@@ -13,8 +13,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.binary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Binary treatments: ]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이진 처리 변수:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이진 처리: ]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Binary treatment variables: ]]></Val>
@@ -25,8 +25,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.binaryDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 샘플에서 평균적으로 이 기능을 켜면 결과가 X 단위만큼 증가합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[평균적으로 이 샘플에서 이 기능을 켜면 클래스/레이블 1의 확률이 X 단위만큼 증가합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[On average in this sample, turing on this feature will cause the outcome to increase by X units]]></Val>
@@ -37,26 +37,35 @@
       <Item ItemId=";CausalAnalysis.AggregateView.causalPoint" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Causal effect point]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인과 관계 효과 포인트]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confidenceLower" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (lower)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[신뢰 구간(하위)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confidenceUpper" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (upper)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[신뢰 구간(상위)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confoundingFeature" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[교란 특성은 인과 동인과 관심 결과 모두와 상관이 있습니다. 교란 변수는 직접적인 인과 효과 위에 인과 동인으로부터 결과까지의 추가 상관 경로를 만듭니다. 교란 특성이 측정되고 모델에 포함되지 않는 한 이러한 추가 상관관계는 인과 효과의 추정치에 편향할 수 있습니다. 편향은 생략된 교란 변수, 인과 동인 및 결과 사이의 상관관계에 따라 양수 또는 음수일 수 있습니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교란 기능은 처리 및 관심 결과 모두와 상관이 있습니다. 교란 요인은 직접적인 인과 관계 효과 외에 처리에서 결과까지의 추가 상관 경로를 만듭니다. 교란 기능이 측정되어 모델에 포함되지 않는 한 이러한 추가 상관 관계는 인과 관계 효과의 추정치에 편향할 수 있습니다. 편향은 생략된 교란 요인, 처리 및 결과 간의 상관 관계에 따라 양수 또는 음수일 수 있습니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.]]></Val>
@@ -67,8 +76,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.continuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Continuous treatments: ]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[연속 처리 변수: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[연속 처리: ]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Continuouts treatment variables: ]]></Val>
@@ -79,8 +88,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.continuousDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 샘플에서 평균적으로 이 기능을 1단위씩 늘리면 결과가 X 단위만큼 증가합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 샘플에서 평균적으로 이 기능을 1단위씩 늘리면 클래스/레이블 1의 확률이 X 단위만큼 증가합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units]]></Val>
@@ -91,8 +100,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.description" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[일반 분석은 제품에 대해 다른 가격 책정 전략을 추구하거나 환자에 대해 대체 치료를 추구하는 것과 같이 누군가가 다르게 행동했다면 실제 결과가 어떻게 변했을지에 대한 '가정' 질문에 답합니다. 중요한 상관관계 패턴을 식별하는 모델 예측과 달리 이러한 도구는 관심 결과에 직접적인 영향을 주는 가장 중요한 인과 기능을 식별할 수 있습니다. 이러한 모델은 다른 교란 기능을 일정하게 유지하며 한 기능의 인과 효과를 식별합니다. 우수한 성능을 위해 결과와 상관될 수 있는 다양한 기능 집합을 교란 요인으로 포함해야 합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인과 관계 분석은 제품에 대해 다른 가격 책정 전략을 추구하거나 환자에 대한 대체 치료와 같은 다양한 정책 선택 하에서 실제 결과가 어떻게 변화되었을지에 대한 '가상'의 질문에 답을 합니다. 중요한 상관 관계 패턴을 식별하는 모델 예측과 달리 이러한 도구는 관심 결과에 직접적인 영향을 주는 가장 중요한 인과 관계 기능을 식별할 수 있습니다. 이러한 모델은 다른 교란 기능을 일정하게 유지하며 한 기능(일반적으로 “처리”라고 함)의 인과 관계 효과를 식별합니다. 최상의 결과를 위해 전체 데이터 세트에 교란 요인으로 결과와 상관 관계가 될 수 있는 모든 사용 가능한 기능을 포함하는지 확인합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.]]></Val>
@@ -121,8 +130,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.lasso" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A lasso (or logistic regression if y is binary) was fit to predict y from X[-i]5D;, and a lasso (or logistic regression if X[i]5D; is categorical) was fit to predict X[i]5D; from Χ[-i]5D;. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[올가미는 X[-i]5D;에서 y를 예측하는 데 적합했으며, 올가미는 X[-i]5D;에서 X[i]5D;를 예측하는 데 적합했습니다. 인과 효과는 두 예측 작업의 잔차/설명할 수 없는 변형의 상관관계로 볼 수 있습니다. Double Machine Learning에 대해 자세히 알아보세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[올가미(또는 y가 이진인 경우 로지스틱 회귀)는 X[-i]5D;에서 y를 예측하는 데 적합했으며, 올가미(또는 X[i]5D;가 범주형인 경우 로지스틱 회귀)는 Χ[-i]5D;에서 X[i]5D;를 예측하는 데 적합했습니다. 인과 관계 효과는 두 예측 작업의 잔차/기습 변형의 평균 상관 관계로 볼 수 있습니다. Double Machine Learning에 대해 자세히 알아보기]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning]]></Val>
@@ -133,8 +142,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.unconfounding" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What are confounding features?]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[교란되지 않는 변수란 무엇인가요?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교란 기능은 무엇인가요?]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What are unconfounding variables?]]></Val>
@@ -145,6 +154,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.currentOutcome" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Current outcome]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[현재 결과]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -178,8 +190,8 @@
       <Item ItemId=";CausalAnalysis.IndividualView.description" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[개별 인과 효과는 고객에 대한 대상이 지정된 홍보 또는 개별화된 처리 계획과 같은 대상이 지정된 또는 개인화된 개입을 알릴 수 있습니다. 특정 기능 집합을 가진 개인이 인과 동인의 변화에 어떻게 반응할까요? 이러한 플롯은 각 인과 동인이 변경될 때 결과의 한계 변화를 보여줍니다. 인과 가정 도구는 인과 동인을 변경한 경우 특정 개인에 대한 가상 실제 결과를 계산합니다. 이 도구의 경우 관측값에 대한 현재 결과 및 현재 처리 옵션을 지정한 다음 탐색할 가상 처리를 지정해야 합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[개별 인과 관계 효과는 고객을 대상으로 하는 프로모션 또는 개별화된 치료 계획과 같은 맞춤화된 해결책을 제공할 수 있습니다. 특정 기능 집합이 포함된 개인이 인과 관계 기능 또는 치료의 변화에 어떻게 반응할까요? 치료 수준을 변경하는 경우, 인과 관계의 가상 도구는 특정 개인에 대한 실제 결과의 한계적 변화를 계산합니다. 이 분석을 통해 제품에 대한 다른 가격 책정 전략이나 환자에 대한 대체 치료 등의 다양한 정책 선택에서 실제 결과가 변화한 방식을 파악할 수 있습니다. 관심 가는 치료를 지정하여 실제 결과가 변화하는 방식을 관찰합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.]]></Val>
@@ -217,6 +229,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.newOutcome" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[New outcome]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[새 결과]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -241,6 +256,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.treatmentValue" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Treatment value min: {0} ({1}) , max: {2} ({3})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[최소 처리값: {0}({1}), 최대값: {2}({3})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -256,6 +274,9 @@
       <Item ItemId=";CausalAnalysis.MainMenu.cohortInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[원인 분석에 대해 현재 전역 코호트가 지원되지 않습니다. 모든 데이터에 대한 인과 분석이 표시됩니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -271,8 +292,8 @@
       <Item ItemId=";CausalAnalysis.MainMenu.individual" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Individual causal what-if]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[개별 인과 효과]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[개별 인과 관계의 가상]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Individual causal effects]]></Val>
@@ -310,8 +331,8 @@
       <Item ItemId=";CausalAnalysis.MainMenu.why" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Why is it important to include confounding features?]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[왜 인과적 통찰이 교란되지 않은 것으로 간주해야 할까요?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교란 기능을 포함하는 것이 중요한 이유는 무엇인가요?]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Why must causal insights assume unconfoundedness?]]></Val>
@@ -322,24 +343,36 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarDescriptionBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 그래프는 데이터 집합의 모든 사용자에게 {0} 처리를 제공하지 않는 기준선에 상대적인 다양한 처리 정책의 평균 게인을 보여 줍니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarDescriptionContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 그래프에서는 데이터 집합의 모든 사용자에게 주어진 현재 처리 값을 수정하지 않는 기준선에 상대적인 다양한 처리 정책의 평균 게인을 보여 줍니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarTextBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[첫 번째 막대는 위에서 설명한 권장 전역 처리 정책이 적용된 경우, 상대적인 평균 게인을 나타냅니다. 보고된 게인은 사용한 처리의 수치 변화를 보고합니다. 두 번째 막대는 이진 처리를 설정하여 모든 사용자를 처리하는 상대 게인(또는 손실)을 나타냅니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarTextContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[첫 번째 막대는 위에서 설명한 권장 전역 처리 정책이 적용된 경우, 상대적인 평균 게인을 나타냅니다. 보고된 게인은 샘플의 일반적인 처리 크기를 10%만큼 처리 기능의 증가/감소를 반영합니다. 두 번째 막대는 연속 처리를 10%만큼 증가/감소하는 상대적 게인(또는 손실)을 나타냅니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -409,8 +442,8 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.TableDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 표에서는 샘플 크기에 대해 해석 가능한 권장 전체 처리 정책을 보여 주세요. 이 표에서는 선택한 처리 기능에 대한 일반적인 세분화 규칙 및 권장 처리를 제공합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 표에서는 현재 데이터 샘플 또는 기타 데이터 집합에 적용할 수 있는 권장 처리 정책을 보여 줍니다. 이 표에서는 개인이 선택한 처리에 응답하는지 여부에 가장 큰 영향을 주는 기능을 기반으로 데이터 코호트에 관측값을 분류하는 간단한 규칙을 제공합니다. 이 표는 또한 각 세그먼트에 할당된 현재 데이터 샘플의 데이터 포인트 수를 지정합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.]]></Val>
@@ -430,18 +463,27 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGainBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average gains of setting the treatment {0} to its baseline value {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[처리 {0}을(를) 기준 값 {1}(으)로 설정했을 때의 평균 게인입니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGainContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average gains of alternative policies over no modification to the current treatment level for {0} treatment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} 처리에 대한 현재 처리 수준에 대해 수정하지 않은 대체 정책의 평균 게인입니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.header" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이러한 도구는 향후 개입을 위한 정책을 만드는 데 도움이 됩니다. 샘플의 어떤 부분에서 인과적 기능 또는 처리의 변화에 대해 가장 큰 응답을 경험하는지 식별하고 특정 개입의 대상이 되어야 하는 향후 데이터 집합을 정의하는 규칙을 구성할 수 있습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -475,6 +517,9 @@
       <Item ItemId=";Core.ComparisonTypes.eq" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} == {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} == {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -490,12 +535,18 @@
       <Item ItemId=";Core.ComparisonTypes.gte" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} >= {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} >= {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.in" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the set of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[({1}) 집합에 있는 {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -520,24 +571,36 @@
       <Item ItemId=";Core.ComparisonTypes.ne" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} != {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} != {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.nin" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} not in the set of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[({1}) 집합에 없는 {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.nrg" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the range of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[({1}) 범위 내의 {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.rg" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the range of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[({1}) 범위 내의 {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -571,6 +634,9 @@
       <Item ItemId=";Counterfactuals.CurrentTreatment" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Current treatment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[현재 처리 값]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -586,8 +652,8 @@
       <Item ItemId=";Counterfactuals.EffectOfTreatment" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Effect of recommendation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[효과]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[권장 사항 효과]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Effect]]></Val>
@@ -625,12 +691,18 @@
       <Item ItemId=";Counterfactuals.WhatIf.sortFeatures" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Sort feature columns by counterfactual feature importance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[반사실적 기능 중요도에 따른 기능 열 정렬]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.counterfactualEx" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Counterfactual Ex {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[반사실적 예 {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -655,6 +727,9 @@
       <Item ItemId=";Counterfactuals.createOwn" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Create your own counterfactual:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용자 고유의 반사실적 기능을 만듭니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -688,8 +763,8 @@
       <Item ItemId=";Counterfactuals.header" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What-If counterfactuals]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[가상 분석]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[반사실적 가상]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What-If analysis]]></Val>
@@ -727,8 +802,8 @@
       <Item ItemId=";Counterfactuals.listDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used]5D; ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 목록에서는 권장되는 처리의 인과적 영향과 CI(하한 및 상한 신뢰 구간)를 기준으로 정렬된 데이터 세트의 상위 샘플 k를 보여 줍니다. 이 정렬된 목록은 기본적으로 결과에 가장 큰 영향을 미치는 권장 처리를 대상으로 하는 샘플의 상위 개별값을 보여 줍니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 목록은 추정 인과 관계 모델에 포함된 모든 기능을 기반으로 현재 데이터 샘플에서 선택한 처리에 대해 가장 큰 인과 관계 응답을 갖는 데이터 포인트를 보여 줍니다. 왼쪽 5개 열은 관찰에 대한 처리 권장 여부, 현재 처리, 처리의 추정 효과(이원 처리에 대한 처리가 없는 기준선에서 처리를 적용하거나 일번적인 처리의 10%만큼 처리 기능을 증가/감소시키는 효과: [동적: 사용한 처리의 수치적 변화 보고]5D;)와 이 효과에 대한 상위와 하위 CI(신뢰 구간)를 보고합니다. 나머지 열은 각 관찰의 현재 처리 상태 및 기타 기능을 표시합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.]]></Val>
@@ -739,12 +814,18 @@
       <Item ItemId=";Counterfactuals.localImportanceDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[원하는 모델 예측을 달성하기 위해 교란할 행 {0}의 최상위 기능입니다. 예측에 대한 가상 분석 기준: {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.localImportanceSelectData" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a data point to view local importance chart]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[로컬 중요도 차트를 볼 데이터 요소 선택]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -760,14 +841,17 @@
       <Item ItemId=";Counterfactuals.noFeatures" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[No features available]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용 가능한 기능 없음]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.panelDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[반사실적 서술을 찾아보고 직접 만듭니다. 다양한 반사실적 서술 예제 집합에서 제안된 값을 보려면 기능을 검색합니다. 각 반대쪽 이름 아래에서 '값 설정' 텍스트를 클릭하여 제안된 반대쪽 기능 값을 설정합니다. 반사실적 서술의 이름을 지정하고 저장합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[반사실적 예측을 찾아보고 고유한 내용을 만드세요. 입력 데이터 포인트와 원하는 예측 {0}을(를) 기반으로 합니다. 이 표에서는 그 예측을 산출하는 일련의 근접한 다양한 반사실적 예제를 보여 줍니다. 고유한 반사실적 예측을 만들려면 반사실적 내용을 제안으로 사용하고, 기능을 검색하여 해당 값을 표시하고, 각 반사실적 예측의 이름 아래 "값 설정" 텍스트를 클릭하여 제안된 반사실적 기능 값을 설정할 수 있습니다. 반사실적 기능의 이름을 지정한 후 저장합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.]]></Val>
@@ -796,6 +880,9 @@
       <Item ItemId=";Counterfactuals.referenceDatapoint" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Reference datapoint: Row {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[참조 데이터 포인트: {0}행]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -811,8 +898,8 @@
       <Item ItemId=";Counterfactuals.saveDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[인과 유추의 엄격한 수학적 견고성이 없으면 사용자에게 이 도구를 기반으로 실제 의사 결정을 내릴 것을 권고하지 마세요. 실제 개입에 대한 인과 분석을 위해 도구 키트를 사용하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이러한 반사실적 예측은 모델의 예측을 기반으로 하므로 모델에서 선택한 것과 동일한 상관 관계를 캡처할 수 있습니다. 사용자에게 이 도구를 기반으로 실질적인 의사 결정을 권고하지는 않습니다. 실제 의사 결정 시나리오에 대한 인과 분석용으로 당사의 도구 키트를 사용하세요.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.]]></Val>
@@ -850,8 +937,8 @@
       <Item ItemId=";Counterfactuals.showTop" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Datapoints with the largest estimated causal responses to treatment feature: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[권장되는 처리 기능에 대한 인과 효과에 따라 정렬된 상위 데이터 요소 샘플을 표시합니다. {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[처리 기능에 대한 추정 인과 관계 응답이 가장 큰 데이터 포인트: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}]]></Val>
@@ -862,8 +949,8 @@
       <Item ItemId=";Counterfactuals.whatifDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[가상(What-if) 기능을 사용하면 입력에 대한 기능을 변경하고 모델의 예측이 어떻게 변경되는지 관찰할 수 있습니다. 기능을 수동으로 변경하거나 원하는 예측(예: 분류자의 클래스 레이블)을 지정하여 원하는 예측으로 이어지는 원래 입력에 가장 가까운 데이터 요소 목록을 볼 수 있습니다. 이는 예측 반사실적 서술이라고도 하며, 모델의 예측에 필요하고 중요한 기능을 이해하거나 모델에 대한 에지 케이스를 디버그하는 등 모델에서 학습한 관계를 탐색하는 데 사용할 수 있습니다. 시작하려면 데이터 테이블러 또는 산점도에서 입력 포인트를 선택하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[가상(What-if) 기능을 사용하면 입력에 대한 기능을 변경하고 모델의 예측이 어떻게 변경되는지 관찰할 수 있습니다. 기능을 수동으로 변경하거나 원하는 예측(예: 분류자의 클래스 레이블)을 지정하여 원하는 예측으로 이어지는 원래 입력에 가장 가까운 데이터 요소 목록을 볼 수 있습니다. 이는 반사실적 예측이라고도 하는데 모델의 예측에 필요하며 중요한 기능을 이해하거나 모델에 대한 에지 케이스를 디버그하는 등 모델에서 학습한 관계를 탐색하는 데 사용할 수 있습니다. 시작하려면 데이터 테이블 또는 산점도에서 입력 포인트를 선택하세요.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.]]></Val>
@@ -1315,36 +1402,54 @@
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Number of values required before binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[범주화하기 전에 필요한 값의 수]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdLabel" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Binning threshold]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[범주화 임계값]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on binning threshold]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[범주화 임계값에 대한 추가 정보]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Distribute values evenly across varying ranges of bins]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[다양한 범위의 저장소에 값을 균일하게 배포]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningLabel" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Quantile binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[분위수 범주화]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on quantile binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[분위수 범주화에 대한 추가 정보]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1369,6 +1474,9 @@
       <Item ItemId=";ErrorAnalysis.MatrixSummary.heatMapDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[열 지도를 사용하면 특정 교차 기능 필터에 집중하여 세분화된 오류율을 계산할 수 있습니다. 비교할 두 데이터 세트 기능으로 시작합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1600,8 +1708,8 @@
       <Item ItemId=";ErrorAnalysis.TreeView.treeDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Configure error explorer."]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[트리 시각화는 각 기능 간의 상호 정보를 사용하여 데이터에서 계층적으로 오류 인스턴스를 성공 인스턴스와 가장 잘 구분합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[트리 시각화는 각 기능과 오류 사이의 상호 정보를 사용하여 데이터의 오류 인스턴스로부터 성공 인스턴스를 계층적으로 가장 잘 분리합니다. 이는 일반적인 오류 패턴을 발견하고 강조 표시하는 프로세스를 단순화합니다. 중요한 오류 패턴을 찾으려면 진한 빨간색(즉, 높은 오류율)과 더 높은 채우기 선(즉, 오류 적용 범위)가 있는 노드를 찾으세요. 트리에서 사용 중인 기능 목록을 편집하려면 “오류 탐색기 구성”을 클릭하세요.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data.]]></Val>
@@ -1882,6 +1990,9 @@
       <Item ItemId=";Fairness.DropdownHeaders.errorMetric" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error bars]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[오차 막대 사용]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1915,36 +2026,54 @@
       <Item ItemId=";Fairness.ErrorBounds.howToRead" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[How to read these error bars]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이러한 오차 막대를 읽는 방법]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText1" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[오차 막대는 평가 데이터 집합의 크기로 인한 메트릭 값의 불확실성을 표시합니다. 다음을 사용하여 계산된 95% 신뢰 기간을 표시합니다. ]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText2" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ (for binary classification) or ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ (이진 분류용) 또는 ]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText3" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ (for other tasks).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ (다른 작업용).]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.normalApproximation" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[normal approximation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[정규 근사치]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.wilsonScores" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wilson scores]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wilson 점수]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4801,8 +4930,8 @@
       <Item ItemId=";Interpret.CrossClass.absoluteValInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[절대값의 평균: 가능한 모든 클래스에서 기능의 중요도 합계를 클래스 수로 나눈 값을 표시합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[절대값 평균: 가능한 모든 클래스에서 기능의 중요도 합계를 클래스 수로 나눈 값을 표시합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes]]></Val>
@@ -4831,7 +4960,7 @@
       <Item ItemId=";Interpret.CrossClass.enumeratedClassInfo" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enumerated class names: Shows only the specified class's feature importance values across all data points.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[열거된 클래스 이름: 모든 데이터 요소에서 지정된 클래스의 기능 중요도 값만 표시합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4861,8 +4990,8 @@
       <Item ItemId=";Interpret.CrossClass.overviewInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[다중 클래스 모델은 각 클래스의 독립 기능 중요도 벡터를 생성합니다. 각 클래스의 기능 중요도 벡터는 클래스의 가능성을 높인 기능 또는 그 반대에 해당하는 기능을 보여 줍니다. 클래스별 기능 중요도 벡터의 가중치가 단일 값으로 요약되는 방법을 선택할 수 있습니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[다중 클래스 모델은 각 클래스에 대해 독립적인 기능 중요도 벡터를 생성합니다. 각 클래스의 기능 중요도 벡터는 클래스의 가능성을 높인 기능 또는 그 반대에 해당하는 기능을 보여 줍니다. 클래스별 기능 중요도 벡터의 가중치가 단일 값으로 요약되는 방법을 선택할 수 있습니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:]]></Val>
@@ -4909,8 +5038,8 @@
       <Item ItemId=";Interpret.DatasetExplorer.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[왼쪽에 데이터 세트 코호트를 만들어 예측 결과, 데이터 세트 기능 및 오류 그룹과 같은 필터를 따라 통계를 분석합니다. x축 및 색 선택기 기능을 사용하여 데이터 세트를 더 많은 차원으로 나눕니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[예측 결과, 데이터 세트 기능 및 오류 그룹과 같은 필터를 따라 데이터 세트 통계를 분석하기 위해 데이터 세트 코호트를 만듭니다. 데이터 세트의 과대/과소 표시에 대해 자세히 알아보세요.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Create dataset cohorts to the left to analyze statistics along filters such as predicted outcome, dataset features and error groups. Use the x-axis and color selectors to further slice your dataset into more dimensions.]]></Val>
@@ -5110,8 +5239,8 @@
       <Item ItemId=";Interpret.ExplanationSummary.mimicDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 설명자는 전역 서로게이트 모델을 학습하여 블랙 박스 모델을 모방하는 개념을 기준으로 합니다. 전역 서로게이트 모델은 모든 블랙 박스 모델 예측 근사치를 가능한 한, 정확하게 구하도록 학습되는 본질적으로 해석 가능한 모델입니다. 기능 중요도 값은 기본 서로게이트 모델(LightGBM, 선형 회귀, 확률적 그라데이션 하강 또는 의사 결정 트리)의 모델 기반 기능 중요도 값입니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 설명자는 전역 대리 모델을 학습하여 블랙 박스 모델을 모방하는 개념을 기준으로 합니다. 전역 대리 모델은 모든 블랙 박스 모델 예측 근사치를 가능한 한, 정확하게 구하도록 학습되는 본질적으로 해석 가능한 모델입니다. 기능 중요도 값은 기본 대리 모델(LightGBM, 선형 회귀, 확률적 그라데이션 하강 또는 의사 결정 트리)의 모델 기반 기능 중요도 값입니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree)]]></Val>
@@ -5167,6 +5296,9 @@
       <Item ItemId=";Interpret.ExplanationSummary.whatDoFeatureMean" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What do these feature importance values mean?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이러한 기능 중요도 값은 무엇을 의미하나요?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5506,8 +5638,8 @@
       <Item ItemId=";Interpret.GlobalTab.dependencePlotHelperText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 종속 플롯은 코호트에서 기능 값과 해당 기능 중요도 간의 관계를 보여 줍니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 종속도는 기능 값과 해당 기능 중요도 값의 관계를 보여줍니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This dependence plot shows the relationship between the value of a feature to the corresponding importance of the feature across a cohort.]]></Val>
@@ -5527,8 +5659,8 @@
       <Item ItemId=";Interpret.GlobalTab.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[슬라이더를 사용하여 내림차순으로 기능 중요도를 표시합니다. 기능 중요도를 나란히 표시하려면 최대 3개의 코호트를 선택합니다. 그래프의 기능을 클릭하면 선택한 기능의 값이 예측에 미치는 영향에 대한 밀도 플롯을 아래에서 볼 수 있습니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[전체 모델 예측에 영향을 주는 최상위 중요 기능을 탐색합니다(전역 설명이라고도 함). 슬라이더를 사용하여 기능 중요도를 내림차순으로 표시합니다. 모든 코호트의 기능 중요도는 나란히 표시되며 범례에서 코호트를 선택하여 전환할 수 있습니다. 그래프의 기능 중 하나를 클릭하여 선택한 기능의 값이 예측에 미치는 영향에 대한 조밀도를 아래에 표시합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Use the slider to show descending feature importances . Select up to three cohorts to see their feature importances side by side. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.]]></Val>
@@ -5566,8 +5698,8 @@
       <Item ItemId=";Interpret.GlobalTab.topAtoB" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Top {0} features by their importance]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[상위 {0}~{1} 기능]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[중요도별 상위 {0}개 기능]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Top {0}-{1} features]]></Val>
@@ -5740,8 +5872,8 @@
       <Item ItemId=";Interpret.ModelPerformance.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[데이터 세트의 여러 코호트 또는 하위 그룹에 대한 성능 비교 분석을 확인하여 모델을 추가로 조사할 수 있습니다. 서로 다른 차원에서 잘라낼 y 값과 x 값을 따라 필터를 선택합니다. 그래프 형식을 변경하려면 그래프의 톱니바퀴를 선택합니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[예측 값의 분포와 모델 성능 메트릭 값을 탐색하여 모델의 성능을 평가합니다. 데이터 세트의 여러 코호트 또는 하위 그룹에 대한 성능 비교 분석을 확인하여 모델을 추가로 조사할 수 있습니다. 서로 다른 차원에서 잘라낼 y 값과 x 값을 따라 필터를 선택합니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions. Select the gear in the graph to change graph type.]]></Val>
@@ -5824,8 +5956,8 @@
       <Item ItemId=";Interpret.Statistics.fnr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[False Negative Rates: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[FNR: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[가음성 비율: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[FNR: {0}]]></Val>
@@ -5836,8 +5968,8 @@
       <Item ItemId=";Interpret.Statistics.fpr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[False Positive Rates: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[FPR: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[가양성 비율: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[FPR: {0}]]></Val>
@@ -6172,8 +6304,8 @@
       <Item ItemId=";Interpret.WhatIfTab.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select an individual datapoint by clicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[분산형의 데이터 포인트를 클릭하여 개별 데이터 포인트를 선택하면 아래의 로컬 기능 중요도 값과 오른쪽 패널의 기능 값을 볼 수 있습니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[산점도에서 데이터 포인트를 클릭하여 개별 데이터 포인트를 선택하면 아래의 로컬 기능 중요도 값과 오른쪽 패널의 기능 값을 볼 수 있습니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Select an individual datapoint by cllicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.]]></Val>
@@ -6724,8 +6856,8 @@
       <Item ItemId=";Interpret.selectPoint" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a point to see its local explanation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[ 의 로컬 설명을 보려면 포인트를 선택하세요.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[로컬 설명을 보려면 포인트를 선택하세요]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Select a point to see its local explanation]]></Val>
@@ -6772,8 +6904,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciLower" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (lower)]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[ci_lower]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[신뢰 구간(하위)]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[ci_lower]]></Val>
@@ -6784,8 +6916,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciUpper" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (upper)]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[ci_upper]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[신뢰 구간(상위)]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[ci_upper]]></Val>
@@ -6808,8 +6940,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.pValue" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[P-value]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[p_value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[P-value]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[p_value]]></Val>
@@ -6820,8 +6952,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.point" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Effect estimate]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[포인트]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[효과 추정치]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[point]]></Val>
@@ -6832,8 +6964,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.stderr" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Standard error]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[stderr]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[표준 오류]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[stderr]]></Val>
@@ -6844,8 +6976,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.zstat" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Z-score]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[zstat]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Z 점수]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[zstat]]></Val>
@@ -6892,6 +7024,9 @@
       <Item ItemId=";ModelAssessment.Cohort.selectCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[코호트 선택]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6907,6 +7042,9 @@
       <Item ItemId=";ModelAssessment.Cohort.shiftCohortDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a cohort from the cohort list. Apply the cohort to the dashboard.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[코호트 목록에서 코호트를 선택합니다. 대시보드에 코호트를 적용합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7048,8 +7186,8 @@
       <Item ItemId=";ModelAssessment.DashboardSettings.Content" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[이 목록에는 대시보드의 레이아웃이 표시됩니다. 식별 태그가 지정된 각 구성 요소는 아래 구성 요소에서 보여질 데이터를 필터링할 수 있습니다. 구성 요소를 추가하고 끌어서 놓아 흐름을 다시 정렬하거나 구성 요소를 삭제할 수 있습니다.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 목록은 대시보드의 레이아웃을 보여줍니다. 오류 분석 구성 요소를 사용하여 데이터를 필터링해서 아래 구성 요소에서 볼 수 있습니다. 구성 요소를 추가하고 끌어서 놓아 흐름을 다시 정렬하거나 구성 요소를 삭제할 수 있습니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
@@ -7114,8 +7252,8 @@
       <Item ItemId=";ModelAssessment.DashboardSettings.Title" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard navigation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[대시보드 레이아웃]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[대시보드 탐색]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dashboard layout]]></Val>
@@ -7153,6 +7291,9 @@
       <Item ItemId=";ModelAssessment.FeatureImportances.IndividualFeature" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[아래의 로컬 기능 중요도 값(로컬 설명) 및 ICE(개별 조건 기대) 그림을 보려면 표에서 데이터 포인트(또는 여러 데이터 포인트)를 클릭하여 데이터 포인트를 선택합니다. 5,000개 이상의 데이터 포인트가 있는 데이터 집합의 경우, 쉬운 탐색을 가능하게 하도록 임의의 하위 샘플로 보기가 구성되어 있습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7168,8 +7309,8 @@
       <Item ItemId=";ModelAssessment.MainMenu.DashboardSettings" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard navigation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[대시보드 설정]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[대시보드 탐색]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dashboard settings]]></Val>
