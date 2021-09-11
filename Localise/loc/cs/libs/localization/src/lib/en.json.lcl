@@ -13,8 +13,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.binary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Binary treatments: ]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Proměnné binárního ošetření:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Binární léčby: ]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Binary treatment variables: ]]></Val>
@@ -25,8 +25,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.binaryDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[V průměru se zapnutí tohoto faktoru v tomto vzorku projeví jako zvýšení výstupu o X jednotek]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[V průměru v této ukázce zapnutí této funkce způsobí zvýšení pravděpodobnosti, že se třída nebo popisek 1 zvýší o tento počet jednotek: X.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[On average in this sample, turing on this feature will cause the outcome to increase by X units]]></Val>
@@ -37,26 +37,35 @@
       <Item ItemId=";CausalAnalysis.AggregateView.causalPoint" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Causal effect point]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bod kauzálního efektu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confidenceLower" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (lower)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Interval spolehlivosti (nižší)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confidenceUpper" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (upper)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Interval spolehlivosti (horní)]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.confoundingFeature" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Současně působící faktor koreluje s ovladačem příčin a s výstupem zkoumání. Současně působící faktor vytváří nad rámec přímého důsledku další korelační cestu od ovladače příčin k výstupu. Pokud nejsou současně působící faktory zahrnuté a zohledněné v modelu, tyto další korelace můžou způsobit odchylku v odhadovaných důsledcích. Odchylka může být kladná i záporná v závislosti na směru korelací mezi vynechanými současně působícími faktory, ovladači příčin a výstupy.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Současně působící faktor koreluje s léčbou a s výstupem zkoumání. Současně působící faktor vytváří nad rámec přímého důsledku další korelační cestu od léčby k výsledku. Pokud nejsou současně působící faktory zahrnuté a zohledněné v modelu, tyto další korelace můžou způsobit odchylku v odhadovaných důsledcích. Odchylka může být kladná i záporná v závislosti na směru korelací mezi vynechanými současně působícími faktory, léčbami a výstupy.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A confounding feature is correlated with both the causal driver and the outcome of interest. The counfounder creates an extra correlation path from the causal driver to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, causal drivers, and outcomes.]]></Val>
@@ -67,8 +76,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.continuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Continuous treatments: ]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Proměnné souvislého ošetření:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Průběžné léčby: ]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Continuouts treatment variables: ]]></Val>
@@ -79,8 +88,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.continuousDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[V průměru se v tomto vzorku zvýšení tohoto faktoru o 1 jednotku projeví jako zvýšení výstupu o X jednotek]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[V průměru v tomto vzorku zvýšení této funkce o 1 jednotku způsobí, že se pravděpodobnost třídy nebo popisku 1 zvýší o tento počet jednotek: X.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units]]></Val>
@@ -91,8 +100,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.description" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Analýza příčin odpovídá na otázky typu: „Co kdyby?“ a popisuje, jak by se v reálném světe změnily výstupy, kdyby se někdo zachoval jinak a například se řídil jinou strategií naceňování nebo zvolil pro pacienta alternativní léčbu. Na rozdíl od modelových predikcí, které rozpoznávají důležité korelační vzorce vám tyto nástroje pomůžou rozpoznat nejdůležitější příčiny, které mají přímý vliv na výstupy faktoru, který vás zajímá. Tyto modely rozpoznávají důsledky jediného faktoru, zatímco ostatní současně působící faktory zůstávají konstantní. Ujistěte se, že zahrnujete širokou sadu faktorů, které by mohly korelovat s výstupem jakožto současně působící faktory.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Analýza příčin odpovídá na otázky typu: Co kdyby? a popisuje, jak by se v reálném světe změnily výstupy v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Na rozdíl od modelových predikcí, které rozpoznávají důležité korelační vzorce vám tyto nástroje pomůžou rozpoznat nejdůležitější příčiny, které mají přímý vliv na výstupy faktoru, který vás zajímá. Tyto modely rozpoznávají důsledky jediného faktoru, zatímco ostatní současně působící faktory zůstávají konstantní. Ujistěte se, že zahrnujete širokou sadu faktorů, které by mohly korelovat s výstupem jakožto současně působící faktory.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Causal analysis answers 'what if' questions about how real world outcomes would have changed if someone had behaved differently, such as pursuing a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature, holding other confounding features constant. For a good performance, make sure to include a wide set of features that may correlate with the outcome as confounders.]]></Val>
@@ -121,8 +130,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.lasso" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A lasso (or logistic regression if y is binary) was fit to predict y from X[-i]5D;, and a lasso (or logistic regression if X[i]5D; is categorical) was fit to predict X[i]5D; from Χ[-i]5D;. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Laso bylo navrženo pro predikce Y z X[-i]5D; a predikce X[i]5D; z X[-i]5D;. Důsledky se dají zobrazit jako korelace mezi zbylými a nevysvětlitelnými proměnnými těchto dvou úkonů predikce. Tady najdete další informace o dvojitém strojovém učení]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Laso (nebo logistická regrese, pokud je y binární) bylo vhodné pro předpověď y z X[-i]5D; a laso (nebo logistické regrese, pokud je X[i]5D; kategorické) bylo vhodné predikovat X[i]5D; z Χ [-i]5D;. Kauzální účinek lze zobrazit jako průměrnou korelaci reziduí nebo překvapivé odchylky dvou úloh předpovědi. Další informace o dvojitém strojovém učení]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[A lasso was fit to predict y from X[-i]5D;, and a lasso was fit to predict X[i]5D; from X[-i]5D;. The causal effect can be viewed as the correlation of the residuals/unexplained variations of the two prediction tasks. Learn more about Double Machine Learning]]></Val>
@@ -133,8 +142,8 @@
       <Item ItemId=";CausalAnalysis.AggregateView.unconfounding" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What are confounding features?]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Co jsou současně nepůsobící proměnné?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Co jsou zavádějící funkce?]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What are unconfounding variables?]]></Val>
@@ -145,6 +154,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.currentOutcome" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Current outcome]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktuální výsledek]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -178,8 +190,8 @@
       <Item ItemId=";CausalAnalysis.IndividualView.description" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Individuální důsledky můžou poskytnout informace o cílených nebo individuálních intervencích, jako je třeba cílená reklama zákazníkům nebo individuální plán léčby. Jak jedinec s konkrétní sadou faktorů zareaguje na změnu ovladače příčin? Tyto diagramy znázorňují marginální změnu výstupu, když se jednotlivé ovladače příčin změní. Pokud změníte ovladače příčin konkrétního jedince, nástroj citlivostní analýzy příčin vypočítá srovnávací dopady ve skutečném světě. U tohoto nástroje je potřeba za účelem pozorování specifikovat současné výstupy a možnosti ošetření a pak specifikovat srovnávací ošetření, které byste chtěli prozkoumat. ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jednotlivé kauzální účinky mohou informovat přizpůsobené zákroky, jako je cílová propagace zákazníkům nebo plán individuální léčby. Jak by jednotlivec s určitou sadou funkcí reagoval na změnu v příčinné funkci nebo v léčbě?  Pokud změníte úroveň léčby, příčinný nástroj citlivostní analýzy počítá mezní změny v reálných výsledcích konkrétního jednotlivce, pokud změníte jejich úroveň léčby. Tato analýza vám umožní pochopit, jak by se reálné výsledky změnily v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Určete léčbu, která vás zaujala a sledujte, jak by se změnil skutečný výsledek.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Individual causal effects can inform targeted or personalized interventions, such as a targeted promition to customers or an individualized treatment plan. How will an individual with a particular set of features respond to a change in a causal driver? These plots show the marginal change in an outcome when each causal driver is changed. The causal what-if tool calculates counterfactual real world outcomes for a particular individual if you changed their causal drivers. For this tool, you need to specify the current outcome and current treatment option for an observation, then specify the counterfactual treatment you would like to explore.]]></Val>
@@ -217,6 +229,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.newOutcome" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[New outcome]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nový výsledek]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -241,6 +256,9 @@
       <Item ItemId=";CausalAnalysis.IndividualView.treatmentValue" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Treatment value min: {0} ({1}) , max: {2} ({3})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Minimální hodnota léčiva: {0} ({1}), max. {2} ({3})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -256,6 +274,9 @@
       <Item ItemId=";CausalAnalysis.MainMenu.cohortInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Globální kohorty se v současné době pro kauzální analýzu nepodporují. Všechny kauzální analýzy se zobrazí pro všechna data.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -271,8 +292,8 @@
       <Item ItemId=";CausalAnalysis.MainMenu.individual" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Individual causal what-if]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Jednotlivé důsledky]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jednotlivé příčiny citlivostní analýzy]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Individual causal effects]]></Val>
@@ -310,8 +331,8 @@
       <Item ItemId=";CausalAnalysis.MainMenu.why" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Why is it important to include confounding features?]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Proč je potřeba předpokládat, že přehledy příčin nepůsobí současně?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Proč je důležité zahrnout zavádějící funkce?]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Why must causal insights assume unconfoundedness?]]></Val>
@@ -322,24 +343,36 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarDescriptionBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento graf ukazuje průměrné nárůsty různých zásad léčby vzhledem k základnímu stavu, kdy se léčba {0} neposkytuje komukoli ve vaší populaci.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarDescriptionContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento graf ukazuje průměrné nárůsty různých zásad léčby vzhledem k základnímu stavu, kdy se neprovádí žádné úpravy aktuálních testovacích hodnot, které se přidělují všem ve vaší populaci.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarTextBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Nahlášené zisky hlásí číselnou změnu v léčby, které jsme použili. Druhý pruh označuje relativní zisky (nebo ztráty) při zacházeli se všemi tím, že zapnete binární léčby.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.BarTextContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Hlášené nárůsty odrážejí zvýšení nebo snížení příznaku léčby o 10 % typické velikosti léčiva ve vzorku. Druhý pruh označuje relativní nárůsty (nebo ztráty) z rostoucího nebo sestupného průběžného zpracování o 10 %.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -409,8 +442,8 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.TableDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Tato tabulka zobrazuje doporučená interpretovatelnou zásadu globálního ošetření u vaší vzorové velikosti. Tabulka obsahuje obecná pravidla segmentace a doporučené ošetření pro vybranou funkci ošetření.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tato tabulka zobrazuje doporučenou zásadu léčby, která se dá použít pro aktuální výběr dat nebo pro jiné populace. Tabulka poskytuje jednoduché pravidlo pro segmentování pozorování kohort dat na základě funkcí s největším vlivem na to, zda osoba odpoví na vybranou léčbu. Tabulka také určuje počet datových bodů v aktuální ukázce dat, který je přiřazený ke každému segmentu.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This table shows an interpretable recommended global treatment policy on your sample size. The table provides general segmentation rules and recommended treatments for the treatment feature you’ve selected.]]></Val>
@@ -430,18 +463,27 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGainBinary" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average gains of setting the treatment {0} to its baseline value {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Průměrné nárůsty nastavení léčby {0} na jeho základní hodnotu {1}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGainContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average gains of alternative policies over no modification to the current treatment level for {0} treatment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Průměrný nárůst alternativních zásad beze změny aktuální úrovně léčby pro léčbu {0}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.header" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tyto nástroje pomáhají vytvářet zásady pro budoucí intervence. Můžete zjistit, které části vašeho ukázkového prostředí mají největší odpovědi na změny příčinných funkcí nebo léčeb, a vytvořit pravidla, která definují, které budoucí populace by měly být určeny pro konkrétní intervence.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -475,6 +517,9 @@
       <Item ItemId=";Core.ComparisonTypes.eq" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} == {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} == {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -499,6 +544,9 @@
       <Item ItemId=";Core.ComparisonTypes.in" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the set of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} v sadě ({1})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -523,24 +571,36 @@
       <Item ItemId=";Core.ComparisonTypes.ne" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} != {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} != {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.nin" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} not in the set of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} není v sadě ({1})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.nrg" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the range of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} v rozsahu ({1})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.rg" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[{0} in the range of ({1})]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} v rozsahu ({1})]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -574,6 +634,9 @@
       <Item ItemId=";Counterfactuals.CurrentTreatment" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Current treatment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aktuální léčba]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -589,8 +652,8 @@
       <Item ItemId=";Counterfactuals.EffectOfTreatment" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Effect of recommendation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Efekt]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vliv doporučení]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Effect]]></Val>
@@ -628,12 +691,18 @@
       <Item ItemId=";Counterfactuals.WhatIf.sortFeatures" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Sort feature columns by counterfactual feature importance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seřadit sloupce funkcí podle důležitosti funkce protifaktoru]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.counterfactualEx" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Counterfactual Ex {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Př. protifaktoru {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -658,6 +727,9 @@
       <Item ItemId=";Counterfactuals.createOwn" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Create your own counterfactual:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vytvořte si vlastní protifaktoru:]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -691,8 +763,8 @@
       <Item ItemId=";Counterfactuals.header" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What-If counterfactuals]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Citlivostní analýza]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Protifaktory citlivostní analýzy]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What-If analysis]]></Val>
@@ -730,8 +802,8 @@
       <Item ItemId=";Counterfactuals.listDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used]5D; ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Seznam zobrazuje hlavní vzorky v sadě dat seřazené podle příčinného efektu doporučeného ošetření a dolní i horní intervaly spolehlivosti (CI). Takto seřazený seznam znázorňuje, kdo jsou hlavní jednotlivci ve vzorku, na které se zaměřit s doporučeným ošetřením tak, aby mělo na výstup co možná největší vliv.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento seznam ukazuje, které datové body v aktuálním vzorku dat mají největší kauzální odezvu na zvolenou léčbu, na základě všech vlastností obsažených v odhadovaném kauzálním modelu. Levých pět sloupců uvádí, zda se doporučuje léčbu sledovat, současnou léčbu, odhadovaný účinek léčby (účinek aplikace léčby od výchozí hodnoty bez léčby pro binární léčby nebo zvýšení nebo snížení hodnoty funkce léčby o 10% typických velikostí léčiva ve vzorku: [dynamická: uveďte numerickou změnu v léčbě, kterou jsme použili]5D;) a dolní a horní intervaly spolehlivosti (CI) pro tento efekt. Zbývající sloupce ukazují aktuální stav léčby a další funkce každého pozorování.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This list shows the top k samples in your dataset sorted by causal effect of a recommended treatment, along with its lower and upper confidence intervals (CI). This sorted list essentially shows you who are the top individuals in your sample to target with a recommended treatment which will have the greatest effect on the outcome.]]></Val>
@@ -742,12 +814,18 @@
       <Item ItemId=";Counterfactuals.localImportanceDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Funkce s nejvyšším pořadím v řádku {0} perturb, aby se dosáhlo požadované predikce modelu. Na základě citlivostní analýzy pro predikci: {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.localImportanceSelectData" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a data point to view local importance chart]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Výběrem datového bodu zobrazíte graf místní důležitosti.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -763,14 +841,17 @@
       <Item ItemId=";Counterfactuals.noFeatures" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[No features available]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nejsou k dispozici žádné funkce.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.panelDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Projděte si protifaktory a vytvořte si své vlastní. Vyhledejte funkce, abyste se mohli podívat na doporučené hodnoty z jiné sady vzorových protifaktorů. Nastavení doporučených hodnot funkce protifaktorů uděláte tak, že pod názvem každého protifaktoru kliknete na text „nastavit hodnoty“. Svoje protifaktory pojmenujte a pak je uložte.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Projděte si protifaktory predikcí a vytvořte si vlastní. Na základě vstupního datového bodu a požadované predikce {0}. Tabulka zobrazuje proximální a různorodou sadu protifaktorových příkladů, které poskytují danou predikci. Pokud chcete vytvořit vlastní protifaktor predikce, můžete použít protifaktory jako návrhy, vyhledat funkce, zobrazit jejich hodnoty a nastavit navrhované hodnoty funkcí protifaktorů kliknutím na text nastavit hodnoty pod každým názvem protifaktoru. Pojmenujte svůj protifaktor a uložte ho.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set a suggested counterfactual feature values by clicking 'set values' text under each counterfactual name. Name your counterfactual and save it.]]></Val>
@@ -799,6 +880,9 @@
       <Item ItemId=";Counterfactuals.referenceDatapoint" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Reference datapoint: Row {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Referenční datový bod: řádek {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -814,8 +898,8 @@
       <Item ItemId=";Counterfactuals.saveDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Bez striktní matematické robustnosti kauzálního odvozování nedoporučujeme uživatelům provádět na základě výsledků tohoto nástroje rozhodnutí v reálném životě. Za účelem skutečné intervence použijte náš nástroj pro kauzální analýzu.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tyto protifaktory jsou založeny na predikci modelu, a proto mohou zachycovat stejné korelace, jaké zachytil model. Nedoporučujeme uživatelům, aby se na základě tohoto nástroje rozhodovali v reálném životě. Použijte naši sadu nástrojů pro kauzální analýzu scénářů rozhodování v reálném životě.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life intervention.]]></Val>
@@ -853,8 +937,8 @@
       <Item ItemId=";Counterfactuals.showTop" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Datapoints with the largest estimated causal responses to treatment feature: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Zobrazit hlavní vzorky datových bodů seřazených podle příčinných dopadů na doporučenou funkci ošetření: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Datové body s největšími odhadovanými příčinami reakce na zpracování funkce: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Show top datapoint samples ordered by causal effects for recommended treatment feature: {0}]]></Val>
@@ -865,8 +949,8 @@
       <Item ItemId=";Counterfactuals.whatifDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Citlivostní analýza vám umožní provést perturbaci funkcí u jakéhokoli vstupu a pozorovat, jak se predikce modelu budou měnit. Funkce můžete perturbovat ručně, nebo můžete zadat požadované predikce (např. třídu popisku u klasifikátoru) a zobrazit si tak seznam nejbližších datových bodů k původnímu vstupu, které povedou k požadované predikci. V případě takzvaných protifaktorů predikce je můžete použít k prozkoumání vztahů, které se model naučil, nebo k porozumění důležitých, nezbytných funkcí pro predikce modelu, nebo k ladění krajních případů modelu. Když budete chtít začít, zvolte vstupní body z datové tabulky nebo bodového diagramu.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Citlivostní analýza vám umožní provést perturbaci funkcí u jakéhokoli vstupu a pozorovat, jak se predikce modelu budou měnit. Funkce můžete perturbovat ručně, nebo můžete zadat požadované predikce (např. třídu popisku u klasifikátoru) a zobrazit si tak seznam nejbližších datových bodů k původnímu vstupu, které povedou k požadované predikci. V případě takzvaných protifaktorů predikce je můžete použít k prozkoumání vztahů, které se model naučil, nebo k porozumění důležitých, nezbytných funkcí pro předpovědi modelu, nebo k ladění krajních případů modelu. Když budete chtít začít, zvolte vstupní body z datové tabulky nebo bodového diagramu.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or simply specify the desired prediction(e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data tablr or scatter plot.]]></Val>
@@ -1318,36 +1402,54 @@
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Number of values required before binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Počet požadovaných hodnot před kvantováním]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdLabel" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Binning threshold]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Prahová hodnota kvantování]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.binningThresholdTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on binning threshold]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Další informace o prahové hodnotě binningu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Distribute values evenly across varying ranges of bins]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Rovnoměrně rozmístit hodnoty v různých rozsazích intervalů]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningLabel" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Quantile binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kvantilové kvantování]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MatrixOptions.quantileBinningTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on quantile binning]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Další informace o kvantilovém kvantování]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1372,6 +1474,9 @@
       <Item ItemId=";ErrorAnalysis.MatrixSummary.heatMapDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[S heat mapou se můžete zaměřit na konkrétní průnikové filtry funkcí a vypočítat členěné míry chyb. Začněte se dvěma funkcemi datové sady, které můžete porovnat.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1603,8 +1708,8 @@
       <Item ItemId=";ErrorAnalysis.TreeView.treeDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Configure error explorer."]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Stromová vizualizace používá vzájemné informace mezi každým atributem a chybou k co nejlepšímu oddělení chybových instancí od úspěšných instancí hierarchicky v datech.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Stromová vizualizace používá vzájemné informace mezi jednotlivými funkcemi a chybami, aby bylo možné v datech hierarchicky samostatně oddělovat instance chyb od instancí úspěchu. To zjednodušuje proces zjišťování a zvýrazňování běžných vzorů selhání. To zjednodušuje proces objevování a zvýrazňování běžných vzorců selhání. Chcete-li najít důležité vzorce selhání, vyhledejte uzly se silnější červenou barvou (tj. vysokou chybovostí) a vyšší čárou výplně (tj. s vysokým pokrytím chyb). Chcete-li upravit seznam funkcí používaných ve stromu, klikněte na „Konfigurovat průzkumníka chyb“.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data.]]></Val>
@@ -1885,6 +1990,9 @@
       <Item ItemId=";Fairness.DropdownHeaders.errorMetric" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable error bars]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Povolit chybové úsečky]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1918,36 +2026,54 @@
       <Item ItemId=";Fairness.ErrorBounds.howToRead" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[How to read these error bars]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jak číst tyto chybové úsečky]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText1" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Chybové úsečky ukazují nejistotu v hodnotách metriky z důvodu velikosti sady dat vyhodnocení. Zobrazujeme 95% intervaly spolehlivosti vypočítané pomocí ]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText2" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ (for binary classification) or ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ (pro binární klasifikaci) nebo ]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.introModalText3" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[ (for other tasks).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ (pro jiné úkoly).]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.normalApproximation" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[normal approximation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[normální aproximace]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ErrorBounds.wilsonScores" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wilson scores]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wilson skóre]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4804,7 +4930,7 @@
       <Item ItemId=";Interpret.CrossClass.absoluteValInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Průměr absolutní hodnoty: Udává součet důležitosti příznaku ve všech možných třídách vydělený počtem tříd.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4834,7 +4960,7 @@
       <Item ItemId=";Interpret.CrossClass.enumeratedClassInfo" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enumerated class names: Shows only the specified class's feature importance values across all data points.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Výčet názvů tříd: Zobrazuje pouze hodnoty významnosti atributu zadané třídy napříč všemi datovými body.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4864,8 +4990,8 @@
       <Item ItemId=";Interpret.CrossClass.overviewInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Modely s více třídami generují pro každou třídu vektor významností nezávislých atributů. Vektor významností atributů jednotlivých tříd ukazuje, kvůli kterým příznakům je určitá třída pravděpodobnější nebo méně pravděpodobná. Můžete vybrat, jak se váhy vektorů významností atributů pro jednotlivé třídy shrnují do jedné hodnoty:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modely s více třídami generují nezávislý vektor důležitosti pro každou třídu. Vektor důležitosti funkcí každé třídy ukazuje, které funkce způsobily, že třída je pravděpodobnější nebo méně pravděpodobná. Můžete vybrat, jak budou váhy vektorů důležitosti funkcí jednotlivých tříd shrnuty do jediné hodnoty:]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:]]></Val>
@@ -4912,8 +5038,8 @@
       <Item ItemId=";Interpret.DatasetExplorer.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Vytvořte kohorty datových sad vlevo, abyste mohli analyzovat statistiky podle filtrů, jako jsou předpokládaný výsledek, atributy datové sady a skupiny chyb. Pomocí osy x a selektorů barev můžete dále datovou sadu rozdělit do více dimenzí.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vytvářejte kohorty datových sad, které analyzují statistiky datové sady podle filtrů, jako jsou předpokládané výsledky, funkce datových sad a skupiny chyb. Přečtěte si o nadměrném nebo nedostatečném zastoupení ve vaší datové sadě.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Create dataset cohorts to the left to analyze statistics along filters such as predicted outcome, dataset features and error groups. Use the x-axis and color selectors to further slice your dataset into more dimensions.]]></Val>
@@ -5113,8 +5239,8 @@
       <Item ItemId=";Interpret.ExplanationSummary.mimicDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Tento nástroj pro vysvětlení se zakládá na myšlence trénování globálních náhradních modelů, které napodobují modely typu černá skříňka. Globální náhradní model je vnitřně interpretovatelný model, který je natrénovaný tak, aby co nejpřesněji aproximoval predikce jakéhokoli modelu typu černá skříňka. Hodnoty významnosti atributů se zakládají na modelu a jsou platné pro základní náhradní model (LightGBM, nebo lineární regrese, nebo metoda Stochastic Gradient Descent, nebo rozhodovací strom).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toto vysvětlení je založeno na myšlence trénovat globální náhradní modely tak, aby napodobovaly modely černé skříňky. Globální náhradní model je vnitřně interpretovatelný model, který je natrénovaný tak, aby co nejpřesněji aproximoval předpovědi jakéhokoli modelu typu černá skříňka. Hodnoty významnosti atributů jsou hodnoty důležitosti funkce založené na modelu vašeho podkladového náhradního modelu (LightGBM, nebo lineární regrese, nebo metoda Stochastic Gradient Descent, nebo rozhodovací strom).]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree)]]></Val>
@@ -5170,6 +5296,9 @@
       <Item ItemId=";Interpret.ExplanationSummary.whatDoFeatureMean" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What do these feature importance values mean?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Co znamenají tyto hodnoty důležitosti funkcí?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5509,8 +5638,8 @@
       <Item ItemId=";Interpret.GlobalTab.dependencePlotHelperText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Tento diagram závislostí zobrazuje vztah mezi hodnotou atributu a odpovídající významností atributu v celé kohortě.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento znázornění závislosti zobrazuje vztah hodnot funkce s odpovídajícími hodnotami důležitosti funkce.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This dependence plot shows the relationship between the value of a feature to the corresponding importance of the feature across a cohort.]]></Val>
@@ -5530,8 +5659,8 @@
       <Item ItemId=";Interpret.GlobalTab.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Pomocí posuvníku zobrazte sestupně významnost atributu. Vyberte až tři kohorty a zobrazte vedle sebe významnost jejich atributů. Kliknutím na některý z prvků v grafu zobrazíte níže digram hustoty toho, jak hodnoty vybraného atributu ovlivňují predikci.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Prozkoumejte nejdůležitější funkce, které ovlivňují celkové predikce modelů (nebo také globální vysvětlení). Pomocí posuvníku zobrazte důležitosti funkcí sestupně. Všechny důležitosti funkcí kohorty se zobrazují vedle sebe a je možné je vypnout výběrem kohorty v legendě. Kliknutím na některý z prvků v grafu zobrazíte graf hustoty ukazující, jak hodnoty vybraného prvku ovlivňují předpověď.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Use the slider to show descending feature importances . Select up to three cohorts to see their feature importances side by side. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.]]></Val>
@@ -5569,8 +5698,8 @@
       <Item ItemId=";Interpret.GlobalTab.topAtoB" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Top {0} features by their importance]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Hlavních {0}-{1} atributů]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hlavní {0} funkce podle důležitosti]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Top {0}-{1} features]]></Val>
@@ -5743,8 +5872,8 @@
       <Item ItemId=";Interpret.ModelPerformance.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Svůj model můžete dále zkoumat prohlédnutím srovnávací analýzy jeho výkonu napříč různými kohortami nebo podskupinami vaší datové sady. Vyberte filtry podél hodnoty Y a hodnoty X, abyste získali průřez různými dimenzemi. Typ grafu můžete změnit kliknutím na ozubené kolečko v grafu.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vyhodnoťte výkon modelu tím, že prozkoumáte distribuci hodnot predikce a hodnot metrik výkonu modelu. Podrobněji můžete model prozkoumat tak, že se podíváte na srovnávací analýzu výkonu mezi různými kohortami nebo podskupinami v datové sadě. Pro informace v různých dimenzích použijte filtry pro hodnoty x a y.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions. Select the gear in the graph to change graph type.]]></Val>
@@ -5827,8 +5956,8 @@
       <Item ItemId=";Interpret.Statistics.fnr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[False Negative Rates: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[FNR: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Míra falešně negativních výsledků: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[FNR: {0}]]></Val>
@@ -5839,8 +5968,8 @@
       <Item ItemId=";Interpret.Statistics.fpr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[False Positive Rates: {0}]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[FPR: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Míra falešně pozitivních výsledků: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[FPR: {0}]]></Val>
@@ -6175,7 +6304,7 @@
       <Item ItemId=";Interpret.WhatIfTab.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select an individual datapoint by clicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vyberte jednotlivý datový bod kliknutím na datový bod v bodovém diagramu a zobrazte níže hodnoty významnosti místního atributu a hodnoty atributu na panelu vpravo.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -6727,8 +6856,8 @@
       <Item ItemId=";Interpret.selectPoint" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a point to see its local explanation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Pokud si chcete zobrazit místní vysvětlení bodu , vyberte daný bod.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pokud chcete zobrazit místní vysvětlení bodu, vyberte daný bod.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Select a point to see its local explanation]]></Val>
@@ -6775,8 +6904,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciLower" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (lower)]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[ci_lower]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Interval spolehlivosti (nižší)]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[ci_lower]]></Val>
@@ -6787,8 +6916,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.ciUpper" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Confidence interval (upper)]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[ci_upper]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Interval spolehlivosti (horní)]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[ci_upper]]></Val>
@@ -6811,8 +6940,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.pValue" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[P-value]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[p_value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[P-hodnota]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[p_value]]></Val>
@@ -6823,8 +6952,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.point" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Effect estimate]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[bod]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odhad efektu]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[point]]></Val>
@@ -6835,8 +6964,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.stderr" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Standard error]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[stderr]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Standardní chyba]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[stderr]]></Val>
@@ -6847,8 +6976,8 @@
       <Item ItemId=";ModelAssessment.CausalAnalysis.Table.zstat" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Z-score]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[zstat]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Skóre Z]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[zstat]]></Val>
@@ -6895,6 +7024,9 @@
       <Item ItemId=";ModelAssessment.Cohort.selectCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vybrat kohortu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6910,6 +7042,9 @@
       <Item ItemId=";ModelAssessment.Cohort.shiftCohortDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a cohort from the cohort list. Apply the cohort to the dashboard.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7051,8 +7186,8 @@
       <Item ItemId=";ModelAssessment.DashboardSettings.Content" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Tento seznam zobrazuje rozložení řídicího panelu. Každá komponenta označená identifikací může filtrovat data, která se zobrazí v níže uvedených komponentách. Komponenty můžete přidat, přetáhnout je a změnit pořadí toku nebo je zcela odstranit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento seznam zobrazuje rozložení řídicího panelu. Data můžete filtrovat pomocí komponenty analýzy chyb, která se zobrazí v následujících komponentách. Komponenty můžete přidat, přetáhnout je a změnit pořadí toku nebo je zcela odstranit.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
@@ -7117,8 +7252,8 @@
       <Item ItemId=";ModelAssessment.DashboardSettings.Title" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard navigation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Rozložení řídicího panelu]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Navigace na řídicím panelu]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dashboard layout]]></Val>
@@ -7156,6 +7291,9 @@
       <Item ItemId=";ModelAssessment.FeatureImportances.IndividualFeature" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Výběrem datového bodu kliknutím na datový bod (nebo více datových bodů) v tabulce zobrazíte hodnoty jejich místní důležitosti funkcí (místní vysvětlení) a graf jednotlivých podmíněných očekávání (ICE) níže. U datových sad s více než 5 000 datovými body je zobrazení náhodným dílčím vzorkem, který umožňuje snadné zkoumání.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7171,8 +7309,8 @@
       <Item ItemId=";ModelAssessment.MainMenu.DashboardSettings" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dashboard navigation]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Nastavení řídicího panelu]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Navigace na řídicím panelu]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dashboard settings]]></Val>
