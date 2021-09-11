@@ -98,7 +98,7 @@ jobs:
       - name: install raiwidgets wheel locally
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
-      - name: install responsible wheel locally
+      - name: install responsibleai wheel locally
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
 
@@ -132,11 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package:
-          [
-            responsibleai,
-            raiwidgets
-          ]
+        package: [responsibleai, raiwidgets]
 
     steps:
       - name: Set up Python
