@@ -227,7 +227,9 @@ class ModelAnalysis(object):
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
             if test.shape[0] > maximum_rows_for_test:
                 msg_fmt = 'The test data has {0} rows, ' +\
-                    'but limit is set to {1} rows'
+                    'but limit is set to {1} rows. ' +\
+                    'Please resample the test data or ' +\
+                    'adjust maximum_rows_for_test'
                 raise UserConfigValidationException(
                     msg_fmt.format(
                         test.shape[0], maximum_rows_for_test)
