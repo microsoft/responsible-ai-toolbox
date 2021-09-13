@@ -60,7 +60,7 @@ def create_kneighbors_classifier(X, y):
 
 
 def create_sklearn_logistic_regressor(X, y, pipeline=False):
-    lin = LogisticRegression(solver='liblinear')
+    lin = LogisticRegression(solver='liblinear', random_state=777)
     if pipeline:
         lin = Pipeline([('lin', lin)])
     model = lin.fit(X, y)
@@ -133,7 +133,7 @@ def create_cancer_data():
 
 
 def create_binary_classification_dataset():
-    X, y = make_classification()
+    X, y = make_classification(random_state=777)
 
     # Split data into train and test
     X_train, X_test, y_train, y_test = train_test_split(X,
