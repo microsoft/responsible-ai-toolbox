@@ -90,7 +90,7 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
-          <MatrixSummary />
+          <MatrixSummary isEnabled={this.props.isEnabled} />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
