@@ -127,7 +127,7 @@ def create_adult_income_dataset():
     # Split data into train and test
     data_train, data_test, y_train, y_test = train_test_split(
         dataset, target,
-        test_size=0.2, random_state=7, stratify=target)
+        test_size=5000, random_state=7, stratify=target)
     return data_train, data_test, y_train, y_test, categorical_features, \
         continuous_features, target_name, classes
 

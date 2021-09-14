@@ -65,3 +65,4 @@ apps/*-e2e/debug.log
 
 # docs
 docs/build/*
+*/.mypy_cache/*
