@@ -48,7 +48,6 @@ export interface ICohortListItem {
 
 interface ICohortListState {
   currentEditCohort?: ErrorCohort;
-  currentEditIndex?: number;
   currentDeleteIndex?: number;
   currentDeleteCohortName?: string;
 }
@@ -109,12 +108,17 @@ export class CohortList extends React.Component<
             cohortName={this.state.currentEditCohort.cohort.name}
             onSave={this.saveEditedCohort}
             isNewCohort={false}
+            disableEditName
             deleteIsDisabled
             closeCohortEditor={(): void => {
-              this.setState({ currentEditCohort: undefined });
+              this.setState({
+                currentEditCohort: undefined
+              });
             }}
             closeCohortEditorPanel={(): void => {
-              this.setState({ currentEditCohort: undefined });
+              this.setState({
+                currentEditCohort: undefined
+              });
             }}
           />
         )}
@@ -256,10 +260,14 @@ export class CohortList extends React.Component<
     }
   }
 
-  private onEditCohortClick(index: number): void {
-    const all = this.context.errorCohorts.filter(
+  private getAllCohort(): ErrorCohort[] {
+    return this.context.errorCohorts.filter(
       (errorCohort) => !errorCohort.isTemporary
     );
+  }
+
+  private onEditCohortClick(index: number): void {
+    const all = this.getAllCohort();
     const cohort = index >= 0 && index < all.length && all[index];
     if (cohort) {
       this.setState({ currentEditCohort: cohort });
@@ -267,9 +275,7 @@ export class CohortList extends React.Component<
   }
 
   private isActiveCohort(index: number): boolean {
-    const all = this.context.errorCohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
-    );
+    const all = this.getAllCohort();
     if (index >= 0 && index < all.length) {
       const targetCohort = all[index];
       return !!(
@@ -282,9 +288,7 @@ export class CohortList extends React.Component<
   }
 
   private onDeleteCohortClick(index: number): void {
-    const all = this.context.errorCohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
-    );
+    const all = this.getAllCohort();
     this.setState({
       currentDeleteCohortName: all[index].cohort.name,
       currentDeleteIndex: index

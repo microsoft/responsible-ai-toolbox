@@ -33,6 +33,7 @@ export interface ICohortEditorProps {
   cohortName: string;
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
+  disableEditName?: boolean;
   onSave: (newCohort: Cohort) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
@@ -115,6 +116,7 @@ export class CohortEditor extends React.PureComponent<
                 }
                 onGetErrorMessage={this._getErrorMessage}
                 validateOnLoad={false}
+                disabled={this.props.disableEditName}
                 onChange={this.setCohortName}
               />
             </Stack.Item>
