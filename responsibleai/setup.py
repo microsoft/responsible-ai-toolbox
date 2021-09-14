@@ -20,6 +20,12 @@ with open('README.md', 'r') as fh:
 with open('requirements.txt') as f:
     install_requires = [line.strip() for line in f]
 
+EXTRAS = {
+    'widgets': [
+        'raiwidgets=={}'.format(version)
+    ]
+}
+
 setuptools.setup(
     name=name,  # noqa: F821
     version=version,  # noqa: F821
@@ -40,5 +46,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha"
-    ]
+    ],
+    extras_require=EXTRAS,
 )
