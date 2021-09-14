@@ -133,7 +133,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             saveFeatures={this.saveFeatures.bind(this)}
             features={this.props.features}
             importances={this.props.importances}
-            isEnabled
+            isEnabled={this.props.getTreeNodes !== undefined}
             selectedFeatures={this.props.features}
           />
         </Stack>

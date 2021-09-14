@@ -262,7 +262,9 @@ export class TreeViewRenderer extends React.PureComponent<
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item>
           <Text variant="medium">
-            {localization.ErrorAnalysis.TreeView.treeDescription}
+            {this.props.getTreeNodes
+              ? localization.ErrorAnalysis.TreeView.treeDescription
+              : localization.ErrorAnalysis.TreeView.treeStaticDescription}
           </Text>
         </Stack.Item>
         <Stack.Item>
