@@ -10,6 +10,7 @@ const versionPyFiles = [
   "./raiwidgets/raiwidgets/__version__.py",
   "./responsibleai/responsibleai/__version__.py"
 ];
+const exclusion = ["mlchartlib"];
 
 function getVersion(release) {
   const revision = execSync("git rev-list --count HEAD").toString().trim();
@@ -73,6 +74,7 @@ async function main() {
     const version = getVersion(release);
     writeVersion(version);
     for (const eachPkg of Object.keys(workspace.projects)) {
+      if (exclusion.includes(eachPkg)) continue;
       await setVersion(workspace, eachPkg, version);
     }
     if (tag) {

@@ -1,6 +1,19 @@
 {
   "extends": ["../../.eslintrc"],
   "ignorePatterns": ["!**/*"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@responsible-ai/core-ui",
+            "message": "mlchartlib is a shared package with static version cannot reference core"
+          }
+        ]
+      }
+    ]
+  },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
