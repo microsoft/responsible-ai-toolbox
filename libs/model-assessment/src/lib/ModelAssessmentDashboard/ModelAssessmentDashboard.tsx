@@ -278,14 +278,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               onDismiss={(): void =>
                 this.setState({ saveCohortVisible: false })
               }
-              onSave={(savedCohort: ErrorCohort): void => {
-                let newCohorts = [...this.state.cohorts, savedCohort];
-                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                this.setState({
-                  cohorts: newCohorts,
-                  selectedCohort: savedCohort
-                });
-              }}
+              onSave={this.onSaveCohort}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
             />
@@ -382,6 +375,20 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
+    });
+  };
+
+  private onSaveCohort = (savedCohort: ErrorCohort): void => {
+    if (
+      this.state.cohorts.some((c) => c.cohort.name === savedCohort.cohort.name)
+    ) {
+      return;
+    }
+    let newCohorts = [...this.state.cohorts, savedCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState({
+      cohorts: newCohorts,
+      selectedCohort: savedCohort
     });
   };
 

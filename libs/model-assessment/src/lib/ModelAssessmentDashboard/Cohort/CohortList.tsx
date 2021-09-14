@@ -21,7 +21,6 @@ import {
   Text,
   SelectionMode,
   IconButton,
-  mergeStyles,
   Dialog,
   DialogFooter,
   PrimaryButton,
@@ -30,6 +29,8 @@ import {
   ContextualMenu
 } from "office-ui-fabric-react";
 import React from "react";
+
+import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
   onEditCohortClick?: (editedCohort: ErrorCohort) => void;
@@ -110,16 +111,8 @@ export class CohortList extends React.Component<
             isNewCohort={false}
             disableEditName
             deleteIsDisabled
-            closeCohortEditor={(): void => {
-              this.setState({
-                currentEditCohort: undefined
-              });
-            }}
-            closeCohortEditorPanel={(): void => {
-              this.setState({
-                currentEditCohort: undefined
-              });
-            }}
+            closeCohortEditor={this.toggleEditPanel}
+            closeCohortEditorPanel={this.toggleEditPanel}
           />
         )}
         {this.state.currentDeleteIndex !== undefined && (
@@ -159,9 +152,7 @@ export class CohortList extends React.Component<
     index: number | undefined,
     column: IColumn | undefined
   ): React.ReactNode {
-    const style = mergeStyles({
-      fontSize: "12px"
-    });
+    const style = cohortListStyles();
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
         column.fieldName as keyof ICohortListItem
@@ -171,13 +162,13 @@ export class CohortList extends React.Component<
         case "nameColumn":
           if (this.props.enableEditing && item.name !== "All data") {
             return (
-              <Stack horizontal={false}>
-                <Stack.Item className={style}>
+              <Stack className={style.link} horizontal={false}>
+                <Stack.Item>
                   <span>{fieldContent}</span>
                 </Stack.Item>
                 <Stack.Item>
                   <Stack horizontal tokens={{ childrenGap: "10px" }}>
-                    <Stack.Item className={style}>
+                    <Stack.Item>
                       <Link
                         onClick={this.onEditCohortClick.bind(this, item.key)}
                         disabled={this.isActiveCohort(item.key)}
@@ -185,7 +176,7 @@ export class CohortList extends React.Component<
                         {localization.Interpret.CohortBanner.edit}
                       </Link>
                     </Stack.Item>
-                    <Stack.Item className={style}>
+                    <Stack.Item>
                       <Link
                         onClick={this.onDuplicateCohortClick.bind(
                           this,
@@ -215,7 +206,7 @@ export class CohortList extends React.Component<
                     </Stack.Item>
                   </Stack>
                 </Stack.Item>
-                <Stack.Item className={style}>
+                <Stack.Item>
                   <IconButton
                     iconProps={{ iconName: "Trash" }}
                     disabled={this.isActiveCohort(item.key)}
@@ -302,9 +293,7 @@ export class CohortList extends React.Component<
   private onDeleteCohort(): void {
     if (this.state.currentDeleteIndex !== undefined) {
       const index = this.state.currentDeleteIndex;
-      const all = this.context.errorCohorts.filter(
-        (errorCohort) => !errorCohort.isTemporary
-      );
+      const all = this.getAllCohort();
       const cohort = index >= 0 && index < all.length && all[index];
       if (cohort) {
         this.context.deleteCohort(cohort);
@@ -341,9 +330,10 @@ export class CohortList extends React.Component<
 
   private saveEditedCohort = (cohort: Cohort) => {
     this.context.editCohort(cohort);
-    this.toggleVisibility();
+    this.toggleEditPanel();
   };
-  private toggleVisibility = () => {
+
+  private toggleEditPanel = () => {
     this.setState({ currentEditCohort: undefined });
   };
 }
