@@ -53,12 +53,16 @@ export interface IModelAssessmentContext {
     | undefined;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort): void;
+  editCohort(cohort: Cohort): void;
+  deleteCohort(cohort: ErrorCohort): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
   addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
   dataset: {} as IDataset,
+  deleteCohort: () => undefined,
+  editCohort: () => undefined,
   errorCohorts: [],
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,

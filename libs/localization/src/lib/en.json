@@ -683,6 +683,7 @@
       "datasetCohorts": "Dataset cohorts",
       "details": "Details",
       "duplicateCohort": "Duplicate",
+      "edit": "Edit",
       "editCohort": "Edit cohort",
       "features": "{0} features",
       "filters": "{0} filters",
@@ -1159,12 +1160,14 @@
       "cancel": "Cancel",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
+      "deleteCohort": "Deleting {0}?",
+      "delteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
       "shiftCohort": "Shift cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "ChangeGlobalCohort": "Change global cohort",
+      "SwitchGlobalCohort": "Switch global cohort",
       "CreateNewCohort": "Create new cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
