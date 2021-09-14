@@ -518,6 +518,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     errorAnalysisOption={this.state.errorAnalysisOption}
                     selectedCohort={this.state.selectedCohort}
                     baseCohort={this.state.baseCohort}
+                    tree={
+                      this.props.requestDebugML === undefined
+                        ? this.props.staticDebugML.data
+                        : undefined
+                    }
                     treeViewState={this.state.treeViewState}
                     setTreeViewState={this.setTreeViewState}
                     matrixAreaState={this.state.matrixAreaState}
