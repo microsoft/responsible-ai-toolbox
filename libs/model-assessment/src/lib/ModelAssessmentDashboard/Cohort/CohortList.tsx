@@ -20,16 +20,11 @@ import {
   Stack,
   Text,
   SelectionMode,
-  IconButton,
-  Dialog,
-  DialogFooter,
-  PrimaryButton,
-  DefaultButton,
-  DialogType,
-  ContextualMenu
+  IconButton
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { CohortDeleteDialog } from "./CohortDeleteDialog";
 import { cohortListStyles } from "./CohortList.styles";
 
 export interface ICohortListProps {
@@ -83,14 +78,6 @@ export class CohortList extends React.Component<
       }
     ];
     const items = this.getCohortListItems();
-    const dialogContentProps = {
-      subText: localization.ModelAssessment.Cohort.delteConfirm,
-      title: localization.formatString(
-        localization.ModelAssessment.Cohort.deleteCohort,
-        this.state.currentDeleteCohortName
-      ),
-      type: DialogType.close
-    };
     return (
       <>
         <DetailsList
@@ -116,32 +103,12 @@ export class CohortList extends React.Component<
           />
         )}
         {this.state.currentDeleteIndex !== undefined && (
-          <Dialog
-            hidden={!this.state.currentDeleteIndex}
+          <CohortDeleteDialog
+            currentDeleteIndex={this.state.currentDeleteIndex}
+            currentDeleteCohortName={this.state.currentDeleteCohortName}
+            onDeleteClick={this.onDeleteCohort.bind(this)}
             onDismiss={this.onDismissDelete.bind(this)}
-            dialogContentProps={dialogContentProps}
-            modalProps={{
-              dragOptions: {
-                closeMenuItemText: "Close",
-                menu: ContextualMenu,
-                moveMenuItemText: "Move"
-              },
-              isBlocking: true
-            }}
-            minWidth={740}
-            maxWidth={1000}
-          >
-            <DialogFooter>
-              <PrimaryButton
-                onClick={this.onDeleteCohort.bind(this)}
-                text="Apply"
-              />
-              <DefaultButton
-                onClick={this.onDismissDelete.bind(this)}
-                text="Cancel"
-              />
-            </DialogFooter>
-          </Dialog>
+          />
         )}
       </>
     );
@@ -236,12 +203,16 @@ export class CohortList extends React.Component<
     return React.Fragment;
   }
 
-  private onDuplicateCohortClick(index: number): void {
-    const allCohorts = this.context.errorCohorts.filter(
-      (errorCohort: ErrorCohort) => !errorCohort.isTemporary
+  private getAllCohort(): ErrorCohort[] {
+    return this.context.errorCohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
     );
-    if (index >= 0 && index < allCohorts.length) {
-      const originCohort = allCohorts[index];
+  }
+
+  private onDuplicateCohortClick(index: number): void {
+    const all = this.getAllCohort();
+    if (index >= 0 && index < all.length) {
+      const originCohort = all[index];
       const newCohort = new Cohort(
         `${originCohort.cohort.name} copy`,
         this.context.jointDataset,
@@ -249,12 +220,6 @@ export class CohortList extends React.Component<
       );
       this.context.addCohort(newCohort);
     }
-  }
-
-  private getAllCohort(): ErrorCohort[] {
-    return this.context.errorCohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
-    );
   }
 
   private onEditCohortClick(index: number): void {
