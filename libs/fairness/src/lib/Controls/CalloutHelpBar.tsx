@@ -3,13 +3,12 @@
 
 import { IBounds } from "@responsible-ai/core-ui";
 import _ from "lodash";
-import { Stack, Toggle } from "office-ui-fabric-react";
+import { Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { IErrorPickerProps } from "../FairnessWizard";
 import { SharedStyles } from "../Shared.styles";
 
-import { CalloutErrorBars } from "./CalloutErrorBars";
 import { CalloutGraph } from "./CalloutGraph";
 
 interface ICalloutHelpBarProps {
@@ -36,7 +35,7 @@ export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
         className={sharedStyles.calloutBarWrapper}
       >
         <CalloutGraph graphCalloutStrings={this.props.graphCalloutStrings} />
-        <Stack horizontal verticalAlign="center">
+        {/* <Stack horizontal verticalAlign="center">
           <CalloutErrorBars />
           <Toggle
             className={sharedStyles.toggle}
@@ -51,7 +50,7 @@ export class CalloutHelpBar extends React.PureComponent<ICalloutHelpBarProps> {
             }
             onChange={this.props.parentErrorChanged}
           />
-        </Stack>
+        </Stack> */}
       </Stack>
     );
   }
