@@ -167,7 +167,7 @@ export class CohortEditor extends React.PureComponent<
     const styles = cohortEditorStyles();
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
-        {!this.props.isNewCohort && (
+        {!this.props.isNewCohort && !this.props.disableEditName && (
           <DefaultButton
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
