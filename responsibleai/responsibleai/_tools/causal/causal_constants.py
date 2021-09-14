@@ -56,27 +56,3 @@ class ResultAttributes:
     THRESHOLD = 'threshold'
     LEFT = 'left'
     RIGHT = 'right'
-
-
-class Versions:
-    """Versions for CausalResults."""
-
-    V_0_0_0 = '0.0.0'
-    V_0_1_0 = '0.1.0'
-
-    CURRENT = V_0_1_0
-
-    @classmethod
-    def get_all(cls):
-        constants = []
-        for attribute in dir(cls):
-            # Ignore private members
-            if attribute.startswith('__'):
-                continue
-
-            # Ignore public methods
-            if attribute != attribute.upper():
-                continue
-
-            constants.append(getattr(cls, attribute))
-        return constants

@@ -9,8 +9,8 @@ from jsonschema import ValidationError
 
 from responsibleai import ModelTask
 from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._tools.causal.causal_constants import Versions
 from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai._tools.shared.versions import CausalVersions
 
 
 @pytest.fixture(scope='module')
@@ -32,7 +32,7 @@ class TestCausalVersioning:
         loaded = CausalResult.load(save_dir)
         assert loaded.id == result.id
         assert loaded.version == result.version
-        assert loaded.version == Versions.CURRENT
+        assert loaded.version == CausalVersions.CURRENT
         assert loaded._get_dashboard_data() == result._get_dashboard_data()
         assert loaded.global_effects.equals(result.global_effects)
         assert loaded.local_effects.equals(result.local_effects)

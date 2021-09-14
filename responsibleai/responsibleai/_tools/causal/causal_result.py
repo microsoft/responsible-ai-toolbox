@@ -11,7 +11,8 @@ from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
 from responsibleai._tools.causal.causal_constants import (
-    ResultAttributes, Versions)
+    ResultAttributes)
+from responsibleai._tools.shared.versions import CausalVersions
 from responsibleai._interfaces import (
     CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
     CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
@@ -39,7 +40,7 @@ class CausalResult(BaseResult['CausalResult']):
         local_effects: Optional[pd.DataFrame] = None,
         policies: Optional[Any] = None,
     ):
-        super().__init__(str(uuid.uuid4()), Versions.CURRENT)
+        super().__init__(str(uuid.uuid4()), CausalVersions.CURRENT)
 
         self.config = config
 
@@ -180,8 +181,9 @@ class CausalResult(BaseResult['CausalResult']):
 
         return feature, comparison, value
 
+    @classmethod
     def _get_schema(cls, version: str):
-        if version not in Versions.get_all():
+        if version not in CausalVersions.get_all():
             raise ValueError(f"Invalid version for causal result: {version}")
 
         schema_directory = Path(__file__).parent / 'dashboard_schemas'
