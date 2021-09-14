@@ -331,7 +331,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     tabs.splice(index, 0, {
       dataCount,
       key: tab,
-      name: tabs[tabs.map(({ key }) => key).indexOf(tab)].name
+      name:
+        this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
     });
     this.setState({ activeGlobalTabs: tabs });
   };
