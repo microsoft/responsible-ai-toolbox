@@ -3,7 +3,6 @@
 
 import {
   defaultModelAssessmentContext,
-  ErrorCohort,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -16,7 +15,6 @@ import { CohortList } from "./CohortList";
 import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 
 export interface ICohortSettingsPanelProps {
-  errorCohorts: ErrorCohort[];
   isOpen: boolean;
   onDismiss: () => void;
 }
@@ -58,10 +56,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
             </Stack>
           </Stack.Item>
           <Stack.Item>
-            <CohortList
-              errorCohorts={this.props.errorCohorts}
-              enableEditing={false}
-            />
+            <CohortList enableEditing />
           </Stack.Item>
         </Stack>
       </Panel>

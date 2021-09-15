@@ -49,7 +49,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
         <Stack horizontal tokens={{ childrenGap: 25 }}>
           <DefaultButton
             text={
-              localization.ModelAssessment.CohortInformation.ChangeGlobalCohort
+              localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
             }
             onClick={this.props.toggleShiftCohortVisibility}
           />

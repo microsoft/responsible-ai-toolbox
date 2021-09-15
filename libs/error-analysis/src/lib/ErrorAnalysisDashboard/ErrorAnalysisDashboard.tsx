@@ -337,6 +337,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           addCohort: () => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
+          deleteCohort: () => undefined,
+          editCohort: () => undefined,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {

@@ -90,6 +90,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.jointDataset
           ),
           dataset: {} as IDataset,
+          deleteCohort: () => undefined,
+          editCohort: () => undefined,
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
