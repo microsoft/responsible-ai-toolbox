@@ -84,7 +84,6 @@ export class MainMenu extends React.PureComponent<
           </div>
         </div>
         <CohortSettingsPanel
-          errorCohorts={this.context.errorCohorts}
           isOpen={this.state?.cohortSettingsPanelVisible}
           onDismiss={this.toggleCohortSettingsPanel}
         />
