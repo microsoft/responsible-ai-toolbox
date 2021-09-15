@@ -5,6 +5,7 @@
 import json
 import pandas as pd
 import re
+import semver
 import uuid
 
 from pathlib import Path
@@ -40,7 +41,7 @@ class CausalResult(BaseResult['CausalResult']):
         local_effects: Optional[pd.DataFrame] = None,
         policies: Optional[Any] = None,
     ):
-        super().__init__(str(uuid.uuid4()), CausalVersions.CURRENT)
+        super().__init__(str(uuid.uuid4()), CausalVersions.get_current())
 
         self.config = config
 
@@ -183,14 +184,24 @@ class CausalResult(BaseResult['CausalResult']):
 
     @classmethod
     def _get_schema(cls, version: str):
-        if version not in CausalVersions.get_all():
-            raise ValueError(f"Invalid version for causal result: {version}")
+        cls._validate_version(version)
 
         schema_directory = Path(__file__).parent / 'dashboard_schemas'
         schema_filename = f'schema_{version}.json'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
             return json.load(f)
+
+    @classmethod
+    def _validate_version(cls, version):
+        if semver.compare(version, CausalVersions.get_current()) > 0:
+            raise ValueError("The installed version of responsibleai "
+                             "is not compatible with causal result version "
+                             f"{version}. Please upgrade in order to load "
+                             "this result.")
+
+        if version not in CausalVersions.get_all():
+            raise ValueError(f"Invalid version for causal result: {version}")
 
     def _get_attributes(self):
         return self._ATTRIBUTES

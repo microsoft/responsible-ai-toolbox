@@ -32,7 +32,7 @@ class TestCausalVersioning:
         loaded = CausalResult.load(save_dir)
         assert loaded.id == result.id
         assert loaded.version == result.version
-        assert loaded.version == CausalVersions.CURRENT
+        assert loaded.version == CausalVersions.get_current()
         assert loaded._get_dashboard_data() == result._get_dashboard_data()
         assert loaded.global_effects.equals(result.global_effects)
         assert loaded.local_effects.equals(result.local_effects)
@@ -64,7 +64,7 @@ class TestCausalVersioning:
             new_version_data = {'version': 'invalid_version'}
             json.dump(new_version_data, f)
 
-        message = r"Invalid version for causal result: invalid_version"
+        message = r"invalid_version is not valid SemVer string"
         with pytest.raises(ValueError, match=message):
             CausalResult.load(save_dir)
 
@@ -79,4 +79,19 @@ class TestCausalVersioning:
 
         message = r"Failed validating"
         with pytest.raises(ValidationError, match=message):
+            CausalResult.load(save_dir)
+
+    def test_forward_incompatible(self, tmpdir, causal_result):
+        save_dir = tmpdir.mkdir('result-dir')
+        causal_result.save(save_dir)
+
+        version_filepath = save_dir / 'version.json'
+        with open(version_filepath, 'w') as f:
+            new_version_data = {'version': '1000.0.0'}
+            json.dump(new_version_data, f)
+
+        message = ("The installed version of responsibleai is not "
+                   "compatible with causal result version 1000.0.0. "
+                   "Please upgrade in order to load this result.")
+        with pytest.raises(ValueError, match=message):
             CausalResult.load(save_dir)
