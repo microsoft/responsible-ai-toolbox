@@ -58,7 +58,6 @@ export class CounterfactualPanel extends React.Component<
   }
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
-    const hasPrediction = this.context.requestPredictions;
     return (
       <Panel
         isOpen={this.props.isPanelOpen}
@@ -66,7 +65,7 @@ export class CounterfactualPanel extends React.Component<
         onDismiss={this.onClosePanel.bind(this)}
         closeButtonAriaLabel="Close"
         headerText={
-          hasPrediction
+          this.context.requestPredictions
             ? localization.Counterfactuals.whatIfPanelHeader
             : localization.Counterfactuals.panelHeader
         }
@@ -97,7 +96,6 @@ export class CounterfactualPanel extends React.Component<
           </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
-              supportPrediction={!!hasPrediction}
               selectedIndex={this.props.selectedIndex}
               filterText={this.state.filterText}
               originalData={this.props.originalData}

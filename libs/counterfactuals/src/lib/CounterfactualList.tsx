@@ -36,7 +36,6 @@ export interface ICounterfactualListProps {
   filterText?: string;
   temporaryPoint: Record<string, string | number> | undefined;
   sortFeatures: boolean;
-  supportPrediction: boolean;
   setCustomRowProperty(
     key: string | number,
     isString: boolean,
@@ -151,7 +150,7 @@ export class CounterfactualList extends React.Component<
               onChange={this.updateColValue}
             />
           </Stack.Item>
-          {this.props.supportPrediction && (
+          {this.context.requestPredictions && (
             <Stack.Item className={classNames.predictedLink}>
               <div
                 id={"predictionLink"}
@@ -186,7 +185,7 @@ export class CounterfactualList extends React.Component<
     return (
       <Stack>
         <Text>{item.row}</Text>
-        {this.props.supportPrediction && (
+        {this.context.requestPredictions && (
           <Link onClick={this.onSelect.bind(this, index)}>
             {localization.Counterfactuals.WhatIf.setValue}
           </Link>
@@ -283,7 +282,7 @@ export class CounterfactualList extends React.Component<
   private onRenderDetailsFooter = (
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
-    if (detailsFooterProps && this.props.supportPrediction) {
+    if (detailsFooterProps && this.context.requestPredictions) {
       return (
         <DetailsRow
           {...detailsFooterProps}
