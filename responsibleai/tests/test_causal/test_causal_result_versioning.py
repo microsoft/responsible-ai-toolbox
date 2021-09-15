@@ -57,8 +57,7 @@ class TestCausalVersioning:
 
     def test_invalid_version_load(self, tmpdir, causal_result):
         save_dir = tmpdir.mkdir('result-dir')
-        result = causal_result
-        result.save(save_dir)
+        causal_result.save(save_dir)
 
         version_filepath = save_dir / 'version.json'
         with open(version_filepath, 'w') as f:
@@ -71,8 +70,7 @@ class TestCausalVersioning:
 
     def test_invalid_dashboard_load(self, tmpdir, causal_result):
         save_dir = tmpdir.mkdir('result-dir')
-        result = causal_result
-        result.save(save_dir)
+        causal_result.save(save_dir)
 
         dashboard_filepath = save_dir / 'dashboard.json'
         with open(dashboard_filepath, 'w') as f:

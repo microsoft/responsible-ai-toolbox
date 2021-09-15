@@ -135,7 +135,6 @@ class BaseResult(ABC, Generic[TResult]):
         if self._dashboard_data is None:
             dashboard_object = self._get_dashboard_object()
             self._dashboard_data = serialize_json_safe(dashboard_object)
-            return self._dashboard_data
 
         return self._dashboard_data
 
