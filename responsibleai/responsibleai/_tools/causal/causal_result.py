@@ -194,7 +194,8 @@ class CausalResult(BaseResult['CausalResult']):
 
     @classmethod
     def _validate_version(cls, version):
-        if semver.compare(version, CausalVersions.get_current()) > 0:
+        semver_version = semver.VersionInfo.parse(version)
+        if semver_version.compare(CausalVersions.get_current()) > 0:
             raise ValueError("The installed version of responsibleai "
                              "is not compatible with causal result version "
                              f"{version}. Please upgrade in order to load "
