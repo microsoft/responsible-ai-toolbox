@@ -32,7 +32,6 @@ export const matrixAreaStyles: () => IProcessedStyleSet<IMatrixAreaStyles> =
       matrixLabelBottom: {
         display: "flex",
         flexDirection: "row",
-        fontFamily: "Segoe UI",
         fontSize: "14px",
         fontStyle: "normal",
         fontWeight: "normal",
