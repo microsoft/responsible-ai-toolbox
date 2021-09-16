@@ -127,6 +127,7 @@ class CausalConfig:
 
 class CausalData:
     id: str
+    version: str
     config: CausalConfig
     global_effects: List[CausalMetric]
     local_effects: List[List[CausalMetric]]
