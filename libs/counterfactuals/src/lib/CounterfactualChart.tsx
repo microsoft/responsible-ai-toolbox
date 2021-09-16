@@ -332,7 +332,11 @@ export class CounterfactualChart extends React.PureComponent<
                   className={classNames.legendLabel}
                   onClick={this.togglePanel}
                   disabled={this.state.selectedPointsIndexes[0] === undefined}
-                  text={localization.Counterfactuals.createCounterfactual}
+                  text={
+                    this.context.requestPredictions
+                      ? localization.Counterfactuals.createWhatIfCounterfactual
+                      : localization.Counterfactuals.createCounterfactual
+                  }
                 />
                 {this.state.customPoints.length > 0 && (
                   <InteractiveLegend

@@ -64,7 +64,11 @@ export class CounterfactualPanel extends React.Component<
         type={PanelType.largeFixed}
         onDismiss={this.onClosePanel.bind(this)}
         closeButtonAriaLabel="Close"
-        headerText={localization.Counterfactuals.panelHeader}
+        headerText={
+          this.context.requestPredictions
+            ? localization.Counterfactuals.whatIfPanelHeader
+            : localization.Counterfactuals.panelHeader
+        }
       >
         <Stack tokens={{ childrenGap: "m1" }}>
           <Stack.Item>

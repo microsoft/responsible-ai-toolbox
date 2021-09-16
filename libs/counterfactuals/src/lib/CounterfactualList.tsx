@@ -150,32 +150,34 @@ export class CounterfactualList extends React.Component<
               onChange={this.updateColValue}
             />
           </Stack.Item>
-          <Stack.Item className={classNames.predictedLink}>
-            <div
-              id={"predictionLink"}
-              className={classNames.predictedLink}
-              onMouseOver={this.toggleCallout}
-              onFocus={this.toggleCallout}
-              onMouseOut={this.toggleCallout}
-              onBlur={this.toggleCallout}
-            >
-              {localization.Counterfactuals.seePrediction}
-            </div>
-            {this.state.showCallout && (
-              <Callout
-                target={"#predictionLink"}
-                onDismiss={this.toggleCallout}
-                setInitialFocus
+          {this.context.requestPredictions && (
+            <Stack.Item className={classNames.predictedLink}>
+              <div
+                id={"predictionLink"}
+                className={classNames.predictedLink}
+                onMouseOver={this.toggleCallout}
+                onFocus={this.toggleCallout}
+                onMouseOut={this.toggleCallout}
+                onBlur={this.toggleCallout}
               >
-                <CustomPredictionLabels
-                  jointDataset={this.context.jointDataset}
-                  metadata={this.context.modelMetadata}
-                  selectedWhatIfRootIndex={this.props.selectedIndex}
-                  temporaryPoint={this.props.temporaryPoint}
-                />
-              </Callout>
-            )}
-          </Stack.Item>
+                {localization.Counterfactuals.seePrediction}
+              </div>
+              {this.state.showCallout && (
+                <Callout
+                  target={"#predictionLink"}
+                  onDismiss={this.toggleCallout}
+                  setInitialFocus
+                >
+                  <CustomPredictionLabels
+                    jointDataset={this.context.jointDataset}
+                    metadata={this.context.modelMetadata}
+                    selectedWhatIfRootIndex={this.props.selectedIndex}
+                    temporaryPoint={this.props.temporaryPoint}
+                  />
+                </Callout>
+              )}
+            </Stack.Item>
+          )}
         </Stack>
       );
     }
@@ -183,9 +185,11 @@ export class CounterfactualList extends React.Component<
     return (
       <Stack>
         <Text>{item.row}</Text>
-        <Link onClick={this.onSelect.bind(this, index)}>
-          {localization.Counterfactuals.WhatIf.setValue}
-        </Link>
+        {this.context.requestPredictions && (
+          <Link onClick={this.onSelect.bind(this, index)}>
+            {localization.Counterfactuals.WhatIf.setValue}
+          </Link>
+        )}
       </Stack>
     );
   };
@@ -278,7 +282,7 @@ export class CounterfactualList extends React.Component<
   private onRenderDetailsFooter = (
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
-    if (detailsFooterProps) {
+    if (detailsFooterProps && this.context.requestPredictions) {
       return (
         <DetailsRow
           {...detailsFooterProps}
