@@ -62,3 +62,21 @@ class ExplanationKeys(object):
     EXPLANATION_TYPE_KEY = 'explanation_type'
     GLOBAL_EXPLANATION_KEY = 'global_feature_importance'
     LOCAL_EXPLANATION_KEY = 'local_feature_importance'
+
+
+class SerializationAttributes:
+    """Constants for a serialized result."""
+
+    # File structure
+    RESULTS_DIRECTORY = 'results'
+
+    # Metadata keys
+    ID_KEY = 'id'
+    VERSION_KEY = 'version'
+
+    # Metadata filnames
+    ID_FILENAME = 'id.json'
+    VERSION_FILENAME = 'version.json'
+
+    # Dashboard filenames
+    DASHBOARD_FILENAME = 'dashboard.json'

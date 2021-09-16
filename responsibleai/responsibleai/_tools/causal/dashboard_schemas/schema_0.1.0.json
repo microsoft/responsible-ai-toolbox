@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Causal analysis dashboard schema",
+  "description": "Full schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "ID of causal result",
+      "type": "string"
+    },
+    "version": {
+      "description": "Version of causal result",
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "properties": {
+        "treatment_features": {
+          "description": "List of treatment features",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["treatment_features"]
+    },
+    "global_effects": {
+      "description": "Causal effects for whole dataset",
+      "type": "array",
+      "items": { "$ref": "#/definitions/causal_effect" }
+    },
+    "local_effects": {
+      "description": "Causal effects per sample",
+      "type": "array",
+      "items": {
+        "description": "Causal effects for one sample",
+        "type": "array",
+        "items": { "$ref": "#/definitions/causal_effect" }
+      }
+    },
+    "policies": {
+      "description": "Treatment policies",
+      "type": "array",
+      "items": { "$ref": "#/definitions/policy" }
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "config",
+    "global_effects",
+    "local_effects",
+    "policies"
+  ],
+  "definitions": {
+    "causal_effect": {
+      "type": "object",
+      "properties": {
+        "sample": {
+          "description": "Number of local sample (only for local effects)",
+          "type": "number"
+        },
+        "feature": {
+          "description": "Treatment feature name",
+          "type": ["string", "number"]
+        },
+        "feature_value": {
+          "description": "Treatment feature value (category or 'num')",
+          "type": "string"
+        },
+        "point": {
+          "description": "Point estimate of causal effect",
+          "type": "number"
+        },
+        "stderr": {
+          "description": "Standard error of the causal effect estimate",
+          "type": "number"
+        },
+        "zstat": {
+          "description": "z-score of the causal effect estimate",
+          "type": "number"
+        },
+        "p_value": {
+          "description": "p-value of the causal effect estimate",
+          "type": "number"
+        },
+        "ci_lower": {
+          "description": "Lower confidence bound for the causal effect estimate",
+          "type": "number"
+        },
+        "ci_upper": {
+          "description": "Upper confidence bound for the causal effect estimate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "point",
+        "stderr",
+        "zstat",
+        "p_value",
+        "ci_lower",
+        "ci_upper"
+      ]
+    },
+    "tree_node": {
+      "description": "Either internal or leaf node in policy tree",
+      "anyOf": [
+        { "$ref": "#/definitions/internal_node" },
+        { "$ref": "#/definitions/leaf_node" }
+      ]
+    },
+    "internal_node": {
+      "leaf": {
+        "description": "Whether the node is a leaf node",
+        "type": "boolean"
+      },
+      "feature": {
+        "description": "Name of the feature to split on",
+        "type": ["string", "number"]
+      },
+      "right_comparison": {
+        "description": "Comparison operator for the right subtree",
+        "type": "string"
+      },
+      "comparison_value": {
+        "description": "Value of comparison for the right subtree",
+        "type": ["string", "number"]
+      },
+      "left": {
+        "description": "Left branch of the tree from the current node",
+        "type": { "$ref": "#/definitions/tree_node" }
+      },
+      "right": {
+        "description": "Right branch of the tree from the current node",
+        "type": { "$ref": "#/definitions/tree_node" }
+      }
+    },
+    "leaf_node": {
+      "leaf": {
+        "description": "Whether the node is a leaf node",
+        "type": "boolean"
+      },
+      "n_samples": {
+        "description": "Number of samples in the leaf node",
+        "type": "number"
+      },
+      "treatment": {
+        "description": "Treatment policy recommendation for the leaf node",
+        "type": ["string", "number"]
+      }
+    },
+    "policy": {
+      "description": "Recommended treatment policy for one treatment feature",
+      "type": "object",
+      "properties": {
+        "treatment_feature": {
+          "description": "Treatment feature name",
+          "type": ["string", "number"]
+        },
+        "control_treatment": {
+          "description": "Control treatment name",
+          "type": ["string", "number"]
+        },
+        "local_policies": {
+          "description": "Individual/local treatment policies",
+          "type": "array",
+          "items": {
+            "description": "Individual/local treatment policy for one sample",
+            "type": "object",
+            "properties": {
+              "Treatment": {
+                "description": "Treatment feature name",
+                "type": ["string", "number"]
+              },
+              "Effect of treatment": {
+                "description": "Point estimate of causal effect",
+                "type": "number"
+              },
+              "Effect of treatment lower bound": {
+                "description": "Lower confidence bound for the causal effect estimate",
+                "type": "number"
+              },
+              "Effect of treatment upper bound": {
+                "description": "Upper confidence bound for the causal effect estimate",
+                "type": "number"
+              }
+            }
+          }
+        },
+        "policy_gains": {
+          "description": "Gains achieved from several policies",
+          "type": "object",
+          "properties": {
+            "recommended_policy_gains": {
+              "description": "Gains achieved by following the full treatment policy recommendation",
+              "type": "number"
+            },
+            "treatment_gains": {
+              "description": "Gains achieved by always applying the treatment (and ignoring the recommended policy)",
+              "type": "object"
+            }
+          }
+        },
+        "policy_tree": {
+          "description": "Tree to represent the treatment policy",
+          "anyOf": [
+            { "$ref": "#/definitions/internal_node" },
+            { "$ref": "#/definitions/leaf_node" }
+          ]
+        }
+      },
+      "required": [
+        "treatment_feature",
+        "control_treatment",
+        "local_policies",
+        "policy_gains",
+        "policy_tree"
+      ]
+    }
+  }
+}

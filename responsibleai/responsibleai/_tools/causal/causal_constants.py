@@ -56,11 +56,3 @@ class ResultAttributes:
     THRESHOLD = 'threshold'
     LEFT = 'left'
     RIGHT = 'right'
-
-
-class SerializationAttributes:
-    """Attributes constants for a serialized CausalResult."""
-
-    RESULTS = 'results'
-
-    DASHBOARD_FILENAME = 'dashboard.json'

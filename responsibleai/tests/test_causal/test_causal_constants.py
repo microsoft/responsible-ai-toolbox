@@ -1,8 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai._tools.causal.causal_constants import (
-    DefaultParams)
+from responsibleai._tools.causal.causal_constants import DefaultParams
 
 
 class TestCausalConstants:
