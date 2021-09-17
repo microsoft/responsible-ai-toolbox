@@ -487,13 +487,12 @@ export class CounterfactualChart extends React.PureComponent<
         index
       )
     };
-    if (this.context?.dataset?.target_column) {
-      const featureNames = this.context?.dataset?.feature_names;
-      featureNames.forEach((f, index) => {
-        data[f] = dataPoint[index];
-      });
-      data[this.context.dataset.target_column] = row[JointDataset.TrueYLabel];
-    }
+    const featureNames = this.context.dataset.feature_names;
+    featureNames.forEach((f, index) => {
+      data[f] = dataPoint[index];
+    });
+    const targetLabel = this.context.dataset.target_column || "y";
+    data[targetLabel] = row[JointDataset.TrueYLabel];
     return data;
   }
 
