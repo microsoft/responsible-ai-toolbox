@@ -24,6 +24,22 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.11.0
+
+- new features
+  - table for list of available cohorts
+- bug fixes
+  - fix various UI usability bugs
+  - fix for clicking custom scatter plot point
+- other
+  - improve validation for model prediction
+  - reorder counterfactual table columns
+  - add absolute sorting for local importance charts
+  - improve spacing and fonts across dashboard
+  - fix typos in docstrings
+  - improve wording of text on dashboard
+  - add warnings for soft data limits
+
 ## v0.10.0
 
 - educational materials
