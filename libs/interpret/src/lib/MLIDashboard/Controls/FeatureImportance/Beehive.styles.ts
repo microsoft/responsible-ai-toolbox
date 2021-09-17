@@ -34,8 +34,6 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> =
     calloutInfo: {
       display: "flex",
       flexDirection: "column",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       maxWidth: "300px",
       padding: "30px"
     },
@@ -43,9 +41,6 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> =
       flex: 1
     },
     labelText: {
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-      sans-serif`,
       fontSize: "14px",
       lineHeight: "14px",
       margin: "7px 0 0 4px"
@@ -56,9 +51,6 @@ export const beehiveStyles: IProcessedStyleSet<IBeehiveStyles> =
     selectorLabel: {
       display: "flex",
       flexDirection: "row",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-              -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-              sans-serif`,
       marginTop: "5px"
     },
     sliderControl: {

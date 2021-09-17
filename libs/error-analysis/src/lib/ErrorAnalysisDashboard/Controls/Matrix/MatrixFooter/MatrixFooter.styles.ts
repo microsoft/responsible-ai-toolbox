@@ -44,7 +44,6 @@ export const matrixFooterStyles: () => IProcessedStyleSet<IMatrixFooterStyles> =
       matrixRow: {
         display: "flex",
         flexDirection: "row",
-        fontFamily: "Segoe UI",
         fontStyle: "normal",
         fontWeight: "normal",
         height: "50px"

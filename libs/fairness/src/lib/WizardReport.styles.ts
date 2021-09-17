@@ -56,7 +56,6 @@ export const WizardReportStyles: () => IProcessedStyleSet<IWizardReportStyles> =
       closeButton: {
         color: theme.semanticColors.bodyText,
         float: "right",
-        fontFamily: "Arial",
         fontSize: "20px",
         fontWeight: "400",
         lineHeight: "20px",
