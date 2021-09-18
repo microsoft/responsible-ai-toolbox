@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         packageDirectory:
-          ["raiwidgets", "responsibleai", "wrapped-flask", "erroranalysis"]
+          ["responsibleai", "wrapped-flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8]
         exclude:
