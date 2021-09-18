@@ -9,7 +9,7 @@ env:
   blob_container_for_js: latest
   blob_container_for_raiwidget: raiwidgets
   blob_path_for_pull_request: ${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref }}
-  node-version: 16.x
+  node-version: 16.8
   widgetDirectory: raiwidgets
   raiDirectory: responsibleai
   dashboardDirectory: dashboard

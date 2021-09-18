@@ -332,7 +332,11 @@ export class CounterfactualChart extends React.PureComponent<
                   className={classNames.legendLabel}
                   onClick={this.togglePanel}
                   disabled={this.state.selectedPointsIndexes[0] === undefined}
-                  text={localization.Counterfactuals.createCounterfactual}
+                  text={
+                    this.context.requestPredictions
+                      ? localization.Counterfactuals.createWhatIfCounterfactual
+                      : localization.Counterfactuals.createCounterfactual
+                  }
                 />
                 {this.state.customPoints.length > 0 && (
                   <InteractiveLegend
@@ -461,10 +465,8 @@ export class CounterfactualChart extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
     const index = trace.customdata[JointDataset.IndexLabel];
-    // custom point
-    if (trace.curveNumber === 1) {
-      this.removeCustomPoint(trace.pointNumber);
-    } else {
+    // non-custom point
+    if (trace.curveNumber !== 1) {
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
     }
@@ -485,13 +487,12 @@ export class CounterfactualChart extends React.PureComponent<
         index
       )
     };
-    if (this.context?.dataset?.target_column) {
-      const featureNames = this.context?.dataset?.feature_names;
-      featureNames.forEach((f, index) => {
-        data[f] = dataPoint[index];
-      });
-      data[this.context.dataset.target_column] = row[JointDataset.TrueYLabel];
-    }
+    const featureNames = this.context.dataset.feature_names;
+    featureNames.forEach((f, index) => {
+      data[f] = dataPoint[index];
+    });
+    const targetLabel = this.context.dataset.target_column || "y";
+    data[targetLabel] = row[JointDataset.TrueYLabel];
     return data;
   }
 

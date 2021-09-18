@@ -32,7 +32,7 @@ export class ChangeGlobalCohortButton extends React.Component<
       <>
         <DefaultButton
           text={
-            localization.ModelAssessment.CohortInformation.ChangeGlobalCohort
+            localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
           }
           onClick={this.toggleShiftCohortVisibility}
         />

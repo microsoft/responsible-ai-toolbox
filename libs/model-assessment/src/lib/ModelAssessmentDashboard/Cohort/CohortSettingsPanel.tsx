@@ -3,7 +3,6 @@
 
 import {
   defaultModelAssessmentContext,
-  ErrorCohort,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -16,7 +15,6 @@ import { CohortList } from "./CohortList";
 import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 
 export interface ICohortSettingsPanelProps {
-  errorCohorts: ErrorCohort[];
   isOpen: boolean;
   onDismiss: () => void;
 }
@@ -36,24 +34,30 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
-        title={localization.ModelAssessment.CohortSettings.CohortSettingsTitle}
         type={PanelType.medium}
       >
-        <Stack tokens={{ childrenGap: 20 }}>
-          <Text>
-            {
-              localization.ModelAssessment.CohortSettings
-                .CohortSettingsDescription
-            }
-          </Text>
-          <Stack horizontal tokens={{ childrenGap: 25 }}>
-            <ChangeGlobalCohortButton />
-            <CreateGlobalCohortButton />
-          </Stack>
-          <CohortList
-            errorCohorts={this.props.errorCohorts}
-            enableEditing={false}
-          />
+        <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
+          <Stack.Item>
+            <Text>
+              {
+                localization.ModelAssessment.CohortSettings
+                  .CohortSettingsDescription
+              }
+            </Text>
+          </Stack.Item>
+          <Stack.Item>
+            <Stack horizontal tokens={{ childrenGap: 25 }}>
+              <Stack.Item>
+                <ChangeGlobalCohortButton />
+              </Stack.Item>
+              <Stack.Item>
+                <CreateGlobalCohortButton />
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <CohortList enableEditing />
+          </Stack.Item>
         </Stack>
       </Panel>
     );

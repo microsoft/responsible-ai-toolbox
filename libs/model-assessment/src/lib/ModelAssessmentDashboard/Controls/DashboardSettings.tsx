@@ -26,13 +26,13 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
-        fieldName: "key",
-        key: "key",
+        fieldName: "name",
+        key: "name",
         minWidth: 50,
         name: localization.ModelAssessment.DashboardSettings.DashboardComponents
       },
       {
-        fieldName: "key",
+        fieldName: "name",
         key: "delete",
         minWidth: 20,
         name: "",
@@ -51,7 +51,10 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
       >
         <Text>{localization.ModelAssessment.DashboardSettings.Content}</Text>
         <DetailsList
-          items={this.props.activeGlobalTabs}
+          items={this.props.activeGlobalTabs.map((a) => ({
+            // removing key here because fluent ui also pick it to identify row
+            name: a.name
+          }))}
           columns={columns}
           selectionMode={SelectionMode.none}
         />
@@ -67,9 +70,10 @@ export class DashboardSettings extends React.PureComponent<IDashboardSettingsPro
     }
     return (
       <DashboardSettingDeleteButton
-        name={item.key}
+        name={item.name}
         index={index}
         removeTab={this.props.removeTab}
+        key={index}
       />
     );
   };

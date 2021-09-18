@@ -40,6 +40,7 @@ export class CreateGlobalCohortButton extends React.Component<
             cohortName={`${localization.Interpret.Cohort.cohort} ${(
               this.context.errorCohorts.length + 1
             ).toString()}`}
+            existingCohortNames={this.getExistingCohortName()}
             onSave={this.addCohort}
             isNewCohort
             deleteIsDisabled
@@ -67,4 +68,9 @@ export class CreateGlobalCohortButton extends React.Component<
       createCohortVisible: !prev.createCohortVisible
     }));
   };
+  private getExistingCohortName(): string[] {
+    return this.context.errorCohorts
+      .filter((errorCohort) => !errorCohort.isTemporary)
+      .map((t) => t.cohort.name);
+  }
 }

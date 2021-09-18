@@ -78,7 +78,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ maxWidth: "80%", padding: "16px 24px" }}
           className={errorAnalysisTab}
         >
-          <Text variant={"xLarge"}>
+          <Text variant={"xxLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
           <Stack horizontal tokens={{ childrenGap: "10px" }}>
@@ -133,7 +133,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             saveFeatures={this.saveFeatures.bind(this)}
             features={this.props.features}
             importances={this.props.importances}
-            isEnabled
+            isEnabled={this.props.getTreeNodes !== undefined}
             selectedFeatures={this.props.features}
           />
         </Stack>

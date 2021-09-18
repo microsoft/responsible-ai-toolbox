@@ -94,7 +94,8 @@
     },
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
-    "createCounterfactual": "Create what-if counterfactual",
+    "createWhatIfCounterfactual": "Create what-if counterfactual",
+    "createCounterfactual": "Counterfactual",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
     "decreaseByOne": "Decrease value by 1",
@@ -108,8 +109,9 @@
     "localImportanceSelectData": "Select a data point to view local importance chart",
     "noData": "No data",
     "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "panelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "whatIfPanelHeader": "What-if counterfactuals",
+    "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Recommended policy gain",
     "referenceDatapoint": "Reference datapoint: Row {0}",
     "saveAsNew": "Save as new datapoint",
@@ -194,7 +196,8 @@
       "selectAll": "Select all"
     },
     "MatrixSummary": {
-      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare.",
+      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
     },
     "MatrixOptions": {
       "quantileBinningLabel": "Quantile binning",
@@ -218,6 +221,30 @@
       "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
       "meanSquaredErrorShort": "Mean sq. error",
       "meanSquaredErrorTitle": "Additional information on mean squared error",
+      "precision": "Precision score",
+      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
+      "precisionShort": "Precision",
+      "precisionTitle": "Additional information on precision",
+      "recall": "Recall score",
+      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
+      "recallShort": "Recall",
+      "recallTitle": "Additional information on recall",
+      "macroPrecision": "Macro averaged precision score",
+      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+      "macroPrecisionShort": "Macro precision",
+      "macroPrecisionTitle": "Additional information on macro averaged precision",
+      "microPrecision": "Micro averaged precision score",
+      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+      "microPrecisionShort": "Micro precision",
+      "microPrecisionTitle": "Additional information on micro averaged precision",
+      "macroRecall": "Macro averaged recall score",
+      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+      "macroRecallShort": "Macro recall",
+      "macroRecallTitle": "Additional information on macro averaged recall",
+      "microRecall": "Micro averaged recall score",
+      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+      "microRecallShort": "Micro recall",
+      "microRecallTitle": "Additional information on micro averaged recall",
       "metricName": "Metric name",
       "metricValue": "Metric value"
     },
@@ -238,7 +265,8 @@
       "subText": "Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list."
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Configure error explorer.\""
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\""
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
@@ -683,6 +711,7 @@
       "datasetCohorts": "Dataset cohorts",
       "details": "Details",
       "duplicateCohort": "Duplicate",
+      "edit": "Edit",
       "editCohort": "Edit cohort",
       "features": "{0} features",
       "filters": "{0} filters",
@@ -879,8 +908,10 @@
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
       "_viewDependencePlotFor.comment": "label for dropdown to select feature to be shown in a dependence plot (a kind of graph)",
       "_weightOptions.comment": "Weight how importance values are averaged https://en.wikipedia.org/wiki/Weighted_arithmetic_mean",
+      "absoluteValues": "Absolute values",
       "aggregateFeatureImportance": "Aggregate feature importance",
       "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
+      "datapoint": "Datapoint",
       "datasetCohortSelector": "Select a dataset cohort",
       "datasetCohorts": "Dataset cohorts",
       "datasetRequired": "Dependence plots require the evaluation dataset and local feature importance array.",
@@ -1157,12 +1188,14 @@
       "cancel": "Cancel",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
+      "deleteCohort": "Deleting {0}?",
+      "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
       "shiftCohort": "Shift cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "ChangeGlobalCohort": "Change global cohort",
+      "SwitchGlobalCohort": "Switch global cohort",
       "CreateNewCohort": "Create new cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",

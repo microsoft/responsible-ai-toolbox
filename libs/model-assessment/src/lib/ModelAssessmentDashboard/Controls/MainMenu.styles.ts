@@ -28,8 +28,6 @@ export const mainMenuStyles: () => IProcessedStyleSet<IMainMenuStyles> = () => {
   return mergeStyleSets<IMainMenuStyles>({
     banner: {
       backgroundColor: theme.palette.white,
-      borderBottom: "1px solid #C8C8C8",
-      borderTop: "1px solid #C8C8C8",
       boxSizing: "border-box",
       color: theme.palette.black,
       display: "flex",

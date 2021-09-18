@@ -11,11 +11,12 @@ from econml.solutions.causal_analysis import CausalAnalysis
 from pathlib import Path
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import (
+    ManagerNames, SerializationAttributes)
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._tools.causal.causal_constants import (
-    DefaultParams, ModelTypes, ResultAttributes, SerializationAttributes)
+    DefaultParams, ModelTypes, ResultAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.modelanalysis.constants import ModelTask
@@ -105,8 +106,8 @@ class CausalManager(BaseManager):
             value to indicate a constant cost of applying that treatment or
             an array indicating the cost for each sample. If the treatment
             is a discrete treatment, then the array for that feature should
-            be two dimensional wih the first dimension representing samples
-            and t second representing the difference in cost between the
+            be two dimensional with the first dimension representing samples
+            and the second representing the difference in cost between the
             non-default values and the default value.
         :type treatment_cost: None, List of float or array
         :param min_tree_leaf_samples: Minimum number of samples per leaf
@@ -341,7 +342,7 @@ class CausalManager(BaseManager):
         causal_dir.mkdir(parents=True, exist_ok=True)
 
         # Save results to disk
-        results_path = causal_dir / SerializationAttributes.RESULTS
+        results_path = causal_dir / SerializationAttributes.RESULTS_DIRECTORY
         results_path.mkdir(parents=True, exist_ok=True)
         for result in self._results:
             result_path = results_path / result.id
@@ -360,7 +361,7 @@ class CausalManager(BaseManager):
         causal_dir = Path(path)
 
         # Rehydrate results
-        results_path = causal_dir / SerializationAttributes.RESULTS
+        results_path = causal_dir / SerializationAttributes.RESULTS_DIRECTORY
         paths = results_path.resolve().glob('*')
         this.__dict__['_results'] = [CausalResult.load(p) for p in paths]
 

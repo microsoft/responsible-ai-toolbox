@@ -79,6 +79,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           causalAnalysisData: this.props.causalAnalysisData?.[0],
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
+          deleteCohort: this.deleteCohort,
+          editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
@@ -204,7 +206,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             modelAssessmentDashboardStyles.sectionHeader
                           }
                         >
-                          <Text variant={"xLarge"}>
+                          <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
                                 .ModelStatistics
@@ -221,7 +223,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             modelAssessmentDashboardStyles.sectionHeader
                           }
                         >
-                          <Text variant={"xLarge"}>
+                          <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
                                 .DataExplorer
@@ -276,14 +278,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               onDismiss={(): void =>
                 this.setState({ saveCohortVisible: false })
               }
-              onSave={(savedCohort: ErrorCohort): void => {
-                let newCohorts = [...this.state.cohorts, savedCohort];
-                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                this.setState({
-                  cohorts: newCohorts,
-                  selectedCohort: savedCohort
-                });
-              }}
+              onSave={this.onSaveCohort}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
             />
@@ -328,7 +323,12 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     } else {
       dataCount = this.state.baseCohort.cohortStats.totalCohort;
     }
-    tabs.splice(index, 0, { dataCount, key: tab });
+    tabs.splice(index, 0, {
+      dataCount,
+      key: tab,
+      name:
+        this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
+    });
     this.setState({ activeGlobalTabs: tabs });
   };
 
@@ -379,7 +379,28 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     });
   };
 
+  private onSaveCohort = (savedCohort: ErrorCohort): void => {
+    if (
+      this.state.cohorts.some((c) => c.cohort.name === savedCohort.cohort.name)
+    ) {
+      return;
+    }
+    let newCohorts = [...this.state.cohorts, savedCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState({
+      cohorts: newCohorts,
+      selectedCohort: savedCohort
+    });
+  };
+
   private addCohort = (manuallyCreatedCohort: Cohort): void => {
+    if (
+      this.state.cohorts.some(
+        (c) => c.cohort.name === manuallyCreatedCohort.name
+      )
+    ) {
+      return;
+    }
     const newErrorCohort = new ErrorCohort(
       manuallyCreatedCohort,
       this.state.jointDataset,
@@ -392,6 +413,42 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       baseCohort: newErrorCohort,
       cohorts: newCohorts,
       selectedCohort: newErrorCohort
+    });
+  };
+
+  private editCohort = (editCohort: Cohort): void => {
+    const editIndex = this.state.cohorts.findIndex(
+      (c) => c.cohort.name === editCohort.name
+    );
+    if (editIndex === -1) {
+      return;
+    }
+    const newErrorCohort = new ErrorCohort(
+      editCohort,
+      this.state.jointDataset,
+      0,
+      CohortSource.ManuallyCreated
+    );
+    let newCohorts = [...this.state.cohorts];
+    newCohorts[editIndex] = newErrorCohort;
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState({
+      cohorts: newCohorts
+    });
+  };
+
+  private deleteCohort = (cohort: ErrorCohort) => {
+    if (
+      this.state.baseCohort.cohort.name === cohort.cohort.name ||
+      this.state.selectedCohort.cohort.name === cohort.cohort.name
+    ) {
+      return;
+    }
+    const newCohorts = [...this.state.cohorts].filter(
+      (t) => t.cohort.name !== cohort.cohort.name
+    );
+    this.setState({
+      cohorts: newCohorts
     });
   };
 }

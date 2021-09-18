@@ -7,6 +7,7 @@ const defaultNumBins = 8;
 
 export interface IMatrixLegendState {
   maxMetricValue: number;
+  isErrorMetric: boolean;
 }
 
 export interface IMatrixFilterState {
@@ -29,7 +30,7 @@ export interface IMatrixAreaState {
 
 export function createInitialMatrixFilterState(): IMatrixFilterState {
   return {
-    matrixLegendState: { maxMetricValue: 0 },
+    matrixLegendState: { isErrorMetric: true, maxMetricValue: 0 },
     selectedFeature1: undefined,
     selectedFeature2: undefined
   };

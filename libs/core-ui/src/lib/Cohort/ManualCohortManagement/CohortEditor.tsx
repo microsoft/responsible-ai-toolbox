@@ -33,6 +33,8 @@ export interface ICohortEditorProps {
   cohortName: string;
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
+  disableEditName?: boolean;
+  existingCohortNames?: string[];
   onSave: (newCohort: Cohort) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
@@ -115,6 +117,7 @@ export class CohortEditor extends React.PureComponent<
                 }
                 onGetErrorMessage={this._getErrorMessage}
                 validateOnLoad={false}
+                disabled={this.props.disableEditName}
                 onChange={this.setCohortName}
               />
             </Stack.Item>
@@ -165,7 +168,7 @@ export class CohortEditor extends React.PureComponent<
     const styles = cohortEditorStyles();
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
-        {!this.props.isNewCohort && (
+        {!this.props.isNewCohort && !this.props.disableEditName && (
           <DefaultButton
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
@@ -174,7 +177,7 @@ export class CohortEditor extends React.PureComponent<
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
         )}
-        <PrimaryButton onClick={this.saveCohort}>
+        <PrimaryButton onClick={this.saveCohort} disabled={this.isDuplicate()}>
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton onClick={this.onCancelClick}>
@@ -201,6 +204,14 @@ export class CohortEditor extends React.PureComponent<
         onConfirm={this.onCancelConfirm}
         onClose={this.onCancelClose}
       />
+    );
+  };
+
+  private isDuplicate = (): boolean => {
+    return !!(
+      this.props.isNewCohort &&
+      this.state.cohortName &&
+      this.props.existingCohortNames?.includes(this.state.cohortName)
     );
   };
 

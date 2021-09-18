@@ -90,10 +90,10 @@ def _check_causal_result(causal_result, is_serialized=False):
 
     if is_serialized:
         assert isinstance(causal_result, CausalData)
-        assert len(causal_result.__dict__) == 5
+        assert len(causal_result.__dict__) == 6
     else:
         assert isinstance(causal_result, CausalResult)
-        assert len(causal_result.__dict__) == 6
+        assert len(causal_result.__dict__) == 8
         _check_causal_analysis(causal_result.causal_analysis)
 
     _check_global_effects(causal_result.global_effects,

@@ -1,0 +1,206 @@
+name: Release to PyPI
+
+env:
+  node-version: 16.8
+  widgetDirectory: raiwidgets
+  raiDirectory: responsibleai
+  typescriptBuildOutput: dist
+  typescriptBuildArtifactName: typescript
+
+# trigger manually only ("collaborator" or more permissions required)
+on:
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: "Test or Prod PyPI?"
+        required: true
+        default: "Test"
+
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.releaseType == 'Test' || github.event.inputs.releaseType == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
+          exit 1
+
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: |
+          npm install yarn -g
+
+      - name: install typescript dependencies
+        run: |
+          yarn install --frozen-lock-file
+
+      - name: auto version
+        if: ${{ github.event.inputs.releaseType == 'Test' }}
+        run: |
+          yarn auto-version -r
+      - name: auto version
+        if: ${{ github.event.inputs.releaseType == 'Prod' }}
+        run: |
+          yarn auto-version -r -t
+
+      - name: build typescript
+        run: |
+          yarn buildall
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+
+      - name: install requirements.txt for raiwidgets
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: ${{ env.widgetDirectory }}
+      - name: install requirements.txt for responsibleai
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: ${{ env.raiDirectory }}
+      - name: pip freeze
+        run: pip freeze
+      #
+      - name: replace README for raiwidgets
+        run: |
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./${{ env.widgetDirectory }}/
+      - name: replace README for responsibleai
+        run: |
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./${{ env.raiDirectory }}/
+      # =====
+      - name: build wheel for raiwidgets
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.widgetDirectory }}
+      - name: build wheel for responsibleai
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.raiDirectory }}
+
+      # run tests before publishing to PyPI
+      - name: install raiwidgets wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.widgetDirectory }}
+      - name: install responsibleai wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.raiDirectory }}
+
+      - name: run raiwidgets tests
+        run: pytest ./tests/
+        working-directory: ${{ env.widgetDirectory }}
+      - name: run responsibleai tests
+        run: pytest ./tests/
+        working-directory: ${{ env.raiDirectory }}
+
+      - name: Upload a raiwidgets build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.widgetDirectory }}
+          path: ${{ env.widgetDirectory }}/dist/
+
+      - name: Upload a responsibleai build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.raiDirectory }}
+          path: ${{ env.raiDirectory }}/dist/
+
+      - name: Upload a typescript build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.typescriptBuildArtifactName }}
+          path: ${{ env.typescriptBuildOutput }}
+
+  release-python:
+    needs: release-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [responsibleai, raiwidgets]
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - id: download
+        name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ matrix.package }}
+          path: ${{ matrix.package }}
+
+      - name: publish package to Test PyPI
+        if: ${{ github.event.inputs.releaseType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: ${{steps.download.outputs.download-path}}
+      - name: Publish package to PyPI
+        if: ${{ github.event.inputs.releaseType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
+          packages_dir: ${{steps.download.outputs.download-path}}
+
+  release-typescript:
+    needs: release-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          [
+            core-ui,
+            mlchartlib,
+            dataset-explorer,
+            causality,
+            counterfactuals,
+            fairness,
+            interpret,
+            localization,
+            error-analysis,
+            model-assessment
+          ]
+
+    steps:
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node-version }}
+      - id: download
+        name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.typescriptBuildArtifactName }}
+          path: ${{ env.typescriptBuildOutput }}
+      - id: publish
+        name: NPM Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
+          dry-run: ${{github.event.inputs.releaseType == 'Test'}}
+          access: public
+          # tag: next
+      - if: steps.publish.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"

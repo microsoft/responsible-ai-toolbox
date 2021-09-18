@@ -63,8 +63,13 @@ class ErrorAnalysisDashboard(Dashboard):
     :type model_task: str
     :param metric: The metric name to evaluate at each tree node or
         heatmap grid.  Currently supported classification metrics
-        include 'error_rate', 'recall_score', 'precision_score',
-        'f1_score', and 'accuracy_score'. Supported regression
+        include 'error_rate', 'recall_score' for binary
+        classification and 'micro_recall_score' or
+        'macro_recall_score' for multiclass classification,
+        'precision_score' for binary classification and
+        'micro_precision_score' or 'macro_precision_score'
+        for multiclass classification, 'f1_score',
+        and 'accuracy_score'. Supported regression
         metrics include 'mean_absolute_error', 'mean_squared_error',
         'r2_score', and 'median_absolute_error'.
     :type metric: str

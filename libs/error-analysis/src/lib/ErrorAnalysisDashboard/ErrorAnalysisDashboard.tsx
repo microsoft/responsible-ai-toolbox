@@ -337,6 +337,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           addCohort: () => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
+          deleteCohort: () => undefined,
+          editCohort: () => undefined,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {
@@ -516,6 +518,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     errorAnalysisOption={this.state.errorAnalysisOption}
                     selectedCohort={this.state.selectedCohort}
                     baseCohort={this.state.baseCohort}
+                    tree={
+                      this.props.requestDebugML === undefined
+                        ? this.props.staticDebugML.data
+                        : undefined
+                    }
                     treeViewState={this.state.treeViewState}
                     setTreeViewState={this.setTreeViewState}
                     matrixAreaState={this.state.matrixAreaState}

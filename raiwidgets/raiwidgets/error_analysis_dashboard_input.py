@@ -90,8 +90,13 @@ class ErrorAnalysisDashboardInput:
         :type model_task: str
         :param metric: The metric name to evaluate at each tree node or
             heatmap grid.  Currently supported classification metrics
-            include 'error_rate', 'recall_score', 'precision_score',
-            'f1_score', and 'accuracy_score'. Supported regression
+            include 'error_rate', 'recall_score' for binary
+            classification and 'micro_recall_score' or
+            'macro_recall_score' for multiclass classification,
+            'precision_score' for binary classification and
+            'micro_precision_score' or 'macro_precision_score'
+            for multiclass classification, 'f1_score',
+            and 'accuracy_score'. Supported regression
             metrics include 'mean_absolute_error', 'mean_squared_error',
             'r2_score', and 'median_absolute_error'.
         :type metric: str
@@ -284,7 +289,7 @@ class ErrorAnalysisDashboardInput:
                 metric = Metrics.MEAN_SQUARED_ERROR
             else:
                 metric = self._error_analyzer.metric
-        if model_available and true_y_dataset is not None:
+        if model_available:
             full_pred_y = self.compute_predicted_y(model, full_dataset)
         self.set_root_metric(full_pred_y, full_true_y, metric)
 

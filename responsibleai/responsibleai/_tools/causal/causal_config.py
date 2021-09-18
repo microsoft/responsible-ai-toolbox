@@ -1,26 +1,29 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 """Configuration for causal analysis."""
+import numpy as np
+
+from typing import Any, List, Optional, Union
 
 
 class CausalConfig:
     def __init__(
         self,
-        treatment_features,
-        heterogeneity_features,
-        nuisance_model,
-        heterogeneity_model,
-        alpha,
-        upper_bound_on_cat_expansion,
-        treatment_cost,
-        min_tree_leaf_samples,
-        max_tree_depth,
-        skip_cat_limit_checks,
-        n_jobs,
-        categories,
-        verbose,
-        random_state,
-        categorical_features,
+        treatment_features: List[str],
+        heterogeneity_features: Optional[List[str]],
+        nuisance_model: str,
+        heterogeneity_model: str,
+        alpha: float,
+        upper_bound_on_cat_expansion: int,
+        treatment_cost: Union[float, List[Union[float, np.ndarray]]],
+        min_tree_leaf_samples: int,
+        max_tree_depth: int,
+        skip_cat_limit_checks: bool,
+        categories: Union[str, List[Union[str, List[Any]]]],
+        n_jobs: int,
+        verbose: int,
+        random_state: Optional[Union[int, np.random.RandomState]],
+        categorical_features: List[str],
     ):
         self.treatment_features = treatment_features
         self.heterogeneity_features = heterogeneity_features

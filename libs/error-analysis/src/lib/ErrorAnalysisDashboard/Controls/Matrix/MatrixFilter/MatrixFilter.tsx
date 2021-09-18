@@ -90,7 +90,7 @@ export class MatrixFilter extends React.PureComponent<
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
-          <MatrixSummary />
+          <MatrixSummary isEnabled={this.props.isEnabled} />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <Stack.Item key="feature1key">
               <ComboBox
@@ -132,6 +132,7 @@ export class MatrixFilter extends React.PureComponent<
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
             max={this.state.matrixLegendState.maxMetricValue}
+            isErrorMetric={this.state.matrixLegendState.isErrorMetric}
           />
           <MatrixArea
             theme={this.props.theme}
@@ -171,7 +172,12 @@ export class MatrixFilter extends React.PureComponent<
     }
   };
 
-  private updateMatrixLegendState = (maxMetricValue: number): void => {
-    this.setState({ matrixLegendState: { maxMetricValue } });
+  private updateMatrixLegendState = (
+    maxMetricValue: number,
+    isErrorMetric: boolean
+  ): void => {
+    this.setState({
+      matrixLegendState: { isErrorMetric, maxMetricValue }
+    });
   };
 }

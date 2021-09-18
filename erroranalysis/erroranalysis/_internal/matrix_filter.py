@@ -12,8 +12,12 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                ModelTask,
                                                MatrixParams,
                                                Metrics,
-                                               metric_to_display_name)
+                                               metric_to_display_name,
+                                               precision_metrics,
+                                               recall_metrics)
 from erroranalysis._internal.metrics import metric_to_func
+from abc import ABC, abstractmethod
+from sklearn.metrics import multilabel_confusion_matrix
 
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
@@ -28,6 +32,11 @@ METRIC_VALUE = 'metricValue'
 METRIC_NAME = 'metricName'
 VALUES = 'values'
 PRECISION = 100
+TP = 'tp'
+FP = 'fp'
+FN = 'fn'
+TN = 'tn'
+ERROR = 'error'
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
@@ -104,7 +113,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
     df_err = df.copy()
     df_err[DIFF] = diff
-    if analyzer.model_task == ModelTask.CLASSIFICATION:
+    if metric == Metrics.ERROR_RATE:
         df_err = df_err[df_err[DIFF]]
     else:
         df_err[TRUE_Y] = true_y
@@ -161,7 +170,12 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        rownames=[feat1],
                                        colnames=[feat2])
         else:
-            aggfunc = _AggFunc(metric_to_func[metric])
+            if metric in precision_metrics or metric in recall_metrics:
+                labels = list(set(true_y) | set(pred_y))
+                labels.sort()
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+            else:
+                aggfunc = _AggFunc(metric_to_func[metric])
             matrix_total = pd.crosstab(tabdf1,
                                        tabdf2,
                                        rownames=[feat1],
@@ -173,8 +187,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        values=list(zip(df_err[TRUE_Y],
                                                        df_err[PRED_Y])),
                                        aggfunc=aggfunc._agg_func_pair)
-            matrix_total = matrix_total.fillna(0)
-            matrix_error = matrix_error.fillna(0)
+            fill_matrix_nulls(matrix_total, aggfunc._fill_na_value())
+            fill_matrix_nulls(matrix_error, aggfunc._fill_na_value())
         matrix = matrix_2d(categories1, categories2,
                            matrix_total, matrix_error,
                            metric)
@@ -220,12 +234,18 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             cut_err = df_err
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
-            aggfunc = _AggFunc(metric_to_func[metric])
+            if metric in precision_metrics or metric in recall_metrics:
+                labels = list(set(true_y) | set(pred_y))
+                labels.sort()
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+            else:
+                aggfunc = _AggFunc(metric_to_func[metric])
             cutdf_err = pd.DataFrame(cut_err)
             cutdf_err['metric_values'] = list(zip(df_err[TRUE_Y],
                                                   df_err[PRED_Y]))
             grouped = cutdf_err.groupby([feat1])
-            counts_err = grouped.agg(aggfunc._agg_func_triplet)
+            agg_func = {'metric_values': aggfunc._agg_func_triplet}
+            counts_err = grouped.agg(agg_func)
             counts_err = counts_err.values.ravel()
         matrix = matrix_1d(categories, val_err, counts,
                            counts_err, metric)
@@ -254,9 +274,26 @@ def bin_data(df, feat, bins, quantile_binning=False):
         return pd.cut(feat_col, bins, precision=PRECISION)
 
 
-class _AggFunc(object):
+class _BaseAggFunc(ABC):
     def __init__(self, aggfunc):
         self.aggfunc = aggfunc
+
+    @abstractmethod
+    def _agg_func_pair(self, pair):
+        pass
+
+    @abstractmethod
+    def _agg_func_triplet(self, pair):
+        pass
+
+    @abstractmethod
+    def _fill_na_value(self):
+        pass
+
+
+class _AggFunc(_BaseAggFunc):
+    def __init__(self, aggfunc):
+        super(_AggFunc, self).__init__(aggfunc)
 
     def _agg_func_pair(self, pair):
         true_y, pred_y = zip(*pair.values.tolist())
@@ -268,6 +305,49 @@ class _AggFunc(object):
         (true_y, pred_y) = zip(*pair.values.tolist())
         return self.aggfunc(true_y, pred_y)
 
+    def _fill_na_value(self):
+        return 0
+
+
+class _MultiMetricAggFunc(_BaseAggFunc):
+    def __init__(self, aggfunc, labels):
+        super(_MultiMetricAggFunc, self).__init__(aggfunc)
+        if len(labels) == 2:
+            # for binary classification case, choose positive class label
+            self.labels = [labels[1]]
+        else:
+            self.labels = labels
+
+    def _multi_metric_result(self, true_y, pred_y):
+        pred_y = np.array(pred_y)
+        true_y = np.array(true_y)
+        conf_matrix = multilabel_confusion_matrix(true_y, pred_y,
+                                                  labels=self.labels)
+        tp_sum = conf_matrix[:, 1, 1]
+        diff = pred_y != true_y
+        error = diff.sum()
+        # needed for precision metrics
+        fp_sum = conf_matrix[:, 0, 1]
+        # needed for recall metrics
+        fn_sum = conf_matrix[:, 1, 0]
+        tn_sum = conf_matrix[:, 0, 0]
+        return (self.aggfunc(true_y, pred_y), tp_sum.tolist(),
+                fp_sum.tolist(), fn_sum.tolist(),
+                tn_sum.tolist(), error)
+
+    def _agg_func_pair(self, pair):
+        true_y, pred_y = zip(*pair.values.tolist())
+        return self._multi_metric_result(true_y, pred_y)
+
+    def _agg_func_triplet(self, pair):
+        if pair.empty:
+            return (0, [0], [0], [0], [0], 0)
+        (true_y, pred_y) = zip(*pair.values.tolist())
+        return self._multi_metric_result(true_y, pred_y)
+
+    def _fill_na_value(self):
+        return (0, [0], [0], [0], [0], 0)
+
 
 def matrix_2d(categories1, categories2, matrix_counts,
               matrix_err_counts, metric):
@@ -275,6 +355,8 @@ def matrix_2d(categories1, categories2, matrix_counts,
     category1 = []
     category1_min_interval = []
     category1_max_interval = []
+    is_precision = metric in precision_metrics
+    is_recall = metric in recall_metrics
     for row_index in range(len(categories1)):
         matrix_row = []
         cat1 = categories1[row_index]
@@ -292,6 +374,19 @@ def matrix_2d(categories1, categories2, matrix_counts,
                 false_count = 0
                 if index_exists_err and col_exists_err:
                     false_count = int(matrix_err_counts.loc[cat1, cat2])
+            elif is_precision or is_recall:
+                tp_sum = []
+                fp_sum = []
+                fn_sum = []
+                tn_sum = []
+                metric_value = 0
+                if index_exists_err and col_exists_err:
+                    metric_value = float(matrix_err_counts.loc[cat1, cat2][0])
+                    tp_sum = matrix_err_counts.loc[cat1, cat2][1]
+                    fp_sum = matrix_err_counts.loc[cat1, cat2][2]
+                    fn_sum = matrix_err_counts.loc[cat1, cat2][3]
+                    tn_sum = matrix_err_counts.loc[cat1, cat2][4]
+                    error = float(matrix_err_counts.loc[cat1, cat2][5])
             else:
                 metric_value = 0
                 if index_exists_err and col_exists_err:
@@ -304,6 +399,17 @@ def matrix_2d(categories1, categories2, matrix_counts,
             if metric == Metrics.ERROR_RATE:
                 matrix_row.append({
                     FALSE_COUNT: false_count,
+                    COUNT: total_count
+                })
+            elif is_precision or is_recall:
+                matrix_row.append({
+                    METRIC_VALUE: metric_value,
+                    TP: tp_sum,
+                    FP: fp_sum,
+                    FN: fn_sum,
+                    TN: tn_sum,
+                    ERROR: error,
+                    METRIC_NAME: metric_to_display_name[metric],
                     COUNT: total_count
                 })
             else:
@@ -338,6 +444,8 @@ def matrix_1d(categories, values_err, counts, counts_err,
               metric):
     matrix = []
     matrix_row = []
+    is_precision = metric in precision_metrics
+    is_recall = metric in recall_metrics
     for col_idx in range(len(categories)):
         cat = categories[col_idx]
         if metric == Metrics.ERROR_RATE:
@@ -347,6 +455,32 @@ def matrix_1d(categories, values_err, counts, counts_err,
                 false_count = int(counts_err[index_err])
             matrix_row.append({
                 FALSE_COUNT: false_count,
+                COUNT: int(counts[col_idx])
+            })
+        elif is_precision or is_recall:
+            tp_sum = []
+            fp_sum = []
+            fn_sum = []
+            tn_sum = []
+            metric_value = 0
+            error = 0
+            if cat in values_err:
+                metric_value = float(counts_err[col_idx][0])
+                tp_sum = counts_err[col_idx][1]
+                fp_sum = counts_err[col_idx][2]
+                fn_sum = counts_err[col_idx][3]
+                tn_sum = counts_err[col_idx][4]
+                error = float(counts_err[col_idx][5])
+                if math.isnan(metric_value):
+                    metric_value = 0.0
+            matrix_row.append({
+                METRIC_VALUE: metric_value,
+                TP: tp_sum,
+                FP: fp_sum,
+                FN: fn_sum,
+                TN: tn_sum,
+                ERROR: error,
+                METRIC_NAME: metric_to_display_name[metric],
                 COUNT: int(counts[col_idx])
             })
         else:
@@ -375,3 +509,10 @@ def matrix_1d(categories, values_err, counts, counts_err,
                  INTERVAL_MIN: category_min_interval,
                  INTERVAL_MAX: category_max_interval}
     return {MATRIX: matrix, CATEGORY1: category1}
+
+
+def fill_matrix_nulls(matrix, null_value):
+    idx_arrays = np.where(matrix.isnull())
+    idx_tuples = list(zip(idx_arrays[0], idx_arrays[1]))
+    for tuple in idx_tuples:
+        matrix.iloc[tuple] = null_value

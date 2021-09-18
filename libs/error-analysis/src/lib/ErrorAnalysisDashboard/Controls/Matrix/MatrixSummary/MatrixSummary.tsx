@@ -9,7 +9,11 @@ import { matrixSummaryStyles } from "./MatrixSummary.styles";
 
 const legendDescriptionPadding: IStackTokens = { padding: "20px 0px 20px 0px" };
 
-export class MatrixSummary extends React.Component {
+export interface IMatrixSummaryProps {
+  isEnabled: boolean;
+}
+
+export class MatrixSummary extends React.Component<IMatrixSummaryProps> {
   public render(): React.ReactNode {
     const classNames = matrixSummaryStyles();
     return (
@@ -18,7 +22,9 @@ export class MatrixSummary extends React.Component {
         tokens={legendDescriptionPadding}
       >
         <Text variant={"medium"}>
-          {localization.ErrorAnalysis.MatrixSummary.heatMapDescription}
+          {this.props.isEnabled
+            ? localization.ErrorAnalysis.MatrixSummary.heatMapDescription
+            : localization.ErrorAnalysis.MatrixSummary.heatMapStaticDescription}
         </Text>
       </Stack>
     );

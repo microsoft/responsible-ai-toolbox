@@ -109,7 +109,17 @@ export const applications: IApplications = <const>{
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
       bostonData: { classDimension: 1, data: bostonData },
-      breastCancerData: { classDimension: 2, data: breastCancerData }
+      breastCancerData: { classDimension: 2, data: breastCancerData },
+      breastCancerPrecisionData: {
+        classDimension: 2,
+        data: breastCancerData,
+        metric: "Precision"
+      },
+      breastCancerRecallData: {
+        classDimension: 2,
+        data: breastCancerData,
+        metric: "Recall"
+      }
     },
     versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
   },
