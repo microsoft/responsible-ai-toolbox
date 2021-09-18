@@ -95,7 +95,7 @@ jobs:
       - name: Upload code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: code-coverage-results
+          name: ${{ matrix.packageDirectory }}-code-coverage-results
           path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
