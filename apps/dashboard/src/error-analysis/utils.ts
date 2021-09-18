@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { strict as assert } from "assert";
+
 import _ from "lodash";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
@@ -10,11 +12,15 @@ import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
 import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
 import { dummyTreeBostonData } from "./__mock_data__/dummyTreeBoston";
 import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
+import { dummyTreeBreastCancerPrecisionData } from "./__mock_data__/dummyTreeBreastCancerPrecision";
+import { dummyTreeBreastCancerRecallData } from "./__mock_data__/dummyTreeBreastCancerRecall";
 
 export enum DatasetName {
   AdultCensusIncome = 1,
   BreastCancer,
-  Boston
+  Boston,
+  BreastCancerPrecision,
+  BreastCancerRecall
 }
 
 export function getJsonMatrix(): any {
@@ -27,6 +33,20 @@ export function getJsonMatrix(): any {
 export function getJsonTreeBreastCancer(featureNames: string[]): any {
   return {
     data: getJsonTree(DatasetName.BreastCancer),
+    features: featureNames.filter((feature) => feature.startsWith("mean"))
+  };
+}
+
+export function getJsonTreeBreastCancerRecall(featureNames: string[]): any {
+  return {
+    data: getJsonTree(DatasetName.BreastCancerRecall),
+    features: featureNames.filter((feature) => feature.startsWith("mean"))
+  };
+}
+
+export function getJsonTreeBreastCancerPrecision(featureNames: string[]): any {
+  return {
+    data: getJsonTree(DatasetName.BreastCancerPrecision),
     features: featureNames.filter((feature) => feature.startsWith("mean"))
   };
 }
@@ -56,6 +76,10 @@ export function getJsonTree(dataset: DatasetName): any {
     return _.cloneDeep(dummyTreeBreastCancerData);
   } else if (dataset === DatasetName.Boston) {
     return _.cloneDeep(dummyTreeBostonData);
+  } else if (dataset === DatasetName.BreastCancerPrecision) {
+    return _.cloneDeep(dummyTreeBreastCancerPrecisionData);
+  } else if (dataset === DatasetName.BreastCancerRecall) {
+    return _.cloneDeep(dummyTreeBreastCancerRecallData);
   }
   return _.cloneDeep(dummyTreeAdultCensusIncomeData);
 }
@@ -71,6 +95,10 @@ export function generateJsonTree(
         resolve(_.cloneDeep(dummyTreeBreastCancerData));
       } else if (dataset === DatasetName.AdultCensusIncome) {
         resolve(_.cloneDeep(dummyTreeAdultCensusIncomeData));
+      } else if (dataset === DatasetName.BreastCancerPrecision) {
+        resolve(_.cloneDeep(dummyTreeBreastCancerPrecisionData));
+      } else if (dataset === DatasetName.BreastCancerRecall) {
+        resolve(_.cloneDeep(dummyTreeBreastCancerRecallData));
       } else {
         resolve(_.cloneDeep(dummyTreeBostonData));
       }
@@ -89,6 +117,20 @@ export function generateJsonTreeBreastCancer(
   signal: AbortSignal
 ): Promise<any> {
   return generateJsonTree(_data, signal, DatasetName.BreastCancer);
+}
+
+export function generateJsonTreeBreastCancerRecall(
+  _data: any[],
+  signal: AbortSignal
+): Promise<any> {
+  return generateJsonTree(_data, signal, DatasetName.BreastCancerRecall);
+}
+
+export function generateJsonTreeBreastCancerPrecision(
+  _data: any[],
+  signal: AbortSignal
+): Promise<any> {
+  return generateJsonTree(_data, signal, DatasetName.BreastCancerPrecision);
 }
 
 export function generateJsonTreeAdultCensusIncome(
@@ -145,13 +187,14 @@ export function createJsonImportancesGenerator(
   return (_data: any[], signal: AbortSignal): Promise<any> => {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        if (dataset === DatasetName.BreastCancer) {
-          resolve(featureNames.map(() => Math.random()));
-        } else if (dataset === DatasetName.AdultCensusIncome) {
-          resolve(featureNames.map(() => Math.random()));
-        } else {
-          resolve(featureNames.map(() => Math.random()));
-        }
+        assert(
+          dataset === DatasetName.BreastCancer ||
+            dataset === DatasetName.AdultCensusIncome ||
+            dataset === DatasetName.Boston ||
+            dataset === DatasetName.BreastCancerPrecision ||
+            dataset === DatasetName.BreastCancerRecall
+        );
+        resolve(featureNames.map(() => Math.random()));
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);

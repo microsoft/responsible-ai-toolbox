@@ -3,7 +3,8 @@
 
 import {
   CohortSource,
-  IErrorAnalysisMatrixNode
+  IErrorAnalysisMatrixNode,
+  Metrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -205,6 +206,7 @@ export class MatrixArea extends React.PureComponent<
       return;
     }
     let maxMetricValue = 0;
+    let isErrorMetric = true;
     jsonMatrix.matrix.forEach((row: IErrorAnalysisMatrixNode[]): void => {
       row.forEach((value: IErrorAnalysisMatrixNode): void => {
         if (value.falseCount !== undefined) {
@@ -218,9 +220,21 @@ export class MatrixArea extends React.PureComponent<
             maxMetricValue = Math.max(maxMetricValue, metricValue);
           }
         }
+        if (value.metricName !== undefined) {
+          if (
+            value.metricName === Metrics.PrecisionScore ||
+            value.metricName === Metrics.RecallScore ||
+            value.metricName === Metrics.MicroPrecisionScore ||
+            value.metricName === Metrics.MacroPrecisionScore ||
+            value.metricName === Metrics.MicroRecallScore ||
+            value.metricName === Metrics.MacroRecallScore
+          ) {
+            isErrorMetric = false;
+          }
+        }
       });
     });
-    this.props.updateMatrixLegendState(maxMetricValue);
+    this.props.updateMatrixLegendState(maxMetricValue, isErrorMetric);
     this.setState({
       disableClearAll: true,
       disableSelectAll: false,

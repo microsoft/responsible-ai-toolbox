@@ -19,10 +19,13 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                ModelTask,
                                                Metrics,
                                                metric_to_display_name,
-                                               error_metrics)
+                                               error_metrics,
+                                               precision_metrics,
+                                               recall_metrics)
+from erroranalysis._internal.metrics import metric_to_func
 from sklearn.metrics import (
     mean_absolute_error, mean_squared_error, median_absolute_error,
-    r2_score, f1_score, precision_score, recall_score)
+    r2_score, f1_score)
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -367,27 +370,29 @@ def node_to_dict(df, tree, nodeid, categories, json,
         success = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_absolute_error(pred_y, true_y)
+        metric_value = mean_absolute_error(true_y, pred_y)
     elif metric == Metrics.MEAN_SQUARED_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_squared_error(pred_y, true_y)
+        metric_value = mean_squared_error(true_y, pred_y)
     elif metric == Metrics.MEDIAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = median_absolute_error(pred_y, true_y)
+        metric_value = median_absolute_error(true_y, pred_y)
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = r2_score(pred_y, true_y)
+        metric_value = r2_score(true_y, pred_y)
     elif metric == Metrics.F1_SCORE:
         pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = f1_score(pred_y, true_y)
+        metric_value = f1_score(true_y, pred_y)
         success = total - error
-    elif metric == Metrics.PRECISION_SCORE:
+    elif metric in precision_metrics:
         pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = precision_score(pred_y, true_y)
+        func = metric_to_func[metric]
+        metric_value = func(true_y, pred_y)
         success = total - error
-    elif metric == Metrics.RECALL_SCORE:
+    elif metric in recall_metrics:
         pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = recall_score(pred_y, true_y)
+        func = metric_to_func[metric]
+        metric_value = func(true_y, pred_y)
         success = total - error
     else:
         error = df[DIFF].values.sum()

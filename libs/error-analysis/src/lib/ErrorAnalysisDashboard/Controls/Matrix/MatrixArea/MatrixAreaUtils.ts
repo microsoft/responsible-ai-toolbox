@@ -6,7 +6,6 @@ import {
   Operations,
   FilterMethods,
   JointDataset,
-  ErrorCohortStats,
   ErrorCohort,
   Metrics,
   MetricCohortStats,
@@ -14,6 +13,14 @@ import {
   IErrorAnalysisMatrixCategory,
   IErrorAnalysisMatrixNode
 } from "@responsible-ai/core-ui";
+
+import {
+  BaseStatsAggregator,
+  ErrorRateStatsAggregator,
+  MetricStatsAggregator,
+  PrecisionStatsAggregator,
+  RecallStatsAggregator
+} from "./StatsAggregator";
 
 export async function fetchMatrix(
   quantileBinning: boolean,
@@ -64,82 +71,39 @@ export function createCohortStatsFromSelectedCells(
   selectedCells: boolean[],
   jsonMatrix: IErrorAnalysisMatrix
 ): MetricCohortStats {
-  let falseCohortCount = 0;
-  let totalCohortCount = 0;
-  let metricName = Metrics.ErrorRate;
-  let totalCohortError = 0;
-  let totalError = 0;
-  let falseCount = 0;
-  let totalCount = 0;
-  let existsSelectedCell = false;
+  const metricName = jsonMatrix.matrix[0][0].metricName;
+  let statsAggregator: BaseStatsAggregator;
+  if (metricName === Metrics.ErrorRate) {
+    statsAggregator = new ErrorRateStatsAggregator(metricName);
+  } else if (
+    metricName === Metrics.MeanSquaredError ||
+    metricName === Metrics.MeanAbsoluteError
+  ) {
+    statsAggregator = new MetricStatsAggregator(metricName);
+  } else if (
+    metricName === Metrics.PrecisionScore ||
+    metricName === Metrics.MacroPrecisionScore ||
+    metricName === Metrics.MicroPrecisionScore
+  ) {
+    statsAggregator = new PrecisionStatsAggregator(metricName);
+  } else if (
+    metricName === Metrics.RecallScore ||
+    metricName === Metrics.MacroRecallScore ||
+    metricName === Metrics.MicroRecallScore
+  ) {
+    statsAggregator = new RecallStatsAggregator(metricName);
+  } else {
+    throw new Error(`Unknown metric value ${metricName} specified`);
+  }
   jsonMatrix.matrix.forEach((row: IErrorAnalysisMatrixNode[], i: number) => {
     row.forEach((value: IErrorAnalysisMatrixNode, j: number) => {
       if (selectedCells !== undefined && selectedCells[j + i * row.length]) {
-        if (value.falseCount !== undefined) {
-          falseCohortCount += value.falseCount;
-        } else if (value.metricValue !== undefined) {
-          metricName = value.metricName;
-          if (value.metricName === Metrics.MeanSquaredError) {
-            totalCohortError += value.metricValue * value.count;
-          }
-        }
-        totalCohortCount += value.count;
-        existsSelectedCell = true;
+        statsAggregator.updateCohort(value);
       }
-      if (value.falseCount !== undefined) {
-        falseCount += value.falseCount;
-      } else if (value.metricValue !== undefined) {
-        metricName = value.metricName;
-        if (value.metricName === Metrics.MeanSquaredError) {
-          totalError += value.metricValue * value.count;
-        }
-      }
-      totalCount += value.count;
+      statsAggregator.updateGlobal(value);
     });
   });
-  let metricValue: number;
-  if (existsSelectedCell) {
-    if (metricName === Metrics.ErrorRate) {
-      metricValue = (falseCohortCount / totalCohortCount) * 100;
-      return new ErrorCohortStats(
-        falseCohortCount,
-        totalCohortCount,
-        falseCount,
-        totalCount,
-        metricValue,
-        metricName
-      );
-    }
-    metricValue = totalCohortError / totalCohortCount;
-    const coverage = (totalCohortError / totalError) * 100;
-    return new MetricCohortStats(
-      totalCohortCount,
-      totalCount,
-      metricValue,
-      metricName,
-      coverage
-    );
-  }
-  if (metricName === Metrics.ErrorRate) {
-    metricValue = (falseCount / totalCount) * 100;
-    return new ErrorCohortStats(
-      falseCount,
-      totalCount,
-      falseCount,
-      totalCount,
-      metricValue,
-      metricName
-    );
-  }
-  metricValue = totalError / totalCount;
-  const coverage = 100;
-  return new MetricCohortStats(
-    totalCohortCount,
-    totalCount,
-    metricValue,
-    metricName,
-    coverage
-  );
+  return statsAggregator.createCohortStats();
 }
 
 export function createCompositeFilterFromCells(

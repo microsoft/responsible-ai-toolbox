@@ -35,6 +35,7 @@ export interface ITreeViewRendererState {
   rootSize: any;
   rootErrorSize: any;
   rootLocalError: any;
+  isErrorMetric: boolean;
 }
 
 // Represents IRequestNode with augmented calculations
@@ -61,6 +62,7 @@ export interface INodeState {
 
 export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
+    isErrorMetric: true,
     nodeDetail: {
       errorColor: "#eaeaea",
       maskDown: {

@@ -12,6 +12,7 @@ export interface IGradientProps {
   minPct: number;
   value: number;
   isRate: boolean;
+  isErrorMetric: boolean;
 }
 
 export class Gradient extends React.Component<IGradientProps> {
@@ -27,8 +28,12 @@ export class Gradient extends React.Component<IGradientProps> {
     const gradientMidPct = `${
       100 - (1 / (maxValue / 100)) * this.props.minPct
     }%`;
-    const minColor = ColorPalette.MinColor;
-    const maxColor = ColorPalette.MaxColor;
+    const minColor = this.props.isErrorMetric
+      ? ColorPalette.MinErrorColor
+      : ColorPalette.MinMetricColor;
+    const maxColor = this.props.isErrorMetric
+      ? ColorPalette.MaxErrorColor
+      : ColorPalette.MaxMetricColor;
     const errorAvgColor = ColorPalette.ErrorAvgColor;
     return (
       <g>

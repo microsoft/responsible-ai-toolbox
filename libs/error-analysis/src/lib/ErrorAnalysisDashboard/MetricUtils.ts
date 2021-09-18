@@ -48,6 +48,66 @@ export class MetricUtils {
         }
         return localization.ErrorAnalysis.Metrics.meanAbsoluteErrorShort;
       }
+      case Metrics.PrecisionScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.precision;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.precisionInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.precisionTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.precisionShort;
+      }
+      case Metrics.RecallScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.recall;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.recallInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.recallTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.recallShort;
+      }
+      case Metrics.MacroPrecisionScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.macroPrecision;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.macroPrecisionInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.macroPrecisionTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.macroPrecisionShort;
+      }
+      case Metrics.MicroPrecisionScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.microPrecision;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.microPrecisionInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.microPrecisionTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.microPrecisionShort;
+      }
+      case Metrics.MacroRecallScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.macroRecall;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.macroRecallInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.macroRecallTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.macroRecallShort;
+      }
+      case Metrics.MicroRecallScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.microRecall;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.microRecallInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.microRecallTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.microRecallShort;
+      }
       default: {
         return "";
       }
