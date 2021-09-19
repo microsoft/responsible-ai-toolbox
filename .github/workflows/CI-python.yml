@@ -89,4 +89,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest ${{ matrix.packageDirectory }}/tests/ --durations=10
+          pytest ${{ matrix.packageDirectory }}/tests/ --durations=10 -n auto
