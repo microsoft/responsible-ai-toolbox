@@ -87,6 +87,28 @@ jobs:
       - name: flake8
         run: flake8
 
-      - name: Run tests
+      - if: ${{ matrix.packageDirectory == 'responsibleai' ||  matrix.packageDirectory == 'erroranalysis'}}
+        name: Run tests
         run: |
-          pytest ${{ matrix.packageDirectory }}/tests/ --durations=10 -n auto
+          pytest --durations=10 -n auto --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ matrix.packageDirectory == 'wrapped-flask' }}
+        name: Run tests
+        run: |
+          pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
+        name: Run tests
+        run: |
+          pytest --durations=10 -n auto
+        working-directory: ${{ matrix.packageDirectory }}
+
+      - name: Upload code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.packageDirectory }}-code-coverage-results
+          path: ${{ matrix.packageDirectory }}/htmlcov
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() && matrix.packageDirectory != 'raiwidgets'}}
