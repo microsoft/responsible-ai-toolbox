@@ -11,6 +11,7 @@ import { modelData } from "./modelData";
 
 export class Fairness extends React.Component {
   public render(): React.ReactNode {
+    console.log("testing");
     let requestMethod = undefined;
     if (config.baseUrl !== undefined) {
       requestMethod = async (
