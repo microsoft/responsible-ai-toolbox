@@ -1,6 +1,6 @@
 pytest==5.0.1
 pytest-mock==3.1.1
-pytest-xdist
+pytest-xdist==1.31.0
 requests==2.25.1
 
 autopep8==1.5.3
