@@ -225,6 +225,25 @@ class TestModelAnalysisValidations:
         assert 'The model passed cannot be used for getting predictions ' + \
             'via predict_proba()' in str(ucve.value)
 
+    def test_model_analysis_incorrect_task_type(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        err_msg = ('INVALID-TASK-TYPE-WARNING: The regression model'
+                   'provided has a predict_proba function. '
+                   'Please check the task_type.')
+        with pytest.warns(UserWarning, match=err_msg):
+            ModelAnalysis(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column='target',
+                task_type='regression')
+
     def test_mismatch_train_test_features(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
