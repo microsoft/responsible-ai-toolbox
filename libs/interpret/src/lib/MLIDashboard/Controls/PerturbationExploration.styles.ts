@@ -29,8 +29,6 @@ export const perturbationExplorationStyles: IProcessedStyleSet<IPerturbationExpl
     labelGroup: {
       borderBottom: "1px solid",
       display: "flex",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       fontSize: "20px"
     },
     labelGroupLabel: {
@@ -41,8 +39,6 @@ export const perturbationExplorationStyles: IProcessedStyleSet<IPerturbationExpl
     loadingMessage: {
       borderBottom: "1px solid",
       display: "flex",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       fontSize: "20px",
       padding: "5px 10px"
     },

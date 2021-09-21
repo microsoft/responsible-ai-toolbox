@@ -17,8 +17,6 @@ export const infoCalloutStyles: () => IProcessedStyleSet<IInfoCalloutStyles> =
       calloutInfo: {
         display: "flex",
         flexDirection: "column",
-        fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
         maxWidth: "300px",
         padding: "10px"
       }

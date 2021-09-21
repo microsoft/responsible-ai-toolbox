@@ -49,14 +49,12 @@ export const matrixCellsStyles: () => IProcessedStyleSet<IMatrixCellsStyles> =
       matrixCol: {
         display: "flex",
         flexDirection: "column",
-        fontFamily: "Segoe UI",
         fontStyle: "normal",
         fontWeight: "normal"
       },
       matrixRow: {
         display: "flex",
         flexDirection: "row",
-        fontFamily: "Segoe UI",
         fontStyle: "normal",
         fontWeight: "normal",
         height: "50px"

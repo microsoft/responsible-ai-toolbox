@@ -9,6 +9,7 @@ import {
   rowsFromCustomPoints,
   ITableState
 } from "@responsible-ai/core-ui";
+import _ from "lodash";
 import {
   ConstrainMode,
   DetailsList,
@@ -99,7 +100,7 @@ export class TabularDataView extends React.Component<
     if (
       this.props.customPoints !== prevProps.customPoints ||
       this.props.selectedCohort !== prevProps.selectedCohort ||
-      this.props.selectedIndexes !== prevProps.selectedIndexes
+      !_.isEqual(this.props.selectedIndexes, prevProps.selectedIndexes)
     ) {
       const newTableState = this.updateItems();
       this.setState({ tableState: newTableState });

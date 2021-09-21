@@ -21,6 +21,7 @@ export interface ITreeLegendProps {
   minPct: number;
   max: number;
   showCohortName: boolean;
+  isErrorMetric: boolean;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -124,6 +125,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                   minPct={this.props.minPct}
                   value={this.props.selectedCohort.metricValue}
                   isRate={isRate}
+                  isErrorMetric={this.props.isErrorMetric}
                 />
               </g>
             </svg>

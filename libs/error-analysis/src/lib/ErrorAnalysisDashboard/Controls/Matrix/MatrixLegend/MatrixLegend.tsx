@@ -16,6 +16,7 @@ export interface IMatrixLegendProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   max: number;
+  isErrorMetric: boolean;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -107,6 +108,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                     minPct={0}
                     value={this.props.selectedCohort.metricValue}
                     isRate={isRate}
+                    isErrorMetric={this.props.isErrorMetric}
                   />
                 </g>
               </svg>

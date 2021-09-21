@@ -276,6 +276,7 @@ export class TreeViewRenderer extends React.PureComponent<
               minPct={minPct}
               max={max}
               showCohortName={this.props.showCohortName}
+              isErrorMetric={this.state.isErrorMetric}
             />
             <svg
               ref={svgOuterFrame}
@@ -409,11 +410,12 @@ export class TreeViewRenderer extends React.PureComponent<
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
       const isErrorRate = requestTreeNodes[0].metricName === Metrics.ErrorRate;
-      const rootLocalError = isErrorRate
+      const rootLocalMetric = isErrorRate
         ? rootErrorSize / rootSize
         : requestTreeNodes[0].metricValue;
 
-      const min: number = rootLocalError;
+      const isErrorMetric = requestTreeNodes[0].isErrorMetric;
+      const min: number = rootLocalMetric;
       const max: number = Math.max(
         ...requestTreeNodes.map((node) => {
           if (node.size === 0) {
@@ -426,8 +428,12 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = ColorPalette.MinColor;
-      const maxColor = ColorPalette.MaxColor;
+      const minColor = isErrorMetric
+        ? ColorPalette.MinErrorColor
+        : ColorPalette.MinMetricColor;
+      const maxColor = isErrorMetric
+        ? ColorPalette.MaxErrorColor
+        : ColorPalette.MaxMetricColor;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
@@ -449,7 +455,7 @@ export class TreeViewRenderer extends React.PureComponent<
 
         let heatmapStyle: Property.Color = errorAvgColor;
 
-        if (errorPerc > rootLocalError * errorRatioThreshold) {
+        if (errorPerc > rootLocalMetric * errorRatioThreshold) {
           heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
         }
 
@@ -457,6 +463,7 @@ export class TreeViewRenderer extends React.PureComponent<
           ...node,
           errorColor: heatmapStyle,
           filterProps,
+          isErrorMetric,
           maskShift: calcMaskShift,
           nodeState: {
             isSelectedLeaf: false,
@@ -486,11 +493,12 @@ export class TreeViewRenderer extends React.PureComponent<
       }
 
       return {
+        isErrorMetric,
         nodeDetail,
         request: state.request,
         root,
         rootErrorSize,
-        rootLocalError,
+        rootLocalError: rootLocalMetric,
         rootSize,
         selectedNode: root,
         transform: state.transform,
@@ -590,6 +598,7 @@ export class TreeViewRenderer extends React.PureComponent<
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
       return {
+        isErrorMetric: state.isErrorMetric,
         nodeDetail,
         request: state.request,
         root: state.root,
