@@ -4,12 +4,14 @@
 
 import semver
 
+from typing import List
+
 
 class BaseVersions:
     """Base class for result versions."""
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> List[str]:
         constants = []
         for attribute in dir(cls):
             if attribute.startswith('V_'):
@@ -17,7 +19,7 @@ class BaseVersions:
         return constants
 
     @classmethod
-    def get_current(cls):
+    def get_current(cls) -> str:
         current = None
         current_string = None
         for version_string in cls.get_all():

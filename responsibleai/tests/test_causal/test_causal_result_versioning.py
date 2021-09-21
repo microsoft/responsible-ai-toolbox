@@ -6,11 +6,14 @@ import pandas as pd
 import pytest
 
 from jsonschema import ValidationError
+from pathlib import Path
+from typing import Any
 
 from responsibleai import ModelTask
 from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._tools.causal.causal_result import CausalResult
-from responsibleai._tools.shared.versions import CausalVersions
+from responsibleai._tools.causal import causal_result as causal_result_module
+# from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai._tools.shared import versions
 
 
 @pytest.fixture(scope='module')
@@ -26,13 +29,12 @@ def causal_result(parks_data):
 
 class TestCausalVersioning:
     def test_current_roundtrip(self, tmpdir, causal_result):
-        save_dir = tmpdir.mkdir('result-dir')
+        save_dir = self._save_result(causal_result, tmpdir)
+        loaded = causal_result_module.CausalResult.load(save_dir)
         result = causal_result
-        result.save(save_dir)
-        loaded = CausalResult.load(save_dir)
         assert loaded.id == result.id
         assert loaded.version == result.version
-        assert loaded.version == CausalVersions.get_current()
+        assert loaded.version == versions.CausalVersions.get_current()
         assert loaded._get_dashboard_data() == result._get_dashboard_data()
         assert loaded.global_effects.equals(result.global_effects)
         assert loaded.local_effects.equals(result.local_effects)
@@ -56,42 +58,71 @@ class TestCausalVersioning:
             assert o_1 == o_2
 
     def test_invalid_version_load(self, tmpdir, causal_result):
-        save_dir = tmpdir.mkdir('result-dir')
-        causal_result.save(save_dir)
+        save_dir = self._save_result(causal_result, tmpdir, version='invalid')
 
-        version_filepath = save_dir / 'version.json'
-        with open(version_filepath, 'w') as f:
-            new_version_data = {'version': 'invalid_version'}
-            json.dump(new_version_data, f)
-
-        message = r"invalid_version is not valid SemVer string"
+        message = r"invalid is not valid SemVer string"
         with pytest.raises(ValueError, match=message):
-            CausalResult.load(save_dir)
+            causal_result_module.CausalResult.load(save_dir)
 
     def test_invalid_dashboard_load(self, tmpdir, causal_result):
-        save_dir = tmpdir.mkdir('result-dir')
-        causal_result.save(save_dir)
-
-        dashboard_filepath = save_dir / 'dashboard.json'
-        with open(dashboard_filepath, 'w') as f:
-            new_dashboard_data = {'fake_dashboard': 'invalid'}
-            json.dump(new_dashboard_data, f)
+        save_dir = self._save_result(causal_result, tmpdir, dashboard='inv')
 
         message = r"Failed validating"
         with pytest.raises(ValidationError, match=message):
-            CausalResult.load(save_dir)
+            causal_result_module.CausalResult.load(save_dir)
 
     def test_forward_incompatible(self, tmpdir, causal_result):
-        save_dir = tmpdir.mkdir('result-dir')
-        causal_result.save(save_dir)
+        """Test that the current client won't load results with versions
+        later than the current version."""
 
-        version_filepath = save_dir / 'version.json'
-        with open(version_filepath, 'w') as f:
-            new_version_data = {'version': '1000.0.0'}
-            json.dump(new_version_data, f)
+        save_dir = self._save_result(causal_result, tmpdir, version='1000.0.0')
 
         message = ("The installed version of responsibleai is not "
                    "compatible with causal result version 1000.0.0. "
-                   "Please upgrade in order to load this result.")
+                   "Please upgrade responsibleai "
+                   "in order to load this result.")
         with pytest.raises(ValueError, match=message):
-            CausalResult.load(save_dir)
+            causal_result_module.CausalResult.load(save_dir)
+
+    def test_backward_incompatible(self, monkeypatch, tmpdir, causal_result):
+        """Test that the current client won't load results with versions
+        earlier than the current major version."""
+
+        save_dir = self._save_result(causal_result, tmpdir, version='0.1.0')
+
+        class PatchCausalVersions(versions.BaseVersions):
+
+            V_0_0_0 = '0.0.0'
+            V_0_1_0 = '0.1.0'
+            V_1000_0_0 = '1000.0.0'
+
+        monkeypatch.setattr(causal_result_module,
+                            'CausalVersions',
+                            PatchCausalVersions)
+
+        message = ("The installed version of responsibleai is not "
+                   "compatible with causal result version 0.1.0. "
+                   "Please downgrade responsibleai "
+                   "in order to load this result.")
+        with pytest.raises(ValueError, match=message):
+            causal_result_module.CausalResult.load(save_dir)
+
+    def _save_result(
+        self,
+        causal_result: causal_result_module.CausalResult,
+        tmpdir: Path,
+        version: str = None,
+        dashboard: Any = None,
+    ) -> Path:
+        save_dir = tmpdir.mkdir('result-dir')
+        causal_result.save(save_dir)
+
+        if version is not None:
+            with open(save_dir / 'version.json', 'w') as f:
+                json.dump({'version': version}, f)
+
+        if dashboard is not None:
+            with open(save_dir / 'dashboard.json', 'w') as f:
+                json.dump({'fake_dashboard': dashboard}, f)
+
+        return save_dir
