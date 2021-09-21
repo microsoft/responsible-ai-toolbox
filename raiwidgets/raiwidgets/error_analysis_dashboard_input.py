@@ -308,7 +308,7 @@ class ErrorAnalysisDashboardInput:
                     true_y = np.array(true_y)
                 diff = predicted_y != true_y
                 error = sum(diff)
-                metric_value = error / total
+                metric_value = (error / total) * 100
         metric_name = metric_to_display_name[metric]
         root_stats = {
             ExplanationDashboardInterface.ROOT_METRIC_NAME: metric_name,

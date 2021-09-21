@@ -407,7 +407,8 @@ def matrix_2d(categories1, categories2, matrix_counts,
             if metric == Metrics.ERROR_RATE:
                 matrix_row.append({
                     FALSE_COUNT: false_count,
-                    COUNT: total_count
+                    COUNT: total_count,
+                    METRIC_NAME: metric_to_display_name[metric]
                 })
             elif is_precision or is_recall:
                 matrix_row.append({
@@ -463,7 +464,8 @@ def matrix_1d(categories, values_err, counts, counts_err,
                 false_count = int(counts_err[index_err])
             matrix_row.append({
                 FALSE_COUNT: false_count,
-                COUNT: int(counts[col_idx])
+                COUNT: int(counts[col_idx]),
+                METRIC_NAME: metric_to_display_name[metric]
             })
         elif is_precision or is_recall:
             tp_sum = []

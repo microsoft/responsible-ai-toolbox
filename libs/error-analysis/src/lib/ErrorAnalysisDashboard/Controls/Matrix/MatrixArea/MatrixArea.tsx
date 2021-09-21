@@ -220,17 +220,16 @@ export class MatrixArea extends React.PureComponent<
             maxMetricValue = Math.max(maxMetricValue, metricValue);
           }
         }
-        if (value.metricName !== undefined) {
-          if (
-            value.metricName === Metrics.PrecisionScore ||
+        if (
+          value.metricName !== undefined &&
+          (value.metricName === Metrics.PrecisionScore ||
             value.metricName === Metrics.RecallScore ||
             value.metricName === Metrics.MicroPrecisionScore ||
             value.metricName === Metrics.MacroPrecisionScore ||
             value.metricName === Metrics.MicroRecallScore ||
-            value.metricName === Metrics.MacroRecallScore
-          ) {
-            isErrorMetric = false;
-          }
+            value.metricName === Metrics.MacroRecallScore)
+        ) {
+          isErrorMetric = false;
         }
       });
     });

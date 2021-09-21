@@ -71,9 +71,12 @@ export function createCohortStatsFromSelectedCells(
   selectedCells: boolean[],
   jsonMatrix: IErrorAnalysisMatrix
 ): MetricCohortStats {
-  const metricName = jsonMatrix.matrix[0][0].metricName;
+  let metricName = jsonMatrix.matrix[0][0].metricName;
   let statsAggregator: BaseStatsAggregator;
-  if (metricName === Metrics.ErrorRate) {
+  // Note for older versions of error analysis package metricName is
+  // undefined for ErrorRate
+  if (metricName === Metrics.ErrorRate || metricName === undefined) {
+    metricName = Metrics.ErrorRate;
     statsAggregator = new ErrorRateStatsAggregator(metricName);
   } else if (
     metricName === Metrics.MeanSquaredError ||
