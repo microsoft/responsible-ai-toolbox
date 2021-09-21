@@ -28,9 +28,17 @@ this file to understand what changed.
 
 - new features
   - table for list of available cohorts
+  - added more metrics to ErrorAnalysisDashboard, including precision, recall and mean abs error
 - bug fixes
   - fix various UI usability bugs
   - fix for clicking custom scatter plot point
+  - ## Error Analysis
+    - fix selecting what if datapoint crashing dashboard
+    - fix error in quantile binning when there are too many duplicate points
+    - fix displayed error rate in all data cohort in cohort list
+    - fix error in heatmap for classification case
+    - fix features list not getting disabled in static view
+    - update description text for static view
 - other
   - improve validation for model prediction
   - reorder counterfactual table columns
@@ -39,6 +47,8 @@ this file to understand what changed.
   - fix typos in docstrings
   - improve wording of text on dashboard
   - add warnings for soft data limits
+  - remove font override for all components
+  - add code coverage to repository
 
 ## v0.10.0
 
