@@ -146,20 +146,35 @@ jobs:
           name: ${{ matrix.package }}
           path: ${{ matrix.package }}
 
-      - name: publish package to Test PyPI
-        if: ${{ github.event.inputs.releaseType == 'Test' }}
+      - name: Publish responsibleai package to Test PyPI
+        if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{steps.download.outputs.download-path}}
-      - name: Publish package to PyPI
-        if: ${{ github.event.inputs.releaseType == 'Prod' }}
+      - name: Publish responsibleai package to Prod PyPI
+        if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
+          packages_dir: ${{steps.download.outputs.download-path}}
+      - name: Publish raiwidgets package to Test PyPI
+        if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: ${{steps.download.outputs.download-path}}
+      - name: Publish raiwidgets package to Prod PyPI
+        if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
           packages_dir: ${{steps.download.outputs.download-path}}
 
   release-typescript:
