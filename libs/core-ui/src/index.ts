@@ -34,7 +34,6 @@ export * from "./lib/util/Never";
 export * from "./lib/util/PartialRequired";
 export * from "./lib/util/nameof";
 export * from "./lib/util/rowErrorSize";
-export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryMessage";
