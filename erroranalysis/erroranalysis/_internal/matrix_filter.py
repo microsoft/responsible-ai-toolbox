@@ -4,6 +4,7 @@
 import numpy as np
 import pandas as pd
 import math
+import warnings
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y,
                                                TRUE_Y,
@@ -37,6 +38,7 @@ FP = 'fp'
 FN = 'fn'
 TN = 'tn'
 ERROR = 'error'
+DROP = 'drop'
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
@@ -203,7 +205,13 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                              feat1,
                              num_bins,
                              quantile_binning=quantile_binning)
-            bin_range = range(num_bins)
+            num_categories = len(cutdf.cat.categories)
+            bin_range = range(num_categories)
+            if len(cutdf.cat.categories) < num_bins:
+                warnings.warn(("Removing duplicate bin edges for "
+                               "quantile binning. There are too many "
+                               "duplicate values for the specified "
+                               "number of bins."), UserWarning)
             catr = cutdf.cat.rename_categories(bin_range)
             catn, counts = np.unique(catr.to_numpy(),
                                      return_counts=True)
@@ -269,7 +277,7 @@ def bin_data(df, feat, bins, quantile_binning=False):
                                           name=feat_col.name)
         return cat_typed
     if quantile_binning and not feat_col.empty:
-        return pd.qcut(feat_col, bins, precision=PRECISION)
+        return pd.qcut(feat_col, bins, precision=PRECISION, duplicates=DROP)
     else:
         return pd.cut(feat_col, bins, precision=PRECISION)
 
@@ -399,7 +407,8 @@ def matrix_2d(categories1, categories2, matrix_counts,
             if metric == Metrics.ERROR_RATE:
                 matrix_row.append({
                     FALSE_COUNT: false_count,
-                    COUNT: total_count
+                    COUNT: total_count,
+                    METRIC_NAME: metric_to_display_name[metric]
                 })
             elif is_precision or is_recall:
                 matrix_row.append({
@@ -455,7 +464,8 @@ def matrix_1d(categories, values_err, counts, counts_err,
                 false_count = int(counts_err[index_err])
             matrix_row.append({
                 FALSE_COUNT: false_count,
-                COUNT: int(counts[col_idx])
+                COUNT: int(counts[col_idx]),
+                METRIC_NAME: metric_to_display_name[metric]
             })
         elif is_precision or is_recall:
             tp_sum = []
