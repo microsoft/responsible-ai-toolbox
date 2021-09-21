@@ -9,7 +9,8 @@ from erroranalysis._internal.matrix_filter import (
     VALUES, METRIC_NAME, METRIC_VALUE)
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from common_utils import (
-    create_boston_data, create_iris_data, create_cancer_data,
+    create_adult_census_data, create_boston_data, create_iris_data,
+    create_kneighbors_classifier, create_cancer_data,
     create_simple_titanic_data, create_titanic_pipeline,
     create_binary_classification_dataset,
     create_models_classification,
@@ -72,6 +73,27 @@ class TestMatrixFilter(object):
                                      y_test, feature_names,
                                      model_task,
                                      quantile_binning=True)
+
+    def test_matrix_filter_adult_census_quantile_binning(self):
+        X_train, X_test, y_train, y_test, categorical_features = \
+            create_adult_census_data()
+
+        model_task = ModelTask.CLASSIFICATION
+        feature_names = X_test.columns.tolist()
+        matrix_features = ['Capital Gain']
+        # validate quantile binning for column with many zero values
+        model = create_kneighbors_classifier(X_train, y_train)
+
+        # validate warning printed
+        err = ("Removing duplicate bin edges for quantile binning. "
+               "There are too many duplicate values for the specified "
+               "number of bins.")
+        with pytest.warns(UserWarning, match=err):
+            run_error_analyzer(model, X_test, y_test,
+                               feature_names, categorical_features,
+                               model_task=model_task,
+                               matrix_features=matrix_features,
+                               quantile_binning=True)
 
     def test_matrix_filter_iris_num_bins(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
