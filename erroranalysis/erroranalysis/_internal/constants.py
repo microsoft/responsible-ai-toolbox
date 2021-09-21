@@ -53,7 +53,11 @@ class Metrics(str, Enum):
     R2_SCORE = 'r2_score'
     F1_SCORE = 'f1_score'
     PRECISION_SCORE = 'precision_score'
+    MACRO_PRECISION_SCORE = 'macro_precision_score'
+    MICRO_PRECISION_SCORE = 'micro_precision_score'
     RECALL_SCORE = 'recall_score'
+    MACRO_RECALL_SCORE = 'macro_recall_score'
+    MICRO_RECALL_SCORE = 'micro_recall_score'
     ERROR_RATE = 'error_rate'
 
 
@@ -64,7 +68,11 @@ metric_to_display_name = {
     Metrics.R2_SCORE: 'R2 score',
     Metrics.F1_SCORE: 'F1 score',
     Metrics.PRECISION_SCORE: 'Precision score',
+    Metrics.MACRO_PRECISION_SCORE: 'Macro precision score',
+    Metrics.MICRO_PRECISION_SCORE: 'Micro precision score',
     Metrics.RECALL_SCORE: 'Recall score',
+    Metrics.MACRO_RECALL_SCORE: 'Macro recall score',
+    Metrics.MICRO_RECALL_SCORE: 'Micro recall score',
     Metrics.ERROR_RATE: 'Error rate'
 }
 
@@ -73,3 +81,13 @@ metric_to_display_name = {
 # These should be given a negative value when computing the feature importance
 error_metrics = {Metrics.MEAN_ABSOLUTE_ERROR, Metrics.MEAN_SQUARED_ERROR,
                  Metrics.MEDIAN_ABSOLUTE_ERROR, Metrics.ERROR_RATE}
+
+
+precision_metrics = {Metrics.PRECISION_SCORE,
+                     Metrics.MACRO_PRECISION_SCORE,
+                     Metrics.MICRO_PRECISION_SCORE}
+
+
+recall_metrics = {Metrics.RECALL_SCORE,
+                  Metrics.MACRO_RECALL_SCORE,
+                  Metrics.MICRO_RECALL_SCORE}

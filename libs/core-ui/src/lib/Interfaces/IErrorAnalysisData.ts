@@ -52,28 +52,58 @@ export type IErrorAnalysisMatrixRegressionCategory = {
 type IErrorAnalysisMatrixClassification = {
   category1: IErrorAnalysisMatrixClassificationCategory;
   category2?: IErrorAnalysisMatrixClassificationCategory;
-  matrix: IErrorAnalysisMatrixNodeClassification[][];
+  matrix: IErrorAnalysisMatrixClassificationNode[][];
 };
 
 type IErrorAnalysisMatrixRegression = {
   category1: IErrorAnalysisMatrixRegressionCategory;
   category2?: IErrorAnalysisMatrixRegressionCategory;
-  matrix: IErrorAnalysisMatrixNodeRegression[][];
+  matrix: IErrorAnalysisMatrixRegressionNode[][];
 };
 
 export type IErrorAnalysisMatrixNode =
-  | IErrorAnalysisMatrixNodeClassification
-  | IErrorAnalysisMatrixNodeRegression;
+  | IErrorAnalysisMatrixClassificationNode
+  | IErrorAnalysisMatrixRegressionNode;
 
-export type IErrorAnalysisMatrixNodeClassification = {
+export type IErrorAnalysisMatrixClassificationNode =
+  | IErrorAnalysisMatrixNodeErrorRate
+  | IErrorAnalysisMatrixNodeConfusionMetric;
+
+export type IErrorAnalysisMatrixRegressionNode =
+  IErrorAnalysisMatrixNodeSimpleMetric;
+
+export type IErrorAnalysisMatrixNodeErrorRate = {
   count: number;
+  error: never;
   falseCount: number;
   metricValue?: never;
   metricName?: never;
+  tp: never;
+  fp: never;
+  fn: never;
+  tn: never;
 };
-export type IErrorAnalysisMatrixNodeRegression = {
+
+export type IErrorAnalysisMatrixNodeSimpleMetric = {
   count: number;
+  error: never;
   falseCount?: never;
   metricValue: number;
   metricName: string;
+  tp: never;
+  fp: never;
+  fn: never;
+  tn: never;
+};
+
+export type IErrorAnalysisMatrixNodeConfusionMetric = {
+  count: number;
+  error: number;
+  falseCount?: never;
+  metricValue: number;
+  metricName: string;
+  tp: number[];
+  fp: number[];
+  fn: number[];
+  tn: number[];
 };

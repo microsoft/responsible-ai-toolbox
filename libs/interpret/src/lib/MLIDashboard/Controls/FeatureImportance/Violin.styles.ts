@@ -35,8 +35,6 @@ export const violinStyles: IProcessedStyleSet<IViolinStyles> =
     calloutInfo: {
       display: "flex",
       flexDirection: "column",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-    -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       maxWidth: "300px",
       padding: "30px"
     },
@@ -44,9 +42,6 @@ export const violinStyles: IProcessedStyleSet<IViolinStyles> =
       flex: 1
     },
     labelText: {
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-            -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-            sans-serif`,
       fontSize: "14px",
       lineHeight: "14px",
       margin: " 7px 0 0 4px"
@@ -59,9 +54,6 @@ export const violinStyles: IProcessedStyleSet<IViolinStyles> =
       flexDirection: "row"
     },
     selectorSpan: {
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-          sans-serif`,
       paddingTop: "5px"
     },
     sliderControl: {

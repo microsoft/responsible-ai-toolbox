@@ -39,8 +39,6 @@ export const featureEditingTileStyles: IProcessedStyleSet<IFeatureEditingTileSty
       width: "200px"
     },
     tileLabel: {
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       fontSize: "20px",
       overflowWrap: "break-word",
       padding: "3px 4px 15px 4px"

@@ -32,8 +32,6 @@ export const iCEPlotStyles: IProcessedStyleSet<IICEPlotStyles> =
       flexDirection: "column"
     },
     loading: {
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-          -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       fontSize: "25px",
       margin: "auto",
       padding: "40px"

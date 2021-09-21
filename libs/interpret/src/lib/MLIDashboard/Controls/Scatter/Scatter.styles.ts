@@ -26,8 +26,6 @@ export const scatterStyles: IProcessedStyleSet<IScatterStyles> =
     calloutInfo: {
       display: "flex",
       flexDirection: "column",
-      fontFamily: `"Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif`,
       maxWidth: "300px",
       padding: "30px"
     },
@@ -39,9 +37,6 @@ export const scatterStyles: IProcessedStyleSet<IScatterStyles> =
       width: "100%"
     },
     labelText: {
-      fontFamily: ` "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
-      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue",
-      sans-serif`,
       fontSize: "14px",
       lineHeight: "14px",
       marginRight: "-16px",
