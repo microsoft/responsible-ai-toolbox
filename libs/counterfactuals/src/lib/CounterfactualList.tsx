@@ -250,7 +250,7 @@ export class CounterfactualList extends React.Component<
     _event: React.FormEvent<IComboBox>,
     option?: IComboBoxOption
   ): void => {
-    const id = key.toString() || "aaa";
+    const id = key.toString();
     const keyIndex =
       this.props.data?.feature_names_including_target.indexOf(id);
     if (option?.text) {
