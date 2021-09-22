@@ -1470,7 +1470,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     [
       [
         38,
-        "Never-worked",
+        "Federal-gov",
         203836,
         "5th-6th",
         3,
@@ -1642,7 +1642,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     [
       [
         41,
-        "Never-worked",
+        "Federal-gov",
         139907,
         "Assoc-voc",
         11,
@@ -4479,7 +4479,7 @@ export const adultCounterfactualData: ICounterfactualData = {
       ],
       [
         46,
-        "Never-worked",
+        "Federal-gov",
         265266,
         "Bachelors",
         13,

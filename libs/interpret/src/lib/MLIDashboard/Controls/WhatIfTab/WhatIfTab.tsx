@@ -16,7 +16,8 @@ import {
   ModelAssessmentContext,
   FabricStyles,
   InteractiveLegend,
-  rowErrorSize
+  rowErrorSize,
+  getFeatureOptions
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -125,27 +126,7 @@ export class WhatIfTab extends React.PureComponent<
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 400);
 
-    const featuresOption = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
+    const featuresOption = getFeatureOptions(this.context.jointDataset);
 
     this.setState({
       chartProps: this.generateDefaultChartAxes(),
