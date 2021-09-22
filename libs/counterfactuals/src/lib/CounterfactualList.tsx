@@ -8,14 +8,17 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _, { toLower, toNumber } from "lodash";
+import _, { toNumber } from "lodash";
 import {
   Callout,
+  ComboBox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   IColumn,
+  IComboBox,
+  IComboBoxOption,
   IDetailsFooterProps,
   Link,
   SelectionMode,
@@ -25,9 +28,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { getCategoricalOption } from "../util/getCategoricalOption";
+import { getFilterFeatures } from "../util/getFilterFeatures";
+
+import { counterfactualListStyle } from "./CounterfactualListStyles";
 import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
-import { ILocalImportanceData } from "./LocalImportanceChart";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
@@ -199,7 +205,12 @@ export class CounterfactualList extends React.Component<
       this.props.data?.feature_names_including_target[
         this.props.data?.feature_names_including_target.length - 1
       ];
-    const featureNames = this.getFilterFeatures();
+    const featureNames = getFilterFeatures(
+      this.props.data,
+      this.props.selectedIndex,
+      this.props.sortFeatures,
+      this.props.filterText
+    );
     if (!featureNames || featureNames.length === 0) {
       return columns;
     }
@@ -234,6 +245,23 @@ export class CounterfactualList extends React.Component<
     return columns;
   }
 
+  private updateDropdownColValue = (
+    key: string | number,
+    _event: React.FormEvent<IComboBox>,
+    option?: IComboBoxOption
+  ): void => {
+    const id = key.toString();
+    const keyIndex =
+      this.props.data?.feature_names_including_target.indexOf(id);
+    if (option?.text) {
+      this.props.setCustomRowProperty(`Data${keyIndex}`, false, option.text);
+      this.setState((prevState) => {
+        prevState.data[id] = option.text;
+        return { data: prevState.data };
+      });
+    }
+  };
+
   private updateColValue = (
     evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
@@ -262,6 +290,31 @@ export class CounterfactualList extends React.Component<
     _index?: number,
     column?: IColumn
   ): React.ReactNode | undefined => {
+    const dropdownOption = getCategoricalOption(
+      this.context.jointDataset,
+      column?.key
+    );
+    const styles = counterfactualListStyle();
+    if (column && dropdownOption?.data?.categoricalOptions) {
+      return (
+        <Stack horizontal={false} tokens={{ childrenGap: "5px" }}>
+          <Stack.Item className={styles.dropdownLabel}>
+            <Text>{column.key}</Text>
+          </Stack.Item>
+          <Stack.Item>
+            <ComboBox
+              key={column.key}
+              // label={metaInfo.abbridgedLabel}
+              autoComplete={"on"}
+              allowFreeform
+              selectedKey={this.state.data[column.key]}
+              options={dropdownOption.data.categoricalOptions}
+              onChange={this.updateDropdownColValue.bind(this, column.key)}
+            />
+          </Stack.Item>
+        </Stack>
+      );
+    }
     if (column) {
       return (
         <Stack horizontal={false}>
@@ -297,33 +350,4 @@ export class CounterfactualList extends React.Component<
     }
     return <div />;
   };
-
-  private getFilterFeatures = (): string[] => {
-    const allFeatures = this.getSortedFeatureNames();
-    const filterText = this.props.filterText;
-    const invalidInput =
-      filterText === undefined || filterText === null || !/\S/.test(filterText);
-    const filtered = invalidInput
-      ? allFeatures
-      : allFeatures.filter((f) => toLower(f).includes(toLower(filterText)));
-    return filtered;
-  };
-
-  private getSortedFeatureNames(): string[] {
-    const data: ILocalImportanceData[] = [];
-    const localImportanceData =
-      this.props.data?.local_importance?.[this.props.selectedIndex];
-    if (!localImportanceData || !this.props.sortFeatures) {
-      return this.props?.data?.feature_names_including_target || [];
-    }
-    this.props?.data?.feature_names_including_target.forEach((f, index) => {
-      data.push({
-        label: f,
-        value: localImportanceData[index] || -Infinity
-      });
-    });
-    data.sort((d1, d2) => d2.value - d1.value);
-    const result = data.map((p) => p.label);
-    return result;
-  }
 }

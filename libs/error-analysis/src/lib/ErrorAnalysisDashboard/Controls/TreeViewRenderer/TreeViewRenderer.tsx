@@ -249,7 +249,6 @@ export class TreeViewRenderer extends React.PureComponent<
     const minY = Math.min(...y) - 40;
     //40:tooltip height
     const maxY = Math.max(...y) + 40 + 40;
-    console.log(minY, maxY);
     const containerStyles = mergeStyles({
       transform: `translate(${-minX}px, ${-minY}px)`
     });
