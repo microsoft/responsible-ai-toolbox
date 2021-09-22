@@ -251,6 +251,19 @@ class TestMatrixFilter(object):
                                      y_test, feature_names,
                                      model_task, filters=filters)
 
+    def test_matrix_filter_boston_quantile_binning(self):
+        # Test quantile binning on CRIM feature in boston dataset,
+        # which errored out due to first category not fitting into bins
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_boston_data(test_size=0.5)
+
+        model_task = ModelTask.REGRESSION
+        matrix_features = ['CRIM']
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names, model_task,
+                                     matrix_features=matrix_features,
+                                     quantile_binning=True)
+
 
 def run_error_analyzer_on_models(X_train,
                                  y_train,

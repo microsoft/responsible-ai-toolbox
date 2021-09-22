@@ -166,14 +166,14 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_boston_data():
+def create_boston_data(test_size=0.2):
     # Import Boston housing dataset
     boston = load_boston()
     # Split data into train and test
-    X_train, X_test, y_train, y_validation = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         boston.data, boston.target,
-        test_size=0.2, random_state=7)
-    return X_train, X_test, y_train, y_validation, boston.feature_names
+        test_size=test_size, random_state=7)
+    return X_train, X_test, y_train, y_test, boston.feature_names
 
 
 def create_models_classification(X_train, y_train):
