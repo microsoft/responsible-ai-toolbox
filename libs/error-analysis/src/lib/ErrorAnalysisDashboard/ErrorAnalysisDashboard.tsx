@@ -776,7 +776,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   };
 
   private shiftErrorCohort = (selectedCohort: ErrorCohort): void => {
-    console.log(selectedCohort);
     let cohorts = this.state.cohorts;
     cohorts = cohorts.filter(
       (cohort) => cohort.cohort.name !== selectedCohort.cohort.name

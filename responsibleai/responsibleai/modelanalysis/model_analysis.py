@@ -309,6 +309,13 @@ class ModelAnalysis(object):
                             ' getting predictions via predict_proba()'
                         )
 
+                if task_type == ModelTask.REGRESSION:
+                    if hasattr(model, 'predict_proba'):
+                        warnings.warn(
+                            'INVALID-TASK-TYPE-WARNING: The regression model'
+                            'provided has a predict_proba function. '
+                            'Please check the task_type.')
+
     @property
     def causal(self) -> CausalManager:
         """Get the causal manager.
