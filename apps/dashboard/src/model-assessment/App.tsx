@@ -50,7 +50,7 @@ export class App extends React.Component<IAppProps> {
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
       requestCausalWhatIf: this.requestCausalWhatIf,
-      requestMatrix: generateJsonMatrix,
+      requestMatrix: generateJsonMatrix(DatasetName.BreastCancer),
       requestPredictions: !this.props.classDimension
         ? undefined
         : createPredictionsRequestGenerator(this.props.classDimension),
