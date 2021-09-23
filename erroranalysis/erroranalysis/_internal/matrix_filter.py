@@ -374,7 +374,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
     category1_max_interval = []
     is_precision = metric in precision_metrics
     is_recall = metric in recall_metrics
-    for row_index in range(len(categories1)):
+    for row_index in reversed(range(len(categories1))):
         matrix_row = []
         cat1 = categories1[row_index]
         if isinstance(categories1, pd.IntervalIndex):
@@ -464,7 +464,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
     matrix_row = []
     is_precision = metric in precision_metrics
     is_recall = metric in recall_metrics
-    for col_idx in range(len(categories)):
+    for col_idx in reversed(range(len(categories))):
         cat = categories[col_idx]
         if metric == Metrics.ERROR_RATE:
             false_count = 0
@@ -517,7 +517,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
     category = []
     category_min_interval = []
     category_max_interval = []
-    for cat in categories:
+    for cat in reversed(categories):
         if isinstance(categories, pd.IntervalIndex):
             category_min_interval.append(cat.left)
             category_max_interval.append(cat.right)
