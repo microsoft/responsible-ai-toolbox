@@ -3,9 +3,11 @@
 
 import pytest
 import pandas as pd
+import numpy as np
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.matrix_filter import (
-    CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX,
+    CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT,
+    INTERVAL_MAX, INTERVAL_MIN, MATRIX,
     VALUES, METRIC_NAME, METRIC_VALUE)
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from common_utils import (
@@ -346,15 +348,30 @@ def validate_matrix(matrix, exp_total_count,
         assert CATEGORY2 in matrix
         num_cat2 = len(matrix[CATEGORY2][VALUES])
         assert len(matrix[MATRIX][0]) == num_cat2
+        validate_matrix_category(matrix[CATEGORY1])
+        validate_matrix_category(matrix[CATEGORY2], reverse_order=False)
         validate_matrix_metric(matrix, exp_total_count,
                                exp_total_error, metric,
                                num_cat1, num_cat2)
     else:
         assert len(matrix[MATRIX][0]) == num_cat1
         assert len(matrix[MATRIX]) == 1
+        validate_matrix_category(matrix[CATEGORY1])
         validate_matrix_metric(matrix, exp_total_count,
                                exp_total_error, metric,
                                1, num_cat1)
+
+
+def validate_matrix_category(category, reverse_order=True):
+    assert VALUES in category
+    if INTERVAL_MIN in category:
+        assert INTERVAL_MAX in category
+        intervals = category[INTERVAL_MIN]
+        if reverse_order:
+            assert is_sorted(intervals, reverse_order)
+        intervals = category[INTERVAL_MAX]
+        if reverse_order:
+            assert is_sorted(intervals, reverse_order)
 
 
 def validate_matrix_metric(matrix, exp_total_count,
@@ -395,3 +412,10 @@ def validate_matrix_metric(matrix, exp_total_count,
     else:
         raise NotImplementedError(
             "Metric {} validation not supported yet".format(metric))
+
+
+def is_sorted(category, reverse_order=True):
+    if reverse_order:
+        return np.all(category[:-1] >= category[1:])
+    else:
+        return np.all(category[:-1] <= category[1:])
