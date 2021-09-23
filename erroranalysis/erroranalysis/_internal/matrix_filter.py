@@ -138,6 +138,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                               num_bins,
                               quantile_binning=quantile_binning)
             categories1 = tabdf1.cat.categories
+            if len(categories1) < num_bins:
+                warn_duplicate_edges(feat1)
             tabdf1_err = bin_data(df_err,
                                   feat1,
                                   categories1,
@@ -153,6 +155,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                               num_bins,
                               quantile_binning=quantile_binning)
             categories2 = tabdf2.cat.categories
+            if len(categories2) < num_bins:
+                warn_duplicate_edges(feat2)
             tabdf2_err = bin_data(df_err,
                                   feat2,
                                   categories2,
@@ -208,10 +212,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             num_categories = len(cutdf.cat.categories)
             bin_range = range(num_categories)
             if len(cutdf.cat.categories) < num_bins:
-                warnings.warn(("Removing duplicate bin edges for "
-                               "quantile binning. There are too many "
-                               "duplicate values for the specified "
-                               "number of bins."), UserWarning)
+                warn_duplicate_edges(feat1)
             catr = cutdf.cat.rename_categories(bin_range)
             catn, counts = np.unique(catr.to_numpy(),
                                      return_counts=True)
@@ -258,6 +259,14 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         matrix = matrix_1d(categories, val_err, counts,
                            counts_err, metric)
     return matrix
+
+
+def warn_duplicate_edges(feat):
+    warnings.warn(("Removing duplicate bin edges for "
+                   "quantile binning of feature {}"
+                   ". There are too many "
+                   "duplicate values for the specified "
+                   "number of bins.").format(feat), UserWarning)
 
 
 def bin_data(df, feat, bins, quantile_binning=False):

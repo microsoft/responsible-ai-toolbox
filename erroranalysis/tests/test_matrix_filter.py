@@ -85,15 +85,31 @@ class TestMatrixFilter(object):
         model = create_kneighbors_classifier(X_train, y_train)
 
         # validate warning printed
-        err = ("Removing duplicate bin edges for quantile binning. "
-               "There are too many duplicate values for the specified "
-               "number of bins.")
-        with pytest.warns(UserWarning, match=err):
+        err_capg = ("Removing duplicate bin edges for quantile binning of "
+                    "feature Capital Gain. There are too many duplicate "
+                    "values for the specified number of bins.")
+        with pytest.warns(UserWarning, match=err_capg):
             run_error_analyzer(model, X_test, y_test,
                                feature_names, categorical_features,
                                model_task=model_task,
                                matrix_features=matrix_features,
                                quantile_binning=True)
+        matrix_features = ['Capital Gain', 'Capital Loss']
+        err_capl = ("Removing duplicate bin edges for quantile binning of "
+                    "feature Capital Loss. There are too many duplicate "
+                    "values for the specified number of bins.")
+        with pytest.warns(UserWarning) as warninfo:
+            run_error_analyzer(model, X_test, y_test,
+                               feature_names, categorical_features,
+                               model_task=model_task,
+                               matrix_features=matrix_features,
+                               quantile_binning=True)
+        warns = {(warn.category, warn.message.args[0]) for warn in warninfo}
+        expected = {
+            (UserWarning, err_capg),
+            (UserWarning, err_capl)
+        }
+        assert warns == expected
 
     def test_matrix_filter_iris_num_bins(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
