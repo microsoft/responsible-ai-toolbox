@@ -111,7 +111,8 @@ class TestMatrixFilter(object):
             (UserWarning, err_capg),
             (UserWarning, err_capl)
         }
-        assert warns == expected
+        for expected_warning in expected:
+            assert expected_warning in warns
 
     def test_matrix_filter_iris_num_bins(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
