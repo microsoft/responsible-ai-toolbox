@@ -47,7 +47,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -116,7 +115,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -185,7 +183,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -381,7 +378,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -450,7 +446,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -519,7 +514,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -588,7 +582,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -653,7 +646,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -722,7 +714,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
@@ -791,7 +782,6 @@
               "react-dom",
               "uuid"
             ],
-            "babelConfig": "@nrwl/react/plugins/bundle-babel",
             "rollupConfig": "./rollup.config.js",
             "assets": [
               {
