@@ -450,6 +450,31 @@ class TestCounterfactualUserConfigValidations:
                 method='random',
                 desired_class='opposite')
 
+    def test_feature_importance_with_less_counterfactuals(self):
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="A total_CFs value of at least 10 is required to "
+                      "use counterfactual feature importances. "
+                      "Either increase total_CFs to at least 10 or "
+                      "set feature_importance to False."):
+            model_analysis.counterfactual.add(
+                total_CFs=5,
+                method='random',
+                desired_class=2)
+
     def test_eval_data_having_new_categories(self):
         train_data = pd.DataFrame(
             data=[[1, 2, 0],
