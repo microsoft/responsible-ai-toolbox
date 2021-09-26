@@ -5,9 +5,6 @@ import pytest
 from responsibleai.exceptions import (
     DuplicateManagerConfigException, UserConfigValidationException
 )
-from dice_ml.utils.exception import (
-    UserConfigValidationException as DiceException
-)
 
 
 def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
@@ -72,7 +69,7 @@ def validate_counterfactual(cf_analyzer,
                                  feature_importance=feature_importance)
 
     # Add a bad configuration
-    with pytest.raises(DiceException):
+    with pytest.raises(UserConfigValidationException):
         cf_analyzer.counterfactual.add(total_CFs=-20,
                                        method='random',
                                        desired_class=desired_class,
@@ -82,4 +79,3 @@ def validate_counterfactual(cf_analyzer,
     assert cf_analyzer.counterfactual.get() is not None
     assert isinstance(cf_analyzer.counterfactual.get(), list)
     assert len(cf_analyzer.counterfactual.get()) == 2
-    assert len(cf_analyzer.counterfactual.get(failed_to_compute=True)) == 1
