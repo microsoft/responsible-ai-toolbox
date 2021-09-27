@@ -304,6 +304,10 @@
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
+    "ValidationErrors": {
+      "missingPerformanceMetric": "No performance metric found.",
+      "missingFairnessMetric": "No fairness metric found."
+    },
     "BinDialog": {
       "cancel": "Cancel",
       "categoryHeader": "Bin values:",

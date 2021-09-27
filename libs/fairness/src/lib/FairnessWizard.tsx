@@ -10,7 +10,10 @@ import {
   PivotItem,
   Stack,
   StackItem,
-  loadTheme
+  loadTheme,
+  MessageBar,
+  MessageBarType,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -72,8 +75,8 @@ export interface IWizardStateV2 {
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
   fairnessMetrics: IFairnessOption[];
-  selectedPerformanceKey: string;
-  selectedFairnessKey: string;
+  selectedPerformanceKey: string | undefined;
+  selectedFairnessKey: string | undefined;
   errorBarsEnabled: boolean;
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
@@ -101,8 +104,8 @@ export class FairnessWizard extends React.PureComponent<
     }
     let performanceMetrics: IPerformanceOption[];
     let fairnessMetrics: IFairnessOption[];
-    let selectedPerformanceKey: string;
-    let selectedFairnessKey: string;
+    let selectedPerformanceKey: string | undefined;
+    let selectedFairnessKey: string | undefined;
     loadTheme(props.theme || defaultTheme);
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
@@ -213,6 +216,30 @@ export class FairnessWizard extends React.PureComponent<
 
   public render(): React.ReactNode {
     const styles = FairnessWizardStyles();
+    if (!this.state.selectedPerformanceKey) {
+      return (
+        <MessageBar
+          dismissButtonAriaLabel="Close"
+          messageBarType={MessageBarType.warning}
+        >
+          <Text>
+            {localization.Fairness.ValidationErrors.missingPerformanceMetric}
+          </Text>
+        </MessageBar>
+      );
+    }
+    if (!this.state.selectedFairnessKey) {
+      return (
+        <MessageBar
+          dismissButtonAriaLabel="Close"
+          messageBarType={MessageBarType.warning}
+        >
+          <Text>
+            {localization.Fairness.ValidationErrors.missingFairnessMetric}
+          </Text>
+        </MessageBar>
+      );
+    }
     const performancePickerProps = {
       onPerformanceChange: this.setPerformanceKey,
       performanceOptions: this.state.performanceMetrics,
@@ -461,7 +488,7 @@ export class FairnessWizard extends React.PureComponent<
   private selectDefaultMetric(
     metrics: { [key: string]: any },
     prioritization: string[]
-  ): string {
+  ): string | undefined {
     const keys = new Set(Object.values(metrics).map((metric) => metric.key));
     for (const metricKey of prioritization) {
       if (keys.has(metricKey)) {
@@ -470,6 +497,6 @@ export class FairnessWizard extends React.PureComponent<
     }
 
     // if none of the prioritized default metrics are available return first item
-    return metrics[0].key;
+    return Object.values(metrics)[0]?.key;
   }
 }
