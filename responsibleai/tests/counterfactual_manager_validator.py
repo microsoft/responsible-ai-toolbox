@@ -72,14 +72,23 @@ def validate_counterfactual(cf_analyzer,
                                  feature_importance=feature_importance)
 
     # Add a bad configuration
-    with pytest.raises(DiceException):
-        cf_analyzer.counterfactual.add(total_CFs=-20,
-                                       method='random',
-                                       desired_class=desired_class,
-                                       desired_range=desired_range,
-                                       feature_importance=feature_importance)
-        cf_analyzer.counterfactual.compute()
+    if feature_importance:
+        with pytest.raises(UserConfigValidationException):
+            cf_analyzer.counterfactual.add(
+                total_CFs=2,
+                method='random',
+                desired_class=desired_class,
+                desired_range=desired_range,
+                feature_importance=feature_importance)
+    else:
+        with pytest.raises(DiceException):
+            cf_analyzer.counterfactual.add(
+                total_CFs=-2,
+                method='random',
+                desired_class=desired_class,
+                desired_range=desired_range,
+                feature_importance=feature_importance)
+            cf_analyzer.counterfactual.compute()
     assert cf_analyzer.counterfactual.get() is not None
     assert isinstance(cf_analyzer.counterfactual.get(), list)
     assert len(cf_analyzer.counterfactual.get()) == 2
-    assert len(cf_analyzer.counterfactual.get(failed_to_compute=True)) == 1

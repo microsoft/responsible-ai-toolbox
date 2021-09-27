@@ -159,6 +159,14 @@ class CounterfactualManager(BaseManager):
                     'The desired_range should not be None'
                     ' for regression scenarios.')
 
+        if new_counterfactual_config.feature_importance and\
+                new_counterfactual_config.total_CFs < 10:
+            raise UserConfigValidationException(
+                "A total_CFs value of at least 10 is required to "
+                "use counterfactual feature importances. "
+                "Either increase total_CFs to at least 10 or "
+                "set feature_importance to False.")
+
         is_duplicate = new_counterfactual_config.is_duplicate(
             self._counterfactual_config_list)
 
