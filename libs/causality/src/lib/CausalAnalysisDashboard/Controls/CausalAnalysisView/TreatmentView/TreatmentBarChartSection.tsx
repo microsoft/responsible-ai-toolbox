@@ -7,7 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Label, Stack, Text } from "office-ui-fabric-react";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentBarChart } from "./TreatmentBarChart";
@@ -28,46 +28,42 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
       this.props.data.treatment_feature
     );
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
-        <Stack.Item>
-          <Label>
+      <Stack horizontal grow tokens={{ padding: "0 24px" }}>
+        <Stack.Item className={styles.chartContainer}>
+          <TreatmentBarChart
+            data={this.props.data?.policy_gains}
+            title={
+              isBinaryFeature
+                ? localization.formatString(
+                    localization.CausalAnalysis.TreatmentPolicy
+                      .averageGainBinary,
+                    this.props.data.treatment_feature,
+                    this.props.data.control_treatment
+                  )
+                : localization.formatString(
+                    localization.CausalAnalysis.TreatmentPolicy
+                      .averageGainContinuous,
+                    this.props.data.treatment_feature
+                  )
+            }
+          />
+        </Stack.Item>
+        <Stack.Item className={styles.description}>
+          <Text variant={"medium"} className={styles.label}>
             {isBinaryFeature
               ? localization.formatString(
-                  localization.CausalAnalysis.TreatmentPolicy.averageGainBinary,
-                  this.props.data.treatment_feature,
-                  this.props.data.control_treatment
-                )
-              : localization.formatString(
                   localization.CausalAnalysis.TreatmentPolicy
-                    .averageGainContinuous,
-                  this.props.data.treatment_feature
-                )}
-          </Label>
-        </Stack.Item>
-        <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "16px 24px" }}>
-            <Stack.Item className={styles.chartContainer}>
-              <TreatmentBarChart data={this.props.data?.policy_gains} />
-            </Stack.Item>
-            <Stack.Item className={styles.description}>
-              <Text variant={"medium"} className={styles.label}>
-                {isBinaryFeature
-                  ? localization.formatString(
-                      localization.CausalAnalysis.TreatmentPolicy
-                        .BarDescriptionBinary,
-                      this.props.data?.treatment_feature
-                    )
-                  : localization.CausalAnalysis.TreatmentPolicy
-                      .BarDescriptionContinuous}
-              </Text>
-              <Text variant={"medium"} className={styles.label}>
-                {isBinaryFeature
-                  ? localization.CausalAnalysis.TreatmentPolicy.BarTextBinary
-                  : localization.CausalAnalysis.TreatmentPolicy
-                      .BarTextContinuous}
-              </Text>
-            </Stack.Item>
-          </Stack>
+                    .BarDescriptionBinary,
+                  this.props.data?.treatment_feature
+                )
+              : localization.CausalAnalysis.TreatmentPolicy
+                  .BarDescriptionContinuous}
+          </Text>
+          <Text variant={"medium"} className={styles.label}>
+            {isBinaryFeature
+              ? localization.CausalAnalysis.TreatmentPolicy.BarTextBinary
+              : localization.CausalAnalysis.TreatmentPolicy.BarTextContinuous}
+          </Text>
         </Stack.Item>
       </Stack>
     );
