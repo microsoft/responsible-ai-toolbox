@@ -3,22 +3,23 @@
 
 import {
   defaultModelAssessmentContext,
+  ErrorCohort,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
+  ICommandBar,
   ICommandBarItemProps,
-  IIconProps,
-  Stack,
-  Text
+  IContextualMenuItem,
+  IIconProps
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { ChangeGlobalCohortButton } from "../Cohort/ChangeGlobalCohortButton";
+import { ChangeGlobalCohort } from "../Cohort/ChangeGlobalCohort";
 import { CohortSettingsPanel } from "../Cohort/CohortSettingsPanel";
-import { CreateGlobalCohortButton } from "../Cohort/CreateGlobalCohortButton";
+import { CreateGlobalCohort } from "../Cohort/CreateGlobalCohort";
 import { IModelAssessmentDashboardTab } from "../ModelAssessmentDashboardState";
 
 import { DashboardSettings } from "./DashboardSettings";
@@ -31,6 +32,9 @@ export interface IMainMenuProps {
 interface IMainMenuState {
   cohortSettingsPanelVisible: boolean;
   dashboardSettingsVisible: boolean;
+  changeCohortVisible: boolean;
+  createCohortVisible: boolean;
+  selectedCohort?: ErrorCohort;
 }
 
 const settingsIcon: IIconProps = { iconName: "Settings" };
@@ -44,11 +48,14 @@ export class MainMenu extends React.PureComponent<
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   private menuFarItems: ICommandBarItemProps[];
-  private menuItems: ICommandBarItemProps[];
+
+  private commandBar = React.createRef<ICommandBar>();
   public constructor(props: IMainMenuProps) {
     super(props);
     this.state = {
+      changeCohortVisible: false,
       cohortSettingsPanelVisible: false,
+      createCohortVisible: false,
       dashboardSettingsVisible: false
     };
     this.menuFarItems = [
@@ -65,22 +72,47 @@ export class MainMenu extends React.PureComponent<
         text: localization.ModelAssessment.MainMenu.DashboardSettings
       }
     ];
-    this.menuItems = [
-      {
-        key: "cohort",
-        onRender: this.renderCohort,
-        text: ""
-      }
-    ];
+  }
+
+  public componentDidUpdate() {
+    this.commandBar.current?.remeasure();
   }
 
   public render(): React.ReactNode {
     const classNames = mainMenuStyles();
+    const menuItems: ICommandBarItemProps[] = [
+      {
+        className: classNames.mainMenuItem,
+        key: "cohortName",
+        subMenuProps: {
+          items: this.getCohortStats()
+        },
+        text: this.getCohortName()
+      },
+      {
+        iconProps: {
+          iconName: "Switch"
+        },
+        key: "changeCohort",
+        text: localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
+      },
+      {
+        iconProps: {
+          iconName: "Add"
+        },
+        key: "addCohort",
+        text: localization.ModelAssessment.CohortInformation.CreateNewCohort
+      }
+    ];
     return (
       <>
         <div className={classNames.banner}>
           <div className={classNames.mainMenu}>
-            <CommandBar items={this.menuItems} farItems={this.menuFarItems} />
+            <CommandBar
+              componentRef={this.commandBar}
+              items={menuItems}
+              farItems={this.menuFarItems}
+            />
           </div>
         </div>
         <CohortSettingsPanel
@@ -93,11 +125,36 @@ export class MainMenu extends React.PureComponent<
           activeGlobalTabs={this.props.activeGlobalTabs}
           removeTab={this.props.removeTab}
         />
+        <ChangeGlobalCohort
+          visible={this.state.changeCohortVisible}
+          onDismiss={this.toggleChangeCohortVisibility}
+        />
+        <CreateGlobalCohort
+          visible={this.state.createCohortVisible}
+          onDismiss={this.toggleCreateCohortVisibility}
+        />
       </>
     );
   }
 
-  private renderCohort = (): React.ReactNode => {
+  private getCohortStats = (): IContextualMenuItem[] => {
+    const currentCohort = this.context.baseErrorCohort;
+    const dataPointsCountString = `${
+      localization.ModelAssessment.CohortInformation.DataPoints
+    } = ${currentCohort.cohortStats.totalCohort.toString()}`;
+    const filtersCountString = `${
+      localization.ModelAssessment.CohortInformation.Filters
+    } = ${currentCohort.cohort.filters.length.toString()}`;
+    return [
+      {
+        key: "dataPoints",
+        text: dataPointsCountString
+      },
+      { key: "filters", text: filtersCountString }
+    ];
+  };
+
+  private getCohortName = (): string => {
     const currentCohort = this.context.baseErrorCohort;
     const cohortName = currentCohort.cohort.name;
     // add (default) if it's the default cohort
@@ -110,23 +167,7 @@ export class MainMenu extends React.PureComponent<
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
-    const dataPointsCountString = `${
-      localization.ModelAssessment.CohortInformation.DataPoints
-    } = ${currentCohort.cohortStats.totalCohort.toString()}`;
-    const filtersCountString = `${
-      localization.ModelAssessment.CohortInformation.Filters
-    } = ${currentCohort.cohort.filters.length.toString()}`;
-    return (
-      <Stack horizontal tokens={{ childrenGap: "l1" }}>
-        <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
-        <Stack>
-          <Text>{dataPointsCountString}</Text>
-          <Text>{filtersCountString}</Text>
-        </Stack>
-        <ChangeGlobalCohortButton />
-        <CreateGlobalCohortButton />
-      </Stack>
-    );
+    return cohortInfoTitle;
   };
 
   private toggleCohortSettingsPanel = (): void =>
@@ -138,4 +179,14 @@ export class MainMenu extends React.PureComponent<
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));
+  private toggleChangeCohortVisibility = () => {
+    this.setState((prev) => ({
+      changeCohortVisible: !prev.changeCohortVisible
+    }));
+  };
+  private toggleCreateCohortVisibility = () => {
+    this.setState((prev) => ({
+      createCohortVisible: !prev.createCohortVisible
+    }));
+  };
 }
