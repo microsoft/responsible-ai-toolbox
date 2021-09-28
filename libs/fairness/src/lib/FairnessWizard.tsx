@@ -218,10 +218,7 @@ export class FairnessWizard extends React.PureComponent<
     const styles = FairnessWizardStyles();
     if (!this.state.selectedPerformanceKey) {
       return (
-        <MessageBar
-          dismissButtonAriaLabel="Close"
-          messageBarType={MessageBarType.warning}
-        >
+        <MessageBar messageBarType={MessageBarType.warning}>
           <Text>
             {localization.Fairness.ValidationErrors.missingPerformanceMetric}
           </Text>
@@ -230,10 +227,7 @@ export class FairnessWizard extends React.PureComponent<
     }
     if (!this.state.selectedFairnessKey) {
       return (
-        <MessageBar
-          dismissButtonAriaLabel="Close"
-          messageBarType={MessageBarType.warning}
-        >
+        <MessageBar messageBarType={MessageBarType.warning}>
           <Text>
             {localization.Fairness.ValidationErrors.missingFairnessMetric}
           </Text>
