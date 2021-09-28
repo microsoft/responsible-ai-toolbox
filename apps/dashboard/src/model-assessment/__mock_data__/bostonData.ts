@@ -3442,5 +3442,6 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
 };
 export const bostonErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
+  minChildSamples: 21,
   numLeaves: 11
 };

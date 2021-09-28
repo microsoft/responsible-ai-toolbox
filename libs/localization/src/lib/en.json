@@ -151,6 +151,17 @@
       "features": "Features",
       "importances": "Importances"
     },
+    "TreeViewParameters": {
+      "maximumDepth": "Maximum depth",
+      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
+      "maximumDepthTitle": "Additional information on maximum depth",
+      "numLeaves": "Number of leaves",
+      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
+      "numLeavesTitle": "Additional information on number of leaves",
+      "minDataInLeaf": "Minimum number of samples in one leaf",
+      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
+      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
+    },
     "FilterTooltip": {
       "correctNum": "Correct (#): ",
       "countNum": "Count (#): ",

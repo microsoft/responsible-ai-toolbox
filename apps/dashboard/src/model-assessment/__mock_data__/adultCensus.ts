@@ -13573,5 +13573,6 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
 };
 export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
+  minChildSamples: 21,
   numLeaves: 11
 };

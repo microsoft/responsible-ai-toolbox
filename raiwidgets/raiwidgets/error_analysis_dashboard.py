@@ -153,7 +153,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
         def tree():
             data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data[0], data[1], data[2]))
+            return jsonify(self.input.debug_ml(data))
 
         self.add_url_rule(tree, '/tree', methods=["POST"])
 

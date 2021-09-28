@@ -8,6 +8,7 @@ export interface IErrorAnalysisData {
   matrix_features?: string[];
   maxDepth: number;
   numLeaves: number;
+  minChildSamples: number;
 }
 // Represents the data retrieved from the backend
 export interface IErrorAnalysisTreeNode {

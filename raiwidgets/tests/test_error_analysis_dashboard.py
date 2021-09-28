@@ -12,6 +12,8 @@ from raiwidgets.explanation_constants import WidgetRequestResponseConstants
 from interpret_community.common.constants import ModelTask
 from interpret.ext.blackbox import MimicExplainer
 from interpret.ext.glassbox import LGBMExplainableModel
+from erroranalysis._internal.surrogate_error_tree import (
+    DEFAULT_MAX_DEPTH, DEFAULT_NUM_LEAVES, DEFAULT_MIN_CHILD_SAMPLES)
 
 
 class TestErrorAnalysisDashboard:
@@ -122,7 +124,12 @@ class TestErrorAnalysisDashboard:
                                            knn,
                                            dataset=X_test,
                                            true_y=y_test)
-        result = dashboard.input.debug_ml(global_explanation.features, [], [])
+        result = dashboard.input.debug_ml([global_explanation.features,
+                                           [],
+                                           [],
+                                           DEFAULT_MAX_DEPTH,
+                                           DEFAULT_NUM_LEAVES,
+                                           DEFAULT_MIN_CHILD_SAMPLES])
         assert WidgetRequestResponseConstants.ERROR not in result
         matrix_features = global_explanation.features[0:1]
         result = dashboard.input.matrix(matrix_features, [], [], True, 8)
@@ -169,7 +176,12 @@ def run_error_analysis_adult_census(X, y, categorical_features):
     dashboard = ErrorAnalysisDashboard(
         global_explanation, knn, dataset=X_test,
         true_y=y_test, categorical_features=categorical_features)
-    result = dashboard.input.debug_ml(global_explanation.features, [], [])
+    result = dashboard.input.debug_ml([global_explanation.features,
+                                       [],
+                                       [],
+                                       DEFAULT_MAX_DEPTH,
+                                       DEFAULT_NUM_LEAVES,
+                                       DEFAULT_MIN_CHILD_SAMPLES])
     assert WidgetRequestResponseConstants.ERROR not in result
     matrix_features = global_explanation.features[0:1]
     result = dashboard.input.matrix(matrix_features, [], [], True, 8)
