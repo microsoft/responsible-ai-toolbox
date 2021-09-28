@@ -17,6 +17,7 @@ import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 export interface ITreatmentBarChartProps {
+  title: string;
   data?: ICausalPolicyGains;
   theme?: string;
 }
@@ -60,6 +61,9 @@ export class TreatmentBarChart extends React.PureComponent<ITreatmentBarChartPro
           size: 10
         },
         hovermode: "closest",
+        title: {
+          text: this.props.title
+        },
         xaxis: {
           automargin: true,
           title: this.context.dataset.target_column

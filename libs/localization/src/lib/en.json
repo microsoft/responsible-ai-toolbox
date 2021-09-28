@@ -54,7 +54,7 @@
       "TableDescription": "This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.",
       "alwaysTreat": "Always treat '{0}'",
       "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
-      "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
+      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
       "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
       "nSample": "n = {0}",
       "noData": "No data"
@@ -304,6 +304,10 @@
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
+    "ValidationErrors": {
+      "missingPerformanceMetric": "No performance metric found.",
+      "missingFairnessMetric": "No fairness metric found."
+    },
     "BinDialog": {
       "cancel": "Cancel",
       "categoryHeader": "Bin values:",
