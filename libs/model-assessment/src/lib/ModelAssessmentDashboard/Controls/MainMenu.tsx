@@ -94,6 +94,7 @@ export class MainMenu extends React.PureComponent<
           iconName: "Switch"
         },
         key: "changeCohort",
+        onClick: this.toggleChangeCohortVisibility,
         text: localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
       },
       {
@@ -101,6 +102,7 @@ export class MainMenu extends React.PureComponent<
           iconName: "Add"
         },
         key: "addCohort",
+        onClick: this.toggleCreateCohortVisibility,
         text: localization.ModelAssessment.CohortInformation.CreateNewCohort
       }
     ];
