@@ -11,6 +11,7 @@ class ExplanationDashboardInterface(object):
     CLASS_NAMES = "classNames"
     CUSTOM_VISUALS = "customVis"
     EBM_EXPLANATION = "ebmGlobalExplanation"
+    ERROR_ANALYSIS_DATA = 'errorAnalysisData'
     EXPLANATION_METHOD = 'explanation_method'
     FEATURE_NAMES = "featureNames"
     GLOBAL_EXPLANATION = "globalExplanation"

@@ -81,6 +81,11 @@ export class App extends React.Component<IAppProps> {
       if (this.props.version === 1) {
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            maxDepth: 3,
+            minChildSamples: 21,
+            numLeaves: 31
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
@@ -103,6 +108,11 @@ export class App extends React.Component<IAppProps> {
       } else if (this.props.version === 3) {
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            maxDepth: 3,
+            minChildSamples: 21,
+            numLeaves: 31
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
@@ -115,14 +125,23 @@ export class App extends React.Component<IAppProps> {
           theme: this.props.theme
         };
       } else {
+        const staticTree = getJsonTreeBoston(featureNames);
+        const staticMatrix = getJsonMatrix();
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            matrix: staticMatrix.data,
+            matrix_features: staticMatrix.features,
+            maxDepth: 3,
+            minChildSamples: 21,
+            numLeaves: 31,
+            tree: staticTree.data,
+            tree_features: staticTree.features
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
           localUrl: "https://www.bing.com/",
-          staticDebugML: getJsonTreeBoston(featureNames),
-          staticMatrix: getJsonMatrix(),
           stringParams: { contextualHelp: this.messages },
           theme: this.props.theme
         };
@@ -160,6 +179,11 @@ export class App extends React.Component<IAppProps> {
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
+            errorAnalysisData={{
+              maxDepth: 3,
+              minChildSamples: 21,
+              numLeaves: 31
+            }}
           />
         );
       } else if (this.props.version === 3) {
@@ -185,9 +209,18 @@ export class App extends React.Component<IAppProps> {
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
+            errorAnalysisData={{
+              maxDepth: 3,
+              minChildSamples: 21,
+              numLeaves: 31
+            }}
           />
         );
       }
+      const staticTree = getJsonTreeAdultCensusIncome(
+        this.props.dataset.featureNames
+      );
+      const staticMatrix = getJsonMatrix();
       return (
         <ErrorAnalysisDashboard
           modelInformation={{ modelClass: "blackbox" }}
@@ -203,13 +236,18 @@ export class App extends React.Component<IAppProps> {
           precomputedExplanations={{
             localFeatureImportance: this.props.dataset.localExplanations
           }}
-          staticDebugML={getJsonTreeAdultCensusIncome(
-            this.props.dataset.featureNames
-          )}
-          staticMatrix={getJsonMatrix()}
           localUrl={""}
           locale={undefined}
           features={this.props.dataset.featureNames}
+          errorAnalysisData={{
+            matrix: staticMatrix.data,
+            matrix_features: staticMatrix.features,
+            maxDepth: 3,
+            minChildSamples: 21,
+            numLeaves: 31,
+            tree: staticTree.data,
+            tree_features: staticTree.features
+          }}
         />
       );
     }
@@ -226,6 +264,7 @@ export class App extends React.Component<IAppProps> {
       }
       dashboardProp = {
         ...dataset,
+        errorAnalysisData: { maxDepth: 3, minChildSamples: 21, numLeaves: 31 },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
@@ -251,6 +290,7 @@ export class App extends React.Component<IAppProps> {
       const dataset = this.props.dataset as IExplanationDashboardData;
       dashboardProp = {
         ...dataset,
+        errorAnalysisData: { maxDepth: 3, minChildSamples: 21, numLeaves: 31 },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
@@ -275,14 +315,23 @@ export class App extends React.Component<IAppProps> {
       const featureNames = dataset.dataSummary.featureNames
         ? dataset.dataSummary.featureNames
         : [];
+      const staticTree = requestFunction(featureNames);
+      const staticMatrix = getJsonMatrix();
       dashboardProp = {
         ...(this.props.dataset as IExplanationDashboardData),
+        errorAnalysisData: {
+          matrix: staticMatrix.data,
+          matrix_features: staticMatrix.features,
+          maxDepth: 3,
+          minChildSamples: 21,
+          numLeaves: 31,
+          tree: staticTree.data,
+          tree_features: staticTree.features
+        },
         explanationMethod: "mimic",
         features: featureNames,
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
-        staticDebugML: requestFunction(featureNames),
-        staticMatrix: getJsonMatrix(),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };

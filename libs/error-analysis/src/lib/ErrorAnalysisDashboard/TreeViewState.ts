@@ -36,6 +36,9 @@ export interface ITreeViewRendererState {
   rootErrorSize: any;
   rootLocalError: any;
   isErrorMetric: boolean;
+  maxDepth: number;
+  numLeaves: number;
+  minChildSamples: number;
 }
 
 // Represents IRequestNode with augmented calculations
@@ -63,6 +66,8 @@ export interface INodeState {
 export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
     isErrorMetric: true,
+    maxDepth: 4,
+    minChildSamples: 20,
     nodeDetail: {
       errorColor: "#eaeaea",
       maskDown: {
@@ -72,6 +77,7 @@ export function createInitialTreeViewState(): ITreeViewRendererState {
         transform: "translate(0px, 13px)"
       }
     },
+    numLeaves: 31,
     request: undefined,
     root: undefined,
     rootErrorSize: 0,
