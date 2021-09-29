@@ -379,13 +379,14 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   private getCurrentClass(): string {
-    if (this.props.data.desired_class) {
-      return this.props.data.desired_class;
+    if (this.context.dataset.task_type === "regression") {
+      return (
+        (this.props.data.desired_range &&
+          this.props.data.desired_range.join("->")) ||
+        ""
+      );
     }
-    if (this.props.data.desired_range) {
-      return this.props.data.desired_range.join("->");
-    }
-    return "";
+    return this.props.data.desired_class || "";
   }
 
   private buildRowOptions(cohortIndex: number): void {
