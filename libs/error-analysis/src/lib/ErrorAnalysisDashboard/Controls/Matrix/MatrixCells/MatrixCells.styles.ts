@@ -9,7 +9,6 @@ import {
 
 export interface IMatrixCellsStyles {
   matrixCell: IStyle;
-  matrixCellPivot1Categories: IStyle;
   matrixCol: IStyle;
   matrixRow: IStyle;
   nanMatrixCell: IStyle;
@@ -32,19 +31,6 @@ export const matrixCellsStyles: () => IProcessedStyleSet<IMatrixCellsStyles> =
         margin: "2px",
         minWidth: "60px",
         overflow: "visible"
-      },
-      matrixCellPivot1Categories: {
-        alignItems: "center",
-        border: "none",
-        display: "flex",
-        fontSize: "12px",
-        justifyContent: "flex-end",
-        lineHeight: "16px",
-        margin: "2px",
-        overflow: "hidden",
-        paddingLeft: "2px",
-        paddingRight: "10px",
-        width: "180px"
       },
       matrixCol: {
         display: "flex",

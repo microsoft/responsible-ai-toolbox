@@ -153,7 +153,7 @@ export function generateJsonMatrix(dataset: DatasetName) {
     const promise = new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         if (
-          data.length === 3 &&
+          data.length === 5 &&
           data[0][0] === "mean radius" &&
           data[0][1] === "mean texture"
         ) {
@@ -169,7 +169,7 @@ export function generateJsonMatrix(dataset: DatasetName) {
         ) {
           resolve(_.cloneDeep(dummyMatrixPrecisionBreastCancer));
         } else if (
-          data.length === 3 &&
+          data.length === 5 &&
           data[0][0] === "CRIM" &&
           data[0][1] === "ZN"
         ) {

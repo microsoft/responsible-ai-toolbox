@@ -24,7 +24,6 @@ import { ColorPalette, isColorDark } from "../../../ColorPalette";
 import { FilterProps } from "../../../FilterProps";
 import { FilterTooltip } from "../../FilterTooltip/FilterTooltip";
 import { IMatrixSingleCategory } from "../IMatrixCategory";
-import { MatrixCategory } from "../MatrixCategory/MatrixCategory";
 
 import { matrixCellsStyles } from "./MatrixCells.styles";
 
@@ -203,45 +202,11 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
               </div>
             );
             if (!this.props.selectedFeature2) {
-              const categoryData = (
-                <div
-                  key={`${i}_${j}category1`}
-                  className={classNames.matrixCellPivot1Categories}
-                >
-                  <MatrixCategory
-                    category={this.props.category1Values}
-                    index={j}
-                  />
-                </div>
-              );
               return (
                 <div key={`${j}row`} className={classNames.matrixRow}>
-                  {categoryData}
                   {cellData}
                 </div>
               );
-            } else if (j === 0) {
-              if (!this.props.selectedFeature1) {
-                return [
-                  <div
-                    key={`${i}_${j}category1`}
-                    className={classNames.matrixCellPivot1Categories}
-                  />,
-                  cellData
-                ];
-              }
-              return [
-                <div
-                  key={`${i}_${j}category1`}
-                  className={classNames.matrixCellPivot1Categories}
-                >
-                  <MatrixCategory
-                    category={this.props.category1Values}
-                    index={i}
-                  />
-                </div>,
-                cellData
-              ];
             }
             return cellData;
           })}
