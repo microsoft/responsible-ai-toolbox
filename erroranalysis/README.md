@@ -1,6 +1,6 @@
 # Error Analysis SDK for Python
 
-### This package has been tested with Python 3.5, 3.6 and 3.7
+### This package has been tested with Python 3.6, 3.7 and 3.8
 
 The error analysis sdk enables users to get a deeper understanding of machine learning model errors. When evaluating a machine learning model, aggregate accuracy is not sufficient and single-score evaluation may hide important conditions of inaccuracies. Use Error Analysis to identify cohorts with higher error rates and diagnose the root causes behind these errors.
 
