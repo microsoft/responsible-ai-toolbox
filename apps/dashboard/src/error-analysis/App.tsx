@@ -98,7 +98,7 @@ export class App extends React.Component<IAppProps> {
               : [],
             DatasetName.Boston
           ),
-          requestMatrix: generateJsonMatrix,
+          requestMatrix: generateJsonMatrix(DatasetName.Boston),
           requestPredictions: !this.props.classDimension
             ? undefined
             : createPredictionsRequestGenerator(this.props.classDimension),
@@ -171,7 +171,7 @@ export class App extends React.Component<IAppProps> {
                 : createPredictionsRequestGenerator(this.props.classDimension)
             }
             requestDebugML={generateJsonTreeAdultCensusIncome}
-            requestMatrix={generateJsonMatrix}
+            requestMatrix={generateJsonMatrix(DatasetName.AdultCensusIncome)}
             requestImportances={createJsonImportancesGenerator(
               this.props.dataset.featureNames,
               DatasetName.AdultCensusIncome
@@ -279,7 +279,7 @@ export class App extends React.Component<IAppProps> {
             : [],
           datasetType
         ),
-        requestMatrix: generateJsonMatrix,
+        requestMatrix: generateJsonMatrix(datasetType),
         requestPredictions: !this.props.classDimension
           ? undefined
           : createPredictionsRequestGenerator(this.props.classDimension),
