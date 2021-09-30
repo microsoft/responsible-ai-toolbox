@@ -113,7 +113,14 @@ export class TreatmentListSection extends React.Component<
     if (!newValue || Number.isNaN(Number.parseInt(newValue))) {
       newValue = "10";
     }
-    this.setState({ topN: newValue });
-    return newValue;
+    let val = Math.max(Number.parseInt(newValue), 1);
+    if (
+      this.props.data?.local_policies?.length &&
+      val > this.props.data.local_policies.length
+    ) {
+      val = this.props.data.local_policies.length;
+    }
+    this.setState({ topN: val.toString() });
+    return val.toString();
   };
 }
