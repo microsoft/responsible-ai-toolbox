@@ -5,7 +5,8 @@ import {
   IOfficeFabricProps,
   IExplanationDashboardData,
   ITelemetryMessage,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IErrorAnalysisData
 } from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
@@ -57,8 +58,7 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
-  staticDebugML?: any;
-  staticMatrix?: any;
   rootStats?: IRootStats;
   telemetryHook?: (message: ITelemetryMessage) => void;
+  errorAnalysisData: IErrorAnalysisData;
 }

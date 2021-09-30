@@ -1256,7 +1256,7 @@ export const bostonCounterfactualData: ICounterfactualData = {
       [6, 2.7, 4.3, 1.8, 2]
     ]
   ],
-  desired_class: "opposite",
+  desired_range: [10, 20],
   feature_names: ["CRIM", "ZN", "INDUS", "CHAS"],
   feature_names_including_target: ["CRIM", "ZN", "INDUS", "CHAS", "y"],
   local_importance: [
@@ -3442,5 +3442,6 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
 };
 export const bostonErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
+  minChildSamples: 21,
   numLeaves: 11
 };

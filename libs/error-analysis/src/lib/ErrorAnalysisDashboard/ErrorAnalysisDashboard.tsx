@@ -279,7 +279,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     let selectedFeatures = props.features;
     if (props.requestDebugML === undefined) {
-      selectedFeatures = props.staticDebugML.features;
+      selectedFeatures = props.errorAnalysisData.tree_features!;
     }
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
@@ -339,6 +339,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           dataset: {} as IDataset,
           deleteCohort: () => undefined,
           editCohort: () => undefined,
+          errorAnalysisData: this.props.errorAnalysisData,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {
@@ -520,7 +521,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     baseCohort={this.state.baseCohort}
                     tree={
                       this.props.requestDebugML === undefined
-                        ? this.props.staticDebugML.data
+                        ? this.props.errorAnalysisData.tree
                         : undefined
                     }
                     treeViewState={this.state.treeViewState}

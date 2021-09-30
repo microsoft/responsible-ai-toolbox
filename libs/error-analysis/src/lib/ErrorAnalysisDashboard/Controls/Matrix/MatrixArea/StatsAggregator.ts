@@ -148,12 +148,14 @@ export class PrecisionStatsAggregator extends BaseStatsAggregator {
       this.totalCohortError += value.error;
       if (this.tpCohort.length === 0) {
         this.tpCohort = [...value.tp];
+      } else {
+        this.tpCohort = this.tpCohort.map((num, idx) => num + value.tp[idx]);
       }
-      this.tpCohort = this.tpCohort.map((num, idx) => num + value.tp[idx]);
       if (this.fpCohort.length === 0) {
         this.fpCohort = [...value.fp];
+      } else {
+        this.fpCohort = this.fpCohort.map((num, idx) => num + value.fp[idx]);
       }
-      this.fpCohort = this.fpCohort.map((num, idx) => num + value.fp[idx]);
     }
   }
 
@@ -163,12 +165,14 @@ export class PrecisionStatsAggregator extends BaseStatsAggregator {
     }
     if (this.tpGlobal.length === 0) {
       this.tpGlobal = [...value.tp];
+    } else {
+      this.tpGlobal = this.tpGlobal.map((num, idx) => num + value.tp[idx]);
     }
-    this.tpGlobal = this.tpGlobal.map((num, idx) => num + value.tp[idx]);
     if (this.fpGlobal.length === 0) {
       this.fpGlobal = [...value.fp];
+    } else {
+      this.fpGlobal = this.fpGlobal.map((num, idx) => num + value.fp[idx]);
     }
-    this.fpGlobal = this.fpGlobal.map((num, idx) => num + value.fp[idx]);
   }
 
   public createCohortStats(): MetricCohortStats {
@@ -233,12 +237,14 @@ export class RecallStatsAggregator extends BaseStatsAggregator {
       this.totalCohortError += value.error;
       if (this.tpCohort.length === 0) {
         this.tpCohort = [...value.tp];
+      } else {
+        this.tpCohort = this.tpCohort.map((num, idx) => num + value.tp[idx]);
       }
-      this.tpCohort = this.tpCohort.map((num, idx) => num + value.tp[idx]);
       if (this.fnCohort.length === 0) {
         this.fnCohort = [...value.fn];
+      } else {
+        this.fnCohort = this.fnCohort.map((num, idx) => num + value.fn[idx]);
       }
-      this.fnCohort = this.fnCohort.map((num, idx) => num + value.fn[idx]);
     }
   }
 
@@ -248,12 +254,14 @@ export class RecallStatsAggregator extends BaseStatsAggregator {
     }
     if (this.tpGlobal.length === 0) {
       this.tpGlobal = [...value.tp];
+    } else {
+      this.tpGlobal = this.tpGlobal.map((num, idx) => num + value.tp[idx]);
     }
-    this.tpGlobal = this.tpGlobal.map((num, idx) => num + value.tp[idx]);
     if (this.fnGlobal.length === 0) {
       this.fnGlobal = [...value.fn];
+    } else {
+      this.fnGlobal = this.fnGlobal.map((num, idx) => num + value.fn[idx]);
     }
-    this.fnGlobal = this.fnGlobal.map((num, idx) => num + value.fn[idx]);
   }
 
   public createCohortStats(): MetricCohortStats {
