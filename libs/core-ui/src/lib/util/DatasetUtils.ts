@@ -20,9 +20,11 @@ export function constructRows(
 ): any[] {
   const rows = [];
   for (let i = 0; i < viewedRows; i++) {
-    let index = cohortData[i][JointDataset.IndexLabel];
+    let index: number;
     if (indexes) {
       index = indexes[i];
+    } else {
+      index = cohortData[i][JointDataset.IndexLabel];
     }
     const row = jointDataset.getRow(index);
     if (filterFunction && filterFunction(row)) {
