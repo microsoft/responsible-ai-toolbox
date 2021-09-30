@@ -326,7 +326,7 @@ export class CounterfactualChart extends React.PureComponent<
                 />
                 <div className={classNames.legendLabel}>
                   <b>{`${localization.Counterfactuals.currentClass}: `}</b>
-                  {this.getCurrentClass()}
+                  {this.getCurrentLabel()}
                 </div>
                 <PrimaryButton
                   className={classNames.legendLabel}
@@ -361,7 +361,7 @@ export class CounterfactualChart extends React.PureComponent<
             </div>
             <LocalImportanceChart
               rowNumber={this.state.selectedPointsIndexes[0]}
-              currentClass={this.getCurrentClass()}
+              currentClass={this.getCurrentLabel()}
               data={this.props.data}
             />
           </div>
@@ -378,14 +378,15 @@ export class CounterfactualChart extends React.PureComponent<
     return [];
   }
 
-  private getCurrentClass(): string {
-    if (this.props.data.desired_class) {
-      return this.props.data.desired_class;
+  private getCurrentLabel(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return (
+        (this.props.data.desired_range &&
+          this.props.data.desired_range.join("->")) ||
+        ""
+      );
     }
-    if (this.props.data.desired_range) {
-      return this.props.data.desired_range.join("->");
-    }
-    return "";
+    return this.props.data.desired_class || "";
   }
 
   private buildRowOptions(cohortIndex: number): void {
