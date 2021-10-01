@@ -10,10 +10,13 @@ import {
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
+  CommandButton,
   ICommandBar,
   ICommandBarItemProps,
-  IContextualMenuItem,
-  IIconProps
+  Text,
+  IIconProps,
+  Stack,
+  TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -84,10 +87,10 @@ export class MainMenu extends React.PureComponent<
       {
         className: classNames.mainMenuItem,
         key: "cohortName",
-        subMenuProps: {
-          items: this.getCohortStats()
-        },
-        text: this.getCohortName()
+        onRender: this.getCohortName,
+        tooltipHostProps: {
+          content: "this is host"
+        }
       },
       {
         iconProps: {
@@ -139,7 +142,7 @@ export class MainMenu extends React.PureComponent<
     );
   }
 
-  private getCohortStats = (): IContextualMenuItem[] => {
+  private getCohortStats = (): JSX.Element => {
     const currentCohort = this.context.baseErrorCohort;
     const dataPointsCountString = `${
       localization.ModelAssessment.CohortInformation.DataPoints
@@ -147,16 +150,15 @@ export class MainMenu extends React.PureComponent<
     const filtersCountString = `${
       localization.ModelAssessment.CohortInformation.Filters
     } = ${currentCohort.cohort.filters.length.toString()}`;
-    return [
-      {
-        key: "dataPoints",
-        text: dataPointsCountString
-      },
-      { key: "filters", text: filtersCountString }
-    ];
+    return (
+      <Stack>
+        <Text>{dataPointsCountString}</Text>
+        <Text>{filtersCountString}</Text>
+      </Stack>
+    );
   };
 
-  private getCohortName = (): string => {
+  private getCohortName = (): React.ReactNode => {
     const currentCohort = this.context.baseErrorCohort;
     const cohortName = currentCohort.cohort.name;
     // add (default) if it's the default cohort
@@ -169,7 +171,12 @@ export class MainMenu extends React.PureComponent<
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
-    return cohortInfoTitle;
+
+    return (
+      <TooltipHost content={this.getCohortStats()}>
+        <CommandButton>{cohortInfoTitle}</CommandButton>
+      </TooltipHost>
+    );
   };
 
   private toggleCohortSettingsPanel = (): void =>
