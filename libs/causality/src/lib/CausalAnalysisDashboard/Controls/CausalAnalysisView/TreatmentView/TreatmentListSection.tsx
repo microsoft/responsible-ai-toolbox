@@ -110,10 +110,18 @@ export class TreatmentListSection extends React.Component<
     return newValue.toString();
   };
   private readonly handleSpinChange = (newValue?: string): string => {
-    if (!newValue || Number.isNaN(Number.parseInt(newValue))) {
-      newValue = "10";
+    let curVal =
+      newValue && !Number.isNaN(Number.parseInt(newValue))
+        ? Number.parseInt(newValue)
+        : 10;
+    curVal = Math.max(curVal, 1);
+    if (
+      this.props.data?.local_policies?.length &&
+      curVal > this.props.data.local_policies.length
+    ) {
+      curVal = this.props.data.local_policies.length;
     }
-    this.setState({ topN: newValue });
-    return newValue;
+    this.setState({ topN: curVal.toString() });
+    return curVal.toString();
   };
 }
