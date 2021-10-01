@@ -68,6 +68,7 @@ class ErrorAnalysisData:
     matrix: list
     tree_features: List[str]
     matrix_features: List[str]
+    metric: str
 
 
 class CausalMetric:

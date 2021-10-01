@@ -7,7 +7,8 @@ import {
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
-  ComparisonTypes
+  ComparisonTypes,
+  Metrics
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -13573,6 +13574,7 @@ export const adultCensusCausalAnalysisData: ICausalAnalysisData = {
 };
 export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
+  metric: Metrics.ErrorRate,
   minChildSamples: 21,
   numLeaves: 11
 };

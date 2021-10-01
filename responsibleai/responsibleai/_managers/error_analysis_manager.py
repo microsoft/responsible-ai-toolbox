@@ -15,6 +15,7 @@ from responsibleai.exceptions import DuplicateManagerConfigException
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import (
     json_converter as report_json_converter, as_error_report)
+from erroranalysis._internal.constants import metric_to_display_name
 from responsibleai._interfaces import ErrorAnalysisData
 
 REPORTS = 'reports'
@@ -295,6 +296,7 @@ class ErrorAnalysisManager(BaseManager):
             error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
+        error_analysis.metric = metric_to_display_name[self._analyzer.metric]
         return error_analysis
 
     @property

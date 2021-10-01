@@ -4,7 +4,8 @@
 import {
   IErrorAnalysisMatrix,
   IExplanationDashboardData,
-  ISerializedExplanationData
+  ISerializedExplanationData,
+  Metrics
 } from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisDashboard,
@@ -83,6 +84,7 @@ export class App extends React.Component<IAppProps> {
           ...dataset,
           errorAnalysisData: {
             maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
             minChildSamples: 21,
             numLeaves: 31
           },
@@ -110,6 +112,7 @@ export class App extends React.Component<IAppProps> {
           ...dataset,
           errorAnalysisData: {
             maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
             minChildSamples: 21,
             numLeaves: 31
           },
@@ -133,6 +136,7 @@ export class App extends React.Component<IAppProps> {
             matrix: staticMatrix.data,
             matrix_features: staticMatrix.features,
             maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
             minChildSamples: 21,
             numLeaves: 31,
             tree: staticTree.data,
@@ -181,6 +185,7 @@ export class App extends React.Component<IAppProps> {
             features={this.props.dataset.featureNames}
             errorAnalysisData={{
               maxDepth: 3,
+              metric: Metrics.ErrorRate,
               minChildSamples: 21,
               numLeaves: 31
             }}
@@ -211,6 +216,7 @@ export class App extends React.Component<IAppProps> {
             features={this.props.dataset.featureNames}
             errorAnalysisData={{
               maxDepth: 3,
+              metric: Metrics.ErrorRate,
               minChildSamples: 21,
               numLeaves: 31
             }}
@@ -243,6 +249,7 @@ export class App extends React.Component<IAppProps> {
             matrix: staticMatrix.data,
             matrix_features: staticMatrix.features,
             maxDepth: 3,
+            metric: Metrics.ErrorRate,
             minChildSamples: 21,
             numLeaves: 31,
             tree: staticTree.data,
@@ -264,7 +271,12 @@ export class App extends React.Component<IAppProps> {
       }
       dashboardProp = {
         ...dataset,
-        errorAnalysisData: { maxDepth: 3, minChildSamples: 21, numLeaves: 31 },
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.ErrorRate,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
@@ -290,7 +302,12 @@ export class App extends React.Component<IAppProps> {
       const dataset = this.props.dataset as IExplanationDashboardData;
       dashboardProp = {
         ...dataset,
-        errorAnalysisData: { maxDepth: 3, minChildSamples: 21, numLeaves: 31 },
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.ErrorRate,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
@@ -323,6 +340,7 @@ export class App extends React.Component<IAppProps> {
           matrix: staticMatrix.data,
           matrix_features: staticMatrix.features,
           maxDepth: 3,
+          metric: Metrics.ErrorRate,
           minChildSamples: 21,
           numLeaves: 31,
           tree: staticTree.data,

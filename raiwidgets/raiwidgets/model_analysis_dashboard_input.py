@@ -7,6 +7,7 @@ import pandas as pd
 from .interfaces import WidgetRequestResponseConstants
 import traceback
 from responsibleai._input_processing import _convert_to_list
+from erroranalysis._internal.constants import display_name_to_metric
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -61,6 +62,8 @@ class ModelAnalysisDashboardInput:
             max_depth = data[3]
             num_leaves = data[4]
             min_child_samples = data[5]
+            metric = display_name_to_metric[data[6]]
+            self._error_analyzer.update_metric(metric)
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth, num_leaves, min_child_samples)
@@ -79,12 +82,14 @@ class ModelAnalysisDashboardInput:
     def matrix(self, data):
         try:
             features = data[0]
+            if features[0] is None and features[1] is None:
+                return {WidgetRequestResponseConstants.data: []}
             filters = data[1]
             composite_filters = data[2]
             quantile_binning = data[3]
             num_bins = data[4]
-            if features[0] is None and features[1] is None:
-                return {WidgetRequestResponseConstants.data: []}
+            metric = display_name_to_metric[data[5]]
+            self._error_analyzer.update_metric(metric)
             matrix = self._error_analyzer.compute_matrix(
                 features, filters, composite_filters,
                 quantile_binning, num_bins)
