@@ -28,6 +28,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
+    this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
     return (
       <Stack grow tokens={{ padding: "16px 8px" }}>
         <Stack horizontal={false}>
