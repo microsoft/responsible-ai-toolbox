@@ -87,10 +87,7 @@ export class MainMenu extends React.PureComponent<
       {
         className: classNames.mainMenuItem,
         key: "cohortName",
-        onRender: this.getCohortName,
-        tooltipHostProps: {
-          content: "this is host"
-        }
+        onRender: this.getCohortName
       },
       {
         iconProps: {
@@ -159,6 +156,7 @@ export class MainMenu extends React.PureComponent<
   };
 
   private getCohortName = (): React.ReactNode => {
+    const classNames = mainMenuStyles();
     const currentCohort = this.context.baseErrorCohort;
     const cohortName = currentCohort.cohort.name;
     // add (default) if it's the default cohort
@@ -174,7 +172,9 @@ export class MainMenu extends React.PureComponent<
 
     return (
       <TooltipHost content={this.getCohortStats()}>
-        <CommandButton>{cohortInfoTitle}</CommandButton>
+        <CommandButton className={classNames.mainMenuItem}>
+          {cohortInfoTitle}
+        </CommandButton>
       </TooltipHost>
     );
   };
