@@ -55,10 +55,15 @@ class ModelAnalysisDashboardInput:
 
     def debug_ml(self, data):
         try:
-            features, filters, composite_filters, max_depth, num_leaves = data
+            features = data[0]
+            filters = data[1]
+            composite_filters = data[2]
+            max_depth = data[3]
+            num_leaves = data[4]
+            min_child_samples = data[5]
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
-                max_depth, num_leaves)
+                max_depth, num_leaves, min_child_samples)
             return {
                 WidgetRequestResponseConstants.data: tree
             }

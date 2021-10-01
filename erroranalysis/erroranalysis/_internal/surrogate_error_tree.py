@@ -3,6 +3,7 @@
 
 import numpy as np
 import pandas as pd
+import numbers
 from lightgbm import LGBMClassifier, LGBMRegressor
 from enum import Enum
 from erroranalysis._internal.cohort_filter import filter_from_cohort
@@ -288,7 +289,8 @@ def create_categorical_arg(parent_threshold):
     return [float(i) for i in parent_threshold.split('||')]
 
 
-def create_categorical_query(method, arg, p_node_name, parent, categories):
+def create_categorical_query(method, arg, p_node_name, p_node_query,
+                             parent, categories):
     if method == METHOD_INCLUDES:
         operation = "=="
     else:
@@ -307,7 +309,7 @@ def create_categorical_query(method, arg, p_node_name, parent, categories):
     condition = "{} {} {}".format(p_node_name, operation, threshold_str)
     query = []
     for argi in arg:
-        query.append("`" + p_node_name + "` " + operation + " " + str(argi))
+        query.append(p_node_query + " " + operation + " " + str(argi))
     if method == METHOD_INCLUDES:
         query = " | ".join(query)
     else:
@@ -326,6 +328,15 @@ def node_to_dict(df, tree, nodeid, categories, json,
     if parent is not None:
         parentid = int(parent[SPLIT_INDEX])
         p_node_name = feature_names[parent[SPLIT_FEATURE]]
+        # use number.Integral to check for any numpy or python number type
+        if isinstance(p_node_name, numbers.Integral):
+            # for numeric column names, we can use @df[numeric_colname] syntax
+            p_node_query = "@df[" + str(p_node_name) + "]"
+        else:
+            # for string column names, we can just use column name directly
+            # with backticks
+            p_node_query = "`" + str(p_node_name) + "`"
+        p_node_name = str(p_node_name)
         parent_threshold = parent['threshold']
         parent_decision_type = parent['decision_type']
         if side == TreeSide.LEFT_CHILD:
@@ -334,7 +345,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                query = "`" + p_node_name + "` <= " + str(parent_threshold)
+                query = p_node_query + " <= " + str(parent_threshold)
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_INCLUDES
@@ -342,6 +353,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 query, condition = create_categorical_query(method,
                                                             arg,
                                                             p_node_name,
+                                                            p_node_query,
                                                             parent,
                                                             categories)
                 df = df.query(query)
@@ -351,7 +363,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                query = "`" + p_node_name + "` > " + str(parent_threshold)
+                query = p_node_query + " > " + str(parent_threshold)
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_EXCLUDES
@@ -359,6 +371,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 query, condition = create_categorical_query(method,
                                                             arg,
                                                             p_node_name,
+                                                            p_node_query,
                                                             parent,
                                                             categories)
                 df = df.query(query)

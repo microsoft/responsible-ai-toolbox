@@ -90,6 +90,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
     # Run simple view of error analysis with just predictions and
     # true labels
+
     >>> predictions = model.predict(X_test)
     >>> from raiwidgets import ErrorAnalysisDashboard
     >>> ErrorAnalysisDashboard(dataset=X_test, true_y=y_test,
@@ -98,6 +99,7 @@ class ErrorAnalysisDashboard(Dashboard):
     :Example:
 
     # Run error analysis with a model and a computed explanation
+
     >>> from raiwidgets import ErrorAnalysisDashboard
     >>> ErrorAnalysisDashboard(global_explanation, model,
     ...                        dataset=X_test, true_y=y_test)
@@ -106,6 +108,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
     # Run error analysis on large data and a downsampled dataset
     # for the UI
+
     >>> from raiwidgets import ErrorAnalysisDashboard
     >>> ErrorAnalysisDashboard(sample_dataset=X_test_sample,
     ...                        dataset=X_test,
@@ -150,7 +153,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
         def tree():
             data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data[0], data[1], data[2]))
+            return jsonify(self.input.debug_ml(data))
 
         self.add_url_rule(tree, '/tree', methods=["POST"])
 

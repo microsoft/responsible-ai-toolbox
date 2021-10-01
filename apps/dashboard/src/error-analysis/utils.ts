@@ -8,6 +8,7 @@ import _ from "lodash";
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
 import { dummyMatrixBostonData } from "./__mock_data__/dummyMatrixBoston";
 import { dummyMatrix1dInterval } from "./__mock_data__/dummyMatrixOnedInterval";
+import { dummyMatrixPrecisionBreastCancer } from "./__mock_data__/dummyMatrixPrecisionBreastCancer";
 import { dummyMatrix2dInterval } from "./__mock_data__/dummyMatrixTwodInterval";
 import { dummyTreeAdultCensusIncomeData } from "./__mock_data__/dummyTreeAdultCensusIncome";
 import { dummyTreeBostonData } from "./__mock_data__/dummyTreeBoston";
@@ -147,37 +148,44 @@ export function generateJsonTreeBoston(
   return generateJsonTree(_data, signal, DatasetName.Boston);
 }
 
-export function generateJsonMatrix(
-  data: any[],
-  signal: AbortSignal
-): Promise<any> {
-  const promise = new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      if (
-        data.length === 3 &&
-        data[0][0] === "mean radius" &&
-        data[0][1] === "mean texture"
-      ) {
-        resolve(_.cloneDeep(dummyMatrix2dInterval));
-      } else if (data[0][0] === "mean radius" || data[0][1] === "mean radius") {
-        resolve(_.cloneDeep(dummyMatrix1dInterval));
-      } else if (
-        data.length === 3 &&
-        data[0][0] === "CRIM" &&
-        data[0][1] === "ZN"
-      ) {
-        resolve(_.cloneDeep(dummyMatrixBostonData));
-      } else {
-        resolve(_.cloneDeep(dummyMatrixData));
-      }
-    }, 300);
-    signal.addEventListener("abort", () => {
-      clearTimeout(timeout);
-      reject(new DOMException("Aborted", "AbortError"));
+export function generateJsonMatrix(dataset: DatasetName) {
+  return (data: any[], signal: AbortSignal): Promise<any> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        if (
+          data.length === 5 &&
+          data[0][0] === "mean radius" &&
+          data[0][1] === "mean texture"
+        ) {
+          resolve(_.cloneDeep(dummyMatrix2dInterval));
+        } else if (
+          dataset !== DatasetName.BreastCancerPrecision &&
+          (data[0][0] === "mean radius" || data[0][1] === "mean radius")
+        ) {
+          resolve(_.cloneDeep(dummyMatrix1dInterval));
+        } else if (
+          data[0][0] === "mean radius" ||
+          data[0][1] === "mean radius"
+        ) {
+          resolve(_.cloneDeep(dummyMatrixPrecisionBreastCancer));
+        } else if (
+          data.length === 5 &&
+          data[0][0] === "CRIM" &&
+          data[0][1] === "ZN"
+        ) {
+          resolve(_.cloneDeep(dummyMatrixBostonData));
+        } else {
+          resolve(_.cloneDeep(dummyMatrixData));
+        }
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
     });
-  });
 
-  return promise;
+    return promise;
+  };
 }
 
 export function createJsonImportancesGenerator(

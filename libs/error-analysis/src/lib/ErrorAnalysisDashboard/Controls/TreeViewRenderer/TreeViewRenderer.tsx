@@ -119,7 +119,11 @@ export class TreeViewRenderer extends React.PureComponent<
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
       this.props.baseCohort !== prevProps.baseCohort ||
-      this.props.state !== prevProps.state
+      this.props.state !== prevProps.state ||
+      this.context.errorAnalysisData!.maxDepth !== this.state.maxDepth ||
+      this.context.errorAnalysisData!.numLeaves !== this.state.numLeaves ||
+      this.context.errorAnalysisData!.minChildSamples !==
+        this.state.minChildSamples
     ) {
       this.fetchTreeNodes();
     }
@@ -406,6 +410,10 @@ export class TreeViewRenderer extends React.PureComponent<
         return state;
       }
 
+      const maxDepth = this.context.errorAnalysisData!.maxDepth;
+      const numLeaves = this.context.errorAnalysisData!.numLeaves;
+      const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
+
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
       const isErrorRate = requestTreeNodes[0].metricName === Metrics.ErrorRate;
@@ -493,7 +501,10 @@ export class TreeViewRenderer extends React.PureComponent<
 
       return {
         isErrorMetric,
+        maxDepth,
+        minChildSamples,
         nodeDetail,
+        numLeaves,
         request: state.request,
         root,
         rootErrorSize,
@@ -598,7 +609,10 @@ export class TreeViewRenderer extends React.PureComponent<
       const nodeDetail = this.getNodeDetail(node);
       return {
         isErrorMetric: state.isErrorMetric,
+        maxDepth: state.maxDepth,
+        minChildSamples: state.minChildSamples,
         nodeDetail,
+        numLeaves: state.numLeaves,
         request: state.request,
         root: state.root,
         rootErrorSize: state.rootErrorSize,
@@ -650,7 +664,8 @@ export class TreeViewRenderer extends React.PureComponent<
           filtersRelabeled,
           compositeFiltersRelabeled,
           this.context.errorAnalysisData?.maxDepth,
-          this.context.errorAnalysisData?.numLeaves
+          this.context.errorAnalysisData?.numLeaves,
+          this.context.errorAnalysisData?.minChildSamples
         ],
         new AbortController().signal
       )

@@ -39,6 +39,7 @@ FN = 'fn'
 TN = 'tn'
 ERROR = 'error'
 DROP = 'drop'
+ZERO_BIN_TOL = 0.01
 
 
 def compute_json_matrix(analyzer, features, filters, composite_filters):
@@ -286,7 +287,19 @@ def bin_data(df, feat, bins, quantile_binning=False):
                                           name=feat_col.name)
         return cat_typed
     if quantile_binning and not feat_col.empty:
-        return pd.qcut(feat_col, bins, precision=PRECISION, duplicates=DROP)
+        bindf = pd.qcut(feat_col, bins, precision=PRECISION, duplicates=DROP)
+        zero_interval = bindf.cat.categories[0]
+        left = zero_interval.left - ZERO_BIN_TOL * zero_interval.left
+        zero_interval = pd.Interval(left=left, right=zero_interval.right,
+                                    closed=zero_interval.closed)
+        indexes = [zero_interval]
+        for idx in range(1, len(bindf.cat.categories)):
+            indexes.append(bindf.cat.categories[idx])
+        cats = pd.IntervalIndex(indexes, closed=zero_interval.closed,
+                                dtype=bindf.cat.categories.dtype,
+                                name=bindf.cat.categories.name)
+        bindf.cat.categories = cats
+        return bindf
     else:
         return pd.cut(feat_col, bins, precision=PRECISION)
 

@@ -35,6 +35,7 @@ export class MatrixOptions extends React.Component<IMatrixOptionsProps> {
       <Stack horizontal tokens={stackTokens}>
         <Stack.Item className={classNames.toggleStackStyle}>
           <Toggle
+            defaultChecked={this.props.quantileBinning}
             label={
               <div>
                 {localization.ErrorAnalysis.MatrixOptions.quantileBinningLabel}
@@ -75,7 +76,7 @@ export class MatrixOptions extends React.Component<IMatrixOptionsProps> {
           <Slider
             min={2}
             max={20}
-            defaultValue={8}
+            defaultValue={this.props.binningThreshold}
             showValue
             onChanged={this.onBinsSliderChanged}
             disabled={!this.props.isEnabled}
