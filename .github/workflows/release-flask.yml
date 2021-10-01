@@ -25,40 +25,40 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: install requirements.txt for wrapped-flask
+      - name: install requirements.txt for rai_core_flask
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-        working-directory: wrapped-flask
+        working-directory: rai_core_flask
       - name: pip freeze
         run: pip freeze
       - name: build wheel for wrapped flask
         run: python setup.py sdist bdist_wheel
-        working-directory: wrapped-flask
+        working-directory: rai_core_flask
 
       # run tests before publishing to PyPI
 
-      - name: install wrapped-flask wheel locally
+      - name: install rai_core_flask wheel locally
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: wrapped-flask
+        working-directory: rai_core_flask
 
-      - name: run wrapped-flask tests
+      - name: run rai_core_flask tests
         run: pytest ./tests/
-        working-directory: wrapped-flask
+        working-directory: rai_core_flask
 
       ####### publish to PyPI
-      - name: Publish wrapped-flask package to Test PyPI
+      - name: Publish rai_core_flask package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_CORE_FLASK }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: wrapped-flask/dist/
-      - name: Publish wrapped-flask package to PyPI
+          packages_dir: rai_core_flask/dist/
+      - name: Publish rai_core_flask package to PyPI
         if: ${{ github.event.inputs.type == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAI_CORE_FLASK }}
-          packages_dir: wrapped-flask/dist/
+          packages_dir: rai_core_flask/dist/
