@@ -23,11 +23,16 @@ export class Gradient extends React.Component<IGradientProps> {
     if (this.props.isRate) {
       maxValue = maxValue * 100;
     }
+    const gradentMidValue = (1 / (maxValue / 100)) * this.props.minPct;
+    let gradientMidPct: number;
+    if (this.props.isRate) {
+      gradientMidPct = 100 - gradentMidValue * 100;
+    } else {
+      gradientMidPct = 100 - gradentMidValue;
+    }
     const errorRateLineHeight =
       errorRateRectHeight - (this.props.value / maxValue) * errorRateRectHeight;
-    const gradientMidPct = `${
-      100 - (1 / (maxValue / 100)) * this.props.minPct
-    }%`;
+    const gradientMidPctStr = `${gradientMidPct}%`;
     const minColor = this.props.isErrorMetric
       ? ColorPalette.MinErrorColor
       : ColorPalette.MinMetricColor;
@@ -44,8 +49,8 @@ export class Gradient extends React.Component<IGradientProps> {
           gradientTransform="rotate(90)"
         >
           <stop offset="0%" stopColor={maxColor} />
-          <stop offset={gradientMidPct} stopColor={minColor} />
-          <stop offset={gradientMidPct} stopColor={errorAvgColor} />
+          <stop offset={gradientMidPctStr} stopColor={minColor} />
+          <stop offset={gradientMidPctStr} stopColor={errorAvgColor} />
           <stop offset="100%" stopColor={errorAvgColor} />
         </linearGradient>
         <rect

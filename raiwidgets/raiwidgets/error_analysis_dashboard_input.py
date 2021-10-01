@@ -15,6 +15,7 @@ from erroranalysis._internal.error_analyzer import (
     ModelAnalyzer, PredictionsAnalyzer)
 from erroranalysis._internal.metrics import metric_to_func
 from erroranalysis._internal.constants import Metrics, metric_to_display_name
+from responsibleai._interfaces import ErrorAnalysisData
 
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
@@ -137,9 +138,6 @@ class ErrorAnalysisDashboardInput:
         self.dashboard_input = {}
         has_explanation = explanation is not None
         feature_length = None
-        self._max_depth = max_depth
-        self._num_leaves = num_leaves
-        self._min_child_samples = min_child_samples
 
         if has_explanation:
             if classes is None:
@@ -176,7 +174,7 @@ class ErrorAnalysisDashboardInput:
                 "Unsupported dataset type, inner error: {}".format(ex_str))
 
         if has_explanation:
-            self.input_explanation_data(explanation, list_dataset, classes)
+            self.input_explanation_data(list_dataset, classes)
             if features is None and hasattr(explanation, 'features'):
                 features = explanation.features
 
@@ -292,6 +290,20 @@ class ErrorAnalysisDashboardInput:
         if model_available:
             full_pred_y = self.compute_predicted_y(model, full_dataset)
         self.set_root_metric(full_pred_y, full_true_y, metric)
+        data = self.get_error_analysis_data(max_depth,
+                                            num_leaves,
+                                            min_child_samples)
+        self.dashboard_input[
+            ExplanationDashboardInterface.ERROR_ANALYSIS_DATA
+        ] = data
+
+    def get_error_analysis_data(self, max_depth, num_leaves,
+                                min_child_samples):
+        data = ErrorAnalysisData()
+        data.maxDepth = max_depth
+        data.numLeaves = num_leaves
+        data.minChildSamples = min_child_samples
+        return data
 
     def set_root_metric(self, predicted_y, true_y, metric):
         if metric != Metrics.ERROR_RATE:
@@ -366,7 +378,7 @@ class ErrorAnalysisDashboardInput:
             dataset = explanation._eval_data
         return dataset, true_y
 
-    def input_explanation_data(self, explanation, list_dataset, classes):
+    def input_explanation_data(self, list_dataset, classes):
         # List of explanations, key of explanation type is "explanation_type"
         local_explanation = self._find_first_explanation(
             ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY)
@@ -442,13 +454,19 @@ class ErrorAnalysisDashboardInput:
                 raise ValueError(
                     "Unsupported ebm explanation type: {}".format(ex_str))
 
-    def debug_ml(self, features, filters, composite_filters):
+    def debug_ml(self, data):
         try:
+            features = data[0]
+            filters = data[1]
+            composite_filters = data[2]
+            max_depth = data[3]
+            num_leaves = data[4]
+            min_child_samples = data[5]
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
-                max_depth=self._max_depth,
-                num_leaves=self._num_leaves,
-                min_child_samples=self._min_child_samples)
+                max_depth=max_depth,
+                num_leaves=num_leaves,
+                min_child_samples=min_child_samples)
             return {
                 WidgetRequestResponseConstants.DATA: tree
             }

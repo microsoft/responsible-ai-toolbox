@@ -22,6 +22,7 @@ export const basePlotlyProperties: IPlotlyProperty = {
     },
     showlegend: false,
     xaxis: {
+      automargin: true,
       color: FabricStyles.chartAxisColor,
       mirror: true,
       tickfont: {

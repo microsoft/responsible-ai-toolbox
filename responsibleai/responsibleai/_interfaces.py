@@ -63,6 +63,7 @@ class ModelExplanationData:
 class ErrorAnalysisData:
     maxDepth: int
     numLeaves: int
+    minChildSamples: int
     tree: list
     matrix: list
     tree_features: List[str]

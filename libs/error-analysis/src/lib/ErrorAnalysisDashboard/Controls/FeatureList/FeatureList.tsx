@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITableState } from "@responsible-ai/core-ui";
+import {
+  ITableState,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   Checkbox,
@@ -41,6 +45,8 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { TreeViewParameters } from "../TreeViewParameters/TreeViewParameters";
+
 import { updateItems, updatePercents, sortByPercent } from "./FeatureListUtils";
 
 export interface IFeatureListProps {
@@ -73,6 +79,12 @@ export interface IFeatureListState {
   enableApplyButton: boolean;
   lastAppliedFeatures: Set<string>;
   tableState: ITableState;
+  maxDepth: number;
+  numLeaves: number;
+  minChildSamples: number;
+  lastAppliedMaxDepth: number;
+  lastAppliedNumLeaves: number;
+  lastAppliedMinChildSamples: number;
 }
 
 const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
@@ -83,6 +95,9 @@ export class FeatureList extends React.Component<
   IFeatureListProps,
   IFeatureListState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   private layerHostId: string;
   private _selection: Selection;
   public constructor(props: IFeatureListProps) {
@@ -102,6 +117,12 @@ export class FeatureList extends React.Component<
     this.state = {
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(this.props.features),
+      lastAppliedMaxDepth: 4,
+      lastAppliedMinChildSamples: 21,
+      lastAppliedNumLeaves: 21,
+      maxDepth: 4,
+      minChildSamples: 21,
+      numLeaves: 21,
       searchedFeatures,
       selectedFeatures: this.props.selectedFeatures,
       tableState
@@ -118,12 +139,12 @@ export class FeatureList extends React.Component<
         newSelectedFeatures = newSelectedFeatures.concat(
           oldSelectedFeaturesNotSearched
         );
-        const enableApplyButton =
-          this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
-          newSelectedFeatures.some(
-            (selectedFeature) =>
-              !this.state.lastAppliedFeatures.has(selectedFeature)
-          );
+        const enableApplyButton = this.checkEnableApplyButton(
+          newSelectedFeatures,
+          this.state.maxDepth,
+          this.state.numLeaves,
+          this.state.minChildSamples
+        );
         this.setState({
           enableApplyButton,
           selectedFeatures: newSelectedFeatures
@@ -219,6 +240,17 @@ export class FeatureList extends React.Component<
                 position: "relative"
               }}
             />
+            <Stack.Item key="treeViewParameters" align="start">
+              <TreeViewParameters
+                updateMaxDepth={this.updateMaxDepth.bind(this)}
+                updateNumLeaves={this.updateNumLeaves.bind(this)}
+                updateMinChildSamples={this.updateMinChildSamples.bind(this)}
+                maxDepth={this.state.maxDepth}
+                numLeaves={this.state.numLeaves}
+                minChildSamples={this.state.minChildSamples}
+                isEnabled={this.props.isEnabled}
+              />
+            </Stack.Item>
             <Stack.Item key="applyButtonKey" align="start">
               <PrimaryButton
                 text="Apply"
@@ -360,11 +392,76 @@ export class FeatureList extends React.Component<
     );
   }
 
+  private checkEnableApplyButton(
+    newSelectedFeatures: string[],
+    maxDepth: number,
+    numLeaves: number,
+    minChildSamples: number
+  ): boolean {
+    return (
+      this.state.lastAppliedMaxDepth !== maxDepth ||
+      this.state.lastAppliedNumLeaves !== numLeaves ||
+      this.state.lastAppliedMinChildSamples !== minChildSamples ||
+      this.state.lastAppliedFeatures.size !== newSelectedFeatures.length ||
+      newSelectedFeatures.some(
+        (selectedFeature) =>
+          !this.state.lastAppliedFeatures.has(selectedFeature)
+      )
+    );
+  }
+
+  private updateMaxDepth(maxDepth: number): void {
+    const enableApplyButton = this.checkEnableApplyButton(
+      this.state.selectedFeatures,
+      maxDepth,
+      this.state.numLeaves,
+      this.state.minChildSamples
+    );
+    this.setState({
+      enableApplyButton,
+      maxDepth
+    });
+  }
+
+  private updateNumLeaves(numLeaves: number): void {
+    const enableApplyButton = this.checkEnableApplyButton(
+      this.state.selectedFeatures,
+      this.state.maxDepth,
+      numLeaves,
+      this.state.minChildSamples
+    );
+    this.setState({
+      enableApplyButton,
+      numLeaves
+    });
+  }
+
+  private updateMinChildSamples(minChildSamples: number): void {
+    const enableApplyButton = this.checkEnableApplyButton(
+      this.state.selectedFeatures,
+      this.state.maxDepth,
+      this.state.numLeaves,
+      minChildSamples
+    );
+    this.setState({
+      enableApplyButton,
+      minChildSamples
+    });
+  }
+
   private apply(): void {
-    this.props.saveFeatures(this.state.selectedFeatures);
+    const selectedFeatures = [...this.state.selectedFeatures];
+    this.props.saveFeatures(selectedFeatures);
+    this.context.errorAnalysisData!.maxDepth = this.state.maxDepth;
+    this.context.errorAnalysisData!.numLeaves = this.state.numLeaves;
+    this.context.errorAnalysisData!.minChildSamples =
+      this.state.minChildSamples;
     this.setState({
       enableApplyButton: false,
-      lastAppliedFeatures: new Set<string>(this.state.selectedFeatures)
+      lastAppliedFeatures: new Set<string>(selectedFeatures),
+      lastAppliedMaxDepth: this.state.maxDepth,
+      lastAppliedMinChildSamples: this.state.minChildSamples,
+      lastAppliedNumLeaves: this.state.numLeaves
     });
   }
 }

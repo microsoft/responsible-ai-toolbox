@@ -8,34 +8,18 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import make_classification, load_iris
 from raiwidgets import ErrorAnalysisDashboard
+from raiwidgets.explanation_constants import WidgetRequestResponseConstants
 from interpret_community.common.constants import ModelTask
 from interpret.ext.blackbox import MimicExplainer
 from interpret.ext.glassbox import LGBMExplainableModel
+from erroranalysis._internal.surrogate_error_tree import (
+    DEFAULT_MAX_DEPTH, DEFAULT_NUM_LEAVES, DEFAULT_MIN_CHILD_SAMPLES)
 
 
 class TestErrorAnalysisDashboard:
     def test_error_analysis_adult_census(self):
         X, y = shap.datasets.adult()
         y = [1 if r else 0 for r in y]
-
-        X, y = sklearn.utils.resample(
-            X, y, n_samples=1000, random_state=7, stratify=y)
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=7, stratify=y)
-
-        knn = sklearn.neighbors.KNeighborsClassifier()
-        knn.fit(X_train, y_train)
-
-        model_task = ModelTask.Classification
-        explainer = MimicExplainer(knn,
-                                   X_train,
-                                   LGBMExplainableModel,
-                                   augment_data=True,
-                                   max_num_of_augmentations=10,
-                                   model_task=model_task)
-        global_explanation = explainer.explain_global(X_test)
-
         categorical_features = ['Workclass',
                                 'Education-Num',
                                 'Marital Status',
@@ -44,11 +28,7 @@ class TestErrorAnalysisDashboard:
                                 'Race',
                                 'Sex',
                                 'Country']
-        ErrorAnalysisDashboard(global_explanation,
-                               knn,
-                               dataset=X_test,
-                               true_y=y_test,
-                               categorical_features=categorical_features)
+        run_error_analysis_adult_census(X, y, categorical_features)
 
     def test_error_analysis_many_rows(self):
         X, y = make_classification(n_samples=110000)
@@ -126,6 +106,86 @@ class TestErrorAnalysisDashboard:
                                knn,
                                dataset=X_test,
                                true_y=y_test)
+
+    def test_error_analysis_iris_numeric_feature_names(self):
+        # e2e test of error analysis with numeric feature names
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+        knn = sklearn.neighbors.KNeighborsClassifier()
+        knn.fit(X_train, y_train)
+
+        model_task = ModelTask.Classification
+        explainer = MimicExplainer(knn,
+                                   X_train,
+                                   LGBMExplainableModel,
+                                   model_task=model_task)
+        global_explanation = explainer.explain_global(X_test)
+
+        dashboard = ErrorAnalysisDashboard(global_explanation,
+                                           knn,
+                                           dataset=X_test,
+                                           true_y=y_test)
+        result = dashboard.input.debug_ml([global_explanation.features,
+                                           [],
+                                           [],
+                                           DEFAULT_MAX_DEPTH,
+                                           DEFAULT_NUM_LEAVES,
+                                           DEFAULT_MIN_CHILD_SAMPLES])
+        assert WidgetRequestResponseConstants.ERROR not in result
+        matrix_features = global_explanation.features[0:1]
+        result = dashboard.input.matrix(matrix_features, [], [], True, 8)
+        assert WidgetRequestResponseConstants.ERROR not in result
+
+    def test_error_analysis_adult_census_numeric_feature_names(self):
+        X, y = shap.datasets.adult()
+        categorical_features = ['Workclass',
+                                'Education-Num',
+                                'Marital Status',
+                                'Occupation',
+                                'Relationship',
+                                'Race',
+                                'Sex',
+                                'Country']
+        columns = X.columns.tolist()
+        cat_idxs = [columns.index(feat) for feat in categorical_features]
+        # Convert to numpy to remove features names
+        X = X.values
+        y = [1 if r else 0 for r in y]
+
+        run_error_analysis_adult_census(X, y, cat_idxs)
+
+
+def run_error_analysis_adult_census(X, y, categorical_features):
+    X, y = sklearn.utils.resample(
+        X, y, n_samples=1000, random_state=7, stratify=y)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=7, stratify=y)
+
+    knn = sklearn.neighbors.KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+
+    model_task = ModelTask.Classification
+    explainer = MimicExplainer(knn,
+                               X_train,
+                               LGBMExplainableModel,
+                               augment_data=True,
+                               max_num_of_augmentations=10,
+                               model_task=model_task)
+    global_explanation = explainer.explain_global(X_test)
+
+    dashboard = ErrorAnalysisDashboard(
+        global_explanation, knn, dataset=X_test,
+        true_y=y_test, categorical_features=categorical_features)
+    result = dashboard.input.debug_ml([global_explanation.features,
+                                       [],
+                                       [],
+                                       DEFAULT_MAX_DEPTH,
+                                       DEFAULT_NUM_LEAVES,
+                                       DEFAULT_MIN_CHILD_SAMPLES])
+    assert WidgetRequestResponseConstants.ERROR not in result
+    matrix_features = global_explanation.features[0:1]
+    result = dashboard.input.matrix(matrix_features, [], [], True, 8)
+    assert WidgetRequestResponseConstants.ERROR not in result
 
 
 def create_iris_data():
