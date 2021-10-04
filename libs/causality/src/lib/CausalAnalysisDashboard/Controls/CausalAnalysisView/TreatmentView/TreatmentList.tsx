@@ -100,10 +100,9 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
       };
     });
     const columns = [...defaultColumns, ...leftColumns];
-    const maxCount = Math.min(this.props.data.length, this.props.topN);
     const items = this.props.data
       .sort((a, b) => b["Effect of treatment"] - a["Effect of treatment"])
-      .slice(0, maxCount);
+      .slice(0, this.props.topN);
     const convertedItems = items.map((item) => toScientific(item));
     return (
       <div className={styles.listContainer}>
