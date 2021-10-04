@@ -109,6 +109,6 @@ export class CausalIndividualView extends React.PureComponent<
     if (!(dataIndex !== undefined && dataIndex >= 0 && causalLocal)) {
       return undefined;
     }
-    return causalLocal[dataIndex];
+    return causalLocal[dataIndex].sort((d1, d2) => d2.point - d1.point);
   };
 }
