@@ -36,7 +36,7 @@ export class ErrorAnalysis extends React.Component {
 
     return (
       <ErrorAnalysisDashboard
-        modelInformation={{ modelClass: "blackbox" }}
+        modelInformation={{ method: modelData.method, modelClass: "blackbox" }}
         dataSummary={{
           categoricalMap: modelData.categoricalMap,
           classNames: modelData.classNames,

@@ -5,8 +5,10 @@ import {
   IFilter,
   ICompositeFilter,
   CohortSource,
+  defaultModelAssessmentContext,
   ErrorCohort,
   MetricCohortStats,
+  ModelAssessmentContext,
   IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -24,6 +26,7 @@ import {
   IMatrixAreaState,
   IMatrixFilterState
 } from "../../../MatrixFilterState";
+import { MetricSelector } from "../../MetricSelector/MetricSelector";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
 import { MatrixSummary } from "../MatrixSummary/MatrixSummary";
@@ -61,6 +64,9 @@ export class MatrixFilter extends React.PureComponent<
   IMatrixFilterProps,
   IMatrixFilterState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   private options: IComboBoxOption[];
   public constructor(props: IMatrixFilterProps) {
     super(props);
@@ -87,11 +93,17 @@ export class MatrixFilter extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = matrixFilterStyles();
+    const featuresUnselected =
+      !this.state.selectedFeature1 && !this.state.selectedFeature2;
     return (
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
           <MatrixSummary isEnabled={this.props.isEnabled} />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
+            <MetricSelector
+              isEnabled={this.props.isEnabled && !featuresUnselected}
+              setMetric={this.setMetric}
+            />
             <Stack.Item key="feature1key">
               <ComboBox
                 defaultSelectedKey={
@@ -148,6 +160,7 @@ export class MatrixFilter extends React.PureComponent<
             state={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
             isEnabled={this.props.isEnabled}
+            metric={this.context.errorAnalysisData!.metric}
           />
         </Stack>
       </div>
@@ -170,6 +183,11 @@ export class MatrixFilter extends React.PureComponent<
     if (typeof item?.key == "string") {
       this.setState({ selectedFeature2: item.key });
     }
+  };
+
+  private setMetric = (metric: string): void => {
+    this.context.errorAnalysisData!.metric = metric;
+    this.forceUpdate();
   };
 
   private updateMatrixLegendState = (

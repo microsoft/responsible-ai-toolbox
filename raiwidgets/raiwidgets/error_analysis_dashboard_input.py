@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from .error_analysis_constants import ErrorAnalysisDashboardInterface
+from .error_analysis_constants import (
+    ErrorAnalysisDashboardInterface, MethodConstants)
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
 import numpy as np
@@ -14,7 +15,8 @@ from responsibleai._input_processing import _convert_to_list
 from erroranalysis._internal.error_analyzer import (
     ModelAnalyzer, PredictionsAnalyzer)
 from erroranalysis._internal.metrics import metric_to_func
-from erroranalysis._internal.constants import Metrics, metric_to_display_name
+from erroranalysis._internal.constants import (
+    Metrics, metric_to_display_name, display_name_to_metric)
 from responsibleai._interfaces import ErrorAnalysisData
 
 
@@ -138,6 +140,7 @@ class ErrorAnalysisDashboardInput:
         self.dashboard_input = {}
         has_explanation = explanation is not None
         feature_length = None
+        probability_y = None
 
         if has_explanation:
             if classes is None:
@@ -289,20 +292,35 @@ class ErrorAnalysisDashboardInput:
                 metric = self._error_analyzer.metric
         if model_available:
             full_pred_y = self.compute_predicted_y(model, full_dataset)
+        # If we don't have an explanation or model/probabilities specified
+        # we can try to use model task to figure out the method
+        if not has_explanation and probability_y is None:
+            method = MethodConstants.REGRESSION
+            if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
+                if (len(np.unique(predicted_y)) > 2):
+                    method = MethodConstants.MULTICLASS
+                else:
+                    method = MethodConstants.BINARY
+            self.dashboard_input[
+                ErrorAnalysisDashboardInterface.METHOD
+            ] = method
+
         self.set_root_metric(full_pred_y, full_true_y, metric)
         data = self.get_error_analysis_data(max_depth,
                                             num_leaves,
-                                            min_child_samples)
+                                            min_child_samples,
+                                            metric)
         self.dashboard_input[
             ExplanationDashboardInterface.ERROR_ANALYSIS_DATA
         ] = data
 
     def get_error_analysis_data(self, max_depth, num_leaves,
-                                min_child_samples):
+                                min_child_samples, metric):
         data = ErrorAnalysisData()
         data.maxDepth = max_depth
         data.numLeaves = num_leaves
         data.minChildSamples = min_child_samples
+        data.metric = metric_to_display_name[metric]
         return data
 
     def set_root_metric(self, predicted_y, true_y, metric):
@@ -462,6 +480,8 @@ class ErrorAnalysisDashboardInput:
             max_depth = data[3]
             num_leaves = data[4]
             min_child_samples = data[5]
+            metric = display_name_to_metric[data[6]]
+            self._error_analyzer.update_metric(metric)
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
                 max_depth=max_depth,
@@ -480,10 +500,12 @@ class ErrorAnalysisDashboardInput:
             }
 
     def matrix(self, features, filters, composite_filters,
-               quantile_binning, num_bins):
+               quantile_binning, num_bins, metric):
         try:
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
+            metric = display_name_to_metric[metric]
+            self._error_analyzer.update_metric(metric)
             matrix = self._error_analyzer.compute_matrix(
                 features, filters, composite_filters,
                 quantile_binning, num_bins)

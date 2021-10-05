@@ -77,6 +77,9 @@ metric_to_display_name = {
 }
 
 
+display_name_to_metric = {v: k for k, v in metric_to_display_name.items()}
+
+
 # Note: Error metrics are those for which a higher score is worse, not better
 # These should be given a negative value when computing the feature importance
 error_metrics = {Metrics.MEAN_ABSOLUTE_ERROR, Metrics.MEAN_SQUARED_ERROR,

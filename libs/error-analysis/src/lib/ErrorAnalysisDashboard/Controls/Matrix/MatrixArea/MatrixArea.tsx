@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import {
+  defaultModelAssessmentContext,
   CohortSource,
   IErrorAnalysisMatrixNode,
-  Metrics
+  Metrics,
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -47,6 +49,9 @@ export class MatrixArea extends React.PureComponent<
   IMatrixAreaProps,
   IMatrixAreaState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: IMatrixAreaProps) {
     super(props);
     this.state = {
@@ -70,9 +75,11 @@ export class MatrixArea extends React.PureComponent<
       this.props.selectedFeature1 !== prevProps.selectedFeature1;
     const selectedFeature2Changed =
       this.props.selectedFeature2 !== prevProps.selectedFeature2;
+    const metricChanged = this.props.metric !== prevProps.metric;
     if (
       selectedFeature1Changed ||
       selectedFeature2Changed ||
+      metricChanged ||
       this.props.baseCohort !== prevProps.baseCohort
     ) {
       this.reloadData();
@@ -85,11 +92,13 @@ export class MatrixArea extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = matrixAreaStyles();
+    const featuresUnselected =
+      !this.props.selectedFeature1 && !this.props.selectedFeature2;
     // Note: we render as empty if: 1.) there is no matrix 2.) all features set to empty
     // 3.) when user first changes feature a render is triggered but componentDidUpdate
     // is only called after initial render is done, which would be an inconsistent state
     // Note in third case we just show empty and not the help text
-    if (!this.state.jsonMatrix) {
+    if (!this.state.jsonMatrix || featuresUnselected) {
       return (
         <Stack styles={emptyTextStyle} tokens={emptyTextPadding}>
           <Text variant="medium">
@@ -219,6 +228,7 @@ export class MatrixArea extends React.PureComponent<
       this.props.baseCohort,
       this.props.selectedFeature1,
       this.props.selectedFeature2,
+      this.context.errorAnalysisData!.metric,
       this.props.getMatrix,
       this.props.matrix
     );
@@ -254,15 +264,27 @@ export class MatrixArea extends React.PureComponent<
       });
     });
     this.props.updateMatrixLegendState(maxMetricValue, isErrorMetric);
-    this.setState({
-      disableClearAll: true,
-      disableSelectAll: false,
-      jsonMatrix,
-      matrixFeature1: this.props.selectedFeature1,
-      matrixFeature2: this.props.selectedFeature2,
-      maxMetricValue,
-      selectedCells: undefined
-    });
+    const matrixLength = jsonMatrix.matrix.length;
+    const matrixRowLength = jsonMatrix.matrix[0].length;
+    const size = matrixLength * matrixRowLength;
+    const selectedCells = new Array<boolean>(size);
+    this.setState(
+      {
+        disableClearAll: true,
+        disableSelectAll: false,
+        jsonMatrix,
+        matrixFeature1: this.props.selectedFeature1,
+        matrixFeature2: this.props.selectedFeature2,
+        maxMetricValue,
+        selectedCells
+      },
+      () => {
+        // Force root metrics to be recalculated
+        if (this.state.selectedCells) {
+          this.updateStateFromSelectedCells(this.state.selectedCells);
+        }
+      }
+    );
   };
 
   private selectAll(matrixLength: number, rowLength: number): void {

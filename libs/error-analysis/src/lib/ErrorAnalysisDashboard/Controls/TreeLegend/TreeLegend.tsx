@@ -11,6 +11,7 @@ import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
 import { INodeDetail } from "../../TreeViewState";
 import { Gradient } from "../Gradient/Gradient";
 import { InfoCallout } from "../InfoCallout/InfoCallout";
+import { MetricSelector } from "../MetricSelector/MetricSelector";
 
 import { treeLegendStyles } from "./TreeLegend.styles";
 
@@ -22,6 +23,8 @@ export interface ITreeLegendProps {
   max: number;
   showCohortName: boolean;
   isErrorMetric: boolean;
+  isEnabled: boolean;
+  setMetric: (metric: string) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -41,6 +44,10 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               Cohort: {this.props.baseCohort.cohort.name}
             </Text>
           )}
+          <MetricSelector
+            isEnabled={this.props.isEnabled}
+            setMetric={this.props.setMetric}
+          />
           <Stack>
             <Stack horizontal>
               <div className={classNames.metricBarBlack} />

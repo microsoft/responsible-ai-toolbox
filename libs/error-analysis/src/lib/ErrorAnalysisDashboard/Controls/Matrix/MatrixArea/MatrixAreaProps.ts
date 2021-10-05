@@ -36,4 +36,5 @@ export interface IMatrixAreaProps {
   updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
   state: IMatrixAreaState;
   setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
+  metric: string;
 }

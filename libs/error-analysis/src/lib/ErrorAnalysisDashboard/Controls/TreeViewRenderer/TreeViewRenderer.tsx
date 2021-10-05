@@ -123,7 +123,8 @@ export class TreeViewRenderer extends React.PureComponent<
       this.context.errorAnalysisData!.maxDepth !== this.state.maxDepth ||
       this.context.errorAnalysisData!.numLeaves !== this.state.numLeaves ||
       this.context.errorAnalysisData!.minChildSamples !==
-        this.state.minChildSamples
+        this.state.minChildSamples ||
+      this.context.errorAnalysisData!.metric !== this.state.metric
     ) {
       this.fetchTreeNodes();
     }
@@ -280,6 +281,8 @@ export class TreeViewRenderer extends React.PureComponent<
               max={max}
               showCohortName={this.props.showCohortName}
               isErrorMetric={this.state.isErrorMetric}
+              isEnabled={this.props.getTreeNodes !== undefined}
+              setMetric={this.setMetric}
             />
             <svg
               ref={svgOuterFrame}
@@ -413,6 +416,7 @@ export class TreeViewRenderer extends React.PureComponent<
       const maxDepth = this.context.errorAnalysisData!.maxDepth;
       const numLeaves = this.context.errorAnalysisData!.numLeaves;
       const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
+      const metric = this.context.errorAnalysisData!.metric;
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
@@ -502,6 +506,7 @@ export class TreeViewRenderer extends React.PureComponent<
       return {
         isErrorMetric,
         maxDepth,
+        metric,
         minChildSamples,
         nodeDetail,
         numLeaves,
@@ -610,6 +615,7 @@ export class TreeViewRenderer extends React.PureComponent<
       return {
         isErrorMetric: state.isErrorMetric,
         maxDepth: state.maxDepth,
+        metric: state.metric,
         minChildSamples: state.minChildSamples,
         nodeDetail,
         numLeaves: state.numLeaves,
@@ -636,6 +642,11 @@ export class TreeViewRenderer extends React.PureComponent<
     return nodeDetail;
   }
 
+  private setMetric = (metric: string): void => {
+    this.context.errorAnalysisData!.metric = metric;
+    this.fetchTreeNodes();
+  };
+
   private fetchTreeNodes(): void {
     if (this.state.request) {
       this.state.request.abort();
@@ -657,15 +668,17 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
+    const errorAnalysisData = this.context.errorAnalysisData!;
     this.props
       .getTreeNodes(
         [
           this.props.selectedFeatures,
           filtersRelabeled,
           compositeFiltersRelabeled,
-          this.context.errorAnalysisData?.maxDepth,
-          this.context.errorAnalysisData?.numLeaves,
-          this.context.errorAnalysisData?.minChildSamples
+          errorAnalysisData.maxDepth,
+          errorAnalysisData.numLeaves,
+          errorAnalysisData.minChildSamples,
+          errorAnalysisData.metric
         ],
         new AbortController().signal
       )

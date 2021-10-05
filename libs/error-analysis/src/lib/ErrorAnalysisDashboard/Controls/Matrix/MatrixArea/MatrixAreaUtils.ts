@@ -28,6 +28,7 @@ export async function fetchMatrix(
   baseCohort: ErrorCohort,
   selectedFeature1: string | undefined,
   selectedFeature2: string | undefined,
+  metric: string,
   getMatrix?: (
     request: any,
     abortSignal: AbortSignal
@@ -61,7 +62,8 @@ export async function fetchMatrix(
       filtersRelabeled,
       compositeFiltersRelabeled,
       quantileBinning,
-      numBins
+      numBins,
+      metric
     ],
     new AbortController().signal
   );
