@@ -166,6 +166,9 @@ class BaseAnalyzer(ABC):
         else:
             return mutual_info_regression(input_data, diff).tolist()
 
+    def update_metric(self, metric):
+        self._metric = metric
+
     def _make_pandas_copy(self, dataset):
         if isinstance(dataset, pd.DataFrame):
             return dataset.copy()

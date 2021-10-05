@@ -7,7 +7,8 @@ import {
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
-  ComparisonTypes
+  ComparisonTypes,
+  Metrics
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
@@ -3442,6 +3443,7 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
 };
 export const bostonErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
+  metric: Metrics.MeanSquaredError,
   minChildSamples: 21,
   numLeaves: 11
 };

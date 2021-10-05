@@ -259,6 +259,9 @@
       "metricName": "Metric name",
       "metricValue": "Metric value"
     },
+    "MetricSelector": {
+      "selectorLabel": "Select metric"
+    },
     "Navigation": {
       "dataExplorer": "Data explorer",
       "errorExplorer": "Error explorer",

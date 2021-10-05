@@ -9,6 +9,7 @@ export interface IErrorAnalysisData {
   maxDepth: number;
   numLeaves: number;
   minChildSamples: number;
+  metric: string;
 }
 // Represents the data retrieved from the backend
 export interface IErrorAnalysisTreeNode {
