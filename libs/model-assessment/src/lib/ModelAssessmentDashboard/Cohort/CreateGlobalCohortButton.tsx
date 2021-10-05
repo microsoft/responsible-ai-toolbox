@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  Cohort,
-  CohortEditor,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -11,6 +9,8 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { DefaultButton } from "office-ui-fabric-react";
 import React from "react";
+
+import { CreateGlobalCohort } from "./CreateGlobalCohort";
 
 interface ICreateGlobalCohortButtonState {
   createCohortVisible: boolean;
@@ -33,44 +33,16 @@ export class CreateGlobalCohortButton extends React.Component<
           text={localization.ModelAssessment.CohortInformation.CreateNewCohort}
           onClick={this.toggleVisibility}
         />
-        {this.state.createCohortVisible && (
-          <CohortEditor
-            jointDataset={this.context.jointDataset}
-            filterList={this.context.baseErrorCohort.cohort.filters}
-            cohortName={`${localization.Interpret.Cohort.cohort} ${(
-              this.context.errorCohorts.length + 1
-            ).toString()}`}
-            existingCohortNames={this.getExistingCohortName()}
-            onSave={this.addCohort}
-            isNewCohort
-            deleteIsDisabled
-            closeCohortEditor={(): void => {
-              this.setState((prev) => ({
-                createCohortVisible: !prev.createCohortVisible
-              }));
-            }}
-            closeCohortEditorPanel={(): void => {
-              this.setState((prev) => ({
-                createCohortVisible: !prev.createCohortVisible
-              }));
-            }}
-          />
-        )}
+        <CreateGlobalCohort
+          visible={this.state.createCohortVisible}
+          onDismiss={this.toggleVisibility}
+        />
       </>
     );
   }
-  private addCohort = (cohort: Cohort) => {
-    this.context.addCohort(cohort);
-    this.toggleVisibility();
-  };
   private toggleVisibility = () => {
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));
   };
-  private getExistingCohortName(): string[] {
-    return this.context.errorCohorts
-      .filter((errorCohort) => !errorCohort.isTemporary)
-      .map((t) => t.cohort.name);
-  }
 }

@@ -15,6 +15,7 @@ export interface IMainMenuStyles {
   summaryBox: IStyle;
   summaryItemText: IStyle;
   mainMenu: IStyle;
+  mainMenuItem: IStyle;
   cohortBox: IStyle;
   cohortLabelWrapper: IStyle;
   cohortLabel: IStyle;
@@ -59,6 +60,12 @@ export const mainMenuStyles: () => IProcessedStyleSet<IMainMenuStyles> = () => {
     },
     mainMenu: {
       width: "100%"
+    },
+    mainMenuItem: {
+      span: {
+        fontSize: "larger",
+        fontWeight: "bold"
+      }
     },
     mediumText: {
       maxWidth: "200px"

@@ -3,7 +3,6 @@
 
 import {
   defaultModelAssessmentContext,
-  ErrorCohort,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -11,7 +10,7 @@ import { localization } from "@responsible-ai/localization";
 import { DefaultButton } from "office-ui-fabric-react";
 import React from "react";
 
-import { ShiftCohort } from "./ShiftCohort";
+import { ChangeGlobalCohort } from "./ChangeGlobalCohort";
 
 interface IChangeGlobalCohortButtonState {
   shiftCohortVisible: boolean;
@@ -36,20 +35,13 @@ export class ChangeGlobalCohortButton extends React.Component<
           }
           onClick={this.toggleShiftCohortVisibility}
         />
-        {this.state.shiftCohortVisible && (
-          <ShiftCohort
-            onDismiss={this.toggleShiftCohortVisibility}
-            onApply={this.shiftErrorCohort}
-            defaultCohort={this.context.baseErrorCohort}
-          />
-        )}
+        <ChangeGlobalCohort
+          visible={this.state.shiftCohortVisible}
+          onDismiss={this.toggleShiftCohortVisibility}
+        />
       </>
     );
   }
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
-    this.context.shiftErrorCohort(cohort);
-    this.toggleShiftCohortVisibility();
-  };
   private toggleShiftCohortVisibility = () => {
     this.setState((prev) => ({ shiftCohortVisible: !prev.shiftCohortVisible }));
   };
