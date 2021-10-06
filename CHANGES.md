@@ -24,6 +24,49 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.12.0
+
+- new features
+  - ## Model Analysis
+    - add global cohort statistics
+  - ## Error Analysis
+    - add metric selector dropdown
+    - add tree view parameters as sliders to features selector panel
+    - add tooltip to heatmap categories and left-justify the heatmap
+  - ## Counterfactual
+    - upgrade dice-ml to 0.7.2
+- bug fixes
+  - ## Model Analysis
+    - fix cohort information in heatmap resizing in model analysis
+    - log warning when regression model has predict_proba()
+  - ## Error Analysis
+    - fix error rate gradient for classification scenario
+    - fix quantile binning toggle should stay on when making actions
+    - fix multiple issues in instance view, including:
+      - when selecting multiple rows in correct and incorrect panels, and going to all selected, if a point is removed in the middle all of the points below get removed
+      - when removing points in the all selected panel, the count does not get updates in the correct/incorrect panels until they are selected
+      - when using what if, make points not selectable
+    - fix precision and recall calculation in the UI changing with number of bins
+    - decrease the lower bound on first category for quantile binning
+    - fix handling of numeric features names in pandas for error analysis tree view
+    - reverse y axis in heatmap so that higher values are towards the top of the matrix
+    - add warnings for 2d heatmap case and test for quantile binning with duplicate edges
+  - ## Causal
+    - sort causal data point by effect size
+    - set treatment list spin range
+    - fix causal global effect plot x-axis titles cut off
+    - fix causal categorical treatment average gains text
+  - ## Counterfactual
+    - change current class label for regression task
+    - raise exception when users configures less than required counterfactuals
+    - show options for categorical features on counterfactual list
+  - ## Fairness
+    - add error handling for missing metrics in fairness
+- other
+  - remove Axios library from dependencies
+  - rename wrapped-flask to rai_core_flask
+  - remove deprecated babelconfig option in workspace.json
+
 ## v0.11.0
 
 - new features
