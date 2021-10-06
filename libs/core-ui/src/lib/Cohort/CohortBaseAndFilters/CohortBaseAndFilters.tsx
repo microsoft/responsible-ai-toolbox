@@ -39,9 +39,6 @@ export class CohortBaseAndFilters extends React.Component<ICohortBaseAndFiltersP
                 <div className={classNames.tableData}>Base cohort</div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Error explorer</div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
                 <div className={classNames.tableData}>Filters</div>
               </Stack>
             </Stack>
@@ -49,11 +46,6 @@ export class CohortBaseAndFilters extends React.Component<ICohortBaseAndFiltersP
               <Stack horizontal tokens={alignmentStackTokens}>
                 <div className={classNames.tableData}>
                   {this.props.baseCohort.cohort.name}
-                </div>
-              </Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>
-                  {this.props.cohort.source}
                 </div>
               </Stack>
               <Stack
