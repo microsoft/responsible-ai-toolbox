@@ -15,14 +15,14 @@ import {
   Pivot,
   PivotItem,
   Stack,
-  Separator,
-  mergeStyles
+  Separator
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { FeatureList } from "../FeatureList/FeatureList";
 
+import { errorAnalysisStyles } from "./ErrorAnalysis.styles";
 import {
   ErrorAnalysisView,
   IErrorAnalysisViewProps
@@ -67,16 +67,13 @@ export class ErrorAnalysisViewTab extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const errorAnalysisTab = mergeStyles({
-      overflow: "auto",
-      width: "100%"
-    });
+    const classNames = errorAnalysisStyles();
     return (
       <Stack horizontal>
         <Stack
           grow
-          tokens={{ maxWidth: "80%", padding: "16px 24px" }}
-          className={errorAnalysisTab}
+          tokens={{ padding: "16px 24px" }}
+          className={classNames.errorAnalysis}
         >
           <Text variant={"xxLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
@@ -140,7 +137,10 @@ export class ErrorAnalysisViewTab extends React.Component<
         <Stack tokens={{ padding: "100px 0 0 0" }}>
           <Separator vertical styles={{ root: { height: "100%" } }} />
         </Stack>
-        <Stack tokens={{ padding: "100px 80px 0 0" }}>
+        <Stack
+          className={classNames.cohortInfo}
+          tokens={{ padding: "100px 80px 0 0" }}
+        >
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
             onSaveCohortClick={this.props.onSaveCohortClick}
