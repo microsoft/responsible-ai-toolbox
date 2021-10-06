@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
-  IStyleFunctionOrObject,
-  Panel
-} from "office-ui-fabric-react";
+import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
@@ -28,10 +22,6 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
   isClickableOutsideFocusTrap: true
 };
 
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
-};
-
 export class CohortListPanel extends React.Component<ICohortListPanelProps> {
   public render(): React.ReactNode {
     const classNames = cohortListStyles();
@@ -44,7 +34,6 @@ export class CohortListPanel extends React.Component<ICohortListPanelProps> {
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
-        styles={panelStyles}
       >
         <div className={classNames.divider} />
         <CohortList
