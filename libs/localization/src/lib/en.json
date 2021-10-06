@@ -91,7 +91,7 @@
         "WhatIf": {
             "setValue": "Set Value",
             "sortFeatures": "Sort feature columns by counterfactual feature importance",
-            "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class.",
+            "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
             "toggleToolTipHeader": "Ranked counterfactual features"
         },
         "counterfactualEx": "Counterfactual Ex {0}",
