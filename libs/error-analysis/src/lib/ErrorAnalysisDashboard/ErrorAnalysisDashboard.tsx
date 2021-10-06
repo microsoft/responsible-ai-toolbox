@@ -527,6 +527,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    disabledView={false}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}
                     errorAnalysisOption={this.state.errorAnalysisOption}

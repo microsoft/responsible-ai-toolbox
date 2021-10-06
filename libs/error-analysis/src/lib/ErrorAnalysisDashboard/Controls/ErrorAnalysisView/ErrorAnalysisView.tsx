@@ -23,6 +23,7 @@ import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
 export interface IErrorAnalysisViewProps {
   messages?: HelpMessageDict;
+  disabledView: boolean;
   features: string[];
   selectedFeatures: string[];
   getTreeNodes?: (
@@ -61,6 +62,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const matrixViewIsEnabled = this.props.getMatrix !== undefined;
     return (
       <>
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
@@ -77,6 +79,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             state={this.props.treeViewState}
             setTreeViewState={this.props.setTreeViewState}
             showCohortName={this.props.showCohortName}
+            disabledView={this.props.disabledView}
           />
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -93,7 +96,8 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             matrixAreaState={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
             setMatrixFilterState={this.props.setMatrixFilterState}
-            isEnabled={this.props.getMatrix !== undefined}
+            isEnabled={matrixViewIsEnabled}
+            disabledView={this.props.disabledView}
           />
         )}
       </>

@@ -71,6 +71,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   }
 
   public render(): React.ReactNode {
+    const disabledView =
+      this.props.requestDebugML === undefined &&
+      this.props.requestMatrix === undefined &&
+      this.state.baseCohort.cohort.name !==
+        localization.ErrorAnalysis.Cohort.defaultLabel;
     return (
       <ModelAssessmentContext.Provider
         value={{
@@ -135,6 +140,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                       this.props.errorAnalysisData?.[0] && (
                         <ErrorAnalysisViewTab
+                          disabledView={disabledView}
                           tree={this.props.errorAnalysisData[0].tree}
                           matrix={this.props.errorAnalysisData[0].matrix}
                           matrixFeatures={

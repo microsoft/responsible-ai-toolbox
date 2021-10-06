@@ -15,6 +15,7 @@ export interface ICohortInfoProps {
   currentCohort: ErrorCohort;
   onSaveCohortClick: () => void;
   includeDividers: boolean;
+  disabledView: boolean;
 }
 
 const alignmentStackTokens: IStackTokens = {
@@ -34,6 +35,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             <DefaultButton
               text={localization.ErrorAnalysis.CohortInfo.saveCohort}
               onClick={(): any => this.props.onSaveCohortClick()}
+              disabled={this.props.disabledView}
             />
           </div>
           <div className={classNames.section} />

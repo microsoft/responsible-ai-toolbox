@@ -19,6 +19,7 @@ export class ColorPalette {
   public static ErrorAnalysisLightText = "white";
   public static ErrorAnalysisDarkBlackText = "rgba(0,0,0,0.8)";
   public static ErrorAnalysisDarkGreyText = "#555";
+  public static DisabledColor = theme.palette.neutralSecondary;
 }
 
 export function isColorDark(colorStr: string | undefined): boolean {
