@@ -106,6 +106,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           <ErrorAnalysisView
             tree={this.props.tree}
             messages={this.props.messages}
+            disabledView={this.props.disabledView}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             getTreeNodes={this.props.getTreeNodes}
@@ -145,6 +146,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             currentCohort={this.context.selectedErrorCohort}
             onSaveCohortClick={this.props.onSaveCohortClick}
             includeDividers={false}
+            disabledView={this.props.disabledView}
           />
         </Stack>
       </Stack>
