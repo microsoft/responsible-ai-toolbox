@@ -29,7 +29,6 @@ import { CohortEditorFilterList } from "./CohortEditorFilterList";
 
 export interface ICohortEditorProps {
   jointDataset: JointDataset;
-  filterList: IFilter[];
   cohortName: string;
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
@@ -38,6 +37,7 @@ export interface ICohortEditorProps {
   onSave: (newCohort: Cohort) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
+  filterList?: IFilter[];
   onDelete?: () => void;
 }
 
@@ -82,8 +82,8 @@ export class CohortEditor extends React.PureComponent<
     super(props);
     this.state = {
       cohortName: this.props.cohortName,
-      filterIndex: this.props.filterList.length,
-      filters: this.props.filterList,
+      filterIndex: this.props.filterList?.length || 0,
+      filters: this.props.filterList || [],
       openedFilter: undefined,
       selectedFilterCategory: undefined,
       showConfirmation: false
