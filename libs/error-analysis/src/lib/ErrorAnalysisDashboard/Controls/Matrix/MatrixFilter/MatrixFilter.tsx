@@ -18,7 +18,10 @@ import {
   IComboBoxOption,
   IStackTokens,
   ITheme,
-  Stack
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -34,6 +37,7 @@ import { MatrixSummary } from "../MatrixSummary/MatrixSummary";
 import { matrixFilterStyles } from "./MatrixFilter.styles";
 
 export interface IMatrixFilterProps {
+  disabledView: boolean;
   theme?: ITheme;
   features: string[];
   getMatrix?: (
@@ -99,6 +103,13 @@ export class MatrixFilter extends React.PureComponent<
       <div className={classNames.matrixFilter}>
         <Stack tokens={stackTokens}>
           <MatrixSummary isEnabled={this.props.isEnabled} />
+          {this.props.disabledView && (
+            <MessageBar messageBarType={MessageBarType.warning}>
+              <Text>
+                {localization.ErrorAnalysis.MatrixFilter.disabledWarning}
+              </Text>
+            </MessageBar>
+          )}
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <MetricSelector
               isEnabled={this.props.isEnabled && !featuresUnselected}
@@ -145,23 +156,26 @@ export class MatrixFilter extends React.PureComponent<
             baseCohort={this.props.baseCohort}
             max={this.state.matrixLegendState.maxMetricValue}
             isErrorMetric={this.state.matrixLegendState.isErrorMetric}
+            disabledView={this.props.disabledView}
           />
-          <MatrixArea
-            theme={this.props.theme}
-            features={this.props.features}
-            getMatrix={this.props.getMatrix}
-            matrix={this.props.matrix}
-            selectedFeature1={this.state.selectedFeature1}
-            selectedFeature2={this.state.selectedFeature2}
-            updateSelectedCohort={this.props.updateSelectedCohort}
-            selectedCohort={this.props.selectedCohort}
-            baseCohort={this.props.baseCohort}
-            updateMatrixLegendState={this.updateMatrixLegendState}
-            state={this.props.matrixAreaState}
-            setMatrixAreaState={this.props.setMatrixAreaState}
-            isEnabled={this.props.isEnabled}
-            metric={this.context.errorAnalysisData!.metric}
-          />
+          {!this.props.disabledView && (
+            <MatrixArea
+              theme={this.props.theme}
+              features={this.props.features}
+              getMatrix={this.props.getMatrix}
+              matrix={this.props.matrix}
+              selectedFeature1={this.state.selectedFeature1}
+              selectedFeature2={this.state.selectedFeature2}
+              updateSelectedCohort={this.props.updateSelectedCohort}
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
+              updateMatrixLegendState={this.updateMatrixLegendState}
+              state={this.props.matrixAreaState}
+              setMatrixAreaState={this.props.setMatrixAreaState}
+              isEnabled={this.props.isEnabled}
+              metric={this.context.errorAnalysisData!.metric}
+            />
+          )}
         </Stack>
       </div>
     );

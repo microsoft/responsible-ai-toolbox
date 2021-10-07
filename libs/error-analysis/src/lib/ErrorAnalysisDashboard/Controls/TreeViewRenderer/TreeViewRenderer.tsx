@@ -31,6 +31,8 @@ import {
   IProcessedStyleSet,
   ITheme,
   mergeStyles,
+  MessageBar,
+  MessageBarType,
   Stack,
   Text
 } from "office-ui-fabric-react";
@@ -59,6 +61,7 @@ const viewerHeight = 300;
 const viewerWidth = 800;
 
 export interface ITreeViewRendererProps {
+  disabledView: boolean;
   theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
@@ -90,6 +93,7 @@ export interface ISVGDatum {
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
 const errorAvgColor = ColorPalette.ErrorAvgColor;
+const disabledColor = ColorPalette.DisabledColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -271,6 +275,13 @@ export class TreeViewRenderer extends React.PureComponent<
               : localization.ErrorAnalysis.TreeView.treeStaticDescription}
           </Text>
         </Stack.Item>
+        {this.props.disabledView && (
+          <Stack.Item>
+            <MessageBar messageBarType={MessageBarType.warning}>
+              <Text>{localization.ErrorAnalysis.TreeView.disabledWarning}</Text>
+            </MessageBar>
+          </Stack.Item>
+        )}
         <Stack.Item>
           <Stack horizontal className={classNames.svgContainer}>
             <TreeLegend
@@ -283,6 +294,7 @@ export class TreeViewRenderer extends React.PureComponent<
               isErrorMetric={this.state.isErrorMetric}
               isEnabled={this.props.getTreeNodes !== undefined}
               setMetric={this.setMetric}
+              disabledView={this.props.disabledView}
             />
             <svg
               ref={svgOuterFrame}
@@ -313,6 +325,7 @@ export class TreeViewRenderer extends React.PureComponent<
                         node={node}
                         onSelect={this.onSelectNode}
                         fillOffset={node.data.error / node.data.rootErrorSize}
+                        disabledView={this.props.disabledView}
                       />
                     );
                   })}
@@ -470,6 +483,10 @@ export class TreeViewRenderer extends React.PureComponent<
           heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
         }
 
+        if (this.props.disabledView) {
+          heatmapStyle = disabledColor;
+        }
+
         return {
           ...node,
           errorColor: heatmapStyle,
@@ -494,7 +511,9 @@ export class TreeViewRenderer extends React.PureComponent<
       if (selectedNode) {
         this.unselectParentNodes(selectedNode);
       }
-      this.selectParentNodes(root);
+      if (!this.props.disabledView) {
+        this.selectParentNodes(root);
+      }
       let nodeDetail: INodeDetail;
       if (root === undefined) {
         nodeDetail = this.state.nodeDetail;
@@ -590,6 +609,9 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private onSelectNode = (node: HierarchyPointNode<ITreeNode>): void => {
+    if (this.props.disabledView) {
+      return;
+    }
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {

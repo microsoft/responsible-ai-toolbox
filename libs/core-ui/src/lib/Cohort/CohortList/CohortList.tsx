@@ -138,7 +138,10 @@ export class CohortList extends React.Component<
 
       switch (column.key) {
         case "nameColumn":
-          if (this.props.enableEditing && item.name !== "All data") {
+          if (
+            this.props.enableEditing &&
+            item.name !== localization.ErrorAnalysis.Cohort.defaultLabel
+          ) {
             return (
               <Link onClick={this.onEditCohortClick.bind(this, item.name)}>
                 {fieldContent}
