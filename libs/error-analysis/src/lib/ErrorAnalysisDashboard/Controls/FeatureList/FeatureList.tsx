@@ -22,12 +22,9 @@ import {
   IDetailsRowFieldsProps,
   IDetailsRowProps,
   IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
   ISearchBoxStyles,
   ISettings,
   IStackTokens,
-  IStyleFunctionOrObject,
   ITheme,
   Customizer,
   getId,
@@ -86,10 +83,6 @@ export interface IFeatureListState {
   lastAppliedNumLeaves: number;
   lastAppliedMinChildSamples: number;
 }
-
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
-};
 
 export class FeatureList extends React.Component<
   IFeatureListProps,
@@ -171,7 +164,6 @@ export class FeatureList extends React.Component<
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
-        styles={panelStyles}
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
