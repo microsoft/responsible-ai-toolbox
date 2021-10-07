@@ -25,6 +25,7 @@ export interface ITreeLegendProps {
   isErrorMetric: boolean;
   isEnabled: boolean;
   setMetric: (metric: string) => void;
+  disabledView: boolean;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -60,12 +61,17 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                     title={localization.ErrorAnalysis.errorCoverageTitle}
                   />
                 </div>
-                <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
-                    2
-                  )}
-                  %
-                </div>
+                {this.props.disabledView && (
+                  <div className={classNames.valueBlack}>-</div>
+                )}
+                {!this.props.disabledView && (
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
+                      2
+                    )}
+                    %
+                  </div>
+                )}
               </Stack>
             </Stack>
             <svg
@@ -119,21 +125,37 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
                     )}
                   />
                 </div>
-                <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.metricValue.toFixed(2)}
-                  {isRate ? "%" : ""}
-                </div>
+                {this.props.disabledView && (
+                  <div className={classNames.valueBlack}>-</div>
+                )}
+                {!this.props.disabledView && (
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.metricValue.toFixed(2)}
+                    {isRate ? "%" : ""}
+                  </div>
+                )}
               </Stack>
             </Stack>
             <svg width="60" height="60" viewBox="0 0 40 40">
               <g>
-                <Gradient
-                  max={this.props.max}
-                  minPct={this.props.minPct}
-                  value={this.props.selectedCohort.metricValue}
-                  isRate={isRate}
-                  isErrorMetric={this.props.isErrorMetric}
-                />
+                {!this.props.disabledView && (
+                  <Gradient
+                    max={this.props.max}
+                    minPct={this.props.minPct}
+                    value={this.props.selectedCohort.metricValue}
+                    isRate={isRate}
+                    isErrorMetric={this.props.isErrorMetric}
+                  />
+                )}
+                {this.props.disabledView && (
+                  <Gradient
+                    max={0}
+                    minPct={0}
+                    value={0}
+                    isRate={false}
+                    isErrorMetric={false}
+                  />
+                )}
               </g>
             </svg>
           </Stack>

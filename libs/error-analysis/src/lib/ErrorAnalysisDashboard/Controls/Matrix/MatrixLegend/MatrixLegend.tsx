@@ -13,10 +13,11 @@ import { InfoCallout } from "../../InfoCallout/InfoCallout";
 import { matrixLegendStyles } from "./MatrixLegend.styles";
 
 export interface IMatrixLegendProps {
-  selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  max: number;
+  disabledView: boolean;
   isErrorMetric: boolean;
+  max: number;
+  selectedCohort: ErrorCohort;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -49,7 +50,8 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                   />
                 </div>
                 <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.cells === 0
+                  {this.props.selectedCohort.cells === 0 ||
+                  this.props.disabledView
                     ? "-"
                     : this.props.selectedCohort.cells}
                 </div>
@@ -66,12 +68,17 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                     title={localization.ErrorAnalysis.errorCoverageTitle}
                   />
                 </div>
-                <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
-                    2
-                  )}
-                  %
-                </div>
+                {this.props.disabledView && (
+                  <div className={classNames.valueBlack}>-</div>
+                )}
+                {!this.props.disabledView && (
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
+                      2
+                    )}
+                    %
+                  </div>
+                )}
               </Stack>
             </Stack>
             <Stack>
@@ -95,21 +102,37 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                       )}
                     />
                   </div>
-                  <div className={classNames.valueBlack}>
-                    {this.props.selectedCohort.metricValue.toFixed(2)}
-                    {isRate ? "%" : ""}
-                  </div>
+                  {this.props.disabledView && (
+                    <div className={classNames.valueBlack}>-</div>
+                  )}
+                  {!this.props.disabledView && (
+                    <div className={classNames.valueBlack}>
+                      {this.props.selectedCohort.metricValue.toFixed(2)}
+                      {isRate ? "%" : ""}
+                    </div>
+                  )}
                 </Stack>
               </Stack>
               <svg width="60" height="60" viewBox="0 0 40 40">
                 <g>
-                  <Gradient
-                    max={this.props.max}
-                    minPct={0}
-                    value={this.props.selectedCohort.metricValue}
-                    isRate={isRate}
-                    isErrorMetric={this.props.isErrorMetric}
-                  />
+                  {!this.props.disabledView && (
+                    <Gradient
+                      max={this.props.max}
+                      minPct={0}
+                      value={this.props.selectedCohort.metricValue}
+                      isRate={isRate}
+                      isErrorMetric={this.props.isErrorMetric}
+                    />
+                  )}
+                  {this.props.disabledView && (
+                    <Gradient
+                      max={0}
+                      minPct={0}
+                      value={0}
+                      isRate={false}
+                      isErrorMetric={false}
+                    />
+                  )}
                 </g>
               </svg>
             </Stack>
