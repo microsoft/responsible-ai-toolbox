@@ -52,7 +52,7 @@ const modalProps = {
   isBlocking: true
 };
 
-const allDataCopy = "All data copy";
+const allDataCopy = localization.ErrorAnalysis.SaveCohort.defaultLabelCopy;
 
 const textFieldStyles: Partial<ITextFieldStyles> = {
   fieldGroup: { width: 200 }

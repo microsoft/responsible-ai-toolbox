@@ -85,7 +85,7 @@ export interface IErrorAnalysisSetting {
 }
 
 export interface IModelAssessmentSetting {
-  versions: { [key: string]: 1 };
+  versions: { [key: string]: 1 | 2 };
 }
 
 export const applicationKeys = <const>[
@@ -205,6 +205,6 @@ export const applications: IApplications = <const>{
         modelExplanationData: [bostonWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
-    versions: { "Version-1": 1 }
+    versions: { "1": 1, "2:Static-View": 2 }
   }
 };
