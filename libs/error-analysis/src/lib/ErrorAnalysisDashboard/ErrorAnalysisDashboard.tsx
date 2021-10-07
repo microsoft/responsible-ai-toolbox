@@ -181,10 +181,23 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       featureNamesAbridged = featureNames;
     }
     let classNames = props.dataSummary.classNames;
-    const classLength = getClassLength(
-      props.precomputedExplanations,
+    let classLength = 1;
+    if (
+      (props.precomputedExplanations &&
+        (props.precomputedExplanations.localFeatureImportance ||
+          props.precomputedExplanations.globalFeatureImportance)) ||
       props.probabilityY
-    );
+    ) {
+      classLength = getClassLength(
+        props.precomputedExplanations,
+        props.probabilityY
+      );
+    } else if (modelType === ModelTypes.Binary) {
+      classLength = 2;
+    } else if (modelType === ModelTypes.Multiclass) {
+      classLength = new Set([...props.trueY!].concat(props.predictedY!)).size;
+    }
+
     if (!classNames || classNames.length !== classLength) {
       classNames = buildIndexedNames(
         classLength,
