@@ -14,7 +14,8 @@ import {
   Stack,
   Panel,
   ChoiceGroup,
-  IChoiceGroupOption
+  IChoiceGroupOption,
+  Link
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
@@ -29,7 +30,6 @@ import { CohortEditorFilterList } from "./CohortEditorFilterList";
 
 export interface ICohortEditorProps {
   jointDataset: JointDataset;
-  filterList: IFilter[];
   cohortName: string;
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
@@ -38,6 +38,7 @@ export interface ICohortEditorProps {
   onSave: (newCohort: Cohort) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
+  filterList?: IFilter[];
   onDelete?: () => void;
 }
 
@@ -82,8 +83,8 @@ export class CohortEditor extends React.PureComponent<
     super(props);
     this.state = {
       cohortName: this.props.cohortName,
-      filterIndex: this.props.filterList.length,
-      filters: this.props.filterList,
+      filterIndex: this.props.filterList?.length || 0,
+      filters: this.props.filterList || [],
       openedFilter: undefined,
       selectedFilterCategory: undefined,
       showConfirmation: false
@@ -93,7 +94,7 @@ export class CohortEditor extends React.PureComponent<
 
   public render(): React.ReactNode {
     const openedFilter = this.state.openedFilter;
-
+    const styles = cohortEditorStyles();
     return (
       <>
         <Panel
@@ -158,6 +159,14 @@ export class CohortEditor extends React.PureComponent<
                 jointDataset={this.props.jointDataset}
               />
             </Stack.Item>
+            <Stack.Item>
+              <Link
+                className={styles.clearFilter}
+                onClick={this.clearAllFilters}
+              >
+                {localization.Interpret.CohortEditor.clearAllFilters}
+              </Link>
+            </Stack.Item>
           </Stack>
         </Panel>
         {this.renderCancelDialog()}
@@ -213,6 +222,10 @@ export class CohortEditor extends React.PureComponent<
       this.state.cohortName &&
       this.props.existingCohortNames?.includes(this.state.cohortName)
     );
+  };
+
+  private clearAllFilters = (): void => {
+    this.setState({ filters: [] });
   };
 
   private deleteCohort = (): void => {

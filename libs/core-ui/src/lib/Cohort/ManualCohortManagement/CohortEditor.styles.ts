@@ -44,6 +44,7 @@ export interface ICohortEditorStyles {
   closeIcon: IStyle;
   cohortEditor: IStyle;
   saveAndDeleteDiv: IStyle;
+  clearFilter: IStyle;
 }
 
 export const cohortEditorStyles: () => IProcessedStyleSet<ICohortEditorStyles> =
@@ -79,6 +80,9 @@ export const cohortEditorStyles: () => IProcessedStyleSet<ICohortEditorStyles> =
       cancelFilterButton: {
         height: "32px",
         width: "68px"
+      },
+      clearFilter: {
+        color: theme.semanticColors.severeWarningIcon
       },
       closeIcon: {
         alignSelf: "flex-end",
