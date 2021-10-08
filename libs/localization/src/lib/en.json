@@ -281,7 +281,7 @@
       "move": "Move",
       "save": "Save",
       "saveTitle": "Save as a new cohort",
-      "subText": "Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list.",
+      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
       "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
