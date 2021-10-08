@@ -16,7 +16,12 @@ import {
   PrimaryButton,
   TextField,
   SearchBox,
-  Toggle
+  Toggle,
+  TooltipHost,
+  TooltipDelay,
+  DirectionalHint,
+  IconButton,
+  ITooltipProps
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -58,6 +63,20 @@ export class CounterfactualPanel extends React.Component<
   }
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
+    const tooltipProps: ITooltipProps = {
+      onRenderContent: () => (
+        <div className={classes.tooltipWrapper}>
+          <div className={classes.tooltipTitle}>
+            <Text variant="large" className={classes.boldText}>
+              {localization.Counterfactuals.WhatIf.toggleToolTipHeader}
+            </Text>
+          </div>
+          <div className={classes.tooltipHost}>
+            <Text>{localization.Counterfactuals.WhatIf.toggleToolTipBody}</Text>
+          </div>
+        </div>
+      )
+    };
     return (
       <Panel
         isOpen={this.props.isPanelOpen}
@@ -92,6 +111,15 @@ export class CounterfactualPanel extends React.Component<
                 inlineLabel
                 onChange={this.toggleSortFeatures}
               />
+              <TooltipHost
+                tooltipProps={tooltipProps}
+                delay={TooltipDelay.zero}
+                id={WhatIfConstants.whatIfPredictionTooltipIds}
+                directionalHint={DirectionalHint.rightTopEdge}
+                styles={{ root: { display: "inline-block" } }}
+              >
+                <IconButton iconProps={{ iconName: "info" }} />
+              </TooltipHost>
             </Stack>
           </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
