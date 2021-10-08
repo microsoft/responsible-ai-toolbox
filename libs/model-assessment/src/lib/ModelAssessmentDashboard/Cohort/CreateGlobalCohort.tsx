@@ -24,6 +24,7 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
       this.props.visible && (
         <CohortEditor
           jointDataset={this.context.jointDataset}
+          filterList={this.context.baseErrorCohort.cohort.filters}
           cohortName={`${localization.Interpret.Cohort.cohort} ${(
             this.context.errorCohorts.length + 1
           ).toString()}`}

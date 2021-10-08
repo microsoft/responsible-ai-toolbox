@@ -14,7 +14,8 @@ import {
   Stack,
   Panel,
   ChoiceGroup,
-  IChoiceGroupOption
+  IChoiceGroupOption,
+  Link
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
@@ -93,7 +94,7 @@ export class CohortEditor extends React.PureComponent<
 
   public render(): React.ReactNode {
     const openedFilter = this.state.openedFilter;
-
+    const styles = cohortEditorStyles();
     return (
       <>
         <Panel
@@ -158,6 +159,14 @@ export class CohortEditor extends React.PureComponent<
                 jointDataset={this.props.jointDataset}
               />
             </Stack.Item>
+            <Stack.Item>
+              <Link
+                className={styles.clearFilter}
+                onClick={this.clearAllFilters}
+              >
+                {localization.Interpret.CohortEditor.clearAllFilters}
+              </Link>
+            </Stack.Item>
           </Stack>
         </Panel>
         {this.renderCancelDialog()}
@@ -213,6 +222,10 @@ export class CohortEditor extends React.PureComponent<
       this.state.cohortName &&
       this.props.existingCohortNames?.includes(this.state.cohortName)
     );
+  };
+
+  private clearAllFilters = (): void => {
+    this.setState({ filters: [] });
   };
 
   private deleteCohort = (): void => {
