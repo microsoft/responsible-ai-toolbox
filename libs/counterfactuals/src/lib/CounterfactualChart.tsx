@@ -331,7 +331,7 @@ export class CounterfactualChart extends React.PureComponent<
                 <PrimaryButton
                   className={classNames.legendLabel}
                   onClick={this.togglePanel}
-                  disabled={this.state.selectedPointsIndexes[0] === undefined}
+                  disabled={this.disableCounterfactualPanel()}
                   text={
                     this.context.requestPredictions
                       ? localization.Counterfactuals.createWhatIfCounterfactual
@@ -842,6 +842,13 @@ export class CounterfactualChart extends React.PureComponent<
         this.fetchData(editingData);
       }
     }
+  };
+
+  private disableCounterfactualPanel = (): boolean => {
+    return (
+      this.state.selectedPointsIndexes[0] === undefined ||
+      !this.props.data.cfs_list[this.state.selectedPointsIndexes[0]]
+    );
   };
 
   private getDataOptions(): IComboBoxOption[] {
