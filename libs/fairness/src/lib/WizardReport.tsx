@@ -15,6 +15,8 @@ import {
   ActionButton,
   Spinner,
   SpinnerSize,
+  MessageBar,
+  MessageBarType,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
@@ -120,6 +122,16 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
             `Unexpected task type ${this.props.dashboardContext.modelMetadata.PredictionType}.`
           );
         }
+      }
+
+      if (!this.state.metrics.performance) {
+        return (
+          <MessageBar messageBarType={MessageBarType.warning}>
+            <Text>
+              {localization.Fairness.ValidationErrors.missingPerformanceMetric}
+            </Text>
+          </MessageBar>
+        );
       }
 
       const globalPerformanceString = FormatMetrics.formatNumbers(
