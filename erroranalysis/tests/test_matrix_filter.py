@@ -7,8 +7,8 @@ import numpy as np
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT,
-    INTERVAL_MAX, INTERVAL_MIN, MATRIX,
-    VALUES, METRIC_NAME, METRIC_VALUE)
+    INTERVAL_MAX, INTERVAL_MIN, MATRIX, VALUES,
+    METRIC_NAME, METRIC_VALUE, TP, FP, FN)
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from common_utils import (
     create_adult_census_data, create_boston_data, create_iris_data,
@@ -20,11 +20,12 @@ from common_utils import (
     create_wine_data)
 from erroranalysis._internal.constants import (
     ModelTask, TRUE_Y, ROW_INDEX, MatrixParams, Metrics,
-    metric_to_display_name)
+    metric_to_display_name, precision_metrics, recall_metrics)
 from erroranalysis._internal.metrics import metric_to_func
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
+FLOAT64 = 'float64'
 
 
 class TestMatrixFilter(object):
@@ -142,20 +143,30 @@ class TestMatrixFilter(object):
         X_train, X_test, y_train, y_test, feature_names, _ = create_wine_data()
 
         model_task = ModelTask.CLASSIFICATION
-        one_feature_matrix = [feature_names[0]]
-        # validate quantile binning on wine dataset for one and two features
-        # note wine dataset has some cells with zero error in heatmap
-        run_error_analyzer_on_models(X_train, y_train, X_test,
-                                     y_test, feature_names,
-                                     model_task,
-                                     quantile_binning=True,
-                                     matrix_features=one_feature_matrix)
-        two_feature_matrix = [feature_names[0], feature_names[2]]
-        run_error_analyzer_on_models(X_train, y_train, X_test,
-                                     y_test, feature_names,
-                                     model_task,
-                                     quantile_binning=True,
-                                     matrix_features=two_feature_matrix)
+        metrics = [Metrics.ERROR_RATE,
+                   Metrics.MACRO_PRECISION_SCORE,
+                   Metrics.MICRO_PRECISION_SCORE,
+                   Metrics.MACRO_RECALL_SCORE,
+                   Metrics.MICRO_RECALL_SCORE]
+        for metric in metrics:
+            one_feature_matrix = [feature_names[0]]
+            # validate quantile binning on wine dataset for one and two
+            # features note wine dataset has some cells with zero error
+            # in heatmap
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names,
+                                         model_task,
+                                         quantile_binning=True,
+                                         matrix_features=one_feature_matrix,
+                                         metric=metric)
+        for metric in metrics:
+            two_feature_matrix = [feature_names[0], feature_names[2]]
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names,
+                                         model_task,
+                                         quantile_binning=True,
+                                         matrix_features=two_feature_matrix,
+                                         metric=metric)
 
     def test_matrix_filter_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -221,20 +232,26 @@ class TestMatrixFilter(object):
     def test_matrix_filter_boston(self):
         X_train, X_test, y_train, y_test, feature_names = create_boston_data()
 
-        model_task = ModelTask.REGRESSION
-        run_error_analyzer_on_models(X_train, y_train, X_test,
-                                     y_test, feature_names, model_task)
+        metrics = [Metrics.MEAN_SQUARED_ERROR,
+                   Metrics.MEAN_ABSOLUTE_ERROR]
+        for metric in metrics:
+            model_task = ModelTask.REGRESSION
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names, model_task,
+                                         metric=metric)
 
-        # Test with single feature instead of two features
-        run_error_analyzer_on_models(X_train, y_train, X_test,
-                                     y_test, feature_names, model_task,
-                                     matrix_features=[feature_names[0]])
+            # Test with single feature instead of two features
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names, model_task,
+                                         matrix_features=[feature_names[0]],
+                                         metric=metric)
 
-        # Note: Third feature has few unique values, tests code path
-        # without binning data
-        run_error_analyzer_on_models(X_train, y_train, X_test,
-                                     y_test, feature_names, model_task,
-                                     matrix_features=[feature_names[3]])
+            # Note: Third feature has few unique values, tests code path
+            # without binning data
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names, model_task,
+                                         matrix_features=[feature_names[3]],
+                                         metric=metric)
 
     def test_matrix_filter_boston_filters(self):
         X_train, X_test, y_train, y_test, feature_names = create_boston_data()
@@ -275,7 +292,8 @@ def run_error_analyzer_on_models(X_train,
                                  composite_filters=None,
                                  matrix_features=None,
                                  quantile_binning=False,
-                                 num_bins=BIN_THRESHOLD):
+                                 num_bins=BIN_THRESHOLD,
+                                 metric=None):
     if model_task == ModelTask.CLASSIFICATION:
         models = create_models_classification(X_train, y_train)
     else:
@@ -289,7 +307,8 @@ def run_error_analyzer_on_models(X_train,
                            composite_filters=composite_filters,
                            matrix_features=matrix_features,
                            quantile_binning=quantile_binning,
-                           num_bins=num_bins)
+                           num_bins=num_bins,
+                           metric=metric)
 
 
 def run_error_analyzer(model,
@@ -302,13 +321,15 @@ def run_error_analyzer(model,
                        composite_filters=None,
                        matrix_features=None,
                        quantile_binning=False,
-                       num_bins=BIN_THRESHOLD):
+                       num_bins=BIN_THRESHOLD,
+                       metric=None):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
                                    feature_names,
                                    categorical_features,
-                                   model_task=model_task)
+                                   model_task=model_task,
+                                   metric=metric)
     # features, filters, composite_filters
     if matrix_features is None:
         features = [feature_names[0], feature_names[1]]
@@ -336,7 +357,10 @@ def run_error_analyzer(model,
     metric = error_analyzer.metric
     if metric == Metrics.ERROR_RATE:
         expected_error = sum(model.predict(validation_data) != y_test)
-    elif metric == Metrics.MEAN_SQUARED_ERROR:
+    elif (metric == Metrics.MEAN_SQUARED_ERROR or
+          metric == Metrics.MEAN_ABSOLUTE_ERROR or
+          metric in precision_metrics or
+          metric in recall_metrics):
         func = metric_to_func[metric]
         pred_y = model.predict(validation_data)
         expected_error = func(y_test, pred_y)
@@ -391,6 +415,8 @@ def validate_matrix_category(category, reverse_order=True):
 def validate_matrix_metric(matrix, exp_total_count,
                            exp_total_error, metric,
                            num_cat1, num_cat2):
+    is_precision = metric in precision_metrics
+    is_recall = metric in recall_metrics
     if metric == Metrics.ERROR_RATE:
         # take sum of count, false count
         total_count = 0
@@ -405,7 +431,8 @@ def validate_matrix_metric(matrix, exp_total_count,
                 total_false_count += cell_false_count
         assert exp_total_count == total_count
         assert exp_total_error == total_false_count
-    elif metric == Metrics.MEAN_SQUARED_ERROR:
+    elif (metric == Metrics.MEAN_SQUARED_ERROR or
+          metric == Metrics.MEAN_ABSOLUTE_ERROR):
         # take sum of count, metric value
         total_count = 0
         total_metric_value = 0
@@ -421,6 +448,57 @@ def validate_matrix_metric(matrix, exp_total_count,
                 metric_name = matrix[MATRIX][i][j][METRIC_NAME]
                 assert metric_name == metric_to_display_name[metric]
         total_metric_value = total_metric_value / total_count
+        assert exp_total_count == total_count
+        assert abs(exp_total_error - total_metric_value) < TOLERANCE
+    elif is_precision or is_recall:
+        # compute the overall metric from the data in each of the cells
+        total_count = 0
+        total_metric_value = 0
+        cell_tp_value = None
+        cell_fp_value = None
+        cell_fn_value = None
+        for i in range(num_cat1):
+            for j in range(num_cat2):
+                count = matrix[MATRIX][i][j][COUNT]
+                assert count >= 0
+                total_count += count
+                cell_metric_value = matrix[MATRIX][i][j][METRIC_VALUE]
+                assert cell_metric_value >= 0
+                if cell_tp_value is None:
+                    cell_tp_value = np.array(matrix[MATRIX][i][j][TP],
+                                             dtype=FLOAT64)
+                else:
+                    cell_tp_value += np.array(matrix[MATRIX][i][j][TP],
+                                              dtype=FLOAT64)
+                if is_precision:
+                    if cell_fp_value is None:
+                        cell_fp_value = np.array(matrix[MATRIX][i][j][FP],
+                                                 dtype=FLOAT64)
+                    else:
+                        cell_fp_value += np.array(matrix[MATRIX][i][j][FP],
+                                                  dtype=FLOAT64)
+                elif is_recall:
+                    if cell_fn_value is None:
+                        cell_fn_value = np.array(matrix[MATRIX][i][j][FN],
+                                                 dtype=FLOAT64)
+                    else:
+                        cell_fn_value += np.array(matrix[MATRIX][i][j][FN],
+                                                  dtype=FLOAT64)
+                metric_name = matrix[MATRIX][i][j][METRIC_NAME]
+                assert metric_name == metric_to_display_name[metric]
+        tp_sum = cell_tp_value.sum()
+        if metric == Metrics.MICRO_PRECISION_SCORE:
+            total_metric_value = tp_sum / (tp_sum + cell_fp_value.sum())
+        elif metric == Metrics.MICRO_RECALL_SCORE:
+            total_metric_value = tp_sum / (tp_sum + cell_fn_value.sum())
+        elif metric == Metrics.MACRO_PRECISION_SCORE:
+            per_class_metrics = cell_tp_value / (cell_tp_value + cell_fp_value)
+            num_classes = len(per_class_metrics)
+            total_metric_value = per_class_metrics.sum() / num_classes
+        elif metric == Metrics.MACRO_RECALL_SCORE:
+            per_class_metrics = cell_tp_value / (cell_tp_value + cell_fn_value)
+            num_classes = len(per_class_metrics)
+            total_metric_value = per_class_metrics.sum() / num_classes
         assert exp_total_count == total_count
         assert abs(exp_total_error - total_metric_value) < TOLERANCE
     else:

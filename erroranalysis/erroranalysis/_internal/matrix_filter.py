@@ -342,7 +342,8 @@ class _AggFunc(_BaseAggFunc):
 class _MultiMetricAggFunc(_BaseAggFunc):
     def __init__(self, aggfunc, labels):
         super(_MultiMetricAggFunc, self).__init__(aggfunc)
-        if len(labels) == 2:
+        self.num_labels = len(labels)
+        if self.num_labels == 2:
             # for binary classification case, choose positive class label
             self.labels = [labels[1]]
         else:
@@ -371,12 +372,15 @@ class _MultiMetricAggFunc(_BaseAggFunc):
 
     def _agg_func_triplet(self, pair):
         if pair.empty:
-            return (0, [0], [0], [0], [0], 0)
+            return self._fill_na_value()
         (true_y, pred_y) = zip(*pair.values.tolist())
         return self._multi_metric_result(true_y, pred_y)
 
     def _fill_na_value(self):
-        return (0, [0], [0], [0], [0], 0)
+        zero_array = [0]
+        if self.num_labels > 2:
+            zero_array = zero_array * self.num_labels
+        return (0, zero_array, zero_array, zero_array, zero_array, 0)
 
 
 def matrix_2d(categories1, categories2, matrix_counts,
