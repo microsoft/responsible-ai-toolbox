@@ -124,7 +124,11 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         }
       }
 
-      if (!this.state.metrics.performance) {
+      if (
+        !this.state.metrics.performance ||
+        !this.state.metrics.outcomes ||
+        !this.state.metrics.disparities
+      ) {
         return (
           <MessageBar messageBarType={MessageBarType.warning}>
             <Text>
