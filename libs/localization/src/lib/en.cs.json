@@ -1,49 +1,49 @@
 {
   "CausalAnalysis": {
     "AggregateView": {
-      "binary": "Binary treatments: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.",
-      "causalPoint": "Causal effect point",
-      "confidenceLower": "Confidence interval (lower)",
-      "confidenceUpper": "Confidence interval (upper)",
-      "confoundingFeature": "A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.",
-      "continuous": "Continuous treatments: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
-      "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
+      "binary": "Binární léčby: ",
+      "binaryDescription": "V průměru v této ukázce zapnutí této funkce způsobí zvýšení pravděpodobnosti, že se třída nebo popisek 1 zvýší o tento počet jednotek: X.",
+      "causalPoint": "Bod kauzálního efektu",
+      "confidenceLower": "Interval spolehlivosti (nižší)",
+      "confidenceUpper": "Interval spolehlivosti (horní)",
+      "confoundingFeature": "Současně působící faktor koreluje s léčbou a s výstupem zkoumání. Současně působící faktor vytváří nad rámec přímého důsledku další korelační cestu od léčby k výsledku. Pokud nejsou současně působící faktory zahrnuté a zohledněné v modelu, tyto další korelace můžou způsobit odchylku v odhadovaných důsledcích. Odchylka může být kladná i záporná v závislosti na směru korelací mezi vynechanými současně působícími faktory, léčbami a výstupy.",
+      "continuous": "Průběžné léčby: ",
+      "continuousDescription": "V průměru v tomto vzorku zvýšení této funkce o 1 jednotku způsobí, že se pravděpodobnost třídy nebo popisku 1 zvýší o tento počet jednotek: X.",
+      "description": "Analýza příčin odpovídá na otázky typu: Co kdyby? a popisuje, jak by se v reálném světe změnily výstupy v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Na rozdíl od modelových predikcí, které rozpoznávají důležité korelační vzorce vám tyto nástroje pomůžou rozpoznat nejdůležitější příčiny, které mají přímý vliv na výstupy faktoru, který vás zajímá. Tyto modely rozpoznávají důsledky jediného faktoru, zatímco ostatní současně působící faktory zůstávají konstantní. Ujistěte se, že zahrnujete širokou sadu faktorů, které by mohly korelovat s výstupem jakožto současně působící faktory.",
       "directAggregate": "Přímý agregát důsledků jednotlivých ošetření v 95% intervalu spolehlivosti",
       "here": "tady",
-      "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
-      "unconfounding": "What are confounding features?"
+      "lasso": "Laso (nebo logistická regrese, pokud je y binární) bylo vhodné pro předpověď y z X[-i] a laso (nebo logistické regrese, pokud je X[i] kategorické) bylo vhodné predikovat X[i] z Χ [-i]. Kauzální účinek lze zobrazit jako průměrnou korelaci reziduí nebo překvapivé odchylky dvou úloh předpovědi. Další informace o dvojitém strojovém učení",
+      "unconfounding": "Co jsou zavádějící funkce?"
     },
     "IndividualView": {
-      "currentOutcome": "Current outcome",
+      "currentOutcome": "Aktuální výsledek",
       "currentTreatment": "Aktuální hodnota ošetření",
       "dataRequired": "Tato karta vyžaduje výběr datového bodu.",
       "datapointIndex": "Index datového bodu",
-      "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
+      "description": "Jednotlivé kauzální účinky mohou informovat přizpůsobené zákroky, jako je cílová propagace zákazníkům nebo plán individuální léčby. Jak by jednotlivec s určitou sadou funkcí reagoval na změnu v příčinné funkci nebo v léčbě?  Pokud změníte úroveň léčby, příčinný nástroj citlivostní analýzy počítá mezní změny v reálných výsledcích konkrétního jednotlivce, pokud změníte jejich úroveň léčby. Tato analýza vám umožní pochopit, jak by se reálné výsledky změnily v rámci různých voleb zásad, jako je například jiná cenová strategie pro produkt nebo alternativní léčba pacienta. Určete léčbu, která vás zaujala a sledujte, jak by se změnil skutečný výsledek.",
       "directIndividual": "Přímý individuální důsledek jednotlivých ošetření v 95% intervalu spolehlivosti",
       "index": "Index datového bodu",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
-      "newOutcome": "New outcome",
+      "newOutcome": "Nový výsledek",
       "selectTreatment": "Vyberte ošetření",
       "setNewTreatment": "Nastavení nové hodnoty ošetření",
-      "treatmentValue": "Treatment value min: {0} ({1}) , max: {2} ({3})"
+      "treatmentValue": "Minimální hodnota léčiva: {0} ({1}), max. {2} ({3})"
     },
     "MainMenu": {
       "aggregate": "Agregace důsledků",
-      "cohortInfo": "Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data.",
+      "cohortInfo": "Globální kohorty se v současné době pro kauzální analýzu nepodporují. Všechny kauzální analýzy se zobrazí pro všechna data.",
       "header": "analýza příčin",
-      "individual": "Individual causal what-if",
+      "individual": "Jednotlivé příčiny citlivostní analýzy",
       "learnMore": "Další informace",
       "title": "Přímý důsledek jednotlivých faktorů v 90% intervalu spolehlivosti",
       "treatment": "Zásady ošetření",
-      "why": "Why is it important to include confounding features?"
+      "why": "Proč je důležité zahrnout zavádějící funkce?"
     },
     "TreatmentPolicy": {
-      "BarDescriptionBinary": "This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.",
-      "BarDescriptionContinuous": "This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.",
-      "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
-      "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
+      "BarDescriptionBinary": "Tento graf ukazuje průměrné nárůsty různých zásad léčby vzhledem k základnímu stavu, kdy se léčba {0} neposkytuje komukoli ve vaší populaci.",
+      "BarDescriptionContinuous": "Tento graf ukazuje průměrné nárůsty různých zásad léčby vzhledem k základnímu stavu, kdy se neprovádí žádné úpravy aktuálních testovacích hodnot, které se přidělují všem ve vaší populaci.",
+      "BarTextBinary": "První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Nahlášené zisky hlásí číselnou změnu v léčby, které jsme použili. Druhý pruh označuje relativní zisky (nebo ztráty) při zacházeli se všemi tím, že zapnete binární léčby.",
+      "BarTextContinuous": "První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Hlášené nárůsty odrážejí zvýšení nebo snížení příznaku léčby o 10 % typické velikosti léčiva ve vzorku. Druhý pruh označuje relativní nárůsty (nebo ztráty) z rostoucího nebo sestupného průběžného zpracování o 10 %.",
       "Description": "Tyto nástroje pomáhají vytvářet zásady pro budoucí intervence. Můžete identifikovat, u kterých částí vašeho vzorového prostředí dochází k největší odezvě na příčinnou jednotku (ošetření) nebo vytvořit pravidla na definování budoucích populací, které budou mít největší efekt na ošetření.",
       "Left": "{0} <= {1}",
       "Recommended": "Doporučené ošetření = {0}",
@@ -51,13 +51,13 @@
       "SelectPolicy": "Nastavit funkci ošetření",
       "Size": "Doporučená interpretovatelná zásada globálního ošetření u vzorové velikosti (n) = {0}",
       "Table": "Tabulka se dá přečíst, když se zaměříte na libovolný řádek a pak na sloupec u vybraného řádku.",
-      "TableDescription": "This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.",
+      "TableDescription": "Tato tabulka zobrazuje doporučenou zásadu léčby, která se dá použít pro aktuální výběr dat nebo pro jiné populace. Tabulka poskytuje jednoduché pravidlo pro segmentování pozorování kohort dat na základě funkcí s největším vlivem na to, zda osoba odpoví na vybranou léčbu. Tabulka také určuje počet datových bodů v aktuální ukázce dat, který je přiřazený ke každému segmentu.",
       "alwaysTreat": "Vždy ošetřit {0}",
-      "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
-      "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
-      "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "averageGainBinary": "Průměrné nárůsty nastavení léčby {0} na jeho základní hodnotu {1}.",
+      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "header": "Tyto nástroje pomáhají vytvářet zásady pro budoucí intervence. Můžete zjistit, které části vašeho ukázkového prostředí mají největší odpovědi na změny příčinných funkcí nebo léčeb, a vytvořit pravidla, která definují, které budoucí populace by měly být určeny pro konkrétní intervence.",
       "nSample": "n = {0}",
-      "noData": "No data"
+      "noData": "Žádná data"
     }
   },
   "Core": {
@@ -75,50 +75,54 @@
       "gte": "{0} >= {1}",
       "eq": "{0} == {1}",
       "ne": "{0} != {1}",
-      "in": "{0} in the set of ({1})",
-      "nin": "{0} not in the set of ({1})",
-      "rg": "{0} in the range of ({1})",
-      "nrg": "{0} in the range of ({1})",
-      "Unknown": "unknown"
+      "in": "{0} v sadě ({1})",
+      "nin": "{0} není v sadě ({1})",
+      "rg": "{0} v rozsahu ({1})",
+      "nrg": "{0} v rozsahu ({1})",
+      "Unknown": "neznámé"
     }
   },
   "Counterfactuals": {
-    "CurrentTreatment": "Current treatment",
+    "CurrentTreatment": "Aktuální léčba",
     "EffectLowerBound": "Dolní interval spolehlivosti",
-    "EffectOfTreatment": "Effect of recommendation",
+    "EffectOfTreatment": "Vliv doporučení",
     "EffectUpperBound": "Horní interval spolehlivosti",
     "RecommendedTreatment": "Doporučené ošetření",
     "WhatIf": {
-      "setValue": "Set Value",
-      "sortFeatures": "Sort feature columns by counterfactual feature importance"
+      "setValue": "Nastavit hodnotu",
+      "sortFeatures": "Seřadit sloupce funkcí podle důležitosti funkce protifaktoru",
+      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
+      "toggleToolTipHeader": "Ranked counterfactual features"
     },
-    "counterfactualEx": "Counterfactual Ex {0}",
+    "counterfactualEx": "Př. protifaktoru {0}",
     "counterfactualName": "Název protifaktoru citlivostní analýzy",
-    "createCounterfactual": "Vytvořit protifaktory citlivostní analýzy",
-    "createOwn": "Create your own counterfactual:",
+    "createWhatIfCounterfactual": "Create what-if counterfactual",
+    "createCounterfactual": "Counterfactual",
+    "createOwn": "Vytvořte si vlastní protifaktoru:",
     "currentClass": "Aktuální třída",
     "decreaseByOne": "Snížit hodnotu o 1",
     "desiredClass": "Požadovaná třída protifaktorů",
-    "header": "What-If counterfactuals",
+    "header": "Protifaktory citlivostní analýzy",
     "increaseByOne": "Zvýšit hodnotu o 1",
     "individualTreatment": "Doporučená zásada individuálního ošetření",
     "listChoose": "Požadované hlavní vzorky si můžete zobrazit prostřednictvím ovládacího prvku rotujícího indikátoru průběhu.",
-    "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
-    "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
-    "localImportanceSelectData": "Select a data point to view local importance chart",
+    "listDescription": "Tento seznam ukazuje, které datové body v aktuálním vzorku dat mají největší kauzální odezvu na zvolenou léčbu, na základě všech vlastností obsažených v odhadovaném kauzálním modelu. Levých pět sloupců uvádí, zda se doporučuje léčbu sledovat, současnou léčbu, odhadovaný účinek léčby (účinek aplikace léčby od výchozí hodnoty bez léčby pro binární léčby nebo zvýšení nebo snížení hodnoty funkce léčby o 10% typických velikostí léčiva ve vzorku: [dynamická: uveďte numerickou změnu v léčbě, kterou jsme použili]) a dolní a horní intervaly spolehlivosti (CI) pro tento efekt. Zbývající sloupce ukazují aktuální stav léčby a další funkce každého pozorování.",
+    "localImportanceDescription": "Funkce s nejvyšším pořadím v řádku {0} perturb, aby se dosáhlo požadované predikce modelu. Na základě citlivostní analýzy pro predikci: {1}",
+    "localImportanceSelectData": "Výběrem datového bodu zobrazíte graf místní důležitosti.",
     "noData": "Žádná data",
-    "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "panelHeader": "Protifaktory citlivostní analýzy",
+    "noFeatures": "Nejsou k dispozici žádné funkce.",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "whatIfPanelHeader": "What-if counterfactuals",
+    "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Přírůstek doporučené zásady",
-    "referenceDatapoint": "Reference datapoint: Row {0}",
+    "referenceDatapoint": "Referenční datový bod: řádek {0}",
     "saveAsNew": "Uložit jako nový datový bod",
-    "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
+    "saveDescription": "Tyto protifaktory jsou založeny na predikci modelu, a proto mohou zachycovat stejné korelace, jaké zachytil model. Nedoporučujeme uživatelům, aby se na základě tohoto nástroje rozhodovali v reálném životě. Použijte naši sadu nástrojů pro kauzální analýzu scénářů rozhodování v reálném životě.",
     "seePrediction": "Zobrazit podrobnosti predikce",
     "selectedDatapoint": "Vybraný datový bod",
     "showOnly": "Zobrazit jenom",
-    "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
-    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot."
+    "showTop": "Datové body s největšími odhadovanými příčinami reakce na zpracování funkce: {0}",
+    "whatifDescription": "Citlivostní analýza vám umožní provést perturbaci funkcí u jakéhokoli vstupu a pozorovat, jak se predikce modelu budou měnit. Funkce můžete perturbovat ručně, nebo můžete zadat požadované predikce (např. třídu popisku u klasifikátoru) a zobrazit si tak seznam nejbližších datových bodů k původnímu vstupu, které povedou k požadované predikci. V případě takzvaných protifaktorů predikce je můžete použít k prozkoumání vztahů, které se model naučil, nebo k porozumění důležitých, nezbytných funkcí pro předpovědi modelu, nebo k ladění krajních případů modelu. Když budete chtít začít, zvolte vstupní body z datové tabulky nebo bodového diagramu."
   },
   "ErrorAnalysis": {
     "Cohort": {
@@ -147,6 +151,17 @@
     "FeatureList": {
       "features": "Atributy",
       "importances": "Významné prvky"
+    },
+    "TreeViewParameters": {
+      "maximumDepth": "Maximum depth",
+      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
+      "maximumDepthTitle": "Additional information on maximum depth",
+      "numLeaves": "Number of leaves",
+      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
+      "numLeavesTitle": "Additional information on number of leaves",
+      "minDataInLeaf": "Minimum number of samples in one leaf",
+      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
+      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
     "FilterTooltip": {
       "correctNum": "Správně (#):",
@@ -192,18 +207,22 @@
       "emptyText": "Vyberte dva atributy pomocí rozbalovacích nabídek výše. Data můžete seskupovat a filtrovat podle dvou dimenzí.",
       "selectAll": "Vybrat vše"
     },
+    "MatrixFilter": {
+      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+    },
     "MatrixSummary": {
-      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+      "heatMapDescription": "S heat mapou se můžete zaměřit na konkrétní průnikové filtry funkcí a vypočítat členěné míry chyb. Začněte se dvěma funkcemi datové sady, které můžete porovnat.",
+      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
     },
     "MatrixOptions": {
-      "quantileBinningLabel": "Quantile binning",
-      "binningThresholdLabel": "Binning threshold",
-      "toggleOnLabel": "On",
-      "toggleOffLabel": "Off",
-      "quantileBinningInfoText": "Distribute values evenly across varying ranges of bins",
-      "quantileBinningTitle": "Additional information on quantile binning",
-      "binningThresholdInfoText": "Number of values required before binning",
-      "binningThresholdTitle": "Additional information on binning threshold"
+      "quantileBinningLabel": "Kvantilové kvantování",
+      "binningThresholdLabel": "Prahová hodnota kvantování",
+      "toggleOnLabel": "Zapnuto",
+      "toggleOffLabel": "Vypnuto",
+      "quantileBinningInfoText": "Rovnoměrně rozmístit hodnoty v různých rozsazích intervalů",
+      "quantileBinningTitle": "Další informace o kvantilovém kvantování",
+      "binningThresholdInfoText": "Počet požadovaných hodnot před kvantováním",
+      "binningThresholdTitle": "Další informace o prahové hodnotě binningu"
     },
     "Metrics": {
       "errorRate": "Chybovost",
@@ -217,8 +236,35 @@
       "meanSquaredErrorInfo": "Střední kvadratická chyba představuje průměr druhých mocnin chyb.",
       "meanSquaredErrorShort": "Střední kvadratická chyba",
       "meanSquaredErrorTitle": "Další informace o střední kvadratické chybě (MSE)",
+      "precision": "Precision score",
+      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
+      "precisionShort": "Precision",
+      "precisionTitle": "Additional information on precision",
+      "recall": "Recall score",
+      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
+      "recallShort": "Recall",
+      "recallTitle": "Additional information on recall",
+      "macroPrecision": "Macro averaged precision score",
+      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+      "macroPrecisionShort": "Macro precision",
+      "macroPrecisionTitle": "Additional information on macro averaged precision",
+      "microPrecision": "Micro averaged precision score",
+      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+      "microPrecisionShort": "Micro precision",
+      "microPrecisionTitle": "Additional information on micro averaged precision",
+      "macroRecall": "Macro averaged recall score",
+      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+      "macroRecallShort": "Macro recall",
+      "macroRecallTitle": "Additional information on macro averaged recall",
+      "microRecall": "Micro averaged recall score",
+      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+      "microRecallShort": "Micro recall",
+      "microRecallTitle": "Additional information on micro averaged recall",
       "metricName": "Název metriky",
       "metricValue": "Hodnota metriky"
+    },
+    "MetricSelector": {
+      "selectorLabel": "Select metric"
     },
     "Navigation": {
       "dataExplorer": "Průzkumník dat",
@@ -234,10 +280,13 @@
       "move": "Přesunout",
       "save": "Uložit",
       "saveTitle": "Uložit jako novou kohortu",
-      "subText": "Uložit aktuální kohortu do seznamu kohort. Uloženou kohortu můžete znovu navštívit prostřednictvím seznamu kohort."
+      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
+      "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Configure error explorer.\""
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
+      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Citlivostní analýza"
@@ -267,6 +316,10 @@
     "whatIfDatapoints": "Datové body citlivostní analýzy"
   },
   "Fairness": {
+    "ValidationErrors": {
+      "missingPerformanceMetric": "No performance metric found.",
+      "missingFairnessMetric": "No fairness metric found."
+    },
     "BinDialog": {
       "cancel": "Zrušit",
       "categoryHeader": "Hodnoty intervalů:",
@@ -276,18 +329,18 @@
       "save": "Uložit"
     },
     "DropdownHeaders": {
-      "errorMetric": "Enable error bars",
+      "errorMetric": "Povolit chybové úsečky",
       "fairnessMetric": "Metrika nestrannosti",
       "performanceMetric": "Metrika výkonu",
       "sensitiveFeature": "Citlivý údaj"
     },
     "ErrorBounds": {
-      "howToRead": "How to read these error bars",
-      "introModalText1": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ",
-      "wilsonScores": "Wilson scores",
-      "introModalText2": " (for binary classification) or ",
-      "normalApproximation": "normal approximation",
-      "introModalText3": " (for other tasks)."
+      "howToRead": "Jak číst tyto chybové úsečky",
+      "introModalText1": "Chybové úsečky ukazují nejistotu v hodnotách metriky z důvodu velikosti sady dat vyhodnocení. Zobrazujeme 95% intervaly spolehlivosti vypočítané pomocí ",
+      "wilsonScores": "Wilson skóre",
+      "introModalText2": " (pro binární klasifikaci) nebo ",
+      "normalApproximation": "normální aproximace",
+      "introModalText3": " (pro jiné úkoly)."
     },
     "Fairness": {
       "body": "Metriky nestrannosti kvantifikují variaci chování modelu napříč vybranými atributy. Existuje několik druhů metrik nestrannosti, které jsou založeny na různých metrikách výkonu. Zachycují buď rozdíl nebo poměr mezi extrémními hodnotami napříč skupinami, nebo jednoduše nejhorší hodnotu ze všech skupin.",
@@ -604,6 +657,7 @@
       "datasetCohorts": "Kohorty datové sady",
       "details": "Podrobnosti",
       "duplicateCohort": "Duplikovat",
+      "edit": "Edit",
       "editCohort": "Upravit kohortu",
       "features": "{0} atrinbuty",
       "filters": "Filtry: {0}",
@@ -614,7 +668,7 @@
     "CohortEditor": {
       "TreatAsCategorical": "Považovat za kategorické",
       "addFilter": "Přidat filtr",
-      "addedFilters": "Filters",
+      "addedFilters": "Filtry",
       "cancel": "Zrušit",
       "cancelExistingCohort": "Opravdu chcete zrušit úpravy nové kohorty a vrátit se zpět?",
       "cancelNewCohort": "Opravdu chcete zrušit vytváření nové kohorty a vrátit se zpět?",
@@ -624,9 +678,10 @@
       "cohortNameError": "Chybí název kohorty",
       "cohortNameLabel": "Název kohorty datové sady",
       "cohortNamePlaceholder": "Pojmenujte svou kohortu.",
-      "defaultFilterState": "Pokud chcete do kohorty datové sady přidat parametry, vyberte filtr.",
+      "clearAllFilters": "Clear all filters",
+      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Odstranit",
-      "noAddedFilters": "No filters",
+      "noAddedFilters": "Žádné filtry",
       "placeholderName": "Kohorta {0}",
       "save": "Uložit",
       "selectFilter": "Vybrat filtr"
@@ -644,20 +699,20 @@
       "truePositive": "Pravdivě pozitivní"
     },
     "CrossClass": {
-      "absoluteValInfo": "Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes",
+      "absoluteValInfo": "Průměr absolutní hodnoty: Udává součet důležitosti příznaku ve všech možných třídách vydělený počtem tříd.",
       "close": "Zavřít",
       "crossClassWeights": "Váhy mezi třídami",
-      "enumeratedClassInfo": "Enumerated class names: Shows only the specified class's feature importance values across all data points.",
+      "enumeratedClassInfo": "Výčet názvů tříd: Zobrazuje pouze hodnoty významnosti atributu zadané třídy napříč všemi datovými body.",
       "info": "Informace o výpočtu mezi třídami",
       "label": "Váhy mezi třídami:",
-      "overviewInfo": "Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:",
+      "overviewInfo": "Modely s více třídami generují nezávislý vektor důležitosti pro každou třídu. Vektor důležitosti funkcí každé třídy ukazuje, které funkce způsobily, že třída je pravděpodobnější nebo méně pravděpodobná. Můžete vybrat, jak budou váhy vektorů důležitosti funkcí jednotlivých tříd shrnuty do jediné hodnoty:",
       "predictedClassInfo": "Predikovaná třída: Udává hodnotu významnosti atributu pro předpokládanou třídu daného bodu"
     },
     "DatasetExplorer": {
       "aggregatePlots": "Agregované diagramy",
       "chartType": "Typ grafu",
       "colorValue": "Hodnota barvy",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.",
+      "helperText": "Vytvářejte kohorty datových sad, které analyzují statistiky datové sady podle filtrů, jako jsou předpokládané výsledky, funkce datových sad a skupiny chyb. Přečtěte si o nadměrném nebo nedostatečném zastoupení ve vaší datové sadě.",
       "individualDatapoints": "Jednotlivé datové body",
       "missingParameters": "Tato karta vyžaduje zadání datové sady pro vyhodnocení.",
       "noColor": "Žádné"
@@ -685,13 +740,13 @@
       "clickHere": "Další informace",
       "limeDescription": "Tento nástroj pro vysvětlení používá vysvětlení LIME, které nabízí lineární aproximaci modelu. Abyste získali vysvětlení, je třeba provést tyto kroky: perturbace instance, získání predikcí modelu a využití těchto predikcí jako popisků, abychom si osvojili zhuštěný, místně věrohodný lineární model. Váhy tohoto lineárního modelu se používají jako „významnosti atributů“. Další informace získáte kliknutím na odkaz uvedený níže.",
       "limeTitle": "LIME (Local Interpretable Model-Agnostic Explanations)",
-      "mimicDescription": "This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).",
+      "mimicDescription": "Toto vysvětlení je založeno na myšlence trénovat globální náhradní modely tak, aby napodobovaly modely černé skříňky. Globální náhradní model je vnitřně interpretovatelný model, který je natrénovaný tak, aby co nejpřesněji aproximoval předpovědi jakéhokoli modelu typu černá skříňka. Hodnoty významnosti atributů jsou hodnoty důležitosti funkce založené na modelu vašeho podkladového náhradního modelu (LightGBM, nebo lineární regrese, nebo metoda Stochastic Gradient Descent, nebo rozhodovací strom).",
       "mimicTitle": "Napodobení (globální náhradní vysvětlení)",
       "pfiDescription": "Tento nástroj pro vysvětlení náhodně přeuspořádá data pro celou datovou sadu po jednotlivých atributech a vypočítá, jak moc se mění zkoumaná metrika výkonu (výchozí metriky výkonu: F1 pro binární klasifikaci, skóre F1 s mikroprůměrem pro klasifikaci s více třídami a střední absolutní chyba pro regresi). Čím větší bude změna, tím důležitější atribut je. Tento nástroj pro vysvětlení dokáže vysvětlit jen celkové chování základního modelu, nevysvětluje jednotlivé predikce. Hodnota významnosti atributu pro daný atribut představuje rozdíl ve výkonu modelu perturbací onoho daného atributu.",
       "pfiTitle": "Důležitost atributů permutace (PFI)",
       "shapDescription": "Tento nástroj pro vysvětlení používá SHAP. To je přístup pro vysvětlování modelů založený na teorii her, u kterého se důležitost sad atributů měří „skrýváním“ těchto atributů před modelem prostřednictvím marginalizace. Další informace získáte kliknutím na odkaz uvedený níže.",
       "shapTitle": "Hodnoty Shapley",
-      "whatDoFeatureMean": "What do these feature importance values mean?"
+      "whatDoFeatureMean": "Co znamenají tyto hodnoty důležitosti funkcí?"
     },
     "FeatureImportanceWrapper": {
       "barText": "Sloupec",
@@ -733,19 +788,21 @@
       "helperText": "Prozkoumejte hlavní významné atributy K, které mají vliv na celkové predikce modelu. Pomocí posuvníku můžete zobrazit významnost atributů v sestupném pořadí."
     },
     "GlobalTab": {
+      "absoluteValues": "Absolute values",
       "aggregateFeatureImportance": "Význam agregovaného atributu",
       "collapsedHelperText": "Prozkoumejte hlavní významné atributy, které ovlivňují celkové predikce modelu.",
+      "datapoint": "Datapoint",
       "datasetCohortSelector": "Vyberte kohortu datové sady",
       "datasetCohorts": "Kohorty datové sady",
       "datasetRequired": "Závislostní diagramy vyžadují datovou sadu pro vyhodnocení a pole významnosti místních atributů.",
       "dependencePlotFeatureSelectPlaceholder": "Vyberte atribut",
-      "dependencePlotHelperText": "This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.",
+      "dependencePlotHelperText": "Tento znázornění závislosti zobrazuje vztah hodnot funkce s odpovídajícími hodnotami důležitosti funkce.",
       "dependencePlotTitle": "Závislostní diagramy",
-      "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
+      "helperText": "Prozkoumejte nejdůležitější funkce, které ovlivňují celkové predikce modelů (nebo také globální vysvětlení). Pomocí posuvníku zobrazte důležitosti funkcí sestupně. Všechny důležitosti funkcí kohorty se zobrazují vedle sebe a je možné je vypnout výběrem kohorty v legendě. Kliknutím na některý z prvků v grafu zobrazíte graf hustoty ukazující, jak hodnoty vybraného prvku ovlivňují předpověď.",
       "legendHelpText": "Kliknutím na položky legendy v diagramu můžete zapínat nebo vypínat kohorty.",
       "missingParameters": "Tato karta vyžaduje, aby se zadal parametr významnosti místního příznaku.",
       "sortBy": "Řadit podle",
-      "topAtoB": "Top {0} features by their importance",
+      "topAtoB": "Hlavní {0} funkce podle důležitosti",
       "viewDependencePlotFor": "Zobrazit závislostní diagram pro:",
       "weightOptions": "Váhy důležitosti tříd"
     },
@@ -768,7 +825,7 @@
     },
     "ModelPerformance": {
       "cohortPickerLabel": "Vyberte kohortu datové sady, kterou chcete prozkoumat.",
-      "helperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.",
+      "helperText": "Vyhodnoťte výkon modelu tím, že prozkoumáte distribuci hodnot predikce a hodnot metrik výkonu modelu. Podrobněji můžete model prozkoumat tak, že se podíváte na srovnávací analýzu výkonu mezi různými kohortami nebo podskupinami v datové sadě. Pro informace v různých dimenzích použijte filtry pro hodnoty x a y.",
       "missingParameters": "Tato karta vyžaduje zadání pole predikovaných hodnot z modelu.",
       "missingTrueY": "Statistika výkonu modelu vyžaduje, aby se kromě predikovaných výsledků zadaly i skutečné výsledky",
       "modelStatistics": "Statistika modelu"
@@ -783,8 +840,8 @@
     },
     "Statistics": {
       "accuracy": "Úspěšnost: {0}",
-      "fnr": "False Negative Rates: {0}",
-      "fpr": "False Positive Rates: {0}",
+      "fnr": "Míra falešně negativních výsledků: {0}",
+      "fpr": "Míra falešně pozitivních výsledků: {0}",
       "meanPrediction": "Střední predikce: {0}",
       "mse": "MSE: {0}",
       "precision": "Přesnost: {0}",
@@ -829,7 +886,7 @@
       "featureImportanceLackingParameters": "Pokud si chcete zobrazit, jak každý atribut ovlivňuje jednotlivé predikce, zadejte významnost místních atributů.",
       "featureImportancePlot": "Diagram významnosti atributu",
       "featureValues": "Hodnoty atributu",
-      "helperText": "Select an individual datapoint by clicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.",
+      "helperText": "Vyberte jednotlivý datový bod kliknutím na datový bod v bodovém diagramu a zobrazte níže hodnoty významnosti místního atributu a hodnoty atributu na panelu vpravo.",
       "iceLackingParameters": "Aby bylo možné provádět predikce hypotetických datových bodů, diagramy ICE vyžadují zprovozněný model.",
       "icePlot": "Diagram jednotlivých podmíněných očekávání (ICE)",
       "icePlotHelperText": "Diagramy ICE ukazují, jak se hodnoty predikcí vybraného datového bodu mění v rozsahu mezi maximální a minimální hodnotou atributu.",
@@ -891,7 +948,7 @@
     "modelPerformance": "Výkon modelu",
     "perturbationExploration": "Průzkum perturbace",
     "predictedClass": "Predikovaná třída",
-    "selectPoint": "Select a point to see its local explanation",
+    "selectPoint": "Pokud chcete zobrazit místní vysvětlení bodu, vyberte daný bod.",
     "summaryImportance": "Důležitost souhrnu"
   },
   "ModelAssessment": {
@@ -902,26 +959,28 @@
     },
     "CausalAnalysis": {
       "Table": {
-        "ciLower": "Confidence interval (lower)",
-        "ciUpper": "Confidence interval (upper)",
-        "name": "Feature",
-        "pValue": "P-value",
-        "point": "Effect estimate",
-        "stderr": "Standard error",
-        "zstat": "Z-score"
+        "ciLower": "Interval spolehlivosti (nižší)",
+        "ciUpper": "Interval spolehlivosti (horní)",
+        "name": "Atribut",
+        "pValue": "P-hodnota",
+        "point": "Odhad efektu",
+        "stderr": "Standardní chyba",
+        "zstat": "Skóre Z"
       }
     },
     "Cohort": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortInfo": "Cohort info",
-      "cohortList": "Cohort list",
-      "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
-      "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "apply": "Použít",
+      "cancel": "Zrušit",
+      "cohortInfo": "Informace o kohortě",
+      "cohortList": "Seznam kohort",
+      "deleteCohort": "Deleting {0}?",
+      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "selectCohort": "Vybrat kohortu",
+      "shiftCohort": "Kohorta posunu",
+      "shiftCohortDescription": "Vyberte kohortu ze seznamu kohort. Použije kohortu na řídicí panel."
     },
     "CohortInformation": {
-      "ChangeGlobalCohort": "Změnit globální kohortu",
+      "SwitchGlobalCohort": "Switch global cohort",
       "CreateNewCohort": "Vytvořit novou kohortu",
       "DataPoints": "Počet datových bodů",
       "DefaultCohort": " (výchozí)",
@@ -942,7 +1001,7 @@
       "ModelStatistics": "Statistika modelu"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Content": "Tento seznam zobrazuje rozložení řídicího panelu. Data můžete filtrovat pomocí komponenty analýzy chyb, která se zobrazí v následujících komponentách. Komponenty můžete přidat, přetáhnout je a změnit pořadí toku nebo je zcela odstranit.",
       "DashboardComponents": "Komponenty řídicího panelu",
       "DataPoints": "Počet datových bodů",
       "DeleteDialog": {
@@ -951,17 +1010,17 @@
         "Delete": "Odstranit",
         "Title": "Odstranit: {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Navigace na řídicím panelu"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Správné predikce",
       "GlobalExplanation": "Význam agregovaného atributu",
       "IncorrectPredictions": "Nesprávné predikce",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.",
+      "IndividualFeature": "Výběrem datového bodu kliknutím na datový bod (nebo více datových bodů) v tabulce zobrazíte hodnoty jejich místní důležitosti funkcí (místní vysvětlení) a graf jednotlivých podmíněných očekávání (ICE) níže. U datových sad s více než 5 000 datovými body je zobrazení náhodným dílčím vzorkem, který umožňuje snadné zkoumání.",
       "LocalExplanation": "Významnost jednotlivých atributů"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Navigace na řídicím panelu",
       "cohortInfo": "Informace o kohortě",
       "cohortList": "Seznam kohort",
       "cohortSettings": "Nastavení kohorty",

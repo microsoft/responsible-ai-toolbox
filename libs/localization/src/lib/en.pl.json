@@ -1,49 +1,49 @@
 {
   "CausalAnalysis": {
     "AggregateView": {
-      "binary": "Binary treatments: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.",
-      "causalPoint": "Causal effect point",
-      "confidenceLower": "Confidence interval (lower)",
-      "confidenceUpper": "Confidence interval (upper)",
-      "confoundingFeature": "A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.",
-      "continuous": "Continuous treatments: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
-      "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
+      "binary": "Działania binarne: ",
+      "binaryDescription": "Przeciętnie w tej próbce włączenie tej funkcji spowoduje wzrost prawdopodobieństwa klasy/etykiety 1 o X jednostek.",
+      "causalPoint": "Punkt skutku przyczynowego",
+      "confidenceLower": "Interwał pewności (dolny)",
+      "confidenceUpper": "Interwał pewności (górny)",
+      "confoundingFeature": "Funkcja wprowadzająca w błąd jest skorelowana zarówno ze sposobem działania jak i wynikiem będącym przedmiotem zainteresowania. Czynnik wprowadzający w błąd tworzy dodatkową ścieżkę korelacji od sposobu działania do wyniku ponad bezpośrednim skutkiem przyczynowym. O ile funkcje wprowadzające w błąd nie są mierzone i nie są uwzględniane w modelu, te dodatkowe korelacje mogą wpływać na oszacowania skutków przyczynowych. Wpływ ten może być dodatni lub ujemny, w zależności od kierunków korelacji między pominiętymi czynnikami wprowadzającymi w błąd, sposobami działania i wynikami.",
+      "continuous": "Nieprzerwane sposoby działania: ",
+      "continuousDescription": "Średnio w tej próbce zwiększenie tej funkcji o 1 jednostkę spowoduje wzrost prawdopodobieństwa klasy/etykiety 1 o X jednostek.",
+      "description": "Analiza przyczyn odpowiada na pytania „co-jeśli” na temat tego, jak zmieniłyby się rzeczywiste wyniki w przypadku dokonania wyboru innych zasad, np. innej strategii cenowej w przypadku danego produktu lub alternatywnego sposobu działania w przypadku pacjenta. W przeciwieństwie do przewidywań modelu, które identyfikują ważne wzorce korelacji, narzędzia te pomagają zidentyfikować najważniejsze funkcje przyczynowe, które bezpośrednio wpływają na wynik będący przedmiotem zainteresowania. Modele te identyfikują skutek przyczynowy jednej funkcji (zazwyczaj określanej mianem „działanie”), jednocześnie utrzymując inne funkcje wprowadzające w błąd na stałym poziomie. Aby uzyskać najlepsze wyniki, należy zapewnić, że pełny zestaw danych zawiera wszystkie dostępne funkcje, które mogą korelować z wynikiem jako czynnikiem wprowadzającym w błąd.",
       "directAggregate": "Bezpośredni zagregowany efekt przyczyn każdego leczenia z 95% przedziałem ufności",
       "here": "tutaj",
-      "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
-      "unconfounding": "What are confounding features?"
+      "lasso": "Element Lasso (lub regresja logistyczna, jeśli wartość y jest binarna) był dopasowany do przewidywania y z X[-i], a Lasso (lub regresja logistyczna, jeśli X[i] jest kategoryczne) jest dopasowane do przewidywania X[i] z Χ[-i]. Skutek przyczynowy można wyświetlić jako średnią korelację pozostałości/niespodziewanych wahań dwóch zadań przewidywania. Dowiedz się więcej o podwójnym uczeniu maszynowym",
+      "unconfounding": "Czy są funkcje wprowadzające w błąd?"
     },
     "IndividualView": {
-      "currentOutcome": "Current outcome",
+      "currentOutcome": "Bieżący wynik",
       "currentTreatment": "Bieżąca wartość leczenia",
       "dataRequired": "Ta karta wymaga wybrania punktu danych.",
       "datapointIndex": "Indeks punktów danych",
-      "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
+      "description": "Poszczególne skutki przyczynowe mogą informować o spersonalizowanych interwencjach, takich jak promocja ukierunkowana na docelową grupę klientów lub zindywidualizowany plan działania. W jaki sposób osoba z określonym zestawem funkcji będzie reagować na zmianę funkcji przyczynowej lub sposobu działania? Przyczynowe narzędzie warunkowe oblicza marginalne zmiany w rzeczywistych wartościach w przypadku konkretnej osoby, jeśli zmieni się poziom działania. Ta analiza umożliwia zrozumienie, w jaki sposób wyniki rzeczywiste zmieniłyby się w przypadku dokonania wyboru innych zasad, np. innej strategii cenowej w przypadku danego produktu lub alternatywnego sposobu działania w przypadku pacjenta. Określ sposób działania, będący przedmiotem zainteresowania, i obserwuj, jak rzeczywisty wynik mógłby się zmienić.",
       "directIndividual": "Bezpośredni indywidualny efekt przyczyn każdego leczenia z 95% przedziałem ufności",
       "index": "Indeks punktów danych",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
-      "newOutcome": "New outcome",
+      "newOutcome": "Nowy wynik",
       "selectTreatment": "Wybierz rodzaj leczenia",
       "setNewTreatment": "Ustaw nową wartość leczenia",
-      "treatmentValue": "Treatment value min: {0} ({1}) , max: {2} ({3})"
+      "treatmentValue": "Wartość działania, min.: {0} ({1}), maks.: {2} ({3})"
     },
     "MainMenu": {
       "aggregate": "Agreguj efekty przyczyn",
-      "cohortInfo": "Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data.",
+      "cohortInfo": "Globalne kohorty nie są obecnie obsługiwane w przypadku analizy przyczyn. Wszystkie analizy przyczyn będą wyświetlane w przypadku wszystkich danych.",
       "header": "analiza przyczyn",
-      "individual": "Individual causal what-if",
+      "individual": "Indywidualna analiza przyczynowa co-jeśli",
       "learnMore": "Dowiedz się więcej",
       "title": "Bezpośredni efekt przyczyn każdej funkcji z 90% przedziałem ufności",
       "treatment": "Zasady leczenia",
-      "why": "Why is it important to include confounding features?"
+      "why": "Dlaczego tak ważne jest uwzględnianie funkcji wprowadzających w błąd?"
     },
     "TreatmentPolicy": {
-      "BarDescriptionBinary": "This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.",
-      "BarDescriptionContinuous": "This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.",
-      "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
-      "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
+      "BarDescriptionBinary": "Ten wykres pokazuje średnie zyski różnych zasad dotyczących działań w odniesieniu do punktu odniesienia bez zapewniania działania {0} wszystkim osobom w Twoim zestawie danych.",
+      "BarDescriptionContinuous": "Ten wykres pokazuje średnie zyski różnych zasad dotyczących działania w odniesieniu do punktu odniesienia braku dokonywania jakichkolwiek modyfikacji wartości bieżącego działania dotyczącego wszystkich osób w Twoim zestawie danych.",
+      "BarTextBinary": "Pierwszy pasek wskazuje średnie zyski względne, jeśli zostały zastosowane zalecane zasady dotyczące działania globalnego opisane powyżej. Odnotowane zyski informują o zmianie liczbowej użytego przez nas działania. Drugi pasek wskazuje zyski względne (lub straty) ze sposobu działania wszystkich osób poprzez włączenie działań binarnych.",
+      "BarTextContinuous": "Pierwszy pasek wskazuje średnie zyski względne, jeśli zostały zastosowane zalecane zasady dotyczące działania globalnego opisane powyżej. Odnotowane zyski odzwierciedlają zwiększenie/zmniejszenie funkcji działania o 10% typowej wielkości działania w danej próbce. Drugi pasek wskazuje zyski względne (lub straty) wraz ze zwiększeniem/zmniejszeniem nieprzerwanych działań o 10%.",
       "Description": "Narzędzia te pomagają w kompilowaniu zasad dla przyszłych interwencji. Możesz określić, które części Twoich próbek doświadczają największych odpowiedzi na czynnik przyczynowy (tj. leczenie) lub stworzyć reguły w celu określenia, które przyszłe populacje będą miały największe efekty leczenia.",
       "Left": "{0} <= {1}",
       "Recommended": "Proponowane leczenie = {0}",
@@ -51,13 +51,13 @@
       "SelectPolicy": "Ustaw funkcję leczenia",
       "Size": "Proponowane interpretowane globalne zasady leczenia dla wielkości próbki (n) = {0}",
       "Table": "Tabelę można odczytać, biorąc wiersz, a następnie kolumnę tego określonego wiersza.",
-      "TableDescription": "This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.",
+      "TableDescription": "W tej tabeli pokazano zalecane zasady dotyczące działań, które można zastosować do bieżącej próbki danych lub innych kolekcji. Tabela udostępnia prostą regułę podziału na obserwacji na kohorty danych na podstawie tych funkcji z największym wpływem na to, czy dana osoba będzie reagować na wybrany sposób działania. Tabela określa również liczbę punktów danych w bieżącej próbce danych przypisanej do każdego segmentu.",
       "alwaysTreat": "Zawsze lecz „{0}\"",
-      "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
-      "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
-      "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "averageGainBinary": "Średnie zyski ustawienia działania {0} na jego wartość punktu odniesienia {1}.",
+      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "header": "Te narzędzia ułatwiają opracowywanie zasad dla przyszłych interwencji. Możesz określić, które części Twojej próbki najbardziej są podatne na zmiany funkcji przyczynowych lub działań, a także utworzyć reguły w celu określenia, które przyszłe zestawy danych powinny być docelowe na potrzeby konkretnych interwencji.",
       "nSample": "n = {0}",
-      "noData": "No data"
+      "noData": "Brak danych"
     }
   },
   "Core": {
@@ -75,50 +75,54 @@
       "gte": "{0} >= {1}",
       "eq": "{0} == {1}",
       "ne": "{0} != {1}",
-      "in": "{0} in the set of ({1})",
-      "nin": "{0} not in the set of ({1})",
-      "rg": "{0} in the range of ({1})",
-      "nrg": "{0} in the range of ({1})",
-      "Unknown": "unknown"
+      "in": "{0} znajduje się w zestawie ({1})",
+      "nin": "{0} nie znajduje się w zestawie ({1})",
+      "rg": "{0} w zakresie ({1})",
+      "nrg": "{0} w zakresie ({1})",
+      "Unknown": "nieznane"
     }
   },
   "Counterfactuals": {
-    "CurrentTreatment": "Current treatment",
+    "CurrentTreatment": "Bieżące działanie",
     "EffectLowerBound": "Dolny przedział ufności",
-    "EffectOfTreatment": "Effect of recommendation",
+    "EffectOfTreatment": "Skutek zalecenia",
     "EffectUpperBound": "Górny przedział ufności",
     "RecommendedTreatment": "Proponowane leczenie",
     "WhatIf": {
-      "setValue": "Set Value",
-      "sortFeatures": "Sort feature columns by counterfactual feature importance"
+      "setValue": "Ustaw wartość",
+      "sortFeatures": "Sortuj kolumny funkcji według ważności funkcji hipotez przeciwnych",
+      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
+      "toggleToolTipHeader": "Ranked counterfactual features"
     },
-    "counterfactualEx": "Counterfactual Ex {0}",
+    "counterfactualEx": "Przykład hipotezy przeciwnej {0}",
     "counterfactualName": "Nazwa dla analizy co-jeżeli hipotez przeciwnych",
-    "createCounterfactual": "Utwórz hipotezę przeciwną analizy co-jeżeli",
-    "createOwn": "Create your own counterfactual:",
+    "createWhatIfCounterfactual": "Create what-if counterfactual",
+    "createCounterfactual": "Counterfactual",
+    "createOwn": "Utwórz własne hipotezy przeciwne:",
     "currentClass": "Bieżąca klasa",
     "decreaseByOne": "Zmniejsz wartość o 1",
     "desiredClass": "Pożądana klasa hipotez przeciwnych",
-    "header": "What-If counterfactuals",
+    "header": "Analiza co-jeżeli dla hipotez przeciwnych",
     "increaseByOne": "Zwiększ wartość o 1",
     "individualTreatment": "Proponowane indywidualne zasady leczenia",
     "listChoose": "Użyj okrągłego wskaźnika przetwarzania mechanizmu kontroli, aby wybrać najlepsze k-próbki, które chcesz wyświetlić.",
-    "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
-    "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
-    "localImportanceSelectData": "Select a data point to view local importance chart",
+    "listDescription": "Na tej liście pokazano, które punkty danych w bieżącej próbce mają największą odpowiedź przyczynową na wybrane działanie na podstawie wszystkich funkcji uwzględnionych w szacowanym modelu przyczynowym. Lewe pięć kolumn informuje, czy dany sposób działania jest zalecany dla obserwacji, bieżącego działania, oszacowanego skutku działania (skutku zastosowania działania z punktu odniesienia braku działania w przypadku działań binarnych lub zwiększenia/zmniejszenia funkcji działania o 10% wielkości typowego działania w próbce: [dynamiczne: informuje o zmianie liczbowej w użytym przez nas działaniu]) oraz dolne i górne Interwały pewności (CI) dla tego skutku. Pozostałe kolumny przedstawiają bieżący stan działania i inne funkcje każdej obserwacji.",
+    "localImportanceDescription": "Najważniejsze funkcje w wierszu {0}, aby osiągnąć wymagane przewidywanie modelu. Na podstawie analizy warunkowej w przypadku przewidywania: {1}",
+    "localImportanceSelectData": "Wybierz punkt danych do wyświetlenia lokalnego wykresu ważności",
     "noData": "Brak danych",
-    "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "panelHeader": "Analiza co-jeżeli dla hipotez przeciwnych",
+    "noFeatures": "Brak dostępnych funkcji",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "whatIfPanelHeader": "What-if counterfactuals",
+    "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Zysk wynikający z zaproponowanych zasad",
-    "referenceDatapoint": "Reference datapoint: Row {0}",
+    "referenceDatapoint": "Referencyjny punkt danych: wiersz {0}",
     "saveAsNew": "Zapisz jako nowy punkt danych",
-    "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
+    "saveDescription": "Te hipotezy przeciwne są oparte na przewidywaniu modelu i dlatego mogą przechwytywać te same korelacje, które zostały pobrane przez model. Nie doradzamy użytkownikom podejmowania rzeczywistych decyzji na podstawie tego narzędzia. Skorzystaj z naszego zestawu narzędzi, aby uzyskać analizę przyczyn w przypadku scenariuszy podejmowania decyzji w czasie rzeczywistym.",
     "seePrediction": "Zobacz różnice przewidywań",
     "selectedDatapoint": "Wybrany punkt danych",
     "showOnly": "Pokaż tylko",
-    "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
-    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot."
+    "showTop": "Punkty danych z największymi szacowanymi odpowiedziami przyczynowymi na funkcje działań: {0}",
+    "whatifDescription": "Analiza co-jeżeli pozwala na zakłócenie funkcji w przypadku dowolnych danych wejściowych i obserwowanie, jak zmienia się przewidywanie modelu. Możesz zakłócać funkcje ręcznie lub określić żądane przewidywanie (np. etykietę klasy dla klasyfikatora), aby wyświetlić listę punktów danych najbliższych pierwotnym danym wejściowym, które mogłyby doprowadzić do żądanego przewidywania. Nazywane również przewidywaniami hipotez przeciwnych, których można używać do badania relacji wyuczonych przez model; stopnia zrozumienia ważnych, niezbędnych funkcji dla przewidywań modelu; lub możesz debugować skrajne przypadki dla modelu. Aby rozpocząć, wybierz punkty danych wejściowych z tabeli danych lub wykresu punktowego."
   },
   "ErrorAnalysis": {
     "Cohort": {
@@ -147,6 +151,17 @@
     "FeatureList": {
       "features": "Cechy",
       "importances": "Ważności"
+    },
+    "TreeViewParameters": {
+      "maximumDepth": "Maximum depth",
+      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
+      "maximumDepthTitle": "Additional information on maximum depth",
+      "numLeaves": "Number of leaves",
+      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
+      "numLeavesTitle": "Additional information on number of leaves",
+      "minDataInLeaf": "Minimum number of samples in one leaf",
+      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
+      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
     "FilterTooltip": {
       "correctNum": "Poprawne (#): ",
@@ -192,18 +207,22 @@
       "emptyText": "Wybierz dwie cechy, używając powyższych menu rozwijanych. Dane można grupować i filtrować według dwóch wymiarów.",
       "selectAll": "Wybierz wszystkie"
     },
+    "MatrixFilter": {
+      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+    },
     "MatrixSummary": {
-      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+      "heatMapDescription": "Dzięki mapie cieplnej możesz skoncentrować uwagę na określonych filtrach funkcji międzysekcyjnej i obliczyć wskaźniki rozdzielonych błędów. Zacznij od dwóch funkcji zestawów danych w celu porównania.",
+      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
     },
     "MatrixOptions": {
-      "quantileBinningLabel": "Quantile binning",
-      "binningThresholdLabel": "Binning threshold",
-      "toggleOnLabel": "On",
-      "toggleOffLabel": "Off",
-      "quantileBinningInfoText": "Distribute values evenly across varying ranges of bins",
-      "quantileBinningTitle": "Additional information on quantile binning",
-      "binningThresholdInfoText": "Number of values required before binning",
-      "binningThresholdTitle": "Additional information on binning threshold"
+      "quantileBinningLabel": "Kwantowanie kwantyli",
+      "binningThresholdLabel": "Próg kwantowania",
+      "toggleOnLabel": "Włączone",
+      "toggleOffLabel": "Wyłączone",
+      "quantileBinningInfoText": "Równomiernie rozprowadź wartości w ramach różnych zakresów przedziałów",
+      "quantileBinningTitle": "Dodatkowe informacje o kwantowaniu kwantyli",
+      "binningThresholdInfoText": "Liczba wartości wymaganych przed kwantowaniem",
+      "binningThresholdTitle": "Dodatkowe informacje na temat progu kwantowania"
     },
     "Metrics": {
       "errorRate": "Częstotliwość błędów",
@@ -217,8 +236,35 @@
       "meanSquaredErrorInfo": "Średni błąd kwadratowy to średnia kwadratów błędów.",
       "meanSquaredErrorShort": "Średni błąd kwadratowy",
       "meanSquaredErrorTitle": "Dodatkowe informacje o średnim błędzie kwadratowym",
+      "precision": "Precision score",
+      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
+      "precisionShort": "Precision",
+      "precisionTitle": "Additional information on precision",
+      "recall": "Recall score",
+      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
+      "recallShort": "Recall",
+      "recallTitle": "Additional information on recall",
+      "macroPrecision": "Macro averaged precision score",
+      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+      "macroPrecisionShort": "Macro precision",
+      "macroPrecisionTitle": "Additional information on macro averaged precision",
+      "microPrecision": "Micro averaged precision score",
+      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+      "microPrecisionShort": "Micro precision",
+      "microPrecisionTitle": "Additional information on micro averaged precision",
+      "macroRecall": "Macro averaged recall score",
+      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+      "macroRecallShort": "Macro recall",
+      "macroRecallTitle": "Additional information on macro averaged recall",
+      "microRecall": "Micro averaged recall score",
+      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+      "microRecallShort": "Micro recall",
+      "microRecallTitle": "Additional information on micro averaged recall",
       "metricName": "Nazwa metryki",
       "metricValue": "Wartość metryki"
+    },
+    "MetricSelector": {
+      "selectorLabel": "Select metric"
     },
     "Navigation": {
       "dataExplorer": "Eksplorator danych",
@@ -234,10 +280,13 @@
       "move": "Przenieś",
       "save": "Zapisz",
       "saveTitle": "Zapisz jako nową kohortę",
-      "subText": "Zapisz bieżącą kohortę na liście kohort. Zapisaną kohortę można wyświetlić ponownie, korzystając z listy kohort."
+      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
+      "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Configure error explorer.\""
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
+      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Analiza warunkowa"
@@ -267,6 +316,10 @@
     "whatIfDatapoints": "Warunkowe punkty danych"
   },
   "Fairness": {
+    "ValidationErrors": {
+      "missingPerformanceMetric": "No performance metric found.",
+      "missingFairnessMetric": "No fairness metric found."
+    },
     "BinDialog": {
       "cancel": "Anuluj",
       "categoryHeader": "Wartości przedziału:",
@@ -276,18 +329,18 @@
       "save": "Zapisz"
     },
     "DropdownHeaders": {
-      "errorMetric": "Enable error bars",
+      "errorMetric": "Włącz paski błędów",
       "fairnessMetric": "Metryka uczciwości",
       "performanceMetric": "Metryka wydajności",
       "sensitiveFeature": "Cecha wrażliwa"
     },
     "ErrorBounds": {
-      "howToRead": "How to read these error bars",
-      "introModalText1": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ",
-      "wilsonScores": "Wilson scores",
-      "introModalText2": " (for binary classification) or ",
-      "normalApproximation": "normal approximation",
-      "introModalText3": " (for other tasks)."
+      "howToRead": "Jak odczytywać te słupki błędów",
+      "introModalText1": "Słupki błędów pokazują niepewność wartości metryk z powodu wielkości zestawu danych oceny. Przedstawiany 95% interwałów pewności obliczonych przy użyciu ",
+      "wilsonScores": "Wyniki Wilsona",
+      "introModalText2": " (dotyczy klasyfikacji binarnej) lub ",
+      "normalApproximation": "typowa aproksymacja",
+      "introModalText3": " (na potrzeby innych zadań)."
     },
     "Fairness": {
       "body": "Metryki uczciwości określają wartość odchylenia dla zachowania modelu w ramach wybranych cech. Istnieje kilka rodzajów metryk uczciwości opartych na różnych metrykach wydajności. Przechwytują one różnicę między skrajnymi wartościami w grupach lub ich stosunek albo po prostu najgorszą wartość z dowolnej grupy.",
@@ -604,6 +657,7 @@
       "datasetCohorts": "Kohorty zestawów danych",
       "details": "Szczegóły",
       "duplicateCohort": "Duplikat",
+      "edit": "Edit",
       "editCohort": "Edytuj kohortę",
       "features": "Cechy: {0}",
       "filters": "Filtry: {0}",
@@ -614,7 +668,7 @@
     "CohortEditor": {
       "TreatAsCategorical": "Traktuj jako kategorialne",
       "addFilter": "Dodawanie filtru",
-      "addedFilters": "Filters",
+      "addedFilters": "Filtry",
       "cancel": "Anuluj",
       "cancelExistingCohort": "Czy na pewno chcesz anulować edytowanie kohorty i przejść wstecz?",
       "cancelNewCohort": "Czy na pewno chcesz anulować tworzenie nowej kohorty i przejść wstecz?",
@@ -624,9 +678,10 @@
       "cohortNameError": "Brak nazwy kohorty",
       "cohortNameLabel": "Nazwa kohorty zestawów danych",
       "cohortNamePlaceholder": "Nazwij kohortę",
-      "defaultFilterState": "Wybierz filtr, aby dodać parametry do kohorty zestawów danych.",
+      "clearAllFilters": "Clear all filters",
+      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Usuń",
-      "noAddedFilters": "No filters",
+      "noAddedFilters": "Brak filtrów",
       "placeholderName": "Kohorta {0}",
       "save": "Zapisz",
       "selectFilter": "Wybierz filtr"
@@ -644,20 +699,20 @@
       "truePositive": "Wynik prawdziwie dodatni"
     },
     "CrossClass": {
-      "absoluteValInfo": "Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes",
+      "absoluteValInfo": "Średnia wartość bezwzględna: pokazuje sumę istotności funkcji dla wszystkich możliwych klas, podzielonych przez liczbę klas",
       "close": "Zamknij",
       "crossClassWeights": "Wagi wieloklasowe",
-      "enumeratedClassInfo": "Enumerated class names: Shows only the specified class's feature importance values across all data points.",
+      "enumeratedClassInfo": "Wyliczane nazwy klas: pokazuje tylko określone wartości istotności funkcji klasy dla wszystkich punktów danych.",
       "info": "Informacje o obliczeniach obejmujących wiele klas",
       "label": "Waga wieloklasowa:",
-      "overviewInfo": "Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:",
+      "overviewInfo": "Modele wieloklasowe generują niezależny wektor istotności funkcji dla każdej klasy. Wektor istotności funkcji każdej klasy wskazuje, które funkcje powodują, że klasa jest mniej lub bardziej prawdopodobna. Możesz wybrać, w jaki sposób wagi wektorów istotności funkcji każdej klasy są podsumowywane w postaci pojedynczej wartości:",
       "predictedClassInfo": "Przewidywana klasa: pokazuje wartość ważności cechy dla przewidywanej klasy danego punktu"
     },
     "DatasetExplorer": {
       "aggregatePlots": "Zagreguj wykresy",
       "chartType": "Typ wykresu",
       "colorValue": "Wartość koloru",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.",
+      "helperText": "Utwórz zestaw danych kohorty, aby analizować statystykę zestawu danych na filtrach, takich jak prognozowany wynik, funkcje zestawu danych i grupy błędów. Dowiedz się więcej o nadmiernej/niedostatecznej prezentacji w zestawie danych.",
       "individualDatapoints": "Poszczególne punkty danych",
       "missingParameters": "Ta karta wymaga dostarczenia zestawu danych oceny.",
       "noColor": "Brak"
@@ -685,13 +740,13 @@
       "clickHere": "Dowiedz się więcej",
       "limeDescription": "Ten element wyjaśniający używa lokalnych, interpretowalnych wyjaśnień niezależnych od modelu (LIME, Local Interpretable Model-Agnostic Explanations), które zapewniają liniową aproksymację modelu. Aby uzyskać wyjaśnienie, wykonujemy następujące czynności: zaburzamy wystąpienie i pobieramy przewidywania modelu, a następnie używamy tych przewidywań jako etykiet, aby nauczyć rozrzedzony model liniowy, który jest wierny lokalnie. Wagi tego modelu liniowego są używane jako ważności cech. Kliknij poniższy link, aby dowiedzieć się więcej.",
       "limeTitle": "Lokalne, interpretowalne wyjaśnienia niezależne od modelu (LIME)",
-      "mimicDescription": "This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).",
+      "mimicDescription": "Ten element wyjaśniający jest oparty na zamyśle trenowania globalnych modeli zastępczych naśladujących modele czarnej skrzynki. Globalny model zastępczy to wewnętrznie interpretowalny model wytrenowany do jak najdokładniejszej aproksymacji przewidywań dowolnego modelu czarnej skrzynki. Wartości istotności funkcji to oparte na modelu wartości istotności funkcji podstawowego modelu zastępczego (LightGBM, regresja liniowa, stochastyczny spadek gradientu lub drzewo decyzyjne).",
       "mimicTitle": "Naśladowanie (globalne wyjaśnienia zastępcze)",
       "pfiDescription": "Ten element wyjaśniający losowo zmienia dane, modyfikując po jednej cesze całego zestawu danych i obliczając, jak bardzo zmienia się badana metryka wydajności (domyślne metryki wydajności: F1 w przypadku klasyfikacji binarnej, miara F1 z mikrośrednią w przypadku klasyfikacji wielu klas oraz średni błąd bezwzględny w przypadku regresji). Im większa zmiana, tym ważniejsza jest cecha. Ten element wyjaśniający może wyjaśnić tylko ogólne zachowanie podstawowego modelu, ale nie wyjaśnia poszczególnych przewidywań. Wartość ważności cechy reprezentuje zmianę wydajności modelu spowodowaną zaburzeniem tej konkretnej cechy.",
       "pfiTitle": "Ważność cechy za pomocą permutacji",
       "shapDescription": "Ten element wyjaśniający używa podejścia SHAP, czyli podejścia z zakresu teorii gier do wyjaśniania modeli, w którym ważność cech jest mierzona przez „ukrywanie” tych cech w modelu za pomocą marginalizacji. Kliknij poniższy link, aby dowiedzieć się więcej.",
       "shapTitle": "Wartości Shapleya",
-      "whatDoFeatureMean": "What do these feature importance values mean?"
+      "whatDoFeatureMean": "Co oznaczają te wartości ważności funkcji?"
     },
     "FeatureImportanceWrapper": {
       "barText": "Słupkowy",
@@ -733,19 +788,21 @@
       "helperText": "Poznaj „top k” ważnych cech, które wpływają na ogólne przewidywania modelu. Użyj suwaka, aby wyświetlić malejące ważności cech."
     },
     "GlobalTab": {
+      "absoluteValues": "Absolute values",
       "aggregateFeatureImportance": "Zagregowana ważność cechy",
       "collapsedHelperText": "Poznaj „top k” ważnych cech, które wpływają na ogólne przewidywania modelu.",
+      "datapoint": "Datapoint",
       "datasetCohortSelector": "Wybierz kohortę zestawów danych",
       "datasetCohorts": "Kohorty zestawów danych",
       "datasetRequired": "Wykresy zależności wymagają zestawu danych oceny i tablicy ważności cech lokalnych.",
       "dependencePlotFeatureSelectPlaceholder": "Wybierz cechę",
-      "dependencePlotHelperText": "This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.",
+      "dependencePlotHelperText": "Ten wykres zależności pokazuje relacje wartości funkcji z odpowiadającymi jej wartościami istotności funkcji.",
       "dependencePlotTitle": "Wykresy zależności",
-      "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
+      "helperText": "Poznaj ważne funkcje typu top-k, które wpływają na ogólne przewidywania modelu (zwanego też objaśnieniem ogólnym). Użyj suwaka, aby wyświetlić istotności funkcji w kolejności malejącej. Wszystkie istotności funkcji kohort są wyświetlane obok siebie i można je wyłączyć, wybierając daną kohortę z legendy. Kliknij dowolną funkcję na wykresie, aby zobaczyć, w jaki sposób wartości wybranej funkcji wpływają na przewidywanie poniżej powierzchni gęstości.",
       "legendHelpText": "Włącz lub wyłącz kohorty na wykresie, klikając elementy legendy.",
       "missingParameters": "Na tej karcie musi być podany parametr ważności cechy lokalnej.",
       "sortBy": "Sortuj według",
-      "topAtoB": "Top {0} features by their importance",
+      "topAtoB": "Najlepsze {0} funkcji według ich istotności",
       "viewDependencePlotFor": "Wyświetl wykres zależności dla:",
       "weightOptions": "Wagi ważności klas"
     },
@@ -768,7 +825,7 @@
     },
     "ModelPerformance": {
       "cohortPickerLabel": "Wybierz kohortę zestawów danych do eksploracji",
-      "helperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.",
+      "helperText": "Oceń wydajność modelu, badając rozkład wartości prognozowania i wartości metryk wydajności modelu. Możesz dokładniej zbadać model, patrząc na analizę porównawczą jego wydajności w ramach różnych kohort lub podgrup zestawów danych. Wybierz filtry wzdłuż wartości na osi y i wartości na osi x, aby przeciąć różne wymiary.",
       "missingParameters": "Ta karta wymaga, aby była podana tablica przewidywanych wartości z modelu.",
       "missingTrueY": "Statystyki wydajności modelu wymagają podania prawdziwych wyników oprócz przewidywanych wyników",
       "modelStatistics": "Statystyki modelu"
@@ -783,8 +840,8 @@
     },
     "Statistics": {
       "accuracy": "Dokładność: {0}",
-      "fnr": "False Negative Rates: {0}",
-      "fpr": "False Positive Rates: {0}",
+      "fnr": "Wskaźnik wyników fałszywie ujemnych: {0}",
+      "fpr": "Wskaźniki wyników fałszywie dodatnich: {0}",
       "meanPrediction": "Średnie przewidywanie {0}",
       "mse": "Błąd średniokwadratowy: {0}",
       "precision": "Precyzja: {0}",
@@ -829,7 +886,7 @@
       "featureImportanceLackingParameters": "Podaj ważności cech lokalnych, aby zobaczyć, jak każda cecha wpływa na poszczególne przewidywania.",
       "featureImportancePlot": "Wykres istotności funkcji",
       "featureValues": "Wartości cech",
-      "helperText": "Select an individual datapoint by clicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.",
+      "helperText": "Wybierz pojedynczy punkt danych, klikając punkt danych na wykresie punktowym, aby wyświetlić poniżej jego lokalne wartości istotności funkcji i wartości funkcji w panelu po prawej stronie.",
       "iceLackingParameters": "Wykresy ICE wymagają działającego modelu do opracowywania przewidywań dla hipotetycznych punktów danych.",
       "icePlot": "Wykres ICE (individual conditional expectation)",
       "icePlotHelperText": "Wykresy ICE przedstawiają, jak wartości przewidywań wybranych punktów danych zmieniają się w zależności od wartości cechy z zakresu od minimalnej do maksymalnej.",
@@ -891,7 +948,7 @@
     "modelPerformance": "Wydajność modelu",
     "perturbationExploration": "Eksploracja perturbacji",
     "predictedClass": "Przewidywana klasa",
-    "selectPoint": "Select a point to see its local explanation",
+    "selectPoint": "Wybierz punkt, aby zobaczyć jego objaśnienie lokalne",
     "summaryImportance": "Ważność podsumowania"
   },
   "ModelAssessment": {
@@ -902,26 +959,28 @@
     },
     "CausalAnalysis": {
       "Table": {
-        "ciLower": "Confidence interval (lower)",
-        "ciUpper": "Confidence interval (upper)",
-        "name": "Feature",
-        "pValue": "P-value",
-        "point": "Effect estimate",
-        "stderr": "Standard error",
-        "zstat": "Z-score"
+        "ciLower": "Interwał pewności (dolny)",
+        "ciUpper": "Interwał pewności (górny)",
+        "name": "Funkcja",
+        "pValue": "Wartość-p",
+        "point": "Szacowanie efektu",
+        "stderr": "Błąd standardowy",
+        "zstat": "Wynik-Z"
       }
     },
     "Cohort": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortInfo": "Cohort info",
-      "cohortList": "Cohort list",
-      "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
-      "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "apply": "Zastosuj",
+      "cancel": "Anuluj",
+      "cohortInfo": "Informacje dotyczące kohort",
+      "cohortList": "Lista kohort",
+      "deleteCohort": "Deleting {0}?",
+      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "selectCohort": "Wybieranie kohorty",
+      "shiftCohort": "Przesuń kohortę",
+      "shiftCohortDescription": "Wybierz kohortę z listy kohort. Zastosuj kohortę do pulpitu nawigacyjnego."
     },
     "CohortInformation": {
-      "ChangeGlobalCohort": "Zmień globalną kohortę",
+      "SwitchGlobalCohort": "Switch global cohort",
       "CreateNewCohort": "Utwórz nową kohortę",
       "DataPoints": "Liczba punktów danych",
       "DefaultCohort": " (wartość domyślna)",
@@ -942,7 +1001,7 @@
       "ModelStatistics": "Statystyki modelu"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Content": "Lista pokazuje układ pulpitu nawigacyjnego. Możesz przefiltrować dane za pomocą składnika analizy błędów, aby je wyświetlić w poniższych składnikach. Możesz dodać składniki, przeciągnąć i upuścić je w celu zmiany kolejności przepływu lub usunąć składniki.",
       "DashboardComponents": "Składniki pulpitu nawigacyjnego",
       "DataPoints": "Liczba punktów danych",
       "DeleteDialog": {
@@ -951,17 +1010,17 @@
         "Delete": "Usuń",
         "Title": "Usunąć {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Poruszanie się po pulpicie nawigacyjnym"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Prawidłowe przewidywania",
       "GlobalExplanation": "Zagregowana istotność funkcji",
       "IncorrectPredictions": "Niepoprawne przewidywania",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.",
+      "IndividualFeature": "Wybierz punkt danych, klikając punkt danych (lub wiele punktów danych) w tabeli, aby wyświetlić poniżej wykres przedstawiający ich lokalne wartości istotności funkcji (lokalne objaśnienie) oraz indywidualne oczekiwanie warunkowego (ICE). W przypadku zestawów danych zawierających ponad 5000 punktów danych widok jest losową próbką pomocniczą, aby umożliwić szybką eksplorację.",
       "LocalExplanation": "Indywidualna istotność funkcji"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Poruszanie się po pulpicie nawigacyjnym",
       "cohortInfo": "Informacje dotyczące kohorty",
       "cohortList": "Lista kohort",
       "cohortSettings": "Ustawienia kohorty",
