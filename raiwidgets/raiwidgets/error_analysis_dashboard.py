@@ -88,8 +88,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
     :Example:
 
-    # Run simple view of error analysis with just predictions and
-    # true labels
+    Run simple view of error analysis with just predictions and true labels
 
     >>> predictions = model.predict(X_test)
     >>> from raiwidgets import ErrorAnalysisDashboard
@@ -98,7 +97,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
     :Example:
 
-    # Run error analysis with a model and a computed explanation
+    Run error analysis with a model and a computed explanation
 
     >>> from raiwidgets import ErrorAnalysisDashboard
     >>> ErrorAnalysisDashboard(global_explanation, model,
@@ -106,8 +105,7 @@ class ErrorAnalysisDashboard(Dashboard):
 
     :Example:
 
-    # Run error analysis on large data and a downsampled dataset
-    # for the UI
+    Run error analysis on large data and a downsampled dataset for the UI
 
     >>> from raiwidgets import ErrorAnalysisDashboard
     >>> ErrorAnalysisDashboard(sample_dataset=X_test_sample,
