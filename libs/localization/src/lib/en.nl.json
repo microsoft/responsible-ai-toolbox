@@ -1,49 +1,49 @@
 {
   "CausalAnalysis": {
     "AggregateView": {
-      "binary": "Binary treatments: ",
-      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.",
-      "causalPoint": "Causal effect point",
-      "confidenceLower": "Confidence interval (lower)",
-      "confidenceUpper": "Confidence interval (upper)",
-      "confoundingFeature": "A confounding feature is correlated with both the treatment and the outcome of interest. The confounder creates an extra correlation path from the treatment to the outcome on top of the direct causal effect. Unless confounding features are measured and included in the model, these extra correlations can bias estimates of the causal effect. The bias can be positive or negative, depending on the directions of correlations between omitted confounders, treatments, and outcomes.",
-      "continuous": "Continuous treatments: ",
-      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
-      "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
+      "binary": "Binaire behandelingen: ",
+      "binaryDescription": "Gemiddeld zal het inschakelen van deze functie in dit voorbeeld ertoe leiden dat de kans dat klasse/label 1 wordt verhoogd met X eenheden.",
+      "causalPoint": "Oorzakelijk effectpunt",
+      "confidenceLower": "Betrouwbaarheidsinterval (lager)",
+      "confidenceUpper": "Betrouwbaarheidsinterval (boven)",
+      "confoundingFeature": "Een variabel kenmerk wordt gecorreleerd met de behandeling en het belanghebbende resultaat. De variabele maakt een extra correlatiepad van de behandeling tot het resultaat bovenop het directe oorzakelijk effect. Tenzij de variabele kenmerken worden gemeten en opgenomen in het model, kunnen deze extra correlaties schattingen van het oorzakelijke effect afwijken. De afwijking kan positief of negatief zijn, afhankelijk van de richting van de correlaties tussen weggelaten variabelen, behandelingen en resultaten.",
+      "continuous": "Continue behandelingen: ",
+      "continuousDescription": "In dit voorbeeld leidt het verhogen van deze functie met 1 eenheid ertoe dat de kans dat klasse/label 1 met gemiddeld X eenheden toeneemt.",
+      "description": "De oorzakelijke analyse beantwoordt 'Wat als'-vragen over de manier waarop reële resultaten zouden zijn gewijzigd als iemand zich anders zou hebben gedragen, zoals het vervolgen van een andere prijsstrategie voor een product of een alternatieve behandeling voor een patiënt. In tegenstelling tot modelvoorspellingen die belangrijke correlatiepatronen identificeren, helpen deze hulpprogramma's u de belangrijkste oorzakelijke functies te identificeren die direct van invloed zijn op het resultaat van belang. Met deze modellen wordt het oorzakelijke effect van één kenmerk bepaald (ofwel 'behandeling'), waarbij andere variabele kenmerken constant zijn. Voor de beste resultaten moet u ervoor zorgen dat u de volledige gegevensset alle beschikbare kenmerken bevat die kunnen correleren met het resultaat van de variabelen.",
       "directAggregate": "Directe aggregatie van het oorzakelijk effect van elke behandeling met een betrouwbaarheidsinterval van 95%",
       "here": "hier",
-      "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
-      "unconfounding": "What are confounding features?"
+      "lasso": "Een lasso (of logistieke regressie als y binair is) was geschikt om y van X[-i] te voorspellen en een lasso (of logistieke regressie als X[i] categorisch is) was geschikt om X[i] te voorspellen vanuit Χ [-i]. Het oorzakelijke effect kan worden weergegeven als de gemiddelde correlatie van de residuen/verrassingsvariatie van de twee voorspellingstaken. Meer informatie over Double Machine Learning",
+      "unconfounding": "Wat zijn verwarrende kenmerken?"
     },
     "IndividualView": {
-      "currentOutcome": "Current outcome",
+      "currentOutcome": "Huidig resultaat",
       "currentTreatment": "Status huidige behandeling",
       "dataRequired": "Voor dit tabblad moet een gegevenspunt zijn geselecteerd.",
       "datapointIndex": "Gegevenspunt-index",
-      "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
+      "description": "Individuele oorzakelijke effecten kunnen gepersonaliseerde tussenkomsten inlichten, zoals een gerichte promotie naar klanten of een geïndividualiseerd behandelplan. Hoe zou een persoon met een bepaalde set kenmerken reageren op een wijziging in een oorzakelijke functie of behandeling?  Het oorzakelijke wat-als-hulpprogramma berekent marginale veranderingen in de werkelijke resultaten voor een bepaalde persoon als u het niveau van een behandeling wijzigt. Met deze analyse kunt u begrijpen hoe de werkelijke resultaten zouden zijn gewijzigd onder verschillende beleidskeuzes, zoals een andere prijsstrategie voor een product of een alternatieve behandeling voor een patiënt. Geef de behandeling van interesse op en kijk hoe het werkelijke resultaat zou veranderen.",
       "directIndividual": "Direct individueel oorzakelijk effect van elke behandeling met een betrouwbaarheidsinterval van 95%",
       "index": "Gegevenspunt-index",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
-      "newOutcome": "New outcome",
+      "newOutcome": "Nieuw resultaat",
       "selectTreatment": "Behandeling selecteren",
       "setNewTreatment": "Nieuwe behandelingswaarde instellen",
-      "treatmentValue": "Treatment value min: {0} ({1}) , max: {2} ({3})"
+      "treatmentValue": "Minimale behandelingswaarde: {0}({1}) , max: {2}({3})"
     },
     "MainMenu": {
       "aggregate": "Agregeer oorzakelijke effecten",
-      "cohortInfo": "Global cohorts are not currently supported for causal analysis. All causal analyses will be shown for all data.",
+      "cohortInfo": "Globale cohorten worden momenteel niet ondersteund voor oorzakelijke analyse. Alle oorzakelijke analyses worden weergegeven voor alle gegevens.",
       "header": "Oorzakelijke analyse",
-      "individual": "Individual causal what-if",
+      "individual": "Individueel oorzakelijke wat-als",
       "learnMore": "Meer informatie",
       "title": "Direct oorzakelijk effect van elke functie met een betrouwbaarheidsinterval van 90%",
       "treatment": "Behandelingsbeleid",
-      "why": "Why is it important to include confounding features?"
+      "why": "Waarom is het belangrijk om variabele kenmerken op te nemen?"
     },
     "TreatmentPolicy": {
-      "BarDescriptionBinary": "This graph shows the average gains of various treatment policies relative to the baseline of not providing the {0} treatment to anyone in your population.",
-      "BarDescriptionContinuous": "This graph shows the average gains of various treatment policies relative to the baseline of not making any modifications of the current treatment values given to everyone in your population.",
-      "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
-      "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
+      "BarDescriptionBinary": "In deze grafiek ziet u de gemiddelde winst van verschillende behandelingsbeleidsregels ten opzichte van de basislijn van het niet leveren van de {0}-behandeling aan iedereen in uw populatie.",
+      "BarDescriptionContinuous": "In deze grafiek ziet u de gemiddelde toename van verschillende behandelingsbeleidsregels ten opzichte van de basislijn van het niet aanbrengen van wijzigingen van de huidige behandelingswaarden die aan iedereen in uw populatie zijn gegeven.",
+      "BarTextBinary": "De eerste balk geeft de gemiddelde relatieve winst aan als het hierboven beschreven aanbevolen globale behandelingsbeleid zou toegepast worden. De gerapporteerde winst meldt de numerieke wijziging in de behandeling die werd gebruikt. De tweede balk geeft relatieve winst (of verlies) aan van het behandelen van iedereen door binaire behandelingen in te schakelen.",
+      "BarTextContinuous": "De eerste balk geeft de gemiddelde relatieve winst aan als het hierboven beschreven aanbevolen globale behandelingsbeleid zou toegepast worden. De gerapporteerde toenamen weerspiegelen het verhogen/verlagen van de behandelingsfunctie met 10% van de typische behandelgrootte in de steekproef. De tweede balk geeft relatieve winst (of verliezen) aan van het verhogen/verlagen van continue behandelingen met 10%.",
       "Description": "Deze hulpprogramma's helpen bij het opstellen van beleid voor toekomstige interventies. U kunt bepalen welke delen van uw steekproef de grootste reacties op een causale factor (bijvoorbeeld behandeling) ervaren of regels opstellen om te bepalen welke toekomstige populaties de grootste behandelingseffecten zullen hebben.",
       "Left": "{0} <= {1}",
       "Recommended": "Aanbevolen behandeling = {0}",
@@ -51,13 +51,13 @@
       "SelectPolicy": "Behandelfunctie instellen",
       "Size": "Interpreteerbaar aanbevolen globaal behandelbeleid voor steekproefgrootte (n) = {0}",
       "Table": "U kunt de tabel lezen door een rij te nemen en vervolgens een kolom van die specifieke rij te nemen.",
-      "TableDescription": "This table shows a recommended treatment policy that can be applied to the current data sample or other populations. The table provides a simple rule to segment observations into data cohorts based on the features with the largest impact on whether the individual will respond to the selected treatment. The table also specifies number of datapoints in the current data sample assigned to each segment.",
+      "TableDescription": "In deze tabel ziet u een aanbevolen behandelingsbeleid dat kan worden toegepast op het huidige gegevensvoorbeeld of op andere populaties. De tabel biedt een eenvoudige regel voor het segmenteren van waarnemingen in gegevenscohorten op basis van de functies met de grootste impact op de vraag of de persoon op de geselecteerde behandeling reageert. In de tabel wordt ook het aantal gegevenspunten opgegeven in het huidige gegevensvoorbeeld dat aan elk segment is toegewezen.",
       "alwaysTreat": "'{0}' altijd behandelen",
-      "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
-      "averageGainContinuous": "Average gains of alternative policies over no modification to the current treatment level for {0} treatment.",
-      "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "averageGainBinary": "Gemiddelde winst van het instellen van de behandeling {0} naar de basislijnwaarde {1}.",
+      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "header": "Deze hulpprogramma's helpen bij het bouwen van beleid voor toekomstige interventies. U kunt bepalen welke delen van uw steekproef het meeste antwoord geven op wijzigingen in oorzakelijke kenmerken of behandelingen, en regels opstellen om te definiëren welke toekomstige populaties moeten worden gericht op bepaalde interventies.",
       "nSample": "n = {0}",
-      "noData": "No data"
+      "noData": "Geen gegevens"
     }
   },
   "Core": {
@@ -75,50 +75,54 @@
       "gte": "{0} >= {1}",
       "eq": "{0} == {1}",
       "ne": "{0} != {1}",
-      "in": "{0} in the set of ({1})",
-      "nin": "{0} not in the set of ({1})",
-      "rg": "{0} in the range of ({1})",
-      "nrg": "{0} in the range of ({1})",
-      "Unknown": "unknown"
+      "in": "{0} in de set van ({1})",
+      "nin": "{0} niet in de set van ({1})",
+      "rg": "{0} binnen het bereik van ({1})",
+      "nrg": "{0} binnen het bereik van ({1})",
+      "Unknown": "onbekend"
     }
   },
   "Counterfactuals": {
-    "CurrentTreatment": "Current treatment",
+    "CurrentTreatment": "Huidige behandeling",
     "EffectLowerBound": "CI lager",
-    "EffectOfTreatment": "Effect of recommendation",
+    "EffectOfTreatment": "Effect van aanbeveling",
     "EffectUpperBound": "CI bovenste",
     "RecommendedTreatment": "Aanbevolen behandeling",
     "WhatIf": {
-      "setValue": "Set Value",
-      "sortFeatures": "Sort feature columns by counterfactual feature importance"
+      "setValue": "Waarde instellen",
+      "sortFeatures": "Functiekolommen sorteren op functie-belang van nulscenario",
+      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
+      "toggleToolTipHeader": "Ranked counterfactual features"
     },
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "Naam wat-als-nulscenario's",
-    "createCounterfactual": "Wat-als-nulscenario maken",
-    "createOwn": "Create your own counterfactual:",
+    "createWhatIfCounterfactual": "Create what-if counterfactual",
+    "createCounterfactual": "Counterfactual",
+    "createOwn": "Uw eigen nulscenario maken:",
     "currentClass": "Huidige klasse",
     "decreaseByOne": "Waarde met 1 verlagen",
     "desiredClass": "Gewenste klasse voor nulscenario('s)",
-    "header": "What-If counterfactuals",
+    "header": "Wat-als-nulscenario's",
     "increaseByOne": "Waarde met 1 verhogen",
     "individualTreatment": "Aanbevolen beleid voor individuele behandeling",
     "listChoose": "Gebruik het spinner-besturingselement om de belangrijkste k-voorbeelden te kiezen die u wilt weergeven.",
-    "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
-    "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
-    "localImportanceSelectData": "Select a data point to view local importance chart",
+    "listDescription": "In deze lijst ziet u welke gegevenspunten in het huidige gegevensvoorbeeld het meeste oorzakelijke antwoord op de geselecteerde behandeling hebben, op basis van alle behandelingen die zijn opgenomen in het geschatte oorzakelijke model. In de linker vijf kolommen wordt aangegeven of de behandeling wordt aanbevolen voor de observatie, de huidige behandeling, het geschatte effect van de behandeling (effect van het toepassen van een behandeling vanaf een basislijn van geen behandeling voor binaire behandelingen of het vergroten/verkleinen van de behandelingsfunctie met 10% van de normale behandelgrootte in het voorbeeld: [dynamisch: de numerieke wijziging in de behandeling die gebruikt is] rapporteren), en de lage en hogere betrouwbaarheidsintervallen (CI) voor dit effect. In de resterende kolommen worden de huidige behandelingsstatus en andere kenmerken van elke observatie weergegeven.",
+    "localImportanceDescription": "De belangrijkste functies in rij {0} die moeten verstoord worden om de gewenste modelvoorspelling te bereiken. Op basis van wat-als-analyse voor voorspelling: {1}",
+    "localImportanceSelectData": "Selecteer een gegevenspunt om de lokale belangrijkheidsgrafiek te bekijken",
     "noData": "Geen gegevens",
-    "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "panelHeader": "Wat-als-nulscenario's",
+    "noFeatures": "Er zijn geen functies beschikbaar",
+    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "whatIfPanelHeader": "What-if counterfactuals",
+    "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Aanbevolen beleidsverbetering",
-    "referenceDatapoint": "Reference datapoint: Row {0}",
+    "referenceDatapoint": "Referentiegegevenspunt: rij {0}",
     "saveAsNew": "Opslaan als nieuw gegevenspunt",
-    "saveDescription": "These counterfactuals are based on the model's prediction, and therefore may be capturing the same correlations that were picked up by the model. We do not advise users to make real-life decisions based on this tool. Use our toolkit for causal analysis for real-life decision-making scenarios.",
+    "saveDescription": "Deze nulscenario's zijn gebaseerd op de voorspelling van het model en kunnen daarom dezelfde correlaties vastleggen die door het model zijn opgehaald. We raden gebruikers niet aan om echte beslissingen te nemen op basis van dit hulpprogramma. Gebruik onze toolkit voor oorzakelijke analyse voor besluitvormingsscenario's in de praktijk.",
     "seePrediction": "Voorspellingsdelta's bekijken",
     "selectedDatapoint": "Geselecteerd gegevenspunt",
     "showOnly": "Alleen weergeven",
-    "showTop": "Datapoints with the largest estimated causal responses to treatment feature: {0}",
-    "whatifDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot."
+    "showTop": "Gegevenspunten met de meeste geschatte oorzakelijke reacties op behandelingskenmerk: {0}",
+    "whatifDescription": "Met Wat-als-scenario's kunt u kenmerken voor elke invoer verstoren en observeren hoe de voorspelling van het model verandert. U kunt functies handmatig verstoren of eenvoudig de gewenste voorspelling specificeren (bijvoorbeeld klasselabel voor een classificatie) om een lijst te zien met gegevenspunten die het dichtst bij de oorzakelijke invoer liggen en die tot de gewenste voorspelling zouden leiden. Ook bekend als nulscenario's voor voorspellingen, kunt u ze gebruiken voor het verkennen van de relaties die door het model zijn geleerd; het begrijpen van belangrijke, noodzakelijke kenmerken voor de voorspellingen van het model; of fouten opsporen in edge-cases voor het model. Kies om te beginnen invoerpunten uit de gegevenstabel of het spreidingsdiagram."
   },
   "ErrorAnalysis": {
     "Cohort": {
@@ -147,6 +151,17 @@
     "FeatureList": {
       "features": "Functies",
       "importances": "Urgenties"
+    },
+    "TreeViewParameters": {
+      "maximumDepth": "Maximum depth",
+      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
+      "maximumDepthTitle": "Additional information on maximum depth",
+      "numLeaves": "Number of leaves",
+      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
+      "numLeavesTitle": "Additional information on number of leaves",
+      "minDataInLeaf": "Minimum number of samples in one leaf",
+      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
+      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
     "FilterTooltip": {
       "correctNum": "Juist (#): ",
@@ -192,18 +207,22 @@
       "emptyText": "Selecteer twee functies met behulp van de bovenstaande vervolgkeuzelijsten. U kunt de gegevens via twee dimensies clusteren en filteren.",
       "selectAll": "Alles selecteren"
     },
+    "MatrixFilter": {
+      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+    },
     "MatrixSummary": {
-      "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare."
+      "heatMapDescription": "Met de heatmap kunt u zich richten op specifieke intersectionele functiefilters en geaggregeerde foutpercentages berekenen. Begin met twee gegevenssetfuncties om te vergelijken.",
+      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
     },
     "MatrixOptions": {
-      "quantileBinningLabel": "Quantile binning",
-      "binningThresholdLabel": "Binning threshold",
-      "toggleOnLabel": "On",
-      "toggleOffLabel": "Off",
-      "quantileBinningInfoText": "Distribute values evenly across varying ranges of bins",
-      "quantileBinningTitle": "Additional information on quantile binning",
-      "binningThresholdInfoText": "Number of values required before binning",
-      "binningThresholdTitle": "Additional information on binning threshold"
+      "quantileBinningLabel": "Kwantiel binning",
+      "binningThresholdLabel": "Drempelwaarde voor binning",
+      "toggleOnLabel": "Aan",
+      "toggleOffLabel": "Uit",
+      "quantileBinningInfoText": "Waarden gelijkmatig verdelen over verschillende bereiken van bins",
+      "quantileBinningTitle": "Aanvullende informatie over kwantiel binning",
+      "binningThresholdInfoText": "Aantal waarden dat is vereist voor binning",
+      "binningThresholdTitle": "Aanvullende informatie over binningdrempel"
     },
     "Metrics": {
       "errorRate": "Aantal fouten",
@@ -217,8 +236,35 @@
       "meanSquaredErrorInfo": "De gemiddelde kwadratenfout is het gemiddelde van de kwadraten van de fouten.",
       "meanSquaredErrorShort": "Gemiddelde sq. fout",
       "meanSquaredErrorTitle": "Aanvullende informatie over gemiddelde kwadratische fout",
+      "precision": "Precision score",
+      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
+      "precisionShort": "Precision",
+      "precisionTitle": "Additional information on precision",
+      "recall": "Recall score",
+      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
+      "recallShort": "Recall",
+      "recallTitle": "Additional information on recall",
+      "macroPrecision": "Macro averaged precision score",
+      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+      "macroPrecisionShort": "Macro precision",
+      "macroPrecisionTitle": "Additional information on macro averaged precision",
+      "microPrecision": "Micro averaged precision score",
+      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+      "microPrecisionShort": "Micro precision",
+      "microPrecisionTitle": "Additional information on micro averaged precision",
+      "macroRecall": "Macro averaged recall score",
+      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+      "macroRecallShort": "Macro recall",
+      "macroRecallTitle": "Additional information on macro averaged recall",
+      "microRecall": "Micro averaged recall score",
+      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+      "microRecallShort": "Micro recall",
+      "microRecallTitle": "Additional information on micro averaged recall",
       "metricName": "Naam van de meetwaarde",
       "metricValue": "Metrische waarde"
+    },
+    "MetricSelector": {
+      "selectorLabel": "Select metric"
     },
     "Navigation": {
       "dataExplorer": "Data Explorer",
@@ -234,10 +280,13 @@
       "move": "Verplaatsen",
       "save": "Opslaan",
       "saveTitle": "Opslaan als een nieuwe cohort",
-      "subText": "Sla de huidige cohort op in de cohortenlijst. U kunt weer naar de opgeslagen cohort gaan via de cohortenlijst."
+      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
+      "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Configure error explorer.\""
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
+      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Wat-als"
@@ -267,6 +316,10 @@
     "whatIfDatapoints": "Wat-als-gegevenspunten"
   },
   "Fairness": {
+    "ValidationErrors": {
+      "missingPerformanceMetric": "No performance metric found.",
+      "missingFairnessMetric": "No fairness metric found."
+    },
     "BinDialog": {
       "cancel": "Annuleren",
       "categoryHeader": "Binwaarden:",
@@ -276,18 +329,18 @@
       "save": "Opslaan"
     },
     "DropdownHeaders": {
-      "errorMetric": "Enable error bars",
+      "errorMetric": "Foutbalken inschakelen",
       "fairnessMetric": "Metrisch gegeven voor eerlijkheid",
       "performanceMetric": "Metrische prestatiegegevens",
       "sensitiveFeature": "Gevoelige functie"
     },
     "ErrorBounds": {
-      "howToRead": "How to read these error bars",
-      "introModalText1": "Error bars show the uncertainty in the metric values due to the size of the evaluation data set. We show 95% confidence intervals calculated using ",
-      "wilsonScores": "Wilson scores",
-      "introModalText2": " (for binary classification) or ",
-      "normalApproximation": "normal approximation",
-      "introModalText3": " (for other tasks)."
+      "howToRead": "Hoe deze foutbalken te lezen?",
+      "introModalText1": "Foutbalken tonen de consistentie in de metrische waarden vanwege de grootte van de evaluatiegegevensset. Er worden betrouwbaarheidsintervallen van 95% weergegeven die worden berekend met ",
+      "wilsonScores": "Wilson-scores",
+      "introModalText2": " (voor binaire classificatie) of ",
+      "normalApproximation": "normale benadering",
+      "introModalText3": " (voor andere taken)."
     },
     "Fairness": {
       "body": "Met de metrische gegevens voor eerlijkheid wordt de variatie van het gedrag van uw model voor geselecteerde functies berekend. Er zijn verschillende soorten metrische gegevens voor eerlijkheid die zijn gebaseerd op verschillende metrische gegevens voor prestaties. Hiermee kan het verschil of de verhouding tussen de uiterste waarden voor de groepen, of eenvoudig de slechtste waarde van een groep, worden vastgelegd.",
@@ -604,6 +657,7 @@
       "datasetCohorts": "Gegevenssetcohorten",
       "details": "Details",
       "duplicateCohort": "Dupliceren",
+      "edit": "Edit",
       "editCohort": "Cohort bewerken",
       "features": "{0} functies",
       "filters": "{0} filters",
@@ -624,9 +678,10 @@
       "cohortNameError": "Cohortnaam ontbreekt",
       "cohortNameLabel": "Naam van de gegevenssetcohort",
       "cohortNamePlaceholder": "Een naam voor uw cohort invoeren",
-      "defaultFilterState": "Selecteer een filter om parameters aan uw gegevenssetcohort toe te voegen.",
+      "clearAllFilters": "Clear all filters",
+      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Verwijderen",
-      "noAddedFilters": "No filters",
+      "noAddedFilters": "Geen filters",
       "placeholderName": "Cohort {0}",
       "save": "Opslaan",
       "selectFilter": "Filter selecteren"
@@ -644,20 +699,20 @@
       "truePositive": "Terecht-positief"
     },
     "CrossClass": {
-      "absoluteValInfo": "Average of absolute value: Shows the sum of the feature's importance across all possible classes, divided by number of classes",
+      "absoluteValInfo": "Gemiddelde van absolute waarde: hiermee wordt de som van de functie-urgentie weergegeven voor alle mogelijke klassen, gedeeld door het aantal klassen",
       "close": "Sluiten",
       "crossClassWeights": "Gewichten in meerdere klassen",
-      "enumeratedClassInfo": "Enumerated class names: Shows only the specified class's feature importance values across all data points.",
+      "enumeratedClassInfo": "Geïnventariseerde klassenamen: hiermee worden alleen de functie-urgentiewaarden voor de opgegeven klasse weergegeven voor alle gegevenspunten.",
       "info": "Informatie over de berekening van meerdere klassen",
       "label": "Weging voor alle klassen:",
-      "overviewInfo": "Multiclass models generate an independent feature importance vector for each class. Each class's feature importance vector demonstrates which features made a class more likely or less likely. You can select how the weights of the per-class feature importance vectors are summarized into a single value:",
+      "overviewInfo": "Modellen met meerdere klassen genereren een onafhankelijke functie-urgentievector voor elke klasse. De functie-urgentievector van elke klasse geeft aan door welke functies een klasse waarschijnlijker of minder waarschijnlijk is. U kunt selecteren hoe de wegingen van de functie-urgentievectoren per klasse worden samengevat in één waarde:",
       "predictedClassInfo": "Voorspelde klasse: hiermee wordt de functie-urgentiewaarde weergegeven voor de voorspelde klasse van een bepaald punt"
     },
     "DatasetExplorer": {
       "aggregatePlots": "Plots samenvoegen",
       "chartType": "Grafiektype",
       "colorValue": "Kleurwaarde",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.",
+      "helperText": "Maak gegevensset-cohorten om gegevenssetstatistieken te analyseren, samen met filters zoals voorspeld resultaat, gegevenssetfuncties en foutgroepen. Meer informatie over de over/onderpresentatie in uw gegevensset.",
       "individualDatapoints": "Afzonderlijke gegevenspunten",
       "missingParameters": "Op dit tabblad moet een evaluatiegegevensset worden opgegeven.",
       "noColor": "Geen"
@@ -685,13 +740,13 @@
       "clickHere": "Meer informatie",
       "limeDescription": "Deze verklarende factor maakt gebruik van LIME, waarmee een lineaire benadering van het model wordt geleverd. Een uitleg wordt verkregen door het exemplaar te verstoren, modelvoorspellingen op te halen en deze voorspellingen te gebruiken als labels om een eenvoudig lineair model te verkrijgen dat lokaal getrouw is. De gewichten van dit lineaire model worden gebruikt als functie-urgenties. Klik op de onderstaande koppeling voor meer informatie.",
       "limeTitle": "LIME (Local Interpretable Model-Agnostic Explanations)",
-      "mimicDescription": "This explainer is based on the idea of training global surrogate models to mimic blackbox models. A global surrogate model is an intrinsically interpretable model that is trained to approximate the predictions of any black box model as accurately as possible. Feature importance values are model-based feature importance values of your underlying surrogate model (LightGBM, or Linear Regression, or Stochastic Gradient Descent, or Decision Tree).",
+      "mimicDescription": "Deze verklaring is gebaseerd op het idee van het trainen van globale surrogaatmodellen om black box-modellen na te bootsen. Een globaal surrogaatmodel is een intrinsiek interpreteerbaar model dat is getraind om de voorspellingen van elk black box-model zo nauwkeurig mogelijk te benaderen. De functie-urgentiewaarden zijn op modellen gebaseerde functie-urgentiewaarden van het onderliggende surrogaatmodel (LightGBM, lineaire regressie, Stochastic Gradient Descent of beslissingsstructuur)",
       "mimicTitle": "Nabootsen (verklaringen met globale surrogaatmodellen)",
       "pfiDescription": "Met deze verklarende factor worden per functie de gegevens van een volledige gegevensset willekeurig gebruikt en wordt berekend in welke mate de metrische prestatiegegevens voor het belang veranderen (standaardwaarden voor metrische prestatiegegevens: F1 voor binaire classificatie, F1-score met microgemiddelde voor classificatie met meerdere klassen en gemiddelde absolute fout voor regressie). Hoe groter de verandering, hoe belangrijker de functie. Met deze verklarende factor kan alleen het algemene gedrag van het onderliggende model worden uitgelegd. Er worden geen afzonderlijke voorspellingen uitgelegd. De functie-urgentiewaarde van een functie geeft het verschil in de prestatie van het model aan wanneer die specifieke functie wordt verstoord.",
       "pfiTitle": "PFI (Permutation Feature Importance)",
       "shapDescription": "Deze verklarende factor maakt gebruik van SHAP, een speltheoretische benadering voor het uitleggen van modellen, waarbij de betekenis van de functiesets wordt gemeten door deze functies te 'verbergen' voor het model via marginalisatie. Klik op de onderstaande koppeling voor meer informatie.",
       "shapTitle": "Shapley-waarden",
-      "whatDoFeatureMean": "What do these feature importance values mean?"
+      "whatDoFeatureMean": "Wat betekenen deze waarden voor functie-urgentie?"
     },
     "FeatureImportanceWrapper": {
       "barText": "Staaf",
@@ -733,19 +788,21 @@
       "helperText": "Verken de k belangrijkste functies die invloed hebben op uw algemene modelvoorspellingen. Gebruik de schuifbalk om functies van aflopend belang weer te geven."
     },
     "GlobalTab": {
+      "absoluteValues": "Absolute values",
       "aggregateFeatureImportance": "Functie-urgentie samenvoegen",
       "collapsedHelperText": "Bekijk de belangrijkste k-functies die van invloed zijn op uw algehele modelvoorspellingen.",
+      "datapoint": "Datapoint",
       "datasetCohortSelector": "Een gegevenssetcohort selecteren",
       "datasetCohorts": "Gegevenssetcohorten",
       "datasetRequired": "Voor plots met afhankelijkheden zijn de evaluatiegegevensset en de matrix van lokale functie-urgenties vereist.",
       "dependencePlotFeatureSelectPlaceholder": "Functie selecteren",
-      "dependencePlotHelperText": "This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.",
+      "dependencePlotHelperText": "Deze afhankelijkheidsgrafiek toont de relatie van de waarden van een functie met de bijbehorende waarden voor functie-urgentie.",
       "dependencePlotTitle": "Plots met afhankelijkheden",
-      "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
+      "helperText": "Verken de belangrijkste functies die van invloed zijn op uw algemene modelvoorspellingen (ook wel globale uitleg). Gebruik de schuifregelaar om aflopende functie-urgenties weer te geven. Alle cohortenfunctie-urgenties worden naast elkaar weergegeven en kunnen worden uitgeschakeld door het cohort in de legenda te selecteren. Klik op een van de functies in de grafiek om een dichtheidsdiagram te zien onder de invloed van de waarden van de geselecteerde functie op de voorspelling.",
       "legendHelpText": "Schakel cohorten in en uit in de plot door op de legenda-items te klikken.",
       "missingParameters": "Op dit tabblad moet de parameter voor de lokale functie-urgentie worden opgegeven.",
       "sortBy": "Sorteren op",
-      "topAtoB": "Top {0} features by their importance",
+      "topAtoB": "Belangrijkste {0} functies op basis van hun belang",
       "viewDependencePlotFor": "Plot met afhankelijkheden weergeven voor:",
       "weightOptions": "Gewichten voor urgentie van klassen"
     },
@@ -768,7 +825,7 @@
     },
     "ModelPerformance": {
       "cohortPickerLabel": "Een gegevenssetcohort selecteren om te verkennen",
-      "helperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.",
+      "helperText": "Evalueer de prestaties van uw model door de distributie van uw voorspellingswaarden en de waarden van de metrische gegevens over de prestaties van uw model te verkennen. U kunt uw model verder onderzoeken door te kijken naar een relatieve analyse van de prestaties in verschillende cohorten of subgroepen van uw gegevensset. Selecteer filters naast y-value en x-value om over verschillende dimensies te knippen.",
       "missingParameters": "Voor dit tabblad moet de matrix van voorspelde waarden uit het model worden geleverd.",
       "missingTrueY": "Prestatiestatistieken voor modellen moeten naast de voorspelde resultaten ook de echte resultaten weergeven",
       "modelStatistics": "Modelstatistieken"
@@ -783,8 +840,8 @@
     },
     "Statistics": {
       "accuracy": "Nauwkeurigheid: {0}",
-      "fnr": "False Negative Rates: {0}",
-      "fpr": "False Positive Rates: {0}",
+      "fnr": "Fout-negatieve frequenties: {0}",
+      "fpr": "Fout-positieve frequenties: {0}",
       "meanPrediction": "Gemiddelde voorspelling {0}",
       "mse": "MSE: {0}",
       "precision": "Precisie: {0}",
@@ -829,7 +886,7 @@
       "featureImportanceLackingParameters": "Geef lokale functie-urgenties op om te zien hoe elke functie invloed heeft op afzonderlijke voorspellingen.",
       "featureImportancePlot": "Plot met belang van functies",
       "featureValues": "Functiewaarden",
-      "helperText": "Select an individual datapoint by clicking on a datapoint in the scatterplot to view its local feature importance values below and feature values in the panel on the right.",
+      "helperText": "Selecteer een afzonderlijk gegevenspunt door op een gegevenspunt in het spreidingsplot te klikken om eronder de lokale functie-urgentiewaarden hiervan te bekijken en functiewaarden in het paneel aan de rechterkant weer te geven.",
       "iceLackingParameters": "Voor ICE-grafieken is een operationeel model vereist om voorspellingen te maken voor hypothetische gegevenspunten.",
       "icePlot": "ICE-tekenbewerking (Individual Conditional Expectation)",
       "icePlotHelperText": "Met ICE-spreidingsdiagrammen wordt aangegeven hoe de voorspellingswaarden van het geselecteerde gegevenspunt worden gewijzigd langs een aantal functiewaarden tussen een minimum- en maximumwaarde.",
@@ -891,7 +948,7 @@
     "modelPerformance": "Modelprestaties",
     "perturbationExploration": "Storingsverkenning",
     "predictedClass": "Voorspelde klasse",
-    "selectPoint": "Select a point to see its local explanation",
+    "selectPoint": "Een punt selecteren om de lokale uitleg weer te geven",
     "summaryImportance": "Belangenoverzicht"
   },
   "ModelAssessment": {
@@ -902,26 +959,28 @@
     },
     "CausalAnalysis": {
       "Table": {
-        "ciLower": "Confidence interval (lower)",
-        "ciUpper": "Confidence interval (upper)",
-        "name": "Feature",
-        "pValue": "P-value",
-        "point": "Effect estimate",
-        "stderr": "Standard error",
+        "ciLower": "Betrouwbaarheidsinterval (lager)",
+        "ciUpper": "Betrouwbaarheidsinterval (boven)",
+        "name": "Kenmerk",
+        "pValue": "P-waarde",
+        "point": "Effectschatting",
+        "stderr": "Standaardfout",
         "zstat": "Z-score"
       }
     },
     "Cohort": {
-      "apply": "Apply",
-      "cancel": "Cancel",
-      "cohortInfo": "Cohort info",
-      "cohortList": "Cohort list",
-      "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
-      "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "apply": "Toepassen",
+      "cancel": "Annuleren",
+      "cohortInfo": "Cohortgegevens",
+      "cohortList": "Cohortlijst",
+      "deleteCohort": "Deleting {0}?",
+      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "selectCohort": "Een cohort selecteren",
+      "shiftCohort": "Cohort verplaatsen",
+      "shiftCohortDescription": "Selecteer een cohort in de lijst met cohorten. Pas het cohort toe op het dashboard."
     },
     "CohortInformation": {
-      "ChangeGlobalCohort": "Globale cohort wijzigen",
+      "SwitchGlobalCohort": "Switch global cohort",
       "CreateNewCohort": "Nieuw cohort maken",
       "DataPoints": "Aantal gegevenspunten",
       "DefaultCohort": " (standaard)",
@@ -942,7 +1001,7 @@
       "ModelStatistics": "Modelstatistieken"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Content": "In deze lijst ziet u de indeling van het dashboard. U kunt gegevens filteren met behulp van het foutanalyse-onderdeel, wat onderaan wordt weergegeven in de onderdelen. U kunt onderdelen toevoegen, slepen en neerzetten om de volgorde van de stroom te wijzigen of u kunt onderdelen verwijderen.",
       "DashboardComponents": "Dashboardonderdelen",
       "DataPoints": "Aantal gegevenspunten",
       "DeleteDialog": {
@@ -951,17 +1010,17 @@
         "Delete": "Verwijderen",
         "Title": "{0}verwijderen?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Dashboardnavigatie"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Juiste voorspellingen",
       "GlobalExplanation": "Functie-urgentie samenvoegen",
       "IncorrectPredictions": "Onjuiste voorspellingen",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.",
+      "IndividualFeature": "Selecteer een gegevenspunt door op een gegevenspunt (of meerdere gegevenspunten) in de tabel te klikken om de waarden voor het belang van lokale functies (lokale uitleg) en de afzonderlijke voorwaardelijke verwachting hieronder weer te geven. Voor gegevenssets met meer dan 5000 gegevenspunten is de weergave een willekeurige subsample om eenvoudig te verkennen.",
       "LocalExplanation": "Belang van afzonderlijke functies"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Dashboardnavigatie",
       "cohortInfo": "Cohortgegevens",
       "cohortList": "Cohortlijst",
       "cohortSettings": "Cohortinstellingen",
