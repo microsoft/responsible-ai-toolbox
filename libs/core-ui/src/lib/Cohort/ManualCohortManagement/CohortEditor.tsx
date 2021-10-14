@@ -35,7 +35,7 @@ export interface ICohortEditorProps {
   deleteIsDisabled: boolean;
   disableEditName?: boolean;
   existingCohortNames?: string[];
-  onSave: (newCohort: Cohort) => void;
+  onSave: (newCohort: Cohort, switchNew?: boolean) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
   filterList?: IFilter[];
@@ -186,9 +186,18 @@ export class CohortEditor extends React.PureComponent<
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
         )}
-        <PrimaryButton onClick={this.saveCohort} disabled={this.isDuplicate()}>
+        <PrimaryButton
+          onClick={() => this.saveCohort()}
+          disabled={this.isDuplicate()}
+        >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
+        <DefaultButton
+          onClick={() => this.saveCohort(true)}
+          disabled={this.isDuplicate()}
+        >
+          {localization.Interpret.CohortEditor.saveAndSwitch}
+        </DefaultButton>
         <DefaultButton onClick={this.onCancelClick}>
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
@@ -471,14 +480,14 @@ export class CohortEditor extends React.PureComponent<
     });
   };
 
-  private saveCohort = (): void => {
+  private saveCohort = (switchNew?: boolean): void => {
     if (this.state.cohortName?.length) {
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
         this.state.filters
       );
-      this.props.onSave(newCohort);
+      this.props.onSave(newCohort, switchNew);
     }
   };
 

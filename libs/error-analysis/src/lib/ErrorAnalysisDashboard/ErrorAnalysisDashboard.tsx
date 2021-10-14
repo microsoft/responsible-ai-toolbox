@@ -424,14 +424,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             <SaveCohort
               isOpen={this.state.openSaveCohort}
               onDismiss={(): void => this.setState({ openSaveCohort: false })}
-              onSave={(savedCohort: ErrorCohort): void => {
-                let newCohorts = [...this.state.cohorts, savedCohort];
-                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                this.setState({
-                  cohorts: newCohorts,
-                  selectedCohort: savedCohort
-                });
-              }}
+              onSave={this.handleSaveCohort}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
             />
@@ -800,5 +793,18 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       cohorts: [...cohorts, selectedCohort],
       selectedCohort
     });
+  };
+
+  private handleSaveCohort = (
+    savedCohort: ErrorCohort,
+    switchNew?: boolean
+  ): void => {
+    let newCohorts = [...this.state.cohorts, savedCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState((prevState) => ({
+      baseCohort: switchNew ? savedCohort : prevState.baseCohort,
+      cohorts: newCohorts,
+      selectedCohort: switchNew ? savedCohort : prevState.selectedCohort
+    }));
   };
 }
