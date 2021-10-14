@@ -97,7 +97,15 @@ export class MatrixArea extends React.PureComponent<
     // Note: we render as empty if: 1.) there is no matrix 2.) all features set to empty
     // 3.) when user first changes feature a render is triggered but componentDidUpdate
     // is only called after initial render is done, which would be an inconsistent state
-    // Note in third case we just show empty and not the help text
+    // Note in third case we just show empty and not the help text.
+    // Also we do not display the text when in the static view.
+    if (
+      !this.props.isEnabled ||
+      this.state.matrixFeature1 !== this.props.selectedFeature1 ||
+      this.state.matrixFeature2 !== this.props.selectedFeature2
+    ) {
+      return <div />;
+    }
     if (!this.state.jsonMatrix || featuresUnselected) {
       return (
         <Stack styles={emptyTextStyle} tokens={emptyTextPadding}>
@@ -106,12 +114,6 @@ export class MatrixArea extends React.PureComponent<
           </Text>
         </Stack>
       );
-    }
-    if (
-      this.state.matrixFeature1 !== this.props.selectedFeature1 ||
-      this.state.matrixFeature2 !== this.props.selectedFeature2
-    ) {
-      return <div />;
     }
     const sameFeatureSelected =
       this.props.selectedFeature1 === this.props.selectedFeature2;
