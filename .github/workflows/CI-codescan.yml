@@ -1,4 +1,4 @@
-name: CI Notebooks
+name: CI code scan
 
 on:
   push:
