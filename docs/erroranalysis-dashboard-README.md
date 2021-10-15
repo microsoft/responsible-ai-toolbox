@@ -2,15 +2,14 @@
 
 # Error Analysis
 
-
 Responsible-AI-Widgets provides a collection of model and data exploration and assessment user interfaces that enable a better understanding of AI systems. One of these interfaces is Error Analysis (+ Interpretability) dashboard.
 
-You can use the Error Analysis dashboard to 
-1) ***Identify*** cohorts with high error rate versus benchmark and visualize how the error rate is distributed. 
-2) ***Diagnose*** the root causes of the errors by visually diving deeper into the characteristics of data and models (via its embedded interpretability capabilities). 
+You can use the Error Analysis dashboard to
 
-For instance, you can use Error Analysis to discover that the model has a higher error rate for a specific cohort (e.g., females with income <$50K) vs. the rest of the population. Via its embedded interpretability capabilities of this dashboard, you can next understand the most impactful factors responsible for this subset’s erroneous predictions, inspect some individual records of that cohort receiving erroneous predictions, understand their feature importance values, and perform what-if analysis on them to diagnose the contributing error factors better. 
+1. **_Identify_** cohorts with high error rate versus benchmark and visualize how the error rate is distributed.
+2. **_Diagnose_** the root causes of the errors by visually diving deeper into the characteristics of data and models (via its embedded interpretability capabilities).
 
+For instance, you can use Error Analysis to discover that the model has a higher error rate for a specific cohort (e.g., females with income <$50K) vs. the rest of the population. Via its embedded interpretability capabilities of this dashboard, you can next understand the most impactful factors responsible for this subset’s erroneous predictions, inspect some individual records of that cohort receiving erroneous predictions, understand their feature importance values, and perform what-if analysis on them to diagnose the contributing error factors better.
 
 ## Example Notebooks
 
@@ -22,16 +21,14 @@ For instance, you can use Error Analysis to discover that the model has a higher
 
 <a name="interpretability dashboard"></a>
 
-
-
 <a name="error analysis dashboard "></a>
 
 ## Error Analysis Dashboard
 
 Error Analysis drives deeper to provide a better understanding of your machine learning model's behaviors. Use Error Analysis to identify cohorts with higher error rates and diagnose the root causes behind these errors. Combined with [Fairlearn](github.com/fairlearn/fairlearn) and [Interpret-Community](https://github.com/interpretml/interpret-community), practitioners can perform a wide variety of assessment operations to build responsible machine learning. Use this dashboard to:
 
-1. Evaluate Cohorts: Learn how errors distribute across different cohorts at different levels of granularity 
-2. Explore Predictions: Use built-in interpretability features or combine with InterpretML for boosted debugging capability 
+1. Evaluate Cohorts: Learn how errors distribute across different cohorts at different levels of granularity
+2. Explore Predictions: Use built-in interpretability features or combine with InterpretML for boosted debugging capability
 3. Interactive Dashboard View customizable pre-built visuals to quickly identify errors and diagnose root causes
 
 Run the dashboard via:
@@ -42,12 +39,14 @@ from raiwidgets import ErrorAnalysisDashboard
 ErrorAnalysisDashboard(global_explanation, dashboard_pipeline, dataset=X_test_original,
                        true_y=y_test, categorical_features=categorical_features)
 ```
+
 Once you load the visualization dashboard, you can investigate different aspects of your dataset and trained model via two stages:
 
-* Identification
-* Diagnosis
+- Identification
+- Diagnosis
 
 ---
+
 **NOTE**
 
 Click on "Open in a new tab" on the top left corner to get a better view of the dashboard in a new tab.
@@ -76,14 +75,13 @@ After identifying cohorts with higher error rates, Error Analysis enables debugg
 
 4. What-if analysis (Perturbation Exploration) which applies changes to feature values of selected data point and observe resulting changes to the prediction.
 
-
 <a name="supported models"></a>
 
 ## Supported Models
 
 This interpretability and error analysis API supports regression and classification models that are trained on datasets in Python `numpy.array`, `pandas.DataFrame`, `iml.datatypes.DenseData`, or `scipy.sparse.csr_matrix` format.
 
-The explanation functions of [Interpret-Community](https://github.com/interpretml/interpret-community) accept both models and pipelines as input as long as the model or pipeline implements a `predict` or `predict_proba` function that conforms to the Scikit convention. If not compatible, you can wrap your model's prediction function into a wrapper function that transforms the output into the format that is supported (predict or predict_proba of Scikit), and pass that wrapper function to your selected interpretability techniques.  
+The explanation functions of [Interpret-Community](https://github.com/interpretml/interpret-community) accept both models and pipelines as input as long as the model or pipeline implements a `predict` or `predict_proba` function that conforms to the Scikit convention. If not compatible, you can wrap your model's prediction function into a wrapper function that transforms the output into the format that is supported (predict or predict_proba of Scikit), and pass that wrapper function to your selected interpretability techniques.
 
 If a pipeline script is provided, the explanation function assumes that the running pipeline script returns a prediction. The repository also supports models trained via **PyTorch**, **TensorFlow**, and **Keras** deep learning frameworks.
 
@@ -120,5 +118,5 @@ if needed:
 then:
 jupyter notebook
 ```
-</details>
 
+</details>
