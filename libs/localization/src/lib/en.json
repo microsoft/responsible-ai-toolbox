@@ -80,6 +80,10 @@
       "rg": "{0} in the range of ({1})",
       "nrg": "{0} in the range of ({1})",
       "Unknown": "unknown"
+    },
+    "ShiftCohort": {
+      "title": "Shift Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     }
   },
   "Counterfactuals": {
@@ -773,6 +777,7 @@
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "Select filter"
     },
     "Columns": {

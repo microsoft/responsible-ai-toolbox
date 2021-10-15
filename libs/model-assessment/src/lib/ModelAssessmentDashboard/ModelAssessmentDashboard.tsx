@@ -385,7 +385,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     });
   };
 
-  private onSaveCohort = (savedCohort: ErrorCohort): void => {
+  private onSaveCohort = (
+    savedCohort: ErrorCohort,
+    switchNew?: boolean
+  ): void => {
     if (
       this.state.cohorts.some((c) => c.cohort.name === savedCohort.cohort.name)
     ) {
@@ -393,13 +396,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
     let newCohorts = [...this.state.cohorts, savedCohort];
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState({
+    this.setState((preState) => ({
+      baseCohort: switchNew ? savedCohort : preState.baseCohort,
       cohorts: newCohorts,
-      selectedCohort: savedCohort
-    });
+      selectedCohort: switchNew ? savedCohort : preState.selectedCohort
+    }));
   };
 
-  private addCohort = (manuallyCreatedCohort: Cohort): void => {
+  private addCohort = (
+    manuallyCreatedCohort: Cohort,
+    switchNew?: boolean
+  ): void => {
     if (
       this.state.cohorts.some(
         (c) => c.cohort.name === manuallyCreatedCohort.name
@@ -415,11 +422,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     );
     let newCohorts = [...this.state.cohorts, newErrorCohort];
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState({
-      baseCohort: newErrorCohort,
+    this.setState((prevState) => ({
+      baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
       cohorts: newCohorts,
-      selectedCohort: newErrorCohort
-    });
+      selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
+    }));
   };
 
   private editCohort = (editCohort: Cohort): void => {
