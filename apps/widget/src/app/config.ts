@@ -14,4 +14,4 @@ export interface IAppConfig {
   locale: string | undefined;
 }
 
-export const config: IAppConfig = JSON.parse(`__rai_config__${""}`);
+export const config: IAppConfig = JSON.parse("__rai_config__");
