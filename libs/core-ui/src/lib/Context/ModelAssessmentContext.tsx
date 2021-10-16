@@ -52,7 +52,7 @@ export interface IModelAssessmentContext {
       ) => Promise<any[]>)
     | undefined;
   shiftErrorCohort(cohort: ErrorCohort): void;
-  addCohort(cohort: Cohort): void;
+  addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort): void;
   deleteCohort(cohort: ErrorCohort): void;
 }

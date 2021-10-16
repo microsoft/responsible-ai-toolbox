@@ -52,14 +52,14 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
-    cy.get('button:contains("Save")').click();
+    cy.get('button:contains("Save and switch")').click();
     cy.get("#cohortEditPanel").should("exist");
   });
   it("should create New cohort", () => {
     cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
-    cy.get('button:contains("Save")').click();
+    cy.get('button:contains("Save and switch")').click();
     cy.get('span:contains("CohortCreateE2E")').should("exist");
   });
   if (dataShape.noDataset) {
