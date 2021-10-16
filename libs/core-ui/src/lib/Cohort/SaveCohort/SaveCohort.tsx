@@ -28,7 +28,7 @@ export interface ISaveCohortProps {
   temporaryCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   onDismiss: () => void;
-  onSave: (temporaryCohort: ErrorCohort) => void;
+  onSave: (temporaryCohort: ErrorCohort, switchNew?: boolean) => void;
 }
 
 export interface ISaveCohortState {
@@ -103,6 +103,14 @@ export class SaveCohort extends React.Component<
             text={localization.ErrorAnalysis.SaveCohort.save}
           />
           <DefaultButton
+            onClick={(): void => {
+              this.props.onDismiss();
+              this.saveCohort.bind(this)(true);
+            }}
+          >
+            {localization.Interpret.CohortEditor.saveAndSwitch}
+          </DefaultButton>
+          <DefaultButton
             onClick={this.props.onDismiss}
             text={localization.ErrorAnalysis.SaveCohort.cancel}
           />
@@ -121,7 +129,7 @@ export class SaveCohort extends React.Component<
     this.setState({ cohortName: newValue });
   }
 
-  private saveCohort(): void {
+  private saveCohort(switchNew?: boolean): void {
     const tempCohort = this.props.temporaryCohort;
     const savedCohort = new ErrorCohort(
       new Cohort(
@@ -136,6 +144,6 @@ export class SaveCohort extends React.Component<
       false,
       tempCohort.cohortStats
     );
-    this.props.onSave(savedCohort);
+    this.props.onSave(savedCohort, switchNew);
   }
 }

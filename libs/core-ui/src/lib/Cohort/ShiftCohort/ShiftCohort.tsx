@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -35,9 +36,8 @@ export interface IShiftCohortState {
 }
 
 const dialogContentProps = {
-  subText:
-    "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
-  title: "Shift Cohort",
+  subText: localization.Core.ShiftCohort.subText,
+  title: localization.Core.ShiftCohort.title,
   type: DialogType.close
 };
 
