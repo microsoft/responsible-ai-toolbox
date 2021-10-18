@@ -34,6 +34,7 @@ setuptools.setup(
     package_data={
         '': [
             'schema_*.json',
+            'counterfactual_examples_output_*.json',
         ]
     },
     include_package_data=True,
