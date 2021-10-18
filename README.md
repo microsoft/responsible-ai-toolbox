@@ -29,7 +29,7 @@ In order to achieve these capabilities, the toolbox integrates together ideas an
 
 
 <p align="center">
-<img src="./img/responsible-ai-toolbox.png
+<img src="./img/responsibleai-toolbox.png
 " alt="responsible-ai-toolbox" width="500"/>
 
 Responsible AI Toolbox is designed to achieve the following goals:
