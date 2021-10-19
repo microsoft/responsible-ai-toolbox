@@ -472,8 +472,8 @@
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.averageGainContinuous" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Average gains of alternative policies over no '{0}' treatment.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Moyenne des gains de polices alternatives sans modification du niveau de traitement actuel pour le traitement de la {0}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gains moyens des stratégies alternatives sans traitement ’{0}’]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Average gains of alternative policies over no modification to the current treatment level for {0} treatment.]]></Val>
@@ -703,12 +703,18 @@
       <Item ItemId=";Counterfactuals.WhatIf.toggleToolTipBody" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les exemples contrefactuels génèrent des importances de caractéristique locale qui indiquent quelles fonctionnalités principales ont été les plus perturbées pour atteindre les scénarios de classification de classe souhaités ou la plage souhaitée pour les scénarios de régression.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Counterfactuals.WhatIf.toggleToolTipHeader" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ranked counterfactual features]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Fonctionnalités contrefactuelles classées]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -755,7 +761,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Create what-if counterfactual]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Créer des scénarios contrefactifs]]></Val>
+            <Val><![CDATA[Créer des scénarios contrefactuels]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -877,8 +883,8 @@
       <Item ItemId=";Counterfactuals.panelDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Parcourez le counterfactuals de prédiction et créez votre propre prédiction. Basé sur un DataPoint d’entrée et sur le {0} de prédiction souhaité. le tableau montre un ensemble proximal et diversifié d’exemples counterfactual qui produisent cette prédiction. Pour créer vos propres counterfactual de prédiction, vous pouvez utiliser les counterfactuals en tant que suggestions, Rechercher des fonctionnalités pour voir leurs valeurs et définir les valeurs de fonctionnalité counterfactual proposées en cliquant sur le texte « définir les valeurs » sous chaque nom de counterfactual. Nommez votre counterfactual et enregistrez-la.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Parcourez les contrefactuels de prédiction et créez les vôtres. Sur la base d'un point de données d'entrée et de la prédiction souhaitée {0}. Le tableau présente un ensemble proximal et diversifié d'exemples contrefactuels qui donnent cette prédiction. Pour créer votre propre contrefactuel de prédiction, vous pouvez utiliser les contrefactuels comme suggestions, rechercher des caractéristiques pour voir leurs valeurs, et définir les valeurs des caractéristiques contrefactuelles suggérées en cliquant sur le texte "définir les valeurs" sous chaque nom de contrefactuel. Nommez votre contrefactuel et enregistrez-le.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
@@ -1441,6 +1447,9 @@
       <Item ItemId=";ErrorAnalysis.MatrixFilter.disabledWarning" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error heatmap is disabled unless global cohort is switched to represent "All data" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La carte thermique d’erreur est désactivée, sauf si la cohorte globale est basculée pour représenter « Toutes les données » en raison de la carte thermique générée pour le jeu de données complet. Revenez au jeu de données complet pour afficher la carte thermique d’erreur.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1528,6 +1537,9 @@
       <Item ItemId=";ErrorAnalysis.MatrixSummary.heatMapStaticDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Avec la carte thermique, vous pouvez vous concentrer sur des filtres de fonctionnalité intersection spécifiques et calculer les taux d’erreurs désagrégés. Vous devez sélectionner jusqu’à deux fonctionnalités pour créer une carte thermique via le Kit de développement logiciel (SDK) avant d’afficher le tableau de bord.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1570,48 +1582,72 @@
       <Item ItemId=";ErrorAnalysis.Metrics.macroPrecision" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Macro averaged precision score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score de précision moyen de la macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroPrecisionInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La précision moyenne de la macro est le rapport entre les vrais positifs et tous les positifs prédits calculés indépendamment par classe et dont on a fait la moyenne.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroPrecisionShort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Macro precision]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Macro précision]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroPrecisionTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on macro averaged precision]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur la précision moyenne de macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroRecall" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Macro averaged recall score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score moyen de rappel de la macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroRecallInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le rappel moyen de macro correspond au ratio de vrais positifs par rapport à tous les positifs réels calculés indépendamment par classe et moyennes.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroRecallShort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Macro recall]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Rappel de macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.macroRecallTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on macro averaged recall]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur le rappel moyen de macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1708,60 +1744,90 @@
       <Item ItemId=";ErrorAnalysis.Metrics.microPrecision" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Micro averaged precision score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score de précision moyen de la micro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microPrecisionInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La précision micro-moyenne est le ratio des vrais positifs sur tous les positifs prédits agrégés pour toutes les classes.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microPrecisionShort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Micro precision]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Micro précision]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microPrecisionTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on micro averaged precision]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur la précision moyenne de macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microRecall" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Micro averaged recall score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score moyen de rappel de la macro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microRecallInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le rappel micro-moyen est le ratio de vrai positifs par rapport à tous les positifs réels agrégés pour toutes les classes.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microRecallShort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Micro recall]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Micro-rappel]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microRecallTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on micro averaged recall]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur le rappel moyen de micro]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.precision" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Precision score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score de précision]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.precisionInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The precision is the ratio of true positives over all predicted positives.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La précision correspond au ratio de vrai positifs par rapport à tous les positifs prédits.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1777,18 +1843,27 @@
       <Item ItemId=";ErrorAnalysis.Metrics.precisionTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on precision]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur la précision]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.recall" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Recall score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Score de rappel]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.recallInfo" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The recall is the ratio of true positives over all actual positives.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le rappel est le ratio de vrai positifs par rapport à tous les positifs réels.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1804,6 +1879,9 @@
       <Item ItemId=";ErrorAnalysis.Metrics.recallTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on recall]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur le rappel]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1882,6 +1960,9 @@
       <Item ItemId=";ErrorAnalysis.SaveCohort.defaultLabelCopy" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All data copy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Copie de toutes les données]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1915,8 +1996,8 @@
       <Item ItemId=";ErrorAnalysis.SaveCohort.subText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Enregistrez la cohorte actuelle dans la liste des cohortes. Vous pouvez revoir la cohorte enregistrée via la liste des cohortes.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Enregistrez la cohorte actuelle dans les paramètres des cohortes. Vous pouvez revoir la cohorte enregistrée via les paramètres des cohortes.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Save the current cohort to the cohort list. You can revisit the saved cohort via the cohort list.]]></Val>
@@ -1927,14 +2008,17 @@
       <Item ItemId=";ErrorAnalysis.TreeView.disabledWarning" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error treemap is disabled unless global cohort is switched to represent "All data" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le treemap des erreurs est désactivé à moins que la cohorte globale ne soit commutée pour représenter « Toutes les données », car le treemap est généré pour l'ensemble complet de données. Revenez à l'ensemble de données complet pour afficher le treemap des erreurs.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeView.treeDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Feature list."]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[La visualisation d’arborescence utilise les informations mutuelles entre chaque fonctionnalité et l’erreur pour mieux séparer les instances d’erreur des instances de succès dans les données de façon hiérarchique. Cela simplifie le processus de découverte et de mise en surbrillance des modèles d’échec courants. Pour trouver des modèles de défaillance importants, recherchez les nœuds avec une couleur rouge plus forte (c’est-à-dire un taux d’erreur élevé) et une plus grande ligne de remplissage (c.-à-d. une couverture d’erreur élevée). Pour modifier la liste des fonctionnalités utilisées dans l’arborescence, cliquez sur « configurer l’Explorateur d’erreurs ».]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La visualisation d’arborescence utilise les informations mutuelles entre chaque fonctionnalité et l’erreur pour mieux séparer les instances d’erreur des instances de succès dans les données de façon hiérarchique. Cela simplifie le processus de découverte et de mise en surbrillance des modèles d’échec courants. Pour trouver des modèles de défaillance importants, recherchez les nœuds avec une couleur rouge plus forte (c’est-à-dire un taux d’erreur élevé) et une plus grande ligne de remplissage (c.-à-d. une couverture d’erreur élevée). Pour modifier la liste des fonctionnalités utilisées dans l’arborescence, cliquez sur « Liste des fonctionnalités ».]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Configure error explorer."]]></Val>
@@ -1945,60 +2029,90 @@
       <Item ItemId=";ErrorAnalysis.TreeView.treeStaticDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on "Feature list."]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La visualisation d’arborescence utilise les informations mutuelles entre chaque fonctionnalité et l’erreur pour mieux séparer les instances d’erreur des instances de succès dans les données de façon hiérarchique. Cela simplifie le processus de découverte et de mise en surbrillance des modèles d’échec courants. Pour trouver des modèles de défaillance importants, recherchez les nœuds avec une couleur rouge plus forte (c’est-à-dire un taux d’erreur élevé) et une plus grande ligne de remplissage (c.-à-d. une couverture d’erreur élevée). Pour afficher la liste des caractéristiques utilisées pour créer cet arbre d'erreurs, cliquez sur "Liste des caractéristiques".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.maximumDepth" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Maximum depth]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Profondeur maximale]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.maximumDepthInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The maximum depth of the surrogate tree trained on errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Profondeur maximale de l’arborescence de substitution entraînée sur les erreurs]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.maximumDepthTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on maximum depth]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur la profondeur maximale]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.minDataInLeaf" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Minimum number of samples in one leaf]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre minimal d’échantillons dans une feuille]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.minDataInLeafInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The minimum number of data required to create one leaf]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre minimal de données nécessaires pour créer une feuille]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.minDataInLeafTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on minimum number of samples in one leaf]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur le nombre minimal d’échantillons dans une feuille]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.numLeaves" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Number of leaves]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre de feuilles]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.numLeavesInfoText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The number of leaves of the surrogate tree trained on errors]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nombre de feuilles de l’arborescence de substitution entraînées sur les erreurs]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeViewParameters.numLeavesTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Additional information on number of leaves]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Informations supplémentaires sur le nombre de feuilles]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4210,12 +4324,18 @@
       <Item ItemId=";Fairness.ValidationErrors.missingFairnessMetric" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[No fairness metric found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Métrique d’impartialité introuvable]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Fairness.ValidationErrors.missingPerformanceMetric" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[No performance metric found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Métrique de performance introuvable]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5098,8 +5218,8 @@
       <Item ItemId=";Interpret.CohortEditor.defaultFilterState" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Sélectionnez un filtre pour ajouter des paramètres à votre cohorte de jeux de données.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sélectionnez un filtre pour ajouter des paramètres à votre cohorte de jeux de données. Les filtres de votre cohorte d’affichage actuelle sont préremplis.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Select a filter to add parameters to your dataset cohort.]]></Val>
@@ -5902,6 +6022,9 @@
       <Item ItemId=";Interpret.GlobalTab.absoluteValues" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Absolute values]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Valeurs absolues]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5926,6 +6049,9 @@
       <Item ItemId=";Interpret.GlobalTab.datapoint" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Datapoint]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Datapoint]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7354,12 +7480,18 @@
       <Item ItemId=";ModelAssessment.Cohort.deleteCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Deleting {0}?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Suppression {0}?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ModelAssessment.Cohort.deleteConfirm" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Are you sure you want to delete this cohort?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Voulez-vous vraiment supprimer cette cohorte?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7438,6 +7570,9 @@
       <Item ItemId=";ModelAssessment.CohortInformation.SwitchGlobalCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Switch global cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Changer de cohorte globale]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
