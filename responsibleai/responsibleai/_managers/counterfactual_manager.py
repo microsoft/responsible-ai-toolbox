@@ -267,7 +267,8 @@ class CounterfactualManager(BaseManager):
                     # Validate the serialized output against schema
                     schema = self._get_counterfactual_schema(
                         version=counterfactual_obj.metadata['version'])
-                    jsonschema.validate(json.loads(counterfactual_obj.to_json()), schema)
+                    jsonschema.validate(
+                        json.loads(counterfactual_obj.to_json()), schema)
 
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
@@ -303,7 +304,8 @@ class CounterfactualManager(BaseManager):
 
     def _get_counterfactual_schema(self, version):
         """Get the schema for validating the counterfactual examples output."""
-        schema_directory = Path(__file__).parent.parent / '_tools' / 'counterfactual' / 'dashboard_schemas'
+        schema_directory = (Path(__file__).parent.parent / '_tools' /
+                            'counterfactual' / 'dashboard_schemas')
         schema_filename = f'counterfactual_examples_output_v{version}.json'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
