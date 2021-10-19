@@ -41,11 +41,11 @@ This repository contains the Jupyter notebooks with examples to showcase how to 
 ### Useful Links
 
 - [Take a tour of Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaitoolbox-dashboard/tour.ipynb)
-- [Get started](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/getting-started.ipynb)
+- [Get started](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaitoolbox-dashboard/getting-started.ipynb)
 
 - [Try the tool: model assessment of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaitoolbox-dashboard/responsibleaitoolbox-classification-model-assessment.ipynb)
 - [Try the tool: model assessment of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaitoolbox-dashboard/responsibleaitoolbox-regression-model-assessment.ipynb)
-- [Try the tool: make decitions based on diabetes progression data](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaitoolbox-dashboard/responsibleaitoolbox-regression-decision-making.ipynb)
+- [Try the tool: make decisions based on diabetes progression data](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaitoolbox-dashboard/responsibleaitoolbox-regression-decision-making.ipynb)
 
 ## Individual Dashboards
 
