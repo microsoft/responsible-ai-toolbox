@@ -26,7 +26,8 @@ class BaseAnalyzer(ABC):
                  feature_names,
                  categorical_features,
                  model_task,
-                 metric):
+                 metric,
+                 classes):
         self._dataset = self._make_pandas_copy(dataset)
         self._true_y = true_y
         self._categorical_features = categorical_features
@@ -37,6 +38,7 @@ class BaseAnalyzer(ABC):
         self._categorical_indexes = []
         self._category_dictionary = {}
         self._model_task = model_task
+        self._classes = classes
         if model_task == ModelTask.CLASSIFICATION:
             if metric is None:
                 metric = Metrics.ERROR_RATE
@@ -76,6 +78,10 @@ class BaseAnalyzer(ABC):
     @property
     def categorical_indexes(self):
         return self._categorical_indexes
+
+    @property
+    def classes(self):
+        return self._classes
 
     @property
     def dataset(self):
@@ -187,7 +193,8 @@ class ModelAnalyzer(BaseAnalyzer):
                  feature_names,
                  categorical_features,
                  model_task=ModelTask.UNKNOWN,
-                 metric=None):
+                 metric=None,
+                 classes=None):
         self._model = model
         if model_task == ModelTask.UNKNOWN:
             # Try to automatically infer the model task
@@ -201,7 +208,8 @@ class ModelAnalyzer(BaseAnalyzer):
                                             feature_names,
                                             categorical_features,
                                             model_task,
-                                            metric)
+                                            metric,
+                                            classes)
 
     @property
     def model(self):
@@ -222,7 +230,8 @@ class PredictionsAnalyzer(BaseAnalyzer):
                  feature_names,
                  categorical_features,
                  model_task=ModelTask.CLASSIFICATION,
-                 metric=None):
+                 metric=None,
+                 classes=None):
         self._pred_y = pred_y
         if model_task == ModelTask.UNKNOWN:
             raise ValueError(
@@ -232,7 +241,8 @@ class PredictionsAnalyzer(BaseAnalyzer):
                                                   feature_names,
                                                   categorical_features,
                                                   model_task,
-                                                  metric)
+                                                  metric,
+                                                  classes)
 
     @property
     def pred_y(self):
