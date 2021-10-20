@@ -27,6 +27,7 @@ export interface ICounterfactualPanelStyles {
   tooltipTable: IStyle;
   tooltipTitle: IStyle;
   tooltipHost: IStyle;
+  headerText: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -47,7 +48,6 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       counterfactualList: {
         height: "100%",
-        overflow: "scroll",
         width: "100%"
       },
       cPanel: {
@@ -56,6 +56,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       customPredictBlock: {
         padding: "10px"
+      },
+      headerText: {
+        paddingBottom: "6px"
       },
       listContainer: {
         height: "100%",
