@@ -58,7 +58,14 @@ This Responsible AI Toolbox API supports models that are trained on datasets in 
 The explanation functions of [Interpret-Community](https://github.com/interpretml/interpret-community) accept both models and pipelines as input as long as the model or pipeline implements a `predict` or `predict_proba` function that conforms to the Scikit convention. If not compatible, you can wrap your model's prediction function into a wrapper function that transforms the output into the format that is supported (predict or predict_proba of Scikit), and pass that wrapper function to your selected interpretability techniques.
 
 If a pipeline script is provided, the explanation function assumes that the running pipeline script returns a prediction. The repository also supports models trained via **PyTorch**, **TensorFlow**, and **Keras** deep learning frameworks.
+  
+## Other Use Cases 
 
+Tools within the Responsible AI Toolbox can also be used with AI models offered as APIs by providers such as [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/). To see example use cases, see the folders below:
+
+- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/...)
+- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/...)
+  
 ## Maintainers
 
 - [Ke Xu](https://github.com/KeXu444)
