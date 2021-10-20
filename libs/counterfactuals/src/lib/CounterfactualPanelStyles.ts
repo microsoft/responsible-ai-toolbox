@@ -54,6 +54,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         height: "100%",
         width: "100%"
       },
+      counterfactualName: {
+        width: 200
+      },
       cPanel: {
         float: "left",
         width: "100%"
@@ -76,6 +79,15 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         border: "1px solid",
         width: "150px"
       },
+      panelStyle: {
+        selectors: {
+          ".content": {
+            paddingLeft: 24,
+            paddingRight: 24
+          },
+          ".scrollableContent": { height: "100%", paddingTop: 1 }
+        }
+      },
       positiveNumber: {
         color: theme.palette.green
       },
@@ -90,6 +102,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       searchBox: {
         padding: "20px 0"
+      },
+      stackHeader: {
+        paddingLeft: 24,
+        paddingRight: 24
       },
       tooltipColumn: {
         alignItems: "flex-start",
@@ -107,6 +123,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         height: "100%",
         marginRight: "4px"
       },
+      tooltipHostDisplay: {
+        display: "inline-block"
+      },
       tooltipTable: {
         display: "flex",
         flexDirection: "row"
@@ -116,25 +135,6 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       tooltipWrapper: {
         padding: "10px 15px"
-      },
-      panelStyle: {
-        selectors: {
-          ".content": {
-            paddingLeft: 24,
-            paddingRight: 24
-          },
-          ".scrollableContent": { height: "100%", paddingTop: 1 }
-        }
-      },
-      stackHeader: {
-        paddingLeft: 24,
-        paddingRight: 24
-      },
-      counterfactualName: {
-        width: 200
-      },
-      tooltipHostDisplay: {
-        display: "inline-block"
       }
     });
   };
