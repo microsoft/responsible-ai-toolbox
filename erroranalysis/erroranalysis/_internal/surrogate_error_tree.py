@@ -23,7 +23,7 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                error_metrics,
                                                precision_metrics,
                                                recall_metrics)
-from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.metrics import metric_to_func, get_ordered_labels
 from sklearn.metrics import (
     mean_absolute_error, mean_squared_error, median_absolute_error,
     r2_score, f1_score)
@@ -163,7 +163,8 @@ def compute_error_tree(analyzer,
                      cat_ind_reindexed),
                     [],
                     dataset_sub_names,
-                    metric=analyzer.metric)
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
     return tree
 
 
@@ -260,7 +261,8 @@ def traverse(df,
              feature_names,
              parent=None,
              side=TreeSide.UNKNOWN,
-             metric=None):
+             metric=None,
+             classes=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -270,7 +272,8 @@ def traverse(df,
 
     # write current node to a dictionary that can be saved as json
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
-                            feature_names, metric, parent, side)
+                            feature_names, metric, parent, side,
+                            classes)
 
     # write children to a dictionary that can be saved as json
     if 'leaf_value' not in tree:
@@ -278,10 +281,12 @@ def traverse(df,
         right_child = tree[TreeSide.RIGHT_CHILD]
         dict = traverse(df, left_child, max_split_index,
                         categories, dict, feature_names,
-                        tree, TreeSide.LEFT_CHILD, metric)
+                        tree, TreeSide.LEFT_CHILD, metric,
+                        classes)
         dict = traverse(df, right_child, max_split_index,
                         categories, dict, feature_names,
-                        tree, TreeSide.RIGHT_CHILD, metric)
+                        tree, TreeSide.RIGHT_CHILD, metric,
+                        classes)
     return dict
 
 
@@ -319,7 +324,7 @@ def create_categorical_query(method, arg, p_node_name, p_node_query,
 
 def node_to_dict(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
-                 side=TreeSide.UNKNOWN):
+                 side=TreeSide.UNKNOWN, classes=None):
     p_node_name = None
     condition = None
     arg = None
@@ -395,17 +400,20 @@ def node_to_dict(df, tree, nodeid, categories, json,
         metric_value = r2_score(true_y, pred_y)
     elif metric == Metrics.F1_SCORE:
         pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = f1_score(true_y, pred_y)
+        metric_value = compute_metric_value(f1_score, classes,
+                                            true_y, pred_y, metric)
         success = total - error
     elif metric in precision_metrics:
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
-        metric_value = func(true_y, pred_y)
+        metric_value = compute_metric_value(func, classes, true_y,
+                                            pred_y, metric)
         success = total - error
     elif metric in recall_metrics:
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
-        metric_value = func(true_y, pred_y)
+        metric_value = compute_metric_value(func, classes, true_y,
+                                            pred_y, metric)
         success = total - error
     else:
         error = df[DIFF].values.sum()
@@ -455,3 +463,11 @@ def get_classification_metric_data(df):
     true_y = df[TRUE_Y]
     error = df[DIFF].values.sum()
     return pred_y, true_y, error
+
+
+def compute_metric_value(func, classes, true_y, pred_y, metric):
+    if metric == Metrics.RECALL_SCORE or metric == Metrics.PRECISION_SCORE:
+        ordered_labels = get_ordered_labels(classes, true_y, pred_y)
+        if ordered_labels is not None and len(ordered_labels) == 2:
+            return func(true_y, pred_y, pos_label=ordered_labels[1])
+    return func(true_y, pred_y)

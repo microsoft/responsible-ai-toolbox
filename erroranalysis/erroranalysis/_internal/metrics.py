@@ -26,6 +26,21 @@ def macro_recall_score(y_true, y_pred):
     return recall_score(y_true, y_pred, average=MACRO)
 
 
+def get_ordered_labels(classes, true_y, pred_y):
+    # If classes is none, or disagrees with labels from true and predicted
+    # arrays, return the sorted set of labels.
+    # Otherwise return classes as it provides the correct ordering and any
+    # classes we may be missing for the subset of data evaluated.
+    labels = list(set(true_y) | set(pred_y))
+    labels.sort()
+    if classes is None:
+        return labels
+    for label in labels:
+        if label not in classes:
+            return labels
+    return classes
+
+
 metric_to_func = {
     Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
     Metrics.MEAN_SQUARED_ERROR: mean_squared_error,

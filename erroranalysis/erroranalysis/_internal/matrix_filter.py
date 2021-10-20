@@ -16,7 +16,7 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
-from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.metrics import metric_to_func, get_ordered_labels
 from abc import ABC, abstractmethod
 from sklearn.metrics import multilabel_confusion_matrix
 
@@ -178,9 +178,10 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        colnames=[feat2])
         else:
             if metric in precision_metrics or metric in recall_metrics:
-                labels = list(set(true_y) | set(pred_y))
-                labels.sort()
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+                ordered_labels = get_ordered_labels(analyzer.classes,
+                                                    true_y, pred_y)
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
+                                              ordered_labels)
             else:
                 aggfunc = _AggFunc(metric_to_func[metric])
             matrix_total = pd.crosstab(tabdf1,
@@ -245,9 +246,10 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
             if metric in precision_metrics or metric in recall_metrics:
-                labels = list(set(true_y) | set(pred_y))
-                labels.sort()
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+                ordered_labels = get_ordered_labels(analyzer.classes,
+                                                    true_y, pred_y)
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
+                                              ordered_labels)
             else:
                 aggfunc = _AggFunc(metric_to_func[metric])
             cutdf_err = pd.DataFrame(cut_err)
@@ -362,7 +364,11 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         # needed for recall metrics
         fn_sum = conf_matrix[:, 1, 0]
         tn_sum = conf_matrix[:, 0, 0]
-        return (self.aggfunc(true_y, pred_y), tp_sum.tolist(),
+        if self.num_labels == 2:
+            metric = self.aggfunc(true_y, pred_y, pos_label=self.labels[0])
+        else:
+            metric = self.aggfunc(true_y, pred_y)
+        return (metric, tp_sum.tolist(),
                 fp_sum.tolist(), fn_sum.tolist(),
                 tn_sum.tolist(), error)
 
