@@ -27,6 +27,10 @@ class InLineScript(HTMLParser):
                 if att[0] == "src":
                     src = att[1]
                     continue
+                # skip module type as it causes ipython to render widget
+                # with 8px height
+                if att[0] == "type":
+                    continue
                 scriptTag += f' {att[0]}={att[1]}'
             if src is not None:
                 content = self.load_widget_file(src)
