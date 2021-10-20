@@ -28,6 +28,10 @@ export interface ICounterfactualPanelStyles {
   tooltipTitle: IStyle;
   tooltipHost: IStyle;
   headerText: IStyle;
+  panelStyle: IStyle;
+  stackHeader: IStyle;
+  counterfactualName: IStyle;
+  tooltipHostDisplay: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -112,6 +116,25 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       tooltipWrapper: {
         padding: "10px 15px"
+      },
+      panelStyle: {
+        selectors: {
+          ".content": {
+            paddingLeft: 24,
+            paddingRight: 24
+          },
+          ".scrollableContent": { height: "100%", paddingTop: 1 }
+        }
+      },
+      stackHeader: {
+        paddingLeft: 24,
+        paddingRight: 24
+      },
+      counterfactualName: {
+        width: 200
+      },
+      tooltipHostDisplay: {
+        display: "inline-block"
       }
     });
   };

@@ -69,11 +69,8 @@ export class CounterfactualPanel extends React.Component<
         type={PanelType.largeFixed}
         onDismiss={this.onClosePanel.bind(this)}
         closeButtonAriaLabel="Close"
-        styles={{
-          content: { paddingLeft: 24, paddingRight: 24 },
-          scrollableContent: { height: "100%", paddingTop: 1 }
-        }}
         isFooterAtBottom
+        className={classes.panelStyle}
         onRenderHeader={this.renderHeader}
         onRenderFooterContent={this.renderClose}
       >
@@ -95,6 +92,7 @@ export class CounterfactualPanel extends React.Component<
   }
 
   private renderHeader = (): JSX.Element => {
+    const classes = counterfactualPanelStyles();
     const tooltipProps: ITooltipProps = {
       onRenderContent: () => (
         <div className={classes.tooltipWrapper}>
@@ -109,9 +107,8 @@ export class CounterfactualPanel extends React.Component<
         </div>
       )
     };
-    const classes = counterfactualPanelStyles();
     return (
-      <Stack style={{ paddingLeft: 24, paddingRight: 24 }}>
+      <Stack className={classes.stackHeader}>
         <Stack.Item className={classes.headerText}>
           <Text variant={"xLarge"} className={classes.boldText}>
             {this.context.requestPredictions
@@ -145,7 +142,7 @@ export class CounterfactualPanel extends React.Component<
               delay={TooltipDelay.zero}
               id={WhatIfConstants.whatIfPredictionTooltipIds}
               directionalHint={DirectionalHint.rightTopEdge}
-              styles={{ root: { display: "inline-block" } }}
+              className={classes.tooltipHostDisplay}
             >
               <IconButton iconProps={{ iconName: "info" }} />
             </TooltipHost>
@@ -171,7 +168,7 @@ export class CounterfactualPanel extends React.Component<
               WhatIfConstants.namePath,
               true
             )}
-            styles={{ fieldGroup: { width: 200 } }}
+            className={classes.counterfactualName}
           />
         </Stack.Item>
         <Stack.Item align="end" grow={5}>
