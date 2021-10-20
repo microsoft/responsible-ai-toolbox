@@ -101,9 +101,12 @@ def create_wine_data():
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
-def create_adult_census_data():
+def create_adult_census_data(string_labels=False):
     X, y = shap.datasets.adult()
-    y = [1 if r else 0 for r in y]
+    if string_labels:
+        y = [">=50K" if r else "<50K" for r in y]
+    else:
+        y = [1 if r else 0 for r in y]
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=7, stratify=y)
