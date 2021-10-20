@@ -136,6 +136,7 @@ class ModelAnalysis(object):
 
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column,
+            self._classes,
             categorical_features)
 
         self._explainer_manager = ExplainerManager(
