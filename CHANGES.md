@@ -24,7 +24,7 @@ this file to understand what changed.
 - bug fixes
 - other
 
-## v0.12.2
+## v0.13.0
 
 - new features
   - ## Model Analysis
