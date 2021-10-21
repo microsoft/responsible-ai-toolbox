@@ -9,7 +9,7 @@
    To next minor version, if new features are added.  
    To update major version, please coordinating with pm and leads.
 5. Send the pr and wait for gated pipeline to be finished.
-6. Inform the team to block all other pr to be merged before new version be totally released.
+6. **Inform the team to block** all other pr to be merged before new version be totally released.
 7. Merge pr, then manually run pipeline [release-rai.yml](https://github.com/microsoft/responsible-ai-widgets/actions/workflows/release-rai.yml)
 8. Release to pytest first and verify it is working fine
 9. Release pypi.com by using "prod" as input env parameter
