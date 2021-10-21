@@ -262,7 +262,8 @@ class ErrorAnalysisDashboardInput:
                                                  features,
                                                  categorical_features,
                                                  model_task,
-                                                 metric)
+                                                 metric,
+                                                 classes)
         else:
             # Model task cannot be unknown when passing predictions
             # Assume classification for backwards compatibility
@@ -274,7 +275,8 @@ class ErrorAnalysisDashboardInput:
                                                        features,
                                                        categorical_features,
                                                        model_task,
-                                                       metric)
+                                                       metric,
+                                                       classes)
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
