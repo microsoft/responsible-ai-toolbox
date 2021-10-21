@@ -62,6 +62,8 @@ class ExplainerManager(BaseManager):
         The order of the class names should match that of the model
         output.  Only required if explaining classifier.
     :type classes: list
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
@@ -86,6 +88,8 @@ class ExplainerManager(BaseManager):
             The order of the class names should match that of the model
             output.  Only required if explaining classifier.
         :type classes: list
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._model = model
         self._initialization_examples = \

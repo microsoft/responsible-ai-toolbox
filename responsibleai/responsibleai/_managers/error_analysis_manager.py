@@ -170,9 +170,15 @@ class ErrorAnalysisManager(BaseManager):
     :type dataset: pandas.DataFrame
     :param target_column: The name of the label column.
     :type target_column: str
+    :param classes: Class names as a list of strings.
+        The order of the class names should match that of the model
+        output.  Only required if analyzing a classifier.
+    :type classes: list
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
     """
 
-    def __init__(self, model, dataset, target_column,
+    def __init__(self, model, dataset, target_column, classes=None,
                  categorical_features=None):
         """Defines the ErrorAnalysisManager for discovering errors in a model.
 
@@ -184,10 +190,17 @@ class ErrorAnalysisManager(BaseManager):
         :type dataset: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
+        :param classes: Class names as a list of strings.
+            The order of the class names should match that of the model
+            output.  Only required if analyzing a classifier.
+        :type classes: list
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
+        self._classes = classes
         self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
@@ -195,7 +208,8 @@ class ErrorAnalysisManager(BaseManager):
                                        self._dataset,
                                        self._true_y,
                                        self._feature_names,
-                                       self._categorical_features)
+                                       self._categorical_features,
+                                       classes=self._classes)
 
     def add(self, max_depth=3, num_leaves=31,
             min_child_samples=20, filter_features=None):
