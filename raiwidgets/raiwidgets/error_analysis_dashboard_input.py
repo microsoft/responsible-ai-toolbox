@@ -98,10 +98,11 @@ class ErrorAnalysisDashboardInput:
             'macro_recall_score' for multiclass classification,
             'precision_score' for binary classification and
             'micro_precision_score' or 'macro_precision_score'
-            for multiclass classification, 'f1_score',
-            and 'accuracy_score'. Supported regression
-            metrics include 'mean_absolute_error', 'mean_squared_error',
-            'r2_score', and 'median_absolute_error'.
+            for multiclass classification, 'f1_score' for binary
+            classification and 'micro_f1_score' or 'macro_f1_score'
+            for multiclass classification, and 'accuracy_score'.
+            Supported regression metrics include 'mean_absolute_error',
+            'mean_squared_error', 'r2_score', and 'median_absolute_error'.
         :type metric: str
         :param max_depth: The maximum depth of the surrogate tree trained
             on errors.

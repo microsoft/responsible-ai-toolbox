@@ -8,7 +8,7 @@ from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.matrix_filter import (
     CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT,
     INTERVAL_MAX, INTERVAL_MIN, MATRIX, VALUES,
-    METRIC_NAME, METRIC_VALUE, TP, FP, FN)
+    METRIC_NAME, METRIC_VALUE, TP, TN, FP, FN)
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from common_utils import (
     create_adult_census_data, create_boston_data, create_iris_data,
@@ -20,8 +20,10 @@ from common_utils import (
     create_wine_data)
 from erroranalysis._internal.constants import (
     ModelTask, TRUE_Y, ROW_INDEX, MatrixParams, Metrics,
-    metric_to_display_name, precision_metrics, recall_metrics)
-from erroranalysis._internal.metrics import metric_to_func, get_ordered_labels
+    metric_to_display_name, precision_metrics,
+    recall_metrics, f1_metrics)
+from erroranalysis._internal.metrics import (
+    metric_to_func, get_ordered_labels, is_multi_agg_metric)
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
@@ -80,7 +82,9 @@ class TestMatrixFilter(object):
     @pytest.mark.parametrize('string_labels', [True, False])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.PRECISION_SCORE,
-                                        Metrics.RECALL_SCORE])
+                                        Metrics.RECALL_SCORE,
+                                        Metrics.F1_SCORE,
+                                        Metrics.ACCURACY_SCORE])
     def test_matrix_filter_adult_census_quantile_binning(self,
                                                          string_labels,
                                                          metric):
@@ -151,7 +155,10 @@ class TestMatrixFilter(object):
                                         Metrics.MACRO_PRECISION_SCORE,
                                         Metrics.MICRO_PRECISION_SCORE,
                                         Metrics.MACRO_RECALL_SCORE,
-                                        Metrics.MICRO_RECALL_SCORE])
+                                        Metrics.MICRO_RECALL_SCORE,
+                                        Metrics.ACCURACY_SCORE,
+                                        Metrics.MACRO_F1_SCORE,
+                                        Metrics.MICRO_F1_SCORE])
     def test_matrix_filter_wine_quantile_binning(self, metric):
         X_train, X_test, y_train, y_test, feature_names, _ = create_wine_data()
 
@@ -380,10 +387,13 @@ def get_expected_metric_error(error_analyzer, metric, model,
     elif (metric == Metrics.MEAN_SQUARED_ERROR or
           metric == Metrics.MEAN_ABSOLUTE_ERROR or
           metric in precision_metrics or
-          metric in recall_metrics):
+          metric in recall_metrics or
+          metric in f1_metrics or
+          metric == Metrics.ACCURACY_SCORE):
         func = metric_to_func[metric]
         pred_y = model.predict(validation_data)
-        if error_analyzer.model_task == ModelTask.CLASSIFICATION:
+        can_be_binary = error_analyzer.model_task == ModelTask.CLASSIFICATION
+        if can_be_binary and metric != Metrics.ACCURACY_SCORE:
             ordered_labels = get_ordered_labels(error_analyzer.classes,
                                                 y_test,
                                                 pred_y)
@@ -438,6 +448,9 @@ def validate_matrix_metric(matrix, exp_total_count,
                            num_cat1, num_cat2):
     is_precision = metric in precision_metrics
     is_recall = metric in recall_metrics
+    is_accuracy = metric == Metrics.ACCURACY_SCORE
+    is_f1_score = metric in f1_metrics
+    is_multi_agg = is_multi_agg_metric(metric)
     if metric == Metrics.ERROR_RATE:
         # take sum of count, false count
         total_count = 0
@@ -471,11 +484,12 @@ def validate_matrix_metric(matrix, exp_total_count,
         total_metric_value = total_metric_value / total_count
         assert exp_total_count == total_count
         assert abs(exp_total_error - total_metric_value) < TOLERANCE
-    elif is_precision or is_recall:
+    elif is_multi_agg:
         # compute the overall metric from the data in each of the cells
         total_count = 0
         total_metric_value = 0
         cell_tp_value = None
+        cell_tn_value = None
         cell_fp_value = None
         cell_fn_value = None
         for i in range(num_cat1):
@@ -491,26 +505,39 @@ def validate_matrix_metric(matrix, exp_total_count,
                 else:
                     cell_tp_value += np.array(matrix[MATRIX][i][j][TP],
                                               dtype=FLOAT64)
-                if is_precision:
+                if is_precision or is_accuracy or is_f1_score:
                     if cell_fp_value is None:
                         cell_fp_value = np.array(matrix[MATRIX][i][j][FP],
                                                  dtype=FLOAT64)
                     else:
                         cell_fp_value += np.array(matrix[MATRIX][i][j][FP],
                                                   dtype=FLOAT64)
-                elif is_recall:
+                if is_recall or is_accuracy or is_f1_score:
                     if cell_fn_value is None:
                         cell_fn_value = np.array(matrix[MATRIX][i][j][FN],
                                                  dtype=FLOAT64)
                     else:
                         cell_fn_value += np.array(matrix[MATRIX][i][j][FN],
                                                   dtype=FLOAT64)
+                if is_accuracy:
+                    if cell_tn_value is None:
+                        cell_tn_value = np.array(matrix[MATRIX][i][j][TN],
+                                                 dtype=FLOAT64)
+                    else:
+                        cell_tn_value += np.array(matrix[MATRIX][i][j][TN],
+                                                  dtype=FLOAT64)
                 metric_name = matrix[MATRIX][i][j][METRIC_NAME]
                 assert metric_name == metric_to_display_name[metric]
         tp_sum = cell_tp_value.sum()
-        if metric == Metrics.MICRO_PRECISION_SCORE:
+        is_overall_precision = (metric == Metrics.MICRO_PRECISION_SCORE or
+                                metric == Metrics.PRECISION_SCORE)
+        is_overall_recall = (metric == Metrics.MICRO_RECALL_SCORE or
+                             metric == Metrics.RECALL_SCORE)
+        is_overall_f1_score = (metric == Metrics.MICRO_F1_SCORE or
+                               metric == Metrics.F1_SCORE)
+        if is_overall_precision:
             total_metric_value = tp_sum / (tp_sum + cell_fp_value.sum())
-        elif metric == Metrics.MICRO_RECALL_SCORE:
+        elif is_overall_recall:
             total_metric_value = tp_sum / (tp_sum + cell_fn_value.sum())
         elif metric == Metrics.MACRO_PRECISION_SCORE:
             per_class_metrics = cell_tp_value / (cell_tp_value + cell_fp_value)
@@ -522,8 +549,29 @@ def validate_matrix_metric(matrix, exp_total_count,
             total_metric_value = per_class_metrics.sum() / num_classes
         elif metric == Metrics.PRECISION_SCORE:
             total_metric_value = tp_sum / (tp_sum + cell_fp_value.sum())
-        elif metric == Metrics.RECALL_SCORE:
-            total_metric_value = tp_sum / (tp_sum + cell_fn_value.sum())
+        elif metric == Metrics.ACCURACY_SCORE:
+            if len(cell_tn_value) < 2:
+                tn_sum = cell_tn_value.sum()
+                fn_sum = cell_fn_value.sum()
+                fp_sum = cell_fp_value.sum()
+                num_correct = tp_sum + tn_sum
+                num_total = num_correct + fn_sum + fp_sum
+                total_metric_value = num_correct / num_total
+            else:
+                num_total = (cell_tp_value[0] + cell_tn_value[0] +
+                             cell_fn_value[0] + cell_fp_value[0])
+                total_metric_value = tp_sum / num_total
+        elif is_overall_f1_score:
+            fn_sum = cell_fn_value.sum()
+            fp_sum = cell_fp_value.sum()
+            total_metric_value = tp_sum / (tp_sum + (fp_sum + fn_sum) / 2)
+        elif metric == Metrics.MACRO_F1_SCORE:
+            pc_precision = cell_tp_value / (cell_tp_value + cell_fp_value)
+            pc_recall = cell_tp_value / (cell_tp_value + cell_fn_value)
+            num_classes = len(pc_precision)
+            pc_f1_score = (2 * (pc_precision * pc_recall) /
+                           (pc_precision + pc_recall)).sum()
+            total_metric_value = pc_f1_score / num_classes
         assert exp_total_count == total_count
         assert abs(exp_total_error - total_metric_value) < TOLERANCE
     else:
