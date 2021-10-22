@@ -106,7 +106,13 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
           </Stack>
           <Stack>
             <Stack horizontal>
-              <div className={classNames.metricBarRed} />
+              <div
+                className={
+                  this.props.isErrorMetric
+                    ? classNames.metricBarRed
+                    : classNames.metricBarGreen
+                }
+              />
               <Stack tokens={cellTokens}>
                 <div className={classNames.smallHeader}>
                   {MetricUtils.getLocalizedMetric(
