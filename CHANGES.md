@@ -53,6 +53,23 @@ this file to understand what changed.
   - delete old notebooks
   - change tests to run on new notebooks, add new notebook to tests
 
+## v0.12.1
+
+- new features
+  - ## Error Analysis
+    - add disabled tree view and heatmap for static view
+- bug fixes
+  - ## Error Analysis
+    - fix class length causing labels to not be shown in simple view of Error Analysis
+    - fix cohort filter tooltip behind cohort info panel
+  - ## Causal
+    - fix trace0 appearing on hover tooltip in plots
+  - ## Counterfactual
+    - handle cases where counterfactuals failed to compute
+    - add tooltip for counterfactual info
+- other
+  - some grammatical errors were corrected on documentation page
+
 ## v0.12.0
 
 - new features
