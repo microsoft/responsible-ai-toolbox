@@ -243,15 +243,18 @@ export class FeatureList extends React.Component<
                 isEnabled={this.props.isEnabled}
               />
             </Stack.Item>
-            <Stack.Item key="applyButtonKey" align="start">
-              <PrimaryButton
-                text="Apply"
-                onClick={this.apply.bind(this)}
-                allowDisabledFocus
-                disabled={!this.state.enableApplyButton}
-                checked={false}
-              />
-            </Stack.Item>
+            {this.props.isEnabled && (
+              // Remove apply button in static view
+              <Stack.Item key="applyButtonKey" align="start">
+                <PrimaryButton
+                  text="Apply"
+                  onClick={this.apply.bind(this)}
+                  allowDisabledFocus
+                  disabled={!this.state.enableApplyButton}
+                  checked={false}
+                />
+              </Stack.Item>
+            )}
           </Stack>
         </div>
       </Panel>
