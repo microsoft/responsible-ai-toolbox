@@ -12,6 +12,14 @@ export enum MetricLocalizationType {
 }
 
 export class MetricUtils {
+  public static isErrorMetricName(metricName: string): boolean {
+    return (
+      metricName === Metrics.ErrorRate ||
+      metricName === Metrics.MeanSquaredError ||
+      metricName === Metrics.MeanAbsoluteError
+    );
+  }
+
   public static getLocalizedMetric(
     metricName: string,
     type: MetricLocalizationType

@@ -11,7 +11,8 @@ export interface IMatrixCellsStyles {
   matrixCell: IStyle;
   matrixCol: IStyle;
   matrixRow: IStyle;
-  nanMatrixCell: IStyle;
+  nanErrorMatrixCell: IStyle;
+  nanMetricMatrixCell: IStyle;
   selectedMatrixCell: IStyle;
   styledMatrixCell: IStyle;
 }
@@ -45,9 +46,14 @@ export const matrixCellsStyles: () => IProcessedStyleSet<IMatrixCellsStyles> =
         fontWeight: "normal",
         height: "50px"
       },
-      nanMatrixCell: {
+      nanErrorMatrixCell: {
         background:
           "repeating-linear-gradient(-45deg, white, white 5px, pink 10px, pink 20px)",
+        color: "black"
+      },
+      nanMetricMatrixCell: {
+        background:
+          "repeating-linear-gradient(-45deg, white, white 5px, limegreen 10px, limegreen 20px)",
         color: "black"
       },
       selectedMatrixCell: {

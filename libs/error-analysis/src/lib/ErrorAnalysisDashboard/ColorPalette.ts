@@ -8,7 +8,7 @@ const theme = getTheme();
 
 export class ColorPalette {
   public static MinErrorColor = "#F4D1D2";
-  public static MaxErrorColor = "#8d2323";
+  public static MaxErrorColor = theme.palette.redDark;
   public static MinMetricColor = theme.palette.greenLight;
   public static MaxMetricColor = theme.palette.greenDark;
   public static ErrorAvgColor = "#b2b7bd";
