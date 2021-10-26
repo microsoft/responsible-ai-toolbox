@@ -155,7 +155,9 @@
     },
     "FeatureList": {
       "features": "Features",
-      "importances": "Importances"
+      "importances": "Importances",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximum depth",
@@ -325,7 +327,6 @@
     "instanceView": "Instance View",
     "localExplanationView": "Local explanation",
     "noFeature": "No feature",
-    "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
