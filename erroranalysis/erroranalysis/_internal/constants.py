@@ -43,15 +43,23 @@ class Metrics(str, Enum):
 
     The regression metrics are 'mean_absolute_error',
     'mean_squared_error', 'median_absolute_error',
-    and 'r2_score'.  The classification metrics are
-    'f1_score', 'precision_score', 'recall_score' and
-    'error_rate'.
+    and 'r2_score'.  The binary classification
+    metrics are 'f1_score', 'precision_score',
+    'recall_score', 'accuracy_score' and
+    'error_rate'. The multiclass classification
+    metrics are 'macro_precision_score',
+    'micro_precision_score', 'macro_recall_score',
+    'micro_recall_score', 'f1_score',
+    'accuracy_score' and 'error_rate'.
     """
+    ACCURACY_SCORE = 'accuracy_score'
     MEAN_ABSOLUTE_ERROR = 'mean_absolute_error'
     MEAN_SQUARED_ERROR = 'mean_squared_error'
     MEDIAN_ABSOLUTE_ERROR = 'median_absolute_error'
     R2_SCORE = 'r2_score'
     F1_SCORE = 'f1_score'
+    MACRO_F1_SCORE = 'macro_f1_score'
+    MICRO_F1_SCORE = 'micro_f1_score'
     PRECISION_SCORE = 'precision_score'
     MACRO_PRECISION_SCORE = 'macro_precision_score'
     MICRO_PRECISION_SCORE = 'micro_precision_score'
@@ -62,11 +70,14 @@ class Metrics(str, Enum):
 
 
 metric_to_display_name = {
+    Metrics.ACCURACY_SCORE: 'Accuracy score',
     Metrics.MEAN_ABSOLUTE_ERROR: 'Mean absolute error',
     Metrics.MEAN_SQUARED_ERROR: 'Mean squared error',
     Metrics.MEDIAN_ABSOLUTE_ERROR: 'Median absolute error',
     Metrics.R2_SCORE: 'R2 score',
     Metrics.F1_SCORE: 'F1 score',
+    Metrics.MACRO_F1_SCORE: 'Macro F1 score',
+    Metrics.MICRO_F1_SCORE: 'Micro F1 score',
     Metrics.PRECISION_SCORE: 'Precision score',
     Metrics.MACRO_PRECISION_SCORE: 'Macro precision score',
     Metrics.MICRO_PRECISION_SCORE: 'Micro precision score',
@@ -94,3 +105,8 @@ precision_metrics = {Metrics.PRECISION_SCORE,
 recall_metrics = {Metrics.RECALL_SCORE,
                   Metrics.MACRO_RECALL_SCORE,
                   Metrics.MICRO_RECALL_SCORE}
+
+
+f1_metrics = {Metrics.F1_SCORE,
+              Metrics.MACRO_F1_SCORE,
+              Metrics.MICRO_F1_SCORE}

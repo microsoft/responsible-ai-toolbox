@@ -22,11 +22,12 @@ from erroranalysis._internal.constants import (PRED_Y,
                                                metric_to_display_name,
                                                error_metrics,
                                                precision_metrics,
-                                               recall_metrics)
+                                               recall_metrics,
+                                               f1_metrics)
 from erroranalysis._internal.metrics import metric_to_func, get_ordered_labels
 from sklearn.metrics import (
     mean_absolute_error, mean_squared_error, median_absolute_error,
-    r2_score, f1_score)
+    r2_score)
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -398,18 +399,10 @@ def node_to_dict(df, tree, nodeid, categories, json,
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = r2_score(true_y, pred_y)
-    elif metric == Metrics.F1_SCORE:
-        pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = compute_metric_value(f1_score, classes,
-                                            true_y, pred_y, metric)
-        success = total - error
-    elif metric in precision_metrics:
-        pred_y, true_y, error = get_classification_metric_data(df)
-        func = metric_to_func[metric]
-        metric_value = compute_metric_value(func, classes, true_y,
-                                            pred_y, metric)
-        success = total - error
-    elif metric in recall_metrics:
+    elif (metric in precision_metrics or
+          metric in recall_metrics or
+          metric in f1_metrics or
+          metric == Metrics.ACCURACY_SCORE):
         pred_y, true_y, error = get_classification_metric_data(df)
         func = metric_to_func[metric]
         metric_value = compute_metric_value(func, classes, true_y,
@@ -466,7 +459,10 @@ def get_classification_metric_data(df):
 
 
 def compute_metric_value(func, classes, true_y, pred_y, metric):
-    if metric == Metrics.RECALL_SCORE or metric == Metrics.PRECISION_SCORE:
+    requires_pos_label = (metric == Metrics.RECALL_SCORE or
+                          metric == Metrics.PRECISION_SCORE or
+                          metric == Metrics.F1_SCORE)
+    if requires_pos_label:
         ordered_labels = get_ordered_labels(classes, true_y, pred_y)
         if ordered_labels is not None and len(ordered_labels) == 2:
             return func(true_y, pred_y, pos_label=ordered_labels[1])

@@ -48,7 +48,9 @@ class TestSurrogateErrorTree(object):
     @pytest.mark.parametrize('string_labels', [True, False])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.PRECISION_SCORE,
-                                        Metrics.RECALL_SCORE])
+                                        Metrics.RECALL_SCORE,
+                                        Metrics.ACCURACY_SCORE,
+                                        Metrics.F1_SCORE])
     def test_traverse_tree(self, string_labels, metric):
         X_train, X_test, y_train, y_test, categorical_features = \
             create_adult_census_data(string_labels)
@@ -99,7 +101,10 @@ class TestSurrogateErrorTree(object):
                                         Metrics.MACRO_PRECISION_SCORE,
                                         Metrics.MICRO_PRECISION_SCORE,
                                         Metrics.MACRO_RECALL_SCORE,
-                                        Metrics.MICRO_RECALL_SCORE])
+                                        Metrics.MICRO_RECALL_SCORE,
+                                        Metrics.MACRO_F1_SCORE,
+                                        Metrics.MICRO_F1_SCORE,
+                                        Metrics.ACCURACY_SCORE])
     @pytest.mark.parametrize('min_child_samples', [5, 10, 20])
     @pytest.mark.parametrize('max_depth', [3, 4])
     @pytest.mark.parametrize('num_leaves', [5, 10, 31])
