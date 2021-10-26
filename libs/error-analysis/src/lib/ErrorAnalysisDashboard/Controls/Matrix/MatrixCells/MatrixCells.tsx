@@ -73,7 +73,11 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             metricName === Metrics.MicroPrecisionScore ||
             metricName === Metrics.MacroPrecisionScore ||
             metricName === Metrics.MicroRecallScore ||
-            metricName === Metrics.MacroRecallScore
+            metricName === Metrics.MacroRecallScore ||
+            metricName === Metrics.F1Score ||
+            metricName === Metrics.MicroF1Score ||
+            metricName === Metrics.MacroF1Score ||
+            metricName === Metrics.AccuracyScore
           ) {
             totalError += value.error;
             maxMetricValue = Math.max(maxMetricValue, value.metricValue);
@@ -100,16 +104,7 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
                 errorRatio = (value.falseCount / value.count) * 100;
               } else {
                 metricName = value.metricName;
-                if (
-                  metricName === Metrics.MeanSquaredError ||
-                  metricName === Metrics.MeanAbsoluteError ||
-                  metricName === Metrics.PrecisionScore ||
-                  metricName === Metrics.RecallScore ||
-                  metricName === Metrics.MicroPrecisionScore ||
-                  metricName === Metrics.MacroPrecisionScore ||
-                  metricName === Metrics.MicroRecallScore ||
-                  metricName === Metrics.MacroRecallScore
-                ) {
+                if (metricName !== Metrics.ErrorRate) {
                   errorRatio = (value.metricValue / maxMetricValue) * 100;
                 }
               }

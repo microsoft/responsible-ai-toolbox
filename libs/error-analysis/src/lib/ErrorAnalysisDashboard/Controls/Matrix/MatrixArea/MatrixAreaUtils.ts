@@ -15,11 +15,13 @@ import {
 } from "@responsible-ai/core-ui";
 
 import {
-  BaseStatsAggregator,
+  AccuracyStatsAggregator,
+  BaseStats,
   ErrorRateStatsAggregator,
   MetricStatsAggregator,
   PrecisionStatsAggregator,
-  RecallStatsAggregator
+  RecallStatsAggregator,
+  F1ScoreStatsAggregator
 } from "./StatsAggregator";
 
 export async function fetchMatrix(
@@ -74,7 +76,7 @@ export function createCohortStatsFromSelectedCells(
   jsonMatrix: IErrorAnalysisMatrix
 ): MetricCohortStats {
   let metricName = jsonMatrix.matrix[0][0].metricName;
-  let statsAggregator: BaseStatsAggregator;
+  let statsAggregator: BaseStats;
   // Note for older versions of error analysis package metricName is
   // undefined for ErrorRate
   if (metricName === Metrics.ErrorRate || metricName === undefined) {
@@ -97,6 +99,14 @@ export function createCohortStatsFromSelectedCells(
     metricName === Metrics.MicroRecallScore
   ) {
     statsAggregator = new RecallStatsAggregator(metricName);
+  } else if (
+    metricName === Metrics.F1Score ||
+    metricName === Metrics.MacroF1Score ||
+    metricName === Metrics.MicroF1Score
+  ) {
+    statsAggregator = new F1ScoreStatsAggregator(metricName);
+  } else if (metricName === Metrics.AccuracyScore) {
+    statsAggregator = new AccuracyStatsAggregator(metricName);
   } else {
     throw new Error(`Unknown metric value ${metricName} specified`);
   }

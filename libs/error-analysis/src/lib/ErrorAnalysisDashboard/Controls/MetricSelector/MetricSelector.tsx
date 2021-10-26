@@ -33,81 +33,26 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
     if (modelType === ModelTypes.Binary) {
-      options.push({
-        key: Metrics.ErrorRate,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.ErrorRate,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.PrecisionScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.PrecisionScore,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.RecallScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.RecallScore,
-          MetricLocalizationType.Name
-        )
-      });
+      options.push(this.addDropdownOption(Metrics.ErrorRate));
+      options.push(this.addDropdownOption(Metrics.PrecisionScore));
+      options.push(this.addDropdownOption(Metrics.RecallScore));
+      options.push(this.addDropdownOption(Metrics.F1Score));
+      options.push(this.addDropdownOption(Metrics.AccuracyScore));
     } else if (modelType === ModelTypes.Regression) {
-      options.push({
-        key: Metrics.MeanSquaredError,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MeanSquaredError,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.MeanAbsoluteError,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MeanAbsoluteError,
-          MetricLocalizationType.Name
-        )
-      });
+      options.push(this.addDropdownOption(Metrics.MeanSquaredError));
+      options.push(this.addDropdownOption(Metrics.MeanAbsoluteError));
     } else if (modelType === ModelTypes.Multiclass) {
       dropdownStyles = {
         dropdown: { width: 235 }
       };
-      options.push({
-        key: Metrics.ErrorRate,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.ErrorRate,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.MacroPrecisionScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MacroPrecisionScore,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.MacroRecallScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MacroRecallScore,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.MicroPrecisionScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MicroPrecisionScore,
-          MetricLocalizationType.Name
-        )
-      });
-      options.push({
-        key: Metrics.MicroRecallScore,
-        text: MetricUtils.getLocalizedMetric(
-          Metrics.MicroRecallScore,
-          MetricLocalizationType.Name
-        )
-      });
+      options.push(this.addDropdownOption(Metrics.ErrorRate));
+      options.push(this.addDropdownOption(Metrics.MacroPrecisionScore));
+      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
+      options.push(this.addDropdownOption(Metrics.MicroPrecisionScore));
+      options.push(this.addDropdownOption(Metrics.MicroRecallScore));
+      options.push(this.addDropdownOption(Metrics.MicroF1Score));
+      options.push(this.addDropdownOption(Metrics.MacroF1Score));
+      options.push(this.addDropdownOption(Metrics.AccuracyScore));
     }
     return (
       <Dropdown
@@ -119,6 +64,13 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
         disabled={!this.props.isEnabled}
       />
     );
+  }
+
+  private addDropdownOption(metric: string): IDropdownOption {
+    return {
+      key: metric,
+      text: MetricUtils.getLocalizedMetric(metric, MetricLocalizationType.Name)
+    };
   }
 
   private handleMetricChanged = (
