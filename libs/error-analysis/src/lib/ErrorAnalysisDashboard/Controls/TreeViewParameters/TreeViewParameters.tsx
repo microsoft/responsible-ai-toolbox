@@ -37,7 +37,10 @@ export class TreeViewParameters extends React.Component<
     const classNames = treeViewParametersStyles();
     return (
       <div>
-        <Label className={classNames.sliderLabelStyle}>
+        <Label
+          className={classNames.sliderLabelStyle}
+          disabled={!this.props.isEnabled}
+        >
           {localization.ErrorAnalysis.TreeViewParameters.maximumDepth}
           <InfoCallout
             iconId={this._maximumDepthIconId}
@@ -57,7 +60,10 @@ export class TreeViewParameters extends React.Component<
           onChanged={this.onMaxDepthSliderChanged}
           disabled={!this.props.isEnabled}
         />
-        <Label className={classNames.sliderLabelStyle}>
+        <Label
+          className={classNames.sliderLabelStyle}
+          disabled={!this.props.isEnabled}
+        >
           {localization.ErrorAnalysis.TreeViewParameters.numLeaves}
           <InfoCallout
             iconId={this._numLeavesIconId}
@@ -75,7 +81,10 @@ export class TreeViewParameters extends React.Component<
           onChanged={this.onNumLeavesSliderChanged}
           disabled={!this.props.isEnabled}
         />
-        <Label className={classNames.sliderLabelStyle}>
+        <Label
+          className={classNames.sliderLabelStyle}
+          disabled={!this.props.isEnabled}
+        >
           {localization.ErrorAnalysis.TreeViewParameters.minDataInLeaf}
           <InfoCallout
             iconId={this._minChildSamplesIconId}

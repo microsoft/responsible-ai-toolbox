@@ -169,7 +169,10 @@ export class FeatureList extends React.Component<
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
             <Stack.Item key="decisionTreeKey" align="start">
               <Text key="decisionTreeTextKey" variant="medium">
-                {localization.ErrorAnalysis.treeMapDescription}
+                {this.props.isEnabled
+                  ? localization.ErrorAnalysis.FeatureList.treeMapDescription
+                  : localization.ErrorAnalysis.FeatureList
+                      .staticTreeMapDescription}
               </Text>
             </Stack.Item>
             <Stack.Item key="searchKey" align="start">
@@ -243,15 +246,18 @@ export class FeatureList extends React.Component<
                 isEnabled={this.props.isEnabled}
               />
             </Stack.Item>
-            <Stack.Item key="applyButtonKey" align="start">
-              <PrimaryButton
-                text="Apply"
-                onClick={this.apply.bind(this)}
-                allowDisabledFocus
-                disabled={!this.state.enableApplyButton}
-                checked={false}
-              />
-            </Stack.Item>
+            {this.props.isEnabled && (
+              // Remove apply button in static view
+              <Stack.Item key="applyButtonKey" align="start">
+                <PrimaryButton
+                  text="Apply"
+                  onClick={this.apply.bind(this)}
+                  allowDisabledFocus
+                  disabled={!this.state.enableApplyButton}
+                  checked={false}
+                />
+              </Stack.Item>
+            )}
           </Stack>
         </div>
       </Panel>

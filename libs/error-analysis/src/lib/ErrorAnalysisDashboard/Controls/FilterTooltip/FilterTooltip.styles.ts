@@ -9,14 +9,16 @@ import {
   mergeStyles
 } from "office-ui-fabric-react";
 
+import { ColorPalette } from "../../ColorPalette";
+
 export interface IFilterTooltipStyles {
   hideFilterTooltip: IStyle;
   tooltipRect: IStyle;
   metricBarBlack: IStyle;
+  metricBarGreen: IStyle;
   metricBarRed: IStyle;
   showFilterTooltip: IStyle;
   smallHeader: IStyle;
-  valueRed: IStyle;
   valueBlack: IStyle;
   metricValueCell: IStyle;
   errorCoverageCell: IStyle;
@@ -48,8 +50,11 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
       metricBarBlack: mergeStyles(metricBar, {
         fill: theme.palette.black
       }),
+      metricBarGreen: mergeStyles(metricBar, {
+        fill: ColorPalette.MaxMetricColor
+      }),
       metricBarRed: mergeStyles(metricBar, {
-        fill: theme.palette.red
+        fill: ColorPalette.MaxErrorColor
       }),
       metricValueCell: {
         transform: "translate(20px, 75px)"
@@ -76,9 +81,6 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
       },
       valueBlack: mergeStyles(value, {
         color: theme.palette.black
-      }),
-      valueRed: mergeStyles(value, {
-        color: theme.palette.red
       })
     });
   };

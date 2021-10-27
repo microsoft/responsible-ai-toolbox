@@ -30,6 +30,7 @@ scrapbook
 jupyter
 nbval
 
+docutils<0.18
 sphinx==3.1.1
 sphinx-gallery==0.8.1
 pydata-sphinx-theme==0.3.0

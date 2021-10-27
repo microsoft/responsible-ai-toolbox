@@ -83,7 +83,13 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
             </Stack>
             <Stack>
               <Stack horizontal>
-                <div className={classNames.metricBarRed} />
+                <div
+                  className={
+                    this.props.isErrorMetric
+                      ? classNames.metricBarRed
+                      : classNames.metricBarGreen
+                  }
+                />
                 <Stack tokens={cellTokens}>
                   <div className={classNames.smallHeader}>
                     {MetricUtils.getLocalizedMetric(
