@@ -63,8 +63,8 @@ If a pipeline script is provided, the explanation function assumes that the runn
 
 Tools within the Responsible AI Toolbox can also be used with AI models offered as APIs by providers such as [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/). To see example use cases, see the folders below:
 
-- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/cognitive-services-examples/speech-to-text)
-- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/cognitive-services-examples/face-verification/)
+- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/michaelamoako/cognitive-services/notebooks/cognitive-services-examples/speech-to-text)
+- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/michaelamoako/cognitive-services/notebooks/cognitive-services-examples/face-verification/)
   
 ## Maintainers
 
