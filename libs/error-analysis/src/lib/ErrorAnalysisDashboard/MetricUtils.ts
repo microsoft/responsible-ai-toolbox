@@ -25,6 +25,16 @@ export class MetricUtils {
     type: MetricLocalizationType
   ): string {
     switch (metricName) {
+      case Metrics.AccuracyScore: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.accuracyScore;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.accuracyScoreInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.accuracyScoreTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.accuracyScoreShort;
+      }
       case Metrics.ErrorRate: {
         if (
           type === MetricLocalizationType.Name ||
@@ -55,6 +65,17 @@ export class MetricUtils {
           return localization.ErrorAnalysis.Metrics.meanAbsoluteErrorTitle;
         }
         return localization.ErrorAnalysis.Metrics.meanAbsoluteErrorShort;
+      }
+      case Metrics.F1Score: {
+        if (
+          type === MetricLocalizationType.Name ||
+          type === MetricLocalizationType.Short
+        ) {
+          return localization.ErrorAnalysis.Metrics.f1Score;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.f1ScoreInfo;
+        }
+        return localization.ErrorAnalysis.Metrics.f1ScoreTitle;
       }
       case Metrics.PrecisionScore: {
         if (type === MetricLocalizationType.Name) {
@@ -115,6 +136,26 @@ export class MetricUtils {
           return localization.ErrorAnalysis.Metrics.microRecallTitle;
         }
         return localization.ErrorAnalysis.Metrics.microRecallShort;
+      }
+      case Metrics.MacroF1Score: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.macroF1Score;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.macroF1ScoreInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.macroF1ScoreTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.macroF1ScoreShort;
+      }
+      case Metrics.MicroF1Score: {
+        if (type === MetricLocalizationType.Name) {
+          return localization.ErrorAnalysis.Metrics.microF1Score;
+        } else if (type === MetricLocalizationType.Info) {
+          return localization.ErrorAnalysis.Metrics.microF1ScoreInfo;
+        } else if (type === MetricLocalizationType.Title) {
+          return localization.ErrorAnalysis.Metrics.microF1ScoreTitle;
+        }
+        return localization.ErrorAnalysis.Metrics.microF1ScoreShort;
       }
       default: {
         return "";
