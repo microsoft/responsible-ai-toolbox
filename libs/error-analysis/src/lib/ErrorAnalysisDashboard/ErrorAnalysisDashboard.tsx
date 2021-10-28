@@ -294,6 +294,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     if (props.requestDebugML === undefined) {
       selectedFeatures = props.errorAnalysisData.tree_features!;
     }
+    const importances = props.errorAnalysisData.importances ?? [];
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
       baseCohort: cohorts[0],
@@ -305,7 +306,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       globalImportance: globalProps.globalImportance,
       globalImportanceIntercept: globalProps.globalImportanceIntercept,
-      importances: [],
+      importances,
       isGlobalImportanceDerivedFromLocal:
         globalProps.isGlobalImportanceDerivedFromLocal,
       jointDataset,
