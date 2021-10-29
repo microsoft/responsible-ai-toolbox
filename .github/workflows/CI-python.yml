@@ -87,13 +87,13 @@ jobs:
       - name: flake8
         run: flake8
 
-      - if: ${{ matrix.packageDirectory != 'raiwidgets' }}
-        name: Run tests
+      - name: Run tests
         run: |
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Run widget tests
+      - if: ${{ matrix.packageDirectory != 'raiwidgets' }}
+        name: Run widget tests
         run: yarn e2e-widget
 
       - if: ${{ matrix.packageDirectory == 'raiwidgets' }}

@@ -18,7 +18,7 @@
     "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn e2e",
     "copytest": "node ./scripts/copyTest.js",
     "dep-graph": "nx dep-graph",
-    "e2e": "nx e2e",
+    "e2e": "nx e2e dashboard-e2e",
     "e2e-widget": "node ./scripts/e2e-widget.js",
     "format": "nx format:write",
     "format:check": "nx format:check",
