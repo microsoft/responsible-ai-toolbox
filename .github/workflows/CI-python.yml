@@ -93,6 +93,9 @@ jobs:
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
+      - name: Run widget tests
+        run: yarn e2e-widget
+
       - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
         name: Run tests
         run: |
