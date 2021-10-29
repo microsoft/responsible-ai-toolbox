@@ -105,6 +105,7 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert ea_deserialized.tree == error_report1.tree
     assert ea_deserialized.tree_features == error_report1.tree_features
     assert ea_deserialized.matrix_features == error_report1.matrix_features
+    assert ea_deserialized.importances == error_report1.importances
 
     # validate error report does not modify original dataset in ModelAnalyzer
     if isinstance(X_test, pd.DataFrame):
