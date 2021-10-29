@@ -10,25 +10,37 @@ from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 
 # Replace with a valid Subscription Key here.
-KEY = 'subscription key'    
+KEY = 'subscription key'
 # Replace with your regional Base URL
-ENDPOINT = 'https://westus2.api.cognitive.microsoft.com' 
+ENDPOINT = 'https://westus2.api.cognitive.microsoft.com'
 
 # Create an authenticated FaceClient.
-face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY)) 
+face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
 
-# Define the face_verify function
-# source_image: source image file path
-# target_image: target image file path
-# recognition_model: supported 'recognition_model' values include "recognition_01", "recognition_02", "recognition_03", and "recognition_04"
-# detection_model: supported 'detection_model' values include "detection_01", "detection_02", and "detection_03"
+
+# Define face_verify function
 def face_verify(
     source_image,
     target_image,
     recognition_model='recognition_04',
     detection_model='detection_03',
 ):
-    #Detect all faces in the source image
+    """
+    Runs Cognitive Service Face detection client on two input images.
+
+    Parameters:
+    - Source_image: Source image file path
+    - Target_image: Target image file path
+    - Recognition_model: Model used for facial recognition
+        Supported values:
+            - 'recogntion_01',
+            - 'recognition_02,
+            - 'recognition_03',
+            - 'recognition_04'
+    - Detection_model: Model used for facial detection
+        Supported values: 'detection_01', 'detection_02', 'detection_03'
+    """
+    # Detect all faces in the source image
     source_image_stream = open(source_image, "rb")
     source_detected_faces = face_client.face.detect_with_stream(
         image=source_image_stream,
@@ -38,8 +50,8 @@ def face_verify(
     if len(source_detected_faces) == 0:
         print("No face detected from ", source_image)
         return 0
-    
-    #Detect all faces in the target image
+
+    # Detect all faces in the target image
     target_image_stream = open(target_image, "rb")
     target_detected_faces = face_client.face.detect_with_stream(
         image=target_image_stream,
@@ -49,8 +61,9 @@ def face_verify(
     if len(target_detected_faces) == 0:
         print("No face detected from ", target_image)
         return 0
-    
-    #Verify the first/largest face in the source image to each face in the target image.
+
+    # Verify the first/largest face in the source image
+    # To each face in the target image.
     maxConfidence = 0
     for i in range(len(target_detected_faces)):
         target_face_id = target_detected_faces[i].face_id
@@ -60,8 +73,9 @@ def face_verify(
         )
         if verify_result.confidence > maxConfidence:
             maxConfidence = verify_result.confidence
-    #Use the best confidence score as the matching score of source and target images.
+    # Return best confidence score as the matching score.
     return maxConfidence
+
 
 # Replace with your input golden lables file
 golden_label_file = 'golden_labels.csv'
