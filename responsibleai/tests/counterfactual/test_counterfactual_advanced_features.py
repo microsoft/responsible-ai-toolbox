@@ -70,3 +70,34 @@ class TestCounterfactualAdvancedFeatures(object):
 
         cf_obj = model_analysis.counterfactual.get()[0]
         assert cf_obj is not None
+
+    def test_counterfactual_manager_save_load(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_data()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        model_analysis = ModelAnalysis(
+            model=model,
+            train=X_train,
+            test=X_test.iloc[0:10],
+            target_column='target',
+            task_type='classification')
+
+        model_analysis.counterfactual.add(
+            total_CFs=10, desired_class=2,
+            features_to_vary=[feature_names[0]],
+            permitted_range={feature_names[0]: [2.0, 5.0]})
+        model_analysis.counterfactual.compute()
+
+        cf_obj = model_analysis.counterfactual.get()[0]
+        assert cf_obj is not None
+
+        model_analysis.save('counterfactual')
+        model_analysis_copy = ModelAnalysis.load('counterfactual')
+
+        cf_obj = model_analysis_copy.counterfactual.get()[0]
+
+        assert cf_obj is not None
