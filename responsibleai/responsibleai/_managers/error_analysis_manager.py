@@ -10,7 +10,7 @@ from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
-  json_converter as report_json_converter
+    json_converter as report_json_converter
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys

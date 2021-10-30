@@ -11,8 +11,8 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
                                                TRUE_Y, Metrics)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.surrogate_error_tree import (
-  TreeSide, create_surrogate_model, get_categorical_info, get_max_split_index,
-  traverse)
+    TreeSide, create_surrogate_model, get_categorical_info,
+    get_max_split_index, traverse)
 
 SIZE = 'size'
 PARENTID = 'parentId'

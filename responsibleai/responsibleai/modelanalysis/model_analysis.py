@@ -15,7 +15,8 @@ from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import Dataset, ModelAnalysisData
 from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
 from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import CounterfactualManager
+from responsibleai._managers.counterfactual_manager import \
+    CounterfactualManager
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException

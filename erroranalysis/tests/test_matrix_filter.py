@@ -23,7 +23,8 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
                                                    FALSE_COUNT, FN, FP,
                                                    INTERVAL_MAX, INTERVAL_MIN,
                                                    MATRIX, METRIC_NAME,
-                                                   METRIC_VALUE, TN, TP, VALUES)
+                                                   METRIC_VALUE, TN, TP,
+                                                   VALUES)
 from erroranalysis._internal.metrics import (get_ordered_labels,
                                              is_multi_agg_metric,
                                              metric_to_func)

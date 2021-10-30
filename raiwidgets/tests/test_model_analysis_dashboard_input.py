@@ -7,7 +7,7 @@ import sklearn
 from sklearn.model_selection import train_test_split
 
 from raiwidgets.model_analysis_dashboard_input import \
-  ModelAnalysisDashboardInput
+    ModelAnalysisDashboardInput
 from responsibleai import ModelAnalysis
 
 

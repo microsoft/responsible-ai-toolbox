@@ -8,13 +8,13 @@ import pytest
 from rai_core_flask import FlaskHelper
 from rai_core_flask.environments.azure_nb_environment import AzureNBEnvironment
 from rai_core_flask.environments.credentialed_vm_environment import \
-  CredentialedVMEnvironment
+    CredentialedVMEnvironment
 from rai_core_flask.environments.databricks_environment import (
-  DATABRICKS_ENV_VAR, DatabricksEnvironment)
+    DATABRICKS_ENV_VAR, DatabricksEnvironment)
 from rai_core_flask.environments.local_ipython_environment import \
-  LocalIPythonEnvironment
+    LocalIPythonEnvironment
 from rai_core_flask.environments.public_vm_environment import \
-  PublicVMEnvironment
+    PublicVMEnvironment
 
 
 class TestEnvironmentDetector(object):

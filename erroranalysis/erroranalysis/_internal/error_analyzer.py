@@ -13,9 +13,9 @@ from sklearn.preprocessing import OrdinalEncoder
 from erroranalysis._internal.constants import MatrixParams, Metrics, ModelTask
 from erroranalysis._internal.error_report import ErrorReport
 from erroranalysis._internal.matrix_filter import \
-  compute_matrix as _compute_matrix
+    compute_matrix as _compute_matrix
 from erroranalysis._internal.surrogate_error_tree import \
-  compute_error_tree as _compute_error_tree
+    compute_error_tree as _compute_error_tree
 from erroranalysis._internal.version_checker import check_pandas_version
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD

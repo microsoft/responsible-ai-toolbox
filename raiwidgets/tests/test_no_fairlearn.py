@@ -6,7 +6,7 @@ import pytest
 
 from raiwidgets import FairnessDashboard
 from raiwidgets.fairness_metric_calculation import \
-  MODULE_NOT_INSTALLED_ERROR_MESSAGE
+    MODULE_NOT_INSTALLED_ERROR_MESSAGE
 
 
 @mock.patch("importlib.import_module")

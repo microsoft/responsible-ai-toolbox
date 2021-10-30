@@ -12,8 +12,9 @@ from sklearn.metrics import (mean_absolute_error, mean_squared_error,
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
-                                               METHOD_EXCLUDES, METHOD_INCLUDES,
-                                               PRED_Y, ROW_INDEX, SPLIT_FEATURE,
+                                               METHOD_EXCLUDES,
+                                               METHOD_INCLUDES, PRED_Y,
+                                               ROW_INDEX, SPLIT_FEATURE,
                                                SPLIT_INDEX, TRUE_Y, Metrics,
                                                ModelTask, error_metrics,
                                                f1_metrics,

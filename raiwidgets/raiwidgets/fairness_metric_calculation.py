@@ -138,10 +138,10 @@ class FairnessMetricModule:
             # Issue 269 has been opened to track the work for unifying the two
             import sklearn.metrics as skm
             from fairlearn.metrics._extra_metrics import (
-              _balanced_root_mean_squared_error, _mean_overprediction,
-              _mean_underprediction, _root_mean_squared_error,
-              false_negative_rate, false_positive_rate, mean_prediction,
-              selection_rate, true_negative_rate)
+                _balanced_root_mean_squared_error, _mean_overprediction,
+                _mean_underprediction, _root_mean_squared_error,
+                false_negative_rate, false_positive_rate, mean_prediction,
+                selection_rate, true_negative_rate)
 
             self._metric_methods = {
                 "accuracy_score": {

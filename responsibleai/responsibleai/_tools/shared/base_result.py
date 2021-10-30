@@ -11,7 +11,7 @@ import jsonschema
 
 from responsibleai._internal.constants import SerializationAttributes
 from responsibleai._tools.shared.attribute_serialization import (
-  load_attributes, save_attributes)
+    load_attributes, save_attributes)
 from responsibleai.serialization_utilities import serialize_json_safe
 
 TResult = TypeVar('TResult')  # Type for subclasses of BaseResult

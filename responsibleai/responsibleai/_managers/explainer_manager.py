@@ -10,10 +10,12 @@ from pathlib import Path
 import numpy as np
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
-  FeatureImportanceExplanation, load_explanation, save_explanation)
+    FeatureImportanceExplanation, load_explanation, save_explanation)
 from interpret_community.mimic.mimic_explainer import MimicExplainer
-from interpret_community.mimic.models.lightgbm_model import LGBMExplainableModel
-from interpret_community.mimic.models.linear_model import LinearExplainableModel
+from interpret_community.mimic.models.lightgbm_model import \
+    LGBMExplainableModel
+from interpret_community.mimic.models.linear_model import \
+    LinearExplainableModel
 from scipy.sparse import issparse
 
 from responsibleai._input_processing import _convert_to_list

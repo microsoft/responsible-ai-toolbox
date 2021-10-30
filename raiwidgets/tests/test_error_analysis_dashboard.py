@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 
 from erroranalysis._internal.constants import Metrics, metric_to_display_name
 from erroranalysis._internal.surrogate_error_tree import (
-  DEFAULT_MAX_DEPTH, DEFAULT_MIN_CHILD_SAMPLES, DEFAULT_NUM_LEAVES)
+    DEFAULT_MAX_DEPTH, DEFAULT_MIN_CHILD_SAMPLES, DEFAULT_NUM_LEAVES)
 from raiwidgets import ErrorAnalysisDashboard
 from raiwidgets.explanation_constants import WidgetRequestResponseConstants
 
