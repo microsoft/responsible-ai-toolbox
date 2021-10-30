@@ -3,7 +3,6 @@
 
 from enum import Enum
 
-
 PRED_Y = 'pred_y'
 ROW_INDEX = 'row_index'
 TRUE_Y = 'true_y'

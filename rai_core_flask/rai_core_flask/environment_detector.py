@@ -2,11 +2,10 @@
 # Licensed under the MIT License.
 
 import os
-from .environments import AzureNBEnvironment
-from .environments import CredentialedVMEnvironment
-from .environments import DatabricksEnvironment
-from .environments import LocalIPythonEnvironment
-from .environments import PublicVMEnvironment
+
+from .environments import (AzureNBEnvironment, CredentialedVMEnvironment,
+                           DatabricksEnvironment, LocalIPythonEnvironment,
+                           PublicVMEnvironment)
 
 """Environment detection related utilities.
 A good portion of this code has largely been sourced from open-source licensed

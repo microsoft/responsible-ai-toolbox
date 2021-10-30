@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+from unittest.mock import ANY, patch
+
 import numpy as np
 import pytest
 
-from unittest.mock import patch, ANY
-
 from responsibleai import ModelAnalysis, ModelTask
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._managers.causal_manager import CausalManager
+from responsibleai.exceptions import UserConfigValidationException
 
 
 class TestCausalManager:

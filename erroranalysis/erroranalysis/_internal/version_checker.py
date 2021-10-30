@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pandas as pd
 from warnings import warn
+
+import pandas as pd
 
 
 def check_pandas_version(feature_names):

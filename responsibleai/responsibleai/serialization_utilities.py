@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import datetime
-import numpy as np
-
-from typing import Any
 import json
+from typing import Any
+
+import numpy as np
 
 
 def serialize_json_safe(o: Any):

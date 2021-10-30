@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.model_selection import train_test_split
 import shap
 import sklearn
-from responsibleai import ModelAnalysis
+from sklearn.model_selection import train_test_split
+
 from raiwidgets import ModelAnalysisDashboard
-from responsibleai._interfaces import CausalData, CounterfactualData, Dataset,\
-    ErrorAnalysisData, ModelExplanationData
+from responsibleai import ModelAnalysis
+from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
+                                       ErrorAnalysisData, ModelExplanationData)
 
 
 class TestModelAnalysisDashboard:

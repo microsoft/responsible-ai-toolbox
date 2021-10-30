@@ -3,8 +3,8 @@
 import pytest
 
 from responsibleai._tools.shared.attribute_serialization import (
-    load_attributes, save_attributes,
-    SerializationExtensions, SerializationFormats)
+  SerializationExtensions, SerializationFormats, load_attributes,
+  save_attributes)
 
 
 class Example:

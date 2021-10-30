@@ -3,10 +3,10 @@
 
 """Defines the model performance dashboard class."""
 
-from .explanation_dashboard_input import ExplanationDashboardInput
-from .dashboard import Dashboard
-
 from flask import jsonify, request
+
+from .dashboard import Dashboard
+from .explanation_dashboard_input import ExplanationDashboardInput
 
 
 class ModelPerformanceDashboard(Dashboard):

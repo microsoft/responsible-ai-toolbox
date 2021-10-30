@@ -1,11 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 import copy
+from typing import List, Tuple
+
 import numpy as np
 import pandas as pd
 import pytest
-
-from typing import List, Tuple
 
 from ..common_utils import create_adult_income_dataset, create_boston_data
 

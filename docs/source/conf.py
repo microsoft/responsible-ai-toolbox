@@ -15,8 +15,10 @@
 #
 import inspect
 import os
-import raiwidgets
 import sys
+
+import raiwidgets
+
 sys.path.insert(0, os.path.abspath(os.path.join('..', 'raiwidgets')))
 
 

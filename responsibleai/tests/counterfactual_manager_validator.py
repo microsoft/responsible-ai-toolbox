@@ -2,12 +2,11 @@
 # Licensed under the MIT License.
 
 import pytest
-from responsibleai.exceptions import (
-    DuplicateManagerConfigException, UserConfigValidationException
-)
-from dice_ml.utils.exception import (
-    UserConfigValidationException as DiceException
-)
+from dice_ml.utils.exception import \
+  UserConfigValidationException as DiceException
+
+from responsibleai.exceptions import (DuplicateManagerConfigException,
+                                      UserConfigValidationException)
 
 
 def verify_counterfactual_object(counterfactual_obj, feature_importance=False):

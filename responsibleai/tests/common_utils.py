@@ -1,20 +1,20 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-# Defines common utilities for responsibleai tests
-from dice_ml.utils import helpers
 import numpy as np
 import pandas as pd
+# Defines common utilities for responsibleai tests
+from dice_ml.utils import helpers
+from lightgbm import LGBMClassifier
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import load_iris, load_breast_cancer, \
-    make_classification, load_boston
+from sklearn.datasets import (load_boston, load_breast_cancer, load_iris,
+                              make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from lightgbm import LGBMClassifier
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBClassifier
 
 

@@ -2,21 +2,17 @@
 # Licensed under the MIT License.
 
 import pytest
+from common_utils import (create_adult_census_data, create_iris_data,
+                          create_kneighbors_classifier,
+                          create_models_classification)
 
-from common_utils import (
-    create_iris_data, create_models_classification,
-    create_adult_census_data, create_kneighbors_classifier)
+from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
+                                               SPLIT_FEATURE, SPLIT_INDEX,
+                                               TRUE_Y, Metrics)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.surrogate_error_tree import (
-    create_surrogate_model, get_categorical_info, get_max_split_index,
-    traverse, TreeSide)
-from erroranalysis._internal.constants import (Metrics,
-                                               PRED_Y,
-                                               TRUE_Y,
-                                               DIFF,
-                                               SPLIT_INDEX,
-                                               SPLIT_FEATURE,
-                                               LEAF_INDEX)
+  TreeSide, create_surrogate_model, get_categorical_info, get_max_split_index,
+  traverse)
 
 SIZE = 'size'
 PARENTID = 'parentId'

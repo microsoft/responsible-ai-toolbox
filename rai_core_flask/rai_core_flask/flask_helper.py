@@ -1,20 +1,19 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import atexit
+import logging
+import socket
+import threading
+import time
+import uuid
+
 from flask import Flask
+from gevent.pywsgi import WSGIServer
+
 from .environment_detector import build_environment
 from .environments.credentialed_vm_environment import CREDENTIALED_VM
 from .environments.public_vm_environment import PUBLIC_VM
-
-import socket
-import threading
-import atexit
-import uuid
-import time
-
-from gevent.pywsgi import WSGIServer
-
-import logging
 
 LOCALHOST = 'localhost'
 VM_ENVS = {CREDENTIALED_VM, PUBLIC_VM}

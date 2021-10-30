@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai.exceptions import UserConfigValidationException
 import pytest
-from responsibleai._internal.constants import ManagerNames, ListProperties
+
 from responsibleai import ModelTask
+from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai.exceptions import UserConfigValidationException
 
 LIGHTGBM_METHOD = 'mimic.lightgbm'
 

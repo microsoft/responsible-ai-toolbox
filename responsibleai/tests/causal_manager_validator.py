@@ -1,23 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-
-import pandas as pd
 import numpy as np
-
-from responsibleai.modelanalysis.constants import (
-    ModelTask)
-
-from responsibleai.exceptions import UserConfigValidationException
-
-from responsibleai._interfaces import (
-    CausalConfig, CausalData, CausalPolicy, CausalPolicyGains,
-    CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
-
+import pandas as pd
+import pytest
 from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
-from responsibleai._tools.causal.causal_result import CausalResult
 
+from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
+                                       CausalPolicyGains,
+                                       CausalPolicyTreeInternal,
+                                       CausalPolicyTreeLeaf)
+from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.modelanalysis.constants import ModelTask
 
 EFFECTS_ATTRIBUTES = [
     'point',

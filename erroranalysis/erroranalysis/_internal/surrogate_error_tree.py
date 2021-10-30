@@ -1,33 +1,26 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import numbers
+from enum import Enum
+
 import numpy as np
 import pandas as pd
-import numbers
 from lightgbm import LGBMClassifier, LGBMRegressor
-from enum import Enum
+from sklearn.metrics import (mean_absolute_error, mean_squared_error,
+                             median_absolute_error, r2_score)
+
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               ROW_INDEX,
-                                               DIFF,
-                                               SPLIT_INDEX,
-                                               SPLIT_FEATURE,
-                                               LEAF_INDEX,
-                                               METHOD,
-                                               METHOD_EXCLUDES,
-                                               METHOD_INCLUDES,
-                                               ModelTask,
-                                               Metrics,
+from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
+                                               METHOD_EXCLUDES, METHOD_INCLUDES,
+                                               PRED_Y, ROW_INDEX, SPLIT_FEATURE,
+                                               SPLIT_INDEX, TRUE_Y, Metrics,
+                                               ModelTask, error_metrics,
+                                               f1_metrics,
                                                metric_to_display_name,
-                                               error_metrics,
                                                precision_metrics,
-                                               recall_metrics,
-                                               f1_metrics)
-from erroranalysis._internal.metrics import metric_to_func, get_ordered_labels
-from sklearn.metrics import (
-    mean_absolute_error, mean_squared_error, median_absolute_error,
-    r2_score)
+                                               recall_metrics)
+from erroranalysis._internal.metrics import get_ordered_labels, metric_to_func
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
