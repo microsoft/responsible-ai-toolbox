@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
+const { forEach } = require("lodash");
 
 const baseDir = path.join(
   __dirname,
@@ -67,9 +68,10 @@ async function runNotebooks() {
   const files = fs
     .readdirSync(baseDir)
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".py"));
-  const output = await Promise.all(files.map(runNotebook));
-  const hosts = files.map((f, i) => ({ file: f, host: output[i] }));
-  console.log(hosts);
+  const hosts = [];
+  for (const f of files) {
+    hosts.push({ file: f, host: await runNotebook(f) });
+  }
   return hosts;
 }
 
