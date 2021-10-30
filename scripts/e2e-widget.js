@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
-const { forEach } = require("lodash");
 
 const baseDir = path.join(
   __dirname,
@@ -12,7 +11,7 @@ const baseDir = path.join(
 const filePrefix = "responsibleaitoolbox";
 
 const hostReg = /^ModelAssessment started at (http:\/\/localhost:\d+)$/m;
-const timeout = 1200;
+const timeout = 3600;
 
 /**
  *
@@ -24,7 +23,9 @@ async function runNotebook(name) {
   const timer = setTimeout(() => {
     throw new Error(`${name} timeout.`);
   }, timeout * 1000);
-  const nbProcess = spawn("python", ["-i", path.join(baseDir, name)]);
+  const nbProcess = spawn("python", ["-i", path.join(baseDir, name)], {
+    stdio: "overlapped"
+  });
   nbProcess.on("exit", () => {
     throw new Error(`Failed to run notebook ${name}`);
   });
@@ -38,6 +39,9 @@ async function runNotebook(name) {
         clearTimeout(timer);
         resolve(hostReg.exec(stdout)[1]);
       }
+    });
+    nbProcess.stdout.on("error", (error) => {
+      throw error;
     });
   });
 }
