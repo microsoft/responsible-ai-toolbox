@@ -6,13 +6,17 @@ import uuid
 
 _ErrorReportVersion1 = '1.0'
 _ErrorReportVersion2 = '2.0'
-_AllVersions = [_ErrorReportVersion1, _ErrorReportVersion2]
+_ErrorReportVersion3 = '3.0'
+_AllVersions = [_ErrorReportVersion1,
+                _ErrorReportVersion2,
+                _ErrorReportVersion3]
 _VERSION = 'version'
 
 TREE = 'tree'
 MATRIX = 'matrix'
 TREE_FEATURES = 'tree_features'
 MATRIX_FEATURES = 'matrix_features'
+IMPORTANCES = 'importances'
 ID = 'id'
 METADATA = 'metadata'
 
@@ -53,11 +57,18 @@ def as_error_report(error_dict):
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[ID])
+        elif version == _ErrorReportVersion2:
+            return ErrorReport(error_dict[TREE],
+                               error_dict[MATRIX],
+                               error_dict[TREE_FEATURES],
+                               error_dict[MATRIX_FEATURES],
+                               error_dict[ID])
         else:
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[TREE_FEATURES],
                                error_dict[MATRIX_FEATURES],
+                               error_dict[IMPORTANCES],
                                error_dict[ID])
     else:
         return error_dict
@@ -81,6 +92,7 @@ class ErrorReport(object):
                  matrix,
                  tree_features=None,
                  matrix_features=None,
+                 importances=None,
                  id=None):
         """Defines the ErrorReport, which contains the tree and matrix filter.
 
@@ -90,10 +102,13 @@ class ErrorReport(object):
         :type matrix: dict
         :param tree_features: The features that were selected to train the
             decision tree on errors.
-        :param tree_features: list[str]
+        :type tree_features: list[str]
         :param matrix_features: The one or two features selected for creating
             the matrix filter (aka heatmap).
-        :param matrix_features: list[str]
+        :type matrix_features: list[str]
+        :param importances: The feature importances calculated using mutual
+            information with the error on the true labels.
+        :type importances: list[float]
         :param id: The unique identifier for the ErrorReport.
             A new unique id is created if none is specified.
         :type id: str
@@ -103,7 +118,8 @@ class ErrorReport(object):
         self._matrix = matrix
         self._tree_features = tree_features
         self._matrix_features = matrix_features
-        self._metadata = {_VERSION: _ErrorReportVersion2}
+        self._importances = importances
+        self._metadata = {_VERSION: _ErrorReportVersion3}
 
     @property
     def __dict__(self):
@@ -119,6 +135,7 @@ class ErrorReport(object):
                 MATRIX: self._matrix,
                 TREE_FEATURES: self._tree_features,
                 MATRIX_FEATURES: self._matrix_features,
+                IMPORTANCES: self._importances,
                 ID: self._id,
                 METADATA: self._metadata}
 
@@ -163,6 +180,20 @@ class ErrorReport(object):
         :rtype: list[str]
         """
         return self._matrix_features
+
+    @property
+    def importances(self):
+        """Returns the feature importances for the tree view.
+
+        The feature importances are calculated using mutual
+        information with the error on the true labels.
+
+        :return: The feature importances for the tree view
+            calculated using mutual information with the error
+            on the true labels.
+        :rtype: list[float]
+        """
+        return self._importances
 
     @property
     def id(self):

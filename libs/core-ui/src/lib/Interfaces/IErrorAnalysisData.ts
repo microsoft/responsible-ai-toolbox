@@ -6,6 +6,7 @@ export interface IErrorAnalysisData {
   tree_features?: string[];
   matrix?: IErrorAnalysisMatrix;
   matrix_features?: string[];
+  importances?: number[];
   maxDepth: number;
   numLeaves: number;
   minChildSamples: number;
