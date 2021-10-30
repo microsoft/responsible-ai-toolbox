@@ -23,23 +23,23 @@ async function runNotebook(name) {
   const timer = setTimeout(() => {
     throw new Error(`${name} timeout.`);
   }, timeout * 1000);
-  const nbProcess = spawn("python", ["-i", path.join(baseDir, name)], {
-    stdio: "overlapped"
-  });
+  const nbProcess = spawn("python", ["-i", path.join(baseDir, name)]);
   nbProcess.on("exit", () => {
     throw new Error(`Failed to run notebook ${name}`);
   });
-  let stdout = "";
   return new Promise((resolve) => {
-    nbProcess.stdout.on("data", (data) => {
+    let stdout = "";
+    const handleOutput = (data) => {
       const message = data.toString();
       stdout += message;
-      console.log(name, message);
+      console.log(message);
       if (hostReg.test(stdout)) {
         clearTimeout(timer);
         resolve(hostReg.exec(stdout)[1]);
       }
-    });
+    };
+    nbProcess.stdout.on("data", handleOutput);
+    nbProcess.stderr.on("data", handleOutput);
     nbProcess.stdout.on("error", (error) => {
       throw error;
     });
