@@ -111,7 +111,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           theme: this.props.theme
         }}
       >
-        <Stack className={modelAssessmentDashboardStyles.page}>
+        <Stack
+          id="ModelAssessmentDashboard"
+          className={modelAssessmentDashboardStyles.page}
+        >
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}

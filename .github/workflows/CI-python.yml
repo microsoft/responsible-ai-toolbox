@@ -94,6 +94,10 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
+        name: Run widget tests
+        run: yarn e2e-widget
+
+      - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
         name: Run tests
         run: |
           pytest --durations=10

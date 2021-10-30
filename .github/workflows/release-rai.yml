@@ -109,6 +109,9 @@ jobs:
         run: pytest ./tests/
         working-directory: ${{ env.raiDirectory }}
 
+      - name: Run widget tests
+        run: yarn e2e-widget
+
       - name: Upload a raiwidgets build result
         uses: actions/upload-artifact@v2
         with:
