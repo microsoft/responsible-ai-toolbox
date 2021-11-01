@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from typing import Dict, List
+
 import numpy as np
 import pandas as pd
 from scipy.sparse import issparse
 from sklearn.utils import check_consistent_length
-from typing import Dict, List
-
 
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
     " Name '{0}' is of type {1}"

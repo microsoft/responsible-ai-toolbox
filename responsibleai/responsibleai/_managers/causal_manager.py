@@ -2,23 +2,23 @@
 # Licensed under the MIT License.
 
 """Manager for causal analysis."""
-import numpy as np
-import pandas as pd
-
+from pathlib import Path
 from typing import Any, List, Optional, Union
 
+import numpy as np
+import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
-from pathlib import Path
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import (
-    ManagerNames, SerializationAttributes)
+from responsibleai._internal.constants import (ManagerNames,
+                                               SerializationAttributes)
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import UserConfigValidationException
-from responsibleai._tools.causal.causal_constants import (
-    DefaultParams, ModelTypes, ResultAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
+from responsibleai._tools.causal.causal_constants import (DefaultParams,
+                                                          ModelTypes,
+                                                          ResultAttributes)
 from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
 
 

@@ -3,19 +3,19 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import dice_ml
-from dice_ml import Dice
-import numpy as np
 
+import dice_ml
+import numpy as np
+from dice_ml import Dice
+
+from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
+from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai._config.base_config import BaseConfig
+from responsibleai.exceptions import (DuplicateManagerConfigException,
+                                      UserConfigValidationException)
 from responsibleai.modelanalysis.constants import ModelTask
-from responsibleai.exceptions import (
-    UserConfigValidationException, DuplicateManagerConfigException
-)
-from responsibleai._interfaces import CounterfactualData
 
 
 class CounterfactualConstants:

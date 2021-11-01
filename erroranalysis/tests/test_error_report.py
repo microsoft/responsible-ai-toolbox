@@ -1,18 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import uuid
+
 import numpy as np
 import pandas as pd
 import pytest
-import uuid
+from common_utils import (create_boston_data, create_cancer_data,
+                          create_dataframe, create_iris_data,
+                          create_models_classification,
+                          create_models_regression)
 
-
-from erroranalysis._internal.error_report import ErrorReport
-from common_utils import (
-    create_boston_data, create_dataframe, create_iris_data,
-    create_cancer_data, create_models_classification,
-    create_models_regression)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.error_report import ErrorReport
 
 
 class TestErrorReport(object):

@@ -1,12 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.metrics import (
-    accuracy_score, mean_absolute_error, mean_squared_error,
-    median_absolute_error, r2_score, f1_score,
-    precision_score, recall_score)
-from erroranalysis._internal.constants import (
-    ModelTask, Metrics, precision_metrics, recall_metrics, f1_metrics)
+from sklearn.metrics import (accuracy_score, f1_score, mean_absolute_error,
+                             mean_squared_error, median_absolute_error,
+                             precision_score, r2_score, recall_score)
+
+from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
+                                               precision_metrics,
+                                               recall_metrics)
 
 MICRO = 'micro'
 MACRO = 'macro'

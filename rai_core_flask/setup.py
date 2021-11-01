@@ -3,7 +3,6 @@
 
 import setuptools
 
-
 # The version must be incremented every time we push an update to pypi (but
 # not before)
 VERSION = "0.2.4"

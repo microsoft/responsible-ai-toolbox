@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
 import subprocess
 
+import pytest
 
 REQUIRED_DEPENDENCIES = [
     'econml',

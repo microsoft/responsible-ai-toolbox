@@ -4,11 +4,9 @@
 
 import pytest
 
-from ..common_utils import (
-    create_iris_data, create_lightgbm_classifier
-)
-
 from responsibleai import ModelAnalysis
+
+from ..common_utils import create_iris_data, create_lightgbm_classifier
 
 
 class TestCounterfactualAdvancedFeatures(object):

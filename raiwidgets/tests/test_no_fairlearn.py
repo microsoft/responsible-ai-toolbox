@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
 import mock
+import pytest
+
 from raiwidgets import FairnessDashboard
 from raiwidgets.fairness_metric_calculation import \
     MODULE_NOT_INSTALLED_ERROR_MESSAGE

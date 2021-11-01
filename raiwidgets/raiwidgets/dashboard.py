@@ -6,10 +6,9 @@
 import json
 import os
 import uuid
-
 from html.parser import HTMLParser
-from rai_core_flask import FlaskHelper  # , environment_detector
 
+from rai_core_flask import FlaskHelper  # , environment_detector
 from responsibleai.serialization_utilities import serialize_json_safe
 
 

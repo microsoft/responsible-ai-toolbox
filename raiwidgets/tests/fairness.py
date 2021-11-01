@@ -1,14 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiwidgets import FairnessDashboard
-from sklearn.model_selection import train_test_split
-
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.linear_model import LogisticRegression
 import pandas as pd
-
 from sklearn.datasets import fetch_openml
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+from raiwidgets import FairnessDashboard
+
 data = fetch_openml(data_id=1590, as_frame=True)
 X_raw = data.data
 Y = (data.target == '>50K') * 1

@@ -3,13 +3,14 @@
 
 """Defines the fairness dashboard class."""
 
+import numpy as np
+from flask import jsonify, request
+
+from responsibleai._input_processing import (_convert_to_list,
+                                             _convert_to_string_list_dict)
+
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
-from responsibleai._input_processing import _convert_to_string_list_dict,\
-    _convert_to_list
-
-from flask import jsonify, request
-import numpy as np
 
 
 class FairnessDashboard(Dashboard):
