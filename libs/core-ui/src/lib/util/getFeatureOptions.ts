@@ -15,7 +15,10 @@ export function getFeatureOptions(
       const meta = jointDataset.metaDict[key];
       const options = meta.isCategorical
         ? meta.sortedCategoricalValues?.map(
-            (optionText: string, index: number) => {
+            (optionText: string | number, index: number) => {
+              if (typeof optionText !== "string") {
+                optionText = optionText.toString();
+              }
               return { key: index, text: optionText };
             }
           )
