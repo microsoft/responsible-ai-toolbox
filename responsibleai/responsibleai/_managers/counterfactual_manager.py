@@ -435,9 +435,12 @@ class CounterfactualManager(BaseManager):
             with open(result_path, 'r') as result_file:
                 cf_result = json.load(result_file)
 
-            counterfactual_config.counterfactual_obj = \
-                CounterfactualExplanations.from_json(
-                    cf_result['counterfactual_obj'])
+            if cf_result['counterfactual_obj'] is not None:
+                counterfactual_config.counterfactual_obj = \
+                    CounterfactualExplanations.from_json(
+                        cf_result['counterfactual_obj'])
+            else:
+                counterfactual_config.counterfactual_obj = None
             counterfactual_config.has_computation_failed = \
                 cf_result['has_computation_failed']
             counterfactual_config.failure_reason = cf_result['failure_reason']
