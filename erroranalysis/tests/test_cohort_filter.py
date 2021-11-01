@@ -1,17 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pandas as pd
 import numpy as np
-from common_utils import (
-    create_iris_data,
-    create_sklearn_svm_classifier,
-    create_simple_titanic_data,
-    create_titanic_pipeline)
+import pandas as pd
+from common_utils import (create_iris_data, create_simple_titanic_data,
+                          create_sklearn_svm_classifier,
+                          create_titanic_pipeline)
+
 from erroranalysis._internal.cohort_filter import filter_from_cohort
+from erroranalysis._internal.constants import ROW_INDEX, TRUE_Y, ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
-from erroranalysis._internal.constants import (
-    ModelTask, TRUE_Y, ROW_INDEX)
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'

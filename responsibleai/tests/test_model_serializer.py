@@ -1,13 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 import pickle
-
 from pathlib import Path
 
-from .common_utils import (
-    create_cancer_data, create_lightgbm_classifier)
-
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
+
+from .common_utils import create_cancer_data, create_lightgbm_classifier
 
 
 class PickleSerializer:

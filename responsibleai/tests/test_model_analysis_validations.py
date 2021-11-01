@@ -2,18 +2,17 @@
 # Licensed under the MIT License.
 
 import logging
+from unittest.mock import MagicMock
+
 import pandas as pd
 import pytest
 
-from unittest.mock import MagicMock
-
-from .common_utils import (create_iris_data,
-                           create_cancer_data,
-                           create_binary_classification_dataset,
-                           create_lightgbm_classifier)
-
-from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.modelanalysis.model_analysis import ModelAnalysis
+
+from .common_utils import (create_binary_classification_dataset,
+                           create_cancer_data, create_iris_data,
+                           create_lightgbm_classifier)
 
 
 class TestModelAnalysisValidations:

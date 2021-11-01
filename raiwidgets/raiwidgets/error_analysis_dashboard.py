@@ -3,11 +3,11 @@
 
 """Defines the ErrorAnalysis dashboard class."""
 
-from .error_analysis_dashboard_input import ErrorAnalysisDashboardInput
-from .dashboard import Dashboard
-from .constants import ModelTask
-
 from flask import jsonify, request
+
+from .constants import ModelTask
+from .dashboard import Dashboard
+from .error_analysis_dashboard_input import ErrorAnalysisDashboardInput
 
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31

@@ -1,29 +1,27 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-import pandas as pd
-import numpy as np
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from .common_utils import (create_boston_data,
-                           create_cancer_data,
-                           create_iris_data,
-                           create_binary_classification_dataset,
-                           create_adult_income_dataset,
-                           create_models_classification,
-                           create_complex_classification_pipeline,
-                           create_models_regression)
+
+import numpy as np
+import pandas as pd
+import pytest
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
 
 from .causal_manager_validator import validate_causal
+from .common_utils import (create_adult_income_dataset,
+                           create_binary_classification_dataset,
+                           create_boston_data, create_cancer_data,
+                           create_complex_classification_pipeline,
+                           create_iris_data, create_models_classification,
+                           create_models_regression)
 from .counterfactual_manager_validator import validate_counterfactual
-from .error_analysis_validator import (
-    setup_error_analysis, validate_error_analysis)
+from .error_analysis_validator import (setup_error_analysis,
+                                       validate_error_analysis)
 from .explainer_manager_validator import setup_explainer, validate_explainer
-
 
 LABELS = 'labels'
 

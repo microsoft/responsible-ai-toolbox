@@ -4,6 +4,7 @@
 """Responsible AI SDK package."""
 
 from responsibleai.modelanalysis import ModelAnalysis, ModelTask
+
 from .__version__ import version
 
 __version__ = version

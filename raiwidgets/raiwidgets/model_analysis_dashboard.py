@@ -3,12 +3,12 @@
 
 """Defines the Model Analysis Dashboard class."""
 
-from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
-from .dashboard import Dashboard
-
 from flask import jsonify, request
 
 from responsibleai import ModelAnalysis
+
+from .dashboard import Dashboard
+from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
 
 
 class ModelAnalysisDashboard(Dashboard):

@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 
 import os
-from rai_core_flask.environments.base_environment import BaseEnvironment
 
+from rai_core_flask.environments.base_environment import BaseEnvironment
 
 _DISPLAY_HTML = "displayHTML"
 _DISPLAY = "display"

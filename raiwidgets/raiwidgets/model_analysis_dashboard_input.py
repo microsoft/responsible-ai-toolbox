@@ -1,13 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai import ModelAnalysis
-from .constants import SKLearn, ErrorMessages
-import pandas as pd
-from .interfaces import WidgetRequestResponseConstants
 import traceback
-from responsibleai._input_processing import _convert_to_list
+
+import pandas as pd
+
 from erroranalysis._internal.constants import display_name_to_metric
+from responsibleai import ModelAnalysis
+from responsibleai._input_processing import _convert_to_list
+
+from .constants import ErrorMessages, SKLearn
+from .interfaces import WidgetRequestResponseConstants
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 

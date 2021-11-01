@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from raiwidgets import ExplanationDashboard, ModelPerformanceDashboard
-from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_iris
-from sklearn import svm
-
 from interpret.ext.blackbox import TabularExplainer
+from sklearn import svm
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+from raiwidgets import ExplanationDashboard, ModelPerformanceDashboard
 
 iris = load_iris()
 X = iris['data']

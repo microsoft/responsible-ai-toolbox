@@ -1,13 +1,17 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
 import numpy as np
-from raiwidgets.fairness_metric_calculation import (
-    compute_wilson_bounds, recall_wilson,
-    precision_wilson, false_positive_rate_wilson,
-    true_negative_rate_wilson, false_negative_rate_wilson,
-    mse_standard_normal, mae_standard_normal)
+import pytest
+
+from raiwidgets.fairness_metric_calculation import (compute_wilson_bounds,
+                                                    false_negative_rate_wilson,
+                                                    false_positive_rate_wilson,
+                                                    mae_standard_normal,
+                                                    mse_standard_normal,
+                                                    precision_wilson,
+                                                    recall_wilson,
+                                                    true_negative_rate_wilson)
 
 
 @pytest.fixture()
