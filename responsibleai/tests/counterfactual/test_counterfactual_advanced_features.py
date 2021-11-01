@@ -71,7 +71,7 @@ class TestCounterfactualAdvancedFeatures(object):
         cf_obj = model_analysis.counterfactual.get()[0]
         assert cf_obj is not None
 
-    def test_counterfactual_manager_save_load(self):
+    def test_counterfactual_manager_save_load(self, tmpdir):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_data()
 
@@ -90,14 +90,20 @@ class TestCounterfactualAdvancedFeatures(object):
             total_CFs=10, desired_class=2,
             features_to_vary=[feature_names[0]],
             permitted_range={feature_names[0]: [2.0, 5.0]})
+        model_analysis.counterfactual.add(
+            total_CFs=10, desired_class=1,
+            features_to_vary=[feature_names[0]],
+            permitted_range={feature_names[0]: [2.0, 5.0]})
         model_analysis.counterfactual.compute()
 
+        assert len(model_analysis.counterfactual.get()) == 2
         cf_obj = model_analysis.counterfactual.get()[0]
         assert cf_obj is not None
 
-        model_analysis.save('counterfactual')
-        model_analysis_copy = ModelAnalysis.load('counterfactual')
+        save_dir = tmpdir.mkdir('save-dir')
+        model_analysis.save(save_dir)
+        model_analysis_copy = ModelAnalysis.load(save_dir)
 
+        assert len(model_analysis_copy.counterfactual.get()) == 2
         cf_obj = model_analysis_copy.counterfactual.get()[0]
-
         assert cf_obj is not None

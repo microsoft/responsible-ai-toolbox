@@ -8,6 +8,7 @@ from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
 import numpy as np
 from pathlib import Path
+import uuid
 
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
@@ -372,12 +373,17 @@ class CounterfactualManager(BaseManager):
         counterfactual_dir = Path(path)
         counterfactual_dir.mkdir(parents=True, exist_ok=True)
         for counterfactual_config in self._counterfactual_config_list:
-            with open(Path(path) / 'config.json', 'w') as config_file:
+            counterfactual_state_dir = Path(path) / str(uuid.uuid4())
+            counterfactual_state_dir.mkdir(parents=True, exist_ok=True)
+
+            config_path = counterfactual_state_dir / 'config.json'
+            with open(config_path, 'w') as config_file:
                 json.dump(
                     counterfactual_config.get_config_as_dict(),
                     config_file)
 
-            with open(Path(path) / 'result.json', 'w') as result_file:
+            result_path = counterfactual_state_dir / 'result.json'
+            with open(result_path, 'w') as result_file:
                 json.dump(
                     counterfactual_config.get_result(),
                     result_file)
@@ -404,31 +410,40 @@ class CounterfactualManager(BaseManager):
             model_analysis.categorical_features
 
         this.__dict__['_counterfactual_config_list'] = []
-        with open(counterfactual_dir / 'config.json', 'r') as config_file:
-            cf_config = json.load(config_file)
+        import os
+        all_cf_dirs = os.listdir(counterfactual_dir)
+        for counterfactual_config_dir in all_cf_dirs:
+            config_path = \
+                Path(path) / counterfactual_config_dir / 'config.json'
 
-        counterfactual_config = CounterfactualConfig(
-            method=cf_config['method'],
-            continuous_features=cf_config['continuous_features'],
-            total_CFs=cf_config['total_CFs'],
-            desired_class=cf_config['desired_class'],
-            desired_range=cf_config['desired_range'],
-            permitted_range=cf_config['permitted_range'],
-            features_to_vary=cf_config['features_to_vary'],
-            feature_importance=cf_config['feature_importance'])
+            with open(config_path, 'r') as config_file:
+                cf_config = json.load(config_file)
 
-        with open(counterfactual_dir / 'result.json', 'r') as result_file:
-            cf_result = json.load(result_file)
+            counterfactual_config = CounterfactualConfig(
+                method=cf_config['method'],
+                continuous_features=cf_config['continuous_features'],
+                total_CFs=cf_config['total_CFs'],
+                desired_class=cf_config['desired_class'],
+                desired_range=cf_config['desired_range'],
+                permitted_range=cf_config['permitted_range'],
+                features_to_vary=cf_config['features_to_vary'],
+                feature_importance=cf_config['feature_importance'])
 
-        counterfactual_config.counterfactual_obj = \
-            CounterfactualExplanations.from_json(
-                cf_result['counterfactual_obj'])
-        counterfactual_config.has_computation_failed = \
-            cf_result['has_computation_failed']
-        counterfactual_config.failure_reason = cf_result['failure_reason']
-        counterfactual_config.is_computed = cf_result['is_computed']
+            result_path = \
+                Path(path) / counterfactual_config_dir / 'result.json'
 
-        this.__dict__[
-            '_counterfactual_config_list'].append(counterfactual_config)
+            with open(result_path, 'r') as result_file:
+                cf_result = json.load(result_file)
+
+            counterfactual_config.counterfactual_obj = \
+                CounterfactualExplanations.from_json(
+                    cf_result['counterfactual_obj'])
+            counterfactual_config.has_computation_failed = \
+                cf_result['has_computation_failed']
+            counterfactual_config.failure_reason = cf_result['failure_reason']
+            counterfactual_config.is_computed = cf_result['is_computed']
+
+            this.__dict__[
+                '_counterfactual_config_list'].append(counterfactual_config)
 
         return this
