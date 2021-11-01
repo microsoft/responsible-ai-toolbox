@@ -9,7 +9,8 @@ import {
   WeightVectorOption,
   CohortSource,
   Cohort,
-  SaveCohort
+  SaveCohort,
+  defaultTheme
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -30,6 +31,7 @@ import _ from "lodash";
 import {
   DefaultEffects,
   IDropdownOption,
+  loadTheme,
   PivotItem,
   Stack,
   Text
@@ -58,7 +60,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       localization.setLanguage(this.props.locale);
     }
     this.state = buildInitialModelAssessmentContext(_.cloneDeep(props));
-
+    loadTheme(props.theme || defaultTheme);
     this.addTabDropdownOptions = getAvailableTabs(this.props, true);
 
     if (this.props.requestImportances) {
@@ -67,6 +69,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         .then((result) => {
           this.setState({ importances: result });
         });
+    }
+  }
+  public componentDidUpdate(prev: IModelAssessmentDashboardProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
+    }
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
     }
   }
 
@@ -107,8 +117,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            }),
-          theme: this.props.theme
+            })
         }}
       >
         <Stack
