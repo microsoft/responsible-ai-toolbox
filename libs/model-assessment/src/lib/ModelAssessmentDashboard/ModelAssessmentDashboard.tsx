@@ -30,6 +30,7 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   DefaultEffects,
+  getTheme,
   IDropdownOption,
   loadTheme,
   PivotItem,
@@ -117,7 +118,8 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             this.props.telemetryHook ||
             ((): void => {
               return;
-            })
+            }),
+          theme: getTheme()
         }}
       >
         <Stack
