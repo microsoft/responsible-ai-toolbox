@@ -6,7 +6,8 @@ import {
   ErrorCohort,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles
+  FabricStyles,
+  getFeatureOptions
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -70,27 +71,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     this.createCopyOfFirstRow();
     this.buildRowOptions();
 
-    const featuresOption: IDropdownOption[] = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
+    const featuresOption = getFeatureOptions(this.context.jointDataset);
+
     this.setState({ featuresOption, filteredFeatureList: featuresOption });
   }
 
