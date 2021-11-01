@@ -3,11 +3,14 @@
 
 """Defines the Counterfactual Manager class."""
 import json
+import uuid
+from pathlib import Path
+
+import numpy as np
 
 import dice_ml
-import numpy as np
 from dice_ml import Dice
-
+from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
@@ -40,6 +43,7 @@ class CounterfactualConfig(BaseConfig):
         self.permitted_range = permitted_range
         self.features_to_vary = features_to_vary
         self.feature_importance = feature_importance
+        self.is_computed = False
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
@@ -55,6 +59,38 @@ class CounterfactualConfig(BaseConfig):
             self.features_to_vary == other_cf_config.features_to_vary and
             self.feature_importance == other_cf_config.feature_importance
         )
+
+    def get_config_as_dict(self):
+        """Returns the dictionary representation of the CounterfactualConfig.
+
+        The dictionary contains the counterfactual method, continuous features,
+        total counterfactuals, desired class, desired range,
+        permitted range, features to vary and feature importance.
+
+        :return: The dictionary representation of the CounterfactualConfig.
+        :rtype: dict
+        """
+        return {'method': self.method,
+                'continuous_features': self.continuous_features,
+                'total_CFs': self.total_CFs,
+                'desired_range': self.desired_range,
+                'desired_class': self.desired_class,
+                'permitted_range': self.permitted_range,
+                'features_to_vary': self.features_to_vary,
+                'feature_importance': self.feature_importance}
+
+    def get_result(self):
+        result = {}
+        if self.counterfactual_obj is not None:
+            result['counterfactual_obj'] = self.counterfactual_obj.to_json()
+        else:
+            result['counterfactual_obj'] = None
+
+        result['has_computation_failed'] = self.has_computation_failed
+        result['failure_reason'] = self.failure_reason
+        result['is_computed'] = self.is_computed
+
+        return result
 
 
 class CounterfactualManager(BaseManager):
@@ -329,8 +365,85 @@ class CounterfactualManager(BaseManager):
         return ManagerNames.COUNTERFACTUAL
 
     def _save(self, path):
-        pass
+        """Save the CounterfactualManager to the given path.
 
-    @staticmethod
-    def _load(path, model_analysis):
-        pass
+        :param path: The directory path to save the CounterfactualManager to.
+        :type path: str
+        """
+        counterfactual_dir = Path(path)
+        counterfactual_dir.mkdir(parents=True, exist_ok=True)
+        for counterfactual_config in self._counterfactual_config_list:
+            counterfactual_state_dir = Path(path) / str(uuid.uuid4())
+            counterfactual_state_dir.mkdir(parents=True, exist_ok=True)
+
+            config_path = counterfactual_state_dir / 'config.json'
+            with open(config_path, 'w') as config_file:
+                json.dump(
+                    counterfactual_config.get_config_as_dict(),
+                    config_file)
+
+            result_path = counterfactual_state_dir / 'result.json'
+            with open(result_path, 'w') as result_file:
+                json.dump(
+                    counterfactual_config.get_result(),
+                    result_file)
+
+    @classmethod
+    def _load(cls, path, model_analysis):
+        """Load the CounterfactualManager from the given path.
+
+        :param path: The directory path to load the CounterfactualManager from.
+        :type path: str
+        :param model_analysis: The loaded parent ModelAnalysis.
+        :type model_analysis: ModelAnalysis
+        """
+        this = cls.__new__(cls)
+        counterfactual_dir = Path(path)
+
+        # Rehydrate model analysis data
+        this.__dict__['_model'] = model_analysis.model
+        this.__dict__['_train'] = model_analysis.train
+        this.__dict__['_test'] = model_analysis.test
+        this.__dict__['_target_column'] = model_analysis.target_column
+        this.__dict__['_task_type'] = model_analysis.task_type
+        this.__dict__['_categorical_features'] = \
+            model_analysis.categorical_features
+
+        this.__dict__['_counterfactual_config_list'] = []
+        import os
+        all_cf_dirs = os.listdir(counterfactual_dir)
+        for counterfactual_config_dir in all_cf_dirs:
+            config_path = \
+                Path(path) / counterfactual_config_dir / 'config.json'
+
+            with open(config_path, 'r') as config_file:
+                cf_config = json.load(config_file)
+
+            counterfactual_config = CounterfactualConfig(
+                method=cf_config['method'],
+                continuous_features=cf_config['continuous_features'],
+                total_CFs=cf_config['total_CFs'],
+                desired_class=cf_config['desired_class'],
+                desired_range=cf_config['desired_range'],
+                permitted_range=cf_config['permitted_range'],
+                features_to_vary=cf_config['features_to_vary'],
+                feature_importance=cf_config['feature_importance'])
+
+            result_path = \
+                Path(path) / counterfactual_config_dir / 'result.json'
+
+            with open(result_path, 'r') as result_file:
+                cf_result = json.load(result_file)
+
+            counterfactual_config.counterfactual_obj = \
+                CounterfactualExplanations.from_json(
+                    cf_result['counterfactual_obj'])
+            counterfactual_config.has_computation_failed = \
+                cf_result['has_computation_failed']
+            counterfactual_config.failure_reason = cf_result['failure_reason']
+            counterfactual_config.is_computed = cf_result['is_computed']
+
+            this.__dict__[
+                '_counterfactual_config_list'].append(counterfactual_config)
+
+        return this
