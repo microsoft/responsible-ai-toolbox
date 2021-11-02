@@ -28,18 +28,16 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
     const classNames = cohortInfoStyles();
 
     return (
-      <Stack>
+      <Stack className={classNames.container}>
         {this.props.includeDividers && <div className={classNames.divider} />}
         <div className={classNames.section}>
-          <div className={classNames.subsection}>
-            <DefaultButton
-              text={localization.ErrorAnalysis.CohortInfo.saveCohort}
-              onClick={(): any => this.props.onSaveCohortClick()}
-              disabled={this.props.disabledView}
-            />
-          </div>
+          <DefaultButton
+            text={localization.ErrorAnalysis.CohortInfo.saveCohort}
+            onClick={(): any => this.props.onSaveCohortClick()}
+            disabled={this.props.disabledView}
+          />
           <div className={classNames.section} />
-          <div className={classNames.subsection}>
+          <div>
             <div className={classNames.header}>
               {localization.ErrorAnalysis.CohortInfo.basicInformation}
             </div>
@@ -56,7 +54,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         </div>
         {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
-          <div className={classNames.subsection}>
+          <div>
             <div>
               {localization.ErrorAnalysis.CohortInfo.baseCohortInstances}
             </div>
@@ -95,7 +93,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           </div>
         </div>
         <div className={classNames.section}>
-          <div className={classNames.subsection}>
+          <div>
             <div>
               {localization.ErrorAnalysis.CohortInfo.selectedCohortInstances}
             </div>
@@ -135,12 +133,10 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         </div>
         {this.props.includeDividers && <div className={classNames.divider} />}{" "}
         <div className={classNames.section}>
-          <div className={classNames.subsection}>
-            <div className={classNames.header}>
-              {localization.ErrorAnalysis.CohortInfo.predictionPath}
-            </div>
-            <PredictionPath temporaryCohort={this.props.currentCohort} />
+          <div className={classNames.header}>
+            {localization.ErrorAnalysis.CohortInfo.predictionPath}
           </div>
+          <PredictionPath temporaryCohort={this.props.currentCohort} />
         </div>
       </Stack>
     );
