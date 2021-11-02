@@ -21,7 +21,7 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
     const theme = getTheme();
     return mergeStyleSets<ICohortInfoStyles>({
       container: {
-        color: theme.palette.neutralPrimary
+        color: theme.semanticColors.bodyText
       },
       divider: {
         borderTop: "1px solid",

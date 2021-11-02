@@ -22,7 +22,7 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         width: "40%"
       },
       errorAnalysis: {
-        color: theme.palette.neutralPrimary,
+        color: theme.semanticColors.bodyText,
         overflow: "auto",
         width: "100%"
       }

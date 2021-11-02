@@ -95,6 +95,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
       },
       page: {
         boxSizing: "border-box",
+        color: theme.semanticColors.bodyText,
         display: "flex",
         flexDirection: "column",
         height: "100%",

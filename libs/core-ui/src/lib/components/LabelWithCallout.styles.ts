@@ -50,7 +50,7 @@ export const labelWithCalloutStyles: () => IProcessedStyleSet<ILabelWithCalloutS
       calloutLink: [
         theme.fonts.medium,
         {
-          color: theme.palette.neutralPrimary
+          color: theme.semanticColors.bodyText
         }
       ],
       calloutText: {
