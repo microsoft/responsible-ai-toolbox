@@ -317,6 +317,8 @@ class ExplainerManager(BaseManager):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The ExplainerManager manager after loading.
+        :rtype: ExplainerManager
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle

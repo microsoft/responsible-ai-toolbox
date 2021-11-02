@@ -536,6 +536,8 @@ class ModelAnalysis(object):
         """Load the ModelAnalysis from the given path.
         :param path: The directory path to load the ModelAnalysis from.
         :type path: str
+        :return: The ModelAnlysis object after loading.
+        :rtype: ModelAnlysis
         """
         # create the ModelAnalysis without any properties using the __new__
         # function, similar to pickle

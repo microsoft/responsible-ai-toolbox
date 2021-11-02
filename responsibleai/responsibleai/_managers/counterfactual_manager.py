@@ -4,6 +4,7 @@
 """Defines the Counterfactual Manager class."""
 import json
 import uuid
+import os
 from pathlib import Path
 
 import numpy as np
@@ -30,6 +31,20 @@ class CounterfactualConstants:
 
 
 class CounterfactualConfig(BaseConfig):
+    METHOD = 'method'
+    CONTINUOUS_FEATURES = 'continuous_features'
+    TOTAL_CFS = 'total_CFs'
+    DESIRED_RANGE = 'desired_range'
+    DESIRED_CLASS = 'desired_class'
+    PERMITTED_RANGE = 'permitted_range'
+    FEATURES_TO_VARY = 'features_to_vary'
+    FEATURE_IMPORTANCE = 'feature_importance'
+
+    IS_COMPUTED = 'is_computed'
+    COUNTERFACTUAL_OBJ = 'counterfactual_obj'
+    HAS_COMPUTATION_FAILED = 'has_computation_failed'
+    FAILURE_REASON = 'failure_reason'
+
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
@@ -61,7 +76,8 @@ class CounterfactualConfig(BaseConfig):
         )
 
     def get_config_as_dict(self):
-        """Returns the dictionary representation of the CounterfactualConfig.
+        """Returns the dictionary representation of configuration
+           in the CounterfactualConfig.
 
         The dictionary contains the counterfactual method, continuous features,
         total counterfactuals, desired class, desired range,
@@ -70,30 +86,50 @@ class CounterfactualConfig(BaseConfig):
         :return: The dictionary representation of the CounterfactualConfig.
         :rtype: dict
         """
-        return {'method': self.method,
-                'continuous_features': self.continuous_features,
-                'total_CFs': self.total_CFs,
-                'desired_range': self.desired_range,
-                'desired_class': self.desired_class,
-                'permitted_range': self.permitted_range,
-                'features_to_vary': self.features_to_vary,
-                'feature_importance': self.feature_importance}
+        return {
+            CounterfactualConfig.METHOD: self.method,
+            CounterfactualConfig.CONTINUOUS_FEATURES: self.continuous_features,
+            CounterfactualConfig.TOTAL_CFS: self.total_CFs,
+            CounterfactualConfig.DESIRED_RANGE: self.desired_range,
+            CounterfactualConfig.DESIRED_CLASS: self.desired_class,
+            CounterfactualConfig.PERMITTED_RANGE: self.permitted_range,
+            CounterfactualConfig.FEATURES_TO_VARY: self.features_to_vary,
+            CounterfactualConfig.FEATURE_IMPORTANCE: self.feature_importance}
 
     def get_result(self):
+        """Returns the dictionary representation of result of the computation
+           in the CounterfactualConfig.
+
+        :return: The dictionary representation of result in the
+                 CounterfactualConfig.
+        :rtype: dict
+        """
         result = {}
         if self.counterfactual_obj is not None:
-            result['counterfactual_obj'] = self.counterfactual_obj.to_json()
+            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = \
+                self.counterfactual_obj.to_json()
         else:
-            result['counterfactual_obj'] = None
+            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = None
 
-        result['has_computation_failed'] = self.has_computation_failed
-        result['failure_reason'] = self.failure_reason
-        result['is_computed'] = self.is_computed
+        result[CounterfactualConfig.HAS_COMPUTATION_FAILED] = \
+            self.has_computation_failed
+        result[CounterfactualConfig.FAILURE_REASON] = self.failure_reason
+        result[CounterfactualConfig.IS_COMPUTED] = self.is_computed
 
         return result
 
 
 class CounterfactualManager(BaseManager):
+    _TRAIN = '_train'
+    _TEST = '_test'
+    _MODEL = '_model'
+    _TARGET_COLUMN = '_target_column'
+    _TASK_TYPE = '_task_type'
+    _CATEGORICAL_FEATURES = '_categorical_features'
+    _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
+    CONFIG_FILE_NAME = 'config.json'
+    RESULT_FILE_NAME = 'result.json'
+
     def __init__(self, model, train, test, target_column, task_type,
                  categorical_features):
         """Defines the CounterfactualManager for generating counterfactuals
@@ -376,13 +412,15 @@ class CounterfactualManager(BaseManager):
             counterfactual_state_dir = Path(path) / str(uuid.uuid4())
             counterfactual_state_dir.mkdir(parents=True, exist_ok=True)
 
-            config_path = counterfactual_state_dir / 'config.json'
+            config_path = (counterfactual_state_dir /
+                           CounterfactualManager.CONFIG_FILE_NAME)
             with open(config_path, 'w') as config_file:
                 json.dump(
                     counterfactual_config.get_config_as_dict(),
                     config_file)
 
-            result_path = counterfactual_state_dir / 'result.json'
+            result_path = (counterfactual_state_dir /
+                           CounterfactualManager.RESULT_FILE_NAME)
             with open(result_path, 'w') as result_file:
                 json.dump(
                     counterfactual_config.get_result(),
@@ -396,57 +434,69 @@ class CounterfactualManager(BaseManager):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The CounterfactualManager manager after loading.
+        :rtype: CounterfactualManager
         """
         this = cls.__new__(cls)
         counterfactual_dir = Path(path)
 
         # Rehydrate model analysis data
-        this.__dict__['_model'] = model_analysis.model
-        this.__dict__['_train'] = model_analysis.train
-        this.__dict__['_test'] = model_analysis.test
-        this.__dict__['_target_column'] = model_analysis.target_column
-        this.__dict__['_task_type'] = model_analysis.task_type
-        this.__dict__['_categorical_features'] = \
+        this.__dict__[CounterfactualManager._MODEL] = model_analysis.model
+        this.__dict__[CounterfactualManager._TRAIN] = model_analysis.train
+        this.__dict__[CounterfactualManager._TEST] = model_analysis.test
+        this.__dict__[CounterfactualManager._TARGET_COLUMN] = \
+            model_analysis.target_column
+        this.__dict__[CounterfactualManager._TASK_TYPE] = \
+            model_analysis.task_type
+        this.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
             model_analysis.categorical_features
 
-        this.__dict__['_counterfactual_config_list'] = []
-        import os
+        this.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
         all_cf_dirs = os.listdir(counterfactual_dir)
         for counterfactual_config_dir in all_cf_dirs:
-            config_path = \
-                Path(path) / counterfactual_config_dir / 'config.json'
+            config_path = (Path(path) /
+                           counterfactual_config_dir /
+                           CounterfactualManager.CONFIG_FILE_NAME)
 
             with open(config_path, 'r') as config_file:
                 cf_config = json.load(config_file)
 
             counterfactual_config = CounterfactualConfig(
-                method=cf_config['method'],
-                continuous_features=cf_config['continuous_features'],
-                total_CFs=cf_config['total_CFs'],
-                desired_class=cf_config['desired_class'],
-                desired_range=cf_config['desired_range'],
-                permitted_range=cf_config['permitted_range'],
-                features_to_vary=cf_config['features_to_vary'],
-                feature_importance=cf_config['feature_importance'])
+                method=cf_config[CounterfactualConfig.METHOD],
+                continuous_features=cf_config[
+                    CounterfactualConfig.CONTINUOUS_FEATURES],
+                total_CFs=cf_config[CounterfactualConfig.TOTAL_CFS],
+                desired_class=cf_config[CounterfactualConfig.DESIRED_CLASS],
+                desired_range=cf_config[CounterfactualConfig.DESIRED_RANGE],
+                permitted_range=cf_config[
+                    CounterfactualConfig.PERMITTED_RANGE],
+                features_to_vary=cf_config[
+                    CounterfactualConfig.FEATURES_TO_VARY],
+                feature_importance=cf_config[
+                    CounterfactualConfig.FEATURE_IMPORTANCE])
 
-            result_path = \
-                Path(path) / counterfactual_config_dir / 'result.json'
+            result_path = (Path(path) /
+                           counterfactual_config_dir /
+                           CounterfactualManager.RESULT_FILE_NAME)
 
             with open(result_path, 'r') as result_file:
                 cf_result = json.load(result_file)
 
-            if cf_result['counterfactual_obj'] is not None:
+            if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
                 counterfactual_config.counterfactual_obj = \
                     CounterfactualExplanations.from_json(
-                        cf_result['counterfactual_obj'])
+                        cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
             else:
                 counterfactual_config.counterfactual_obj = None
             counterfactual_config.has_computation_failed = \
-                cf_result['has_computation_failed']
-            counterfactual_config.failure_reason = cf_result['failure_reason']
-            counterfactual_config.is_computed = cf_result['is_computed']
+                cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED]
+            counterfactual_config.failure_reason = cf_result[
+                CounterfactualConfig.FAILURE_REASON]
+            counterfactual_config.is_computed = cf_result[
+                CounterfactualConfig.IS_COMPUTED]
 
             this.__dict__[
-                '_counterfactual_config_list'].append(counterfactual_config)
+                CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST].append(
+                    counterfactual_config)
 
         return this
