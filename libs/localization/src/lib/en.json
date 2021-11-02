@@ -1263,7 +1263,7 @@
       "ModelStatistics": "Model statistics"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "Dashboard components",
       "DataPoints": "Number of datapoints",
       "DeleteDialog": {
