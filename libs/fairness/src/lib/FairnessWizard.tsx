@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/core-ui";
+import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -25,7 +25,6 @@ import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { IFairnessProps } from "./IFairnessProps";
-import { defaultTheme } from "./Themes";
 import {
   IFairnessOption,
   fairnessOptions,
