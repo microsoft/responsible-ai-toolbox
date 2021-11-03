@@ -63,4 +63,6 @@ class BaseManager(ABC):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The BaseManager after loading.
+        :rtype: BaseManager
         """
