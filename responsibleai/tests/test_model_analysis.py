@@ -234,9 +234,6 @@ def run_model_analysis(model, train_data, test_data, target_column,
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
 
-        if manager_type == ManagerNames.EXPLAINER:
-            setup_explainer(model_analysis)
-
         validate_model_analysis(
             model_analysis, train_data, test_data,
             target_column, task_type, categorical_features)
