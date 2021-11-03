@@ -87,6 +87,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       this.props.requestMatrix === undefined &&
       this.state.baseCohort.cohort.name !==
         localization.ErrorAnalysis.Cohort.defaultLabel;
+    const classNames = modelAssessmentDashboardStyles();
     return (
       <ModelAssessmentContext.Provider
         value={{
@@ -122,21 +123,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           theme: getTheme()
         }}
       >
-        <Stack
-          id="ModelAssessmentDashboard"
-          className={modelAssessmentDashboardStyles.page}
-        >
+        <Stack id="ModelAssessmentDashboard" className={classNames.page}>
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
           />
-          <Stack.Item className={modelAssessmentDashboardStyles.mainContent}>
+          <Stack.Item className={classNames.mainContent}>
             <Stack tokens={{ childrenGap: "10px", padding: "50px 0 0 0" }}>
               {this.state.activeGlobalTabs[0]?.key !==
                 GlobalTabKeys.ErrorAnalysisTab && (
-                <Stack.Item
-                  className={modelAssessmentDashboardStyles.buttonSection}
-                >
+                <Stack.Item className={classNames.buttonSection}>
                   <AddTabButton
                     tabIndex={0}
                     onAdd={this.addTab}
@@ -148,7 +144,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 <>
                   <Stack.Item
                     key={i}
-                    className={modelAssessmentDashboardStyles.section}
+                    className={classNames.section}
                     styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
                   >
                     {t.key === GlobalTabKeys.ErrorAnalysisTab &&
@@ -221,11 +217,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                       )}
                     {t.key === GlobalTabKeys.ModelStatisticsTab && (
                       <>
-                        <div
-                          className={
-                            modelAssessmentDashboardStyles.sectionHeader
-                          }
-                        >
+                        <div className={classNames.sectionHeader}>
                           <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
@@ -238,11 +230,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     )}
                     {t.key === GlobalTabKeys.DataExplorerTab && (
                       <>
-                        <div
-                          className={
-                            modelAssessmentDashboardStyles.sectionHeader
-                          }
-                        >
+                        <div className={classNames.sectionHeader}>
                           <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
@@ -279,9 +267,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         />
                       )}
                   </Stack.Item>
-                  <Stack.Item
-                    className={modelAssessmentDashboardStyles.buttonSection}
-                  >
+                  <Stack.Item className={classNames.buttonSection}>
                     <AddTabButton
                       tabIndex={i + 1}
                       onAdd={this.addTab}

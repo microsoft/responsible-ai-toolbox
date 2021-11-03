@@ -100,7 +100,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       calloutLink: [
         theme.fonts.medium,
         {
-          color: theme.palette.neutralPrimary
+          color: theme.semanticColors.bodyText
         }
       ],
       calloutTitle: [FabricStyles.calloutTitle],
