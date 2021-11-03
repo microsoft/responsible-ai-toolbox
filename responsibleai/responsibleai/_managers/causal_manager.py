@@ -356,6 +356,8 @@ class CausalManager(BaseManager):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The CausalManager manager after loading.
+        :rtype: CausalManager
         """
         this = cls.__new__(cls)
         causal_dir = Path(path)
