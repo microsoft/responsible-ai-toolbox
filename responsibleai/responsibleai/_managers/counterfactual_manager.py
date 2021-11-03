@@ -426,8 +426,8 @@ class CounterfactualManager(BaseManager):
                     counterfactual_config.get_result(),
                     result_file)
 
-    @classmethod
-    def _load(cls, path, model_analysis):
+    @staticmethod
+    def _load(path, model_analysis):
         """Load the CounterfactualManager from the given path.
 
         :param path: The directory path to load the CounterfactualManager from.
@@ -437,21 +437,21 @@ class CounterfactualManager(BaseManager):
         :return: The CounterfactualManager manager after loading.
         :rtype: CounterfactualManager
         """
-        this = cls.__new__(cls)
+        inst = CounterfactualManager.__new__(CounterfactualManager)
         counterfactual_dir = Path(path)
 
         # Rehydrate model analysis data
-        this.__dict__[CounterfactualManager._MODEL] = model_analysis.model
-        this.__dict__[CounterfactualManager._TRAIN] = model_analysis.train
-        this.__dict__[CounterfactualManager._TEST] = model_analysis.test
-        this.__dict__[CounterfactualManager._TARGET_COLUMN] = \
+        inst.__dict__[CounterfactualManager._MODEL] = model_analysis.model
+        inst.__dict__[CounterfactualManager._TRAIN] = model_analysis.train
+        inst.__dict__[CounterfactualManager._TEST] = model_analysis.test
+        inst.__dict__[CounterfactualManager._TARGET_COLUMN] = \
             model_analysis.target_column
-        this.__dict__[CounterfactualManager._TASK_TYPE] = \
+        inst.__dict__[CounterfactualManager._TASK_TYPE] = \
             model_analysis.task_type
-        this.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
+        inst.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
             model_analysis.categorical_features
 
-        this.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
+        inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
         all_cf_dirs = os.listdir(counterfactual_dir)
         for counterfactual_config_dir in all_cf_dirs:
             config_path = (Path(path) /
@@ -495,8 +495,8 @@ class CounterfactualManager(BaseManager):
             counterfactual_config.is_computed = cf_result[
                 CounterfactualConfig.IS_COMPUTED]
 
-            this.__dict__[
+            inst.__dict__[
                 CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST].append(
                     counterfactual_config)
 
-        return this
+        return inst
