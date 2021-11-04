@@ -51,7 +51,7 @@ class ErrorAnalysisDashboardInput:
         :param explanation: An object that represents an explanation.
         :type explanation: ExplanationMixin
         :param model: An object that represents a model.
-        It is assumed that for the classification case
+            It is assumed that for the classification case
             it has a method of predict_proba() returning
             the prediction probabilities for each
             class and for the regression case a method of predict()
@@ -61,8 +61,6 @@ class ErrorAnalysisDashboardInput:
         (# examples x # features), the same samples
             used to build the explanation.
             Will overwrite any set on explanation object already.
-            Must have fewer than
-            10000 rows and fewer than 1000 columns.
         :type dataset: numpy.array or list[][] or pandas.DataFrame
         :param true_y: The true labels for the provided explanation.
             Will overwrite any set on explanation object already.
