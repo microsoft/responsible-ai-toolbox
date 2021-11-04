@@ -2,9 +2,10 @@
 # Licensed under the MIT License.
 
 """Data validations for responsibleai module."""
+from typing import List, Optional
+
 import numpy as np
 import pandas as pd
-from typing import List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException
 

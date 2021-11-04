@@ -5,23 +5,21 @@
 import numpy as np
 import pandas as pd
 import shap
+from lightgbm import LGBMClassifier
+from pandas import read_csv
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import (
-    load_boston, load_breast_cancer, load_iris, load_wine,
-    make_classification)
+from sklearn.datasets import (load_boston, load_breast_cancer, load_iris,
+                              load_wine, make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import (
-    StandardScaler, OneHotEncoder, FunctionTransformer)
-from lightgbm import LGBMClassifier
+from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
+                                   StandardScaler)
 from xgboost import XGBClassifier
-
-from pandas import read_csv
 
 
 def create_sklearn_random_forest_classifier(X, y):

@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.model_selection import train_test_split
+import mock
 import shap
 import sklearn
-import mock
-from responsibleai import ModelAnalysis
+from sklearn.model_selection import train_test_split
+
 from raiwidgets.model_analysis_dashboard_input import \
     ModelAnalysisDashboardInput
+from responsibleai import ModelAnalysis
 
 
 class TestModelAnalysisDashboardInput:

@@ -3,20 +3,21 @@
 
 """Defines the Error Analysis Manager class."""
 
-from pathlib import Path
 import json
+from pathlib import Path
 
-from responsibleai.exceptions import UserConfigValidationException
-from responsibleai._internal.constants import (
-    ManagerNames, ListProperties, ErrorAnalysisManagerKeys as Keys)
-from responsibleai._managers.base_manager import BaseManager
-from responsibleai._config.base_config import BaseConfig
-from responsibleai.exceptions import DuplicateManagerConfigException
-from erroranalysis._internal.error_analyzer import ModelAnalyzer
-from erroranalysis._internal.error_report import (
-    json_converter as report_json_converter, as_error_report)
 from erroranalysis._internal.constants import metric_to_display_name
+from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.error_report import as_error_report
+from erroranalysis._internal.error_report import \
+    json_converter as report_json_converter
+from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
+from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
+from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai._managers.base_manager import BaseManager
+from responsibleai.exceptions import (DuplicateManagerConfigException,
+                                      UserConfigValidationException)
 
 REPORTS = 'reports'
 CONFIG = 'config'
@@ -349,6 +350,8 @@ class ErrorAnalysisManager(BaseManager):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The ErrorAnalysisManager manager after loading.
+        :rtype: ErrorAnalysisManager
         """
         # create the ErrorAnalysisManager without any properties using
         # the __new__ function, similar to pickle

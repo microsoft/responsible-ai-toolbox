@@ -1,13 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from common_utils import (
-    create_boston_data, create_iris_data, create_cancer_data,
-    create_binary_classification_dataset,
-    create_models_classification, create_models_regression,
-    create_simple_titanic_data, create_titanic_pipeline)
-from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from common_utils import (create_binary_classification_dataset,
+                          create_boston_data, create_cancer_data,
+                          create_iris_data, create_models_classification,
+                          create_models_regression, create_simple_titanic_data,
+                          create_titanic_pipeline)
+
 from erroranalysis._internal.constants import ModelTask
+from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 TOL = 1e-10
 

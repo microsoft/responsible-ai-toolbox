@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 import os
+
 import nbformat as nbf
 import papermill as pm
 import pytest
 import scrapbook as sb
-
 
 RACE_GROUP_SIZES_ADULT = {
     'White': 41762,

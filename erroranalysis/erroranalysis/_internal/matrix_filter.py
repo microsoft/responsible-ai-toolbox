@@ -1,24 +1,22 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import numpy as np
-import pandas as pd
 import math
 import warnings
-from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               ROW_INDEX,
-                                               DIFF,
-                                               ModelTask,
-                                               MatrixParams,
-                                               Metrics,
-                                               metric_to_display_name)
-from erroranalysis._internal.metrics import (
-    metric_to_func, get_ordered_labels, is_multi_agg_metric)
 from abc import ABC, abstractmethod
+
+import numpy as np
+import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
 
+from erroranalysis._internal.cohort_filter import filter_from_cohort
+from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
+                                               MatrixParams, Metrics,
+                                               ModelTask,
+                                               metric_to_display_name)
+from erroranalysis._internal.metrics import (get_ordered_labels,
+                                             is_multi_agg_metric,
+                                             metric_to_func)
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'

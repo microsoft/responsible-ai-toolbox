@@ -3,23 +3,23 @@
 """Result of causal analysis."""
 
 import json
-import pandas as pd
 import re
-import semver
 import uuid
-
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
-from responsibleai._tools.causal.causal_constants import (
-    ResultAttributes)
-from responsibleai._tools.shared.versions import CausalVersions
-from responsibleai._interfaces import (
-    CausalConfig as CausalConfigInterface, CausalData, CausalPolicy,
-    CausalPolicyGains, CausalPolicyTreeInternal, CausalPolicyTreeLeaf,
-    ComparisonTypes)
+import pandas as pd
+import semver
+
+from responsibleai._interfaces import CausalConfig as CausalConfigInterface
+from responsibleai._interfaces import (CausalData, CausalPolicy,
+                                       CausalPolicyGains,
+                                       CausalPolicyTreeInternal,
+                                       CausalPolicyTreeLeaf, ComparisonTypes)
 from responsibleai._tools.causal.causal_config import CausalConfig
+from responsibleai._tools.causal.causal_constants import ResultAttributes
 from responsibleai._tools.shared.base_result import BaseResult
+from responsibleai._tools.shared.versions import CausalVersions
 
 
 class CausalResult(BaseResult['CausalResult']):

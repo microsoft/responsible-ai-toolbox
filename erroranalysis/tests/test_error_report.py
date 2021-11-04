@@ -1,18 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import uuid
+
 import numpy as np
 import pandas as pd
 import pytest
-import uuid
+from common_utils import (create_boston_data, create_cancer_data,
+                          create_dataframe, create_iris_data,
+                          create_models_classification,
+                          create_models_regression)
 
-
-from erroranalysis._internal.error_report import ErrorReport
-from common_utils import (
-    create_boston_data, create_dataframe, create_iris_data,
-    create_cancer_data, create_models_classification,
-    create_models_regression)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.error_report import ErrorReport
 
 
 class TestErrorReport(object):
@@ -84,28 +84,29 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-    error_report1 = model_analyzer.create_error_report(filter_features=None,
-                                                       max_depth=3,
-                                                       num_leaves=None)
-    error_report2 = model_analyzer.create_error_report()
-    assert error_report1.id != error_report2.id
+    report1 = model_analyzer.create_error_report(filter_features=None,
+                                                 max_depth=3,
+                                                 num_leaves=None,
+                                                 compute_importances=True)
+    report2 = model_analyzer.create_error_report()
+    assert report1.id != report2.id
 
     # validate uuids in correct format
-    assert is_valid_uuid(error_report1.id)
-    assert is_valid_uuid(error_report2.id)
+    assert is_valid_uuid(report1.id)
+    assert is_valid_uuid(report2.id)
 
-    json_str1 = error_report1.to_json()
-    json_str2 = error_report2.to_json()
+    json_str1 = report1.to_json()
+    json_str2 = report2.to_json()
     assert json_str1 != json_str2
 
     # validate deserialized error report json
     ea_deserialized = ErrorReport.from_json(json_str1)
-    assert ea_deserialized.id == error_report1.id
-    assert ea_deserialized.matrix == error_report1.matrix
-    assert ea_deserialized.tree == error_report1.tree
-    assert ea_deserialized.tree_features == error_report1.tree_features
-    assert ea_deserialized.matrix_features == error_report1.matrix_features
-    assert ea_deserialized.importances == error_report1.importances
+    assert ea_deserialized.id == report1.id
+    assert ea_deserialized.matrix == report1.matrix
+    assert ea_deserialized.tree == report1.tree
+    assert ea_deserialized.tree_features == report1.tree_features
+    assert ea_deserialized.matrix_features == report1.matrix_features
+    assert ea_deserialized.importances == report1.importances
 
     # validate error report does not modify original dataset in ModelAnalyzer
     if isinstance(X_test, pd.DataFrame):

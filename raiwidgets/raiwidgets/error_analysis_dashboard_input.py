@@ -1,24 +1,26 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from .error_analysis_constants import (
-    ErrorAnalysisDashboardInterface, MethodConstants)
-from .explanation_constants import (ExplanationDashboardInterface,
-                                    WidgetRequestResponseConstants)
+import traceback
+
 import numpy as np
 import pandas as pd
-import traceback
-from .constants import ModelTask, SKLearn
-from .error_handling import _format_exception
-from responsibleai.serialization_utilities import serialize_json_safe
-from responsibleai._input_processing import _convert_to_list
-from erroranalysis._internal.error_analyzer import (
-    ModelAnalyzer, PredictionsAnalyzer)
-from erroranalysis._internal.metrics import metric_to_func
-from erroranalysis._internal.constants import (
-    Metrics, metric_to_display_name, display_name_to_metric)
-from responsibleai._interfaces import ErrorAnalysisData
 
+from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
+                                               metric_to_display_name)
+from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
+                                                    PredictionsAnalyzer)
+from erroranalysis._internal.metrics import metric_to_func
+from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import ErrorAnalysisData
+from responsibleai.serialization_utilities import serialize_json_safe
+
+from .constants import ModelTask, SKLearn
+from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
+                                       MethodConstants)
+from .error_handling import _format_exception
+from .explanation_constants import (ExplanationDashboardInterface,
+                                    WidgetRequestResponseConstants)
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
@@ -49,7 +51,7 @@ class ErrorAnalysisDashboardInput:
         :param explanation: An object that represents an explanation.
         :type explanation: ExplanationMixin
         :param model: An object that represents a model.
-        It is assumed that for the classification case
+            It is assumed that for the classification case
             it has a method of predict_proba() returning
             the prediction probabilities for each
             class and for the regression case a method of predict()
@@ -59,8 +61,6 @@ class ErrorAnalysisDashboardInput:
         (# examples x # features), the same samples
             used to build the explanation.
             Will overwrite any set on explanation object already.
-            Must have fewer than
-            10000 rows and fewer than 1000 columns.
         :type dataset: numpy.array or list[][] or pandas.DataFrame
         :param true_y: The true labels for the provided explanation.
             Will overwrite any set on explanation object already.

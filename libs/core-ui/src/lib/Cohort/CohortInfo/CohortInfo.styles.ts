@@ -9,10 +9,9 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ICohortInfoStyles {
-  cohortinfo: IStyle;
+  container: IStyle;
   divider: IStyle;
   section: IStyle;
-  subsection: IStyle;
   header: IStyle;
   tableData: IStyle;
 }
@@ -21,14 +20,11 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<ICohortInfoStyles>({
-      cohortinfo: {
-        backgroundColor: theme.palette.white,
-        border: "1px solid #C8C8C8",
-        boxSizing: "border-box",
-        color: theme.palette.black
+      container: {
+        color: theme.semanticColors.bodyText
       },
       divider: {
-        borderTop: "1px solid #DADADA",
+        borderTop: "1px solid",
         left: "50%",
         margin: "0",
         marginRight: "-50%",
@@ -41,11 +37,8 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
         fontWeight: "600"
       },
       section: {
-        paddingBottom: "10px !important",
-        paddingLeft: "20px",
-        paddingTop: "10px !important"
+        padding: "10px 0 10px 20px"
       },
-      subsection: {},
       tableData: {
         fontSize: "16px"
       }
