@@ -57,19 +57,19 @@ def as_error_report(error_dict):
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[ID])
-        elif version == _ErrorReportVersion2:
+        elif IMPORTANCES not in error_dict:
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[TREE_FEATURES],
                                error_dict[MATRIX_FEATURES],
-                               error_dict[ID])
+                               id=error_dict[ID])
         else:
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[TREE_FEATURES],
                                error_dict[MATRIX_FEATURES],
-                               error_dict[IMPORTANCES],
-                               error_dict[ID])
+                               importances=error_dict[IMPORTANCES],
+                               id=error_dict[ID])
     else:
         return error_dict
 
@@ -131,13 +131,15 @@ class ErrorReport(object):
         :return: The dictionary representation of the Error Report.
         :rtype: dict
         """
-        return {TREE: self._tree,
-                MATRIX: self._matrix,
-                TREE_FEATURES: self._tree_features,
-                MATRIX_FEATURES: self._matrix_features,
-                IMPORTANCES: self._importances,
-                ID: self._id,
-                METADATA: self._metadata}
+        error_report_dict = {TREE: self._tree,
+                             MATRIX: self._matrix,
+                             TREE_FEATURES: self._tree_features,
+                             MATRIX_FEATURES: self._matrix_features,
+                             ID: self._id,
+                             METADATA: self._metadata}
+        if self._importances is not None:
+            error_report_dict[IMPORTANCES] = self._importances
+        return error_report_dict
 
     @property
     def tree(self):
