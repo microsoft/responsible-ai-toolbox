@@ -100,3 +100,9 @@ export interface IWhatIfCounterfactualsData {
   noPredict?: boolean;
   noY?: boolean;
 }
+
+export enum datasetTypes {
+  "classificationModelAssessment",
+  "regressionDecisionMaking",
+  "regressionModelAssessment"
+}
