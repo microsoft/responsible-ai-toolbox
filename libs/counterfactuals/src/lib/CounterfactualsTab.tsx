@@ -10,6 +10,7 @@ import { localization } from "@responsible-ai/localization";
 import { Text, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { counterfactualsTabStyles } from "./CounterfactualsTab.styles";
 import { CounterfactualsView } from "./CounterfactualsView";
 
 export interface ICounterfactualsTabProps {
@@ -22,8 +23,13 @@ export class CounterfactualsTab extends React.PureComponent<ICounterfactualsTabP
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const classNames = counterfactualsTabStyles();
     return (
-      <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
+      <Stack
+        className={classNames.container}
+        horizontal={false}
+        tokens={{ childrenGap: "15px" }}
+      >
         <Stack.Item>
           <Text variant={"xxLarge"}>{localization.Counterfactuals.header}</Text>
         </Stack.Item>
