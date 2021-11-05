@@ -58,7 +58,26 @@ const modelAssessmentDatasets = {
       errorCoverage: "75.49%",
       errorRate: "41.40%",
       modelStatisticsData: {}
-    }
+    },
+    featureImportanceData: {
+      noFeatureImportance: false
+    },
+    featureNames: [
+      "marital-status",
+      "education-num",
+      "capital-gain",
+      "age",
+      "hours-per-week",
+      "relationship",
+      "occupation",
+      "workclass",
+      "native-country",
+      "fnlwgt",
+      "race",
+      "gender",
+      "education",
+      "capital-loss"
+    ]
   }
 };
 
