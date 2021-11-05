@@ -98,7 +98,7 @@ export function buildInitialModelAssessmentContext(
       name: item.text as string
     };
   });
-  const importances = props.errorAnalysisData?.[0].importances ?? [];
+  const importances = props.errorAnalysisData?.[0]?.importances ?? [];
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
