@@ -145,6 +145,7 @@ class ExplainerManager(BaseManager):
             classes=self._classes,
             categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
+        self._is_run = True
 
     def get(self):
         """Get the computed explanation.
