@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BoxChart } from "../../../../../../util/BoxChart";
+import { BoxChart } from "../../../../util/BoxChart";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";

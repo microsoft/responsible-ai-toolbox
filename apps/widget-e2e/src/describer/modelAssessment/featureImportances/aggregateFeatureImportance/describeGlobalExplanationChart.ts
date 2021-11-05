@@ -3,12 +3,9 @@
 
 import { toNumber } from "lodash";
 
-import { Chart, IChartElement } from "../../../../../../util/Chart";
-import {
-  getComboBoxValue,
-  selectComboBox
-} from "../../../../../../util/comboBox";
-import { ScatterChart } from "../../../../../../util/ScatterChart";
+import { Chart, IChartElement } from "../../../../util/Chart";
+import { getComboBoxValue, selectComboBox } from "../../../../util/comboBox";
+import { ScatterChart } from "../../../../util/ScatterChart";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 const topKLabelReg = /^Top (\d+) features by their importance$/;

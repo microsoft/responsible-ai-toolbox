@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "../../../../../../util/BarChart";
-import { selectDropdown } from "../../../../../../util/dropdown";
+import { BarChart } from "../../../../util/BarChart";
+import { selectDropdown } from "../../../../util/dropdown";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
