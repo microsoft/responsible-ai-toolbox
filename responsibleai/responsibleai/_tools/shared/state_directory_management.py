@@ -13,8 +13,7 @@ class DirectoryManager:
     DATA = 'data'
     EXPLAINER = 'explainer'
 
-    def __init__(self, parent_directory_path, sub_directory_name=None,
-                 create_paths=False):
+    def __init__(self, parent_directory_path, sub_directory_name=None):
         self.parent_directory_path = parent_directory_path
 
         if sub_directory_name is None:
@@ -22,15 +21,14 @@ class DirectoryManager:
         else:
             self.sub_directory_name = sub_directory_name
 
-        if create_paths:
-            parent_directory = Path(self.parent_directory_path)
-            if not parent_directory.exists():
-                parent_directory.mkdir(parents=True, exist_ok=True)
+        parent_directory = Path(self.parent_directory_path)
+        if not parent_directory.exists():
+            parent_directory.mkdir(parents=True, exist_ok=True)
 
-            sub_directory = (Path(self.parent_directory_path) /
-                             self.sub_directory_name)
-            if not sub_directory.exists():
-                sub_directory.mkdir(parents=True, exist_ok=True)
+        sub_directory = (Path(self.parent_directory_path) /
+                         self.sub_directory_name)
+        if not sub_directory.exists():
+            sub_directory.mkdir(parents=True, exist_ok=True)
 
     def create_config_directory(self):
         config_directory = (Path(self.parent_directory_path) /

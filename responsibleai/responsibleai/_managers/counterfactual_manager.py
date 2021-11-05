@@ -407,6 +407,8 @@ class CounterfactualManager(BaseManager):
         :param path: The directory path to save the CounterfactualManager to.
         :type path: str
         """
+        counterfactual_dir = Path(path)
+        counterfactual_dir.mkdir(parents=True, exist_ok=True)
         for counterfactual_config in self._counterfactual_config_list:
             directory_manager = DirectoryManager(parent_directory_path=path)
 
