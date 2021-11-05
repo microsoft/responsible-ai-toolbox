@@ -66,5 +66,6 @@ class DirectoryManager:
                 self.sub_directory_name /
                 DirectoryManager.EXPLAINER)
 
-    def list_sub_directories(self):
-        return os.listdir(Path(self.parent_directory_path))
+    @staticmethod
+    def list_sub_directories(path):
+        return os.listdir(Path(path))

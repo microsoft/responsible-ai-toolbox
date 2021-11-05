@@ -3,7 +3,6 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import os
 from pathlib import Path
 
 import numpy as np
@@ -454,13 +453,11 @@ class CounterfactualManager(BaseManager):
 
         inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
 
-        counterfactual_dir = Path(path)
-        all_cf_dirs = os.listdir(counterfactual_dir)
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
         for counterfactual_config_dir in all_cf_dirs:
             directory_manager = DirectoryManager(
                 parent_directory_path=path,
-                sub_directory_name=counterfactual_config_dir,
-                create_paths=False)
+                sub_directory_name=counterfactual_config_dir)
 
             config_path = (directory_manager.get_config_directory() /
                            CounterfactualManager.CONFIG_FILE_NAME)
