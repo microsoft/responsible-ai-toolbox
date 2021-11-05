@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "../../../../../util/BarChart";
-import { ScatterChart } from "../../../../../util/ScatterChart";
+import { BarChart } from "../../../util/BarChart";
+import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeSubBarChart(dataShape: IInterpretData): void {

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ScatterChart } from "../../../../../util/ScatterChart";
+import { ScatterChart } from "../../../util/ScatterChart";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeSubLineChart(dataShape: IInterpretData): void {

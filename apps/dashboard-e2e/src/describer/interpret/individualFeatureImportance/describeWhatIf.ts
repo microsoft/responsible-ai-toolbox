@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getText } from "../../../../../util/getText";
-import { getValue } from "../../../../../util/getValue";
-import { setValue } from "../../../../../util/setValue";
+import { getText } from "../../../util/getText";
+import { getValue } from "../../../util/getValue";
+import { setValue } from "../../../util/setValue";
 import { IInterpretData } from "../IInterpretData";
 
 export function describeWhatIf(datasetShape: IInterpretData): void {
