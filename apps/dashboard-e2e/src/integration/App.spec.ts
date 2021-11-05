@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../util/getMenu";
+import { getMenu } from "../../../util/getMenu";
 const topMenu = "#TopMenuBar";
 describe("dashboard", () => {
   beforeEach(() => cy.visit("/"));

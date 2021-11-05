@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from "../../../util/getSpan";
-import { ScatterChart } from "../../../util/ScatterChart";
+import { getSpan } from "../../../../../util/getSpan";
+import { ScatterChart } from "../../../../../util/ScatterChart";
 import { IFairnessMetadata, PredictionTypes } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
