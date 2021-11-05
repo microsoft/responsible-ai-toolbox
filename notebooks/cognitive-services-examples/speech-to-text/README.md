@@ -1,7 +1,7 @@
 ## Main files
 The following files are intended to be used directly, to test the provided sample notebook. 
 This quickstart and example 
-* **run_stt.py** – python script to compare faces in two images and returns the match confidence score for the images, using the [Face SDK](https://docs.microsoft.com/en-us/python/api/azure-cognitiveservices-vision-face/?view=azure-python) for Cognitive Services.
+* **run_stt.py** – python script to generate speech-to-text transcriptions on input audio files, using the [Speech SDK](https://docs.microsoft.com/en-us/python/api/azure-cognitiveservices-speech/azure.cognitiveservices.speech?view=azure-pythonn) for Cognitive Services.
 * **analyze_stt_fairness.ipynb**– Jupyter Notebook to generate:
   * Fairness comparison table for different English-speaking countries using the *Word Error Rate*
 * **stt_testing_data.csv** – sample speech transcription data representing results generated from the verify run on fairness dataset
