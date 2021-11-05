@@ -43,15 +43,6 @@ export interface IModelStatisticsData {
 }
 
 export interface IDatasetExplorerData {
-  featureList?: string[];
-  yAxisLabel?: string;
-  xAxisLabel?: string;
-  yAxisPanelOptions?: string[];
-  xAxisPanelOptions?: string[];
-  dataPointsOnHover?: string[];
-}
-
-export interface IDatasetExplorerData {
   whiskerPlot?: IDEWhiskerPlotData;
   dotPlot?: IDEDotPlotData;
 }
@@ -99,10 +90,4 @@ export interface IWhatIfCounterfactualsData {
   isClassification?: boolean;
   noPredict?: boolean;
   noY?: boolean;
-}
-
-export enum datasetTypes {
-  "classificationModelAssessment",
-  "regressionDecisionMaking",
-  "regressionModelAssessment"
 }
