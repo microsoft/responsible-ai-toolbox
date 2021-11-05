@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../../util/getMenu";
+import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
 import {
@@ -22,8 +23,11 @@ export function describeAggregateFeatureImportance(
   describe(testName, () => {
     before(() => {
       const hosts = Cypress.env().hosts;
-      cy.task("log", hosts);
-      cy.visit(hosts[0].host);
+      const hostDetails = hosts.find((obj: { file: string }) => {
+        return obj.file === RAINotebookNames[name];
+      });
+      cy.task("log", hostDetails.host);
+      cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
       getMenu("Aggregate feature importance").click();
     });

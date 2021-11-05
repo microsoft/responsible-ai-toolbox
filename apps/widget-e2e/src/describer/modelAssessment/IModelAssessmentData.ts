@@ -91,3 +91,9 @@ export interface IWhatIfCounterfactualsData {
   noPredict?: boolean;
   noY?: boolean;
 }
+
+export enum RAINotebookNames {
+  "ClassificationModelAssessment" = "responsibleaitoolbox-classification-model-assessment.py",
+  "RegressionDecisionMaking" = "responsibleaitoolbox-regression-decision-making.py",
+  "RegressionModelAssessment" = "responsibleaitoolbox-regression-model-assessment.py"
+}

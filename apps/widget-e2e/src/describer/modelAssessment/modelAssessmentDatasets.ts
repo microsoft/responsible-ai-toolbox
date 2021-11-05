@@ -4,7 +4,7 @@
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
-  classificationModelAssessment: {
+  ClassificationModelAssessment: {
     errorAnalysisData: {
       basicInformationData: {
         BasicInformation: ["Unsaved", "All data (2 filters)"],
