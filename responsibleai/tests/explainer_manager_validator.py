@@ -53,3 +53,7 @@ def validate_explainer(model_analysis, X_train, X_test, classes):
     assert properties['model_type'] is None
     assert properties['is_raw'] is False
     assert properties['is_engineered'] is False
+
+    # Check the internal state of explainer manager
+    assert model_analysis.explainer._is_added
+    assert model_analysis.explainer._is_run
