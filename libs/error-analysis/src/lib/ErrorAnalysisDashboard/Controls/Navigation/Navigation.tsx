@@ -7,9 +7,13 @@ import {
   IBreadcrumbItem,
   IBreadcrumbStyleProps,
   IBreadcrumbStyles,
+  IMessageBarStyles,
+  IRenderFunction,
   IStyleFunctionOrObject,
   Link,
-  IRenderFunction
+  MessageBar,
+  MessageBarType,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -27,13 +31,15 @@ export interface INavigationProps {
   viewType: ViewTypeKeys;
   activeGlobalTab: GlobalTabKeys;
   activePredictionTab: PredictionTabKeys;
+  showMessageBar: boolean;
+  closeMessageBar: () => void;
 }
 
 const breadcrumbStyle: IStyleFunctionOrObject<
   IBreadcrumbStyleProps,
   IBreadcrumbStyles
 > = {
-  root: { margin: "3px 0px 1px" }
+  root: { margin: "3px 0px 1px 10px" }
 };
 
 export class Navigation extends React.Component<INavigationProps> {
@@ -102,18 +108,41 @@ export class Navigation extends React.Component<INavigationProps> {
       }
     }
     const classNames = navigationStyles();
+    const messageBarStyles: IMessageBarStyles = {
+      content: classNames.content,
+      dismissal: classNames.dismissal,
+      dismissSingleLine: classNames.dismissSingleLine,
+      iconContainer: classNames.iconContainer,
+      root: classNames.root,
+      text: classNames.text
+    };
     return (
       <div className={classNames.navigation}>
-        <div className={classNames.breadcrumb}>
-          <Breadcrumb
-            items={items}
-            maxDisplayedItems={10}
-            ariaLabel="Navigation"
-            overflowAriaLabel="More links"
-            onRenderItem={this._onRenderItem}
-            styles={breadcrumbStyle}
-          />
-        </div>
+        <Stack horizontal horizontalAlign="space-between">
+          <Stack.Item className={classNames.breadcrumbItemWidth}>
+            <Breadcrumb
+              items={items}
+              maxDisplayedItems={10}
+              ariaLabel="Navigation"
+              overflowAriaLabel="More links"
+              onRenderItem={this._onRenderItem}
+              styles={breadcrumbStyle}
+            />
+          </Stack.Item>
+          {this.props.showMessageBar && (
+            <Stack.Item>
+              <MessageBar
+                messageBarType={MessageBarType.success}
+                isMultiline={false}
+                onDismiss={() => this.props.closeMessageBar()}
+                className={classNames.root}
+                styles={messageBarStyles}
+              >
+                {localization.ErrorAnalysis.Navigation.cohortSaved}
+              </MessageBar>
+            </Stack.Item>
+          )}
+        </Stack>
       </div>
     );
   }
