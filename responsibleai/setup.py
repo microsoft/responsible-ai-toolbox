@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+
 import setuptools
 
 # Version will be read from version.py

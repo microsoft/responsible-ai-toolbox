@@ -1,25 +1,22 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import numpy as np
-import pandas as pd
 import math
 import warnings
-from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               ROW_INDEX,
-                                               DIFF,
-                                               ModelTask,
-                                               MatrixParams,
-                                               Metrics,
-                                               metric_to_display_name,
-                                               precision_metrics,
-                                               recall_metrics)
-from erroranalysis._internal.metrics import metric_to_func
 from abc import ABC, abstractmethod
+
+import numpy as np
+import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
 
+from erroranalysis._internal.cohort_filter import filter_from_cohort
+from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
+                                               MatrixParams, Metrics,
+                                               ModelTask,
+                                               metric_to_display_name)
+from erroranalysis._internal.metrics import (get_ordered_labels,
+                                             is_multi_agg_metric,
+                                             metric_to_func)
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
@@ -177,10 +174,11 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        rownames=[feat1],
                                        colnames=[feat2])
         else:
-            if metric in precision_metrics or metric in recall_metrics:
-                labels = list(set(true_y) | set(pred_y))
-                labels.sort()
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+            if is_multi_agg_metric(metric):
+                ordered_labels = get_ordered_labels(analyzer.classes,
+                                                    true_y, pred_y)
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
+                                              ordered_labels, metric)
             else:
                 aggfunc = _AggFunc(metric_to_func[metric])
             matrix_total = pd.crosstab(tabdf1,
@@ -244,10 +242,11 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             cut_err = df_err
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
-            if metric in precision_metrics or metric in recall_metrics:
-                labels = list(set(true_y) | set(pred_y))
-                labels.sort()
-                aggfunc = _MultiMetricAggFunc(metric_to_func[metric], labels)
+            if is_multi_agg_metric(metric):
+                ordered_labels = get_ordered_labels(analyzer.classes,
+                                                    true_y, pred_y)
+                aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
+                                              ordered_labels, metric)
             else:
                 aggfunc = _AggFunc(metric_to_func[metric])
             cutdf_err = pd.DataFrame(cut_err)
@@ -340,7 +339,7 @@ class _AggFunc(_BaseAggFunc):
 
 
 class _MultiMetricAggFunc(_BaseAggFunc):
-    def __init__(self, aggfunc, labels):
+    def __init__(self, aggfunc, labels, metric):
         super(_MultiMetricAggFunc, self).__init__(aggfunc)
         self.num_labels = len(labels)
         if self.num_labels == 2:
@@ -348,6 +347,7 @@ class _MultiMetricAggFunc(_BaseAggFunc):
             self.labels = [labels[1]]
         else:
             self.labels = labels
+        self.metric = metric
 
     def _multi_metric_result(self, true_y, pred_y):
         pred_y = np.array(pred_y)
@@ -362,7 +362,12 @@ class _MultiMetricAggFunc(_BaseAggFunc):
         # needed for recall metrics
         fn_sum = conf_matrix[:, 1, 0]
         tn_sum = conf_matrix[:, 0, 0]
-        return (self.aggfunc(true_y, pred_y), tp_sum.tolist(),
+        if self.num_labels == 2 and self.metric != Metrics.ACCURACY_SCORE:
+            metric_value = self.aggfunc(true_y, pred_y,
+                                        pos_label=self.labels[0])
+        else:
+            metric_value = self.aggfunc(true_y, pred_y)
+        return (metric_value, tp_sum.tolist(),
                 fp_sum.tolist(), fn_sum.tolist(),
                 tn_sum.tolist(), error)
 
@@ -389,8 +394,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
     category1 = []
     category1_min_interval = []
     category1_max_interval = []
-    is_precision = metric in precision_metrics
-    is_recall = metric in recall_metrics
+    is_multi_agg = is_multi_agg_metric(metric)
     for row_index in reversed(range(len(categories1))):
         matrix_row = []
         cat1 = categories1[row_index]
@@ -408,7 +412,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
                 false_count = 0
                 if index_exists_err and col_exists_err:
                     false_count = int(matrix_err_counts.loc[cat1, cat2])
-            elif is_precision or is_recall:
+            elif is_multi_agg:
                 tp_sum = []
                 fp_sum = []
                 fn_sum = []
@@ -436,7 +440,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
                     COUNT: total_count,
                     METRIC_NAME: metric_to_display_name[metric]
                 })
-            elif is_precision or is_recall:
+            elif is_multi_agg:
                 matrix_row.append({
                     METRIC_VALUE: metric_value,
                     TP: tp_sum,
@@ -479,8 +483,6 @@ def matrix_1d(categories, values_err, counts, counts_err,
               metric):
     matrix = []
     matrix_row = []
-    is_precision = metric in precision_metrics
-    is_recall = metric in recall_metrics
     for col_idx in reversed(range(len(categories))):
         cat = categories[col_idx]
         if metric == Metrics.ERROR_RATE:
@@ -493,7 +495,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
                 COUNT: int(counts[col_idx]),
                 METRIC_NAME: metric_to_display_name[metric]
             })
-        elif is_precision or is_recall:
+        elif is_multi_agg_metric(metric):
             tp_sum = []
             fp_sum = []
             fn_sum = []

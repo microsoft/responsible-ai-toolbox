@@ -19,7 +19,12 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
   public render(): React.ReactNode {
     const classNames = filterTooltipStyles();
     const theme = getTheme();
-    const isErrorRate = this.props.filterProps.metricName === Metrics.ErrorRate;
+    const metricName = this.props.filterProps.metricName;
+    const isErrorRate = metricName === Metrics.ErrorRate;
+    const isErrorMetric =
+      metricName === Metrics.ErrorRate ||
+      metricName === Metrics.MeanSquaredError ||
+      metricName === Metrics.MeanAbsoluteError;
     return (
       <>
         <g>
@@ -73,7 +78,13 @@ export class FilterTooltip extends React.Component<IFilterTooltipProps> {
             </g>
           </g>
           <g className={classNames.metricValueCell}>
-            <rect className={classNames.metricBarRed} />
+            <rect
+              className={
+                isErrorMetric
+                  ? classNames.metricBarRed
+                  : classNames.metricBarGreen
+              }
+            />
             <g>
               <text className={classNames.smallHeader}>
                 {MetricUtils.getLocalizedMetric(

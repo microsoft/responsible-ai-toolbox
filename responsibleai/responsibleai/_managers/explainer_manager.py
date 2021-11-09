@@ -3,29 +3,30 @@
 
 """Defines the Explainer Manager class."""
 
-import warnings
 import json
-import numpy as np
-from scipy.sparse import issparse
+import warnings
 from pathlib import Path
 
-from interpret_community.mimic.mimic_explainer import MimicExplainer
-from interpret_community.mimic.models.lightgbm_model import (
-    LGBMExplainableModel)
-from interpret_community.mimic.models.linear_model import (
-    LinearExplainableModel)
+import numpy as np
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
-    save_explanation, load_explanation, FeatureImportanceExplanation)
+    FeatureImportanceExplanation, load_explanation, save_explanation)
+from interpret_community.mimic.mimic_explainer import MimicExplainer
+from interpret_community.mimic.models.lightgbm_model import \
+    LGBMExplainableModel
+from interpret_community.mimic.models.linear_model import \
+    LinearExplainableModel
+from scipy.sparse import issparse
 
-from responsibleai.exceptions import UserConfigValidationException
-from responsibleai._internal.constants import (
-    ManagerNames, Metadata, ListProperties, ExplanationKeys,
-    ExplainerManagerKeys as Keys)
-from responsibleai._managers.base_manager import BaseManager
-from responsibleai._interfaces import ModelExplanationData,\
-    PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
 from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
+                                       ModelExplanationData,
+                                       PrecomputedExplanations)
+from responsibleai._internal.constants import ExplainerManagerKeys as Keys
+from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
+                                               ManagerNames, Metadata)
+from responsibleai._managers.base_manager import BaseManager
+from responsibleai.exceptions import UserConfigValidationException
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -62,6 +63,8 @@ class ExplainerManager(BaseManager):
         The order of the class names should match that of the model
         output.  Only required if explaining classifier.
     :type classes: list
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
@@ -86,6 +89,8 @@ class ExplainerManager(BaseManager):
             The order of the class names should match that of the model
             output.  Only required if explaining classifier.
         :type classes: list
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._model = model
         self._initialization_examples = \
@@ -140,6 +145,7 @@ class ExplainerManager(BaseManager):
             classes=self._classes,
             categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
+        self._is_run = True
 
     def get(self):
         """Get the computed explanation.
@@ -312,6 +318,8 @@ class ExplainerManager(BaseManager):
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The ExplainerManager manager after loading.
+        :rtype: ExplainerManager
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle

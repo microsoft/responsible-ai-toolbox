@@ -27,6 +27,11 @@ export interface ICounterfactualPanelStyles {
   tooltipTable: IStyle;
   tooltipTitle: IStyle;
   tooltipHost: IStyle;
+  headerText: IStyle;
+  panelStyle: IStyle;
+  stackHeader: IStyle;
+  counterfactualName: IStyle;
+  tooltipHostDisplay: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -47,8 +52,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       counterfactualList: {
         height: "100%",
-        overflow: "scroll",
         width: "100%"
+      },
+      counterfactualName: {
+        width: 200
       },
       cPanel: {
         float: "left",
@@ -56,6 +63,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       },
       customPredictBlock: {
         padding: "10px"
+      },
+      headerText: {
+        paddingBottom: "6px"
       },
       listContainer: {
         height: "100%",
@@ -68,6 +78,15 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       pane: {
         border: "1px solid",
         width: "150px"
+      },
+      panelStyle: {
+        selectors: {
+          ".content": {
+            paddingLeft: 24,
+            paddingRight: 24
+          },
+          ".scrollableContent": { height: "100%", paddingTop: 1 }
+        }
       },
       positiveNumber: {
         color: theme.palette.green
@@ -84,6 +103,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       searchBox: {
         padding: "20px 0"
       },
+      stackHeader: {
+        paddingLeft: 24,
+        paddingRight: 24
+      },
       tooltipColumn: {
         alignItems: "flex-start",
         boxSizing: "border-box",
@@ -99,6 +122,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         display: "inline-block",
         height: "100%",
         marginRight: "4px"
+      },
+      tooltipHostDisplay: {
+        display: "inline-block"
       },
       tooltipTable: {
         display: "flex",

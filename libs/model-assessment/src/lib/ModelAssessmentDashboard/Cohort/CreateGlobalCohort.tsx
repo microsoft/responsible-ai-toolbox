@@ -38,8 +38,8 @@ export class CreateGlobalCohort extends React.Component<ICreateGlobalCohortProps
       )
     );
   }
-  private addCohort = (cohort: Cohort) => {
-    this.context.addCohort(cohort);
+  private addCohort = (cohort: Cohort, switchNew?: boolean) => {
+    this.context.addCohort(cohort, switchNew);
     this.props.onDismiss();
   };
   private getExistingCohortName(): string[] {

@@ -259,7 +259,11 @@ export class MatrixArea extends React.PureComponent<
             value.metricName === Metrics.MicroPrecisionScore ||
             value.metricName === Metrics.MacroPrecisionScore ||
             value.metricName === Metrics.MicroRecallScore ||
-            value.metricName === Metrics.MacroRecallScore)
+            value.metricName === Metrics.MacroRecallScore ||
+            value.metricName === Metrics.AccuracyScore ||
+            value.metricName === Metrics.F1Score ||
+            value.metricName === Metrics.MicroF1Score ||
+            value.metricName === Metrics.MacroF1Score)
         ) {
           isErrorMetric = false;
         }

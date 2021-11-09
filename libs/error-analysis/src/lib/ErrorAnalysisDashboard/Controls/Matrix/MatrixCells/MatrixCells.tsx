@@ -22,6 +22,7 @@ import React from "react";
 
 import { ColorPalette, isColorDark } from "../../../ColorPalette";
 import { FilterProps } from "../../../FilterProps";
+import { MetricUtils } from "../../../MetricUtils";
 import { FilterTooltip } from "../../FilterTooltip/FilterTooltip";
 import { IMatrixSingleCategory } from "../IMatrixCategory";
 
@@ -72,7 +73,11 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             metricName === Metrics.MicroPrecisionScore ||
             metricName === Metrics.MacroPrecisionScore ||
             metricName === Metrics.MicroRecallScore ||
-            metricName === Metrics.MacroRecallScore
+            metricName === Metrics.MacroRecallScore ||
+            metricName === Metrics.F1Score ||
+            metricName === Metrics.MicroF1Score ||
+            metricName === Metrics.MacroF1Score ||
+            metricName === Metrics.AccuracyScore
           ) {
             totalError += value.error;
             maxMetricValue = Math.max(maxMetricValue, value.metricValue);
@@ -92,29 +97,15 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
           {row.map((value, j: number) => {
             let errorRatio = 0;
             let styledGradientMatrixCell: IStyle = classNames.styledMatrixCell;
-            let isErrorMetric = true;
+            metricName = value.metricName ?? Metrics.ErrorRate;
+            const isErrorMetric = MetricUtils.isErrorMetricName(metricName);
             if (value.count > 0) {
               if (value.falseCount !== undefined) {
                 errorRatio = (value.falseCount / value.count) * 100;
               } else {
                 metricName = value.metricName;
-                if (
-                  metricName === Metrics.MeanSquaredError ||
-                  metricName === Metrics.MeanAbsoluteError ||
-                  metricName === Metrics.PrecisionScore ||
-                  metricName === Metrics.RecallScore ||
-                  metricName === Metrics.MicroPrecisionScore ||
-                  metricName === Metrics.MacroPrecisionScore ||
-                  metricName === Metrics.MicroRecallScore ||
-                  metricName === Metrics.MacroRecallScore
-                ) {
+                if (metricName !== Metrics.ErrorRate) {
                   errorRatio = (value.metricValue / maxMetricValue) * 100;
-                  if (
-                    metricName !== Metrics.MeanSquaredError &&
-                    metricName !== Metrics.MeanAbsoluteError
-                  ) {
-                    isErrorMetric = false;
-                  }
                 }
               }
               const bkgcolor = this.colorLookup(errorRatio, isErrorMetric);
@@ -129,7 +120,9 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
             } else {
               styledGradientMatrixCell = mergeStyles([
                 styledGradientMatrixCell,
-                classNames.nanMatrixCell
+                isErrorMetric
+                  ? classNames.nanErrorMatrixCell
+                  : classNames.nanMetricMatrixCell
               ]);
             }
             if (

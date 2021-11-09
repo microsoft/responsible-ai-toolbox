@@ -9,7 +9,8 @@ import {
   WeightVectorOption,
   CohortSource,
   Cohort,
-  SaveCohort
+  SaveCohort,
+  defaultTheme
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -29,7 +30,9 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   DefaultEffects,
+  getTheme,
   IDropdownOption,
+  loadTheme,
   PivotItem,
   Stack,
   Text
@@ -58,7 +61,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       localization.setLanguage(this.props.locale);
     }
     this.state = buildInitialModelAssessmentContext(_.cloneDeep(props));
-
+    loadTheme(props.theme || defaultTheme);
     this.addTabDropdownOptions = getAvailableTabs(this.props, true);
 
     if (this.props.requestImportances) {
@@ -69,6 +72,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         });
     }
   }
+  public componentDidUpdate(prev: IModelAssessmentDashboardProps): void {
+    if (prev.theme !== this.props.theme) {
+      loadTheme(this.props.theme || defaultTheme);
+    }
+    if (this.props.locale && prev.locale !== this.props.locale) {
+      localization.setLanguage(this.props.locale);
+    }
+  }
 
   public render(): React.ReactNode {
     const disabledView =
@@ -76,6 +87,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       this.props.requestMatrix === undefined &&
       this.state.baseCohort.cohort.name !==
         localization.ErrorAnalysis.Cohort.defaultLabel;
+    const classNames = modelAssessmentDashboardStyles();
     return (
       <ModelAssessmentContext.Provider
         value={{
@@ -108,21 +120,19 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             ((): void => {
               return;
             }),
-          theme: this.props.theme
+          theme: getTheme()
         }}
       >
-        <Stack className={modelAssessmentDashboardStyles.page}>
+        <Stack id="ModelAssessmentDashboard" className={classNames.page}>
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
           />
-          <Stack.Item className={modelAssessmentDashboardStyles.mainContent}>
+          <Stack.Item className={classNames.mainContent}>
             <Stack tokens={{ childrenGap: "10px", padding: "50px 0 0 0" }}>
               {this.state.activeGlobalTabs[0]?.key !==
                 GlobalTabKeys.ErrorAnalysisTab && (
-                <Stack.Item
-                  className={modelAssessmentDashboardStyles.buttonSection}
-                >
+                <Stack.Item className={classNames.buttonSection}>
                   <AddTabButton
                     tabIndex={0}
                     onAdd={this.addTab}
@@ -134,7 +144,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 <>
                   <Stack.Item
                     key={i}
-                    className={modelAssessmentDashboardStyles.section}
+                    className={classNames.section}
                     styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
                   >
                     {t.key === GlobalTabKeys.ErrorAnalysisTab &&
@@ -207,11 +217,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                       )}
                     {t.key === GlobalTabKeys.ModelStatisticsTab && (
                       <>
-                        <div
-                          className={
-                            modelAssessmentDashboardStyles.sectionHeader
-                          }
-                        >
+                        <div className={classNames.sectionHeader}>
                           <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
@@ -224,11 +230,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     )}
                     {t.key === GlobalTabKeys.DataExplorerTab && (
                       <>
-                        <div
-                          className={
-                            modelAssessmentDashboardStyles.sectionHeader
-                          }
-                        >
+                        <div className={classNames.sectionHeader}>
                           <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
@@ -265,9 +267,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                         />
                       )}
                   </Stack.Item>
-                  <Stack.Item
-                    className={modelAssessmentDashboardStyles.buttonSection}
-                  >
+                  <Stack.Item className={classNames.buttonSection}>
                     <AddTabButton
                       tabIndex={i + 1}
                       onAdd={this.addTab}
@@ -385,7 +385,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     });
   };
 
-  private onSaveCohort = (savedCohort: ErrorCohort): void => {
+  private onSaveCohort = (
+    savedCohort: ErrorCohort,
+    switchNew?: boolean
+  ): void => {
     if (
       this.state.cohorts.some((c) => c.cohort.name === savedCohort.cohort.name)
     ) {
@@ -393,13 +396,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
     let newCohorts = [...this.state.cohorts, savedCohort];
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState({
+    this.setState((preState) => ({
+      baseCohort: switchNew ? savedCohort : preState.baseCohort,
       cohorts: newCohorts,
-      selectedCohort: savedCohort
-    });
+      selectedCohort: switchNew ? savedCohort : preState.selectedCohort
+    }));
   };
 
-  private addCohort = (manuallyCreatedCohort: Cohort): void => {
+  private addCohort = (
+    manuallyCreatedCohort: Cohort,
+    switchNew?: boolean
+  ): void => {
     if (
       this.state.cohorts.some(
         (c) => c.cohort.name === manuallyCreatedCohort.name
@@ -415,11 +422,11 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     );
     let newCohorts = [...this.state.cohorts, newErrorCohort];
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState({
-      baseCohort: newErrorCohort,
+    this.setState((prevState) => ({
+      baseCohort: switchNew ? newErrorCohort : prevState.baseCohort,
       cohorts: newCohorts,
-      selectedCohort: newErrorCohort
-    });
+      selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
+    }));
   };
 
   private editCohort = (editCohort: Cohort): void => {

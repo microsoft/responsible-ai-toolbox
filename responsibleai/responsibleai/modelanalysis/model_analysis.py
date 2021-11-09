@@ -4,25 +4,23 @@
 """Defines the ModelAnalysis class."""
 
 import json
-import numpy as np
-import pandas as pd
-from pathlib import Path
 import pickle
 import warnings
+from pathlib import Path
 
+import numpy as np
+import pandas as pd
 
 from responsibleai._input_processing import _convert_to_list
-from responsibleai._interfaces import ModelAnalysisData, Dataset
-from responsibleai._internal.constants import\
-    ManagerNames, Metadata, SKLearn
-from responsibleai._managers.counterfactual_manager import (
-    CounterfactualManager)
+from responsibleai._interfaces import Dataset, ModelAnalysisData
+from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
+from responsibleai._managers.causal_manager import CausalManager
+from responsibleai._managers.counterfactual_manager import \
+    CounterfactualManager
 from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
-from responsibleai._managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
-
 
 _DTYPES = 'dtypes'
 _TRAIN = 'train'
@@ -136,6 +134,7 @@ class ModelAnalysis(object):
 
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column,
+            self._classes,
             categorical_features)
 
         self._explainer_manager = ExplainerManager(
@@ -537,6 +536,8 @@ class ModelAnalysis(object):
         """Load the ModelAnalysis from the given path.
         :param path: The directory path to load the ModelAnalysis from.
         :type path: str
+        :return: The ModelAnlysis object after loading.
+        :rtype: ModelAnlysis
         """
         # create the ModelAnalysis without any properties using the __new__
         # function, similar to pickle

@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
+
 import numpy as np
 
 from responsibleai.serialization_utilities import serialize_json_safe
-import json
 
 
 class TestSerializationUtilities:

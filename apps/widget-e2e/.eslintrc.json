@@ -12,7 +12,8 @@
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "no-undef": "off",
-        "filenames/no-index": "off"
+        "filenames/no-index": "off",
+        "unicorn/no-null": "off"
       }
     },
     {

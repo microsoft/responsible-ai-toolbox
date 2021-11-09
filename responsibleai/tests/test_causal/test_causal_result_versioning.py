@@ -2,9 +2,9 @@
 # Licensed under the MIT License.
 
 import json
+
 import pandas as pd
 import pytest
-
 from jsonschema import ValidationError
 
 from responsibleai import ModelTask

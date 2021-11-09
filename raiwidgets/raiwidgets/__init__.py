@@ -3,12 +3,12 @@
 
 """Package for the fairness, explanation, and error analysis widgets."""
 
-from .fairness_dashboard import FairnessDashboard
-from .explanation_dashboard import ExplanationDashboard
-from .error_analysis_dashboard import ErrorAnalysisDashboard
-from .model_performance_dashboard import ModelPerformanceDashboard
-from .model_analysis_dashboard import ModelAnalysisDashboard
 from .__version__ import version
+from .error_analysis_dashboard import ErrorAnalysisDashboard
+from .explanation_dashboard import ExplanationDashboard
+from .fairness_dashboard import FairnessDashboard
+from .model_analysis_dashboard import ModelAnalysisDashboard
+from .model_performance_dashboard import ModelPerformanceDashboard
 
 __version__ = version
 

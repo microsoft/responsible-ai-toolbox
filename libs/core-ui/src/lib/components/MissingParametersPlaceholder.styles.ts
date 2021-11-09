@@ -26,7 +26,7 @@ export const missingParametersPlaceholderStyles: () => IProcessedStyleSet<IMissi
         width: "100%"
       },
       missingParametersPlaceholderSpacer: {
-        boxShadow: theme.effects.elevation4,
+        color: theme.semanticColors.bodyText,
         margin: "25px auto 0 auto",
         maxWidth: "400px",
         padding: "23px",

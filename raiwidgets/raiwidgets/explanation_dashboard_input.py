@@ -1,14 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from .explanation_constants import \
-    ExplanationDashboardInterface, WidgetRequestResponseConstants
 import numpy as np
 import pandas as pd
-from .constants import SKLearn, ErrorMessages
-from .error_handling import _format_exception
-from responsibleai.serialization_utilities import serialize_json_safe
+
 from responsibleai._input_processing import _convert_to_list
+from responsibleai.serialization_utilities import serialize_json_safe
+
+from .constants import ErrorMessages, SKLearn
+from .error_handling import _format_exception
+from .explanation_constants import (ExplanationDashboardInterface,
+                                    WidgetRequestResponseConstants)
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 

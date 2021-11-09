@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 """Configuration for causal analysis."""
-import numpy as np
-
 from typing import Any, List, Optional, Union
+
+import numpy as np
 
 
 class CausalConfig:

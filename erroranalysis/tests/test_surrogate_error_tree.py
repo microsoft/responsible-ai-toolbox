@@ -1,19 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from common_utils import (
-    create_iris_data, create_models_classification,
-    create_adult_census_data, create_kneighbors_classifier)
+import pytest
+from common_utils import (create_adult_census_data, create_iris_data,
+                          create_kneighbors_classifier,
+                          create_models_classification)
+
+from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
+                                               SPLIT_FEATURE, SPLIT_INDEX,
+                                               TRUE_Y, Metrics)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.surrogate_error_tree import (
-    create_surrogate_model, get_categorical_info, get_max_split_index,
-    traverse, TreeSide)
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               DIFF,
-                                               SPLIT_INDEX,
-                                               SPLIT_FEATURE,
-                                               LEAF_INDEX)
+    TreeSide, create_surrogate_model, get_categorical_info,
+    get_max_split_index, traverse)
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -42,14 +41,21 @@ class TestSurrogateErrorTree(object):
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
                            categorical_features)
 
-    def test_traverse_tree(self):
+    @pytest.mark.parametrize('string_labels', [True, False])
+    @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
+                                        Metrics.PRECISION_SCORE,
+                                        Metrics.RECALL_SCORE,
+                                        Metrics.ACCURACY_SCORE,
+                                        Metrics.F1_SCORE])
+    def test_traverse_tree(self, string_labels, metric):
         X_train, X_test, y_train, y_test, categorical_features = \
-            create_adult_census_data()
+            create_adult_census_data(string_labels)
         model = create_kneighbors_classifier(X_train, y_train)
         feature_names = list(X_train.columns)
         error_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
-                                       categorical_features)
+                                       categorical_features,
+                                       metric=metric)
         categorical_info = get_categorical_info(error_analyzer,
                                                 feature_names)
         cat_ind_reindexed, categories_reindexed = categorical_info
@@ -87,25 +93,40 @@ class TestSurrogateErrorTree(object):
         validate_traversed_tree(tree_structure, tree_dict,
                                 max_split_index, feature_names)
 
-    def test_min_child_samples(self):
+    @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
+                                        Metrics.MACRO_PRECISION_SCORE,
+                                        Metrics.MICRO_PRECISION_SCORE,
+                                        Metrics.MACRO_RECALL_SCORE,
+                                        Metrics.MICRO_RECALL_SCORE,
+                                        Metrics.MACRO_F1_SCORE,
+                                        Metrics.MICRO_F1_SCORE,
+                                        Metrics.ACCURACY_SCORE])
+    @pytest.mark.parametrize('min_child_samples', [5, 10, 20])
+    @pytest.mark.parametrize('max_depth', [3, 4])
+    @pytest.mark.parametrize('num_leaves', [5, 10, 31])
+    def test_parameters(self, metric, min_child_samples,
+                        max_depth, num_leaves):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
         model = create_kneighbors_classifier(X_train, y_train)
         categorical_features = []
-        min_child_samples_list = [5, 10, 20]
-        for min_child_samples in min_child_samples_list:
-            run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features,
-                               min_child_samples=min_child_samples)
+        run_error_analyzer(model, X_test, y_test, feature_names,
+                           categorical_features,
+                           max_depth=max_depth,
+                           num_leaves=num_leaves,
+                           min_child_samples=min_child_samples,
+                           metric=metric)
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features, tree_features=None,
                        max_depth=3, num_leaves=31,
-                       min_child_samples=20):
+                       min_child_samples=20,
+                       metric=None):
     error_analyzer = ModelAnalyzer(model, X_test, y_test,
                                    feature_names,
-                                   categorical_features)
+                                   categorical_features,
+                                   metric=metric)
     if tree_features is None:
         tree_features = feature_names
     filters = None

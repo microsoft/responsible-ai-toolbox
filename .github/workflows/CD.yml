@@ -180,6 +180,7 @@ jobs:
           inlineScript: |
             az storage blob delete-batch --account-name "${{env.blob_account}}" -s "${{env.blob_container_for_raiwidget}}" --if-unmodified-since "${{steps.retention_date.outputs.date}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
             az storage blob delete-batch --account-name "${{env.blob_account}}" -s "${{env.blob_container_for_pull_request}}" --if-unmodified-since "${{steps.retention_date.outputs.date}}" --connection-string="${{secrets.AZURE_STORAGE_CONNECTION_STRING}}"
+        continue-on-error: true
 
   cd-typescript-publish:
     if: ${{ github.event_name  == 'push' || github.event_name  == 'workflow_dispatch' }}

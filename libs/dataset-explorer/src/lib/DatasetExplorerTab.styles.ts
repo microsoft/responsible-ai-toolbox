@@ -148,6 +148,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       page: {
         boxSizing: "border-box",
+        color: theme.semanticColors.bodyText,
         display: "flex",
         flexDirection: "column",
         height: "100%",

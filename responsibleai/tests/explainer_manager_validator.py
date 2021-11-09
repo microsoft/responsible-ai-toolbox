@@ -1,10 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai.exceptions import UserConfigValidationException
 import pytest
-from responsibleai._internal.constants import ManagerNames, ListProperties
+
 from responsibleai import ModelTask
+from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai.exceptions import UserConfigValidationException
 
 LIGHTGBM_METHOD = 'mimic.lightgbm'
 
@@ -52,3 +53,7 @@ def validate_explainer(model_analysis, X_train, X_test, classes):
     assert properties['model_type'] is None
     assert properties['is_raw'] is False
     assert properties['is_engineered'] is False
+
+    # Check the internal state of explainer manager
+    assert model_analysis.explainer._is_added
+    assert model_analysis.explainer._is_run

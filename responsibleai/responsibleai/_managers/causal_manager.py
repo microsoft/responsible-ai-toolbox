@@ -2,23 +2,23 @@
 # Licensed under the MIT License.
 
 """Manager for causal analysis."""
-import numpy as np
-import pandas as pd
-
+from pathlib import Path
 from typing import Any, List, Optional, Union
 
+import numpy as np
+import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
-from pathlib import Path
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import (
-    ManagerNames, SerializationAttributes)
+from responsibleai._internal.constants import (ManagerNames,
+                                               SerializationAttributes)
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import UserConfigValidationException
-from responsibleai._tools.causal.causal_constants import (
-    DefaultParams, ModelTypes, ResultAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
+from responsibleai._tools.causal.causal_constants import (DefaultParams,
+                                                          ModelTypes,
+                                                          ResultAttributes)
 from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
 
 
@@ -348,29 +348,32 @@ class CausalManager(BaseManager):
             result_path = results_path / result.id
             result.save(result_path)
 
-    @classmethod
-    def _load(cls, path, model_analysis):
+    @staticmethod
+    def _load(path, model_analysis):
         """Load the CausalManager from the given path.
 
         :param path: The directory path to load the CausalManager from.
         :type path: str
         :param model_analysis: The loaded parent ModelAnalysis.
         :type model_analysis: ModelAnalysis
+        :return: The CausalManager manager after loading.
+        :rtype: CausalManager
         """
-        this = cls.__new__(cls)
+        inst = CausalManager.__new__(CausalManager)
+
         causal_dir = Path(path)
 
         # Rehydrate results
         results_path = causal_dir / SerializationAttributes.RESULTS_DIRECTORY
         paths = results_path.resolve().glob('*')
-        this.__dict__['_results'] = [CausalResult.load(p) for p in paths]
+        inst.__dict__['_results'] = [CausalResult.load(p) for p in paths]
 
         # Rehydrate model analysis data
-        this.__dict__['_train'] = model_analysis.train
-        this.__dict__['_test'] = model_analysis.test
-        this.__dict__['_target_column'] = model_analysis.target_column
-        this.__dict__['_task_type'] = model_analysis.task_type
-        this.__dict__['_categorical_features'] = \
+        inst.__dict__['_train'] = model_analysis.train
+        inst.__dict__['_test'] = model_analysis.test
+        inst.__dict__['_target_column'] = model_analysis.target_column
+        inst.__dict__['_task_type'] = model_analysis.task_type
+        inst.__dict__['_categorical_features'] = \
             model_analysis.categorical_features
 
-        return this
+        return inst

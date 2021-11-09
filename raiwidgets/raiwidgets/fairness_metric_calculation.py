@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import importlib
-from packaging import version
-import numpy as np
-from sklearn.metrics import confusion_matrix
 
+import numpy as np
+from packaging import version
+from sklearn.metrics import confusion_matrix
 
 MODULE_NOT_INSTALLED_ERROR_MESSAGE = "{} is not installed. " \
     "Either install fairlearn or provide another fairness metric module."

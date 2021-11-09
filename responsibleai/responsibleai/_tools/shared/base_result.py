@@ -3,18 +3,16 @@
 """BaseResult of ResponsibleAI tools."""
 
 import json
-import jsonschema
-
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Generic, List, TypeVar, Union
 
-from responsibleai.serialization_utilities import serialize_json_safe
+import jsonschema
+
+from responsibleai._internal.constants import SerializationAttributes
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
-from responsibleai._internal.constants import (
-    SerializationAttributes)
-
+from responsibleai.serialization_utilities import serialize_json_safe
 
 TResult = TypeVar('TResult')  # Type for subclasses of BaseResult
 

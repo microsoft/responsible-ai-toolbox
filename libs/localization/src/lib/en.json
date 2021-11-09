@@ -80,6 +80,10 @@
       "rg": "{0} in the range of ({1})",
       "nrg": "{0} in the range of ({1})",
       "Unknown": "unknown"
+    },
+    "ShiftCohort": {
+      "title": "Shift Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     }
   },
   "Counterfactuals": {
@@ -151,7 +155,9 @@
     },
     "FeatureList": {
       "features": "Features",
-      "importances": "Importances"
+      "importances": "Importances",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximum depth",
@@ -226,9 +232,16 @@
       "binningThresholdTitle": "Additional information on binning threshold"
     },
     "Metrics": {
+      "accuracyScore": "Accuracy score",
+      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
+      "accuracyScoreShort": "Accuracy",
+      "accuracyScoreTitle": "Additional information on accuracy score",
       "errorRate": "Error rate",
       "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
       "errorRateTitle": "Additional information on error rate",
+      "f1Score": "F1 score",
+      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
+      "f1ScoreTitle": "Additional information on F1 score",
       "meanAbsoluteError": "Mean absolute error",
       "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
       "meanAbsoluteErrorShort": "Mean abs. error",
@@ -261,6 +274,14 @@
       "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
       "microRecallShort": "Micro recall",
       "microRecallTitle": "Additional information on micro averaged recall",
+      "macroF1Score": "Macro averaged F1 score",
+      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+      "macroF1ScoreShort": "Macro F1 score",
+      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
+      "microF1Score": "Micro averaged F1 score",
+      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+      "microF1ScoreShort": "Micro F1 score",
+      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
       "metricName": "Metric name",
       "metricValue": "Metric value"
     },
@@ -321,7 +342,6 @@
     "instanceView": "Instance View",
     "localExplanationView": "Local explanation",
     "noFeature": "No feature",
-    "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
@@ -773,6 +793,7 @@
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "Select filter"
     },
     "Columns": {
@@ -1242,7 +1263,7 @@
       "ModelStatistics": "Model statistics"
     },
     "DashboardSettings": {
-      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "Dashboard components",
       "DataPoints": "Number of datapoints",
       "DeleteDialog": {

@@ -3,13 +3,10 @@
 
 import numpy as np
 import pandas as pd
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               ROW_INDEX,
-                                               METHOD,
-                                               METHOD_EXCLUDES,
-                                               METHOD_INCLUDES)
 
+from erroranalysis._internal.constants import (METHOD, METHOD_EXCLUDES,
+                                               METHOD_INCLUDES, PRED_Y,
+                                               ROW_INDEX, TRUE_Y)
 
 METHOD_EQUAL = 'equal'
 METHOD_GREATER = 'greater'

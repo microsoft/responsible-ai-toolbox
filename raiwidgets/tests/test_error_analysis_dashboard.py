@@ -1,21 +1,21 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.model_selection import train_test_split
-import shap
-import sklearn
 import numpy as np
 import pandas as pd
-from sklearn.datasets import make_classification, load_iris
-from raiwidgets import ErrorAnalysisDashboard
-from raiwidgets.explanation_constants import WidgetRequestResponseConstants
-from interpret_community.common.constants import ModelTask
+import shap
+import sklearn
 from interpret.ext.blackbox import MimicExplainer
 from interpret.ext.glassbox import LGBMExplainableModel
+from interpret_community.common.constants import ModelTask
+from sklearn.datasets import load_iris, make_classification
+from sklearn.model_selection import train_test_split
+
+from erroranalysis._internal.constants import Metrics, metric_to_display_name
 from erroranalysis._internal.surrogate_error_tree import (
-    DEFAULT_MAX_DEPTH, DEFAULT_NUM_LEAVES, DEFAULT_MIN_CHILD_SAMPLES)
-from erroranalysis._internal.constants import (
-    Metrics, metric_to_display_name)
+    DEFAULT_MAX_DEPTH, DEFAULT_MIN_CHILD_SAMPLES, DEFAULT_NUM_LEAVES)
+from raiwidgets import ErrorAnalysisDashboard
+from raiwidgets.explanation_constants import WidgetRequestResponseConstants
 
 
 class TestErrorAnalysisDashboard:

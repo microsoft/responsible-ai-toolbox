@@ -24,6 +24,52 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.13.0
+
+- new features
+  - ## Model Analysis
+    - add "Save amd switch" button to cohort creation
+    - pass classes parameter to both error analysis dashboard and error analysis manager in model analysis
+    - upgrade interpret-community to 0.20.0
+  - ## Error Analysis
+    - update erroranalysis to 0.1.24
+- bug fixes
+  - ## Model Analysis
+    - fix issue with widgets rendering with 8px height
+  - ## Error Analysis
+    - fix precision and recall score failing on string labels in error analysis
+    - fix multiclass precision and recall calculation for NA zero values in heatmap
+    - edit string in error analysis cohort creation
+    - remove text in heatmap suggesting to select features when in static view
+    - minor doc fix for examples in error analysis dashboard
+  - ## Counterfactual
+    - fix horizontal scroll bar disappears for small screen in what-if panel
+  - ## Fairness
+    - fix data issue caused robot page exception on fairnessDetails
+- other
+  - fix broken link to getting started notebook
+  - fix broken image link on main readme
+  - fix the issues with sample notebooks markdown images
+  - delete old notebooks
+  - change tests to run on new notebooks, add new notebook to tests
+
+## v0.12.1
+
+- new features
+  - ## Error Analysis
+    - add disabled tree view and heatmap for static view
+- bug fixes
+  - ## Error Analysis
+    - fix class length causing labels to not be shown in simple view of Error Analysis
+    - fix cohort filter tooltip behind cohort info panel
+  - ## Causal
+    - fix trace0 appearing on hover tooltip in plots
+  - ## Counterfactual
+    - handle cases where counterfactuals failed to compute
+    - add tooltip for counterfactual info
+- other
+  - some grammatical errors were corrected on documentation page
+
 ## v0.12.0
 
 - new features
