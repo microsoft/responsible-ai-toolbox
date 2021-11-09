@@ -3,11 +3,12 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import uuid
+import jsonschema
 import os
-from pathlib import Path
+import uuid
 
 import numpy as np
+from pathlib import Path
 
 import dice_ml
 from dice_ml import Dice
@@ -334,8 +335,15 @@ class CounterfactualManager(BaseManager):
                                 features_to_vary=cf_config.features_to_vary,
                                 permitted_range=cf_config.permitted_range)
 
+                    # Validate the serialized output against schema
+                    schema = self._get_counterfactual_schema(
+                        version=counterfactual_obj.metadata['version'])
+                    jsonschema.validate(
+                        json.loads(counterfactual_obj.to_json()), schema)
+
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
+
                 except Exception as e:
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)
@@ -364,6 +372,15 @@ class CounterfactualManager(BaseManager):
                     failure_reason_list.append(
                         counterfactual_config.failure_reason)
             return failure_reason_list
+
+    def _get_counterfactual_schema(self, version):
+        """Get the schema for validating the counterfactual examples output."""
+        schema_directory = (Path(__file__).parent.parent / '_tools' /
+                            'counterfactual' / 'dashboard_schemas')
+        schema_filename = f'counterfactual_examples_output_v{version}.json'
+        schema_filepath = schema_directory / schema_filename
+        with open(schema_filepath, 'r') as f:
+            return json.load(f)
 
     def list(self):
         pass
