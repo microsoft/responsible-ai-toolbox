@@ -60,7 +60,9 @@ const modelAssessmentDatasets = {
       }
     },
     featureImportanceData: {
-      noFeatureImportance: false
+      noFeatureImportance: false,
+      noDataset: false,
+      datapoint: 480
     },
     featureNames: [
       "marital-status",
