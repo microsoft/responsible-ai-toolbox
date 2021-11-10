@@ -47,8 +47,14 @@ export class CohortDeleteDialog extends React.Component<ICohortDeleteDialogProps
         maxWidth={1000}
       >
         <DialogFooter>
-          <PrimaryButton onClick={this.props.onDeleteClick} text="Apply" />
-          <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+          <PrimaryButton
+            onClick={this.props.onDeleteClick}
+            text={localization.ModelAssessment.Cohort.delete}
+          />
+          <DefaultButton
+            onClick={this.props.onDismiss}
+            text={localization.ModelAssessment.Cohort.cancel}
+          />
         </DialogFooter>
       </Dialog>
     );
