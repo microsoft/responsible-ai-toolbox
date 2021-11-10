@@ -1232,6 +1232,7 @@
     },
     "Cohort": {
       "apply": "Apply",
+      "delete": "Delete",
       "cancel": "Cancel",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",

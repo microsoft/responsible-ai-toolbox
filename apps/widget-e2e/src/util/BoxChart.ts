@@ -51,7 +51,6 @@ export class BoxChart extends Chart<IBox> {
         `box${idx} right: ${boxCoordinate.right} does not match right for mean: ${meanCoordinate.right} `
       );
     }
-
     return meanCoordinate
       ? { ...boxCoordinate, ...meanCoordinate }
       : { ...boxCoordinate };
