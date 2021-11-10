@@ -60,6 +60,10 @@ const modelAssessmentDatasets = {
       }
     },
     featureImportanceData: {
+      correctPredictionDatapoint: "398",
+      dropdownRowName: "Row 4",
+      incorrectPredictionDatapoint: "102",
+      noDataset: false,
       noFeatureImportance: false
     },
     featureNames: [
