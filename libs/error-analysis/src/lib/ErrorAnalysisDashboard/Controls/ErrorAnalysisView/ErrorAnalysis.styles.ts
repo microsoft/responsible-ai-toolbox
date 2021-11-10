@@ -11,6 +11,7 @@ import {
 export interface IErrorAnalysisStyles {
   errorAnalysis: IStyle;
   cohortInfo: IStyle;
+  featureList: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -25,6 +26,9 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         color: theme.semanticColors.bodyText,
         overflow: "auto",
         width: "100%"
+      },
+      featureList: {
+        padding: "16px 0 10px 0"
       }
     });
   };
