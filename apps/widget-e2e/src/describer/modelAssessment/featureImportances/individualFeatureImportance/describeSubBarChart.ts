@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { selectRow } from "apps/widget-e2e/src/util/Table";
 import { BarChart } from "../../../../util/BarChart";
 import { ScatterChart } from "../../../../util/ScatterChart";
 import { locators } from "../../Constants";
@@ -14,10 +15,10 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
   };
   describe("Sub bar chart", () => {
     before(() => {
-      cy.get(locators.IFITableRows).eq(1).click();
+      selectRow("Index", "4");
     });
     after(() => {
-      cy.get(locators.IFITableRows).eq(1).click();
+      selectRow("Index", "4");
     });
     it("should have right number of bars", () => {
       cy.get(locators.IFINumberOfBars).should(

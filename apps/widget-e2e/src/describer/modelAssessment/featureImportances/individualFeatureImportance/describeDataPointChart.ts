@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { selectRow } from "apps/widget-e2e/src/util/Table";
 import { locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
@@ -41,12 +42,12 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the first point", () => {
-        cy.get(locators.IFITableRows).eq(1).click(); //select second row in the table
+        selectRow("Index", "4");
         cy.get(locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
         );
-        cy.get(locators.IFITableRows).eq(1).click();
+        selectRow("Index", "4");
       });
     });
 
