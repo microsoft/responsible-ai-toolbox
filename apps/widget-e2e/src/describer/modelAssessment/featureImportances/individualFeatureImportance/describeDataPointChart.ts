@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTableRowCount } from "apps/widget-e2e/src/util/Table";
-import { ScatterChart } from "../../../../util/ScatterChart";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeSubBarChart } from "./describeSubBarChart";
@@ -10,23 +8,29 @@ import { describeSubLineChart } from "./describeSubLineChart";
 
 export function describeDataPointChart(dataShape: IModelAssessmentData): void {
   describe("Individual datapoints chart", () => {
-    const props = {
-      chart: undefined as unknown as ScatterChart,
-      dataShape
-    };
-    beforeEach(() => {
-      props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-    });
-    it("should render right number of points", () => {
-      expect(getTableRowCount()).equals(
-        dataShape.featureImportanceData?.datapoint
-      );
+    it("should have right number of correct prediction datapoints", () => {
+      cy.get('span[class^="headerCount"]')
+        .first()
+        .should(
+          "contain.text",
+          dataShape.featureImportanceData?.correctPredictionDatapoint
+        );
     });
 
-    describe("Scatter chart clickable", () => {
+    it("should have right number of incorrect prediction datapoints", () => {
+      cy.get("[aria-label='expand collapse group']").click();
+      cy.get('span[class^="headerCount"]')
+        .eq(1)
+        .should(
+          "contain.text",
+          dataShape.featureImportanceData?.incorrectPredictionDatapoint
+        );
+    });
+
+    describe("Table rows should be selectable", () => {
       it("should select none by default", () => {
         cy.get(
-          '#IndividualFeatureContainer div[class^="legendAndText"] div[class^="clickTarget"]'
+          'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]'
         ).should("not.exist");
       });
       it("should show message on sub chart", () => {
@@ -38,12 +42,16 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the first point", () => {
-        props.chart.clickNthPoint(0);
-        cy.get(
-          '#IndividualFeatureContainer  div[class^="legendAndText"] div[class^="clickTarget"]'
-        ).should("contain.text", "Row");
-        cy.get("#noPointSelectedInfo").should("not.exist");
-        props.chart.clickNthPoint(0);
+        cy.get('div[class^="ms-List-page"] div[class^="ms-DetailsRow-check"]')
+          .eq(1)
+          .click();
+        cy.get("div[class^='featureImportanceChartAndLegend'] ").should(
+          "contain.text",
+          dataShape.featureImportanceData?.dropdownRowName
+        );
+        cy.get('div[class^="ms-List-page"] div[class^="ms-DetailsRow-check"]')
+          .eq(1)
+          .click();
       });
     });
 
@@ -54,7 +62,7 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
       describeSubBarChart(dataShape);
     }
     if (!dataShape.featureImportanceData?.noPredict) {
-      describeSubLineChart(dataShape);
+      describeSubLineChart();
     }
   });
 }

@@ -65,10 +65,12 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
-  datapoint?: number;
+  correctPredictionDatapoint?: string;
+  incorrectPredictionDatapoint?: string;
   noLocalImportance?: boolean;
   noPredict?: boolean;
   noFeatureImportance?: boolean;
+  dropdownRowName?: string;
   noDataset?: boolean;
   noY?: boolean;
   aggregateFeatureImportanceExpectedValues?: {

@@ -13,11 +13,14 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
   };
   describe("Sub bar chart", () => {
     before(() => {
-      props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(0);
+      cy.get('div[class^="ms-List-page"] div[class^="ms-DetailsRow-check"]')
+        .eq(1)
+        .click();
     });
     after(() => {
-      props.chart.clickNthPoint(0);
+      cy.get('div[class^="ms-List-page"] div[class^="ms-DetailsRow-check"]')
+        .eq(1)
+        .click();
     });
     it("should have right number of bars", () => {
       cy.get("#FeatureImportanceBar svg .plot .points .point path").should(
