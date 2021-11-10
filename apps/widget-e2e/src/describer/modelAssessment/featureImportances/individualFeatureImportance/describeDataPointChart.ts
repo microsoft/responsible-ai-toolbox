@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selectRow } from "apps/widget-e2e/src/util/Table";
-import { locators } from "../../Constants";
+import { selectRow } from "../../../../util/Table";
+import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeSubBarChart } from "./describeSubBarChart";
@@ -11,7 +11,7 @@ import { describeSubLineChart } from "./describeSubLineChart";
 export function describeDataPointChart(dataShape: IModelAssessmentData): void {
   describe("Individual datapoints chart", () => {
     it("should have right number of correct prediction datapoints", () => {
-      cy.get(locators.IFIPredictionSpan)
+      cy.get(Locators.IFIPredictionSpan)
         .first()
         .should(
           "contain.text",
@@ -20,8 +20,8 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
     });
 
     it("should have right number of incorrect prediction datapoints", () => {
-      cy.get(locators.IFIExpandCollapseButton).click();
-      cy.get(locators.IFIPredictionSpan)
+      cy.get(Locators.IFIExpandCollapseButton).click();
+      cy.get(Locators.IFIPredictionSpan)
         .eq(1)
         .should(
           "contain.text",
@@ -31,7 +31,7 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
 
     describe("Table rows should be selectable", () => {
       it("should select none by default", () => {
-        cy.get(locators.IFITableRowSelected).should("not.exist");
+        cy.get(Locators.IFITableRowSelected).should("not.exist");
       });
       it("should show message on sub chart", () => {
         const message =
@@ -43,7 +43,7 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
       });
       it("should select the first point", () => {
         selectRow("Index", "4");
-        cy.get(locators.IFIDropdownSelectedOption).should(
+        cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
         );

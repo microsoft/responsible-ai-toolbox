@@ -60,11 +60,11 @@ const modelAssessmentDatasets = {
       }
     },
     featureImportanceData: {
-      noFeatureImportance: false,
-      noDataset: false,
       correctPredictionDatapoint: "398",
+      dropdownRowName: "Row 4",
       incorrectPredictionDatapoint: "102",
-      dropdownRowName: "Row 4"
+      noDataset: false,
+      noFeatureImportance: false
     },
     featureNames: [
       "marital-status",

@@ -24,7 +24,7 @@ export function getTableRowCount(srPrefix?: string): number {
   const selectorPrefix = srPrefix ? `${srPrefix}` : "";
   cy.get(
     `${selectorPrefix} [data-automationid=DetailsList] [data-automationid=ListCell]`
-  ).should("exist"); // [data-automationid='DetailsList']
+  ).should("exist");
   return Cypress.$(
     `${selectorPrefix} [data-automationid=DetailsList] [data-automationid=ListCell]`
   ).length;

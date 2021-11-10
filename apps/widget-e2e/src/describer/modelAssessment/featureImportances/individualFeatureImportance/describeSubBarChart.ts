@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { selectRow } from "apps/widget-e2e/src/util/Table";
 import { BarChart } from "../../../../util/BarChart";
 import { ScatterChart } from "../../../../util/ScatterChart";
-import { locators } from "../../Constants";
+import { selectRow } from "../../../../util/Table";
+import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 export function describeSubBarChart(dataShape: IModelAssessmentData): void {
@@ -21,19 +21,19 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
       selectRow("Index", "4");
     });
     it("should have right number of bars", () => {
-      cy.get(locators.IFINumberOfBars).should(
+      cy.get(Locators.IFINumberOfBars).should(
         "have.length",
         props.dataShape.featureNames?.length
       );
     });
     it("should have y axis with matched value", () => {
-      cy.get(locators.IFIYAxisValue).should(
+      cy.get(Locators.IFIYAxisValue).should(
         "contain.text",
         "Feature importance"
       );
     });
     it("should have right number of x axis labels", () => {
-      cy.get(locators.IFIXAxisValue)
+      cy.get(Locators.IFIXAxisValue)
         .its("length")
         .should("be", props.dataShape.featureNames?.length);
     });
