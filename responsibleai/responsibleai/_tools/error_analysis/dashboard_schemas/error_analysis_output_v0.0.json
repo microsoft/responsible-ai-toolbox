@@ -1,0 +1,164 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "JSON schema for error analysis",
+    "description": "JSON schema for error analysis",
+    "type": "object",
+    "properties": {
+      "tree": {
+        "description": "The json tree representation.",
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "arg": {
+                    "anyOf": [
+                        {
+                            "type": ["number", "string", "null"]
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": ["number", "string", "null"]
+                            }
+                        }
+                    ]
+                },
+                "condition": {
+                    "type": ["number", "string", "null"]
+                },
+                "error": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "number"
+                },
+                "isErrorMetric": {
+                    "type": "boolean"
+                },
+                "method": {
+                    "type": ["string", "null"]
+                },
+                "metricName": {
+                    "type": "string"
+                },
+                "metricValue": {
+                    "type": "number"
+                },
+                "nodeIndex": {
+                    "type": "number"
+                },
+                "nodeName": {
+                    "type": ["string", "null"]
+                },
+                "parentId": {
+                    "type": ["number", "null"]
+                },
+                "parentNodeName": {
+                    "type": ["string", "null"]
+                },
+                "size": {
+                    "type": "number"
+                }
+            },
+            "required": [ "arg", "condition", "error", "id", "method", "nodeIndex", "nodeName", "parentId", "parentNodeName" ]
+        }
+      },
+      "matrix": {
+          "anyOf": [
+              {
+                "description": "The json heatmap representation.",
+                "type": "object",
+                "properties": {
+                    "category1": {
+                        "type": "object",
+                        "properties": {
+                            "values": {
+                                "type": "array"
+                            }
+                        },
+                        "required": [ "values" ]
+                    },
+                    "category2": {
+                        "type": "object",
+                        "properties": {
+                            "values": {
+                                "type": "array"
+                            }
+                        },
+                        "required": [ "values" ]
+                    },
+                    "matrix": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "count": {
+                                        "type": "number"
+                                    },
+                                    "falseCount": {
+                                        "type": "number"
+                                    }
+                                },
+                                "required": [ "count" ]
+                            }
+                        }
+                    }
+                },
+                "required": [ "category1", "matrix" ]
+              },
+              {
+                "type": "null"
+              }
+          ]
+      },
+      "tree_features": {
+        "anyOf": [
+            {
+                "description": "The features used to train the surrogate model on errors.",
+                "type": "array",
+                "items": {
+                    "type": ["number", "string", "null"]
+                },
+                "required": ["version"]
+            },
+            {
+                "type": "null"
+            }
+        ]
+      },
+      "matrix_features": {
+        "anyOf": [
+            {
+                "description": "The one or two features used to create the matrix filter, aka heatmap.",
+                "type": "array",
+                "items": {
+                    "type": ["number", "string", "null"]
+                },
+                "required": ["version"]
+            },
+            {
+                "type": "null"
+            }
+        ]
+      },
+      "metadata": {
+        "description": "The metadata about the generated error analysis report.",
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": ["version"]
+      }
+    },
+    "required": [
+      "tree",
+      "matrix",
+      "tree_features",
+      "matrix_features",
+      "metadata"
+    ]
+}
