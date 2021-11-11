@@ -131,9 +131,11 @@ export function generatePlotlyProps(
       // color series will be set by the y axis if it is categorical, otherwise no color for aggregate charts
       if (!jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
         plotlyProps.data[0].type = "box";
-        if (plotlyProps.layout) {
-          plotlyProps.layout.hovermode = false;
-        }
+        // if (plotlyProps.layout) {
+        //   plotlyProps.layout.hovermode = false;
+        // }
+        // avoid trace0 when hovered
+        plotlyProps.data[0].name = "";
         plotlyProps.data[0].x = rawX;
         plotlyProps.data[0].y = cohort.unwrap(chartProps.yAxis.property, false);
         plotlyProps.data[0].marker = {
