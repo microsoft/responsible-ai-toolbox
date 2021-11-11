@@ -51,6 +51,19 @@ export class BoxChart extends Chart<IBox> {
         `box${idx} right: ${boxCoordinate.right} does not match right for mean: ${meanCoordinate.right} `
       );
     }
+<<<<<<< HEAD
+=======
+    // if (boxCoordinate.bottom < meanCoordinate.mean) {
+    //   throw new Error(
+    //     `box${idx} mean: ${meanCoordinate.mean} is out of bottom: ${boxCoordinate.bottom} `
+    //   );
+    // }
+    // if (boxCoordinate.top > meanCoordinate.mean) {
+    //   throw new Error(
+    //     `box${idx} mean: ${meanCoordinate.mean} is out of top: ${boxCoordinate.top} `
+    //   );
+    // }
+>>>>>>> 6eba4f36... [E2E] Add aggregate feature importance tests for responsibleaitoolbox-classification-model-assessment notebook (#998)
     return meanCoordinate
       ? { ...boxCoordinate, ...meanCoordinate }
       : { ...boxCoordinate };

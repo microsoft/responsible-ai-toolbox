@@ -65,12 +65,19 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
+<<<<<<< HEAD
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
   noLocalImportance?: boolean;
   noPredict?: boolean;
   noFeatureImportance?: boolean;
   dropdownRowName?: string;
+=======
+  datapoint?: number;
+  noLocalImportance?: boolean;
+  noPredict?: boolean;
+  noFeatureImportance?: boolean;
+>>>>>>> 6eba4f36... [E2E] Add aggregate feature importance tests for responsibleaitoolbox-classification-model-assessment notebook (#998)
   noDataset?: boolean;
   noY?: boolean;
   aggregateFeatureImportanceExpectedValues?: {
