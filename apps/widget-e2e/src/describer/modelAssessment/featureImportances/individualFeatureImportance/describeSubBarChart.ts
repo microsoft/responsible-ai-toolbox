@@ -37,5 +37,37 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         .its("length")
         .should("be", props.dataShape.featureNames?.length);
     });
+
+    it.only("should update x axis labels on changing top features by their importance number", () => {
+      cy.get(Locators.IFITopFeaturesText).should(
+        "have.text",
+        dataShape.featureImportanceData?.topFeaturesText
+      );
+      cy.get(Locators.IFITopFeaturesValue).should(
+        "have.attr",
+        "aria-valuenow",
+        dataShape.featureImportanceData?.topFeaturesCurrentValue
+      );
+      const currentValue = 4;
+      const newValue = 6;
+      const increment = 1;
+      const steps = (newValue - currentValue) / increment;
+      const arrows = "{rightarrow}".repeat(steps);
+      cy.task("log", arrows);
+
+      cy.get(Locators.IFITopFeaturesValue)
+        .should(
+          "have.attr",
+          "aria-valuenow",
+          dataShape.featureImportanceData?.topFeaturesCurrentValue
+        )
+        .type(arrows);
+
+      cy.get(Locators.IFITopFeaturesValue).should(
+        "have.attr",
+        "aria-valuenow",
+        11
+      );
+    });
   });
 }

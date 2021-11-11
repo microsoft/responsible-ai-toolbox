@@ -8,8 +8,8 @@ import { IModelAssessmentData } from "../../IModelAssessmentData";
 import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
 
-export function describeDataPointChart(dataShape: IModelAssessmentData): void {
-  describe("Individual datapoints chart", () => {
+export function describeTabularDataView(dataShape: IModelAssessmentData): void {
+  describe("Tabular data view", () => {
     it("should have right number of correct prediction datapoints", () => {
       cy.get(Locators.IFIPredictionSpan)
         .first()
@@ -29,6 +29,10 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
         );
     });
 
+    it("should be scrollable", () => {
+      cy.get(Locators.IFIScrollableTable).should("exist");
+    });
+
     describe("Table rows should be selectable", () => {
       it("should select none by default", () => {
         cy.get(Locators.IFITableRowSelected).should("not.exist");
@@ -41,7 +45,7 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
             : "Provide local feature importances to see how each feature impacts individual predictions.";
         cy.get("#subPlotContainer").should("contain.text", message);
       });
-      it("should select the first point", () => {
+      it("should select the row", () => {
         selectRow("Index", "4");
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",

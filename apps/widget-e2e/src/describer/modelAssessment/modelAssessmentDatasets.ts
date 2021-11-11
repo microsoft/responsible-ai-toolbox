@@ -64,7 +64,9 @@ const modelAssessmentDatasets = {
       dropdownRowName: "Row 4",
       incorrectPredictionDatapoint: "102",
       noDataset: false,
-      noFeatureImportance: false
+      noFeatureImportance: false,
+      topFeaturesText: "Top 4 features by their importance",
+      topFeaturesCurrentValue: "4"
     },
     featureNames: [
       "marital-status",
