@@ -15,7 +15,7 @@ jobs:
         packageDirectory:
           ["raiwidgets", "responsibleai", "rai_core_flask", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: [3.6, 3.7, 3.8]
+        pythonVersion: [3.6, 3.7, 3.8, 3.9]
         exclude:
           # segfaults in rai_core_flask tests in most OS-Python version combinations
           - packageDirectory: "rai_core_flask"
