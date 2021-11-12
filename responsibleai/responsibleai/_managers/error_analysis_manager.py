@@ -262,7 +262,8 @@ class ErrorAnalysisManager(BaseManager):
             report = self._analyzer.create_error_report(
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
-                num_leaves=num_leaves)
+                num_leaves=num_leaves,
+                compute_importances=True)
 
             # Validate the serialized output against schema
             schema = self._get_error_analysis_schema()
@@ -328,6 +329,7 @@ class ErrorAnalysisManager(BaseManager):
             error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
+        error_analysis.importances = self._analyzer.compute_importances()
         error_analysis.metric = metric_to_display_name[self._analyzer.metric]
         return error_analysis
 
