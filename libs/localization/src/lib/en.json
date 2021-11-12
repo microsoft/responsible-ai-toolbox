@@ -838,7 +838,7 @@
       "aggregatePlots": "Aggregate plots",
       "chartType": "Chart type",
       "colorValue": "Color value",
-      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "noColor": "None"

@@ -32,6 +32,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         {this.props.includeDividers && <div className={classNames.divider} />}
         <div className={classNames.section}>
           <DefaultButton
+            className={classNames.button}
             text={localization.ErrorAnalysis.CohortInfo.saveCohort}
             onClick={(): any => this.props.onSaveCohortClick()}
             disabled={this.props.disabledView}
