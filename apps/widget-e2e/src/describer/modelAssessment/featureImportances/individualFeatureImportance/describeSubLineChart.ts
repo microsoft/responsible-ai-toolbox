@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
+
 import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
-import { localization } from "@responsible-ai/localization";
 
 export function describeSubLineChart(): void {
   describe("Sub line chart", () => {

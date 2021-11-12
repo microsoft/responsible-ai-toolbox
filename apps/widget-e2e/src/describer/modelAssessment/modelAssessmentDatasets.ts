@@ -65,8 +65,8 @@ const modelAssessmentDatasets = {
       incorrectPredictionDatapoint: "102",
       noDataset: false,
       noFeatureImportance: false,
-      topFeaturesText: "Top 4 features by their importance",
-      topFeaturesCurrentValue: "4"
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
     },
     featureNames: [
       "marital-status",
