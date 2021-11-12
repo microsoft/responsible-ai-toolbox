@@ -289,6 +289,7 @@
       "selectorLabel": "Select metric"
     },
     "Navigation": {
+      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
       "dataExplorer": "Data explorer",
       "errorExplorer": "Error explorer",
       "globalExplanation": "Global explanation",
