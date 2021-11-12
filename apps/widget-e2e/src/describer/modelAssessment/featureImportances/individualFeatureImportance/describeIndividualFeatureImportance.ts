@@ -5,7 +5,7 @@ import { getMenu } from "../../../../util/getMenu";
 import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
-import { describeDataPointChart } from "./describeDataPointChart";
+import { describeTabularDataView } from "./describeTabularDataView";
 
 const testName = "Individual feature importance";
 
@@ -35,6 +35,6 @@ export function describeIndividualFeatureImportance(
       });
       return;
     }
-    describeDataPointChart(datasetShape);
+    describeTabularDataView(datasetShape);
   });
 }
