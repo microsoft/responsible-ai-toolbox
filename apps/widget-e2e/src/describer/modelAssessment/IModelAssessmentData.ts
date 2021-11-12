@@ -73,6 +73,8 @@ export interface IFeatureImportanceData {
   dropdownRowName?: string;
   noDataset?: boolean;
   noY?: boolean;
+  topFeaturesText?: string;
+  topFeaturesCurrentValue?: string;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
