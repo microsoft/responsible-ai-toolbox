@@ -38,7 +38,7 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         .should("be", props.dataShape.featureNames?.length);
     });
 
-    it.only("should update x axis labels on changing top features by their importance number", () => {
+    it("should update x axis labels on changing top features by their importance number", () => {
       cy.get(Locators.IFITopFeaturesText).should(
         "have.text",
         dataShape.featureImportanceData?.topFeaturesText
@@ -53,7 +53,6 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
       const increment = 1;
       const steps = (newValue - currentValue) / increment;
       const arrows = "{rightarrow}".repeat(steps);
-      cy.task("log", arrows);
 
       cy.get(Locators.IFITopFeaturesValue)
         .should(
@@ -68,6 +67,22 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         "aria-valuenow",
         11
       );
+    });
+
+    it("should be able to select different 'datapoint' from dropdown", () => {
+      selectRow("Index", "7");
+
+      cy.get(Locators.IFIDatapointDropdown).then(() => {
+        cy.get(
+          `div[class^='featureImportanceLegend'] div.ms-Dropdown-container`
+        ).should("contain", "Row 7");
+      });
+    });
+
+    it("Should have Sort by absolute values toggle button", () => {
+      cy.get(Locators.IFIAbsoluteValuesToggleButton)
+        .click({ force: true })
+        .should("have.class", "is-checked");
     });
   });
 }
