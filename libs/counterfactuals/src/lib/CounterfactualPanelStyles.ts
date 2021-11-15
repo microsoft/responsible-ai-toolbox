@@ -105,7 +105,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         color: theme.palette.blue
       },
       searchBox: {
-        width: "200px"
+        width: "210px"
       },
       stackHeader: {
         paddingLeft: 24,
