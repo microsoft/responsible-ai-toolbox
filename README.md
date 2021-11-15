@@ -13,13 +13,13 @@ The [Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-widgets
 - Model Assessment, which involves determining how and why AI systems behave the way they do, understanding and diagnosing their issues, and using that knowledge to take targeted steps to improve their performance. Such steps can be encapsulated in the following workflow:
 
 <p align="center">
-<img src="./img/model-assessment.png" alt="Model Assessment" width="600"/>
+<img src="https://raw.githubusercontent.com/microsoft/responsible-ai-widgets/main/img/model-assessment.png" alt="Model Assessment" width="600"/>
 
 - Decision-making, which involves explorations such as estimating how a real-world outcome changes in the presence of an intervention, or “interrogating” a model to determine what feature perturbations of a particular datapoint would change the output of a machine learning model.
 
 In order to achieve these capabilities, the toolbox integrates together ideas and technologies from several open-source toolkits in the areas of
 
-- <b>Error Analysis</b> powered by [Error Analysis](./docs/erroranalysis-dashboard-README.md), which identifies cohorts of data with higher error rate than the overall benchmark. These discrepancies might occur when the system or model underperforms for specific demographic groups or infrequently observed input conditions in the training data.
+- <b>Error Analysis</b> powered by [Error Analysis](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), which identifies cohorts of data with higher error rate than the overall benchmark. These discrepancies might occur when the system or model underperforms for specific demographic groups or infrequently observed input conditions in the training data.
 
 - <b>Model Interpretability</b> powered by [InterpretML](https://github.com/interpretml/interpret-community), which explains blackbox models, helping users understand their model's global behavior, or the reasons behind individual predictions.
 
@@ -28,7 +28,7 @@ In order to achieve these capabilities, the toolbox integrates together ideas an
 - <b>Causal Analysis</b> powered by [EconML](https://github.com/microsoft/EconML), which focuses on answering What If-style questions to apply data-driven decision-making – how would revenue be affected if a corporation pursues a new pricing strategy? Would a new medication improve a patient’s condition, all else equal?
 
 <p align="center">
-<img src="./img/responsibleai-toolbox.png" alt="responsible-ai-toolbox" width="500"/>
+<img src="https://raw.githubusercontent.com/microsoft/responsible-ai-widgets/main/img/responsibleai-toolbox.png" alt="responsible-ai-toolbox" width="500"/>
 
 Responsible AI Toolbox is designed to achieve the following goals:
 
@@ -49,7 +49,7 @@ This repository contains the Jupyter notebooks with examples to showcase how to 
 
 ## Individual Dashboards
 
-Besides the customizable and modular Responsible AI Toolbox, Responsible-AI-Widgets is hosts three individual dashboards that are specifically focused on error analysis, interpretability, and fairness assessment. Learn more: [Error Analysis dashboard](./docs/erroranalysis-dashboard-README.md), [Fairness dashboard](./docs/fairness-dashboard-README.md), and [Explanation dashboard](./docs/explanation-dashboard-README.md).
+Besides the customizable and modular Responsible AI Toolbox, Responsible-AI-Widgets is hosts three individual dashboards that are specifically focused on error analysis, interpretability, and fairness assessment. Learn more: [Error Analysis dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), [Fairness dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/fairness-dashboard-README.md), and [Explanation dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/explanation-dashboard-README.md).
 
 ## Supported Models
 
@@ -58,17 +58,23 @@ This Responsible AI Toolbox API supports models that are trained on datasets in 
 The explanation functions of [Interpret-Community](https://github.com/interpretml/interpret-community) accept both models and pipelines as input as long as the model or pipeline implements a `predict` or `predict_proba` function that conforms to the Scikit convention. If not compatible, you can wrap your model's prediction function into a wrapper function that transforms the output into the format that is supported (predict or predict_proba of Scikit), and pass that wrapper function to your selected interpretability techniques.
 
 If a pipeline script is provided, the explanation function assumes that the running pipeline script returns a prediction. The repository also supports models trained via **PyTorch**, **TensorFlow**, and **Keras** deep learning frameworks.
-  
-## Other Use Cases 
+
+## Other Use Cases
 
 Tools within the Responsible AI Toolbox can also be used with AI models offered as APIs by providers such as [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/). To see example use cases, see the folders below:
 
-- [Cognitive Services Speech to Text Fairness testing](notebooks/cognitive-services-examples/speech-to-text)
-- [Cognitive Services Face Verification Fairness testing](notebooks/cognitive-services-examples/face-verification)
-  
+- [Cognitive Services Speech to Text Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/main/notebooks/cognitive-services-examples/speech-to-text)
+- [Cognitive Services Face Verification Fairness testing](https://github.com/microsoft/responsible-ai-widgets/tree/main/notebooks/cognitive-services-examples/face-verification)
+
 ## Maintainers
 
 - [Ke Xu](https://github.com/KeXu444)
 - [Roman Lutz](https://github.com/romanlutz)
 - [Ilya Matiach](https://github.com/imatiach-msft)
 - [Dawei Li](https://github.com/chnldw)
+- [Bo Zhang](https://github.com/zhb000)
+- [Gaurav Gupta](https://github.com/gaugup)
+- [Richard Edgar](https://github.com/riedgar-ms)
+- [Vinutha Karanth](https://github.com/vinuthakaranth)
+- [Tong Yu](https://github.com/tongyu-microsoft)
+- [Ruby Zhu](https://github.com/RubyZ10)
