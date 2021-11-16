@@ -130,8 +130,7 @@
           "type": "array",
           "items": {
             "type": ["number", "string", "null"]
-          },
-          "required": ["version"]
+          }
         },
         {
           "type": "null"
@@ -145,8 +144,21 @@
           "type": "array",
           "items": {
             "type": ["number", "string", "null"]
-          },
-          "required": ["version"]
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "importances": {
+      "anyOf": [
+        {
+          "description": "The correlation of features to the error using mutual information.",
+          "type": "array",
+          "items": {
+            "type": ["number"]
+          }
         },
         {
           "type": "null"

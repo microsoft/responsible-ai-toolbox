@@ -124,28 +124,35 @@ export class CounterfactualPanel extends React.Component<
             )}
           </Text>
         </Stack.Item>
-        <Stack.Item className={classes.searchBox}>
+        <Stack.Item className={classes.buttonRow}>
           <Stack horizontal tokens={{ childrenGap: "l1" }}>
-            <SearchBox
-              placeholder={
-                localization.Interpret.WhatIf.filterFeaturePlaceholder
-              }
-              onChange={this.setFilterText.bind(this)}
-            />
-            <Toggle
-              label={localization.Counterfactuals.WhatIf.sortFeatures}
-              inlineLabel
-              onChange={this.toggleSortFeatures}
-            />
-            <TooltipHost
-              tooltipProps={tooltipProps}
-              delay={TooltipDelay.zero}
-              id={WhatIfConstants.whatIfPredictionTooltipIds}
-              directionalHint={DirectionalHint.rightTopEdge}
-              className={classes.tooltipHostDisplay}
-            >
-              <IconButton iconProps={{ iconName: "info" }} />
-            </TooltipHost>
+            <Stack.Item className={classes.searchBox}>
+              <SearchBox
+                placeholder={
+                  localization.Interpret.WhatIf.filterFeaturePlaceholder
+                }
+                onChange={this.setFilterText.bind(this)}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Toggle
+                label={localization.Counterfactuals.WhatIf.sortFeatures}
+                inlineLabel
+                defaultChecked={this.state.sortFeatures}
+                onChange={this.toggleSortFeatures}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <TooltipHost
+                tooltipProps={tooltipProps}
+                delay={TooltipDelay.zero}
+                id={WhatIfConstants.whatIfPredictionTooltipIds}
+                directionalHint={DirectionalHint.rightTopEdge}
+                className={classes.tooltipHostDisplay}
+              >
+                <IconButton iconProps={{ iconName: "info" }} />
+              </TooltipHost>
+            </Stack.Item>
           </Stack>
         </Stack.Item>
       </Stack>
