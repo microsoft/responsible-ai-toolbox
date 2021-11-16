@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Note: this test file will be removed once ModelAnalysis is removed."""
-
 import logging
 from unittest.mock import MagicMock
 
@@ -10,14 +8,14 @@ import pandas as pd
 import pytest
 
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai.modelanalysis.model_analysis import ModelAnalysis
+from responsibleai import RAIInsights
 
 from .common_utils import (create_binary_classification_dataset,
                            create_cancer_data, create_iris_data,
                            create_lightgbm_classifier)
 
 
-class TestModelAnalysisValidations:
+class TestRAIInsightsValidations:
     def test_validate_unsupported_task_type(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()
@@ -29,7 +27,7 @@ class TestModelAnalysisValidations:
         message = ("Unsupported task type 'regre'. "
                    "Should be one of \\['classification', 'regression'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -45,7 +43,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -67,7 +65,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -85,7 +83,7 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -106,7 +104,7 @@ class TestModelAnalysisValidations:
         message = ("Feature names in categorical_features "
                    "do not exist in train data: \\['not_a_feature'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -131,7 +129,7 @@ class TestModelAnalysisValidations:
                     pass
 
             serializer = LoadOnlySerializer()
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -150,7 +148,7 @@ class TestModelAnalysisValidations:
                     pass
 
             serializer = SaveOnlySerializer()
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -173,7 +171,7 @@ class TestModelAnalysisValidations:
 
             serializer = Serializer(logger=logging.getLogger('some logger'))
 
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -194,7 +192,7 @@ class TestModelAnalysisValidations:
         model = MagicMock()
         model.predict.side_effect = Exception()
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -216,7 +214,7 @@ class TestModelAnalysisValidations:
         model.predict_proba.side_effect = Exception()
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -238,7 +236,7 @@ class TestModelAnalysisValidations:
                    'provided has a predict_proba function. '
                    'Please check the task_type.')
         with pytest.warns(UserWarning, match=err_msg):
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -254,7 +252,7 @@ class TestModelAnalysisValidations:
         X_test['bad_target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
@@ -263,7 +261,7 @@ class TestModelAnalysisValidations:
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
 
-    def test_train_labels(self):
+    def test_classes(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
@@ -272,13 +270,13 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column='target',
                 task_type='classification',
-                train_labels=[0, 1, 2])
+                classes=[0, 1, 2])
         assert 'The train labels and distinct values in ' + \
             'target (train data) do not match' in str(ucve.value)
 
@@ -287,13 +285,13 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column='target',
                 task_type='classification',
-                train_labels=[0, 1])
+                classes=[0, 1])
         assert 'The train labels and distinct values in target ' + \
             '(train data) do not match' in str(ucve.value)
 
@@ -303,13 +301,13 @@ class TestModelAnalysisValidations:
         X_test['target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
-            ModelAnalysis(
+            RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
                 target_column='target',
                 task_type='classification',
-                train_labels=[0, 1])
+                classes=[0, 1])
 
         assert 'The train labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
@@ -325,7 +323,7 @@ class TestCausalUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -335,7 +333,7 @@ class TestCausalUserConfigValidations:
         message = ("Feature names in treatment_features "
                    "do not exist in train data: \\['not_a_feature'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
-            model_analysis.causal.add(treatment_features=['not_a_feature'])
+            rai_insights.causal.add(treatment_features=['not_a_feature'])
 
 
 class TestCounterfactualUserConfigValidations:
@@ -348,7 +346,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -358,7 +356,7 @@ class TestCounterfactualUserConfigValidations:
         message = ("Feature names in features_to_vary do "
                    "not exist in train data: \\['not_a_feature'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10, features_to_vary=['not_a_feature'])
 
     def test_permitted_range_not_having_train_features(self):
@@ -369,7 +367,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -379,7 +377,7 @@ class TestCounterfactualUserConfigValidations:
         message = ("Feature names in permitted_range do "
                    "not exist in train data: \\['not_a_feature'\\]")
         with pytest.raises(UserConfigValidationException, match=message):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10, permitted_range={'not_a_feature': [20, 40]})
 
     def test_desired_class_not_set(self):
@@ -390,7 +388,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -401,7 +399,7 @@ class TestCounterfactualUserConfigValidations:
                 match='The desired_class attribute should be '
                       'either \'opposite\' for binary classification or '
                       'the class value for multi-classification scenarios.'):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10,
                 method='random')
 
@@ -413,7 +411,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -423,7 +421,7 @@ class TestCounterfactualUserConfigValidations:
                 UserConfigValidationException,
                 match='The desired_range should not be None'
                       ' for regression scenarios.'):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10,
                 method='random')
 
@@ -434,7 +432,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -446,7 +444,7 @@ class TestCounterfactualUserConfigValidations:
                 match='The desired_class attribute should not be \'opposite\''
                       ' It should be the class value for multiclass'
                       ' classification scenario.'):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10,
                 method='random',
                 desired_class='opposite')
@@ -458,7 +456,7 @@ class TestCounterfactualUserConfigValidations:
         X_train['target'] = y_train
         X_test['target'] = y_test
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
@@ -471,7 +469,7 @@ class TestCounterfactualUserConfigValidations:
                       "use counterfactual feature importances. "
                       "Either increase total_CFs to at least 10 or "
                       "set feature_importance to False."):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=5,
                 method='random',
                 desired_class=2)
@@ -492,7 +490,7 @@ class TestCounterfactualUserConfigValidations:
         y_train = train_data['target']
         model = create_lightgbm_classifier(X_train, y_train)
 
-        model_analysis = ModelAnalysis(
+        rai_insights = RAIInsights(
             model=model,
             train=train_data,
             test=test_data,
@@ -508,7 +506,7 @@ class TestCounterfactualUserConfigValidations:
                    "{'c2': \\[1\\]}")
         with pytest.raises(
                 UserConfigValidationException, match=message):
-            model_analysis.counterfactual.add(
+            rai_insights.counterfactual.add(
                 total_CFs=10,
                 method='random',
                 desired_class='opposite')

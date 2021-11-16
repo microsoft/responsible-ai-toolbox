@@ -5,7 +5,7 @@ from unittest.mock import ANY, patch
 import numpy as np
 import pytest
 
-from responsibleai import ModelAnalysis, ModelTask
+from responsibleai import RAIInsights, ModelTask
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -28,15 +28,15 @@ class TestCausalManager:
 
         save_dir = tmpdir.mkdir('save-dir')
 
-        analysis = ModelAnalysis(
+        insights = RAIInsights(
             None, train_df, test_df, target_feature, ModelTask.REGRESSION)
 
-        analysis.causal.add(['ZN'])
-        pre_results = analysis.causal.get()
+        insights.causal.add(['ZN'])
+        pre_results = insights.causal.get()
         pre_result = pre_results[0]
 
-        analysis.causal._save(save_dir)
-        manager = analysis.causal._load(save_dir, analysis)
+        insights.causal._save(save_dir)
+        manager = insights.causal._load(save_dir, insights)
         post_results = manager.get()
         post_result = post_results[0]
         assert post_result.id == pre_result.id

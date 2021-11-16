@@ -19,7 +19,7 @@ from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ResultAttributes)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai.rai_insights.constants import ModelTask
 
 
 class CausalManager(BaseManager):
@@ -256,7 +256,7 @@ class CausalManager(BaseManager):
             message = str(e)
             expected = "increase the upper_bound_on_cat_expansion"
             clarification = (
-                " Increase the value {} in model_analysis.causal.add("
+                " Increase the value {} in rai_insights.causal.add("
                 "upper_bound_on_cat_expansion={})."
             ).format(max_cat_expansion, max_cat_expansion)
             if expected in message:
@@ -349,13 +349,13 @@ class CausalManager(BaseManager):
             result.save(result_path)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the CausalManager from the given path.
 
         :param path: The directory path to load the CausalManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The CausalManager manager after loading.
         :rtype: CausalManager
         """
@@ -369,11 +369,11 @@ class CausalManager(BaseManager):
         inst.__dict__['_results'] = [CausalResult.load(p) for p in paths]
 
         # Rehydrate model analysis data
-        inst.__dict__['_train'] = model_analysis.train
-        inst.__dict__['_test'] = model_analysis.test
-        inst.__dict__['_target_column'] = model_analysis.target_column
-        inst.__dict__['_task_type'] = model_analysis.task_type
+        inst.__dict__['_train'] = rai_insights.train
+        inst.__dict__['_test'] = rai_insights.test
+        inst.__dict__['_target_column'] = rai_insights.target_column
+        inst.__dict__['_task_type'] = rai_insights.task_type
         inst.__dict__['_categorical_features'] = \
-            model_analysis.categorical_features
+            rai_insights.categorical_features
 
         return inst

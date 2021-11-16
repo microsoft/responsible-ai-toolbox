@@ -148,7 +148,7 @@ class CounterfactualData:
     desired_range: List[float]
 
 
-class ModelAnalysisData:
+class RAIInsightsData:
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
     causalAnalysisData: List[CausalData]
