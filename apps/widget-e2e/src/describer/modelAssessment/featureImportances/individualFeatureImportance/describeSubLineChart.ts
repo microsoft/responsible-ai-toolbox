@@ -20,13 +20,13 @@ export function describeSubLineChart(): void {
       cy.get(Locators.ICENoOfPoints).its("length").should("be.gte", 1);
     });
 
-    it("should update x-axis value when 'Feature' dropdown is changed", () => {
+    it.skip("should update x-axis value when 'Feature' dropdown is changed", () => {
       cy.get(Locators.ICEFeatureDropdown).click();
       cy.get(Locators.ICEFeatureDropdownOption).click();
       cy.get(Locators.ICEXAxisNewValue).should("contain", "workclass");
     });
 
-    it("Should have tooltip 'How to read this chart'", () => {
+    it.skip("Should have tooltip 'How to read this chart'", () => {
       cy.get(Locators.ICEToolTipButton).should("exist");
       cy.get(Locators.ICEToolTipButton).click();
       cy.get(Locators.ICECalloutTitle).should(
