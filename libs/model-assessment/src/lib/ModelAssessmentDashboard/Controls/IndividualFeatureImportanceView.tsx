@@ -250,10 +250,13 @@ export class IndividualFeatureImportanceView extends React.Component<
           (row) =>
             row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
         );
+      const noIncorrectItem = firstIncorrectItemIndex === -1;
 
       groups = [
         {
-          count: firstIncorrectItemIndex,
+          count: noIncorrectItem
+            ? this.props.selectedCohort.cohort.filteredData.length
+            : firstIncorrectItemIndex,
           key: "groupCorrect",
           level: 0,
           name: localization.ModelAssessment.FeatureImportances
@@ -261,9 +264,10 @@ export class IndividualFeatureImportanceView extends React.Component<
           startIndex: 0
         },
         {
-          count:
-            this.props.selectedCohort.cohort.filteredData.length -
-            firstIncorrectItemIndex,
+          count: noIncorrectItem
+            ? 0
+            : this.props.selectedCohort.cohort.filteredData.length -
+              firstIncorrectItemIndex,
           key: "groupIncorrect",
           level: 0,
           name: localization.ModelAssessment.FeatureImportances
