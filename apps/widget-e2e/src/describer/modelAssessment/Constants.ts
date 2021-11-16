@@ -21,5 +21,7 @@ export enum Locators {
   ICEXAxisNewValue = "#subPlotContainer text[class^='xtitle']",
   ICEToolTipButton = "#subPlotContainer button:contains('How to read this chart')",
   ICECalloutTitle = "#subPlotContainer div.ms-Callout-container span[class^='calloutTitle']",
-  ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']"
+  ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']",
+  FirstBarInAggregateFeatureImportanceBarChart = "#FeatureImportanceBar g[class^='cartesianlayer'] g[class='trace bars'] g.points g.point",
+  FirstBarInAggregateFeatureImportanceHoverAllDataText = "#FeatureImportanceBar div.svg-container svg.main-svg g.hovertext tspan"
 }
