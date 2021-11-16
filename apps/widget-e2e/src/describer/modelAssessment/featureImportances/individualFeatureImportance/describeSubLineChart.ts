@@ -28,11 +28,10 @@ export function describeSubLineChart(): void {
         .scrollIntoView()
         .focus()
         .click({ force: true });
-
       cy.get(Locators.ICEXAxisNewValue).should("contain", "workclass");
     });
 
-    xit("Should have tooltip 'How to read this chart'", () => {
+    it("Should have tooltip 'How to read this chart'", () => {
       cy.get(Locators.ICEToolTipButton).should("exist");
       cy.get(Locators.ICEToolTipButton).click({ force: true });
       cy.get(Locators.ICECalloutTitle)
@@ -42,7 +41,6 @@ export function describeSubLineChart(): void {
       cy.get(Locators.ICECalloutBody)
         .scrollIntoView()
         .should("exist")
-
         .should("contain", localization.Interpret.WhatIfTab.icePlotHelperText);
     });
   });
