@@ -60,14 +60,13 @@ const modelAssessmentDatasets = {
       }
     },
     featureImportanceData: {
-<<<<<<< HEAD
       correctPredictionDatapoint: "398",
       dropdownRowName: "Row 4",
       incorrectPredictionDatapoint: "102",
       noDataset: false,
-=======
->>>>>>> 6eba4f36... [E2E] Add aggregate feature importance tests for responsibleaitoolbox-classification-model-assessment notebook (#998)
-      noFeatureImportance: false
+      noFeatureImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
     },
     featureNames: [
       "marital-status",

@@ -80,6 +80,8 @@ export interface IFeatureImportanceData {
 >>>>>>> 6eba4f36... [E2E] Add aggregate feature importance tests for responsibleaitoolbox-classification-model-assessment notebook (#998)
   noDataset?: boolean;
   noY?: boolean;
+  topFeaturesText?: string;
+  topFeaturesCurrentValue?: string;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
