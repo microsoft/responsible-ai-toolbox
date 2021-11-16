@@ -435,6 +435,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           )}
           {this.state.openMapShift && (
             <MapShift
+              currentOption={this.state.mapShiftErrorAnalysisOption}
               isOpen={this.state.openMapShift}
               onDismiss={(): void => this.setState({ openMapShift: false })}
               onSave={(): void => {
