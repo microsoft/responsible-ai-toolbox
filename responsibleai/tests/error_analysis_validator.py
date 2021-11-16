@@ -40,6 +40,7 @@ def validate_error_analysis(model_analysis, expected_reports=1):
     for idx, report in enumerate(reports):
         matrix = report.matrix
         matrix_features = report.matrix_features
+        importances = report.importances
         tree_features = report.tree_features
         info_features = ea_info_list[REPORTS][idx][FILTER_FEATURES]
         assert matrix_features == info_features
@@ -57,6 +58,8 @@ def validate_error_analysis(model_analysis, expected_reports=1):
         tree = report.tree
         min_child_samples = ea_info_list[REPORTS][idx][MIN_CHILD_SAMPLES]
         validate_tree(tree, expected_count, min_child_samples)
+        num_features = len(model_analysis.error_analysis._feature_names)
+        assert len(importances) == num_features
 
 
 def validate_matrix(matrix, exp_total_count, exp_total_false_count):
