@@ -291,6 +291,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           )}
           {this.state.mapShiftVisible && (
             <MapShift
+              currentOption={this.state.mapShiftErrorAnalysisOption}
               isOpen={this.state.mapShiftVisible}
               onDismiss={(): void =>
                 this.setState({
