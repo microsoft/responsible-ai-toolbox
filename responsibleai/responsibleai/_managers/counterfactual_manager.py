@@ -336,7 +336,7 @@ class CounterfactualManager(BaseManager):
                                 permitted_range=cf_config.permitted_range)
 
                     # Validate the serialized output against schema
-                    schema = self._get_counterfactual_schema(
+                    schema = CounterfactualManager._get_counterfactual_schema(
                         version=counterfactual_obj.metadata['version'])
                     jsonschema.validate(
                         json.loads(counterfactual_obj.to_json()), schema)
@@ -373,7 +373,8 @@ class CounterfactualManager(BaseManager):
                         counterfactual_config.failure_reason)
             return failure_reason_list
 
-    def _get_counterfactual_schema(self, version):
+    @staticmethod
+    def _get_counterfactual_schema(version):
         """Get the schema for validating the counterfactual examples output."""
         schema_directory = (Path(__file__).parent.parent / '_tools' /
                             'counterfactual' / 'dashboard_schemas')
@@ -503,6 +504,15 @@ class CounterfactualManager(BaseManager):
                 counterfactual_config.counterfactual_obj = \
                     CounterfactualExplanations.from_json(
                         cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
+
+                # Validate the serialized output against schema
+                schema = CounterfactualManager._get_counterfactual_schema(
+                    version=counterfactual_config.counterfactual_obj.metadata[
+                        'version'])
+                jsonschema.validate(
+                    json.loads(
+                        counterfactual_config.counterfactual_obj.to_json()),
+                    schema)
             else:
                 counterfactual_config.counterfactual_obj = None
             counterfactual_config.has_computation_failed = \
