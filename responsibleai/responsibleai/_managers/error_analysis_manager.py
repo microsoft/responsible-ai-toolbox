@@ -266,10 +266,11 @@ class ErrorAnalysisManager(BaseManager):
             report = self._analyzer.create_error_report(
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
-                num_leaves=num_leaves)
+                num_leaves=num_leaves,
+                compute_importances=True)
 
             # Validate the serialized output against schema
-            schema = self._get_error_analysis_schema()
+            schema = ErrorAnalysisManager._get_error_analysis_schema()
             jsonschema.validate(
                 json.loads(report.to_json()), schema)
 
@@ -285,7 +286,8 @@ class ErrorAnalysisManager(BaseManager):
         """
         return self._ea_report_list
 
-    def _get_error_analysis_schema(self):
+    @staticmethod
+    def _get_error_analysis_schema():
         """Get the schema for validating the error analysis output."""
         schema_directory = (Path(__file__).parent.parent / '_tools' /
                             'error_analysis' / 'dashboard_schemas')
@@ -332,6 +334,7 @@ class ErrorAnalysisManager(BaseManager):
             error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
+        error_analysis.importances = self._analyzer.compute_importances()
         error_analysis.metric = metric_to_display_name[self._analyzer.metric]
         return error_analysis
 
@@ -415,6 +418,10 @@ class ErrorAnalysisManager(BaseManager):
                            'report.json')
             with open(report_path, 'r') as file:
                 ea_report = json.load(file, object_hook=as_error_report)
+                # Validate the serialized output against schema
+                schema = ErrorAnalysisManager._get_error_analysis_schema()
+                jsonschema.validate(
+                    json.loads(ea_report.to_json()), schema)
                 ea_report_list.append(ea_report)
 
         inst.__dict__['_ea_report_list'] = ea_report_list
