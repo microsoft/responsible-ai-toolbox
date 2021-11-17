@@ -22,6 +22,7 @@ from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.constants import ModelTask
 
+_DATA = 'data'
 _DTYPES = 'dtypes'
 _TRAIN = 'train'
 _TEST = 'test'
@@ -498,14 +499,18 @@ class ModelAnalysis(object):
         for manager in self._managers:
             manager._save(top_dir / manager.name)
         # save current state
+        data_directory = Path(path) / _DATA
+        data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (_TRAIN + _DTYPES),
+        self._write_to_file(data_directory / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / _TRAIN, self.train.to_json())
+        self._write_to_file(data_directory / _TRAIN,
+                            self.train.to_json())
         dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(top_dir / (_TEST + _DTYPES),
+        self._write_to_file(data_directory / (_TEST + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(top_dir / _TEST, self.test.to_json())
+        self._write_to_file(data_directory / _TEST,
+                            self.test.to_json())
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
@@ -544,14 +549,15 @@ class ModelAnalysis(object):
         inst = ModelAnalysis.__new__(ModelAnalysis)
         top_dir = Path(path)
         # load current state
-        with open(top_dir / (_TRAIN + _DTYPES), 'r') as file:
+        data_directory = Path(path) / _DATA
+        with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / _TRAIN, 'r') as file:
+        with open(data_directory / _TRAIN, 'r') as file:
             train = pd.read_json(file, dtype=types)
         inst.__dict__[_TRAIN] = train
-        with open(top_dir / (_TEST + _DTYPES), 'r') as file:
+        with open(data_directory / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(top_dir / _TEST, 'r') as file:
+        with open(data_directory / _TEST, 'r') as file:
             test = pd.read_json(file, dtype=types)
         inst.__dict__[_TEST] = test
         with open(top_dir / _META_JSON, 'r') as meta_file:
