@@ -4,6 +4,8 @@
 """Defines the Error Analysis Manager class."""
 
 import json
+import jsonschema
+
 from pathlib import Path
 
 from erroranalysis._internal.constants import metric_to_display_name
@@ -260,7 +262,14 @@ class ErrorAnalysisManager(BaseManager):
             report = self._analyzer.create_error_report(
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
-                num_leaves=num_leaves)
+                num_leaves=num_leaves,
+                compute_importances=True)
+
+            # Validate the serialized output against schema
+            schema = ErrorAnalysisManager._get_error_analysis_schema()
+            jsonschema.validate(
+                json.loads(report.to_json()), schema)
+
             self._ea_report_list.append(report)
 
     def get(self):
@@ -272,6 +281,16 @@ class ErrorAnalysisManager(BaseManager):
         :rtype: list[erroranalysis._internal.error_report.ErrorReport]
         """
         return self._ea_report_list
+
+    @staticmethod
+    def _get_error_analysis_schema():
+        """Get the schema for validating the error analysis output."""
+        schema_directory = (Path(__file__).parent.parent / '_tools' /
+                            'error_analysis' / 'dashboard_schemas')
+        schema_filename = 'error_analysis_output_v0.0.json'
+        schema_filepath = schema_directory / schema_filename
+        with open(schema_filepath, 'r') as f:
+            return json.load(f)
 
     def list(self):
         """List information about the ErrorAnalysisManager.
@@ -311,6 +330,7 @@ class ErrorAnalysisManager(BaseManager):
             error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
+        error_analysis.importances = self._analyzer.compute_importances()
         error_analysis.metric = metric_to_display_name[self._analyzer.metric]
         return error_analysis
 
@@ -360,6 +380,12 @@ class ErrorAnalysisManager(BaseManager):
         reports_path = top_dir / REPORTS
         with open(reports_path, 'r') as file:
             ea_report_list = json.load(file, object_hook=as_error_report)
+        for error_report in ea_report_list:
+            # Validate the serialized output against schema
+            schema = ErrorAnalysisManager._get_error_analysis_schema()
+            jsonschema.validate(
+                json.loads(error_report.to_json()), schema)
+
         inst.__dict__['_ea_report_list'] = ea_report_list
         config_path = top_dir / CONFIG
         with open(config_path, 'r') as file:

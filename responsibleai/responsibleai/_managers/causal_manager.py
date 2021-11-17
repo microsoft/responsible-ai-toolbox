@@ -240,6 +240,8 @@ class CausalManager(BaseManager):
                 treatment_features[i], treatment_cost[i],
                 alpha, max_tree_depth, min_tree_leaf_samples)
             result.policies.append(policy)
+
+        result._validate_schema()
         self._results.append(result)
         return result
 

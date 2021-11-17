@@ -9,6 +9,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface ICohortInfoStyles {
+  button: IStyle;
   container: IStyle;
   divider: IStyle;
   section: IStyle;
@@ -20,6 +21,9 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<ICohortInfoStyles>({
+      button: {
+        minWidth: "120px"
+      },
       container: {
         color: theme.semanticColors.bodyText
       },
