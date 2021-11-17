@@ -89,7 +89,10 @@ class TestCausalManagerTreatmentCosts:
     def test_zero_cost(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+            try:
+                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+            except TypeError:
+                pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 0, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'RM', 0, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'B', 0, ANY, ANY, ANY)
@@ -125,7 +128,10 @@ class TestCausalManagerTreatmentCosts:
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+            try:
+                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+            except TypeError:
+                pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 1, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'RM', 2, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'B', 3, ANY, ANY, ANY)
@@ -137,7 +143,10 @@ class TestCausalManagerTreatmentCosts:
                 [1, 2, 3, 4, 5, 6, 7],
                 [2, 3, 4, 5, 6, 7, 1],
             ]
-            cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+            try:
+                cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+            except TypeError:
+                pass
             mock_create.assert_any_call(
                 ANY, ANY, 'ZN', [1, 2, 3, 4, 5, 6, 7], ANY, ANY, ANY)
             mock_create.assert_any_call(
