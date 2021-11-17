@@ -161,6 +161,9 @@ export class CounterfactualPanel extends React.Component<
 
   private renderClose = (): JSX.Element => {
     const classes = counterfactualPanelStyles();
+    if (!this.context.requestPredictions) {
+      return <div />;
+    }
     return (
       <Stack horizontal tokens={{ childrenGap: "15px" }}>
         <Stack.Item align="end" grow={1}>
