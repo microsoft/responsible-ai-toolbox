@@ -23,5 +23,7 @@ export enum Locators {
   ICECalloutTitle = "#subPlotContainer div.ms-Callout-container span[class^='calloutTitle']",
   ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']",
   FirstBarInAggregateFeatureImportanceBarChart = "#FeatureImportanceBar g[class^='cartesianlayer'] g[class='trace bars'] g.points g.point",
-  FirstBarInAggregateFeatureImportanceHoverAllDataText = "#FeatureImportanceBar div.svg-container svg.main-svg g.hovertext tspan"
+  FirstBarInAggregateFeatureImportanceHoverAllDataText = "#FeatureImportanceBar div.svg-container svg.main-svg g.hovertext tspan",
+  SortByDropdown = "div[class^='globalChartWithLegend'] div.ms-Dropdown-container",
+  SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')"
 }
