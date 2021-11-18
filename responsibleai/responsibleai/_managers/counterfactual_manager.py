@@ -429,16 +429,14 @@ class CounterfactualManager(BaseManager):
         for counterfactual_config in self._counterfactual_config_list:
             directory_manager = DirectoryManager(parent_directory_path=path)
 
-            directory_manager.create_config_directory()
-            config_path = (directory_manager.get_config_directory() /
+            config_path = (directory_manager.create_config_directory() /
                            CounterfactualManager.CONFIG_FILE_NAME)
             with open(config_path, 'w') as config_file:
                 json.dump(
                     counterfactual_config.get_config_as_dict(),
                     config_file)
 
-            directory_manager.create_data_directory()
-            data_path = (directory_manager.get_data_directory() /
+            data_path = (directory_manager.create_data_directory() /
                          CounterfactualManager.RESULT_FILE_NAME)
             with open(data_path, 'w') as data_file:
                 json.dump(

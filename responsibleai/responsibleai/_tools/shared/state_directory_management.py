@@ -37,6 +37,8 @@ class DirectoryManager:
         if not config_directory.exists():
             config_directory.mkdir(parents=True, exist_ok=True)
 
+        return config_directory
+
     def create_data_directory(self):
         data_directory = (Path(self.parent_directory_path) /
                           self.sub_directory_name /
@@ -44,12 +46,16 @@ class DirectoryManager:
         if not data_directory.exists():
             data_directory.mkdir(parents=True, exist_ok=True)
 
+        return data_directory
+
     def create_explainer_directory(self):
         explainer_directory = (Path(self.parent_directory_path) /
                                self.sub_directory_name /
                                DirectoryManager.EXPLAINER)
         if not explainer_directory.exists():
             explainer_directory.mkdir(parents=True, exist_ok=True)
+
+        return explainer_directory
 
     def get_config_directory(self):
         return (Path(self.parent_directory_path) /

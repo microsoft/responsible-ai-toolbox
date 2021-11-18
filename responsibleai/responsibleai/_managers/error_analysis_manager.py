@@ -368,19 +368,17 @@ class ErrorAnalysisManager(BaseManager):
         for index in range(0, len(self._ea_report_list)):
             # save the configs
             directory_manager = DirectoryManager(parent_directory_path=path)
-            directory_manager.create_config_directory()
-            ea_config = self._ea_config_list[index]
-            config_path = (directory_manager.get_config_directory() /
+            config_path = (directory_manager.create_config_directory() /
                            'config.json')
+            ea_config = self._ea_config_list[index]
             with open(config_path, 'w') as file:
                 json.dump(ea_config, file,
                           default=config_json_converter)
 
             # save the reports
-            directory_manager.create_data_directory()
-            ea_report = self._ea_report_list[index]
-            report_path = (directory_manager.get_data_directory() /
+            report_path = (directory_manager.create_data_directory() /
                            'report.json')
+            ea_report = self._ea_report_list[index]
             with open(report_path, 'w') as file:
                 json.dump(ea_report, file,
                           default=report_json_converter)

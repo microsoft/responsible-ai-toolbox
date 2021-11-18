@@ -304,8 +304,7 @@ class ExplainerManager(BaseManager):
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
         directory_manager = DirectoryManager(parent_directory_path=path)
-        directory_manager.create_data_directory()
-        data_directory = directory_manager.get_data_directory()
+        data_directory = directory_manager.create_data_directory()
 
         # save the explanation
         if self._explanation:
