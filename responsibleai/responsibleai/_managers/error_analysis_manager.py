@@ -363,13 +363,13 @@ class ErrorAnalysisManager(BaseManager):
                       default=config_json_converter)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the ErrorAnalysisManager from the given path.
 
         :param path: The directory path to load the ErrorAnalysisManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The ErrorAnalysisManager manager after loading.
         :rtype: ErrorAnalysisManager
         """
@@ -391,16 +391,16 @@ class ErrorAnalysisManager(BaseManager):
         with open(config_path, 'r') as file:
             ea_config_list = json.load(file, object_hook=as_error_config)
         inst.__dict__['_ea_config_list'] = ea_config_list
-        categorical_features = model_analysis.categorical_features
+        categorical_features = rai_insights.categorical_features
         inst.__dict__['_categorical_features'] = categorical_features
-        target_column = model_analysis.target_column
-        true_y = model_analysis.test[target_column]
-        dataset = model_analysis.test.drop(columns=[target_column])
+        target_column = rai_insights.target_column
+        true_y = rai_insights.test[target_column]
+        dataset = rai_insights.test.drop(columns=[target_column])
         inst.__dict__['_dataset'] = dataset
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
-        inst.__dict__['_analyzer'] = ModelAnalyzer(model_analysis.model,
+        inst.__dict__['_analyzer'] = ModelAnalyzer(rai_insights.model,
                                                    dataset,
                                                    true_y,
                                                    feature_names,
