@@ -25,5 +25,8 @@ export enum Locators {
   FirstBarInAggregateFeatureImportanceBarChart = "#FeatureImportanceBar g[class^='cartesianlayer'] g[class='trace bars'] g.points g.point",
   FirstBarInAggregateFeatureImportanceHoverAllDataText = "#FeatureImportanceBar div.svg-container svg.main-svg g.hovertext tspan",
   SortByDropdown = "div[class^='globalChartWithLegend'] div.ms-Dropdown-container",
-  SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')"
+  SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  CohortOnOffSelectionContainer = "#iterative-container",
+  CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']"
 }
+// span:contains(CohortCreateE2E)

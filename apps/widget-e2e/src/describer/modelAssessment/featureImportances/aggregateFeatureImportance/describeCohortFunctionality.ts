@@ -4,7 +4,7 @@
 import { Locators } from "../../Constants";
 
 export function describeCohortFunctionality(): void {
-  describe.only("Cohort functionality", () => {
+  describe("Cohort functionality", () => {
     it("Should have cohort selection in 'Sort by' dropdown", () => {
       cy.get('button:contains("Create new cohort")').click();
       cy.get("#cohortEditPanel").should("exist");
@@ -16,17 +16,24 @@ export function describeCohortFunctionality(): void {
 
       cy.get(Locators.SortByDropdown).click();
       cy.get(Locators.SortByDropdownOptions).should("exist");
-
-      // //check on mouse over has 'All data'
-      // cy.get(Locators.FirstBarInAggregateFeatureImportanceBarChart)
-      //   .eq(0)
-      //   .trigger("mouseenter", "top", { force: true });
-      // // .trigger("mouseenter", { force: true });
-      // cy.get(
-      //   Locators.FirstBarInAggregateFeatureImportanceHoverAllDataText
-      // ).should("contain", "All data");
     });
 
-    it("Should disable cohort in on-off items on selection", () => {});
+    it("Should disable cohort in on-off items on selection", () => {
+      cy.get(Locators.CohortOnOffSelectionContainer).should(
+        "contain",
+        "CohortCreateE2E"
+      );
+      cy.get(Locators.CohortOnOffCohortCreateE2E).should(
+        "have.attr",
+        "aria-checked",
+        "true"
+      );
+      cy.get(Locators.CohortOnOffCohortCreateE2E).click({ force: true });
+      cy.get(Locators.CohortOnOffCohortCreateE2E).should(
+        "have.attr",
+        "aria-checked",
+        "false"
+      );
+    });
   });
 }
