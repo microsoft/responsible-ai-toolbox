@@ -35,17 +35,14 @@ class BaseResult(ABC, Generic[TResult]):
 
         :param path: Path to result directory on disk.
         """
-        result_dir = Path(path)
-        result_dir.mkdir(parents=True, exist_ok=True)
-
         # Save metadata like ID and and version to disk
-        self._save_metadata(result_dir)
+        self._save_metadata(path)
 
         # Save all result attributes to disk
-        save_attributes(self, self._get_attributes(), result_dir)
+        save_attributes(self, self._get_attributes(), path)
 
         # Save dashboard data
-        self._save_dashboard(result_dir)
+        self._save_dashboard(path)
 
     def _save_metadata(self, result_dir: Path):
         """Save result metadata to disk.

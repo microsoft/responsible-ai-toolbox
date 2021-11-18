@@ -13,6 +13,8 @@ from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import (ManagerNames,
                                                SerializationAttributes)
 from responsibleai._managers.base_manager import BaseManager
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
@@ -344,11 +346,10 @@ class CausalManager(BaseManager):
         causal_dir.mkdir(parents=True, exist_ok=True)
 
         # Save results to disk
-        results_path = causal_dir / SerializationAttributes.RESULTS_DIRECTORY
-        results_path.mkdir(parents=True, exist_ok=True)
         for result in self._results:
-            result_path = results_path / result.id
-            result.save(result_path)
+            directory_manager = DirectoryManager(parent_directory_path=path)
+            data_path = directory_manager.create_data_directory()
+            result.save(data_path)
 
     @staticmethod
     def _load(path, model_analysis):
@@ -363,12 +364,14 @@ class CausalManager(BaseManager):
         """
         inst = CausalManager.__new__(CausalManager)
 
-        causal_dir = Path(path)
-
         # Rehydrate results
-        results_path = causal_dir / SerializationAttributes.RESULTS_DIRECTORY
-        paths = results_path.resolve().glob('*')
-        inst.__dict__['_results'] = [CausalResult.load(p) for p in paths]
+        all_causal_dirs = DirectoryManager.list_sub_directories(path)
+        inst.__dict__['_results'] = []
+        for causal_dir in all_causal_dirs:
+            dm = DirectoryManager(parent_directory_path=path,
+                                  sub_directory_name=causal_dir)
+            causal_result = CausalResult.load(dm.get_data_directory())
+            inst.__dict__['_results'].append(causal_result)
 
         # Rehydrate model analysis data
         inst.__dict__['_train'] = model_analysis.train

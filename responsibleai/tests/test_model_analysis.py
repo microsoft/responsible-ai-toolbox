@@ -3,6 +3,7 @@
 
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Callable
 
 import numpy as np
 import os
@@ -236,7 +237,8 @@ def run_model_analysis(model, train_data, test_data, target_column,
         # save the model_analysis
         model_analysis.save(path)
 
-        validate_state_directory(path, manager_type)
+        validate_state_directory(
+            path, manager_type, classes=classes)
 
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
@@ -257,30 +259,39 @@ def run_model_analysis(model, train_data, test_data, target_column,
             validate_explainer(model_analysis, train_data, test_data, classes)
 
 
-def validate_state_directory(path, manager_name):
+def validate_state_directory(path, manager_type, classes=None):
     all_dirs = os.listdir(path)
-    assert manager_name in all_dirs
-    all_component_paths = os.listdir(path / manager_name)
-    assert len(all_component_paths) != 0
+    assert manager_type in all_dirs
+    all_component_paths = os.listdir(path / manager_type)
+    if manager_type == ManagerNames.CAUSAL:
+        if classes is not None and len(classes) > 2:
+            assert len(all_component_paths) == 0
+        else:
+            assert len(all_component_paths) != 0
+    else:
+        assert len(all_component_paths) != 0
     for component_path in all_component_paths:
-
         # TODO: Add code to check if the component_path is GUID
-        dm = DirectoryManager(path / manager_name, component_path)
+        dm = DirectoryManager(path / manager_type, component_path)
 
         config_path = dm.get_config_directory()
         data_path = dm.get_data_directory()
         explainer_path = dm.get_explainer_directory()
 
-        if manager_name == ManagerNames.EXPLAINER:
+        if manager_type == ManagerNames.EXPLAINER:
             assert not config_path.exists()
             assert data_path.exists()
             assert not explainer_path.exists()
-        elif manager_name == ManagerNames.COUNTERFACTUAL:
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
             assert config_path.exists()
             assert data_path.exists()
             assert not explainer_path.exists()
-        elif manager_name == ManagerNames.ERROR_ANALYSIS:
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
             assert config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_type == ManagerNames.CAUSAL:
+            assert not config_path.exists()
             assert data_path.exists()
             assert not explainer_path.exists()
 
