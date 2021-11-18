@@ -5,11 +5,14 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import numpy as np
+import os
 import pandas as pd
 import pytest
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 from .causal_manager_validator import validate_causal
 from .common_utils import (create_adult_income_dataset,
@@ -229,8 +232,12 @@ def run_model_analysis(model, train_data, test_data, target_column,
 
     with TemporaryDirectory() as tempdir:
         path = Path(tempdir) / 'rai_test_path'
+
         # save the model_analysis
         model_analysis.save(path)
+
+        validate_state_directory(path, manager_type)
+
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
 
@@ -248,6 +255,34 @@ def run_model_analysis(model, train_data, test_data, target_column,
             # validate adding new explainer config after deserialization works
             setup_explainer(model_analysis)
             validate_explainer(model_analysis, train_data, test_data, classes)
+
+
+def validate_state_directory(path, manager_name):
+    all_dirs = os.listdir(path)
+    assert manager_name in all_dirs
+    all_component_paths = os.listdir(path / manager_name)
+    assert len(all_component_paths) != 0
+    for component_path in all_component_paths:
+
+        # TODO: Add code to check if the component_path is GUID
+        dm = DirectoryManager(path / manager_name, component_path)
+
+        config_path = dm.get_config_directory()
+        data_path = dm.get_data_directory()
+        explainer_path = dm.get_explainer_directory()
+
+        if manager_name == ManagerNames.EXPLAINER:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_name == ManagerNames.COUNTERFACTUAL:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_name == ManagerNames.ERROR_ANALYSIS:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
 
 
 def validate_model_analysis(
