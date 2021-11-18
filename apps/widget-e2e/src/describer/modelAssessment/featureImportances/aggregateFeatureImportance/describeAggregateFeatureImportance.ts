@@ -4,8 +4,8 @@
 import { getMenu } from "../../../../util/getMenu";
 import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
-import { describeCohortFunctionality } from "./describeCohortFunctionality";
 
+import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
   describeGlobalExplanationBarChart,
   describeGlobalExplanationBarChartExplicitValues
