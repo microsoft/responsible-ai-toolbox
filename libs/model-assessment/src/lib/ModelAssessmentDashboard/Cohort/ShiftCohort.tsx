@@ -72,6 +72,9 @@ export class ShiftCohort extends React.Component<
     }
     const filters =
       this.state.savedCohorts[this.state.selectedCohort].cohort.filters;
+    const compositeFilters =
+      this.state.savedCohorts[this.state.selectedCohort].cohort
+        .compositeFilters;
     return (
       <Dialog
         hidden={false}
@@ -101,6 +104,7 @@ export class ShiftCohort extends React.Component<
         />
         <CohortEditorFilterList
           filters={filters}
+          compositeFilters={compositeFilters}
           jointDataset={this.context.jointDataset}
         />
         <DialogFooter>

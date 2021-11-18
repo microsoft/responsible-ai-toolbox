@@ -10,6 +10,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { getCohortFilterCount } from "libs/core-ui/src/lib/util/getCohortFilterCount";
 import _ from "lodash";
 import {
   IColumn,
@@ -281,7 +282,7 @@ export class CohortList extends React.Component<
           ),
           localization.formatString(
             localization.Interpret.CohortBanner.filters,
-            errorCohort.cohort.filters.length
+            getCohortFilterCount(errorCohort.cohort)
           )
         ];
         return {
