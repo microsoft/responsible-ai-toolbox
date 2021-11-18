@@ -22,21 +22,26 @@ export function describeSubLineChart(): void {
 
     it("should update x-axis value when 'Feature' dropdown is changed", () => {
       cy.get(Locators.ICEFeatureDropdown).click();
-      cy.get(Locators.ICEFeatureDropdownOption).click();
+      cy.get(".ms-Callout")
+        .should("be.visible")
+        .contains("workclass")
+        .scrollIntoView()
+        .focus()
+        .click({ force: true });
       cy.get(Locators.ICEXAxisNewValue).should("contain", "workclass");
     });
 
-    xit("Should have tooltip 'How to read this chart'", () => {
+    it("Should have tooltip 'How to read this chart'", () => {
       cy.get(Locators.ICEToolTipButton).should("exist");
-      cy.get(Locators.ICEToolTipButton).click();
-      cy.get(Locators.ICECalloutTitle).should(
-        "contain",
-        localization.Interpret.WhatIfTab.icePlot
-      );
-      cy.get(Locators.ICECalloutBody).should(
-        "contain",
-        localization.Interpret.WhatIfTab.icePlotHelperText
-      );
+      cy.get(Locators.ICEToolTipButton).click({ force: true });
+      cy.get(Locators.ICECalloutTitle)
+        .scrollIntoView()
+        .should("exist")
+        .should("contain", localization.Interpret.WhatIfTab.icePlot);
+      cy.get(Locators.ICECalloutBody)
+        .scrollIntoView()
+        .should("exist")
+        .should("contain", localization.Interpret.WhatIfTab.icePlotHelperText);
     });
   });
 }

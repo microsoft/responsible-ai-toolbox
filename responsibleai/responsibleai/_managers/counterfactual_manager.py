@@ -20,7 +20,7 @@ from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       UserConfigValidationException)
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai.rai_insights.constants import ModelTask
 
 
 class CounterfactualConstants:
@@ -336,7 +336,7 @@ class CounterfactualManager(BaseManager):
                                 permitted_range=cf_config.permitted_range)
 
                     # Validate the serialized output against schema
-                    schema = self._get_counterfactual_schema(
+                    schema = CounterfactualManager._get_counterfactual_schema(
                         version=counterfactual_obj.metadata['version'])
                     jsonschema.validate(
                         json.loads(counterfactual_obj.to_json()), schema)
@@ -373,7 +373,8 @@ class CounterfactualManager(BaseManager):
                         counterfactual_config.failure_reason)
             return failure_reason_list
 
-    def _get_counterfactual_schema(self, version):
+    @staticmethod
+    def _get_counterfactual_schema(version):
         """Get the schema for validating the counterfactual examples output."""
         schema_directory = (Path(__file__).parent.parent / '_tools' /
                             'counterfactual' / 'dashboard_schemas')
@@ -444,13 +445,13 @@ class CounterfactualManager(BaseManager):
                     result_file)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the CounterfactualManager from the given path.
 
         :param path: The directory path to load the CounterfactualManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The CounterfactualManager manager after loading.
         :rtype: CounterfactualManager
         """
@@ -458,15 +459,15 @@ class CounterfactualManager(BaseManager):
         counterfactual_dir = Path(path)
 
         # Rehydrate model analysis data
-        inst.__dict__[CounterfactualManager._MODEL] = model_analysis.model
-        inst.__dict__[CounterfactualManager._TRAIN] = model_analysis.train
-        inst.__dict__[CounterfactualManager._TEST] = model_analysis.test
+        inst.__dict__[CounterfactualManager._MODEL] = rai_insights.model
+        inst.__dict__[CounterfactualManager._TRAIN] = rai_insights.train
+        inst.__dict__[CounterfactualManager._TEST] = rai_insights.test
         inst.__dict__[CounterfactualManager._TARGET_COLUMN] = \
-            model_analysis.target_column
+            rai_insights.target_column
         inst.__dict__[CounterfactualManager._TASK_TYPE] = \
-            model_analysis.task_type
+            rai_insights.task_type
         inst.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
-            model_analysis.categorical_features
+            rai_insights.categorical_features
 
         inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
         all_cf_dirs = os.listdir(counterfactual_dir)
@@ -503,6 +504,15 @@ class CounterfactualManager(BaseManager):
                 counterfactual_config.counterfactual_obj = \
                     CounterfactualExplanations.from_json(
                         cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
+
+                # Validate the serialized output against schema
+                schema = CounterfactualManager._get_counterfactual_schema(
+                    version=counterfactual_config.counterfactual_obj.metadata[
+                        'version'])
+                jsonschema.validate(
+                    json.loads(
+                        counterfactual_config.counterfactual_obj.to_json()),
+                    schema)
             else:
                 counterfactual_config.counterfactual_obj = None
             counterfactual_config.has_computation_failed = \

@@ -6,7 +6,7 @@ import sklearn
 from sklearn.model_selection import train_test_split
 
 from raiwidgets import ModelAnalysisDashboard
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
 
@@ -28,22 +28,22 @@ class TestModelAnalysisDashboard:
         X['Income'] = y
         X_test['Income'] = y_test
 
-        ma = ModelAnalysis(knn, X, X_test, 'Income', 'classification',
-                           categorical_features=['Workclass', 'Education-Num',
-                                                 'Marital Status',
-                                                 'Occupation', 'Relationship',
-                                                 'Race',
-                                                 'Sex', 'Country'])
-        ma.explainer.add()
-        ma.counterfactual.add(10, desired_class='opposite')
-        ma.error_analysis.add()
-        ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
+        ri = RAIInsights(knn, X, X_test, 'Income', 'classification',
+                         categorical_features=['Workclass', 'Education-Num',
+                                               'Marital Status',
+                                               'Occupation', 'Relationship',
+                                               'Race',
+                                               'Sex', 'Country'])
+        ri.explainer.add()
+        ri.counterfactual.add(10, desired_class='opposite')
+        ri.error_analysis.add()
+        ri.causal.add(treatment_features=['Hours per week', 'Occupation'],
                       heterogeneity_features=None,
                       upper_bound_on_cat_expansion=42,
                       skip_cat_limit_checks=True)
-        ma.compute()
+        ri.compute()
 
-        widget = ModelAnalysisDashboard(ma)
+        widget = ModelAnalysisDashboard(ri)
         assert isinstance(widget.input.dashboard_input.dataset,
                           Dataset)
         assert isinstance(
