@@ -5,7 +5,7 @@
 
 from flask import jsonify, request
 
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights
 
 from .dashboard import Dashboard
 from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
@@ -15,7 +15,7 @@ class ModelAnalysisDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
     :param analysis: An object that represents an model analysis.
-    :type analysis: ModelAnalysis
+    :type analysis: RAIInsights
     :param public_ip: Optional. If running on a remote vm,
         the external public ip address of the VM.
     :type public_ip: str
@@ -24,7 +24,7 @@ class ModelAnalysisDashboard(Dashboard):
 
     """
 
-    def __init__(self, analysis: ModelAnalysis,
+    def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None):
         self.input = ModelAnalysisDashboardInput(analysis)
 

@@ -20,7 +20,7 @@ from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       UserConfigValidationException)
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai.rai_insights.constants import ModelTask
 
 
 class CounterfactualConstants:
@@ -445,13 +445,13 @@ class CounterfactualManager(BaseManager):
                     result_file)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the CounterfactualManager from the given path.
 
         :param path: The directory path to load the CounterfactualManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The CounterfactualManager manager after loading.
         :rtype: CounterfactualManager
         """
@@ -459,15 +459,15 @@ class CounterfactualManager(BaseManager):
         counterfactual_dir = Path(path)
 
         # Rehydrate model analysis data
-        inst.__dict__[CounterfactualManager._MODEL] = model_analysis.model
-        inst.__dict__[CounterfactualManager._TRAIN] = model_analysis.train
-        inst.__dict__[CounterfactualManager._TEST] = model_analysis.test
+        inst.__dict__[CounterfactualManager._MODEL] = rai_insights.model
+        inst.__dict__[CounterfactualManager._TRAIN] = rai_insights.train
+        inst.__dict__[CounterfactualManager._TEST] = rai_insights.test
         inst.__dict__[CounterfactualManager._TARGET_COLUMN] = \
-            model_analysis.target_column
+            rai_insights.target_column
         inst.__dict__[CounterfactualManager._TASK_TYPE] = \
-            model_analysis.task_type
+            rai_insights.task_type
         inst.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
-            model_analysis.categorical_features
+            rai_insights.categorical_features
 
         inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
         all_cf_dirs = os.listdir(counterfactual_dir)
