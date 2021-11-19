@@ -239,8 +239,9 @@ def run_model_analysis(model, train_data, test_data, target_column,
         # save the model_analysis
         model_analysis.save(path)
 
-        validate_state_directory(
-            path, manager_type, classes=classes)
+        # Validate the directory structure of the state saved
+        # by the managers.
+        validate_state_directory(path, manager_type)
 
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
@@ -261,17 +262,10 @@ def run_model_analysis(model, train_data, test_data, target_column,
             validate_explainer(model_analysis, train_data, test_data, classes)
 
 
-def validate_state_directory(path, manager_type, classes=None):
+def validate_state_directory(path, manager_type):
     all_dirs = os.listdir(path)
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)
-    if manager_type == ManagerNames.CAUSAL:
-        if classes is not None and len(classes) > 2:
-            assert len(all_component_paths) == 0
-        else:
-            assert len(all_component_paths) != 0
-    else:
-        assert len(all_component_paths) != 0
     for component_path in all_component_paths:
         # TODO: Add code to check if the component_path is GUID
         dm = DirectoryManager(path / manager_type, component_path)
