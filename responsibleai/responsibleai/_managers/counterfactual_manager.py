@@ -4,8 +4,6 @@
 """Defines the Counterfactual Manager class."""
 import json
 import jsonschema
-import os
-import uuid
 
 import numpy as np
 from pathlib import Path
@@ -20,6 +18,8 @@ from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       UserConfigValidationException)
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.rai_insights.constants import ModelTask
 
 
@@ -427,22 +427,21 @@ class CounterfactualManager(BaseManager):
         counterfactual_dir = Path(path)
         counterfactual_dir.mkdir(parents=True, exist_ok=True)
         for counterfactual_config in self._counterfactual_config_list:
-            counterfactual_state_dir = Path(path) / str(uuid.uuid4())
-            counterfactual_state_dir.mkdir(parents=True, exist_ok=True)
+            directory_manager = DirectoryManager(parent_directory_path=path)
 
-            config_path = (counterfactual_state_dir /
+            config_path = (directory_manager.create_config_directory() /
                            CounterfactualManager.CONFIG_FILE_NAME)
             with open(config_path, 'w') as config_file:
                 json.dump(
                     counterfactual_config.get_config_as_dict(),
                     config_file)
 
-            result_path = (counterfactual_state_dir /
-                           CounterfactualManager.RESULT_FILE_NAME)
-            with open(result_path, 'w') as result_file:
+            data_path = (directory_manager.create_data_directory() /
+                         CounterfactualManager.RESULT_FILE_NAME)
+            with open(data_path, 'w') as data_file:
                 json.dump(
                     counterfactual_config.get_result(),
-                    result_file)
+                    data_file)
 
     @staticmethod
     def _load(path, rai_insights):
@@ -456,7 +455,6 @@ class CounterfactualManager(BaseManager):
         :rtype: CounterfactualManager
         """
         inst = CounterfactualManager.__new__(CounterfactualManager)
-        counterfactual_dir = Path(path)
 
         # Rehydrate model analysis data
         inst.__dict__[CounterfactualManager._MODEL] = rai_insights.model
@@ -470,12 +468,15 @@ class CounterfactualManager(BaseManager):
             rai_insights.categorical_features
 
         inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
-        all_cf_dirs = os.listdir(counterfactual_dir)
-        for counterfactual_config_dir in all_cf_dirs:
-            config_path = (Path(path) /
-                           counterfactual_config_dir /
-                           CounterfactualManager.CONFIG_FILE_NAME)
 
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
+        for counterfactual_config_dir in all_cf_dirs:
+            directory_manager = DirectoryManager(
+                parent_directory_path=path,
+                sub_directory_name=counterfactual_config_dir)
+
+            config_path = (directory_manager.get_config_directory() /
+                           CounterfactualManager.CONFIG_FILE_NAME)
             with open(config_path, 'r') as config_file:
                 cf_config = json.load(config_file)
 
@@ -493,10 +494,8 @@ class CounterfactualManager(BaseManager):
                 feature_importance=cf_config[
                     CounterfactualConfig.FEATURE_IMPORTANCE])
 
-            result_path = (Path(path) /
-                           counterfactual_config_dir /
+            result_path = (directory_manager.get_data_directory() /
                            CounterfactualManager.RESULT_FILE_NAME)
-
             with open(result_path, 'r') as result_file:
                 cf_result = json.load(result_file)
 
