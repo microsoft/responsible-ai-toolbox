@@ -5,7 +5,6 @@
 
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Callable
 
 import numpy as np
 import os

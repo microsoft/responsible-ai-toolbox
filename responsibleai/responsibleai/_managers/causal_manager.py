@@ -10,8 +10,7 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import (ManagerNames,
-                                               SerializationAttributes)
+from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
