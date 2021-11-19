@@ -503,12 +503,12 @@ class RAIInsights(object):
         dtypes = self.train.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(data_directory / _TRAIN,
+        self._write_to_file(data_directory / (_TRAIN + '.json'),
                             self.train.to_json())
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TEST + _DTYPES),
                             json.dumps(dtypes))
-        self._write_to_file(data_directory / _TEST,
+        self._write_to_file(data_directory / (_TEST + '.json'),
                             self.test.to_json())
         classes = _convert_to_list(self._classes)
         meta = {
@@ -552,12 +552,12 @@ class RAIInsights(object):
         data_directory = Path(path) / _DATA
         with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(data_directory / _TRAIN, 'r') as file:
+        with open(data_directory / (_TRAIN + '.json'), 'r') as file:
             train = pd.read_json(file, dtype=types)
         inst.__dict__[_TRAIN] = train
         with open(data_directory / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
-        with open(data_directory / _TEST, 'r') as file:
+        with open(data_directory / (_TEST + '.json'), 'r') as file:
             test = pd.read_json(file, dtype=types)
         inst.__dict__[_TEST] = test
         with open(top_dir / _META_JSON, 'r') as meta_file:
