@@ -27,6 +27,8 @@ from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -301,13 +303,17 @@ class ExplainerManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
+        directory_manager = DirectoryManager(parent_directory_path=path)
+        data_directory = directory_manager.create_data_directory()
+
         # save the explanation
         if self._explanation:
             save_explanation(self._explanation,
-                             top_dir / ManagerNames.EXPLAINER)
+                             data_directory / ManagerNames.EXPLAINER)
+
         meta = {IS_RUN: self._is_run,
                 IS_ADDED: self._is_added}
-        with open(Path(path) / META_JSON, 'w') as file:
+        with open(data_directory / META_JSON, 'w') as file:
             json.dump(meta, file)
 
     @staticmethod
@@ -324,17 +330,24 @@ class ExplainerManager(BaseManager):
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle
         inst = ExplainerManager.__new__(ExplainerManager)
-        top_dir = Path(path)
-        explanation_path = top_dir / ManagerNames.EXPLAINER
-        if explanation_path.exists():
-            explanation = load_explanation(explanation_path)
-            inst.__dict__[EXPLANATION] = explanation
-        inst.__dict__['_' + MODEL] = rai_insights.model
 
-        with open(top_dir / META_JSON, 'r') as meta_file:
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
+        directory_manager = DirectoryManager(
+            parent_directory_path=path,
+            sub_directory_name=all_cf_dirs[0])
+        data_directory = directory_manager.get_data_directory()
+
+        with open(data_directory / META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
+
+        explanation_path = data_directory / ManagerNames.EXPLAINER
+        if explanation_path.exists():
+            explanation = load_explanation(explanation_path)
+            inst.__dict__[EXPLANATION] = explanation
+
+        inst.__dict__['_' + MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features
