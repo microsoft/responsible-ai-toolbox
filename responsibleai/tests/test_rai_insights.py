@@ -5,11 +5,14 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import numpy as np
+import os
 import pandas as pd
 import pytest
 
 from responsibleai import RAIInsights, ModelTask
 from responsibleai._internal.constants import ManagerNames
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 from .causal_manager_validator import validate_causal
 from .common_utils import (create_adult_income_dataset,
@@ -231,6 +234,11 @@ def run_rai_insights(model, train_data, test_data, target_column,
         path = Path(tempdir) / 'rai_test_path'
         # save the rai_insights
         rai_insights.save(path)
+
+        # Validate the directory structure of the state saved
+        # by the managers.
+        validate_state_directory(path, manager_type)
+
         # load the rai_insights
         rai_insights = RAIInsights.load(path)
 
@@ -248,6 +256,36 @@ def run_rai_insights(model, train_data, test_data, target_column,
             # validate adding new explainer config after deserialization works
             setup_explainer(rai_insights)
             validate_explainer(rai_insights, train_data, test_data, classes)
+
+
+def validate_state_directory(path, manager_type, classes=None):
+    all_dirs = os.listdir(path)
+    assert manager_type in all_dirs
+    all_component_paths = os.listdir(path / manager_type)
+    for component_path in all_component_paths:
+        # TODO: Add code to check if the component_path is GUID
+        dm = DirectoryManager(path / manager_type, component_path)
+
+        config_path = dm.get_config_directory()
+        data_path = dm.get_data_directory()
+        explainer_path = dm.get_explainer_directory()
+
+        if manager_type == ManagerNames.EXPLAINER:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
+        elif manager_type == ManagerNames.CAUSAL:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not explainer_path.exists()
 
 
 def validate_rai_insights(
