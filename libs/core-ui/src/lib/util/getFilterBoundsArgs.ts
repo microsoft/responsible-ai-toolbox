@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, IJointMeta } from "@responsible-ai/core-ui";
+import { IFilter } from "../Interfaces/IFilter";
+
+import { IJointMeta } from "./JointDataset";
 
 export function getFilterBoundsArgs(
   metaDict: IJointMeta,

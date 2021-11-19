@@ -1,13 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ICompositeFilter,
-  IFilter,
-  JointDataset
-} from "@responsible-ai/core-ui";
+import { ICompositeFilter, IFilter } from "../Interfaces/IFilter";
 
 import { getBasicFilterString } from "./getBasicFilterString";
+import { JointDataset } from "./JointDataset";
 
 export function getCompositeFilterString(
   compositeFilters: ICompositeFilter[],
