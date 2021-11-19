@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FilterMethods, IFilter, JointDataset } from "@responsible-ai/core-ui";
+import { FilterMethods, IFilter } from "../Interfaces/IFilter";
 
 import { getFilterBoundsArgs } from "./getFilterBoundsArgs";
+import { JointDataset } from "./JointDataset";
 
 export function getBasicFilterString(
   filters: IFilter[],
