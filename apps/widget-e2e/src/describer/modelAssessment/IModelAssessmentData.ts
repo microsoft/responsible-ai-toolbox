@@ -75,6 +75,7 @@ export interface IFeatureImportanceData {
   noY?: boolean;
   topFeaturesText?: string;
   topFeaturesCurrentValue?: string;
+  datapoint?: number;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };

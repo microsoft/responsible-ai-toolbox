@@ -21,6 +21,7 @@ export class ScatterChart extends Chart<IScatter> {
   }
   public clickNthPoint(idx: number): void {
     const offset = this.getNthPointOffset(idx);
+    cy.task("log", offset);
     if (!offset) {
       return;
     }

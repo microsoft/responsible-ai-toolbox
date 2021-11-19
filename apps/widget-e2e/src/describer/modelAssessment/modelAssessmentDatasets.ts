@@ -66,7 +66,9 @@ const modelAssessmentDatasets = {
       noDataset: false,
       noFeatureImportance: false,
       topFeaturesCurrentValue: "4",
-      topFeaturesText: "Top 4 features by their importance"
+      topFeaturesText: "Top 4 features by their importance",
+      noLocalImportance: false,
+      datapoint: 500
     },
     featureNames: [
       "marital-status",

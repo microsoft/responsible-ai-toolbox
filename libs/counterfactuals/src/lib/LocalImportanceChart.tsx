@@ -58,14 +58,16 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <AccessibleChart
-            plotlyProps={{
-              config: themedProps.config,
-              data: themedProps.data,
-              layout: themedProps.layout
-            }}
-            theme={getTheme()}
-          />
+          <div id={"WhatIfFeatureImportanceBar"}>
+            <AccessibleChart
+              plotlyProps={{
+                config: themedProps.config,
+                data: themedProps.data,
+                layout: themedProps.layout
+              }}
+              theme={getTheme()}
+            />
+          </div>
         </Stack.Item>
       </Stack>
     );
