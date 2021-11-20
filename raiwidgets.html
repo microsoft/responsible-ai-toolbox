@@ -274,9 +274,11 @@ names of “Model &lt;n&gt;” are generated</p></li>
 
 <dl class="py class">
 <dt id="raiwidgets.ModelAnalysisDashboard">
-<em class="property">class </em><code class="sig-prename descclassname">raiwidgets.</code><code class="sig-name descname">ModelAnalysisDashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span><span class="p">:</span> <span class="n">responsibleai.rai_insights.rai_insights.RAIInsights</span></em>, <em class="sig-param"><span class="n">public_ip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">locale</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/microsoft/responsible-ai-widgets/blob/main/raiwidgets/raiwidgets/model_analysis_dashboard.py#L14-L65"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raiwidgets.ModelAnalysisDashboard" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">raiwidgets.dashboard.Dashboard</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">raiwidgets.</code><code class="sig-name descname">ModelAnalysisDashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span><span class="p">:</span> <span class="n">responsibleai.rai_insights.rai_insights.RAIInsights</span></em>, <em class="sig-param"><span class="n">public_ip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">locale</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/microsoft/responsible-ai-widgets/blob/main/raiwidgets/raiwidgets/model_analysis_dashboard.py#L12-L34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raiwidgets.ModelAnalysisDashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>The dashboard class, wraps the dashboard component.</p>
+<p>Note: this class is now deprecated, please use the
+ResponsibleAIDashboard instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -312,6 +314,23 @@ Must have fewer than 10000 rows and fewer than 1000 columns.</p></li>
 Overwrites any existing dataset on the explanation object.</p></li>
 <li><p><strong>classes</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><em>]</em>) – The class names.</p></li>
 <li><p><strong>features</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><em>]</em>) – Feature names.</p></li>
+<li><p><strong>public_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Optional. If running on a remote vm,
+the external public ip address of the VM.</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The port to use on locally hosted service.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="raiwidgets.ResponsibleAIDashboard">
+<em class="property">class </em><code class="sig-prename descclassname">raiwidgets.</code><code class="sig-name descname">ResponsibleAIDashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">analysis</span><span class="p">:</span> <span class="n">responsibleai.rai_insights.rai_insights.RAIInsights</span></em>, <em class="sig-param"><span class="n">public_ip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">locale</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/microsoft/responsible-ai-widgets/blob/main/raiwidgets/raiwidgets/responsibleai_dashboard.py#L14-L65"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#raiwidgets.ResponsibleAIDashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">raiwidgets.dashboard.Dashboard</span></code></p>
+<p>The dashboard class, wraps the dashboard component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>analysis</strong> (<em>RAIInsights</em>) – An object that represents an RAIInsights.</p></li>
 <li><p><strong>public_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Optional. If running on a remote vm,
 the external public ip address of the VM.</p></li>
 <li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The port to use on locally hosted service.</p></li>
