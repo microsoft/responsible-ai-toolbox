@@ -15,7 +15,7 @@ from .interfaces import WidgetRequestResponseConstants
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
 
-class ModelAnalysisDashboardInput:
+class ResponsibleAIDashboardInput:
     def __init__(
             self,
             analysis: RAIInsights):

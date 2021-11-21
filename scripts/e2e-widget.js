@@ -10,7 +10,7 @@ const baseDir = path.join(
 );
 const filePrefix = "responsibleaitoolbox";
 
-const hostReg = /^ModelAssessment started at (http:\/\/localhost:\d+)$/m;
+const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
 
 /**
