@@ -49,7 +49,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     return (
       <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} id="LocalImportanceDescription">
             {localization.formatString(
               localization.Counterfactuals.localImportanceDescription,
               this.props.rowNumber,

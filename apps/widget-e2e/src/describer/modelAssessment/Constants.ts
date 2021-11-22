@@ -31,5 +31,7 @@ export enum Locators {
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
-  NewCohortSpan = "span:contains('CohortCreateE2E')"
+  NewCohortSpan = "span:contains('CohortCreateE2E')",
+  WICDatapointDropbox = "#IndividualFeatureContainer div[class^='legendAndText'] div[class^='ms-ComboBox-container']",
+  WICLocalImportanceDescription = "#LocalImportanceDescription"
 }
