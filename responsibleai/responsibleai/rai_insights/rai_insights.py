@@ -492,7 +492,7 @@ class RAIInsights(object):
     def _reset_data_frame_index(self, some_dataframe):
         """Reset the index if duplicates exist in the dataframe index.
            Create a new dataframe if the input dataframe has duplicate index.
-        
+
         :param some_dataframe: Dataframe to check for duplicate index
         :type some_dataframe: pd.DataFrame
         :return: Dataframe without duplicate indices.
