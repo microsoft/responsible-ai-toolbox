@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ScatterChart } from "apps/widget-e2e/src/util/ScatterChart";
-import { IModelAssessmentData } from "../IModelAssessmentData";
 import { localization } from "@responsible-ai/localization";
-import { describeSubBarChart } from "./describeSubBarChart";
+
+import { getSpan } from "../../../util/getSpan";
+import { ScatterChart } from "../../../util/ScatterChart";
 import { Locators } from "../Constants";
-import { getSpan } from "apps/widget-e2e/src/util/getSpan";
+import { IModelAssessmentData } from "../IModelAssessmentData";
+
+import { describeSubBarChart } from "./describeSubBarChart";
 
 export function describeWhatIfCommonFunctionalities(
   dataShape: IModelAssessmentData

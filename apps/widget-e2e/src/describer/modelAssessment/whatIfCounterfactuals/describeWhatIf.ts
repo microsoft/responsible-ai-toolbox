@@ -1,5 +1,9 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
 
 const testName = "What If";
