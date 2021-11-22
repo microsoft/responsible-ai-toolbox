@@ -261,6 +261,24 @@ class TestRAIInsightsValidations:
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
 
+    def test_unsupported_train_test_types(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        X_train['target'] = y_train
+        X_test['bad_target'] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train.values,
+                test=X_test.values,
+                target_column='target',
+                task_type='classification')
+        assert "Unsupported data type for either train or test. " + \
+            "Expecting pandas Dataframe for train and test." in str(ucve.value)
+
     def test_classes(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
