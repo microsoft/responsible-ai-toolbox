@@ -18,6 +18,7 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
+import { adultCensusWithDataBalance } from "../interpret/__mock_data__/adultCensus";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -145,6 +146,7 @@ export const applications: IApplications = <const>{
   },
   interpret: {
     datasets: {
+      adultCensus: { data: adultCensusWithDataBalance },
       automlMimicAdult: { data: automlMimicAdult },
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },

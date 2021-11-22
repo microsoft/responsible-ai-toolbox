@@ -74,13 +74,7 @@ export class DatasetExplorerTab extends React.Component<
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
-    if (!this.context.jointDataset.hasDataset) {
-      return (
-        <MissingParametersPlaceholder>
-          {localization.Interpret.DatasetExplorer.missingParameters}
-        </MissingParametersPlaceholder>
-      );
-    }
+    // TODO: If we remove the check for jointDataset.hasDataset, fix bugs that may occur
 
     if (this.state.chartProps === undefined) {
       return <div />;
@@ -245,6 +239,22 @@ export class DatasetExplorerTab extends React.Component<
                     }
                   />
                 </div>
+                <h1>Hi</h1>
+                {/* TODO: Insert Data Balance visualizations here */}
+                {
+                  // this.context.
+                  // ?.aggregateBalanceMeasures?.measures?.atkinsonIndex
+                }
+                {canRenderChart ? (
+                  <AccessibleChart
+                    plotlyProps={plotlyProps}
+                    theme={getTheme()}
+                  />
+                ) : (
+                  <MissingParametersPlaceholder>
+                    {localization.Interpret.ValidationErrors.datasizeError}
+                  </MissingParametersPlaceholder>
+                )}
               </div>
             </div>
           </div>

@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDataBalanceMeasures } from "./DataBalanceInterfaces";
+
 export interface IDataset {
   task_type: "classification" | "regression";
   true_y: number[];
@@ -11,6 +13,7 @@ export interface IDataset {
   categorical_features: string[];
   class_names?: string[];
   target_column?: string;
+  dataBalanceMeasures?: IDataBalanceMeasures;
 }
 
 // TODO Remove DatasetSummary when possible
