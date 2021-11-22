@@ -25,7 +25,7 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
                                                    MATRIX, METRIC_NAME,
                                                    METRIC_VALUE, TN, TP,
                                                    VALUES)
-from erroranalysis._internal.metrics import (get_ordered_labels,
+from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 
@@ -359,13 +359,9 @@ def run_error_analyzer(model,
                                            num_bins=num_bins)
     validation_data = X_test
     if filters is not None or composite_filters is not None:
-        validation_data = filter_from_cohort(X_test,
+        validation_data = filter_from_cohort(error_analyzer,
                                              filters,
-                                             composite_filters,
-                                             feature_names,
-                                             y_test,
-                                             categorical_features,
-                                             error_analyzer.categories)
+                                             composite_filters)
         y_test = validation_data[TRUE_Y]
         validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
         if not isinstance(X_test, pd.DataFrame):
@@ -398,9 +394,9 @@ def get_expected_metric_error(error_analyzer, metric, model,
         pred_y = model.predict(validation_data)
         can_be_binary = error_analyzer.model_task == ModelTask.CLASSIFICATION
         if can_be_binary and metric != Metrics.ACCURACY_SCORE:
-            ordered_labels = get_ordered_labels(error_analyzer.classes,
-                                                y_test,
-                                                pred_y)
+            ordered_labels = get_ordered_classes(error_analyzer.classes,
+                                                 y_test,
+                                                 pred_y)
             if len(ordered_labels) == 2:
                 return func(y_test, pred_y, pos_label=ordered_labels[1])
         return func(y_test, pred_y)

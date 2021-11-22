@@ -9,9 +9,10 @@ from .explanation_dashboard import ExplanationDashboard
 from .fairness_dashboard import FairnessDashboard
 from .model_analysis_dashboard import ModelAnalysisDashboard
 from .model_performance_dashboard import ModelPerformanceDashboard
+from .responsibleai_dashboard import ResponsibleAIDashboard
 
 __version__ = version
 
 __all__ = ['FairnessDashboard', 'ExplanationDashboard',
            'ErrorAnalysisDashboard', 'ModelPerformanceDashboard',
-           'ModelAnalysisDashboard']
+           'ModelAnalysisDashboard', 'ResponsibleAIDashboard']
