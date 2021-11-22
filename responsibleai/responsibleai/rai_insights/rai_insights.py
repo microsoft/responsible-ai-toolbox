@@ -321,7 +321,6 @@ class RAIInsights(object):
                 "Expecting pandas Dataframe for train and test."
             )
 
-
     @property
     def causal(self) -> CausalManager:
         """Get the causal manager.
