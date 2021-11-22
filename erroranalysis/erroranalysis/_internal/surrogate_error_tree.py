@@ -21,7 +21,7 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
-from erroranalysis._internal.metrics import get_ordered_labels, metric_to_func
+from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -75,27 +75,13 @@ def compute_error_tree(analyzer,
         num_leaves = DEFAULT_NUM_LEAVES
     if min_child_samples is None:
         min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
-    is_model_analyzer = hasattr(analyzer, MODEL)
-    if is_model_analyzer:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories)
-    else:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories,
-                                         analyzer.pred_y)
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
+    is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -457,7 +443,7 @@ def compute_metric_value(func, classes, true_y, pred_y, metric):
                           metric == Metrics.PRECISION_SCORE or
                           metric == Metrics.F1_SCORE)
     if requires_pos_label:
-        ordered_labels = get_ordered_labels(classes, true_y, pred_y)
+        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
         if ordered_labels is not None and len(ordered_labels) == 2:
             return func(true_y, pred_y, pos_label=ordered_labels[1])
     return func(true_y, pred_y)

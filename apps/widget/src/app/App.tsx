@@ -20,7 +20,7 @@ export class App extends React.Component {
         return <Interpret dashboardType={config.dashboardType} />;
       case "ErrorAnalysis":
         return <ErrorAnalysis />;
-      case "ModelAssessment":
+      case "ResponsibleAI":
         return <ModelAssessment />;
       default:
         return "Not Found";
