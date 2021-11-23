@@ -64,8 +64,6 @@ class CounterfactualConfig(BaseConfig):
         self.has_computation_failed = False
         self.failure_reason = None
 
-
-
     def __eq__(self, other_cf_config):
         return (
             self.method == other_cf_config.method and
