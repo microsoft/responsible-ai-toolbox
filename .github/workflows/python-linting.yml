@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
 
-    - name: Install linting dependencies
-      run: |
-        pip install -r requirements-linting.txt
+      - name: Install linting dependencies
+        run: |
+          pip install -r requirements-linting.txt
 
-    - name: flake8
-      run: flake8
+      - name: flake8
+        run: flake8
