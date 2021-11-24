@@ -31,5 +31,18 @@ export enum Locators {
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
-  NewCohortSpan = "span:contains('CohortCreateE2E')"
+  NewCohortSpan = "span:contains('CohortCreateE2E')",
+  WICDatapointDropbox = "#IndividualFeatureContainer div[class^='legendAndText'] div[class^='ms-ComboBox-container']",
+  WICLocalImportanceDescription = "#LocalImportanceDescription",
+  WhatIfScatterChartYAxis = "#IndividualFeatureContainer div[class^='rotatedVerticalBox']",
+  WhatIfScatterChartYAxisFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
+  WhatIfScatterChartYAxisFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
+  WhatIfAxisPanel = "#AxisConfigPanel",
+  WhatIfYAxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
+  WhatIfYAxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
+  WhatIfYAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
+  WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
+  WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
+  WhatIfYAxisAxisValueNewValue = "#AxisConfigPanel span:contains('True Y')",
+  WhatIfScatterChartYAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('True Y')"
 }

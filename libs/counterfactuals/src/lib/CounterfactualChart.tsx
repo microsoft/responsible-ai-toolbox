@@ -315,6 +315,7 @@ export class CounterfactualChart extends React.PureComponent<
               </div>
               <div className={classNames.legendAndText}>
                 <ComboBox
+                  id={"CounterfactualSelectedDatapoint"}
                   className={classNames.legendLabel}
                   label={localization.Counterfactuals.selectedDatapoint}
                   onChange={this.selectPointFromDropdown}
