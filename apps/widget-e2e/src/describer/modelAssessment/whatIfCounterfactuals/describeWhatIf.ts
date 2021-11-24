@@ -3,8 +3,8 @@
 
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
-import { describeAxisFlyouts } from "./describeAxisFlyouts";
 
+import { describeAxisFlyouts } from "./describeAxisFlyouts";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
 
 const testName = "What If";
