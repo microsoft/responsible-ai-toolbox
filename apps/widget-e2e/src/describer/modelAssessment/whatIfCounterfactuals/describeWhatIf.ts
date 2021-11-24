@@ -3,6 +3,7 @@
 
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+import { describeAxisFlyouts } from "./describeAxisFlyouts";
 
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
 
@@ -23,5 +24,6 @@ export function describeWhatIf(
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
     describeWhatIfCommonFunctionalities(datasetShape);
+    describeAxisFlyouts(datasetShape);
   });
 }
