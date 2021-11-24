@@ -15,7 +15,7 @@ export function getCategoricalOption(
     if (meta?.label === featureName && meta?.isCategorical) {
       const options = meta?.sortedCategoricalValues?.map(
         (optionText: string) => {
-          return { key: optionText, text: optionText };
+          return { key: `${optionText}`, text: `${optionText}` };
         }
       );
       return {
