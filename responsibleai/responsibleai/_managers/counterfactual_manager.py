@@ -46,6 +46,9 @@ class CounterfactualConfig(BaseConfig):
     HAS_COMPUTATION_FAILED = 'has_computation_failed'
     FAILURE_REASON = 'failure_reason'
 
+    CONFIG_FILE_NAME = 'config.json'
+    RESULT_FILE_NAME = 'result.json'
+
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
@@ -95,7 +98,38 @@ class CounterfactualConfig(BaseConfig):
             CounterfactualConfig.DESIRED_CLASS: self.desired_class,
             CounterfactualConfig.PERMITTED_RANGE: self.permitted_range,
             CounterfactualConfig.FEATURES_TO_VARY: self.features_to_vary,
-            CounterfactualConfig.FEATURE_IMPORTANCE: self.feature_importance}
+            CounterfactualConfig.FEATURE_IMPORTANCE: self.feature_importance
+        }
+
+    def save_config(self, config_directory_path):
+        config_file_path = (config_directory_path /
+                            CounterfactualConfig.CONFIG_FILE_NAME)
+        with open(config_file_path, 'w') as config_file:
+            json.dump(
+                self.get_config_as_dict(), config_file)
+
+    @staticmethod
+    def load_config(config_directory_path):
+        config_path = (config_directory_path /
+                       CounterfactualConfig.CONFIG_FILE_NAME)
+        with open(config_path, 'r') as config_file:
+            cf_config = json.load(config_file)
+
+        counterfactual_config = CounterfactualConfig(
+            method=cf_config[CounterfactualConfig.METHOD],
+            continuous_features=cf_config[
+                CounterfactualConfig.CONTINUOUS_FEATURES],
+            total_CFs=cf_config[CounterfactualConfig.TOTAL_CFS],
+            desired_class=cf_config[CounterfactualConfig.DESIRED_CLASS],
+            desired_range=cf_config[CounterfactualConfig.DESIRED_RANGE],
+            permitted_range=cf_config[
+                CounterfactualConfig.PERMITTED_RANGE],
+            features_to_vary=cf_config[
+                CounterfactualConfig.FEATURES_TO_VARY],
+            feature_importance=cf_config[
+                CounterfactualConfig.FEATURE_IMPORTANCE])
+
+        return counterfactual_config
 
     def get_result(self):
         """Returns the dictionary representation of result of the computation
@@ -119,6 +153,31 @@ class CounterfactualConfig(BaseConfig):
 
         return result
 
+    def save_result(self, data_directory_path):
+        data_path = (data_directory_path /
+                     CounterfactualConfig.RESULT_FILE_NAME)
+        with open(data_path, 'w') as data_file:
+            json.dump(self.get_result(), data_file)
+
+    def load_result(self, data_directory_path):
+        result_path = (data_directory_path /
+                       CounterfactualConfig.RESULT_FILE_NAME)
+        with open(result_path, 'r') as result_file:
+            cf_result = json.load(result_file)
+
+        if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
+            self.counterfactual_obj = \
+                CounterfactualExplanations.from_json(
+                    cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
+        else:
+            self.counterfactual_obj = None
+        self.has_computation_failed = \
+            cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED]
+        self.failure_reason = cf_result[
+            CounterfactualConfig.FAILURE_REASON]
+        self.is_computed = cf_result[
+            CounterfactualConfig.IS_COMPUTED]
+
 
 class CounterfactualManager(BaseManager):
     _TRAIN = '_train'
@@ -128,8 +187,6 @@ class CounterfactualManager(BaseManager):
     _TASK_TYPE = '_task_type'
     _CATEGORICAL_FEATURES = '_categorical_features'
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
-    CONFIG_FILE_NAME = 'config.json'
-    RESULT_FILE_NAME = 'result.json'
 
     def __init__(self, model, train, test, target_column, task_type,
                  categorical_features):
@@ -429,19 +486,13 @@ class CounterfactualManager(BaseManager):
         for counterfactual_config in self._counterfactual_config_list:
             directory_manager = DirectoryManager(parent_directory_path=path)
 
-            config_path = (directory_manager.create_config_directory() /
-                           CounterfactualManager.CONFIG_FILE_NAME)
-            with open(config_path, 'w') as config_file:
-                json.dump(
-                    counterfactual_config.get_config_as_dict(),
-                    config_file)
+            counterfactual_config.save_config(
+                directory_manager.create_config_directory()
+            )
 
-            data_path = (directory_manager.create_data_directory() /
-                         CounterfactualManager.RESULT_FILE_NAME)
-            with open(data_path, 'w') as data_file:
-                json.dump(
-                    counterfactual_config.get_result(),
-                    data_file)
+            counterfactual_config.save_result(
+                directory_manager.create_data_directory()
+            )
 
     @staticmethod
     def _load(path, rai_insights):
@@ -475,35 +526,15 @@ class CounterfactualManager(BaseManager):
                 parent_directory_path=path,
                 sub_directory_name=counterfactual_config_dir)
 
-            config_path = (directory_manager.get_config_directory() /
-                           CounterfactualManager.CONFIG_FILE_NAME)
-            with open(config_path, 'r') as config_file:
-                cf_config = json.load(config_file)
+            counterfactual_config = CounterfactualConfig.load_config(
+                directory_manager.get_config_directory()
+            )
 
-            counterfactual_config = CounterfactualConfig(
-                method=cf_config[CounterfactualConfig.METHOD],
-                continuous_features=cf_config[
-                    CounterfactualConfig.CONTINUOUS_FEATURES],
-                total_CFs=cf_config[CounterfactualConfig.TOTAL_CFS],
-                desired_class=cf_config[CounterfactualConfig.DESIRED_CLASS],
-                desired_range=cf_config[CounterfactualConfig.DESIRED_RANGE],
-                permitted_range=cf_config[
-                    CounterfactualConfig.PERMITTED_RANGE],
-                features_to_vary=cf_config[
-                    CounterfactualConfig.FEATURES_TO_VARY],
-                feature_importance=cf_config[
-                    CounterfactualConfig.FEATURE_IMPORTANCE])
+            counterfactual_config.load_result(
+                directory_manager.get_data_directory()
+            )
 
-            result_path = (directory_manager.get_data_directory() /
-                           CounterfactualManager.RESULT_FILE_NAME)
-            with open(result_path, 'r') as result_file:
-                cf_result = json.load(result_file)
-
-            if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
-                counterfactual_config.counterfactual_obj = \
-                    CounterfactualExplanations.from_json(
-                        cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
-
+            if counterfactual_config.counterfactual_obj is not None:
                 # Validate the serialized output against schema
                 schema = CounterfactualManager._get_counterfactual_schema(
                     version=counterfactual_config.counterfactual_obj.metadata[
@@ -512,14 +543,6 @@ class CounterfactualManager(BaseManager):
                     json.loads(
                         counterfactual_config.counterfactual_obj.to_json()),
                     schema)
-            else:
-                counterfactual_config.counterfactual_obj = None
-            counterfactual_config.has_computation_failed = \
-                cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED]
-            counterfactual_config.failure_reason = cf_result[
-                CounterfactualConfig.FAILURE_REASON]
-            counterfactual_config.is_computed = cf_result[
-                CounterfactualConfig.IS_COMPUTED]
 
             inst.__dict__[
                 CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST].append(
