@@ -271,17 +271,18 @@ class CounterfactualConfig(BaseConfig):
                 file_path)
 
     def load_result(self, data_directory_path):
-        result_path = (data_directory_path /
-                       (_CommonSchemaConstants.METADATA + '.json'))
-        metadata = None
-        with open(result_path, 'r') as result_file:
-            metadata = json.load(result_file)
+        metadata_file_path = (data_directory_path /
+                              (_CommonSchemaConstants.METADATA + '.json'))
 
-        if metadata is not None:
+        if metadata_file_path.exists():
+            with open(metadata_file_path, 'r') as result_file:
+                metadata = json.load(result_file)
+
             if metadata['version'] == _SchemaVersions.V1:
                 cf_schema_keys = _V1SchemaConstants.ALL
             else:
                 cf_schema_keys = _V2SchemaConstants.ALL
+
             counterfactual_examples_dict = {}
             for counterfactual_examples_key in cf_schema_keys:
                 result_path = (data_directory_path /
