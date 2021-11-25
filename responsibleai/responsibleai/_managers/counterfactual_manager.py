@@ -17,6 +17,7 @@ from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
+                                      SchemaErrorException,
                                       UserConfigValidationException)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
@@ -29,6 +30,80 @@ class CounterfactualConstants:
     REGRESSOR = 'regressor'
     SKLEARN = 'sklearn'
     RANDOM = 'random'
+
+
+class _CommonSchemaConstants:
+    LOCAL_IMPORTANCE = 'local_importance'
+    METADATA = 'metadata'
+    SUMMARY_IMPORTANCE = 'summary_importance'
+    VERSION = 'version'
+
+
+class _V1SchemaConstants:
+    CF_EXAMPLES_LIST = 'cf_examples_list'
+    LOCAL_IMPORTANCE = _CommonSchemaConstants.LOCAL_IMPORTANCE
+    METADATA = _CommonSchemaConstants.METADATA
+    SUMMARY_IMPORTANCE = _CommonSchemaConstants.SUMMARY_IMPORTANCE
+
+    ALL = [CF_EXAMPLES_LIST, LOCAL_IMPORTANCE, METADATA, SUMMARY_IMPORTANCE]
+
+
+class _V2SchemaConstants:
+    CFS_LIST = 'cfs_list'
+    DATA_INTERFACE = 'data_interface'
+    DESIRED_CLASS = 'desired_class'
+    DESIRED_RANGE = 'desired_range'
+    FEATURE_NAMES = 'feature_names'
+    FEATURE_NAMES_INCLUDING_TARGET = 'feature_names_including_target'
+    LOCAL_IMPORTANCE = _CommonSchemaConstants.LOCAL_IMPORTANCE
+    METADATA = _CommonSchemaConstants.METADATA
+    MODEL_TYPE = 'model_type'
+    SUMMARY_IMPORTANCE = _CommonSchemaConstants.SUMMARY_IMPORTANCE
+    TEST_DATA = 'test_data'
+
+    ALL = [CFS_LIST, DATA_INTERFACE, DESIRED_CLASS, DESIRED_RANGE,
+           FEATURE_NAMES, FEATURE_NAMES_INCLUDING_TARGET,
+           LOCAL_IMPORTANCE, METADATA, MODEL_TYPE,
+           SUMMARY_IMPORTANCE, TEST_DATA]
+
+
+class _SchemaVersions:
+    V1 = '1.0'
+    V2 = '2.0'
+
+    ALL_VERSIONS = [V1, V2]
+
+
+def _get_schema_version(counterfactuals_dict):
+    """
+    Get the version from the serialized version of the
+    counterfactual examples.
+
+    :param counterfactuals_dict: Serialized version of the
+                                 counterfactual example.
+    :type counterfactuals_dict: Dict
+    """
+    if _CommonSchemaConstants.METADATA not in counterfactuals_dict:
+        raise SchemaErrorException(
+            "No metadata field found in serialized counterfactual output"
+        )
+
+    metadata = counterfactuals_dict[_CommonSchemaConstants.METADATA]
+    if _CommonSchemaConstants.VERSION not in metadata:
+        raise SchemaErrorException(
+            "No version field found in serialized counterfactual output"
+        )
+
+    version = metadata[_CommonSchemaConstants.VERSION]
+    if version not in _SchemaVersions.ALL_VERSIONS:
+        raise SchemaErrorException(
+            "Schema version {0} not supported."
+            "Support versions are {1}".format(
+                version, ','.join(_SchemaVersions.ALL_VERSIONS)
+            )
+        )
+
+    return version
 
 
 class CounterfactualConfig(BaseConfig):
@@ -154,29 +229,87 @@ class CounterfactualConfig(BaseConfig):
         return result
 
     def save_result(self, data_directory_path):
-        data_path = (data_directory_path /
-                     CounterfactualConfig.RESULT_FILE_NAME)
-        with open(data_path, 'w') as data_file:
-            json.dump(self.get_result(), data_file)
+        cf_result = self.get_result()
+        if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
+            counterfactuals_dict = json.loads(
+                cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ]
+            )
+
+            schema_version = _get_schema_version(counterfactuals_dict)
+            if schema_version == _SchemaVersions.V1:
+                cf_schema_keys = _V1SchemaConstants.ALL
+            else:
+                cf_schema_keys = _V2SchemaConstants.ALL
+
+            for counterfactual_examples_key in cf_schema_keys:
+                file_path = (data_directory_path /
+                             (counterfactual_examples_key + '.json'))
+                with open(file_path, 'w') as file_path:
+                    json.dump(
+                        counterfactuals_dict[counterfactual_examples_key],
+                        file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED],
+                file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.FAILURE_REASON + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.FAILURE_REASON],
+                file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.IS_COMPUTED + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.IS_COMPUTED],
+                file_path)
 
     def load_result(self, data_directory_path):
         result_path = (data_directory_path /
-                       CounterfactualConfig.RESULT_FILE_NAME)
+                       (_CommonSchemaConstants.METADATA + '.json'))
+        metadata = None
         with open(result_path, 'r') as result_file:
-            cf_result = json.load(result_file)
+            metadata = json.load(result_file)
 
-        if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
+        if metadata is not None:
+            if metadata['version'] == _SchemaVersions.V1:
+                cf_schema_keys = _V1SchemaConstants.ALL
+            else:
+                cf_schema_keys = _V2SchemaConstants.ALL
+            counterfactual_examples_dict = {}
+            for counterfactual_examples_key in cf_schema_keys:
+                result_path = (data_directory_path /
+                               (counterfactual_examples_key + '.json'))
+                with open(result_path, 'r') as result_file:
+                    counterfactual_examples_dict[
+                        counterfactual_examples_key] = json.load(result_file)
+
+            counterfactuals_json_str = json.dumps(counterfactual_examples_dict)
             self.counterfactual_obj = \
-                CounterfactualExplanations.from_json(
-                    cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ])
+                CounterfactualExplanations.from_json(counterfactuals_json_str)
         else:
             self.counterfactual_obj = None
-        self.has_computation_failed = \
-            cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED]
-        self.failure_reason = cf_result[
-            CounterfactualConfig.FAILURE_REASON]
-        self.is_computed = cf_result[
-            CounterfactualConfig.IS_COMPUTED]
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.has_computation_failed = json.load(result_file)
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.FAILURE_REASON + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.failure_reason = json.load(result_file)
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.IS_COMPUTED + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.is_computed = json.load(result_file)
 
 
 class CounterfactualManager(BaseManager):
