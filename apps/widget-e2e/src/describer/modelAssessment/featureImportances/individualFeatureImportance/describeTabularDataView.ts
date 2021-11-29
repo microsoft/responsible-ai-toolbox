@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { selectRow } from "../../../../util/Table";
+import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
@@ -19,7 +19,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
         );
     });
 
-    xit("should have right number of incorrect prediction datapoints", () => {
+    it("should have right number of incorrect prediction datapoints", () => {
       cy.get(Locators.IFIExpandCollapseButton).click();
       cy.get(Locators.IFIPredictionSpan)
         .eq(1)
@@ -33,27 +33,27 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       cy.get(Locators.IFIScrollableTable).should("exist");
     });
 
-    // describe("Table rows should be selectable", () => {
-    //   it("should select none by default", () => {
-    //     cy.get(Locators.IFITableRowSelected).should("not.exist");
-    //   });
-    //   it("should show message on sub chart", () => {
-    //     const message =
-    //       !dataShape.featureImportanceData?.noLocalImportance &&
-    //       !dataShape.featureImportanceData?.noFeatureImportance
-    //         ? "Select a point to see its local importance"
-    //         : "Provide local feature importances to see how each feature impacts individual predictions.";
-    //     cy.get("#subPlotContainer").should("contain.text", message);
-    //   });
-    //   it("should select the row", () => {
-    //     selectRow("Index", "4");
-    //     cy.get(Locators.IFIDropdownSelectedOption).should(
-    //       "contain.text",
-    //       dataShape.featureImportanceData?.dropdownRowName
-    //     );
-    //     selectRow("Index", "4");
-    //   });
-    // });
+    describe("Table rows should be selectable", () => {
+      it("should select none by default", () => {
+        cy.get(Locators.IFITableRowSelected).should("not.exist");
+      });
+      it("should show message on sub chart", () => {
+        const message =
+          !dataShape.featureImportanceData?.noLocalImportance &&
+          !dataShape.featureImportanceData?.noFeatureImportance
+            ? "Select a point to see its local importance"
+            : "Provide local feature importances to see how each feature impacts individual predictions.";
+        cy.get("#subPlotContainer").should("contain.text", message);
+      });
+      it("should select the row", () => {
+        selectRow("Index", "4");
+        cy.get(Locators.IFIDropdownSelectedOption).should(
+          "contain.text",
+          dataShape.featureImportanceData?.dropdownRowName
+        );
+        selectRow("Index", "4");
+      });
+    });
 
     if (
       !dataShape.featureImportanceData?.noLocalImportance &&
