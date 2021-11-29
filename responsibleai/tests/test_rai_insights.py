@@ -268,24 +268,24 @@ def validate_state_directory(path, manager_type, classes=None):
 
         config_path = dm.get_config_directory()
         data_path = dm.get_data_directory()
-        explainer_path = dm.get_explainer_directory()
+        models_path = dm.get_models_directory()
 
         if manager_type == ManagerNames.EXPLAINER:
             assert not config_path.exists()
             assert data_path.exists()
-            assert not explainer_path.exists()
+            assert not models_path.exists()
         elif manager_type == ManagerNames.COUNTERFACTUAL:
             assert config_path.exists()
             assert data_path.exists()
-            assert not explainer_path.exists()
+            assert not models_path.exists()
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             assert config_path.exists()
             assert data_path.exists()
-            assert not explainer_path.exists()
+            assert not models_path.exists()
         elif manager_type == ManagerNames.CAUSAL:
             assert not config_path.exists()
             assert data_path.exists()
-            assert not explainer_path.exists()
+            assert not models_path.exists()
 
 
 def validate_rai_insights(
