@@ -24,6 +24,40 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.15.0
+
+- new features
+  - ## Model Analysis
+    - move raw data into /data directory
+    - perform schema validations during compute and load
+    - rename model analysis to rai insights
+    - rename ModelAnalysisDashboard to ResponsibleAIDashboard
+    - directory based state management for model analysis tools
+    - add .json extension to train and test dataset
+  - ## Error Analysis
+    - port ErrorReport schema validation for error analysis to responsibleai
+    - add error analysis error importances (aka correlation of features with error) to model analyzer API
+    - add support for special classification outcome filter to error analysis backend to work with model analysis filters
+  - ## Counterfactual
+    - remove save as new data point option for read-only mode on What-if counterfactual
+- bug fixes
+  - ## Model Analysis
+    - fix cohort text out of button box
+    - fix bug when the tree node has 0 errors and N correct, the raw data table shows the opposite with N+1 errors and -1 correct.
+  - ## Counterfactual
+    - fix sort feature columns by counterfactual
+  - ## Error Analysis
+    - fix map shift text not being clear, provide conditional dialog text based on current view
+    - fix tree map connection line doubled after switching to dark theme
+- ## other
+  - update readme links to be absolute instead of relative path
+  - add more UX IFI tests for responsibleaitoolbox-classification-model-assessment notebook
+  - several E2E UX test fixes
+  - add E2E UX tests for Feature Importance - Cohort functionality
+  - add test to render ModelAnalysisDashboard after save and load
+  - add test to render ResponsibleAIDashboard after save and load
+  - add E2E tests for What-if Counterfactuals - common functionalities & Y Axis Flyout
+
 ## v0.14.0
 
 - educational materials
