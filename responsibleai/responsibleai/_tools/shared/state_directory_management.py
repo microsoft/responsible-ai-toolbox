@@ -11,11 +11,11 @@ class DirectoryManager:
 
     CONFIGURATION = 'configuration'
     DATA = 'data'
-    EXPLAINER = 'explainer'
+    GENERATORS = 'generators'
 
     def __init__(self, parent_directory_path, sub_directory_name=None):
         """Directory manager for managing the configuration,
-           dashboard data and explainers need to recompose the state
+           dashboard data and generators need to recompose the state
            in the various managers.
 
         :param parent_directory_path: Directory path of where the state data
@@ -68,18 +68,18 @@ class DirectoryManager:
 
         return data_directory
 
-    def create_explainer_directory(self):
-        """Create the explainer directory and return its path.
+    def create_generators_directory(self):
+        """Create the generators directory and return its path.
 
-        :returns: Path to the explainer directory.
+        :returns: Path to the generators directory.
         """
-        explainer_directory = (Path(self.parent_directory_path) /
-                               self.sub_directory_name /
-                               DirectoryManager.EXPLAINER)
-        if not explainer_directory.exists():
-            explainer_directory.mkdir(parents=True, exist_ok=True)
+        generators_directory = (Path(self.parent_directory_path) /
+                                self.sub_directory_name /
+                                DirectoryManager.GENERATORS)
+        if not generators_directory.exists():
+            generators_directory.mkdir(parents=True, exist_ok=True)
 
-        return explainer_directory
+        return generators_directory
 
     def get_config_directory(self):
         """Return the path of the configuration directory.
@@ -101,15 +101,15 @@ class DirectoryManager:
                 self.sub_directory_name /
                 DirectoryManager.DATA)
 
-    def get_explainer_directory(self):
-        """Return the path of the explainer directory.
+    def get_generators_directory(self):
+        """Return the path of the generators directory.
 
-        :returns: Path to the explainer directory.
+        :returns: Path to the generators directory.
         :rtype: Path
         """
         return (Path(self.parent_directory_path) /
                 self.sub_directory_name /
-                DirectoryManager.EXPLAINER)
+                DirectoryManager.GENERATORS)
 
     @staticmethod
     def list_sub_directories(path):
