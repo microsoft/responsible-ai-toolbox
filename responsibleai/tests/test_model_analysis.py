@@ -62,7 +62,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -80,7 +80,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
@@ -98,7 +98,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args,
                                classes=classes)
 
@@ -142,7 +142,7 @@ class TestModelAnalysis(object):
             ManagerParams.TREATMENT_FEATURES: ['col0']
         }
 
-        run_model_analysis(model, X_train, X_test, LABELS, [],
+        run_model_analysis(model, X_train, X_test, LABELS, None,
                            manager_type, manager_args,
                            classes=classes)
 
@@ -309,5 +309,7 @@ def validate_model_analysis(
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features
     if task_type == ModelTask.CLASSIFICATION:
+        classes = train_data[target_column].unique()
+        classes.sort()
         np.testing.assert_array_equal(model_analysis.rai_insights._classes,
-                                      train_data[target_column].unique())
+                                      classes)

@@ -60,7 +60,7 @@ class TestRAIInsights(object):
         }
 
         for model in models:
-            run_rai_insights(model, X_train, X_test, LABELS, [],
+            run_rai_insights(model, X_train, X_test, LABELS, None,
                              manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -78,7 +78,7 @@ class TestRAIInsights(object):
         }
 
         for model in models:
-            run_rai_insights(model, X_train, X_test, LABELS, [],
+            run_rai_insights(model, X_train, X_test, LABELS, None,
                              manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
@@ -96,7 +96,7 @@ class TestRAIInsights(object):
         }
 
         for model in models:
-            run_rai_insights(model, X_train, X_test, LABELS, [],
+            run_rai_insights(model, X_train, X_test, LABELS, None,
                              manager_type, manager_args,
                              classes=classes)
 
@@ -140,7 +140,7 @@ class TestRAIInsights(object):
             ManagerParams.TREATMENT_FEATURES: ['col0']
         }
 
-        run_rai_insights(model, X_train, X_test, LABELS, [],
+        run_rai_insights(model, X_train, X_test, LABELS, None,
                          manager_type, manager_args,
                          classes=classes)
 
@@ -305,5 +305,7 @@ def validate_rai_insights(
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == categorical_features
     if task_type == ModelTask.CLASSIFICATION:
+        classes = train_data[target_column].unique()
+        classes.sort()
         np.testing.assert_array_equal(rai_insights._classes,
-                                      train_data[target_column].unique())
+                                      classes)
