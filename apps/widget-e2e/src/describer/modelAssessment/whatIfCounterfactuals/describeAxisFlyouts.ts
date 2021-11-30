@@ -45,7 +45,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
       });
     });
 
-    describe.only("X Axis functionalities", () => {
+    describe("X Axis functionalities", () => {
       it("should be able cancel the flyout", () => {
         cy.get(Locators.WhatIfScatterChartXAxis)
           .click()
