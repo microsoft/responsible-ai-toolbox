@@ -153,7 +153,10 @@ class RAIInsights(object):
     def _get_classes(task_type, train, target_column, classes):
         if task_type == ModelTask.CLASSIFICATION:
             if classes is None:
-                return train[target_column].unique()
+                classes = train[target_column].unique()
+                # sort the classes after calling unique in numeric case
+                classes.sort()
+                return classes
             else:
                 return classes
         else:
@@ -315,6 +318,11 @@ class RAIInsights(object):
                             'INVALID-TASK-TYPE-WARNING: The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
+        else:
+            raise UserConfigValidationException(
+                "Unsupported data type for either train or test. "
+                "Expecting pandas Dataframe for train and test."
+            )
 
     @property
     def causal(self) -> CausalManager:

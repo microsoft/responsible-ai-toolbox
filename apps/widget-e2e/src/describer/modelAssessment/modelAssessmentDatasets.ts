@@ -61,10 +61,12 @@ const modelAssessmentDatasets = {
     },
     featureImportanceData: {
       correctPredictionDatapoint: "398",
+      datapoint: 500,
       dropdownRowName: "Row 4",
       incorrectPredictionDatapoint: "102",
       noDataset: false,
       noFeatureImportance: false,
+      noLocalImportance: false,
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
     },

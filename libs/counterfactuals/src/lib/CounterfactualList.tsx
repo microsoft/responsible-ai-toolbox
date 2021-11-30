@@ -303,11 +303,11 @@ export class CounterfactualList extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <ComboBox
-              key={column.key}
+              key={`${column.key}`}
               // label={metaInfo.abbridgedLabel}
               autoComplete={"on"}
               allowFreeform
-              selectedKey={this.state.data[column.key]}
+              selectedKey={`${this.state.data[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
               onChange={this.updateDropdownColValue.bind(this, column.key)}
             />
