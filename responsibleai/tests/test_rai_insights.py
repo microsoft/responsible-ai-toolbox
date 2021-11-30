@@ -191,7 +191,12 @@ class TestRAIInsights(object):
                 # Load
                 rai_2 = RAIInsights.load(save_1)
 
-                # Save again
+                # Validate, but this isn't the main check
+                validate_rai_insights(
+                    rai_2, X_train, X_test,
+                    LABELS, ModelTask.CLASSIFICATION, None)
+
+                # Save again (this is where Issue #1046 manifested)
                 rai_2.save(save_2)
 
 
