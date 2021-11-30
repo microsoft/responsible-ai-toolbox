@@ -126,6 +126,7 @@ export class CohortBar extends React.Component<
       showEditPanel: false
     });
   };
+
   private onCohortChange = (newCohort: Cohort): void => {
     if (this.state.editingCohortIndex !== undefined) {
       const isNew = this.state.editingCohortIndex === this.props.cohorts.length;
