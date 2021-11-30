@@ -77,7 +77,9 @@ def create_iris_data():
     test_index_list = X_test.index.tolist()
     test_index_list.append(test_index_list[0])
     X_test = X_test.reindex(test_index_list)
-    y_test = np.array(y_test.tolist().append(y_test[0]))
+    y_test_list = y_test.tolist()
+    y_test_list.append(y_test[0])
+    y_test = np.array(y_test_list)
 
     return X_train, X_test, y_train, y_test, feature_names, classes
 
