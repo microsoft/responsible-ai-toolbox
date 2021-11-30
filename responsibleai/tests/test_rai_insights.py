@@ -245,9 +245,7 @@ class TestRAIInsights(object):
                     feature_importance=False
                 )
             elif manager_type == ManagerNames.ERROR_ANALYSIS:
-                rai_2.error_analysis.add(
-
-                )
+                rai_2.error_analysis.add()
             elif manager_type == ManagerNames.EXPLAINER:
                 rai_2.explainer.add()
             else:
