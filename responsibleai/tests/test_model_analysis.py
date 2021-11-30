@@ -306,5 +306,7 @@ def validate_model_analysis(
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features
     if task_type == ModelTask.CLASSIFICATION:
+        classes = train_data[target_column].unique()
+        classes.sort()
         np.testing.assert_array_equal(model_analysis.rai_insights._classes,
-                                      train_data[target_column].unique())
+                                      classes)
