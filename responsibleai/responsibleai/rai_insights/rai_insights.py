@@ -153,7 +153,10 @@ class RAIInsights(object):
     def _get_classes(task_type, train, target_column, classes):
         if task_type == ModelTask.CLASSIFICATION:
             if classes is None:
-                return train[target_column].unique()
+                classes = train[target_column].unique()
+                # sort the classes after calling unique in numeric case
+                classes.sort()
+                return classes
             else:
                 return classes
         else:

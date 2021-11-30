@@ -6,6 +6,7 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
+import numpy as np
 
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
@@ -279,7 +280,7 @@ class TestRAIInsightsValidations:
         assert "Unsupported data type for either train or test. " + \
             "Expecting pandas Dataframe for train and test." in str(ucve.value)
 
-    def test_classes(self):
+    def test_classes_exceptions(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
@@ -329,6 +330,24 @@ class TestRAIInsightsValidations:
 
         assert 'The train labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
+
+    def test_classes_passes(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        rai = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+        # validate classes are always sorted
+        classes = rai._classes
+        assert np.all(classes[:-1] <= classes[1:])
 
 
 class TestCausalUserConfigValidations:

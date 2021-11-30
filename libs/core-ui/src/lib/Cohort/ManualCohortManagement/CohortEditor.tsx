@@ -20,7 +20,11 @@ import {
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
-import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
+import {
+  FilterMethods,
+  ICompositeFilter,
+  IFilter
+} from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
 
@@ -39,6 +43,7 @@ export interface ICohortEditorProps {
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
   filterList?: IFilter[];
+  compositeFilters?: ICompositeFilter[];
   onDelete?: () => void;
 }
 
@@ -46,6 +51,7 @@ export interface ICohortEditorState {
   openedFilter?: IFilter;
   filterIndex?: number;
   filters: IFilter[];
+  compositeFilters: ICompositeFilter[];
   cohortName?: string;
   selectedFilterCategory?: string;
   showConfirmation: boolean;
@@ -83,6 +89,7 @@ export class CohortEditor extends React.PureComponent<
     super(props);
     this.state = {
       cohortName: this.props.cohortName,
+      compositeFilters: this.props.compositeFilters || [],
       filterIndex: this.props.filterList?.length || 0,
       filters: this.props.filterList || [],
       openedFilter: undefined,
@@ -153,7 +160,9 @@ export class CohortEditor extends React.PureComponent<
             </Stack.Item>
             <Stack.Item>
               <CohortEditorFilterList
+                compositeFilters={this.state.compositeFilters}
                 editFilter={this.editFilter}
+                removeCompositeFilter={this.removeCompositeFilter}
                 removeFilter={this.removeFilter}
                 filters={this.state.filters}
                 jointDataset={this.props.jointDataset}
@@ -234,7 +243,7 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private clearAllFilters = (): void => {
-    this.setState({ filters: [] });
+    this.setState({ compositeFilters: [], filters: [] });
   };
 
   private deleteCohort = (): void => {
@@ -472,6 +481,12 @@ export class CohortEditor extends React.PureComponent<
     this.setState({ filters });
   };
 
+  private removeCompositeFilter = (index: number): void => {
+    const compositeFilters = [...this.state.compositeFilters];
+    compositeFilters.splice(index, 1);
+    this.setState({ compositeFilters });
+  };
+
   private editFilter = (index: number): void => {
     const editFilter = this.state.filters[index];
     this.setState({
@@ -485,7 +500,8 @@ export class CohortEditor extends React.PureComponent<
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
-        this.state.filters
+        this.state.filters,
+        this.state.compositeFilters
       );
       this.props.onSave(newCohort, switchNew);
     }
