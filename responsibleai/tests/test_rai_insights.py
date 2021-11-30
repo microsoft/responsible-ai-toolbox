@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from pathlib import Path
-from tempfile import TemporaryDirectory, tempdir
+from tempfile import TemporaryDirectory
 
 import numpy as np
 import os
