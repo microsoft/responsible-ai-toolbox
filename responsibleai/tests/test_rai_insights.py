@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, tempdir
 
 import numpy as np
 import os
@@ -165,6 +165,34 @@ class TestRAIInsights(object):
         for model in models:
             run_rai_insights(model, X_train, X_test, LABELS, ['CHAS'],
                              manager_type, manager_args)
+
+    def test_rai_insights_empty_save(self):
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+
+        for model in models:
+            rai_insights = RAIInsights(
+                model, X_train, X_test,
+                LABELS,
+                categorical_features=None,
+                task_type=ModelTask.CLASSIFICATION)
+
+            with TemporaryDirectory() as tmpdir:
+                save_1 = Path(tmpdir) / "first_save"
+                save_2 = Path(tmpdir) / "second_save"
+
+                # Save it
+                rai_insights.save(save_1)
+
+                # Load
+                rai_2 = RAIInsights.load(save_1)
+
+                # Save again
+                rai_2.save(save_2)
 
 
 def run_rai_insights(model, train_data, test_data, target_column,
