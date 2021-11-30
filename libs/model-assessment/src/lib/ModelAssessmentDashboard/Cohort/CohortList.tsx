@@ -6,6 +6,7 @@ import {
   CohortEditor,
   defaultModelAssessmentContext,
   ErrorCohort,
+  getCohortFilterCount,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -93,6 +94,9 @@ export class CohortList extends React.Component<
           <CohortEditor
             jointDataset={this.context.jointDataset}
             filterList={this.state.currentEditCohort.cohort.filters}
+            compositeFilters={
+              this.state.currentEditCohort.cohort.compositeFilters
+            }
             cohortName={this.state.currentEditCohort.cohort.name}
             onSave={this.saveEditedCohort}
             isNewCohort={false}
@@ -281,7 +285,7 @@ export class CohortList extends React.Component<
           ),
           localization.formatString(
             localization.Interpret.CohortBanner.filters,
-            errorCohort.cohort.filters.length
+            getCohortFilterCount(errorCohort.cohort)
           )
         ];
         return {
