@@ -263,8 +263,8 @@ def run_rai_insights(model, train_data, test_data, target_column,
     elif manager_type == ManagerNames.EXPLAINER:
         validate_explainer(rai_insights, train_data, test_data, classes)
 
-    with TemporaryDirectory() as tempdir:
-        path = Path(tempdir) / 'rai_test_path'
+    with TemporaryDirectory() as tmpdir:
+        path = Path(tmpdir) / 'rai_test_path'
         # save the rai_insights
         rai_insights.save(path)
 
