@@ -318,6 +318,11 @@ class RAIInsights(object):
                             'INVALID-TASK-TYPE-WARNING: The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
+        else:
+            raise UserConfigValidationException(
+                "Unsupported data type for either train or test. "
+                "Expecting pandas Dataframe for train and test."
+            )
 
     @property
     def causal(self) -> CausalManager:
