@@ -10,7 +10,7 @@ import numpy as np
 import os
 import pandas as pd
 import pytest
-import re
+from uuid import UUID
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
@@ -267,12 +267,9 @@ def validate_state_directory(path, manager_type):
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)
     for component_path in all_component_paths:
-        uuid_regex = re.compile(
-            '^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}\Z',
-            re.I)
-        uuid_regex.match(component_path)
+        # Test if the component directory has UUID structure
+        UUID(component_path, version=4)
 
-        # TODO: Add code to check if the component_path is GUID
         dm = DirectoryManager(path / manager_type, component_path)
 
         config_path = dm.get_config_directory()
