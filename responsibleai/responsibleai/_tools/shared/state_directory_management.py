@@ -11,11 +11,11 @@ class DirectoryManager:
 
     CONFIGURATION = 'configuration'
     DATA = 'data'
-    MODELS = 'models'
+    GENERATORS = 'generators'
 
     def __init__(self, parent_directory_path, sub_directory_name=None):
         """Directory manager for managing the configuration,
-           dashboard data and models need to recompose the state
+           dashboard data and generators need to recompose the state
            in the various managers.
 
         :param parent_directory_path: Directory path of where the state data
@@ -68,18 +68,18 @@ class DirectoryManager:
 
         return data_directory
 
-    def create_models_directory(self):
-        """Create the models directory and return its path.
+    def create_generators_directory(self):
+        """Create the generators directory and return its path.
 
-        :returns: Path to the models directory.
+        :returns: Path to the generators directory.
         """
-        models_directory = (Path(self.parent_directory_path) /
-                            self.sub_directory_name /
-                            DirectoryManager.MODELS)
-        if not models_directory.exists():
-            models_directory.mkdir(parents=True, exist_ok=True)
+        generators_directory = (Path(self.parent_directory_path) /
+                                self.sub_directory_name /
+                                DirectoryManager.GENERATORS)
+        if not generators_directory.exists():
+            generators_directory.mkdir(parents=True, exist_ok=True)
 
-        return models_directory
+        return generators_directory
 
     def get_config_directory(self):
         """Return the path of the configuration directory.
@@ -101,15 +101,15 @@ class DirectoryManager:
                 self.sub_directory_name /
                 DirectoryManager.DATA)
 
-    def get_models_directory(self):
-        """Return the path of the models directory.
+    def get_generators_directory(self):
+        """Return the path of the generators directory.
 
-        :returns: Path to the models directory.
+        :returns: Path to the generators directory.
         :rtype: Path
         """
         return (Path(self.parent_directory_path) /
                 self.sub_directory_name /
-                DirectoryManager.MODELS)
+                DirectoryManager.GENERATORS)
 
     @staticmethod
     def list_sub_directories(path):

@@ -271,24 +271,24 @@ def validate_state_directory(path, manager_type):
 
         config_path = dm.get_config_directory()
         data_path = dm.get_data_directory()
-        models_path = dm.get_models_directory()
+        generators_path = dm.get_generators_directory()
 
         if manager_type == ManagerNames.EXPLAINER:
             assert not config_path.exists()
             assert data_path.exists()
-            assert not models_path.exists()
+            assert not generators_path.exists()
         elif manager_type == ManagerNames.COUNTERFACTUAL:
             assert config_path.exists()
             assert data_path.exists()
-            assert not models_path.exists()
+            assert not generators_path.exists()
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             assert config_path.exists()
             assert data_path.exists()
-            assert not models_path.exists()
+            assert not generators_path.exists()
         elif manager_type == ManagerNames.CAUSAL:
             assert not config_path.exists()
             assert data_path.exists()
-            assert not models_path.exists()
+            assert not generators_path.exists()
 
 
 def validate_model_analysis(
