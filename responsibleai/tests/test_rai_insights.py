@@ -167,7 +167,7 @@ class TestRAIInsights(object):
             run_rai_insights(model, X_train, X_test, LABELS, ['CHAS'],
                              manager_type, manager_args)
 
-    def test_rai_insights_empty_save(self):
+    def test_rai_insights_empty_save_load_save(self):
         X_train, y_train, X_test, y_test, classes = \
             create_binary_classification_dataset()
 
@@ -191,6 +191,69 @@ class TestRAIInsights(object):
 
                 # Load
                 rai_2 = RAIInsights.load(save_1)
+
+                # Validate, but this isn't the main check
+                validate_rai_insights(
+                    rai_2, X_train, X_test,
+                    LABELS, ModelTask.CLASSIFICATION, None)
+
+                # Save again (this is where Issue #1046 manifested)
+                rai_2.save(save_2)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_rai_insights_save_load_add_save(self, manager_type):
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+
+        # Cut down size for counterfactuals, in the interests of speed
+        if manager_type == ManagerNames.COUNTERFACTUAL:
+            X_test = X_test[0:20]
+
+        for model in models:
+            rai_insights = RAIInsights(
+                model, X_train, X_test,
+                LABELS,
+                categorical_features=None,
+                task_type=ModelTask.CLASSIFICATION)
+
+            with TemporaryDirectory() as tmpdir:
+                save_1 = Path(tmpdir) / "first_save"
+                save_2 = Path(tmpdir) / "second_save"
+
+                # Save it
+                rai_insights.save(save_1)
+
+                # Load
+                rai_2 = RAIInsights.load(save_1)
+
+                # Call a single manager
+                if manager_type == ManagerNames.CAUSAL:
+                    rai_2.causal.add(
+                        treatment_features=['age', 'hours_per_week']
+                    )
+                elif manager_type == ManagerNames.COUNTERFACTUAL:
+                    rai_2.counterfactual.add(
+                        total_CFs=10,
+                        desired_class='opposite'
+                    )
+                elif manager_type == ManagerNames.ERROR_ANALYSIS:
+                    rai_2.error_analysis.add(
+
+                    )
+                elif manager_type == ManagerNames.EXPLAINER:
+                    rai_2.explainer.add()
+                else:
+                    raise ValueError(
+                        "Bad manager_type: {0}".format(manager_type))
+
+                rai_2.compute()
 
                 # Validate, but this isn't the main check
                 validate_rai_insights(
