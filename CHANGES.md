@@ -24,6 +24,22 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.15.1
+
+- educational materials
+  - Notebooks updated for new class names (`ResponsibleAIDashboard` etc.)
+- new features
+  - None
+- breaking changes
+  - ## RAI Insights/Model Analysis
+    - Rename `explainers` directory to `generators` when saving RAI Insights object
+- bug fixes
+  - ## RAI Insights/Model Analysis
+    - Fix [Issue #1046](https://github.com/microsoft/responsible-ai-toolbox/issues/1046), related to a save/load/save cycle when no explainer present
+- other
+  - Extra tests for WhatIf counterfactuals
+  - Checks on the UUID directory structure of RAI Insights
+
 ## v0.15.0
 
 - new features
