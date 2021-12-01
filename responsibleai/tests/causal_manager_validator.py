@@ -4,8 +4,8 @@
 import numpy as np
 import pandas as pd
 import pytest
-
 from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
+
 from responsibleai import ModelTask
 from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,

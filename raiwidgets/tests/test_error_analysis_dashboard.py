@@ -3,17 +3,17 @@
 
 import numpy as np
 import pandas as pd
-import sklearn
-from sklearn.datasets import load_iris, make_classification
-from sklearn.model_selection import train_test_split
-
 import shap
-from erroranalysis._internal.constants import Metrics, metric_to_display_name
-from erroranalysis._internal.surrogate_error_tree import (
-    DEFAULT_MAX_DEPTH, DEFAULT_MIN_CHILD_SAMPLES, DEFAULT_NUM_LEAVES)
+import sklearn
 from interpret.ext.blackbox import MimicExplainer
 from interpret.ext.glassbox import LGBMExplainableModel
 from interpret_community.common.constants import ModelTask
+from sklearn.datasets import load_iris, make_classification
+from sklearn.model_selection import train_test_split
+
+from erroranalysis._internal.constants import Metrics, metric_to_display_name
+from erroranalysis._internal.surrogate_error_tree import (
+    DEFAULT_MAX_DEPTH, DEFAULT_MIN_CHILD_SAMPLES, DEFAULT_NUM_LEAVES)
 from raiwidgets import ErrorAnalysisDashboard
 from raiwidgets.explanation_constants import WidgetRequestResponseConstants
 

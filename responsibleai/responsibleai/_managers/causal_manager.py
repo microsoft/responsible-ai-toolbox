@@ -7,8 +7,8 @@ from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
-
 from econml.solutions.causal_analysis import CausalAnalysis
+
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager

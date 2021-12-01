@@ -4,8 +4,8 @@
 import re
 
 import pytest
-
 import semver
+
 from responsibleai._tools.shared.versions import CausalVersions
 
 

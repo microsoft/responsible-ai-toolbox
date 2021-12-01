@@ -10,9 +10,10 @@ import pandas as pd
 from sklearn.metrics import multilabel_confusion_matrix
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (
-    DIFF, PRED_Y, ROW_INDEX, TRUE_Y, MatrixParams, Metrics, ModelTask,
-    metric_to_display_name)
+from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
+                                               MatrixParams, Metrics,
+                                               ModelTask,
+                                               metric_to_display_name)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)

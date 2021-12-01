@@ -4,21 +4,27 @@
 import numpy as np
 import pandas as pd
 import pytest
+from common_utils import (create_adult_census_data,
+                          create_binary_classification_dataset,
+                          create_boston_data, create_cancer_data,
+                          create_iris_data, create_kneighbors_classifier,
+                          create_models_classification,
+                          create_models_regression, create_simple_titanic_data,
+                          create_titanic_pipeline, create_wine_data)
 
-from common_utils import (
-    create_adult_census_data, create_binary_classification_dataset,
-    create_boston_data, create_cancer_data, create_iris_data,
-    create_kneighbors_classifier, create_models_classification,
-    create_models_regression, create_simple_titanic_data,
-    create_titanic_pipeline, create_wine_data)
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (
-    ROW_INDEX, TRUE_Y, MatrixParams, Metrics, ModelTask, f1_metrics,
-    metric_to_display_name, precision_metrics, recall_metrics)
+from erroranalysis._internal.constants import (ROW_INDEX, TRUE_Y, MatrixParams,
+                                               Metrics, ModelTask, f1_metrics,
+                                               metric_to_display_name,
+                                               precision_metrics,
+                                               recall_metrics)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
-from erroranalysis._internal.matrix_filter import (
-    CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, FN, FP, INTERVAL_MAX,
-    INTERVAL_MIN, MATRIX, METRIC_NAME, METRIC_VALUE, TN, TP, VALUES)
+from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
+                                                   FALSE_COUNT, FN, FP,
+                                                   INTERVAL_MAX, INTERVAL_MIN,
+                                                   MATRIX, METRIC_NAME,
+                                                   METRIC_VALUE, TN, TP,
+                                                   VALUES)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)

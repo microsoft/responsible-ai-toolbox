@@ -8,8 +8,6 @@ import warnings
 from pathlib import Path
 
 import numpy as np
-from scipy.sparse import issparse
-
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
@@ -18,13 +16,15 @@ from interpret_community.mimic.models.lightgbm_model import \
     LGBMExplainableModel
 from interpret_community.mimic.models.linear_model import \
     LinearExplainableModel
+from scipy.sparse import issparse
+
 from responsibleai._input_processing import _convert_to_list
-from responsibleai._interfaces import (
-    EBMGlobalExplanation, FeatureImportance, ModelExplanationData,
-    PrecomputedExplanations)
+from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
+                                       ModelExplanationData,
+                                       PrecomputedExplanations)
 from responsibleai._internal.constants import ExplainerManagerKeys as Keys
-from responsibleai._internal.constants import (
-    ExplanationKeys, ListProperties, ManagerNames, Metadata)
+from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
+                                               ManagerNames, Metadata)
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager

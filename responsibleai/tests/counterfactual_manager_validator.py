@@ -2,9 +2,9 @@
 # Licensed under the MIT License.
 
 import pytest
-
 from dice_ml.utils.exception import \
     UserConfigValidationException as DiceException
+
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       UserConfigValidationException)
 

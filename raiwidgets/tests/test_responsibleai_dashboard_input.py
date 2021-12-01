@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import mock
+import shap
 import sklearn
 from sklearn.model_selection import train_test_split
 
-import shap
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 from responsibleai import RAIInsights

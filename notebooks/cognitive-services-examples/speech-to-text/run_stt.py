@@ -5,9 +5,8 @@ Microsoft speech service
 Refer to with `Microsoft Speech-to-text quickstart
 <https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/get-started-speech-to-text?tabs=windowsinstall&pivots=programming-language-python#install-and-import-the-speech-sdk>`
 """
-import dask.dataframe as dd
-
 import azure.cognitiveservices.speech as speechsdk
+import dask.dataframe as dd
 
 # Set up the subscription info for the Speech Service:
 speech_key, service_region = "4b69b69b6e664122ba95bf8fc86ce89f", "eastus"

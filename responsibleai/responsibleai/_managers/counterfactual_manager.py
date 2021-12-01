@@ -5,12 +5,12 @@
 import json
 from pathlib import Path
 
+import dice_ml
 import jsonschema
 import numpy as np
-
-import dice_ml
 from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
+
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
