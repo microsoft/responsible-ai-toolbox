@@ -342,6 +342,7 @@ class ExplainerManager(BaseManager):
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
 
+        inst.__dict__[EXPLANATION] = None
         explanation_path = data_directory / ManagerNames.EXPLAINER
         if explanation_path.exists():
             explanation = load_explanation(explanation_path)
