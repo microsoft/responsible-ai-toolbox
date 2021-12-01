@@ -35,12 +35,12 @@ export enum Locators {
   WICDatapointDropbox = "#IndividualFeatureContainer div[class^='legendAndText'] div[class^='ms-ComboBox-container']",
   WICLocalImportanceDescription = "#LocalImportanceDescription",
   WhatIfScatterChartYAxis = "#IndividualFeatureContainer div[class^='rotatedVerticalBox']",
-  WhatIfScatterChartYAxisFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
-  WhatIfScatterChartYAxisFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
+  WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
+  WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
   WhatIfAxisPanel = "#AxisConfigPanel",
-  WhatIfYAxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
+  WhatIfAxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
   WhatIfYAxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
-  WhatIfYAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
+  WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
   WhatIfYAxisAxisValueNewValue = "#AxisConfigPanel span:contains('True Y')",
@@ -53,5 +53,10 @@ export enum Locators {
   WhatIfCloseButton = "#CounterfactualPanel button[aria-label='Close']",
   WhatIfSearchBarClearTextButton = "#CounterfactualPanel button[aria-label='Clear text']",
   WhatIfNameLabel = "#whatIfNameLabel",
-  CreateYourOwnCounterfactualInputField = "#CounterfactualPanel div[role='gridcell'] input[type='text']"
+  CreateYourOwnCounterfactualInputField = "#CounterfactualPanel div[role='gridcell'] input[type='text']",
+  WhatIfScatterChartXAxis = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding']",
+  WhatIfXAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('Probability : >50K')",
+  WhatIfScatterChartXAxisLabelUpdated = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding'] button:contains('Probability : >50K')",
+  WhatIfXAxisAxisValueNewValue = "#AxisConfigPanel span:contains('True Y')",
+  WhatIfScatterChartXAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding'] button:contains('True Y')"
 }
