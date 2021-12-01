@@ -22,11 +22,11 @@ class TestStateDirectoryManagement:
         assert data_directory_path.exists()
         assert DirectoryManager.DATA in str(data_directory_path)
 
-        explainer_directory_path = \
-            directory_manager.create_explainer_directory()
-        assert isinstance(explainer_directory_path, Path)
-        assert explainer_directory_path.exists()
-        assert DirectoryManager.EXPLAINER in str(explainer_directory_path)
+        generators_directory_path = \
+            directory_manager.create_generators_directory()
+        assert isinstance(generators_directory_path, Path)
+        assert generators_directory_path.exists()
+        assert DirectoryManager.GENERATORS in str(generators_directory_path)
 
         # Test the get APIs
         config_directory_path = directory_manager.get_config_directory()
@@ -39,10 +39,11 @@ class TestStateDirectoryManagement:
         assert data_directory_path.exists()
         assert DirectoryManager.DATA in str(data_directory_path)
 
-        explainer_directory_path = directory_manager.get_explainer_directory()
-        assert isinstance(explainer_directory_path, Path)
-        assert explainer_directory_path.exists()
-        assert DirectoryManager.EXPLAINER in str(explainer_directory_path)
+        generators_directory_path = \
+            directory_manager.create_generators_directory()
+        assert isinstance(generators_directory_path, Path)
+        assert generators_directory_path.exists()
+        assert DirectoryManager.GENERATORS in str(generators_directory_path)
 
     def test_directory_manager(self, tmpdir):
         parent_directory = tmpdir.mkdir('parent_directory')
