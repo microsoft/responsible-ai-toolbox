@@ -7,6 +7,7 @@ from .environments import (AzureNBEnvironment, CredentialedVMEnvironment,
                            DatabricksEnvironment, LocalIPythonEnvironment,
                            PublicVMEnvironment)
 
+
 """Environment detection related utilities.
 A good portion of this code has largely been sourced from open-source licensed
 code available between StackOverflow and plotly.

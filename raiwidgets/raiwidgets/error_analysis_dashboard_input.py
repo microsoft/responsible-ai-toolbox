@@ -6,8 +6,8 @@ import traceback
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
-                                               metric_to_display_name)
+from erroranalysis._internal.constants import (
+    Metrics, display_name_to_metric, metric_to_display_name)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.metrics import metric_to_func

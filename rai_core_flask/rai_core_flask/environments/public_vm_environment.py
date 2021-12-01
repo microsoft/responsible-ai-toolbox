@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from flask_cors import CORS
-
 from rai_core_flask.environments.base_environment import BaseEnvironment
 
 PUBLIC_VM = 'public_vm'

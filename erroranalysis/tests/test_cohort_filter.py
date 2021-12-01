@@ -3,13 +3,13 @@
 
 import numpy as np
 import pandas as pd
+
 from common_utils import (create_iris_data, create_simple_titanic_data,
                           create_sklearn_svm_classifier,
                           create_titanic_pipeline)
-
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (
-    PRED_Y, ROW_INDEX, TRUE_Y, ModelTask)
+from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 TOL = 1e-10

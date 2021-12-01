@@ -4,7 +4,6 @@
 # Defines common utilities for error analysis tests
 import numpy as np
 import pandas as pd
-import shap
 from lightgbm import LGBMClassifier
 from pandas import read_csv
 from sklearn import svm
@@ -19,6 +18,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
                                    StandardScaler)
+
+import shap
 from xgboost import XGBClassifier
 
 

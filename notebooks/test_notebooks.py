@@ -4,8 +4,9 @@
 import os
 
 import nbformat as nbf
-import papermill as pm
 import pytest
+
+import papermill as pm
 import scrapbook as sb
 
 RACE_GROUP_SIZES_ADULT = {

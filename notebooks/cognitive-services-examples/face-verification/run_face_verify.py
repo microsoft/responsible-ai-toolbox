@@ -6,6 +6,7 @@ Refer to with `Microsoft face verify quickstart
 <https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/python-sdk#verify-faces>`
 """
 import dask.dataframe as dd
+
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 

@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import pytest
+
 from common_utils import (create_adult_census_data, create_iris_data,
                           create_kneighbors_classifier,
                           create_models_classification)
-
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, Metrics)
