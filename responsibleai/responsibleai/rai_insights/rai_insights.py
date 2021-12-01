@@ -409,6 +409,8 @@ class RAIInsights(object):
         dataset: pd.DataFrame = self.test.drop(
             [self.target_column], axis=1)
 
+        features = dataset.columns
+
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
         try:
@@ -423,6 +425,14 @@ class RAIInsights(object):
                 msg = "Model does not support predict method for given"
                 "dataset type"
                 raise ValueError(msg) from ex
+            post_pred_features = dataset.columns
+            if len(post_pred_features) != len(features):
+                warnings.warn(
+                    'INVALID-MODEL-WARNING: Calling model predict '
+                    'function modifies input dataset features. '
+                    'Please check if predict function is defined correctly.')
+                # reset dataset back to original
+                dataset = self.test.drop([self.target_column], axis=1)
             try:
                 predicted_y = _convert_to_list(predicted_y)
             except Exception as ex:
@@ -458,8 +468,6 @@ class RAIInsights(object):
                 true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
             dashboard_dataset.true_y = _convert_to_list(true_y)
-
-        features = dataset.columns
 
         if features is not None:
             features = _convert_to_list(features)

@@ -36,6 +36,7 @@ IS_ADDED = 'is_added'
 CLASSES = 'classes'
 U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
+U_TARGET_COLUMN = '_target_column'
 FEATURES = 'features'
 CATEGORICAL_FEATURES = 'categorical_features'
 META_JSON = Metadata.META_JSON
@@ -95,14 +96,13 @@ class ExplainerManager(BaseManager):
         :type categorical_features: list[str]
         """
         self._model = model
-        self._initialization_examples = \
-            initialization_examples.drop(columns=[target_column])
-        self._evaluation_examples = \
-            evaluation_examples.drop(columns=[target_column])
+        self._initialization_examples = initialization_examples
+        self._evaluation_examples = evaluation_examples
         self._is_run = False
         self._is_added = False
         self._surrogate_model = None
         self._features = list(self._initialization_examples.columns)
+        self._features.remove(target_column)
         self._classes = classes
         self._target_column = target_column
         self._explanation = None
@@ -120,7 +120,7 @@ class ExplainerManager(BaseManager):
                           UserWarning)
             return
         is_sparse = issparse(self._evaluation_examples)
-        num_cols = self._evaluation_examples.shape[1]
+        num_cols = self._evaluation_examples.shape[1] - 1
         many_cols = num_cols > SPARSE_NUM_FEATURES_THRESHOLD
         self._surrogate_model = LGBMExplainableModel
         if is_sparse and many_cols:
@@ -137,16 +137,17 @@ class ExplainerManager(BaseManager):
             model_task = ModelTask.Classification
         else:
             model_task = ModelTask.Regression
-
+        target_column = self._target_column
         explainer = MimicExplainer(
             self._model,
-            self._initialization_examples,
+            self._initialization_examples.drop(columns=[target_column]),
             self._surrogate_model,
             features=self._features,
             model_task=model_task,
             classes=self._classes,
             categorical_features=self._categorical_features)
-        self._explanation = explainer.explain_global(self._evaluation_examples)
+        eval_data = self._evaluation_examples.drop(columns=[target_column])
+        self._explanation = explainer.explain_global(eval_data)
         self._is_run = True
 
     def get(self):
@@ -241,8 +242,7 @@ class ExplainerManager(BaseManager):
                 raise ValueError(
                     "Unsupported local explanation type") from ex
             if self._evaluation_examples is not None:
-
-                _feature_length = self._evaluation_examples.shape[1]
+                _feature_length = self._evaluation_examples.shape[1] - 1
                 _row_length = self._evaluation_examples.shape[0]
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
@@ -353,11 +353,12 @@ class ExplainerManager(BaseManager):
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features
         target_column = rai_insights.target_column
-        train = rai_insights.train.drop(columns=[target_column])
-        test = rai_insights.test.drop(columns=[target_column])
-        inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
-        inst.__dict__[U_EVALUATION_EXAMPLES] = test
-        inst.__dict__['_' + FEATURES] = list(train.columns)
+        inst.__dict__[U_INITIALIZATION_EXAMPLES] = rai_insights.train
+        inst.__dict__[U_EVALUATION_EXAMPLES] = rai_insights.test
+        inst.__dict__[U_TARGET_COLUMN] = target_column
+        features = list(rai_insights.train.columns)
+        features.remove(target_column)
+        inst.__dict__['_' + FEATURES] = features
         inst.__dict__['_' + IS_ADDED] = False
         # reset self._surrogate_model
         if meta[IS_ADDED]:
