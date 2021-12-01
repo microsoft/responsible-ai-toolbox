@@ -31,7 +31,8 @@ this file to understand what changed.
 - new features
   - None
 - breaking changes
-  - None
+  - ## RAI Insights/Model Analysis
+    - Rename `explainers` directory to `generators` when saving RAI Insights object
 - bug fixes
   - ## RAI Insights/Model Analysis
     - Fix [Issue #1046](https://github.com/microsoft/responsible-ai-toolbox/issues/1046), related to a save/load/save cycle when no explainer present
