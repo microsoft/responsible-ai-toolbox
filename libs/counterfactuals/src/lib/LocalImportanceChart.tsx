@@ -49,7 +49,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     return (
       <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
         <Stack.Item>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} id="LocalImportanceDescription">
             {localization.formatString(
               localization.Counterfactuals.localImportanceDescription,
               this.props.rowNumber,
@@ -58,14 +58,16 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <AccessibleChart
-            plotlyProps={{
-              config: themedProps.config,
-              data: themedProps.data,
-              layout: themedProps.layout
-            }}
-            theme={getTheme()}
-          />
+          <div id={"WhatIfFeatureImportanceBar"}>
+            <AccessibleChart
+              plotlyProps={{
+                config: themedProps.config,
+                data: themedProps.data,
+                layout: themedProps.layout
+              }}
+              theme={getTheme()}
+            />
+          </div>
         </Stack.Item>
       </Stack>
     );

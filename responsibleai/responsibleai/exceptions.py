@@ -19,3 +19,23 @@ class UserConfigValidationException(Exception):
     :type exception_message: str
     """
     _error_code = 'Invalid config'
+
+
+class ConfigAndResultMismatchException(Exception):
+    """An exception indicating that number of configuration and
+       results are different.
+
+    :param exception_message: A message describing the error.
+    :type exception_message: str
+    """
+    _error_code = 'Config and result mismatch'
+
+
+class SchemaErrorException(Exception):
+    """An exception indicating that the schema of the RAI
+    component has some error or is not supported.
+
+    :param exception_message: A message describing the error.
+    :type exception_message: str
+    """
+    _error_code = 'Schema Error'

@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON schema for counterfactual examples",
+  "description": "JSON schema for counterfactual examples",
+  "type": "object",
+  "properties": {
+    "cfs_list": {
+      "description": "The list of the computed counterfactual examples.",
+      "type": "array",
+      "items": {
+        "type": ["array", "null"]
+      }
+    },
+    "test_data": {
+      "description": "The list of the input test samples for which counterfactual examples need to be computed.",
+      "type": "array",
+      "items": {
+        "type": "array"
+      }
+    },
+    "local_importance": {
+      "description": "The list of counterfactual local importance for the features in input data.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "array"
+      }
+    },
+    "summary_importance": {
+      "description": "The list of counterfactual summary importance for the features in input data.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "number"
+      }
+    },
+    "feature_names": {
+      "description": "The list of features in the input data.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "string"
+      }
+    },
+    "feature_names_including_target": {
+      "description": "The list of features including the target in input data.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_type": {
+      "description": "The type of model is either a classifier/regressor",
+      "type": ["string", "null"]
+    },
+    "desired_class": {
+      "description": "The target class for the generated counterfactual examples",
+      "type": ["string", "integer", "null"]
+    },
+    "desired_range": {
+      "description": "The target range for the generated counterfactual examples",
+      "type": ["array", "null"],
+      "items": {
+        "type": "number"
+      }
+    },
+    "data_interface": {
+      "description": "The data interface details including outcome name.",
+      "type": ["object", "null"]
+    },
+    "metadata": {
+      "description": "The metadata about the generated counterfactuals.",
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": ["version"]
+    }
+  },
+  "required": [
+    "cfs_list",
+    "test_data",
+    "local_importance",
+    "summary_importance",
+    "feature_names",
+    "feature_names_including_target",
+    "model_type",
+    "desired_class",
+    "desired_range",
+    "data_interface",
+    "metadata"
+  ]
+}

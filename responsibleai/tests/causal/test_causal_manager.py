@@ -5,7 +5,7 @@ from unittest.mock import ANY, patch
 import numpy as np
 import pytest
 
-from responsibleai import ModelAnalysis, ModelTask
+from responsibleai import RAIInsights, ModelTask
 from responsibleai._managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -28,15 +28,15 @@ class TestCausalManager:
 
         save_dir = tmpdir.mkdir('save-dir')
 
-        analysis = ModelAnalysis(
+        insights = RAIInsights(
             None, train_df, test_df, target_feature, ModelTask.REGRESSION)
 
-        analysis.causal.add(['ZN'])
-        pre_results = analysis.causal.get()
+        insights.causal.add(['ZN'])
+        pre_results = insights.causal.get()
         pre_result = pre_results[0]
 
-        analysis.causal._save(save_dir)
-        manager = analysis.causal._load(save_dir, analysis)
+        insights.causal._save(save_dir)
+        manager = insights.causal._load(save_dir, insights)
         post_results = manager.get()
         post_result = post_results[0]
         assert post_result.id == pre_result.id
@@ -89,7 +89,10 @@ class TestCausalManagerTreatmentCosts:
     def test_zero_cost(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+            try:
+                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+            except TypeError:
+                pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 0, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'RM', 0, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'B', 0, ANY, ANY, ANY)
@@ -125,7 +128,10 @@ class TestCausalManagerTreatmentCosts:
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+            try:
+                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+            except TypeError:
+                pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 1, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'RM', 2, ANY, ANY, ANY)
             mock_create.assert_any_call(ANY, ANY, 'B', 3, ANY, ANY, ANY)
@@ -137,7 +143,10 @@ class TestCausalManagerTreatmentCosts:
                 [1, 2, 3, 4, 5, 6, 7],
                 [2, 3, 4, 5, 6, 7, 1],
             ]
-            cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+            try:
+                cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+            except TypeError:
+                pass
             mock_create.assert_any_call(
                 ANY, ANY, 'ZN', [1, 2, 3, 4, 5, 6, 7], ANY, ANY, ANY)
             mock_create.assert_any_call(

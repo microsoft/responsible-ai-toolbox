@@ -3,19 +3,25 @@
 
 """Defines the Counterfactual Manager class."""
 import json
+import jsonschema
+
+import numpy as np
+from pathlib import Path
 
 import dice_ml
-import numpy as np
 from dice_ml import Dice
-
+from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
+                                      SchemaErrorException,
                                       UserConfigValidationException)
-from responsibleai.modelanalysis.constants import ModelTask
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+from responsibleai.rai_insights.constants import ModelTask
 
 
 class CounterfactualConstants:
@@ -26,7 +32,98 @@ class CounterfactualConstants:
     RANDOM = 'random'
 
 
+class _CommonSchemaConstants:
+    LOCAL_IMPORTANCE = 'local_importance'
+    METADATA = 'metadata'
+    SUMMARY_IMPORTANCE = 'summary_importance'
+    VERSION = 'version'
+
+
+class _V1SchemaConstants:
+    CF_EXAMPLES_LIST = 'cf_examples_list'
+    LOCAL_IMPORTANCE = _CommonSchemaConstants.LOCAL_IMPORTANCE
+    METADATA = _CommonSchemaConstants.METADATA
+    SUMMARY_IMPORTANCE = _CommonSchemaConstants.SUMMARY_IMPORTANCE
+
+    ALL = [CF_EXAMPLES_LIST, LOCAL_IMPORTANCE, METADATA, SUMMARY_IMPORTANCE]
+
+
+class _V2SchemaConstants:
+    CFS_LIST = 'cfs_list'
+    DATA_INTERFACE = 'data_interface'
+    DESIRED_CLASS = 'desired_class'
+    DESIRED_RANGE = 'desired_range'
+    FEATURE_NAMES = 'feature_names'
+    FEATURE_NAMES_INCLUDING_TARGET = 'feature_names_including_target'
+    LOCAL_IMPORTANCE = _CommonSchemaConstants.LOCAL_IMPORTANCE
+    METADATA = _CommonSchemaConstants.METADATA
+    MODEL_TYPE = 'model_type'
+    SUMMARY_IMPORTANCE = _CommonSchemaConstants.SUMMARY_IMPORTANCE
+    TEST_DATA = 'test_data'
+
+    ALL = [CFS_LIST, DATA_INTERFACE, DESIRED_CLASS, DESIRED_RANGE,
+           FEATURE_NAMES, FEATURE_NAMES_INCLUDING_TARGET,
+           LOCAL_IMPORTANCE, METADATA, MODEL_TYPE,
+           SUMMARY_IMPORTANCE, TEST_DATA]
+
+
+class _SchemaVersions:
+    V1 = '1.0'
+    V2 = '2.0'
+
+    ALL_VERSIONS = [V1, V2]
+
+
+def _get_schema_version(counterfactuals_dict):
+    """
+    Get the version from the serialized version of the
+    counterfactual examples.
+
+    :param counterfactuals_dict: Serialized version of the
+                                 counterfactual example.
+    :type counterfactuals_dict: Dict
+    """
+    if _CommonSchemaConstants.METADATA not in counterfactuals_dict:
+        raise SchemaErrorException(
+            "No metadata field found in serialized counterfactual output"
+        )
+
+    metadata = counterfactuals_dict[_CommonSchemaConstants.METADATA]
+    if _CommonSchemaConstants.VERSION not in metadata:
+        raise SchemaErrorException(
+            "No version field found in serialized counterfactual output"
+        )
+
+    version = metadata[_CommonSchemaConstants.VERSION]
+    if version not in _SchemaVersions.ALL_VERSIONS:
+        raise SchemaErrorException(
+            "Schema version {0} not supported."
+            "Support versions are {1}".format(
+                version, ','.join(_SchemaVersions.ALL_VERSIONS)
+            )
+        )
+
+    return version
+
+
 class CounterfactualConfig(BaseConfig):
+    METHOD = 'method'
+    CONTINUOUS_FEATURES = 'continuous_features'
+    TOTAL_CFS = 'total_CFs'
+    DESIRED_RANGE = 'desired_range'
+    DESIRED_CLASS = 'desired_class'
+    PERMITTED_RANGE = 'permitted_range'
+    FEATURES_TO_VARY = 'features_to_vary'
+    FEATURE_IMPORTANCE = 'feature_importance'
+
+    IS_COMPUTED = 'is_computed'
+    COUNTERFACTUAL_OBJ = 'counterfactual_obj'
+    HAS_COMPUTATION_FAILED = 'has_computation_failed'
+    FAILURE_REASON = 'failure_reason'
+
+    CONFIG_FILE_NAME = 'config.json'
+    RESULT_FILE_NAME = 'result.json'
+
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
@@ -40,6 +137,7 @@ class CounterfactualConfig(BaseConfig):
         self.permitted_range = permitted_range
         self.features_to_vary = features_to_vary
         self.feature_importance = feature_importance
+        self.is_computed = False
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
@@ -56,8 +154,174 @@ class CounterfactualConfig(BaseConfig):
             self.feature_importance == other_cf_config.feature_importance
         )
 
+    def get_config_as_dict(self):
+        """Returns the dictionary representation of configuration
+           in the CounterfactualConfig.
+
+        The dictionary contains the counterfactual method, continuous features,
+        total counterfactuals, desired class, desired range,
+        permitted range, features to vary and feature importance.
+
+        :return: The dictionary representation of the CounterfactualConfig.
+        :rtype: dict
+        """
+        return {
+            CounterfactualConfig.METHOD: self.method,
+            CounterfactualConfig.CONTINUOUS_FEATURES: self.continuous_features,
+            CounterfactualConfig.TOTAL_CFS: self.total_CFs,
+            CounterfactualConfig.DESIRED_RANGE: self.desired_range,
+            CounterfactualConfig.DESIRED_CLASS: self.desired_class,
+            CounterfactualConfig.PERMITTED_RANGE: self.permitted_range,
+            CounterfactualConfig.FEATURES_TO_VARY: self.features_to_vary,
+            CounterfactualConfig.FEATURE_IMPORTANCE: self.feature_importance
+        }
+
+    def save_config(self, config_directory_path):
+        config_file_path = (config_directory_path /
+                            CounterfactualConfig.CONFIG_FILE_NAME)
+        with open(config_file_path, 'w') as config_file:
+            json.dump(
+                self.get_config_as_dict(), config_file)
+
+    @staticmethod
+    def load_config(config_directory_path):
+        config_path = (config_directory_path /
+                       CounterfactualConfig.CONFIG_FILE_NAME)
+        with open(config_path, 'r') as config_file:
+            cf_config = json.load(config_file)
+
+        counterfactual_config = CounterfactualConfig(
+            method=cf_config[CounterfactualConfig.METHOD],
+            continuous_features=cf_config[
+                CounterfactualConfig.CONTINUOUS_FEATURES],
+            total_CFs=cf_config[CounterfactualConfig.TOTAL_CFS],
+            desired_class=cf_config[CounterfactualConfig.DESIRED_CLASS],
+            desired_range=cf_config[CounterfactualConfig.DESIRED_RANGE],
+            permitted_range=cf_config[
+                CounterfactualConfig.PERMITTED_RANGE],
+            features_to_vary=cf_config[
+                CounterfactualConfig.FEATURES_TO_VARY],
+            feature_importance=cf_config[
+                CounterfactualConfig.FEATURE_IMPORTANCE])
+
+        return counterfactual_config
+
+    def get_result(self):
+        """Returns the dictionary representation of result of the computation
+           in the CounterfactualConfig.
+
+        :return: The dictionary representation of result in the
+                 CounterfactualConfig.
+        :rtype: dict
+        """
+        result = {}
+        if self.counterfactual_obj is not None:
+            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = \
+                self.counterfactual_obj.to_json()
+        else:
+            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = None
+
+        result[CounterfactualConfig.HAS_COMPUTATION_FAILED] = \
+            self.has_computation_failed
+        result[CounterfactualConfig.FAILURE_REASON] = self.failure_reason
+        result[CounterfactualConfig.IS_COMPUTED] = self.is_computed
+
+        return result
+
+    def save_result(self, data_directory_path):
+        cf_result = self.get_result()
+        if cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ] is not None:
+            counterfactuals_dict = json.loads(
+                cf_result[CounterfactualConfig.COUNTERFACTUAL_OBJ]
+            )
+
+            schema_version = _get_schema_version(counterfactuals_dict)
+            if schema_version == _SchemaVersions.V1:
+                cf_schema_keys = _V1SchemaConstants.ALL
+            else:
+                cf_schema_keys = _V2SchemaConstants.ALL
+
+            for counterfactual_examples_key in cf_schema_keys:
+                file_path = (data_directory_path /
+                             (counterfactual_examples_key + '.json'))
+                with open(file_path, 'w') as file_path:
+                    json.dump(
+                        counterfactuals_dict[counterfactual_examples_key],
+                        file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED],
+                file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.FAILURE_REASON + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.FAILURE_REASON],
+                file_path)
+
+        file_path = (data_directory_path /
+                     (CounterfactualConfig.IS_COMPUTED + '.json'))
+        with open(file_path, 'w') as file_path:
+            json.dump(
+                cf_result[CounterfactualConfig.IS_COMPUTED],
+                file_path)
+
+    def load_result(self, data_directory_path):
+        metadata_file_path = (data_directory_path /
+                              (_CommonSchemaConstants.METADATA + '.json'))
+
+        if metadata_file_path.exists():
+            with open(metadata_file_path, 'r') as result_file:
+                metadata = json.load(result_file)
+
+            if metadata['version'] == _SchemaVersions.V1:
+                cf_schema_keys = _V1SchemaConstants.ALL
+            else:
+                cf_schema_keys = _V2SchemaConstants.ALL
+
+            counterfactual_examples_dict = {}
+            for counterfactual_examples_key in cf_schema_keys:
+                result_path = (data_directory_path /
+                               (counterfactual_examples_key + '.json'))
+                with open(result_path, 'r') as result_file:
+                    counterfactual_examples_dict[
+                        counterfactual_examples_key] = json.load(result_file)
+
+            counterfactuals_json_str = json.dumps(counterfactual_examples_dict)
+            self.counterfactual_obj = \
+                CounterfactualExplanations.from_json(counterfactuals_json_str)
+        else:
+            self.counterfactual_obj = None
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.has_computation_failed = json.load(result_file)
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.FAILURE_REASON + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.failure_reason = json.load(result_file)
+
+        result_path = (data_directory_path /
+                       (CounterfactualConfig.IS_COMPUTED + '.json'))
+        with open(result_path, 'r') as result_file:
+            self.is_computed = json.load(result_file)
+
 
 class CounterfactualManager(BaseManager):
+    _TRAIN = '_train'
+    _TEST = '_test'
+    _MODEL = '_model'
+    _TARGET_COLUMN = '_target_column'
+    _TASK_TYPE = '_task_type'
+    _CATEGORICAL_FEATURES = '_categorical_features'
+    _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
+
     def __init__(self, model, train, test, target_column, task_type,
                  categorical_features):
         """Defines the CounterfactualManager for generating counterfactuals
@@ -262,8 +526,15 @@ class CounterfactualManager(BaseManager):
                                 features_to_vary=cf_config.features_to_vary,
                                 permitted_range=cf_config.permitted_range)
 
+                    # Validate the serialized output against schema
+                    schema = CounterfactualManager._get_counterfactual_schema(
+                        version=counterfactual_obj.metadata['version'])
+                    jsonschema.validate(
+                        json.loads(counterfactual_obj.to_json()), schema)
+
                     cf_config.counterfactual_obj = \
                         counterfactual_obj
+
                 except Exception as e:
                     cf_config.has_computation_failed = True
                     cf_config.failure_reason = str(e)
@@ -292,6 +563,16 @@ class CounterfactualManager(BaseManager):
                     failure_reason_list.append(
                         counterfactual_config.failure_reason)
             return failure_reason_list
+
+    @staticmethod
+    def _get_counterfactual_schema(version):
+        """Get the schema for validating the counterfactual examples output."""
+        schema_directory = (Path(__file__).parent.parent / '_tools' /
+                            'counterfactual' / 'dashboard_schemas')
+        schema_filename = f'counterfactual_examples_output_v{version}.json'
+        schema_filepath = schema_directory / schema_filename
+        with open(schema_filepath, 'r') as f:
+            return json.load(f)
 
     def list(self):
         pass
@@ -329,8 +610,76 @@ class CounterfactualManager(BaseManager):
         return ManagerNames.COUNTERFACTUAL
 
     def _save(self, path):
-        pass
+        """Save the CounterfactualManager to the given path.
+
+        :param path: The directory path to save the CounterfactualManager to.
+        :type path: str
+        """
+        counterfactual_dir = Path(path)
+        counterfactual_dir.mkdir(parents=True, exist_ok=True)
+        for counterfactual_config in self._counterfactual_config_list:
+            directory_manager = DirectoryManager(parent_directory_path=path)
+
+            counterfactual_config.save_config(
+                directory_manager.create_config_directory()
+            )
+
+            counterfactual_config.save_result(
+                directory_manager.create_data_directory()
+            )
 
     @staticmethod
-    def _load(path, model_analysis):
-        pass
+    def _load(path, rai_insights):
+        """Load the CounterfactualManager from the given path.
+
+        :param path: The directory path to load the CounterfactualManager from.
+        :type path: str
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
+        :return: The CounterfactualManager manager after loading.
+        :rtype: CounterfactualManager
+        """
+        inst = CounterfactualManager.__new__(CounterfactualManager)
+
+        # Rehydrate model analysis data
+        inst.__dict__[CounterfactualManager._MODEL] = rai_insights.model
+        inst.__dict__[CounterfactualManager._TRAIN] = rai_insights.train
+        inst.__dict__[CounterfactualManager._TEST] = rai_insights.test
+        inst.__dict__[CounterfactualManager._TARGET_COLUMN] = \
+            rai_insights.target_column
+        inst.__dict__[CounterfactualManager._TASK_TYPE] = \
+            rai_insights.task_type
+        inst.__dict__[CounterfactualManager._CATEGORICAL_FEATURES] = \
+            rai_insights.categorical_features
+
+        inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
+
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
+        for counterfactual_config_dir in all_cf_dirs:
+            directory_manager = DirectoryManager(
+                parent_directory_path=path,
+                sub_directory_name=counterfactual_config_dir)
+
+            counterfactual_config = CounterfactualConfig.load_config(
+                directory_manager.get_config_directory()
+            )
+
+            counterfactual_config.load_result(
+                directory_manager.get_data_directory()
+            )
+
+            if counterfactual_config.counterfactual_obj is not None:
+                # Validate the serialized output against schema
+                schema = CounterfactualManager._get_counterfactual_schema(
+                    version=counterfactual_config.counterfactual_obj.metadata[
+                        'version'])
+                jsonschema.validate(
+                    json.loads(
+                        counterfactual_config.counterfactual_obj.to_json()),
+                    schema)
+
+            inst.__dict__[
+                CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST].append(
+                    counterfactual_config)
+
+        return inst

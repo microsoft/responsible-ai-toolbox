@@ -9,7 +9,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
-  IButtonStyles,
   IIconProps,
   Text,
   Pivot,
@@ -32,11 +31,6 @@ import {
  * together with the map selector and feature list control. This way all
  * error analysis specific components can be plugged into a larger dashboard.
  */
-
-const buttonStyle: IButtonStyles = {
-  root: { padding: "0px 4px" }
-};
-const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   handleErrorDetectorChanged: (
@@ -63,11 +57,14 @@ export class ErrorAnalysisViewTab extends React.Component<
 
   public constructor(props: IErrorAnalysisViewTabProps) {
     super(props);
-    this.state = { openFeatureList: false };
+    this.state = {
+      openFeatureList: false
+    };
   }
 
   public render(): React.ReactNode {
     const classNames = errorAnalysisStyles();
+    const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
     return (
       <Stack horizontal>
         <Stack
@@ -78,30 +75,34 @@ export class ErrorAnalysisViewTab extends React.Component<
           <Text variant={"xxLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
-            <Pivot
-              onLinkClick={this.props.handleErrorDetectorChanged}
-              selectedKey={this.props.selectedKey}
-            >
-              <PivotItem
-                itemKey={ErrorAnalysisOptions.TreeMap}
-                headerText={localization.ErrorAnalysis.MainMenu.treeMap}
-              />
-              <PivotItem
-                itemKey={ErrorAnalysisOptions.HeatMap}
-                headerText={localization.ErrorAnalysis.MainMenu.heatMap}
-              />
-            </Pivot>
-            {this.props.errorAnalysisOption ===
-              ErrorAnalysisOptions.TreeMap && (
-              <CommandBarButton
-                styles={buttonStyle}
-                iconProps={featureListIcon}
-                key={"featureList"}
-                onClick={(): void => this.setState({ openFeatureList: true })}
-                text={localization.ErrorAnalysis.MainMenu.featureList}
-              />
-            )}
+          <Stack horizontal>
+            <Stack.Item>
+              <Pivot
+                onLinkClick={this.handleTabClick}
+                selectedKey={this.props.selectedKey}
+              >
+                <PivotItem
+                  itemKey={ErrorAnalysisOptions.TreeMap}
+                  headerText={localization.ErrorAnalysis.MainMenu.treeMap}
+                />
+                <PivotItem
+                  itemKey={ErrorAnalysisOptions.HeatMap}
+                  headerText={localization.ErrorAnalysis.MainMenu.heatMap}
+                />
+              </Pivot>
+            </Stack.Item>
+            <Stack.Item>
+              {this.props.errorAnalysisOption ===
+                ErrorAnalysisOptions.TreeMap && (
+                <CommandBarButton
+                  className={classNames.featureList}
+                  iconProps={featureListIcon}
+                  key={"featureList"}
+                  onClick={this.handleFeatureListClick}
+                  text={localization.ErrorAnalysis.MainMenu.featureList}
+                />
+              )}
+            </Stack.Item>
           </Stack>
           <ErrorAnalysisView
             tree={this.props.tree}
@@ -157,4 +158,15 @@ export class ErrorAnalysisViewTab extends React.Component<
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
   }
+
+  private readonly handleTabClick = (item?: PivotItem): void => {
+    if (item?.props.itemKey === ErrorAnalysisOptions.HeatMap) {
+      this.setState({ openFeatureList: false });
+    }
+    this.props.handleErrorDetectorChanged(item);
+  };
+
+  private readonly handleFeatureListClick = (): void => {
+    this.setState((prev) => ({ openFeatureList: !prev.openFeatureList }));
+  };
 }

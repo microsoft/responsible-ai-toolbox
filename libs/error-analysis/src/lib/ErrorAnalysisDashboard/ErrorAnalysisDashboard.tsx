@@ -331,6 +331,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       selectedWhatIfIndex: undefined,
+      showMessageBar: false,
       treeViewState: createInitialTreeViewState(),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
@@ -380,6 +381,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             viewType={this.state.viewType}
             activeGlobalTab={this.state.activeGlobalTab}
             activePredictionTab={this.state.predictionTab}
+            showMessageBar={this.state.showMessageBar}
+            closeMessageBar={this.closeMessageBar}
           />
           <MainMenu
             viewExplanation={this.viewExplanation.bind(this)}
@@ -432,6 +435,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           )}
           {this.state.openMapShift && (
             <MapShift
+              currentOption={this.state.mapShiftErrorAnalysisOption}
               isOpen={this.state.openMapShift}
               onDismiss={(): void => this.setState({ openMapShift: false })}
               onSave={(): void => {
@@ -776,6 +780,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     this.setState({ predictionTab });
   }
 
+  private closeMessageBar = (): void => {
+    this.setState({ showMessageBar: false });
+  };
+
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
     this.state.cohorts.forEach((errorCohort) =>
@@ -805,7 +813,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     this.setState((prevState) => ({
       baseCohort: switchNew ? savedCohort : prevState.baseCohort,
       cohorts: newCohorts,
-      selectedCohort: switchNew ? savedCohort : prevState.selectedCohort
+      selectedCohort: switchNew ? savedCohort : prevState.selectedCohort,
+      showMessageBar: true
     }));
   };
 }

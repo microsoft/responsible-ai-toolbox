@@ -84,13 +84,6 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: flake8
-        run: flake8
-
-      - name: Check sorted python imports using isort
-        run: |
-          isort . -c
-
       - if: ${{ matrix.packageDirectory != 'raiwidgets' }}
         name: Run tests
         run: |

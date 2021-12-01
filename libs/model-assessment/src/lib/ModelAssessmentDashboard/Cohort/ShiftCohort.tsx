@@ -100,6 +100,10 @@ export class ShiftCohort extends React.Component<
           onChange={this.onChange}
         />
         <CohortEditorFilterList
+          compositeFilters={
+            this.state.savedCohorts[this.state.selectedCohort].cohort
+              .compositeFilters
+          }
           filters={filters}
           jointDataset={this.context.jointDataset}
         />

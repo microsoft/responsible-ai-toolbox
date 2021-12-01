@@ -1,0 +1,29 @@
+name: Python Linting
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install linting dependencies
+        run: |
+          pip install -r requirements-linting.txt
+
+      - name: flake8
+        run: flake8
+
+      - name: Check sorted python imports using isort
+        run: |
+          isort . -c

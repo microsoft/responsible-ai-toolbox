@@ -6,7 +6,7 @@ import traceback
 import pandas as pd
 
 from erroranalysis._internal.constants import display_name_to_metric
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 
 from .constants import ErrorMessages, SKLearn
@@ -15,15 +15,15 @@ from .interfaces import WidgetRequestResponseConstants
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
 
-class ModelAnalysisDashboardInput:
+class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: ModelAnalysis):
+            analysis: RAIInsights):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
-            An ModelAnalysis object that represents an explanation.
-        :type analysis: ModelAnalysis
+            A RAIInsights object that represents an explanation.
+        :type analysis: RAIInsights
         """
         self._analysis = analysis
         model = analysis.model

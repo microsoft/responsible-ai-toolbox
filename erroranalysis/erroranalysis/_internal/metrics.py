@@ -37,7 +37,7 @@ def macro_f1_score(y_true, y_pred):
     return f1_score(y_true, y_pred, average=MACRO)
 
 
-def get_ordered_labels(classes, true_y, pred_y):
+def get_ordered_classes(classes, true_y, pred_y):
     # If classes is none, or disagrees with labels from true and predicted
     # arrays, return the sorted set of labels.
     # Otherwise return classes as it provides the correct ordering and any
