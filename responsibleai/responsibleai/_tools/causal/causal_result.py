@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
 import pandas as pd
-import semver
 
+import semver
 from responsibleai._interfaces import CausalConfig as CausalConfigInterface
 from responsibleai._interfaces import (CausalData, CausalPolicy,
                                        CausalPolicyGains,

@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 import pytest
 
-from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
-                                                   FALSE_COUNT, MATRIX, VALUES)
+from erroranalysis._internal.matrix_filter import (
+    CATEGORY1, CATEGORY2, COUNT, FALSE_COUNT, MATRIX, VALUES)
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       UserConfigValidationException)

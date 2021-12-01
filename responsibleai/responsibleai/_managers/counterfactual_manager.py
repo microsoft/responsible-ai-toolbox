@@ -3,10 +3,10 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import jsonschema
-
-import numpy as np
 from pathlib import Path
+
+import jsonschema
+import numpy as np
 
 import dice_ml
 from dice_ml import Dice
@@ -16,11 +16,11 @@ from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException,
                                       UserConfigValidationException)
-from responsibleai._tools.shared.state_directory_management import \
-    DirectoryManager
 from responsibleai.rai_insights.constants import ModelTask
 
 

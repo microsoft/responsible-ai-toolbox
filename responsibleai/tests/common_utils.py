@@ -3,8 +3,6 @@
 
 import numpy as np
 import pandas as pd
-# Defines common utilities for responsibleai tests
-from dice_ml.utils import helpers
 from lightgbm import LGBMClassifier
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
@@ -15,6 +13,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+# Defines common utilities for responsibleai tests
+from dice_ml.utils import helpers
 from xgboost import XGBClassifier
 
 

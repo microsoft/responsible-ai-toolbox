@@ -7,18 +7,18 @@ from typing import Any, List, Optional, Union
 
 import numpy as np
 import pandas as pd
-from econml.solutions.causal_analysis import CausalAnalysis
 
+from econml.solutions.causal_analysis import CausalAnalysis
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai._tools.shared.state_directory_management import \
-    DirectoryManager
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
                                                           ResultAttributes)
 from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.constants import ModelTask
 

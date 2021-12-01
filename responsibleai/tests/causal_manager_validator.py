@@ -4,15 +4,15 @@
 import numpy as np
 import pandas as pd
 import pytest
-from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
 
+from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
+from responsibleai import ModelTask
 from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai import ModelTask
 
 EFFECTS_ATTRIBUTES = [
     'point',
