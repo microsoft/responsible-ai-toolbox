@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { getSpan } from "apps/widget-e2e/src/util/getSpan";
+
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 

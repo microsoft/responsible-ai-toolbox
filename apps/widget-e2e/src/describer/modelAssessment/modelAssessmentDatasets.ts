@@ -70,15 +70,6 @@ const modelAssessmentDatasets = {
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
     },
-    whatIfCounterfactualsData: {
-      selectedDatapoint: "Index 5",
-      columnHeaderBeforeSort: "age",
-      columnHeaderAfterSort: "capital-gain",
-      searchBarQuery: "occupation",
-      WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
-      CreateYourOwnCounterfactualInputFieldUpdated: "25"
-    },
     featureNames: [
       "marital-status",
       "education-num",
@@ -94,7 +85,16 @@ const modelAssessmentDatasets = {
       "gender",
       "education",
       "capital-loss"
-    ]
+    ],
+    whatIfCounterfactualsData: {
+      columnHeaderAfterSort: "capital-gain",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "occupation",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5"
+    }
   }
 };
 
