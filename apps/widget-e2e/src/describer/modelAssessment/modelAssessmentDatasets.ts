@@ -70,6 +70,15 @@ const modelAssessmentDatasets = {
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
     },
+    whatIfCounterfactualsData: {
+      selectedDatapoint: "Index 5",
+      columnHeaderBeforeSort: "age",
+      columnHeaderAfterSort: "capital-gain",
+      searchBarQuery: "occupation",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25"
+    },
     featureNames: [
       "marital-status",
       "education-num",

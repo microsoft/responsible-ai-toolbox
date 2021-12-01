@@ -44,5 +44,14 @@ export enum Locators {
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
   WhatIfYAxisAxisValueNewValue = "#AxisConfigPanel span:contains('True Y')",
-  WhatIfScatterChartYAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('True Y')"
+  WhatIfScatterChartYAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('True Y')",
+  WhatIfCounterfactualPanel = "#CounterfactualPanel",
+  CreateWhatIfCounterfactualButton = "#IndividualFeatureContainer button:contains('Create what-if counterfactual')",
+  WhatIfCreateCounterfactualSortButton = "#CounterfactualPanel button[class^='ms-Toggle']",
+  WhatIfColumnHeaders = "#CounterfactualPanel div[role='columnheader']",
+  WhatIfSearchBar = "#CounterfactualPanel div[role='search']",
+  WhatIfCloseButton = "#CounterfactualPanel button[aria-label='Close']",
+  WhatIfSearchBarClearTextButton = "#CounterfactualPanel button[aria-label='Clear text']",
+  WhatIfNameLabel = "#whatIfNameLabel",
+  CreateYourOwnCounterfactualInputField = "#CounterfactualPanel div[role='gridcell'] input[type='text']"
 }

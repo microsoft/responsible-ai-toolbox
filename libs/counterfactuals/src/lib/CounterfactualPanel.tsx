@@ -65,6 +65,7 @@ export class CounterfactualPanel extends React.Component<
     const classes = counterfactualPanelStyles();
     return (
       <Panel
+        id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
         type={PanelType.largeFixed}
         onDismiss={this.onClosePanel.bind(this)}
