@@ -3,7 +3,7 @@
 
 import { BarChart } from "../../../../util/BarChart";
 import { ScatterChart } from "../../../../util/ScatterChart";
-import { selectRow } from "../../../../util/Table";
+import { assertRowSelected, selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
@@ -69,14 +69,12 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
       );
     });
 
-    it("should be able to select different 'datapoint' from dropdown", () => {
+    it("should be able to select different 'datapoint'", () => {
       selectRow("Index", "7");
+      assertRowSelected("Index", "7");
 
-      cy.get(Locators.IFIDatapointDropdown).then(() => {
-        cy.get(
-          `div[class^='featureImportanceLegend'] div.ms-Dropdown-container`
-        ).should("contain", "Row 7");
-      });
+      cy.get(Locators.IFIDataPointDropdown).focus();
+      cy.focused().should("contain", "Row 7");
     });
 
     it("Should have Sort by absolute values toggle button", () => {
