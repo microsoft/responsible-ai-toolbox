@@ -332,6 +332,10 @@ def run_rai_insights(model, train_data, test_data, target_column,
         # save the rai_insights
         rai_insights.save(path)
 
+        # Validate the common set of state produced when rai insights
+        # are saved on the disk.
+        validate_common_state_directories(path, task_type)
+
         # Validate the directory structure of the state saved
         # by the managers.
         validate_state_directory(path, manager_type)
@@ -355,7 +359,18 @@ def run_rai_insights(model, train_data, test_data, target_column,
             validate_explainer(rai_insights, train_data, test_data, classes)
 
 
-def validate_state_directory(path, manager_type, classes=None):
+def validate_common_state_directories(path, task_type):
+    predictions_path = path / "predictions"
+    assert predictions_path.exists()
+    all_predictions_files = os.listdir(predictions_path)
+    assert "predict.json" in all_predictions_files
+    if task_type == ModelTask.CLASSIFICATION:
+        assert "predict_proba.json" in all_predictions_files
+    else:
+        assert "predict_proba.json" not in all_predictions_files
+
+
+def validate_state_directory(path, manager_type):
     all_dirs = os.listdir(path)
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)

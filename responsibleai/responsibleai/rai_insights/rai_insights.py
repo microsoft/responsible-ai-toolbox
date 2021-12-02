@@ -23,6 +23,7 @@ from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.constants import ModelTask
 
 _DATA = 'data'
+_PREDICTIONS = 'predictions'
 _DTYPES = 'dtypes'
 _TRAIN = 'train'
 _TEST = 'test'
@@ -37,6 +38,8 @@ _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
+_PREDICT = 'predict'
+_PREDICT_PROBA = 'predict_proba'
 
 
 class RAIInsights(object):
@@ -526,16 +529,37 @@ class RAIInsights(object):
         with open(file_path, 'w') as file:
             file.write(content)
 
-    def save(self, path):
-        """Save the RAIInsights to the given path.
+    def _save_predictions(self, path):
+        """Save the predict() and predict_proba() output.
+
         :param path: The directory path to save the RAIInsights to.
         :type path: str
         """
-        top_dir = Path(path)
-        # save each of the individual managers
-        for manager in self._managers:
-            manager._save(top_dir / manager.name)
-        # save current state
+        prediction_output_path = Path(path) / _PREDICTIONS
+        prediction_output_path.mkdir(parents=True, exist_ok=True)
+
+        test_without_target_column = self.test.drop(
+            [self.target_column], axis=1)
+
+        predict_output = self.model.predict(test_without_target_column)
+        self._write_to_file(
+            prediction_output_path / (_PREDICT + _JSON_EXTENSION),
+            json.dumps(predict_output.tolist()))
+
+        if hasattr(self.model, SKLearn.PREDICT_PROBA):
+            predict_proba_output = self.model.predict_proba(
+                test_without_target_column)
+            self._write_to_file(
+                prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
+                json.dumps(predict_proba_output.tolist()))
+
+    def _save_data(self, path):
+        """Save the copy of raw data (train and test sets) and
+           their related metadata.
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
         data_directory = Path(path) / _DATA
         data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
@@ -548,6 +572,15 @@ class RAIInsights(object):
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
                             self.test.to_json())
+
+    def _save_metadata(self, path):
+        """Save the metadata like target column, categorical features,
+           task type and the classes (if any).
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        top_dir = Path(path)
         classes = _convert_to_list(self._classes)
         meta = {
             _TARGET_COLUMN: self.target_column,
@@ -557,6 +590,14 @@ class RAIInsights(object):
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
+
+    def _save_model(self, path):
+        """Save the model and the serializer (if any).
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        top_dir = Path(path)
         if self._serializer is not None:
             # save the model
             self._serializer.save(self.model, top_dir)
@@ -573,6 +614,22 @@ class RAIInsights(object):
                         " be specified")
             with open(top_dir / _MODEL_PKL, 'wb') as file:
                 pickle.dump(self.model, file)
+
+    def save(self, path):
+        """Save the RAIInsights to the given path.
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        top_dir = Path(path)
+        # save each of the individual managers
+        for manager in self._managers:
+            manager._save(top_dir / manager.name)
+
+        self._save_data(path)
+        self._save_metadata(path)
+        self._save_model(path)
+        self._save_predictions(path)
 
     @staticmethod
     def load(path):
