@@ -13,12 +13,12 @@ from sklearn.feature_selection import (mutual_info_classif,
 from sklearn.preprocessing import OrdinalEncoder
 
 from erroranalysis._internal.constants import MatrixParams, Metrics, ModelTask
-from erroranalysis.report import ErrorReport
-from erroranalysis._internal.matrix_filter import (
-    compute_matrix as _compute_matrix)
-from erroranalysis._internal.surrogate_error_tree import (
-    compute_error_tree as _compute_error_tree)
+from erroranalysis._internal.matrix_filter import \
+    compute_matrix as _compute_matrix
+from erroranalysis._internal.surrogate_error_tree import \
+    compute_error_tree as _compute_error_tree
 from erroranalysis._internal.version_checker import check_pandas_version
+from erroranalysis.report import ErrorReport
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 

@@ -4,12 +4,12 @@
 import logging
 from unittest.mock import MagicMock
 
+import numpy as np
 import pandas as pd
 import pytest
-import numpy as np
 
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
+from responsibleai.exceptions import UserConfigValidationException
 
 from .common_utils import (create_binary_classification_dataset,
                            create_cancer_data, create_iris_data,

@@ -3,14 +3,14 @@
 
 """Note: this test file will be removed once ModelAnalysis is removed."""
 
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from uuid import UUID
 
 import numpy as np
-import os
 import pandas as pd
 import pytest
-from uuid import UUID
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
