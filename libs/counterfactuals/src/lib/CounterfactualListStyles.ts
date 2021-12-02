@@ -10,6 +10,8 @@ import {
 
 export interface ICounterfactualListStyle {
   dropdownLabel: IStyle;
+  originalCell: IStyle;
+  editCell: IStyle;
 }
 
 export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualListStyle> =
@@ -23,6 +25,13 @@ export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualLi
         span: {
           fontWeight: "600"
         }
+      },
+      editCell: {
+        color: theme.palette.green,
+        fontWeight: "bold"
+      },
+      originalCell: {
+        color: theme.semanticColors.bodyText
       }
     });
   };
