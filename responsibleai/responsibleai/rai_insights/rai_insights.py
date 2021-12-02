@@ -291,6 +291,8 @@ class RAIInsights(object):
                 small_test_data = test.iloc[0:1].drop(
                     [target_column], axis=1)
 
+                small_train_features_before = list(small_train_data.columns)
+
                 # Run predict() of the model
                 try:
                     model.predict(small_train_data)
@@ -300,6 +302,9 @@ class RAIInsights(object):
                         'The model passed cannot be used for'
                         ' getting predictions via predict()'
                     )
+                self._validate_features_same(small_train_features_before,
+                                             small_train_data,
+                                             SKLearn.PREDICT)
 
                 # Run predict_proba() of the model
                 if task_type == ModelTask.CLASSIFICATION:
@@ -311,9 +316,12 @@ class RAIInsights(object):
                             'The model passed cannot be used for'
                             ' getting predictions via predict_proba()'
                         )
+                self._validate_features_same(small_train_features_before,
+                                             small_train_data,
+                                             SKLearn.PREDICT_PROBA)
 
                 if task_type == ModelTask.REGRESSION:
-                    if hasattr(model, 'predict_proba'):
+                    if hasattr(model, SKLearn.PREDICT_PROBA):
                         warnings.warn(
                             'INVALID-TASK-TYPE-WARNING: The regression model'
                             'provided has a predict_proba function. '
@@ -322,6 +330,27 @@ class RAIInsights(object):
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
                 "Expecting pandas Dataframe for train and test."
+            )
+
+    def _validate_features_same(self, small_train_features_before,
+                                small_train_data, function):
+        """
+        Validate the features are unmodified on the dataframe.
+
+        :param small_train_features_before: The features saved before
+            an operation was performed.
+        :type small_train_features_before: list[str]
+        :param small_train_data: The dataframe after the operation.
+        :type small_train_data: pandas.DataFrame
+        :param function: The name of the operation performed.
+        :type function: str
+        """
+        small_train_features_after = list(small_train_data.columns)
+        if small_train_features_before != small_train_features_after:
+            raise UserConfigValidationException(
+                ('Calling model {} function modifies '
+                 'input dataset features. Please check if '
+                 'predict function is defined correctly.').format(function)
             )
 
     @property
@@ -513,12 +542,13 @@ class RAIInsights(object):
         self._write_to_file(data_directory / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            self.train.to_json())
+                            self.train.to_json(orient='split'))
+
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TEST + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
-                            self.test.to_json())
+                            self.test.to_json(orient='split'))
         classes = _convert_to_list(self._classes)
         meta = {
             _TARGET_COLUMN: self.target_column,
@@ -562,12 +592,12 @@ class RAIInsights(object):
         with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types)
+            train = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TRAIN] = train
         with open(data_directory / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
-            test = pd.read_json(file, dtype=types)
+            test = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TEST] = test
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()

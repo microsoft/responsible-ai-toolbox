@@ -93,6 +93,7 @@ export class CounterfactualList extends React.Component<
         setKey="set"
         constrainMode={ConstrainMode.unconstrained}
         layoutMode={DetailsListLayoutMode.fixedColumns}
+        onRenderItemColumn={this.renderItemColumn}
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
@@ -283,6 +284,16 @@ export class CounterfactualList extends React.Component<
         showCallout: !preState.showCallout
       };
     });
+  };
+
+  private renderItemColumn = (item: any, index?: number, column?: IColumn) => {
+    const classNames = counterfactualListStyle();
+    const fieldContent = item[column?.fieldName as unknown as string] as string;
+    const itemClass =
+      index !== 0 && fieldContent !== "-"
+        ? classNames.editCell
+        : classNames.originalCell;
+    return <div className={itemClass}>{fieldContent}</div>;
   };
 
   private renderDetailsFooterItemColumn = (

@@ -46,9 +46,6 @@ class TestModelAnalysisDashboard:
         X['Income'] = y
         X_test['Income'] = y_test
 
-        X.reset_index(drop=True, inplace=True)
-        X_test.reset_index(drop=True, inplace=True)
-
         ri = RAIInsights(knn, X, X_test, 'Income', 'classification',
                          categorical_features=['Workclass', 'Education-Num',
                                                'Marital Status',
