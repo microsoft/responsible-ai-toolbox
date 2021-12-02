@@ -33,7 +33,9 @@ class AzureNBEnvironment(BaseEnvironment):
 
             if "instance" not in self.nbvm or "domainsuffix" not in self.nbvm:
                 self.successfully_detected = False
+                print("Azure NB Env NOT Detected")
             else:
+                print("Azure NB Env Detected!!!")
                 instance_name = self.nbvm["instance"]
                 domain_suffix = self.nbvm["domainsuffix"]
                 self.base_url = \
@@ -43,6 +45,14 @@ class AzureNBEnvironment(BaseEnvironment):
                     f"https://{instance_name}.{domain_suffix}",
                     f"https://{instance_name}-{service.port}.{domain_suffix}"
                 ]
+                print("origins: ")
+                print(self.nbvm_origins)
+                print("base url: ")
+                print(self.base_url)
+                print("instance: ")
+                print(instance_name)
+                print("suffix: ")
+                print(domain_suffix)
 
     def get_nbvm_config(self):
         # Use regex to find items of the form key=value where value is a
@@ -58,6 +68,8 @@ class AzureNBEnvironment(BaseEnvironment):
         return result
 
     def select(self, service):
+        print("setting CORS!!! with origins: ")
+        print(self.nbvm_origins)
         headers = ['Content-Type']
         service.cors = CORS(
             service.app,
