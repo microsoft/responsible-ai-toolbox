@@ -338,7 +338,7 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
         # Validate the directory structure of the state saved
         # by the managers.
-        validate_state_directory(path, manager_type)
+        validate_component_state_directory(path, manager_type)
 
         # load the rai_insights
         rai_insights = RAIInsights.load(path)
@@ -360,6 +360,14 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
 
 def validate_common_state_directories(path, task_type):
+    data_path = path / "data"
+    assert data_path.exists()
+    all_data_files = os.listdir(data_path)
+    assert "train.json" in all_data_files
+    assert "traindtypes.json" in all_data_files
+    assert "test.json" in all_data_files
+    assert "testdtypes.json" in all_data_files
+
     predictions_path = path / "predictions"
     assert predictions_path.exists()
     all_predictions_files = os.listdir(predictions_path)
@@ -370,7 +378,7 @@ def validate_common_state_directories(path, task_type):
         assert "predict_proba.json" not in all_predictions_files
 
 
-def validate_state_directory(path, manager_type):
+def validate_component_state_directory(path, manager_type):
     all_dirs = os.listdir(path)
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)
