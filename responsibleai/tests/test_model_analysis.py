@@ -303,12 +303,8 @@ def validate_model_analysis(
     categorical_features
 ):
 
-    pd.testing.assert_frame_equal(
-        model_analysis.train.reset_index(drop=True),
-        train_data.reset_index(drop=True))
-    pd.testing.assert_frame_equal(
-        model_analysis.test.reset_index(drop=True),
-        test_data.reset_index(drop=True))
+    pd.testing.assert_frame_equal(model_analysis.train, train_data)
+    pd.testing.assert_frame_equal(model_analysis.test, test_data)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features

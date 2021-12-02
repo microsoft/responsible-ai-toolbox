@@ -395,12 +395,8 @@ def validate_rai_insights(
     categorical_features
 ):
 
-    pd.testing.assert_frame_equal(
-        rai_insights.train.reset_index(drop=True),
-        train_data.reset_index(drop=True))
-    pd.testing.assert_frame_equal(
-        rai_insights.test.reset_index(drop=True),
-        test_data.reset_index(drop=True))
+    pd.testing.assert_frame_equal(rai_insights.train, train_data)
+    pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == categorical_features

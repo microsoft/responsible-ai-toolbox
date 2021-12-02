@@ -526,23 +526,6 @@ class RAIInsights(object):
         with open(file_path, 'w') as file:
             file.write(content)
 
-    def _reset_data_frame_index(self, some_dataframe):
-        """Reset the index if duplicates exist in the dataframe index.
-           Create a new dataframe if the input dataframe has duplicate index.
-
-        :param some_dataframe: Dataframe to check for duplicate index
-        :type some_dataframe: pd.DataFrame
-        :return: Dataframe without duplicate indices.
-        :rtype: pd.DataFrame
-        """
-        num_indices = len(some_dataframe.index.tolist())
-        num_distinct_indices = len(np.unique(some_dataframe.index).tolist())
-
-        if num_indices == num_distinct_indices:
-            return some_dataframe
-
-        return some_dataframe.reset_index(drop=True)
-
     def save(self, path):
         """Save the RAIInsights to the given path.
         :param path: The directory path to save the RAIInsights to.
@@ -558,16 +541,14 @@ class RAIInsights(object):
         dtypes = self.train.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
-        reset_index_train = self._reset_data_frame_index(self.train)
         self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            reset_index_train.to_json())
+                            self.train.to_json(orient='split'))
 
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TEST + _DTYPES),
                             json.dumps(dtypes))
-        reset_index_test = self._reset_data_frame_index(self.test)
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
-                            reset_index_test.to_json())
+                            self.test.to_json(orient='split'))
         classes = _convert_to_list(self._classes)
         meta = {
             _TARGET_COLUMN: self.target_column,
@@ -611,12 +592,12 @@ class RAIInsights(object):
         with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types)
+            train = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TRAIN] = train
         with open(data_directory / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
-            test = pd.read_json(file, dtype=types)
+            test = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TEST] = test
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
