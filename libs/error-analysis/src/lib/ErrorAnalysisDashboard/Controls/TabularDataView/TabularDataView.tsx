@@ -9,6 +9,7 @@ import {
   rowsFromCustomPoints,
   ITableState
 } from "@responsible-ai/core-ui";
+import _ from "lodash";
 import {
   ConstrainMode,
   DetailsList,
@@ -61,9 +62,8 @@ const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
   if (!props) {
     return <div />;
   }
-  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
-    tooltipHostProps
-  ) => <TooltipHost {...tooltipHostProps} />;
+  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+    (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
   return (
     <div>
       {defaultRender?.({
@@ -100,11 +100,12 @@ export class TabularDataView extends React.Component<
     if (
       this.props.customPoints !== prevProps.customPoints ||
       this.props.selectedCohort !== prevProps.selectedCohort ||
-      this.props.selectedIndexes !== prevProps.selectedIndexes
+      !_.isEqual(this.props.selectedIndexes, prevProps.selectedIndexes)
     ) {
       const newTableState = this.updateItems();
-      this.setState({ tableState: newTableState });
-      this.updateSelection();
+      this.setState({ tableState: newTableState }, () => {
+        this.updateSelection();
+      });
     }
   }
 
@@ -121,12 +122,18 @@ export class TabularDataView extends React.Component<
                 setKey="set"
                 layoutMode={DetailsListLayoutMode.fixedColumns}
                 constrainMode={ConstrainMode.unconstrained}
-                onRenderDetailsHeader={onRenderDetailsHeader}
+                onRenderDetailsHeader={
+                  this.props.customPoints ? undefined : onRenderDetailsHeader
+                }
                 selectionPreservedOnEmptyClick
                 ariaLabelForSelectionColumn="Toggle selection"
                 ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                 checkButtonAriaLabel="Row checkbox"
-                selectionMode={SelectionMode.multiple}
+                selectionMode={
+                  this.props.customPoints
+                    ? SelectionMode.none
+                    : SelectionMode.multiple
+                }
                 selection={this._selection}
                 onItemInvoked={this.onItemInvoked.bind(this)}
               />
@@ -182,14 +189,18 @@ export class TabularDataView extends React.Component<
   }
 
   private updateSelection(): void {
+    this._selection.setChangeEvents(false);
     this._selection.setItems(this.state.tableState.rows);
     if (this.props.selectedIndexes) {
       const rowIndexes = this.state.tableState.rows.map((row) => row[0]);
       this.props.selectedIndexes.forEach((selectedIndex): void => {
         const rowIndex = rowIndexes.indexOf(selectedIndex);
-        this._selection.setIndexSelected(rowIndex, true, true);
+        if (!this._selection.isIndexSelected(rowIndex)) {
+          this._selection.setIndexSelected(rowIndex, true, false);
+        }
       });
     }
+    this._selection.setChangeEvents(true);
   }
 
   private getSelectionDetails(): number[] {

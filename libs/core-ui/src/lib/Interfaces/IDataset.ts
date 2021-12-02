@@ -6,9 +6,9 @@ export interface IDataset {
   true_y: number[];
   predicted_y?: number[];
   probability_y?: number[][];
-  features: any[][];
+  features: unknown[][];
   feature_names: string[];
-  categorical_map?: { [key: number]: string[] };
+  categorical_features: string[];
   class_names?: string[];
   target_column?: string;
 }

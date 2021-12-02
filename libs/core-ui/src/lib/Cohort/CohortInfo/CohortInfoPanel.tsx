@@ -2,13 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import {
-  IFocusTrapZoneProps,
-  IPanelProps,
-  IPanelStyles,
-  IStyleFunctionOrObject,
-  Panel
-} from "office-ui-fabric-react";
+import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
@@ -28,13 +22,7 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
   isClickableOutsideFocusTrap: true
 };
 
-const panelStyles: IStyleFunctionOrObject<IPanelProps, IPanelStyles> = {
-  main: { zIndex: 1 }
-};
-
-export class CohortInfoPanel extends React.PureComponent<
-  ICohortInfoPanelProps
-> {
+export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> {
   public render(): React.ReactNode {
     return (
       <Panel
@@ -45,12 +33,12 @@ export class CohortInfoPanel extends React.PureComponent<
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
-        styles={panelStyles}
       >
         <CohortInfo
           onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
           includeDividers
+          disabledView={false}
         />
       </Panel>
     );

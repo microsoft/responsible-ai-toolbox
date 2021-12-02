@@ -3,7 +3,6 @@
 
 import {
   Cohort,
-  ExpandableText,
   JointDataset,
   WeightVectorOption,
   ModelExplanationUtils,
@@ -12,7 +11,8 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles
+  FabricStyles,
+  LabelWithCallout
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -28,7 +28,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { LabelWithCallout } from "../Callout/LabelWithCallout";
 import { DependencePlot } from "../DependencePlot/DependencePlot";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
@@ -66,7 +65,6 @@ interface IGlobalExplanationTabState {
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
   cohortSeries: IGlobalSeries[];
-  activeSeries: IGlobalSeries[];
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -74,13 +72,14 @@ export class GlobalExplanationTab extends React.PureComponent<
   IGlobalExplanationTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly explainerCalloutInfo = this.props.explanationMethod
     ? explainerCalloutDictionary[this.props.explanationMethod]
     : undefined;
+
+  private depPlot = React.createRef<HTMLDivElement>();
 
   private defaultMinK = 4;
 
@@ -92,7 +91,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       initialCohortIndex = this.props.initialCohortIndex;
     }
     this.state = {
-      activeSeries: [],
       chartType: ChartTypes.Bar,
       cohortSeries: [],
       selectedCohortIndex: initialCohortIndex,
@@ -116,10 +114,6 @@ export class GlobalExplanationTab extends React.PureComponent<
 
     const cohortSeries = this.getGlobalSeries();
     this.setState({
-      activeSeries: this.getActiveCohortSeries(
-        sortArray.map(() => true),
-        cohortSeries
-      ),
       cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
       sortArray
@@ -162,9 +156,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText iconName="Info">
+          <Text variant="medium">
             {localization.Interpret.GlobalTab.helperText}
-          </ExpandableText>
+          </Text>
         </div>
         <div
           className={classNames.globalChartControls}
@@ -173,7 +167,6 @@ export class GlobalExplanationTab extends React.PureComponent<
           <Slider
             label={localization.formatString(
               localization.Interpret.GlobalTab.topAtoB,
-              1,
               this.state.topK
             )}
             className={classNames.startingK}
@@ -190,7 +183,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           {this.explainerCalloutInfo && (
             <LabelWithCallout
               label={
-                localization.Interpret.ExplanationSummary.whatDoExplanationsMean
+                localization.Interpret.ExplanationSummary.whatDoFeatureMean
               }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
@@ -214,9 +207,11 @@ export class GlobalExplanationTab extends React.PureComponent<
             chartType={this.state.chartType}
             unsortedX={this.context.modelMetadata.featureNamesAbridged}
             originX={this.context.modelMetadata.featureNames}
-            unsortedSeries={this.state.activeSeries}
+            unsortedSeries={this.getActiveCohortSeries(
+              this.state.seriesIsActive
+            )}
             topK={this.state.topK}
-            onFeatureSelection={this.handleFeatureSelection}
+            onFeatureSelection={this.onFeatureSelection}
             selectedFeatureIndex={this.state.selectedFeatureIndex}
           />
           <SidePanel
@@ -258,6 +253,7 @@ export class GlobalExplanationTab extends React.PureComponent<
             <div
               id="DependencePlot"
               className={classNames.secondaryChartAndLegend}
+              ref={this.depPlot}
             >
               <DependencePlot
                 chartProps={this.state.dependenceProps}
@@ -330,7 +326,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     const seriesIsActive = [...this.state.seriesIsActive];
     seriesIsActive[index] = !seriesIsActive[index];
     this.setState({
-      activeSeries: this.getActiveCohortSeries(seriesIsActive),
       seriesIsActive
     });
   };
@@ -367,7 +362,6 @@ export class GlobalExplanationTab extends React.PureComponent<
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
     this.setState({
-      activeSeries: this.getActiveCohortSeries(seriesIsActive),
       cohortSeries: this.getGlobalSeries(),
       selectedCohortIndex,
       seriesIsActive
@@ -397,10 +391,22 @@ export class GlobalExplanationTab extends React.PureComponent<
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
-      const key = item.key as string;
+      const key = item.key;
       const index = this.context.jointDataset.metaDict[key].index;
       if (index !== undefined) {
         this.handleFeatureSelection(this.state.selectedCohortIndex, index);
+      }
+    }
+  };
+  private onFeatureSelection = (
+    cohortIndex: number,
+    featureIndex: number
+  ): void => {
+    for (let i = 0; i < this.state.seriesIsActive.length; i++) {
+      if (!this.state.seriesIsActive[i]) continue;
+      if (cohortIndex-- === 0) {
+        this.handleFeatureSelection(i, featureIndex);
+        return;
       }
     }
   };
@@ -411,8 +417,8 @@ export class GlobalExplanationTab extends React.PureComponent<
   ): void => {
     // set to dependence plot initially, can be changed if other feature importances available
     const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
-    const xIsDithered = this.context.jointDataset.metaDict[xKey]
-      .treatAsCategorical;
+    const xIsDithered =
+      this.context.jointDataset.metaDict[xKey].treatAsCategorical;
     const yKey =
       JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
     const chartProps: IGenericChartProps = {
@@ -434,6 +440,14 @@ export class GlobalExplanationTab extends React.PureComponent<
       selectedCohortIndex: cohortIndex,
       selectedFeatureIndex: featureIndex
     });
+    // some how scroll does not work in studio under certain reslution
+    // put a manual timeout to handle the issue
+    setTimeout(() => {
+      this.depPlot.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
+    }, 0.5);
   };
 
   private readonly onDependenceChange = (

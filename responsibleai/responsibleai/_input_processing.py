@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from typing import Dict, List
+
 import numpy as np
 import pandas as pd
 from scipy.sparse import issparse
 from sklearn.utils import check_consistent_length
-from typing import Dict, List
-
 
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
     " Name '{0}' is of type {1}"
@@ -14,11 +14,14 @@ _LIST_NONSCALAR = "Lists must be of scalar types"
 _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
 
-def _convert_to_list(array):
+def _convert_to_list(array, custom_err_msg=None):
     if issparse(array):
         if array.shape[1] > 1000:
-            raise ValueError("Exceeds maximum number of features for "
-                             "visualization (1000)")
+            if custom_err_msg is None:
+                raise ValueError("Exceeds maximum number of features for "
+                                 "visualization (1000)")
+            else:
+                raise ValueError(custom_err_msg)
         return array.toarray().tolist()
     if isinstance(array, pd.DataFrame):
         return array.values.tolist()

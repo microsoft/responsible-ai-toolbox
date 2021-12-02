@@ -9,7 +9,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
-  IButtonStyles,
   IIconProps,
   Text,
   Pivot,
@@ -22,6 +21,7 @@ import React from "react";
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { FeatureList } from "../FeatureList/FeatureList";
 
+import { errorAnalysisStyles } from "./ErrorAnalysis.styles";
 import {
   ErrorAnalysisView,
   IErrorAnalysisViewProps
@@ -31,11 +31,6 @@ import {
  * together with the map selector and feature list control. This way all
  * error analysis specific components can be plugged into a larger dashboard.
  */
-
-const buttonStyle: IButtonStyles = {
-  root: { padding: "0px 4px" }
-};
-const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
 
 export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   handleErrorDetectorChanged: (
@@ -52,60 +47,73 @@ interface IErrorAnalysisViewTabState {
   openFeatureList: boolean;
 }
 
-export class ErrorAnalysisViewTab extends React.PureComponent<
+export class ErrorAnalysisViewTab extends React.Component<
   IErrorAnalysisViewTabProps,
   IErrorAnalysisViewTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public constructor(props: IErrorAnalysisViewTabProps) {
     super(props);
-    this.state = { openFeatureList: false };
+    this.state = {
+      openFeatureList: false
+    };
   }
 
   public render(): React.ReactNode {
+    const classNames = errorAnalysisStyles();
+    const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
     return (
       <Stack horizontal>
-        <Stack grow tokens={{ maxWidth: "80%", padding: "16px 24px" }}>
-          <Text variant={"xLarge"}>
+        <Stack
+          grow
+          tokens={{ padding: "16px 24px" }}
+          className={classNames.errorAnalysis}
+        >
+          <Text variant={"xxLarge"}>
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
-            <Pivot
-              onLinkClick={this.props.handleErrorDetectorChanged}
-              selectedKey={this.props.selectedKey}
-            >
-              <PivotItem
-                itemKey={ErrorAnalysisOptions.TreeMap}
-                headerText={localization.ErrorAnalysis.MainMenu.treeMap}
-              />
-              <PivotItem
-                itemKey={ErrorAnalysisOptions.HeatMap}
-                headerText={localization.ErrorAnalysis.MainMenu.heatMap}
-              />
-            </Pivot>
-            {this.props.errorAnalysisOption ===
-              ErrorAnalysisOptions.TreeMap && (
-              <CommandBarButton
-                styles={buttonStyle}
-                iconProps={featureListIcon}
-                key={"featureList"}
-                onClick={(): void => this.setState({ openFeatureList: true })}
-                text={localization.ErrorAnalysis.MainMenu.featureList}
-              />
-            )}
+          <Stack horizontal>
+            <Stack.Item>
+              <Pivot
+                onLinkClick={this.handleTabClick}
+                selectedKey={this.props.selectedKey}
+              >
+                <PivotItem
+                  itemKey={ErrorAnalysisOptions.TreeMap}
+                  headerText={localization.ErrorAnalysis.MainMenu.treeMap}
+                />
+                <PivotItem
+                  itemKey={ErrorAnalysisOptions.HeatMap}
+                  headerText={localization.ErrorAnalysis.MainMenu.heatMap}
+                />
+              </Pivot>
+            </Stack.Item>
+            <Stack.Item>
+              {this.props.errorAnalysisOption ===
+                ErrorAnalysisOptions.TreeMap && (
+                <CommandBarButton
+                  className={classNames.featureList}
+                  iconProps={featureListIcon}
+                  key={"featureList"}
+                  onClick={this.handleFeatureListClick}
+                  text={localization.ErrorAnalysis.MainMenu.featureList}
+                />
+              )}
+            </Stack.Item>
           </Stack>
           <ErrorAnalysisView
+            tree={this.props.tree}
             messages={this.props.messages}
+            disabledView={this.props.disabledView}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             getTreeNodes={this.props.getTreeNodes}
             getMatrix={this.props.getMatrix}
-            staticTreeNodes={this.props.staticTreeNodes}
-            staticMatrix={this.props.staticMatrix}
+            matrix={this.props.matrix}
+            matrixFeatures={this.props.matrixFeatures}
             errorAnalysisOption={this.props.errorAnalysisOption}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
@@ -124,18 +132,22 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
             saveFeatures={this.saveFeatures.bind(this)}
             features={this.props.features}
             importances={this.props.importances}
-            isEnabled
+            isEnabled={this.props.getTreeNodes !== undefined}
             selectedFeatures={this.props.features}
           />
         </Stack>
         <Stack tokens={{ padding: "100px 0 0 0" }}>
           <Separator vertical styles={{ root: { height: "100%" } }} />
         </Stack>
-        <Stack tokens={{ padding: "100px 80px 0 0" }}>
+        <Stack
+          className={classNames.cohortInfo}
+          tokens={{ padding: "100px 80px 0 0" }}
+        >
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
             onSaveCohortClick={this.props.onSaveCohortClick}
             includeDividers={false}
+            disabledView={this.props.disabledView}
           />
         </Stack>
       </Stack>
@@ -146,4 +158,15 @@ export class ErrorAnalysisViewTab extends React.PureComponent<
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
   }
+
+  private readonly handleTabClick = (item?: PivotItem): void => {
+    if (item?.props.itemKey === ErrorAnalysisOptions.HeatMap) {
+      this.setState({ openFeatureList: false });
+    }
+    this.props.handleErrorDetectorChanged(item);
+  };
+
+  private readonly handleFeatureListClick = (): void => {
+    this.setState((prev) => ({ openFeatureList: !prev.openFeatureList }));
+  };
 }

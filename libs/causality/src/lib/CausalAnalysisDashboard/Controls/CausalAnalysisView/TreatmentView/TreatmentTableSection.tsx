@@ -7,45 +7,40 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { Label, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { TreatmentCell } from "./TreatmentCell";
 import { TreatmentTable } from "./TreatmentTable";
-import { TreatmentTableStyles } from "./TreatmentTableStyles";
+import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentTableSectionProps {
   data?: ICausalPolicy;
 }
 
-export class TreatmentTableSection extends React.Component<
-  ITreatmentTableSectionProps
-> {
+export class TreatmentTableSection extends React.Component<ITreatmentTableSectionProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
+    if (!this.props.data?.policy_tree) {
+      return <div>{localization.CausalAnalysis.TreatmentPolicy.noData}</div>;
+    }
     return (
       <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
         <Stack.Item>
-          <Text variant={"medium"} className={styles.header}>
+          <Label>
             {localization.formatString(
               localization.CausalAnalysis.TreatmentPolicy.Size,
               this.props.data?.local_policies?.length
             )}
-          </Text>
+          </Label>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "l1" }}>
             <Stack.Item>
-              {this.props.data?.policy_tree?.leaf ? (
-                <TreatmentCell data={this.props.data?.policy_tree} />
-              ) : (
-                <TreatmentTable data={this.props.data?.policy_tree} />
-              )}
+              <TreatmentTable data={this.props.data.policy_tree} />
             </Stack.Item>
             <Stack.Item>
               <Text variant={"medium"} className={styles.label}>

@@ -4,18 +4,20 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData,
-  IDataset
+  IFairnessData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
+import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
 import { precomputedBinary } from "../fairness/__mock_data__/precomputedBinary";
 import { precomputedBinaryMissingMetrics } from "../fairness/__mock_data__/precomputedBinaryMissingMetrics";
 import { precomputedBinaryTwo } from "../fairness/__mock_data__/precomputedBinaryTwo";
+import { precomputedBinaryWithError } from "../fairness/__mock_data__/precomputedBinaryWithError";
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
+import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -37,12 +39,14 @@ import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
-  adultCensusCausalErrorAnalysisConfig,
+  adultCensusCausalErrorAnalysisData,
   adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
+  bostonCensusCausalAnalysisData,
+  bostonCounterfactualData,
   bostonData as bostonDataMAD,
-  bostonErrorAnalysisConfig,
+  bostonErrorAnalysisData,
   bostonWithFairnessModelExplanationData
 } from "../model-assessment/__mock_data__/bostonData";
 
@@ -81,7 +85,7 @@ export interface IErrorAnalysisSetting {
 }
 
 export interface IModelAssessmentSetting {
-  versions: { [key: string]: 1 };
+  versions: { [key: string]: 1 | 2 };
 }
 
 export const applicationKeys = <const>[
@@ -105,20 +109,37 @@ export const applications: IApplications = <const>{
     datasets: {
       adultCensusIncomeData: { classDimension: 2, data: adultCensus },
       bostonData: { classDimension: 1, data: bostonData },
-      breastCancerData: { classDimension: 2, data: breastCancerData }
+      breastCancerData: { classDimension: 2, data: breastCancerData },
+      breastCancerPrecisionData: {
+        classDimension: 2,
+        data: breastCancerData,
+        metric: "Precision"
+      },
+      breastCancerRecallData: {
+        classDimension: 2,
+        data: breastCancerData,
+        metric: "Recall"
+      }
     },
     versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
   },
   fairness: {
     datasets: {
-      binaryClassification: { data: binaryClassification },
+      binaryClassification: {
+        data: { ...binaryClassification, errorBarsEnabled: false }
+      },
+      binaryClassificationWithError: {
+        data: binaryClassificationWithError
+      },
       precomputedBinary: { data: precomputedBinary },
       precomputedBinaryMissingMetrics: {
         data: precomputedBinaryMissingMetrics
       },
       precomputedBinaryTwo: { data: precomputedBinaryTwo },
+      precomputedBinaryWithError: { data: precomputedBinaryWithError },
       probability: { data: probability },
-      regression: { data: regression }
+      regression: { data: regression },
+      regressionWithError: { data: regressionWithError }
     },
     versions: { "Version-2": 2 }
   },
@@ -154,42 +175,36 @@ export const applications: IApplications = <const>{
         classDimension: 2,
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoCausalData: {
         classDimension: 2,
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoCounterfactualData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
         dataset: adultCensusWithFairnessDataset,
-        errorAnalysisConfig: [adultCensusCausalErrorAnalysisConfig],
+        errorAnalysisData: [adultCensusCausalErrorAnalysisData],
         modelExplanationData: [adultCensusWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet,
       adultCensusIncomeNoModelData: {
         classDimension: 2,
-        dataset: {
-          categorical_map: adultCensusWithFairnessDataset.categorical_map,
-          class_names: adultCensusWithFairnessDataset.class_names,
-          feature_names: adultCensusWithFairnessDataset.feature_names,
-          features: adultCensusWithFairnessDataset.features,
-          target_column: adultCensusWithFairnessDataset.target_column,
-          task_type: adultCensusWithFairnessDataset.task_type,
-          true_y: adultCensusWithFairnessDataset.true_y
-        } as IDataset
-      } as IModelAssessmentDataSet,
+        dataset: adultCensusWithFairnessDataset
+      },
       bostonData: {
+        causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
+        counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
-        errorAnalysisConfig: [bostonErrorAnalysisConfig],
+        errorAnalysisData: [bostonErrorAnalysisData],
         modelExplanationData: [bostonWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
-    versions: { "Version-1": 1 }
+    versions: { "1": 1, "2:Static-View": 2 }
   }
 };

@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/core-ui";
+import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import { getTheme, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";
 import {
+  IErrorPickerProps,
   IFeatureBinPickerPropsV2,
   IPerformancePickerPropsV2
 } from "../FairnessWizard";
@@ -17,7 +19,12 @@ import { SharedStyles } from "../Shared.styles";
 
 import { FormatMetrics } from "./../util/FormatMetrics";
 import { IFairnessContext } from "./../util/IFairnessContext";
-import { ModalHelp } from "./ModalHelp";
+import { CalloutHelpBar } from "./CalloutHelpBar";
+import {
+  buildFalseNegativeErrorBounds,
+  buildFalsePositiveErrorBounds,
+  buildCustomTooltips
+} from "./PerformancePlotHelper";
 import { PerformancePlotLegend } from "./PerformancePlotLegend";
 
 interface IPerformancePlotProps {
@@ -26,19 +33,26 @@ interface IPerformancePlotProps {
   areaHeights: number;
   performancePickerProps: IPerformancePickerPropsV2;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
+  errorPickerProps: IErrorPickerProps;
+  fairnessBounds?: Array<IBounds | undefined>;
+  performanceBounds?: Array<IBounds | undefined>;
+  outcomeBounds?: Array<IBounds | undefined>;
+  falsePositiveBounds?: Array<IBounds | undefined>;
+  falseNegativeBounds?: Array<IBounds | undefined>;
+  parentErrorChanged: {
+    (event: React.MouseEvent<HTMLElement>, checked?: boolean): void;
+  };
 }
 
-export class PerformancePlot extends React.PureComponent<
-  IPerformancePlotProps
-> {
+export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> {
   public render(): React.ReactNode {
     const barPlotlyProps = new BarPlotlyProps();
     const theme = getTheme();
     const sharedStyles = SharedStyles();
-    let performanceChartModalHelpStrings: string[] = [];
+    let performanceChartCalloutHelpBarStrings: string[] = [];
     const groupNamesWithBuffer = this.props.dashboardContext.groupNames.map(
       (name) => {
-        return name + " ";
+        return `${name} `;
       }
     );
 
@@ -76,6 +90,26 @@ export class PerformancePlot extends React.PureComponent<
           y: groupNamesWithBuffer
         }
       ];
+      // Plot Error Bars
+      if (
+        this.props.errorPickerProps.errorBarsEnabled &&
+        this.props.metrics.falsePositiveRates !== undefined
+      ) {
+        barPlotlyProps.data[0].error_x = buildFalsePositiveErrorBounds(
+          this.props.metrics.falsePositiveRates
+        );
+        barPlotlyProps.data[0].textposition = "none";
+      }
+      if (
+        this.props.errorPickerProps.errorBarsEnabled &&
+        this.props.metrics.falseNegativeRates !== undefined
+      ) {
+        barPlotlyProps.data[1].error_x = buildFalseNegativeErrorBounds(
+          this.props.metrics.falseNegativeRates
+        );
+        barPlotlyProps.data[1].textposition = "none";
+      }
+
       // Annotations for both sides of the chart
       if (barPlotlyProps.layout) {
         barPlotlyProps.layout.annotations = [
@@ -108,7 +142,7 @@ export class PerformancePlot extends React.PureComponent<
       if (barPlotlyProps.layout?.xaxis) {
         barPlotlyProps.layout.xaxis.tickformat = ",.0%";
       }
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.classificationPerformanceHowToReadV2
       ];
     }
@@ -174,7 +208,7 @@ export class PerformancePlot extends React.PureComponent<
           }
         ];
       }
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.probabilityPerformanceHowToRead1,
         localization.Fairness.Report.probabilityPerformanceHowToRead2,
         localization.Fairness.Report.probabilityPerformanceHowToRead3
@@ -218,9 +252,17 @@ export class PerformancePlot extends React.PureComponent<
           )
         } as any
       ];
-      performanceChartModalHelpStrings = [
+      performanceChartCalloutHelpBarStrings = [
         localization.Fairness.Report.regressionPerformanceHowToRead
       ];
+    }
+
+    // Create custom hover tooltips
+    if (
+      this.props.dashboardContext.modelMetadata.PredictionType ===
+      PredictionTypes.BinaryClassification
+    ) {
+      buildCustomTooltips(barPlotlyProps, this.props.dashboardContext);
     }
 
     return (
@@ -230,13 +272,16 @@ export class PerformancePlot extends React.PureComponent<
           style={{ height: `${this.props.areaHeights}px` }}
         >
           <div className={sharedStyles.chartWrapper}>
-            <Stack horizontal horizontalAlign={"space-between"}>
-              <div className={sharedStyles.chartSubHeader} />
-              <ModalHelp
-                theme={theme}
-                strings={performanceChartModalHelpStrings}
-              />
-            </Stack>
+            <CalloutHelpBar
+              graphCalloutStrings={performanceChartCalloutHelpBarStrings}
+              errorPickerProps={this.props.errorPickerProps}
+              fairnessBounds={this.props.fairnessBounds}
+              performanceBounds={this.props.performanceBounds}
+              outcomeBounds={this.props.outcomeBounds}
+              falsePositiveBounds={this.props.falsePositiveBounds}
+              falseNegativeBounds={this.props.falseNegativeBounds}
+              parentErrorChanged={this.props.parentErrorChanged}
+            />
             <div className={sharedStyles.chartBody}>
               <AccessibleChart
                 plotlyProps={barPlotlyProps}

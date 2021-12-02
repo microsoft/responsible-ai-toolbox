@@ -90,27 +90,26 @@ export function buildInitialModelAssessmentContext(
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
-    jointDataset,
     false
   ).map((item) => {
     return {
       dataCount: jointDataset.datasetRowCount,
-      key: item.key as GlobalTabKeys
+      key: item.key as GlobalTabKeys,
+      name: item.text as string
     };
   });
-
+  const importances = props.errorAnalysisData?.[0]?.importances ?? [];
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
     cohorts,
-    createCohortVisible: false,
     customPoints: [],
     dataChartConfig: undefined,
     dependenceProps: undefined,
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
     globalImportanceIntercept: globalProps.globalImportanceIntercept,
-    importances: [],
+    importances,
     isGlobalImportanceDerivedFromLocal:
       globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
@@ -128,7 +127,6 @@ export function buildInitialModelAssessmentContext(
         ? WeightVectors.AbsAvg
         : 0,
     selectedWhatIfIndex: undefined,
-    shiftCohortVisible: false,
     sortVector: undefined,
     treeViewState: createInitialTreeViewState(),
     weightVectorLabels,
@@ -176,13 +174,15 @@ function buildModelMetadata(
         props.modelExplanationData?.[0]?.precomputedExplanations
           .localFeatureImportance.scores;
       if (isThreeDimArray(localImportances)) {
-        featureLength = (props.modelExplanationData?.[0]
-          ?.precomputedExplanations.localFeatureImportance
-          .scores[0][0] as number[]).length;
+        featureLength = (
+          props.modelExplanationData?.[0]?.precomputedExplanations
+            .localFeatureImportance.scores[0][0] as number[]
+        ).length;
       } else {
-        featureLength = (props.modelExplanationData?.[0]
-          ?.precomputedExplanations.localFeatureImportance
-          .scores[0] as number[]).length;
+        featureLength = (
+          props.modelExplanationData?.[0]?.precomputedExplanations
+            .localFeatureImportance.scores[0] as number[]
+        ).length;
       }
     } else if (
       props.modelExplanationData?.[0]?.precomputedExplanations &&
@@ -212,14 +212,18 @@ function buildModelMetadata(
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
-    props.dataset.features,
-    props.dataset.categorical_map
+    props.dataset.features
+  ).map(
+    (v, i) =>
+      v ||
+      props.dataset.categorical_features.includes(
+        props.dataset.feature_names[i]
+      )
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.dataset.features,
-      featureIsCategorical,
-      props.dataset.categorical_map
+      featureIsCategorical
     ) || [];
   return {
     classNames,

@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import setuptools
 import os
+
+import setuptools
 
 # Version will be read from version.py
 version = ""

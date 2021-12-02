@@ -51,8 +51,8 @@ export abstract class CohortBasedComponent<
       addTemporaryCohort = false;
     }
     const baseCohortFilters = this.state.baseCohort.cohort.filters;
-    const baseCohortCompositeFilters = this.state.baseCohort.cohort
-      .compositeFilters;
+    const baseCohortCompositeFilters =
+      this.state.baseCohort.cohort.compositeFilters;
     const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
         selectedCohortName,
@@ -67,7 +67,7 @@ export abstract class CohortBasedComponent<
       cohortStats
     );
     let cohorts = this.state.cohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
+      (errorCohort) => !addTemporaryCohort || !errorCohort.isTemporary
     );
     if (addTemporaryCohort) {
       cohorts = [selectedCohort, ...cohorts];

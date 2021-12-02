@@ -4,7 +4,6 @@
 import {
   AxisConfigDialog,
   ColumnCategories,
-  ExpandableText,
   JointDataset,
   ModelTypes,
   cohortKey,
@@ -48,9 +47,8 @@ export class ModelPerformanceTab extends React.PureComponent<
   IModelPerformanceTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "ModelPerformanceChart";
 
@@ -87,7 +85,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       this.state.selectedCohortIndex
     );
     const metricsList = this.generateMetrics().reverse();
-    const height = Math.max(400, 160 * metricsList.length) + "px";
+    const height = `${Math.max(400, 160 * metricsList.length)}px`;
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
         ? this.context.errorCohorts.map((errorCohort, index) => {
@@ -97,12 +95,9 @@ export class ModelPerformanceTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText
-            iconName="Info"
-            expandedText={localization.Interpret.ModelPerformance.helperText}
-          >
-            {localization.Interpret.ModelPerformance.collapsedHelperText}
-          </ExpandableText>
+          <Text variant="medium">
+            {localization.Interpret.ModelPerformance.helperText}
+          </Text>
         </div>
         {cohortOptions && (
           <div className={classNames.cohortPickerWrapper}>
@@ -294,7 +289,7 @@ export class ModelPerformanceTab extends React.PureComponent<
       this.context.modelMetadata.modelType === ModelTypes.Binary &&
       this.context.jointDataset.hasPredictedProbabilities
     ) {
-      bestModelMetricKey = JointDataset.ProbabilityYRoot + "0";
+      bestModelMetricKey = `${JointDataset.ProbabilityYRoot}0`;
     } else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
       if (
         this.context.jointDataset.hasPredictedY &&
@@ -341,13 +336,13 @@ export class ModelPerformanceTab extends React.PureComponent<
         this.context.modelMetadata.modelType
       );
     }
-    const cohort = this.context.errorCohorts[this.state.selectedCohortIndex]
-      .cohort;
+    const cohort =
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort;
     const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
     const indexArray = cohort.unwrap(JointDataset.IndexLabel);
-    const sortedCategoricalValues = this.context.jointDataset.metaDict[
-      this.state.chartProps.yAxis.property
-    ].sortedCategoricalValues;
+    const sortedCategoricalValues =
+      this.context.jointDataset.metaDict[this.state.chartProps.yAxis.property]
+        .sortedCategoricalValues;
     const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
       return indexArray.filter((_, index) => {
         return yValues[index] === labelIndex;

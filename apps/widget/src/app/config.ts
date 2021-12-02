@@ -7,11 +7,11 @@ export interface IAppConfig {
     | "Interpret"
     | "ErrorAnalysis"
     | "ModelPerformance"
-    | "ModelAssessment";
+    | "ResponsibleAI";
   id: string;
   baseUrl: string;
   withCredentials: boolean;
   locale: string | undefined;
 }
 
-export const config: IAppConfig = JSON.parse(`__rai_config__${""}`);
+export const config: IAppConfig = JSON.parse("__rai_config__");

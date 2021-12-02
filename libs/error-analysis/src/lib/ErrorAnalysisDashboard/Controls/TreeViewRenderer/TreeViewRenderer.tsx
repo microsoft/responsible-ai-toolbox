@@ -8,12 +8,12 @@ import {
   CohortSource,
   ErrorCohort,
   ErrorCohortStats,
-  ExpandableText,
   getRandomId,
   Metrics,
   MetricCohortStats,
   ModelAssessmentContext,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  IErrorAnalysisTreeNode
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
@@ -28,16 +28,19 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import {
+  getTheme,
   IProcessedStyleSet,
   ITheme,
   mergeStyles,
-  Stack
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
-import { IRequestNode } from "../../Interfaces/IErrorAnalysisDashboardProps";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import {
   INodeDetail,
@@ -59,6 +62,7 @@ const viewerHeight = 300;
 const viewerWidth = 800;
 
 export interface ITreeViewRendererProps {
+  disabledView: boolean;
   theme?: ITheme;
   messages?: HelpMessageDict;
   features: string[];
@@ -66,8 +70,8 @@ export interface ITreeViewRendererProps {
   getTreeNodes?: (
     request: any[],
     abortSignal: AbortSignal
-  ) => Promise<IRequestNode[]>;
-  staticTreeNodes?: { data: IRequestNode[] };
+  ) => Promise<IErrorAnalysisTreeNode[]>;
+  tree?: IErrorAnalysisTreeNode[];
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -90,6 +94,7 @@ export interface ISVGDatum {
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
 const errorAvgColor = ColorPalette.ErrorAvgColor;
+const disabledColor = ColorPalette.DisabledColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -97,9 +102,8 @@ export class TreeViewRenderer extends React.PureComponent<
   ITreeViewRendererState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ITreeViewRendererProps) {
     super(props);
     // Note: we take state from props in case
@@ -120,7 +124,12 @@ export class TreeViewRenderer extends React.PureComponent<
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
       this.props.baseCohort !== prevProps.baseCohort ||
-      this.props.state !== prevProps.state
+      this.props.state !== prevProps.state ||
+      this.context.errorAnalysisData!.maxDepth !== this.state.maxDepth ||
+      this.context.errorAnalysisData!.numLeaves !== this.state.numLeaves ||
+      this.context.errorAnalysisData!.minChildSamples !==
+        this.state.minChildSamples ||
+      this.context.errorAnalysisData!.metric !== this.state.metric
     ) {
       this.fetchTreeNodes();
     }
@@ -139,6 +148,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const labelPaddingX = 20;
     const labelPaddingY = 8;
     const labelYOffset = 3;
+    const theme = getTheme();
 
     const rootDescendants = this.state.root.descendants();
     let max = 0;
@@ -149,9 +159,9 @@ export class TreeViewRenderer extends React.PureComponent<
     }
 
     if (svgOuterFrame.current) {
-      const svg = select<SVGSVGElement, undefined>(svgOuterFrame.current).datum<
-        ISVGDatum
-      >({
+      const svg = select<SVGSVGElement, undefined>(
+        svgOuterFrame.current
+      ).datum<ISVGDatum>({
         filterBrushEvent: true,
         height: viewerHeight,
         width: viewerWidth
@@ -188,7 +198,11 @@ export class TreeViewRenderer extends React.PureComponent<
         return {
           d: linkVerticalD || "",
           id: id + getRandomId(),
-          style: { fill: "white", stroke: lineColor, strokeWidth: thick }
+          style: {
+            fill: theme.semanticColors.bodyBackground,
+            stroke: lineColor,
+            strokeWidth: thick
+          }
         };
       });
 
@@ -250,7 +264,6 @@ export class TreeViewRenderer extends React.PureComponent<
     const minY = Math.min(...y) - 40;
     //40:tooltip height
     const maxY = Math.max(...y) + 40 + 40;
-    console.log(minY, maxY);
     const containerStyles = mergeStyles({
       transform: `translate(${-minX}px, ${-minY}px)`
     });
@@ -262,16 +275,19 @@ export class TreeViewRenderer extends React.PureComponent<
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item>
-          <ExpandableText
-            expandedText={
-              localization.ErrorAnalysis.TreeView.treeDescriptionExpanded
-            }
-            iconName="Info"
-            variant={"smallPlus"}
-          >
-            {localization.ErrorAnalysis.TreeView.treeDescription}
-          </ExpandableText>
+          <Text variant="medium">
+            {this.props.getTreeNodes
+              ? localization.ErrorAnalysis.TreeView.treeDescription
+              : localization.ErrorAnalysis.TreeView.treeStaticDescription}
+          </Text>
         </Stack.Item>
+        {this.props.disabledView && (
+          <Stack.Item>
+            <MessageBar messageBarType={MessageBarType.warning}>
+              <Text>{localization.ErrorAnalysis.TreeView.disabledWarning}</Text>
+            </MessageBar>
+          </Stack.Item>
+        )}
         <Stack.Item>
           <Stack horizontal className={classNames.svgContainer}>
             <TreeLegend
@@ -281,6 +297,10 @@ export class TreeViewRenderer extends React.PureComponent<
               minPct={minPct}
               max={max}
               showCohortName={this.props.showCohortName}
+              isErrorMetric={this.state.isErrorMetric}
+              isEnabled={this.props.getTreeNodes !== undefined}
+              setMetric={this.setMetric}
+              disabledView={this.props.disabledView}
             />
             <svg
               ref={svgOuterFrame}
@@ -311,6 +331,7 @@ export class TreeViewRenderer extends React.PureComponent<
                         node={node}
                         onSelect={this.onSelectNode}
                         fillOffset={node.data.error / node.data.rootErrorSize}
+                        disabledView={this.props.disabledView}
                       />
                     );
                   })}
@@ -352,7 +373,7 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private calculateFilterProps(
-    node: IRequestNode,
+    node: IErrorAnalysisTreeNode,
     rootErrorSize: number
   ): FilterProps {
     let metricValue: number;
@@ -399,7 +420,7 @@ export class TreeViewRenderer extends React.PureComponent<
     this.setState({});
   };
 
-  private reloadData(requestTreeNodes: IRequestNode[]): void {
+  private reloadData(requestTreeNodes: IErrorAnalysisTreeNode[]): void {
     const reloadDataFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -411,14 +432,20 @@ export class TreeViewRenderer extends React.PureComponent<
         return state;
       }
 
+      const maxDepth = this.context.errorAnalysisData!.maxDepth;
+      const numLeaves = this.context.errorAnalysisData!.numLeaves;
+      const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
+      const metric = this.context.errorAnalysisData!.metric;
+
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
       const isErrorRate = requestTreeNodes[0].metricName === Metrics.ErrorRate;
-      const rootLocalError = isErrorRate
+      const rootLocalMetric = isErrorRate
         ? rootErrorSize / rootSize
         : requestTreeNodes[0].metricValue;
 
-      const min: number = rootLocalError;
+      const isErrorMetric = requestTreeNodes[0].isErrorMetric;
+      const min: number = rootLocalMetric;
       const max: number = Math.max(
         ...requestTreeNodes.map((node) => {
           if (node.size === 0) {
@@ -431,8 +458,12 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = ColorPalette.MinColor;
-      const maxColor = ColorPalette.MaxColor;
+      const minColor = isErrorMetric
+        ? ColorPalette.MinErrorColor
+        : ColorPalette.MinMetricColor;
+      const maxColor = isErrorMetric
+        ? ColorPalette.MaxErrorColor
+        : ColorPalette.MaxMetricColor;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
@@ -441,51 +472,42 @@ export class TreeViewRenderer extends React.PureComponent<
 
       // From the retrieved request, calculate additional properties
       // that won't change during UI updates
-      const treeNodes = requestTreeNodes.map(
-        (node): ITreeNode => {
-          const globalErrorPerc = node.error / rootErrorSize;
-          let errorPerc: number;
-          if (node.metricName !== Metrics.ErrorRate) {
-            errorPerc = node.metricValue;
-          } else {
-            errorPerc = node.error / node.size;
-          }
-          const calcMaskShift = globalErrorPerc * 52;
-          const filterProps = this.calculateFilterProps(node, rootErrorSize);
-
-          let heatmapStyle: Property.Color = errorAvgColor;
-
-          if (errorPerc > rootLocalError * errorRatioThreshold) {
-            heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
-          }
-
-          return {
-            arg: node.arg,
-            condition: node.condition,
-            error: node.error,
-            errorColor: heatmapStyle,
-            filterProps,
-            id: node.id,
-            isErrorMetric: node.isErrorMetric,
-            maskShift: calcMaskShift,
-            method: node.method,
-            metricName: node.metricName,
-            metricValue: node.metricValue,
-            nodeIndex: node.nodeIndex,
-            nodeName: node.nodeName,
-            nodeState: {
-              isSelectedLeaf: false,
-              onSelectedPath: false,
-              style: undefined
-            },
-            parentId: node.parentId,
-            parentNodeName: node.parentNodeName,
-            r: 28,
-            rootErrorSize,
-            size: node.size
-          };
+      const treeNodes = requestTreeNodes.map((node): ITreeNode => {
+        const globalErrorPerc = node.error / rootErrorSize;
+        let errorPerc: number;
+        if (node.metricName !== Metrics.ErrorRate) {
+          errorPerc = node.metricValue;
+        } else {
+          errorPerc = node.error / node.size;
         }
-      );
+        const calcMaskShift = globalErrorPerc * 52;
+        const filterProps = this.calculateFilterProps(node, rootErrorSize);
+
+        let heatmapStyle: Property.Color = errorAvgColor;
+
+        if (errorPerc > rootLocalMetric * errorRatioThreshold) {
+          heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
+        }
+
+        if (this.props.disabledView) {
+          heatmapStyle = disabledColor;
+        }
+
+        return {
+          ...node,
+          errorColor: heatmapStyle,
+          filterProps,
+          isErrorMetric,
+          maskShift: calcMaskShift,
+          nodeState: {
+            isSelectedLeaf: false,
+            onSelectedPath: false,
+            style: undefined
+          },
+          r: 28,
+          rootErrorSize
+        };
+      });
 
       const tempRoot = d3stratify()(treeNodes);
       const treemap = d3tree().size([viewerWidth, viewerHeight]);
@@ -495,7 +517,9 @@ export class TreeViewRenderer extends React.PureComponent<
       if (selectedNode) {
         this.unselectParentNodes(selectedNode);
       }
-      this.selectParentNodes(root);
+      if (!this.props.disabledView) {
+        this.selectParentNodes(root);
+      }
       let nodeDetail: INodeDetail;
       if (root === undefined) {
         nodeDetail = this.state.nodeDetail;
@@ -505,11 +529,16 @@ export class TreeViewRenderer extends React.PureComponent<
       }
 
       return {
+        isErrorMetric,
+        maxDepth,
+        metric,
+        minChildSamples,
         nodeDetail,
+        numLeaves,
         request: state.request,
         root,
         rootErrorSize,
-        rootLocalError,
+        rootLocalError: rootLocalMetric,
         rootSize,
         selectedNode: root,
         transform: state.transform,
@@ -572,6 +601,8 @@ export class TreeViewRenderer extends React.PureComponent<
     let filterArg: number[];
     if (Array.isArray(d.data.arg)) {
       filterArg = d.data.arg;
+    } else if (d.data.arg === undefined) {
+      filterArg = [];
     } else {
       filterArg = [d.data.arg];
     }
@@ -584,6 +615,9 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private onSelectNode = (node: HierarchyPointNode<ITreeNode>): void => {
+    if (this.props.disabledView) {
+      return;
+    }
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -607,7 +641,12 @@ export class TreeViewRenderer extends React.PureComponent<
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
       return {
+        isErrorMetric: state.isErrorMetric,
+        maxDepth: state.maxDepth,
+        metric: state.metric,
+        minChildSamples: state.minChildSamples,
         nodeDetail,
+        numLeaves: state.numLeaves,
         request: state.request,
         root: state.root,
         rootErrorSize: state.rootErrorSize,
@@ -631,16 +670,21 @@ export class TreeViewRenderer extends React.PureComponent<
     return nodeDetail;
   }
 
+  private setMetric = (metric: string): void => {
+    this.context.errorAnalysisData!.metric = metric;
+    this.fetchTreeNodes();
+  };
+
   private fetchTreeNodes(): void {
     if (this.state.request) {
       this.state.request.abort();
     }
     if (!this.props.getTreeNodes) {
-      if (this.props.staticTreeNodes) {
+      if (this.props.tree) {
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
         this.onResize();
         this.forceUpdate();
-        this.reloadData(this.props.staticTreeNodes.data);
+        this.reloadData(this.props.tree);
       }
       return;
     }
@@ -652,14 +696,17 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
+    const errorAnalysisData = this.context.errorAnalysisData!;
     this.props
       .getTreeNodes(
         [
           this.props.selectedFeatures,
           filtersRelabeled,
           compositeFiltersRelabeled,
-          this.context.errorAnalysisConfig?.maxDepth,
-          this.context.errorAnalysisConfig?.numLeaves
+          errorAnalysisData.maxDepth,
+          errorAnalysisData.numLeaves,
+          errorAnalysisData.minChildSamples,
+          errorAnalysisData.metric
         ],
         new AbortController().signal
       )

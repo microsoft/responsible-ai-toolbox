@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+
 import setuptools
 
 # Version will be read from version.py
@@ -31,6 +32,14 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/microsoft/responsible-ai-widgets",
     packages=setuptools.find_packages(),
+    package_data={
+        '': [
+            'schema_*.json',
+            'counterfactual_examples_output_*.json',
+            'error_analysis_output_v0.0.json',
+        ]
+    },
+    include_package_data=True,
     python_requires='>=3.6',
     install_requires=install_requires,
     classifiers=[

@@ -8,37 +8,32 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import _, { toNumber } from "lodash";
 import {
-  ConstrainMode,
-  DetailsList,
-  DetailsListLayoutMode,
   Panel,
   PanelType,
   Text,
   Stack,
   PrimaryButton,
   TextField,
-  IColumn,
-  IDetailsFooterProps,
-  DetailsRow,
-  Selection,
-  SelectionMode,
-  ISelection,
-  Link,
-  Callout
+  SearchBox,
+  Toggle,
+  TooltipHost,
+  TooltipDelay,
+  DirectionalHint,
+  IconButton,
+  ITooltipProps
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { CounterfactualList } from "./CounterfactualList";
 import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
-import { CustomPredictionLabels } from "./CustomPredictionLabels";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
   data?: ICounterfactualData;
   isPanelOpen: boolean;
-  temporaryPoint: { [key: string]: any } | undefined;
-  originalData: { [key: string]: any };
+  temporaryPoint: { [key: string]: string | number } | undefined;
+  originalData: { [key: string]: string | number };
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -48,8 +43,8 @@ export interface ICounterfactualPanelProps {
   ): void;
 }
 interface ICounterfactualState {
-  data: any;
-  showCallout: boolean;
+  filterText?: string;
+  sortFeatures: boolean;
 }
 
 export class CounterfactualPanel extends React.Component<
@@ -57,192 +52,168 @@ export class CounterfactualPanel extends React.Component<
   ICounterfactualState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
-  private selection: ISelection;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
   public constructor(props: ICounterfactualPanelProps) {
     super(props);
-    this.selection = new Selection({
-      onSelectionChanged: (): void => {
-        const select = this.selection.getSelectedIndices()[0];
-        this.setState({
-          data: this.processSelectionData(this.getItems(), select)
-        });
-      }
-    });
     this.state = {
-      data: this.processSelectionData(this.getItems(), 0),
-      showCallout: false
+      filterText: undefined,
+      sortFeatures: false
     };
-  }
-  public componentDidUpdate(
-    prevProps: ICounterfactualPanelProps,
-    preState: ICounterfactualState
-  ): void {
-    if (
-      !_.isEqual(prevProps.data, this.props.data) ||
-      !_.isEqual(preState.data, this.state.data) ||
-      !_.isEqual(prevProps.originalData, this.props.originalData)
-    ) {
-      this.forceUpdate();
-    }
-  }
-  public componentDidMount(): void {
-    setImmediate(() => {
-      this.selection.setIndexSelected(0, true, false);
-    });
   }
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
-    const items = this.getItems();
-    const columns = this.getColumns();
     return (
       <Panel
         isOpen={this.props.isPanelOpen}
         type={PanelType.largeFixed}
-        onDismiss={this.props.closePanel}
+        onDismiss={this.onClosePanel.bind(this)}
         closeButtonAriaLabel="Close"
-        headerText={localization.Counterfactuals.panelHeader}
+        isFooterAtBottom
+        className={classes.panelStyle}
+        onRenderHeader={this.renderHeader}
+        onRenderFooterContent={this.renderClose}
       >
         <Stack tokens={{ childrenGap: "m1" }}>
-          <Stack.Item>
-            <Text variant={"medium"}>
-              {localization.Counterfactuals.panelDescription}
-            </Text>
-          </Stack.Item>
-          <Stack.Item>
-            <DetailsList
-              items={items}
-              columns={columns}
-              selection={this.selection}
-              selectionMode={SelectionMode.single}
-              setKey="set"
-              constrainMode={ConstrainMode.unconstrained}
-              layoutMode={DetailsListLayoutMode.fixedColumns}
-              onRenderDetailsFooter={this.onRenderDetailsFooter.bind(this)}
+          <Stack.Item className={classes.counterfactualList}>
+            <CounterfactualList
+              selectedIndex={this.props.selectedIndex}
+              filterText={this.state.filterText}
+              originalData={this.props.originalData}
+              data={this.props.data}
+              temporaryPoint={this.props.temporaryPoint}
+              setCustomRowProperty={this.props.setCustomRowProperty}
+              sortFeatures={this.state.sortFeatures}
             />
-          </Stack.Item>
-          <Stack.Item>
-            <Stack horizontal tokens={{ childrenGap: "15px" }}>
-              <Stack.Item align="end" grow={1}>
-                <TextField
-                  id="whatIfNameLabel"
-                  label={localization.Counterfactuals.counterfactualName}
-                  value={this.props.temporaryPoint?.[WhatIfConstants.namePath]}
-                  onChange={this.setCustomRowProperty.bind(
-                    this,
-                    WhatIfConstants.namePath,
-                    true
-                  )}
-                  styles={{ fieldGroup: { width: 200 } }}
-                />
-              </Stack.Item>
-              <Stack.Item align="end" grow={5}>
-                <PrimaryButton
-                  className={classes.button}
-                  text={localization.Counterfactuals.saveAsNew}
-                  onClick={this.handleSavePoint.bind(this)}
-                />
-              </Stack.Item>
-              <Stack.Item align="end" grow={3}>
-                <Text variant={"medium"}>
-                  {localization.Counterfactuals.saveDescription}
-                </Text>
-              </Stack.Item>
-            </Stack>
           </Stack.Item>
         </Stack>
       </Panel>
     );
   }
-  private getItems(): any {
-    const items: any = [];
-    const selectedData = this.props.data?.cfs_list[
-      this.props.selectedIndex % this.props.data?.cfs_list.length
-    ];
-    if (selectedData && this.props.originalData) {
-      items.push(this.props.originalData);
-      selectedData.forEach((point, i) => {
-        const temp = {};
-        temp["row"] = localization.formatString(
-          localization.Counterfactuals.counterfactualEx,
-          i + 1
-        );
-        this.props.data?.feature_names.forEach((f, j) => {
-          temp[f] = this.props.originalData?.[j] !== point[j] ? point[j] : "-";
-        });
-        items.push(temp);
-      });
-    }
-    return items;
-  }
-  private processSelectionData(items: any, row: number): any {
-    const data = _.cloneDeep(items[row]);
-    Object.keys(data).forEach((k) => {
-      data[k] = data[k] === "-" ? items[0][k] : data[k];
-      const keyIndex = this.props.data?.feature_names.indexOf(k);
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
-    });
-    data["row"] = localization.formatString(
-      localization.Interpret.WhatIf.defaultCustomRootName,
-      this.props.selectedIndex
+
+  private renderHeader = (): JSX.Element => {
+    const classes = counterfactualPanelStyles();
+    const tooltipProps: ITooltipProps = {
+      onRenderContent: () => (
+        <div className={classes.tooltipWrapper}>
+          <div className={classes.tooltipTitle}>
+            <Text variant="large" className={classes.boldText}>
+              {localization.Counterfactuals.WhatIf.toggleToolTipHeader}
+            </Text>
+          </div>
+          <div className={classes.tooltipHost}>
+            <Text>{localization.Counterfactuals.WhatIf.toggleToolTipBody}</Text>
+          </div>
+        </div>
+      )
+    };
+    return (
+      <Stack className={classes.stackHeader}>
+        <Stack.Item className={classes.headerText}>
+          <Text variant={"xLarge"} className={classes.boldText}>
+            {this.context.requestPredictions
+              ? localization.Counterfactuals.whatIfPanelHeader
+              : localization.Counterfactuals.panelHeader}
+          </Text>
+        </Stack.Item>
+        <Stack.Item>
+          <Text variant={"medium"}>
+            {localization.formatString(
+              localization.Counterfactuals.panelDescription,
+              this.props.data?.desired_class
+            )}
+          </Text>
+        </Stack.Item>
+        <Stack.Item className={classes.buttonRow}>
+          <Stack horizontal tokens={{ childrenGap: "l1" }}>
+            <Stack.Item className={classes.searchBox}>
+              <SearchBox
+                placeholder={
+                  localization.Interpret.WhatIf.filterFeaturePlaceholder
+                }
+                onChange={this.setFilterText.bind(this)}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Toggle
+                label={localization.Counterfactuals.WhatIf.sortFeatures}
+                inlineLabel
+                defaultChecked={this.state.sortFeatures}
+                onChange={this.toggleSortFeatures}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <TooltipHost
+                tooltipProps={tooltipProps}
+                delay={TooltipDelay.zero}
+                id={WhatIfConstants.whatIfPredictionTooltipIds}
+                directionalHint={DirectionalHint.rightTopEdge}
+                className={classes.tooltipHostDisplay}
+              >
+                <IconButton iconProps={{ iconName: "info" }} />
+              </TooltipHost>
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
+      </Stack>
     );
-    return data;
-  }
-  private getColumns(): IColumn[] {
-    const columns: IColumn[] = [];
-    columns.push({
-      fieldName: "row",
-      isResizable: true,
-      key: "row",
-      minWidth: 200,
-      name: ""
-    });
-    if (this.props.data) {
-      this.props.data.feature_names.forEach((f) =>
-        columns.push({
-          fieldName: f,
-          isResizable: true,
-          key: f,
-          minWidth: 175,
-          name: f
-        })
-      );
+  };
+
+  private renderClose = (): JSX.Element => {
+    const classes = counterfactualPanelStyles();
+    if (!this.context.requestPredictions) {
+      return <div />;
     }
-    return columns;
-  }
-  private onRenderDetailsFooter(
-    detailsFooterProps?: IDetailsFooterProps
-  ): JSX.Element {
-    if (detailsFooterProps) {
-      return (
-        <DetailsRow
-          {...detailsFooterProps}
-          columns={detailsFooterProps.columns}
-          item={this.state.data}
-          itemIndex={-1}
-          groupNestingDepth={detailsFooterProps.groupNestingDepth}
-          selectionMode={SelectionMode.single}
-          selection={detailsFooterProps.selection}
-          onRenderItemColumn={this.renderDetailsFooterItemColumn.bind(this)}
-        />
-      );
+    return (
+      <Stack horizontal tokens={{ childrenGap: "15px" }}>
+        <Stack.Item align="end" grow={1}>
+          <TextField
+            id="whatIfNameLabel"
+            label={localization.Counterfactuals.counterfactualName}
+            value={this.props.temporaryPoint?.[
+              WhatIfConstants.namePath
+            ]?.toString()}
+            onChange={this.setCustomRowProperty.bind(
+              this,
+              WhatIfConstants.namePath,
+              true
+            )}
+            className={classes.counterfactualName}
+          />
+        </Stack.Item>
+        <Stack.Item align="end" grow={5}>
+          <PrimaryButton
+            className={classes.button}
+            text={localization.Counterfactuals.saveAsNew}
+            onClick={this.handleSavePoint.bind(this)}
+          />
+        </Stack.Item>
+        <Stack.Item align="end" grow={3}>
+          <Text variant={"medium"}>
+            {localization.Counterfactuals.saveDescription}
+          </Text>
+        </Stack.Item>
+      </Stack>
+    );
+  };
+
+  private toggleSortFeatures = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ) => {
+    if (checked !== undefined) {
+      this.setState({ sortFeatures: checked });
     }
-    return <div />;
-  }
-  private updateColValue(
-    evt: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    newValue?: string
-  ): void {
-    const target = evt.target as Element;
-    const id = target.id;
-    const keyIndex = this.props.data?.feature_names.indexOf(id);
-    this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
-    this.setState((prevState) => {
-      prevState.data[id] = toNumber(newValue);
-      return { data: prevState.data };
+  };
+  private onClosePanel(): void {
+    this.setState({
+      filterText: undefined
     });
+    this.props.closePanel();
+  }
+  private handleSavePoint(): void {
+    this.props.saveAsPoint();
+    this.onClosePanel();
   }
   private setCustomRowProperty = (
     key: string | number,
@@ -252,67 +223,12 @@ export class CounterfactualPanel extends React.Component<
   ): void => {
     this.props.setCustomRowProperty(key, isString, newValue);
   };
-  private toggleCallout(): void {
-    this.setState((preState) => {
-      return {
-        showCallout: !preState.showCallout
-      };
+  private setFilterText = (
+    _event?: React.ChangeEvent<HTMLInputElement> | undefined,
+    newValue?: string | undefined
+  ): void => {
+    this.setState({
+      filterText: newValue
     });
-  }
-
-  private handleSavePoint(): void {
-    this.props.saveAsPoint();
-    this.props.closePanel();
-  }
-
-  private renderDetailsFooterItemColumn(
-    _item: any,
-    _index?: number,
-    column?: IColumn
-  ): React.ReactNode | undefined {
-    if (column) {
-      return (
-        <Stack horizontal={false}>
-          <Stack.Item>
-            <TextField
-              value={this.state.data[column.key]}
-              label={
-                column.key === "row"
-                  ? localization.Counterfactuals.createOwn
-                  : column.key
-              }
-              id={column.key}
-              disabled={column.key === "row"}
-              onChange={this.updateColValue.bind(this)}
-            />
-          </Stack.Item>
-          {column.key === "row" && (
-            <Stack.Item>
-              <Link
-                id={"predictionLink"}
-                onClick={this.toggleCallout.bind(this)}
-              >
-                {localization.Counterfactuals.seePrediction}
-              </Link>
-              {this.state.showCallout && (
-                <Callout
-                  target={"#predictionLink"}
-                  onDismiss={this.toggleCallout.bind(this)}
-                  setInitialFocus
-                >
-                  <CustomPredictionLabels
-                    jointDataset={this.context.jointDataset}
-                    metadata={this.context.modelMetadata}
-                    selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.props.temporaryPoint}
-                  />
-                </Callout>
-              )}
-            </Stack.Item>
-          )}
-        </Stack>
-      );
-    }
-    return undefined;
-  }
+  };
 }

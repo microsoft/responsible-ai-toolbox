@@ -48,6 +48,7 @@ export interface IErrorAnalysisDashboardState
   selectedWhatIfIndex: number | undefined;
   editedCohort: ErrorCohort;
   selectedFeatures: string[];
+  showMessageBar: boolean;
   treeViewState: ITreeViewRendererState;
   matrixAreaState: IMatrixAreaState;
   matrixFilterState: IMatrixFilterState;

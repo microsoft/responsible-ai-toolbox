@@ -84,11 +84,14 @@ export class NewExplanationDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          addCohort: this.addCohort,
           baseErrorCohort: new ErrorCohort(
             this.state.cohorts[0],
             this.state.jointDataset
           ),
           dataset: {} as IDataset,
+          deleteCohort: () => undefined,
+          editCohort: () => undefined,
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
@@ -97,20 +100,20 @@ export class NewExplanationDashboard extends React.PureComponent<
             precomputedExplanations: this.props.precomputedExplanations
           } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          requestLocalFeatureExplanations: this.props
-            .requestLocalFeatureExplanations,
+          requestLocalFeatureExplanations:
+            this.props.requestLocalFeatureExplanations,
           requestPredictions: this.state.requestPredictions,
           selectedErrorCohort: new ErrorCohort(
             this.state.selectedCohort,
             this.state.jointDataset
           ),
+          shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
               return;
             }),
-          theme: getTheme(),
-          updateErrorCohorts: this.updateErrorCohorts
+          theme: getTheme()
         }}
       >
         <div className={classNames.page}>
@@ -170,9 +173,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && (
-                    <DatasetExplorerTab showCohortSelection />
-                  )}
+                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab
@@ -248,13 +249,15 @@ export class NewExplanationDashboard extends React.PureComponent<
     this.setState({ showingDataSizeWarning: false });
   };
 
-  private updateErrorCohorts = (
-    cohorts: ErrorCohort[],
-    selectedCohort: ErrorCohort
-  ): void => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.setState({
-      cohorts: cohorts.map((c) => c.cohort),
-      selectedCohort: selectedCohort.cohort
+      selectedCohort: cohort.cohort
     });
+  };
+
+  private addCohort = (cohort: Cohort): void => {
+    this.setState((prev) => ({
+      cohorts: [...prev.cohorts, cohort]
+    }));
   };
 }

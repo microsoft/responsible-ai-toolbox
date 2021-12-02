@@ -33,7 +33,8 @@ import {
   Stack,
   TooltipHost,
   IColumn,
-  IGroup
+  IGroup,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -67,9 +68,8 @@ export class IndividualFeatureImportanceView extends React.Component<
   IIndividualFeatureImportanceState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private selection: Selection = new Selection({
     onSelectionChanged: (): void => {
@@ -135,7 +135,12 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
-        <div className="tabularDataView">
+        <Stack.Item>
+          <Text variant="medium">
+            {localization.ModelAssessment.FeatureImportances.IndividualFeature}
+          </Text>
+        </Stack.Item>
+        <Stack.Item className="tabularDataView">
           <div style={{ height: "800px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -161,7 +166,7 @@ export class IndividualFeatureImportanceView extends React.Component<
               </ScrollablePane>
             </Fabric>
           </div>
-        </div>
+        </Stack.Item>
         <LocalImportancePlots
           includedFeatureImportance={this.state.featureImportances}
           jointDataset={this.context.jointDataset}
@@ -240,29 +245,33 @@ export class IndividualFeatureImportanceView extends React.Component<
           row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
       );
       // find first incorrect item
-      const firstIncorrectItemIndex = this.props.selectedCohort.cohort.filteredData.findIndex(
-        (row) =>
-          row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
-      );
+      const firstIncorrectItemIndex =
+        this.props.selectedCohort.cohort.filteredData.findIndex(
+          (row) =>
+            row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+        );
+      const noIncorrectItem = firstIncorrectItemIndex === -1;
 
       groups = [
         {
-          count: firstIncorrectItemIndex,
+          count: noIncorrectItem
+            ? this.props.selectedCohort.cohort.filteredData.length
+            : firstIncorrectItemIndex,
           key: "groupCorrect",
           level: 0,
-          name:
-            localization.ModelAssessment.FeatureImportances.CorrectPredictions,
+          name: localization.ModelAssessment.FeatureImportances
+            .CorrectPredictions,
           startIndex: 0
         },
         {
-          count:
-            this.props.selectedCohort.cohort.filteredData.length -
-            firstIncorrectItemIndex,
+          count: noIncorrectItem
+            ? 0
+            : this.props.selectedCohort.cohort.filteredData.length -
+              firstIncorrectItemIndex,
           key: "groupIncorrect",
           level: 0,
-          name:
-            localization.ModelAssessment.FeatureImportances
-              .IncorrectPredictions,
+          name: localization.ModelAssessment.FeatureImportances
+            .IncorrectPredictions,
           startIndex: firstIncorrectItemIndex
         }
       ];
@@ -308,9 +317,8 @@ export class IndividualFeatureImportanceView extends React.Component<
     if (!props) {
       return <div />;
     }
-    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> = (
-      tooltipHostProps
-    ) => <TooltipHost {...tooltipHostProps} />;
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
     return (
       <div>
         {defaultRender?.({

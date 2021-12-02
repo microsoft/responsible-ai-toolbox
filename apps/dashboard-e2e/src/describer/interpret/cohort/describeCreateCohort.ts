@@ -7,7 +7,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
   it("should have no filter by default", () => {
     cy.get('button:contains("New cohort")')
       .click()
-      .get('#cohortEditPanel span:contains("No filters added yet")')
+      .get('#cohortEditPanel span:contains("No filters")')
       .should("exist");
   });
   it("should able to add filter", () => {
@@ -15,9 +15,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
 
-    cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
-      "not.exist"
-    );
+    cy.get('#cohortEditPanel span:contains("No filters")').should("not.exist");
   });
   it("should able to add multiple filters", () => {
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -39,9 +37,7 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
       .click()
       .get("#removeFilterBtn-0")
       .click();
-    cy.get('#cohortEditPanel span:contains("No filters added yet")').should(
-      "exist"
-    );
+    cy.get('#cohortEditPanel span:contains("No filters")').should("exist");
   });
   it("should show error message with no cohort name", () => {
     cy.get("#cohortEditPanel input:eq(0)").clear();
@@ -56,14 +52,14 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get("#cohortEditPanel input:eq(0)").clear();
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
-    cy.get('button:contains("Save")').click();
+    cy.get('button:contains("Save and switch")').click();
     cy.get("#cohortEditPanel").should("exist");
   });
   it("should create New cohort", () => {
     cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
     cy.get('button:contains("Add filter")').click();
-    cy.get('button:contains("Save")').click();
+    cy.get('button:contains("Save and switch")').click();
     cy.get('span:contains("CohortCreateE2E")').should("exist");
   });
   if (dataShape.noDataset) {

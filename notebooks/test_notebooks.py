@@ -2,11 +2,11 @@
 # Licensed under the MIT License.
 
 import os
+
 import nbformat as nbf
 import papermill as pm
 import pytest
 import scrapbook as sb
-
 
 RACE_GROUP_SIZES_ADULT = {
     'White': 41762,
@@ -15,6 +15,11 @@ RACE_GROUP_SIZES_ADULT = {
     'Amer-Indian-Eskimo': 470,
     'Other': 406
 }
+INDIVIDUAL_DASHBOARDS = 'individual-dashboards/'
+RESPONSIBLEAITOOLBOX_DASHBOARD = 'responsibleaitoolbox-dashboard/'
+ERROR_ANALYSIS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'erroranalysis-dashboard/'
+EXPLANATION_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'explanation-dashboard/'
+FAIRNESS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'fairness-dashboard/'
 
 
 class ScrapSpec:
@@ -62,7 +67,7 @@ def append_scrapbook_commands(input_nb_path, output_nb_path, scrap_specs):
     nbf.write(notebook, output_nb_path)
 
 
-def assay_one_notebook(notebook_name, test_values):
+def assay_one_notebook(notebook_path, notebook_name, test_values):
     """Test a single notebook.
 
     This uses nbformat to append `nteract-scrapbook` commands to the
@@ -76,12 +81,12 @@ def assay_one_notebook(notebook_name, test_values):
 
     Makes certain assumptions about directory layout.
     """
-    processed_dir_name = "./notebooks/processed/"
+    processed_dir_name = "./notebooks/processed/" + notebook_path
 
     if not os.path.exists(processed_dir_name):
         os.makedirs(processed_dir_name)
 
-    input_notebook = "notebooks/" + notebook_name + ".ipynb"
+    input_notebook = "notebooks/" + notebook_path + notebook_name + ".ipynb"
     processed_notebook = f"{processed_dir_name}{notebook_name}.processed.ipynb"
     output_notebook = f"{processed_dir_name}{notebook_name}.output.ipynb"
 
@@ -95,6 +100,7 @@ def assay_one_notebook(notebook_name, test_values):
 
 @pytest.mark.notebooks
 def test_fairness_dashboard_loan_allocation():
+    nb_path = FAIRNESS_DASHBOARD
     nb_name = "fairness-dashboard-loan-allocation"
 
     test_values = {}
@@ -111,11 +117,12 @@ def test_fairness_dashboard_loan_allocation():
             'grid_32', 'grid_33', 'grid_34', 'grid_35'
         ])
 
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
 def test_fairness_interpretability_dashboard_loan_allocation():
+    nb_path = INDIVIDUAL_DASHBOARDS
     nb_name = "fairness-interpretability-dashboard-loan-allocation"
 
     test_values = {}
@@ -139,52 +146,85 @@ def test_fairness_interpretability_dashboard_loan_allocation():
             'grid_33', 'grid_34', 'grid_35'
         ])
 
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
 def test_interpretability_dashboard_employee_attrition():
-    nb_name = "interpretability-dashboard-employee-attrition"
+    nb_path = EXPLANATION_DASHBOARD
+    nb_name = "explanation-dashboard-employee-attrition"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
 def test_erroranalysis_interpretability_dashboard_census():
+    nb_path = ERROR_ANALYSIS_DASHBOARD
     nb_name = "erroranalysis-interpretability-dashboard-census"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
 def test_erroranalysis_interpretability_dashboard_breast_cancer():
+    nb_path = ERROR_ANALYSIS_DASHBOARD
     nb_name = "erroranalysis-interpretability-dashboard-breast-cancer"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
 def test_erroranalysis_dashboard_multiclass():
+    nb_path = ERROR_ANALYSIS_DASHBOARD
     nb_name = "erroranalysis-dashboard-multiclass"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
-def test_model_analysis_adult_classification():
-    nb_name = "model-analysis-adult-classification"
+def test_erroranalysis_dashboard_superconductor():
+    nb_path = ERROR_ANALYSIS_DASHBOARD
+    nb_name = "erroranalysis-dashboard-regression-superconductor"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
-def test_model_analysis_boston_housing_regression():
-    nb_name = "model-analysis-boston-housing-regression"
+def test_erroranalysis_dashboard_boston_housing():
+    nb_path = ERROR_ANALYSIS_DASHBOARD
+    nb_name = "erroranalysis-dashboard-regression-boston-housing"
 
     test_values = {}
-    assay_one_notebook(nb_name, test_values)
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaitoolbox_classification_model_assessment():
+    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
+    nb_name = "responsibleaitoolbox-classification-model-assessment"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaitoolbox_regression_model_assessment():
+    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
+    nb_name = "responsibleaitoolbox-regression-model-assessment"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaitoolbox_regression_decision_making():
+    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
+    nb_name = "responsibleaitoolbox-regression-decision-making"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)

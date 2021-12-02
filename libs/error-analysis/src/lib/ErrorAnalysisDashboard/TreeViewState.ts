@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IErrorAnalysisTreeNode, Metrics } from "@responsible-ai/core-ui";
 import { Property } from "csstype";
 import { HierarchyPointNode } from "d3-hierarchy";
 
@@ -34,24 +35,16 @@ export interface ITreeViewRendererState {
   rootSize: any;
   rootErrorSize: any;
   rootLocalError: any;
+  isErrorMetric: boolean;
+  maxDepth: number;
+  numLeaves: number;
+  minChildSamples: number;
+  metric: string;
 }
 
 // Represents IRequestNode with augmented calculations
-export interface ITreeNode {
-  arg: number;
-  condition: string;
-  error: number;
+export interface ITreeNode extends IErrorAnalysisTreeNode {
   rootErrorSize: number;
-  id: string;
-  isErrorMetric: boolean;
-  method: string;
-  metricName: string;
-  metricValue: number;
-  nodeIndex: number;
-  nodeName: string;
-  parentId: string;
-  parentNodeName: string;
-  size: number;
   errorColor: Property.Color;
   filterProps: FilterProps;
   maskShift: number;
@@ -73,6 +66,10 @@ export interface INodeState {
 
 export function createInitialTreeViewState(): ITreeViewRendererState {
   return {
+    isErrorMetric: true,
+    maxDepth: 4,
+    metric: Metrics.ErrorRate,
+    minChildSamples: 20,
     nodeDetail: {
       errorColor: "#eaeaea",
       maskDown: {
@@ -82,6 +79,7 @@ export function createInitialTreeViewState(): ITreeViewRendererState {
         transform: "translate(0px, 13px)"
       }
     },
+    numLeaves: 31,
     request: undefined,
     root: undefined,
     rootErrorSize: 0,

@@ -62,9 +62,8 @@ export class FeatureImportanceBar extends React.PureComponent<
       (globalExplanation.flattenedFeatureImportances !== undefined ||
         globalExplanation.perClassFeatureImportances !== undefined)
     ) {
-      const featuresByClassMatrix = this.getFeatureByClassMatrix(
-        globalExplanation
-      );
+      const featuresByClassMatrix =
+        this.getFeatureByClassMatrix(globalExplanation);
       const sortVector = this.getSortVector(featuresByClassMatrix);
 
       return (
@@ -126,7 +125,7 @@ export class FeatureImportanceBar extends React.PureComponent<
           </div>
           {this.state.isCalloutVisible && (
             <Callout
-              target={"#" + this._iconId}
+              target={`#${this._iconId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"

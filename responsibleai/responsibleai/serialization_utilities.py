@@ -2,14 +2,15 @@
 # Licensed under the MIT License.
 
 import datetime
-import numpy as np
-
+import json
 from typing import Any
+
+import numpy as np
 
 
 def serialize_json_safe(o: Any):
     """
-    Convert a value into something that is safe to parse into JSON.
+    Convert a value into something that is safe to parse as JSON.
 
     :param o: Object to make JSON safe.
     :return: Serialized object.
@@ -18,6 +19,10 @@ def serialize_json_safe(o: Any):
         if isinstance(o, float):
             if np.isinf(o) or np.isnan(o):
                 return 0
+        # need to escape double quoted string values
+        # and other special characters for json
+        if isinstance(o, str):
+            return json.dumps(o)[1:-1]
         return o
     elif isinstance(o, datetime.datetime):
         return o.__str__()

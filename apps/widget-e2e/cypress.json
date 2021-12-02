@@ -8,5 +8,7 @@
   "video": true,
   "videosFolder": "../../dist/cypress/apps/widget-e2e/videos",
   "screenshotsFolder": "../../dist/cypress/apps/widget-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "viewportWidth": 1920,
+  "viewportHeight": 1080
 }

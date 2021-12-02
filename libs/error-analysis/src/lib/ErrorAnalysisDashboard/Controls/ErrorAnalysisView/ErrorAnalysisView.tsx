@@ -8,7 +8,9 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   MetricCohortStats,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  IErrorAnalysisTreeNode,
+  IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -16,17 +18,25 @@ import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { ITreeViewRendererState } from "../../TreeViewState";
-import { MatrixFilter } from "../MatrixFilter/MatrixFilter";
+import { MatrixFilter } from "../Matrix/MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
 export interface IErrorAnalysisViewProps {
   messages?: HelpMessageDict;
+  disabledView: boolean;
   features: string[];
   selectedFeatures: string[];
-  getTreeNodes?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  getMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  staticTreeNodes?: any;
-  staticMatrix?: any;
+  getTreeNodes?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisTreeNode[]>;
+  getMatrix?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>;
+  tree?: IErrorAnalysisTreeNode[];
+  matrix?: IErrorAnalysisMatrix;
+  matrixFeatures?: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   updateSelectedCohort: (
     filters: IFilter[],
@@ -46,15 +56,13 @@ export interface IErrorAnalysisViewProps {
   showCohortName: boolean;
 }
 
-export class ErrorAnalysisView extends React.PureComponent<
-  IErrorAnalysisViewProps
-> {
+export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const matrixViewIsEnabled = this.props.getMatrix !== undefined;
     return (
       <>
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.TreeMap && (
@@ -62,7 +70,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.context.theme}
             messages={this.props.messages}
             getTreeNodes={this.props.getTreeNodes}
-            staticTreeNodes={this.props.staticTreeNodes}
+            tree={this.props.tree}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
             updateSelectedCohort={this.props.updateSelectedCohort}
@@ -71,6 +79,7 @@ export class ErrorAnalysisView extends React.PureComponent<
             state={this.props.treeViewState}
             setTreeViewState={this.props.setTreeViewState}
             showCohortName={this.props.showCohortName}
+            disabledView={this.props.disabledView}
           />
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (
@@ -78,7 +87,8 @@ export class ErrorAnalysisView extends React.PureComponent<
             theme={this.context.theme}
             features={this.props.features}
             getMatrix={this.props.getMatrix}
-            staticMatrix={this.props.staticMatrix}
+            matrix={this.props.matrix}
+            matrixFeatures={this.props.matrixFeatures}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
@@ -86,7 +96,8 @@ export class ErrorAnalysisView extends React.PureComponent<
             matrixAreaState={this.props.matrixAreaState}
             setMatrixAreaState={this.props.setMatrixAreaState}
             setMatrixFilterState={this.props.setMatrixFilterState}
-            isEnabled={this.props.getMatrix !== undefined}
+            isEnabled={matrixViewIsEnabled}
+            disabledView={this.props.disabledView}
           />
         )}
       </>

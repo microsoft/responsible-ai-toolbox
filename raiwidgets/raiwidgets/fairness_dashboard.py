@@ -3,13 +3,14 @@
 
 """Defines the fairness dashboard class."""
 
+import numpy as np
+from flask import jsonify, request
+
+from responsibleai._input_processing import (_convert_to_list,
+                                             _convert_to_string_list_dict)
+
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
-from responsibleai._input_processing import _convert_to_string_list_dict,\
-    _convert_to_list
-
-from flask import jsonify, request
-import numpy as np
 
 
 class FairnessDashboard(Dashboard):
@@ -93,6 +94,18 @@ class FairnessDashboard(Dashboard):
         self.fairness_metrics_module = metrics_module
 
         def metrics():
+            """
+            Note:
+                This function always calculates the error_function,
+                if available, so that the value is cached in the MetricsCache
+
+            Request attributes:
+                binVector: the sensitive features binning vector
+                metricKey: the metricKey that corresponds to the function that
+                    will be calculated
+                modelIndex: the model index used to index the predicted y's
+                    by that model
+            """
             try:
                 data = request.get_json(force=True)
 
@@ -100,17 +113,52 @@ class FairnessDashboard(Dashboard):
                     data['binVector'] = [
                         str(bin_) for bin_ in data['binVector']]
 
-                metric_method = self.fairness_metrics_module.\
-                    _metric_methods.get(data["metricKey"]).get("function")
+                metric_name = data['metricKey']
+                error_function_name = f"{metric_name} bounds"
+                metric_function = \
+                    self.fairness_metrics_module._metric_methods.get(
+                        data["metricKey"]).get("function")
+                metric_method = {
+                    metric_name: metric_function
+                }
+                error_function = \
+                    self.fairness_metrics_module._metric_methods.get(
+                        data["metricKey"]).get("error_function")
+                if error_function is not None:
+                    metric_method.update({error_function_name: error_function})
+
                 metric_frame = self.fairness_metrics_module.MetricFrame(
-                    metric_method,
-                    self.model_data['true_y'],
-                    self.model_data['predicted_ys'][data["modelIndex"]],
+                    metrics=metric_method,
+                    y_true=self.model_data['true_y'],
+                    y_pred=self.model_data['predicted_ys'][data["modelIndex"]],
                     sensitive_features=data["binVector"])
-                return jsonify({"data": {
-                    "global": metric_frame.overall,
-                    "bins": list(metric_frame.by_group.to_dict().values())
-                }})
+
+                result = {"data": {
+                    "global": metric_frame.overall[metric_name],
+                    "bins": list([
+                        entry for entry in
+                        list(metric_frame.by_group.to_dict().values())
+                        if not isinstance(entry[0], tuple)
+                    ][0].values()),
+                }}
+                if error_function_name in metric_method:
+                    result["data"].update({
+                        "bounds": {
+                            "lower":
+                            metric_frame.overall[error_function_name][0],
+                            "upper":
+                            metric_frame.overall[error_function_name][1],
+                        },
+                        # [(x1, y1), (x2, y2), (x3, y3)...]
+                        "binBounds": [{
+                            "lower": bounds[0],
+                            "upper": bounds[1]
+                        }
+                            for bounds in list(
+                                metric_frame.by_group[error_function_name]\
+                                .to_dict().values())]
+                    })
+                return jsonify(result)
             except Exception as ex:
                 import sys
                 import traceback

@@ -22,7 +22,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -53,12 +53,10 @@ export class CausalIndividualChart extends React.PureComponent<
   ICausalIndividualChartState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "CausalIndividualChart";
-  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
   public constructor(props: ICausalIndividualChartProps) {
@@ -93,8 +91,8 @@ export class CausalIndividualChart extends React.PureComponent<
       this.state.chartProps,
       this.context.selectedErrorCohort.cohort
     );
-    const cohortLength = this.context.selectedErrorCohort.cohort.filteredData
-      .length;
+    const cohortLength =
+      this.context.selectedErrorCohort.cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -207,17 +205,13 @@ export class CausalIndividualChart extends React.PureComponent<
 
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
-    this.temporaryPoint[
-      CausalIndividualConstants.namePath
-    ] = localization.formatString(
-      localization.Interpret.WhatIf.defaultCustomRootName,
-      index
-    );
+    this.temporaryPoint[CausalIndividualConstants.namePath] =
+      localization.formatString(
+        localization.Interpret.WhatIf.defaultCustomRootName,
+        index
+      );
     this.temporaryPoint[CausalIndividualConstants.colorPath] =
       FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
-    });
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -375,23 +369,22 @@ export class CausalIndividualChart extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX = this.context.jointDataset.metaDict[
-        chartProps.xAxis.property
-      ];
+      const metaX =
+        this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += metaX.label + ": %{customdata.X}<br>";
+      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
-          customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
+          customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+          customdata[index].X = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -409,16 +402,15 @@ export class CausalIndividualChart extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY = this.context.jointDataset.metaDict[
-        chartProps.yAxis.property
-      ];
+      const metaY =
+        this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += metaY.label + ": %{customdata.Y}<br>";
+      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
-          customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
+          customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+          customdata[index].Y = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -435,23 +427,22 @@ export class CausalIndividualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate +=
-      localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
   }
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.context.jointDataset.metaDict[yKey]
-      .treatAsCategorical;
+    const yKey = `${JointDataset.DataLabelRoot}0`;
+    const yIsDithered =
+      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
         options: {},
         property: this.context.jointDataset.hasPredictedProbabilities
-          ? JointDataset.ProbabilityYRoot + "0"
+          ? `${JointDataset.ProbabilityYRoot}0`
           : JointDataset.IndexLabel
       },
       yAxis: {

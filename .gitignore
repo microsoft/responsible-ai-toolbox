@@ -58,6 +58,7 @@ Thumbs.db
 
 # test files
 apps/*-e2e/debug.log
+**/cypress.env.json
 
 # notebook artifacts
 /notebooks/*.csv
@@ -65,3 +66,6 @@ apps/*-e2e/debug.log
 
 # docs
 docs/build/*
+*/.mypy_cache/*
+
+notebooks/responsibleaitoolbox-dashboard/*.py

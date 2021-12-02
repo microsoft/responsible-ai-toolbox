@@ -62,10 +62,10 @@ export class FeatureEditingTile extends React.Component<
       this.state.value !== this.props.defaultValue.toString() &&
       this.state.errorMessage === undefined
     ) {
-      tileClass += " " + featureEditingTileStyles.edited;
+      tileClass += ` ${featureEditingTileStyles.edited}`;
     }
     if (this.state.errorMessage !== undefined) {
-      tileClass += " " + featureEditingTileStyles.error;
+      tileClass += ` ${featureEditingTileStyles.error}`;
     }
 
     return (

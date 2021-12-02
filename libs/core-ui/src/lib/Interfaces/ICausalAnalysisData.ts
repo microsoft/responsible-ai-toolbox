@@ -1,11 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ComparisonTypes } from "./ComparisonTypes";
+
 export interface ICausalAnalysisData {
+  id: string;
+  config?: ICausalConfig;
   global_effects: ICausalAnalysisSingleData[];
   local_effects: ICausalAnalysisSingleData[][];
   policies?: ICausalPolicy[];
-  id: string;
+}
+
+export interface ICausalConfig {
   treatment_features: string[];
 }
 
@@ -21,13 +27,17 @@ export interface ICausalPolicyTreeLeaf {
   n_samples: number;
   treatment: string;
 }
+export type ICausalPolicyTreeNode =
+  | ICausalPolicyTreeInternal
+  | ICausalPolicyTreeLeaf;
 
 export interface ICausalPolicyTreeInternal {
   leaf: false;
   feature: string;
-  threshold: number | string;
-  left: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
-  right: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
+  right_comparison: ComparisonTypes;
+  comparison_value: string | number | Array<string | number>;
+  left: ICausalPolicyTreeNode;
+  right: ICausalPolicyTreeNode;
 }
 
 export interface ICausalPolicy {
@@ -35,7 +45,7 @@ export interface ICausalPolicy {
   control_treatment: string;
   local_policies?: Array<{ [key: string]: any }>;
   policy_gains?: ICausalPolicyGains;
-  policy_tree?: ICausalPolicyTreeInternal | ICausalPolicyTreeLeaf;
+  policy_tree?: ICausalPolicyTreeNode;
 }
 
 export interface ICausalAnalysisSingleData {

@@ -41,5 +41,5 @@ export const basePlotlyProperties: IPlotlyProperty = {
       },
       zeroline: true
     }
-  } as any
+  }
 };

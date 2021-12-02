@@ -27,9 +27,7 @@ export interface ICustomPredictionLabelsProps {
   selectedWhatIfRootIndex: number;
   temporaryPoint: { [key: string]: any } | undefined;
 }
-export class CustomPredictionLabels extends React.Component<
-  ICustomPredictionLabelsProps
-> {
+export class CustomPredictionLabels extends React.Component<ICustomPredictionLabelsProps> {
   public render(): React.ReactNode {
     const classNames = whatIfTabStyles();
     if (this.props.metadata.modelType !== ModelTypes.Regression) {
@@ -61,9 +59,9 @@ export class CustomPredictionLabels extends React.Component<
           .reverse()
           .slice(0, WhatIfConstants.MAX_CLASSES_TOOLTIP);
         const tooltipClasses = sortedProbs.map((index) => {
-          const className = this.props.jointDataset.metaDict[
-            JointDataset.PredictedYLabel
-          ].sortedCategoricalValues?.[index];
+          const className =
+            this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
+              .sortedCategoricalValues?.[index];
           return (
             <Text block variant="small" key={index}>
               {className}
@@ -100,8 +98,9 @@ export class CustomPredictionLabels extends React.Component<
                 variant="small"
                 key={index}
               >
-                {"+" +
-                  delta.toLocaleString(undefined, { maximumFractionDigits: 3 })}
+                {`+${delta.toLocaleString(undefined, {
+                  maximumFractionDigits: 3
+                })}`}
               </Text>
             );
           }

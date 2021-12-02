@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import {
+  IErrorAnalysisMatrix,
   IExplanationDashboardData,
-  ISerializedExplanationData
+  ISerializedExplanationData,
+  Metrics
 } from "@responsible-ai/core-ui";
 import {
   ErrorAnalysisDashboard,
@@ -20,16 +22,21 @@ import {
   generateJsonMatrix,
   generateJsonTreeAdultCensusIncome,
   generateJsonTreeBreastCancer,
+  generateJsonTreeBreastCancerPrecision,
+  generateJsonTreeBreastCancerRecall,
   generateJsonTreeBoston,
   getJsonMatrix,
   getJsonTreeAdultCensusIncome,
   getJsonTreeBreastCancer,
+  getJsonTreeBreastCancerPrecision,
+  getJsonTreeBreastCancerRecall,
   getJsonTreeBoston,
   DatasetName
 } from "./utils";
 
 interface IAppProps {
   dataset: IExplanationDashboardData | ISerializedExplanationData;
+  datasetName: string;
   theme: ITheme;
   language: Language;
   version: 1 | 2 | 3;
@@ -55,7 +62,9 @@ export class App extends React.Component<IAppProps> {
     requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
       return callFlaskService(data, "/predict");
     };
-    requestMatrixMethod = async (data: any[]): Promise<any[]> => {
+    requestMatrixMethod = async (
+      data: any[]
+    ): Promise<IErrorAnalysisMatrix> => {
       return callFlaskService(data, "/matrix");
     };
     requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
@@ -73,6 +82,12 @@ export class App extends React.Component<IAppProps> {
       if (this.props.version === 1) {
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
+            minChildSamples: 21,
+            numLeaves: 31
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
@@ -85,7 +100,7 @@ export class App extends React.Component<IAppProps> {
               : [],
             DatasetName.Boston
           ),
-          requestMatrix: generateJsonMatrix,
+          requestMatrix: generateJsonMatrix(DatasetName.Boston),
           requestPredictions: !this.props.classDimension
             ? undefined
             : createPredictionsRequestGenerator(this.props.classDimension),
@@ -95,6 +110,12 @@ export class App extends React.Component<IAppProps> {
       } else if (this.props.version === 3) {
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
+            minChildSamples: 21,
+            numLeaves: 31
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
@@ -107,14 +128,24 @@ export class App extends React.Component<IAppProps> {
           theme: this.props.theme
         };
       } else {
+        const staticTree = getJsonTreeBoston(featureNames);
+        const staticMatrix = getJsonMatrix();
         dashboardProp = {
           ...dataset,
+          errorAnalysisData: {
+            matrix: staticMatrix.data,
+            matrix_features: staticMatrix.features,
+            maxDepth: 3,
+            metric: Metrics.MeanSquaredError,
+            minChildSamples: 21,
+            numLeaves: 31,
+            tree: staticTree.data,
+            tree_features: staticTree.features
+          },
           explanationMethod: "mimic",
           features: featureNames,
           locale: this.props.language,
           localUrl: "https://www.bing.com/",
-          staticDebugML: getJsonTreeBoston(featureNames),
-          staticMatrix: getJsonMatrix(),
           stringParams: { contextualHelp: this.messages },
           theme: this.props.theme
         };
@@ -144,7 +175,7 @@ export class App extends React.Component<IAppProps> {
                 : createPredictionsRequestGenerator(this.props.classDimension)
             }
             requestDebugML={generateJsonTreeAdultCensusIncome}
-            requestMatrix={generateJsonMatrix}
+            requestMatrix={generateJsonMatrix(DatasetName.AdultCensusIncome)}
             requestImportances={createJsonImportancesGenerator(
               this.props.dataset.featureNames,
               DatasetName.AdultCensusIncome
@@ -152,6 +183,12 @@ export class App extends React.Component<IAppProps> {
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
+            errorAnalysisData={{
+              maxDepth: 3,
+              metric: Metrics.ErrorRate,
+              minChildSamples: 21,
+              numLeaves: 31
+            }}
           />
         );
       } else if (this.props.version === 3) {
@@ -177,9 +214,19 @@ export class App extends React.Component<IAppProps> {
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
+            errorAnalysisData={{
+              maxDepth: 3,
+              metric: Metrics.ErrorRate,
+              minChildSamples: 21,
+              numLeaves: 31
+            }}
           />
         );
       }
+      const staticTree = getJsonTreeAdultCensusIncome(
+        this.props.dataset.featureNames
+      );
+      const staticMatrix = getJsonMatrix();
       return (
         <ErrorAnalysisDashboard
           modelInformation={{ modelClass: "blackbox" }}
@@ -195,35 +242,56 @@ export class App extends React.Component<IAppProps> {
           precomputedExplanations={{
             localFeatureImportance: this.props.dataset.localExplanations
           }}
-          staticDebugML={getJsonTreeAdultCensusIncome(
-            this.props.dataset.featureNames
-          )}
-          staticMatrix={getJsonMatrix()}
           localUrl={""}
           locale={undefined}
           features={this.props.dataset.featureNames}
+          errorAnalysisData={{
+            matrix: staticMatrix.data,
+            matrix_features: staticMatrix.features,
+            maxDepth: 3,
+            metric: Metrics.ErrorRate,
+            minChildSamples: 21,
+            numLeaves: 31,
+            tree: staticTree.data,
+            tree_features: staticTree.features
+          }}
         />
       );
     }
     if (this.props.version === 1) {
       const dataset = this.props.dataset as IExplanationDashboardData;
+      let datasetType: DatasetName = DatasetName.BreastCancer;
+      let requestFunction = generateJsonTreeBreastCancer;
+      if (this.props.datasetName === "breastCancerRecallData") {
+        datasetType = DatasetName.BreastCancerRecall;
+        requestFunction = generateJsonTreeBreastCancerRecall;
+      } else if (this.props.datasetName === "breastCancerPrecisionData") {
+        datasetType = DatasetName.BreastCancerPrecision;
+        requestFunction = generateJsonTreeBreastCancerPrecision;
+      }
       dashboardProp = {
         ...dataset,
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.ErrorRate,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
           : [],
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
-        requestDebugML: generateJsonTreeBreastCancer,
+        requestDebugML: requestFunction,
         requestImportances: createJsonImportancesGenerator(
           "dataSummary" in this.props.dataset &&
             this.props.dataset.dataSummary.featureNames
             ? this.props.dataset.dataSummary.featureNames
             : [],
-          DatasetName.BreastCancer
+          datasetType
         ),
-        requestMatrix: generateJsonMatrix,
+        requestMatrix: generateJsonMatrix(datasetType),
         requestPredictions: !this.props.classDimension
           ? undefined
           : createPredictionsRequestGenerator(this.props.classDimension),
@@ -234,6 +302,12 @@ export class App extends React.Component<IAppProps> {
       const dataset = this.props.dataset as IExplanationDashboardData;
       dashboardProp = {
         ...dataset,
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.ErrorRate,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
         explanationMethod: "mimic",
         features: dataset.dataSummary.featureNames
           ? dataset.dataSummary.featureNames
@@ -248,18 +322,34 @@ export class App extends React.Component<IAppProps> {
         theme: this.props.theme
       };
     } else {
+      let requestFunction = getJsonTreeBreastCancer;
+      if (this.props.datasetName === "breastCancerRecallData") {
+        requestFunction = getJsonTreeBreastCancerRecall;
+      } else if (this.props.datasetName === "breastCancerPrecisionData") {
+        requestFunction = getJsonTreeBreastCancerPrecision;
+      }
       const dataset = this.props.dataset as IExplanationDashboardData;
       const featureNames = dataset.dataSummary.featureNames
         ? dataset.dataSummary.featureNames
         : [];
+      const staticTree = requestFunction(featureNames);
+      const staticMatrix = getJsonMatrix();
       dashboardProp = {
         ...(this.props.dataset as IExplanationDashboardData),
+        errorAnalysisData: {
+          matrix: staticMatrix.data,
+          matrix_features: staticMatrix.features,
+          maxDepth: 3,
+          metric: Metrics.ErrorRate,
+          minChildSamples: 21,
+          numLeaves: 31,
+          tree: staticTree.data,
+          tree_features: staticTree.features
+        },
         explanationMethod: "mimic",
         features: featureNames,
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
-        staticDebugML: getJsonTreeBreastCancer(featureNames),
-        staticMatrix: getJsonMatrix(),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
@@ -272,7 +362,7 @@ export async function callFlaskService<TRequest, TResponse>(
   data: TRequest,
   urlPath: string
 ): Promise<TResponse> {
-  const url = "http://localhost:5000" + urlPath;
+  const url = `http://localhost:5000${urlPath}`;
   return fetch(url, {
     body: JSON.stringify(data),
     headers: {

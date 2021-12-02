@@ -1,33 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { noFeature } from "./Constants";
+import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
+
+const defaultNumBins = 8;
 
 export interface IMatrixLegendState {
   maxMetricValue: number;
+  isErrorMetric: boolean;
 }
 
 export interface IMatrixFilterState {
-  selectedFeature1: string;
-  selectedFeature2: string;
+  selectedFeature1?: string;
+  selectedFeature2?: string;
   matrixLegendState: IMatrixLegendState;
 }
 
 export interface IMatrixAreaState {
-  jsonMatrix?: any;
+  jsonMatrix?: IErrorAnalysisMatrix;
   maxMetricValue: number;
   selectedCells?: boolean[];
-  matrixFeature1: string;
-  matrixFeature2: string;
+  matrixFeature1?: string;
+  matrixFeature2?: string;
   disableClearAll: boolean;
   disableSelectAll: boolean;
+  quantileBinning: boolean;
+  numBins: number;
 }
 
 export function createInitialMatrixFilterState(): IMatrixFilterState {
   return {
-    matrixLegendState: { maxMetricValue: 0 },
-    selectedFeature1: noFeature,
-    selectedFeature2: noFeature
+    matrixLegendState: { isErrorMetric: true, maxMetricValue: 0 },
+    selectedFeature1: undefined,
+    selectedFeature2: undefined
   };
 }
 
@@ -36,9 +41,11 @@ export function createInitialMatrixAreaState(): IMatrixAreaState {
     disableClearAll: true,
     disableSelectAll: false,
     jsonMatrix: undefined,
-    matrixFeature1: noFeature,
-    matrixFeature2: noFeature,
+    matrixFeature1: undefined,
+    matrixFeature2: undefined,
     maxMetricValue: 0,
+    numBins: defaultNumBins,
+    quantileBinning: false,
     selectedCells: undefined
   };
 }

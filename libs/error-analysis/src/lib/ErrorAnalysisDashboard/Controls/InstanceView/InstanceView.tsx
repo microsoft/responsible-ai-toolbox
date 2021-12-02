@@ -29,10 +29,11 @@ import {
 import { InstanceViewStyles } from "./InstanceView.styles";
 
 export interface ISelectionDetails {
-  selectedDatasetIndexes: number[];
-  selectedCorrectDatasetIndexes: number[];
+  selectedAllIndexes: number[];
+  selectedAllCorrectIndexes: number[];
+  selectedAllIncorrectIndexes: number[];
   selectedIncorrectDatasetIndexes: number[];
-  selectedAllSelectedIndexes: number[];
+  selectedCorrectDatasetIndexes: number[];
 }
 
 export interface IInstanceViewProps {
@@ -71,18 +72,18 @@ export class InstanceView extends React.Component<
   IInstanceViewState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private choiceItems: IChoiceGroupOption[] = [];
   public constructor(props: IInstanceViewProps) {
     super(props);
     this.state = {
       selectionDetails: {
-        selectedAllSelectedIndexes: [],
+        selectedAllCorrectIndexes: [],
+        selectedAllIncorrectIndexes: [],
+        selectedAllIndexes: [],
         selectedCorrectDatasetIndexes: [],
-        selectedDatasetIndexes: [],
         selectedIncorrectDatasetIndexes: []
       }
     };
@@ -132,9 +133,7 @@ export class InstanceView extends React.Component<
             metadata={this.context.modelMetadata}
             selectedCohort={this.props.selectedCohort}
             messages={this.props.messages}
-            inspectedIndexes={
-              this.state.selectionDetails.selectedAllSelectedIndexes
-            }
+            inspectedIndexes={this.state.selectionDetails.selectedAllIndexes}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}
@@ -212,11 +211,9 @@ export class InstanceView extends React.Component<
               messages={this.props.messages}
               dataView={DataViewKeys.SelectedInstances}
               setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
-              selectedIndexes={
-                this.state.selectionDetails.selectedAllSelectedIndexes
-              }
+              selectedIndexes={this.state.selectionDetails.selectedAllIndexes}
               allSelectedIndexes={
-                this.state.selectionDetails.selectedAllSelectedIndexes
+                this.state.selectionDetails.selectedAllIndexes
               }
               selectedCohort={this.props.selectedCohort}
               setWhatIfDatapoint={this.props.setWhatIfDatapoint}
@@ -232,13 +229,11 @@ export class InstanceView extends React.Component<
               messages={this.props.messages}
               customPoints={this.props.customPoints}
               dataView={DataViewKeys.SelectedInstances}
-              setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
-              selectedIndexes={
-                this.state.selectionDetails.selectedAllSelectedIndexes
-              }
-              allSelectedIndexes={
-                this.state.selectionDetails.selectedAllSelectedIndexes
-              }
+              setSelectedIndexes={(_: number[]): void => {
+                // do nothing.
+              }}
+              selectedIndexes={[]}
+              allSelectedIndexes={[]}
               selectedCohort={this.props.selectedCohort}
               setWhatIfDatapoint={(): void => {
                 // do nothing.
@@ -264,27 +259,23 @@ export class InstanceView extends React.Component<
           selectionDetails.selectedCorrectDatasetIndexes;
         let selectedIncorrectIndexes =
           selectionDetails.selectedIncorrectDatasetIndexes;
-        const selectedAllSelectedIndexes =
-          selectionDetails.selectedAllSelectedIndexes;
+        const selectedAllIndexes = [...selectionDetails.selectedAllIndexes];
         // If going from AllSelectedTab, need to update the other arrays
         if (props.activePredictionTab === PredictionTabKeys.AllSelectedTab) {
           selectedCorrectIndexes = selectedCorrectIndexes.filter((index) =>
-            selectedAllSelectedIndexes.includes(index)
+            selectedAllIndexes.includes(index)
           );
           selectedIncorrectIndexes = selectedIncorrectIndexes.filter((index) =>
-            selectedAllSelectedIndexes.includes(index)
+            selectedAllIndexes.includes(index)
           );
         }
-        const selectedIndexes = [
-          ...selectedCorrectIndexes,
-          ...selectedIncorrectIndexes
-        ];
         this.props.setActivePredictionTab(PredictionTabKeys[option.key]);
         return {
           selectionDetails: {
-            selectedAllSelectedIndexes,
+            selectedAllCorrectIndexes: selectedCorrectIndexes,
+            selectedAllIncorrectIndexes: selectedIncorrectIndexes,
+            selectedAllIndexes,
             selectedCorrectDatasetIndexes: selectedCorrectIndexes,
-            selectedDatasetIndexes: selectedIndexes,
             selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
           }
         };
@@ -311,9 +302,10 @@ export class InstanceView extends React.Component<
       ];
       return {
         selectionDetails: {
-          selectedAllSelectedIndexes: selectedIndexes,
+          selectedAllCorrectIndexes: selectedCorrectIndexes,
+          selectedAllIncorrectIndexes: selectedIncorrectIndexes,
+          selectedAllIndexes: selectedIndexes,
           selectedCorrectDatasetIndexes: selectedCorrectIndexes,
-          selectedDatasetIndexes: selectedIndexes,
           selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
         }
       };
@@ -335,9 +327,10 @@ export class InstanceView extends React.Component<
       ];
       return {
         selectionDetails: {
-          selectedAllSelectedIndexes: selectedIndexes,
+          selectedAllCorrectIndexes: selectedCorrectIndexes,
+          selectedAllIncorrectIndexes: selectedIncorrectIndexes,
+          selectedAllIndexes: selectedIndexes,
           selectedCorrectDatasetIndexes: selectedCorrectIndexes,
-          selectedDatasetIndexes: selectedIndexes,
           selectedIncorrectDatasetIndexes: selectedIncorrectIndexes
         }
       };
@@ -350,12 +343,21 @@ export class InstanceView extends React.Component<
       state: Readonly<IInstanceViewState>
     ): IInstanceViewState => {
       const selectionDetails = state.selectionDetails;
+      const correctDatasetIndexes =
+        selectionDetails.selectedCorrectDatasetIndexes.filter((value) =>
+          indexes.includes(value)
+        );
+      const incorrectDatasetIndexes =
+        selectionDetails.selectedIncorrectDatasetIndexes.filter((value) =>
+          indexes.includes(value)
+        );
       return {
         selectionDetails: {
-          selectedAllSelectedIndexes: indexes,
+          selectedAllCorrectIndexes: correctDatasetIndexes,
+          selectedAllIncorrectIndexes: incorrectDatasetIndexes,
+          selectedAllIndexes: indexes,
           selectedCorrectDatasetIndexes:
             selectionDetails.selectedCorrectDatasetIndexes,
-          selectedDatasetIndexes: selectionDetails.selectedDatasetIndexes,
           selectedIncorrectDatasetIndexes:
             selectionDetails.selectedIncorrectDatasetIndexes
         }
@@ -364,52 +366,76 @@ export class InstanceView extends React.Component<
     this.setState(reloadDataFunc);
   }
 
-  private onRenderLabel = (type: SelectionType) => (
-    p: IChoiceGroupOption | undefined
-  ): JSX.Element => {
-    const classNames = InstanceViewStyles();
-    let selectionText = "";
-    switch (type) {
-      case SelectionType.AllSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedAllSelectedIndexes.length
-        );
-        break;
-      case SelectionType.CorrectSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedCorrectDatasetIndexes.length
-        );
-        break;
-      case SelectionType.IncorrectSelectionType:
-        selectionText = localization.formatString(
-          localization.ErrorAnalysis.InstanceView.selection,
-          this.state.selectionDetails.selectedIncorrectDatasetIndexes.length
-        );
-        break;
-      default:
-        break;
-    }
-    const stackItemStyles: IStackItemStyles = {
-      root: classNames.stackItemsStyle
+  private onRenderLabel =
+    (type: SelectionType) =>
+    (p: IChoiceGroupOption | undefined): JSX.Element => {
+      const classNames = InstanceViewStyles();
+      let selectionText = "";
+      switch (type) {
+        case SelectionType.AllSelectionType: {
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            this.state.selectionDetails.selectedAllIndexes.length
+          );
+          break;
+        }
+        case SelectionType.CorrectSelectionType: {
+          let countCorrect: number;
+          if (
+            this.props.activePredictionTab === PredictionTabKeys.AllSelectedTab
+          ) {
+            countCorrect =
+              this.state.selectionDetails.selectedAllCorrectIndexes.length;
+          } else {
+            countCorrect =
+              this.state.selectionDetails.selectedCorrectDatasetIndexes.length;
+          }
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            countCorrect
+          );
+          break;
+        }
+        case SelectionType.IncorrectSelectionType: {
+          let countIncorrect: number;
+          if (
+            this.props.activePredictionTab === PredictionTabKeys.AllSelectedTab
+          ) {
+            countIncorrect =
+              this.state.selectionDetails.selectedAllIncorrectIndexes.length;
+          } else {
+            countIncorrect =
+              this.state.selectionDetails.selectedIncorrectDatasetIndexes
+                .length;
+          }
+          selectionText = localization.formatString(
+            localization.ErrorAnalysis.InstanceView.selection,
+            countIncorrect
+          );
+          break;
+        }
+        default:
+          break;
+      }
+      const stackItemStyles: IStackItemStyles = {
+        root: classNames.stackItemsStyle
+      };
+      const textStyle = {
+        root: classNames.selectedTextStyle
+      };
+      return (
+        <Stack>
+          <Stack.Item align="start">
+            <span id={p?.labelId} className="ms-ChoiceFieldLabel">
+              {p?.text}
+            </span>
+          </Stack.Item>
+          <Stack.Item align="start" styles={stackItemStyles}>
+            <Text variant="small" styles={textStyle}>
+              {selectionText}
+            </Text>
+          </Stack.Item>
+        </Stack>
+      );
     };
-    const textStyle = {
-      root: classNames.selectedTextStyle
-    };
-    return (
-      <Stack>
-        <Stack.Item align="start">
-          <span id={p?.labelId} className="ms-ChoiceFieldLabel">
-            {p?.text}
-          </span>
-        </Stack.Item>
-        <Stack.Item align="start" styles={stackItemStyles}>
-          <Text variant="small" styles={textStyle}>
-            {selectionText}
-          </Text>
-        </Stack.Item>
-      </Stack>
-    );
-  };
 }

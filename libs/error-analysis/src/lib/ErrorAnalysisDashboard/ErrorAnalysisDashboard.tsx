@@ -156,11 +156,15 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         const localImportances =
           props.precomputedExplanations.localFeatureImportance.scores;
         if (isThreeDimArray(localImportances)) {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0][0] as number[]).length;
+          featureLength = (
+            props.precomputedExplanations.localFeatureImportance
+              .scores[0][0] as number[]
+          ).length;
         } else {
-          featureLength = (props.precomputedExplanations.localFeatureImportance
-            .scores[0] as number[]).length;
+          featureLength = (
+            props.precomputedExplanations.localFeatureImportance
+              .scores[0] as number[]
+          ).length;
         }
       } else if (
         props.precomputedExplanations &&
@@ -177,10 +181,23 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       featureNamesAbridged = featureNames;
     }
     let classNames = props.dataSummary.classNames;
-    const classLength = getClassLength(
-      props.precomputedExplanations,
+    let classLength = 1;
+    if (
+      (props.precomputedExplanations &&
+        (props.precomputedExplanations.localFeatureImportance ||
+          props.precomputedExplanations.globalFeatureImportance)) ||
       props.probabilityY
-    );
+    ) {
+      classLength = getClassLength(
+        props.precomputedExplanations,
+        props.probabilityY
+      );
+    } else if (modelType === ModelTypes.Binary) {
+      classLength = 2;
+    } else if (modelType === ModelTypes.Multiclass) {
+      classLength = new Set([...props.trueY!].concat(props.predictedY!)).size;
+    }
+
     if (!classNames || classNames.length !== classLength) {
       classNames = buildIndexedNames(
         classLength,
@@ -275,8 +292,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     let selectedFeatures = props.features;
     if (props.requestDebugML === undefined) {
-      selectedFeatures = props.staticDebugML.features;
+      selectedFeatures = props.errorAnalysisData.tree_features!;
     }
+    const importances = props.errorAnalysisData.importances ?? [];
     return {
       activeGlobalTab: GlobalTabKeys.DataExplorerTab,
       baseCohort: cohorts[0],
@@ -288,7 +306,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       globalImportance: globalProps.globalImportance,
       globalImportanceIntercept: globalProps.globalImportanceIntercept,
-      importances: [],
+      importances,
       isGlobalImportanceDerivedFromLocal:
         globalProps.isGlobalImportanceDerivedFromLocal,
       jointDataset,
@@ -313,6 +331,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       selectedWhatIfIndex: undefined,
+      showMessageBar: false,
       treeViewState: createInitialTreeViewState(),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
@@ -329,25 +348,30 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     return (
       <ModelAssessmentContext.Provider
         value={{
+          //error analysis does not have manual cohort adding
+          addCohort: () => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
+          deleteCohort: () => undefined,
+          editCohort: () => undefined,
+          errorAnalysisData: this.props.errorAnalysisData,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
           modelExplanationData: {
             precomputedExplanations: this.props.precomputedExplanations
           } as IModelExplanationData,
           modelMetadata: this.state.modelMetadata,
-          requestLocalFeatureExplanations: this.props
-            .requestLocalFeatureExplanations,
+          requestLocalFeatureExplanations:
+            this.props.requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
           selectedErrorCohort: this.state.selectedCohort,
+          shiftErrorCohort: this.shiftErrorCohort,
           telemetryHook:
             this.props.telemetryHook ||
             ((): void => {
               return;
             }),
-          theme: this.props.theme,
-          updateErrorCohorts: this.updateErrorCohorts
+          theme: this.props.theme
         }}
       >
         <div className={classNames.page}>
@@ -357,6 +381,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             viewType={this.state.viewType}
             activeGlobalTab={this.state.activeGlobalTab}
             activePredictionTab={this.state.predictionTab}
+            showMessageBar={this.state.showMessageBar}
+            closeMessageBar={this.closeMessageBar}
           />
           <MainMenu
             viewExplanation={this.viewExplanation.bind(this)}
@@ -402,20 +428,14 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             <SaveCohort
               isOpen={this.state.openSaveCohort}
               onDismiss={(): void => this.setState({ openSaveCohort: false })}
-              onSave={(savedCohort: ErrorCohort): void => {
-                let newCohorts = [...this.state.cohorts, savedCohort];
-                newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-                this.setState({
-                  cohorts: newCohorts,
-                  selectedCohort: savedCohort
-                });
-              }}
+              onSave={this.handleSaveCohort}
               temporaryCohort={this.state.selectedCohort}
               baseCohort={this.state.baseCohort}
             />
           )}
           {this.state.openMapShift && (
             <MapShift
+              currentOption={this.state.mapShiftErrorAnalysisOption}
               isOpen={this.state.openMapShift}
               onDismiss={(): void => this.setState({ openMapShift: false })}
               onSave={(): void => {
@@ -504,14 +524,18 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
-                    staticTreeNodes={this.props.staticDebugML}
-                    staticMatrix={this.props.staticMatrix}
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    disabledView={false}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}
                     errorAnalysisOption={this.state.errorAnalysisOption}
                     selectedCohort={this.state.selectedCohort}
                     baseCohort={this.state.baseCohort}
+                    tree={
+                      this.props.requestDebugML === undefined
+                        ? this.props.errorAnalysisData.tree
+                        : undefined
+                    }
                     treeViewState={this.state.treeViewState}
                     setTreeViewState={this.setTreeViewState}
                     matrixAreaState={this.state.matrixAreaState}
@@ -537,9 +561,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       ))}
                     </Pivot>
                     {this.state.activeGlobalTab ===
-                      GlobalTabKeys.DataExplorerTab && (
-                      <DatasetExplorerTab showCohortSelection={false} />
-                    )}
+                      GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.GlobalExplanationTab && (
                       <GlobalExplanationTab
@@ -698,8 +720,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       addTemporaryCohort = false;
     }
     const baseCohortFilters = this.state.baseCohort.cohort.filters;
-    const baseCohortCompositeFilters = this.state.baseCohort.cohort
-      .compositeFilters;
+    const baseCohortCompositeFilters =
+      this.state.baseCohort.cohort.compositeFilters;
     const selectedCohort: ErrorCohort = new ErrorCohort(
       new Cohort(
         selectedCohortName,
@@ -758,6 +780,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     this.setState({ predictionTab });
   }
 
+  private closeMessageBar = (): void => {
+    this.setState({ showMessageBar: false });
+  };
+
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.state.jointDataset.buildLocalFlattenMatrix(weightOption);
     this.state.cohorts.forEach((errorCohort) =>
@@ -766,15 +792,29 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     this.setState({ selectedWeightVector: weightOption });
   };
 
-  private updateErrorCohorts = (
-    cohorts: ErrorCohort[],
-    selectedCohort: ErrorCohort,
-    baseCohort?: ErrorCohort
-  ): void => {
+  private shiftErrorCohort = (selectedCohort: ErrorCohort): void => {
+    let cohorts = this.state.cohorts;
+    cohorts = cohorts.filter(
+      (cohort) => cohort.cohort.name !== selectedCohort.cohort.name
+    );
     this.setState({
-      baseCohort: baseCohort || this.state.baseCohort,
-      cohorts,
+      baseCohort: selectedCohort,
+      cohorts: [...cohorts, selectedCohort],
       selectedCohort
     });
+  };
+
+  private handleSaveCohort = (
+    savedCohort: ErrorCohort,
+    switchNew?: boolean
+  ): void => {
+    let newCohorts = [...this.state.cohorts, savedCohort];
+    newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
+    this.setState((prevState) => ({
+      baseCohort: switchNew ? savedCohort : prevState.baseCohort,
+      cohorts: newCohorts,
+      selectedCohort: switchNew ? savedCohort : prevState.selectedCohort,
+      showMessageBar: true
+    }));
   };
 }

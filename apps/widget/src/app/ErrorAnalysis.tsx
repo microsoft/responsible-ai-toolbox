@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
 import { ErrorAnalysisDashboard } from "@responsible-ai/error-analysis";
 import React from "react";
 
@@ -20,7 +21,9 @@ export class ErrorAnalysis extends React.Component {
           return callFlaskService(data, "/predict");
         };
       }
-      requestMatrixMethod = async (data: any[]): Promise<any[]> => {
+      requestMatrixMethod = async (
+        data: any[]
+      ): Promise<IErrorAnalysisMatrix> => {
         return callFlaskService(data, "/matrix");
       };
       requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
@@ -33,7 +36,7 @@ export class ErrorAnalysis extends React.Component {
 
     return (
       <ErrorAnalysisDashboard
-        modelInformation={{ modelClass: "blackbox" }}
+        modelInformation={{ method: modelData.method, modelClass: "blackbox" }}
         dataSummary={{
           categoricalMap: modelData.categoricalMap,
           classNames: modelData.classNames,
@@ -56,6 +59,7 @@ export class ErrorAnalysis extends React.Component {
         locale={config.locale}
         features={modelData.featureNames}
         rootStats={modelData.rootStats}
+        errorAnalysisData={modelData.errorAnalysisData}
       />
     );
   }

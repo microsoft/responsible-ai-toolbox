@@ -10,10 +10,15 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  SelectionMode
+  IDetailsColumnRenderTooltipProps,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  SelectionMode,
+  TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -23,64 +28,75 @@ export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];
 }
 
-export class CausalAggregateTable extends React.PureComponent<
-  ICausalAggregateTableProps
-> {
+export class CausalAggregateTable extends React.PureComponent<ICausalAggregateTableProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.name,
         fieldName: nameof<ICausalAnalysisSingleData>("feature"),
+        isResizable: true,
         key: "name",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 110,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.name,
         onRender: getCausalDisplayFeatureName
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.point,
         fieldName: nameof<ICausalAnalysisSingleData>("point"),
+        isResizable: true,
         key: "point",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 100,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.point
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.stderr,
         fieldName: nameof<ICausalAnalysisSingleData>("stderr"),
+        isResizable: true,
         key: "stderr",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 100,
+        minWidth: 70,
         name: localization.ModelAssessment.CausalAnalysis.Table.stderr
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.zstat,
         fieldName: nameof<ICausalAnalysisSingleData>("zstat"),
+        isResizable: true,
         key: "zstat",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 70,
+        minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.zstat
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.pValue,
         fieldName: nameof<ICausalAnalysisSingleData>("p_value"),
+        isResizable: true,
         key: "pValue",
-        maxWidth: 125,
-        minWidth: 100,
+        maxWidth: 70,
+        minWidth: 50,
         name: localization.ModelAssessment.CausalAnalysis.Table.pValue
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciLower,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_lower"),
+        isResizable: true,
         key: "ciLower",
-        maxWidth: 175,
-        minWidth: 150,
+        maxWidth: 130,
+        minWidth: 80,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciLower
       },
       {
+        ariaLabel: localization.ModelAssessment.CausalAnalysis.Table.ciUpper,
         fieldName: nameof<ICausalAnalysisSingleData>("ci_upper"),
+        isResizable: true,
         key: "ciUpper",
-        maxWidth: 175,
-        minWidth: 150,
+        maxWidth: 130,
+        minWidth: 80,
         name: localization.ModelAssessment.CausalAnalysis.Table.ciUpper
       }
     ];
@@ -88,7 +104,7 @@ export class CausalAggregateTable extends React.PureComponent<
       const roundedData = {};
       Object.entries(d).forEach(([key, value]) => {
         if (typeof value === "number") {
-          roundedData[key] = value.toFixed(3);
+          roundedData[key] = value.toExponential(3);
         } else {
           roundedData[key] = value;
         }
@@ -100,7 +116,9 @@ export class CausalAggregateTable extends React.PureComponent<
         items={items}
         columns={columns}
         selectionMode={SelectionMode.none}
-        setKey="set"
+        onRenderDetailsHeader={this.onRenderDetailsHeader}
+        checkboxVisibility={CheckboxVisibility.hidden}
+        selectionPreservedOnEmptyClick
         layoutMode={DetailsListLayoutMode.justified}
       />
     );
@@ -111,4 +129,23 @@ export class CausalAggregateTable extends React.PureComponent<
       this.forceUpdate();
     }
   }
+
+  private onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+    props,
+    defaultRender
+  ) => {
+    if (!props) {
+      return <div />;
+    }
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+    return (
+      <div>
+        {defaultRender?.({
+          ...props,
+          onRenderColumnHeaderTooltip
+        })}
+      </div>
+    );
+  };
 }

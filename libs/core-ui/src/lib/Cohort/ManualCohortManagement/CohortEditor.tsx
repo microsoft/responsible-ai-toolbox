@@ -14,12 +14,17 @@ import {
   Stack,
   Panel,
   ChoiceGroup,
-  IChoiceGroupOption
+  IChoiceGroupOption,
+  Link
 } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
-import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
+import {
+  FilterMethods,
+  ICompositeFilter,
+  IFilter
+} from "../../Interfaces/IFilter";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 import { Cohort } from "../Cohort";
 
@@ -29,13 +34,16 @@ import { CohortEditorFilterList } from "./CohortEditorFilterList";
 
 export interface ICohortEditorProps {
   jointDataset: JointDataset;
-  filterList: IFilter[];
   cohortName: string;
   isNewCohort: boolean;
   deleteIsDisabled: boolean;
-  onSave: (newCohort: Cohort) => void;
+  disableEditName?: boolean;
+  existingCohortNames?: string[];
+  onSave: (newCohort: Cohort, switchNew?: boolean) => void;
   closeCohortEditor: () => void;
   closeCohortEditorPanel: () => void;
+  filterList?: IFilter[];
+  compositeFilters?: ICompositeFilter[];
   onDelete?: () => void;
 }
 
@@ -43,6 +51,7 @@ export interface ICohortEditorState {
   openedFilter?: IFilter;
   filterIndex?: number;
   filters: IFilter[];
+  compositeFilters: ICompositeFilter[];
   cohortName?: string;
   selectedFilterCategory?: string;
   showConfirmation: boolean;
@@ -80,8 +89,9 @@ export class CohortEditor extends React.PureComponent<
     super(props);
     this.state = {
       cohortName: this.props.cohortName,
-      filterIndex: this.props.filterList.length,
-      filters: this.props.filterList,
+      compositeFilters: this.props.compositeFilters || [],
+      filterIndex: this.props.filterList?.length || 0,
+      filters: this.props.filterList || [],
       openedFilter: undefined,
       selectedFilterCategory: undefined,
       showConfirmation: false
@@ -91,7 +101,7 @@ export class CohortEditor extends React.PureComponent<
 
   public render(): React.ReactNode {
     const openedFilter = this.state.openedFilter;
-
+    const styles = cohortEditorStyles();
     return (
       <>
         <Panel
@@ -115,6 +125,7 @@ export class CohortEditor extends React.PureComponent<
                 }
                 onGetErrorMessage={this._getErrorMessage}
                 validateOnLoad={false}
+                disabled={this.props.disableEditName}
                 onChange={this.setCohortName}
               />
             </Stack.Item>
@@ -149,11 +160,21 @@ export class CohortEditor extends React.PureComponent<
             </Stack.Item>
             <Stack.Item>
               <CohortEditorFilterList
+                compositeFilters={this.state.compositeFilters}
                 editFilter={this.editFilter}
+                removeCompositeFilter={this.removeCompositeFilter}
                 removeFilter={this.removeFilter}
                 filters={this.state.filters}
                 jointDataset={this.props.jointDataset}
               />
+            </Stack.Item>
+            <Stack.Item>
+              <Link
+                className={styles.clearFilter}
+                onClick={this.clearAllFilters}
+              >
+                {localization.Interpret.CohortEditor.clearAllFilters}
+              </Link>
             </Stack.Item>
           </Stack>
         </Panel>
@@ -165,7 +186,7 @@ export class CohortEditor extends React.PureComponent<
     const styles = cohortEditorStyles();
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
-        {!this.props.isNewCohort && (
+        {!this.props.isNewCohort && !this.props.disableEditName && (
           <DefaultButton
             disabled={this.props.deleteIsDisabled}
             onClick={this.deleteCohort}
@@ -174,9 +195,18 @@ export class CohortEditor extends React.PureComponent<
             {localization.Interpret.CohortEditor.delete}
           </DefaultButton>
         )}
-        <PrimaryButton onClick={this.saveCohort}>
+        <PrimaryButton
+          onClick={() => this.saveCohort()}
+          disabled={this.isDuplicate()}
+        >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
+        <DefaultButton
+          onClick={() => this.saveCohort(true)}
+          disabled={this.isDuplicate()}
+        >
+          {localization.Interpret.CohortEditor.saveAndSwitch}
+        </DefaultButton>
         <DefaultButton onClick={this.onCancelClick}>
           {localization.Interpret.CohortEditor.cancel}
         </DefaultButton>
@@ -202,6 +232,18 @@ export class CohortEditor extends React.PureComponent<
         onClose={this.onCancelClose}
       />
     );
+  };
+
+  private isDuplicate = (): boolean => {
+    return !!(
+      this.props.isNewCohort &&
+      this.state.cohortName &&
+      this.props.existingCohortNames?.includes(this.state.cohortName)
+    );
+  };
+
+  private clearAllFilters = (): void => {
+    this.setState({ compositeFilters: [], filters: [] });
   };
 
   private deleteCohort = (): void => {
@@ -339,8 +381,8 @@ export class CohortEditor extends React.PureComponent<
     const openedFilter = this.state.openedFilter;
     if ((item.key as FilterMethods) === FilterMethods.InTheRangeOf) {
       //default values for in the range operation
-      const meta = this.props.jointDataset.metaDict[openedFilter.column]
-        .featureRange;
+      const meta =
+        this.props.jointDataset.metaDict[openedFilter.column].featureRange;
       openedFilter.arg[0] = meta?.min || Number.MIN_SAFE_INTEGER;
       openedFilter.arg[1] = meta?.max || Number.MAX_SAFE_INTEGER;
     } else {
@@ -439,6 +481,12 @@ export class CohortEditor extends React.PureComponent<
     this.setState({ filters });
   };
 
+  private removeCompositeFilter = (index: number): void => {
+    const compositeFilters = [...this.state.compositeFilters];
+    compositeFilters.splice(index, 1);
+    this.setState({ compositeFilters });
+  };
+
   private editFilter = (index: number): void => {
     const editFilter = this.state.filters[index];
     this.setState({
@@ -447,14 +495,15 @@ export class CohortEditor extends React.PureComponent<
     });
   };
 
-  private saveCohort = (): void => {
+  private saveCohort = (switchNew?: boolean): void => {
     if (this.state.cohortName?.length) {
       const newCohort = new Cohort(
         this.state.cohortName,
         this.props.jointDataset,
-        this.state.filters
+        this.state.filters,
+        this.state.compositeFilters
       );
-      this.props.onSave(newCohort);
+      this.props.onSave(newCohort, switchNew);
     }
   };
 

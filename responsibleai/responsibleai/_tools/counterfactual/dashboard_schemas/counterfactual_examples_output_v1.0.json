@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dashboard Dictionary for Counterfactual outputs",
+  "description": "The original JSON format for counterfactual examples",
+  "type": "object",
+  "properties": {
+    "cf_examples_list": {
+      "description": "The list of the computed counterfactual examples.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "local_importance": {
+      "description": "The list of counterfactual local importance for the features in input data.",
+      "type": ["array", "null"],
+      "items": {
+        "type": "object"
+      }
+    },
+    "summary_importance": {
+      "description": "The list of counterfactual summary importance for the features in input data.",
+      "type": ["object", "null"]
+    },
+    "metadata": {
+      "description": "The metadata about the generated counterfactuals.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "cf_examples_list",
+    "local_importance",
+    "summary_importance",
+    "metadata"
+  ]
+}

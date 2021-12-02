@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalWhatIfData } from "@responsible-ai/core-ui";
+import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
@@ -18,13 +18,15 @@ import {
   createPredictionsRequestGenerator,
   DatasetName,
   generateJsonTreeBoston,
-  generateJsonTreeAdultCensusIncome
+  generateJsonTreeAdultCensusIncome,
+  getJsonMatrix,
+  getJsonTreeAdultCensusIncome
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
-  version: 1;
+  version: 1 | 2;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -44,38 +46,68 @@ export class App extends React.Component<IAppProps> {
         exp.modelClass = "blackbox";
       }
     }
+    let modelAssessmentDashboardProps: IModelAssessmentDashboardProps;
+    if (this.props.version === 1) {
+      modelAssessmentDashboardProps = {
+        ...this.props,
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        requestCausalWhatIf: this.requestCausalWhatIf,
+        requestMatrix: generateJsonMatrix(DatasetName.BreastCancer),
+        requestPredictions: !this.props.classDimension
+          ? undefined
+          : createPredictionsRequestGenerator(this.props.classDimension),
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
 
-    const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
-      ...this.props,
-      locale: this.props.language,
-      localUrl: "https://www.bing.com/",
-      requestCausalWhatIf: this.requestCausalWhatIf,
-      requestMatrix: generateJsonMatrix,
-      requestPredictions: !this.props.classDimension
-        ? undefined
-        : createPredictionsRequestGenerator(this.props.classDimension),
-      stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme
-    };
-
-    if (this.props.classDimension === 1) {
-      // Boston
-      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
-      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-        this.props.dataset.feature_names,
-        DatasetName.Boston
-      );
+      if (this.props.classDimension === 1) {
+        // Boston
+        modelAssessmentDashboardProps.requestDebugML = generateJsonTreeBoston;
+        modelAssessmentDashboardProps.requestImportances =
+          createJsonImportancesGenerator(
+            this.props.dataset.feature_names,
+            DatasetName.Boston
+          );
+      } else {
+        // Adult
+        modelAssessmentDashboardProps.requestDebugML =
+          generateJsonTreeAdultCensusIncome;
+        modelAssessmentDashboardProps.requestImportances =
+          createJsonImportancesGenerator(
+            this.props.dataset.feature_names,
+            DatasetName.AdultCensusIncome
+          );
+      }
     } else {
-      // Adult
-      modelAssessmentDashboardProps.requestDebugML = generateJsonTreeAdultCensusIncome;
-      modelAssessmentDashboardProps.requestImportances = createJsonImportancesGenerator(
-        this.props.dataset.feature_names,
-        DatasetName.AdultCensusIncome
+      const staticTree = getJsonTreeAdultCensusIncome(
+        this.props.dataset.feature_names
       );
+      const staticMatrix = getJsonMatrix();
+      modelAssessmentDashboardProps = {
+        ...this.props,
+        errorAnalysisData: [
+          {
+            matrix: staticMatrix.data,
+            matrix_features: staticMatrix.features,
+            maxDepth: 3,
+            metric: Metrics.ErrorRate,
+            minChildSamples: 21,
+            numLeaves: 31,
+            tree: staticTree.data,
+            tree_features: staticTree.features
+          }
+        ],
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
     }
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
   }
+
   private readonly requestCausalWhatIf = async (
     _id: string,
     _features: unknown[],

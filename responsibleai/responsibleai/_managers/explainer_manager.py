@@ -3,26 +3,32 @@
 
 """Defines the Explainer Manager class."""
 
-import warnings
 import json
-import numpy as np
-from scipy.sparse import issparse
+import warnings
 from pathlib import Path
-from interpret_community.mimic.mimic_explainer import MimicExplainer
-from interpret_community.mimic.models.lightgbm_model import (
-    LGBMExplainableModel)
-from interpret_community.mimic.models.linear_model import (
-    LinearExplainableModel)
+
+import numpy as np
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
-    save_explanation, load_explanation, FeatureImportanceExplanation)
-from responsibleai._internal.constants import (
-    ManagerNames, Metadata, ListProperties, ExplanationKeys,
-    ExplainerManagerKeys as Keys)
-from responsibleai._managers.base_manager import BaseManager, measure_time, log
-from responsibleai._interfaces import ModelExplanationData,\
-    PrecomputedExplanations, FeatureImportance, EBMGlobalExplanation
+    FeatureImportanceExplanation, load_explanation, save_explanation)
+from interpret_community.mimic.mimic_explainer import MimicExplainer
+from interpret_community.mimic.models.lightgbm_model import \
+    LGBMExplainableModel
+from interpret_community.mimic.models.linear_model import \
+    LinearExplainableModel
+from scipy.sparse import issparse
+
 from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
+                                       ModelExplanationData,
+                                       PrecomputedExplanations)
+from responsibleai._internal.constants import ExplainerManagerKeys as Keys
+from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
+                                               ManagerNames, Metadata)
+from responsibleai._managers.base_manager import BaseManager, measure_time, log
+from responsibleai.exceptions import UserConfigValidationException
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
@@ -59,6 +65,8 @@ class ExplainerManager(BaseManager):
         The order of the class names should match that of the model
         output.  Only required if explaining classifier.
     :type classes: list
+    :param categorical_features: The categorical feature names.
+    :type categorical_features: list[str]
     """
 
     def __init__(self, model, initialization_examples, evaluation_examples,
@@ -83,6 +91,8 @@ class ExplainerManager(BaseManager):
             The order of the class names should match that of the model
             output.  Only required if explaining classifier.
         :type classes: list
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         """
         self._model = model
         self._initialization_examples = \
@@ -100,6 +110,10 @@ class ExplainerManager(BaseManager):
 
     def add(self):
         """Add an explainer to be computed later."""
+        if self._model is None:
+            raise UserConfigValidationException(
+                'Model is required for model explanations')
+
         if self._is_added:
             warnings.warn(("Ignoring.  Explanation has already been added, "
                            "currently limited to one explainer type."),
@@ -113,17 +127,19 @@ class ExplainerManager(BaseManager):
             self._surrogate_model = LinearExplainableModel
         self._is_added = True
 
-    @measure_time(show_progress=False)
-    def compute(self, show_progress=False):
+    @measure_time
+    def compute(self):
         """Creates an explanation by running the explainer on the model."""
-        log("Explanations", print_to_console=show_progress)
+        print("Explanations")
+
         if not self._is_added:
             return
+
         if self._is_run:
             return
 
-        log('Current Status: Explaining {0} features'.format(len(
-            self._features)), print_to_console=show_progress)
+        print('Current Status: Explaining {0} features'.format(
+            len(self._features)))
 
         if self._classes is not None:
             model_task = ModelTask.Classification
@@ -139,8 +155,10 @@ class ExplainerManager(BaseManager):
             classes=self._classes,
             categorical_features=self._categorical_features)
         self._explanation = explainer.explain_global(self._evaluation_examples)
-        log('Current Status: Explained {0} features.'.format(
-            len(self._features)), print_to_console=show_progress)
+        self._is_run = True
+
+        print('Current Status: Explained {0} features.'.format(
+              len(self._features)))
 
     def get(self):
         """Get the computed explanation.
@@ -296,44 +314,58 @@ class ExplainerManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
+        directory_manager = DirectoryManager(parent_directory_path=path)
+        data_directory = directory_manager.create_data_directory()
+
         # save the explanation
         if self._explanation:
             save_explanation(self._explanation,
-                             top_dir / ManagerNames.EXPLAINER)
+                             data_directory / ManagerNames.EXPLAINER)
+
         meta = {IS_RUN: self._is_run,
                 IS_ADDED: self._is_added}
-        with open(Path(path) / META_JSON, 'w') as file:
+        with open(data_directory / META_JSON, 'w') as file:
             json.dump(meta, file)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the ExplainerManager from the given path.
 
         :param path: The directory path to load the ExplainerManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
+        :return: The ExplainerManager manager after loading.
+        :rtype: ExplainerManager
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle
         inst = ExplainerManager.__new__(ExplainerManager)
-        top_dir = Path(path)
-        explanation_path = top_dir / ManagerNames.EXPLAINER
-        if explanation_path.exists():
-            explanation = load_explanation(explanation_path)
-            inst.__dict__[EXPLANATION] = explanation
-        inst.__dict__['_' + MODEL] = model_analysis.model
 
-        with open(top_dir / META_JSON, 'r') as meta_file:
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
+        directory_manager = DirectoryManager(
+            parent_directory_path=path,
+            sub_directory_name=all_cf_dirs[0])
+        data_directory = directory_manager.get_data_directory()
+
+        with open(data_directory / META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
-        inst.__dict__['_' + CLASSES] = model_analysis._classes
+
+        inst.__dict__[EXPLANATION] = None
+        explanation_path = data_directory / ManagerNames.EXPLAINER
+        if explanation_path.exists():
+            explanation = load_explanation(explanation_path)
+            inst.__dict__[EXPLANATION] = explanation
+
+        inst.__dict__['_' + MODEL] = rai_insights.model
+        inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
-            model_analysis.categorical_features
-        target_column = model_analysis.target_column
-        train = model_analysis.train.drop(columns=[target_column])
-        test = model_analysis.test.drop(columns=[target_column])
+            rai_insights.categorical_features
+        target_column = rai_insights.target_column
+        train = rai_insights.train.drop(columns=[target_column])
+        test = rai_insights.test.drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)

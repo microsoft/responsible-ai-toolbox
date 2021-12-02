@@ -6,10 +6,9 @@
 import json
 import os
 import uuid
-
 from html.parser import HTMLParser
-from rai_core_flask import FlaskHelper  # , environment_detector
 
+from rai_core_flask import FlaskHelper  # , environment_detector
 from responsibleai.serialization_utilities import serialize_json_safe
 
 
@@ -22,13 +21,19 @@ class InLineScript(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == "script":
             src = None
+            scriptTag = "<script "
             for att in attrs:
                 if att[0] == "src":
                     src = att[1]
-                    break
+                    continue
+                # skip module type as it causes ipython to render widget
+                # with 8px height
+                if att[0] == "type":
+                    continue
+                scriptTag += f' {att[0]}={att[1]}'
             if src is not None:
                 content = self.load_widget_file(src)
-                self.content += f'<script>\r\n{content}\r\n'
+                self.content += f'{scriptTag}>\r\n{content}\r\n'
                 return
         self.content += self.get_starttag_text()
 
@@ -108,11 +113,12 @@ class Dashboard(object):
             content = content.replace(
                 "__rai_app_id__", f'rai_widget_{self.id}')
             content = content.replace(
-                "__rai_config__", json.dumps(self.config))
+                '"__rai_config__"', f'`{json.dumps(self.config)}`')
+            model_data = json.dumps(self.model_data,
+                                    default=serialize_json_safe)
             content = content.replace(
-                "__rai_model_data__",
-                json.dumps(self.model_data,
-                           default=serialize_json_safe))
+                '"__rai_model_data__"',
+                f'`{model_data}`')
             return content
 
     def add_url_rule(self, func, route, methods):

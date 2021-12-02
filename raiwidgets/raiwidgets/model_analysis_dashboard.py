@@ -3,19 +3,20 @@
 
 """Defines the Model Analysis Dashboard class."""
 
-from .model_analysis_dashboard_input import ModelAnalysisDashboardInput
-from .dashboard import Dashboard
+from responsibleai import RAIInsights
 
-from flask import jsonify, request
-
-from responsibleai import ModelAnalysis
+from .responsibleai_dashboard import ResponsibleAIDashboard
+import warnings
 
 
-class ModelAnalysisDashboard(Dashboard):
+class ModelAnalysisDashboard(object):
     """The dashboard class, wraps the dashboard component.
 
+    Note: this class is now deprecated, please use the
+    ResponsibleAIDashboard instead.
+
     :param analysis: An object that represents an model analysis.
-    :type analysis: ModelAnalysis
+    :type analysis: RAIInsights
     :param public_ip: Optional. If running on a remote vm,
         the external public ip address of the VM.
     :type public_ip: str
@@ -24,42 +25,10 @@ class ModelAnalysisDashboard(Dashboard):
 
     """
 
-    def __init__(self, analysis: ModelAnalysis,
+    def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None):
-        self.input = ModelAnalysisDashboardInput(analysis)
-
-        super(ModelAnalysisDashboard, self).__init__(
-            dashboard_type="ModelAssessment",
-            model_data=self.input.dashboard_input,
-            public_ip=public_ip,
-            port=port,
-            locale=locale,
-            no_inline_dashboard=True)
-
-        def predict():
-            data = request.get_json(force=True)
-            return jsonify(self.input.on_predict(data))
-        self.add_url_rule(predict, '/predict', methods=["POST"])
-
-        def tree():
-            data = request.get_json(force=True)
-            return jsonify(self.input.debug_ml(data))
-
-        self.add_url_rule(tree, '/tree', methods=["POST"])
-
-        def matrix():
-            data = request.get_json(force=True)
-            return jsonify(self.input.matrix(data))
-
-        self.add_url_rule(matrix, '/matrix', methods=["POST"])
-
-        def causal_whatif():
-            data = request.get_json(force=True)
-            return jsonify(self.input.causal_whatif(data))
-
-        self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
-
-        def importances():
-            return jsonify(self.input.importances())
-
-        self.add_url_rule(importances, '/importances', methods=["POST"])
+        warnings.warn("ModelAnalysisDashboard in raiwidgets package is "
+                      "deprecated."
+                      "Please use ResponsibleAIDashboard instead.")
+        rai = ResponsibleAIDashboard(analysis, public_ip, port, locale)
+        self.input = rai.input

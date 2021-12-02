@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IFilter,
-  ICompositeFilter,
-  FilterMethods
-} from "../Interfaces/IFilter";
-import { JointDataset, IJointMeta } from "../util/JointDataset";
+import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
+import { getBasicFilterString } from "../util/getBasicFilterString";
+import { getCompositeFilterString } from "../util/getCompositeFilterString";
+import { JointDataset } from "../util/JointDataset";
 
 import { Cohort, CohortSource } from "./Cohort";
 import { MetricCohortStats, ErrorCohortStats } from "./CohortStats";
@@ -45,17 +43,15 @@ export class ErrorCohort {
     features: string[]
   ): IFilter[] {
     // return the filters relabeled from original label to Data#
-    const filtersRelabeled = filters.map(
-      (filter: IFilter): IFilter => {
-        const index = features.indexOf(filter.column);
-        const key = JointDataset.DataLabelRoot + index.toString();
-        return {
-          arg: filter.arg,
-          column: key,
-          method: filter.method
-        };
-      }
-    );
+    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
+      const index = features.indexOf(filter.column);
+      const key = JointDataset.DataLabelRoot + index.toString();
+      return {
+        arg: filter.arg,
+        column: key,
+        method: filter.method
+      };
+    });
     return filtersRelabeled;
   }
 
@@ -64,16 +60,14 @@ export class ErrorCohort {
     jointDataset: JointDataset
   ): IFilter[] {
     // return the filters relabeled from Data# to original label
-    const filtersRelabeled = filters.map(
-      (filter: IFilter): IFilter => {
-        const label = jointDataset.metaDict[filter.column].label;
-        return {
-          arg: filter.arg,
-          column: label,
-          method: filter.method
-        };
-      }
-    );
+    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
+      const label = jointDataset.metaDict[filter.column].label;
+      return {
+        arg: filter.arg,
+        column: label,
+        method: filter.method
+      };
+    });
     return filtersRelabeled;
   }
 
@@ -102,81 +96,16 @@ export class ErrorCohort {
     return filtersRelabeled;
   }
 
-  public cohortFiltersToString(filters: IFilter[]): string[] {
-    return filters.map((filter: IFilter): string => {
-      let method = "";
-      const metaDict = this.jointDataset.metaDict[filter.column];
-      const label = metaDict.label;
-      if (filter.method === FilterMethods.InTheRangeOf) {
-        const arg0 = filter.arg[0].toFixed(2);
-        const arg1 = filter.arg[1].toFixed(2);
-        return `${label} in (${arg0}, ${arg1}]`;
-      }
-      if (filter.method === FilterMethods.Includes) {
-        const args = this.getFilterBoundsArgs(metaDict, filter);
-        return `${label} in ${args}`;
-      }
-      if (filter.method === FilterMethods.Excludes) {
-        const args = this.getFilterBoundsArgs(metaDict, filter);
-        return `${label} not in ${args}`;
-      }
-      if (filter.method === FilterMethods.Equal) {
-        method = "==";
-        if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
-          const catArg = (metaDict.sortedCategoricalValues as string[])[
-            filter.arg[0]
-          ];
-          return `${label} ${method} ${catArg}`;
-        }
-      } else if (filter.method === FilterMethods.GreaterThan) {
-        method = ">";
-      } else if (filter.method === FilterMethods.GreaterThanEqualTo) {
-        method = ">=";
-      } else if (filter.method === FilterMethods.LessThan) {
-        method = "<";
-      } else if (filter.method === FilterMethods.LessThanEqualTo) {
-        method = "<=";
-      }
-      return `${label} ${method} ${filter.arg[0].toFixed(2)}`;
-    });
-  }
-
-  public cohortCompositeFiltersToString(
-    compositeFilters: ICompositeFilter[]
-  ): string[] {
-    return compositeFilters.map((compositeFilter: ICompositeFilter): string => {
-      if (compositeFilter.method) {
-        return this.cohortFiltersToString([compositeFilter as IFilter])[0];
-      }
-      const cohortCompositeFiltersStrings = this.cohortCompositeFiltersToString(
-        compositeFilter.compositeFilters
-      );
-      if (cohortCompositeFiltersStrings.length === 1) {
-        return cohortCompositeFiltersStrings[0];
-      }
-      return cohortCompositeFiltersStrings
-        .map(
-          (cohortCompositeFiltersString) => `(${cohortCompositeFiltersString})`
-        )
-        .join(` ${compositeFilter.operation} `);
-    });
-  }
-
   public filtersToString(): string[] {
-    const cohortFilters = this.cohortFiltersToString(this.cohort.filters);
-    const cohortCompositeFilters = this.cohortCompositeFiltersToString(
-      this.cohort.compositeFilters
+    const cohortFilters = getBasicFilterString(
+      this.cohort.filters,
+      this.jointDataset
+    );
+    const cohortCompositeFilters = getCompositeFilterString(
+      this.cohort.compositeFilters,
+      this.jointDataset
     );
     return cohortFilters.concat(cohortCompositeFilters);
-  }
-
-  private getFilterBoundsArgs(metaDict: IJointMeta, filter: IFilter): string {
-    if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
-      return filter.arg
-        .map((arg) => (metaDict.sortedCategoricalValues as string[])[arg])
-        .join(", ");
-    }
-    return filter.arg.map((arg) => arg.toFixed(2)).join(", ");
   }
 
   private updateStatsFromData(

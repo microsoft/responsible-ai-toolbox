@@ -57,7 +57,7 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
         key: "binLabel"
       };
       this.props.overallMetrics.forEach((metric, colIndex) => {
-        item["metric" + colIndex] = metric;
+        item[`metric${colIndex}`] = metric;
       });
       items.push(item);
 
@@ -69,9 +69,9 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
         };
         this.props.formattedBinValues.forEach((metricArray, colIndex) => {
           if (metricArray) {
-            item["metric" + colIndex] = metricArray[rowIndex];
+            item[`metric${colIndex}`] = metricArray[rowIndex];
           } else {
-            item["metric" + colIndex] = "empty";
+            item[`metric${colIndex}`] = "empty";
           }
         });
         items.push(item);
@@ -91,9 +91,9 @@ export class OverallTable extends React.PureComponent<IOverallTableProps> {
     ];
     this.props.metricLabels.forEach((colName, colIndex) => {
       columns.push({
-        fieldName: "metric" + colIndex,
+        fieldName: `metric${colIndex}`,
         isResizable: true,
-        key: "column" + colIndex,
+        key: `column${colIndex}`,
         maxWidth: 150,
         minWidth: 75,
         name: colName

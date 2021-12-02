@@ -5,22 +5,21 @@
 import numpy as np
 import pandas as pd
 import shap
+from lightgbm import LGBMClassifier
+from pandas import read_csv
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import (
-    load_boston, load_breast_cancer, load_iris, make_classification)
+from sklearn.datasets import (load_boston, load_breast_cancer, load_iris,
+                              load_wine, make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import (
-    StandardScaler, OneHotEncoder, FunctionTransformer)
-from lightgbm import LGBMClassifier
+from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
+                                   StandardScaler)
 from xgboost import XGBClassifier
-
-from pandas import read_csv
 
 
 def create_sklearn_random_forest_classifier(X, y):
@@ -59,7 +58,7 @@ def create_kneighbors_classifier(X, y):
 
 
 def create_sklearn_logistic_regressor(X, y, pipeline=False):
-    lin = LogisticRegression(solver='liblinear')
+    lin = LogisticRegression(solver='liblinear', random_state=777)
     if pipeline:
         lin = Pipeline([('lin', lin)])
     model = lin.fit(X, y)
@@ -77,19 +76,35 @@ def create_iris_data(append_special_characters=False):
     # Import Iris dataset
     iris = load_iris()
     # Split data into train and test
-    X_train, X_test, y_train, y_validation = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         iris.data, iris.target, test_size=0.2, random_state=0)
     feature_names = [
         name.replace(' (cm)', '-' if append_special_characters else '')
         for name in iris.feature_names]
 
     classes = iris.target_names
-    return X_train, X_test, y_train, y_validation, feature_names, classes
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
-def create_adult_census_data():
+def create_wine_data():
+    wine = load_wine()
+    X = wine.data
+    y = wine.target
+    classes = wine.target_names
+    feature_names = wine.feature_names
+    X_train, X_test, y_train, y_test = train_test_split(X,
+                                                        y,
+                                                        test_size=0.5,
+                                                        random_state=0)
+    return X_train, X_test, y_train, y_test, feature_names, classes
+
+
+def create_adult_census_data(string_labels=False):
     X, y = shap.datasets.adult()
-    y = [1 if r else 0 for r in y]
+    if string_labels:
+        y = [">=50K" if r else "<50K" for r in y]
+    else:
+        y = [1 if r else 0 for r in y]
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=7, stratify=y)
@@ -119,7 +134,7 @@ def create_cancer_data():
 
 
 def create_binary_classification_dataset():
-    X, y = make_classification()
+    X, y = make_classification(random_state=777)
 
     # Split data into train and test
     X_train, X_test, y_train, y_test = train_test_split(X,
@@ -152,14 +167,14 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_boston_data():
+def create_boston_data(test_size=0.2):
     # Import Boston housing dataset
     boston = load_boston()
     # Split data into train and test
-    X_train, X_test, y_train, y_validation = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
         boston.data, boston.target,
-        test_size=0.2, random_state=7)
-    return X_train, X_test, y_train, y_validation, boston.feature_names
+        test_size=test_size, random_state=7)
+    return X_train, X_test, y_train, y_test, boston.feature_names
 
 
 def create_models_classification(X_train, y_train):
@@ -209,3 +224,7 @@ def create_titanic_pipeline(X_train, y_train):
                            LogisticRegression(solver='lbfgs'))])
     clf.fit(X_train, y_train)
     return clf
+
+
+def create_dataframe(data, feature_names):
+    return pd.DataFrame(data, columns=feature_names)

@@ -1,24 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IModelAssessmentDashboardProps } from "@responsible-ai/model-assessment";
 import { IDropdownOption } from "office-ui-fabric-react";
 
+import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
 export function getAvailableTabs(
   props: IModelAssessmentDashboardProps,
-  jointDataset: JointDataset,
   excludeErrorAnalysis: boolean
 ): IDropdownOption[] {
   const availableTabs: IDropdownOption[] = [];
   if (
     !excludeErrorAnalysis &&
-    props.requestDebugML &&
-    props.requestMatrix &&
-    props.requestImportances
+    (props.requestDebugML || props.errorAnalysisData?.[0]?.tree)
   ) {
     availableTabs.push({
       key: GlobalTabKeys.ErrorAnalysisTab,
@@ -26,29 +22,28 @@ export function getAvailableTabs(
     });
   }
 
-  if (jointDataset.hasPredictedY && jointDataset.hasTrueY) {
+  if (props.dataset.predicted_y) {
     availableTabs.push({
       key: GlobalTabKeys.ModelStatisticsTab,
       text: localization.ModelAssessment.ComponentNames.ModelStatistics
     });
   }
+  availableTabs.push({
+    key: GlobalTabKeys.DataExplorerTab,
+    text: localization.ModelAssessment.ComponentNames.DataExplorer
+  });
 
-  if (jointDataset.hasDataset) {
-    availableTabs.push({
-      key: GlobalTabKeys.DataExplorerTab,
-      text: localization.ModelAssessment.ComponentNames.DataExplorer
-    });
-  }
-
-  if (
-    props.requestPredictions &&
-    props.requestImportances &&
-    props.modelExplanationData &&
-    props.modelExplanationData.length > 0
-  ) {
+  if (props.modelExplanationData && props.modelExplanationData.length > 0) {
     availableTabs.push({
       key: GlobalTabKeys.FeatureImportancesTab,
       text: localization.ModelAssessment.ComponentNames.FeatureImportances
+    });
+  }
+
+  if (props.counterfactualData && props.counterfactualData.length > 0) {
+    availableTabs.push({
+      key: GlobalTabKeys.CounterfactualsTab,
+      text: localization.ModelAssessment.ComponentNames.Counterfactuals
     });
   }
 
@@ -59,11 +54,5 @@ export function getAvailableTabs(
     });
   }
 
-  if (props.counterfactualData && props.counterfactualData.length > 0) {
-    availableTabs.push({
-      key: GlobalTabKeys.CounterfactualsTab,
-      text: localization.ModelAssessment.ComponentNames.Counterfactuals
-    });
-  }
   return availableTabs;
 }

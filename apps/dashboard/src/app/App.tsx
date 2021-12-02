@@ -62,7 +62,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.dataset
                 ].classDimension
               }
-              theme={theme}
+              theme={themes[this.state.theme]}
               language={Language[this.state.language]}
               version={
                 applications[this.state.application].versions[
@@ -94,6 +94,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.dataset
                 ].data
               }
+              datasetName={this.state.dataset}
               classDimension={
                 applications[this.state.application].datasets[
                   this.state.dataset
@@ -113,7 +114,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
               {...applications[this.state.application].datasets[
                 this.state.dataset
               ]}
-              theme={theme}
+              theme={themes[this.state.theme]}
               language={Language[this.state.language]}
               version={
                 applications[this.state.application].versions[

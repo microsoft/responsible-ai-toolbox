@@ -16,6 +16,7 @@ import {
 } from "./TreeViewRenderer.styles";
 
 export interface ITreeViewNodeProps {
+  disabledView: boolean;
   fillOffset: number;
   node: HierarchyPointNode<ITreeNode>;
   onSelect(node: HierarchyPointNode<ITreeNode>): void;
@@ -64,7 +65,11 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
           </linearGradient>
           <circle
             r={node.data.r}
-            className={classNames.node}
+            className={
+              this.props.disabledView
+                ? classNames.nodeDisabled
+                : classNames.node
+            }
             style={{
               color: "black",
               stroke: this.props.node.data.nodeState.onSelectedPath
@@ -95,12 +100,14 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
             {this.getNodeText(node)}
           </text>
         </g>
-        <SVGToolTip target={this.ref} spacing={15}>
-          <FilterTooltip
-            key={node.id + "tooltip"}
-            filterProps={node.data.filterProps}
-          />
-        </SVGToolTip>
+        {!this.props.disabledView && (
+          <SVGToolTip target={this.ref} spacing={15}>
+            <FilterTooltip
+              key={`${node.id}tooltip`}
+              filterProps={node.data.filterProps}
+            />
+          </SVGToolTip>
+        )}
       </>
     );
   }
@@ -116,7 +123,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     ) {
       return node.data.metricValue.toFixed(2);
     }
-    return node.data.error + "/" + node.data.size;
+    return `${node.data.error}/${node.data.size}`;
   }
 
   private getNodeClassName(

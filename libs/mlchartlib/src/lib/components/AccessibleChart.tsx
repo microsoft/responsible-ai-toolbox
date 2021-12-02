@@ -38,12 +38,25 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
   }
 
   public render(): React.ReactNode {
+    let themeOverride = this.props.themeOverride;
+    if (
+      !themeOverride &&
+      this.props.theme &&
+      typeof this.props.theme !== "string"
+    ) {
+      themeOverride = {
+        axisColor: this.props.theme.palette.neutralPrimary,
+        axisGridColor: this.props.theme.palette.neutralLight,
+        backgroundColor: this.props.theme.palette.white,
+        fontColor: this.props.theme.semanticColors.bodyText
+      };
+    }
     if (this.hasData()) {
       const themedProps = this.props.theme
         ? PlotlyThemes.applyTheme(
             this.props.plotlyProps,
             this.props.theme,
-            this.props.themeOverride
+            themeOverride
           )
         : _.cloneDeep(this.props.plotlyProps);
       return (
@@ -52,9 +65,10 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             className={accessibleChartStyles.chart}
             data={themedProps.data}
             layout={
-              { ...themedProps.layout, ...this.props.relayoutArg } as Partial<
-                Plotly.Layout
-              >
+              {
+                ...themedProps.layout,
+                ...this.props.relayoutArg
+              } as Partial<Plotly.Layout>
             }
             config={themedProps.config as Partial<Plotly.Config>}
             onClick={this.props.onClickHandler}
@@ -66,7 +80,7 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
     return (
       <div className={accessibleChartStyles.noData}>
         {this.props.localizedStrings
-          ? this.props.localizedStrings["noData"]
+          ? this.props.localizedStrings.noData
           : "No Data"}
       </div>
     );
@@ -101,15 +115,15 @@ export class AccessibleChart extends React.Component<IAccessibleChartProps> {
             for (let i = 0; i < tableWidth; i++) {
               // Add String() because sometimes data may be Nan
               xRowCells.push(
-                <td key={i + ".x"}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
+                <td key={`${i}.x`}>{datum.x ? formatValue(datum.x[i]) : ""}</td>
               );
               yRowCells.push(
-                <td key={i + ".y"}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
+                <td key={`${i}.y`}>{datum.y ? formatValue(datum.y[i]) : ""}</td>
               );
             }
             return [
-              <tr key={index + ".x"}>{xRowCells}</tr>,
-              <tr key={index + ".y"}>{yRowCells}</tr>
+              <tr key={`${index}.x`}>{xRowCells}</tr>,
+              <tr key={`${index}.y`}>{yRowCells}</tr>
             ];
           })}
         </tbody>

@@ -3,13 +3,16 @@
 
 import { getSpan } from "../../../util/getSpan";
 import { ScatterChart } from "../../../util/ScatterChart";
-import { IFairnessMetadata } from "../IFairnessMetadata";
+import { IFairnessMetadata, PredictionTypes } from "../IFairnessMetadata";
 import { getToModelComparisonPageWithDefaults } from "../utils";
 
-export function describeSingleModelView(data: IFairnessMetadata): void {
+export function describeSingleModelView(
+  data: IFairnessMetadata,
+  checkErrorBars: boolean
+): void {
   describe("single model view", () => {
     const props = {
-      chart: (undefined as unknown) as ScatterChart
+      chart: undefined as unknown as ScatterChart
     };
     beforeEach(() => {
       // move to the single model view
@@ -67,6 +70,15 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
             .should("exist");
         }
       );
+      if (
+        checkErrorBars &&
+        data.predictionType === PredictionTypes.BinaryClassificationWithError
+      ) {
+        cy.get(".xerror").should(
+          "have.length",
+          data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]].length
+        );
+      }
 
       // dropdown switch to other chart
       if (data.charts.length > 1) {
@@ -78,6 +90,17 @@ export function describeSingleModelView(data: IFairnessMetadata): void {
           "contain.text",
           data.charts[1]
         );
+        if (
+          checkErrorBars &&
+          data.predictionType === PredictionTypes.BinaryClassificationWithError
+        ) {
+          cy.get(".xerror").should(
+            "have.length",
+            2 *
+              data.sensitiveFeatures[Object.keys(data.sensitiveFeatures)[0]]
+                .length
+          );
+        }
       }
     });
   });

@@ -21,6 +21,7 @@ import {
 } from "office-ui-fabric-react";
 import * as React from "react";
 
+import { featureImportanceTabStyles } from "./FeatureImportances.styles";
 import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
@@ -71,54 +72,52 @@ export class FeatureImportancesTab extends React.PureComponent<
     ) {
       return React.Fragment;
     }
+    const classNames = featureImportanceTabStyles();
 
     return (
-      <Stack>
-        <div style={{ padding: "16px 24px 16px 40px" }}>
-          <Text variant={"xLarge"}>
+      <Stack className={classNames.container}>
+        <Stack.Item className={classNames.header}>
+          <Text variant={"xxLarge"}>
             {localization.ModelAssessment.ComponentNames.FeatureImportances}
           </Text>
-        </div>
-        <Pivot
-          selectedKey={this.state.activeFeatureImportancesOption}
-          onLinkClick={(item: PivotItem | undefined): void => {
-            if (
-              item &&
-              item.props.itemKey &&
-              Object.values(FeatureImportancesTabOptions).includes(
-                item.props.itemKey as FeatureImportancesTabOptions
-              )
-            ) {
-              this.setState({
-                activeFeatureImportancesOption: item.props
-                  .itemKey as FeatureImportancesTabOptions
-              });
-            }
-          }}
-          linkSize={PivotLinkSize.normal}
-          headersOnly
-          styles={{
-            root: {
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "start",
-              padding: "0px 30px"
-            }
-          }}
-        >
-          <PivotItem
-            itemKey={FeatureImportancesTabOptions.GlobalExplanation}
-            headerText={
-              localization.ModelAssessment.FeatureImportances.GlobalExplanation
-            }
-          />
-          <PivotItem
-            itemKey={FeatureImportancesTabOptions.LocalExplanation}
-            headerText={
-              localization.ModelAssessment.FeatureImportances.LocalExplanation
-            }
-          />
-        </Pivot>
+        </Stack.Item>
+        <Stack.Item>
+          <Pivot
+            selectedKey={this.state.activeFeatureImportancesOption}
+            onLinkClick={(item: PivotItem | undefined): void => {
+              if (
+                item &&
+                item.props.itemKey &&
+                Object.values(FeatureImportancesTabOptions).includes(
+                  item.props.itemKey as FeatureImportancesTabOptions
+                )
+              ) {
+                this.setState({
+                  activeFeatureImportancesOption: item.props
+                    .itemKey as FeatureImportancesTabOptions
+                });
+              }
+            }}
+            linkSize={PivotLinkSize.normal}
+            headersOnly
+            className={classNames.tabs}
+          >
+            <PivotItem
+              itemKey={FeatureImportancesTabOptions.GlobalExplanation}
+              headerText={
+                localization.ModelAssessment.FeatureImportances
+                  .GlobalExplanation
+              }
+            />
+            <PivotItem
+              itemKey={FeatureImportancesTabOptions.LocalExplanation}
+              headerText={
+                localization.ModelAssessment.FeatureImportances.LocalExplanation
+              }
+            />
+          </Pivot>
+        </Stack.Item>
+
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.GlobalExplanation && (
           <GlobalExplanationTab

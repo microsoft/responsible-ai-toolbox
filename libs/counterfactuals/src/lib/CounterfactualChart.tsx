@@ -27,7 +27,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -63,7 +63,7 @@ export interface ICounterfactualChartState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
-  originalData?: any;
+  originalData?: { [key: string]: string | number };
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -71,15 +71,13 @@ export class CounterfactualChart extends React.PureComponent<
   ICounterfactualChartState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
-  private stringifiedValues: { [key: string]: string } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
   public constructor(props: ICounterfactualChartProps) {
@@ -190,8 +188,8 @@ export class CounterfactualChart extends React.PureComponent<
       this.state.chartProps,
       this.context.selectedErrorCohort.cohort
     );
-    const cohortLength = this.context.selectedErrorCohort.cohort.filteredData
-      .length;
+    const cohortLength =
+      this.context.selectedErrorCohort.cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -317,24 +315,29 @@ export class CounterfactualChart extends React.PureComponent<
               </div>
               <div className={classNames.legendAndText}>
                 <ComboBox
+                  id={"CounterfactualSelectedDatapoint"}
                   className={classNames.legendLabel}
                   label={localization.Counterfactuals.selectedDatapoint}
                   onChange={this.selectPointFromDropdown}
                   options={this.getDataOptions()}
-                  selectedKey={"" + this.state.selectedPointsIndexes[0]}
+                  selectedKey={`${this.state.selectedPointsIndexes[0]}`}
                   ariaLabel={"datapoint picker"}
                   useComboBoxAsMenuWidth
                   styles={FabricStyles.smallDropdownStyle}
                 />
                 <div className={classNames.legendLabel}>
                   <b>{`${localization.Counterfactuals.currentClass}: `}</b>
-                  {this.getCurrentClass()}
+                  {this.getCurrentLabel()}
                 </div>
                 <PrimaryButton
                   className={classNames.legendLabel}
                   onClick={this.togglePanel}
-                  disabled={this.state.selectedPointsIndexes[0] === undefined}
-                  text={localization.Counterfactuals.createCounterfactual}
+                  disabled={this.disableCounterfactualPanel()}
+                  text={
+                    this.context.requestPredictions
+                      ? localization.Counterfactuals.createWhatIfCounterfactual
+                      : localization.Counterfactuals.createCounterfactual
+                  }
                 />
                 {this.state.customPoints.length > 0 && (
                   <InteractiveLegend
@@ -359,7 +362,7 @@ export class CounterfactualChart extends React.PureComponent<
             </div>
             <LocalImportanceChart
               rowNumber={this.state.selectedPointsIndexes[0]}
-              currentClass={this.getCurrentClass()}
+              currentClass={this.getCurrentLabel()}
               data={this.props.data}
             />
           </div>
@@ -376,15 +379,15 @@ export class CounterfactualChart extends React.PureComponent<
     return [];
   }
 
-  private getCurrentClass(): string {
-    if (this.props.data.desired_class) {
-      return this.props.data.desired_class;
+  private getCurrentLabel(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return (
+        (this.props.data.desired_range &&
+          this.props.data.desired_range.join("->")) ||
+        ""
+      );
     }
-    if (this.props.data.desired_range) {
-      const ranges = this.props.data.desired_range.map((t) => t.join("->"));
-      return ranges.join(",");
-    }
-    return "";
+    return this.props.data.desired_class || "";
   }
 
   private buildRowOptions(cohortIndex: number): void {
@@ -402,7 +405,6 @@ export class CounterfactualChart extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -424,7 +426,6 @@ export class CounterfactualChart extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -466,26 +467,34 @@ export class CounterfactualChart extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     const trace = data.points[0];
     const index = trace.customdata[JointDataset.IndexLabel];
-    this.setTemporaryPointToCopyOfDatasetPoint(index);
-    this.toggleSelectionOfPoint(index);
+    // non-custom point
+    if (trace.curveNumber !== 1) {
+      this.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.toggleSelectionOfPoint(index);
+    }
   };
 
-  private getOriginalData(index: number): { [key: string]: any } | undefined {
+  private getOriginalData(
+    index: number
+  ): { [key: string]: string | number } | undefined {
     const row = this.context.jointDataset.getRow(index);
     const dataPoint = JointDataset.datasetSlice(
       row,
       this.context.jointDataset.metaDict,
       this.context.jointDataset.datasetFeatureCount
     );
-    const data = {};
-    data["row"] = localization.formatString(
-      localization.Counterfactuals.referenceDatapoint,
-      index
-    );
-    const featureNames = this.context?.dataset?.feature_names;
+    const data = {
+      row: localization.formatString(
+        localization.Counterfactuals.referenceDatapoint,
+        index
+      )
+    };
+    const featureNames = this.context.dataset.feature_names;
     featureNames.forEach((f, index) => {
       data[f] = dataPoint[index];
     });
+    const targetLabel = this.context.dataset.target_column || "y";
+    data[targetLabel] = row[JointDataset.TrueYLabel];
     return data;
   }
 
@@ -538,9 +547,8 @@ export class CounterfactualChart extends React.PureComponent<
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
           for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[
-              JointDataset.ProbabilityYRoot + i.toString()
-            ] = element;
+            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
+              element;
             if (element > maxProb) {
               predictedClass = i;
               maxProb = element;
@@ -586,9 +594,8 @@ export class CounterfactualChart extends React.PureComponent<
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
-        const selectionIndex = this.state.selectedPointsIndexes.indexOf(
-          rowIndex
-        );
+        const selectionIndex =
+          this.state.selectedPointsIndexes.indexOf(rowIndex);
         if (selectionIndex === -1) {
           return FabricStyles.fabricColorInactiveSeries;
         }
@@ -664,13 +671,6 @@ export class CounterfactualChart extends React.PureComponent<
       chartProps,
       plotlyProps.data[1]
     );
-    if (this.temporaryPoint) {
-      this.generateDataTrace(
-        [this.temporaryPoint],
-        chartProps,
-        plotlyProps.data[2]
-      );
-    }
     return plotlyProps;
   }
 
@@ -683,23 +683,22 @@ export class CounterfactualChart extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX = this.context.jointDataset.metaDict[
-        chartProps.xAxis.property
-      ];
+      const metaX =
+        this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += metaX.label + ": %{customdata.X}<br>";
+      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
-          customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
+          customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+          customdata[index].X = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -717,16 +716,15 @@ export class CounterfactualChart extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY = this.context.jointDataset.metaDict[
-        chartProps.yAxis.property
-      ];
+      const metaY =
+        this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += metaY.label + ": %{customdata.Y}<br>";
+      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
-          customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
+          customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+          customdata[index].Y = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -743,23 +741,22 @@ export class CounterfactualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate +=
-      localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
   }
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.context.jointDataset.metaDict[yKey]
-      .treatAsCategorical;
+    const yKey = `${JointDataset.DataLabelRoot}0`;
+    const yIsDithered =
+      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
         options: {},
         property: this.context.jointDataset.hasPredictedProbabilities
-          ? JointDataset.ProbabilityYRoot + "0"
+          ? `${JointDataset.ProbabilityYRoot}0`
           : JointDataset.IndexLabel
       },
       yAxis: {
@@ -822,20 +819,19 @@ export class CounterfactualChart extends React.PureComponent<
   private setCustomRowProperty = (
     key: string | number,
     isString: boolean,
-    newValue?: string
+    newValue?: string | number
   ): void => {
     if (!this.temporaryPoint || !newValue) {
       return;
     }
     const editingData = this.temporaryPoint;
-    this.stringifiedValues[key] = newValue;
     if (isString) {
       editingData[key] = newValue;
       this.forceUpdate();
     } else {
       const asNumber = +newValue;
       // because " " evaluates to 0 in js
-      const isWhitespaceOnly = /^\s*$/.test(newValue);
+      const isWhitespaceOnly = /^\s*$/.test(newValue?.toString());
       if (Number.isNaN(asNumber) || isWhitespaceOnly) {
         this.validationErrors[key] =
           localization.Interpret.WhatIfTab.nonNumericValue;
@@ -849,6 +845,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
   };
 
+  private disableCounterfactualPanel = (): boolean => {
+    return (
+      this.state.selectedPointsIndexes[0] === undefined ||
+      !this.props.data.cfs_list[this.state.selectedPointsIndexes[0]]
+    );
+  };
+
   private getDataOptions(): IComboBoxOption[] {
     const indexes = this.context.selectedErrorCohort.cohort.unwrap(
       JointDataset.IndexLabel
@@ -856,7 +859,7 @@ export class CounterfactualChart extends React.PureComponent<
     indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
     return indexes.map((index) => {
       return {
-        key: "" + index,
+        key: `${index}`,
         text: `Index ${index}`
       };
     });

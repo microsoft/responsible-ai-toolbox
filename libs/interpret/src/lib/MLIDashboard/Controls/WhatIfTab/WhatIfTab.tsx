@@ -3,7 +3,6 @@
 
 import {
   AxisConfigDialog,
-  ExpandableText,
   ColumnCategories,
   WeightVectorOption,
   JointDataset,
@@ -17,7 +16,8 @@ import {
   ModelAssessmentContext,
   FabricStyles,
   InteractiveLegend,
-  rowErrorSize
+  rowErrorSize,
+  getFeatureOptions
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -26,7 +26,7 @@ import {
   PlotlyMode,
   IData
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import {
   getTheme,
   Text,
@@ -77,9 +77,8 @@ export class WhatIfTab extends React.PureComponent<
   IWhatIfTabState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
@@ -127,27 +126,7 @@ export class WhatIfTab extends React.PureComponent<
 
     this.fetchData = _.debounce(this.fetchData.bind(this), 400);
 
-    const featuresOption = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
+    const featuresOption = getFeatureOptions(this.context.jointDataset);
 
     this.setState({
       chartProps: this.generateDefaultChartAxes(),
@@ -306,9 +285,9 @@ export class WhatIfTab extends React.PureComponent<
       this.state.chartProps,
       this.context.errorCohorts[this.state.selectedCohortIndex].cohort
     );
-    const cohortLength = this.context.errorCohorts[
-      this.state.selectedCohortIndex
-    ].cohort.filteredData.length;
+    const cohortLength =
+      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
+        .filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -320,9 +299,9 @@ export class WhatIfTab extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.infoWithText}>
-          <ExpandableText iconName="Info">
+          <Text variant="medium">
             {localization.Interpret.WhatIfTab.helperText}
-          </ExpandableText>
+          </Text>
         </div>
         <div className={classNames.mainArea}>
           <WhatIfPanel
@@ -357,7 +336,18 @@ export class WhatIfTab extends React.PureComponent<
                   {localization.Interpret.WhatIfTab.cohortPickerLabel}
                 </Text>
                 <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
+                  styles={{
+                    callout: {
+                      selectors: {
+                        ".ms-Button-flexContainer": {
+                          width: "100%"
+                        }
+                      }
+                    },
+                    dropdown: {
+                      width: 150
+                    }
+                  }}
                   options={cohortOptions}
                   selectedKey={this.state.selectedCohortIndex}
                   onChange={this.setSelectedCohort}
@@ -629,7 +619,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -641,7 +631,7 @@ export class WhatIfTab extends React.PureComponent<
   private setTemporaryPointToCustomPoint(index: number): void {
     this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -763,7 +753,7 @@ export class WhatIfTab extends React.PureComponent<
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -903,9 +893,8 @@ export class WhatIfTab extends React.PureComponent<
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
           for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[
-              JointDataset.ProbabilityYRoot + i.toString()
-            ] = element;
+            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
+              element;
             if (element > maxProb) {
               predictedClass = i;
               maxProb = element;
@@ -951,9 +940,8 @@ export class WhatIfTab extends React.PureComponent<
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
-        const selectionIndex = this.state.selectedPointsIndexes.indexOf(
-          rowIndex
-        );
+        const selectionIndex =
+          this.state.selectedPointsIndexes.indexOf(rowIndex);
         if (selectionIndex === -1) {
           return FabricStyles.fabricColorInactiveSeries;
         }
@@ -1048,23 +1036,22 @@ export class WhatIfTab extends React.PureComponent<
       dictionary,
       JointDataset.IndexLabel
     ).map((val) => {
-      const dict = {};
+      const dict: Dictionary<any> = {};
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
     let hovertemplate = "";
     if (chartProps.xAxis) {
-      const metaX = this.context.jointDataset.metaDict[
-        chartProps.xAxis.property
-      ];
+      const metaX =
+        this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += metaX.label + ": %{customdata.X}<br>";
+      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
-          customdata[index]["X"] = metaX.sortedCategoricalValues?.[val];
+          customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["X"] = (val as number).toLocaleString(undefined, {
+          customdata[index].X = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -1082,16 +1069,15 @@ export class WhatIfTab extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      const metaY = this.context.jointDataset.metaDict[
-        chartProps.yAxis.property
-      ];
+      const metaY =
+        this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += metaY.label + ": %{customdata.Y}<br>";
+      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
-          customdata[index]["Y"] = metaY.sortedCategoricalValues?.[val];
+          customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
-          customdata[index]["Y"] = (val as number).toLocaleString(undefined, {
+          customdata[index].Y = (val as number).toLocaleString(undefined, {
             maximumSignificantDigits: 5
           });
         }
@@ -1108,23 +1094,22 @@ export class WhatIfTab extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate +=
-      localization.Interpret.Charts.rowIndex + ": %{customdata.Index}<br>";
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
   }
 
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    const yKey = JointDataset.DataLabelRoot + "0";
-    const yIsDithered = this.context.jointDataset.metaDict[yKey]
-      .treatAsCategorical;
+    const yKey = `${JointDataset.DataLabelRoot}0`;
+    const yIsDithered =
+      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
         options: {},
         property: this.context.jointDataset.hasPredictedProbabilities
-          ? JointDataset.ProbabilityYRoot + "0"
+          ? `${JointDataset.ProbabilityYRoot}0`
           : JointDataset.IndexLabel
       },
       yAxis: {

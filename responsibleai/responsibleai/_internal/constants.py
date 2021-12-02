@@ -42,6 +42,7 @@ class ErrorAnalysisManagerKeys(object):
     IS_COMPUTED = 'is_computed'
     MAX_DEPTH = 'max_depth'
     NUM_LEAVES = 'num_leaves'
+    MIN_CHILD_SAMPLES = 'min_child_samples'
     FILTER_FEATURES = 'filter_features'
     REPORTS = 'reports'
 
@@ -61,3 +62,21 @@ class ExplanationKeys(object):
     EXPLANATION_TYPE_KEY = 'explanation_type'
     GLOBAL_EXPLANATION_KEY = 'global_feature_importance'
     LOCAL_EXPLANATION_KEY = 'local_feature_importance'
+
+
+class SerializationAttributes:
+    """Constants for a serialized result."""
+
+    # File structure
+    RESULTS_DIRECTORY = 'results'
+
+    # Metadata keys
+    ID_KEY = 'id'
+    VERSION_KEY = 'version'
+
+    # Metadata filnames
+    ID_FILENAME = 'id.json'
+    VERSION_FILENAME = 'version.json'
+
+    # Dashboard filenames
+    DASHBOARD_FILENAME = 'dashboard.json'

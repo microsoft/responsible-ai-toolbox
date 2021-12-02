@@ -4,7 +4,9 @@
 import {
   IOfficeFabricProps,
   IExplanationDashboardData,
-  ITelemetryMessage
+  ITelemetryMessage,
+  IErrorAnalysisMatrix,
+  IErrorAnalysisData
 } from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
@@ -23,25 +25,6 @@ import { IStringsParam } from "./IStringsParam";
  * @property {Array<number | string>} [predictedY] - model outputs for sample dataset. Dim(rows)
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
-
-// Represents the data retrieved from the backend
-export interface IRequestNode {
-  arg: number;
-  condition: string;
-  error: number;
-  id: string;
-  isErrorMetric: boolean;
-  method: string;
-  metricName: string;
-  metricValue: number;
-  nodeIndex: number;
-  nodeName: string;
-  parentId: string;
-  parentNodeName: string;
-  size: number;
-  sourceRowKeyHash: string;
-  success: number;
-}
 
 export interface IRootStats {
   metricName: string;
@@ -66,14 +49,16 @@ export interface IErrorAnalysisDashboardProps
     explanationAlgorithm?: string
   ) => Promise<any[]>;
   requestDebugML?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  requestMatrix?: (request: any[], abortSignal: AbortSignal) => Promise<any[]>;
+  requestMatrix?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IErrorAnalysisMatrix>;
   requestImportances?: (
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
-  staticDebugML?: any;
-  staticMatrix?: any;
   rootStats?: IRootStats;
   telemetryHook?: (message: ITelemetryMessage) => void;
+  errorAnalysisData: IErrorAnalysisData;
 }

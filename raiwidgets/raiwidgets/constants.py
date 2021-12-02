@@ -293,3 +293,12 @@ class ResetIndex(str, Enum):
     Ignore = 'ignore'
     Reset = 'reset'
     ResetTeacher = 'reset_teacher'
+
+
+class ErrorMessages(object):
+    "Provides custom error messages for thrown errors."
+    EXP_VIZ_ERR_MSG = ("Exceeds maximum number of features"
+                       " for visualization (1000). Please regenerate"
+                       " the explanation using fewer features"
+                       " or initialize the dashboard without passing"
+                       " a dataset.")

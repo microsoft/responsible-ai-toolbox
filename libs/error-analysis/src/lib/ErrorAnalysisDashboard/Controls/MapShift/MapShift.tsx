@@ -14,18 +14,15 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
+
 export interface IMapShiftProps {
   isOpen: boolean;
   onDismiss: () => void;
   onSave: () => void;
   onShift: () => void;
+  currentOption: ErrorAnalysisOptions;
 }
-
-const dialogContentProps = {
-  subText: localization.ErrorAnalysis.MapShift.subText,
-  title: localization.ErrorAnalysis.MapShift.title,
-  type: DialogType.close
-};
 
 const dragOptions = {
   closeMenuItemText: localization.ErrorAnalysis.MapShift.close,
@@ -42,6 +39,17 @@ const stackTokens: IStackTokens = { childrenGap: 5 };
 
 export class MapShift extends React.Component<IMapShiftProps> {
   public render(): React.ReactNode {
+    const dialogContentProps = {
+      subText:
+        this.props.currentOption === ErrorAnalysisOptions.TreeMap
+          ? localization.ErrorAnalysis.MapShift.treeSubText
+          : localization.ErrorAnalysis.MapShift.heatSubText,
+      title:
+        this.props.currentOption === ErrorAnalysisOptions.TreeMap
+          ? localization.ErrorAnalysis.MapShift.treeTitle
+          : localization.ErrorAnalysis.MapShift.heatTitle,
+      type: DialogType.close
+    };
     return (
       <Dialog
         hidden={!this.props.isOpen}

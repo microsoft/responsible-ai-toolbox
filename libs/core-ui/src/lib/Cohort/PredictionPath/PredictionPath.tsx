@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStackTokens, Stack } from "office-ui-fabric-react";
+import {
+  Icon,
+  IStackTokens,
+  Stack,
+  Text,
+  TooltipHost
+} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
@@ -31,7 +37,14 @@ export class PredictionPath extends React.Component<IPredictionPathProps> {
                 <i className={classNames.filterCircle} />
               </Stack>
               <Stack verticalAlign="center">
-                <div>{filter}</div>
+                {filter.length <= 150 ? (
+                  <Text>{filter}</Text>
+                ) : (
+                  <TooltipHost content={filter} id={`Filter ${index}`}>
+                    <Text>{`${filter.slice(0, 150)} `}</Text>
+                    <Icon iconName="More" />
+                  </TooltipHost>
+                )}
               </Stack>
             </Stack>
             {index !== filters.length - 1 && (

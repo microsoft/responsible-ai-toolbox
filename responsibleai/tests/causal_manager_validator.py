@@ -1,24 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-
-import pandas as pd
 import numpy as np
-
-from responsibleai.modelanalysis.constants import (
-    ModelTask)
-
-from responsibleai.exceptions import (
-    DuplicateManagerConfigException,
-    UserConfigValidationException)
-
-from responsibleai._interfaces import (
-    CausalData, CausalPolicy, CausalPolicyGains,
-    CausalPolicyTreeInternal, CausalPolicyTreeLeaf)
-
+import pandas as pd
+import pytest
 from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
 
+from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
+                                       CausalPolicyGains,
+                                       CausalPolicyTreeInternal,
+                                       CausalPolicyTreeLeaf)
+from responsibleai._tools.causal.causal_result import CausalResult
+from responsibleai.exceptions import UserConfigValidationException
+from responsibleai import ModelTask
 
 EFFECTS_ATTRIBUTES = [
     'point',
@@ -38,85 +32,80 @@ LOCAL_POLICY_ATTRIBUTES = [
 ]
 
 
-def validate_causal(model_analysis, data, target_column,
+def validate_causal(rai_insights, data, target_column,
                     treatment_features, max_cat_expansion):
-    if model_analysis.task_type == ModelTask.CLASSIFICATION and \
+    if rai_insights.task_type == ModelTask.CLASSIFICATION and \
             len(np.unique(data[target_column])) > 2:
         with pytest.raises(AssertionError,
                            match="Multiclass classification isn't supported"):
-            model_analysis.causal.add(
+            rai_insights.causal.add(
                 treatment_features,
                 nuisance_model='automl',
                 upper_bound_on_cat_expansion=max_cat_expansion)
-            model_analysis.causal.compute()
+            rai_insights.causal.compute()
         return
 
     # Add the first configuration
-    model_analysis.causal.add(
+    rai_insights.causal.add(
         treatment_features,
         nuisance_model='automl',
         upper_bound_on_cat_expansion=max_cat_expansion)
-    model_analysis.causal.compute()
 
-    results = model_analysis.causal.get()
+    results = rai_insights.causal.get()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 1
-    _check_causal_results(results[0])
+    _check_causal_result(results[0])
 
-    results = model_analysis.causal.get_data()
+    results = rai_insights.causal.get_data()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 1
-    _check_causal_results(results[0], is_serialized=True)
-
-    # Add a duplicate configuration
-    message = "Duplicate causal configuration detected."
-    with pytest.raises(DuplicateManagerConfigException, match=message):
-        model_analysis.causal.add(
-            treatment_features,
-            nuisance_model='automl',
-            upper_bound_on_cat_expansion=max_cat_expansion)
+    _check_causal_result(results[0], is_serialized=True)
 
     # Add the second configuration
-    model_analysis.causal.add(treatment_features,
-                              nuisance_model='linear')
-    model_analysis.causal.compute()
-    results = model_analysis.causal.get()
+    rai_insights.causal.add(treatment_features,
+                            nuisance_model='linear')
+    results = rai_insights.causal.get()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 2
 
     # Add a bad configuration
-    model_analysis.causal.add(treatment_features,
-                              nuisance_model='fake_model')
     with pytest.raises(UserConfigValidationException):
-        model_analysis.causal.compute()
+        rai_insights.causal.add(treatment_features,
+                                nuisance_model='fake_model')
 
 
-def _check_causal_results(causal_results, is_serialized=False):
+def _check_causal_result(causal_result, is_serialized=False):
+    assert len(causal_result.id) > 0
+
+    _check_config(causal_result.config,
+                  is_serialized=is_serialized)
+
     if is_serialized:
-        assert isinstance(causal_results, CausalData)
-        assert len(causal_results.__dict__) == 5
-        global_effects = causal_results.global_effects
-        local_effects = causal_results.local_effects
-        policies = causal_results.policies
-        assert len(causal_results.id) > 0
-        assert causal_results.treatment_features is not None
+        assert isinstance(causal_result, CausalData)
+        assert len(causal_result.__dict__) == 6
     else:
-        assert isinstance(causal_results, dict)
-        assert len(causal_results) == 6
-        global_effects = causal_results['global_effects']
-        local_effects = causal_results['local_effects']
-        policies = causal_results['policies']
-        assert len(causal_results['id']) > 0
-        assert causal_results['treatment_features'] is not None
+        assert isinstance(causal_result, CausalResult)
+        assert len(causal_result.__dict__) == 8
+        _check_causal_analysis(causal_result.causal_analysis)
 
-        _check_causal_analysis(causal_results['causal_analysis'])
+    _check_global_effects(causal_result.global_effects,
+                          is_serialized=is_serialized)
+    _check_local_effects(causal_result.local_effects,
+                         is_serialized=is_serialized)
+    _check_policies(causal_result.policies, causal_result.config,
+                    is_serialized=is_serialized)
 
-    _check_global_effects(global_effects, is_serialized=is_serialized)
-    _check_local_effects(local_effects, is_serialized=is_serialized)
-    _check_policies(policies, is_serialized=is_serialized)
+
+def _check_config(config, is_serialized=False):
+    if is_serialized:
+        assert isinstance(config, CausalConfig)
+        assert len(config.__dict__) == 1
+        assert config.treatment_features is not None
+    else:
+        assert len(config.__dict__) == 15
 
 
 def _check_causal_analysis(causal_analysis):
@@ -141,13 +130,13 @@ def _check_local_effects(local_effects, is_serialized=False):
             assert attribute in local_effects.columns.to_list()
 
 
-def _check_policies(policies, is_serialized=False):
+def _check_policies(policies, config, is_serialized=False):
     assert isinstance(policies, list)
     for policy in policies:
-        _check_policy(policy, is_serialized=is_serialized)
+        _check_policy(policy, config, is_serialized=is_serialized)
 
 
-def _check_policy(policy, is_serialized=False):
+def _check_policy(policy, config, is_serialized=False):
     if is_serialized:
         assert isinstance(policy, CausalPolicy)
         treatment_feature = policy.treatment_feature
@@ -167,7 +156,7 @@ def _check_policy(policy, is_serialized=False):
     _check_control_treatment(control_treatment)
     _check_local_policies(local_policies, is_serialized=is_serialized)
     _check_policy_gains(policy_gains, is_serialized=is_serialized)
-    _check_policy_tree(policy_tree, is_serialized=is_serialized)
+    _check_policy_tree(policy_tree, config, is_serialized=is_serialized)
 
 
 def _check_treatment_feature(treatment_feature):
@@ -207,7 +196,7 @@ def _check_policy_gains(policy_gains, is_serialized=False):
         assert isinstance(treatment_value, float)
 
 
-def _check_policy_tree(policy_tree, is_serialized=False):
+def _check_policy_tree(policy_tree, config, depth=0, is_serialized=False):
     if is_serialized:
         if policy_tree.leaf:
             assert isinstance(policy_tree, CausalPolicyTreeLeaf)
@@ -216,12 +205,15 @@ def _check_policy_tree(policy_tree, is_serialized=False):
         else:
             assert isinstance(policy_tree, CausalPolicyTreeInternal)
             assert isinstance(policy_tree.feature, str)
-            assert hasattr(policy_tree, 'threshold')
-            _check_policy_tree(policy_tree.left,
+            assert isinstance(policy_tree.right_comparison, str)
+            assert isinstance(policy_tree.comparison_value, (str, int, float))
+            _check_policy_tree(policy_tree.left, config, depth=depth + 1,
                                is_serialized=is_serialized)
-            _check_policy_tree(policy_tree.right,
+            _check_policy_tree(policy_tree.right, config, depth=depth + 1,
                                is_serialized=is_serialized)
     else:
+        assert depth <= config.max_tree_depth
+
         assert isinstance(policy_tree, dict)
         if policy_tree['leaf']:
             assert 'treatment' in policy_tree
@@ -229,7 +221,7 @@ def _check_policy_tree(policy_tree, is_serialized=False):
         else:
             assert isinstance(policy_tree['feature'], str)
             assert isinstance(policy_tree['threshold'], float)
-            _check_policy_tree(policy_tree['left'],
+            _check_policy_tree(policy_tree['left'], config, depth=depth + 1,
                                is_serialized=is_serialized)
-            _check_policy_tree(policy_tree['right'],
+            _check_policy_tree(policy_tree['right'], config, depth=depth + 1,
                                is_serialized=is_serialized)

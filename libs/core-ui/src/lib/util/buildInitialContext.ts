@@ -27,8 +27,9 @@ export function buildGlobalProperties(
       result.globalImportanceIntercept = precomputedExplanations
         .globalFeatureImportance.intercept as number[];
     } else {
-      result.globalImportance = (precomputedExplanations.globalFeatureImportance
-        .scores as number[]).map((value) => [value]);
+      result.globalImportance = (
+        precomputedExplanations.globalFeatureImportance.scores as number[]
+      ).map((value) => [value]);
       result.globalImportanceIntercept = [
         precomputedExplanations.globalFeatureImportance.intercept as number
       ];
@@ -76,8 +77,9 @@ export const getClassLength: (
       if (
         isTwoDimArray(precomputedExplanations.globalFeatureImportance.scores)
       ) {
-        return (precomputedExplanations.globalFeatureImportance
-          .scores as number[][]).length;
+        return (
+          precomputedExplanations.globalFeatureImportance.scores as number[][]
+        ).length;
       }
     }
     if (
@@ -99,8 +101,14 @@ export function getModelType(
   probabilityY?: number[][]
 ): ModelTypes {
   // If Python provides a hint, use it!
-  if (method && method === "regressor") {
-    return ModelTypes.Regression;
+  if (method) {
+    if (method === ModelTypes.Regression.valueOf() || method === "regressor") {
+      return ModelTypes.Regression;
+    } else if (method === ModelTypes.Binary.valueOf()) {
+      return ModelTypes.Binary;
+    } else if (method === ModelTypes.Multiclass.valueOf()) {
+      return ModelTypes.Multiclass;
+    }
   }
   switch (getClassLength(precomputedExplanations, probabilityY)) {
     case 1:

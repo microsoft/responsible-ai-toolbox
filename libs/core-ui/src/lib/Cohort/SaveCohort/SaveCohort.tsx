@@ -28,7 +28,7 @@ export interface ISaveCohortProps {
   temporaryCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   onDismiss: () => void;
-  onSave: (temporaryCohort: ErrorCohort) => void;
+  onSave: (temporaryCohort: ErrorCohort, switchNew?: boolean) => void;
 }
 
 export interface ISaveCohortState {
@@ -52,7 +52,7 @@ const modalProps = {
   isBlocking: true
 };
 
-const allDataCopy = "All data copy";
+const allDataCopy = localization.ErrorAnalysis.SaveCohort.defaultLabelCopy;
 
 const textFieldStyles: Partial<ITextFieldStyles> = {
   fieldGroup: { width: 200 }
@@ -63,9 +63,8 @@ export class SaveCohort extends React.Component<
   ISaveCohortState
 > {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public constructor(props: ISaveCohortProps) {
     super(props);
@@ -104,6 +103,14 @@ export class SaveCohort extends React.Component<
             text={localization.ErrorAnalysis.SaveCohort.save}
           />
           <DefaultButton
+            onClick={(): void => {
+              this.props.onDismiss();
+              this.saveCohort.bind(this)(true);
+            }}
+          >
+            {localization.Interpret.CohortEditor.saveAndSwitch}
+          </DefaultButton>
+          <DefaultButton
             onClick={this.props.onDismiss}
             text={localization.ErrorAnalysis.SaveCohort.cancel}
           />
@@ -122,7 +129,7 @@ export class SaveCohort extends React.Component<
     this.setState({ cohortName: newValue });
   }
 
-  private saveCohort(): void {
+  private saveCohort(switchNew?: boolean): void {
     const tempCohort = this.props.temporaryCohort;
     const savedCohort = new ErrorCohort(
       new Cohort(
@@ -137,6 +144,6 @@ export class SaveCohort extends React.Component<
       false,
       tempCohort.cohortStats
     );
-    this.props.onSave(savedCohort);
+    this.props.onSave(savedCohort, switchNew);
   }
 }

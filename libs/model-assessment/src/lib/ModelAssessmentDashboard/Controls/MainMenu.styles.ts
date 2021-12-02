@@ -15,6 +15,7 @@ export interface IMainMenuStyles {
   summaryBox: IStyle;
   summaryItemText: IStyle;
   mainMenu: IStyle;
+  mainMenuItem: IStyle;
   cohortBox: IStyle;
   cohortLabelWrapper: IStyle;
   cohortLabel: IStyle;
@@ -28,8 +29,6 @@ export const mainMenuStyles: () => IProcessedStyleSet<IMainMenuStyles> = () => {
   return mergeStyleSets<IMainMenuStyles>({
     banner: {
       backgroundColor: theme.palette.white,
-      borderBottom: "1px solid #C8C8C8",
-      borderTop: "1px solid #C8C8C8",
       boxSizing: "border-box",
       color: theme.palette.black,
       display: "flex",
@@ -61,6 +60,12 @@ export const mainMenuStyles: () => IProcessedStyleSet<IMainMenuStyles> = () => {
     },
     mainMenu: {
       width: "100%"
+    },
+    mainMenuItem: {
+      span: {
+        fontSize: "larger",
+        fontWeight: "bold"
+      }
     },
     mediumText: {
       maxWidth: "200px"

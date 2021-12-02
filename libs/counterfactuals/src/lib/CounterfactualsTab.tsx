@@ -10,31 +10,32 @@ import { localization } from "@responsible-ai/localization";
 import { Text, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { counterfactualsTabStyles } from "./CounterfactualsTab.styles";
 import { CounterfactualsView } from "./CounterfactualsView";
 
 export interface ICounterfactualsTabProps {
-  classDimension?: 1 | 2 | 3;
   data: ICounterfactualData;
 }
 
-export class CounterfactualsTab extends React.PureComponent<
-  ICounterfactualsTabProps
-> {
+export class CounterfactualsTab extends React.PureComponent<ICounterfactualsTabProps> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const classNames = counterfactualsTabStyles();
     return (
-      <Stack grow tokens={{ padding: "16px 24px" }}>
-        <Stack horizontal={false} tokens={{ childrenGap: "15px" }}>
-          <Text variant={"xLarge"}>{localization.Counterfactuals.header}</Text>
-        </Stack>
-        <CounterfactualsView
-          data={this.props.data}
-          classDimension={this.props.classDimension}
-        />
+      <Stack
+        className={classNames.container}
+        horizontal={false}
+        tokens={{ childrenGap: "15px" }}
+      >
+        <Stack.Item>
+          <Text variant={"xxLarge"}>{localization.Counterfactuals.header}</Text>
+        </Stack.Item>
+        <Stack.Item>
+          <CounterfactualsView data={this.props.data} />
+        </Stack.Item>
       </Stack>
     );
   }

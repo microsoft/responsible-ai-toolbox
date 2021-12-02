@@ -19,6 +19,7 @@ export interface ITreeViewRendererStyles {
   legend: IStyle;
   linkLabel: IStyle;
   node: IStyle;
+  nodeDisabled: IStyle;
   nodeText: IStyle;
   nopointer: IStyle;
   svgOuterFrame: IStyle;
@@ -72,6 +73,10 @@ export const treeViewRendererStyles = (props?: {
 
       stroke: props?.onSelectedPath ? theme.semanticColors.link : props?.fill,
       strokeWidth: props?.onSelectedPath ? 3 : 2
+    },
+    nodeDisabled: {
+      stroke: props?.fill,
+      strokeWidth: 2
     },
     nodeText: mergeStyles([
       nodeTextStyle,

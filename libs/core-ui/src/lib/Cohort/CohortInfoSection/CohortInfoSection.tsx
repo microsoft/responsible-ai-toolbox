@@ -16,9 +16,7 @@ export interface ICohortInfoSectionProps {
   toggleCreateCohortVisibility: () => void;
 }
 
-export class CohortInfoSection extends React.PureComponent<
-  ICohortInfoSectionProps
-> {
+export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionProps> {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
@@ -35,14 +33,12 @@ export class CohortInfoSection extends React.PureComponent<
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
-    const datapointsCountString =
-      localization.ModelAssessment.CohortInformation.DataPoints +
-      " = " +
-      currentCohort.cohortStats.totalCohort.toString();
-    const filtersCountString =
-      localization.ModelAssessment.CohortInformation.Filters +
-      " = " +
-      currentCohort.cohort.filters.length.toString();
+    const datapointsCountString = `${
+      localization.ModelAssessment.CohortInformation.DataPoints
+    } = ${currentCohort.cohortStats.totalCohort.toString()}`;
+    const filtersCountString = `${
+      localization.ModelAssessment.CohortInformation.Filters
+    } = ${currentCohort.cohort.filters.length.toString()}`;
     return (
       <Stack grow tokens={{ childrenGap: 10, padding: "16px 24px" }}>
         <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
@@ -53,7 +49,7 @@ export class CohortInfoSection extends React.PureComponent<
         <Stack horizontal tokens={{ childrenGap: 25 }}>
           <DefaultButton
             text={
-              localization.ModelAssessment.CohortInformation.ChangeGlobalCohort
+              localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
             }
             onClick={this.props.toggleShiftCohortVisibility}
           />

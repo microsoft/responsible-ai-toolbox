@@ -7,12 +7,12 @@ from abc import ABC, abstractmethod
 import timeit
 
 
-def measure_time(manager_compute_func, show_progress=False):
+def measure_time(manager_compute_func):
     def compute_wrapper(*args, **kwargs):
         print(args)
         print(args[0])
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         separator(80)
         start_time = timeit.default_timer()
         manager_compute_func(*args, **kwargs)
@@ -87,11 +87,13 @@ class BaseManager(ABC):
 
     @staticmethod
     @abstractmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Static method to load the manager.
 
         :param path: The directory path to load the manager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
+        :return: The BaseManager after loading.
+        :rtype: BaseManager
         """

@@ -256,10 +256,10 @@ export const fairnessOptions: { [key: string]: IFairnessOption } = {
 // selected by default.
 export const defaultFairnessMetricPrioritization = [
   // binary classification
-  fairnessOptions["demographic_parity_difference"].key,
-  fairnessOptions["accuracy_score_difference"].key,
-  fairnessOptions["equalized_odds_difference"].key,
+  fairnessOptions.demographic_parity_difference.key,
+  fairnessOptions.accuracy_score_difference.key,
+  fairnessOptions.equalized_odds_difference.key,
   // regression / probability
-  fairnessOptions["mean_absolute_error_max"].key,
-  fairnessOptions["mean_squared_error_max"].key
+  fairnessOptions.mean_absolute_error_max.key,
+  fairnessOptions.mean_squared_error_max.key
 ];

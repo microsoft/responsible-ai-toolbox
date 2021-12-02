@@ -425,7 +425,7 @@ export class Violin extends React.PureComponent<
           </div>
           {this.state.calloutContent && (
             <Callout
-              target={"#" + this.state.calloutId}
+              target={`#${this.state.calloutId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
@@ -486,15 +486,16 @@ export class Violin extends React.PureComponent<
       this.props.dashboardContext.explanationContext,
       this.state.groupBy
     );
-    const importanceSums = this.props.dashboardContext.explanationContext.localExplanation?.flattenedValues
-      ?.filter((_, index) => {
-        return classLabels[index] === this.state.selectedSorting;
-      })
-      .reduce((prev: number[], current: number[]) => {
-        return prev.map((featureImp, featureIndex) => {
-          return featureImp + current[featureIndex];
-        });
-      }, new Array(this.props.dashboardContext.explanationContext.modelMetadata.featureNames.length).fill(0));
+    const importanceSums =
+      this.props.dashboardContext.explanationContext.localExplanation?.flattenedValues
+        ?.filter((_, index) => {
+          return classLabels[index] === this.state.selectedSorting;
+        })
+        .reduce((prev: number[], current: number[]) => {
+          return prev.map((featureImp, featureIndex) => {
+            return featureImp + current[featureIndex];
+          });
+        }, new Array(this.props.dashboardContext.explanationContext.modelMetadata.featureNames.length).fill(0));
     return ModelExplanationUtils.getSortIndices(importanceSums || []);
   }
 

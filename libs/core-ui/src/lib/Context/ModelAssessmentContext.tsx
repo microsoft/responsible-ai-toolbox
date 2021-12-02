@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ErrorCohort,
-  ICausalAnalysisData,
-  ICausalWhatIfData
-} from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
+import { Cohort } from "../Cohort/Cohort";
+import { ErrorCohort } from "../Cohort/ErrorCohort";
+import {
+  ICausalAnalysisData,
+  ICausalWhatIfData
+} from "../Interfaces/ICausalAnalysisData";
 import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
-import { IErrorAnalysisConfig } from "../Interfaces/IErrorAnalysisConfig";
+import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryMessage } from "../util/ITelemetryMessage";
@@ -22,7 +23,7 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
-  errorAnalysisConfig?: IErrorAnalysisConfig;
+  errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   // Everything below this comment should eventually be removed.
   // Instead, dataset and modelExplanationData should suffice.
@@ -50,16 +51,18 @@ export interface IModelAssessmentContext {
         explanationAlgorithm?: string
       ) => Promise<any[]>)
     | undefined;
-  updateErrorCohorts(
-    cohorts: ErrorCohort[],
-    selectedCohort: ErrorCohort,
-    baseCohort?: ErrorCohort
-  ): void;
+  shiftErrorCohort(cohort: ErrorCohort): void;
+  addCohort(cohort: Cohort, switchNew?: boolean): void;
+  editCohort(cohort: Cohort): void;
+  deleteCohort(cohort: ErrorCohort): void;
 }
 
 export const defaultModelAssessmentContext: IModelAssessmentContext = {
+  addCohort: () => undefined,
   baseErrorCohort: {} as ErrorCohort,
   dataset: {} as IDataset,
+  deleteCohort: () => undefined,
+  editCohort: () => undefined,
   errorCohorts: [],
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,
@@ -67,9 +70,9 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,
+  shiftErrorCohort: () => undefined,
   telemetryHook: () => undefined,
-  theme: {} as ITheme,
-  updateErrorCohorts: () => undefined
+  theme: {} as ITheme
 };
 const modelAssessmentContext = React.createContext<IModelAssessmentContext>(
   defaultModelAssessmentContext

@@ -142,15 +142,14 @@ export class Beehive extends React.PureComponent<
   };
   private static maxFeatures = 30;
 
-  private static generateSortVector: (
-    data: IExplanationContext
-  ) => number[] = memoize((data: IExplanationContext): number[] => {
-    return data.globalExplanation?.perClassFeatureImportances
-      ? ModelExplanationUtils.buildSortedVector(
-          data.globalExplanation.perClassFeatureImportances
-        )
-      : [];
-  });
+  private static generateSortVector: (data: IExplanationContext) => number[] =
+    memoize((data: IExplanationContext): number[] => {
+      return data.globalExplanation?.perClassFeatureImportances
+        ? ModelExplanationUtils.buildSortedVector(
+            data.globalExplanation.perClassFeatureImportances
+          )
+        : [];
+    });
 
   private static projectData: (
     data: IExplanationContext,
@@ -553,7 +552,7 @@ export class Beehive extends React.PureComponent<
           </div>
           {this.state.calloutContent && (
             <Callout
-              target={"#" + this.state.calloutId}
+              target={`#${this.state.calloutId}`}
               setInitialFocus
               onDismiss={this.onDismiss}
               role="alertdialog"
@@ -612,7 +611,8 @@ export class Beehive extends React.PureComponent<
 
   private handleClick = (data: any): void => {
     const clickedId = (data.points[0] as any).customdata;
-    const selections: string[] = this.props.selectionContext.selectedIds.slice();
+    const selections: string[] =
+      this.props.selectionContext.selectedIds.slice();
     const existingIndex = selections.indexOf(clickedId);
     if (existingIndex !== -1) {
       selections.splice(existingIndex, 1);

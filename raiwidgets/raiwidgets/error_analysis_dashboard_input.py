@@ -1,21 +1,26 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from .error_analysis_constants import ErrorAnalysisDashboardInterface
-from .explanation_constants import (ExplanationDashboardInterface,
-                                    WidgetRequestResponseConstants)
-from scipy.sparse import issparse
+import traceback
+
 import numpy as np
 import pandas as pd
-import traceback
-from .constants import ModelTask, SKLearn
-from .error_handling import _format_exception
-from responsibleai.serialization_utilities import serialize_json_safe
-from erroranalysis._internal.error_analyzer import (
-    ModelAnalyzer, PredictionsAnalyzer)
-from erroranalysis._internal.metrics import metric_to_func
-from erroranalysis._internal.constants import Metrics, metric_to_display_name
 
+from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
+                                               metric_to_display_name)
+from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
+                                                    PredictionsAnalyzer)
+from erroranalysis._internal.metrics import metric_to_func
+from responsibleai._input_processing import _convert_to_list
+from responsibleai._interfaces import ErrorAnalysisData
+from responsibleai.serialization_utilities import serialize_json_safe
+
+from .constants import ModelTask, SKLearn
+from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
+                                       MethodConstants)
+from .error_handling import _format_exception
+from .explanation_constants import (ExplanationDashboardInterface,
+                                    WidgetRequestResponseConstants)
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
@@ -34,16 +39,19 @@ class ErrorAnalysisDashboardInput:
             categorical_features,
             true_y_dataset,
             pred_y,
+            pred_y_dataset,
             model_task,
             metric,
             max_depth,
-            num_leaves):
+            num_leaves,
+            min_child_samples,
+            sample_dataset):
         """Initialize the ErrorAnalysis Dashboard Input.
 
         :param explanation: An object that represents an explanation.
         :type explanation: ExplanationMixin
         :param model: An object that represents a model.
-        It is assumed that for the classification case
+            It is assumed that for the classification case
             it has a method of predict_proba() returning
             the prediction probabilities for each
             class and for the regression case a method of predict()
@@ -53,12 +61,10 @@ class ErrorAnalysisDashboardInput:
         (# examples x # features), the same samples
             used to build the explanation.
             Will overwrite any set on explanation object already.
-            Must have fewer than
-            10000 rows and fewer than 1000 columns.
         :type dataset: numpy.array or list[][] or pandas.DataFrame
         :param true_y: The true labels for the provided explanation.
             Will overwrite any set on explanation object already.
-        :type true_y: numpy.array or list[]
+        :type true_y: numpy.array or list[] or pandas.Series
         :param classes: The class names.
         :type classes: numpy.array or list[]
         :param features: Feature names.
@@ -68,11 +74,16 @@ class ErrorAnalysisDashboardInput:
         :param true_y_dataset: The true labels for the provided dataset.
         Only needed if the explanation has a sample of instances from the
         original dataset.  Otherwise specify true_y parameter only.
-        :type true_y_dataset: numpy.array or list[]
+        :type true_y_dataset: numpy.array or list[] or pandas.Series
         :param pred_y: The predicted y values, can be passed in as an
             alternative to the model and explanation for a more limited
             view.
-        :type pred_y: numpy.ndarray or list[]
+        :type pred_y: numpy.ndarray or list[] or pandas.Series
+        :param pred_y_dataset: The predicted labels for the provided dataset.
+            Only needed if providing a sample dataset for the UI while using
+            the full dataset for the tree view and heatmap. Otherwise specify
+            pred_y parameter only.
+        :type pred_y_dataset: numpy.array or list[] or pandas.Series
         :param model_task: Optional parameter to specify whether the model
             is a classification or regression model. In most cases, the
             type of the model can be inferred based on the shape of the
@@ -82,10 +93,16 @@ class ErrorAnalysisDashboardInput:
         :type model_task: str
         :param metric: The metric name to evaluate at each tree node or
             heatmap grid.  Currently supported classification metrics
-            include 'error_rate', 'recall_score', 'precision_score',
-            'f1_score', and 'accuracy_score'. Supported regression
-            metrics include 'mean_absolute_error', 'mean_squared_error',
-            'r2_score', and 'median_absolute_error'.
+            include 'error_rate', 'recall_score' for binary
+            classification and 'micro_recall_score' or
+            'macro_recall_score' for multiclass classification,
+            'precision_score' for binary classification and
+            'micro_precision_score' or 'macro_precision_score'
+            for multiclass classification, 'f1_score' for binary
+            classification and 'micro_f1_score' or 'macro_f1_score'
+            for multiclass classification, and 'accuracy_score'.
+            Supported regression metrics include 'mean_absolute_error',
+            'mean_squared_error', 'r2_score', and 'median_absolute_error'.
         :type metric: str
         :param max_depth: The maximum depth of the surrogate tree trained
             on errors.
@@ -93,6 +110,15 @@ class ErrorAnalysisDashboardInput:
         :param num_leaves: The number of leaves of the surrogate tree
             trained on errors.
         :type num_leaves: int
+        :param min_child_samples: The minimal number of data required
+            to create one leaf.
+        :type min_child_samples: int
+        :param sample_dataset: Dataset with fewer samples than the main
+            dataset. Used to improve performance only when an
+            Explanation object is not provided.  Used only if
+            explanation is not specified for the dataset explorer.
+            Specify less than 10k points for optimal performance.
+        :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
         """
         self._model = model
         full_dataset = dataset
@@ -100,6 +126,10 @@ class ErrorAnalysisDashboardInput:
             full_true_y = true_y
         else:
             full_true_y = true_y_dataset
+        if pred_y_dataset is None:
+            full_pred_y = pred_y
+        else:
+            full_pred_y = pred_y_dataset
         self._categorical_features = categorical_features
         self._string_ind_data = None
         self._categories = []
@@ -111,8 +141,7 @@ class ErrorAnalysisDashboardInput:
         self.dashboard_input = {}
         has_explanation = explanation is not None
         feature_length = None
-        self._max_depth = max_depth
-        self._num_leaves = num_leaves
+        probability_y = None
 
         if has_explanation:
             if classes is None:
@@ -128,9 +157,11 @@ class ErrorAnalysisDashboardInput:
                 raise ValueError(
                     "Exceeds maximum number of rows"
                     "for visualization (100000)")
+        elif sample_dataset is not None:
+            dataset = sample_dataset
 
         if classes is not None:
-            classes = self._convert_to_list(classes)
+            classes = _convert_to_list(classes)
             self.dashboard_input[
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
@@ -140,14 +171,14 @@ class ErrorAnalysisDashboardInput:
             self._dataframeColumns = dataset.columns
             self._dfdtypes = dataset.dtypes
         try:
-            list_dataset = self._convert_to_list(dataset)
+            list_dataset = _convert_to_list(dataset)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
                 "Unsupported dataset type, inner error: {}".format(ex_str))
 
         if has_explanation:
-            self.input_explanation_data(explanation, list_dataset, classes)
+            self.input_explanation_data(list_dataset, classes)
             if features is None and hasattr(explanation, 'features'):
                 features = explanation.features
 
@@ -190,7 +221,7 @@ class ErrorAnalysisDashboardInput:
             ] = self._is_classifier
 
         if true_y is not None and len(true_y) == row_length:
-            list_true_y = self._convert_to_list(true_y)
+            list_true_y = _convert_to_list(true_y)
             # If classes specified, convert true_y to numeric representation
             if classes is not None and list_true_y[0] in class_to_index:
                 for i in range(len(list_true_y)):
@@ -200,7 +231,7 @@ class ErrorAnalysisDashboardInput:
             ] = list_true_y
 
         if features is not None:
-            features = self._convert_to_list(features)
+            features = _convert_to_list(features)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -216,7 +247,7 @@ class ErrorAnalysisDashboardInput:
                                  " for given dataset type,"
                                  " inner error: {}".format(ex_str))
             try:
-                probability_y = self._convert_to_list(probability_y)
+                probability_y = _convert_to_list(probability_y)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -232,23 +263,25 @@ class ErrorAnalysisDashboardInput:
                                                  features,
                                                  categorical_features,
                                                  model_task,
-                                                 metric)
+                                                 metric,
+                                                 classes)
         else:
             # Model task cannot be unknown when passing predictions
             # Assume classification for backwards compatibility
             if model_task == ModelTask.UNKNOWN:
                 model_task = ModelTask.CLASSIFICATION
-            self._error_analyzer = PredictionsAnalyzer(pred_y,
+            self._error_analyzer = PredictionsAnalyzer(full_pred_y,
                                                        full_dataset,
                                                        full_true_y,
                                                        features,
                                                        categorical_features,
                                                        model_task,
-                                                       metric)
+                                                       metric,
+                                                       classes)
         if self._categorical_features:
             self.dashboard_input[
                 ExplanationDashboardInterface.CATEGORICAL_MAP
-            ] = self._error_analyzer.category_dictionary
+            ] = serialize_json_safe(self._error_analyzer.category_dictionary)
         # Compute metrics on all data cohort
         if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
             if self._error_analyzer.metric is None:
@@ -260,11 +293,38 @@ class ErrorAnalysisDashboardInput:
                 metric = Metrics.MEAN_SQUARED_ERROR
             else:
                 metric = self._error_analyzer.metric
-        if model_available and true_y_dataset is not None:
-            full_predicted_y = self.compute_predicted_y(model, full_dataset)
-        else:
-            full_predicted_y = predicted_y
-        self.set_root_metric(full_predicted_y, full_true_y, metric)
+        if model_available:
+            full_pred_y = self.compute_predicted_y(model, full_dataset)
+        # If we don't have an explanation or model/probabilities specified
+        # we can try to use model task to figure out the method
+        if not has_explanation and probability_y is None:
+            method = MethodConstants.REGRESSION
+            if self._error_analyzer.model_task == ModelTask.CLASSIFICATION:
+                if (len(np.unique(predicted_y)) > 2):
+                    method = MethodConstants.MULTICLASS
+                else:
+                    method = MethodConstants.BINARY
+            self.dashboard_input[
+                ErrorAnalysisDashboardInterface.METHOD
+            ] = method
+
+        self.set_root_metric(full_pred_y, full_true_y, metric)
+        data = self.get_error_analysis_data(max_depth,
+                                            num_leaves,
+                                            min_child_samples,
+                                            metric)
+        self.dashboard_input[
+            ExplanationDashboardInterface.ERROR_ANALYSIS_DATA
+        ] = data
+
+    def get_error_analysis_data(self, max_depth, num_leaves,
+                                min_child_samples, metric):
+        data = ErrorAnalysisData()
+        data.maxDepth = max_depth
+        data.numLeaves = num_leaves
+        data.minChildSamples = min_child_samples
+        data.metric = metric_to_display_name[metric]
+        return data
 
     def set_root_metric(self, predicted_y, true_y, metric):
         if metric != Metrics.ERROR_RATE:
@@ -281,7 +341,7 @@ class ErrorAnalysisDashboardInput:
                     true_y = np.array(true_y)
                 diff = predicted_y != true_y
                 error = sum(diff)
-                metric_value = error / total
+                metric_value = (error / total) * 100
         metric_name = metric_to_display_name[metric]
         root_stats = {
             ExplanationDashboardInterface.ROOT_METRIC_NAME: metric_name,
@@ -310,7 +370,7 @@ class ErrorAnalysisDashboardInput:
 
     def predicted_y_to_list(self, predicted_y):
         try:
-            predicted_y = self._convert_to_list(predicted_y)
+            predicted_y = _convert_to_list(predicted_y)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
@@ -339,7 +399,7 @@ class ErrorAnalysisDashboardInput:
             dataset = explanation._eval_data
         return dataset, true_y
 
-    def input_explanation_data(self, explanation, list_dataset, classes):
+    def input_explanation_data(self, list_dataset, classes):
         # List of explanations, key of explanation type is "explanation_type"
         local_explanation = self._find_first_explanation(
             ExplanationDashboardInterface.MLI_LOCAL_EXPLANATION_KEY)
@@ -350,13 +410,13 @@ class ErrorAnalysisDashboardInput:
 
         if local_explanation is not None:
             try:
-                local_explanation["scores"] = self._convert_to_list(
+                local_explanation["scores"] = _convert_to_list(
                     local_explanation["scores"])
                 if np.shape(local_explanation["scores"])[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_explanation["intercept"] = self._convert_to_list(
+                local_explanation["intercept"] = _convert_to_list(
                     local_explanation["intercept"])
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -393,10 +453,10 @@ class ErrorAnalysisDashboardInput:
                                      "local explanations dimension")
         if local_explanation is None and global_explanation is not None:
             try:
-                global_explanation["scores"] = self._convert_to_list(
+                global_explanation["scores"] = _convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
-                    global_explanation["intercept"] = self._convert_to_list(
+                    global_explanation["intercept"] = _convert_to_list(
                         global_explanation["intercept"])
                 self.dashboard_input[
                     ExplanationDashboardInterface.GLOBAL_EXPLANATION
@@ -415,14 +475,23 @@ class ErrorAnalysisDashboardInput:
                 raise ValueError(
                     "Unsupported ebm explanation type: {}".format(ex_str))
 
-    def debug_ml(self, features, filters, composite_filters):
+    def debug_ml(self, data):
         try:
-            json_tree = self._error_analyzer.compute_error_tree(
+            features = data[0]
+            filters = data[1]
+            composite_filters = data[2]
+            max_depth = data[3]
+            num_leaves = data[4]
+            min_child_samples = data[5]
+            metric = display_name_to_metric[data[6]]
+            self._error_analyzer.update_metric(metric)
+            tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
-                max_depth=self._max_depth,
-                num_leaves=self._num_leaves)
+                max_depth=max_depth,
+                num_leaves=num_leaves,
+                min_child_samples=min_child_samples)
             return {
-                WidgetRequestResponseConstants.DATA: json_tree
+                WidgetRequestResponseConstants.DATA: tree
             }
         except Exception as e:
             print(e)
@@ -433,14 +502,18 @@ class ErrorAnalysisDashboardInput:
                 WidgetRequestResponseConstants.DATA: []
             }
 
-    def matrix(self, features, filters, composite_filters):
+    def matrix(self, features, filters, composite_filters,
+               quantile_binning, num_bins, metric):
         try:
             if features[0] is None and features[1] is None:
                 return {WidgetRequestResponseConstants.DATA: []}
-            json_matrix = self._error_analyzer.compute_matrix(
-                features, filters, composite_filters)
+            metric = display_name_to_metric[metric]
+            self._error_analyzer.update_metric(metric)
+            matrix = self._error_analyzer.compute_matrix(
+                features, filters, composite_filters,
+                quantile_binning, num_bins)
             return {
-                WidgetRequestResponseConstants.DATA: json_matrix
+                WidgetRequestResponseConstants.DATA: matrix
             }
         except Exception as e:
             print(e)
@@ -473,10 +546,10 @@ class ErrorAnalysisDashboardInput:
                 data = data.astype(dict(self._dfdtypes))
             if (self._is_classifier):
                 model_pred_proba = self._model.predict_proba(data)
-                prediction = self._convert_to_list(model_pred_proba)
+                prediction = _convert_to_list(model_pred_proba)
             else:
                 model_predict = self._model.predict(data)
-                prediction = self._convert_to_list(model_predict)
+                prediction = _convert_to_list(model_predict)
             return {
                 WidgetRequestResponseConstants.DATA: prediction
             }
@@ -486,18 +559,6 @@ class ErrorAnalysisDashboardInput:
                     "Model threw exception while predicting...",
                 WidgetRequestResponseConstants.DATA: []
             }
-
-    def _convert_to_list(self, array):
-        if issparse(array):
-            if array.shape[1] > 1000:
-                raise ValueError("Exceeds maximum number of "
-                                 "features for visualization (1000)")
-            return array.toarray().tolist()
-        if (isinstance(array, pd.DataFrame)):
-            return array.values.tolist()
-        if (isinstance(array, np.ndarray)):
-            return array.tolist()
-        return array
 
     def _find_first_explanation(self, key):
         interface = ExplanationDashboardInterface

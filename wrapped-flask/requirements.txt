@@ -1,5 +1,0 @@
-Flask==1.1.2
-Flask-Cors==3.0.9
-ipython==7.16.1
-greenlet==0.4.17
-gevent==20.9.0

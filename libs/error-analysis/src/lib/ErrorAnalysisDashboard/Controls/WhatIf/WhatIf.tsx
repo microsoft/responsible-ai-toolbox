@@ -6,7 +6,8 @@ import {
   ErrorCohort,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles
+  FabricStyles,
+  getFeatureOptions
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -47,9 +48,8 @@ const focusTrapZoneProps: IFocusTrapZoneProps = {
 
 export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   public static contextType = ModelAssessmentContext;
-  public context: React.ContextType<
-    typeof ModelAssessmentContext
-  > = defaultModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
 
   private rowOptions: IDropdownOption[] | undefined;
   private stringifiedValues: { [key: string]: string } = {};
@@ -71,27 +71,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
     this.createCopyOfFirstRow();
     this.buildRowOptions();
 
-    const featuresOption: IDropdownOption[] = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
+    const featuresOption = getFeatureOptions(this.context.jointDataset);
+
     this.setState({ featuresOption, filteredFeatureList: featuresOption });
   }
 
@@ -266,7 +247,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
     this.setState({
@@ -283,9 +264,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       return undefined;
     }
     this.props.currentCohort.cohort.sort();
-    this.temporaryPoint = this.props.currentCohort.cohort.filteredData[
-      indexes[0]
-    ];
+    this.temporaryPoint =
+      this.props.currentCohort.cohort.filteredData[indexes[0]];
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
       indexes[0]
@@ -295,7 +275,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
-      this.stringifiedValues[key] = this.temporaryPoint?.[key].toString();
+      this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
       this.validationErrors[key] = undefined;
     });
   }
@@ -335,9 +315,8 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           let predictedClass = 0;
           let maxProb = Number.MIN_SAFE_INTEGER;
           for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[
-              JointDataset.ProbabilityYRoot + i.toString()
-            ] = element;
+            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
+              element;
             if (element > maxProb) {
               predictedClass = i;
               maxProb = element;

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PredictionTypes } from "@responsible-ai/core-ui";
+import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -10,7 +10,10 @@ import {
   PivotItem,
   Stack,
   StackItem,
-  loadTheme
+  loadTheme,
+  MessageBar,
+  MessageBarType,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -22,7 +25,6 @@ import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { PerformanceTab } from "./Controls/PerformanceTab";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import { IFairnessProps } from "./IFairnessProps";
-import { defaultTheme } from "./Themes";
 import {
   IFairnessOption,
   fairnessOptions,
@@ -54,6 +56,11 @@ export interface IFairnessPickerPropsV2 {
   onFairnessChange: (newKey: string) => void;
 }
 
+export interface IErrorPickerProps {
+  errorBarsEnabled: boolean;
+  onErrorChange: (newKey: boolean) => void;
+}
+
 export interface IFeatureBinPickerPropsV2 {
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
@@ -67,8 +74,9 @@ export interface IWizardStateV2 {
   dashboardContext: IFairnessContext;
   performanceMetrics: IPerformanceOption[];
   fairnessMetrics: IFairnessOption[];
-  selectedPerformanceKey: string;
-  selectedFairnessKey: string;
+  selectedPerformanceKey: string | undefined;
+  selectedFairnessKey: string | undefined;
+  errorBarsEnabled: boolean;
   featureBins: IBinnedResponse[];
   selectedBinIndex: number;
   metricCache: MetricsCache;
@@ -84,7 +92,7 @@ const flights = {
   skipFairness: false
 };
 
-export class FairnessWizardV2 extends React.PureComponent<
+export class FairnessWizard extends React.PureComponent<
   IFairnessProps,
   IWizardStateV2
 > {
@@ -95,15 +103,14 @@ export class FairnessWizardV2 extends React.PureComponent<
     }
     let performanceMetrics: IPerformanceOption[];
     let fairnessMetrics: IFairnessOption[];
-    let selectedPerformanceKey: string;
-    let selectedFairnessKey: string;
+    let selectedPerformanceKey: string | undefined;
+    let selectedFairnessKey: string | undefined;
     loadTheme(props.theme || defaultTheme);
     // handle the case of precomputed metrics separately. As it becomes more defined, can integrate with existing code path.
     if (this.props.precomputedMetrics && this.props.precomputedFeatureBins) {
       // we must assume that the same performance metrics are provided across models and bins
-      performanceMetrics = WizardBuilder.buildPerformanceListForPrecomputedMetrics(
-        this.props
-      );
+      performanceMetrics =
+        WizardBuilder.buildPerformanceListForPrecomputedMetrics(this.props);
       fairnessMetrics = WizardBuilder.buildFairnessListForPrecomputedMetrics(
         this.props
       );
@@ -132,6 +139,7 @@ export class FairnessWizardV2 extends React.PureComponent<
         dashboardContext: WizardBuilder.buildPrecomputedFairnessContext(
           this.props
         ),
+        errorBarsEnabled: this.props.errorBarsEnabled ?? false,
         fairnessMetrics,
         featureBins: readonlyFeatureBins,
         metricCache: new MetricsCache(
@@ -179,6 +187,7 @@ export class FairnessWizardV2 extends React.PureComponent<
     this.state = {
       activeTabKey: introTabKey,
       dashboardContext: fairnessContext,
+      errorBarsEnabled: this.props.errorBarsEnabled ?? false,
       fairnessMetrics,
       featureBins,
       metricCache: new MetricsCache(
@@ -206,6 +215,24 @@ export class FairnessWizardV2 extends React.PureComponent<
 
   public render(): React.ReactNode {
     const styles = FairnessWizardStyles();
+    if (!this.state.selectedPerformanceKey) {
+      return (
+        <MessageBar messageBarType={MessageBarType.warning}>
+          <Text>
+            {localization.Fairness.ValidationErrors.missingPerformanceMetric}
+          </Text>
+        </MessageBar>
+      );
+    }
+    if (!this.state.selectedFairnessKey) {
+      return (
+        <MessageBar messageBarType={MessageBarType.warning}>
+          <Text>
+            {localization.Fairness.ValidationErrors.missingFairnessMetric}
+          </Text>
+        </MessageBar>
+      );
+    }
     const performancePickerProps = {
       onPerformanceChange: this.setPerformanceKey,
       performanceOptions: this.state.performanceMetrics,
@@ -215,6 +242,10 @@ export class FairnessWizardV2 extends React.PureComponent<
       fairnessOptions: this.state.fairnessMetrics,
       onFairnessChange: this.setFairnessKey,
       selectedFairnessKey: this.state.selectedFairnessKey
+    };
+    const errorPickerProps = {
+      errorBarsEnabled: this.state.errorBarsEnabled,
+      onErrorChange: this.setErrorBarsEnabled
     };
     const featureBinPickerProps = {
       featureBins: this.state.featureBins,
@@ -306,6 +337,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               performancePickerProps={performancePickerProps}
               onChartClick={this.onSelectModel}
               fairnessPickerProps={fairnessPickerProps}
+              errorPickerProps={errorPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               selectedModelIndex={this.state.selectedModelId}
               onHideIntro={this.hideIntro.bind(this)}
@@ -322,6 +354,7 @@ export class FairnessWizardV2 extends React.PureComponent<
               modelCount={this.props.predictedY.length}
               performancePickerProps={performancePickerProps}
               fairnessPickerProps={fairnessPickerProps}
+              errorPickerProps={errorPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               onHideIntro={this.hideIntro.bind(this)}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
@@ -379,7 +412,7 @@ export class FairnessWizardV2 extends React.PureComponent<
       return;
     }
     if (data.points && data.points[0]) {
-      this.setState({ selectedModelId: data.points[0].customdata });
+      this.setState({ selectedModelId: data.points[0].customdata.modelId });
     }
   };
 
@@ -395,14 +428,17 @@ export class FairnessWizardV2 extends React.PureComponent<
     this.setState({ selectedFairnessKey: key });
   };
 
+  private readonly setErrorBarsEnabled = (key: boolean): void => {
+    this.setState({ errorBarsEnabled: key });
+  };
+
   private readonly setBinIndex = (index: number): void => {
     if (this.props.precomputedMetrics) {
       const newContext = _.cloneDeep(this.state.dashboardContext);
 
       newContext.binVector = this.props.precomputedFeatureBins[index].binVector;
-      newContext.groupNames = this.props.precomputedFeatureBins[
-        index
-      ].binLabels;
+      newContext.groupNames =
+        this.props.precomputedFeatureBins[index].binLabels;
 
       this.setState({ dashboardContext: newContext, selectedBinIndex: index });
     } else {
@@ -445,7 +481,7 @@ export class FairnessWizardV2 extends React.PureComponent<
   private selectDefaultMetric(
     metrics: { [key: string]: any },
     prioritization: string[]
-  ): string {
+  ): string | undefined {
     const keys = new Set(Object.values(metrics).map((metric) => metric.key));
     for (const metricKey of prioritization) {
       if (keys.has(metricKey)) {
@@ -454,6 +490,6 @@ export class FairnessWizardV2 extends React.PureComponent<
     }
 
     // if none of the prioritized default metrics are available return first item
-    return metrics[0].key;
+    return Object.values(metrics)[0]?.key;
   }
 }

@@ -1,32 +1,32 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import numbers
+from enum import Enum
+
 import numpy as np
 import pandas as pd
 from lightgbm import LGBMClassifier, LGBMRegressor
-from enum import Enum
+from sklearn.metrics import (mean_absolute_error, mean_squared_error,
+                             median_absolute_error, r2_score)
+
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (PRED_Y,
-                                               TRUE_Y,
-                                               ROW_INDEX,
-                                               DIFF,
-                                               SPLIT_INDEX,
-                                               SPLIT_FEATURE,
-                                               LEAF_INDEX,
-                                               METHOD,
+from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                METHOD_EXCLUDES,
-                                               METHOD_INCLUDES,
-                                               ModelTask,
-                                               Metrics,
+                                               METHOD_INCLUDES, PRED_Y,
+                                               ROW_INDEX, SPLIT_FEATURE,
+                                               SPLIT_INDEX, TRUE_Y, Metrics,
+                                               ModelTask, error_metrics,
+                                               f1_metrics,
                                                metric_to_display_name,
-                                               error_metrics)
-from sklearn.metrics import (
-    mean_absolute_error, mean_squared_error, median_absolute_error,
-    r2_score, f1_score, precision_score, recall_score)
+                                               precision_metrics,
+                                               recall_metrics)
+from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31
+DEFAULT_MIN_CHILD_SAMPLES = 20
 
 
 class TreeSide(str, Enum):
@@ -48,33 +48,40 @@ def compute_json_error_tree(analyzer,
                             filters,
                             composite_filters,
                             max_depth=DEFAULT_MAX_DEPTH,
-                            num_leaves=DEFAULT_NUM_LEAVES):
+                            num_leaves=DEFAULT_NUM_LEAVES,
+                            min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
+    # Note: this is for backcompat for older versions
+    # of raiwidgets pypi package
+    return compute_error_tree(analyzer,
+                              features,
+                              filters,
+                              composite_filters,
+                              max_depth,
+                              num_leaves,
+                              min_child_samples)
+
+
+def compute_error_tree(analyzer,
+                       features,
+                       filters,
+                       composite_filters,
+                       max_depth=DEFAULT_MAX_DEPTH,
+                       num_leaves=DEFAULT_NUM_LEAVES,
+                       min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
     # Fit a surrogate model on errors
     if max_depth is None:
         max_depth = DEFAULT_MAX_DEPTH
     if num_leaves is None:
         num_leaves = DEFAULT_NUM_LEAVES
-    is_model_analyzer = hasattr(analyzer, MODEL)
-    if is_model_analyzer:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories)
-    else:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories,
-                                         analyzer.pred_y)
+    if min_child_samples is None:
+        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
+    is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -119,6 +126,7 @@ def compute_json_error_tree(analyzer,
                                        diff,
                                        max_depth,
                                        num_leaves,
+                                       min_child_samples,
                                        cat_ind_reindexed)
 
     filtered_indexed_df = pd.DataFrame(dataset_sub_features,
@@ -126,18 +134,19 @@ def compute_json_error_tree(analyzer,
     filtered_indexed_df[DIFF] = diff
     filtered_indexed_df[TRUE_Y] = true_y
     filtered_indexed_df[PRED_Y] = pred_y
-    model_json = surrogate._Booster.dump_model()
-    tree_structure = model_json["tree_info"][0]['tree_structure']
+    dumped_model = surrogate._Booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
     max_split_index = get_max_split_index(tree_structure) + 1
-    json_tree = traverse(filtered_indexed_df,
-                         tree_structure,
-                         max_split_index,
-                         (categories_reindexed,
-                          cat_ind_reindexed),
-                         [],
-                         dataset_sub_names,
-                         metric=analyzer.metric)
-    return json_tree
+    tree = traverse(filtered_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
+    return tree
 
 
 def create_surrogate_model(analyzer,
@@ -145,6 +154,7 @@ def create_surrogate_model(analyzer,
                            diff,
                            max_depth,
                            num_leaves,
+                           min_child_samples,
                            cat_ind_reindexed):
     """Creates and fits the surrogate lightgbm model.
 
@@ -162,6 +172,9 @@ def create_surrogate_model(analyzer,
     :param num_leaves: The number of leaves of the surrogate tree
         trained on errors.
     :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
     :param cat_ind_reindexed: The list of categorical feature indexes.
     :type cat_ind_reindexed: list[int]
     :return: The trained surrogate model.
@@ -170,11 +183,13 @@ def create_surrogate_model(analyzer,
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         surrogate = LGBMClassifier(n_estimators=1,
                                    max_depth=max_depth,
-                                   num_leaves=num_leaves)
+                                   num_leaves=num_leaves,
+                                   min_child_samples=min_child_samples)
     else:
         surrogate = LGBMRegressor(n_estimators=1,
                                   max_depth=max_depth,
-                                  num_leaves=num_leaves)
+                                  num_leaves=num_leaves,
+                                  min_child_samples=min_child_samples)
     if cat_ind_reindexed:
         surrogate.fit(dataset_sub_features, diff,
                       categorical_feature=cat_ind_reindexed)
@@ -223,11 +238,12 @@ def traverse(df,
              tree,
              max_split_index,
              categories,
-             json,
+             dict,
              feature_names,
              parent=None,
              side=TreeSide.UNKNOWN,
-             metric=None):
+             metric=None,
+             classes=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -235,28 +251,32 @@ def traverse(df,
     else:
         nodeid = 0
 
-    # write current node to json
-    json, df = node_to_json(df, tree, nodeid, categories, json,
-                            feature_names, metric, parent, side)
+    # write current node to a dictionary that can be saved as json
+    dict, df = node_to_dict(df, tree, nodeid, categories, dict,
+                            feature_names, metric, parent, side,
+                            classes)
 
-    # write children to json
+    # write children to a dictionary that can be saved as json
     if 'leaf_value' not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
-        json = traverse(df, left_child, max_split_index,
-                        categories, json, feature_names,
-                        tree, TreeSide.LEFT_CHILD, metric)
-        json = traverse(df, right_child, max_split_index,
-                        categories, json, feature_names,
-                        tree, TreeSide.RIGHT_CHILD, metric)
-    return json
+        dict = traverse(df, left_child, max_split_index,
+                        categories, dict, feature_names,
+                        tree, TreeSide.LEFT_CHILD, metric,
+                        classes)
+        dict = traverse(df, right_child, max_split_index,
+                        categories, dict, feature_names,
+                        tree, TreeSide.RIGHT_CHILD, metric,
+                        classes)
+    return dict
 
 
 def create_categorical_arg(parent_threshold):
     return [float(i) for i in parent_threshold.split('||')]
 
 
-def create_categorical_query(method, arg, p_node_name, parent, categories):
+def create_categorical_query(method, arg, p_node_name, p_node_query,
+                             parent, categories):
     if method == METHOD_INCLUDES:
         operation = "=="
     else:
@@ -275,7 +295,7 @@ def create_categorical_query(method, arg, p_node_name, parent, categories):
     condition = "{} {} {}".format(p_node_name, operation, threshold_str)
     query = []
     for argi in arg:
-        query.append("`" + p_node_name + "` " + operation + " " + str(argi))
+        query.append(p_node_query + " " + operation + " " + str(argi))
     if method == METHOD_INCLUDES:
         query = " | ".join(query)
     else:
@@ -283,9 +303,9 @@ def create_categorical_query(method, arg, p_node_name, parent, categories):
     return query, condition
 
 
-def node_to_json(df, tree, nodeid, categories, json,
+def node_to_dict(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
-                 side=TreeSide.UNKNOWN):
+                 side=TreeSide.UNKNOWN, classes=None):
     p_node_name = None
     condition = None
     arg = None
@@ -294,6 +314,15 @@ def node_to_json(df, tree, nodeid, categories, json,
     if parent is not None:
         parentid = int(parent[SPLIT_INDEX])
         p_node_name = feature_names[parent[SPLIT_FEATURE]]
+        # use number.Integral to check for any numpy or python number type
+        if isinstance(p_node_name, numbers.Integral):
+            # for numeric column names, we can use @df[numeric_colname] syntax
+            p_node_query = "@df[" + str(p_node_name) + "]"
+        else:
+            # for string column names, we can just use column name directly
+            # with backticks
+            p_node_query = "`" + str(p_node_name) + "`"
+        p_node_name = str(p_node_name)
         parent_threshold = parent['threshold']
         parent_decision_type = parent['decision_type']
         if side == TreeSide.LEFT_CHILD:
@@ -302,7 +331,7 @@ def node_to_json(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                query = "`" + p_node_name + "` <= " + str(parent_threshold)
+                query = p_node_query + " <= " + str(parent_threshold)
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_INCLUDES
@@ -310,6 +339,7 @@ def node_to_json(df, tree, nodeid, categories, json,
                 query, condition = create_categorical_query(method,
                                                             arg,
                                                             p_node_name,
+                                                            p_node_query,
                                                             parent,
                                                             categories)
                 df = df.query(query)
@@ -319,7 +349,7 @@ def node_to_json(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                query = "`" + p_node_name + "` > " + str(parent_threshold)
+                query = p_node_query + " > " + str(parent_threshold)
                 df = df.query(query)
             elif parent_decision_type == '==':
                 method = METHOD_EXCLUDES
@@ -327,6 +357,7 @@ def node_to_json(df, tree, nodeid, categories, json,
                 query, condition = create_categorical_query(method,
                                                             arg,
                                                             p_node_name,
+                                                            p_node_query,
                                                             parent,
                                                             categories)
                 df = df.query(query)
@@ -338,27 +369,24 @@ def node_to_json(df, tree, nodeid, categories, json,
         success = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_absolute_error(pred_y, true_y)
+        metric_value = mean_absolute_error(true_y, pred_y)
     elif metric == Metrics.MEAN_SQUARED_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = mean_squared_error(pred_y, true_y)
+        metric_value = mean_squared_error(true_y, pred_y)
     elif metric == Metrics.MEDIAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = median_absolute_error(pred_y, true_y)
+        metric_value = median_absolute_error(true_y, pred_y)
     elif metric == Metrics.R2_SCORE:
         pred_y, true_y, error = get_regression_metric_data(df)
-        metric_value = r2_score(pred_y, true_y)
-    elif metric == Metrics.F1_SCORE:
+        metric_value = r2_score(true_y, pred_y)
+    elif (metric in precision_metrics or
+          metric in recall_metrics or
+          metric in f1_metrics or
+          metric == Metrics.ACCURACY_SCORE):
         pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = f1_score(pred_y, true_y)
-        success = total - error
-    elif metric == Metrics.PRECISION_SCORE:
-        pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = precision_score(pred_y, true_y)
-        success = total - error
-    elif metric == Metrics.RECALL_SCORE:
-        pred_y, true_y, error = get_classification_metric_data(df)
-        metric_value = recall_score(pred_y, true_y)
+        func = metric_to_func[metric]
+        metric_value = compute_metric_value(func, classes, true_y,
+                                            pred_y, metric)
         success = total - error
     else:
         error = df[DIFF].values.sum()
@@ -408,3 +436,14 @@ def get_classification_metric_data(df):
     true_y = df[TRUE_Y]
     error = df[DIFF].values.sum()
     return pred_y, true_y, error
+
+
+def compute_metric_value(func, classes, true_y, pred_y, metric):
+    requires_pos_label = (metric == Metrics.RECALL_SCORE or
+                          metric == Metrics.PRECISION_SCORE or
+                          metric == Metrics.F1_SCORE)
+    if requires_pos_label:
+        ordered_labels = get_ordered_classes(classes, true_y, pred_y)
+        if ordered_labels is not None and len(ordered_labels) == 2:
+            return func(true_y, pred_y, pos_label=ordered_labels[1])
+    return func(true_y, pred_y)

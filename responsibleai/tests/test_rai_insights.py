@@ -1,0 +1,407 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+import numpy as np
+import os
+import pandas as pd
+import pytest
+from uuid import UUID
+
+from responsibleai import RAIInsights, ModelTask
+from responsibleai._internal.constants import ManagerNames
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+
+from .causal_manager_validator import validate_causal
+from .common_utils import (create_adult_income_dataset,
+                           create_binary_classification_dataset,
+                           create_boston_data, create_cancer_data,
+                           create_complex_classification_pipeline,
+                           create_iris_data, create_models_classification,
+                           create_models_regression)
+from .counterfactual_manager_validator import validate_counterfactual
+from .error_analysis_validator import (setup_error_analysis,
+                                       validate_error_analysis)
+from .explainer_manager_validator import setup_explainer, validate_explainer
+
+LABELS = 'labels'
+
+
+class ManagerParams:
+    # Counterfactual
+    DESIRED_CLASS = 'desired_class'
+    DESIRED_RANGE = 'desired_range'
+    FEATURE_IMPORTANCE = 'feature_importance'
+
+    # Causal
+    TREATMENT_FEATURES = 'treatment_features'
+    MAX_CAT_EXPANSION = 'max_cat_expansion'
+
+
+class TestRAIInsights(object):
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.CAUSAL,
+                                              ManagerNames.EXPLAINER])
+    def test_rai_insights_iris(self, manager_type):
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_data()
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: [feature_names[0]],
+            ManagerParams.DESIRED_CLASS: 0,
+            ManagerParams.FEATURE_IMPORTANCE: True
+        }
+
+        for model in models:
+            run_rai_insights(model, X_train, X_test, LABELS, None,
+                             manager_type, manager_args, classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.EXPLAINER])
+    def test_rai_insights_cancer(self, manager_type):
+        X_train, X_test, y_train, y_test, _, classes = \
+            create_cancer_data()
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        manager_args = {
+            ManagerParams.DESIRED_CLASS: 'opposite',
+            ManagerParams.FEATURE_IMPORTANCE: False
+        }
+
+        for model in models:
+            run_rai_insights(model, X_train, X_test, LABELS, None,
+                             manager_type, manager_args, classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER])
+    def test_rai_insights_binary(self, manager_type):
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: ['col0']
+        }
+
+        for model in models:
+            run_rai_insights(model, X_train, X_test, LABELS, None,
+                             manager_type, manager_args,
+                             classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_rai_insights_binary_mixed_types(self, manager_type):
+
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: ['age', 'hours_per_week'],
+            ManagerParams.DESIRED_CLASS: 'opposite',
+            ManagerParams.FEATURE_IMPORTANCE: False
+        }
+
+        run_rai_insights(model, data_train, data_test, target_name,
+                         categorical_features,
+                         manager_type, manager_args,
+                         classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_rai_insights_no_model(self, manager_type):
+
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+        model = None
+        manager_args = {
+            ManagerParams.TREATMENT_FEATURES: ['col0']
+        }
+
+        run_rai_insights(model, X_train, X_test, LABELS, None,
+                         manager_type, manager_args,
+                         classes=classes)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.EXPLAINER])
+    def test_modelanalysis_boston(self, manager_type):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_boston_data()
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+        models = create_models_regression(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+
+        manager_args = {
+            ManagerParams.DESIRED_RANGE: [10, 20],
+            ManagerParams.TREATMENT_FEATURES: ['CHAS'],
+            ManagerParams.MAX_CAT_EXPANSION: 12,
+            ManagerParams.FEATURE_IMPORTANCE: True
+        }
+
+        for model in models:
+            run_rai_insights(model, X_train, X_test, LABELS, ['CHAS'],
+                             manager_type, manager_args)
+
+    def test_rai_insights_empty_save_load_save(self):
+        X_train, y_train, X_test, y_test, classes = \
+            create_binary_classification_dataset()
+
+        models = create_models_classification(X_train, y_train)
+        X_train[LABELS] = y_train
+        X_test[LABELS] = y_test
+
+        for model in models:
+            rai_insights = RAIInsights(
+                model, X_train, X_test,
+                LABELS,
+                categorical_features=None,
+                task_type=ModelTask.CLASSIFICATION)
+
+            with TemporaryDirectory() as tmpdir:
+                save_1 = Path(tmpdir) / "first_save"
+                save_2 = Path(tmpdir) / "second_save"
+
+                # Save it
+                rai_insights.save(save_1)
+
+                # Load
+                rai_2 = RAIInsights.load(save_1)
+
+                # Validate, but this isn't the main check
+                validate_rai_insights(
+                    rai_2, X_train, X_test,
+                    LABELS, ModelTask.CLASSIFICATION, None)
+
+                # Save again (this is where Issue #1046 manifested)
+                rai_2.save(save_2)
+
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_rai_insights_save_load_add_save(self, manager_type):
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
+
+        # Cut down size for counterfactuals, in the interests of speed
+        if manager_type == ManagerNames.COUNTERFACTUAL:
+            data_test = data_test[0:1]
+
+        rai_insights = RAIInsights(
+            model, data_train, data_test,
+            target_name,
+            categorical_features=categorical_features,
+            task_type=ModelTask.CLASSIFICATION)
+
+        with TemporaryDirectory() as tmpdir:
+            save_1 = Path(tmpdir) / "first_save"
+            save_2 = Path(tmpdir) / "second_save"
+
+            # Save it
+            rai_insights.save(save_1)
+
+            # Load
+            rai_2 = RAIInsights.load(save_1)
+
+            # Call a single manager
+            if manager_type == ManagerNames.CAUSAL:
+                rai_2.causal.add(
+                    treatment_features=['age', 'hours_per_week']
+                )
+            elif manager_type == ManagerNames.COUNTERFACTUAL:
+                rai_2.counterfactual.add(
+                    total_CFs=10,
+                    desired_class='opposite',
+                    feature_importance=False
+                )
+            elif manager_type == ManagerNames.ERROR_ANALYSIS:
+                rai_2.error_analysis.add()
+            elif manager_type == ManagerNames.EXPLAINER:
+                rai_2.explainer.add()
+            else:
+                raise ValueError(
+                    "Bad manager_type: {0}".format(manager_type))
+
+            rai_2.compute()
+
+            # Validate, but this isn't the main check
+            validate_rai_insights(
+                rai_2, data_train, data_test,
+                target_name, ModelTask.CLASSIFICATION,
+                categorical_features=categorical_features)
+
+            # Save again (this is where Issue #1046 manifested)
+            rai_2.save(save_2)
+
+
+def run_rai_insights(model, train_data, test_data, target_column,
+                     categorical_features, manager_type,
+                     manager_args=None, classes=None):
+    if manager_args is None:
+        manager_args = {}
+
+    if classes is not None:
+        task_type = ModelTask.CLASSIFICATION
+    else:
+        task_type = ModelTask.REGRESSION
+
+    if manager_type == ManagerNames.COUNTERFACTUAL:
+        feature_importance = manager_args.get(ManagerParams.FEATURE_IMPORTANCE)
+        if feature_importance:
+            test_data = test_data[0:20]
+        else:
+            test_data = test_data[0:1]
+
+    if model is None:
+        with pytest.warns(
+                UserWarning,
+                match='INVALID-MODEL-WARNING: '
+                      'No valid model is supplied. '
+                      'The explanations, error analysis and '
+                      'counterfactuals may not work'):
+            rai_insights = RAIInsights(
+                model, train_data, test_data,
+                target_column,
+                categorical_features=categorical_features,
+                task_type=task_type)
+    else:
+        rai_insights = RAIInsights(
+            model, train_data, test_data,
+            target_column,
+            categorical_features=categorical_features,
+            task_type=task_type)
+
+    if manager_type == ManagerNames.EXPLAINER:
+        setup_explainer(rai_insights)
+    elif manager_type == ManagerNames.ERROR_ANALYSIS:
+        setup_error_analysis(rai_insights)
+
+    validate_rai_insights(rai_insights, train_data, test_data,
+                          target_column, task_type, categorical_features)
+
+    if manager_type == ManagerNames.CAUSAL:
+        treatment_features = manager_args.get(ManagerParams.TREATMENT_FEATURES)
+        max_cat_expansion = manager_args.get(ManagerParams.MAX_CAT_EXPANSION)
+        validate_causal(rai_insights, train_data, target_column,
+                        treatment_features, max_cat_expansion)
+    elif manager_type == ManagerNames.COUNTERFACTUAL:
+        desired_class = manager_args.get(ManagerParams.DESIRED_CLASS)
+        desired_range = manager_args.get(ManagerParams.DESIRED_RANGE)
+        feature_importance = manager_args.get(ManagerParams.FEATURE_IMPORTANCE)
+        validate_counterfactual(rai_insights,
+                                desired_class=desired_class,
+                                desired_range=desired_range,
+                                feature_importance=feature_importance)
+    elif manager_type == ManagerNames.ERROR_ANALYSIS:
+        validate_error_analysis(rai_insights)
+    elif manager_type == ManagerNames.EXPLAINER:
+        validate_explainer(rai_insights, train_data, test_data, classes)
+
+    with TemporaryDirectory() as tmpdir:
+        path = Path(tmpdir) / 'rai_test_path'
+        # save the rai_insights
+        rai_insights.save(path)
+
+        # Validate the directory structure of the state saved
+        # by the managers.
+        validate_state_directory(path, manager_type)
+
+        # load the rai_insights
+        rai_insights = RAIInsights.load(path)
+
+        validate_rai_insights(
+            rai_insights, train_data, test_data,
+            target_column, task_type, categorical_features)
+
+        if manager_type == ManagerNames.ERROR_ANALYSIS:
+            validate_error_analysis(rai_insights)
+            # validate adding new reports after deserialization works
+            setup_error_analysis(rai_insights, max_depth=4)
+            validate_error_analysis(rai_insights, expected_reports=2)
+        elif manager_type == ManagerNames.EXPLAINER:
+            validate_explainer(rai_insights, train_data, test_data, classes)
+            # validate adding new explainer config after deserialization works
+            setup_explainer(rai_insights)
+            validate_explainer(rai_insights, train_data, test_data, classes)
+
+
+def validate_state_directory(path, manager_type, classes=None):
+    all_dirs = os.listdir(path)
+    assert manager_type in all_dirs
+    all_component_paths = os.listdir(path / manager_type)
+    for component_path in all_component_paths:
+        # Test if the component directory has UUID structure
+        UUID(component_path, version=4)
+        dm = DirectoryManager(path / manager_type, component_path)
+
+        config_path = dm.get_config_directory()
+        data_path = dm.get_data_directory()
+        generators_path = dm.get_generators_directory()
+
+        if manager_type == ManagerNames.EXPLAINER:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.CAUSAL:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+
+
+def validate_rai_insights(
+    rai_insights,
+    train_data,
+    test_data,
+    target_column,
+    task_type,
+    categorical_features
+):
+
+    pd.testing.assert_frame_equal(rai_insights.train, train_data)
+    pd.testing.assert_frame_equal(rai_insights.test, test_data)
+    assert rai_insights.target_column == target_column
+    assert rai_insights.task_type == task_type
+    assert rai_insights.categorical_features == categorical_features
+    if task_type == ModelTask.CLASSIFICATION:
+        classes = train_data[target_column].unique()
+        classes.sort()
+        np.testing.assert_array_equal(rai_insights._classes,
+                                      classes)
