@@ -542,12 +542,13 @@ class RAIInsights(object):
         self._write_to_file(data_directory / (_TRAIN + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            self.train.to_json())
+                            self.train.to_json(orient='split'))
+
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory / (_TEST + _DTYPES),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
-                            self.test.to_json())
+                            self.test.to_json(orient='split'))
         classes = _convert_to_list(self._classes)
         meta = {
             _TARGET_COLUMN: self.target_column,
@@ -591,12 +592,12 @@ class RAIInsights(object):
         with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types)
+            train = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TRAIN] = train
         with open(data_directory / (_TEST + _DTYPES), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
-            test = pd.read_json(file, dtype=types)
+            test = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TEST] = test
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
