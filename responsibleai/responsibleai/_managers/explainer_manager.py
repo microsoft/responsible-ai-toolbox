@@ -26,9 +26,9 @@ from responsibleai._internal.constants import ExplainerManagerKeys as Keys
 from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
+from responsibleai.exceptions import UserConfigValidationException
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
 IS_RUN = 'is_run'
