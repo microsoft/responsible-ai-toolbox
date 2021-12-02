@@ -4,9 +4,9 @@
 """Defines the Error Analysis Manager class."""
 
 import json
-import jsonschema
-
 from pathlib import Path
+
+import jsonschema
 
 from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -18,12 +18,11 @@ from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import (DuplicateManagerConfigException,
-                                      UserConfigValidationException,
-                                      ConfigAndResultMismatchException)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
-
+from responsibleai.exceptions import (ConfigAndResultMismatchException,
+                                      DuplicateManagerConfigException,
+                                      UserConfigValidationException)
 
 REPORTS = 'reports'
 CONFIG = 'config'

@@ -3,10 +3,11 @@
 
 """Defines the Model Analysis Dashboard class."""
 
+import warnings
+
 from responsibleai import RAIInsights
 
 from .responsibleai_dashboard import ResponsibleAIDashboard
-import warnings
 
 
 class ModelAnalysisDashboard(object):

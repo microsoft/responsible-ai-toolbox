@@ -1,16 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
-
-import numpy as np
-import os
-import pandas as pd
-import pytest
 from uuid import UUID
 
-from responsibleai import RAIInsights, ModelTask
+import numpy as np
+import pandas as pd
+import pytest
+
+from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
