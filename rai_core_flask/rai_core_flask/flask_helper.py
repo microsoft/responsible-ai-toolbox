@@ -96,9 +96,7 @@ class FlaskHelper(object):
         if self.env_name in VM_ENVS:
             host_name = socket.gethostname()
             ip = socket.gethostbyname(host_name)
-        logger = logging.getLogger('wsgiserver')
-        logger.setLevel(logging.DEBUG)
-        self.server = WSGIServer((ip, self.port), self.app, log=logger)
+        self.server = WSGIServer((ip, self.port), self.app)
         self.app.config["server"] = self.server
         # self.app.config["CACHE_TYPE"] = "null"
         self.server.serve_forever()
