@@ -95,6 +95,13 @@ export interface IWhatIfCounterfactualsData {
   isClassification?: boolean;
   noPredict?: boolean;
   noY?: boolean;
+  selectedDatapoint?: string;
+  columnHeaderBeforeSort?: string;
+  columnHeaderAfterSort?: string;
+  searchBarQuery?: string;
+  WhatIfNameLabel?: string;
+  WhatIfNameLabelUpdated?: string;
+  CreateYourOwnCounterfactualInputFieldUpdated?: string;
 }
 
 export enum RAINotebookNames {

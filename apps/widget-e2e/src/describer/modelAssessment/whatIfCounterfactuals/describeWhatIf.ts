@@ -6,6 +6,7 @@ import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeAxisFlyouts } from "./describeAxisFlyouts";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
+import { describeWhatIfCreate } from "./describeWhatIfCreate";
 
 const testName = "What If";
 
@@ -25,5 +26,6 @@ export function describeWhatIf(
     });
     describeWhatIfCommonFunctionalities(datasetShape);
     describeAxisFlyouts(datasetShape);
+    describeWhatIfCreate(datasetShape);
   });
 }
