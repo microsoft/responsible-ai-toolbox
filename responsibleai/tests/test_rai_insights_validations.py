@@ -53,7 +53,7 @@ class TestRAIInsightsValidations:
                 target_column='bad_target',
                 task_type='classification',
                 maximum_rows_for_test=len(y_test) - 1)
-        assert "The test data has 30 rows, but limit is set to 29 rows" in \
+        assert "The test data has 31 rows, but limit is set to 30 rows" in \
             str(ucve.value)
         assert "Please resample the test data or " +\
             "adjust maximum_rows_for_test" in \
