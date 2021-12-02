@@ -43,7 +43,8 @@ class AzureNBEnvironment(BaseEnvironment):
                 self.successfully_detected = True
                 self.nbvm_origins = [
                     f"https://{instance_name}.{domain_suffix}",
-                    f"https://{instance_name}-{service.port}.{domain_suffix}"
+                    f"https://{instance_name}-{service.port}.{domain_suffix}",
+                    f"https://*.aznbcontent.net"
                 ]
                 print("origins: ")
                 print(self.nbvm_origins)
