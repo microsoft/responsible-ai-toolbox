@@ -29,3 +29,23 @@ export function getTableRowCount(srPrefix?: string): number {
     `${selectorPrefix} [data-automationid=DetailsList] [data-automationid=ListCell]`
   ).length;
 }
+
+export function assertRowSelected(
+  columnName: string,
+  columnValue: string,
+  srPrefix?: string
+): void {
+  const selectorPrefix = srPrefix ? `${srPrefix}` : "";
+  const columnsHeaderColumn = `${selectorPrefix} [data-automationid='ColumnsHeaderColumn']`;
+  cy.get(columnsHeaderColumn)
+    .contains(columnName)
+    .parents(columnsHeaderColumn)
+    .invoke("attr", "data-item-key")
+    .then((columnIndex) => {
+      cy.get(`${selectorPrefix} [data-automation-key='${columnIndex}']`)
+        .contains(columnValue)
+        .parents(`${selectorPrefix} div[data-automationid='DetailsRow']`)
+        .should("have.attr", "aria-selected")
+        .and("contain", "true");
+    });
+}

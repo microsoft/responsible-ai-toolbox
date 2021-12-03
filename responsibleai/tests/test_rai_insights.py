@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
@@ -334,7 +335,8 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
         # Validate the common set of state produced when rai insights
         # are saved on the disk.
-        validate_common_state_directories(path)
+        validate_common_state_directories(path, task_type)
+
         # Validate the directory structure of the state saved
         # by the managers.
         validate_component_state_directory(path, manager_type)
@@ -358,7 +360,27 @@ def run_rai_insights(model, train_data, test_data, target_column,
             validate_explainer(rai_insights, train_data, test_data, classes)
 
 
-def validate_common_state_directories(path):
+def validate_common_state_directories(path, task_type):
+    all_other_files = os.listdir(path)
+    assert "meta.json" in all_other_files
+    assert "model.pkl" in all_other_files
+
+    model = None
+    with open(path / 'model.pkl', 'rb') as file:
+        model = pickle.load(file)
+
+    predictions_path = path / "predictions"
+    assert predictions_path.exists()
+    all_predictions_files = os.listdir(predictions_path)
+    if model is not None:
+        assert "predict.json" in all_predictions_files
+        if task_type == ModelTask.CLASSIFICATION:
+            assert "predict_proba.json" in all_predictions_files
+        else:
+            assert "predict_proba.json" not in all_predictions_files
+    else:
+        assert len(all_predictions_files) == 0
+
     data_path = path / "data"
     assert data_path.exists()
     all_data_files = os.listdir(data_path)
@@ -368,7 +390,7 @@ def validate_common_state_directories(path):
     assert "testdtypes.json" in all_data_files
 
 
-def validate_component_state_directory(path, manager_type, classes=None):
+def validate_component_state_directory(path, manager_type):
     all_dirs = os.listdir(path)
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)
