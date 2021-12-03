@@ -72,9 +72,6 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
     it("should be able to select different 'datapoint'", () => {
       selectRow("Index", "7");
       assertRowSelected("Index", "7");
-
-      cy.get(Locators.IFIDataPointDropdown).focus();
-      cy.focused().should("contain", "Row 7");
     });
 
     it("Should have Sort by absolute values toggle button", () => {
