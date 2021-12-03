@@ -93,7 +93,8 @@ const modelAssessmentDatasets = {
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5"
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      setValueData: ["workclass", "Self-emp-inc"]
     }
   }
 };

@@ -102,6 +102,7 @@ export interface IWhatIfCounterfactualsData {
   WhatIfNameLabel?: string;
   WhatIfNameLabelUpdated?: string;
   CreateYourOwnCounterfactualInputFieldUpdated?: string;
+  setValueData?: string[];
 }
 
 export enum RAINotebookNames {
