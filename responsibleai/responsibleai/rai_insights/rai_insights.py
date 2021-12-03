@@ -539,13 +539,15 @@ class RAIInsights(object):
         data_directory = Path(path) / _DATA
         data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory / (_TRAIN + _DTYPES),
+        self._write_to_file(data_directory /
+                            (_TRAIN + _DTYPES + _JSON_EXTENSION),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
                             self.train.to_json(orient='split'))
 
         dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory / (_TEST + _DTYPES),
+        self._write_to_file(data_directory /
+                            (_TEST + _DTYPES + _JSON_EXTENSION),
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
                             self.test.to_json(orient='split'))
@@ -589,12 +591,14 @@ class RAIInsights(object):
         top_dir = Path(path)
         # load current state
         data_directory = Path(path) / _DATA
-        with open(data_directory / (_TRAIN + _DTYPES), 'r') as file:
+        with open(data_directory /
+                  (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
             train = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TRAIN] = train
-        with open(data_directory / (_TEST + _DTYPES), 'r') as file:
+        with open(data_directory /
+                  (_TEST + _DTYPES + _JSON_EXTENSION), 'r') as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
             test = pd.read_json(file, dtype=types, orient='split')

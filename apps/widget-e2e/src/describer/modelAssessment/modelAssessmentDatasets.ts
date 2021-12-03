@@ -85,7 +85,16 @@ const modelAssessmentDatasets = {
       "gender",
       "education",
       "capital-loss"
-    ]
+    ],
+    whatIfCounterfactualsData: {
+      columnHeaderAfterSort: "capital-gain",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "occupation",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5"
+    }
   }
 };
 

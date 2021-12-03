@@ -332,9 +332,12 @@ def run_rai_insights(model, train_data, test_data, target_column,
         # save the rai_insights
         rai_insights.save(path)
 
+        # Validate the common set of state produced when rai insights
+        # are saved on the disk.
+        validate_common_state_directories(path)
         # Validate the directory structure of the state saved
         # by the managers.
-        validate_state_directory(path, manager_type)
+        validate_component_state_directory(path, manager_type)
 
         # load the rai_insights
         rai_insights = RAIInsights.load(path)
@@ -355,7 +358,17 @@ def run_rai_insights(model, train_data, test_data, target_column,
             validate_explainer(rai_insights, train_data, test_data, classes)
 
 
-def validate_state_directory(path, manager_type, classes=None):
+def validate_common_state_directories(path):
+    data_path = path / "data"
+    assert data_path.exists()
+    all_data_files = os.listdir(data_path)
+    assert "train.json" in all_data_files
+    assert "traindtypes.json" in all_data_files
+    assert "test.json" in all_data_files
+    assert "testdtypes.json" in all_data_files
+
+
+def validate_component_state_directory(path, manager_type, classes=None):
     all_dirs = os.listdir(path)
     assert manager_type in all_dirs
     all_component_paths = os.listdir(path / manager_type)
