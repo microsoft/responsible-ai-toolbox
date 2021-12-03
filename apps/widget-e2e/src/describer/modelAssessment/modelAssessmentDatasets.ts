@@ -92,9 +92,9 @@ const modelAssessmentDatasets = {
       CreateYourOwnCounterfactualInputFieldUpdated: "25",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
+      setValueData: ["workclass", "Self-emp-inc"],
       WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
-      setValueData: ["workclass", "Self-emp-inc"]
+      WhatIfNameLabelUpdated: "New Copy of row 5"
     }
   }
 };
