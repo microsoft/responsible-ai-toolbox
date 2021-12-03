@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 import os
+import pickle
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from uuid import UUID
@@ -365,7 +366,6 @@ def validate_common_state_directories(path, task_type):
     assert "model.pkl" in all_other_files
 
     model = None
-    import pickle
     with open(path / 'model.pkl', 'rb') as file:
         model = pickle.load(file)
 
