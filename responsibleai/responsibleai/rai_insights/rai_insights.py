@@ -107,6 +107,7 @@ class RAIInsights(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
+        categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
