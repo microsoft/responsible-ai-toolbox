@@ -12,6 +12,7 @@ export interface ICounterfactualListStyle {
   dropdownLabel: IStyle;
   originalCell: IStyle;
   editCell: IStyle;
+  highlightRow: IStyle;
 }
 
 export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualListStyle> =
@@ -29,6 +30,9 @@ export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualLi
       editCell: {
         color: theme.palette.green,
         fontWeight: "bold"
+      },
+      highlightRow: {
+        backgroundColor: theme.semanticColors.bodyBackgroundHovered
       },
       originalCell: {
         color: theme.semanticColors.bodyText
