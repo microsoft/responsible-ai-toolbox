@@ -16,10 +16,14 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
+  DetailsRowFields,
   IColumn,
   IComboBox,
   IComboBoxOption,
   IDetailsFooterProps,
+  IDetailsRowFieldsProps,
+  IDetailsRowProps,
+  IRenderFunction,
   Link,
   SelectionMode,
   Stack,
@@ -94,10 +98,30 @@ export class CounterfactualList extends React.Component<
         constrainMode={ConstrainMode.unconstrained}
         layoutMode={DetailsListLayoutMode.fixedColumns}
         onRenderItemColumn={this.renderItemColumn}
+        onRenderRow={this.renderRow}
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
   }
+
+  private renderRow: IRenderFunction<IDetailsRowProps> = (
+    props?: IDetailsRowProps
+  ): JSX.Element | null => {
+    if (!props) {
+      return <div />;
+    }
+    return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
+  };
+
+  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+    const classNames = counterfactualListStyle();
+    const rowClass = props?.itemIndex === 0 ? classNames.highlightRow : "";
+    return (
+      <span className={rowClass}>
+        <DetailsRowFields {...props} />
+      </span>
+    );
+  };
 
   private getItems(): Array<Record<string, string | number>> {
     const items: Array<Record<string, string | number>> = [];
@@ -315,7 +339,6 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <ComboBox
               key={`${column.key}`}
-              // label={metaInfo.abbridgedLabel}
               autoComplete={"on"}
               allowFreeform
               selectedKey={`${this.state.data[column.key]}`}
@@ -347,8 +370,10 @@ export class CounterfactualList extends React.Component<
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
     if (detailsFooterProps && this.context.requestPredictions) {
+      const classNames = counterfactualListStyle();
       return (
         <DetailsRow
+          styles={{ root: classNames.highlightRow }}
           {...detailsFooterProps}
           columns={detailsFooterProps.columns}
           item={this.state.data}
