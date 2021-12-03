@@ -538,6 +538,9 @@ class RAIInsights(object):
         prediction_output_path = Path(path) / _PREDICTIONS
         prediction_output_path.mkdir(parents=True, exist_ok=True)
 
+        if self.model is None:
+            return
+
         test_without_target_column = self.test.drop(
             [self.target_column], axis=1)
 
@@ -618,8 +621,8 @@ class RAIInsights(object):
             with open(top_dir / _MODEL_PKL, 'wb') as file:
                 pickle.dump(self.model, file)
 
-    def save(self, path):
-        """Save the RAIInsights to the given path.
+    def _save_managers(self, path):
+        """Save the state of individual managers.
 
         :param path: The directory path to save the RAIInsights to.
         :type path: str
@@ -629,6 +632,13 @@ class RAIInsights(object):
         for manager in self._managers:
             manager._save(top_dir / manager.name)
 
+    def save(self, path):
+        """Save the RAIInsights to the given path.
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        self._save_managers(path)
         self._save_data(path)
         self._save_metadata(path)
         self._save_model(path)

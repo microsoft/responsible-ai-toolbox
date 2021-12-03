@@ -360,6 +360,27 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
 
 def validate_common_state_directories(path, task_type):
+    all_other_files = os.listdir(path)
+    assert "meta.json" in all_other_files
+    assert "model.pkl" in all_other_files
+
+    model = None
+    import pickle
+    with open(path / 'model.pkl', 'rb') as file:
+        model = pickle.load(file)
+
+    predictions_path = path / "predictions"
+    assert predictions_path.exists()
+    all_predictions_files = os.listdir(predictions_path)
+    if model is not None:
+        assert "predict.json" in all_predictions_files
+        if task_type == ModelTask.CLASSIFICATION:
+            assert "predict_proba.json" in all_predictions_files
+        else:
+            assert "predict_proba.json" not in all_predictions_files
+    else:
+        assert len(all_predictions_files) == 0
+
     data_path = path / "data"
     assert data_path.exists()
     all_data_files = os.listdir(data_path)
@@ -367,15 +388,6 @@ def validate_common_state_directories(path, task_type):
     assert "traindtypes.json" in all_data_files
     assert "test.json" in all_data_files
     assert "testdtypes.json" in all_data_files
-
-    predictions_path = path / "predictions"
-    assert predictions_path.exists()
-    all_predictions_files = os.listdir(predictions_path)
-    assert "predict.json" in all_predictions_files
-    if task_type == ModelTask.CLASSIFICATION:
-        assert "predict_proba.json" in all_predictions_files
-    else:
-        assert "predict_proba.json" not in all_predictions_files
 
 
 def validate_component_state_directory(path, manager_type):
