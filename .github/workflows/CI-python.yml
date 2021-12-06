@@ -84,8 +84,7 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ matrix.packageDirectory != 'raiwidgets' }}
-        name: Run tests
+      - name: Run tests
         run: |
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
@@ -93,12 +92,6 @@ jobs:
       - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
         name: Run widget tests
         run: yarn e2e-widget
-
-      - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
-        name: Run tests
-        run: |
-          pytest --durations=10
-        working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload code coverage results
         uses: actions/upload-artifact@v2
