@@ -14,8 +14,8 @@ from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
-from responsibleai._internal.constants import CounterfactualManagerKeys, \
-    ListProperties, ManagerNames
+from responsibleai._internal.constants import (CounterfactualManagerKeys,
+                                               ListProperties, ManagerNames)
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
