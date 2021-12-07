@@ -19,7 +19,7 @@ This quickstart and example
 
   **Note:** All sample files are provided as examples. Users should replace them with their own testing data, and a corresponding golden_labels CSV files that point to their image file paths. 
   
-* Run fairness analysis based on face verify results
+* Run fairness analysis to verify results
   * Replace " stt_testing_data.csv" in "analyze_stt_fairness.ipynb" with the data you generated from "run_stt.py" script. You can also use the default file to show complete fairness analysis on our provided sample data. 
   * In Anaconda, run `jupyter notebook`
   * In the pop-up browser, open “analyze_stt_fairness.ipynb".
