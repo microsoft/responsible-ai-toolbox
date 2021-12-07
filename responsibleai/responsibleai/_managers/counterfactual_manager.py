@@ -14,7 +14,8 @@ from dice_ml.counterfactual_explanations import CounterfactualExplanations
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import CounterfactualManagerKeys, \
+    ListProperties, ManagerNames
 from responsibleai._managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
@@ -206,20 +207,24 @@ class CounterfactualConfig(BaseConfig):
 
         return counterfactual_config
 
-    def get_result(self):
+    def get_result(self, include_counterfactual_obj=True):
         """Returns the dictionary representation of result of the computation
            in the CounterfactualConfig.
 
+        :param include_counterfactual_obj: Whether to include serialized
+                                           version of counterfactual object.
+        :type method: bool
         :return: The dictionary representation of result in the
                  CounterfactualConfig.
         :rtype: dict
         """
         result = {}
-        if self.counterfactual_obj is not None:
-            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = \
-                self.counterfactual_obj.to_json()
-        else:
-            result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = None
+        if include_counterfactual_obj:
+            if self.counterfactual_obj is not None:
+                result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = \
+                    self.counterfactual_obj.to_json()
+            else:
+                result[CounterfactualConfig.COUNTERFACTUAL_OBJ] = None
 
         result[CounterfactualConfig.HAS_COMPUTATION_FAILED] = \
             self.has_computation_failed
@@ -575,7 +580,23 @@ class CounterfactualManager(BaseManager):
             return json.load(f)
 
     def list(self):
-        pass
+        """List information about the CounterfactualManager.
+
+        :return: A dictionary of properties.
+        :rtype: Dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        counterfactual_props_list = []
+        for counterfactual_config in self._counterfactual_config_list:
+            cf_coufig_dict = counterfactual_config.get_config_as_dict()
+            cf_coufig_dict.update(counterfactual_config.get_result(
+                include_counterfactual_obj=False))
+            counterfactual_props_list.append(cf_coufig_dict)
+
+        props[CounterfactualManagerKeys.COUNTERFACTUALS] = \
+            counterfactual_props_list
+
+        return props
 
     def get_data(self):
         """Get counterfactual data
