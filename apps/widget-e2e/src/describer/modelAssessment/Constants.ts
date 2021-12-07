@@ -61,5 +61,6 @@ export enum Locators {
   WhatIfScatterChartXAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding'] button:contains('True Y')",
   WhatIfSaveAsNewDatapointButton = "#CounterfactualPanel button:contains('Save as new datapoint')",
   WhatIfSaveAsDataPoints = "#IndividualFeatureContainer #iterative-container span",
-  WhatIfSaveAsDataPointsDeleteButton = "#IndividualFeatureContainer #iterative-container i[data-icon-name='Clear']"
+  WhatIfSaveAsDataPointsDeleteButton = "#IndividualFeatureContainer #iterative-container i[data-icon-name='Clear']",
+  WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')"
 }
