@@ -19,8 +19,6 @@ The Toolbox consists of four dashboards:
 
 ## Introducing Responsible AI dashboard
 
-The [Responsible AI dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb) is an open-source framework for helping data scientists and machine learning developers build machine learning powered products that are responsible and reliable. The toolkit supports the following activities:
-
 [Responsible AI dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb) is a single pane of glass, enabling you to easily flow through different stages of model debugging and decision-making. This customizable experience can be taken in a multitude of directions, from analyzing the model or data holistically, to conducting a deep dive or comparison on cohorts of interest, to explaining and perturbing model predictions for individual instances, and to informing users on business decisions and actions.
 
 
@@ -73,11 +71,13 @@ The Responsible AI Toolbox’s strength lies in its customizability. It empowers
 - [Take a tour of Responsible AI Dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb)
 - [Get started](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb)
 
-- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/tour.ipynb/responsibleaidashboard-census-classification-model-debugging.ipynb)
-- [Try the tool: model debugging of a a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-classification-model-debugging.ipynb)
-- [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-decision-making.ipynb)
-
+Model Debugging Examples:
+- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-classification-model-debugging.ipynb)
 - [Try the tool: model debugging of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-regression-model-debugging.ipynb)
+
+ Responsible Decision Making Examples:
+- [Try the tool: make decisions for house improvements](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-decision-making.ipynb)
 - [Try the tool: provide recommendations to patients using diabetes data](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-decision-making.ipynb)
 
 
