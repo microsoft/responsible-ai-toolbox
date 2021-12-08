@@ -45,6 +45,10 @@ export interface IModelStatisticsData {
 export interface IDatasetExplorerData {
   whiskerPlot?: IDEWhiskerPlotData;
   dotPlot?: IDEDotPlotData;
+  datasetBarLabel?: string[];
+  defaultXAxis?: string;
+  defaultYAxis?: string;
+  noY?: boolean;
 }
 
 export interface IDEWhiskerPlotData {
