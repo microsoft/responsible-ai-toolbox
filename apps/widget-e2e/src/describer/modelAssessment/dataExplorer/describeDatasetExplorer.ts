@@ -21,7 +21,6 @@ export function describeDatasetExplorer(
       cy.task("log", hostDetails.host);
       cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      // getMenu("Dataset explorer", "#DashboardPivot").click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
       it("should render no data message", () => {
