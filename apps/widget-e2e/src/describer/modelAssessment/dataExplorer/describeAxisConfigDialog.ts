@@ -34,10 +34,7 @@ export function describeAxisConfigDialog(
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get("#AxisConfigPanel")
-                .find("button")
-                .contains("Select")
-                .click();
+              cy.get(Locators.SelectButton).click();
               cy.get(`${Locators.DECRotatedVerticalBox} button:eq(0)`).contains(
                 text1
               );
@@ -45,11 +42,8 @@ export function describeAxisConfigDialog(
           cy.get(`${Locators.DECRotatedVerticalBox} button`)
             .click()
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Dataset')`)
-            .click()
-            .get("#AxisConfigPanel")
-            .find("button")
-            .contains("Select")
             .click();
+          cy.get(Locators.SelectButton).click();
         });
       }
     });
@@ -77,10 +71,7 @@ export function describeAxisConfigDialog(
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get("#AxisConfigPanel")
-                .find("button")
-                .contains("Select")
-                .click();
+              cy.get(Locators.SelectButton).click();
               cy.get(`${Locators.DECHorizontalAxis} button:eq(0)`).contains(
                 text1
               );
@@ -88,11 +79,8 @@ export function describeAxisConfigDialog(
           cy.get(`${Locators.DECHorizontalAxis} button`)
             .click()
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Index')`)
-            .click()
-            .get("#AxisConfigPanel")
-            .find("button")
-            .contains("Select")
             .click();
+          cy.get(Locators.SelectButton).click();
         });
       }
     });

@@ -14,7 +14,8 @@ const modelAssessmentDatasets = {
         "400 - 499"
       ],
       defaultXAxis: "Index",
-      defaultYAxis: "age"
+      defaultYAxis: "age",
+      colorValueButton: "Predicted Y"
     },
     errorAnalysisData: {
       basicInformationData: {
