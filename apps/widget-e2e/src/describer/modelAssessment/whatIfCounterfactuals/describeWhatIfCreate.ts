@@ -6,7 +6,7 @@ import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
-  describe.only("What if Create counterfactual", () => {
+  describe("What if Create counterfactual", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
