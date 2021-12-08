@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Locators } from "../Constants";
+
 export function describeAxisConfigDialog(
   defaultXAxis: string,
   defaultYAxis: string,
@@ -10,33 +12,25 @@ export function describeAxisConfigDialog(
   describe("Axis settings dialog", () => {
     describe("Y Axis settings dialog", () => {
       it("should display settings dialog", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
-        ).click();
-        cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
-        cy.get('button:contains("Cancel")').click();
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+        cy.get(Locators.DECAxisPanel).should("exist");
+        cy.get(Locators.CancelButton).click();
       });
       it("should be able to hide settings", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
-        ).click();
-        cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
-        cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+        cy.get(Locators.DECCloseButton).click();
+        cy.get(Locators.DECAxisPanel).should("not.exist");
       });
       it("should display right y-axis title", () => {
         cy.get(
-          '#DatasetExplorerChart div[class*="rotatedVerticalBox"] span[class*="textContainer"]'
+          `${Locators.DECRotatedVerticalBox} span[class*="textContainer"]`
         ).contains(defaultYAxis);
       });
       if (!noY) {
         it("should change to different y-axis title", () => {
-          cy.get(
-            '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
-          ).click();
+          cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
 
-          cy.get(
-            "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:eq(3)"
-          )
+          cy.get(`${Locators.DECChoiceFieldGroup} label:eq(3)`)
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
@@ -44,17 +38,13 @@ export function describeAxisConfigDialog(
                 .find("button")
                 .contains("Select")
                 .click();
-              cy.get(
-                '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button:eq(0)'
-              ).contains(text1);
+              cy.get(`${Locators.DECRotatedVerticalBox} button:eq(0)`).contains(
+                text1
+              );
             });
-          cy.get(
-            '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button'
-          )
+          cy.get(`${Locators.DECRotatedVerticalBox} button`)
             .click()
-            .get(
-              "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:contains('Dataset')"
-            )
+            .get(`${Locators.DECChoiceFieldGroup} label:contains('Dataset')`)
             .click()
             .get("#AxisConfigPanel")
             .find("button")
@@ -65,33 +55,25 @@ export function describeAxisConfigDialog(
     });
     describe("X Axis settings dialog", () => {
       it("should display settings dialog", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="horizontalAxis"] button'
-        ).click();
-        cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
-        cy.get('button:contains("Cancel")').click();
+        cy.get(`${Locators.DECHorizontalAxis} button`).click();
+        cy.get(Locators.DECAxisPanel).should("exist");
+        cy.get(Locators.CancelButton).click();
       });
       it("should be able to hide settings", () => {
-        cy.get(
-          '#DatasetExplorerChart div[class*="horizontalAxis"] button'
-        ).click();
-        cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
-        cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
+        cy.get(`${Locators.DECHorizontalAxis} button`).click();
+        cy.get(Locators.DECCloseButton).click();
+        cy.get(Locators.DECAxisPanel).should("not.exist");
       });
       it("should display right x-axis title", () => {
         cy.get(
-          '#DatasetExplorerChart div[class*="horizontalAxis"] span[class*="textContainer"]'
+          `${Locators.DECHorizontalAxis} span[class*="textContainer"]`
         ).contains(defaultXAxis);
       });
       if (!noY) {
         it("should change to different x-axis title", () => {
-          cy.get(
-            '#DatasetExplorerChart div[class*="horizontalAxis"] button'
-          ).click();
+          cy.get(`${Locators.DECHorizontalAxis} button`).click();
 
-          cy.get(
-            "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:eq(3)"
-          )
+          cy.get(`${Locators.DECChoiceFieldGroup} label:eq(3)`)
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
@@ -99,15 +81,13 @@ export function describeAxisConfigDialog(
                 .find("button")
                 .contains("Select")
                 .click();
-              cy.get(
-                '#DatasetExplorerChart div[class*="horizontalAxis"] button:eq(0)'
-              ).contains(text1);
+              cy.get(`${Locators.DECHorizontalAxis} button:eq(0)`).contains(
+                text1
+              );
             });
-          cy.get('#DatasetExplorerChart div[class*="horizontalAxis"] button')
+          cy.get(`${Locators.DECHorizontalAxis} button`)
             .click()
-            .get(
-              "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:contains('Index')"
-            )
+            .get(`${Locators.DECChoiceFieldGroup} label:contains('Index')`)
             .click()
             .get("#AxisConfigPanel")
             .find("button")
@@ -122,12 +102,12 @@ export function describeAxisConfigDialog(
           cy.get("#DatasetExplorerChart button#SetColorButton").click();
         });
         it("should display settings dialog", () => {
-          cy.get("#AxisConfigPanel div.ms-Panel-main").should("exist");
-          cy.get('button:contains("Cancel")').click();
+          cy.get(Locators.DECAxisPanel).should("exist");
+          cy.get(Locators.CancelButton).click();
         });
         it("should be able to hide settings", () => {
-          cy.get("#AxisConfigPanel button.ms-Panel-closeButton").click();
-          cy.get("#AxisConfigPanel div.ms-Panel-main").should("not.exist");
+          cy.get(Locators.DECCloseButton).click();
+          cy.get(Locators.DECAxisPanel).should("not.exist");
         });
       });
     }

@@ -62,5 +62,11 @@ export enum Locators {
   WhatIfSaveAsNewDatapointButton = "#CounterfactualPanel button:contains('Save as new datapoint')",
   WhatIfSaveAsDataPoints = "#IndividualFeatureContainer #iterative-container span",
   WhatIfSaveAsDataPointsDeleteButton = "#IndividualFeatureContainer #iterative-container i[data-icon-name='Clear']",
-  WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')"
+  WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')",
+  DECRotatedVerticalBox = "#DatasetExplorerChart div[class*='rotatedVerticalBox']", // DEC- Data explorer chart
+  DECHorizontalAxis = "#DatasetExplorerChart div[class*='horizontalAxis']",
+  DECChoiceFieldGroup = "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup']",
+  DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
+  DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
+  CancelButton = "button:contains('Cancel')"
 }
