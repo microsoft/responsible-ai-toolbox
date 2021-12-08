@@ -5,6 +5,17 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
+    datasetExplorerData: {
+      datasetBarLabel: [
+        "0 - 99",
+        "100 - 199",
+        "200 - 299",
+        "300 - 399",
+        "400 - 499"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
     errorAnalysisData: {
       basicInformationData: {
         BasicInformation: ["Unsaved", "All data (2 filters)"],
@@ -94,17 +105,6 @@ const modelAssessmentDatasets = {
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
       WhatIfNameLabelUpdated: "New Copy of row 5"
-    },
-    datasetExplorerData: {
-      datasetBarLabel: [
-        "0 - 99",
-        "100 - 199",
-        "200 - 299",
-        "300 - 399",
-        "400 - 499"
-      ],
-      defaultXAxis: "Index",
-      defaultYAxis: "age"
     }
   }
 };
