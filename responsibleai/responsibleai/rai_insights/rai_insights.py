@@ -503,7 +503,7 @@ class RAIInsights(object):
         dashboard_dataset.target_column = self.target_column
         if (self.model is not None and
                 hasattr(self.model, SKLearn.PREDICT_PROBA) and
-                self.model.predict_proba is not None and
+                getattr(self.model, SKLearn.PREDICT_PROBA)  is not None and
                 dataset is not None):
             try:
                 probability_y = self.model.predict_proba(dataset)

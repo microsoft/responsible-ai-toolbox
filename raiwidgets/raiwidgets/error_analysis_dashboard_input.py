@@ -136,7 +136,7 @@ class ErrorAnalysisDashboardInput:
         self._categorical_indexes = []
         self._is_classifier = model is not None\
             and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+            getattr(model, SKLearn.PREDICT_PROBA) is not None
         self._dataframeColumns = None
         self.dashboard_input = {}
         has_explanation = explanation is not None
@@ -238,7 +238,8 @@ class ErrorAnalysisDashboardInput:
                                  " from local explanations dimension")
             self.dashboard_input[FEATURE_NAMES] = features
         if model_available and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
+                and getattr(model, SKLearn.PREDICT_PROBA) is not None and \
+                    dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:

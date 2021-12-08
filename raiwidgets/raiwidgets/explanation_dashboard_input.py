@@ -54,7 +54,7 @@ class ExplanationDashboardInput:
         self._model = model
         self._is_classifier = model is not None\
             and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+            getattr(model, SKLearn.PREDICT_PROBA) is not None
         self._dataframeColumns = None
         self.dashboard_input = {}
         # List of explanations, key of explanation type is "explanation_type"
@@ -235,7 +235,8 @@ class ExplanationDashboardInput:
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
         if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
+                and getattr(model, SKLearn.PREDICT_PROBA) is not None and \
+                    dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:
