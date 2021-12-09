@@ -6,6 +6,7 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
     datasetExplorerData: {
+      colorValueButton: "Predicted Y",
       datasetBarLabel: [
         "0 - 99",
         "100 - 199",

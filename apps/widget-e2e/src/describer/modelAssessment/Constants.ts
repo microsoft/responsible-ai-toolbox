@@ -68,5 +68,6 @@ export enum Locators {
   DECChoiceFieldGroup = "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup']",
   DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
-  CancelButton = "button:contains('Cancel')"
+  CancelButton = "button:contains('Cancel')",
+  SelectButton = "button:contains('Select')"
 }
