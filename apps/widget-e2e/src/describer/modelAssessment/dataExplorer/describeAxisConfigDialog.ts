@@ -30,8 +30,8 @@ export function describeAxisConfigDialog(
 
       it("should populate feature list passed in from SDK in flyout", () => {
         cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
-        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
-        cy.get(Locators.WhatIfYAxisFeatureDropdownOption).should(
+        cy.get(Locators.AxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdownOption).should(
           "have.length",
           featureNames?.length
         );
