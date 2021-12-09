@@ -46,7 +46,8 @@ export function describeIndividualDatapoints(
         props.dataShape.datasetExplorerData?.defaultXAxis,
         props.dataShape.datasetExplorerData?.defaultYAxis,
         !!props.dataShape.datasetExplorerData?.noY,
-        true
+        true,
+        props.dataShape.featureNames
       );
     }
   });
