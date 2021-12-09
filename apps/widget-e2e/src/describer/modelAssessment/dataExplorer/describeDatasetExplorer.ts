@@ -5,6 +5,7 @@ import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeAggregatePlot } from "./describeAggregatePlot";
+import { describeCohortFunctionality } from "./describeCohortFunctionality";
 
 const testName = "Dataset explorer";
 
@@ -31,5 +32,6 @@ export function describeDatasetExplorer(
       return;
     }
     describeAggregatePlot(datasetShape);
+    describeCohortFunctionality(datasetShape);
   });
 }

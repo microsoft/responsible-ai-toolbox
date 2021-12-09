@@ -49,6 +49,7 @@ export interface IDatasetExplorerData {
   defaultXAxis?: string;
   defaultYAxis?: string;
   noY?: boolean;
+  cohortDatasetNewValue?: string;
 }
 
 export interface IDEWhiskerPlotData {
