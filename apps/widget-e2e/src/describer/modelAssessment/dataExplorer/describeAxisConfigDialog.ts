@@ -7,7 +7,8 @@ export function describeAxisConfigDialog(
   defaultXAxis: string,
   defaultYAxis: string,
   noY: boolean,
-  hasColorAxis: boolean
+  hasColorAxis: boolean,
+  featureNames?: string[]
 ): void {
   describe("Axis settings dialog", () => {
     describe("Y Axis settings dialog", () => {
@@ -25,6 +26,16 @@ export function describeAxisConfigDialog(
         cy.get(
           `${Locators.DECRotatedVerticalBox} span[class*="textContainer"]`
         ).contains(defaultYAxis);
+      });
+
+      it("should populate feature list passed in from SDK in flyout", () => {
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
+        cy.get(Locators.WhatIfYAxisFeatureDropdownOption).should(
+          "have.length",
+          featureNames?.length
+        );
+        cy.get(Locators.DECCloseButton).click();
       });
       if (!noY) {
         it("should change to different y-axis title", () => {

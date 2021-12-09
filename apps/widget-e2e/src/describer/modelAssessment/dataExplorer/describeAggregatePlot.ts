@@ -37,7 +37,8 @@ export function describeAggregatePlot(dataShape: IModelAssessmentData): void {
           props.dataShape.datasetExplorerData?.defaultXAxis,
           props.dataShape.datasetExplorerData?.defaultYAxis,
           !!props.dataShape.datasetExplorerData?.noY,
-          false
+          false,
+          props.dataShape.featureNames
         );
       }
     });
