@@ -10,7 +10,10 @@ export function describeCohortFunctionality(
 ): void {
   describe("Cohort functionality", () => {
     it("Should have global cohort by default", () => {
-      cy.get(`${Locators.DECohortDropdown} span`).should("contain", "All data");
+      cy.get(`${Locators.DECohortDropdown} span`).should(
+        "contain",
+        dataShape.cohortDefaultName
+      );
     });
     it("Should update dataset selection with new cohort when a new cohort is created", () => {
       cy.get(Locators.CreateNewCohortButton).click();
@@ -30,20 +33,22 @@ export function describeCohortFunctionality(
     });
 
     it("should render global cohort by default for individual datapoints until dataset selection is changed", () => {
-      cy.get(`${Locators.DECohortDropdown} span`).should("contain", "All data");
-      cy.get(
-        '#ChartTypeSelection label:contains("Individual datapoints")'
-      ).click();
-      cy.get(`${Locators.DECohortDropdown} span`).should("contain", "All data");
-      cy.get('#ChartTypeSelection label:contains("Aggregate plots")').click();
+      cy.get(`${Locators.DECohortDropdown} span`).should(
+        "contain",
+        dataShape.cohortDefaultName
+      );
+      cy.get(Locators.DEIndividualDatapoints).click();
+      cy.get(`${Locators.DECohortDropdown} span`).should(
+        "contain",
+        dataShape.cohortDefaultName
+      );
+      cy.get(Locators.DEAggregatePlots).click();
     });
 
     it("should update chart on selecting new cohort", () => {
       cy.get(Locators.DECohortDropdown).click();
       cy.get(Locators.DEDropdownOptions).should("exist").click();
-      cy.get(
-        '#DatasetExplorerChart g[class^="cartesianlayer"] g[class^="ytick"]'
-      )
+      cy.get(Locators.DEYAxisPoints)
         .last()
         .should(
           "contain",

@@ -9,6 +9,7 @@ export interface IModelAssessmentData {
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
+  cohortDefaultName?: string;
 }
 
 export interface IErrorAnalysisData {

@@ -72,5 +72,8 @@ export enum Locators {
   CancelButton = "button:contains('Cancel')",
   DECohortDropdown = "#dataExplorerCohortDropdown",
   DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
-  SelectButton = "button:contains('Select')"
+  SelectButton = "button:contains('Select')",
+  DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
+  DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']"
 }

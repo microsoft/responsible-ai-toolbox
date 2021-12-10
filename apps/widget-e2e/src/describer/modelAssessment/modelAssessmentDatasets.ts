@@ -5,6 +5,7 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
+    cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
       colorValueButton: "Predicted Y",
