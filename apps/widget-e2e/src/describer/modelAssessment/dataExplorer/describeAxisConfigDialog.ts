@@ -7,7 +7,8 @@ export function describeAxisConfigDialog(
   defaultXAxis: string,
   defaultYAxis: string,
   noY: boolean,
-  hasColorAxis: boolean
+  hasColorAxis: boolean,
+  featureNames?: string[]
 ): void {
   describe("Axis settings dialog", () => {
     describe("Y Axis settings dialog", () => {
@@ -26,6 +27,16 @@ export function describeAxisConfigDialog(
           `${Locators.DECRotatedVerticalBox} span[class*="textContainer"]`
         ).contains(defaultYAxis);
       });
+
+      it("should populate feature list passed in from SDK in flyout", () => {
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+        cy.get(Locators.AxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdownOption).should(
+          "have.length",
+          featureNames?.length
+        );
+        cy.get(Locators.DECCloseButton).click();
+      });
       if (!noY) {
         it("should change to different y-axis title", () => {
           cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
@@ -34,10 +45,7 @@ export function describeAxisConfigDialog(
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get("#AxisConfigPanel")
-                .find("button")
-                .contains("Select")
-                .click();
+              cy.get(Locators.SelectButton).click();
               cy.get(`${Locators.DECRotatedVerticalBox} button:eq(0)`).contains(
                 text1
               );
@@ -45,11 +53,8 @@ export function describeAxisConfigDialog(
           cy.get(`${Locators.DECRotatedVerticalBox} button`)
             .click()
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Dataset')`)
-            .click()
-            .get("#AxisConfigPanel")
-            .find("button")
-            .contains("Select")
             .click();
+          cy.get(Locators.SelectButton).click();
         });
       }
     });
@@ -77,10 +82,7 @@ export function describeAxisConfigDialog(
             .invoke("text")
             .then((text1) => {
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get("#AxisConfigPanel")
-                .find("button")
-                .contains("Select")
-                .click();
+              cy.get(Locators.SelectButton).click();
               cy.get(`${Locators.DECHorizontalAxis} button:eq(0)`).contains(
                 text1
               );
@@ -88,11 +90,8 @@ export function describeAxisConfigDialog(
           cy.get(`${Locators.DECHorizontalAxis} button`)
             .click()
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Index')`)
-            .click()
-            .get("#AxisConfigPanel")
-            .find("button")
-            .contains("Select")
             .click();
+          cy.get(Locators.SelectButton).click();
         });
       }
     });

@@ -39,8 +39,8 @@ export enum Locators {
   WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
   WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
   WhatIfAxisPanel = "#AxisConfigPanel",
-  WhatIfAxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
-  WhatIfYAxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
+  AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
+  AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
   WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
@@ -71,5 +71,6 @@ export enum Locators {
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
   CancelButton = "button:contains('Cancel')",
   DECohortDropdown = "#dataExplorerCohortDropdown",
-  DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')"
+  DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  SelectButton = "button:contains('Select')"
 }

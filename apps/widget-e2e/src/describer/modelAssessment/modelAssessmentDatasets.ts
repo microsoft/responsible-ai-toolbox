@@ -7,6 +7,7 @@ const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
+      colorValueButton: "Predicted Y",
       datasetBarLabel: [
         "0 - 99",
         "100 - 199",

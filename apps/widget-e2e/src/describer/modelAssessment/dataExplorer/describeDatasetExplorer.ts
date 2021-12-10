@@ -6,6 +6,7 @@ import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeAggregatePlot } from "./describeAggregatePlot";
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
+import { describeIndividualDatapoints } from "./describeIndividualDatapoints";
 
 const testName = "Dataset explorer";
 
@@ -33,5 +34,6 @@ export function describeDatasetExplorer(
     }
     describeAggregatePlot(datasetShape);
     describeCohortFunctionality(datasetShape);
+    describeIndividualDatapoints(datasetShape);
   });
 }

@@ -48,6 +48,7 @@ export interface IDatasetExplorerData {
   datasetBarLabel?: string[];
   defaultXAxis?: string;
   defaultYAxis?: string;
+  colorValueButton?: string;
   noY?: boolean;
   cohortDatasetNewValue?: string;
 }
