@@ -324,7 +324,7 @@ class TestRAIInsights(object):
                 target_name, ModelTask.CLASSIFICATION,
                 categorical_features=categorical_features)
 
-            # Save again (this is where Issue #1046 manifested)
+            # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
 
 
