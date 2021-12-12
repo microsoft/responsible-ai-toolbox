@@ -45,6 +45,11 @@ export interface IModelStatisticsData {
 export interface IDatasetExplorerData {
   whiskerPlot?: IDEWhiskerPlotData;
   dotPlot?: IDEDotPlotData;
+  datasetBarLabel?: string[];
+  defaultXAxis?: string;
+  defaultYAxis?: string;
+  colorValueButton?: string;
+  noY?: boolean;
 }
 
 export interface IDEWhiskerPlotData {
@@ -73,6 +78,9 @@ export interface IFeatureImportanceData {
   dropdownRowName?: string;
   noDataset?: boolean;
   noY?: boolean;
+  topFeaturesText?: string;
+  topFeaturesCurrentValue?: string;
+  datapoint?: number;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
@@ -92,10 +100,17 @@ export interface IWhatIfCounterfactualsData {
   isClassification?: boolean;
   noPredict?: boolean;
   noY?: boolean;
+  selectedDatapoint?: string;
+  columnHeaderBeforeSort?: string;
+  columnHeaderAfterSort?: string;
+  searchBarQuery?: string;
+  WhatIfNameLabel?: string;
+  WhatIfNameLabelUpdated?: string;
+  CreateYourOwnCounterfactualInputFieldUpdated?: string;
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelAssessment" = "responsibleaitoolbox-classification-model-assessment.py",
-  "RegressionDecisionMaking" = "responsibleaitoolbox-regression-decision-making.py",
-  "RegressionModelAssessment" = "responsibleaitoolbox-regression-model-assessment.py"
+  "ClassificationModelAssessment" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "RegressionDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "RegressionModelAssessment" = "responsibleaidashboard-diabetes-regression-model-debugging.py"
 }

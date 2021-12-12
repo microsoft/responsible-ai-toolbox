@@ -5,6 +5,7 @@ import { getMenu } from "../../../../util/getMenu";
 import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
+import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
   describeGlobalExplanationBarChart,
   describeGlobalExplanationBarChartExplicitValues
@@ -41,5 +42,6 @@ export function describeAggregateFeatureImportance(
     if (!datasetShape.featureImportanceData?.noLocalImportance) {
       describeGlobalExplanationBoxChart(datasetShape);
     }
+    describeCohortFunctionality();
   });
 }

@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import { DefaultButton, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
+import { getCohortFilterCount } from "../../util/getCohortFilterCount";
 import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
@@ -32,6 +33,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
         {this.props.includeDividers && <div className={classNames.divider} />}
         <div className={classNames.section}>
           <DefaultButton
+            className={classNames.button}
             text={localization.ErrorAnalysis.CohortInfo.saveCohort}
             onClick={(): any => this.props.onSaveCohortClick()}
             disabled={this.props.disabledView}
@@ -47,7 +49,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             )}
             <div>
               {localization.ErrorAnalysis.Cohort.defaultLabel} (
-              {this.props.currentCohort.cohort.filters.length}{" "}
+              {getCohortFilterCount(this.props.currentCohort.cohort)}{" "}
               {localization.ErrorAnalysis.CohortInfo.filters})
             </div>
           </div>

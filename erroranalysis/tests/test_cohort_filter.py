@@ -8,12 +8,14 @@ from common_utils import (create_iris_data, create_simple_titanic_data,
                           create_titanic_pipeline)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import ROW_INDEX, TRUE_Y, ModelTask
+from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
+CLASSIFICATION_OUTCOME = 'Classification outcome'
 
 
 class TestCohortFilter(object):
@@ -157,6 +159,31 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
+    def test_cohort_filter_classification_outcome(self):
+        X_train, X_test, y_train, y_test, numeric, categorical = \
+            create_simple_titanic_data()
+        feature_names = categorical + numeric
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        # the indexes 1, 2 correspond to false positives and false negatives
+        filters = [{'arg': [1, 2],
+                    'column': CLASSIFICATION_OUTCOME,
+                    'method': 'includes'}]
+        pred_y = clf.predict(X_test)
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        validation_filter = validation_data[PRED_Y] != validation_data[TRUE_Y]
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           clf,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters)
+
 
 def create_iris_pandas():
     X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
@@ -167,10 +194,12 @@ def create_iris_pandas():
     return X_train, X_test, y_train, y_test, feature_names
 
 
-def create_validation_data(X_test, y_test):
+def create_validation_data(X_test, y_test, pred_y=None):
     validation_data = X_test.copy()
     validation_data[TRUE_Y] = y_test
     validation_data[ROW_INDEX] = np.arange(0, len(y_test))
+    if pred_y is not None:
+        validation_data[PRED_Y] = pred_y
     return validation_data
 
 
@@ -189,13 +218,9 @@ def run_error_analyzer(validation_data,
                                    feature_names,
                                    categorical_features,
                                    model_task=model_task)
-    filtered_data = filter_from_cohort(X_test,
+    filtered_data = filter_from_cohort(error_analyzer,
                                        filters,
-                                       composite_filters,
-                                       feature_names,
-                                       y_test,
-                                       categorical_features,
-                                       error_analyzer.categories)
+                                       composite_filters)
     # validate there is some data selected for each of the filters
     assert validation_data.shape[0] > 0
     assert validation_data.equals(filtered_data)

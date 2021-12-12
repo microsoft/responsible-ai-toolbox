@@ -1,8 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+"""Note: this test file will be removed once ModelAnalysis is removed."""
+
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from uuid import UUID
 
 import numpy as np
 import pandas as pd
@@ -10,6 +14,8 @@ import pytest
 
 from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 from .causal_manager_validator import validate_causal
 from .common_utils import (create_adult_income_dataset,
@@ -56,7 +62,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
@@ -74,7 +80,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args, classes)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
@@ -92,7 +98,7 @@ class TestModelAnalysis(object):
         }
 
         for model in models:
-            run_model_analysis(model, X_train, X_test, LABELS, [],
+            run_model_analysis(model, X_train, X_test, LABELS, None,
                                manager_type, manager_args,
                                classes=classes)
 
@@ -136,7 +142,7 @@ class TestModelAnalysis(object):
             ManagerParams.TREATMENT_FEATURES: ['col0']
         }
 
-        run_model_analysis(model, X_train, X_test, LABELS, [],
+        run_model_analysis(model, X_train, X_test, LABELS, None,
                            manager_type, manager_args,
                            classes=classes)
 
@@ -229,8 +235,14 @@ def run_model_analysis(model, train_data, test_data, target_column,
 
     with TemporaryDirectory() as tempdir:
         path = Path(tempdir) / 'rai_test_path'
+
         # save the model_analysis
         model_analysis.save(path)
+
+        # Validate the directory structure of the state saved
+        # by the managers.
+        validate_state_directory(path, manager_type)
+
         # load the model_analysis
         model_analysis = ModelAnalysis.load(path)
 
@@ -250,6 +262,38 @@ def run_model_analysis(model, train_data, test_data, target_column,
             validate_explainer(model_analysis, train_data, test_data, classes)
 
 
+def validate_state_directory(path, manager_type):
+    all_dirs = os.listdir(path)
+    assert manager_type in all_dirs
+    all_component_paths = os.listdir(path / manager_type)
+    for component_path in all_component_paths:
+        # Test if the component directory has UUID structure
+        UUID(component_path, version=4)
+
+        dm = DirectoryManager(path / manager_type, component_path)
+
+        config_path = dm.get_config_directory()
+        data_path = dm.get_data_directory()
+        generators_path = dm.get_generators_directory()
+
+        if manager_type == ManagerNames.EXPLAINER:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
+            assert config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+        elif manager_type == ManagerNames.CAUSAL:
+            assert not config_path.exists()
+            assert data_path.exists()
+            assert not generators_path.exists()
+
+
 def validate_model_analysis(
     model_analysis,
     train_data,
@@ -265,5 +309,7 @@ def validate_model_analysis(
     assert model_analysis.task_type == task_type
     assert model_analysis.categorical_features == categorical_features
     if task_type == ModelTask.CLASSIFICATION:
-        np.testing.assert_array_equal(model_analysis._classes,
-                                      train_data[target_column].unique())
+        classes = train_data[target_column].unique()
+        classes.sort()
+        np.testing.assert_array_equal(model_analysis.rai_insights._classes,
+                                      classes)

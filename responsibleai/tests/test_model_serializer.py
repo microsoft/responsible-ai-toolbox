@@ -3,7 +3,7 @@
 import pickle
 from pathlib import Path
 
-from responsibleai.modelanalysis.model_analysis import ModelAnalysis
+from responsibleai import RAIInsights
 
 from .common_utils import create_cancer_data, create_lightgbm_classifier
 
@@ -43,7 +43,7 @@ class TestModelSerializer:
 
         serializer = PickleSerializer()
 
-        analysis = ModelAnalysis(
+        analysis = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,

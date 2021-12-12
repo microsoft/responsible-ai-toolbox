@@ -26,6 +26,8 @@ from responsibleai._internal.constants import ExplainerManagerKeys as Keys
 from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
 from responsibleai._managers.base_manager import BaseManager
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 
 SPARSE_NUM_FEATURES_THRESHOLD = 1000
@@ -117,13 +119,18 @@ class ExplainerManager(BaseManager):
                            "currently limited to one explainer type."),
                           UserWarning)
             return
+
+        self._initialize_surrogate_model()
+        self._is_added = True
+
+    def _initialize_surrogate_model(self):
+        """Initialize the surrogate model."""
         is_sparse = issparse(self._evaluation_examples)
         num_cols = self._evaluation_examples.shape[1]
         many_cols = num_cols > SPARSE_NUM_FEATURES_THRESHOLD
         self._surrogate_model = LGBMExplainableModel
         if is_sparse and many_cols:
             self._surrogate_model = LinearExplainableModel
-        self._is_added = True
 
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
@@ -301,53 +308,66 @@ class ExplainerManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
+        directory_manager = DirectoryManager(parent_directory_path=path)
+        data_directory = directory_manager.create_data_directory()
+
         # save the explanation
         if self._explanation:
             save_explanation(self._explanation,
-                             top_dir / ManagerNames.EXPLAINER)
+                             data_directory / ManagerNames.EXPLAINER)
+
         meta = {IS_RUN: self._is_run,
                 IS_ADDED: self._is_added}
-        with open(Path(path) / META_JSON, 'w') as file:
+        with open(data_directory / META_JSON, 'w') as file:
             json.dump(meta, file)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the ExplainerManager from the given path.
 
         :param path: The directory path to load the ExplainerManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The ExplainerManager manager after loading.
         :rtype: ExplainerManager
         """
         # create the ExplainerManager without any properties using the __new__
         # function, similar to pickle
         inst = ExplainerManager.__new__(ExplainerManager)
-        top_dir = Path(path)
-        explanation_path = top_dir / ManagerNames.EXPLAINER
-        if explanation_path.exists():
-            explanation = load_explanation(explanation_path)
-            inst.__dict__[EXPLANATION] = explanation
-        inst.__dict__['_' + MODEL] = model_analysis.model
 
-        with open(top_dir / META_JSON, 'r') as meta_file:
+        all_cf_dirs = DirectoryManager.list_sub_directories(path)
+        directory_manager = DirectoryManager(
+            parent_directory_path=path,
+            sub_directory_name=all_cf_dirs[0])
+        data_directory = directory_manager.get_data_directory()
+
+        with open(data_directory / META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
-        inst.__dict__['_' + CLASSES] = model_analysis._classes
+        inst.__dict__['_' + IS_ADDED] = meta[IS_ADDED]
+
+        inst.__dict__[EXPLANATION] = None
+        explanation_path = data_directory / ManagerNames.EXPLAINER
+        if explanation_path.exists():
+            explanation = load_explanation(explanation_path)
+            inst.__dict__[EXPLANATION] = explanation
+
+        inst.__dict__['_' + MODEL] = rai_insights.model
+        inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
-            model_analysis.categorical_features
-        target_column = model_analysis.target_column
-        train = model_analysis.train.drop(columns=[target_column])
-        test = model_analysis.test.drop(columns=[target_column])
+            rai_insights.categorical_features
+        target_column = rai_insights.target_column
+        train = rai_insights.train.drop(columns=[target_column])
+        test = rai_insights.test.drop(columns=[target_column])
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)
-        inst.__dict__['_' + IS_ADDED] = False
-        # reset self._surrogate_model
-        if meta[IS_ADDED]:
-            inst.add()
+
+        # reset the surrogate model
+        inst._initialize_surrogate_model()
+
         return inst
 
     def _find_first_explanation(self, key, mli_explanations):

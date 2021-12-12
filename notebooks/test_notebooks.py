@@ -16,7 +16,7 @@ RACE_GROUP_SIZES_ADULT = {
     'Other': 406
 }
 INDIVIDUAL_DASHBOARDS = 'individual-dashboards/'
-RESPONSIBLEAITOOLBOX_DASHBOARD = 'responsibleaitoolbox-dashboard/'
+RESPONSIBLEAIDASHBOARD = 'responsibleaidashboard/'
 ERROR_ANALYSIS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'erroranalysis-dashboard/'
 EXPLANATION_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'explanation-dashboard/'
 FAIRNESS_DASHBOARD = INDIVIDUAL_DASHBOARDS + 'fairness-dashboard/'
@@ -204,27 +204,45 @@ def test_erroranalysis_dashboard_boston_housing():
 
 
 @pytest.mark.notebooks
-def test_responsibleaitoolbox_classification_model_assessment():
-    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
-    nb_name = "responsibleaitoolbox-classification-model-assessment"
+def test_responsibleaidashboard_census_classification_model_debugging():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-census-classification-model-debugging"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
-def test_responsibleaitoolbox_regression_model_assessment():
-    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
-    nb_name = "responsibleaitoolbox-regression-model-assessment"
+def test_responsibleaidashboard_diabetes_decision_making():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-diabetes-decision-making"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
 
 
 @pytest.mark.notebooks
-def test_responsibleaitoolbox_regression_decision_making():
-    nb_path = RESPONSIBLEAITOOLBOX_DASHBOARD
-    nb_name = "responsibleaitoolbox-regression-decision-making"
+def test_responsibleaidashboard_diabetes_regression_model_debugging():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-diabetes-regression-model-debugging"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaidashboard_housing_classification_model_debugging():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-housing-classification-model-debugging"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaidashboard_housing_decision_making():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-housing-decision-making"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)

@@ -24,6 +24,106 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.15.1
+
+- educational materials
+  - Notebooks updated for new class names (`ResponsibleAIDashboard` etc.)
+- new features
+  - None
+- breaking changes
+  - ## RAI Insights/Model Analysis
+    - Rename `explainers` directory to `generators` when saving RAI Insights object
+- bug fixes
+  - ## RAI Insights/Model Analysis
+    - Fix [Issue #1046](https://github.com/microsoft/responsible-ai-toolbox/issues/1046), related to a save/load/save cycle when no explainer present
+- other
+  - Extra tests for WhatIf counterfactuals
+  - Checks on the UUID directory structure of RAI Insights
+
+## v0.15.0
+
+- new features
+  - ## Model Analysis
+    - move raw data into /data directory
+    - perform schema validations during compute and load
+    - rename model analysis to rai insights
+    - rename ModelAnalysisDashboard to ResponsibleAIDashboard
+    - directory based state management for model analysis tools
+    - add .json extension to train and test dataset
+  - ## Error Analysis
+    - port ErrorReport schema validation for error analysis to responsibleai
+    - add error analysis error importances (aka correlation of features with error) to model analyzer API
+    - add support for special classification outcome filter to error analysis backend to work with model analysis filters
+  - ## Counterfactual
+    - remove save as new data point option for read-only mode on What-if counterfactual
+    - split counterfactual output into individual json files
+    - add support for non-string categorical values
+- bug fixes
+  - ## Model Analysis
+    - fix cohort text out of button box
+    - fix bug when the tree node has 0 errors and N correct, the raw data table shows the opposite with N+1 errors and -1 correct.
+    - when classes are not passed, sort them automatically in RAIInsights
+    - fix composite filter issues
+  - ## Counterfactual
+    - fix sort feature columns by counterfactual
+  - ## Error Analysis
+    - fix map shift text not being clear, provide conditional dialog text based on current view
+    - fix tree map connection line doubled after switching to dark theme
+- ## other
+  - update readme links to be absolute instead of relative path
+  - add more UX IFI tests for responsibleaitoolbox-classification-model-assessment notebook
+  - several E2E UX test fixes
+  - add E2E UX tests for Feature Importance - Cohort functionality
+  - add test to render ModelAnalysisDashboard after save and load
+  - add test to render ResponsibleAIDashboard after save and load
+  - add E2E tests for What-if Counterfactuals - common functionalities & Y Axis Flyout
+  - add separate github workflow for python linting
+
+## v0.14.0
+
+- educational materials
+  - add Cognitive Service fairness assessment notebooks
+- new features
+  - ## Error Analysis
+    - add new accuracy and f1-score metrics in erroranalysis python backend and UI frontend
+    - add importances to ErrorReport for error analysis
+    - make ErrorReport, PredictionsAnalyzer and ModelAnalyzer public in erroranalysis package
+    - display message bar after saving a cohort in error analysis dashboard
+  - ## Counterfactual
+    - implement save and load for counterfactual manager
+    - make load method uniform across all RAI managers
+    - perform schema validations on serialized counterfactual output
+  - ## Interpret
+    - upgrade interpret-community to 0.22.0
+- bug fixes
+  - ## Model Analysis
+    - remove drag and drop instructions in the dashboard navigation
+    - add theme support for model statistics and dataset explorer
+    - remove setup_explainer after ModelAnalysis load call in tests
+    - add theme support for feature importances, causal, counterfactual tabs
+    - hide opened feature list when clicking on the heatmap tab in model analysis
+    - add localization for delete cohort dialog
+  - ## Interpret
+    - set is_run class variable in explainer manager
+  - ## Causal
+    - add init file to causal schema directory
+  - ## Error Analysis
+    - fix color for metrics that are not error metrics to be green in legend and heatmap nan cells
+    - update features list in static view to have apply button removed and labels disabled for tree view parameters
+    - update features list text for static case
+    - fix running what if on categorical numeric values in error analysis dashboard
+    - add theme support for error analysis view
+    - fix for importances in static view causing failures when unspecified
+    - fix feature list alignment issue
+- ## other
+  - add documentation for the release process
+  - add E2E test for model analysis, running from python jupyter notebook and validating in cypress
+  - sort all python imports using isort
+  - add aggregate feature importance tests for responsibleaitoolbox
+  - add E2E individual feature importance tests for responsibleaitoolbox-classification-model-assessment notebook
+  - fix image links in responsibleaitoolbox-classification-model-assessment.ipynb notebook to reference images in folder instead of using embedded images directly
+  - rename causal tests
+
 ## v0.13.0
 
 - new features

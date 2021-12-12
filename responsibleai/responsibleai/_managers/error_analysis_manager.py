@@ -6,6 +6,8 @@
 import json
 from pathlib import Path
 
+import jsonschema
+
 from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import as_error_report
@@ -16,7 +18,10 @@ from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai._managers.base_manager import BaseManager
-from responsibleai.exceptions import (DuplicateManagerConfigException,
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+from responsibleai.exceptions import (ConfigAndResultMismatchException,
+                                      DuplicateManagerConfigException,
                                       UserConfigValidationException)
 
 REPORTS = 'reports'
@@ -260,7 +265,14 @@ class ErrorAnalysisManager(BaseManager):
             report = self._analyzer.create_error_report(
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
-                num_leaves=num_leaves)
+                num_leaves=num_leaves,
+                compute_importances=True)
+
+            # Validate the serialized output against schema
+            schema = ErrorAnalysisManager._get_error_analysis_schema()
+            jsonschema.validate(
+                json.loads(report.to_json()), schema)
+
             self._ea_report_list.append(report)
 
     def get(self):
@@ -272,6 +284,16 @@ class ErrorAnalysisManager(BaseManager):
         :rtype: list[erroranalysis._internal.error_report.ErrorReport]
         """
         return self._ea_report_list
+
+    @staticmethod
+    def _get_error_analysis_schema():
+        """Get the schema for validating the error analysis output."""
+        schema_directory = (Path(__file__).parent.parent / '_tools' /
+                            'error_analysis' / 'dashboard_schemas')
+        schema_filename = 'error_analysis_output_v0.0.json'
+        schema_filepath = schema_directory / schema_filename
+        with open(schema_filepath, 'r') as f:
+            return json.load(f)
 
     def list(self):
         """List information about the ErrorAnalysisManager.
@@ -311,6 +333,7 @@ class ErrorAnalysisManager(BaseManager):
             error_analysis.numLeaves, error_analysis.minChildSamples)
         error_analysis.matrix = self._analyzer.compute_matrix(
             self._feature_names, None, None)
+        error_analysis.importances = self._analyzer.compute_importances()
         error_analysis.metric = metric_to_display_name[self._analyzer.metric]
         return error_analysis
 
@@ -331,50 +354,86 @@ class ErrorAnalysisManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
-        # save the reports
-        reports_path = top_dir / REPORTS
-        with open(reports_path, 'w') as file:
-            json.dump(self._ea_report_list, file,
-                      default=report_json_converter)
-        # save the configs
-        config_path = top_dir / CONFIG
-        with open(config_path, 'w') as file:
-            json.dump(self._ea_config_list, file,
-                      default=config_json_converter)
+
+        if len(self._ea_config_list) != len(self._ea_report_list):
+            raise ConfigAndResultMismatchException(
+                "The number of error analysis configs {0} doesn't match the "
+                "number of results {1}".format(
+                    len(self._ea_config_list),
+                    len(self._ea_report_list)
+                )
+            )
+
+        for index in range(0, len(self._ea_report_list)):
+            # save the configs
+            directory_manager = DirectoryManager(parent_directory_path=path)
+            config_path = (directory_manager.create_config_directory() /
+                           'config.json')
+            ea_config = self._ea_config_list[index]
+            with open(config_path, 'w') as file:
+                json.dump(ea_config, file,
+                          default=config_json_converter)
+
+            # save the reports
+            report_path = (directory_manager.create_data_directory() /
+                           'report.json')
+            ea_report = self._ea_report_list[index]
+            with open(report_path, 'w') as file:
+                json.dump(ea_report, file,
+                          default=report_json_converter)
 
     @staticmethod
-    def _load(path, model_analysis):
+    def _load(path, rai_insights):
         """Load the ErrorAnalysisManager from the given path.
 
         :param path: The directory path to load the ErrorAnalysisManager from.
         :type path: str
-        :param model_analysis: The loaded parent ModelAnalysis.
-        :type model_analysis: ModelAnalysis
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
         :return: The ErrorAnalysisManager manager after loading.
         :rtype: ErrorAnalysisManager
         """
         # create the ErrorAnalysisManager without any properties using
         # the __new__ function, similar to pickle
         inst = ErrorAnalysisManager.__new__(ErrorAnalysisManager)
-        top_dir = Path(path)
-        reports_path = top_dir / REPORTS
-        with open(reports_path, 'r') as file:
-            ea_report_list = json.load(file, object_hook=as_error_report)
+
+        ea_config_list = []
+        ea_report_list = []
+        all_ea_dirs = DirectoryManager.list_sub_directories(path)
+        for ea_dir in all_ea_dirs:
+            directory_manager = DirectoryManager(
+                parent_directory_path=path,
+                sub_directory_name=ea_dir)
+
+            config_path = (directory_manager.get_config_directory() /
+                           'config.json')
+            with open(config_path, 'r') as file:
+                ea_config = json.load(file, object_hook=as_error_config)
+                ea_config_list.append(ea_config)
+
+            report_path = (directory_manager.get_data_directory() /
+                           'report.json')
+            with open(report_path, 'r') as file:
+                ea_report = json.load(file, object_hook=as_error_report)
+                # Validate the serialized output against schema
+                schema = ErrorAnalysisManager._get_error_analysis_schema()
+                jsonschema.validate(
+                    json.loads(ea_report.to_json()), schema)
+                ea_report_list.append(ea_report)
+
         inst.__dict__['_ea_report_list'] = ea_report_list
-        config_path = top_dir / CONFIG
-        with open(config_path, 'r') as file:
-            ea_config_list = json.load(file, object_hook=as_error_config)
         inst.__dict__['_ea_config_list'] = ea_config_list
-        categorical_features = model_analysis.categorical_features
+
+        categorical_features = rai_insights.categorical_features
         inst.__dict__['_categorical_features'] = categorical_features
-        target_column = model_analysis.target_column
-        true_y = model_analysis.test[target_column]
-        dataset = model_analysis.test.drop(columns=[target_column])
+        target_column = rai_insights.target_column
+        true_y = rai_insights.test[target_column]
+        dataset = rai_insights.test.drop(columns=[target_column])
         inst.__dict__['_dataset'] = dataset
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
-        inst.__dict__['_analyzer'] = ModelAnalyzer(model_analysis.model,
+        inst.__dict__['_analyzer'] = ModelAnalyzer(rai_insights.model,
                                                    dataset,
                                                    true_y,
                                                    feature_names,

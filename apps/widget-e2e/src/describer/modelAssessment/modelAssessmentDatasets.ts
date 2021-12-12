@@ -5,6 +5,18 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
+    datasetExplorerData: {
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: [
+        "0 - 99",
+        "100 - 199",
+        "200 - 299",
+        "300 - 399",
+        "400 - 499"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
     errorAnalysisData: {
       basicInformationData: {
         BasicInformation: ["Unsaved", "All data (2 filters)"],
@@ -61,10 +73,14 @@ const modelAssessmentDatasets = {
     },
     featureImportanceData: {
       correctPredictionDatapoint: "398",
+      datapoint: 500,
       dropdownRowName: "Row 4",
       incorrectPredictionDatapoint: "102",
       noDataset: false,
-      noFeatureImportance: false
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
     },
     featureNames: [
       "marital-status",
@@ -81,7 +97,16 @@ const modelAssessmentDatasets = {
       "gender",
       "education",
       "capital-loss"
-    ]
+    ],
+    whatIfCounterfactualsData: {
+      columnHeaderAfterSort: "capital-gain",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "occupation",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5"
+    }
   }
 };
 

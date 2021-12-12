@@ -14,7 +14,7 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
                                                MatrixParams, Metrics,
                                                ModelTask,
                                                metric_to_display_name)
-from erroranalysis._internal.metrics import (get_ordered_labels,
+from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 
@@ -53,26 +53,12 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     if features[0] is None and features[1] is None:
         raise ValueError(
             'One or two features must be specified to compute the heat map')
-    is_model_analyzer = hasattr(analyzer, 'model')
-    if is_model_analyzer:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories)
-    else:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories,
-                                         analyzer.pred_y)
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
+    is_model_analyzer = hasattr(analyzer, 'model')
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -175,8 +161,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        colnames=[feat2])
         else:
             if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_labels(analyzer.classes,
-                                                    true_y, pred_y)
+                ordered_labels = get_ordered_classes(analyzer.classes,
+                                                     true_y, pred_y)
                 aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
                                               ordered_labels, metric)
             else:
@@ -243,8 +229,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
             if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_labels(analyzer.classes,
-                                                    true_y, pred_y)
+                ordered_labels = get_ordered_classes(analyzer.classes,
+                                                     true_y, pred_y)
                 aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
                                               ordered_labels, metric)
             else:

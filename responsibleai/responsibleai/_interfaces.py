@@ -69,6 +69,7 @@ class ErrorAnalysisData:
     tree_features: List[str]
     matrix_features: List[str]
     metric: str
+    importances: list
 
 
 class CausalMetric:
@@ -147,7 +148,7 @@ class CounterfactualData:
     desired_range: List[float]
 
 
-class ModelAnalysisData:
+class RAIInsightsData:
     dataset: Dataset
     modelExplanationData: List[ModelExplanationData]
     causalAnalysisData: List[CausalData]

@@ -6,12 +6,12 @@ import shap
 import sklearn
 from sklearn.model_selection import train_test_split
 
-from raiwidgets.model_analysis_dashboard_input import \
-    ModelAnalysisDashboardInput
-from responsibleai import ModelAnalysis
+from raiwidgets.responsibleai_dashboard_input import \
+    ResponsibleAIDashboardInput
+from responsibleai import RAIInsights
 
 
-class TestModelAnalysisDashboardInput:
+class TestResponsibleAIDashboardInput:
     def test_model_analysis_adult(self):
         X, y = shap.datasets.adult()
         y = [1 if r else 0 for r in y]
@@ -28,12 +28,12 @@ class TestModelAnalysisDashboardInput:
         X['Income'] = y
         X_test['Income'] = y_test
 
-        ma = ModelAnalysis(knn, X, X_test, 'Income', 'classification',
-                           categorical_features=['Workclass', 'Education-Num',
-                                                 'Marital Status',
-                                                 'Occupation', 'Relationship',
-                                                 'Race',
-                                                 'Sex', 'Country'])
+        ma = RAIInsights(knn, X, X_test, 'Income', 'classification',
+                         categorical_features=['Workclass', 'Education-Num',
+                                               'Marital Status',
+                                               'Occupation', 'Relationship',
+                                               'Race',
+                                               'Sex', 'Country'])
         # ma.explainer.add()
         # ma.counterfactual.add(10, desired_class='opposite')
         ma.error_analysis.add()
@@ -43,7 +43,7 @@ class TestModelAnalysisDashboardInput:
         #               skip_cat_limit_checks=True)
         ma.compute()
 
-        dashboard_input = ModelAnalysisDashboardInput(ma)
+        dashboard_input = ResponsibleAIDashboardInput(ma)
         with mock.patch.object(knn, "predict_proba") as predict_mock:
             test_pred_data = X_test.head(1).drop("Income", axis=1).values
             dashboard_input.on_predict(

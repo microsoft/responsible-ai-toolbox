@@ -17,46 +17,49 @@ REPORTS = Keys.REPORTS
 FILTER_FEATURES = Keys.FILTER_FEATURES
 
 
-def setup_error_analysis(model_analysis, add_ea=True, max_depth=3):
+def setup_error_analysis(rai_insights, add_ea=True, max_depth=3):
     if add_ea:
-        if model_analysis.model is None:
+        if rai_insights.model is None:
             with pytest.raises(UserConfigValidationException,
                                match='Model is required for error analysis'):
-                model_analysis.error_analysis.add(max_depth=max_depth)
+                rai_insights.error_analysis.add(max_depth=max_depth)
         else:
-            model_analysis.error_analysis.add(max_depth=max_depth)
+            rai_insights.error_analysis.add(max_depth=max_depth)
             with pytest.raises(DuplicateManagerConfigException):
-                model_analysis.error_analysis.add(max_depth=max_depth)
-    model_analysis.error_analysis.compute()
+                rai_insights.error_analysis.add(max_depth=max_depth)
+    rai_insights.error_analysis.compute()
 
 
-def validate_error_analysis(model_analysis, expected_reports=1):
-    if model_analysis.model is None:
+def validate_error_analysis(rai_insights, expected_reports=1):
+    if rai_insights.model is None:
         return
-    reports = model_analysis.error_analysis.get()
+    reports = rai_insights.error_analysis.get()
     assert isinstance(reports, list)
     assert len(reports) == expected_reports
-    ea_info_list = model_analysis.error_analysis.list()
+    ea_info_list = rai_insights.error_analysis.list()
     for idx, report in enumerate(reports):
         matrix = report.matrix
         matrix_features = report.matrix_features
+        importances = report.importances
         tree_features = report.tree_features
         info_features = ea_info_list[REPORTS][idx][FILTER_FEATURES]
         assert matrix_features == info_features
-        assert tree_features == model_analysis.error_analysis._feature_names
+        assert tree_features == rai_insights.error_analysis._feature_names
 
-        ea_x_dataset = model_analysis.error_analysis._dataset
-        ea_true_y = model_analysis.error_analysis._true_y
+        ea_x_dataset = rai_insights.error_analysis._dataset
+        ea_true_y = rai_insights.error_analysis._true_y
 
         expected_count = len(ea_x_dataset)
         if matrix is not None:
-            predictions = model_analysis.model.predict(ea_x_dataset)
+            predictions = rai_insights.model.predict(ea_x_dataset)
             expected_false_count = sum(predictions != ea_true_y)
             validate_matrix(matrix, expected_count, expected_false_count)
 
         tree = report.tree
         min_child_samples = ea_info_list[REPORTS][idx][MIN_CHILD_SAMPLES]
         validate_tree(tree, expected_count, min_child_samples)
+        num_features = len(rai_insights.error_analysis._feature_names)
+        assert len(importances) == num_features
 
 
 def validate_matrix(matrix, exp_total_count, exp_total_false_count):

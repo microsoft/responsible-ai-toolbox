@@ -4,13 +4,11 @@ const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
 
-const baseDir = path.join(
-  __dirname,
-  "../notebooks/responsibleaitoolbox-dashboard"
-);
-const filePrefix = "responsibleaitoolbox";
+const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
+const filePrefix =
+  "responsibleaidashboard-census-classification-model-debugging";
 
-const hostReg = /^ModelAssessment started at (http:\/\/localhost:\d+)$/m;
+const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
 
 /**
