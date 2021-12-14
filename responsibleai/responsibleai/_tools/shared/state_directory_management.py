@@ -122,3 +122,8 @@ class DirectoryManager:
         :rtype: List[str]
         """
         return os.listdir(Path(path))
+
+    @staticmethod
+    def ensure_dir_exists(path: str):
+        target_path = Path(path)
+        target_path.mkdir(exist_ok=True)

@@ -364,6 +364,7 @@ class CausalManager(BaseManager):
         inst = CausalManager.__new__(CausalManager)
 
         # Rehydrate results
+        DirectoryManager.ensure_dir_exists(path)
         all_causal_dirs = DirectoryManager.list_sub_directories(path)
         inst.__dict__['_results'] = []
         for causal_dir in all_causal_dirs:
