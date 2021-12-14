@@ -28,6 +28,7 @@ export enum Locators {
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
   CreateNewCohortButton = "button:contains('Create new cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
+  CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
@@ -69,7 +70,12 @@ export enum Locators {
   DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
   CancelButton = "button:contains('Cancel')",
-  SelectButton = "button:contains('Select')",
   MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
-  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']"
+  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']",
+  DECohortDropdown = "#dataExplorerCohortDropdown",
+  DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  SelectButton = "button:contains('Select')",
+  DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
+  DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']"
 }
