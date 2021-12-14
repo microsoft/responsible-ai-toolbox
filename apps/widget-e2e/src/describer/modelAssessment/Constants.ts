@@ -28,6 +28,7 @@ export enum Locators {
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
   CreateNewCohortButton = "button:contains('Create new cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
+  CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
@@ -38,8 +39,8 @@ export enum Locators {
   WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
   WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
   WhatIfAxisPanel = "#AxisConfigPanel",
-  WhatIfAxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
-  WhatIfYAxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
+  AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
+  AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
   WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
@@ -62,5 +63,17 @@ export enum Locators {
   WhatIfSaveAsNewDatapointButton = "#CounterfactualPanel button:contains('Save as new datapoint')",
   WhatIfSaveAsDataPoints = "#IndividualFeatureContainer #iterative-container span",
   WhatIfSaveAsDataPointsDeleteButton = "#IndividualFeatureContainer #iterative-container i[data-icon-name='Clear']",
-  WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')"
+  WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')",
+  DECRotatedVerticalBox = "#DatasetExplorerChart div[class*='rotatedVerticalBox']", // DEC- Data explorer chart
+  DECHorizontalAxis = "#DatasetExplorerChart div[class*='horizontalAxis']",
+  DECChoiceFieldGroup = "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup']",
+  DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
+  DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
+  CancelButton = "button:contains('Cancel')",
+  DECohortDropdown = "#dataExplorerCohortDropdown",
+  DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  SelectButton = "button:contains('Select')",
+  DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
+  DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']"
 }

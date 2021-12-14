@@ -9,6 +9,7 @@ export interface IModelAssessmentData {
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
+  cohortDefaultName?: string;
 }
 
 export interface IErrorAnalysisData {
@@ -45,6 +46,12 @@ export interface IModelStatisticsData {
 export interface IDatasetExplorerData {
   whiskerPlot?: IDEWhiskerPlotData;
   dotPlot?: IDEDotPlotData;
+  datasetBarLabel?: string[];
+  defaultXAxis?: string;
+  defaultYAxis?: string;
+  colorValueButton?: string;
+  noY?: boolean;
+  cohortDatasetNewValue?: string;
 }
 
 export interface IDEWhiskerPlotData {

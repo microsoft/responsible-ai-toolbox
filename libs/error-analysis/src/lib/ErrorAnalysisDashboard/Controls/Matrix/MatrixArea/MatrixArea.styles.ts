@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import {
+  IProcessedStyleSet,
   IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
+  mergeStyleSets
 } from "office-ui-fabric-react";
 
 export interface IMatrixAreaStyles {
   emptyLabelPadding: IStyle;
+  layerHost: IStyle;
   matrixLabelBottom: IStyle;
   matrixLabelTab: IStyle;
   matrixLabel: IStyle;
@@ -20,6 +21,11 @@ export const matrixAreaStyles: () => IProcessedStyleSet<IMatrixAreaStyles> =
     return mergeStyleSets<IMatrixAreaStyles>({
       emptyLabelPadding: {
         paddingTop: "60px"
+      },
+      layerHost: {
+        height: "500px",
+        overflow: "hidden",
+        position: "relative"
       },
       matrixArea: {
         paddingBottom: "50px",

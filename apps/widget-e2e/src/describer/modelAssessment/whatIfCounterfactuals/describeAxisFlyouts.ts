@@ -17,8 +17,8 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
       });
       it("should have dropdown with feature list", () => {
         cy.get(Locators.WhatIfScatterChartYAxis).click();
-        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
-        cy.get(Locators.WhatIfYAxisFeatureDropdownOption).should(
+        cy.get(Locators.AxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdownOption).should(
           "have.length",
           dataShape.featureNames?.length
         );
@@ -31,7 +31,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           "value",
           "age"
         );
-        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdown).click();
         cy.get(Locators.WhatIfYAxisFeatureDropdownOccupationOption).click();
         cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
         cy.get(Locators.WhatIfScatterChartYAxisLabelUpdated).should("exist");
@@ -56,11 +56,8 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
       });
       it("should have dropdown with class", () => {
         cy.get(Locators.WhatIfScatterChartXAxis).click();
-        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
-        cy.get(Locators.WhatIfYAxisFeatureDropdownOption).should(
-          "have.length",
-          2
-        );
+        cy.get(Locators.AxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdownOption).should("have.length", 2);
         cy.get(Locators.WhatIfScatterChartFlyoutCancel).click();
       });
       it("should be able to select different class", () => {
@@ -70,7 +67,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           "value",
           "Probability : <=50K"
         );
-        cy.get(Locators.WhatIfAxisFeatureDropdown).click();
+        cy.get(Locators.AxisFeatureDropdown).click();
         cy.get(Locators.WhatIfXAxisFeatureDropdownOccupationOption).click();
         cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
         cy.get(Locators.WhatIfScatterChartXAxisLabelUpdated).should("exist");
