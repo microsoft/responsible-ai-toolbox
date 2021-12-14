@@ -53,6 +53,7 @@ export interface IMatrixFilterProps {
     cells: number,
     cohortStats: MetricCohortStats | undefined
   ) => void;
+  updateSelectedMatrixFeatures?: (selectedFeatures: [string, string]) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   state: IMatrixFilterState;
@@ -187,6 +188,10 @@ export class MatrixFilter extends React.PureComponent<
   ): void => {
     if (typeof item?.key == "string") {
       this.setState({ selectedFeature1: item.key });
+      this.props.updateSelectedMatrixFeatures?.([
+        item.key,
+        this.state.selectedFeature2 || ""
+      ]);
     }
   };
 
@@ -196,6 +201,10 @@ export class MatrixFilter extends React.PureComponent<
   ): void => {
     if (typeof item?.key == "string") {
       this.setState({ selectedFeature2: item.key });
+      this.props.updateSelectedMatrixFeatures?.([
+        this.state.selectedFeature1 || "",
+        item.key
+      ]);
     }
   };
 
