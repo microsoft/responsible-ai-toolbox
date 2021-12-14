@@ -110,6 +110,9 @@ export class ErrorAnalysisViewTab extends React.Component<
             disabledView={this.props.disabledView}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
+            updateSelectedMatrixFeatures={
+              this.props.updateSelectedMatrixFeatures
+            }
             getTreeNodes={this.props.getTreeNodes}
             getMatrix={this.props.getMatrix}
             matrix={this.props.matrix}
