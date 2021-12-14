@@ -45,6 +45,7 @@ export interface IErrorAnalysisViewProps {
     cells: number,
     cohortStats: MetricCohortStats | undefined
   ) => void;
+  updateSelectedMatrixFeatures?: (matrixFeatures: [string, string]) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   treeViewState: ITreeViewRendererState;
@@ -89,6 +90,9 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             getMatrix={this.props.getMatrix}
             matrix={this.props.matrix}
             matrixFeatures={this.props.matrixFeatures}
+            updateSelectedMatrixFeatures={
+              this.props.updateSelectedMatrixFeatures
+            }
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
