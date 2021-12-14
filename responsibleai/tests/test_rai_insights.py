@@ -302,8 +302,6 @@ class TestRAIInsights(object):
             # Load
             rai_2 = RAIInsights.load(save_1)
             assert rai_2 is not None
-            # We should also recreate the empty directory on load
-            assert dir_to_remove.exists()
 
 
 def run_rai_insights(model, train_data, test_data, target_column,

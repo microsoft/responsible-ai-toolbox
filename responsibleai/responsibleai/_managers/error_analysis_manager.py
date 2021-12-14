@@ -399,7 +399,6 @@ class ErrorAnalysisManager(BaseManager):
 
         ea_config_list = []
         ea_report_list = []
-        DirectoryManager.ensure_dir_exists(path)
         all_ea_dirs = DirectoryManager.list_sub_directories(path)
         for ea_dir in all_ea_dirs:
             directory_manager = DirectoryManager(
