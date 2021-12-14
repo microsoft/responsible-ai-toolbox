@@ -675,7 +675,6 @@ class CounterfactualManager(BaseManager):
 
         inst.__dict__[CounterfactualManager._COUNTERFACTUAL_CONFIG_LIST] = []
 
-        DirectoryManager.ensure_dir_exists(path)
         all_cf_dirs = DirectoryManager.list_sub_directories(path)
         for counterfactual_config_dir in all_cf_dirs:
             directory_manager = DirectoryManager(
