@@ -69,5 +69,7 @@ export enum Locators {
   DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
   CancelButton = "button:contains('Cancel')",
-  SelectButton = "button:contains('Select')"
+  SelectButton = "button:contains('Select')",
+  MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
+  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']"
 }

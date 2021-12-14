@@ -3,7 +3,7 @@
 
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
-  IModelStatisticsData?: IModelStatisticsData;
+  modelStatisticsData?: IModelStatisticsData;
   datasetExplorerData?: IDatasetExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   causalAnalysisData?: ICausalAnalysisData;
@@ -34,6 +34,9 @@ export interface IErrorAnalysisData {
 export interface IModelStatisticsData {
   defaultYAxis?: string;
   defaultXAxis?: string;
+  defaultXAxisPanelValue?: string;
+  yAxisNewPanelValue?: string;
+  yAxisNewValue?: string;
   yAxisPanelOptions?: string[];
   newYAxisChartValues?: { [key: string]: string[] };
   xAxisPanelOptions?: string[];

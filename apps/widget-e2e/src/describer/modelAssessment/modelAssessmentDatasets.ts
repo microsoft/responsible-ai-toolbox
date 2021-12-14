@@ -71,6 +71,13 @@ const modelAssessmentDatasets = {
         nodeValue: "0.18"
       }
     },
+    modelStatisticsData: {
+      defaultYAxis: "Cohort",
+      defaultXAxis: "Probability : <=50K",
+      defaultXAxisPanelValue: "Prediction probabilities",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age"
+    },
     featureImportanceData: {
       correctPredictionDatapoint: "398",
       datapoint: 500,
