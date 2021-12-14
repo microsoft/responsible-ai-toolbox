@@ -159,6 +159,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           messages={this.props.stringParams?.contextualHelp}
                           getTreeNodes={this.props.requestDebugML}
                           getMatrix={this.props.requestMatrix}
+                          updateSelectedMatrixFeatures={
+                            this.props.onMatrixFeaturesUpdated
+                          }
                           updateSelectedCohort={this.updateSelectedCohort}
                           features={
                             this.props.errorAnalysisData[0].tree_features ||
