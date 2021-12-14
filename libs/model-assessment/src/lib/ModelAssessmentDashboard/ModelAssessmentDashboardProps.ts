@@ -31,6 +31,7 @@ export interface IModelAssessmentDashboardProps
   locale?: string;
   stringParams?: IStringsParam;
   classDimension?: 1 | 2 | 3;
+  onMatrixFeaturesUpdated?: (matrixFeatures: [string, string]) => void;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
