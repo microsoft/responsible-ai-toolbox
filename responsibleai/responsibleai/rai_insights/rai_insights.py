@@ -21,6 +21,7 @@ from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.utils import _is_classifier
 
 _DATA = 'data'
 _PREDICTIONS = 'predictions'
@@ -502,10 +503,7 @@ class RAIInsights(object):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if (self.model is not None and
-                hasattr(self.model, SKLearn.PREDICT_PROBA) and
-                self.model.predict_proba is not None and
-                dataset is not None):
+        if _is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
@@ -646,18 +644,14 @@ class RAIInsights(object):
         self._save_predictions(path)
 
     @staticmethod
-    def load(path):
-        """Load the RAIInsights from the given path.
-        :param path: The directory path to load the RAIInsights from.
+    def _load_data(inst, path):
+        """Load the raw data (train and test sets).
+
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
+        :param path: The directory path to data location.
         :type path: str
-        :return: The RAIInsights object after loading.
-        :rtype: RAIInsights
         """
-        # create the RAIInsights without any properties using the __new__
-        # function, similar to pickle
-        inst = RAIInsights.__new__(RAIInsights)
-        top_dir = Path(path)
-        # load current state
         data_directory = Path(path) / _DATA
         with open(data_directory /
                   (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
@@ -671,6 +665,17 @@ class RAIInsights(object):
         with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
             test = pd.read_json(file, dtype=types, orient='split')
         inst.__dict__[_TEST] = test
+
+    @staticmethod
+    def _load_metadata(inst, path):
+        """Load the metadata.
+
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
+        :param path: The directory path to metadata location.
+        :type path: str
+        """
+        top_dir = Path(path)
         with open(top_dir / _META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
@@ -685,11 +690,21 @@ class RAIInsights(object):
 
         inst.__dict__['_' + _CLASSES] = RAIInsights._get_classes(
             task_type=meta[_TASK_TYPE],
-            train=train,
+            train=inst.__dict__[_TRAIN],
             target_column=meta[_TARGET_COLUMN],
             classes=classes
         )
 
+    @staticmethod
+    def _load_model(inst, path):
+        """Load the model.
+
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
+        :param path: The directory path to model location.
+        :type path: str
+        """
+        top_dir = Path(path)
         serializer_path = top_dir / _SERIALIZER
         if serializer_path.exists():
             with open(serializer_path, 'rb') as file:
@@ -701,6 +716,16 @@ class RAIInsights(object):
             with open(top_dir / _MODEL_PKL, 'rb') as file:
                 inst.__dict__[_MODEL] = pickle.load(file)
 
+    @staticmethod
+    def _load_managers(inst, path):
+        """Load the model.
+
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
+        :param path: The directory path to manager location.
+        :type path: str
+        """
+        top_dir = Path(path)
         # load each of the individual managers
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
@@ -717,4 +742,24 @@ class RAIInsights(object):
             managers.append(manager)
 
         inst.__dict__['_' + _MANAGERS] = managers
+
+    @staticmethod
+    def load(path):
+        """Load the RAIInsights from the given path.
+
+        :param path: The directory path to load the RAIInsights from.
+        :type path: str
+        :return: The RAIInsights object after loading.
+        :rtype: RAIInsights
+        """
+        # create the RAIInsights without any properties using the __new__
+        # function, similar to pickle
+        inst = RAIInsights.__new__(RAIInsights)
+
+        # load current state
+        RAIInsights._load_data(inst, path)
+        RAIInsights._load_metadata(inst, path)
+        RAIInsights._load_model(inst, path)
+        RAIInsights._load_managers(inst, path)
+
         return inst

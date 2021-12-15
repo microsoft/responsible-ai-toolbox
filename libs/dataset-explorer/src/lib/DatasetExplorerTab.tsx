@@ -137,6 +137,7 @@ export class DatasetExplorerTab extends React.Component<
                   width: 150
                 }
               }}
+              id="dataExplorerCohortDropdown"
               options={cohortOptions}
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}

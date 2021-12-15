@@ -10,11 +10,17 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
+  Customizer,
   DefaultButton,
+  getId,
   mergeStyles,
+  ISettings,
   IStackStyles,
   IStackTokens,
   IStyle,
+  Layer,
+  LayerHost,
+  ScrollablePane,
   Stack,
   Text
 } from "office-ui-fabric-react";
@@ -52,6 +58,7 @@ export class MatrixArea extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private layerHostId: string;
   public constructor(props: IMatrixAreaProps) {
     super(props);
     this.state = {
@@ -65,6 +72,7 @@ export class MatrixArea extends React.PureComponent<
       quantileBinning: this.props.state.quantileBinning,
       selectedCells: this.props.state.selectedCells
     };
+    this.layerHostId = getId("matrixAreaHost");
     if (this.props.state.selectedCells === undefined) {
       this.reloadData();
     }
@@ -160,65 +168,79 @@ export class MatrixArea extends React.PureComponent<
             isEnabled={this.props.isEnabled}
           />
         </Stack>
-        <Stack
-          horizontal
-          tokens={stackTokens}
-          className={classNames.matrixArea}
+        <Customizer
+          settings={(currentSettings): ISettings => ({
+            ...currentSettings,
+            hostId: this.layerHostId
+          })}
         >
-          <Stack.Item>
-            {this.props.selectedFeature2 && (
-              <div className={classNames.matrixLabelBottom}>
-                <div className={classNames.matrixLabelTab} />
-                <div>{this.props.selectedFeature2}</div>
-              </div>
-            )}
-            <Stack
-              horizontal
-              tokens={stackTokens}
-              className={classNames.matrixArea}
-            >
-              {this.props.selectedFeature1 && !sameFeatureSelected && (
+          <Layer>
+            <ScrollablePane>
+              <Stack
+                horizontal
+                tokens={stackTokens}
+                className={classNames.matrixArea}
+              >
                 <Stack.Item>
-                  <FeatureRowCategories
-                    jsonMatrix={this.state.jsonMatrix}
-                    selectedFeature1={this.props.selectedFeature1}
-                    selectedFeature2={this.props.selectedFeature2}
-                    category1Values={category1Values}
-                    sameFeatureSelected={sameFeatureSelected}
-                  />
+                  {this.props.selectedFeature2 && (
+                    <div className={classNames.matrixLabelBottom}>
+                      <div className={classNames.matrixLabelTab} />
+                      <div>{this.props.selectedFeature2}</div>
+                    </div>
+                  )}
+                  <Stack
+                    horizontal
+                    tokens={stackTokens}
+                    className={classNames.matrixArea}
+                  >
+                    {this.props.selectedFeature1 && !sameFeatureSelected && (
+                      <Stack.Item>
+                        <FeatureRowCategories
+                          jsonMatrix={this.state.jsonMatrix}
+                          selectedFeature1={this.props.selectedFeature1}
+                          selectedFeature2={this.props.selectedFeature2}
+                          category1Values={category1Values}
+                          sameFeatureSelected={sameFeatureSelected}
+                        />
+                      </Stack.Item>
+                    )}
+                    <Stack.Item>
+                      <MatrixCells
+                        jsonMatrix={this.state.jsonMatrix}
+                        selectedFeature1={this.props.selectedFeature1}
+                        selectedFeature2={this.props.selectedFeature2}
+                        selectedCells={this.state.selectedCells}
+                        category1Values={category1Values}
+                        sameFeatureSelected={sameFeatureSelected}
+                        selectedCellHandler={this.selectedCellHandler.bind(
+                          this
+                        )}
+                      />
+                      <MatrixFooter
+                        jsonMatrix={this.state.jsonMatrix}
+                        selectedFeature1={this.props.selectedFeature1}
+                        selectedFeature2={this.props.selectedFeature2}
+                        selectedCells={this.state.selectedCells}
+                        category1Values={category1Values}
+                        category2Values={category2Values}
+                        sameFeatureSelected={sameFeatureSelected}
+                        matrixLength={matrixLength}
+                      />
+                    </Stack.Item>
+                  </Stack>
                 </Stack.Item>
-              )}
-              <Stack.Item>
-                <MatrixCells
-                  jsonMatrix={this.state.jsonMatrix}
-                  selectedFeature1={this.props.selectedFeature1}
-                  selectedFeature2={this.props.selectedFeature2}
-                  selectedCells={this.state.selectedCells}
-                  category1Values={category1Values}
-                  sameFeatureSelected={sameFeatureSelected}
-                  selectedCellHandler={this.selectedCellHandler.bind(this)}
-                />
-                <MatrixFooter
-                  jsonMatrix={this.state.jsonMatrix}
-                  selectedFeature1={this.props.selectedFeature1}
-                  selectedFeature2={this.props.selectedFeature2}
-                  selectedCells={this.state.selectedCells}
-                  category1Values={category1Values}
-                  category2Values={category2Values}
-                  sameFeatureSelected={sameFeatureSelected}
-                  matrixLength={matrixLength}
-                />
-              </Stack.Item>
-            </Stack>
-          </Stack.Item>
-          <Stack.Item>
-            {this.props.selectedFeature1 && !sameFeatureSelected && (
-              <div className={styledMatrixLabel}>
-                {this.props.selectedFeature1}
-              </div>
-            )}
-          </Stack.Item>
-        </Stack>
+                <Stack.Item>
+                  {this.props.selectedFeature1 && !sameFeatureSelected && (
+                    <div className={styledMatrixLabel}>
+                      {this.props.selectedFeature1}
+                    </div>
+                  )}
+                </Stack.Item>
+              </Stack>
+            </ScrollablePane>
+          </Layer>
+        </Customizer>
+        <LayerHost id={this.layerHostId} className={classNames.layerHost} />
       </Stack>
     );
   }

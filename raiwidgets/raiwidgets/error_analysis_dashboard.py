@@ -54,6 +54,11 @@ class ErrorAnalysisDashboard(Dashboard):
         alternative to the model and explanation for a more limited
         view.
     :type pred_y: numpy.ndarray or list[]
+    :param pred_y_dataset: The predicted labels for the provided dataset.
+        Only needed if providing a sample dataset for the UI while using
+        the full dataset for the tree view and heatmap. Otherwise specify
+        pred_y parameter only.
+    :type pred_y_dataset: numpy.array or list[] or pandas.Series
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -80,6 +85,9 @@ class ErrorAnalysisDashboard(Dashboard):
     :param num_leaves: The number of leaves of the surrogate tree
         trained on errors.
     :type num_leaves: int
+    :param min_child_samples: The minimal number of data required
+        to create one leaf.
+    :type min_child_samples: int
     :param sample_dataset: Dataset with fewer samples than the main
         dataset. Used to improve performance only when an
         Explanation object is not provided.  Used only if
