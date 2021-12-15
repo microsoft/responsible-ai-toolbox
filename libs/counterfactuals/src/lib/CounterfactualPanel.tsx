@@ -111,7 +111,11 @@ export class CounterfactualPanel extends React.Component<
     return (
       <Stack className={classes.stackHeader}>
         <Stack.Item className={classes.headerText}>
-          <Text variant={"xLarge"} className={classes.boldText}>
+          <Text
+            variant={"xLarge"}
+            className={classes.boldText}
+            id="counterfactualHeader"
+          >
             {this.context.requestPredictions
               ? localization.Counterfactuals.whatIfPanelHeader
               : localization.Counterfactuals.panelHeader}

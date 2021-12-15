@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export enum Locators {
+  CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
   IFIExpandCollapseButton = "[aria-label='expand collapse group']",
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',

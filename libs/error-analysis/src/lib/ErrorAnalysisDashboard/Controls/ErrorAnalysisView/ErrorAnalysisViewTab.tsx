@@ -72,7 +72,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ padding: "16px 24px" }}
           className={classNames.errorAnalysis}
         >
-          <Text variant={"xxLarge"}>
+          <Text variant={"xxLarge"} id="errorAnalysisHeader">
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
           <Stack horizontal>
