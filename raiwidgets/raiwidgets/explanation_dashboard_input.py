@@ -7,10 +7,11 @@ import pandas as pd
 from responsibleai._input_processing import _convert_to_list
 from responsibleai.serialization_utilities import serialize_json_safe
 
-from .constants import ErrorMessages, SKLearn
+from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
+from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -52,9 +53,7 @@ class ExplanationDashboardInput:
         :type features: numpy.array or list[]
         """
         self._model = model
-        self._is_classifier = model is not None\
-            and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+        self._is_classifier = _is_classifier(model)
         self._dataframeColumns = None
         self.dashboard_input = {}
         # List of explanations, key of explanation type is "explanation_type"
@@ -234,8 +233,7 @@ class ExplanationDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
-        if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
+        if _is_classifier(model) and dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:
