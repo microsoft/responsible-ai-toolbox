@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createCohort } from "apps/widget-e2e/src/util/createCohort";
 import { BoxChart } from "../../../util/BoxChart";
+import { createCohort } from "../../../util/createCohort";
+
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
