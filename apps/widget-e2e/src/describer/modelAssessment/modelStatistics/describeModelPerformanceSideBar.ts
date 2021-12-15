@@ -3,7 +3,6 @@
 
 import { BoxChart } from "../../../util/BoxChart";
 import { createCohort } from "../../../util/createCohort";
-
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
