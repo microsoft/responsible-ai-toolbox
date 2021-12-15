@@ -21,6 +21,7 @@ from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.utils import _is_classifier
 
 _DATA = 'data'
 _PREDICTIONS = 'predictions'
@@ -501,10 +502,7 @@ class RAIInsights(object):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if (self.model is not None and
-                hasattr(self.model, SKLearn.PREDICT_PROBA) and
-                getattr(self.model, SKLearn.PREDICT_PROBA)  is not None and
-                dataset is not None):
+        if _is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
