@@ -264,6 +264,45 @@ class TestRAIInsights(object):
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
 
+    @pytest.mark.parametrize('target_dir', [ManagerNames.CAUSAL,
+                                            ManagerNames.ERROR_ANALYSIS,
+                                            ManagerNames.COUNTERFACTUAL])
+    def test_load_missing_dirs(self, target_dir):
+        # This test is about the case where an object has been saved to Azure
+        # Directories only exist implicitly, so in a downloaded instance
+        # if a manager had no outputs, then its subdirectory won't exist
+        # The exception is the Explainer, which always creates a file
+        # in its subdirectory
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
+        rai_insights = RAIInsights(
+            model, data_train, data_test,
+            target_name,
+            categorical_features=categorical_features,
+            task_type=ModelTask.CLASSIFICATION)
+
+        with TemporaryDirectory() as tmpdir:
+            save_1 = Path(tmpdir) / "first_save"
+
+            # Save it
+            rai_insights.save(save_1)
+
+            # Remove the target directory
+            # First make sure it's empty
+            dir_to_remove = save_1 / target_dir
+            assert len(list(dir_to_remove.iterdir())) == 0
+            os.rmdir(dir_to_remove)
+            assert not dir_to_remove.exists()
+
+            # Load
+            rai_2 = RAIInsights.load(save_1)
+            assert rai_2 is not None
+
 
 def run_rai_insights(model, train_data, test_data, target_column,
                      categorical_features, manager_type,
