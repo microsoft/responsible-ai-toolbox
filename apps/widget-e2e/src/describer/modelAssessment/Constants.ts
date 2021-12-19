@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 export enum Locators {
+  SelectButton = "button:contains('Select')",
+  CancelButton = "button:contains('Cancel')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
   IFIExpandCollapseButton = "[aria-label='expand collapse group']",
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
@@ -28,6 +30,7 @@ export enum Locators {
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
   CreateNewCohortButton = "button:contains('Create new cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
+  CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
@@ -68,6 +71,11 @@ export enum Locators {
   DECChoiceFieldGroup = "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup']",
   DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
-  CancelButton = "button:contains('Cancel')",
-  SelectButton = "button:contains('Select')"
+  DECohortDropdown = "#dataExplorerCohortDropdown",
+  DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
+  DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
+  MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
+  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']"
 }
