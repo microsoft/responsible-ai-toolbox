@@ -6,7 +6,7 @@ import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
-  describe.only("What if Create counterfactual", () => {
+  describe("What if Create counterfactual", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
@@ -85,6 +85,33 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
           "contain",
           dataShape.whatIfCounterfactualsData?.WhatIfNameLabelUpdated
         );
+    });
+  });
+
+  describe("What-If save scenario", () => {
+    before(() => {
+      cy.get(Locators.WICDatapointDropbox).click();
+      getSpan(
+        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
+      )
+        .scrollIntoView()
+        .click({ force: true });
+      cy.get(Locators.CreateWhatIfCounterfactualButton)
+        .click({ force: true })
+        .get(Locators.WhatIfCounterfactualPanel)
+        .should("exist");
+    });
+    it("Should save as datapoint on clicking 'save as new datapoint'", () => {
+      cy.get(Locators.WhatIfSetValueButton).eq(1).click({ force: true });
+      cy.get(Locators.WhatIfSaveAsNewDatapointButton).click();
+      cy.get(Locators.WhatIfSaveAsDataPoints).should(
+        "contain",
+        dataShape.whatIfCounterfactualsData!.WhatIfNameLabel
+      );
+
+      // Should be able to delete datapoint created
+      cy.get(Locators.WhatIfSaveAsDataPointsDeleteButton).click();
+      cy.get(Locators.WhatIfSaveAsDataPoints).should("not.exist");
     });
   });
 }

@@ -3,9 +3,12 @@
 
 import { Chart, IChartElement } from "./Chart";
 
-const boxReg =
+const boxRegVertical =
   /^M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)ZM([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)$/;
-const meanReg = /^M([\d.]+),([\d.]+)H([\d.]+)$/;
+const boxRegHorizontal =
+  /^M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)H([\d.]+)V([\d.]+)ZM([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)H([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)M([\d.]+),([\d.]+)V([\d.]+)$/;
+const meanRegHorizontal = /^M([\d.]+),([\d.]+)H([\d.]+)$/;
+const meanRegVertical = /^M([\d.]+),([\d.]+)V([\d.]+)$/;
 
 export interface IBox extends IChartElement {
   readonly q1: number;
@@ -66,11 +69,14 @@ export class BoxChart extends Chart<IBox> {
         `${idx}th path element in svg does not have "d" attribute`
       );
     }
-    const exec = boxReg.exec(d);
+    const exec = boxRegVertical.exec(d) || boxRegHorizontal.exec(d);
     if (!exec) {
       throw new Error(
         `${idx}th path element in svg have invalid "d" attribute`
       );
+    }
+    if (boxRegHorizontal.exec(d)) {
+      return this.getHorizontalBoxCoordinates(exec, idx);
     }
     const [, ...strCords] = exec;
     const [
@@ -152,6 +158,84 @@ export class BoxChart extends Chart<IBox> {
     return { bottom, left, q1, q2, q3, right, top };
   };
 
+  private readonly getHorizontalBoxCoordinates = (
+    exec: RegExpExecArray,
+    idx: number
+  ): Pick<IBox, "left" | "right" | "q1" | "q2" | "q3" | "top" | "bottom"> => {
+    const [, ...strCords] = exec;
+    const [
+      q2,
+      right3,
+      left,
+      q1,
+      right,
+      left2,
+      bottom,
+      right2,
+      q12,
+      center,
+      top,
+      q3,
+      center2,
+      q32,
+      top2,
+      sTop,
+      sTop3,
+      bottom2,
+      sTop2,
+      sTop4
+    ] = strCords.map((s) => Number(s));
+    if (right !== right2 || right2 !== right3) {
+      throw new Error(
+        `box${idx} right: ${right}, ${right2}, ${right3} do not match`
+      );
+    }
+    if (left !== left2) {
+      throw new Error(`box${idx} left: ${right}, ${right2} do not match`);
+    }
+    if (bottom !== bottom2) {
+      throw new Error(`box${idx} bottom: ${bottom}, ${bottom2} do not match`);
+    }
+    if (q1 !== q12) {
+      throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
+    }
+    if (q3 !== q32) {
+      throw new Error(`box${idx} q3: ${q3}, ${q32} do not match`);
+    }
+    if (top !== top2) {
+      throw new Error(`box${idx} top: ${top}, ${top2} do not match`);
+    }
+    if (q1 !== q12) {
+      throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
+    }
+    if (center !== center2) {
+      throw new Error(`box${idx} center: ${center}, ${center2} do not match`);
+    }
+    if (sTop !== sTop2) {
+      throw new Error(`box${idx} sTop: ${sTop2}, ${sTop} do not match`);
+    }
+    if (sTop3 !== sTop4) {
+      throw new Error(
+        `box${idx} sTop3 and sTop4: ${sTop3}, ${sTop4} do not match`
+      );
+    }
+    if (q2 < q1) {
+      throw new Error(`box${idx} q1: ${q2} is lesser than q1: ${q1} `);
+    }
+    if (q3 < q2) {
+      throw new Error(`box${idx} q1: ${q3} is lesser than q2: ${q2} `);
+    }
+    if (top > q3) {
+      throw new Error(`box${idx} top: ${top} is lesser than q3: ${q3} `);
+    }
+    if (Math.abs(Math.round(((left + right) / 2) * 100) / 100 - center) > 1) {
+      throw new Error(
+        `box${idx} center: ${center}, is not in the middle of left: ${left} and right ${right}`
+      );
+    }
+    return { bottom, left, q1, q2, q3, right, top };
+  };
+
   private readonly getMeanCoordinate = (
     idx: number,
     meanElement: HTMLElement
@@ -162,7 +246,7 @@ export class BoxChart extends Chart<IBox> {
         `${idx}th path element in svg does not have "d" attribute`
       );
     }
-    const exec = meanReg.exec(d);
+    const exec = meanRegHorizontal.exec(d) || meanRegVertical.exec(d);
     if (!exec) {
       throw new Error(
         `${idx}th path element in svg have invalid "d" attribute`

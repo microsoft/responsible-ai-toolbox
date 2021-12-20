@@ -5,6 +5,20 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
   ClassificationModelAssessment: {
+    cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "40",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: [
+        "0 - 99",
+        "100 - 199",
+        "200 - 299",
+        "300 - 399",
+        "400 - 499"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
     errorAnalysisData: {
       basicInformationData: {
         BasicInformation: ["Unsaved", "All data (2 filters)"],
@@ -86,6 +100,13 @@ const modelAssessmentDatasets = {
       "education",
       "capital-loss"
     ],
+    modelStatisticsData: {
+      defaultXAxis: "Probability : <=50K",
+      defaultXAxisPanelValue: "Prediction probabilities",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age"
+    },
     whatIfCounterfactualsData: {
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",

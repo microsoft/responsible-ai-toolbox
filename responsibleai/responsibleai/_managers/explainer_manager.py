@@ -119,13 +119,18 @@ class ExplainerManager(BaseManager):
                            "currently limited to one explainer type."),
                           UserWarning)
             return
+
+        self._initialize_surrogate_model()
+        self._is_added = True
+
+    def _initialize_surrogate_model(self):
+        """Initialize the surrogate model."""
         is_sparse = issparse(self._evaluation_examples)
         num_cols = self._evaluation_examples.shape[1]
         many_cols = num_cols > SPARSE_NUM_FEATURES_THRESHOLD
         self._surrogate_model = LGBMExplainableModel
         if is_sparse and many_cols:
             self._surrogate_model = LinearExplainableModel
-        self._is_added = True
 
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
@@ -341,6 +346,7 @@ class ExplainerManager(BaseManager):
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
+        inst.__dict__['_' + IS_ADDED] = meta[IS_ADDED]
 
         inst.__dict__[EXPLANATION] = None
         explanation_path = data_directory / ManagerNames.EXPLAINER
@@ -358,10 +364,10 @@ class ExplainerManager(BaseManager):
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)
-        inst.__dict__['_' + IS_ADDED] = False
-        # reset self._surrogate_model
-        if meta[IS_ADDED]:
-            inst.add()
+
+        # reset the surrogate model
+        inst._initialize_surrogate_model()
+
         return inst
 
     def _find_first_explanation(self, key, mli_explanations):

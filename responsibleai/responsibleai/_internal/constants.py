@@ -47,6 +47,11 @@ class ErrorAnalysisManagerKeys(object):
     REPORTS = 'reports'
 
 
+class CounterfactualManagerKeys(object):
+    """Provide constants for CounterfactualManager key properties."""
+    COUNTERFACTUALS = 'counterfactuals'
+
+
 class SKLearn(object):
     """Provide scikit-learn related constants."""
 
