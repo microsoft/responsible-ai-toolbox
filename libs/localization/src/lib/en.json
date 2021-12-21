@@ -788,6 +788,7 @@
       "cancelTitle": "Cancel cohort",
       "cancelYes": "Yes",
       "cohortNameError": "Missing cohort name",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Dataset cohort name",
       "cohortNamePlaceholder": "Name your cohort",
       "clearAllFilters": "Clear all filters",
