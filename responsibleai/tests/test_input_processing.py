@@ -1,10 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
+
 import numpy as np
 import pandas as pd
+from scipy.sparse import csr_matrix
 
-from responsibleai._input_processing import _convert_to_string_list_dict
+from responsibleai._input_processing import (
+    _convert_to_list,
+    _convert_to_string_list_dict
+)
 
 
 class TestConvertToStringListDict:
@@ -97,3 +103,72 @@ class TestConvertToStringListDict:
         arr = result["Base 1"]
         assert isinstance(arr, list)
         assert np.array_equal(arr, [2, 6, 7])
+
+
+class TestConvertToList:
+    def test_pandas_dataframe_to_list(self):
+        input_dataframe = pd.DataFrame.from_dict(
+            {"a": [0, 1, 2], "b": [4, 5, 6]}
+        )
+        expected_list = [[0, 4], [1, 5], [2, 6]]
+        input_as_list = _convert_to_list(input_dataframe)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
+
+    def test_array_to_list(self):
+        input_array = np.array([[0, 4], [1, 5], [2, 6]])
+        expected_list = [[0, 4], [1, 5], [2, 6]]
+        input_as_list = _convert_to_list(input_array)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
+
+    def test_list_to_list(self):
+        input_list = [[0, 4], [1, 5], [2, 6]]
+        expected_list = [[0, 4], [1, 5], [2, 6]]
+        input_as_list = _convert_to_list(input_list)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
+
+    def test_series_to_list(self):
+        input_series = pd.Series(data=[[0, 4], [1, 5], [2, 6]])
+        expected_list = [[0, 4], [1, 5], [2, 6]]
+        input_as_list = _convert_to_list(input_series)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
+
+    def test_index_to_list(self):
+        input_index = pd.Index(data=[[0, 4], [1, 5], [2, 6]])
+        expected_list = [[0, 4], [1, 5], [2, 6]]
+        input_as_list = _convert_to_list(input_index)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
+
+    def test_csr_matrix_to_list(self):
+        input_sparse_matrix = csr_matrix((3, 10000),
+                                         dtype=np.int8)
+        with pytest.raises(ValueError) as ve:
+            _convert_to_list(input_sparse_matrix)
+        assert "Exceeds maximum number of features for " + \
+            "visualization (1000)" in str(ve.value)
+
+        with pytest.raises(ValueError) as ve:
+            _convert_to_list(input_sparse_matrix,
+                             custom_err_msg="Error occurred")
+        assert "Error occurred" in str(ve.value)
+
+        row = np.array([0, 0, 1, 2, 2, 2])
+        col = np.array([0, 2, 2, 0, 1, 2])
+        data = np.array([1, 2, 3, 4, 5, 6])
+        sparse_matrix = csr_matrix((data, (row, col)), shape=(3, 3))
+        expected_list = [[1, 0, 2],
+                         [0, 0, 3],
+                         [4, 5, 6]]
+        input_as_list = _convert_to_list(sparse_matrix)
+
+        assert input_as_list is not None
+        assert input_as_list == expected_list
