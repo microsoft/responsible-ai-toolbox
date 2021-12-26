@@ -22,7 +22,8 @@ from .common_utils import (create_adult_income_dataset,
                            create_boston_data, create_cancer_data,
                            create_complex_classification_pipeline,
                            create_iris_data, create_models_classification,
-                           create_models_regression)
+                           create_models_regression,
+                           create_lightgbm_classifier)
 from .counterfactual_manager_validator import validate_counterfactual
 from .error_analysis_validator import (setup_error_analysis,
                                        validate_error_analysis)
@@ -302,6 +303,37 @@ class TestRAIInsights(object):
             # Load
             rai_2 = RAIInsights.load(save_1)
             assert rai_2 is not None
+
+    def test_loading_rai_insights_without_model_file(self):
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        rai_insights = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column='target',
+            task_type='classification')
+
+        with TemporaryDirectory() as tmpdir:
+            assert rai_insights.model is not None
+            save_path = Path(tmpdir) / "rai_insights"
+            rai_insights.save(save_path)
+
+            # Remove the model.pkl file to cause an exception to occur
+            # while loading the model.
+            model_pkl_path = Path(tmpdir) / "rai_insights" / "model.pkl"
+            os.remove(model_pkl_path)
+            with pytest.warns(
+                UserWarning,
+                match='ERROR-LOADING-USER-MODEL: '
+                      'There was an error loading the user model. '
+                      'Some of RAI dashboard features may not work.'):
+                without_model_rai_insights = RAIInsights.load(save_path)
+                assert without_model_rai_insights.model is None
 
 
 def run_rai_insights(model, train_data, test_data, target_column,

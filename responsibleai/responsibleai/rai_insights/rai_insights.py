@@ -716,6 +716,10 @@ class RAIInsights(object):
                 with open(top_dir / _MODEL_PKL, 'rb') as file:
                     inst.__dict__[_MODEL] = pickle.load(file)
             except Exception:
+                warnings.warn(
+                    'ERROR-LOADING-USER-MODEL: '
+                    'There was an error loading the user model. '
+                    'Some of RAI dashboard features may not work.')
                 inst.__dict__[_MODEL] = None
 
     @staticmethod
