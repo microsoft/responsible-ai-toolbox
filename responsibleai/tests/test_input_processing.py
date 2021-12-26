@@ -1,16 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-
 import numpy as np
 import pandas as pd
+import pytest
 from scipy.sparse import csr_matrix
 
-from responsibleai._input_processing import (
-    _convert_to_list,
-    _convert_to_string_list_dict
-)
+from responsibleai._input_processing import (_convert_to_list,
+                                             _convert_to_string_list_dict)
 
 
 class TestConvertToStringListDict:
