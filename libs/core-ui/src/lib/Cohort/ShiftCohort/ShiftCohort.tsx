@@ -121,7 +121,7 @@ export class ShiftCohort extends React.Component<
           temporaryCohort={this.state.savedCohorts[this.state.selectedCohort]}
         />
         <DialogFooter>
-          <PrimaryButton onClick={this.onApplyClick.bind(this)} text="Apply" />
+          <PrimaryButton onClick={this.onApplyClick} text="Apply" />
           <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
         </DialogFooter>
       </Dialog>
@@ -141,8 +141,8 @@ export class ShiftCohort extends React.Component<
     this.props.onApply(this.state.savedCohorts[this.state.selectedCohort]);
   }
 
-  private onApplyClick(): void {
+  private onApplyClick = () => {
     this.props.onDismiss();
     this.shiftCohort();
-  }
+  };
 }

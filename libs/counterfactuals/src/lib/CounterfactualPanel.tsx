@@ -68,7 +68,7 @@ export class CounterfactualPanel extends React.Component<
         id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
         type={PanelType.largeFixed}
-        onDismiss={this.onClosePanel.bind(this)}
+        onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
         className={classes.panelStyle}
@@ -132,7 +132,7 @@ export class CounterfactualPanel extends React.Component<
                 placeholder={
                   localization.Interpret.WhatIf.filterFeaturePlaceholder
                 }
-                onChange={this.setFilterText.bind(this)}
+                onChange={this.setFilterText}
               />
             </Stack.Item>
             <Stack.Item>
@@ -186,7 +186,7 @@ export class CounterfactualPanel extends React.Component<
           <PrimaryButton
             className={classes.button}
             text={localization.Counterfactuals.saveAsNew}
-            onClick={this.handleSavePoint.bind(this)}
+            onClick={this.handleSavePoint}
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
@@ -206,16 +206,16 @@ export class CounterfactualPanel extends React.Component<
       this.setState({ sortFeatures: checked });
     }
   };
-  private onClosePanel(): void {
+  private onClosePanel = () => {
     this.setState({
       filterText: undefined
     });
     this.props.closePanel();
-  }
-  private handleSavePoint(): void {
+  };
+  private handleSavePoint = () => {
     this.props.saveAsPoint();
     this.onClosePanel();
-  }
+  };
   private setCustomRowProperty = (
     key: string | number,
     isString: boolean,
