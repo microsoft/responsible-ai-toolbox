@@ -179,13 +179,13 @@ export class FeatureList extends React.Component<
               <SearchBox
                 placeholder="Search"
                 styles={searchBoxStyles}
-                onSearch={this.onSearch.bind(this)}
-                onClear={this.onSearch.bind(this)}
+                onSearch={this.onSearch}
+                onClear={this.onSearch}
                 onChange={(_, newValue?: string): void => {
                   if (newValue === undefined) {
                     return;
                   }
-                  this.onSearch.bind(this)(newValue);
+                  this.onSearch(newValue);
                 }}
               />
             </Stack.Item>
@@ -221,7 +221,7 @@ export class FeatureList extends React.Component<
                           : SelectionMode.none
                       }
                       selection={this._selection}
-                      onRenderRow={this.renderRow.bind(this)}
+                      onRenderRow={this.renderRow}
                     />
                   </MarqueeSelection>
                 </ScrollablePane>
@@ -237,9 +237,9 @@ export class FeatureList extends React.Component<
             />
             <Stack.Item key="treeViewParameters" align="start">
               <TreeViewParameters
-                updateMaxDepth={this.updateMaxDepth.bind(this)}
-                updateNumLeaves={this.updateNumLeaves.bind(this)}
-                updateMinChildSamples={this.updateMinChildSamples.bind(this)}
+                updateMaxDepth={this.updateMaxDepth}
+                updateNumLeaves={this.updateNumLeaves}
+                updateMinChildSamples={this.updateMinChildSamples}
                 maxDepth={this.state.maxDepth}
                 numLeaves={this.state.numLeaves}
                 minChildSamples={this.state.minChildSamples}
@@ -251,7 +251,7 @@ export class FeatureList extends React.Component<
               <Stack.Item key="applyButtonKey" align="start">
                 <PrimaryButton
                   text="Apply"
-                  onClick={this.apply.bind(this)}
+                  onClick={this.applyClick}
                   allowDisabledFocus
                   disabled={!this.state.enableApplyButton}
                   checked={false}
@@ -270,12 +270,10 @@ export class FeatureList extends React.Component<
     if (!props) {
       return <div />;
     }
-    return (
-      <DetailsRow rowFieldsAs={this.renderRowFields.bind(this)} {...props} />
-    );
+    return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
   };
 
-  private renderRowFields(props: IDetailsRowFieldsProps): JSX.Element {
+  private renderRowFields = (props: IDetailsRowFieldsProps) => {
     if (this.props.isEnabled) {
       return <DetailsRowFields {...props} />;
     }
@@ -284,7 +282,7 @@ export class FeatureList extends React.Component<
         <DetailsRowFields {...props} />
       </span>
     );
-  }
+  };
 
   private renderItemColumn(
     theme: ITheme,
@@ -377,7 +375,7 @@ export class FeatureList extends React.Component<
     return keys;
   }
 
-  private onSearch(searchValue: string): void {
+  private onSearch = (searchValue: string) => {
     this.setState(
       {
         searchedFeatures: this.props.features.filter((feature) =>
@@ -388,7 +386,7 @@ export class FeatureList extends React.Component<
         this.updateTable();
       }
     );
-  }
+  };
 
   private checkEnableApplyButton(
     newSelectedFeatures: string[],
@@ -408,7 +406,7 @@ export class FeatureList extends React.Component<
     );
   }
 
-  private updateMaxDepth(maxDepth: number): void {
+  private updateMaxDepth = (maxDepth: number) => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       maxDepth,
@@ -419,9 +417,9 @@ export class FeatureList extends React.Component<
       enableApplyButton,
       maxDepth
     });
-  }
+  };
 
-  private updateNumLeaves(numLeaves: number): void {
+  private updateNumLeaves = (numLeaves: number) => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -432,9 +430,9 @@ export class FeatureList extends React.Component<
       enableApplyButton,
       numLeaves
     });
-  }
+  };
 
-  private updateMinChildSamples(minChildSamples: number): void {
+  private updateMinChildSamples = (minChildSamples: number) => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -445,9 +443,9 @@ export class FeatureList extends React.Component<
       enableApplyButton,
       minChildSamples
     });
-  }
+  };
 
-  private apply(): void {
+  private applyClick = () => {
     const selectedFeatures = [...this.state.selectedFeatures];
     this.props.saveFeatures(selectedFeatures);
     this.context.errorAnalysisData!.maxDepth = this.state.maxDepth;
@@ -461,5 +459,5 @@ export class FeatureList extends React.Component<
       lastAppliedMinChildSamples: this.state.minChildSamples,
       lastAppliedNumLeaves: this.state.numLeaves
     });
-  }
+  };
 }

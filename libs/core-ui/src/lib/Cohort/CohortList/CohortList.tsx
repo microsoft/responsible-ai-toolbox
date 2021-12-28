@@ -119,18 +119,18 @@ export class CohortList extends React.Component<
             layoutMode={DetailsListLayoutMode.justified}
             selectionPreservedOnEmptyClick
             checkboxVisibility={CheckboxVisibility.hidden}
-            onRenderItemColumn={this.renderItemColumn.bind(this)}
+            onRenderItemColumn={this.renderItemColumn}
           />
         </div>
       </div>
     );
   }
 
-  private renderItemColumn(
+  private renderItemColumn = (
     item: ICohortListItem,
     index: number | undefined,
     column: IColumn | undefined
-  ): React.ReactNode {
+  ) => {
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
         column.fieldName as keyof ICohortListItem
@@ -164,7 +164,7 @@ export class CohortList extends React.Component<
       }
     }
     return React.Fragment;
-  }
+  };
 
   private onEditCohortClick(name: string): void {
     const cohort = this.props.errorCohorts.find(
