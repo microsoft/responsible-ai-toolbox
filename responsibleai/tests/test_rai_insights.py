@@ -21,8 +21,7 @@ from .common_utils import (create_adult_income_dataset,
                            create_binary_classification_dataset,
                            create_boston_data, create_cancer_data,
                            create_complex_classification_pipeline,
-                           create_iris_data,
-                           create_models_classification,
+                           create_iris_data, create_models_classification,
                            create_models_regression)
 from .counterfactual_manager_validator import validate_counterfactual
 from .error_analysis_validator import (setup_error_analysis,

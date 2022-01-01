@@ -17,7 +17,6 @@ from .common_utils import (create_adult_income_dataset,
                            create_complex_classification_pipeline,
                            create_iris_data, create_lightgbm_classifier)
 
-
 LABELS = 'labels'
 
 
