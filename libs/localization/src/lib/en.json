@@ -345,6 +345,7 @@
     "instanceView": "Instance View",
     "localExplanationView": "Local explanation",
     "noFeature": "No feature",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
