@@ -389,7 +389,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category1_max_interval.append(cat1.right)
             category1.append(str(cat1))
         else:
-            category1.append(cat1)
+            category1.append(get_py_value(cat1))
         for col_index in range(len(categories2)):
             cat2 = categories2[col_index]
             index_exists_err = cat1 in matrix_err_counts.index
@@ -454,7 +454,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category2_max_interval.append(cat2.right)
             category2.append(str(cat2))
         else:
-            category2.append(cat2)
+            category2.append(get_py_value(cat2))
     category1 = {VALUES: category1,
                  INTERVAL_MIN: category1_min_interval,
                  INTERVAL_MAX: category1_max_interval}
@@ -528,7 +528,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
             category_max_interval.append(cat.right)
             category.append(str(cat))
         else:
-            category.append(cat)
+            category.append(get_py_value(cat))
     category1 = {VALUES: category,
                  INTERVAL_MIN: category_min_interval,
                  INTERVAL_MAX: category_max_interval}
@@ -540,3 +540,9 @@ def fill_matrix_nulls(matrix, null_value):
     idx_tuples = list(zip(idx_arrays[0], idx_arrays[1]))
     for tuple in idx_tuples:
         matrix.iloc[tuple] = null_value
+
+
+def get_py_value(value):
+    if isinstance(value, np.generic):
+        return value.item()
+    return value
