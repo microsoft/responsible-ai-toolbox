@@ -14,7 +14,7 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
                                                MatrixParams, Metrics,
                                                ModelTask,
                                                metric_to_display_name)
-from erroranalysis._internal.metrics import (get_ordered_labels,
+from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
 
@@ -53,26 +53,12 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     if features[0] is None and features[1] is None:
         raise ValueError(
             'One or two features must be specified to compute the heat map')
-    is_model_analyzer = hasattr(analyzer, 'model')
-    if is_model_analyzer:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories)
-    else:
-        filtered_df = filter_from_cohort(analyzer.dataset,
-                                         filters,
-                                         composite_filters,
-                                         analyzer.feature_names,
-                                         analyzer.true_y,
-                                         analyzer.categorical_features,
-                                         analyzer.categories,
-                                         analyzer.pred_y)
+    filtered_df = filter_from_cohort(analyzer,
+                                     filters,
+                                     composite_filters)
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
+    is_model_analyzer = hasattr(analyzer, 'model')
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -175,8 +161,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
                                        colnames=[feat2])
         else:
             if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_labels(analyzer.classes,
-                                                    true_y, pred_y)
+                ordered_labels = get_ordered_classes(analyzer.classes,
+                                                     true_y, pred_y)
                 aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
                                               ordered_labels, metric)
             else:
@@ -243,8 +229,8 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         # Compute the given metric for each group, if not using error rate
         if metric != Metrics.ERROR_RATE:
             if is_multi_agg_metric(metric):
-                ordered_labels = get_ordered_labels(analyzer.classes,
-                                                    true_y, pred_y)
+                ordered_labels = get_ordered_classes(analyzer.classes,
+                                                     true_y, pred_y)
                 aggfunc = _MultiMetricAggFunc(metric_to_func[metric],
                                               ordered_labels, metric)
             else:
@@ -403,7 +389,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category1_max_interval.append(cat1.right)
             category1.append(str(cat1))
         else:
-            category1.append(cat1)
+            category1.append(get_py_value(cat1))
         for col_index in range(len(categories2)):
             cat2 = categories2[col_index]
             index_exists_err = cat1 in matrix_err_counts.index
@@ -468,7 +454,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category2_max_interval.append(cat2.right)
             category2.append(str(cat2))
         else:
-            category2.append(cat2)
+            category2.append(get_py_value(cat2))
     category1 = {VALUES: category1,
                  INTERVAL_MIN: category1_min_interval,
                  INTERVAL_MAX: category1_max_interval}
@@ -542,7 +528,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
             category_max_interval.append(cat.right)
             category.append(str(cat))
         else:
-            category.append(cat)
+            category.append(get_py_value(cat))
     category1 = {VALUES: category,
                  INTERVAL_MIN: category_min_interval,
                  INTERVAL_MAX: category_max_interval}
@@ -554,3 +540,9 @@ def fill_matrix_nulls(matrix, null_value):
     idx_tuples = list(zip(idx_arrays[0], idx_arrays[1]))
     for tuple in idx_tuples:
         matrix.iloc[tuple] = null_value
+
+
+def get_py_value(value):
+    if isinstance(value, np.generic):
+        return value.item()
+    return value

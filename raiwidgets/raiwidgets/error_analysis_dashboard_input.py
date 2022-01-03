@@ -15,12 +15,13 @@ from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
 
-from .constants import ModelTask, SKLearn
+from .constants import ModelTask
 from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
                                        MethodConstants)
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
+from .utils import _is_classifier
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
@@ -134,9 +135,7 @@ class ErrorAnalysisDashboardInput:
         self._string_ind_data = None
         self._categories = []
         self._categorical_indexes = []
-        self._is_classifier = model is not None\
-            and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+        self._is_classifier = _is_classifier(model)
         self._dataframeColumns = None
         self.dashboard_input = {}
         has_explanation = explanation is not None
@@ -237,8 +236,8 @@ class ErrorAnalysisDashboardInput:
                                  " feature names length differs"
                                  " from local explanations dimension")
             self.dashboard_input[FEATURE_NAMES] = features
-        if model_available and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
+        if model_available and _is_classifier(model) and \
+                dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:

@@ -65,9 +65,10 @@ export class CounterfactualPanel extends React.Component<
     const classes = counterfactualPanelStyles();
     return (
       <Panel
+        id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
         type={PanelType.largeFixed}
-        onDismiss={this.onClosePanel.bind(this)}
+        onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
         className={classes.panelStyle}
@@ -124,28 +125,35 @@ export class CounterfactualPanel extends React.Component<
             )}
           </Text>
         </Stack.Item>
-        <Stack.Item className={classes.searchBox}>
+        <Stack.Item className={classes.buttonRow}>
           <Stack horizontal tokens={{ childrenGap: "l1" }}>
-            <SearchBox
-              placeholder={
-                localization.Interpret.WhatIf.filterFeaturePlaceholder
-              }
-              onChange={this.setFilterText.bind(this)}
-            />
-            <Toggle
-              label={localization.Counterfactuals.WhatIf.sortFeatures}
-              inlineLabel
-              onChange={this.toggleSortFeatures}
-            />
-            <TooltipHost
-              tooltipProps={tooltipProps}
-              delay={TooltipDelay.zero}
-              id={WhatIfConstants.whatIfPredictionTooltipIds}
-              directionalHint={DirectionalHint.rightTopEdge}
-              className={classes.tooltipHostDisplay}
-            >
-              <IconButton iconProps={{ iconName: "info" }} />
-            </TooltipHost>
+            <Stack.Item className={classes.searchBox}>
+              <SearchBox
+                placeholder={
+                  localization.Interpret.WhatIf.filterFeaturePlaceholder
+                }
+                onChange={this.setFilterText}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <Toggle
+                label={localization.Counterfactuals.WhatIf.sortFeatures}
+                inlineLabel
+                defaultChecked={this.state.sortFeatures}
+                onChange={this.toggleSortFeatures}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <TooltipHost
+                tooltipProps={tooltipProps}
+                delay={TooltipDelay.zero}
+                id={WhatIfConstants.whatIfPredictionTooltipIds}
+                directionalHint={DirectionalHint.rightTopEdge}
+                className={classes.tooltipHostDisplay}
+              >
+                <IconButton iconProps={{ iconName: "info" }} />
+              </TooltipHost>
+            </Stack.Item>
           </Stack>
         </Stack.Item>
       </Stack>
@@ -154,6 +162,9 @@ export class CounterfactualPanel extends React.Component<
 
   private renderClose = (): JSX.Element => {
     const classes = counterfactualPanelStyles();
+    if (!this.context.requestPredictions) {
+      return <div />;
+    }
     return (
       <Stack horizontal tokens={{ childrenGap: "15px" }}>
         <Stack.Item align="end" grow={1}>
@@ -175,7 +186,7 @@ export class CounterfactualPanel extends React.Component<
           <PrimaryButton
             className={classes.button}
             text={localization.Counterfactuals.saveAsNew}
-            onClick={this.handleSavePoint.bind(this)}
+            onClick={this.handleSavePoint}
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
@@ -195,16 +206,16 @@ export class CounterfactualPanel extends React.Component<
       this.setState({ sortFeatures: checked });
     }
   };
-  private onClosePanel(): void {
+  private onClosePanel = () => {
     this.setState({
       filterText: undefined
     });
     this.props.closePanel();
-  }
-  private handleSavePoint(): void {
+  };
+  private handleSavePoint = () => {
     this.props.saveAsPoint();
     this.onClosePanel();
-  }
+  };
   private setCustomRowProperty = (
     key: string | number,
     isString: boolean,

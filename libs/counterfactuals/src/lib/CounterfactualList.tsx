@@ -16,10 +16,14 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
+  DetailsRowFields,
   IColumn,
   IComboBox,
   IComboBoxOption,
   IDetailsFooterProps,
+  IDetailsRowFieldsProps,
+  IDetailsRowProps,
+  IRenderFunction,
   Link,
   SelectionMode,
   Stack,
@@ -93,10 +97,31 @@ export class CounterfactualList extends React.Component<
         setKey="set"
         constrainMode={ConstrainMode.unconstrained}
         layoutMode={DetailsListLayoutMode.fixedColumns}
+        onRenderItemColumn={this.renderItemColumn}
+        onRenderRow={this.renderRow}
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
   }
+
+  private renderRow: IRenderFunction<IDetailsRowProps> = (
+    props?: IDetailsRowProps
+  ): JSX.Element | null => {
+    if (!props) {
+      return <div />;
+    }
+    return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
+  };
+
+  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+    const classNames = counterfactualListStyle();
+    const rowClass = props?.itemIndex === 0 ? classNames.highlightRow : "";
+    return (
+      <span className={rowClass}>
+        <DetailsRowFields {...props} />
+      </span>
+    );
+  };
 
   private getItems(): Array<Record<string, string | number>> {
     const items: Array<Record<string, string | number>> = [];
@@ -285,6 +310,16 @@ export class CounterfactualList extends React.Component<
     });
   };
 
+  private renderItemColumn = (item: any, index?: number, column?: IColumn) => {
+    const classNames = counterfactualListStyle();
+    const fieldContent = item[column?.fieldName as unknown as string] as string;
+    const itemClass =
+      index !== 0 && fieldContent !== "-"
+        ? classNames.editCell
+        : classNames.originalCell;
+    return <div className={itemClass}>{fieldContent}</div>;
+  };
+
   private renderDetailsFooterItemColumn = (
     _item: Record<string, string | number>,
     _index?: number,
@@ -303,11 +338,10 @@ export class CounterfactualList extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <ComboBox
-              key={column.key}
-              // label={metaInfo.abbridgedLabel}
+              key={`${column.key}`}
               autoComplete={"on"}
               allowFreeform
-              selectedKey={this.state.data[column.key]}
+              selectedKey={`${this.state.data[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
               onChange={this.updateDropdownColValue.bind(this, column.key)}
             />
@@ -336,8 +370,10 @@ export class CounterfactualList extends React.Component<
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
     if (detailsFooterProps && this.context.requestPredictions) {
+      const classNames = counterfactualListStyle();
       return (
         <DetailsRow
+          styles={{ root: classNames.highlightRow }}
           {...detailsFooterProps}
           columns={detailsFooterProps.columns}
           item={this.state.data}

@@ -35,16 +35,19 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
+  Customizer,
+  getId,
   IPivotItemProps,
   ISettings,
   Layer,
   LayerHost,
-  Customizer,
-  getId,
+  mergeStyleSets,
+  MessageBar,
+  MessageBarType,
   PivotItem,
   Pivot,
   PivotLinkSize,
-  mergeStyleSets
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -435,6 +438,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           )}
           {this.state.openMapShift && (
             <MapShift
+              currentOption={this.state.mapShiftErrorAnalysisOption}
               isOpen={this.state.openMapShift}
               onDismiss={(): void => this.setState({ openMapShift: false })}
               onSave={(): void => {
@@ -559,6 +563,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         <PivotItem key={props.itemKey} {...props} />
                       ))}
                     </Pivot>
+                    {this.props.rootStats &&
+                      this.state.jointDataset.datasetRowCount !==
+                        this.props.rootStats.totalSize && (
+                        <MessageBar messageBarType={MessageBarType.warning}>
+                          <Text>{localization.ErrorAnalysis.scaleWarning}</Text>
+                        </MessageBar>
+                      )}
                     {this.state.activeGlobalTab ===
                       GlobalTabKeys.DataExplorerTab && <DatasetExplorerTab />}
                     {this.state.activeGlobalTab ===

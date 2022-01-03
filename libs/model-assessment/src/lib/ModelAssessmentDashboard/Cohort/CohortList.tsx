@@ -6,6 +6,7 @@ import {
   CohortEditor,
   defaultModelAssessmentContext,
   ErrorCohort,
+  getCohortFilterCount,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -87,12 +88,15 @@ export class CohortList extends React.Component<
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
           checkboxVisibility={CheckboxVisibility.hidden}
-          onRenderItemColumn={this.renderItemColumn.bind(this)}
+          onRenderItemColumn={this.renderItemColumn}
         />
         {this.state.currentEditCohort && (
           <CohortEditor
             jointDataset={this.context.jointDataset}
             filterList={this.state.currentEditCohort.cohort.filters}
+            compositeFilters={
+              this.state.currentEditCohort.cohort.compositeFilters
+            }
             cohortName={this.state.currentEditCohort.cohort.name}
             onSave={this.saveEditedCohort}
             isNewCohort={false}
@@ -106,19 +110,19 @@ export class CohortList extends React.Component<
           <CohortDeleteDialog
             currentDeleteIndex={this.state.currentDeleteIndex}
             currentDeleteCohortName={this.state.currentDeleteCohortName}
-            onDeleteClick={this.onDeleteCohort.bind(this)}
-            onDismiss={this.onDismissDelete.bind(this)}
+            onDeleteClick={this.onDeleteCohort}
+            onDismiss={this.onDismissDelete}
           />
         )}
       </>
     );
   }
 
-  private renderItemColumn(
+  private renderItemColumn = (
     item: ICohortListItem,
     index: number | undefined,
     column: IColumn | undefined
-  ): React.ReactNode {
+  ) => {
     const style = cohortListStyles();
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
@@ -204,7 +208,7 @@ export class CohortList extends React.Component<
       }
     }
     return React.Fragment;
-  }
+  };
 
   private getAllCohort(): ErrorCohort[] {
     return this.context.errorCohorts.filter(
@@ -254,11 +258,11 @@ export class CohortList extends React.Component<
     });
   }
 
-  private onDismissDelete(): void {
+  private onDismissDelete = () => {
     this.setState({ currentDeleteIndex: undefined });
-  }
+  };
 
-  private onDeleteCohort(): void {
+  private onDeleteCohort = () => {
     if (this.state.currentDeleteIndex !== undefined) {
       const index = this.state.currentDeleteIndex;
       const all = this.getAllCohort();
@@ -268,7 +272,7 @@ export class CohortList extends React.Component<
       }
       this.setState({ currentDeleteIndex: undefined });
     }
-  }
+  };
 
   private getCohortListItems(): ICohortListItem[] {
     const allItems = this.context.errorCohorts
@@ -281,7 +285,7 @@ export class CohortList extends React.Component<
           ),
           localization.formatString(
             localization.Interpret.CohortBanner.filters,
-            errorCohort.cohort.filters.length
+            getCohortFilterCount(errorCohort.cohort)
           )
         ];
         return {

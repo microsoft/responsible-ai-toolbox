@@ -6,30 +6,29 @@ import traceback
 import pandas as pd
 
 from erroranalysis._internal.constants import display_name_to_metric
-from responsibleai import ModelAnalysis
+from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 
-from .constants import ErrorMessages, SKLearn
+from .constants import ErrorMessages
 from .interfaces import WidgetRequestResponseConstants
+from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
 
-class ModelAnalysisDashboardInput:
+class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: ModelAnalysis):
+            analysis: RAIInsights):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
-            An ModelAnalysis object that represents an explanation.
-        :type analysis: ModelAnalysis
+            A RAIInsights object that represents an explanation.
+        :type analysis: RAIInsights
         """
         self._analysis = analysis
         model = analysis.model
-        self._is_classifier = model is not None\
-            and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+        self._is_classifier = _is_classifier(model)
         self.dashboard_input = analysis.get_data()
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)

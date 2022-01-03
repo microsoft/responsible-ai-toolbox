@@ -6,13 +6,13 @@ import pandas as pd
 import pytest
 from econml.solutions.causal_analysis._causal_analysis import CausalAnalysis
 
+from responsibleai import ModelTask
 from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai.modelanalysis.constants import ModelTask
 
 EFFECTS_ATTRIBUTES = [
     'point',
@@ -32,49 +32,49 @@ LOCAL_POLICY_ATTRIBUTES = [
 ]
 
 
-def validate_causal(model_analysis, data, target_column,
+def validate_causal(rai_insights, data, target_column,
                     treatment_features, max_cat_expansion):
-    if model_analysis.task_type == ModelTask.CLASSIFICATION and \
+    if rai_insights.task_type == ModelTask.CLASSIFICATION and \
             len(np.unique(data[target_column])) > 2:
         with pytest.raises(AssertionError,
                            match="Multiclass classification isn't supported"):
-            model_analysis.causal.add(
+            rai_insights.causal.add(
                 treatment_features,
                 nuisance_model='automl',
                 upper_bound_on_cat_expansion=max_cat_expansion)
-            model_analysis.causal.compute()
+            rai_insights.causal.compute()
         return
 
     # Add the first configuration
-    model_analysis.causal.add(
+    rai_insights.causal.add(
         treatment_features,
         nuisance_model='automl',
         upper_bound_on_cat_expansion=max_cat_expansion)
 
-    results = model_analysis.causal.get()
+    results = rai_insights.causal.get()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 1
     _check_causal_result(results[0])
 
-    results = model_analysis.causal.get_data()
+    results = rai_insights.causal.get_data()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 1
     _check_causal_result(results[0], is_serialized=True)
 
     # Add the second configuration
-    model_analysis.causal.add(treatment_features,
-                              nuisance_model='linear')
-    results = model_analysis.causal.get()
+    rai_insights.causal.add(treatment_features,
+                            nuisance_model='linear')
+    results = rai_insights.causal.get()
     assert results is not None
     assert isinstance(results, list)
     assert len(results) == 2
 
     # Add a bad configuration
     with pytest.raises(UserConfigValidationException):
-        model_analysis.causal.add(treatment_features,
-                                  nuisance_model='fake_model')
+        rai_insights.causal.add(treatment_features,
+                                nuisance_model='fake_model')
 
 
 def _check_causal_result(causal_result, is_serialized=False):

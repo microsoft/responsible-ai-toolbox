@@ -28,6 +28,7 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import {
+  getTheme,
   IProcessedStyleSet,
   ITheme,
   mergeStyles,
@@ -147,6 +148,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const labelPaddingX = 20;
     const labelPaddingY = 8;
     const labelYOffset = 3;
+    const theme = getTheme();
 
     const rootDescendants = this.state.root.descendants();
     let max = 0;
@@ -196,7 +198,11 @@ export class TreeViewRenderer extends React.PureComponent<
         return {
           d: linkVerticalD || "",
           id: id + getRandomId(),
-          style: { fill: "white", stroke: lineColor, strokeWidth: thick }
+          style: {
+            fill: theme.semanticColors.bodyBackground,
+            stroke: lineColor,
+            strokeWidth: thick
+          }
         };
       });
 

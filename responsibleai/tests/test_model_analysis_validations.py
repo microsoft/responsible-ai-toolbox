@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+"""Note: this test file will be removed once ModelAnalysis is removed."""
+
 import logging
 from unittest.mock import MagicMock
 
@@ -50,7 +52,7 @@ class TestModelAnalysisValidations:
                 target_column='bad_target',
                 task_type='classification',
                 maximum_rows_for_test=len(y_test) - 1)
-        assert "The test data has 30 rows, but limit is set to 29 rows" in \
+        assert "The test data has 31 rows, but limit is set to 30 rows" in \
             str(ucve.value)
         assert "Please resample the test data or " +\
             "adjust maximum_rows_for_test" in \
@@ -260,6 +262,24 @@ class TestModelAnalysisValidations:
                 task_type='classification')
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
+
+    def test_unsupported_train_test_types(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        X_train['target'] = y_train
+        X_test['bad_target'] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            ModelAnalysis(
+                model=model,
+                train=X_train.values,
+                test=X_test.values,
+                target_column='target',
+                task_type='classification')
+        assert "Unsupported data type for either train or test. " + \
+            "Expecting pandas Dataframe for train and test." in str(ucve.value)
 
     def test_train_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \

@@ -11,6 +11,7 @@ import {
 export interface ICounterfactualPanelStyles {
   listContainer: IStyle;
   pane: IStyle;
+  buttonRow: IStyle;
   cPanel: IStyle;
   container: IStyle;
   customPredictBlock: IStyle;
@@ -46,6 +47,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         marginTop: "20px",
         minWidth: "150px",
         verticalAlign: "center"
+      },
+      buttonRow: {
+        padding: "20px 0"
       },
       container: {
         width: "100%"
@@ -101,7 +105,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         color: theme.palette.blue
       },
       searchBox: {
-        padding: "20px 0"
+        width: "210px"
       },
       stackHeader: {
         paddingLeft: 24,
