@@ -50,7 +50,22 @@ All pull requests need to abide by the following criteria to be accepted:
 
 ## Development process
 
+First ensure you have
+[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+installed (which in turn may require installing `node`).
+Using npm you can install `yarn` as follows:
+
+```
+npm install -g yarn
+```
+
+If `yarn --version` succeeds you can proceed.
+If not, you may have to follow the instructions printed by your shell.
+If you're using Powershell you may have to bypass the execution policy
+to allow `yarn` to execute. One way to do this is `Set-ExecutionPolicy -ExecutionPolicy Bypass`.
+
 For all further steps `yarn install` is a prerequisite.
+Run the `yarn install` command from your repository root directory.
 
 To run the dashboards locally run the following from the root of the
 repository on your machine:

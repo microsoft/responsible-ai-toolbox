@@ -129,7 +129,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           <FeatureList
             isOpen={this.state.openFeatureList}
             onDismiss={(): void => this.setState({ openFeatureList: false })}
-            saveFeatures={this.saveFeatures.bind(this)}
+            saveFeatures={this.saveFeatures}
             features={this.props.features}
             importances={this.props.importances}
             isEnabled={this.props.getTreeNodes !== undefined}
@@ -154,10 +154,10 @@ export class ErrorAnalysisViewTab extends React.Component<
     );
   }
 
-  private saveFeatures(features: string[]): void {
+  private saveFeatures = (features: string[]) => {
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
-  }
+  };
 
   private readonly handleTabClick = (item?: PivotItem): void => {
     if (item?.props.itemKey === ErrorAnalysisOptions.HeatMap) {

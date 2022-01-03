@@ -21,6 +21,7 @@ from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.utils import _is_classifier
 
 _DATA = 'data'
 _PREDICTIONS = 'predictions'
@@ -501,10 +502,7 @@ class RAIInsights(object):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if (self.model is not None and
-                hasattr(self.model, SKLearn.PREDICT_PROBA) and
-                self.model.predict_proba is not None and
-                dataset is not None):
+        if _is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
@@ -714,8 +712,15 @@ class RAIInsights(object):
             inst.__dict__[_MODEL] = serializer.load(top_dir)
         else:
             inst.__dict__['_' + _SERIALIZER] = None
-            with open(top_dir / _MODEL_PKL, 'rb') as file:
-                inst.__dict__[_MODEL] = pickle.load(file)
+            try:
+                with open(top_dir / _MODEL_PKL, 'rb') as file:
+                    inst.__dict__[_MODEL] = pickle.load(file)
+            except Exception:
+                warnings.warn(
+                    'ERROR-LOADING-USER-MODEL: '
+                    'There was an error loading the user model. '
+                    'Some of RAI dashboard features may not work.')
+                inst.__dict__[_MODEL] = None
 
     @staticmethod
     def _load_managers(inst, path):

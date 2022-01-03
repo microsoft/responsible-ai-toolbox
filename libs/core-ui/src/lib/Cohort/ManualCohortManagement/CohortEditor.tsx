@@ -124,7 +124,6 @@ export class CohortEditor extends React.PureComponent<
                   localization.Interpret.CohortEditor.cohortNamePlaceholder
                 }
                 onGetErrorMessage={this._getErrorMessage}
-                validateOnLoad={false}
                 disabled={this.props.disableEditName}
                 onChange={this.setCohortName}
               />
@@ -302,6 +301,9 @@ export class CohortEditor extends React.PureComponent<
   private _getErrorMessage = (): string | undefined => {
     if (!this.state.cohortName?.length) {
       return localization.Interpret.CohortEditor.cohortNameError;
+    }
+    if (this.isDuplicate()) {
+      return localization.Interpret.CohortEditor.cohortNameDupError;
     }
     return undefined;
   };

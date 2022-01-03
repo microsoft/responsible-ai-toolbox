@@ -5,6 +5,7 @@
 import os
 import uuid
 from pathlib import Path
+from typing import List
 
 
 class DirectoryManager:
@@ -112,8 +113,10 @@ class DirectoryManager:
                 DirectoryManager.GENERATORS)
 
     @staticmethod
-    def list_sub_directories(path):
+    def list_sub_directories(path) -> List[str]:
         """List all the directories give a path and return.
+
+        Will return an empty list if the path does not exist.
 
         :param path: Path to look into to list all directories.
         :type path: Path
@@ -121,4 +124,8 @@ class DirectoryManager:
         :returns: List of all directories found in this path.
         :rtype: List[str]
         """
-        return os.listdir(Path(path))
+        target_dir = Path(path)
+        if target_dir.exists():
+            return os.listdir(target_dir)
+        else:
+            return []

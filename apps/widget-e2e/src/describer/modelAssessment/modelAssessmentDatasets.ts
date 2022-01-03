@@ -100,6 +100,13 @@ const modelAssessmentDatasets = {
       "education",
       "capital-loss"
     ],
+    modelStatisticsData: {
+      defaultXAxis: "Probability : <=50K",
+      defaultXAxisPanelValue: "Prediction probabilities",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age"
+    },
     whatIfCounterfactualsData: {
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
