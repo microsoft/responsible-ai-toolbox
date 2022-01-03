@@ -298,6 +298,21 @@ class TestMatrixFilter(object):
                                      matrix_features=matrix_features,
                                      quantile_binning=True)
 
+    def test_matrix_filter_iris_int64(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+
+        X_train[feature_names[0]] = X_train[feature_names[0]].astype(np.int64)
+        X_test[feature_names[0]] = X_test[feature_names[0]].astype(np.int64)
+
+        model_task = ModelTask.CLASSIFICATION
+        matrix_features = [feature_names[0]]
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names, model_task,
+                                     matrix_features=matrix_features)
+
 
 def run_error_analyzer_on_models(X_train,
                                  y_train,
@@ -433,6 +448,9 @@ def validate_matrix(matrix, exp_total_count,
 
 def validate_matrix_category(category, reverse_order=True):
     assert VALUES in category
+    # Make sure categories are never numpy types but python types
+    for value in category[VALUES]:
+        assert not isinstance(value, np.generic)
     if INTERVAL_MIN in category:
         assert INTERVAL_MAX in category
         intervals = category[INTERVAL_MIN]

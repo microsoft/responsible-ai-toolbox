@@ -85,7 +85,7 @@ export class SaveCohort extends React.Component<
       >
         <TextField
           label={localization.ErrorAnalysis.SaveCohort.cohortName}
-          onChange={this.updateCohortName.bind(this)}
+          onChange={this.updateCohortName}
           defaultValue={allDataCopy}
           styles={textFieldStyles}
         />
@@ -98,14 +98,14 @@ export class SaveCohort extends React.Component<
           <PrimaryButton
             onClick={(): void => {
               this.props.onDismiss();
-              this.saveCohort.bind(this)();
+              this.saveCohort();
             }}
             text={localization.ErrorAnalysis.SaveCohort.save}
           />
           <DefaultButton
             onClick={(): void => {
               this.props.onDismiss();
-              this.saveCohort.bind(this)(true);
+              this.saveCohort(true);
             }}
           >
             {localization.Interpret.CohortEditor.saveAndSwitch}
@@ -119,17 +119,17 @@ export class SaveCohort extends React.Component<
     );
   }
 
-  private updateCohortName(
+  private updateCohortName = (
     _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
-  ): void {
+  ) => {
     if (!newValue) {
       newValue = "";
     }
     this.setState({ cohortName: newValue });
-  }
+  };
 
-  private saveCohort(switchNew?: boolean): void {
+  private saveCohort = (switchNew?: boolean) => {
     const tempCohort = this.props.temporaryCohort;
     const savedCohort = new ErrorCohort(
       new Cohort(
@@ -145,5 +145,5 @@ export class SaveCohort extends React.Component<
       tempCohort.cohortStats
     );
     this.props.onSave(savedCohort, switchNew);
-  }
+  };
 }
