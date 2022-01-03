@@ -116,6 +116,6 @@ export interface IWhatIfCounterfactualsData {
 
 export enum RAINotebookNames {
   "ClassificationModelAssessment" = "responsibleaidashboard-census-classification-model-debugging.py",
-  "RegressionDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
   "RegressionModelAssessment" = "responsibleaidashboard-diabetes-regression-model-debugging.py"
 }

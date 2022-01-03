@@ -116,7 +116,8 @@ const modelAssessmentDatasets = {
       WhatIfNameLabel: "Copy of row 5",
       WhatIfNameLabelUpdated: "New Copy of row 5"
     }
-  }
+  },
+  DiabetesDecisionMaking: {}
 };
 
 const withType: {
