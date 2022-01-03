@@ -125,7 +125,7 @@ cypress window will open locally - select test file to run the tests
 5. `pip install -e responsibleai` to install responsibleai locally.
 6. `pip install -e raiwidgets` to install raiwidgets locally.
 7. `pip install jupyter`
-8. `cd notebooks\responsibleaitoolbox-dashboard`
+8. `cd notebooks\responsibleaidashboard`
 9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`
 
 cypress window will open locally - select test file to run the tests
