@@ -5,7 +5,7 @@
 This project welcomes contributions and suggestions. Most contributions
 require you to agree to a Contributor License Agreement (CLA) declaring that
 you have the right to, and actually do, grant us the rights to use your
-contribution. For details, visit https://cla.opensource.microsoft.com.
+contribution. For details, visit <https://cla.opensource.microsoft.com>.
 
 When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status
@@ -104,9 +104,31 @@ or alternatively `yarn buildall` to build all of them. Since most apps have
 dependencies on `mlchartlib` it makes sense to run `yarn buildall` at least
 once.
 
-Tests are in the `apps` directory. To execute them run `yarn e2eall`.
-Sometimes it is preferable to watch the execution and select only individual
-test cases. This is possible using `yarn e2e-watch`.
+### Testing
+
+#### Run e2e tests locally with mock data
+
+1. git clone <https://github.com/microsoft/responsible-ai-widget>
+2. `cd responsible-ai-widgets`
+3. `yarn install`
+4. `yarn build`
+5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`
+
+cypress window will open locally - select test file to run the tests
+
+#### Run e2e tests locally with notebook data
+
+1. git clone <https://github.com/microsoft/responsible-ai-widget>
+2. `cd responsible-ai-widgets` (It is recommended to create a new virtual environment and install the dependencies)
+3. `yarn install`
+4. `yarn buildall` or `yarn build widget`
+5. `pip install -e responsibleai` to install responsibleai locally.
+6. `pip install -e raiwidgets` to install raiwidgets locally.
+7. `pip install jupyter`
+8. `cd notebooks\responsibleaitoolbox-dashboard`
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`
+
+cypress window will open locally - select test file to run the tests
 
 ### Debugging
 
