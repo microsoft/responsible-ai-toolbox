@@ -109,7 +109,7 @@ once.
 #### Run e2e tests locally with mock data
 
 1. git clone <https://github.com/microsoft/responsible-ai-widget>
-2. `cd responsible-ai-widgets`
+2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
 5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`
@@ -119,7 +119,7 @@ cypress window will open locally - select test file to run the tests
 #### Run e2e tests locally with notebook data
 
 1. git clone <https://github.com/microsoft/responsible-ai-widget>
-2. `cd responsible-ai-widgets` (It is recommended to create a new virtual environment and install the dependencies)
+2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
 3. `yarn install`
 4. `yarn buildall` or `yarn build widget`
 5. `pip install -e responsibleai` to install responsibleai locally.
