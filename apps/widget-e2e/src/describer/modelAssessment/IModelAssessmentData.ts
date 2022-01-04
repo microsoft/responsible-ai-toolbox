@@ -38,6 +38,7 @@ export interface IModelStatisticsData {
   defaultXAxisPanelValue?: string;
   yAxisNewPanelValue?: string;
   yAxisNewValue?: string;
+  yAxisNumberOfBins?: string;
   yAxisPanelOptions?: string[];
   newYAxisChartValues?: { [key: string]: string[] };
   xAxisPanelOptions?: string[];

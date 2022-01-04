@@ -5,8 +5,9 @@ import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeModelPerformanceBoxChart } from "./describeModelPerformanceBoxChart";
+import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideBar";
 
-const testName = "What If";
+const testName = "Model Statistics";
 
 export function describeModelStatistics(
   name: keyof typeof modelAssessmentDatasets
@@ -22,5 +23,6 @@ export function describeModelStatistics(
       cy.visit(hostDetails.host);
     });
     describeModelPerformanceBoxChart(datasetShape);
+    describeModelPerformanceSideBar(datasetShape);
   });
 }
