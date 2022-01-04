@@ -187,6 +187,69 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 without_model_rai_insights = RAIInsights.load(save_path)
                 assert without_model_rai_insights.model is None
 
+    @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
+                                              ManagerNames.ERROR_ANALYSIS,
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.COUNTERFACTUAL])
+    def test_rai_insights_add_save_load_save(self, manager_type):
+        data_train, data_test, y_train, y_test, categorical_features, \
+            continuous_features, target_name, classes = \
+            create_adult_income_dataset()
+        X_train = data_train.drop([target_name], axis=1)
+
+        model = create_complex_classification_pipeline(
+            X_train, y_train, continuous_features, categorical_features)
+
+        # Cut down size for counterfactuals, in the interests of speed
+        if manager_type == ManagerNames.COUNTERFACTUAL:
+            data_test = data_test[0:1]
+
+        rai_insights = RAIInsights(
+            model, data_train, data_test,
+            target_name,
+            categorical_features=categorical_features,
+            task_type=ModelTask.CLASSIFICATION)
+
+        # Call a single manager
+        if manager_type == ManagerNames.CAUSAL:
+            rai_insights.causal.add(
+                treatment_features=['age', 'hours_per_week']
+            )
+        elif manager_type == ManagerNames.COUNTERFACTUAL:
+            rai_insights.counterfactual.add(
+                total_CFs=10,
+                desired_class='opposite',
+                feature_importance=False
+            )
+        elif manager_type == ManagerNames.ERROR_ANALYSIS:
+            rai_insights.error_analysis.add()
+        elif manager_type == ManagerNames.EXPLAINER:
+            rai_insights.explainer.add()
+        else:
+            raise ValueError(
+                "Bad manager_type: {0}".format(manager_type))
+
+        rai_insights.compute()
+
+        with TemporaryDirectory() as tmpdir:
+            save_1 = Path(tmpdir) / "first_save"
+            save_2 = Path(tmpdir) / "second_save"
+
+            # Save it
+            rai_insights.save(save_1)
+
+            # Load
+            rai_2 = RAIInsights.load(save_1)
+
+            # Validate, but this isn't the main check
+            validate_rai_insights(
+                rai_2, data_train, data_test,
+                target_name, ModelTask.CLASSIFICATION,
+                categorical_features=categorical_features)
+
+            # Save again (this is where Issue #1081 manifested)
+            rai_2.save(save_2)
+
 
 def validate_rai_insights(
     rai_insights,
