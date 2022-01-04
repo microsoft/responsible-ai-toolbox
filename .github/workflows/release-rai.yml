@@ -77,7 +77,7 @@ jobs:
         working-directory: ${{ env.raiDirectory }}
       - name: pip freeze
         run: pip freeze
-      #
+
       - name: replace README for raiwidgets
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
@@ -86,7 +86,7 @@ jobs:
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./${{ env.raiDirectory }}/
-      # =====
+
       - name: build wheel for raiwidgets
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.widgetDirectory }}
@@ -149,35 +149,20 @@ jobs:
           name: ${{ matrix.package }}
           path: ${{ matrix.package }}
 
-      - name: Publish responsibleai package to Test PyPI
-        if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
+      - name: Publish package to Test PyPI
+        if: ${{ github.event.inputs.releaseType == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{steps.download.outputs.download-path}}
-      - name: Publish responsibleai package to Prod PyPI
-        if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
+      - name: Publish package to Prod PyPI
+        if: ${{ github.event.inputs.releaseType == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
-          packages_dir: ${{steps.download.outputs.download-path}}
-      - name: Publish raiwidgets package to Test PyPI
-        if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
-          repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{steps.download.outputs.download-path}}
-      - name: Publish raiwidgets package to Prod PyPI
-        if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
           packages_dir: ${{steps.download.outputs.download-path}}
 
   release-typescript:
