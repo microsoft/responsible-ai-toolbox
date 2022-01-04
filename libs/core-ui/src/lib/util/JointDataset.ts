@@ -10,6 +10,7 @@ import {
 import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
+import { IDataBalanceMeasures } from "../Interfaces/DataBalanceInterfaces";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance
@@ -32,6 +33,7 @@ export interface IJointDatasetArgs {
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
   metadata: IExplanationModelMetadata;
+  dataBalanceMeasures?: IDataBalanceMeasures;
 }
 
 export enum ColumnCategories {
@@ -89,6 +91,7 @@ export class JointDataset {
   public rawLocalImportance: number[][][] | undefined;
   public metaDict: { [key: string]: IJointMeta } = {};
 
+  public hasDataBalanceMeasures = false;
   public hasDataset = false;
   public hasLocalExplanations = false;
   public hasPredictedY = false;
@@ -310,6 +313,9 @@ export class JointDataset {
       // ).fill(false);
       this.buildLocalFlattenMatrix(WeightVectors.AbsAvg);
       this.hasLocalExplanations = true;
+    }
+    if (args.dataBalanceMeasures) {
+      this.hasDataBalanceMeasures = true;
     }
     if (this.dataDict === undefined) {
       this.initializeDataDictIfNeeded([]);

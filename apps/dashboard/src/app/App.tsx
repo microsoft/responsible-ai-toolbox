@@ -52,10 +52,15 @@ export class App extends React.Component<IAppSetting, IAppState> {
         >
           {this.state.application === "interpret" && (
             <Interpret
-              dataset={
+              data={
                 applications[this.state.application].datasets[
                   this.state.dataset
                 ].data
+              }
+              dataset={
+                applications[this.state.application].datasets[
+                  this.state.dataset
+                ].dataset
               }
               classDimension={
                 applications[this.state.application].datasets[

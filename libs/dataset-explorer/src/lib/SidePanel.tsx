@@ -22,7 +22,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
+import { defaultTabStyles } from "./DefaultTab.styles";
 
 export interface ISidePanelProps {
   chartProps: IGenericChartProps;
@@ -48,7 +48,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
     }
   ];
   public render(): React.ReactNode {
-    const classNames = datasetExplorerTabStyles();
+    const classNames = defaultTabStyles();
     const colorSeries = this.buildColorLegend();
     return (
       <Stack>

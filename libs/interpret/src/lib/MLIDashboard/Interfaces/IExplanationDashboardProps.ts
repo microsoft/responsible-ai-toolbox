@@ -4,7 +4,8 @@
 import {
   IOfficeFabricProps,
   IExplanationDashboardData,
-  ITelemetryMessage
+  ITelemetryMessage,
+  IDataset
 } from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
@@ -26,7 +27,8 @@ import { IStringsParam } from "./IStringsParam";
 
 export interface IExplanationDashboardProps
   extends IExplanationDashboardData,
-    IOfficeFabricProps {
+    IOfficeFabricProps,
+    IDataset {
   dashboardType?: "ModelPerformance";
   locale?: string;
   stringParams?: IStringsParam;

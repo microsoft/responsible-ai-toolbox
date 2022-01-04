@@ -5,7 +5,6 @@ import {
   WeightVectorOption,
   Cohort,
   ModelAssessmentContext,
-  IDataset,
   IModelExplanationData,
   ErrorCohort,
   CohortBar
@@ -89,7 +88,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.cohorts[0],
             this.state.jointDataset
           ),
-          dataset: {} as IDataset,
+          dataset: this.state.dataset,
           deleteCohort: () => undefined,
           editCohort: () => undefined,
           errorCohorts: this.state.cohorts.map(

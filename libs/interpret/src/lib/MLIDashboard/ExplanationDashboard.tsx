@@ -582,7 +582,7 @@ export class ExplanationDashboard extends React.Component<
     props: IExplanationDashboardProps
   ): IExplanationModelMetadata {
     const modelType = ExplanationDashboard.getModelType(props);
-    let featureNames = props.dataSummary.featureNames;
+    let featureNames = props.dataSummary?.featureNames;
     let featureNamesAbridged: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
@@ -641,7 +641,7 @@ export class ExplanationDashboard extends React.Component<
       );
       featureNamesAbridged = featureNames;
     }
-    let classNames = props.dataSummary.classNames;
+    let classNames = props.dataSummary?.classNames;
     const classLength = ExplanationDashboard.getClassLength(props);
     if (!classNames || classNames.length !== classLength) {
       classNames = ExplanationDashboard.buildIndexedNames(
@@ -652,13 +652,13 @@ export class ExplanationDashboard extends React.Component<
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
       featureNames.length,
       props.testData,
-      props.dataSummary.categoricalMap
+      props.dataSummary?.categoricalMap
     );
     const featureRanges =
       ModelMetadata.buildFeatureRanges(
         props.testData,
         featureIsCategorical,
-        props.dataSummary.categoricalMap
+        props.dataSummary?.categoricalMap
       ) || [];
     return {
       classNames,
@@ -681,7 +681,7 @@ export class ExplanationDashboard extends React.Component<
 
   private static getModelType(props: IExplanationDashboardProps): ModelTypes {
     // If python gave us a hint, use it
-    if (props.modelInformation.method === "regressor") {
+    if (props.modelInformation?.method === "regressor") {
       return ModelTypes.Regression;
     }
     switch (ExplanationDashboard.getClassLength(props)) {

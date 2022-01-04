@@ -10,7 +10,8 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   TelemetryLevels,
-  WeightVectorOption
+  WeightVectorOption,
+  IDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -25,6 +26,7 @@ export interface INewExplanationDashboardState {
   selectedCohort: Cohort;
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
+  dataset: IDataset;
   modelMetadata: IExplanationModelMetadata;
   validationWarnings: string[];
   showingDataSizeWarning: boolean;
@@ -47,7 +49,7 @@ export enum GlobalTabKeys {
 const rowWarningSize = 6000;
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
-  if (props.modelInformation.method === "regressor") {
+  if (props.modelInformation?.method === "regressor") {
     return ModelTypes.Regression;
   }
   switch (getClassLength(props)) {
@@ -68,7 +70,7 @@ function buildModelMetadata(
   props: IExplanationDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(props);
-  let featureNames = props.dataSummary.featureNames;
+  let featureNames = props.dataSummary?.featureNames;
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
@@ -122,7 +124,7 @@ function buildModelMetadata(
     );
     featureNamesAbridged = featureNames;
   }
-  let classNames = props.dataSummary.classNames;
+  let classNames = props.dataSummary?.classNames;
   const classLength = getClassLength(props);
   if (!classNames || classNames.length !== classLength) {
     classNames = buildIndexedNames(
@@ -133,13 +135,13 @@ function buildModelMetadata(
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
     props.testData,
-    props.dataSummary.categoricalMap
+    props.dataSummary?.categoricalMap
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.testData,
       featureIsCategorical,
-      props.dataSummary.categoricalMap
+      props.dataSummary?.categoricalMap
     ) || [];
   return {
     classNames,
@@ -164,6 +166,7 @@ export function buildInitialExplanationContext(
   if (props?.precomputedExplanations?.localFeatureImportance?.scores) {
     localExplanations = props.precomputedExplanations.localFeatureImportance;
   }
+  const dataset = props as IDataset;
   const jointDataset = new JointDataset({
     dataset: props.testData,
     localExplanations,
@@ -203,6 +206,7 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ExplanationTab,
     cohorts,
+    dataset,
     jointDataset,
     modelMetadata,
     requestPredictions: props.requestPredictions,

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import {
+  IDataset,
   IExplanationDashboardData,
   ITelemetryMessage
 } from "@responsible-ai/core-ui";
@@ -16,7 +17,8 @@ import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 interface IAppProps {
-  dataset: IExplanationDashboardData;
+  data?: IExplanationDashboardData;
+  dataset?: IDataset;
   theme: ITheme;
   language: Language;
   version: 1 | 2;
@@ -35,7 +37,16 @@ export class App extends React.Component<IAppProps> {
 
   public render(): React.ReactNode {
     const dashboardProp: IExplanationDashboardProps = {
-      ...this.props.dataset,
+      ...this.props.data,
+      ...(this.props.dataset === undefined
+        ? {
+            categorical_features: [],
+            feature_names: [],
+            features: [[]],
+            task_type: undefined,
+            true_y: []
+          }
+        : this.props.dataset),
       explanationMethod: "mimic",
       locale: this.props.language,
       requestPredictions: !this.props.classDimension

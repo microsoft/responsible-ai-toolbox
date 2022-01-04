@@ -9,7 +9,7 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 
-export interface IDatasetExplorerTabStyles {
+export interface IDefaultTabStyles {
   page: IStyle;
   infoIcon: IStyle;
   helperText: IStyle;
@@ -36,10 +36,10 @@ export interface IDatasetExplorerTabStyles {
   smallItalic: IStyle;
 }
 
-export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
+export const defaultTabStyles: () => IProcessedStyleSet<IDefaultTabStyles> =
   () => {
     const theme = getTheme();
-    return mergeStyleSets<IDatasetExplorerTabStyles>({
+    return mergeStyleSets<IDefaultTabStyles>({
       boldText: {
         fontWeight: "600",
         paddingBottom: "5px"

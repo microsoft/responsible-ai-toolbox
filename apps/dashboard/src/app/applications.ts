@@ -4,7 +4,8 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData
+  IFairnessData,
+  IDataset
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -18,7 +19,7 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
-import { adultCensusWithDataBalance } from "../interpret/__mock_data__/adultCensus";
+import { adultCensusWithDataBalanceMeasures } from "../interpret/__mock_data__/adultCensus";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -52,7 +53,8 @@ import {
 } from "../model-assessment/__mock_data__/bostonData";
 
 export interface IInterpretDataSet {
-  data: IExplanationDashboardData;
+  data?: IExplanationDashboardData;
+  dataset?: IDataset;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -146,7 +148,7 @@ export const applications: IApplications = <const>{
   },
   interpret: {
     datasets: {
-      adultCensus: { data: adultCensusWithDataBalance },
+      adultCensus: { dataset: adultCensusWithDataBalanceMeasures },
       automlMimicAdult: { data: automlMimicAdult },
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },

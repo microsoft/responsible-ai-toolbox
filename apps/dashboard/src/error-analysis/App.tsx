@@ -76,8 +76,8 @@ export class App extends React.Component<IAppProps> {
     let dashboardProp: IErrorAnalysisDashboardProps;
     if (this.props.classDimension === 1) {
       const dataset = this.props.dataset as IExplanationDashboardData;
-      const featureNames = dataset.dataSummary.featureNames
-        ? dataset.dataSummary.featureNames
+      const featureNames = dataset.dataSummary?.featureNames
+        ? dataset.dataSummary?.featureNames
         : [];
       if (this.props.version === 1) {
         dashboardProp = {
@@ -95,8 +95,8 @@ export class App extends React.Component<IAppProps> {
           requestDebugML: generateJsonTreeBoston,
           requestImportances: createJsonImportancesGenerator(
             "dataSummary" in this.props.dataset &&
-              this.props.dataset.dataSummary.featureNames
-              ? this.props.dataset.dataSummary.featureNames
+              this.props.dataset.dataSummary?.featureNames
+              ? this.props.dataset.dataSummary?.featureNames
               : [],
             DatasetName.Boston
           ),
@@ -278,16 +278,16 @@ export class App extends React.Component<IAppProps> {
           numLeaves: 31
         },
         explanationMethod: "mimic",
-        features: dataset.dataSummary.featureNames
-          ? dataset.dataSummary.featureNames
+        features: dataset.dataSummary?.featureNames
+          ? dataset.dataSummary?.featureNames
           : [],
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
         requestDebugML: requestFunction,
         requestImportances: createJsonImportancesGenerator(
           "dataSummary" in this.props.dataset &&
-            this.props.dataset.dataSummary.featureNames
-            ? this.props.dataset.dataSummary.featureNames
+            this.props.dataset.dataSummary?.featureNames
+            ? this.props.dataset.dataSummary?.featureNames
             : [],
           datasetType
         ),
@@ -309,8 +309,8 @@ export class App extends React.Component<IAppProps> {
           numLeaves: 31
         },
         explanationMethod: "mimic",
-        features: dataset.dataSummary.featureNames
-          ? dataset.dataSummary.featureNames
+        features: dataset.dataSummary?.featureNames
+          ? dataset.dataSummary?.featureNames
           : [],
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
@@ -329,8 +329,8 @@ export class App extends React.Component<IAppProps> {
         requestFunction = getJsonTreeBreastCancerPrecision;
       }
       const dataset = this.props.dataset as IExplanationDashboardData;
-      const featureNames = dataset.dataSummary.featureNames
-        ? dataset.dataSummary.featureNames
+      const featureNames = dataset.dataSummary?.featureNames
+        ? dataset.dataSummary?.featureNames
         : [];
       const staticTree = requestFunction(featureNames);
       const staticMatrix = getJsonMatrix();
