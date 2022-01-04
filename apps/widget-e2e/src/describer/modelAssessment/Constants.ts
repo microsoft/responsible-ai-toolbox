@@ -77,5 +77,11 @@ export enum Locators {
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
   MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
-  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']"
+  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']",
+  MSSideBarCards = "#ModelPerformanceChart div[class^='statsBox']",
+  MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
+  MSScrollable = "#ModelPerformanceChart div[class^='scrollableWrapper']",
+  MSCohortDropdown = "#modelPerformanceCohortPicker",
+  MSDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  MSYAxisPoints = "#ModelPerformanceChart g[class^='cartesianlayer'] g[class^='ytick']"
 }

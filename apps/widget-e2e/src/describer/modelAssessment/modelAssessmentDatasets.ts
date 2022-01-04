@@ -105,7 +105,8 @@ const modelAssessmentDatasets = {
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
       yAxisNewPanelValue: "Dataset",
-      yAxisNewValue: "age"
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
       columnHeaderAfterSort: "capital-gain",
