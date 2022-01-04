@@ -3,7 +3,9 @@
 
 import {
   IDataset,
+  IDatasetSummary,
   IExplanationDashboardData,
+  IModelInformation,
   ITelemetryMessage
 } from "@responsible-ai/core-ui";
 import {
@@ -37,16 +39,17 @@ export class App extends React.Component<IAppProps> {
 
   public render(): React.ReactNode {
     const dashboardProp: IExplanationDashboardProps = {
-      ...this.props.data,
-      ...(this.props.dataset === undefined
-        ? {
-            categorical_features: [],
-            feature_names: [],
-            features: [[]],
-            task_type: undefined,
-            true_y: []
-          }
-        : this.props.dataset),
+      ...(this.props.data ?? {
+        dataSummary: {} as IDatasetSummary,
+        modelInformation: {} as IModelInformation
+      }),
+      ...(this.props.dataset ?? {
+        categorical_features: [],
+        feature_names: [],
+        features: [[]],
+        task_type: undefined,
+        true_y: []
+      }),
       explanationMethod: "mimic",
       locale: this.props.language,
       requestPredictions: !this.props.classDimension

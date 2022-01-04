@@ -7,8 +7,8 @@ import { Method, ModelClass } from "./IModelExplanationData";
 // TODO replace all of these with classes IDataset and IModelExplanationData
 
 export interface IExplanationDashboardData {
-  modelInformation?: IModelInformation;
-  dataSummary?: IDatasetSummary;
+  modelInformation: IModelInformation;
+  dataSummary: IDatasetSummary;
   testData?: any[][];
   predictedY?: number[];
   probabilityY?: number[][];
