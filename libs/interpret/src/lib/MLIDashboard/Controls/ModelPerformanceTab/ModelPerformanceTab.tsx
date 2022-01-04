@@ -109,6 +109,7 @@ export class ModelPerformanceTab extends React.PureComponent<
               options={cohortOptions}
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}
+              id={"modelPerformanceCohortPicker"}
             />
           </div>
         )}
