@@ -1,19 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { createCohort } from "../../../../util/createCohort";
 import { Locators } from "../../Constants";
 
 const cohortName = "CohortCreateE2E";
 export function describeCohortFunctionality(): void {
   describe("Cohort functionality", () => {
     it("Should have cohort selection in 'Sort by' dropdown", () => {
-      cy.get(Locators.CreateNewCohortButton).click();
-      cy.get("#cohortEditPanel").should("exist");
-      cy.get(Locators.CohortNameInput).clear().type(cohortName);
-      cy.get(Locators.CohortFilterSelection).first().check();
-      cy.get(Locators.CohortAddFilterButton).click();
-      cy.get(Locators.CohortSaveAndSwitchButton).eq(0).click({ force: true });
-      cy.get(Locators.NewCohortSpan).should("exist");
+      createCohort();
 
       cy.get(Locators.SortByDropdown).click();
       cy.get(Locators.SortByDropdownOptions).should("exist");
