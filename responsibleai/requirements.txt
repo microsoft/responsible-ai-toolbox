@@ -5,6 +5,7 @@ erroranalysis>=0.1.28
 interpret-community>=0.23.0
 lightgbm>=2.0.11
 numpy>=1.17.2
+numba<0.54.0
 pandas>=0.25.1
 scikit-learn>=0.22.1
 scipy>=1.4.1
