@@ -24,11 +24,7 @@ export function describeAggregateFeatureImportance(
   describe(testName, () => {
     before(() => {
       const hosts = Cypress.env().hosts;
-      cy.task("log", hosts);
       const hostDetails = hosts.find((obj: { file: string }) => {
-        cy.task("log", name);
-        cy.task("log", RAINotebookNames[name]);
-
         return obj.file === RAINotebookNames[name];
       });
       cy.task("log", hostDetails.host);

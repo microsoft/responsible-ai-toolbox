@@ -117,7 +117,20 @@ const modelAssessmentDatasets = {
       WhatIfNameLabelUpdated: "New Copy of row 5"
     }
   },
-  DiabetesDecisionMaking: {}
+  DiabetesRegressionModelDebugging: {
+    featureNames: [
+      "s5",
+      "bmi",
+      "s3",
+      "sex",
+      "s1",
+      "s4",
+      "s2",
+      "age",
+      "bp",
+      "s6"
+    ]
+  }
 };
 
 const withType: {
