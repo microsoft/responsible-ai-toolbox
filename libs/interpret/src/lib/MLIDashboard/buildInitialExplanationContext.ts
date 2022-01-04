@@ -49,7 +49,7 @@ export enum GlobalTabKeys {
 const rowWarningSize = 6000;
 function getModelType(props: IExplanationDashboardProps): ModelTypes {
   // If python gave us a hint, use it
-  if (props.modelInformation?.method === "regressor") {
+  if (props.modelInformation.method === "regressor") {
     return ModelTypes.Regression;
   }
   switch (getClassLength(props)) {

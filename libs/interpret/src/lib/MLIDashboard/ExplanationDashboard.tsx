@@ -681,7 +681,7 @@ export class ExplanationDashboard extends React.Component<
 
   private static getModelType(props: IExplanationDashboardProps): ModelTypes {
     // If python gave us a hint, use it
-    if (props.modelInformation?.method === "regressor") {
+    if (props.modelInformation.method === "regressor") {
       return ModelTypes.Regression;
     }
     switch (ExplanationDashboard.getClassLength(props)) {

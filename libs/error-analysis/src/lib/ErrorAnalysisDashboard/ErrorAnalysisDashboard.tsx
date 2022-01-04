@@ -126,7 +126,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     props: IErrorAnalysisDashboardProps
   ): IExplanationModelMetadata {
     const modelType = getModelType(
-      props.modelInformation?.method,
+      props.modelInformation.method,
       props.precomputedExplanations,
       props.probabilityY
     );
