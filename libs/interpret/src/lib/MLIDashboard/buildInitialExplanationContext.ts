@@ -70,7 +70,7 @@ function buildModelMetadata(
   props: IExplanationDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(props);
-  let featureNames = props.dataSummary?.featureNames;
+  let featureNames = props.dataSummary.featureNames;
   let featureNamesAbridged: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
@@ -124,7 +124,7 @@ function buildModelMetadata(
     );
     featureNamesAbridged = featureNames;
   }
-  let classNames = props.dataSummary?.classNames;
+  let classNames = props.dataSummary.classNames;
   const classLength = getClassLength(props);
   if (!classNames || classNames.length !== classLength) {
     classNames = buildIndexedNames(
@@ -135,13 +135,13 @@ function buildModelMetadata(
   const featureIsCategorical = ModelMetadata.buildIsCategorical(
     featureNames.length,
     props.testData,
-    props.dataSummary?.categoricalMap
+    props.dataSummary.categoricalMap
   );
   const featureRanges =
     ModelMetadata.buildFeatureRanges(
       props.testData,
       featureIsCategorical,
-      props.dataSummary?.categoricalMap
+      props.dataSummary.categoricalMap
     ) || [];
   return {
     classNames,

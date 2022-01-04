@@ -130,7 +130,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.precomputedExplanations,
       props.probabilityY
     );
-    let featureNames = props.dataSummary?.featureNames;
+    let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
@@ -183,7 +183,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
       featureNamesAbridged = featureNames;
     }
-    let classNames = props.dataSummary?.classNames;
+    let classNames = props.dataSummary.classNames;
     let classLength = 1;
     if (
       (props.precomputedExplanations &&
@@ -210,13 +210,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const featureIsCategorical = ModelMetadata.buildIsCategorical(
       featureNames.length,
       props.testData,
-      props.dataSummary?.categoricalMap
+      props.dataSummary.categoricalMap
     );
     const featureRanges =
       ModelMetadata.buildFeatureRanges(
         props.testData,
         featureIsCategorical,
-        props.dataSummary?.categoricalMap
+        props.dataSummary.categoricalMap
       ) || [];
     return {
       classNames,
