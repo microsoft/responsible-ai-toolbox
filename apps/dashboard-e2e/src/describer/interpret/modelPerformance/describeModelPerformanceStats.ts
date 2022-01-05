@@ -30,9 +30,7 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
           "Precision"
         );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "Recall"
-        );
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("Recall");
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
           "False Positive Rates"
         );
