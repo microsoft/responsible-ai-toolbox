@@ -9,5 +9,5 @@
     "../../node_modules/@nrwl/react/typings/image.d.ts"
   ],
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx"],
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "../core-ui/src/lib/components/AggregatedMetricChart.tsx"]
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
 }
