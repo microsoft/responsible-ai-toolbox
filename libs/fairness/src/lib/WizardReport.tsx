@@ -5,7 +5,8 @@ import {
   IMetricResponse,
   PredictionTypes,
   IFairnessResponse,
-  IBounds
+  IBounds,
+  DisaggregatedMetricsTable
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -23,7 +24,6 @@ import React from "react";
 
 import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
-import { OverallTable } from "./Controls/OverallTable";
 import { ReportChart } from "./Controls/ReportChart";
 import { IMetrics } from "./IMetrics";
 import { SharedStyles } from "./Shared.styles";
@@ -210,7 +210,7 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
         <Stack horizontal>
           <Stack.Item className={sharedStyles.mainLeft}>
             <Stack tokens={{ childrenGap: "l1", padding: "0 0 0 100px" }}>
-              <OverallTable
+              <DisaggregatedMetricsTable
                 binGroup={
                   this.props.dashboardContext.modelMetadata.featureNames[
                     this.props.featureBinPickerProps.selectedBinIndex
