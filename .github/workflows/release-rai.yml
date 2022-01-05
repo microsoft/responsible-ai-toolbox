@@ -147,21 +147,6 @@ jobs:
           name: ${{ matrix.package }}
           path: ${{ matrix.package }}
 
-      - name: Publish responsibleai package to Test PyPI
-        if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
-          repository_url: https://test.pypi.org/legacy/
-          packages_dir: ${{steps.download.outputs.download-path}}
-      - name: Publish responsibleai package to Prod PyPI
-        if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
-          packages_dir: ${{steps.download.outputs.download-path}}
       - name: Publish raiwidgets package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
         uses: pypa/gh-action-pypi-publish@master
@@ -177,46 +162,3 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
           packages_dir: ${{steps.download.outputs.download-path}}
-
-  release-typescript:
-    needs: release-build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package:
-          [
-            core-ui,
-            mlchartlib,
-            dataset-explorer,
-            causality,
-            counterfactuals,
-            fairness,
-            interpret,
-            localization,
-            error-analysis,
-            model-assessment
-          ]
-
-    steps:
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.node-version }}
-      - id: download
-        name: Download a Build Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: ${{ env.typescriptBuildArtifactName }}
-          path: ${{ env.typescriptBuildOutput }}
-      - id: publish
-        name: NPM Publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
-          dry-run: ${{github.event.inputs.releaseType == 'Test'}}
-          access: public
-          # tag: next
-      - if: steps.publish.type != 'none'
-        run: |
-          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
