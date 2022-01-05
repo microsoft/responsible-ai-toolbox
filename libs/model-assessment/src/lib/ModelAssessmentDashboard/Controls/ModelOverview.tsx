@@ -15,7 +15,8 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  ILabeledStatistic, generateMetrics
+  ILabeledStatistic,
+  generateMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -30,7 +31,7 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
-import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
+import { modelPerformanceTabStyles } from "./ModelOverview.styles";
 
 interface IModelPerformanceTabState {
   xDialogOpen: boolean;
@@ -39,7 +40,7 @@ interface IModelPerformanceTabState {
   chartProps: IGenericChartProps | undefined;
 }
 
-class ModelPerformanceTabProps { }
+class ModelPerformanceTabProps {}
 
 export class ModelPerformanceTab extends React.PureComponent<
   ModelPerformanceTabProps,
@@ -88,8 +89,8 @@ export class ModelPerformanceTab extends React.PureComponent<
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
         ? this.context.errorCohorts.map((errorCohort, index) => {
-          return { key: index, text: errorCohort.cohort.name };
-        })
+            return { key: index, text: errorCohort.cohort.name };
+          })
         : undefined;
     return (
       <div className={classNames.page}>
@@ -176,33 +177,33 @@ export class ModelPerformanceTab extends React.PureComponent<
                 </div>
                 {this.context.modelMetadata.modelType !==
                   ModelTypes.Multiclass && (
-                    <div className={classNames.rightPanel}>
-                      {!this.context.jointDataset.hasTrueY && (
-                        <MissingParametersPlaceholder>
-                          {localization.Interpret.ModelPerformance.missingTrueY}
-                        </MissingParametersPlaceholder>
-                      )}
-                      {this.context.jointDataset.hasTrueY &&
-                        metricsList.map((stats, index) => {
-                          return (
-                            <div className={classNames.statsBox} key={index}>
-                              {stats.map((labeledStat, statIndex) => {
-                                return (
-                                  <Text block key={statIndex}>
-                                    {localization.formatString(
-                                      labeledStat.label,
-                                      labeledStat.stat.toLocaleString(undefined, {
-                                        maximumFractionDigits: 3
-                                      })
-                                    )}
-                                  </Text>
-                                );
-                              })}
-                            </div>
-                          );
-                        })}
-                    </div>
-                  )}
+                  <div className={classNames.rightPanel}>
+                    {!this.context.jointDataset.hasTrueY && (
+                      <MissingParametersPlaceholder>
+                        {localization.Interpret.ModelPerformance.missingTrueY}
+                      </MissingParametersPlaceholder>
+                    )}
+                    {this.context.jointDataset.hasTrueY &&
+                      metricsList.map((stats, index) => {
+                        return (
+                          <div className={classNames.statsBox} key={index}>
+                            {stats.map((labeledStat, statIndex) => {
+                              return (
+                                <Text block key={statIndex}>
+                                  {localization.formatString(
+                                    labeledStat.label,
+                                    labeledStat.stat.toLocaleString(undefined, {
+                                      maximumFractionDigits: 3
+                                    })
+                                  )}
+                                </Text>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
