@@ -7,7 +7,7 @@
 
 ## Areas changed
 
-<!--- Put an `x` in all boxes that apply. Some changes (e.g., notebook fix) don't require ticking any boxes. -->
+<!--- Put an `x` in all boxes that apply. -->
 
 npm packages changed:
 
@@ -20,6 +20,7 @@ npm packages changed:
 - [ ] responsibleai/localization
 - [ ] responsibleai/mlchartlib
 - [ ] responsibleai/model-assessment
+- [ ] No npm packages were changed.
 
 Python packages changed:
 
@@ -27,6 +28,7 @@ Python packages changed:
 - [ ] responsibleai
 - [ ] erroranalysis
 - [ ] rai_core_flask
+- [ ] No Python packages were changed.
 
 ## Tests
 
@@ -42,5 +44,6 @@ Python packages changed:
 
 <!--- Put an `x` in all the boxes that apply. -->
 
-- [ ] My change requires a change to the documentation.
-- [ ] I have updated the documentation accordingly.
+- [ ] My change does not require any changes to the documentation.
+- [ ] My change requires an update to the documentation which does not happen in this PR. <!--- Elaborate below on when the update will happen. -->
+- [ ] My change requires an update to the documentation which is part of this PR.
