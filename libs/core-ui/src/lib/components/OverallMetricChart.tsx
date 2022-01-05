@@ -1,23 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  AxisConfigDialog,
-  ColumnCategories,
-  JointDataset,
-  ModelTypes,
-  cohortKey,
-  Cohort,
-  ChartTypes,
-  IGenericChartProps,
-  ISelectorConfig,
-  MissingParametersPlaceholder,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  FabricStyles,
-  ILabeledStatistic,
-  generateMetrics
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -31,6 +14,24 @@ import {
 import { Transform } from "plotly.js";
 import React from "react";
 
+import { Cohort } from "../Cohort/Cohort";
+import { cohortKey } from "../cohortKey";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "../Context/ModelAssessmentContext";
+import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { FabricStyles } from "../util/FabricStyles";
+import {
+  ChartTypes,
+  IGenericChartProps,
+  ISelectorConfig
+} from "../util/IGenericChartProps";
+import { ColumnCategories, JointDataset } from "../util/JointDataset";
+import { ILabeledStatistic, generateMetrics } from "../util/StatisticsUtils";
+
+import { AxisConfigDialog } from "./AxisConfigDialog";
+import { MissingParametersPlaceholder } from "./MissingParametersPlaceholder";
 import { overallMetricChartStyles } from "./OverallMetricChart.styles";
 
 interface IOverallMetricChartState {

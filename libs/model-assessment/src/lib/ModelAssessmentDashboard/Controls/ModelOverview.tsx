@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  IGenericChartProps,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -15,32 +14,12 @@ import React from "react";
 
 import { modelOverviewStyles } from "./ModelOverview.styles";
 
-interface IModelOverviewState {
-  xDialogOpen: boolean;
-  yDialogOpen: boolean;
-  selectedCohortIndex: number;
-  chartProps: IGenericChartProps | undefined;
-}
-
 class ModelOverviewProps {}
 
-export class ModelOverview extends React.PureComponent<
-  ModelOverviewProps,
-  IModelOverviewState
-> {
+export class ModelOverview extends React.PureComponent<ModelOverviewProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
-  public constructor(props: ModelOverviewProps) {
-    super(props);
-    this.state = {
-      chartProps: undefined,
-      selectedCohortIndex: 0,
-      xDialogOpen: false,
-      yDialogOpen: false
-    };
-  }
 
   public render(): React.ReactNode {
     const classNames = modelOverviewStyles();

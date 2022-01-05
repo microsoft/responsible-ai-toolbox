@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  IGenericChartProps,
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -15,32 +14,12 @@ import React from "react";
 
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
 
-interface IModelPerformanceTabState {
-  xDialogOpen: boolean;
-  yDialogOpen: boolean;
-  selectedCohortIndex: number;
-  chartProps: IGenericChartProps | undefined;
-}
-
 class ModelPerformanceTabProps {}
 
-export class ModelPerformanceTab extends React.PureComponent<
-  ModelPerformanceTabProps,
-  IModelPerformanceTabState
-> {
+export class ModelPerformanceTab extends React.PureComponent<ModelPerformanceTabProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
-  public constructor(props: ModelPerformanceTabProps) {
-    super(props);
-    this.state = {
-      chartProps: undefined,
-      selectedCohortIndex: 0,
-      xDialogOpen: false,
-      yDialogOpen: false
-    };
-  }
 
   public render(): React.ReactNode {
     const classNames = modelPerformanceTabStyles();

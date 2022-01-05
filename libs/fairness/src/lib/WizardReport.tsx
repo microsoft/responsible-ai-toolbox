@@ -23,6 +23,7 @@ import React from "react";
 
 import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
+import { OverallTable } from "./Controls/OverallTable";
 import { ReportChart } from "./Controls/ReportChart";
 import { IMetrics } from "./IMetrics";
 import { SharedStyles } from "./Shared.styles";
@@ -30,7 +31,6 @@ import { FairnessModes, fairnessOptions } from "./util/FairnessMetrics";
 import { FormatMetrics } from "./util/FormatMetrics";
 import { performanceOptions } from "./util/PerformanceMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
-import { OverallTable } from "./Controls/OverallTable";
 
 export interface IState {
   metrics?: IMetrics;
