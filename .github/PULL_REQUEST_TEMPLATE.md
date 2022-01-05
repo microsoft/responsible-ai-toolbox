@@ -5,7 +5,6 @@
 <!--- Describe your changes and elaborate on motivation and context. -->
 <!--- Make sure to refer to relevant GitHub issues using # -->
 
-
 ## Checklist
 
 <!--- Make sure to satisfy all the criteria listed below. -->
