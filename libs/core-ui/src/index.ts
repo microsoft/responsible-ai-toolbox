@@ -43,6 +43,7 @@ export * from "./lib/util/StatisticsUtils";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryMessage";
+export * from "./lib/components/OverallMetricChart";
 export * from "./lib/components/AxisConfigDialog";
 export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/DisaggregatedMetricsTable";

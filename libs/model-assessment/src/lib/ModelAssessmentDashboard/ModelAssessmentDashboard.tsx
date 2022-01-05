@@ -25,7 +25,6 @@ import {
   ITreeViewRendererState,
   MapShift
 } from "@responsible-ai/error-analysis";
-import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -44,6 +43,7 @@ import { getAvailableTabs } from "./AvailableTabs";
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
 import { FeatureImportancesTab } from "./Controls/FeatureImportances";
 import { MainMenu } from "./Controls/MainMenu";
+import { ModelOverview } from "./Controls/ModelOverview";
 import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.styles";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
@@ -215,17 +215,17 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           selectedKey={this.state.errorAnalysisOption}
                         />
                       )}
-                    {t.key === GlobalTabKeys.ModelStatisticsTab && (
+                    {t.key === GlobalTabKeys.ModelOverviewTab && (
                       <>
                         <div className={classNames.sectionHeader}>
                           <Text variant={"xxLarge"}>
                             {
                               localization.ModelAssessment.ComponentNames
-                                .ModelStatistics
+                                .ModelOverview
                             }
                           </Text>
                         </div>
-                        <ModelPerformanceTab />
+                        <ModelOverview />
                       </>
                     )}
                     {t.key === GlobalTabKeys.DataExplorerTab && (
