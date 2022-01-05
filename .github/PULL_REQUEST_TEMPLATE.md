@@ -7,43 +7,43 @@
 
 ## Areas changed
 
-<!--- Put an `x` in all boxes that apply. -->
+<!--- Put either :x: (represents "no") or :heavy_check_mark: (represents "yes") in front of each bullet point. -->
 
 npm packages changed:
 
-- [ ] responsibleai/causality
-- [ ] responsibleai/core-ui
-- [ ] responsibleai/counterfactuals
-- [ ] responsibleai/dataset-explorer
-- [ ] responsibleai/fairness
-- [ ] responsibleai/interpret
-- [ ] responsibleai/localization
-- [ ] responsibleai/mlchartlib
-- [ ] responsibleai/model-assessment
-- [ ] No npm packages were changed.
+- :x: responsibleai/causality
+- :x: responsibleai/core-ui
+- :x: responsibleai/counterfactuals
+- :x: responsibleai/dataset-explorer
+- :x: responsibleai/fairness
+- :x: responsibleai/interpret
+- :x: responsibleai/localization
+- :x: responsibleai/mlchartlib
+- :x: responsibleai/model-assessment
+- :x: No npm packages were changed.
 
 Python packages changed:
 
-- [ ] raiwidgets
-- [ ] responsibleai
-- [ ] erroranalysis
-- [ ] rai_core_flask
-- [ ] No Python packages were changed.
+- :x: raiwidgets
+- :x: responsibleai
+- :x: erroranalysis
+- :x: rai_core_flask
+- :x: No Python packages were changed.
 
 ## Tests
 
-<!--- Put an `x` in all the boxes that apply: -->
+<!--- Put either :x: (represents "no") or :heavy_check_mark: (represents "yes") in front of each bullet point. -->
 
-- [ ] No new tests required.
-- [ ] New tests for the added feature are part of this PR.
-- [ ] I validated the changes manually.
+- :x: No new tests required.
+- :x: New tests for the added feature are part of this PR.
+- :x: I validated the changes manually.
 
 ## Screenshots (if appropriate):
 
 ## Documentation:
 
-<!--- Put an `x` in all the boxes that apply. -->
+<!--- Put either :x: (represents "no") or :heavy_check_mark: (represents "yes") in front of each bullet point. -->
 
-- [ ] My change does not require any changes to the documentation.
-- [ ] My change requires an update to the documentation which does not happen in this PR. <!--- Elaborate below on when the update will happen. -->
-- [ ] My change requires an update to the documentation which is part of this PR.
+- :x: My change does not require any changes to the documentation.
+- :x: My change requires an update to the documentation which does not happen in this PR. <!--- Elaborate below on when the update will happen. -->
+- :x: My change requires an update to the documentation which is part of this PR.
