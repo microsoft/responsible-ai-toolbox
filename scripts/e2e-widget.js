@@ -6,7 +6,10 @@ const commander = require("commander");
 
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
-
+const fileNames = [
+  "responsibleaidashboard-census-classification-model-debugging",
+  "responsibleaidashboard-diabetes-regression-model-debugging"
+];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
 
@@ -45,17 +48,20 @@ async function runNotebook(name) {
 
 function convertNotebook() {
   console.log("Converting notebook");
-  const { status, stderr } = spawnSync(
-    "jupyter",
-    ["nbconvert", path.join(baseDir, `${filePrefix}*.ipynb`), "--to", "script"],
-    {
-      stdio: "inherit"
+  for (var fileName of fileNames) {
+    console.log(`Converting notebook  ${fileName}\r\n`);
+    const { status, stderr } = spawnSync(
+      "jupyter",
+      ["nbconvert", path.join(baseDir, `${fileName}.ipynb`), "--to", "script"],
+      {
+        stdio: "inherit"
+      }
+    );
+    if (status) {
+      throw new Error(`Failed to convert notebook:\r\n\r\n${stderr}`);
     }
-  );
-  if (status) {
-    throw new Error(`Failed to convert notebook:\r\n\r\n${stderr}`);
+    console.log(`Converted notebook ${fileName}\r\n`);
   }
-  console.log("Converted notebook\r\n");
 }
 /**
  * @typedef {Object} Host

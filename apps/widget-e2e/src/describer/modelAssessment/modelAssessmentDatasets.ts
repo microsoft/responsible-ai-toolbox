@@ -122,13 +122,13 @@ const modelAssessmentDatasets = {
     featureNames: [
       "s5",
       "bmi",
+      "bp",
       "s3",
       "sex",
       "s1",
       "s4",
       "s2",
       "age",
-      "bp",
       "s6"
     ]
   }
