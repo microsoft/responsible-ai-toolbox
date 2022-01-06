@@ -132,7 +132,7 @@ cypress window will open locally - select test file to run the tests
 
 #### Test UX and SDK changes
 
-For any new change, which involves changing any of the python SDK components and UI components, the manual testing of the code change can be done using the following steps:-
+For any new change, which involves changing any of the python SDK components and UI components, the manual testing of the code change can be done using the following steps:
 
 1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
 2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
