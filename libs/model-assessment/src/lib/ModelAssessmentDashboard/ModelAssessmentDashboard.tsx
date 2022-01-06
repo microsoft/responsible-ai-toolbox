@@ -218,7 +218,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {t.key === GlobalTabKeys.ModelOverviewTab && (
                       <>
                         <div className={classNames.sectionHeader}>
-                          <Text variant={"xxLarge"}>
+                          <Text variant={"xxLarge"} id="modelStatisticsHeader">
                             {
                               localization.ModelAssessment.ComponentNames
                                 .ModelOverview
@@ -231,7 +231,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                     {t.key === GlobalTabKeys.DataExplorerTab && (
                       <>
                         <div className={classNames.sectionHeader}>
-                          <Text variant={"xxLarge"}>
+                          <Text variant={"xxLarge"} id="dataExplorerHeader">
                             {
                               localization.ModelAssessment.ComponentNames
                                 .DataExplorer
