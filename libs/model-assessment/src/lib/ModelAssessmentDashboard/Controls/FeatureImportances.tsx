@@ -77,7 +77,7 @@ export class FeatureImportancesTab extends React.PureComponent<
     return (
       <Stack className={classNames.container}>
         <Stack.Item className={classNames.header}>
-          <Text variant={"xxLarge"}>
+          <Text variant={"xxLarge"} id="featureImportanceHeader">
             {localization.ModelAssessment.ComponentNames.FeatureImportances}
           </Text>
         </Stack.Item>

@@ -78,6 +78,7 @@ export enum Locators {
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
   MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']",
+  CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
   MSSideBarCards = "#ModelPerformanceChart div[class^='statsBox']",
   MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
   MSScrollable = "#ModelPerformanceChart div[class^='scrollableWrapper']",
