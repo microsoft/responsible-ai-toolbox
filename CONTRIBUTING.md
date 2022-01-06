@@ -108,7 +108,7 @@ once.
 
 #### Run e2e tests locally with mock data
 
-1. git clone <https://github.com/microsoft/responsible-ai-widget>
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
 2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
@@ -118,7 +118,7 @@ cypress window will open locally - select test file to run the tests
 
 #### Run e2e tests locally with notebook data
 
-1. git clone <https://github.com/microsoft/responsible-ai-widget>
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
 2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
 3. `yarn install`
 4. `yarn buildall` or `yarn build widget`
@@ -129,6 +129,24 @@ cypress window will open locally - select test file to run the tests
 9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`
 
 cypress window will open locally - select test file to run the tests
+
+#### Test UX and SDK changes
+
+For any new change, which involves changing any of the python SDK components and UI components, the manual testing of the code change can be done using the following steps:
+
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
+2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
+3. You should commit all your current set of changes for SDK and UX using `git commit`.
+4. Clean all untracked files using `git clean -fdx`
+5. Run `yarn install` and `yarn buildall` to build the UX changes.
+6. Run `pip install -e responsibleai` to install responsibleai locally.
+7. Run `pip install -e raiwidgets` to install raiwidgets locally.
+8. Run `pip install -e erroranalysis` to install erroranalysis locally.
+9. Run `pip install -e rai_core_flask` to install rai_core_flask locally.
+10. Install `jupyter` using `pip install jupyter`
+11. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
+
+The steps from 3 to 11 need to be repeated if you incrementally change UI or SDK.
 
 ### Debugging
 
