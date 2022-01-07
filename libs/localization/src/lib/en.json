@@ -1266,7 +1266,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
-      "ModelStatistics": "Model statistics"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
       "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",

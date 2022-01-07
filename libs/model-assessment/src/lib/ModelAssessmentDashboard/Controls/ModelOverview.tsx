@@ -12,17 +12,17 @@ import _ from "lodash";
 import { Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
+import { modelOverviewStyles } from "./ModelOverview.styles";
 
-class ModelPerformanceTabProps {}
+class ModelOverviewProps {}
 
-export class ModelPerformanceTab extends React.PureComponent<ModelPerformanceTabProps> {
+export class ModelOverview extends React.PureComponent<ModelOverviewProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    const classNames = modelPerformanceTabStyles();
+    const classNames = modelOverviewStyles();
     if (!this.context.jointDataset.hasPredictedY) {
       return (
         <MissingParametersPlaceholder>
