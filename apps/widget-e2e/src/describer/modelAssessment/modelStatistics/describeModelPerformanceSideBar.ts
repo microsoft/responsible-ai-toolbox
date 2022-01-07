@@ -15,7 +15,7 @@ export function describeModelPerformanceSideBar(
       dataShape
     };
     beforeEach(() => {
-      props.chart = new BoxChart("#ModelPerformanceChart");
+      props.chart = new BoxChart("#OverallMetricChart");
     });
 
     it("Side bar should be updated with updated values", () => {
