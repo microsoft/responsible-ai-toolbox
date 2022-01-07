@@ -119,6 +119,17 @@ const modelAssessmentDatasets = {
     }
   },
   DiabetesRegressionModelDebugging: {
+    featureImportanceData: {
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: false,
+      datapoint: 89,
+      newFeatureDropdownValue: "bp",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    },
     featureNames: [
       "s5",
       "bmi",
