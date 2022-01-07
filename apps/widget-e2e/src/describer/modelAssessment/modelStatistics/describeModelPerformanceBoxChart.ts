@@ -14,7 +14,7 @@ export function describeModelPerformanceBoxChart(
       dataShape
     };
     beforeEach(() => {
-      props.chart = new BoxChart("#ModelPerformanceChart");
+      props.chart = new BoxChart("#OverallMetricChart");
     });
     it("should render", () => {
       expect(props.chart.Elements.length).greaterThan(0);

@@ -8,15 +8,15 @@ import {
   getTheme
 } from "office-ui-fabric-react";
 
-export interface IModelPerformanceTabStyles {
+export interface IModelOverviewStyles {
   page: IStyle;
   infoWithText: IStyle;
 }
 
-export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerformanceTabStyles> =
+export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
   () => {
     const theme = getTheme();
-    return mergeStyleSets<IModelPerformanceTabStyles>({
+    return mergeStyleSets<IModelOverviewStyles>({
       infoWithText: {
         boxSizing: "border-box",
         display: "flex",
