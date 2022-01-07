@@ -76,13 +76,13 @@ export enum Locators {
   DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
-  MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
-  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']",
+  MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
+  MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
-  MSSideBarCards = "#ModelPerformanceChart div[class^='statsBox']",
+  MSSideBarCards = "#OverallMetricChart div[class^='statsBox']",
   MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
-  MSScrollable = "#ModelPerformanceChart div[class^='scrollableWrapper']",
+  MSScrollable = "#OverallMetricChart div[class^='scrollableWrapper']",
   MSCohortDropdown = "#modelPerformanceCohortPicker",
   MSDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
-  MSYAxisPoints = "#ModelPerformanceChart g[class^='cartesianlayer'] g[class^='ytick']"
+  MSYAxisPoints = "#OverallMetricChart g[class^='cartesianlayer'] g[class^='ytick']"
 }
