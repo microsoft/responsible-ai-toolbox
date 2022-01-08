@@ -77,7 +77,9 @@ const modelAssessmentDatasets = {
       correctPredictionDatapoint: "398",
       datapoint: 500,
       dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: true,
       incorrectPredictionDatapoint: "102",
+      newFeatureDropdownValue: "workclass",
       noDataset: false,
       noFeatureImportance: false,
       noLocalImportance: false,
@@ -117,6 +119,30 @@ const modelAssessmentDatasets = {
       WhatIfNameLabel: "Copy of row 5",
       WhatIfNameLabelUpdated: "New Copy of row 5"
     }
+  },
+  DiabetesRegressionModelDebugging: {
+    featureImportanceData: {
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: false,
+      newFeatureDropdownValue: "bp",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    },
+    featureNames: [
+      "s5",
+      "bmi",
+      "bp",
+      "s3",
+      "sex",
+      "s1",
+      "s4",
+      "s2",
+      "age",
+      "s6"
+    ]
   }
 };
 
