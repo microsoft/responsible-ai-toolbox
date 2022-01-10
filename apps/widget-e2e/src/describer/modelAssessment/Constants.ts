@@ -43,6 +43,7 @@ export enum Locators {
   WhatIfAxisPanel = "#AxisConfigPanel",
   AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
   AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
+  AxisFeatureDropdownOptionGeneral = "div.ms-ComboBox-optionsContainerWrapper",
   WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
