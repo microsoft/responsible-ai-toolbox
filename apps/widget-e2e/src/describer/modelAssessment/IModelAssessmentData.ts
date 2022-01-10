@@ -76,6 +76,7 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
+  hasCorrectIncorrectDatapoints?: boolean;
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
   noLocalImportance?: boolean;
@@ -87,6 +88,7 @@ export interface IFeatureImportanceData {
   topFeaturesText?: string;
   topFeaturesCurrentValue?: string;
   datapoint?: number;
+  newFeatureDropdownValue?: string;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
