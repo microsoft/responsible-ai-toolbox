@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from responsibleai import ModelTask, RAIInsights
-from responsibleai._managers.causal_manager import CausalManager
+from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.exceptions import UserConfigValidationException
 
 

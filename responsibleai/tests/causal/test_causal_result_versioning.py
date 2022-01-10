@@ -8,7 +8,7 @@ import pytest
 from jsonschema import ValidationError
 
 from responsibleai import ModelTask
-from responsibleai._managers.causal_manager import CausalManager
+from responsibleai.managers.causal_manager import CausalManager
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai._tools.shared.versions import CausalVersions
 

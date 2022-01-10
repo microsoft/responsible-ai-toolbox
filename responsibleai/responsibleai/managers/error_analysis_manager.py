@@ -17,7 +17,7 @@ from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (ConfigAndResultMismatchException,

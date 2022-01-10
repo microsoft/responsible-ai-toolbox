@@ -11,7 +11,7 @@ from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,

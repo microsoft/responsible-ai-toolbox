@@ -25,7 +25,7 @@ from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
 from responsibleai._internal.constants import ExplainerManagerKeys as Keys
 from responsibleai._internal.constants import (ExplanationKeys, ListProperties,
                                                ManagerNames, Metadata)
-from responsibleai._managers.base_manager import BaseManager
+from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
