@@ -33,6 +33,7 @@ export function getDistributionBalanceMeasures(
 }
 
 export interface IFeatureBalanceMeasures {
+  classes?: { [featureName: string]: string[] };
   measures?: {
     [featureName: string]: {
       [classKey: string]: { [measureName: string]: number };

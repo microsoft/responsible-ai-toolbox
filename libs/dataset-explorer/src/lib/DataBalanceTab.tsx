@@ -3,15 +3,20 @@
 
 import {
   defaultModelAssessmentContext,
+  FabricStyles,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import {
   getAggregateBalanceMeasures,
   getDistributionBalanceMeasures,
-  getFeatureBalanceMeasures
+  getFeatureBalanceMeasures,
+  IDataBalanceMeasures
 } from "libs/core-ui/src/lib/Interfaces/DataBalanceInterfaces";
-import { Stack, StackItem } from "office-ui-fabric-react";
+import _ from "lodash";
+import { getTheme, Stack, StackItem } from "office-ui-fabric-react";
+import { Annotations } from "plotly.js";
 import React from "react";
 
 import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
@@ -37,9 +42,6 @@ export class DataBalanceTab extends React.Component<
   public render(): React.ReactNode {
     const classNames = dataBalanceTabStyles();
 
-    console.log("this.context.dataset:");
-    console.log(this.context.dataset);
-
     if (!this.context.dataset.dataBalanceMeasures) {
       return (
         <MissingParametersPlaceholder>
@@ -50,8 +52,9 @@ export class DataBalanceTab extends React.Component<
       );
     }
 
-    console.log("this.context.dataset.dataBalanceMeasures:");
-    console.log(this.context.dataset.dataBalanceMeasures);
+    const plotlyProps = generatePlotlyProps(
+      this.context.dataset.dataBalanceMeasures
+    );
 
     return (
       <div className={classNames.page}>
@@ -104,53 +107,116 @@ export class DataBalanceTab extends React.Component<
           </StackItem>
         </Stack>
         <h1>Feature Balance Measures</h1>
-        <Stack>
-          <StackItem>
-            {`race Other Asian-Pac-Islander dp --> ${
-              getFeatureBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures?.featureBalanceMeasures
-                  ?.measures ?? {},
-                "race",
-                "Other",
-                "Asian-Pac-Islander"
-              ).dp
-            }`}
-          </StackItem>
-          <StackItem>
-            {`race Asian-Pac-Islander Other dp --> ${
-              getFeatureBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures?.featureBalanceMeasures
-                  ?.measures ?? {},
-                "race",
-                "Asian-Pac-Islander",
-                "Other"
-              ).dp
-            }`}
-          </StackItem>
-          <StackItem>
-            {`sex Male Female dp --> ${
-              getFeatureBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures?.featureBalanceMeasures
-                  ?.measures ?? {},
-                "sex",
-                "Male",
-                "Female"
-              ).dp
-            }`}
-          </StackItem>
-          <StackItem>
-            {`sex Female Male dp --> ${
-              getFeatureBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures?.featureBalanceMeasures
-                  ?.measures ?? {},
-                "sex",
-                "Female",
-                "Male"
-              ).dp
-            }`}
-          </StackItem>
-        </Stack>
+        <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
       </div>
     );
   }
+}
+
+const basePlotlyProperties: IPlotlyProperty = {
+  config: { displaylogo: false, displayModeBar: false, responsive: true },
+  data: [{}],
+  layout: {
+    autosize: true,
+    dragmode: false,
+    font: {
+      size: 10
+    },
+    hovermode: "closest",
+    margin: {
+      b: 20,
+      l: 20,
+      r: 0,
+      t: 0
+    },
+    showlegend: false,
+    xaxis: {
+      color: FabricStyles.chartAxisColor,
+      mirror: true,
+      tickfont: {
+        family: FabricStyles.fontFamilies,
+        size: 11
+      },
+      zeroline: true
+    },
+    yaxis: {
+      automargin: true,
+      color: FabricStyles.chartAxisColor,
+      gridcolor: "#e5e5e5",
+      showgrid: true,
+      tickfont: {
+        family: "Roboto, Helvetica Neue, sans-serif",
+        size: 11
+      },
+      zeroline: true
+    }
+  }
+};
+
+function generatePlotlyProps(
+  dataBalanceMeasures: IDataBalanceMeasures
+): IPlotlyProperty {
+  const plotlyProps = _.cloneDeep(basePlotlyProperties);
+  plotlyProps.data[0].type = "heatmap";
+  // plotlyProps.data[0].colorscale = [
+  //   [0, "#3D9970"],
+  //   [1, "#001f3f"]
+  // ];
+
+  // TODO: Keep red-blue but make min/max -1 and 1
+
+  const selectedFeature = "race";
+
+  const features = new Map<string, string[]>();
+  features.set(
+    selectedFeature,
+    dataBalanceMeasures.featureBalanceMeasures?.classes?.[selectedFeature] ?? []
+  );
+
+  const data: number[][] = [];
+  const annotations: Array<Partial<Annotations>> = [];
+
+  features.forEach((classes, featureName) => {
+    classes.forEach((classA, colIndex) => {
+      const row: number[] = [];
+      classes.forEach((classB, rowIndex) => {
+        const featureValue = getFeatureBalanceMeasures(
+          dataBalanceMeasures.featureBalanceMeasures?.measures ?? {},
+          featureName,
+          classA,
+          classB
+        ).dp;
+
+        row.push(featureValue);
+
+        annotations.push({
+          align: "center",
+          font: {
+            color: featureValue === 0 ? "black" : "white",
+            family: "Arial",
+            size: 12
+          },
+          showarrow: false,
+          text: `${
+            featureValue === undefined ? Number.NaN : featureValue.toFixed(3)
+          }`,
+          x: rowIndex,
+          xref: "x",
+          y: colIndex,
+          yref: "y"
+        });
+      });
+
+      data.push(row);
+    });
+  });
+
+  const featureNames = features.get(selectedFeature);
+  plotlyProps.data[0].x = featureNames;
+  plotlyProps.data[0].y = featureNames;
+  plotlyProps.data[0].z = data;
+
+  (plotlyProps.layout ?? {}).annotations = annotations;
+
+  return plotlyProps;
 }
