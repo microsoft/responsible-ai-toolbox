@@ -11,7 +11,6 @@ from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._internal.constants import ManagerNames
-from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
@@ -20,6 +19,7 @@ from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.managers.base_manager import BaseManager
 from responsibleai.rai_insights.constants import ModelTask
 
 
