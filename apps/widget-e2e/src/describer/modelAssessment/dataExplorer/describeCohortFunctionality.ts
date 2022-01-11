@@ -53,7 +53,7 @@ export function describeCohortFunctionality(
         .invoke("text")
         .then((text) => {
           const valueInInt = Number(text);
-          expect(valueInInt).to.be.lessThan(
+          expect(valueInInt).lte(
             Number(dataShape.datasetExplorerData?.cohortDatasetNewValue || "")
           );
         });
