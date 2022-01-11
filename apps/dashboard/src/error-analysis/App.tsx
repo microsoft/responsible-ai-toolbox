@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   IErrorAnalysisMatrix,
   IExplanationDashboardData,
@@ -13,7 +14,6 @@ import {
   HelpMessageDict
 } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
