@@ -22,7 +22,7 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
       cy.get(Locators.CohortDatasetValueInput)
         .clear()
-        .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || ""); // input age as 40
+        .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || "");
       cy.get(Locators.CohortAddFilterButton).click();
       cy.get(Locators.CohortSaveAndSwitchButton).eq(0).click({ force: true });
       cy.get(Locators.NewCohortSpan).should("exist");
