@@ -142,7 +142,15 @@ const modelAssessmentDatasets = {
       "s2",
       "age",
       "s6"
-    ]
+    ],
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    }
   }
 };
 
