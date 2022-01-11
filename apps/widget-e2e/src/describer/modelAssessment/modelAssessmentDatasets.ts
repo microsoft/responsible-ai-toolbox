@@ -111,13 +111,16 @@ const modelAssessmentDatasets = {
       yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
+      checkForClassField: true,
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
       CreateYourOwnCounterfactualInputFieldUpdated: "25",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5"
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "occupation",
+      yAxisValue: "age"
     }
   },
   DiabetesRegressionModelDebugging: {
@@ -130,6 +133,7 @@ const modelAssessmentDatasets = {
       defaultYAxis: "age"
     },
     featureImportanceData: {
+      datapoint: 89,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
       newFeatureDropdownValue: "bp",
@@ -150,7 +154,19 @@ const modelAssessmentDatasets = {
       "s2",
       "age",
       "s6"
-    ]
+    ],
+    whatIfCounterfactualsData: {
+      checkForClassField: false,
+      columnHeaderAfterSort: "s5",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "s6",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "bmi",
+      yAxisValue: "age"
+    }
   }
 };
 
