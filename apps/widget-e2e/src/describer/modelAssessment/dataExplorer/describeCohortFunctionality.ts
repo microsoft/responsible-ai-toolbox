@@ -22,7 +22,7 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
       cy.get(Locators.CohortDatasetValueInput)
         .clear()
-        .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || "40"); // input age as 40
+        .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || ""); // input age as 40
       cy.get(Locators.CohortAddFilterButton).click();
       cy.get(Locators.CohortSaveAndSwitchButton).eq(0).click({ force: true });
       cy.get(Locators.NewCohortSpan).should("exist");
@@ -50,10 +50,13 @@ export function describeCohortFunctionality(
       cy.get(Locators.DEDropdownOptions).should("exist").click();
       cy.get(Locators.DEYAxisPoints)
         .last()
-        .should(
-          "contain",
-          dataShape.datasetExplorerData?.cohortDatasetNewValue || "40"
-        );
+        .invoke("text")
+        .then((text) => {
+          const valueInInt = Number(text);
+          expect(valueInInt).to.be.lessThan(
+            Number(dataShape.datasetExplorerData?.cohortDatasetNewValue || "")
+          );
+        });
     });
   });
 }

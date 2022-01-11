@@ -75,7 +75,7 @@ export enum Locators {
   DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
-  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick'] text",
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
