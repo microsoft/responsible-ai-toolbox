@@ -4,10 +4,10 @@
 import logging
 from unittest.mock import MagicMock
 
-from lightgbm import LGBMClassifier
 import numpy as np
 import pandas as pd
 import pytest
+from lightgbm import LGBMClassifier
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
