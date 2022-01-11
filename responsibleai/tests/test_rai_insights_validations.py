@@ -7,6 +7,7 @@ from unittest.mock import MagicMock
 import numpy as np
 import pandas as pd
 import pytest
+from lightgbm import LGBMClassifier
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
@@ -264,13 +265,52 @@ class TestRAIInsightsValidations:
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
 
+    def test_dirty_train_test_data(self):
+        X_train = pd.DataFrame(data=[['1', np.nan], ['2', '3']],
+                               columns=['c1', 'c2'])
+        y_train = np.array([1, 0])
+        X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],
+                              columns=['c1', 'c2'])
+        y_test = np.array([1, 0])
+
+        model = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
+                               max_depth=5, n_estimators=200, n_jobs=1,
+                               random_state=777)
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                categorical_features=['c2'],
+                task_type='classification')
+
+        assert 'Error finding unique values in column c2. ' + \
+            'Please check your train data.' in str(ucve.value)
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_test,
+                test=X_train,
+                target_column=TARGET,
+                categorical_features=['c2'],
+                task_type='classification')
+
+        assert 'Error finding unique values in column c2. ' + \
+            'Please check your test data.' in str(ucve.value)
+
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
         X_train[TARGET] = y_train
-        X_test['bad_target'] = y_test
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
@@ -279,6 +319,7 @@ class TestRAIInsightsValidations:
                 test=X_test.values,
                 target_column=TARGET,
                 task_type='classification')
+
         assert "Unsupported data type for either train or test. " + \
             "Expecting pandas Dataframe for train and test." in str(ucve.value)
 
