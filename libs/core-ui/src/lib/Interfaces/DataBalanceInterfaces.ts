@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 export interface IDataBalanceMeasures {
-  aggregateBalanceMeasures?: IAggregateBalanceMeasures;
-  distributionBalanceMeasures?: IDistributionBalanceMeasures;
-  featureBalanceMeasures?: IFeatureBalanceMeasures;
+  aggregateBalanceMeasures: IAggregateBalanceMeasures;
+  distributionBalanceMeasures: IDistributionBalanceMeasures;
+  featureBalanceMeasures: IFeatureBalanceMeasures;
 }
 
 export interface IAggregateBalanceMeasures {
-  measures?: { [measureName: string]: number };
+  measures: { [measureName: string]: number };
 }
 
 export function getAggregateBalanceMeasures(measures: {
@@ -18,7 +18,7 @@ export function getAggregateBalanceMeasures(measures: {
 }
 
 export interface IDistributionBalanceMeasures {
-  measures?: { [featureName: string]: { [measureName: string]: number } };
+  measures: { [featureName: string]: { [measureName: string]: number } };
 }
 
 export function getDistributionBalanceMeasures(
@@ -33,13 +33,29 @@ export function getDistributionBalanceMeasures(
 }
 
 export interface IFeatureBalanceMeasures {
-  classes?: { [featureName: string]: string[] };
-  measures?: {
+  featureValues: { [featureName: string]: string[] };
+  features: string[];
+  measures: {
     [featureName: string]: {
       [classKey: string]: { [measureName: string]: number };
     };
   };
 }
+
+export const featureBalanceMeasureNames = new Map<string, string>([
+  ["Demographic Parity", "dp"],
+  ["Jaccard Index", "ji"],
+  ["Kendall Rank Correlation", "krc"],
+  ["Log-Likelihood Ratio", "llr"],
+  ["Normalized PMI,	p(x,y) normalization", "n_pmi_xy"],
+  ["Normalized PMI,	p(y) normalization", "n_pmi_y"],
+  ["Pointwise Mutual Information (PMI)", "pmi"],
+  ["Positive Rate of Class A", "prA"],
+  ["Positive Rate of Class B", "prB"],
+  ["Sorensen-Dice Coefficient", "sdc"],
+  ["Squared PMI", "s_pmi"],
+  ["t-test", "t_test"]
+]);
 
 export function getFeatureBalanceMeasures(
   measures: {
@@ -60,14 +76,23 @@ export function getFeatureBalanceMeasures(
 
     classKey = `${classB}__${classA}`;
     if (classKey in classes) {
+      // Measures are available for the string "classB__classA" but not for "classA__classB"
+      // For certain measures, we need to inverse the measure value to get the correct values for classA and classB
+      // We don't modify the underlying collection to preserve the original value, and instead return a new collection
       const measures = classes[classKey];
+      const finalMeasures: { [measureName: string]: number } = {};
       for (const measure in measures) {
-        // Measures are available for the string "classB__classA" but not for "classA__classB"
-        // Therefore, we inverse the values of each measure to get the correct values for classA and classB
-        measures[measure] *= -1;
+        switch (measure) {
+          case "dp":
+            finalMeasures[measure] = -1 * measures[measure];
+            break;
+          default:
+            finalMeasures[measure] = measures[measure];
+            break;
+        }
       }
 
-      return measures;
+      return finalMeasures;
     }
   }
 

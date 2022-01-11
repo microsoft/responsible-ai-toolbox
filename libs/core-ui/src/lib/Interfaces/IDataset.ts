@@ -13,6 +13,7 @@ export interface IDataset {
   categorical_features: string[];
   class_names?: string[];
   target_column?: string;
+  name?: string;
   dataBalanceMeasures?: IDataBalanceMeasures;
 }
 

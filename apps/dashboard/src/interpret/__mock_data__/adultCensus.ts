@@ -46,14 +46,16 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
       }
     },
     featureBalanceMeasures: {
-      classes: {
+      features: ["race", "sex"],
+      featureValues: {
         race: [
           "Asian-Pac-Islander",
           "Black",
           "Other",
           "White",
           "Amer-Indian-Eskimo"
-        ]
+        ],
+        sex: ["Male", "Female"]
       },
       measures: {
         race: {
@@ -196,6 +198,22 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
             s_pmi: 6.671483632054144,
             sdc: 0.1965142981847815,
             t_test: 0.05596541957051317
+          }
+        },
+        sex: {
+          Male__Female: {
+            dp: 0.19627598779361355,
+            ji: 0.2224127453507233,
+            krc: -0.8801022847477544,
+            llr: 1.731753118216254,
+            n_pmi_xy: 0.0802209475794492,
+            n_pmi_y: -0.7214469658118929,
+            pmi: 1.0271593066283586,
+            prA: 0.3057365764111978,
+            prB: 0.10946058861758425,
+            s_pmi: 2.758912424844613,
+            sdc: 0.16148587327545963,
+            t_test: 0.26218135006369214
           }
         }
       }
@@ -987,6 +1005,7 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
       "United-States"
     ]
   ],
+  name: "Adult Census Income",
   predicted_y: [
     1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
     0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1
