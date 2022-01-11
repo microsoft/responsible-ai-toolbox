@@ -9,14 +9,12 @@ import {
 } from "@responsible-ai/core-ui";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import {
-  getAggregateBalanceMeasures,
-  getDistributionBalanceMeasures,
   getFeatureBalanceMeasures,
   IDataBalanceMeasures
 } from "libs/core-ui/src/lib/Interfaces/DataBalanceInterfaces";
 import _ from "lodash";
-import { getTheme, Stack, StackItem } from "office-ui-fabric-react";
-import { Annotations } from "plotly.js";
+import { getTheme, Text } from "office-ui-fabric-react";
+import { Annotations, Layout } from "plotly.js";
 import React from "react";
 
 import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
@@ -58,55 +56,14 @@ export class DataBalanceTab extends React.Component<
 
     return (
       <div className={classNames.page}>
-        <h1>Aggregate Balance Measures</h1>
-        <Stack>
-          <StackItem>
-            {`atkinsonIndex --> ${
-              getAggregateBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures
-                  ?.aggregateBalanceMeasures?.measures ?? {}
-              ).atkinsonIndex
-            }`}
-          </StackItem>
-          <StackItem>
-            {`theilLIndex --> ${
-              getAggregateBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures
-                  ?.aggregateBalanceMeasures?.measures ?? {}
-              ).theilLIndex
-            }`}
-          </StackItem>
-          <StackItem>
-            {`theilTIndex --> ${
-              getAggregateBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures
-                  ?.aggregateBalanceMeasures?.measures ?? {}
-              ).theilTIndex
-            }`}
-          </StackItem>
-        </Stack>
-        <h1>Distribution Balance Measures</h1>
-        <Stack>
-          <StackItem>
-            {`race wassersteinDist --> ${
-              getDistributionBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures
-                  ?.distributionBalanceMeasures?.measures ?? {},
-                "race"
-              ).wassersteinDist
-            }`}
-          </StackItem>
-          <StackItem>
-            {`sex jsDist --> ${
-              getDistributionBalanceMeasures(
-                this.context.dataset.dataBalanceMeasures
-                  ?.distributionBalanceMeasures?.measures ?? {},
-                "sex"
-              ).jsDist
-            }`}
-          </StackItem>
-        </Stack>
-        <h1>Feature Balance Measures</h1>
+        <Text variant="large" className={classNames.leftLabel}>
+          Feature Balance Measures
+        </Text>
+        <br />
+        <Text variant="medium" className={classNames.centerLabel}>
+          Demographic Parity of Races in Adult Dataset
+        </Text>
+        <br />
         <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
       </div>
     );
@@ -158,13 +115,14 @@ function generatePlotlyProps(
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(basePlotlyProperties);
   plotlyProps.data[0].type = "heatmap";
+
+  // TODO: Make colorscale/zmin/zmax work with default colors and a min/max of -1/1
   // plotlyProps.data[0].colorscale = [
-  //   [0, "#3D9970"],
-  //   [1, "#001f3f"]
+  //   [0, "rgba(0,0,255,1.0)"],
+  //   [1, "rgba(255,0,0,1.0)"]
   // ];
 
-  // TODO: Keep red-blue but make min/max -1 and 1
-
+  // TODO: Allow user to select the feature
   const selectedFeature = "race";
 
   const features = new Map<string, string[]>();
@@ -180,6 +138,7 @@ function generatePlotlyProps(
     classes.forEach((classA, colIndex) => {
       const row: number[] = [];
       classes.forEach((classB, rowIndex) => {
+        // TODO: Allow user to select the measure instead of defaulting to DP
         const featureValue = getFeatureBalanceMeasures(
           dataBalanceMeasures.featureBalanceMeasures?.measures ?? {},
           featureName,
@@ -216,7 +175,8 @@ function generatePlotlyProps(
   plotlyProps.data[0].y = featureNames;
   plotlyProps.data[0].z = data;
 
-  (plotlyProps.layout ?? {}).annotations = annotations;
+  const layout = plotlyProps.layout as Partial<Layout>;
+  layout.annotations = annotations;
 
   return plotlyProps;
 }

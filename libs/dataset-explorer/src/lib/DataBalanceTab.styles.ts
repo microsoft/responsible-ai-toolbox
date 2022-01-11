@@ -26,11 +26,13 @@ export interface IDataBalanceTabStyles {
   horizontalAxis: IStyle;
   cohortPickerWrapper: IStyle;
   cohortPickerLabel: IStyle;
+  centerLabel: IStyle;
   boldText: IStyle;
   colorBox: IStyle;
   legendLabel: IStyle;
   legendItem: IStyle;
   legend: IStyle;
+  leftLabel: IStyle;
   callout: IStyle;
   chartEditorButton: IStyle;
   smallItalic: IStyle;
@@ -51,6 +53,11 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
         flexDirection: "column",
         padding: "10px 20px",
         width: "200px"
+      },
+      centerLabel: {
+        alignSelf: "center",
+        fontWeight: "600",
+        paddingRight: "8px"
       },
       chart: {
         flexGrow: "1"
@@ -121,6 +128,11 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
         flexDirection: "row",
         paddingLeft: "25px",
         width: "100%"
+      },
+      leftLabel: {
+        alignSelf: "left",
+        fontWeight: "600",
+        paddingRight: "8px"
       },
       legend: {},
       legendAndText: {
