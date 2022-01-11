@@ -246,3 +246,12 @@ def test_responsibleaidashboard_housing_decision_making():
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaidashboard_multiclass_dnn_model_debugging():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-multiclass-dnn-model-debugging"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
