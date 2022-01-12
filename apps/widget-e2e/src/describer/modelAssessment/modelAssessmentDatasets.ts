@@ -155,6 +155,14 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    },
     whatIfCounterfactualsData: {
       checkForClassField: false,
       columnHeaderAfterSort: "s5",
