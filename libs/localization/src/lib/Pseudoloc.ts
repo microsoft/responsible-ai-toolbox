@@ -78,7 +78,7 @@ export class Pseudoloc {
           throw new Error("Not supported type");
       }
     }
-    return pseudolocStrings as unknown as T;
+    return pseudolocStrings as T;
   }
 
   private static pseudolocalizeString(locString: string): string {
