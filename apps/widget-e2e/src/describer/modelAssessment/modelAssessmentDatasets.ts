@@ -167,6 +167,42 @@ const modelAssessmentDatasets = {
       yAxisNewValue: "bmi",
       yAxisValue: "age"
     }
+  },
+  HousingClassificationModelDebugging: {
+    featureNames: [
+      "LotFrontage",
+      "LotArea",
+      "OverallQual",
+      "OverallCond",
+      "YearBuilt",
+      "YearRemodAdd",
+      "BsmtUnfSF",
+      "TotalBsmtSF",
+      "Ce0tralAir",
+      "1stFlrSF",
+      "2ndFlrSF",
+      "LowQualFinSF",
+      "GrLivArea",
+      "BsmtFullBath",
+      "BsmtHalfBath",
+      "FullBath",
+      "HalfBath",
+      "BedroomAbvGr",
+      "KitchenAbvGr",
+      "TotRmsAbvGrd",
+      "Fireplaces",
+      "GarageYrBlt",
+      "GarageCars",
+      "GarageArea",
+      "PavedDrive",
+      "WoodDeckSF",
+      "OpenPorchSF",
+      "EnclosedPorch",
+      "3SsnPorch",
+      "ScreenPorch",
+      "PoolArea",
+      "YrSold"
+    ]
   }
 };
 
