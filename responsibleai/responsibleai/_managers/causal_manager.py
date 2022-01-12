@@ -3,4 +3,10 @@
 
 """Manager for causal analysis."""
 
-from responsibleai.managers.causal_manager import *
+import warnings
+
+from responsibleai.managers.causal_manager import *  # noqa: F401, F403
+
+warnings.warn(
+    "The module responsibleai._managers.causal_manager is deprecated. "
+    "Please use responsibleai.managers.causal_manager instead.")

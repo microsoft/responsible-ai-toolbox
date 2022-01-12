@@ -3,4 +3,11 @@
 
 """Defines the Error Analysis Manager class."""
 
-from responsibleai.managers.explainer_manager import *
+import warnings
+
+from responsibleai.managers.explainer_manager import *  # noqa: F401, F403
+
+warnings.warn(
+    "The module responsibleai._managers.explainer_manager "
+    "is deprecated. "
+    "Please use responsibleai.managers.explainer_manager instead.")
