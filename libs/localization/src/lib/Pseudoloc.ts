@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ILocStrings } from "./ILocaleContext";
-
 const pseudolocMapping = new Map([
   ["A", "Á"],
   ["B", "β"],
@@ -63,7 +61,7 @@ const identifierEnd = "}";
 const stretchFactor = 0.3; // Stretch each string by adding additional characters
 
 export class Pseudoloc {
-  public static pseudolocalizeStrings(locStrings: ILocStrings): ILocStrings {
+  public static pseudolocalizeStrings<T>(locStrings: T): T {
     const pseudolocStrings = {};
     for (const key of Object.keys(locStrings)) {
       const value = locStrings[key];
@@ -77,10 +75,10 @@ export class Pseudoloc {
           );
           break;
         default:
-          pseudolocStrings[key] = value;
+          throw new Error("Not supported type");
       }
     }
-    return pseudolocStrings;
+    return pseudolocStrings as unknown as T;
   }
 
   private static pseudolocalizeString(locString: string): string {
