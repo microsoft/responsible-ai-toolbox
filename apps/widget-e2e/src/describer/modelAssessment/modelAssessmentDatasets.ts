@@ -120,7 +120,9 @@ const modelAssessmentDatasets = {
       WhatIfNameLabel: "Copy of row 5",
       WhatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "occupation",
-      yAxisValue: "age"
+      yAxisValue: "age",
+      classValue: "Probability : <=50K",
+      newClassValue: "Probability : >50K"
     }
   },
   DiabetesRegressionModelDebugging: {
@@ -213,7 +215,7 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     featureImportanceData: {
-      datapoint: 89,
+      datapoint: 730,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
       newFeatureDropdownValue: "OverallQual",
@@ -235,6 +237,20 @@ const modelAssessmentDatasets = {
       ],
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: true,
+      columnHeaderAfterSort: "OverallQual",
+      columnHeaderBeforeSort: "LotFrontage",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "Wood",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "1stFlrSF",
+      yAxisValue: "LotFrontage",
+      newClassValue: "Probability : More than median",
+      classValue: "Probability : Less than median"
     }
   }
 };
