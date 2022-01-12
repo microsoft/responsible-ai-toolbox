@@ -43,6 +43,7 @@ export enum Locators {
   WhatIfAxisPanel = "#AxisConfigPanel",
   AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
   AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
+  AxisFeatureDropdownOptionGeneral = "div.ms-ComboBox-optionsContainerWrapper",
   WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",
   WhatIfYAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('occupation')",
   WhatIfScatterChartYAxisLabelUpdated = "#IndividualFeatureContainer div[class^='rotatedVerticalBox'] button:contains('occupation')",
@@ -75,7 +76,14 @@ export enum Locators {
   DEDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
-  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick']",
-  MSCRotatedVerticalBox = "#ModelPerformanceChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
-  MSCHorizontalAxis = "#ModelPerformanceChart div[class*='horizontalAxis']"
+  DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick'] text",
+  MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
+  MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
+  CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
+  MSSideBarCards = "#OverallMetricChart div[class^='statsBox']",
+  MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
+  MSScrollable = "#OverallMetricChart div[class^='scrollableWrapper']",
+  MSCohortDropdown = "#modelPerformanceCohortPicker",
+  MSDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
+  MSYAxisPoints = "#OverallMetricChart g[class^='cartesianlayer'] g[class^='ytick']"
 }

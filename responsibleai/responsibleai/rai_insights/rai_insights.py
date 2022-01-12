@@ -271,6 +271,23 @@ class RAIInsights(object):
                                f"{list(difference_set)}")
                     raise UserConfigValidationException(message)
 
+                for column in categorical_features:
+                    try:
+                        np.unique(train[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
+                        )
+
+                    try:
+                        np.unique(test[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
+                        )
+
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
                 if len(set(train[target_column].unique()) -
@@ -713,8 +730,15 @@ class RAIInsights(object):
             inst.__dict__[_MODEL] = serializer.load(top_dir)
         else:
             inst.__dict__['_' + _SERIALIZER] = None
-            with open(top_dir / _MODEL_PKL, 'rb') as file:
-                inst.__dict__[_MODEL] = pickle.load(file)
+            try:
+                with open(top_dir / _MODEL_PKL, 'rb') as file:
+                    inst.__dict__[_MODEL] = pickle.load(file)
+            except Exception:
+                warnings.warn(
+                    'ERROR-LOADING-USER-MODEL: '
+                    'There was an error loading the user model. '
+                    'Some of RAI dashboard features may not work.')
+                inst.__dict__[_MODEL] = None
 
     @staticmethod
     def _load_managers(inst, path):

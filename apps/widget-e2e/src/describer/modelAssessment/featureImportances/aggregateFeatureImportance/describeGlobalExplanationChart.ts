@@ -28,14 +28,15 @@ export function describeGlobalExplanationChart<
       );
     });
     it("should have x axis label", () => {
-      const columns = props.dataShape.featureNames?.slice(0, 4);
+      const columns = props.dataShape.featureNames;
       if (columns) {
-        for (const [i, column] of columns.entries()) {
-          cy.get(
-            `#FeatureImportanceBar svg g.xaxislayer-above g.xtick:nth-child(${
-              i + 1
-            }) text`
-          ).should("contain.text", column);
+        for (let i = 0; i < 4; i++) {
+          cy.get(`#FeatureImportanceBar svg g.xaxislayer-above g.xtick text`)
+            .eq(i)
+            .invoke("text")
+            .then((text) => {
+              expect(columns).contain(text);
+            });
         }
       }
     });

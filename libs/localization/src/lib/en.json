@@ -345,6 +345,7 @@
     "instanceView": "Instance View",
     "localExplanationView": "Local explanation",
     "noFeature": "No feature",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "What-If datapoints"
   },
   "Fairness": {
@@ -788,6 +789,7 @@
       "cancelTitle": "Cancel cohort",
       "cancelYes": "Yes",
       "cohortNameError": "Missing cohort name",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Dataset cohort name",
       "cohortNamePlaceholder": "Name your cohort",
       "clearAllFilters": "Clear all filters",
@@ -1264,7 +1266,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
-      "ModelStatistics": "Model statistics"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
       "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
