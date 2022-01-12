@@ -7,9 +7,14 @@ import {
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import {
-  featureBalanceMeasureNames,
+  AccessibleChart,
+  IData,
+  IPlotlyProperty
+} from "@responsible-ai/mlchartlib";
+import {
+  measureVarNames,
+  measureRanges,
   getFeatureBalanceMeasures,
   IDataBalanceMeasures
 } from "libs/core-ui/src/lib/Interfaces/DataBalanceInterfaces";
@@ -63,7 +68,7 @@ export class DataBalanceTab extends React.Component<
       this.setState({ selectedFeatureIndex: 0 });
     }
 
-    if (preState.selectedMeasureIndex >= featureBalanceMeasureNames.size) {
+    if (preState.selectedMeasureIndex >= measureVarNames.size) {
       this.setState({ selectedMeasureIndex: 0 });
     }
   }
@@ -90,7 +95,7 @@ export class DataBalanceTab extends React.Component<
         : this.state.selectedFeatureIndex;
 
     const selectedMeasureIndex =
-      this.state.selectedMeasureIndex >= featureBalanceMeasureNames.size
+      this.state.selectedMeasureIndex >= measureVarNames.size
         ? 0
         : this.state.selectedMeasureIndex;
 
@@ -98,17 +103,17 @@ export class DataBalanceTab extends React.Component<
       (feature, index) => ({ key: index, text: feature } as IDropdownOption)
     );
 
-    const measureOptions = [...featureBalanceMeasureNames].map(
+    const measureOptions = [...measureVarNames].map(
       ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
     );
 
     // TODO: See if this spread syntax works with indexed type: [...featureBalanceMeasures.featureValues].map()
 
-    const plotlyProps = generatePlotlyProps(
+    const plotlyProps = generateHeatmapPlotlyProps(
       this.context.dataset.dataBalanceMeasures,
-      this.context.dataset.name,
-      featureBalanceMeasures.features[selectedFeatureIndex],
-      [...featureBalanceMeasureNames][selectedMeasureIndex]
+      featureOptions[selectedFeatureIndex].text,
+      measureOptions[selectedMeasureIndex].text,
+      this.context.dataset.name
     );
 
     return (
@@ -194,9 +199,14 @@ export class DataBalanceTab extends React.Component<
   };
 }
 
-const basePlotlyProperties: IPlotlyProperty = {
+const baseHeatmapPlotlyProperties: IPlotlyProperty = {
   config: { displaylogo: false, displayModeBar: false, responsive: true },
-  data: [{}],
+  data: [
+    {
+      colorscale: "Viridis", // Viridis is a colorblind-friendly color scale according to https://sjmgarnier.github.io/viridis/index.html
+      type: "heatmap"
+    }
+  ],
   layout: {
     autosize: true,
     dragmode: false,
@@ -240,26 +250,33 @@ const basePlotlyProperties: IPlotlyProperty = {
   }
 };
 
-function generatePlotlyProps(
+function generateHeatmapPlotlyProps(
   dataBalanceMeasures: IDataBalanceMeasures,
-  datasetName?: string,
-  selectedFeature?: string,
-  selectedMeasure?: [string, string]
+  selectedFeature: string,
+  selectedMeasure: string,
+  datasetName?: string
 ): IPlotlyProperty {
-  const plotlyProps = _.cloneDeep(basePlotlyProperties);
-  plotlyProps.data[0].type = "heatmap";
+  const plotlyProps = _.cloneDeep(baseHeatmapPlotlyProperties);
 
-  if (!selectedFeature || !selectedMeasure) {
+  const measureVar = measureVarNames.get(selectedMeasure);
+  if (!measureVar) {
     return plotlyProps;
   }
 
-  const [measureName, measureVar] = selectedMeasure;
+  const ranges = measureRanges.get(selectedMeasure);
+  if (ranges) {
+    plotlyProps.data[0] = {
+      ...plotlyProps.data[0],
+      ...({ zmax: ranges[1], zmin: ranges[0] } as IData)
+    };
+  }
 
-  const features = new Map<string, string[]>();
-  features.set(
-    selectedFeature,
-    dataBalanceMeasures.featureBalanceMeasures.featureValues[selectedFeature]
-  );
+  const features = new Map<string, string[]>([
+    [
+      selectedFeature,
+      dataBalanceMeasures.featureBalanceMeasures.featureValues[selectedFeature]
+    ]
+  ]);
 
   const featureNames = features.get(selectedFeature);
   plotlyProps.data[0].x = featureNames;
@@ -268,19 +285,13 @@ function generatePlotlyProps(
   const layout = plotlyProps.layout as Partial<Layout>;
 
   const title = layout.title as Partial<{ text: string }>;
-  title.text = `${measureName} of ${selectedFeature}`;
+  title.text = `${selectedMeasure} of ${selectedFeature}`;
 
   if (datasetName) {
     title.text += ` in ${datasetName}`;
   }
 
   // TODO: Make colorscale/zmin/zmax work with default colors and a min/max of -1/1
-  // Choose a color palette friendly to people with color deficiency
-  // plotlyProps.data[0].colorscale = [
-  //   [0, "rgba(0,0,255,1.0)"],
-  //   [1, "rgba(255,0,0,1.0)"]
-  // ];
-  // plotlyProps.data[0].colorscale = "viridis";
 
   // TODO: Need to fix "stretchy" visualization after going from half browser size to full browser size
 

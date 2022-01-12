@@ -42,7 +42,8 @@ export interface IFeatureBalanceMeasures {
   };
 }
 
-export const featureBalanceMeasureNames = new Map<string, string>([
+export const measureVarNames = new Map<string, string>([
+  // TODO: Positive rates aren't good to visualize in a heatmap, because it is per feature value, not a combination of feature values
   ["Demographic Parity", "dp"],
   ["Jaccard Index", "ji"],
   ["Kendall Rank Correlation", "krc"],
@@ -50,11 +51,15 @@ export const featureBalanceMeasureNames = new Map<string, string>([
   ["Normalized PMI,	p(x,y) normalization", "n_pmi_xy"],
   ["Normalized PMI,	p(y) normalization", "n_pmi_y"],
   ["Pointwise Mutual Information (PMI)", "pmi"],
-  ["Positive Rate of Class A", "prA"],
-  ["Positive Rate of Class B", "prB"],
+  // ["Positive Rates of Class A", "prA"],
+  // ["Positive Rates of Class B", "prB"],
   ["Sorensen-Dice Coefficient", "sdc"],
   ["Squared PMI", "s_pmi"],
   ["t-test", "t_test"]
+]);
+
+export const measureRanges = new Map<string, number[]>([
+  ["Demographic Parity", [-1, 1]]
 ]);
 
 export function getFeatureBalanceMeasures(
@@ -86,6 +91,12 @@ export function getFeatureBalanceMeasures(
           case "dp":
             finalMeasures[measure] = -1 * measures[measure];
             break;
+          // case "prA":
+          //   finalMeasures.prA = measures.prB;
+          //   finalMeasures.prB = measures.prA;
+          //   break;
+          // case "prB":
+          //   break;
           default:
             finalMeasures[measure] = measures[measure];
             break;
