@@ -4,7 +4,7 @@
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
-  ClassificationModelAssessment: {
+  ClassificationModelDebugging: {
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
@@ -111,17 +111,29 @@ const modelAssessmentDatasets = {
       yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
+      checkForClassField: true,
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
       CreateYourOwnCounterfactualInputFieldUpdated: "25",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5"
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "occupation",
+      yAxisValue: "age"
     }
   },
   DiabetesRegressionModelDebugging: {
+    cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "0.05",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
     featureImportanceData: {
+      datapoint: 89,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
       newFeatureDropdownValue: "bp",
@@ -142,7 +154,19 @@ const modelAssessmentDatasets = {
       "s2",
       "age",
       "s6"
-    ]
+    ],
+    whatIfCounterfactualsData: {
+      checkForClassField: false,
+      columnHeaderAfterSort: "s5",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "s6",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "bmi",
+      yAxisValue: "age"
+    }
   }
 };
 

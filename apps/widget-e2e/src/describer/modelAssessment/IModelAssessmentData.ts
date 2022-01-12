@@ -115,10 +115,13 @@ export interface IWhatIfCounterfactualsData {
   WhatIfNameLabel?: string;
   WhatIfNameLabelUpdated?: string;
   CreateYourOwnCounterfactualInputFieldUpdated?: string;
+  yAxisValue?: string;
+  yAxisNewValue?: string;
+  checkForClassField?: boolean;
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelAssessment" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py"
 }

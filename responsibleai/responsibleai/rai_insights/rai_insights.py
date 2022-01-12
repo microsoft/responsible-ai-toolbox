@@ -269,6 +269,23 @@ class RAIInsights(object):
                                f"{list(difference_set)}")
                     raise UserConfigValidationException(message)
 
+                for column in categorical_features:
+                    try:
+                        np.unique(train[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
+                        )
+
+                    try:
+                        np.unique(test[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
+                        )
+
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
                 if len(set(train[target_column].unique()) -
