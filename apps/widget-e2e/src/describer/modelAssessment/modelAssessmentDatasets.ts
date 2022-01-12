@@ -202,7 +202,18 @@ const modelAssessmentDatasets = {
       "ScreenPorch",
       "PoolArea",
       "YrSold"
-    ]
+    ],
+    featureImportanceData: {
+      datapoint: 89,
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: false,
+      newFeatureDropdownValue: "OverallQual",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    }
   }
 };
 
