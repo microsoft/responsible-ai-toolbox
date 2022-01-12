@@ -251,6 +251,14 @@ const modelAssessmentDatasets = {
       yAxisValue: "LotFrontage",
       newClassValue: "Probability : More than median",
       classValue: "Probability : Less than median"
+    },
+    modelStatisticsData: {
+      defaultXAxis: "Probability : Less than median",
+      defaultXAxisPanelValue: "Prediction probabilities",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "LotFrontage",
+      yAxisNumberOfBins: "8"
     }
   }
 };
