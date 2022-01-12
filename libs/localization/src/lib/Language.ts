@@ -19,5 +19,6 @@ export enum Language {
   PtPT = "pt-PT",
   Pl = "pl",
   Sv = "sv",
-  Tr = "tr"
+  Tr = "tr",
+  QpsPloc = "qps-ploc"
 }
