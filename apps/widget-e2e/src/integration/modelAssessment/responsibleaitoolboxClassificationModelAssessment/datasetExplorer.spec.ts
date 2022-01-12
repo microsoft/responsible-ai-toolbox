@@ -3,4 +3,4 @@
 
 import { describeDatasetExplorer } from "../../../describer/modelAssessment/dataExplorer/describeDatasetExplorer";
 
-describeDatasetExplorer("ClassificationModelAssessment");
+describeDatasetExplorer("ClassificationModelDebugging");
