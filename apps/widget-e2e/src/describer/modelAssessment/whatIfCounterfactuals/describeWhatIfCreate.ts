@@ -20,7 +20,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     after(() => {
       cy.get(Locators.WhatIfCloseButton).click();
     });
-    it("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
+    it.skip("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
