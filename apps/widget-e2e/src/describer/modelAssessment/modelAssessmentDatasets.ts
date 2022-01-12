@@ -169,6 +169,7 @@ const modelAssessmentDatasets = {
     }
   },
   HousingClassificationModelDebugging: {
+    cohortDefaultName: "All data",
     featureNames: [
       "LotFrontage",
       "LotArea",
@@ -213,6 +214,19 @@ const modelAssessmentDatasets = {
       noLocalImportance: false,
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
+    },
+    datasetExplorerData: {
+      cohortDatasetNewValue: "150",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: [
+        "0 - 145",
+        "146 - 291",
+        "292 - 437",
+        "438 - 583",
+        "584 - 729"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "LotFrontage"
     }
   }
 };
