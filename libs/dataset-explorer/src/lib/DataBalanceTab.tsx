@@ -28,7 +28,7 @@ import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 export class IDataBalanceTabProps {}
 
 export interface IDataBalanceTabState {
-  selectedCohortIndex: number;
+  selectedFeatureIndex: number;
   selectedMeasureIndex: number;
 }
 
@@ -44,7 +44,7 @@ export class DataBalanceTab extends React.Component<
     super(props);
 
     this.state = {
-      selectedCohortIndex: 0,
+      selectedFeatureIndex: 0,
       selectedMeasureIndex: 0
     };
   }
@@ -58,9 +58,9 @@ export class DataBalanceTab extends React.Component<
         .length;
     if (
       featuresLength !== undefined &&
-      preState.selectedCohortIndex >= featuresLength
+      preState.selectedFeatureIndex >= featuresLength
     ) {
-      this.setState({ selectedCohortIndex: 0 });
+      this.setState({ selectedFeatureIndex: 0 });
     }
 
     if (preState.selectedMeasureIndex >= featureBalanceMeasureNames.size) {
@@ -84,18 +84,18 @@ export class DataBalanceTab extends React.Component<
     const featureBalanceMeasures =
       this.context.dataset.dataBalanceMeasures.featureBalanceMeasures;
 
-    const selectedCohortIndex =
-      this.state.selectedCohortIndex >= featureBalanceMeasures.features.length
+    const selectedFeatureIndex =
+      this.state.selectedFeatureIndex >= featureBalanceMeasures.features.length
         ? 0
-        : this.state.selectedCohortIndex;
+        : this.state.selectedFeatureIndex;
 
     const selectedMeasureIndex =
       this.state.selectedMeasureIndex >= featureBalanceMeasureNames.size
         ? 0
         : this.state.selectedMeasureIndex;
 
-    const cohortOptions = featureBalanceMeasures.features.map(
-      (cohort, index) => ({ key: index, text: cohort } as IDropdownOption)
+    const featureOptions = featureBalanceMeasures.features.map(
+      (feature, index) => ({ key: index, text: feature } as IDropdownOption)
     );
 
     const measureOptions = [...featureBalanceMeasureNames].map(
@@ -107,7 +107,7 @@ export class DataBalanceTab extends React.Component<
     const plotlyProps = generatePlotlyProps(
       this.context.dataset.dataBalanceMeasures,
       this.context.dataset.name,
-      featureBalanceMeasures.features[selectedCohortIndex],
+      featureBalanceMeasures.features[selectedFeatureIndex],
       [...featureBalanceMeasureNames][selectedMeasureIndex]
     );
 
@@ -119,13 +119,16 @@ export class DataBalanceTab extends React.Component<
           }
         </Text>
         <br />
-        <div className={classNames.cohortPickerWrapper}>
-          <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
+        <div className={classNames.featureAndMeasurePickerWrapper}>
+          <Text
+            variant="mediumPlus"
+            className={classNames.featureAndMeasurePickerLabel}
+          >
             {
-              "Select a dataset cohort and measure to explore" // TODO: Replace with localization
+              "Select a dataset feature and measure to explore" // TODO: Replace with localization
             }
           </Text>
-          {cohortOptions && (
+          {featureOptions && (
             <Dropdown
               styles={{
                 callout: {
@@ -139,10 +142,10 @@ export class DataBalanceTab extends React.Component<
                   width: 150
                 }
               }}
-              id="dataBalancerCohortDropdown"
-              options={cohortOptions}
-              selectedKey={this.state.selectedCohortIndex}
-              onChange={this.setSelectedCohort}
+              id="dataBalanceFeatureDropdown"
+              options={featureOptions}
+              selectedKey={this.state.selectedFeatureIndex}
+              onChange={this.setSelectedFeature}
             />
           )}
           {measureOptions && (
@@ -159,7 +162,7 @@ export class DataBalanceTab extends React.Component<
                   width: 250
                 }
               }}
-              id="dataBalancerCohortDropdown"
+              id="dataBalanceMeasureDropdown"
               options={measureOptions}
               selectedKey={this.state.selectedMeasureIndex}
               onChange={this.setSelectedMeasure}
@@ -172,12 +175,12 @@ export class DataBalanceTab extends React.Component<
     );
   }
 
-  private setSelectedCohort = (
+  private setSelectedFeature = (
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
     if (item?.key !== undefined) {
-      this.setState({ selectedCohortIndex: item.key as number });
+      this.setState({ selectedFeatureIndex: item.key as number });
     }
   };
 
@@ -277,6 +280,7 @@ function generatePlotlyProps(
   //   [0, "rgba(0,0,255,1.0)"],
   //   [1, "rgba(255,0,0,1.0)"]
   // ];
+  // plotlyProps.data[0].colorscale = "viridis";
 
   // TODO: Need to fix "stretchy" visualization after going from half browser size to full browser size
 

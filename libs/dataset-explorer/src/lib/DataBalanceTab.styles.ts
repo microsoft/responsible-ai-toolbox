@@ -24,8 +24,8 @@ export interface IDataBalanceTabStyles {
   horizontalAxisWithPadding: IStyle;
   paddingDiv: IStyle;
   horizontalAxis: IStyle;
-  cohortPickerWrapper: IStyle;
-  cohortPickerLabel: IStyle;
+  featureAndMeasurePickerWrapper: IStyle;
+  featureAndMeasurePickerLabel: IStyle;
   centerLabel: IStyle;
   boldText: IStyle;
   colorBox: IStyle;
@@ -84,18 +84,6 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
         flexGrow: "1",
         position: "relative"
       },
-      cohortPickerLabel: {
-        fontWeight: "600",
-        paddingRight: "8px"
-      },
-      cohortPickerWrapper: {
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "row",
-        height: "32px",
-        paddingLeft: "63px",
-        paddingTop: "13px"
-      },
       colorBox: {
         borderRadius: "6px",
         cursor: "pointer",
@@ -103,6 +91,18 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
         height: "12px",
         margin: "11px 4px 11px 8px",
         width: "12px"
+      },
+      featureAndMeasurePickerLabel: {
+        fontWeight: "600",
+        paddingRight: "8px"
+      },
+      featureAndMeasurePickerWrapper: {
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        height: "32px",
+        paddingLeft: "63px",
+        paddingTop: "13px"
       },
       helperText: {
         paddingLeft: "15px",
