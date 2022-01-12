@@ -4,7 +4,7 @@
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
-  ClassificationModelAssessment: {
+  ClassificationModelDebugging: {
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
