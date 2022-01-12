@@ -112,17 +112,17 @@ const modelAssessmentDatasets = {
     },
     whatIfCounterfactualsData: {
       checkForClassField: true,
+      classValue: "Probability : <=50K",
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
       CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
       WhatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "occupation",
-      yAxisValue: "age",
-      classValue: "Probability : <=50K",
-      newClassValue: "Probability : >50K"
+      yAxisValue: "age"
     }
   },
   DiabetesRegressionModelDebugging: {
@@ -180,6 +180,30 @@ const modelAssessmentDatasets = {
   },
   HousingClassificationModelDebugging: {
     cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "150",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: [
+        "0 - 145",
+        "146 - 291",
+        "292 - 437",
+        "438 - 583",
+        "584 - 729"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "LotFrontage"
+    },
+    featureImportanceData: {
+      datapoint: 730,
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: false,
+      newFeatureDropdownValue: "OverallQual",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    },
     featureNames: [
       "LotFrontage",
       "LotArea",
@@ -214,44 +238,6 @@ const modelAssessmentDatasets = {
       "PoolArea",
       "YrSold"
     ],
-    featureImportanceData: {
-      datapoint: 730,
-      dropdownRowName: "Row 4",
-      hasCorrectIncorrectDatapoints: false,
-      newFeatureDropdownValue: "OverallQual",
-      noDataset: false,
-      noFeatureImportance: false,
-      noLocalImportance: false,
-      topFeaturesCurrentValue: "4",
-      topFeaturesText: "Top 4 features by their importance"
-    },
-    datasetExplorerData: {
-      cohortDatasetNewValue: "150",
-      colorValueButton: "Predicted Y",
-      datasetBarLabel: [
-        "0 - 145",
-        "146 - 291",
-        "292 - 437",
-        "438 - 583",
-        "584 - 729"
-      ],
-      defaultXAxis: "Index",
-      defaultYAxis: "LotFrontage"
-    },
-    whatIfCounterfactualsData: {
-      checkForClassField: true,
-      columnHeaderAfterSort: "OverallQual",
-      columnHeaderBeforeSort: "LotFrontage",
-      CreateYourOwnCounterfactualInputFieldUpdated: "25",
-      searchBarQuery: "Wood",
-      selectedDatapoint: "Index 5",
-      WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
-      yAxisNewValue: "1stFlrSF",
-      yAxisValue: "LotFrontage",
-      newClassValue: "Probability : More than median",
-      classValue: "Probability : Less than median"
-    },
     modelStatisticsData: {
       defaultXAxis: "Probability : Less than median",
       defaultXAxisPanelValue: "Prediction probabilities",
@@ -259,6 +245,20 @@ const modelAssessmentDatasets = {
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "LotFrontage",
       yAxisNumberOfBins: "8"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: true,
+      classValue: "Probability : Less than median",
+      columnHeaderAfterSort: "OverallQual",
+      columnHeaderBeforeSort: "LotFrontage",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      newClassValue: "Probability : More than median",
+      searchBarQuery: "Wood",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "1stFlrSF",
+      yAxisValue: "LotFrontage"
     }
   }
 };
