@@ -61,6 +61,7 @@ export enum Locators {
   WhatIfScatterChartXAxis = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding']",
   WhatIfXAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('Probability : >50K')",
   WhatIfScatterChartXAxisLabelUpdated = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding'] button:contains('Probability : >50K')",
+  WhatIfScatterChartXAxisLabelUpdatedGeneral = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding']",
   WhatIfXAxisAxisValueNewValue = "#AxisConfigPanel span:contains('True Y')",
   WhatIfScatterChartXAxisLabelUpdated2 = "#IndividualFeatureContainer div[class^='horizontalAxisWithPadding'] button:contains('True Y')",
   WhatIfSaveAsNewDatapointButton = "#CounterfactualPanel button:contains('Save as new datapoint')",
