@@ -95,6 +95,7 @@
     "WhatIf": {
       "setValue": "Set Value",
       "sortFeatures": "Sort feature columns by counterfactual feature importance",
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
       "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
       "toggleToolTipHeader": "Ranked counterfactual features"
     },
@@ -1266,7 +1267,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
-      "ModelStatistics": "Model statistics"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
       "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
