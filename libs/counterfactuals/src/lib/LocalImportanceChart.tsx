@@ -93,7 +93,9 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         },
         yaxis: {
           automargin: true,
-          title: "Percentage of counterfactuals that varied the feature"
+          title:
+            localization.Counterfactuals.WhatIf
+              .percentCounterfactualLocalImportance
         }
       }
     };
