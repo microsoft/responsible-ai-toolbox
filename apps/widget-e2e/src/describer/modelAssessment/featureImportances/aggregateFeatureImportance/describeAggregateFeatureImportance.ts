@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getMenu } from "../../../../util/getMenu";
 import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
-import { getMenu } from "../../../../util/getMenu";
 
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {

@@ -2,9 +2,8 @@
 // Licensed under the MIT License.
 
 import { BarChart } from "../../../../util/BarChart";
-import { getMenu } from "../../../../util/getMenu";
-
 import { selectDropdown } from "../../../../util/dropdown";
+import { getMenu } from "../../../../util/getMenu";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";

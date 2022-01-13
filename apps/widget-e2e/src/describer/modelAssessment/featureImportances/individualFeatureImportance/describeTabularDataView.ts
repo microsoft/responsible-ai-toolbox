@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getMenu } from "../../../../util/getMenu";
 import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
-import { getMenu } from "../../../../util/getMenu";
 
 import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
