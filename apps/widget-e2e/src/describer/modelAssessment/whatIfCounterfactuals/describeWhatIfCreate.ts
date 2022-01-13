@@ -32,8 +32,8 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .invoke("text")
         .then((text1) => {
           cy.task("log", `After sort value: ${text1}`);
-          expect(text1).to.equal(
-            dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort
+          expect(text1).to.not.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
           );
         });
 
