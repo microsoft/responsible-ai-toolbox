@@ -74,6 +74,7 @@ const modelAssessmentDatasets = {
       }
     },
     featureImportanceData: {
+      hasFeatureImportanceComponent: true,
       correctPredictionDatapoint: "398",
       datapoint: 500,
       dropdownRowName: "Row 4",
@@ -135,6 +136,7 @@ const modelAssessmentDatasets = {
       defaultYAxis: "age"
     },
     featureImportanceData: {
+      hasFeatureImportanceComponent: true,
       datapoint: 89,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
@@ -194,6 +196,7 @@ const modelAssessmentDatasets = {
       defaultYAxis: "LotFrontage"
     },
     featureImportanceData: {
+      hasFeatureImportanceComponent: true,
       datapoint: 730,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
@@ -259,6 +262,12 @@ const modelAssessmentDatasets = {
       WhatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "1stFlrSF",
       yAxisValue: "LotFrontage"
+    }
+  },
+  DiabetesDecisionMaking: {
+    cohortDefaultName: "All data",
+    featureImportanceData: {
+      hasFeatureImportanceComponent: false
     }
   }
 };

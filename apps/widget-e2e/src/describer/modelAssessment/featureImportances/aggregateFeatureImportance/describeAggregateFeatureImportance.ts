@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getMenu } from "../../../../util/getMenu";
 import { RAINotebookNames } from "../../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
+import { getMenu } from "../../../../util/getMenu";
 
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
@@ -30,18 +30,24 @@ export function describeAggregateFeatureImportance(
       cy.task("log", hostDetails.host);
       cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      getMenu("Aggregate feature importance").click();
     });
-    describeGlobalExplanationBarChart(datasetShape);
-    if (
-      datasetShape.featureImportanceData
-        ?.aggregateFeatureImportanceExpectedValues
-    ) {
-      describeGlobalExplanationBarChartExplicitValues(datasetShape);
+    if (!datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
+      it("should not have 'Feature importance' for decision making notebooks", () => {
+        getMenu("Aggregate feature importance").should("not.exist");
+      });
     }
-    if (!datasetShape.featureImportanceData?.noLocalImportance) {
-      describeGlobalExplanationBoxChart(datasetShape);
+    if (datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
+      describeGlobalExplanationBarChart(datasetShape);
+      if (
+        datasetShape.featureImportanceData
+          ?.aggregateFeatureImportanceExpectedValues
+      ) {
+        describeGlobalExplanationBarChartExplicitValues(datasetShape);
+      }
+      if (!datasetShape.featureImportanceData?.noLocalImportance) {
+        describeGlobalExplanationBoxChart(datasetShape);
+      }
+      describeCohortFunctionality();
     }
-    describeCohortFunctionality();
   });
 }

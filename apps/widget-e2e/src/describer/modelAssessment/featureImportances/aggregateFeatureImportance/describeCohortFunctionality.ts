@@ -3,10 +3,14 @@
 
 import { createCohort } from "../../../../util/createCohort";
 import { Locators } from "../../Constants";
+import { getMenu } from "../../../../util/getMenu";
 
 const cohortName = "CohortCreateE2E";
 export function describeCohortFunctionality(): void {
   describe("Cohort functionality", () => {
+    before(() => {
+      getMenu("Aggregate feature importance").click();
+    });
     it("Should have cohort selection in 'Sort by' dropdown", () => {
       createCohort();
 
