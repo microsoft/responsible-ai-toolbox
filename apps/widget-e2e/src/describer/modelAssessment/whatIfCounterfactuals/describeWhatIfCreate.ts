@@ -20,7 +20,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     after(() => {
       cy.get(Locators.WhatIfCloseButton).click();
     });
-    it.skip("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
+    it("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
@@ -29,9 +29,20 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
-        );
+        .invoke("text")
+        .then((text1) => {
+          cy.task("log", `After sort value: ${text1}`);
+          expect(text1).to.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort
+          );
+        });
+
+      // cy.get(Locators.WhatIfColumnHeaders, { log: true })
+      //   .eq(2, { log: true })
+      //   .debug()
+      //   .contains(
+      //     dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
+      //   );
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
 
