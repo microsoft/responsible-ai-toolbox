@@ -31,18 +31,10 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .eq(2)
         .invoke("text")
         .then((text1) => {
-          cy.task("log", `After sort value: ${text1}`);
           expect(text1).to.not.equal(
             dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
           );
         });
-
-      // cy.get(Locators.WhatIfColumnHeaders, { log: true })
-      //   .eq(2, { log: true })
-      //   .debug()
-      //   .contains(
-      //     dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
-      //   );
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
 
