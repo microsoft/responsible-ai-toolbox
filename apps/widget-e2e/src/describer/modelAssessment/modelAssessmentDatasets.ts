@@ -155,7 +155,22 @@ const modelAssessmentDatasets = {
       "s2",
       "age",
       "s6"
-    ]
+    ],
+    datasetExplorerData: {
+      cohortDatasetNewValue: "0.05",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    }
   },
   DiabetesRegressionModelDebugging: {
     cohortDefaultName: "All data",
