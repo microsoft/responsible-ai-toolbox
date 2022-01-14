@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getMenu } from "../../../../util/getMenu";
 import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
@@ -10,6 +11,9 @@ import { describeSubLineChart } from "./describeSubLineChart";
 
 export function describeTabularDataView(dataShape: IModelAssessmentData): void {
   describe("Tabular data view", () => {
+    before(() => {
+      getMenu("Individual feature importance").click();
+    });
     if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
       it("should have right number of correct prediction datapoints", () => {
         cy.get(Locators.IFIPredictionSpan)

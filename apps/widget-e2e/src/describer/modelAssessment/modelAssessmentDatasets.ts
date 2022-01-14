@@ -78,6 +78,7 @@ const modelAssessmentDatasets = {
       datapoint: 500,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: true,
+      hasFeatureImportanceComponent: true,
       incorrectPredictionDatapoint: "102",
       newFeatureDropdownValue: "workclass",
       noDataset: false,
@@ -125,6 +126,12 @@ const modelAssessmentDatasets = {
       yAxisValue: "age"
     }
   },
+  DiabetesDecisionMaking: {
+    cohortDefaultName: "All data",
+    featureImportanceData: {
+      hasFeatureImportanceComponent: false
+    }
+  },
   DiabetesRegressionModelDebugging: {
     cohortDefaultName: "All data",
     datasetExplorerData: {
@@ -138,6 +145,7 @@ const modelAssessmentDatasets = {
       datapoint: 89,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
+      hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "bp",
       noDataset: false,
       noFeatureImportance: false,
@@ -197,6 +205,7 @@ const modelAssessmentDatasets = {
       datapoint: 730,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
+      hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "OverallQual",
       noDataset: false,
       noFeatureImportance: false,
