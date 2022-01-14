@@ -118,6 +118,8 @@ export interface IWhatIfCounterfactualsData {
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
+  classValue?: string;
+  newClassValue?: string;
 }
 
 export enum RAINotebookNames {
