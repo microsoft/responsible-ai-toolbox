@@ -4,7 +4,7 @@
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
-  ClassificationModelAssessment: {
+  ClassificationModelDebugging: {
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
@@ -112,9 +112,11 @@ const modelAssessmentDatasets = {
     },
     whatIfCounterfactualsData: {
       checkForClassField: true,
+      classValue: "Probability : <=50K",
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
       CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
       WhatIfNameLabel: "Copy of row 5",
@@ -155,6 +157,14 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    },
     whatIfCounterfactualsData: {
       checkForClassField: false,
       columnHeaderAfterSort: "s5",
@@ -166,6 +176,89 @@ const modelAssessmentDatasets = {
       WhatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "bmi",
       yAxisValue: "age"
+    }
+  },
+  HousingClassificationModelDebugging: {
+    cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "150",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: [
+        "0 - 145",
+        "146 - 291",
+        "292 - 437",
+        "438 - 583",
+        "584 - 729"
+      ],
+      defaultXAxis: "Index",
+      defaultYAxis: "LotFrontage"
+    },
+    featureImportanceData: {
+      datapoint: 730,
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: false,
+      newFeatureDropdownValue: "OverallQual",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    },
+    featureNames: [
+      "LotFrontage",
+      "LotArea",
+      "OverallQual",
+      "OverallCond",
+      "YearBuilt",
+      "YearRemodAdd",
+      "BsmtUnfSF",
+      "TotalBsmtSF",
+      "Ce0tralAir",
+      "1stFlrSF",
+      "2ndFlrSF",
+      "LowQualFinSF",
+      "GrLivArea",
+      "BsmtFullBath",
+      "BsmtHalfBath",
+      "FullBath",
+      "HalfBath",
+      "BedroomAbvGr",
+      "KitchenAbvGr",
+      "TotRmsAbvGrd",
+      "Fireplaces",
+      "GarageYrBlt",
+      "GarageCars",
+      "GarageArea",
+      "PavedDrive",
+      "WoodDeckSF",
+      "OpenPorchSF",
+      "EnclosedPorch",
+      "3SsnPorch",
+      "ScreenPorch",
+      "PoolArea",
+      "YrSold"
+    ],
+    modelStatisticsData: {
+      defaultXAxis: "Probability : Less than median",
+      defaultXAxisPanelValue: "Prediction probabilities",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "LotFrontage",
+      yAxisNumberOfBins: "8"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: true,
+      classValue: "Probability : Less than median",
+      columnHeaderAfterSort: "OverallQual",
+      columnHeaderBeforeSort: "LotFrontage",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      newClassValue: "Probability : More than median",
+      searchBarQuery: "Wood",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "1stFlrSF",
+      yAxisValue: "LotFrontage"
     }
   }
 };

@@ -29,9 +29,12 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
-        );
+        .invoke("text")
+        .then((text1) => {
+          expect(text1).to.not.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
+          );
+        });
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
 

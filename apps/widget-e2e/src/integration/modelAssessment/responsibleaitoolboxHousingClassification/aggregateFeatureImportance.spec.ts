@@ -3,4 +3,4 @@
 
 import { describeAggregateFeatureImportance } from "../../../describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeAggregateFeatureImportance";
 
-describeAggregateFeatureImportance("ClassificationModelDebugging");
+describeAggregateFeatureImportance("HousingClassificationModelDebugging");

@@ -118,10 +118,12 @@ export interface IWhatIfCounterfactualsData {
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
+  classValue?: string;
+  newClassValue?: string;
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelAssessment" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py"
 }

@@ -24,7 +24,11 @@ export function describeCausalAnalysis(
     });
 
     it("should not have causal analysis for model debugging", () => {
-      if (fileName === RAINotebookNames.ClassificationModelAssessment) {
+      if (
+        fileName === RAINotebookNames.ClassificationModelDebugging ||
+        fileName === RAINotebookNames.DiabetesRegressionModelDebugging ||
+        fileName === RAINotebookNames.HousingClassificationModelDebugging
+      ) {
         cy.get(Locators.CausalAnalysisHeader).should("not.exist");
       }
     });

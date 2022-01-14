@@ -3,4 +3,4 @@
 
 import { describeIndividualFeatureImportance } from "../../../describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
 
-describeIndividualFeatureImportance("ClassificationModelDebugging");
+describeIndividualFeatureImportance("HousingClassificationModelDebugging");

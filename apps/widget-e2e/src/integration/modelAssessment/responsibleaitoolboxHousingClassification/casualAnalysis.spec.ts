@@ -3,4 +3,4 @@
 
 import { describeCausalAnalysis } from "../../../describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
 
-describeCausalAnalysis("ClassificationModelDebugging");
+describeCausalAnalysis("HousingClassificationModelDebugging");
