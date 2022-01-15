@@ -39,6 +39,7 @@
     "workspace-generator": "nx workspace-generator"
   },
   "dependencies": {
+    "@fluentui/react": "8.13.1",
     "d3-array": "^2.8.0",
     "d3-color": "^2.0.0",
     "d3-hierarchy": "^2.0.0",
