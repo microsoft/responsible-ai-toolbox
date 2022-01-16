@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import pytest
-
 import shap
 import sklearn
 from sklearn.model_selection import train_test_split
@@ -64,7 +63,7 @@ class TestModelAnalysisDashboard:
         ri.compute()
 
         with pytest.warns(
-            DeprecationWarning, 
+            DeprecationWarning,
             match="MODULE-DEPRECATION-WARNING: "
                   "ModelAnalysisDashboard in raiwidgets package is "
                   "deprecated."
