@@ -42,6 +42,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Save it
             rai_insights.save(save_1)
+            assert len(os.listdir(save_1 / ManagerNames.CAUSAL)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.ERROR_ANALYSIS)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.EXPLAINER)) == 0
 
             # Load
             rai_2 = RAIInsights.load(save_1)
@@ -53,6 +57,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
+            assert len(os.listdir(save_2 / ManagerNames.CAUSAL)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.ERROR_ANALYSIS)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.EXPLAINER)) == 0
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
