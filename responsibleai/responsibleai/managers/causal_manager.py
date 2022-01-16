@@ -99,7 +99,10 @@ class CausalManager(BaseManager):
             is performed among several models and the best is chosen.
         :type nuisance_model: str
         :param heterogeneity_model: Model type to use for
-                                    treatment effect heterogeneity.
+            treatment effect heterogeneity. It is one of {'linear', 'forest'}
+            (default='linear'). 'linear' means that a heterogeneity model of
+            the form theta(X)=<a, X> will be used, while 'forest' means that a
+            forest model will be trained instead.
         :type heterogeneity_model: str
         :param alpha: Confidence level of confidence intervals.
         :type alpha: float
