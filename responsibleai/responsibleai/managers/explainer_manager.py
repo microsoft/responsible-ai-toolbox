@@ -115,7 +115,8 @@ class ExplainerManager(BaseManager):
                 'Model is required for model explanations')
 
         if self._is_added:
-            warnings.warn(("Ignoring.  Explanation has already been added, "
+            warnings.warn(("DUPLICATE-EXPLAINER-CONFIG: Ignoring. "
+                           "Explanation has already been added, "
                            "currently limited to one explainer type."),
                           UserWarning)
             return
