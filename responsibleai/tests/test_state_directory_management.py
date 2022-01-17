@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-
 from pathlib import Path
+
+import pytest
 
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
