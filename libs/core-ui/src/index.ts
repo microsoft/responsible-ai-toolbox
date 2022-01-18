@@ -66,3 +66,4 @@ export * from "./lib/Interfaces/IWeightedDropdownContext";
 export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/ICohort";
 export * from "./lib/Interfaces/IErrorAnalysisData";
+export * from "./lib/Highchart/ErrorBarChart";

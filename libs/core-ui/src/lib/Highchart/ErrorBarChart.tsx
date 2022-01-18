@@ -1,19 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import Highcharts from "highcharts";
+import { uniqueId } from "lodash";
 import React from "react";
 
-interface IDonutProps {
-  input: any;
+import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
+
+interface IErrorBarChartProps {
+  input: ICausalAnalysisSingleData[] | undefined;
+  theme?: string | ITheme;
 }
-interface IDonutState {
+interface IErrorBarChartState {
   series: any;
 }
 
-export class Donut extends React.Component<IDonutProps, IDonutState> {
-  constructor(props: IDonutProps) {
+export class ErrorBarChart extends React.Component<
+  IErrorBarChartProps,
+  IErrorBarChartState
+> {
+  private readonly chartId: string;
+  constructor(props: IErrorBarChartProps) {
     super(props);
+    this.chartId = uniqueId();
     this.state = {
       series: [
         {
@@ -45,10 +55,10 @@ export class Donut extends React.Component<IDonutProps, IDonutState> {
     };
   }
 
-  highChartsRender() {
+  public highChartsRender(): void {
     Highcharts.chart({
       chart: {
-        renderTo: "atmospheric-composition",
+        renderTo: this.chartId,
         type: "pie"
       },
       plotOptions: {
@@ -63,6 +73,7 @@ export class Donut extends React.Component<IDonutProps, IDonutState> {
       title: {
         floating: true,
         style: {
+          color: "red",
           fontSize: "10px"
         },
         text: "Earth's Atmospheric Composition",
@@ -71,11 +82,11 @@ export class Donut extends React.Component<IDonutProps, IDonutState> {
     });
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.highChartsRender();
   }
 
-  render() {
-    return <div id="atmospheric-composition" />;
+  public render(): React.ReactNode {
+    return <div id={this.chartId} />;
   }
 }

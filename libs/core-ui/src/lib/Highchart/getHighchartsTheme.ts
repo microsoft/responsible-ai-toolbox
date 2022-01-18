@@ -24,9 +24,6 @@ export interface IChartColorNames {
 export function getHighchartsTheme(
   chartOptions: IHighchartsConfig,
   theme: ITheme,
-  onSortColors?: (
-    colors: Array<keyof IChartColorNames>
-  ) => Array<keyof IChartColorNames>,
   colorAxisMaxColor?: keyof IChartColorNames
 ): Highcharts.Options {
   const {
@@ -66,15 +63,7 @@ export function getHighchartsTheme(
     ["primaryLight", themeLight]
   ]);
 
-  let colors: string[];
-  if (onSortColors) {
-    const sortedColorNames = onSortColors([...chartColors.keys()]);
-    colors = sortedColorNames.map(
-      (colorName) => chartColors.get(colorName) || ""
-    );
-  } else {
-    colors = [...chartColors.values()];
-  }
+  const colors: string[] = [...chartColors.values()];
 
   let colorAxis: Highcharts.ColorAxisOptions | undefined;
   if (colorAxisMaxColor) {

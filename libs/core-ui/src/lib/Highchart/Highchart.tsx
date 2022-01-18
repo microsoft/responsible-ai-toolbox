@@ -7,13 +7,8 @@ import * as React from "react";
 
 import { defaultHighchartsOptions } from "./defaultHighchartsOptions";
 import { getHighchartsTheme } from "./getHighchartsTheme";
+import { HighchartReact } from "./HighchartReact";
 import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
-
-const HighchartReact = React.lazy(async () => {
-  return {
-    default: await import("./HighchartReact").then((hcr) => hcr.HighchartReact)
-  };
-});
 
 export interface IHighchartProps {
   chartOptions?: IHighchartsConfig;
@@ -24,19 +19,13 @@ export interface IHighchartProps {
   theme?: ITheme;
 }
 
-export function highChart(props: IHighchartProps): React.ReactElement {
+export function HighChart(props: IHighchartProps): React.ReactElement {
   const { chartOptions = {}, modules, plotClassName, theme } = props;
   const { custom = {} } = chartOptions;
-  const { onSortColors, onUpdate } = custom;
 
   const fallback = props.fallback || <></>;
   const themeOptions = theme
-    ? getHighchartsTheme(
-        chartOptions,
-        theme,
-        onSortColors,
-        custom.colorAxisMaxColor
-      )
+    ? getHighchartsTheme(chartOptions, theme, custom.colorAxisMaxColor)
     : {};
 
   // Theme options need to be applied on to everything to make sure we have the same look for all charts
@@ -80,7 +69,6 @@ export function highChart(props: IHighchartProps): React.ReactElement {
         chartOptions={mergedOptions}
         disableUpdate={custom.disableUpdate}
         modules={modules}
-        onUpdate={onUpdate}
       />
     </React.Suspense>
   );

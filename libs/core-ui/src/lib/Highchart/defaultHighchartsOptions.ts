@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
-
 export const defaultHighchartsOptions: Highcharts.Options = {
   chart: {
     panKey: "ctrl",
