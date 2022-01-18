@@ -17,10 +17,12 @@ from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
+from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
+IMPORTANCES_THRESHOLD = 50000
 
 
 class BaseAnalyzer(ABC):
@@ -359,6 +361,14 @@ class BaseAnalyzer(ABC):
             string_ind_data = self.string_indexed_data
             for idx, c_i in enumerate(indexes):
                 input_data[:, c_i] = string_ind_data[:, idx]
+        # for very large number of rows mutual information
+        # will be very expensive to compute, hence we sample
+        num_rows = input_data.shape[0]
+        if num_rows > IMPORTANCES_THRESHOLD:
+            indexes = generate_random_unique_indexes(num_rows,
+                                                     IMPORTANCES_THRESHOLD)
+            input_data = input_data[indexes]
+            diff = diff[indexes]
         if self._model_task == ModelTask.CLASSIFICATION:
             # compute the feature importances using mutual information
             return mutual_info_classif(input_data, diff).tolist()
