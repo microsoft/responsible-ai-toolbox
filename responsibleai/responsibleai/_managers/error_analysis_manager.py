@@ -8,6 +8,7 @@ import warnings
 from responsibleai.managers.error_analysis_manager import *  # noqa: F401, F403
 
 warnings.warn(
-    "The module responsibleai._managers.error_analysis_manager "
-    "is deprecated. "
-    "Please use responsibleai.managers.error_analysis_manager instead.")
+    "MODULE-DEPRECATION-WARNING: The module "
+    "responsibleai._managers.error_analysis_manager is deprecated. "
+    "Please use responsibleai.managers.error_analysis_manager instead.",
+    DeprecationWarning)
