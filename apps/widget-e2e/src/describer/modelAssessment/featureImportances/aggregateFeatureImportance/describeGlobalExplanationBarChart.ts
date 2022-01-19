@@ -3,6 +3,7 @@
 
 import { BarChart } from "../../../../util/BarChart";
 import { selectDropdown } from "../../../../util/dropdown";
+import { getMenu } from "../../../../util/getMenu";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeGlobalExplanationChart } from "./describeGlobalExplanationChart";
@@ -18,6 +19,9 @@ export function describeGlobalExplanationBarChart(
     beforeEach(() => {
       props.chart = new BarChart("#FeatureImportanceBar");
     });
+    before(() => {
+      getMenu("Aggregate feature importance").click();
+    });
     it("should be sorted by height", () => {
       expect(props.chart.sortByH()).deep.equal(props.chart.Elements);
     });
@@ -30,6 +34,9 @@ export function describeGlobalExplanationBarChartExplicitValues(
   dataShape: IModelAssessmentData
 ): void {
   describe("Bar chart - explicit values", () => {
+    before(() => {
+      getMenu("Aggregate feature importance").click();
+    });
     it("should have expected explanation values", () => {
       for (const classWeightKey in dataShape.featureImportanceData
         ?.aggregateFeatureImportanceExpectedValues) {

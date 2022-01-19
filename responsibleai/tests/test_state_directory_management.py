@@ -3,6 +3,8 @@
 
 from pathlib import Path
 
+import pytest
+
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 
@@ -45,8 +47,12 @@ class TestStateDirectoryManagement:
         assert generators_directory_path.exists()
         assert DirectoryManager.GENERATORS in str(generators_directory_path)
 
-    def test_directory_manager(self, tmpdir):
-        parent_directory = tmpdir.mkdir('parent_directory')
+    @pytest.mark.parametrize('create_parent_directory', [True, False])
+    def test_directory_manager(self, tmpdir, create_parent_directory):
+        if create_parent_directory:
+            parent_directory = tmpdir.mkdir('parent_directory')
+        else:
+            parent_directory = tmpdir / 'parent_directory'
         dm_one = DirectoryManager(
             parent_directory_path=parent_directory,
             sub_directory_name='known')

@@ -14,12 +14,11 @@ import pandas as pd
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import \
-    CounterfactualManager
-from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.managers.causal_manager import CausalManager
+from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.utils import _is_classifier
 
@@ -269,6 +268,23 @@ class RAIInsights(object):
                                "do not exist in train data: "
                                f"{list(difference_set)}")
                     raise UserConfigValidationException(message)
+
+                for column in categorical_features:
+                    try:
+                        np.unique(train[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
+                        )
+
+                    try:
+                        np.unique(test[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
+                        )
 
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
