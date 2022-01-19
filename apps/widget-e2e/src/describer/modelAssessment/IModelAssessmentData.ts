@@ -113,9 +113,9 @@ export interface IWhatIfCounterfactualsData {
   columnHeaderBeforeSort?: string;
   columnHeaderAfterSort?: string;
   searchBarQuery?: string;
-  WhatIfNameLabel?: string;
-  WhatIfNameLabelUpdated?: string;
-  CreateYourOwnCounterfactualInputFieldUpdated?: string;
+  whatIfNameLabel?: string;
+  whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualInputFieldUpdated?: string;
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
