@@ -128,8 +128,48 @@ const modelAssessmentDatasets = {
   },
   DiabetesDecisionMaking: {
     cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "0.05",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
     featureImportanceData: {
+      datapoint: 89,
       hasFeatureImportanceComponent: false
+    },
+    featureNames: [
+      "s5",
+      "bmi",
+      "bp",
+      "s3",
+      "sex",
+      "s1",
+      "s4",
+      "s2",
+      "age",
+      "s6"
+    ],
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: false,
+      columnHeaderAfterSort: "s5",
+      columnHeaderBeforeSort: "age",
+      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "sex",
+      selectedDatapoint: "Index 5",
+      WhatIfNameLabel: "Copy of row 5",
+      WhatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "s3",
+      yAxisValue: "age"
     }
   },
   DiabetesRegressionModelDebugging: {
