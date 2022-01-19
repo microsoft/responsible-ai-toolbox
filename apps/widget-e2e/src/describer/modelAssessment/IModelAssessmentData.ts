@@ -96,6 +96,7 @@ export interface IFeatureImportanceData {
 }
 
 export interface ICausalAnalysisData {
+  hasCausalAnalysisComponent?: boolean;
   dataPointsOnHover?: string[];
   dataOnXAxis?: string[];
   defaultYAxis?: string;
@@ -103,6 +104,7 @@ export interface ICausalAnalysisData {
   xAxisPanelOptions?: { [key: string]: string[] };
   yAxisPanelOptions?: { [key: string]: string[] };
   treatmentPolicyData?: { [key: string]: string[] };
+  featureListInCausalTable?: string[];
 }
 
 export interface IWhatIfCounterfactualsData {
