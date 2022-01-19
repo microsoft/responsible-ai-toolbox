@@ -1,10 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import time
+
+import numpy as np
+import pandas as pd
 from common_utils import (create_binary_classification_dataset,
                           create_boston_data, create_cancer_data,
                           create_iris_data, create_models_classification,
                           create_models_regression, create_simple_titanic_data,
+                          create_sklearn_random_forest_regressor,
                           create_titanic_pipeline)
 
 from erroranalysis._internal.constants import ModelTask
@@ -65,6 +70,30 @@ class TestImportances(object):
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
+
+    def test_large_data_importances(self):
+        # mutual information can be very costly for large number of rows
+        # hence, assert we downsample to compute importances for large data
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset(100)
+        feature_names = list(X_train.columns)
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        for _ in range(16):
+            X_test = pd.concat([X_test, X_test], ignore_index=True)
+            y_test = np.concatenate([y_test, y_test])
+        assert X_test.shape[0] > 1000000
+        t0 = time.time()
+        categorical_features = []
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+        model_analyzer.compute_importances()
+        t1 = time.time()
+        execution_time = t1 - t0
+        print(execution_time)
+        # assert we don't take too long and downsample the dataset
+        # note execution time is in seconds
+        assert execution_time < 20
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
