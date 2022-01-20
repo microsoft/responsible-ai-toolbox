@@ -1,4 +1,4 @@
-name: CI RAIWidgets Python Typescript 
+name: CI RAIWidgets Python Typescript
 
 on:
   push:
