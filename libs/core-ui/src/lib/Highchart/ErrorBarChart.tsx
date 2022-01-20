@@ -4,20 +4,12 @@
 import _ from "lodash";
 import React from "react";
 
-import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
-
 import { HighChartWrapper } from "./HighchartWrapper";
-import { ICommonChartProps, IHighchartsOptions } from "./ICommonChartProps";
+import { ICommonChartProps } from "./ICommonChartProps";
 
-export interface IErrorBarChartProps
-  extends ICommonChartProps<ICausalAnalysisSingleData[]> {
-  highchartsOptions: IHighchartsOptions;
-}
-
-export class ErrorBarChart extends React.Component<IErrorBarChartProps> {
+export class ErrorBarChart extends React.Component<ICommonChartProps> {
   public render(): React.ReactNode {
-    const { className, fallback } = this.props;
-    const { configOverride = {}, theme } = this.props.highchartsOptions;
+    const { className, fallback, configOverride = {}, theme } = this.props;
     const chartOptions = _.merge({}, configOverride);
 
     return (
