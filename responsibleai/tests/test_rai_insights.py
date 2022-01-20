@@ -338,7 +338,7 @@ def validate_rai_insights(
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
-    assert rai_insights.categorical_features == categorical_features
+    assert rai_insights.categorical_features == (categorical_features or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()
