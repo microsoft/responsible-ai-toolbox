@@ -7,6 +7,13 @@ import { IHighchartsConfig } from "./HighchartTypes";
 
 export interface IHighchartsOptions {
   configOverride?: IHighchartsConfig;
-  enabled: boolean;
   theme?: ITheme;
+}
+export interface ICommonChartProps<T> {
+  className?: string;
+  fallback?: React.ReactNode;
+  highchartsOptions?: IHighchartsOptions;
+  id?: string;
+  metric?: T;
+  theme?: string;
 }
