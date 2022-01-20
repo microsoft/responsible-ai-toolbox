@@ -63,7 +63,6 @@ export interface ICounterfactualChartState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
-  sortFeatures: boolean;
   originalData?: { [key: string]: string | number };
 }
 
@@ -94,7 +93,6 @@ export class CounterfactualChart extends React.PureComponent<
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortFeatures: false,
       sortingSeriesIndex: undefined,
       xDialogOpen: false,
       yDialogOpen: false
@@ -198,7 +196,6 @@ export class CounterfactualChart extends React.PureComponent<
     return (
       <div className={classNames.page}>
         <div className={classNames.mainArea}>
-          <div>{`Test: ${this.state.sortFeatures}`}</div>
           {this.state.originalData && (
             <CounterfactualPanel
               originalData={this.state.originalData}
@@ -209,8 +206,6 @@ export class CounterfactualChart extends React.PureComponent<
               temporaryPoint={this.temporaryPoint}
               isPanelOpen={this.state.isPanelOpen}
               data={this.context.counterfactualData}
-              sortFeatures={this.state.sortFeatures}
-              handleSortToggle={this.toggleSortFeatures}
             />
           )}
           <div className={classNames.chartsArea}>
@@ -869,19 +864,9 @@ export class CounterfactualChart extends React.PureComponent<
       };
     });
   }
-
   private togglePanel = (): void => {
     this.setState((preState) => {
       return { isPanelOpen: !preState.isPanelOpen };
     });
-  };
-
-  private toggleSortFeatures = (
-    _event: React.MouseEvent<HTMLElement, MouseEvent>,
-    checked?: boolean | undefined
-  ) => {
-    if (checked !== undefined) {
-      this.setState({ sortFeatures: checked });
-    }
   };
 }
