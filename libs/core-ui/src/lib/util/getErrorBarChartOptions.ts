@@ -6,5 +6,6 @@ import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 export function getErrorBarChartOptions(
   data: ICausalAnalysisSingleData[]
 ): any {
+  console.log(data);
   return {};
 }
