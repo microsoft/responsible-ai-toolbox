@@ -77,8 +77,10 @@ class ModelAnalysis(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
-        warnings.warn("ModelAnalysis in responsibleai package is deprecated."
-                      "Please use RAIInsights instead.")
+        warnings.warn(
+            "MODULE-DEPRECATION-WARNING: ModelAnalysis in responsibleai "
+            "package is deprecated. Please use RAIInsights instead.",
+            DeprecationWarning)
         self.rai_insights = RAIInsights(
             model,
             train,
