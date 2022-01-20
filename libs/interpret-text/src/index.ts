@@ -1,4 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export * from "./lib/TextExplanationDashboard";
+export * from "./lib/TextExplanationDashboard/TextExplanationDashboard";
+export * from "./lib/TextExplanationDashboard/Interfaces/IExplanationDashboardProps";
