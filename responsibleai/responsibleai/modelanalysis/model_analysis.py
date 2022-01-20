@@ -5,11 +5,10 @@
 
 import warnings
 
-from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import \
-    CounterfactualManager
-from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai._managers.explainer_manager import ExplainerManager
+from responsibleai.managers.causal_manager import CausalManager
+from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights import RAIInsights
 
 
@@ -78,8 +77,10 @@ class ModelAnalysis(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
-        warnings.warn("ModelAnalysis in responsibleai package is deprecated."
-                      "Please use RAIInsights instead.")
+        warnings.warn(
+            "MODULE-DEPRECATION-WARNING: ModelAnalysis in responsibleai "
+            "package is deprecated. Please use RAIInsights instead.",
+            DeprecationWarning)
         self.rai_insights = RAIInsights(
             model,
             train,

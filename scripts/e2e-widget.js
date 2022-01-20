@@ -8,7 +8,9 @@ const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
 const fileNames = [
   "responsibleaidashboard-census-classification-model-debugging",
-  "responsibleaidashboard-diabetes-regression-model-debugging"
+  "responsibleaidashboard-diabetes-regression-model-debugging",
+  "responsibleaidashboard-housing-classification-model-debugging",
+  "responsibleaidashboard-diabetes-decision-making"
 ];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;

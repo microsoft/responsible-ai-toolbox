@@ -72,12 +72,16 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           cy.get(Locators.WhatIfAxisFeatureDropdownCurrentOption).should(
             "attr",
             "value",
-            "Probability : <=50K"
+            dataShape.whatIfCounterfactualsData?.classValue
           );
           cy.get(Locators.AxisFeatureDropdown).click();
-          cy.get(Locators.WhatIfXAxisFeatureDropdownOccupationOption).click();
+          cy.get(
+            `${Locators.AxisFeatureDropdownOptionGeneral} button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`
+          ).click();
           cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
-          cy.get(Locators.WhatIfScatterChartXAxisLabelUpdated).should("exist");
+          cy.get(
+            `${Locators.WhatIfScatterChartXAxisLabelUpdatedGeneral}  button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`
+          ).should("exist");
         });
       }
 

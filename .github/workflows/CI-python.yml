@@ -107,3 +107,16 @@ jobs:
           path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() && matrix.packageDirectory != 'raiwidgets'}}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          path_to_write_report: ./coverage/codecov_report.txt
+          verbose: true
+        if: ${{ matrix.packageDirectory != 'raiwidgets'}}

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import _ from "lodash";
-import { ITheme } from "office-ui-fabric-react";
 import Plotly from "plotly.js";
 import React from "react";
 import Plot from "react-plotly.js";

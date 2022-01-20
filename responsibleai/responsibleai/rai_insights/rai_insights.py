@@ -14,12 +14,11 @@ import pandas as pd
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import \
-    CounterfactualManager
-from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.managers.causal_manager import CausalManager
+from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.utils import _is_classifier
 

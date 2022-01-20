@@ -76,6 +76,7 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
+  hasFeatureImportanceComponent?: boolean;
   hasCorrectIncorrectDatapoints?: boolean;
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
@@ -118,10 +119,13 @@ export interface IWhatIfCounterfactualsData {
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
+  classValue?: string;
+  newClassValue?: string;
 }
 
 export enum RAINotebookNames {
   "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
-  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py"
+  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py"
 }
