@@ -1044,13 +1044,16 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
-      "fnr": "False Negative Rates: {0}",
-      "fpr": "False Positive Rates: {0}",
+      "fnr": "False Negative Rate: {0}",
+      "fpr": "False Positive Rate: {0}",
       "meanPrediction": "Mean prediction {0}",
       "mse": "MSE: {0}",
       "precision": "Precision: {0}",
       "rSquared": "R-squared: {0}",
-      "recall": "Recall: {0}"
+      "recall": "Recall: {0}",
+      "selectionRate": "Selection Rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -1299,6 +1302,22 @@
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
+    },
+    "ModelOverview": {
+      "Metrics": "Metric(s)",
+      "accuracy": "Accuracy",
+      "f1Score": "F1 score",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanSquaredError": "Mean squared error",
+      "precision": "Precision score",
+      "recall": "Recall score",
+      "falsePositiveRate": "False positive rate",
+      "falseNegativeRate":"False negative rate",
+      "selectionRate": "Selection rate",
+      "meanPrediction": "Mean prediction",
+      "manuallyCreatedCohorts": "Manually created cohorts",
+      "sensitiveFeatureCohorts": "Sensitive feature cohorts",
+      "notAvailable": "N/A"
     }
   }
 }
