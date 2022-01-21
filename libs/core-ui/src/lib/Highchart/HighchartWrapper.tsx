@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme, mergeStyles } from "@fluentui/react";
+import { ITheme } from "@fluentui/react";
 import _ from "lodash";
+import { mergeStyles } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { defaultHighchartsOptions } from "./defaultHighchartsOptions";
@@ -38,6 +39,8 @@ export class HighChartWrapper extends React.Component<IHighChartWrapperProps> {
       themeOptions
     ) as Highcharts.Options;
 
+    const test = _.merge({}, defaultHighchartsOptions, chartOptions);
+
     if (mergedOptions?.chart) {
       // There is no way to override zoomType with undefined value, merge will just ignore this.
       // To be able to disable zooming, it needs to be specified explicitly.
@@ -67,7 +70,7 @@ export class HighChartWrapper extends React.Component<IHighChartWrapperProps> {
       <React.Suspense fallback={fallback}>
         <HighchartReact
           className={className}
-          chartOptions={mergedOptions}
+          chartOptions={test}
           disableUpdate={custom.disableUpdate}
           modules={modules}
         />

@@ -9,6 +9,7 @@
           "core-js/stable",
           "regenerator-runtime/runtime.js",
           "office-ui-fabric-react/lib/utilities/positioning",
+          "highcharts/modules/accessibility",
           "@nrwl/cypress/plugins/preprocessor"
         ]
       }
