@@ -24,32 +24,32 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || "age"
+          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
         );
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort ||
-            "capital-gain"
-        );
+        .invoke("text")
+        .then((text1) => {
+          expect(text1).to.not.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
+          );
+        });
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
 
     it("should filter by included letters in search query", () => {
       cy.get(Locators.WhatIfSearchBar).type(
-        dataShape.whatIfCounterfactualsData?.searchBarQuery || "occupation"
+        dataShape.whatIfCounterfactualsData?.searchBarQuery || ""
       );
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.searchBarQuery || "occupation"
-        );
+        .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
       cy.get(Locators.WhatIfSearchBarClearTextButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || "age"
+          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
         );
     });
 

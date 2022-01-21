@@ -71,6 +71,15 @@ export class DatasetExplorerTab extends React.Component<
     });
   }
 
+  public componentDidUpdate(
+    _preProp: IDatasetExplorerTabProps,
+    preState: IDatasetExplorerTabState
+  ): void {
+    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
+      this.setState({ selectedCohortIndex: 0 });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -85,11 +94,17 @@ export class DatasetExplorerTab extends React.Component<
     if (this.state.chartProps === undefined) {
       return <div />;
     }
+
+    const selectedCohortIndex =
+      this.state.selectedCohortIndex >= this.context.errorCohorts.length
+        ? 0
+        : this.state.selectedCohortIndex;
+
     const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
       this.context.errorCohorts.map((errorCohort) => errorCohort.cohort)[
-        this.state.selectedCohortIndex
+        selectedCohortIndex
       ]
     );
     const cohortOptions =
@@ -99,8 +114,7 @@ export class DatasetExplorerTab extends React.Component<
           })
         : undefined;
     const cohortLength =
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort
-        .filteredData.length;
+      this.context.errorCohorts[selectedCohortIndex].cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
@@ -137,6 +151,7 @@ export class DatasetExplorerTab extends React.Component<
                   width: 150
                 }
               }}
+              id="dataExplorerCohortDropdown"
               options={cohortOptions}
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}

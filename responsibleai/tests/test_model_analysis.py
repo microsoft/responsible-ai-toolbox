@@ -201,11 +201,16 @@ def run_model_analysis(model, train_data, test_data, target_column,
                 categorical_features=categorical_features,
                 task_type=task_type)
     else:
-        model_analysis = ModelAnalysis(
-            model, train_data, test_data,
-            target_column,
-            categorical_features=categorical_features,
-            task_type=task_type)
+        with pytest.warns(DeprecationWarning,
+                          match=("MODULE-DEPRECATION-WARNING: "
+                                 "ModelAnalysis in responsibleai "
+                                 "package is deprecated. "
+                                 "Please use RAIInsights instead.")):
+            model_analysis = ModelAnalysis(
+                model, train_data, test_data,
+                target_column,
+                categorical_features=categorical_features,
+                task_type=task_type)
 
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(model_analysis)
@@ -307,7 +312,8 @@ def validate_model_analysis(
     pd.testing.assert_frame_equal(model_analysis.test, test_data)
     assert model_analysis.target_column == target_column
     assert model_analysis.task_type == task_type
-    assert model_analysis.categorical_features == categorical_features
+    assert model_analysis.categorical_features == (categorical_features or [])
+    assert type(model_analysis.categorical_features) is list
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

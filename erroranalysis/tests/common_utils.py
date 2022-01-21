@@ -133,8 +133,8 @@ def create_cancer_data():
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
-def create_binary_classification_dataset():
-    X, y = make_classification(random_state=777)
+def create_binary_classification_dataset(n_samples=100):
+    X, y = make_classification(n_samples=n_samples, random_state=777)
 
     # Split data into train and test
     X_train, X_test, y_train, y_test = train_test_split(X,
@@ -146,6 +146,13 @@ def create_binary_classification_dataset():
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
     return X_train, y_train, X_test, y_test, classes
+
+
+def replicate_dataset(X, y, replications=16):
+    for _ in range(replications):
+        X = pd.concat([X, X], ignore_index=True)
+        y = np.concatenate([y, y])
+    return X, y
 
 
 def create_simple_titanic_data():

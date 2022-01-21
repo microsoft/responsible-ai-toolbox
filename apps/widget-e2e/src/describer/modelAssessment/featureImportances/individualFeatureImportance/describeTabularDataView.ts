@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getMenu } from "../../../../util/getMenu";
 import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
@@ -10,24 +11,29 @@ import { describeSubLineChart } from "./describeSubLineChart";
 
 export function describeTabularDataView(dataShape: IModelAssessmentData): void {
   describe("Tabular data view", () => {
-    it("should have right number of correct prediction datapoints", () => {
-      cy.get(Locators.IFIPredictionSpan)
-        .first()
-        .should(
-          "contain.text",
-          dataShape.featureImportanceData?.correctPredictionDatapoint
-        );
+    before(() => {
+      getMenu("Individual feature importance").click();
     });
+    if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
+      it("should have right number of correct prediction datapoints", () => {
+        cy.get(Locators.IFIPredictionSpan)
+          .first()
+          .should(
+            "contain.text",
+            dataShape.featureImportanceData?.correctPredictionDatapoint
+          );
+      });
 
-    it("should have right number of incorrect prediction datapoints", () => {
-      cy.get(Locators.IFIExpandCollapseButton).click();
-      cy.get(Locators.IFIPredictionSpan)
-        .eq(1)
-        .should(
-          "contain.text",
-          dataShape.featureImportanceData?.incorrectPredictionDatapoint
-        );
-    });
+      it("should have right number of incorrect prediction datapoints", () => {
+        cy.get(Locators.IFIExpandCollapseButton).click();
+        cy.get(Locators.IFIPredictionSpan)
+          .eq(1)
+          .should(
+            "contain.text",
+            dataShape.featureImportanceData?.incorrectPredictionDatapoint
+          );
+      });
+    }
 
     it("should be scrollable", () => {
       cy.get(Locators.IFIScrollableTable).should("exist");
@@ -62,7 +68,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       describeSubBarChart(dataShape);
     }
     if (!dataShape.featureImportanceData?.noPredict) {
-      describeSubLineChart();
+      describeSubLineChart(dataShape);
     }
   });
 }

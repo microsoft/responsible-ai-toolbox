@@ -12,17 +12,13 @@ jobs:
       node-version: 16.8
     strategy:
       matrix:
-        packageDirectory:
-          ["responsibleai"]
+        packageDirectory: ["responsibleai"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         exclude:
           # segfaults in rai_core_flask tests in most OS-Python version combinations
           - packageDirectory: "rai_core_flask"
             operatingSystem: ubuntu-latest
-          # temperately disabled related to an shap issue
-          # - packageDirectory: "raiwidgets"
-          #   pythonVersion: 3.6
           - packageDirectory: "rai_core_flask"
             operatingSystem: macos-latest
             pythonVersion: 3.7
@@ -47,13 +43,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.node-version }}
-
-      - name: Install yarn
-        run: npm install yarn -g
-      - name: Install
-        run: yarn install --frozen-lock-file
-      - name: Build Typescript
-        run: yarn buildall
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS for lightgbm
@@ -87,20 +76,9 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ matrix.packageDirectory != 'raiwidgets' }}
-        name: Run tests
+      - name: Run tests
         run: |
           pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
-        name: Run widget tests
-        run: yarn e2e-widget
-
-      - if: ${{ matrix.packageDirectory == 'raiwidgets' }}
-        name: Run tests
-        run: |
-          pytest --durations=10
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload code coverage results
@@ -109,4 +87,17 @@ jobs:
           name: ${{ matrix.packageDirectory }}-code-coverage-results
           path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() && matrix.packageDirectory != 'raiwidgets'}}
+        if: ${{ always() }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          path_to_write_report: ./coverage/codecov_report.txt
+          verbose: true

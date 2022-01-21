@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       type:
-        description: "Test or Prod?"
+        description: "Test or Prod PyPI?"
         required: true
         default: "Test"
 
@@ -46,7 +46,7 @@ jobs:
         run: pytest ./tests/
         working-directory: rai_core_flask
 
-      ####### publish to PyPI
+      # publish to PyPI
       - name: Publish rai_core_flask package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master

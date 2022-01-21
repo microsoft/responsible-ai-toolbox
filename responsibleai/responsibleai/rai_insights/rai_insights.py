@@ -14,13 +14,13 @@ import pandas as pd
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import \
-    CounterfactualManager
-from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.managers.causal_manager import CausalManager
+from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.utils import _is_classifier
 
 _DATA = 'data'
 _PREDICTIONS = 'predictions'
@@ -107,6 +107,7 @@ class RAIInsights(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
+        categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
@@ -268,6 +269,23 @@ class RAIInsights(object):
                                "do not exist in train data: "
                                f"{list(difference_set)}")
                     raise UserConfigValidationException(message)
+
+                for column in categorical_features:
+                    try:
+                        np.unique(train[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
+                        )
+
+                    try:
+                        np.unique(test[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
+                        )
 
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
@@ -501,10 +519,7 @@ class RAIInsights(object):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if (self.model is not None and
-                hasattr(self.model, SKLearn.PREDICT_PROBA) and
-                self.model.predict_proba is not None and
-                dataset is not None):
+        if _is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
@@ -714,8 +729,15 @@ class RAIInsights(object):
             inst.__dict__[_MODEL] = serializer.load(top_dir)
         else:
             inst.__dict__['_' + _SERIALIZER] = None
-            with open(top_dir / _MODEL_PKL, 'rb') as file:
-                inst.__dict__[_MODEL] = pickle.load(file)
+            try:
+                with open(top_dir / _MODEL_PKL, 'rb') as file:
+                    inst.__dict__[_MODEL] = pickle.load(file)
+            except Exception:
+                warnings.warn(
+                    'ERROR-LOADING-USER-MODEL: '
+                    'There was an error loading the user model. '
+                    'Some of RAI dashboard features may not work.')
+                inst.__dict__[_MODEL] = None
 
     @staticmethod
     def _load_managers(inst, path):

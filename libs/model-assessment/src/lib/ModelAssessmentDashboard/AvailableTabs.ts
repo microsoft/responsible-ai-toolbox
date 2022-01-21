@@ -24,8 +24,8 @@ export function getAvailableTabs(
 
   if (props.dataset.predicted_y) {
     availableTabs.push({
-      key: GlobalTabKeys.ModelStatisticsTab,
-      text: localization.ModelAssessment.ComponentNames.ModelStatistics
+      key: GlobalTabKeys.ModelOverviewTab,
+      text: localization.ModelAssessment.ComponentNames.ModelOverview
     });
   }
   availableTabs.push({

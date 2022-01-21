@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { IFairnessData } from "@responsible-ai/core-ui";
 import { FairnessWizard, IFairnessProps } from "@responsible-ai/fairness";
 import { Language } from "@responsible-ai/localization";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {

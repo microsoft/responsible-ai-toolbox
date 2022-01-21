@@ -58,7 +58,7 @@ export function describeDataPointChart(dataShape: IModelAssessmentData): void {
       describeSubBarChart(dataShape);
     }
     if (!dataShape.featureImportanceData?.noPredict) {
-      describeSubLineChart();
+      describeSubLineChart(dataShape);
     }
   });
 }
