@@ -4,7 +4,7 @@
 from enum import Enum
 
 PRED_Y = 'pred_y'
-ROW_INDEX = 'row_index'
+ROW_INDEX = 'Index'
 TRUE_Y = 'true_y'
 DIFF = 'diff'
 SPLIT_INDEX = 'split_index'
