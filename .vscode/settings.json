@@ -55,6 +55,8 @@
     "Counterfactuals",
     "cssmodule",
     "Fairness",
+    "fluentui",
+    "Highchart",
     "highcharts",
     "Importances",
     "jmespath",
