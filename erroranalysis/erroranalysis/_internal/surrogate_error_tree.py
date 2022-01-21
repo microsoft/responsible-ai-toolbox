@@ -313,16 +313,16 @@ def node_to_dict(df, tree, nodeid, categories, json,
     parentid = None
     if parent is not None:
         parentid = int(parent[SPLIT_INDEX])
-        p_node_name = feature_names[parent[SPLIT_FEATURE]]
+        p_node_name_val = feature_names[parent[SPLIT_FEATURE]]
         # use number.Integral to check for any numpy or python number type
-        if isinstance(p_node_name, numbers.Integral):
+        if isinstance(p_node_name_val, numbers.Integral):
             # for numeric column names, we can use @df[numeric_colname] syntax
-            p_node_query = "@df[" + str(p_node_name) + "]"
+            p_node_query = "@df[" + str(p_node_name_val) + "]"
         else:
             # for string column names, we can just use column name directly
             # with backticks
-            p_node_query = "`" + str(p_node_name) + "`"
-        p_node_name = str(p_node_name)
+            p_node_query = "`" + str(p_node_name_val) + "`"
+        p_node_name = str(p_node_name_val)
         parent_threshold = parent['threshold']
         parent_decision_type = parent['decision_type']
         if side == TreeSide.LEFT_CHILD:
@@ -331,8 +331,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                query = p_node_query + " <= " + str(parent_threshold)
-                df = df.query(query)
+                df = df[df[p_node_name_val] <= parent_threshold]
             elif parent_decision_type == '==':
                 method = METHOD_INCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -349,8 +348,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                query = p_node_query + " > " + str(parent_threshold)
-                df = df.query(query)
+                df = df[df[p_node_name_val] > parent_threshold]
             elif parent_decision_type == '==':
                 method = METHOD_EXCLUDES
                 arg = create_categorical_arg(parent_threshold)
