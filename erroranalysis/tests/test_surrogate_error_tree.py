@@ -1,10 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import time
+
 import pytest
-from common_utils import (create_adult_census_data, create_iris_data,
-                          create_kneighbors_classifier,
-                          create_models_classification)
+from common_utils import (create_adult_census_data,
+                          create_binary_classification_dataset,
+                          create_iris_data, create_kneighbors_classifier,
+                          create_models_classification,
+                          create_sklearn_random_forest_regressor,
+                          replicate_dataset)
 
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
                                                SPLIT_FEATURE, SPLIT_INDEX,
@@ -40,6 +45,42 @@ class TestSurrogateErrorTree(object):
 
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
                            categorical_features)
+
+    def test_large_data_surrogate_error_tree(self):
+        # validate tree trains quickly for large data
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset(100)
+        feature_names = list(X_train.columns)
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        X_test, y_test = replicate_dataset(X_test, y_test)
+        assert X_test.shape[0] > 1000000
+        t0 = time.time()
+        categorical_features = []
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+        max_depth = 3
+        num_leaves = 31
+        min_child_samples = 20
+        cat_ind_reindexed = []
+        diff = model_analyzer.get_diff()
+        surrogate = create_surrogate_model(model_analyzer,
+                                           X_test,
+                                           diff,
+                                           max_depth,
+                                           num_leaves,
+                                           min_child_samples,
+                                           cat_ind_reindexed)
+        t1 = time.time()
+        execution_time = t1 - t0
+        print(execution_time)
+        # assert we don't take too long to train the tree on 1 million rows
+        # note we train on >1 million rows in ~1 second
+        assert execution_time < 20
+        model_json = surrogate._Booster.dump_model()
+        tree_structure = model_json["tree_info"][0]['tree_structure']
+        max_split_index = get_max_split_index(tree_structure) + 1
+        assert max_split_index == 3
 
     @pytest.mark.parametrize('string_labels', [True, False])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
