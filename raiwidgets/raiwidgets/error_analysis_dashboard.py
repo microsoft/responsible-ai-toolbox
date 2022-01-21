@@ -95,6 +95,35 @@ class ErrorAnalysisDashboard(Dashboard):
         Specify less than 10k points for optimal performance.
     :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
 
+    :Example:
+
+    Run simple view of error analysis with just predictions and true labels
+
+    >>> predictions = model.predict(X_test)
+    >>> from raiwidgets import ErrorAnalysisDashboard
+    >>> ErrorAnalysisDashboard(dataset=X_test, true_y=y_test,
+    ...                        features=features, pred_y=predictions)
+
+    :Example:
+
+    Run error analysis with a model and a computed explanation
+
+    >>> from raiwidgets import ErrorAnalysisDashboard
+    >>> ErrorAnalysisDashboard(global_explanation, model,
+    ...                        dataset=X_test, true_y=y_test)
+
+    :Example:
+
+    Run error analysis on large data and a downsampled dataset for the UI
+
+    >>> from raiwidgets import ErrorAnalysisDashboard
+    >>> ErrorAnalysisDashboard(sample_dataset=X_test_sample,
+    ...                        dataset=X_test,
+    ...                        features=features,
+    ...                        true_y=y_test_sample,
+    ...                        true_y_dataset=y_test,
+    ...                        pred_y=X_test_sample_pred_y,
+    ...                        pred_y_dataset=X_test_pred_y)
     """
 
     def __init__(self, explanation=None, model=None, *, dataset=None,
