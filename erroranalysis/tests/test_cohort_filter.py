@@ -184,6 +184,27 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
+    def test_cohort_filter_index(self):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        # filter on index, which can be done from the RAI dashboard
+        filters = [{'arg': [40],
+                    'column': ROW_INDEX,
+                    'method': 'less and equal'}]
+        validation_data = create_validation_data(X_test, y_test)
+        validation_data = validation_data.loc[validation_data[ROW_INDEX] <= 40]
+        model_task = ModelTask.CLASSIFICATION
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        categorical_features = []
+        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters)
+
 
 def create_iris_pandas():
     X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
