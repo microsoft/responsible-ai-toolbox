@@ -25,9 +25,9 @@ jobs:
           - packageDirectory: "rai_core_flask"
             operatingSystem: macos-latest
             pythonVersion: 3.8
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: 3.9
+#           - packageDirectory: "rai_core_flask"
+#             operatingSystem: macos-latest
+#             pythonVersion: 3.9
 
     runs-on: ${{ matrix.operatingSystem }}
 
