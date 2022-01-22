@@ -12,16 +12,10 @@ jobs:
       node-version: 16.8
     strategy:
       matrix:
-        packageDirectory: ["rai_core_flask"]
+        packageDirectory: ["rai_core_flask", "responsibleai", "erroranalysis"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         exclude:
-#           - packageDirectory: "rai_core_flask"
-#             operatingSystem: macos-latest
-#             pythonVersion: 3.7
-#           - packageDirectory: "rai_core_flask"
-#             operatingSystem: macos-latest
-#             pythonVersion: 3.8
           - packageDirectory: "rai_core_flask"
             operatingSystem: macos-latest
             pythonVersion: 3.9
