@@ -16,15 +16,12 @@ jobs:
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         exclude:
-          # segfaults in rai_core_flask tests in most OS-Python version combinations
 #           - packageDirectory: "rai_core_flask"
-#             operatingSystem: ubuntu-latest
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: 3.7
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: 3.8
+#             operatingSystem: macos-latest
+#             pythonVersion: 3.7
+#           - packageDirectory: "rai_core_flask"
+#             operatingSystem: macos-latest
+#             pythonVersion: 3.8
           - packageDirectory: "rai_core_flask"
             operatingSystem: macos-latest
             pythonVersion: 3.9
