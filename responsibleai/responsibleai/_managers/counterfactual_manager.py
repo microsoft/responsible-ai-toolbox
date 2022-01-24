@@ -8,6 +8,7 @@ import warnings
 from responsibleai.managers.counterfactual_manager import *  # noqa: F401, F403
 
 warnings.warn(
-    "The module responsibleai._managers.counterfactual_manager "
-    "is deprecated. "
-    "Please use responsibleai.managers.counterfactual_manager instead.")
+    "MODULE-DEPRECATION-WARNING: The module "
+    "responsibleai._managers.counterfactual_manager is deprecated. "
+    "Please use responsibleai.managers.counterfactual_manager instead.",
+    DeprecationWarning)

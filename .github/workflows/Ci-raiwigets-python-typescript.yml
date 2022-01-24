@@ -1,4 +1,4 @@
-name: CI Python
+name: CI RAIWidgets Python Typescript
 
 on:
   push:
@@ -12,19 +12,9 @@ jobs:
       node-version: 16.8
     strategy:
       matrix:
-        packageDirectory: ["responsibleai", "rai_core_flask", "erroranalysis"]
+        packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8]
-        exclude:
-          # segfaults in rai_core_flask tests in most OS-Python version combinations
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: ubuntu-latest
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: 3.7
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: 3.8
 
     runs-on: ${{ matrix.operatingSystem }}
 
@@ -40,6 +30,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
+        run: yarn install --frozen-lock-file
+
+      - name: Build Typescript
+        run: yarn buildall
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS for lightgbm
@@ -73,9 +72,12 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
+      - name: Run widget tests
+        run: yarn e2e-widget
+
       - name: Run tests
         run: |
-          pytest --durations=10 --doctest-modules --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
+          pytest --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload code coverage results
