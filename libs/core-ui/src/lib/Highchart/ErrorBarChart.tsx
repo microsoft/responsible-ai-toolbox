@@ -4,7 +4,7 @@
 import _ from "lodash";
 import React from "react";
 
-import { HighChartWrapper } from "./HighchartWrapper";
+import { HighchartWrapper } from "./HighchartWrapper";
 import { ICommonChartProps } from "./ICommonChartProps";
 
 export class ErrorBarChart extends React.Component<ICommonChartProps> {
@@ -13,7 +13,7 @@ export class ErrorBarChart extends React.Component<ICommonChartProps> {
     const chartOptions = _.merge({}, configOverride);
 
     return (
-      <HighChartWrapper
+      <HighchartWrapper
         className={className}
         chartOptions={chartOptions}
         fallback={fallback}
