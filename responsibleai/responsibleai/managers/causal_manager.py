@@ -91,10 +91,20 @@ class CausalManager(BaseManager):
         :type treatment_features: list
         :param heterogeneity_features: Features that mediate the causal effect.
         :type heterogeneity_features: list
-        :param nuisance_model: Model type to use for nuisance estimation.
+        :param nuisance_model: This model used to estimate the outcome and the
+            treatment features from the other features present in user data.
+            It is one of {'linear', 'automl'}, optional (default='linear').
+            If 'linear', then LassoCV (for regression) and
+            LogisticRegressionCV (for classification) are used.
+            If 'automl', then a k-fold cross-validation and model selection
+            is performed among several models and the best is chosen.
         :type nuisance_model: str
-        :param heterogeneity_model: Model type to use for
-                                    treatment effect heterogeneity.
+        :param heterogeneity_model: The heterogeneity model is used to
+            estimate the treatment effect based on the heterogeneity features.
+            It is one of {'linear', 'forest'} (default='linear').
+            'linear' means that a heterogeneity model of the form
+            theta(X)=<a, X> will be used, while 'forest' means that a
+            forest model will be trained instead.
         :type heterogeneity_model: str
         :param alpha: Confidence level of confidence intervals.
         :type alpha: float
