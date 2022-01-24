@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as Highcharts from "highcharts";
+import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
 import * as React from "react";
 
@@ -11,6 +12,8 @@ import { HighchartsModuleNames } from "./HighchartTypes";
 // This is the only module we load for all charts.
 // Other modules need to be loaded on demand using modules property of the chart component.
 Accessibility.default(Highcharts);
+// init module
+HighchartsMore(Highcharts);
 
 interface IHighchartReactProps {
   className?: string;

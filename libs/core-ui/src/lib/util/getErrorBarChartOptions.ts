@@ -1,41 +1,63 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+
 import { IHighchartsConfig } from "../Highchart/HighchartTypes";
 import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 
-// import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
+import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export function getErrorBarChartOptions(
-  data: ICausalAnalysisSingleData[]
+  data: ICausalAnalysisSingleData[],
+  theme?: ITheme
 ): IHighchartsConfig {
+  const colorTheme = {
+    axisColor: theme?.palette.neutralPrimary,
+    axisGridColor: theme?.palette.neutralLight,
+    backgroundColor: theme?.palette.white,
+    fontColor: theme?.semanticColors.bodyText
+  };
   return {
     chart: {
       type: "lowmedhigh",
       zoomType: "xy"
     },
     legend: {},
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: "green"
+            }
+          }
+        }
+      }
+    },
     series: [
       {
+        color: colorTheme.fontColor,
         data: data.map((d) => d.point),
+        showInLegend: false,
+        tooltip: {
+          pointFormat: `${localization.CausalAnalysis.AggregateView.causalPoint}: {point.y:.6f}<br>`
+        },
+        type: "spline"
+      },
+      {
+        color: colorTheme.fontColor,
+        data: data.map((d) => [d.ci_lower, d.ci_upper]),
         tooltip: {
           pointFormat:
-            '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f}</b> '
+            `${localization.CausalAnalysis.AggregateView.confidenceUpper}: {point.high:.6f}<br>` +
+            `${localization.CausalAnalysis.AggregateView.confidenceLower}: {point.low:.6f}<br><extra></extra>`
         },
-        type: "scatter"
+        type: "errorbar"
       }
-      // {
-      //   data: [
-      //     [0.024554703670239472, 0.07637320978494788],
-      //     [0.0000018156074109169128, 0.0000162287897705993],
-      //     [-0.2419328967749073, -0.1428698896693828]
-      //   ],
-      //   name: "Rainfall error",
-      //   tooltip: {
-      //     pointFormat: "(error range: {point.low}-{point.high} mm)<br/>"
-      //   },
-      //   type: "errorbar"
-      // }
     ],
     title: {
       text: ""
@@ -45,13 +67,24 @@ export function getErrorBarChartOptions(
     },
     xAxis: [
       {
-        categories: data.map((d) => d.feature)
+        categories: data.map((d) => getCausalDisplayFeatureName(d)),
+        labels: {
+          format: "{value}",
+          style: {
+            color: colorTheme.fontColor,
+            fontSize: "14px"
+          }
+        }
       }
     ],
     yAxis: [
       {
         labels: {
-          format: "{value}"
+          format: "{value}",
+          style: {
+            color: colorTheme.fontColor,
+            fontSize: "14px"
+          }
         },
         title: {
           text: ""

@@ -30,7 +30,10 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
       <Stack horizontal verticalFill className={styles.container}>
         <Stack.Item grow className={styles.leftPane}>
           <ErrorBarChart
-            configOverride={getErrorBarChartOptions(this.props.data)}
+            configOverride={getErrorBarChartOptions(
+              this.props.data,
+              getTheme()
+            )}
             theme={getTheme()}
           />
         </Stack.Item>
