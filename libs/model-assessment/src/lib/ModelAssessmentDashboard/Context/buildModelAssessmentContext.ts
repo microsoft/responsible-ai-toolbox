@@ -128,7 +128,7 @@ export function buildInitialModelAssessmentContext(
         : 0,
     selectedWhatIfIndex: undefined,
     sortVector: undefined,
-    treeViewState: createInitialTreeViewState(),
+    treeViewState: createInitialTreeViewState(props.errorAnalysisData?.[0]),
     weightVectorLabels,
     weightVectorOptions,
     whatIfChartConfig: undefined

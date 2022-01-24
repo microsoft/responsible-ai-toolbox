@@ -681,10 +681,10 @@ export class TreeViewRenderer extends React.PureComponent<
     }
     if (!this.props.getTreeNodes) {
       if (this.props.tree) {
+        this.reloadData(this.props.tree);
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
         this.onResize();
         this.forceUpdate();
-        this.reloadData(this.props.tree);
       }
       return;
     }
@@ -711,9 +711,9 @@ export class TreeViewRenderer extends React.PureComponent<
         new AbortController().signal
       )
       .then((result) => {
+        this.reloadData(result);
         this.onResize();
         this.forceUpdate();
-        this.reloadData(result);
       });
   }
 }

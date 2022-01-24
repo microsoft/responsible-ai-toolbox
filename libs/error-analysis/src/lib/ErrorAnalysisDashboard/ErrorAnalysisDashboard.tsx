@@ -335,7 +335,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
-      treeViewState: createInitialTreeViewState(),
+      treeViewState: createInitialTreeViewState(props.errorAnalysisData),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
       weightVectorOptions,
@@ -454,7 +454,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   matrixFilterState: createInitialMatrixFilterState(),
                   openMapShift: false,
                   selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  treeViewState: createInitialTreeViewState(
+                    this.props.errorAnalysisData
+                  )
                 });
               }}
             />
