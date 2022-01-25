@@ -159,6 +159,29 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
+    def test_cohort_filter_excludes(self):
+        X_train, X_test, y_train, y_test, numeric, categorical = \
+            create_simple_titanic_data()
+        feature_names = categorical + numeric
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        # the indexes other than 0, 2 correspond to Q
+        filters = [{'arg': [0, 2],
+                    'column': EMBARKED,
+                    'method': 'excludes'}]
+        validation_data = create_validation_data(X_test, y_test)
+        filter_embarked = X_test[EMBARKED].isin(['Q'])
+        validation_data = validation_data.loc[filter_embarked]
+        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           clf,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters)
+
     def test_cohort_filter_classification_outcome(self):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
@@ -242,6 +265,7 @@ def run_error_analyzer(validation_data,
     filtered_data = filter_from_cohort(error_analyzer,
                                        filters,
                                        composite_filters)
+
     # validate there is some data selected for each of the filters
     assert validation_data.shape[0] > 0
     assert validation_data.equals(filtered_data)

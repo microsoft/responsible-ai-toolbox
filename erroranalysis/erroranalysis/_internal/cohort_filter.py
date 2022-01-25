@@ -4,9 +4,10 @@
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import (METHOD, METHOD_EXCLUDES,
-                                               METHOD_INCLUDES, PRED_Y,
-                                               ROW_INDEX, TRUE_Y, ModelTask)
+from erroranalysis._internal.constants import (
+    CohortFilterMethods, METHOD,
+    PRED_Y, ROW_INDEX, TRUE_Y,
+    ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
 
 COLUMN = 'column'
@@ -176,24 +177,25 @@ def build_query(filters, categorical_features, categories):
             method = filter[METHOD]
             arg0 = str(filter['arg'][0])
             colname = filter[COLUMN]
-            if method == METHOD_GREATER:
+            if method == CohortFilterMethods.METHOD_GREATER:
                 queries.append("`" + colname + "` > " + arg0)
-            elif method == METHOD_LESS:
+            elif method == CohortFilterMethods.METHOD_LESS:
                 queries.append("`" + colname + "` < " + arg0)
-            elif method == METHOD_LESS_AND_EQUAL:
+            elif method == CohortFilterMethods.METHOD_LESS_AND_EQUAL:
                 queries.append("`" + colname + "` <= " + arg0)
-            elif method == METHOD_GREATER_AND_EQUAL:
+            elif method == CohortFilterMethods.METHOD_GREATER_AND_EQUAL:
                 queries.append("`" + colname + "` >= " + arg0)
-            elif method == METHOD_RANGE:
+            elif method == CohortFilterMethods.METHOD_RANGE:
                 arg1 = str(filter['arg'][1])
                 queries.append("`" + colname + "` >= " + arg0 +
                                ' & `' + colname + "` <= " + arg1)
-            elif method == METHOD_INCLUDES or method == METHOD_EXCLUDES:
+            elif method == CohortFilterMethods.METHOD_INCLUDES or \
+                    method == CohortFilterMethods.METHOD_EXCLUDES:
                 query = build_bounds_query(filter, colname, method,
                                            categorical_features,
                                            categories)
                 queries.append(query)
-            elif method == METHOD_EQUAL:
+            elif method == CohortFilterMethods.METHOD_EQUAL:
                 is_categorical = False
                 if categorical_features:
                     is_categorical = colname in categorical_features
@@ -243,7 +245,7 @@ def build_bounds_query(filter, colname, method,
     :rtype: str
     """
     bounds = []
-    if method == METHOD_EXCLUDES:
+    if method == CohortFilterMethods.METHOD_EXCLUDES:
         operator = " != "
     else:
         operator = " == "
@@ -260,7 +262,7 @@ def build_bounds_query(filter, colname, method,
         else:
             arg_val = arg
         bounds.append("`{}`{}{}".format(colname, operator, arg_val))
-    if method == METHOD_EXCLUDES:
+    if method == CohortFilterMethods.METHOD_EXCLUDES:
         return ' & '.join(bounds)
     else:
         return ' | '.join(bounds)
