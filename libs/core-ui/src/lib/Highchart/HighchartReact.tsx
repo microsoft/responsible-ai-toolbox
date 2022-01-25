@@ -24,9 +24,9 @@ interface IHighchartReactProps {
   onUpdate?(chart: Highcharts.Chart): void;
 }
 
-export const HighchartReact: React.FC<IHighchartReactProps> = (
+export function HighchartReact(
   props: IHighchartReactProps
-) => {
+): React.ReactElement {
   const chartRef = React.useRef<Highcharts.Chart | null>();
   const containerRef = React.createRef<HTMLDivElement>();
 
@@ -86,4 +86,4 @@ export const HighchartReact: React.FC<IHighchartReactProps> = (
   }, []);
 
   return <div className={props.className} ref={containerRef} />;
-};
+}
