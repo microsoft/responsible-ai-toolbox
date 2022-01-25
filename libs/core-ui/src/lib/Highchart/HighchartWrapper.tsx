@@ -7,13 +7,8 @@ import * as React from "react";
 
 import { defaultHighchartsOptions } from "./defaultHighchartsOptions";
 import { getHighchartsTheme } from "./getHighchartsTheme";
+import { HighchartReact } from "./HighchartReact";
 import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
-
-const HighchartReact = React.lazy(async () => {
-  return {
-    default: await import("./HighchartReact").then((hcr) => hcr.HighchartReact)
-  };
-});
 
 export interface IHighchartWrapperProps {
   chartOptions?: IHighchartsConfig;
