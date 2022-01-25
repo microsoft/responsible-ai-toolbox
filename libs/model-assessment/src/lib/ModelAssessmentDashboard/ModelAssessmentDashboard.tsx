@@ -312,7 +312,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   matrixAreaState: createInitialMatrixAreaState(),
                   matrixFilterState: createInitialMatrixFilterState(),
                   selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  treeViewState: createInitialTreeViewState(
+                    this.props.errorAnalysisData?.[0]
+                  )
                 });
               }}
             />
