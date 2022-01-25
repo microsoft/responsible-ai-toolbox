@@ -9,7 +9,7 @@ import {
 import { Property } from "csstype";
 import { HierarchyPointNode } from "d3-hierarchy";
 
-import { FilterProps } from "./FilterProps";
+import { FilterProps } from "../../FilterProps";
 
 export interface IErrorColorStyle {
   fill: string | undefined;

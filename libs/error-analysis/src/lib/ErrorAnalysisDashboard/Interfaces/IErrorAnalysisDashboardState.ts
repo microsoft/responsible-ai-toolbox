@@ -17,7 +17,6 @@ import {
   PredictionTabKeys
 } from "../ErrorAnalysisEnums";
 import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
-import { ITreeViewRendererState } from "../TreeViewState";
 
 export interface IErrorAnalysisDashboardState
   extends ICohortBasedComponentState {
@@ -49,7 +48,6 @@ export interface IErrorAnalysisDashboardState
   editedCohort: ErrorCohort;
   selectedFeatures: string[];
   showMessageBar: boolean;
-  treeViewState: ITreeViewRendererState;
   matrixAreaState: IMatrixAreaState;
   matrixFilterState: IMatrixFilterState;
   errorAnalysisOption: ErrorAnalysisOptions;

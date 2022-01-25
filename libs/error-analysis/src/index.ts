@@ -6,7 +6,7 @@ export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisDashboard.styles";
 export * from "./lib/ErrorAnalysisDashboard/ErrorAnalysisEnums";
 export * from "./lib/ErrorAnalysisDashboard/ModelExplanationUtils";
 export * from "./lib/ErrorAnalysisDashboard/MatrixFilterState";
-export * from "./lib/ErrorAnalysisDashboard/TreeViewState";
+export * from "./lib/ErrorAnalysisDashboard/Controls/TreeViewRenderer/TreeViewState";
 export * from "./lib/ErrorAnalysisDashboard/Interfaces/IErrorAnalysisDashboardProps";
 export * from "./lib/ErrorAnalysisDashboard/Interfaces/IFilter";
 export * from "./lib/ErrorAnalysisDashboard/Interfaces/IStringsParam";
