@@ -11,6 +11,7 @@
           "office-ui-fabric-react/lib/utilities/positioning",
           "highcharts/modules/accessibility",
           "highcharts/highcharts-more",
+          "highcharts/modules/heatmap",
           "@nrwl/cypress/plugins/preprocessor"
         ]
       }
