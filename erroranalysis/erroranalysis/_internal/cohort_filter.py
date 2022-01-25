@@ -11,12 +11,6 @@ from erroranalysis._internal.constants import (
 from erroranalysis._internal.metrics import get_ordered_classes
 
 COLUMN = 'column'
-METHOD_EQUAL = 'equal'
-METHOD_GREATER = 'greater'
-METHOD_LESS = 'less'
-METHOD_LESS_AND_EQUAL = 'less and equal'
-METHOD_GREATER_AND_EQUAL = 'greater and equal'
-METHOD_RANGE = 'in the range of'
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
 

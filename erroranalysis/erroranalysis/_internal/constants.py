@@ -11,8 +11,6 @@ SPLIT_INDEX = 'split_index'
 SPLIT_FEATURE = 'split_feature'
 LEAF_INDEX = 'leaf_index'
 METHOD = 'method'
-METHOD_EXCLUDES = 'excludes'
-METHOD_INCLUDES = 'includes'
 
 
 class CohortFilterMethods:
