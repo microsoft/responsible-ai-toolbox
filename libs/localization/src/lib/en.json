@@ -116,7 +116,7 @@
     "localImportanceSelectData": "Select a data point to view local importance chart",
     "noData": "No data",
     "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
     "whatIfPanelHeader": "What-if counterfactuals",
     "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Recommended policy gain",
