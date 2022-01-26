@@ -73,10 +73,6 @@ import {
   IMatrixAreaState,
   IMatrixFilterState
 } from "./MatrixFilterState";
-import {
-  ITreeViewRendererState,
-  createInitialTreeViewState
-} from "./TreeViewState";
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
@@ -335,7 +331,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
-      treeViewState: createInitialTreeViewState(props.errorAnalysisData),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
       weightVectorOptions,
@@ -453,10 +448,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                   matrixAreaState: createInitialMatrixAreaState(),
                   matrixFilterState: createInitialMatrixFilterState(),
                   openMapShift: false,
-                  selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState(
-                    this.props.errorAnalysisData
-                  )
+                  selectedCohort: this.state.baseCohort
                 });
               }}
             />
@@ -541,8 +533,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         ? this.props.errorAnalysisData.tree
                         : undefined
                     }
-                    treeViewState={this.state.treeViewState}
-                    setTreeViewState={this.setTreeViewState}
                     matrixAreaState={this.state.matrixAreaState}
                     matrixFilterState={this.state.matrixFilterState}
                     setMatrixAreaState={this.setMatrixAreaState}
@@ -682,11 +672,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       </ModelAssessmentContext.Provider>
     );
   }
-  private setTreeViewState = (treeViewState: ITreeViewRendererState): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
-      this.setState({ treeViewState });
-    }
-  };
   private setMatrixAreaState = (matrixAreaState: IMatrixAreaState): void => {
     if (this.state.selectedCohort !== this.state.baseCohort) {
       this.setState({ matrixAreaState });
