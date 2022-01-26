@@ -11,6 +11,9 @@ from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf)
+from responsibleai._internal.constants import (ManagerNames,
+                                               ListProperties,
+                                               CausalManagerKeys)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -57,6 +60,9 @@ def validate_causal(rai_insights, data, target_column,
     assert len(results) == 1
     _check_causal_result(results[0])
 
+    _check_causal_properties(rai_insights.causal.list(),
+                             expected_causal_effects=1)
+
     results = rai_insights.causal.get_data()
     assert results is not None
     assert isinstance(results, list)
@@ -71,10 +77,29 @@ def validate_causal(rai_insights, data, target_column,
     assert isinstance(results, list)
     assert len(results) == 2
 
+    _check_causal_properties(rai_insights.causal.list(),
+                             expected_causal_effects=2)
+
     # Add a bad configuration
     with pytest.raises(UserConfigValidationException):
         rai_insights.causal.add(treatment_features,
                                 nuisance_model='fake_model')
+
+
+def _check_causal_properties(
+        causal_props, expected_causal_effects):
+    assert causal_props[ListProperties.MANAGER_TYPE] == \
+        ManagerNames.CAUSAL
+    assert causal_props[
+        CausalManagerKeys.CAUSAL_EFFECTS] is not None
+    assert len(
+        causal_props[CausalManagerKeys.CAUSAL_EFFECTS]) == \
+        expected_causal_effects
+
+    for causal_effect in causal_props[CausalManagerKeys.CAUSAL_EFFECTS]:
+        assert causal_effect['global_effects_computed']
+        assert causal_effect['local_effects_computed']
+        assert causal_effect['policies_computed']
 
 
 def _check_causal_result(causal_result, is_serialized=False):

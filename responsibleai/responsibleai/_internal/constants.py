@@ -52,6 +52,11 @@ class CounterfactualManagerKeys(object):
     COUNTERFACTUALS = 'counterfactuals'
 
 
+class CausalManagerKeys(object):
+    """Provide constants for CausalManager key properties."""
+    CAUSAL_EFFECTS = 'causal_effects'
+
+
 class SKLearn(object):
     """Provide scikit-learn related constants."""
 
