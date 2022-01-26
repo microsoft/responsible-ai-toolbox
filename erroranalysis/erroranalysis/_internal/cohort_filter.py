@@ -4,10 +4,9 @@
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import (
-    CohortFilterMethods, METHOD,
-    PRED_Y, ROW_INDEX, TRUE_Y,
-    ModelTask)
+from erroranalysis._internal.constants import (METHOD, PRED_Y, ROW_INDEX,
+                                               TRUE_Y, CohortFilterMethods,
+                                               ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
 
 COLUMN = 'column'
