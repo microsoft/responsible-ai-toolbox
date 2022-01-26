@@ -11,8 +11,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { ITheme } from "office-ui-fabric-react";
 
-import { IMatrixAreaState } from "../../../MatrixFilterState";
-
 export interface IMatrixAreaProps {
   theme?: ITheme;
   features: string[];
@@ -34,7 +32,5 @@ export interface IMatrixAreaProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
-  state: IMatrixAreaState;
-  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
   metric: string;
 }
