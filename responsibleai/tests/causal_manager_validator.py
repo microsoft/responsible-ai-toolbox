@@ -11,9 +11,8 @@ from responsibleai._interfaces import (CausalConfig, CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf)
-from responsibleai._internal.constants import (ManagerNames,
-                                               ListProperties,
-                                               CausalManagerKeys)
+from responsibleai._internal.constants import (CausalManagerKeys,
+                                               ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai.exceptions import UserConfigValidationException
 

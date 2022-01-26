@@ -10,9 +10,8 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import (ManagerNames,
-                                               ListProperties,
-                                               CausalManagerKeys)
+from responsibleai._internal.constants import (CausalManagerKeys,
+                                               ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
