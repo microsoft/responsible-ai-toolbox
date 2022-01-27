@@ -1049,7 +1049,7 @@
       "meanPrediction": "Mean prediction {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
-      "rSquared": "R-squared: {0}",
+      "rSquared": "R²: {0}",
       "recall": "Recall: {0}",
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
