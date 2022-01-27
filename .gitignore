@@ -32,7 +32,6 @@ rollup.json
 # misc
 /.sass-cache
 /connect.lock
-/coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
@@ -59,6 +58,12 @@ Thumbs.db
 # test files
 apps/*-e2e/debug.log
 **/cypress.env.json
+
+# test coverage
+/coverage
+**/.coverage
+**/coverage.xml
+**/test-results.xml
 
 # notebook artifacts
 /notebooks/*.csv

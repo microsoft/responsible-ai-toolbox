@@ -66,6 +66,12 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
       label: localization.Interpret.Statistics.f1Score,
     stat: truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))},
     {
+      key: BinaryClassificationMetrics.F1Score,
+      label: localization.Interpret.Statistics.f1Score,
+      stat:
+        truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
+    },
+    {
       key: BinaryClassificationMetrics.FalsePositiveRate,
       label: localization.Interpret.Statistics.fpr,
       stat: falsePosCount / (trueNegCount + falsePosCount)
@@ -79,7 +85,7 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
       key: BinaryClassificationMetrics.SelectionRate,
       label: localization.Interpret.Statistics.selectionRate,
       stat: (falseNegCount + truePosCount) / total
-    },
+    }
   ];
 };
 
@@ -95,7 +101,7 @@ const generateRegressionStats: (
   const count = trueYs.length;
   const meanAbsoluteError = errors.reduce((prev, curr) => {
     return prev + Math.abs(curr);
-  })
+  });
   const residualSumOfSquares = errors.reduce((prev, curr) => {
     return prev + curr * curr;
   }, 0);

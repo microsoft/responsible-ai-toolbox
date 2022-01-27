@@ -17,12 +17,10 @@ import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
   createInitialMatrixAreaState,
   createInitialMatrixFilterState,
-  createInitialTreeViewState,
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
   IMatrixAreaState,
   IMatrixFilterState,
-  ITreeViewRendererState,
   MapShift
 } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -168,17 +166,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           errorAnalysisOption={this.state.errorAnalysisOption}
                           selectedCohort={this.state.selectedCohort}
                           baseCohort={this.state.baseCohort}
-                          treeViewState={this.state.treeViewState}
-                          setTreeViewState={(
-                            treeViewState: ITreeViewRendererState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ treeViewState });
-                            }
-                          }}
                           matrixAreaState={this.state.matrixAreaState}
                           matrixFilterState={this.state.matrixFilterState}
                           setMatrixAreaState={(
@@ -311,8 +298,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                   mapShiftVisible: false,
                   matrixAreaState: createInitialMatrixAreaState(),
                   matrixFilterState: createInitialMatrixFilterState(),
-                  selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  selectedCohort: this.state.baseCohort
                 });
               }}
             />

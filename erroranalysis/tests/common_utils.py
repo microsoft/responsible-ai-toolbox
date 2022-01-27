@@ -148,6 +148,13 @@ def create_binary_classification_dataset(n_samples=100):
     return X_train, y_train, X_test, y_test, classes
 
 
+def replicate_dataset(X, y, replications=16):
+    for _ in range(replications):
+        X = pd.concat([X, X], ignore_index=True)
+        y = np.concatenate([y, y])
+    return X, y
+
+
 def create_simple_titanic_data():
     titanic_url = ('https://raw.githubusercontent.com/amueller/'
                    'scipy-2017-sklearn/091d371/notebooks/'

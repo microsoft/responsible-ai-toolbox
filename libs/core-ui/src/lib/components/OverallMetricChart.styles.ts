@@ -92,7 +92,7 @@ export const overallMetricChartStyles: () => IProcessedStyleSet<IOverallMetricCh
         height: "100%",
         justifyContent: "space-evenly",
         padding: "10px 15px 11px 30px",
-        width: "245px"
+        width: "255px"
       },
       rotatedVerticalBox: {
         marginLeft: "28px",
