@@ -45,6 +45,8 @@ def validate_causal(rai_insights, data, target_column,
                 nuisance_model='automl',
                 upper_bound_on_cat_expansion=max_cat_expansion)
             rai_insights.causal.compute()
+        _check_causal_properties(rai_insights.causal.list(),
+                                 expected_causal_effects=0)
         return
 
     # Add the first configuration

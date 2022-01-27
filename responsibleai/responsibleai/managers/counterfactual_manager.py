@@ -583,7 +583,7 @@ class CounterfactualManager(BaseManager):
         """List information about the CounterfactualManager.
 
         :return: A dictionary of properties.
-        :rtype: Dict
+        :rtype: dict
         """
         props = {ListProperties.MANAGER_TYPE: self.name}
         counterfactual_props_list = []

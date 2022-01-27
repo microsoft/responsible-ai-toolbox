@@ -332,17 +332,17 @@ class CausalManager(BaseManager):
         """List information about the CausalManager.
 
         :return: A dictionary of properties.
-        :rtype: Dict
+        :rtype: dict
         """
         props = {ListProperties.MANAGER_TYPE: self.name}
         causal_props_list = []
         for result in self._results:
             causal_config_dict = result.config.get_config_as_dict()
-            causal_config_dict['global_effects_computed'] = \
+            causal_config_dict[CausalManagerKeys.GLOBAL_EFFECTS_COMPUTED] = \
                 True if result.global_effects is not None else False
-            causal_config_dict['local_effects_computed'] = \
+            causal_config_dict[CausalManagerKeys.LOCAL_EFFECTS_COMPUTED] = \
                 True if result.local_effects is not None else False
-            causal_config_dict['policies_computed'] = \
+            causal_config_dict[CausalManagerKeys.POLICIES_COMPUTED] = \
                 True if result.policies is not None else False
             causal_props_list.append(causal_config_dict)
         props[CausalManagerKeys.CAUSAL_EFFECTS] = causal_props_list
