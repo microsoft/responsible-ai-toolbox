@@ -11,8 +11,20 @@ SPLIT_INDEX = 'split_index'
 SPLIT_FEATURE = 'split_feature'
 LEAF_INDEX = 'leaf_index'
 METHOD = 'method'
-METHOD_EXCLUDES = 'excludes'
-METHOD_INCLUDES = 'includes'
+
+
+class CohortFilterMethods:
+    """Cohort filter methods.
+    """
+
+    METHOD_INCLUDES = 'includes'
+    METHOD_EXCLUDES = 'excludes'
+    METHOD_EQUAL = 'equal'
+    METHOD_GREATER = 'greater'
+    METHOD_LESS = 'less'
+    METHOD_LESS_AND_EQUAL = 'less and equal'
+    METHOD_GREATER_AND_EQUAL = 'greater and equal'
+    METHOD_RANGE = 'in the range of'
 
 
 class ModelTask(str, Enum):

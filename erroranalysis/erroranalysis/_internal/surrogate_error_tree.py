@@ -12,12 +12,11 @@ from sklearn.metrics import (mean_absolute_error, mean_squared_error,
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
-                                               METHOD_EXCLUDES,
-                                               METHOD_INCLUDES, PRED_Y,
-                                               ROW_INDEX, SPLIT_FEATURE,
-                                               SPLIT_INDEX, TRUE_Y, Metrics,
-                                               ModelTask, error_metrics,
-                                               f1_metrics,
+                                               PRED_Y, ROW_INDEX,
+                                               SPLIT_FEATURE, SPLIT_INDEX,
+                                               TRUE_Y, CohortFilterMethods,
+                                               Metrics, ModelTask,
+                                               error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -277,7 +276,7 @@ def create_categorical_arg(parent_threshold):
 
 def create_categorical_query(method, arg, p_node_name, p_node_query,
                              parent, categories):
-    if method == METHOD_INCLUDES:
+    if method == CohortFilterMethods.METHOD_INCLUDES:
         operation = "=="
     else:
         operation = "!="
@@ -296,7 +295,7 @@ def create_categorical_query(method, arg, p_node_name, p_node_query,
     query = []
     for argi in arg:
         query.append(p_node_query + " " + operation + " " + str(argi))
-    if method == METHOD_INCLUDES:
+    if method == CohortFilterMethods.METHOD_INCLUDES:
         query = " | ".join(query)
     else:
         query = " & ".join(query)
@@ -333,7 +332,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                                   parent_threshold)
                 df = df[df[p_node_name_val] <= parent_threshold]
             elif parent_decision_type == '==':
-                method = METHOD_INCLUDES
+                method = CohortFilterMethods.METHOD_INCLUDES
                 arg = create_categorical_arg(parent_threshold)
                 query, condition = create_categorical_query(method,
                                                             arg,
@@ -350,7 +349,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                                  parent_threshold)
                 df = df[df[p_node_name_val] > parent_threshold]
             elif parent_decision_type == '==':
-                method = METHOD_EXCLUDES
+                method = CohortFilterMethods.METHOD_EXCLUDES
                 arg = create_categorical_arg(parent_threshold)
                 query, condition = create_categorical_query(method,
                                                             arg,
