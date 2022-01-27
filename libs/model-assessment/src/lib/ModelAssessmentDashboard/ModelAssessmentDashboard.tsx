@@ -212,7 +212,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                             }
                           </Text>
                         </div>
-                        <ModelOverview />
+                        <ModelOverview showNewModelOverviewExperience={false} />
                       </>
                     )}
                     {t.key === GlobalTabKeys.DataExplorerTab && (

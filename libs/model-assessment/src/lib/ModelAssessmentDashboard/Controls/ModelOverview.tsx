@@ -30,14 +30,16 @@ import React from "react";
 
 import { modelOverviewStyles } from "./ModelOverview.styles";
 
-class ModelOverviewProps {}
+interface IModelOverviewProps {
+  showNewModelOverviewExperience: boolean;
+}
 
 interface IModelOverviewState {
   selectedMetrics: string[];
 }
 
 export class ModelOverview extends React.Component<
-  ModelOverviewProps,
+  IModelOverviewProps,
   IModelOverviewState
 > {
   public static contextType = ModelAssessmentContext;
@@ -45,7 +47,7 @@ export class ModelOverview extends React.Component<
     defaultModelAssessmentContext;
   private _root = React.createRef<IDetailsList>();
 
-  constructor(props: ModelOverviewProps) {
+  constructor(props: IModelOverviewProps) {
     super(props);
     this.state = { selectedMetrics: [] };
   }
@@ -205,33 +207,37 @@ export class ModelOverview extends React.Component<
             {localization.Interpret.ModelPerformance.helperText}
           </Text>
         </div>
-        <OverallMetricChart showMetricSummary={false} />
-        <Dropdown
-          label={localization.ModelAssessment.ModelOverview.Metrics}
-          selectedKeys={this.state.selectedMetrics}
-          options={selectableMetrics}
-          onChange={this.onMetricSelectionChange}
-          multiSelect
-          styles={{ dropdown: { width: 500 } }}
-        />
-        <DetailsList
-          componentRef={this._root}
-          items={items}
-          groups={groups}
-          columns={columns}
-          ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-          ariaLabelForSelectionColumn="Toggle selection"
-          checkButtonAriaLabel="select row"
-          //checkButtonGroupAriaLabel="select section"
-          //onRenderDetailsHeader={this._onRenderDetailsHeader}
-          groupProps={{
-            showEmptyGroups: true,
-            onRenderHeader: this._onRenderGroupHeader
-          }}
-          //onRenderItemColumn={this._onRenderColumn}
-          compact={false}
-          checkboxVisibility={CheckboxVisibility.hidden}
-        />
+        <OverallMetricChart showMetricSummary={!this.props.showNewModelOverviewExperience} />
+        {this.props.showNewModelOverviewExperience && (
+          <>
+            <Dropdown
+              label={localization.ModelAssessment.ModelOverview.Metrics}
+              selectedKeys={this.state.selectedMetrics}
+              options={selectableMetrics}
+              onChange={this.onMetricSelectionChange}
+              multiSelect
+              styles={{ dropdown: { width: 500 } }}
+            />
+            <DetailsList
+              componentRef={this._root}
+              items={items}
+              groups={groups}
+              columns={columns}
+              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+              ariaLabelForSelectionColumn="Toggle selection"
+              checkButtonAriaLabel="select row"
+              //checkButtonGroupAriaLabel="select section"
+              //onRenderDetailsHeader={this._onRenderDetailsHeader}
+              groupProps={{
+                showEmptyGroups: true,
+                onRenderHeader: this._onRenderGroupHeader
+              }}
+              //onRenderItemColumn={this._onRenderColumn}
+              compact={false}
+              checkboxVisibility={CheckboxVisibility.hidden}
+            />
+          </>
+        )}
       </div>
     );
   }
