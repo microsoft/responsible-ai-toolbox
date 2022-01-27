@@ -10,7 +10,8 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import (CausalManagerKeys,
+                                               ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
@@ -328,7 +329,25 @@ class CausalManager(BaseManager):
         return self._results
 
     def list(self):
-        pass
+        """List information about the CausalManager.
+
+        :return: A dictionary of properties.
+        :rtype: dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        causal_props_list = []
+        for result in self._results:
+            causal_config_dict = result.config.get_config_as_dict()
+            causal_config_dict[CausalManagerKeys.GLOBAL_EFFECTS_COMPUTED] = \
+                True if result.global_effects is not None else False
+            causal_config_dict[CausalManagerKeys.LOCAL_EFFECTS_COMPUTED] = \
+                True if result.local_effects is not None else False
+            causal_config_dict[CausalManagerKeys.POLICIES_COMPUTED] = \
+                True if result.policies is not None else False
+            causal_props_list.append(causal_config_dict)
+        props[CausalManagerKeys.CAUSAL_EFFECTS] = causal_props_list
+
+        return props
 
     def get_data(self):
         """Get causal data
