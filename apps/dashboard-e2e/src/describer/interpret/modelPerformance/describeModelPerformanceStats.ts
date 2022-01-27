@@ -41,13 +41,13 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
           "Selection rate"
         );
       } else {
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("Mean squared error");
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          "Mean squared error"
+        );
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
           "Mean absolute error"
         );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "R²"
-        );
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("R²");
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
           "Mean prediction"
         );
