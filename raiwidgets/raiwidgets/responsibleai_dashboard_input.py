@@ -2,13 +2,14 @@
 # Licensed under the MIT License.
 
 import traceback
+from typing import List, Optional
 
 import pandas as pd
 
 from erroranalysis._internal.constants import display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
-
+from .cohort import Cohort
 from .constants import ErrorMessages
 from .interfaces import WidgetRequestResponseConstants
 from .utils import _is_classifier
@@ -19,17 +20,25 @@ EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: RAIInsights):
+            analysis: RAIInsights,
+            cohort_filter_list: Optional[List[Cohort]] = None):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
             A RAIInsights object that represents an explanation.
         :type analysis: RAIInsights
+        :param cohort_filter_list:
+            List of cohorts defined by the user for the dashboard.
+        :type cohort_filter_list: List[Cohort]
         """
         self._analysis = analysis
         model = analysis.model
         self._is_classifier = _is_classifier(model)
+        # TODO: Add cohort_filter_list to dashboard_input
+        for cohort in cohort_filter_list:
+            print(cohort.serialize_cohort())
         self.dashboard_input = analysis.get_data()
+        # self.dashboard_input.CohortInputData = cohort.serialize_cohort()
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer

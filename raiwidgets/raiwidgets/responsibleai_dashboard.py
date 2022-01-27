@@ -21,12 +21,15 @@ class ResponsibleAIDashboard(Dashboard):
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
-
+    :param cohort_filter_list:
+        List of cohorts defined by the user for the dashboard.
+    :type cohort_filter_list: List[Cohort]
     """
-
     def __init__(self, analysis: RAIInsights,
-                 public_ip=None, port=None, locale=None):
-        self.input = ResponsibleAIDashboardInput(analysis)
+                 public_ip=None, port=None, locale=None,
+                 cohort_Filter_list=None):
+        self.input = ResponsibleAIDashboardInput(
+            analysis, cohort_filter_list=cohort_Filter_list)
 
         super(ResponsibleAIDashboard, self).__init__(
             dashboard_type="ResponsibleAI",

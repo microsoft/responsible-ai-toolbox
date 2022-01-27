@@ -14,7 +14,8 @@ import {
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
-  getModelType
+  getModelType,
+  IFilter
 } from "@responsible-ai/core-ui";
 import {
   createInitialMatrixAreaState,
@@ -61,6 +62,29 @@ export function buildInitialModelAssessmentContext(
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
+  console.log(typeof jointDataset.metaDict);
+  console.log(jointDataset.metaDict);
+
+  let key = undefined;
+  let value = undefined;
+  for (key in jointDataset.metaDict) {
+    value = jointDataset.metaDict[key].abbridgedLabel;
+    console.log(typeof value);
+    console.log(typeof key);
+    if (value === "age") {
+      console.log(value);
+      break;
+    }
+  }
+  console.log(key);
+  console.log(value);
+  const nums = [1];
+  const cohort_filter_1: IFilter = {
+    arg: nums,
+    column: key,
+    method: "less"
+  } as IFilter;
+
   // consider taking filters in as param arg for programmatic users
   const cohorts = [
     new ErrorCohort(
@@ -69,6 +93,10 @@ export function buildInitialModelAssessmentContext(
         jointDataset,
         []
       ),
+      jointDataset
+    ),
+    new ErrorCohort(
+      new Cohort("Cohort New", jointDataset, [cohort_filter_1]),
       jointDataset
     )
   ];
