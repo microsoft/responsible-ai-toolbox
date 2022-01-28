@@ -17,8 +17,9 @@ class TestCausalManager:
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, None)
 
-        result = manager.add(['ZN'])
-
+        manager.add(['ZN'])
+        manager.compute()
+        result = manager.get()[0]
         assert len(result.policies) == 1
         assert len(result.config.treatment_features) == 1
         assert result.config.treatment_features[0] == 'ZN'
@@ -32,6 +33,7 @@ class TestCausalManager:
             None, train_df, test_df, target_feature, ModelTask.REGRESSION)
 
         insights.causal.add(['ZN'])
+        insights.compute()
         pre_results = insights.causal.get()
         pre_result = pre_results[0]
 
@@ -54,6 +56,7 @@ class TestCausalManager:
         expected = "Increase the value 50"
         with pytest.raises(ValueError, match=expected):
             manager.add(['state'])
+            manager.compute()
 
     def test_causal_train_test_categories(self, parks_data):
         train_df, test_df, target_feature = parks_data
@@ -91,6 +94,7 @@ class TestCausalManagerTreatmentCosts:
                 as mock_create:
             try:
                 cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+                cost_manager.compute()
             except TypeError:
                 pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 0, ANY, ANY, ANY)
@@ -106,6 +110,7 @@ class TestCausalManagerTreatmentCosts:
                    "of type <class 'int'>, expected list.")
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=5)
+            cost_manager.compute()
 
     def test_nonlist_cost(self, cost_manager):
         message = ("treatment_cost must be a list with the same number of "
@@ -117,6 +122,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['ZN', 'RM', 'B'],
                              treatment_cost=np.array([1, 2]))
+            cost_manager.compute()
 
     def test_invalid_cost_list_length(self, cost_manager):
         expected = ("treatment_cost must be a list with the same number of "
@@ -124,12 +130,14 @@ class TestCausalManagerTreatmentCosts:
                     "Length of treatment_cost was 2, expected 3.")
         with pytest.raises(UserConfigValidationException, match=expected):
             cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2])
+            cost_manager.compute()
 
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
             try:
                 cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+                cost_manager.compute()
             except TypeError:
                 pass
             mock_create.assert_any_call(ANY, ANY, 'ZN', 1, ANY, ANY, ANY)
@@ -145,6 +153,7 @@ class TestCausalManagerTreatmentCosts:
             ]
             try:
                 cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+                cost_manager.compute()
             except TypeError:
                 pass
             mock_create.assert_any_call(
@@ -160,6 +169,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(Exception):
             cost_manager.add(['ZN', 'B'], treatment_cost=costs,
                              skip_cat_limit_checks=True)
+            cost_manager.compute()
 
 
 class TestCausalDashboardData:
@@ -178,7 +188,9 @@ class TestCausalDashboardData:
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, categoricals)
 
-        result = manager.add(['AGE_CAT', 'INDUS_CAT'], random_state=42)
+        manager.add(['AGE_CAT', 'INDUS_CAT'], random_state=42)
+        manager.compute()
+        result = manager.get()[0]
         dashboard_data = result._get_dashboard_data()
 
         policies = dashboard_data['policies']

@@ -50,6 +50,13 @@ class CausalResult(BaseResult['CausalResult']):
         self.local_effects = local_effects
         self.policies = policies
 
+    @property
+    def is_computed(self):
+        return self.causal_analysis is not None or \
+            self.global_effects is not None or \
+            self.local_effects is not None or \
+            self.policies is not None
+
     def _get_dashboard_object(self):
         causal_data = CausalData()
 
