@@ -35,8 +35,9 @@ class ResponsibleAIDashboardInput:
         model = analysis.model
         self._is_classifier = _is_classifier(model)
         # TODO: Add cohort_filter_list to dashboard_input
-        for cohort in cohort_filter_list:
-            print(cohort.serialize_cohort())
+        if cohort_filter_list is not None:
+            for cohort in cohort_filter_list:
+                print(cohort.serialize_cohort())
         self.dashboard_input = analysis.get_data()
         # self.dashboard_input.CohortInputData = cohort.serialize_cohort()
         self._feature_length = len(self.dashboard_input.dataset.feature_names)

@@ -106,11 +106,11 @@ class TestResponsibleAIDashboard:
 
         cohort_filter_1 = CohortFilter(
             method=CohortFilterMethods.LessThan,
-            number=[65],
+            arg=[65],
             column='Age')
         cohort_filter_2 = CohortFilter(
             method=CohortFilterMethods.GreaterThan,
-            number=[40],
+            arg=[40],
             column='Hours per week')
 
         user_cohort_1 = Cohort(name='New Cohort 1')
@@ -119,7 +119,7 @@ class TestResponsibleAIDashboard:
 
         cohort_filter_3 = CohortFilter(
             method=CohortFilterMethods.Includes,
-            number=[2, 6, 4],
+            arg=[2, 6, 4],
             column='Marital Status')
 
         user_cohort_2 = Cohort(name='New Cohort 2')
