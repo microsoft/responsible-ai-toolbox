@@ -105,3 +105,10 @@ jobs:
           path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
         if: ${{ always() }}
+
+      - name: Upload e2e test screen shot
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.packageDirectory }}-e2e-screen-shot
+          path: dist/cypress
