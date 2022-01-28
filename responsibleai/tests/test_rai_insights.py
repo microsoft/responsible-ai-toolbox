@@ -147,7 +147,8 @@ class TestRAIInsights(object):
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.COUNTERFACTUAL,
-                                              ManagerNames.EXPLAINER])
+                                              ManagerNames.EXPLAINER,
+                                              ManagerNames.ERROR_ANALYSIS])
     def test_rai_insights_boston(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names = \
             create_boston_data()
