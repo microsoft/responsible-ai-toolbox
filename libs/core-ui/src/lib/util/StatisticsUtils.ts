@@ -100,8 +100,8 @@ const generateRegressionStats: (
 ): ILabeledStatistic[] => {
   const count = trueYs.length;
   const meanAbsoluteError = errors.reduce((prev, curr) => {
-    return prev + Math.abs(curr);
-  });
+    return Math.abs(prev) + Math.abs(curr);
+  }, 0);
   const residualSumOfSquares = errors.reduce((prev, curr) => {
     return prev + curr * curr;
   }, 0);
