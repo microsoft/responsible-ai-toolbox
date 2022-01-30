@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
 import traceback
 from typing import List, Optional
 
@@ -9,7 +10,7 @@ import pandas as pd
 from erroranalysis._internal.constants import display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
-from .cohort import Cohort
+from .cohort import Cohort, cohort_filter_json_converter
 from .constants import ErrorMessages
 from .interfaces import WidgetRequestResponseConstants
 from .utils import _is_classifier
@@ -34,12 +35,12 @@ class ResponsibleAIDashboardInput:
         self._analysis = analysis
         model = analysis.model
         self._is_classifier = _is_classifier(model)
-        # TODO: Add cohort_filter_list to dashboard_input
-        if cohort_filter_list is not None:
-            for cohort in cohort_filter_list:
-                print(cohort.serialize_cohort())
         self.dashboard_input = analysis.get_data()
-        # self.dashboard_input.CohortInputData = cohort.serialize_cohort()
+        # Add cohort_filter_list to dashboard_input
+        self.dashboard_input.CohortInputData = json.loads(
+            json.dumps(cohort_filter_list,
+                       default=cohort_filter_json_converter)
+        )
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer
