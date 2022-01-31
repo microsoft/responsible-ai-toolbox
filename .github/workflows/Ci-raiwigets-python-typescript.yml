@@ -50,7 +50,7 @@ jobs:
 
       - name: Setup tools
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip~=21.3
           pip install --upgrade setuptools
           pip install --upgrade pip-tools
 
