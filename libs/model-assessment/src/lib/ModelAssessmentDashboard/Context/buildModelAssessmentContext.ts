@@ -17,12 +17,7 @@ import {
   getModelType,
   IFilter
 } from "@responsible-ai/core-ui";
-import {
-  createInitialMatrixAreaState,
-  createInitialMatrixFilterState,
-  createInitialTreeViewState,
-  ErrorAnalysisOptions
-} from "@responsible-ai/error-analysis";
+import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
@@ -143,8 +138,6 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     mapShiftVisible: false,
-    matrixAreaState: createInitialMatrixAreaState(),
-    matrixFilterState: createInitialMatrixFilterState(),
     modelChartConfig: undefined,
     modelMetadata,
     saveCohortVisible: false,
@@ -156,7 +149,6 @@ export function buildInitialModelAssessmentContext(
         : 0,
     selectedWhatIfIndex: undefined,
     sortVector: undefined,
-    treeViewState: createInitialTreeViewState(props.errorAnalysisData?.[0]),
     weightVectorLabels,
     weightVectorOptions,
     whatIfChartConfig: undefined
