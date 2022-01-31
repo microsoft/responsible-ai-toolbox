@@ -82,7 +82,7 @@ jobs:
         with:
           name: notebook-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
           path: notebooks
-        
+
       - name: Upload e2e test screen shot
         if: always()
         uses: actions/upload-artifact@v2
