@@ -17,11 +17,11 @@ export function describeAxisConfigDialog(
         cy.get(Locators.DECAxisPanel).should("exist");
         cy.get(Locators.CancelButton).click();
       });
-      it("should be able to hide settings", () => {
-        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
-        cy.get(Locators.DECCloseButton).click();
-        cy.get(Locators.DECAxisPanel).should("not.exist");
-      });
+      // it("should be able to hide settings", () => {
+      //   cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+      //   cy.get(Locators.DECCloseButton).click();
+      //   cy.get(Locators.DECAxisPanel).should("not.exist");
+      // });
       it("should display right y-axis title", () => {
         cy.get(
           `${Locators.DECRotatedVerticalBox} span[class*="textContainer"]`
