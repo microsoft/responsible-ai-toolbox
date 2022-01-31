@@ -184,12 +184,3 @@ class Cohort:
         # TODO: Add validations for checking cohort and cohort filter against
         #       test data.
         pass
-
-        # if self.cohort_filter_list is None:
-        #     return
-
-        # for cohort_filter in self.cohort_filter_list:
-        #     if cohort_filter.column not in test_data.columns:
-        #         raise UserConfigValidationException(
-        #             "Cohort filter column name {0} not present "
-        #             "in test data".format(cohort_filter.column))
