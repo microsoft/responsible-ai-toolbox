@@ -10,7 +10,7 @@ export function describeAxisConfigDialog(
   hasColorAxis: boolean,
   featureNames?: string[]
 ): void {
-  describe("Axis settings dialog", () => {
+  describe.skip("Axis settings dialog", () => {
     describe("Y Axis settings dialog", () => {
       it("should display settings dialog", () => {
         cy.get(`${Locators.DECRotatedVerticalBox} button`).click();

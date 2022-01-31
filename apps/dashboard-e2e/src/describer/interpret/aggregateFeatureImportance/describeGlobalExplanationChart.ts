@@ -61,7 +61,7 @@ export function describeGlobalExplanationChart<
 
       if (!props.dataShape.noDataset) {
         const dependencePlotChart = new ScatterChart("#DependencePlot");
-        describe("DependencePlot", () => {
+        describe.skip("DependencePlot", () => {
           beforeEach(() => {
             selectComboBox("#DependencePlotFeatureSelection", 0);
           });
