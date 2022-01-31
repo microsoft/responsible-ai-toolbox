@@ -6,11 +6,10 @@ import sklearn
 from sklearn.model_selection import train_test_split
 
 from raiwidgets import ResponsibleAIDashboard
+from raiwidgets._cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai import RAIInsights
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
-
-from raiwidgets.cohort import Cohort, CohortFilterMethods, CohortFilter
 
 
 class TestResponsibleAIDashboard:

@@ -10,7 +10,8 @@ import pandas as pd
 from erroranalysis._internal.constants import display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
-from .cohort import Cohort, cohort_filter_json_converter
+
+from ._cohort import Cohort, cohort_filter_json_converter
 from .constants import ErrorMessages
 from .interfaces import WidgetRequestResponseConstants
 from .utils import _is_classifier
