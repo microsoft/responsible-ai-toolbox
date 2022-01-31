@@ -41,7 +41,7 @@ export enum Locators {
   WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
   WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
   WhatIfAxisPanel = "#AxisConfigPanel",
-  AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
+  AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container button",
   AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",
   AxisFeatureDropdownOptionGeneral = "div.ms-ComboBox-optionsContainerWrapper",
   WhatIfAxisFeatureDropdownCurrentOption = "#AxisConfigPanel div.ms-ComboBox-container input[type='text']",

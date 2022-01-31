@@ -13,13 +13,21 @@ export function describeAxisConfigDialog(
   describe("Axis settings dialog", () => {
     describe("Y Axis settings dialog", () => {
       it("should display settings dialog", () => {
-        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).then(($btn) => {
+          $btn.trigger("click");
+        });
         cy.get(Locators.DECAxisPanel).should("exist");
-        cy.get(Locators.CancelButton).click();
+        cy.get(Locators.CancelButton).then(($btn) => {
+          $btn.trigger("click");
+        });
       });
       it("should be able to hide settings", () => {
-        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
-        cy.get(Locators.DECCloseButton).click();
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).then(($btn) => {
+          $btn.trigger("click");
+        });
+        cy.get(Locators.DECCloseButton).then(($btn) => {
+          $btn.trigger("click");
+        });
         cy.get(Locators.DECAxisPanel).should("not.exist");
       });
       it("should display right y-axis title", () => {
@@ -29,44 +37,72 @@ export function describeAxisConfigDialog(
       });
 
       it("should populate feature list passed in from SDK in flyout", () => {
-        cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
-        cy.get(Locators.AxisFeatureDropdown).click();
+        cy.get(`${Locators.DECRotatedVerticalBox} button`).then(($btn) => {
+          $btn.trigger("click");
+        });
+        cy.get(Locators.AxisFeatureDropdown).then(($btn) => {
+          $btn.trigger("click");
+        });
         cy.get(Locators.AxisFeatureDropdownOption).should(
           "have.length",
           featureNames?.length
         );
-        cy.get(Locators.DECCloseButton).click();
+        cy.get(Locators.DECCloseButton).then(($btn) => {
+          $btn.trigger("click");
+        });
       });
       if (!noY) {
         it("should change to different y-axis title", () => {
-          cy.get(`${Locators.DECRotatedVerticalBox} button`).click();
+          cy.get(`${Locators.DECRotatedVerticalBox} button`).then(($btn) => {
+            $btn.trigger("click");
+          });
 
           cy.get(`${Locators.DECChoiceFieldGroup} label:eq(3)`)
             .invoke("text")
             .then((text1) => {
-              cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get(Locators.SelectButton).click();
+              cy.get(`#AxisConfigPanel label:contains(${text1})`)
+                .trigger("mouseover")
+                .click();
+              cy.get(Locators.SelectButton).then(($btn) => {
+                $btn.trigger("click");
+              });
               cy.get(`${Locators.DECRotatedVerticalBox} button:eq(0)`).contains(
                 text1
               );
             });
           cy.get(`${Locators.DECRotatedVerticalBox} button`)
-            .click()
+
+            .then(($btn) => {
+              $btn.trigger("click");
+            })
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Dataset')`)
-            .click();
-          cy.get(Locators.SelectButton).click();
+
+            .then(($btn) => {
+              $btn.trigger("click");
+            });
+          cy.get(Locators.SelectButton).then(($btn) => {
+            $btn.trigger("click");
+          });
         });
       }
     });
     describe("X Axis settings dialog", () => {
       it("should display settings dialog", () => {
-        cy.get(`${Locators.DECHorizontalAxis} button`).click();
+        cy.get(`${Locators.DECHorizontalAxis} button`).then(($btn) => {
+          $btn.trigger("click");
+        });
         cy.get(Locators.DECAxisPanel).should("exist");
-        cy.get(Locators.CancelButton).click();
+        cy.get(Locators.CancelButton).then(($btn) => {
+          $btn.trigger("click");
+        });
       });
       it("should be able to hide settings", () => {
-        cy.get(`${Locators.DECHorizontalAxis} button`).click();
-        cy.get(Locators.DECCloseButton).click();
+        cy.get(`${Locators.DECHorizontalAxis} button`).then(($btn) => {
+          $btn.trigger("click");
+        });
+        cy.get(Locators.DECCloseButton).then(($btn) => {
+          $btn.trigger("click");
+        });
         cy.get(Locators.DECAxisPanel).should("not.exist");
       });
       it("should display right x-axis title", () => {
@@ -76,36 +112,56 @@ export function describeAxisConfigDialog(
       });
       if (!noY) {
         it("should change to different x-axis title", () => {
-          cy.get(`${Locators.DECHorizontalAxis} button`).click();
+          cy.get(`${Locators.DECHorizontalAxis} button`).then(($btn) => {
+            $btn.trigger("click");
+          });
 
           cy.get(`${Locators.DECChoiceFieldGroup} label:eq(3)`)
             .invoke("text")
             .then((text1) => {
-              cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-              cy.get(Locators.SelectButton).click();
+              cy.get(`#AxisConfigPanel label:contains(${text1})`)
+                .trigger("mouseover")
+                .click();
+              cy.get(Locators.SelectButton).then(($btn) => {
+                $btn.trigger("click");
+              });
               cy.get(`${Locators.DECHorizontalAxis} button:eq(0)`).contains(
                 text1
               );
             });
           cy.get(`${Locators.DECHorizontalAxis} button`)
-            .click()
+
+            .then(($btn) => {
+              $btn.trigger("click");
+            })
             .get(`${Locators.DECChoiceFieldGroup} label:contains('Index')`)
-            .click();
-          cy.get(Locators.SelectButton).click();
+
+            .then(($btn) => {
+              $btn.trigger("click");
+            });
+          cy.get(Locators.SelectButton).then(($btn) => {
+            $btn.trigger("click");
+          });
         });
       }
     });
     if (hasColorAxis) {
       describe("Color Axis settings dialog", () => {
         beforeEach(() => {
-          cy.get("#DatasetExplorerChart button#SetColorButton").click();
+          cy.get("#DatasetExplorerChart button#SetColorButton").trigger(
+            "click"
+          );
         });
         it("should display settings dialog", () => {
           cy.get(Locators.DECAxisPanel).should("exist");
-          cy.get(Locators.CancelButton).click();
+          cy.get(Locators.CancelButton).then(($btn) => {
+            $btn.trigger("click");
+          });
         });
         it("should be able to hide settings", () => {
-          cy.get(Locators.DECCloseButton).click();
+          cy.get(Locators.DECCloseButton).then(($btn) => {
+            $btn.trigger("click");
+          });
           cy.get(Locators.DECAxisPanel).should("not.exist");
         });
       });

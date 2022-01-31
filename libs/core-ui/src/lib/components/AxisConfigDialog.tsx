@@ -185,6 +185,7 @@ export class AxisConfigDialog extends React.PureComponent<
               <Stack>
                 {isDataColumn && (
                   <ComboBox
+                    id="SelectFeatureComboBox"
                     options={this.dataArray}
                     onChange={this.setSelectedProperty}
                     label={
