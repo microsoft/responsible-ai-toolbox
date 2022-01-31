@@ -16,7 +16,6 @@ import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import { IMatrixAreaState, IMatrixFilterState } from "../../MatrixFilterState";
 import { MatrixFilter } from "../Matrix/MatrixFilter/MatrixFilter";
 import { TreeViewRenderer } from "../TreeViewRenderer/TreeViewRenderer";
 
@@ -46,10 +45,6 @@ export interface IErrorAnalysisViewProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  matrixFilterState: IMatrixFilterState;
-  matrixAreaState: IMatrixAreaState;
-  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
-  setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
   showCohortName: boolean;
 }
 
@@ -87,10 +82,6 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
-            state={this.props.matrixFilterState}
-            matrixAreaState={this.props.matrixAreaState}
-            setMatrixAreaState={this.props.setMatrixAreaState}
-            setMatrixFilterState={this.props.setMatrixFilterState}
             isEnabled={matrixViewIsEnabled}
             disabledView={this.props.disabledView}
           />
@@ -100,11 +91,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
   }
 
   public componentDidUpdate(prevProps: IErrorAnalysisViewProps): void {
-    if (
-      this.props.selectedFeatures !== prevProps.selectedFeatures ||
-      this.props.matrixFilterState !== prevProps.matrixFilterState ||
-      this.props.matrixAreaState !== prevProps.matrixAreaState
-    ) {
+    if (this.props.selectedFeatures !== prevProps.selectedFeatures) {
       this.forceUpdate();
     }
   }
