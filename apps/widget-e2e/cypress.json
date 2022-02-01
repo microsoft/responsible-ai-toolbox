@@ -12,6 +12,5 @@
   "downloadsFolder": "../../dist/cypress/apps/widget-e2e/downloads",
   "chromeWebSecurity": false,
   "viewportWidth": 1920,
-  "viewportHeight": 1080,
-  "videoCompression": false
+  "viewportHeight": 1080
 }
