@@ -76,8 +76,8 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
       - name: Run widget tests
+        if: ${{ matrix.operatingSystem != 'macos-latest' }}
         run: yarn e2e-widget
 
       - name: Run tests
