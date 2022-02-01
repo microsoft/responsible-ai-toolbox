@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from ..common_utils import create_adult_income_dataset, create_boston_data
+from ..common_utils import create_adult_income_dataset, create_housing_data
 
 
 @pytest.fixture(scope='session')
@@ -22,9 +22,9 @@ def adult_data():
 
 
 @pytest.fixture(scope='session')
-def boston_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
+def housing_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
     target_feature = 'TARGET'
-    X_train, X_test, y_train, y_test, feature_names = create_boston_data()
+    X_train, X_test, y_train, y_test, feature_names = create_housing_data()
     train_df = pd.DataFrame(X_train, columns=feature_names)
     train_df[target_feature] = y_train
     test_df = pd.DataFrame(X_test, columns=feature_names)
@@ -48,21 +48,22 @@ def _discretize_feature(
 
 
 @pytest.fixture(scope='session')
-def boston_data_categorical(boston_data):
-    train_df, test_df, target_feature = boston_data
+def housing_data_categorical(housing_data):
+    train_df, test_df, target_feature = housing_data
     train_df = copy.deepcopy(train_df)
     test_df = copy.deepcopy(test_df)
 
     for df in [train_df, test_df]:
-        cat_map = [(0, 'newest'), (40, 'newer'), (65, 'older'), (90, 'oldest')]
-        df['AGE_CAT'] = _discretize_feature(df['AGE'], cat_map)
-        cat_map = [(0, 'small'), (5, 'large')]
-        df['RM_CAT'] = _discretize_feature(df['RM'], cat_map)
-        cat_map = [(0, 'residential'), (10, 'mixed'), (18, 'commercial')]
-        df['INDUS_CAT'] = _discretize_feature(df['INDUS'], cat_map)
-        cat_map = [(0, 'no crime'), (5, 'low crime'),
-                   (10, 'medium crime'), (20, 'high crime')]
-        df['CRIM_CAT'] = _discretize_feature(df['CRIM'], cat_map)
+        cat_map = [(0, 'newest'), (15, 'new'), (25, 'mid'),
+                   (35, 'old'), (45, 'very-old')]
+        df['HouseAge_CAT'] = _discretize_feature(df['HouseAge'], cat_map)
+        cat_map = [(0, 'small'), (4, 'large')]
+        df['AveRooms_CAT'] = _discretize_feature(df['AveRooms'], cat_map)
+        cat_map = [(0, 'low'), (300, 'mid-low'), (500, 'mid'), (1000, 'high'),
+                   (1000, 'very-high'), (10000, 'highest')]
+        df['Population_CAT'] = _discretize_feature(df['Population'], cat_map)
+        cat_map = [(0, 'low'), (2, 'high')]
+        df['AveOccup_CAT'] = _discretize_feature(df['AveOccup'], cat_map)
 
     return train_df, test_df, target_feature
 
