@@ -16,7 +16,7 @@ export function describeModelOverview(
     });
     it("Model overview title", () => {
       cy.get("#modelStatisticsHeader").contains("Model overview");
-    })
+    });
     describe("Model performance Chart", () => {
       describeAxisConfigDialog();
     });

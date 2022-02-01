@@ -4,16 +4,16 @@
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
-  wineData: {
-    isClassification: true,
-    isMulticlass: true
-  },
   adultCensusIncomeData: {
     isClassification: true,
     isMulticlass: false
   },
   bostonData: {
     isClassification: false
+  },
+  wineData: {
+    isClassification: true,
+    isMulticlass: true
   }
 };
 const withType: {

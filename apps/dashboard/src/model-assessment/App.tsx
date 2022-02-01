@@ -81,8 +81,7 @@ export class App extends React.Component<IAppProps> {
           );
       } else {
         // Wine
-        modelAssessmentDashboardProps.requestDebugML =
-          generateJsonTreeWine;
+        modelAssessmentDashboardProps.requestDebugML = generateJsonTreeWine;
         modelAssessmentDashboardProps.requestImportances =
           createJsonImportancesGenerator(
             this.props.dataset.feature_names,
