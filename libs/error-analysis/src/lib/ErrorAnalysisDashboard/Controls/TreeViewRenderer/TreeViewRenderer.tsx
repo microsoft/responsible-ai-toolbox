@@ -77,6 +77,7 @@ export class TreeViewRenderer extends React.PureComponent<
 > {
   public static contextType = ModelAssessmentContext;
   private static savedState: ITreeViewRendererState | undefined;
+  private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   public constructor(props: ITreeViewRendererProps) {
@@ -89,6 +90,11 @@ export class TreeViewRenderer extends React.PureComponent<
     } else {
       this.state = createInitialTreeViewState(this.context.errorAnalysisData);
     }
+    TreeViewRenderer.saveStateOnUnmount = true;
+  }
+
+  public static resetState(): void {
+    TreeViewRenderer.saveStateOnUnmount = false;
   }
 
   public componentDidMount(): void {
@@ -118,7 +124,11 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize);
-    TreeViewRenderer.savedState = this.state;
+    if (TreeViewRenderer.saveStateOnUnmount) {
+      TreeViewRenderer.savedState = this.state;
+    } else {
+      TreeViewRenderer.savedState = undefined;
+    }
   }
 
   public render(): React.ReactNode {

@@ -50,7 +50,7 @@ jobs:
 
       - name: Setup tools
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip~=21.3
           pip install --upgrade setuptools
           pip install --upgrade pip-tools
 
@@ -77,6 +77,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run widget tests
+        if: ${{ matrix.operatingSystem != 'macos-latest' }}
         run: yarn e2e-widget
 
       - name: Run tests
