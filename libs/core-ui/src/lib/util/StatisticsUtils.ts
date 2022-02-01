@@ -8,8 +8,26 @@ import { ModelTypes } from "../Interfaces/IExplanationContext";
 import { ClassificationEnum, JointDataset } from "./JointDataset";
 
 export interface ILabeledStatistic {
+  key: string;
   label: string;
   stat: number;
+}
+
+export enum BinaryClassificationMetrics {
+  Accuracy = "accuracy",
+  Precision = "precision",
+  Recall = "recall",
+  FalseNegativeRate = "falseNegativeRate",
+  FalsePositiveRate = "falsePositiveRate",
+  SelectionRate = "selectionRate",
+  F1Score = "f1Score"
+}
+
+export enum RegressionMetrics {
+  MeanSquaredError = "meanSquaredError",
+  MeanAbsoluteError = "meanAbsoluteError",
+  MeanPrediction = "meanPrediction",
+  RSquared = "rSquared"
 }
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
@@ -30,24 +48,40 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   const total = outcomes.length;
   return [
     {
+      key: BinaryClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
       stat: (truePosCount + trueNegCount) / total
     },
     {
+      key: BinaryClassificationMetrics.Precision,
       label: localization.Interpret.Statistics.precision,
       stat: truePosCount / (truePosCount + falsePosCount)
     },
     {
+      key: BinaryClassificationMetrics.Recall,
       label: localization.Interpret.Statistics.recall,
       stat: truePosCount / (truePosCount + falseNegCount)
     },
     {
+      key: BinaryClassificationMetrics.F1Score,
+      label: localization.Interpret.Statistics.f1Score,
+      stat:
+        truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
+    },
+    {
+      key: BinaryClassificationMetrics.FalsePositiveRate,
       label: localization.Interpret.Statistics.fpr,
       stat: falsePosCount / (trueNegCount + falsePosCount)
     },
     {
+      key: BinaryClassificationMetrics.FalseNegativeRate,
       label: localization.Interpret.Statistics.fnr,
       stat: falseNegCount / (truePosCount + falseNegCount)
+    },
+    {
+      key: BinaryClassificationMetrics.SelectionRate,
+      label: localization.Interpret.Statistics.selectionRate,
+      stat: (falseNegCount + truePosCount) / total
     }
   ];
 };
@@ -62,6 +96,9 @@ const generateRegressionStats: (
   errors: number[]
 ): ILabeledStatistic[] => {
   const count = trueYs.length;
+  const meanAbsoluteError = errors.reduce((prev, curr) => {
+    return Math.abs(prev) + Math.abs(curr);
+  }, 0);
   const residualSumOfSquares = errors.reduce((prev, curr) => {
     return prev + curr * curr;
   }, 0);
@@ -74,14 +111,22 @@ const generateRegressionStats: (
   }, 0);
   return [
     {
+      key: RegressionMetrics.MeanAbsoluteError,
+      label: localization.Interpret.Statistics.mae,
+      stat: meanAbsoluteError
+    },
+    {
+      key: RegressionMetrics.MeanSquaredError,
       label: localization.Interpret.Statistics.mse,
       stat: residualSumOfSquares / count
     },
     {
+      key: RegressionMetrics.RSquared,
       label: localization.Interpret.Statistics.rSquared,
       stat: 1 - residualSumOfSquares / totalSumOfSquares
     },
     {
+      key: RegressionMetrics.MeanPrediction,
       label: localization.Interpret.Statistics.meanPrediction,
       stat:
         predYs.reduce((prev, curr) => {
