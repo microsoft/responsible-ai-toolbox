@@ -32,16 +32,22 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
         );
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains("Recall");
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "False Positive Rates"
+          "False positive rate"
         );
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "False Negative Rates"
+          "False negative rate"
+        );
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          "Selection rate"
         );
       } else {
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("MSE");
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "R-squared"
+          "Mean squared error"
         );
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          "Mean absolute error"
+        );
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("R²");
         cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
           "Mean prediction"
         );
