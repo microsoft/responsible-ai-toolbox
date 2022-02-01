@@ -15,7 +15,9 @@ export function selectComboBox(selector: string, item: string | number): void {
         item
       )}`
     )
-    .click();
+    .then(($btn) => {
+      $btn.trigger("click");
+    });
 }
 export function getComboBoxValue(selector: string): string | undefined {
   return cy.$$(`${selector} input.ms-ComboBox-Input`).val()?.toString();

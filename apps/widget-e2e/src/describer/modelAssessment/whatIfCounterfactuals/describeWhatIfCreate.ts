@@ -8,12 +8,18 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
   describe("What if Create counterfactual", () => {
     before(() => {
-      cy.get(Locators.WICDatapointDropbox).click();
+      cy.get(Locators.WICDatapointDropbox).then(($btn) => {
+        $btn.trigger("click");
+      });
       getSpan(
         dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
-      ).click();
+      )
+        .trigger("mouseover")
+        .click();
       cy.get(Locators.CreateWhatIfCounterfactualButton)
-        .click()
+        .then(($btn) => {
+          $btn.trigger("click");
+        })
         .get(Locators.WhatIfCounterfactualPanel)
         .should("exist");
     });
@@ -90,14 +96,19 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
 
   describe("What-If save scenario", () => {
     before(() => {
-      cy.get(Locators.WICDatapointDropbox).click();
+      cy.get(Locators.WICDatapointDropbox).then(($btn) => {
+        $btn.trigger("click");
+      });
       getSpan(
         dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
       )
         .scrollIntoView()
+        .trigger("mouseover")
         .click({ force: true });
       cy.get(Locators.CreateWhatIfCounterfactualButton)
-        .click({ force: true })
+        .then(($btn) => {
+          $btn.trigger("click");
+        })
         .get(Locators.WhatIfCounterfactualPanel)
         .should("exist");
     });

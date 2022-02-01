@@ -77,7 +77,6 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run widget tests
-        if: ${{ matrix.operatingSystem != 'macos-latest' }}
         run: yarn e2e-widget
 
       - name: Run tests
