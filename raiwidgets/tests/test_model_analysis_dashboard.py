@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
 import shap
 import sklearn
 from sklearn.model_selection import train_test_split
@@ -61,7 +62,13 @@ class TestModelAnalysisDashboard:
                       skip_cat_limit_checks=True)
         ri.compute()
 
-        widget = ModelAnalysisDashboard(ri)
+        with pytest.warns(
+            DeprecationWarning,
+            match="MODULE-DEPRECATION-WARNING: "
+                  "ModelAnalysisDashboard in raiwidgets package is "
+                  "deprecated."
+                  "Please use ResponsibleAIDashboard instead."):
+            widget = ModelAnalysisDashboard(ri)
         self.validate_rai_dashboard_data(widget)
 
         save_dir = tmpdir.mkdir('save-dir')

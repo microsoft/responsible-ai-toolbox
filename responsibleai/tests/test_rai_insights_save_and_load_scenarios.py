@@ -42,6 +42,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Save it
             rai_insights.save(save_1)
+            assert len(os.listdir(save_1 / ManagerNames.CAUSAL)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.ERROR_ANALYSIS)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.EXPLAINER)) == 0
 
             # Load
             rai_2 = RAIInsights.load(save_1)
@@ -53,6 +57,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
+            assert len(os.listdir(save_2 / ManagerNames.CAUSAL)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.ERROR_ANALYSIS)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.EXPLAINER)) == 0
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
@@ -264,7 +272,7 @@ def validate_rai_insights(
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
-    assert rai_insights.categorical_features == categorical_features
+    assert rai_insights.categorical_features == (categorical_features or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

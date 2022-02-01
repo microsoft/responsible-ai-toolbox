@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
 import _ from "lodash";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 

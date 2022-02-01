@@ -10,7 +10,8 @@ import pandas as pd
 from econml.solutions.causal_analysis import CausalAnalysis
 
 from responsibleai._data_validations import validate_train_test_categories
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import (CausalManagerKeys,
+                                               ListProperties, ManagerNames)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import (DefaultParams,
                                                           ModelTypes,
@@ -91,10 +92,20 @@ class CausalManager(BaseManager):
         :type treatment_features: list
         :param heterogeneity_features: Features that mediate the causal effect.
         :type heterogeneity_features: list
-        :param nuisance_model: Model type to use for nuisance estimation.
+        :param nuisance_model: This model used to estimate the outcome and the
+            treatment features from the other features present in user data.
+            It is one of {'linear', 'automl'}, optional (default='linear').
+            If 'linear', then LassoCV (for regression) and
+            LogisticRegressionCV (for classification) are used.
+            If 'automl', then a k-fold cross-validation and model selection
+            is performed among several models and the best is chosen.
         :type nuisance_model: str
-        :param heterogeneity_model: Model type to use for
-                                    treatment effect heterogeneity.
+        :param heterogeneity_model: The heterogeneity model is used to
+            estimate the treatment effect based on the heterogeneity features.
+            It is one of {'linear', 'forest'} (default='linear').
+            'linear' means that a heterogeneity model of the form
+            theta(X)=<a, X> will be used, while 'forest' means that a
+            forest model will be trained instead.
         :type heterogeneity_model: str
         :param alpha: Confidence level of confidence intervals.
         :type alpha: float
@@ -318,7 +329,25 @@ class CausalManager(BaseManager):
         return self._results
 
     def list(self):
-        pass
+        """List information about the CausalManager.
+
+        :return: A dictionary of properties.
+        :rtype: dict
+        """
+        props = {ListProperties.MANAGER_TYPE: self.name}
+        causal_props_list = []
+        for result in self._results:
+            causal_config_dict = result.config.get_config_as_dict()
+            causal_config_dict[CausalManagerKeys.GLOBAL_EFFECTS_COMPUTED] = \
+                True if result.global_effects is not None else False
+            causal_config_dict[CausalManagerKeys.LOCAL_EFFECTS_COMPUTED] = \
+                True if result.local_effects is not None else False
+            causal_config_dict[CausalManagerKeys.POLICIES_COMPUTED] = \
+                True if result.policies is not None else False
+            causal_props_list.append(causal_config_dict)
+        props[CausalManagerKeys.CAUSAL_EFFECTS] = causal_props_list
+
+        return props
 
     def get_data(self):
         """Get causal data

@@ -78,6 +78,7 @@ const modelAssessmentDatasets = {
       datapoint: 500,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: true,
+      hasFeatureImportanceComponent: true,
       incorrectPredictionDatapoint: "102",
       newFeatureDropdownValue: "workclass",
       noDataset: false,
@@ -115,13 +116,59 @@ const modelAssessmentDatasets = {
       classValue: "Probability : <=50K",
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
-      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      createYourOwnCounterfactualInputFieldUpdated: "25",
       newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
-      WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
+      whatIfNameLabel: "Copy of row 5",
+      whatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "occupation",
+      yAxisValue: "age"
+    }
+  },
+  DiabetesDecisionMaking: {
+    cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "0.05",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
+    featureImportanceData: {
+      datapoint: 89,
+      hasFeatureImportanceComponent: false
+    },
+    featureNames: [
+      "s5",
+      "bmi",
+      "bp",
+      "s3",
+      "sex",
+      "s1",
+      "s4",
+      "s2",
+      "age",
+      "s6"
+    ],
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: false,
+      columnHeaderAfterSort: "s5",
+      columnHeaderBeforeSort: "age",
+      createYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "sex",
+      selectedDatapoint: "Index 5",
+      whatIfNameLabel: "Copy of row 5",
+      whatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "s3",
       yAxisValue: "age"
     }
   },
@@ -138,6 +185,7 @@ const modelAssessmentDatasets = {
       datapoint: 89,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
+      hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "bp",
       noDataset: false,
       noFeatureImportance: false,
@@ -169,11 +217,11 @@ const modelAssessmentDatasets = {
       checkForClassField: false,
       columnHeaderAfterSort: "s5",
       columnHeaderBeforeSort: "age",
-      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      createYourOwnCounterfactualInputFieldUpdated: "25",
       searchBarQuery: "s6",
       selectedDatapoint: "Index 5",
-      WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
+      whatIfNameLabel: "Copy of row 5",
+      whatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "bmi",
       yAxisValue: "age"
     }
@@ -197,6 +245,7 @@ const modelAssessmentDatasets = {
       datapoint: 730,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: false,
+      hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "OverallQual",
       noDataset: false,
       noFeatureImportance: false,
@@ -251,12 +300,12 @@ const modelAssessmentDatasets = {
       classValue: "Probability : Less than median",
       columnHeaderAfterSort: "OverallQual",
       columnHeaderBeforeSort: "LotFrontage",
-      CreateYourOwnCounterfactualInputFieldUpdated: "25",
+      createYourOwnCounterfactualInputFieldUpdated: "25",
       newClassValue: "Probability : More than median",
       searchBarQuery: "Wood",
       selectedDatapoint: "Index 5",
-      WhatIfNameLabel: "Copy of row 5",
-      WhatIfNameLabelUpdated: "New Copy of row 5",
+      whatIfNameLabel: "Copy of row 5",
+      whatIfNameLabelUpdated: "New Copy of row 5",
       yAxisNewValue: "1stFlrSF",
       yAxisValue: "LotFrontage"
     }

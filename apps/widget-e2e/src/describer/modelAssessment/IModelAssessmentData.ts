@@ -76,6 +76,7 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
+  hasFeatureImportanceComponent?: boolean;
   hasCorrectIncorrectDatapoints?: boolean;
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
@@ -112,9 +113,9 @@ export interface IWhatIfCounterfactualsData {
   columnHeaderBeforeSort?: string;
   columnHeaderAfterSort?: string;
   searchBarQuery?: string;
-  WhatIfNameLabel?: string;
-  WhatIfNameLabelUpdated?: string;
-  CreateYourOwnCounterfactualInputFieldUpdated?: string;
+  whatIfNameLabel?: string;
+  whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualInputFieldUpdated?: string;
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
@@ -125,5 +126,6 @@ export interface IWhatIfCounterfactualsData {
 export enum RAINotebookNames {
   "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
-  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py"
+  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py"
 }

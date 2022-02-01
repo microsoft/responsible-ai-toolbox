@@ -115,7 +115,8 @@ class ExplainerManager(BaseManager):
                 'Model is required for model explanations')
 
         if self._is_added:
-            warnings.warn(("Ignoring.  Explanation has already been added, "
+            warnings.warn(("DUPLICATE-EXPLAINER-CONFIG: Ignoring. "
+                           "Explanation has already been added, "
                            "currently limited to one explainer type."),
                           UserWarning)
             return
@@ -308,18 +309,19 @@ class ExplainerManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
-        directory_manager = DirectoryManager(parent_directory_path=path)
-        data_directory = directory_manager.create_data_directory()
+        if self._is_added:
+            directory_manager = DirectoryManager(parent_directory_path=path)
+            data_directory = directory_manager.create_data_directory()
 
-        # save the explanation
-        if self._explanation:
-            save_explanation(self._explanation,
-                             data_directory / ManagerNames.EXPLAINER)
+            # save the explanation
+            if self._explanation:
+                save_explanation(self._explanation,
+                                 data_directory / ManagerNames.EXPLAINER)
 
-        meta = {IS_RUN: self._is_run,
-                IS_ADDED: self._is_added}
-        with open(data_directory / META_JSON, 'w') as file:
-            json.dump(meta, file)
+            meta = {IS_RUN: self._is_run,
+                    IS_ADDED: self._is_added}
+            with open(data_directory / META_JSON, 'w') as file:
+                json.dump(meta, file)
 
     @staticmethod
     def _load(path, rai_insights):
@@ -337,22 +339,27 @@ class ExplainerManager(BaseManager):
         inst = ExplainerManager.__new__(ExplainerManager)
 
         all_cf_dirs = DirectoryManager.list_sub_directories(path)
-        directory_manager = DirectoryManager(
-            parent_directory_path=path,
-            sub_directory_name=all_cf_dirs[0])
-        data_directory = directory_manager.get_data_directory()
+        if len(all_cf_dirs) != 0:
+            directory_manager = DirectoryManager(
+                parent_directory_path=path,
+                sub_directory_name=all_cf_dirs[0])
+            data_directory = directory_manager.get_data_directory()
 
-        with open(data_directory / META_JSON, 'r') as meta_file:
-            meta = meta_file.read()
-        meta = json.loads(meta)
-        inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
-        inst.__dict__['_' + IS_ADDED] = meta[IS_ADDED]
+            with open(data_directory / META_JSON, 'r') as meta_file:
+                meta = meta_file.read()
+            meta = json.loads(meta)
+            inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
+            inst.__dict__['_' + IS_ADDED] = meta[IS_ADDED]
 
-        inst.__dict__[EXPLANATION] = None
-        explanation_path = data_directory / ManagerNames.EXPLAINER
-        if explanation_path.exists():
-            explanation = load_explanation(explanation_path)
-            inst.__dict__[EXPLANATION] = explanation
+            inst.__dict__[EXPLANATION] = None
+            explanation_path = data_directory / ManagerNames.EXPLAINER
+            if explanation_path.exists():
+                explanation = load_explanation(explanation_path)
+                inst.__dict__[EXPLANATION] = explanation
+        else:
+            inst.__dict__['_' + IS_RUN] = False
+            inst.__dict__['_' + IS_ADDED] = False
+            inst.__dict__[EXPLANATION] = None
 
         inst.__dict__['_' + MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes

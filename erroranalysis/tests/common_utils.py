@@ -9,8 +9,8 @@ from lightgbm import LGBMClassifier
 from pandas import read_csv
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
-from sklearn.datasets import (load_boston, load_breast_cancer, load_iris,
-                              load_wine, make_classification)
+from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
+                              load_iris, load_wine, make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
@@ -133,8 +133,8 @@ def create_cancer_data():
     return X_train, X_test, y_train, y_test, feature_names, classes
 
 
-def create_binary_classification_dataset():
-    X, y = make_classification(random_state=777)
+def create_binary_classification_dataset(n_samples=100):
+    X, y = make_classification(n_samples=n_samples, random_state=777)
 
     # Split data into train and test
     X_train, X_test, y_train, y_test = train_test_split(X,
@@ -146,6 +146,13 @@ def create_binary_classification_dataset():
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
     return X_train, y_train, X_test, y_test, classes
+
+
+def replicate_dataset(X, y, replications=16):
+    for _ in range(replications):
+        X = pd.concat([X, X], ignore_index=True)
+        y = np.concatenate([y, y])
+    return X, y
 
 
 def create_simple_titanic_data():
@@ -167,14 +174,15 @@ def create_simple_titanic_data():
     return X_train, X_test, y_train, y_test, num_features, cat_features
 
 
-def create_boston_data(test_size=0.2):
-    # Import Boston housing dataset
-    boston = load_boston()
+def create_housing_data(test_size=0.2):
+    # Import California housing dataset
+    housing = fetch_california_housing()
     # Split data into train and test
-    X_train, X_test, y_train, y_test = train_test_split(
-        boston.data, boston.target,
-        test_size=test_size, random_state=7)
-    return X_train, X_test, y_train, y_test, boston.feature_names
+    x_train, x_test, y_train, y_test = train_test_split(housing.data,
+                                                        housing.target,
+                                                        test_size=test_size,
+                                                        random_state=7)
+    return x_train, x_test, y_train, y_test, housing.feature_names
 
 
 def create_models_classification(X_train, y_train):

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   IDataset,
   IDatasetSummary,
@@ -15,7 +16,6 @@ import {
   HelpMessageDict
 } from "@responsible-ai/interpret";
 import { Language } from "@responsible-ai/localization";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 interface IAppProps {

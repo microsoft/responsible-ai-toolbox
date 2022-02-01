@@ -77,8 +77,10 @@ class ModelAnalysis(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
-        warnings.warn("ModelAnalysis in responsibleai package is deprecated."
-                      "Please use RAIInsights instead.")
+        warnings.warn(
+            "MODULE-DEPRECATION-WARNING: ModelAnalysis in responsibleai "
+            "package is deprecated. Please use RAIInsights instead.",
+            DeprecationWarning)
         self.rai_insights = RAIInsights(
             model,
             train,
@@ -89,12 +91,12 @@ class ModelAnalysis(object):
             classes=train_labels,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
-        self.model = model
-        self.train = train
-        self.test = test
-        self.target_column = target_column
-        self.task_type = task_type
-        self.categorical_features = categorical_features
+        self.model = self.rai_insights.model
+        self.train = self.rai_insights.train
+        self.test = self.rai_insights.test
+        self.target_column = self.rai_insights.target_column
+        self.task_type = self.rai_insights.task_type
+        self.categorical_features = self.rai_insights.categorical_features
 
     @property
     def causal(self) -> CausalManager:

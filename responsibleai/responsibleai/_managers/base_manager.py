@@ -8,5 +8,7 @@ import warnings
 from responsibleai.managers.base_manager import *  # noqa: F401, F403
 
 warnings.warn(
-    "The module responsibleai._managers.base_manager is deprecated. "
-    "Please use responsibleai.managers.base_manager instead.")
+    "MODULE-DEPRECATION-WARNING: The module "
+    "responsibleai._managers.base_manager is deprecated. "
+    "Please use responsibleai.managers.base_manager instead.",
+    DeprecationWarning)

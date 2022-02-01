@@ -3,4 +3,4 @@
 
 import { describeWhatIf } from "../../../describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
 
-describeWhatIf("DiabetesRegressionModelDebugging");
+describeWhatIf("DiabetesDecisionMaking");

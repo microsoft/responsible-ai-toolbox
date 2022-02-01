@@ -7,12 +7,7 @@ import {
   WeightVectorOption,
   ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
-import {
-  ErrorAnalysisOptions,
-  ITreeViewRendererState,
-  IMatrixAreaState,
-  IMatrixFilterState
-} from "@responsible-ai/error-analysis";
+import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { Dictionary } from "lodash";
 
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
@@ -36,9 +31,6 @@ export interface IModelAssessmentDashboardState
   mapShiftVisible: boolean;
   selectedWhatIfIndex: number | undefined;
   selectedFeatures: string[];
-  treeViewState: ITreeViewRendererState;
-  matrixAreaState: IMatrixAreaState;
-  matrixFilterState: IMatrixFilterState;
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];

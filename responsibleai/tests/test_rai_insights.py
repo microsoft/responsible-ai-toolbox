@@ -19,9 +19,10 @@ from responsibleai._tools.shared.state_directory_management import \
 from .causal_manager_validator import validate_causal
 from .common_utils import (create_adult_income_dataset,
                            create_binary_classification_dataset,
-                           create_boston_data, create_cancer_data,
+                           create_cancer_data,
                            create_complex_classification_pipeline,
-                           create_iris_data, create_models_classification,
+                           create_housing_data, create_iris_data,
+                           create_models_classification,
                            create_models_regression)
 from .counterfactual_manager_validator import validate_counterfactual
 from .error_analysis_validator import (setup_error_analysis,
@@ -148,9 +149,9 @@ class TestRAIInsights(object):
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.COUNTERFACTUAL,
                                               ManagerNames.EXPLAINER])
-    def test_rai_insights_boston(self, manager_type):
+    def test_rai_insights_housing(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data()
+            create_housing_data()
         X_train = pd.DataFrame(X_train, columns=feature_names)
         X_test = pd.DataFrame(X_test, columns=feature_names)
         models = create_models_regression(X_train, y_train)
@@ -158,14 +159,14 @@ class TestRAIInsights(object):
         X_test[LABELS] = y_test
 
         manager_args = {
-            ManagerParams.DESIRED_RANGE: [10, 20],
-            ManagerParams.TREATMENT_FEATURES: ['CHAS'],
+            ManagerParams.DESIRED_RANGE: [5, 10],
+            ManagerParams.TREATMENT_FEATURES: ['AveRooms'],
             ManagerParams.MAX_CAT_EXPANSION: 12,
             ManagerParams.FEATURE_IMPORTANCE: True
         }
 
         for model in models:
-            run_rai_insights(model, X_train, X_test, LABELS, ['CHAS'],
+            run_rai_insights(model, X_train, X_test, LABELS, [],
                              manager_type, manager_args)
 
 
@@ -338,7 +339,7 @@ def validate_rai_insights(
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
-    assert rai_insights.categorical_features == categorical_features
+    assert rai_insights.categorical_features == (categorical_features or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

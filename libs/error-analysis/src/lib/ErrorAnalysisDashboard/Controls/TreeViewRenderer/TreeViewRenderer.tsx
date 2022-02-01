@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  ICompositeFilter,
   IFilter,
   FilterMethods,
   CohortSource,
@@ -30,7 +29,6 @@ import { linkVertical as d3linkVertical } from "d3-shape";
 import {
   getTheme,
   IProcessedStyleSet,
-  ITheme,
   mergeStyles,
   MessageBar,
   MessageBarType,
@@ -41,50 +39,26 @@ import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
-import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import {
-  INodeDetail,
-  ITreeNode,
-  ITreeViewRendererState
-} from "../../TreeViewState";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import { TreeViewNode } from "./TreeViewNode";
+import { ITreeViewRendererProps } from "./TreeViewProps";
 import {
   ITreeViewRendererStyles,
   treeViewRendererStyles
 } from "./TreeViewRenderer.styles";
+import {
+  createInitialTreeViewState,
+  INodeDetail,
+  ITreeNode,
+  ITreeViewRendererState
+} from "./TreeViewState";
 
 // Importing this solely to set the selectedPanelId. This component is NOT a statefulContainer
 // import StatefulContainer from '../../ap/mixins/statefulContainer.js'
 
 const viewerHeight = 300;
 const viewerWidth = 800;
-
-export interface ITreeViewRendererProps {
-  disabledView: boolean;
-  theme?: ITheme;
-  messages?: HelpMessageDict;
-  features: string[];
-  selectedFeatures: string[];
-  getTreeNodes?: (
-    request: any[],
-    abortSignal: AbortSignal
-  ) => Promise<IErrorAnalysisTreeNode[]>;
-  tree?: IErrorAnalysisTreeNode[];
-  updateSelectedCohort: (
-    filters: IFilter[],
-    compositeFilters: ICompositeFilter[],
-    source: CohortSource,
-    cells: number,
-    cohortStats: MetricCohortStats | undefined
-  ) => void;
-  selectedCohort: ErrorCohort;
-  baseCohort: ErrorCohort;
-  state: ITreeViewRendererState;
-  setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
-  showCohortName: boolean;
-}
 
 export interface ISVGDatum {
   width: number;
@@ -102,12 +76,25 @@ export class TreeViewRenderer extends React.PureComponent<
   ITreeViewRendererState
 > {
   public static contextType = ModelAssessmentContext;
+  private static savedState: ITreeViewRendererState | undefined;
+  private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   public constructor(props: ITreeViewRendererProps) {
     super(props);
-    // Note: we take state from props in case
-    this.state = this.props.state;
+    if (
+      this.props.selectedCohort !== this.props.baseCohort &&
+      TreeViewRenderer.savedState
+    ) {
+      this.state = TreeViewRenderer.savedState;
+    } else {
+      this.state = createInitialTreeViewState(this.context.errorAnalysisData);
+    }
+    TreeViewRenderer.saveStateOnUnmount = true;
+  }
+
+  public static resetState(): void {
+    TreeViewRenderer.saveStateOnUnmount = false;
   }
 
   public componentDidMount(): void {
@@ -124,12 +111,12 @@ export class TreeViewRenderer extends React.PureComponent<
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
       this.props.baseCohort !== prevProps.baseCohort ||
-      this.props.state !== prevProps.state ||
-      this.context.errorAnalysisData!.maxDepth !== this.state.maxDepth ||
-      this.context.errorAnalysisData!.numLeaves !== this.state.numLeaves ||
-      this.context.errorAnalysisData!.minChildSamples !==
-        this.state.minChildSamples ||
-      this.context.errorAnalysisData!.metric !== this.state.metric
+      (this.context.errorAnalysisData &&
+        (this.context.errorAnalysisData.maxDepth !== this.state.maxDepth ||
+          this.context.errorAnalysisData.numLeaves !== this.state.numLeaves ||
+          this.context.errorAnalysisData.minChildSamples !==
+            this.state.minChildSamples ||
+          this.context.errorAnalysisData.metric !== this.state.metric))
     ) {
       this.fetchTreeNodes();
     }
@@ -137,7 +124,11 @@ export class TreeViewRenderer extends React.PureComponent<
 
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize);
-    this.props.setTreeViewState(this.state);
+    if (TreeViewRenderer.saveStateOnUnmount) {
+      TreeViewRenderer.savedState = this.state;
+    } else {
+      TreeViewRenderer.savedState = undefined;
+    }
   }
 
   public render(): React.ReactNode {
@@ -681,10 +672,10 @@ export class TreeViewRenderer extends React.PureComponent<
     }
     if (!this.props.getTreeNodes) {
       if (this.props.tree) {
+        this.reloadData(this.props.tree);
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
         this.onResize();
         this.forceUpdate();
-        this.reloadData(this.props.tree);
       }
       return;
     }
@@ -711,9 +702,9 @@ export class TreeViewRenderer extends React.PureComponent<
         new AbortController().signal
       )
       .then((result) => {
+        this.reloadData(result);
         this.onResize();
         this.forceUpdate();
-        this.reloadData(result);
       });
   }
 }

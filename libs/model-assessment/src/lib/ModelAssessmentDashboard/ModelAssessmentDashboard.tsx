@@ -15,15 +15,12 @@ import {
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
-  createInitialMatrixAreaState,
-  createInitialMatrixFilterState,
-  createInitialTreeViewState,
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
-  IMatrixAreaState,
-  IMatrixFilterState,
-  ITreeViewRendererState,
-  MapShift
+  MapShift,
+  MatrixArea,
+  MatrixFilter,
+  TreeViewRenderer
 } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -168,39 +165,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           errorAnalysisOption={this.state.errorAnalysisOption}
                           selectedCohort={this.state.selectedCohort}
                           baseCohort={this.state.baseCohort}
-                          treeViewState={this.state.treeViewState}
-                          setTreeViewState={(
-                            treeViewState: ITreeViewRendererState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ treeViewState });
-                            }
-                          }}
-                          matrixAreaState={this.state.matrixAreaState}
-                          matrixFilterState={this.state.matrixFilterState}
-                          setMatrixAreaState={(
-                            matrixAreaState: IMatrixAreaState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ matrixAreaState });
-                            }
-                          }}
-                          setMatrixFilterState={(
-                            matrixFilterState: IMatrixFilterState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ matrixFilterState });
-                            }
-                          }}
                           selectFeatures={(features: string[]): void =>
                             this.setState({ selectedFeatures: features })
                           }
@@ -306,13 +270,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 });
               }}
               onShift={(): void => {
+                // reset all states on shift
+                MatrixFilter.resetState();
+                MatrixArea.resetState();
+                TreeViewRenderer.resetState();
                 this.setState({
                   errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
                   mapShiftVisible: false,
-                  matrixAreaState: createInitialMatrixAreaState(),
-                  matrixFilterState: createInitialMatrixFilterState(),
-                  selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  selectedCohort: this.state.baseCohort
                 });
               }}
             />
