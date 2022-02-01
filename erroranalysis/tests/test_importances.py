@@ -4,7 +4,7 @@
 import time
 
 from common_utils import (create_binary_classification_dataset,
-                          create_boston_data, create_cancer_data,
+                          create_cancer_data, create_housing_data,
                           create_iris_data, create_models_classification,
                           create_models_regression, create_simple_titanic_data,
                           create_sklearn_random_forest_regressor,
@@ -59,9 +59,9 @@ class TestImportances(object):
         run_error_analyzer(clf, X_test, y_test, feature_names,
                            categorical_features)
 
-    def test_importances_boston(self):
+    def test_importances_housing(self):
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data()
+            create_housing_data()
         models = create_models_regression(X_train, y_train)
 
         for model in models:
