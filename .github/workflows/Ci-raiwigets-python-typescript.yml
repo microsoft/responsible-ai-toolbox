@@ -76,6 +76,7 @@ jobs:
           pip install -v .
         working-directory: ${{ matrix.packageDirectory }}
 
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
       - name: Run widget tests
         with:
           exclude: macos-latest
