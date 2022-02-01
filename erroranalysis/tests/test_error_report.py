@@ -6,8 +6,8 @@ import uuid
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_boston_data, create_cancer_data,
-                          create_dataframe, create_iris_data,
+from common_utils import (create_cancer_data, create_dataframe,
+                          create_housing_data, create_iris_data,
                           create_models_classification,
                           create_models_regression)
 
@@ -41,9 +41,9 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
-    def test_error_report_boston(self):
+    def test_error_report_housing(self):
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data()
+            create_housing_data()
         models = create_models_regression(X_train, y_train)
 
         for model in models:
@@ -51,9 +51,9 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
-    def test_error_report_boston_pandas(self):
+    def test_error_report_housing_pandas(self):
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data()
+            create_housing_data()
         X_train = create_dataframe(X_train, feature_names)
         X_test = create_dataframe(X_test, feature_names)
         models = create_models_regression(X_train, y_train)
