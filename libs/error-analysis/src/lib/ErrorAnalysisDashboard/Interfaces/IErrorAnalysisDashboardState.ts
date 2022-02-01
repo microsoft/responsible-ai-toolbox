@@ -16,7 +16,6 @@ import {
   ErrorAnalysisOptions,
   PredictionTabKeys
 } from "../ErrorAnalysisEnums";
-import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
 
 export interface IErrorAnalysisDashboardState
   extends ICohortBasedComponentState {
@@ -48,8 +47,6 @@ export interface IErrorAnalysisDashboardState
   editedCohort: ErrorCohort;
   selectedFeatures: string[];
   showMessageBar: boolean;
-  matrixAreaState: IMatrixAreaState;
-  matrixFilterState: IMatrixFilterState;
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
