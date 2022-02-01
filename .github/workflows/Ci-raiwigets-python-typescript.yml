@@ -78,8 +78,6 @@ jobs:
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
       - name: Run widget tests
-        with:
-          exclude: macos-latest
         run: yarn e2e-widget
 
       - name: Run tests
