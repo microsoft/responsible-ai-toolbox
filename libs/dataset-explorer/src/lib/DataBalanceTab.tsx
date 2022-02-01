@@ -108,6 +108,7 @@ export class DataBalanceTab extends React.Component<
     );
 
     // TODO: See if this spread syntax works with indexed type: [...featureBalanceMeasures.featureValues].map()
+    // [...featureBalanceMeasures.featureValues]
 
     const plotlyProps = generateHeatmapPlotlyProps(
       this.context.dataset.dataBalanceMeasures,
