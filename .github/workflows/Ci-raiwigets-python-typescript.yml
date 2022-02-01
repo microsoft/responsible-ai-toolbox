@@ -77,6 +77,8 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run widget tests
+        with:
+          exclude: macos-latest
         run: yarn e2e-widget
 
       - name: Run tests
