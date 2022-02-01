@@ -21,7 +21,11 @@ def setup_explainer(rai_insights, add_explainer=True):
         else:
             rai_insights.explainer.add()
         # Validate calling add multiple times prints a warning
-        with pytest.warns(UserWarning):
+        with pytest.warns(
+            UserWarning,
+            match="DUPLICATE-EXPLAINER-CONFIG: Ignoring. "
+                  "Explanation has already been added, "
+                  "currently limited to one explainer type."):
             rai_insights.explainer.add()
     rai_insights.explainer.compute()
 

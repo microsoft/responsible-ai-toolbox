@@ -38,6 +38,7 @@ export interface IModelStatisticsData {
   defaultXAxisPanelValue?: string;
   yAxisNewPanelValue?: string;
   yAxisNewValue?: string;
+  yAxisNumberOfBins?: string;
   yAxisPanelOptions?: string[];
   newYAxisChartValues?: { [key: string]: string[] };
   xAxisPanelOptions?: string[];
@@ -75,6 +76,8 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
+  hasFeatureImportanceComponent?: boolean;
+  hasCorrectIncorrectDatapoints?: boolean;
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
   noLocalImportance?: boolean;
@@ -86,6 +89,7 @@ export interface IFeatureImportanceData {
   topFeaturesText?: string;
   topFeaturesCurrentValue?: string;
   datapoint?: number;
+  newFeatureDropdownValue?: string;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
@@ -109,13 +113,19 @@ export interface IWhatIfCounterfactualsData {
   columnHeaderBeforeSort?: string;
   columnHeaderAfterSort?: string;
   searchBarQuery?: string;
-  WhatIfNameLabel?: string;
-  WhatIfNameLabelUpdated?: string;
-  CreateYourOwnCounterfactualInputFieldUpdated?: string;
+  whatIfNameLabel?: string;
+  whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualInputFieldUpdated?: string;
+  yAxisValue?: string;
+  yAxisNewValue?: string;
+  checkForClassField?: boolean;
+  classValue?: string;
+  newClassValue?: string;
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelAssessment" = "responsibleaidashboard-census-classification-model-debugging.py",
-  "RegressionDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
-  "RegressionModelAssessment" = "responsibleaidashboard-diabetes-regression-model-debugging.py"
+  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
+  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py"
 }

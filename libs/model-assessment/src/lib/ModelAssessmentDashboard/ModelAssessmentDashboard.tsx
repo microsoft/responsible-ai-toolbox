@@ -15,17 +15,13 @@ import {
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import {
-  createInitialMatrixAreaState,
-  createInitialMatrixFilterState,
-  createInitialTreeViewState,
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
-  IMatrixAreaState,
-  IMatrixFilterState,
-  ITreeViewRendererState,
-  MapShift
+  MapShift,
+  MatrixArea,
+  MatrixFilter,
+  TreeViewRenderer
 } from "@responsible-ai/error-analysis";
-import { ModelPerformanceTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -44,6 +40,7 @@ import { getAvailableTabs } from "./AvailableTabs";
 import { buildInitialModelAssessmentContext } from "./Context/buildModelAssessmentContext";
 import { FeatureImportancesTab } from "./Controls/FeatureImportances";
 import { MainMenu } from "./Controls/MainMenu";
+import { ModelOverview } from "./Controls/ModelOverview";
 import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.styles";
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
@@ -168,39 +165,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           errorAnalysisOption={this.state.errorAnalysisOption}
                           selectedCohort={this.state.selectedCohort}
                           baseCohort={this.state.baseCohort}
-                          treeViewState={this.state.treeViewState}
-                          setTreeViewState={(
-                            treeViewState: ITreeViewRendererState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ treeViewState });
-                            }
-                          }}
-                          matrixAreaState={this.state.matrixAreaState}
-                          matrixFilterState={this.state.matrixFilterState}
-                          setMatrixAreaState={(
-                            matrixAreaState: IMatrixAreaState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ matrixAreaState });
-                            }
-                          }}
-                          setMatrixFilterState={(
-                            matrixFilterState: IMatrixFilterState
-                          ): void => {
-                            if (
-                              this.state.selectedCohort !==
-                              this.state.baseCohort
-                            ) {
-                              this.setState({ matrixFilterState });
-                            }
-                          }}
                           selectFeatures={(features: string[]): void =>
                             this.setState({ selectedFeatures: features })
                           }
@@ -215,23 +179,23 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                           selectedKey={this.state.errorAnalysisOption}
                         />
                       )}
-                    {t.key === GlobalTabKeys.ModelStatisticsTab && (
+                    {t.key === GlobalTabKeys.ModelOverviewTab && (
                       <>
                         <div className={classNames.sectionHeader}>
-                          <Text variant={"xxLarge"}>
+                          <Text variant={"xxLarge"} id="modelStatisticsHeader">
                             {
                               localization.ModelAssessment.ComponentNames
-                                .ModelStatistics
+                                .ModelOverview
                             }
                           </Text>
                         </div>
-                        <ModelPerformanceTab />
+                        <ModelOverview />
                       </>
                     )}
                     {t.key === GlobalTabKeys.DataExplorerTab && (
                       <>
                         <div className={classNames.sectionHeader}>
-                          <Text variant={"xxLarge"}>
+                          <Text variant={"xxLarge"} id="dataExplorerHeader">
                             {
                               localization.ModelAssessment.ComponentNames
                                 .DataExplorer
@@ -306,13 +270,14 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
                 });
               }}
               onShift={(): void => {
+                // reset all states on shift
+                MatrixFilter.resetState();
+                MatrixArea.resetState();
+                TreeViewRenderer.resetState();
                 this.setState({
                   errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
                   mapShiftVisible: false,
-                  matrixAreaState: createInitialMatrixAreaState(),
-                  matrixFilterState: createInitialMatrixFilterState(),
-                  selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  selectedCohort: this.state.baseCohort
                 });
               }}
             />

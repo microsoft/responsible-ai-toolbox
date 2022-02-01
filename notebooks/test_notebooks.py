@@ -195,9 +195,9 @@ def test_erroranalysis_dashboard_superconductor():
 
 
 @pytest.mark.notebooks
-def test_erroranalysis_dashboard_boston_housing():
+def test_erroranalysis_dashboard_housing():
     nb_path = ERROR_ANALYSIS_DASHBOARD
-    nb_name = "erroranalysis-dashboard-regression-boston-housing"
+    nb_name = "erroranalysis-dashboard-regression-housing"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)
@@ -243,6 +243,15 @@ def test_responsibleaidashboard_housing_classification_model_debugging():
 def test_responsibleaidashboard_housing_decision_making():
     nb_path = RESPONSIBLEAIDASHBOARD
     nb_name = "responsibleaidashboard-housing-decision-making"
+
+    test_values = {}
+    assay_one_notebook(nb_path, nb_name, test_values)
+
+
+@pytest.mark.notebooks
+def test_responsibleaidashboard_multiclass_dnn_model_debugging():
+    nb_path = RESPONSIBLEAIDASHBOARD
+    nb_name = "responsibleaidashboard-multiclass-dnn-model-debugging"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)

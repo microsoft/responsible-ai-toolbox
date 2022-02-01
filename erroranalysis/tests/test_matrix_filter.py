@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 from common_utils import (create_adult_census_data,
                           create_binary_classification_dataset,
-                          create_boston_data, create_cancer_data,
+                          create_cancer_data, create_housing_data,
                           create_iris_data, create_kneighbors_classifier,
                           create_models_classification,
                           create_models_regression, create_simple_titanic_data,
@@ -246,8 +246,8 @@ class TestMatrixFilter(object):
                            categorical_features,
                            model_task=ModelTask.CLASSIFICATION)
 
-    def test_matrix_filter_boston(self):
-        X_train, X_test, y_train, y_test, feature_names = create_boston_data()
+    def test_matrix_filter_housing(self):
+        X_train, X_test, y_train, y_test, feature_names = create_housing_data()
 
         metrics = [Metrics.MEAN_SQUARED_ERROR,
                    Metrics.MEAN_ABSOLUTE_ERROR]
@@ -270,14 +270,14 @@ class TestMatrixFilter(object):
                                          matrix_features=[feature_names[3]],
                                          metric=metric)
 
-    def test_matrix_filter_boston_filters(self):
-        X_train, X_test, y_train, y_test, feature_names = create_boston_data()
+    def test_matrix_filter_housing_filters(self):
+        X_train, X_test, y_train, y_test, feature_names = create_housing_data()
 
-        filters = [{'arg': [0.675],
-                    'column': 'NOX',
+        filters = [{'arg': [600],
+                    'column': 'Population',
                     'method': 'less and equal'},
-                   {'arg': [7.141000000000001],
-                    'column': 'RM',
+                   {'arg': [6],
+                    'column': 'AveRooms',
                     'method': 'greater'}]
 
         model_task = ModelTask.REGRESSION
@@ -285,14 +285,14 @@ class TestMatrixFilter(object):
                                      y_test, feature_names,
                                      model_task, filters=filters)
 
-    def test_matrix_filter_boston_quantile_binning(self):
-        # Test quantile binning on CRIM feature in boston dataset,
+    def test_matrix_filter_housing_quantile_binning(self):
+        # Test quantile binning on CRIM feature in california housing dataset,
         # which errored out due to first category not fitting into bins
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data(test_size=0.5)
+            create_housing_data(test_size=0.5)
 
         model_task = ModelTask.REGRESSION
-        matrix_features = ['CRIM']
+        matrix_features = ['Population']
         run_error_analyzer_on_models(X_train, y_train, X_test,
                                      y_test, feature_names, model_task,
                                      matrix_features=matrix_features,

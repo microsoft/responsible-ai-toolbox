@@ -40,3 +40,15 @@ class CausalConfig:
         self.verbose = verbose
         self.random_state = random_state
         self.categorical_features = categorical_features
+
+    def get_config_as_dict(self):
+        """Returns the dictionary representation of configuration
+        in the CausalConfig.
+
+        The dictionary contains the different parameters required for
+        computing the causal effects.
+
+        :return: The dictionary representation of the CausalConfig.
+        :rtype: dict
+        """
+        return self.__dict__

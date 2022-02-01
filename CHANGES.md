@@ -24,6 +24,63 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.16.0
+
+- educational materials
+  - major readme refactoring changes + filename changes for public release of RAI Dashboard
+  - add missing doc for pred_y_dataset and min_child_samples
+  - add npm and yarn installation instructions
+- new features
+  - ## Counterfactual
+    - counterfactual list style updates: highlight counterfactual examples columns with different color, and bold size
+    - highlight first and last row of counterfactual list
+    - implement list method for counterfactual manager
+  - ## Error Analysis
+    - add scrollbar area around matrix cells when there are many categories
+    - add warning message for downsampled explanation data in ErrorAnalysis
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - add e2e UI tests for Dataset Explorer - whisker plot
+    - add e2e UI tests for Dataset Explorer - scatter plot
+    - add e2e UI tests for Dataset Explorer - flyout
+    - add e2e UI tests for Dataset Explorer - cohort scenarios
+    - add e2e UI tests for Model Statistics - chart tests
+    - refactor binding this with arrow func
+    - add error message for duplicate cohort name
+    - handle context cohort delete cases for data explorer
+  - ## RAIInsights
+    - throw error on mutating predict function in RAIInsights
+    - use spilt orientation to save train and test dataframe to address duplicate indices condition in them
+    - add .json extension to dtypes files and add tests
+    - add predict and predict_proba outputs to RAIInsights save method
+    - refactor RAIInsights load function into smaller functions
+    - refactor classifier detection logic into common function
+    - fix issue with missing directories
+    - gracefully handle failure in loading model.pkl from disk
+    - remove unused test dependencies responsibleai
+    - add missing unit tests for \_convert_to_list()
+    - separate out save() and load() tests
+    - add more unit tests for serialize_json_safe()
+    - update responsibleai to interpret-community 0.23.0
+  - ## Counterfactual
+    - add e2e UI tests for what-if counterfactuals - creating counterfactuals
+  - ## Error Analysis
+    - fix coverage calculation for cell tooltips in heatmap for recall, precision and f1 score metrics
+    - fix handling numpy types in heatmap for categories
+  - ## Interpret
+    - improve state management for explainer manager
+    - test for save/load/save bug in Explanations
+- other
+  - fix top broken image link in tour notebook on github
+  - add isort to build pipelines
+  - fix SubBarChart flaky test
+  - update notebook tests for new notebooks
+  - add flake8-bugbear for better python code contructs
+  - add flake8-breakpoint to avoid code checkin with active breakpoints
+  - remove csv files from source for cognitive services example notebooks
+  - add yarn e2e-watch shortcut
+  - replace existing user token with shared account token for releases
+
 ## v0.15.1
 
 - educational materials

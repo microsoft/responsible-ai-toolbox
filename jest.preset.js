@@ -9,7 +9,7 @@ module.exports = {
   moduleFileExtensions: ["ts", "js", "html"],
   collectCoverage: true,
   collectCoverageFrom: ["<rootDir>/src/**/*.ts?(x)"],
-  coverageReporters: ["html", "cobertura", "lcov", "text"],
+  coverageReporters: ["html", "cobertura", "lcov", "text", "json"],
   setupFilesAfterEnv: ["<rootDir>/../../setupTest.ts"],
   moduleNameMapper: {
     "^@uifabric/foundation/lib/(.*)$": "@uifabric/foundation/lib-commonjs/$1",

@@ -72,7 +72,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ padding: "16px 24px" }}
           className={classNames.errorAnalysis}
         >
-          <Text variant={"xxLarge"}>
+          <Text variant={"xxLarge"} id="errorAnalysisHeader">
             {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
           </Text>
           <Stack horizontal>
@@ -118,12 +118,6 @@ export class ErrorAnalysisViewTab extends React.Component<
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
-            treeViewState={this.props.treeViewState}
-            setTreeViewState={this.props.setTreeViewState}
-            matrixFilterState={this.props.matrixFilterState}
-            matrixAreaState={this.props.matrixAreaState}
-            setMatrixAreaState={this.props.setMatrixAreaState}
-            setMatrixFilterState={this.props.setMatrixFilterState}
             showCohortName={this.props.showCohortName}
           />
           <FeatureList
