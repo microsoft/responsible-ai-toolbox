@@ -19,18 +19,6 @@ export function describeAggregateCausalAffects(
     };
     beforeEach(() => {
       props.chart = new ScatterChartErrorBars("#causalAggregateView");
-      cy.task(
-        "log",
-        `props.chart in beforeEach: ${
-          new ScatterChartErrorBars("#causalAggregateView").Elements[0].bottom
-        }, ${
-          new ScatterChartErrorBars("#causalAggregateView").Elements[0].top
-        }, ${
-          new ScatterChartErrorBars("#causalAggregateView").Elements[0].right
-        }, ${
-          new ScatterChartErrorBars("#causalAggregateView").Elements[0].left
-        }`
-      );
     });
     it("should have causal analysis for decision making notebooks", () => {
       cy.get(Locators.CausalAnalysisHeader).should("exist");
