@@ -6,8 +6,14 @@ from typing import Any, Dict, List, Union
 
 
 class TaskType(str, Enum):
-    CLASSIFICATION = 'classification'
-    REGRESSION = 'regression'
+    CLASSIFICATION = "classification"
+    REGRESSION = "regression"
+
+
+class DataBalanceMeasures:
+    aggregateBalanceMeasures: Dict[str, Any]
+    distributionBalanceMeasures: Dict[str, Any]
+    featureBalanceMeasure: Dict[str, Any]
 
 
 class Dataset:
@@ -20,6 +26,8 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
+    name: str
+    data_balance_measures: DataBalanceMeasures
 
 
 class BoundedCoordinates:
@@ -49,9 +57,9 @@ class PrecomputedExplanations:
 
 
 class ModelClass(str, Enum):
-    TREE = 'Tree'
-    EBM = 'EBM'
-    BLACKBOX = 'blackbox'
+    TREE = "Tree"
+    EBM = "EBM"
+    BLACKBOX = "blackbox"
 
 
 class ModelExplanationData:
@@ -95,16 +103,16 @@ class CausalPolicyTreeLeaf:
 
 
 class ComparisonTypes:
-    LT = 'lt'  # less than
-    LTE = 'lte'  # less than or equal to
-    GT = 'gt'  # greater than
-    GTE = 'gte'  # greater than or equal to
-    EQ = 'eq'  # equal to
-    NE = 'ne'  # not equal to
-    IN = 'in'  # in the set
-    NIN = 'nin'  # not in the set
-    RG = 'rg'  # in the range
-    NRG = 'nrg'  # not in the range
+    LT = "lt"  # less than
+    LTE = "lte"  # less than or equal to
+    GT = "gt"  # greater than
+    GTE = "gte"  # greater than or equal to
+    EQ = "eq"  # equal to
+    NE = "ne"  # not equal to
+    IN = "in"  # in the set
+    NIN = "nin"  # not in the set
+    RG = "rg"  # in the range
+    NRG = "nrg"  # not in the range
 
 
 class CausalPolicyTreeInternal:
@@ -112,8 +120,8 @@ class CausalPolicyTreeInternal:
     feature: str
     right_comparison: str
     comparison_value: Union[str, float, int, List[Union[str, float, int]]]
-    left: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
-    right: Union['CausalPolicyTreeInternal', CausalPolicyTreeLeaf]
+    left: Union["CausalPolicyTreeInternal", CausalPolicyTreeLeaf]
+    right: Union["CausalPolicyTreeInternal", CausalPolicyTreeLeaf]
 
 
 class CausalPolicy:

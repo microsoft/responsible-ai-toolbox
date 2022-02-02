@@ -7,20 +7,18 @@ import {
   defaultModelAssessmentContext,
   FabricStyles,
   MissingParametersPlaceholder,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  measureVarNames,
+  measureRanges,
+  getFeatureBalanceMeasures,
+  getDistributionBalanceMeasures,
+  IDataBalanceMeasures
 } from "@responsible-ai/core-ui";
 import {
   AccessibleChart,
   IData,
   IPlotlyProperty
 } from "@responsible-ai/mlchartlib";
-import {
-  measureVarNames,
-  measureRanges,
-  getFeatureBalanceMeasures,
-  getDistributionBalanceMeasures,
-  IDataBalanceMeasures
-} from "libs/core-ui/src/lib/Interfaces/DataBalanceInterfaces";
 import _ from "lodash";
 import {
   Dropdown,
@@ -62,8 +60,8 @@ export class DataBalanceTab extends React.Component<
     preState: IDataBalanceTabState
   ): void {
     const featuresLength =
-      this.context.dataset.dataBalanceMeasures?.featureBalanceMeasures.features
-        .length;
+      this.context.dataset.data_balance_measures?.featureBalanceMeasures
+        .features.length;
     if (
       featuresLength !== undefined &&
       preState.selectedFeatureIndex >= featuresLength
@@ -79,7 +77,7 @@ export class DataBalanceTab extends React.Component<
   public render(): React.ReactNode {
     const classNames = dataBalanceTabStyles();
 
-    if (!this.context.dataset.dataBalanceMeasures) {
+    if (!this.context.dataset.data_balance_measures) {
       return (
         <MissingParametersPlaceholder>
           {
@@ -89,8 +87,9 @@ export class DataBalanceTab extends React.Component<
       );
     }
 
-    const featureBalanceMeasures =
-      this.context.dataset.dataBalanceMeasures.featureBalanceMeasures;
+    const dataBalanceMeasures = this.context.dataset.data_balance_measures;
+
+    const featureBalanceMeasures = dataBalanceMeasures.featureBalanceMeasures;
 
     const selectedFeatureIndex =
       this.state.selectedFeatureIndex >= featureBalanceMeasures.features.length
@@ -114,13 +113,13 @@ export class DataBalanceTab extends React.Component<
     // [...featureBalanceMeasures.featureValues]
 
     const heatmapPlotlyProps = generateHeatmapPlotlyProps(
-      this.context.dataset.dataBalanceMeasures,
+      dataBalanceMeasures,
       featureOptions[selectedFeatureIndex].text,
       measureOptions[selectedMeasureIndex].text,
       this.context.dataset.name
     );
     const barPlotlyProps = generateBarPlotlyProps(
-      this.context.dataset.dataBalanceMeasures,
+      dataBalanceMeasures,
       featureOptions.map((o) => o.text),
       this.context.dataset.name
     );
@@ -358,11 +357,7 @@ function generateHeatmapPlotlyProps(
 
 const baseBarPlotlyProperties: IPlotlyProperty = {
   config: { displaylogo: false, displayModeBar: false, responsive: true },
-  data: [
-    {
-      colorscale: "Viridis" // Viridis is a colorblind-friendly color scale according to https://sjmgarnier.github.io/viridis/index.html
-    }
-  ],
+  data: [],
   layout: {
     autosize: true,
     dragmode: false,
@@ -374,7 +369,7 @@ const baseBarPlotlyProperties: IPlotlyProperty = {
       b: 50,
       t: 50
     },
-    showlegend: false,
+    showlegend: true,
     title: {
       font: { size: 16 },
       pad: { b: 10, t: 10 },

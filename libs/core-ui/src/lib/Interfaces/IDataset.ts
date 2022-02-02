@@ -14,7 +14,7 @@ export interface IDataset {
   class_names?: string[];
   target_column?: string;
   name?: string;
-  dataBalanceMeasures?: IDataBalanceMeasures;
+  data_balance_measures?: IDataBalanceMeasures;
 }
 
 // TODO Remove DatasetSummary when possible

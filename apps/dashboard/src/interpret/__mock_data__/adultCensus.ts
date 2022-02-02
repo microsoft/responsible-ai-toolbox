@@ -15,12 +15,12 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
     "native-country"
   ],
   class_names: ["<=50K", ">50K"],
-  dataBalanceMeasures: {
+  data_balance_measures: {
     aggregateBalanceMeasures: {
       measures: {
-        atkinsonIndex: 0.7779093876726265,
-        theilLIndex: 1.5046698167491577,
-        theilTIndex: 1.120823106721189
+        atkinson_index: 0.7779093876726265,
+        theil_l_index: 1.5046698167491577,
+        theil_t_ndex: 1.120823106721189
       }
     },
     distributionBalanceMeasures: {
