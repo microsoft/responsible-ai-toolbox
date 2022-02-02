@@ -27,7 +27,7 @@ class TestCohortFilter:
                 UserConfigValidationException,
                 match="Got unexpected type <class 'int'> for column. "
                       "Expected string type."):
-            CohortFilter(method=CohortFilterMethods.GreaterThan,
+            CohortFilter(method=CohortFilterMethods.METHOD_GREATER,
                          arg=[], column=1)
 
     def test_cohort_filter_validate_arg(self):
@@ -35,13 +35,13 @@ class TestCohortFilter:
                 UserConfigValidationException,
                 match="Got unexpected type <class 'int'> for arg. "
                       "Expected list type."):
-            CohortFilter(method=CohortFilterMethods.GreaterThan,
+            CohortFilter(method=CohortFilterMethods.METHOD_GREATER,
                          arg=1, column="age")
 
         with pytest.raises(
                 UserConfigValidationException,
                 match="Empty list supplied for arg."):
-            CohortFilter(method=CohortFilterMethods.GreaterThan,
+            CohortFilter(method=CohortFilterMethods.METHOD_GREATER,
                          arg=[], column="age")
 
     @pytest.mark.parametrize('method',
@@ -72,7 +72,7 @@ class TestCohortFilter:
                 UserConfigValidationException,
                 match="Expected two entries in arg for "
                       "cohort method in the range of."):
-            CohortFilter(method=CohortFilterMethods.InTheRangeOf,
+            CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=[1], column="age")
 
     def test_cohort_filter_validate_in_range_methods_type_arg_entries(
@@ -81,14 +81,14 @@ class TestCohortFilter:
                 UserConfigValidationException,
                 match="Expected int or float type for arg "
                       "with cohort method in the range of."):
-            CohortFilter(method=CohortFilterMethods.InTheRangeOf,
+            CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=[1, 'val'], column="age")
 
         with pytest.raises(
                 UserConfigValidationException,
                 match="Expected int or float type for arg "
                       "with cohort method in the range of."):
-            CohortFilter(method=CohortFilterMethods.InTheRangeOf,
+            CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=['val', 2], column="age")
 
     @pytest.mark.parametrize('method',
@@ -105,18 +105,18 @@ class TestCohortFilter:
 
     def test_cohort_filter_serialization_in_range_method(self):
         cohort_filter_1 = \
-            CohortFilter(method=CohortFilterMethods.InTheRangeOf,
+            CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=[65.0, 70.0], column='age')
         json_str = json.dumps(cohort_filter_1,
                               default=cohort_filter_json_converter)
-        assert CohortFilterMethods.InTheRangeOf in json_str
+        assert CohortFilterMethods.METHOD_RANGE in json_str
         assert '65.0' in json_str
         assert '70.0' in json_str
         assert 'age' in json_str
 
     @pytest.mark.parametrize('method',
-                             [CohortFilterMethods.Includes,
-                              CohortFilterMethods.Excludes])
+                             [CohortFilterMethods.METHOD_INCLUDES,
+                              CohortFilterMethods.METHOD_EXCLUDES])
     def test_cohort_filter_serialization_include_exclude_methods(self, method):
         cohort_filter_str = \
             CohortFilter(method=method,
@@ -160,7 +160,7 @@ class TestCohort:
 
     def test_cohort_serialization_in_range_method(self):
         cohort_filter_1 = \
-            CohortFilter(method=CohortFilterMethods.InTheRangeOf,
+            CohortFilter(method=CohortFilterMethods.METHOD_RANGE,
                          arg=[65.0, 70.0], column='age')
         cohort_1 = Cohort(name="Cohort New")
         cohort_1.add_cohort_filter(cohort_filter_1)
@@ -168,14 +168,14 @@ class TestCohort:
                               default=cohort_filter_json_converter)
 
         assert 'Cohort New' in json_str
-        assert CohortFilterMethods.InTheRangeOf in json_str
+        assert CohortFilterMethods.METHOD_RANGE in json_str
         assert '65.0' in json_str
         assert '70.0' in json_str
         assert 'age' in json_str
 
     @pytest.mark.parametrize('method',
-                             [CohortFilterMethods.Includes,
-                              CohortFilterMethods.Excludes])
+                             [CohortFilterMethods.METHOD_INCLUDES,
+                              CohortFilterMethods.METHOD_EXCLUDES])
     def test_cohort_serialization_include_exclude_methods(self, method):
         cohort_filter_str = \
             CohortFilter(method=method,
@@ -207,7 +207,7 @@ class TestCohort:
 class TestCohortList:
     def test_cohort_list_serialization(self):
         cohort_filter_1 = \
-            CohortFilter(method=CohortFilterMethods.LessThan,
+            CohortFilter(method=CohortFilterMethods.METHOD_LESS,
                          arg=[65], column='age')
         cohort_1 = Cohort(name="Cohort New")
         cohort_1.add_cohort_filter(cohort_filter_1)
@@ -221,7 +221,7 @@ class TestCohortList:
 
         assert 'Cohort Old' in json_str
         assert 'Cohort New' in json_str
-        assert CohortFilterMethods.LessThan in json_str
+        assert CohortFilterMethods.METHOD_LESS in json_str
         assert '[65]' in json_str
         assert 'age' in json_str
 
