@@ -16,6 +16,7 @@ import {
   measureVarNames,
   measureRanges,
   getFeatureBalanceMeasures,
+  getDistributionBalanceMeasures,
   IDataBalanceMeasures
 } from "libs/core-ui/src/lib/Interfaces/DataBalanceInterfaces";
 import _ from "lodash";
@@ -116,6 +117,9 @@ export class DataBalanceTab extends React.Component<
       measureOptions[selectedMeasureIndex].text,
       this.context.dataset.name
     );
+    const barPlotlyProps = generateBarPlotlyProps(
+      this.context.dataset.dataBalanceMeasures
+    );
 
     return (
       <div className={classNames.page}>
@@ -177,6 +181,8 @@ export class DataBalanceTab extends React.Component<
         </div>
         <br />
         <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
+        <h1>Distribution Balance Measures</h1>
+        <AccessibleChart plotlyProps={barPlotlyProps} theme={getTheme()} />
       </div>
     );
   }
@@ -337,6 +343,44 @@ function generateHeatmapPlotlyProps(
 
   plotlyProps.data[0].z = data;
   layout.annotations = annotations;
+
+  return plotlyProps;
+}
+
+function generateBarPlotlyProps(
+  dataBalanceMeasures: IDataBalanceMeasures
+): IPlotlyProperty {
+  const plotlyProps = _.cloneDeep(basePlotlyProperties);
+  plotlyProps.data[0].type = "bar";
+
+  plotlyProps.data.pop();
+  // Object.keys(raceDistMeasures).forEach((key) => {
+  //   let value1 = raceDistMeasures[key];
+  //   let value2 = sexDistMeasures[key];
+  //   if (value1 < 1) {
+  //     plotlyProps.data.push({
+  //       x: ["race", "sex"],
+  //       y: [value1, value2],
+  //       name: key,
+  //       type: "bar"
+  //     });
+  //   }
+  // });
+
+  const colsOfInterest = ["race", "sex"];
+  colsOfInterest.forEach((colName: string) => {
+    let distMeasures = getDistributionBalanceMeasures(
+      dataBalanceMeasures.distributionBalanceMeasures?.measures ?? {},
+      colName
+    );
+    delete distMeasures.chi_sq_stat;
+    plotlyProps.data.push({
+      x: Object.keys(distMeasures),
+      y: Object.values(distMeasures),
+      name: colName,
+      type: "bar"
+    });
+  });
 
   return plotlyProps;
 }
