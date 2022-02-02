@@ -26,22 +26,22 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
     distributionBalanceMeasures: {
       measures: {
         race: {
-          kl_divergence: 1.055793082185159,
-          js_dist: 0.5103995242157859,
-          inf_norm_dist: 0.6542735173981142,
-          total_variation_dist: 0.6542735173981142,
-          wasserstein_dist: 0.2617094069592457,
+          chi_sq_p_value: 0,
           chi_sq_stat: 87941.88919259237,
-          chi_sq_p_value: 0
+          inf_norm_dist: 0.6542735173981142,
+          js_dist: 0.5103995242157859,
+          kl_divergence: 1.055793082185159,
+          total_variation_dist: 0.6542735173981142,
+          wasserstein_dist: 0.2617094069592457
         },
         sex: {
-          kl_divergence: 0.058407312537739675,
-          js_dist: 0.12173456308341161,
-          inf_norm_dist: 0.16920549123184175,
-          total_variation_dist: 0.16920549123184173,
-          wasserstein_dist: 0.16920549123184173,
+          chi_sq_p_value: 0,
           chi_sq_stat: 3728.950615767329,
-          chi_sq_p_value: 0
+          inf_norm_dist: 0.16920549123184175,
+          js_dist: 0.12173456308341161,
+          kl_divergence: 0.058407312537739675,
+          total_variation_dist: 0.16920549123184173,
+          wasserstein_dist: 0.16920549123184173
         }
       }
     },

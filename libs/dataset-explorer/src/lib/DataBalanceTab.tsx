@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/*eslint max-lines: ["error", {"max": 500}]*/
+
 import {
   defaultModelAssessmentContext,
   FabricStyles,
@@ -111,14 +113,16 @@ export class DataBalanceTab extends React.Component<
     // TODO: See if this spread syntax works with indexed type: [...featureBalanceMeasures.featureValues].map()
     // [...featureBalanceMeasures.featureValues]
 
-    const plotlyProps = generateHeatmapPlotlyProps(
+    const heatmapPlotlyProps = generateHeatmapPlotlyProps(
       this.context.dataset.dataBalanceMeasures,
       featureOptions[selectedFeatureIndex].text,
       measureOptions[selectedMeasureIndex].text,
       this.context.dataset.name
     );
     const barPlotlyProps = generateBarPlotlyProps(
-      this.context.dataset.dataBalanceMeasures
+      this.context.dataset.dataBalanceMeasures,
+      featureOptions.map((o) => o.text),
+      this.context.dataset.name
     );
 
     return (
@@ -180,8 +184,13 @@ export class DataBalanceTab extends React.Component<
           )}
         </div>
         <br />
-        <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
-        <h1>Distribution Balance Measures</h1>
+        <AccessibleChart plotlyProps={heatmapPlotlyProps} theme={getTheme()} />
+        <br />
+        <Text variant="large" className={classNames.leftLabel}>
+          {
+            "Distribution Balance Measures" // TODO: Replace with localization
+          }
+        </Text>
         <AccessibleChart plotlyProps={barPlotlyProps} theme={getTheme()} />
       </div>
     );
@@ -347,38 +356,83 @@ function generateHeatmapPlotlyProps(
   return plotlyProps;
 }
 
+const baseBarPlotlyProperties: IPlotlyProperty = {
+  config: { displaylogo: false, displayModeBar: false, responsive: true },
+  data: [
+    {
+      colorscale: "Viridis" // Viridis is a colorblind-friendly color scale according to https://sjmgarnier.github.io/viridis/index.html
+    }
+  ],
+  layout: {
+    autosize: true,
+    dragmode: false,
+    font: {
+      size: 10
+    },
+    hovermode: "closest",
+    margin: {
+      b: 50,
+      t: 50
+    },
+    showlegend: false,
+    title: {
+      font: { size: 16 },
+      pad: { b: 10, t: 10 },
+      xanchor: "center",
+      yanchor: "top"
+    },
+    xaxis: {
+      color: FabricStyles.chartAxisColor,
+      mirror: true,
+      tickfont: {
+        family: FabricStyles.fontFamilies,
+        size: 11
+      },
+      title: "Distribution Measure",
+      zeroline: true
+    },
+    yaxis: {
+      automargin: true,
+      color: FabricStyles.chartAxisColor,
+      gridcolor: "#e5e5e5",
+      showgrid: true,
+      tickfont: {
+        family: "Roboto, Helvetica Neue, sans-serif",
+        size: 11
+      },
+      title: "Measure Value",
+      zeroline: true
+    }
+  }
+};
+
 function generateBarPlotlyProps(
-  dataBalanceMeasures: IDataBalanceMeasures
+  dataBalanceMeasures: IDataBalanceMeasures,
+  features: string[],
+  datasetName?: string
 ): IPlotlyProperty {
-  const plotlyProps = _.cloneDeep(basePlotlyProperties);
-  plotlyProps.data[0].type = "bar";
+  const plotlyProps = _.cloneDeep(baseBarPlotlyProperties);
 
-  plotlyProps.data.pop();
-  // Object.keys(raceDistMeasures).forEach((key) => {
-  //   let value1 = raceDistMeasures[key];
-  //   let value2 = sexDistMeasures[key];
-  //   if (value1 < 1) {
-  //     plotlyProps.data.push({
-  //       x: ["race", "sex"],
-  //       y: [value1, value2],
-  //       name: key,
-  //       type: "bar"
-  //     });
-  //   }
-  // });
+  const layout = plotlyProps.layout as Partial<Layout>;
 
-  const colsOfInterest = ["race", "sex"];
-  colsOfInterest.forEach((colName: string) => {
-    let distMeasures = getDistributionBalanceMeasures(
+  const title = layout.title as Partial<{ text: string }>;
+  title.text = `Comparison of ${features.join(", ")} with Uniform Distribution`;
+
+  if (datasetName) {
+    title.text += ` in ${datasetName}`;
+  }
+
+  features.forEach((featureName: string) => {
+    const distMeasures = getDistributionBalanceMeasures(
       dataBalanceMeasures.distributionBalanceMeasures?.measures ?? {},
-      colName
+      featureName
     );
-    delete distMeasures.chi_sq_stat;
+
     plotlyProps.data.push({
+      name: featureName,
+      type: "bar",
       x: Object.keys(distMeasures),
-      y: Object.values(distMeasures),
-      name: colName,
-      type: "bar"
+      y: Object.values(distMeasures)
     });
   });
 

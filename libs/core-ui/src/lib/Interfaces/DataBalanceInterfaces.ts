@@ -26,6 +26,10 @@ export function getDistributionBalanceMeasures(
   featureName: string
 ): { [measureName: string]: number } {
   if (featureName in measures) {
+    // Don't return measures that cannot be plotted in the same range as the other measures
+    delete measures[featureName].chi_sq_stat;
+    delete measures[featureName].chi_sq_p_value;
+
     return measures[featureName];
   }
 
