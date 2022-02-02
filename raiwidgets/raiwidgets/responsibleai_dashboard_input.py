@@ -124,7 +124,7 @@ class ResponsibleAIDashboardInput:
             e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate feature importances"
+                    "Failed to generate feature importances,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
@@ -144,7 +144,7 @@ class ResponsibleAIDashboardInput:
             e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate causal what-if"
+                    "Failed to generate causal what-if,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
