@@ -103,28 +103,39 @@ class TestResponsibleAIDashboard:
                       skip_cat_limit_checks=True)
         ri.compute()
 
-        cohort_filter_1 = CohortFilter(
+        cohort_filter_continuous_1 = CohortFilter(
             method=CohortFilterMethods.LessThan,
             arg=[65],
             column='Age')
-        cohort_filter_2 = CohortFilter(
+        cohort_filter_continuous_2 = CohortFilter(
             method=CohortFilterMethods.GreaterThan,
             arg=[40],
             column='Hours per week')
 
-        user_cohort_1 = Cohort(name='New Cohort 1')
-        user_cohort_1.add_cohort_filter(cohort_filter_1)
-        user_cohort_1.add_cohort_filter(cohort_filter_2)
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
 
-        cohort_filter_3 = CohortFilter(
+        cohort_filter_categorical = CohortFilter(
             method=CohortFilterMethods.Includes,
             arg=[2, 6, 4],
             column='Marital Status')
 
-        user_cohort_2 = Cohort(name='New Cohort 2')
-        user_cohort_2.add_cohort_filter(cohort_filter_3)
+        user_cohort_categorical = Cohort(name='Cohort Index')
+        user_cohort_categorical.add_cohort_filter(cohort_filter_categorical)
 
-        widget = ResponsibleAIDashboard(ri, cohort_Filter_list=[user_cohort_1,
-                                                                user_cohort_2])
+        cohort_filter_index = CohortFilter(
+            method=CohortFilterMethods.LessThan,
+            arg=[20],
+            column='Index')
+
+        user_cohort_index = Cohort(name='Cohort Index')
+        user_cohort_index.add_cohort_filter(cohort_filter_index)
+
+        widget = ResponsibleAIDashboard(
+            ri,
+            cohort_Filter_list=[user_cohort_continuous,
+                                user_cohort_categorical,
+                                user_cohort_index])
 
         self.validate_rai_dashboard_data(widget)
