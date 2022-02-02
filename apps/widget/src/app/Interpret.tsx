@@ -39,6 +39,12 @@ export class Interpret extends React.Component<IInterpretProps> {
         requestPredictions={requestMethod}
         locale={config.locale}
         explanationMethod={modelData.explanation_method}
+        data_balance_measures={modelData.data_balance_measures}
+        task_type={modelData.task_type}
+        true_y={modelData.true_y}
+        features={modelData.features}
+        feature_names={modelData.feature_names}
+        categorical_features={modelData.categorical_features}
       />
     );
   }
