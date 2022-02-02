@@ -51,9 +51,11 @@ class ResponsibleAIDashboardInput:
         except Exception as e:
             print(e)
             traceback.print_exc()
+            e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error: "Model threw exception"
-                " while predicting...",
+                " while predicting..."
+                "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
 
