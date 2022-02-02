@@ -65,7 +65,7 @@ class ResponsibleAIDashboardInput:
             max_depth = data[3]
             num_leaves = data[4]
             min_child_samples = data[5]
-            metric = display_name_to_metric[data[8]]
+            metric = display_name_to_metric[data[6]]
             self._error_analyzer.update_metric(metric)
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
