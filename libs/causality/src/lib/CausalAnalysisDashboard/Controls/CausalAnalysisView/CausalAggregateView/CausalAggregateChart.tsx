@@ -3,7 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
-  ErrorBarChart,
+  BasicHighChart,
   getErrorBarChartOptions,
   ICausalAnalysisSingleData,
   ModelAssessmentContext
@@ -29,7 +29,7 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
     return (
       <Stack horizontal verticalFill className={styles.container}>
         <Stack.Item grow className={styles.leftPane}>
-          <ErrorBarChart
+          <BasicHighChart
             configOverride={getErrorBarChartOptions(
               this.props.data,
               getTheme()
