@@ -10,6 +10,7 @@ from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 
 from .constants import ErrorMessages
+from .error_handling import _format_exception
 from .interfaces import WidgetRequestResponseConstants
 from .utils import _is_classifier
 
@@ -64,7 +65,7 @@ class ResponsibleAIDashboardInput:
             max_depth = data[3]
             num_leaves = data[4]
             min_child_samples = data[5]
-            metric = display_name_to_metric[data[6]]
+            metric = display_name_to_metric[data[8]]
             self._error_analyzer.update_metric(metric)
             tree = self._error_analyzer.compute_error_tree(
                 features, filters, composite_filters,
@@ -75,9 +76,11 @@ class ResponsibleAIDashboardInput:
         except Exception as e:
             print(e)
             traceback.print_exc()
+            e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    f"Failed to generate json tree representation:{str(e)}",
+                    "Failed to generate json tree representation,"
+                    "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
 
@@ -101,9 +104,11 @@ class ResponsibleAIDashboardInput:
         except Exception as e:
             print(e)
             traceback.print_exc()
+            e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate json matrix representation",
+                    "Failed to generate json matrix representation,"
+                    "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
 
@@ -116,9 +121,11 @@ class ResponsibleAIDashboardInput:
         except Exception as e:
             print(e)
             traceback.print_exc()
+            e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate feature importances",
+                    "Failed to generate feature importances"
+                    "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
 
@@ -134,8 +141,10 @@ class ResponsibleAIDashboardInput:
         except Exception as e:
             print(e)
             traceback.print_exc()
+            e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate causal what-if",
+                    "Failed to generate causal what-if"
+                    "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
