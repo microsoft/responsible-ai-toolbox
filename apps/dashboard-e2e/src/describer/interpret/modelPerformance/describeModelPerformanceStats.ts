@@ -24,28 +24,28 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
     });
     it("should have some stats", () => {
       let expectedMetrics: string[];
-        if (dataShape.isClassification) {
-          expectedMetrics = [
-            "Accuracy",
-            "Precision",
-            "F1 score",
-            "False positive rate",
-            "False negative rate",
-            "Selection rate"
-          ];
-        } else {
-          expectedMetrics = [
-            "Mean squared error",
-            "Mean absolute error",
-            "R²",
-            "Mean prediction"
-          ];
-        }
-        expectedMetrics.forEach((metricName) => {
-          cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-            metricName
-          );
-        });
+      if (dataShape.isClassification) {
+        expectedMetrics = [
+          "Accuracy",
+          "Precision",
+          "F1 score",
+          "False positive rate",
+          "False negative rate",
+          "Selection rate"
+        ];
+      } else {
+        expectedMetrics = [
+          "Mean squared error",
+          "Mean absolute error",
+          "R²",
+          "Mean prediction"
+        ];
+      }
+      expectedMetrics.forEach((metricName) => {
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          metricName
+        );
+      });
     });
   });
 }
