@@ -35,7 +35,13 @@ export function describeGlobalExplanationChart<
             .eq(i)
             .invoke("text")
             .then((text) => {
-              expect(columns).contain(text);
+              const trimmedString = text.includes("...")
+                ? text.slice(0, Math.max(0, text.indexOf("...")))
+                : text;
+              const stringInArray = columns.find((column) =>
+                column.includes(trimmedString)
+              );
+              expect(stringInArray).not.equal(undefined);
             });
         }
       }

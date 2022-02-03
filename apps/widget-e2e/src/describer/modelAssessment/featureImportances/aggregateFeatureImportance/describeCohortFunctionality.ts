@@ -14,7 +14,7 @@ export function describeCohortFunctionality(): void {
     it("Should have cohort selection in 'Sort by' dropdown", () => {
       createCohort();
 
-      cy.get(Locators.SortByDropdown).click();
+      cy.get(Locators.SortByDropdown).eq(0).click(); // Dropdown to select cohort
       cy.get(Locators.SortByDropdownOptions).should("exist");
     });
 
