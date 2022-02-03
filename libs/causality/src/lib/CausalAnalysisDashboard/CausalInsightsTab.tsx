@@ -46,6 +46,7 @@ export class CausalInsightsTab extends React.PureComponent<
       <Stack
         grow
         className={classNames.container}
+        id="causalInsightsTab"
         tokens={{ padding: "16px 24px" }}
       >
         <Stack.Item>
