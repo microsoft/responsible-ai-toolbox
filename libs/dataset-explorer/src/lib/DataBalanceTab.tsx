@@ -8,11 +8,11 @@ import {
   FabricStyles,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
-  measureVarNames,
-  measureRanges,
+  featureBalanceMeasureMap,
   getFeatureBalanceMeasures,
   getDistributionBalanceMeasures,
-  IDataBalanceMeasures
+  IFeatureBalanceMeasures,
+  IDistributionBalanceMeasures
 } from "@responsible-ai/core-ui";
 import {
   AccessibleChart,
@@ -61,7 +61,7 @@ export class DataBalanceTab extends React.Component<
   ): void {
     const featuresLength =
       this.context.dataset.data_balance_measures?.featureBalanceMeasures
-        .features.length;
+        ?.features.length;
     if (
       featuresLength !== undefined &&
       preState.selectedFeatureIndex >= featuresLength
@@ -69,7 +69,7 @@ export class DataBalanceTab extends React.Component<
       this.setState({ selectedFeatureIndex: 0 });
     }
 
-    if (preState.selectedMeasureIndex >= measureVarNames.size) {
+    if (preState.selectedMeasureIndex >= featureBalanceMeasureMap.size) {
       this.setState({ selectedMeasureIndex: 0 });
     }
   }
@@ -87,110 +87,149 @@ export class DataBalanceTab extends React.Component<
       );
     }
 
+    // If some types of measures are available but others are not (i.e. feature balance measures are not available but distribution balance measures are),
+    // we still display the measures that are available.
     const dataBalanceMeasures = this.context.dataset.data_balance_measures;
 
     const featureBalanceMeasures = dataBalanceMeasures.featureBalanceMeasures;
+    let heatmapPlotlyProps,
+      featureOptions,
+      measureOptions = undefined;
+    if (
+      featureBalanceMeasures &&
+      featureBalanceMeasures.measures &&
+      featureBalanceMeasures.features &&
+      featureBalanceMeasures.featureValues
+    ) {
+      const selectedFeatureIndex =
+        this.state.selectedFeatureIndex >=
+        featureBalanceMeasures.features.length
+          ? 0
+          : this.state.selectedFeatureIndex;
+      const selectedMeasureIndex =
+        this.state.selectedMeasureIndex >= featureBalanceMeasureMap.size
+          ? 0
+          : this.state.selectedMeasureIndex;
 
-    const selectedFeatureIndex =
-      this.state.selectedFeatureIndex >= featureBalanceMeasures.features.length
-        ? 0
-        : this.state.selectedFeatureIndex;
+      featureOptions = featureBalanceMeasures.features.map(
+        (feature, index) => ({ key: index, text: feature } as IDropdownOption)
+      );
+      measureOptions = [...featureBalanceMeasureMap].map(
+        ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
+      );
 
-    const selectedMeasureIndex =
-      this.state.selectedMeasureIndex >= measureVarNames.size
-        ? 0
-        : this.state.selectedMeasureIndex;
+      // TODO: See if this spread syntax works with indexed type: [...featureBalanceMeasures.featureValues].map()
+      // [...featureBalanceMeasures.featureValues]
+      heatmapPlotlyProps = generateHeatmapPlotlyProps(
+        featureBalanceMeasures,
+        featureOptions[selectedFeatureIndex].text,
+        measureOptions[selectedMeasureIndex].text,
+        this.context.dataset.name
+      );
+    }
 
-    const featureOptions = featureBalanceMeasures.features.map(
-      (feature, index) => ({ key: index, text: feature } as IDropdownOption)
-    );
+    const distributionBalanceMeasures =
+      dataBalanceMeasures.distributionBalanceMeasures;
+    let barPlotlyProps = undefined;
+    if (
+      distributionBalanceMeasures &&
+      distributionBalanceMeasures.measures &&
+      distributionBalanceMeasures.features
+    ) {
+      barPlotlyProps = generateBarPlotlyProps(
+        distributionBalanceMeasures,
+        this.context.dataset.name
+      );
 
-    const measureOptions = [...measureVarNames].map(
-      ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
-    );
-
-    // TODO: See if this spread syntax works with indexed type: [...featureBalanceMeasures.featureValues].map()
-    // [...featureBalanceMeasures.featureValues]
-
-    const heatmapPlotlyProps = generateHeatmapPlotlyProps(
-      dataBalanceMeasures,
-      featureOptions[selectedFeatureIndex].text,
-      measureOptions[selectedMeasureIndex].text,
-      this.context.dataset.name
-    );
-    const barPlotlyProps = generateBarPlotlyProps(
-      dataBalanceMeasures,
-      featureOptions.map((o) => o.text),
-      this.context.dataset.name
-    );
+      // TODO: This doesn't work with data_balance_measures={}
+      if (!heatmapPlotlyProps && !barPlotlyProps) {
+        return (
+          <MissingParametersPlaceholder>
+            {
+              "You tried to specify data balance measures, but we were unable to visualize them. Please ensure the format is correct." // TODO: Replace with localization
+            }
+          </MissingParametersPlaceholder>
+        );
+      }
+    }
 
     return (
       <div className={classNames.page}>
-        <Text variant="large" className={classNames.leftLabel}>
-          {
-            "Feature Balance Measures" // TODO: Replace with localization
-          }
-        </Text>
-        <br />
-        <div className={classNames.featureAndMeasurePickerWrapper}>
-          <Text
-            variant="mediumPlus"
-            className={classNames.featureAndMeasurePickerLabel}
-          >
-            {
-              "Select a dataset feature and measure to explore" // TODO: Replace with localization
-            }
-          </Text>
-          {featureOptions && (
-            <Dropdown
-              styles={{
-                callout: {
-                  selectors: {
-                    ".ms-Button-flexContainer": {
-                      width: "100%"
-                    }
-                  }
-                },
-                dropdown: {
-                  width: 150
+        {heatmapPlotlyProps && featureOptions && measureOptions && (
+          <div>
+            <Text variant="large" className={classNames.leftLabel}>
+              {
+                "Feature Balance Measures" // TODO: Replace with localization
+              }
+            </Text>
+            <div className={classNames.featureAndMeasurePickerWrapper}>
+              <Text
+                variant="mediumPlus"
+                className={classNames.featureAndMeasurePickerLabel}
+              >
+                {
+                  "Select a dataset feature and measure to explore" // TODO: Replace with localization
                 }
-              }}
-              id="dataBalanceFeatureDropdown"
-              options={featureOptions}
-              selectedKey={this.state.selectedFeatureIndex}
-              onChange={this.setSelectedFeature}
-            />
-          )}
-          {measureOptions && (
-            <Dropdown
-              styles={{
-                callout: {
-                  selectors: {
-                    ".ms-Button-flexContainer": {
-                      width: "100%"
+              </Text>
+              <Dropdown
+                styles={{
+                  callout: {
+                    selectors: {
+                      ".ms-Button-flexContainer": {
+                        width: "100%"
+                      }
                     }
+                  },
+                  dropdown: {
+                    width: 150
                   }
-                },
-                dropdown: {
-                  width: 250
-                }
-              }}
-              id="dataBalanceMeasureDropdown"
-              options={measureOptions}
-              selectedKey={this.state.selectedMeasureIndex}
-              onChange={this.setSelectedMeasure}
+                }}
+                id="dataBalanceFeatureDropdown"
+                options={featureOptions}
+                selectedKey={this.state.selectedFeatureIndex}
+                onChange={this.setSelectedFeature}
+              />
+              <Dropdown
+                styles={{
+                  callout: {
+                    selectors: {
+                      ".ms-Button-flexContainer": {
+                        width: "100%"
+                      }
+                    }
+                  },
+                  dropdown: {
+                    width: 250
+                  }
+                }}
+                id="dataBalanceMeasureDropdown"
+                options={measureOptions}
+                selectedKey={this.state.selectedMeasureIndex}
+                onChange={this.setSelectedMeasure}
+              />
+            </div>
+            <br />
+            <AccessibleChart
+              plotlyProps={heatmapPlotlyProps}
+              theme={getTheme()}
             />
-          )}
-        </div>
+            <br />
+          </div>
+        )}
+
         <br />
-        <AccessibleChart plotlyProps={heatmapPlotlyProps} theme={getTheme()} />
-        <br />
-        <Text variant="large" className={classNames.leftLabel}>
-          {
-            "Distribution Balance Measures" // TODO: Replace with localization
-          }
-        </Text>
-        <AccessibleChart plotlyProps={barPlotlyProps} theme={getTheme()} />
+
+        {barPlotlyProps && (
+          <div>
+            <Text variant="large" className={classNames.leftLabel}>
+              {
+                "Distribution Balance Measures" // TODO: Replace with localization
+              }
+            </Text>
+            <br />
+            <AccessibleChart plotlyProps={barPlotlyProps} theme={getTheme()} />
+          </div>
+        )}
       </div>
     );
   }
@@ -266,19 +305,19 @@ const baseHeatmapPlotlyProperties: IPlotlyProperty = {
 };
 
 function generateHeatmapPlotlyProps(
-  dataBalanceMeasures: IDataBalanceMeasures,
+  featureBalanceMeasures: IFeatureBalanceMeasures,
   selectedFeature: string,
   selectedMeasure: string,
   datasetName?: string
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(baseHeatmapPlotlyProperties);
 
-  const measureVar = measureVarNames.get(selectedMeasure);
-  if (!measureVar) {
+  const measure = featureBalanceMeasureMap.get(selectedMeasure);
+  if (!measure) {
     return plotlyProps;
   }
 
-  const ranges = measureRanges.get(selectedMeasure);
+  const ranges = measure.range;
   if (ranges) {
     plotlyProps.data[0] = {
       ...plotlyProps.data[0],
@@ -287,10 +326,7 @@ function generateHeatmapPlotlyProps(
   }
 
   const features = new Map<string, string[]>([
-    [
-      selectedFeature,
-      dataBalanceMeasures.featureBalanceMeasures.featureValues[selectedFeature]
-    ]
+    [selectedFeature, featureBalanceMeasures.featureValues[selectedFeature]]
   ]);
 
   const featureNames = features.get(selectedFeature);
@@ -319,11 +355,11 @@ function generateHeatmapPlotlyProps(
       classes.forEach((classB, rowIndex) => {
         // TODO: Need to figure out which measures are ok to use for heatmap
         const featureValue = getFeatureBalanceMeasures(
-          dataBalanceMeasures.featureBalanceMeasures.measures,
+          featureBalanceMeasures.measures,
           featureName,
           classA,
           classB
-        )[measureVar];
+        )[measure.varName];
 
         row.push(featureValue);
 
@@ -402,11 +438,12 @@ const baseBarPlotlyProperties: IPlotlyProperty = {
 };
 
 function generateBarPlotlyProps(
-  dataBalanceMeasures: IDataBalanceMeasures,
-  features: string[],
+  distributionBalanceMeasures: IDistributionBalanceMeasures,
   datasetName?: string
 ): IPlotlyProperty {
   const plotlyProps = _.cloneDeep(baseBarPlotlyProperties);
+
+  const features = distributionBalanceMeasures.features;
 
   const layout = plotlyProps.layout as Partial<Layout>;
 
@@ -419,7 +456,7 @@ function generateBarPlotlyProps(
 
   features.forEach((featureName: string) => {
     const distMeasures = getDistributionBalanceMeasures(
-      dataBalanceMeasures.distributionBalanceMeasures?.measures ?? {},
+      distributionBalanceMeasures.measures,
       featureName
     );
 

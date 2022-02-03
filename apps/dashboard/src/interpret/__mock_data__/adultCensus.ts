@@ -24,6 +24,7 @@ export const adultCensusWithDataBalanceMeasures: IDataset = {
       }
     },
     distributionBalanceMeasures: {
+      features: ["race", "sex"],
       measures: {
         race: {
           chi_sq_p_value: 0,

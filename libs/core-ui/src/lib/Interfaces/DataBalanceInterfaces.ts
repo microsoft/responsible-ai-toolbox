@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 export interface IDataBalanceMeasures {
-  aggregateBalanceMeasures: IAggregateBalanceMeasures;
-  distributionBalanceMeasures: IDistributionBalanceMeasures;
-  featureBalanceMeasures: IFeatureBalanceMeasures;
+  aggregateBalanceMeasures?: IAggregateBalanceMeasures;
+  distributionBalanceMeasures?: IDistributionBalanceMeasures;
+  featureBalanceMeasures?: IFeatureBalanceMeasures;
 }
 
 export interface IAggregateBalanceMeasures {
@@ -18,8 +18,11 @@ export function getAggregateBalanceMeasures(measures: {
 }
 
 export interface IDistributionBalanceMeasures {
+  features: string[];
   measures: { [featureName: string]: { [measureName: string]: number } };
 }
+
+const blockedDistributionMeasures = new Set(["chi_sq_stat", "chi_sq_p_value"]);
 
 export function getDistributionBalanceMeasures(
   measures: { [featureName: string]: { [measureName: string]: number } },
@@ -27,8 +30,9 @@ export function getDistributionBalanceMeasures(
 ): { [measureName: string]: number } {
   if (featureName in measures) {
     // Don't return measures that cannot be plotted in the same range as the other measures
-    delete measures[featureName].chi_sq_stat;
-    delete measures[featureName].chi_sq_p_value;
+    blockedDistributionMeasures.forEach((measureName) => {
+      delete measures[featureName][measureName];
+    });
 
     return measures[featureName];
   }
@@ -46,25 +50,32 @@ export interface IFeatureBalanceMeasures {
   };
 }
 
-export const measureVarNames = new Map<string, string>([
-  // TODO: Positive rates aren't good to visualize in a heatmap, because it is per feature value, not a combination of feature values
-  ["Demographic Parity", "dp"],
-  ["Jaccard Index", "ji"],
-  ["Kendall Rank Correlation", "krc"],
-  ["Log-Likelihood Ratio", "llr"],
-  ["Normalized PMI,	p(x,y) normalization", "n_pmi_xy"],
-  ["Normalized PMI,	p(y) normalization", "n_pmi_y"],
-  ["Pointwise Mutual Information (PMI)", "pmi"],
-  // ["Positive Rates of Class A", "prA"],
-  // ["Positive Rates of Class B", "prB"],
-  ["Sorensen-Dice Coefficient", "sdc"],
-  ["Squared PMI", "s_pmi"],
-  ["t-test", "t_test"]
-]);
+interface IFeatureBalanceMeasure {
+  varName: string;
+  range: [number, number];
+}
 
-export const measureRanges = new Map<string, number[]>([
-  ["Demographic Parity", [-1, 1]]
-]);
+// Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
+export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
+  [
+    ["Demographic Parity", { range: [-1, 1], varName: "dp" }],
+    ["Jaccard Index", { range: [0, 1], varName: "ji" }],
+    ["Kendall Rank Correlation", { range: [0, 1], varName: "krc" }],
+    ["Log-Likelihood Ratio", { range: [0, 1], varName: "llr" }],
+    [
+      "Normalized PMI,	p(x,y) normalization",
+      { range: [0, 1], varName: "n_pmi_xy" }
+    ],
+    [
+      "Normalized PMI,	p(y) normalization",
+      { range: [0, 1], varName: "n_pmi_y" }
+    ],
+    ["Pointwise Mutual Information (PMI)", { range: [0, 1], varName: "pmi" }],
+    ["Sorensen-Dice Coefficient", { range: [0, 1], varName: "sdc" }],
+    ["Squared PMI", { range: [0, 1], varName: "s_pmi" }],
+    ["t-test", { range: [0, 1], varName: "t_test" }]
+  ]
+);
 
 export function getFeatureBalanceMeasures(
   measures: {
