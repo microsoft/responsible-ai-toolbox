@@ -27,6 +27,14 @@ export abstract class Chart<TElement extends IChartElement> {
       )
       .get();
   }
+
+  protected getHighChartHtmlElements(selector: string): HTMLElement[] {
+    return cy
+      .$$(
+        `${this.container} svg g.highcharts-series-group > g[class*='highcharts-tracker'] > ${selector}`
+      )
+      .get();
+  }
   private getSvgWidth(): number | undefined {
     return cy.$$(`${this.container} svg`).width();
   }

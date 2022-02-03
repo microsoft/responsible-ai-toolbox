@@ -17,6 +17,7 @@ HighchartsMore(Highcharts);
 
 interface IHighchartReactProps {
   className?: string;
+  id?: string;
   chartOptions: Highcharts.Options;
   disableUpdate?: boolean;
   modules?: HighchartsModuleNames[];
@@ -85,5 +86,5 @@ export function HighchartReact(
     };
   }, []);
 
-  return <div className={props.className} ref={containerRef} />;
+  return <div className={props.className} id={props.id} ref={containerRef} />;
 }
