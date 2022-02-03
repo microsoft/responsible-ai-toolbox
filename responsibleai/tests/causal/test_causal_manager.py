@@ -11,27 +11,27 @@ from responsibleai.managers.causal_manager import CausalManager
 
 
 class TestCausalManager:
-    def test_causal_no_categoricals(self, boston_data):
-        train_df, test_df, target_feature = boston_data
+    def test_causal_no_categoricals(self, housing_data):
+        train_df, test_df, target_feature = housing_data
 
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, None)
 
-        result = manager.add(['ZN'])
+        result = manager.add(['AveRooms'])
 
         assert len(result.policies) == 1
         assert len(result.config.treatment_features) == 1
-        assert result.config.treatment_features[0] == 'ZN'
+        assert result.config.treatment_features[0] == 'AveRooms'
 
-    def test_causal_save_and_load(self, boston_data, tmpdir):
-        train_df, test_df, target_feature = boston_data
+    def test_causal_save_and_load(self, housing_data, tmpdir):
+        train_df, test_df, target_feature = housing_data
 
         save_dir = tmpdir.mkdir('save-dir')
 
         insights = RAIInsights(
             None, train_df, test_df, target_feature, ModelTask.REGRESSION)
 
-        insights.causal.add(['ZN'])
+        insights.causal.add(['AveRooms'])
         pre_results = insights.causal.get()
         pre_result = pre_results[0]
 
@@ -77,12 +77,12 @@ class TestCausalManager:
 
 
 @pytest.fixture(scope='class')
-def cost_manager(boston_data):
-    train_df, test_df, target_feature = boston_data
+def cost_manager(housing_data):
+    train_df, test_df, target_feature = housing_data
 
     test_df = test_df[:7]
     return CausalManager(train_df, test_df, target_feature,
-                         ModelTask.REGRESSION, ['CHAS'])
+                         ModelTask.REGRESSION, None)
 
 
 class TestCausalManagerTreatmentCosts:
@@ -90,12 +90,14 @@ class TestCausalManagerTreatmentCosts:
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
             try:
-                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=0)
+                cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
+                                 treatment_cost=0)
             except TypeError:
                 pass
-            mock_create.assert_any_call(ANY, ANY, 'ZN', 0, ANY, ANY, ANY)
-            mock_create.assert_any_call(ANY, ANY, 'RM', 0, ANY, ANY, ANY)
-            mock_create.assert_any_call(ANY, ANY, 'B', 0, ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'AveRooms', 0, ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'Population', 0,
+                                        ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'AveOccup', 0, ANY, ANY, ANY)
 
     def test_nonzero_scalar_cost(self, cost_manager):
         message = ("treatment_cost must be a list with the same number "
@@ -105,7 +107,8 @@ class TestCausalManagerTreatmentCosts:
                    "sample. Found treatment_cost "
                    "of type <class 'int'>, expected list.")
         with pytest.raises(UserConfigValidationException, match=message):
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=5)
+            cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
+                             treatment_cost=5)
 
     def test_nonlist_cost(self, cost_manager):
         message = ("treatment_cost must be a list with the same number of "
@@ -115,7 +118,7 @@ class TestCausalManagerTreatmentCosts:
                    "Found treatment_cost of type <class 'numpy.ndarray'>, "
                    "expected list.")
         with pytest.raises(UserConfigValidationException, match=message):
-            cost_manager.add(['ZN', 'RM', 'B'],
+            cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=np.array([1, 2]))
 
     def test_invalid_cost_list_length(self, cost_manager):
@@ -123,18 +126,21 @@ class TestCausalManagerTreatmentCosts:
                     "elements as treatment_features. "
                     "Length of treatment_cost was 2, expected 3.")
         with pytest.raises(UserConfigValidationException, match=expected):
-            cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2])
+            cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
+                             treatment_cost=[1, 2])
 
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
                 as mock_create:
             try:
-                cost_manager.add(['ZN', 'RM', 'B'], treatment_cost=[1, 2, 3])
+                cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
+                                 treatment_cost=[1, 2, 3])
             except TypeError:
                 pass
-            mock_create.assert_any_call(ANY, ANY, 'ZN', 1, ANY, ANY, ANY)
-            mock_create.assert_any_call(ANY, ANY, 'RM', 2, ANY, ANY, ANY)
-            mock_create.assert_any_call(ANY, ANY, 'B', 3, ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'AveRooms', 1, ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'Population', 2,
+                                        ANY, ANY, ANY)
+            mock_create.assert_any_call(ANY, ANY, 'AveOccup', 3, ANY, ANY, ANY)
 
     def test_per_sample_costs(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
@@ -144,13 +150,14 @@ class TestCausalManagerTreatmentCosts:
                 [2, 3, 4, 5, 6, 7, 1],
             ]
             try:
-                cost_manager.add(['ZN', 'RM'], treatment_cost=costs)
+                cost_manager.add(['AveRooms', 'Population'],
+                                 treatment_cost=costs)
             except TypeError:
                 pass
             mock_create.assert_any_call(
-                ANY, ANY, 'ZN', [1, 2, 3, 4, 5, 6, 7], ANY, ANY, ANY)
+                ANY, ANY, 'AveRooms', [1, 2, 3, 4, 5, 6, 7], ANY, ANY, ANY)
             mock_create.assert_any_call(
-                ANY, ANY, 'RM', [2, 3, 4, 5, 6, 7, 1], ANY, ANY, ANY)
+                ANY, ANY, 'Population', [2, 3, 4, 5, 6, 7, 1], ANY, ANY, ANY)
 
     def test_invalid_per_sample_length(self, cost_manager):
         costs = [
@@ -158,13 +165,13 @@ class TestCausalManagerTreatmentCosts:
             np.array([2, 3, 4, 5, 1]),
         ]
         with pytest.raises(Exception):
-            cost_manager.add(['ZN', 'B'], treatment_cost=costs,
+            cost_manager.add(['AveRooms', 'Population'], treatment_cost=costs,
                              skip_cat_limit_checks=True)
 
 
 class TestCausalDashboardData:
-    def test_categorical_policy(self, boston_data_categorical):
-        train_df, test_df, target_feature = boston_data_categorical
+    def test_categorical_policy(self, housing_data_categorical):
+        train_df, test_df, target_feature = housing_data_categorical
         categoricals = train_df.select_dtypes(include=[object]).columns
 
         # Just use categoricals to force categorical policy tree
@@ -173,12 +180,13 @@ class TestCausalDashboardData:
         test_df = test_df[new_features]
 
         # Sample data for easier debug
-        test_df = test_df[:10]
+        test_df = test_df[:20]
 
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, categoricals)
 
-        result = manager.add(['AGE_CAT', 'INDUS_CAT'], random_state=42)
+        result = manager.add(['HouseAge_CAT', 'Population_CAT'],
+                             random_state=42)
         dashboard_data = result._get_dashboard_data()
 
         policies = dashboard_data['policies']
@@ -188,4 +196,6 @@ class TestCausalDashboardData:
             assert not tree['leaf']
             assert tree['feature'] in categoricals
             assert tree['right_comparison'] == 'eq'
-            assert tree['comparison_value'] == 'no crime'
+            is_very_old_comparison = tree['comparison_value'] == 'very-old'
+            is_high_comparison = tree['comparison_value'] == 'high'
+            assert is_very_old_comparison or is_high_comparison
