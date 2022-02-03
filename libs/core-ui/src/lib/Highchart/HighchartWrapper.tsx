@@ -14,6 +14,7 @@ import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
 export interface IHighchartWrapperProps {
   chartOptions?: IHighchartsConfig;
   className?: string;
+  id?: string;
   fallback?: React.ReactNode;
   modules?: HighchartsModuleNames[];
   plotClassName?: string;
@@ -68,6 +69,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
       <React.Suspense fallback={fallback}>
         <HighchartReact
           className={className}
+          id={this.props.id}
           chartOptions={mergedOptions}
           disableUpdate={custom.disableUpdate}
           modules={modules}

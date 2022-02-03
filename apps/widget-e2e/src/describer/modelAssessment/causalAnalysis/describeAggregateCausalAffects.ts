@@ -18,7 +18,7 @@ export function describeAggregateCausalAffects(
       dataShape
     };
     beforeEach(() => {
-      props.chart = new ScatterChartErrorBars("#causalAggregateView");
+      props.chart = new ScatterChartErrorBars("#CausalAggregateChart");
     });
     it("should have causal analysis for decision making notebooks", () => {
       cy.get(Locators.CausalAnalysisHeader).should("exist");
@@ -55,8 +55,6 @@ export function describeAggregateCausalAffects(
     });
     describe("Chart", () => {
       it("should render", () => {
-        cy.task("log", `props.chart in render: ${props.chart}`);
-        cy.task("log", `props.chart.Elements: ${props.chart.Elements}`);
         expect(props.chart.Elements.length).greaterThan(0);
       });
 
@@ -67,7 +65,7 @@ export function describeAggregateCausalAffects(
             "be",
             dataShape.causalAnalysisData?.featureListInCausalTable?.length
           );
-        cy.get(`${Locators.CausalChartXAxisValues} text`)
+        cy.get(`${Locators.CausalChartXAxisValues}`)
           .last()
           .invoke("text")
           .then((text) => {

@@ -10,12 +10,13 @@ import { ICommonChartProps } from "./ICommonChartProps";
 
 export class BasicHighChart extends React.Component<ICommonChartProps> {
   public render(): React.ReactNode {
-    const { className, fallback, configOverride = {}, theme } = this.props;
+    const { className, id, fallback, configOverride = {}, theme } = this.props;
     const chartOptions = _.merge({}, configOverride, defaultHighchartsOptions);
 
     return (
       <HighchartWrapper
         className={className}
+        id={id}
         chartOptions={chartOptions}
         fallback={fallback}
         theme={theme}

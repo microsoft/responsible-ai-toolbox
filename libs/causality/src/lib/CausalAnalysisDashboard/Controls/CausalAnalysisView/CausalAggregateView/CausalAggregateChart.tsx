@@ -35,6 +35,7 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
               getTheme()
             )}
             theme={getTheme()}
+            id="CausalAggregateChart"
           />
         </Stack.Item>
         <Stack.Item grow className={styles.rightPane}>

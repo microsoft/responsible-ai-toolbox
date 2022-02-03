@@ -21,19 +21,17 @@ export abstract class Chart<TElement extends IChartElement> {
     return this.Elements.filter((b) => b && b.right < svgWidth);
   }
   protected getHtmlElements(selector: string): HTMLElement[] {
-    cy.task("log", `this.container: ${this.container}`);
-    console.log(`this.container:  ${this.container}\r\n`);
-    cy.task(
-      "log",
-      `elements: ${cy
-        .$$(
-          `${this.container} svg g.cartesianlayer > g.subplot.xy > .plot ${selector}`
-        )
-        .get()}`
-    );
     return cy
       .$$(
         `${this.container} svg g.cartesianlayer > g.subplot.xy > .plot ${selector}`
+      )
+      .get();
+  }
+
+  protected getHighChartHtmlElements(selector: string): HTMLElement[] {
+    return cy
+      .$$(
+        `${this.container} svg g.highcharts-series-group > g[class*='highcharts-tracker'] > ${selector}`
       )
       .get();
   }

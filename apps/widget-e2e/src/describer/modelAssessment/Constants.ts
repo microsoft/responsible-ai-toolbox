@@ -90,6 +90,6 @@ export enum Locators {
   CausalCalloutHeader = "#causalAggregateView div[class^='calloutHeader']",
   CausalCalloutInner = "#causalAggregateView div[class^='calloutInner']",
   CausalAnalysisTable = "#causalAggregateView div.ms-DetailsList",
-  CausalChartXAxisValues = '#causalAggregateView g[class^="cartesianlayer"] g[class^="xtick"]',
+  CausalChartXAxisValues = '#causalAggregateView svg g[class*="highcharts-xaxis-labels"] text',
   CausalAggregateView = "#causalAggregateView"
 }
