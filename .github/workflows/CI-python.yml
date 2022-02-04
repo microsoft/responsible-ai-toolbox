@@ -8,8 +8,6 @@ on:
 
 jobs:
   ci-python:
-    env:
-      node-version: 16.8
     strategy:
       matrix:
         packageDirectory: ["rai_core_flask", "responsibleai", "erroranalysis"]
@@ -29,11 +27,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.pythonVersion }}
-
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.node-version }}
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
         name: Use Homebrew to install libomp on MacOS for lightgbm
