@@ -4,11 +4,13 @@
 import {
   ICausalAnalysisData,
   ICounterfactualData,
+  ICohort,
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
   ComparisonTypes,
-  Metrics
+  Metrics,
+  FilterMethods
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -13577,4 +13579,20 @@ export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   metric: Metrics.ErrorRate,
   minChildSamples: 21,
   numLeaves: 11
+};
+
+export const adultCohortData: ICohort = {
+  cohortName: "Cohort Continuous",
+  filterList: [
+    {
+      arg: [65],
+      column: "Age",
+      method: FilterMethods.LessThan
+    },
+    {
+      arg: [40],
+      column: "Hours per week",
+      method: FilterMethods.GreaterThan
+    }
+  ]
 };

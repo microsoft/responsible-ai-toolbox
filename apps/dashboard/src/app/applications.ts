@@ -40,7 +40,8 @@ import {
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
   adultCensusCausalErrorAnalysisData,
-  adultCounterfactualData
+  adultCounterfactualData,
+  adultCohortData
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
   bostonCensusCausalAnalysisData,
@@ -173,6 +174,7 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        cohortData: [adultCohortData],
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisData: [adultCensusCausalErrorAnalysisData],

@@ -39,7 +39,7 @@ class ResponsibleAIDashboardInput:
         self._is_classifier = _is_classifier(model)
         self.dashboard_input = analysis.get_data()
         # Add cohort_filter_list to dashboard_input
-        self.dashboard_input.cohortInputData = json.loads(
+        self.dashboard_input.cohortData = json.loads(
             json.dumps(cohort_filter_list,
                        default=cohort_filter_json_converter)
         )

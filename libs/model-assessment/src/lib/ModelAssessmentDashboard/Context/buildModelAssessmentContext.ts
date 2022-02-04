@@ -57,6 +57,7 @@ export function buildInitialModelAssessmentContext(
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
+  console.log(props);
   console.log(typeof jointDataset.metaDict);
   console.log(jointDataset.metaDict);
 
