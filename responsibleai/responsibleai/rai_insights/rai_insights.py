@@ -35,6 +35,7 @@ _SERIALIZER = 'serializer'
 _CLASSES = 'classes'
 _MANAGERS = 'managers'
 _CATEGORICAL_FEATURES = 'categorical_features'
+_METADATA_COLUMNS = 'metadata_columns'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
@@ -43,44 +44,19 @@ _PREDICT_PROBA = 'predict_proba'
 
 
 class RAIInsights(object):
-
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-    :param model: The model to compute RAI insights for.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
-    :param test: The test dataset including the label column.
-    :type test: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param task_type: The task to run, can be `classification` or
-        `regression`.
-    :type task_type: str
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    :param classes: The class labels in the training dataset
-    :type classes: ndarray
-    :param serializer: Picklable custom serializer with save and load
-        methods for custom model serialization.
-        The save method writes the model to file given a parent directory.
-        The load method returns the deserialized model from the same
-        parent directory.
-    :type serializer: object
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features=None, classes=None,
+                 task_type, categorical_features=None,
+                 metadata_columns=None, classes=None,
                  serializer=None,
                  maximum_rows_for_test: int = 5000):
-        """Defines the top-level Model Analysis API.
-        Use RAIInsights to analyze errors, explain the most important
-        features, compute counterfactuals and run causal analysis in a
-        single API.
+        """Creates an RAIInsights object.
+
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -96,12 +72,17 @@ class RAIInsights(object):
         :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
+        :param metadata_columns: The set of columns that are not passed
+            to the model or explainers. These columns can be used for
+            other analyses.
+        :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
         :param serializer: Picklable custom serializer with save and load
-            methods defined for model that is not serializable. The save
-            method returns a dictionary state and load method returns the
-            model.
+            methods for custom model serialization.
+            The save method writes the model to file given a parent directory.
+            The load method returns the deserialized model from the same
+            parent directory.
         :type serializer: object
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
@@ -112,6 +93,7 @@ class RAIInsights(object):
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
+            metadata_columns=metadata_columns,
             classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
@@ -121,6 +103,7 @@ class RAIInsights(object):
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
+        self.metadata_columns = metadata_columns
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -133,7 +116,8 @@ class RAIInsights(object):
             train, test, target_column, task_type, categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=model, train=train, test=test,
+            model=model, train=train.drop(columns=self.metadata_columns),
+            test=test.drop(columns=self.metadata_columns),
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
 
@@ -143,7 +127,8 @@ class RAIInsights(object):
             categorical_features)
 
         self._explainer_manager = ExplainerManager(
-            model, train, test,
+            model, train.drop(columns=self.metadata_columns),
+            test.drop(columns=self.metadata_columns),
             target_column,
             self._classes,
             categorical_features=categorical_features)
@@ -168,11 +153,12 @@ class RAIInsights(object):
 
     def _validate_model_analysis_input_parameters(
             self, model, train, test, target_column,
-            task_type, categorical_features, classes,
+            task_type, categorical_features,
+            metadata_columns, classes,
             serializer,
             maximum_rows_for_test: int):
         """
-        Validate the inputs for RAIInsights class.
+        Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -189,6 +175,10 @@ class RAIInsights(object):
         :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
+        :param metadata_columns: The set of columns that are not passed
+            to the model or explainers. These columns can be used for
+            other analyses.
+        :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -287,6 +277,28 @@ class RAIInsights(object):
                             "Please check your test data.".format(column)
                         )
 
+            if metadata_columns is not None:
+                if target_column in metadata_columns:
+                    raise UserConfigValidationException(
+                        'The target column cannot be a metadata column.'
+                    )
+                if set(train.columns) - \
+                        set(metadata_columns + [target_column]) == 0:
+                    raise UserConfigValidationException(
+                        'All columns marked as metadata or target columns. '
+                        'Only columns other than metadata and target columns '
+                        'are passed to models or explainers as features. '
+                        'Exclude at least one column from metadata and '
+                        'target columns.'
+                    )
+
+                for column_name in metadata_columns:
+                    if column_name not in list(train.columns) or \
+                            column_name not in list(test.columns):
+                        raise UserConfigValidationException(
+                            'Column name {0} not present in train/test data'
+                            .format(column_name))
+
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
                 if len(set(train[target_column].unique()) -
@@ -356,7 +368,7 @@ class RAIInsights(object):
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
         """
-        Validate the features are unmodified on the dataframe.
+        Validate the features are unmodified on the DataFrame.
 
         :param small_train_features_before: The features saved before
             an operation was performed.
@@ -452,12 +464,23 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
+        dashboard_dataset.metadata_columns = self.metadata_columns
+        if self.metadata_columns:
+            metadata = self.test[self.metadata_columns]
+            try:
+                list_metadata = _convert_to_list(metadata)
+            except Exception as ex:
+                raise ValueError(
+                    "Unsupported dataset type") from ex
+            dashboard_dataset.metadata = list_metadata
 
         predicted_y = None
         feature_length = None
 
-        dataset: pd.DataFrame = self.test.drop(
-            [self.target_column], axis=1)
+        exclude_columns = [self.target_column]
+        if self.metadata_columns:
+            exclude_columns += self.metadata_columns
+        dataset: pd.DataFrame = self.test.drop(exclude_columns, axis=1)
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
@@ -607,6 +630,7 @@ class RAIInsights(object):
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
+            _METADATA_COLUMNS: self.metadata_columns,
             _CLASSES: classes
         }
         with open(top_dir / _META_JSON, 'w') as file:
@@ -698,6 +722,7 @@ class RAIInsights(object):
         inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
         inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
+        inst.__dict__[_METADATA_COLUMNS] = meta[_METADATA_COLUMNS]
         classes = None
         if _TRAIN_LABELS in meta:
             classes = meta[_TRAIN_LABELS]

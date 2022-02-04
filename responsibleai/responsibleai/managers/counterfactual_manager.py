@@ -319,6 +319,9 @@ class CounterfactualConfig(BaseConfig):
 
 
 class CounterfactualManager(BaseManager):
+    """Defines the CounterfactualManager for generating counterfactuals
+        from a model.
+    """
     _TRAIN = '_train'
     _TEST = '_test'
     _MODEL = '_model'
@@ -328,9 +331,8 @@ class CounterfactualManager(BaseManager):
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
 
     def __init__(self, model, train, test, target_column, task_type,
-                 categorical_features):
-        """Defines the CounterfactualManager for generating counterfactuals
-           from a model.
+                 categorical_features, metadata_columns):
+        """Creates a CounterfactualManager object.
 
         :param model: The model to generate counterfactuals from.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -664,8 +666,10 @@ class CounterfactualManager(BaseManager):
 
         # Rehydrate model analysis data
         inst.__dict__[CounterfactualManager._MODEL] = rai_insights.model
-        inst.__dict__[CounterfactualManager._TRAIN] = rai_insights.train
-        inst.__dict__[CounterfactualManager._TEST] = rai_insights.test
+        inst.__dict__[CounterfactualManager._TRAIN] = \
+            rai_insights.train.drop(columns=rai_insights.metadata_columns)
+        inst.__dict__[CounterfactualManager._TEST] = \
+            rai_insights.test.drop(columns=rai_insights.metadata_columns)
         inst.__dict__[CounterfactualManager._TARGET_COLUMN] = \
             rai_insights.target_column
         inst.__dict__[CounterfactualManager._TASK_TYPE] = \

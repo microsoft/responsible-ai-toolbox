@@ -44,34 +44,11 @@ EXPLANATION = '_explanation'
 
 
 class ExplainerManager(BaseManager):
-
-    """Defines the ExplainerManager for explaining a model.
-
-    :param model: The model to explain.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param initialization_examples: A matrix of feature vector
-        examples (# examples x # features) for initializing the explainer,
-        with an additional label column.
-    :type initialization_examples: pandas.DataFrame
-    :param evaluation_examples: A matrix of feature vector
-        examples (# examples x # features) on which to explain the
-        model's output, with an additional label column.
-    :type evaluation_examples: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param classes: Class names as a list of strings.
-        The order of the class names should match that of the model
-        output.  Only required if explaining classifier.
-    :type classes: list
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    """
+    """Defines the ExplainerManager for explaining a model."""
 
     def __init__(self, model, initialization_examples, evaluation_examples,
                  target_column, classes=None, categorical_features=None):
-        """Defines the ExplainerManager for explaining a model.
+        """Creates an ExplainerManager object.
 
         :param model: The model to explain.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -365,9 +342,11 @@ class ExplainerManager(BaseManager):
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features
-        target_column = rai_insights.target_column
-        train = rai_insights.train.drop(columns=[target_column])
-        test = rai_insights.test.drop(columns=[target_column])
+        exclude_columns = [rai_insights.target_column]
+        if rai_insights.metadata_columns:
+            exclude_columns += rai_insights.metadata_columns
+        train = rai_insights.train.drop(columns=exclude_columns)
+        test = rai_insights.test.drop(columns=exclude_columns)
         inst.__dict__[U_INITIALIZATION_EXAMPLES] = train
         inst.__dict__[U_EVALUATION_EXAMPLES] = test
         inst.__dict__['_' + FEATURES] = list(train.columns)
