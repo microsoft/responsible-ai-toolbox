@@ -20,6 +20,10 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.rai_insights.data_balance_analysis import (
+    DataBalanceAnalysis,
+    _get_data_balance_measures,
+)
 from responsibleai.utils import _is_classifier
 
 _DATA = "data"
@@ -83,7 +87,7 @@ class RAIInsights(object):
         categorical_features=None,
         classes=None,
         dataset_name=None,
-        data_balance_measures=None,
+        data_balance_analysis=None,
         serializer=None,
         maximum_rows_for_test: int = 5000,
     ):
@@ -117,7 +121,7 @@ class RAIInsights(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
 
-        # TODO: Add docs for dataset_name and data_balance_measures
+        # TODO: Add docs for dataset_name and data_balance_analysis
         """
         categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
@@ -129,8 +133,9 @@ class RAIInsights(object):
             categorical_features=categorical_features,
             classes=classes,
             serializer=serializer,
+            dataset_name=dataset_name,
+            data_balance_analysis=data_balance_analysis,
             maximum_rows_for_test=maximum_rows_for_test,
-            # TODO: validate
         )
         self.model = model
         self.train = train
@@ -139,7 +144,7 @@ class RAIInsights(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self.dataset_name = dataset_name
-        self.data_balance_measures = data_balance_measures
+        self.data_balance_analysis = data_balance_analysis
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type, train=self.train, target_column=self.target_column, classes=classes
@@ -194,6 +199,8 @@ class RAIInsights(object):
         categorical_features,
         classes,
         serializer,
+        dataset_name,
+        data_balance_analysis,
         maximum_rows_for_test: int,
     ):
         """
@@ -224,6 +231,8 @@ class RAIInsights(object):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+
+        # TODO: Add docs for dataset_name and data_balance_analysis
         """
 
         valid_tasks = [ModelTask.CLASSIFICATION.value, ModelTask.REGRESSION.value]
@@ -237,6 +246,16 @@ class RAIInsights(object):
                 "The explanations, error analysis and counterfactuals "
                 "may not work"
             )
+
+        if dataset_name is not None:
+            if not isinstance(dataset_name, str):
+                raise UserConfigValidationException("dataset_name should be a string")
+
+        if data_balance_analysis is not None:
+            if not isinstance(data_balance_analysis, DataBalanceAnalysis):
+                raise UserConfigValidationException(
+                    "data_balance_analysis should be of type " + "`responsibleai.DataBalanceAnalysis`"
+                )
 
         if serializer is not None:
             if not hasattr(serializer, "save"):
@@ -455,7 +474,7 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(self._classes)
         dashboard_dataset.name = self.dataset_name
-        dashboard_dataset.data_balance_measures = self.data_balance_measures
+        dashboard_dataset.data_balance_measures = _get_data_balance_measures(dba=self.data_balance_analysis)
 
         predicted_y = None
         feature_length = None
