@@ -13581,18 +13581,40 @@ export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   numLeaves: 11
 };
 
-export const adultCohortData: ICohort = {
+export const adultCohortDataContinuous: ICohort = {
   cohortName: "Cohort Continuous",
   filterList: [
     {
       arg: [65],
-      column: "Age",
+      column: "age",
       method: FilterMethods.LessThan
     },
     {
       arg: [40],
-      column: "Hours per week",
+      column: "hours-per-week",
       method: FilterMethods.GreaterThan
+    }
+  ]
+};
+
+// export const adultCohortDataCategorical: ICohort = {
+//   cohortName: "Cohort Categorical",
+//   filterList: [
+//     {
+//       arg: ["HS-Grad", "Bachelors"],
+//       column: "education",
+//       method: FilterMethods.Includes
+//     }
+//   ]
+// };
+
+export const adultCohortDataIndex: ICohort = {
+  cohortName: "Cohort Index",
+  filterList: [
+    {
+      arg: [23],
+      column: "Index",
+      method: FilterMethods.LessThan
     }
   ]
 };
