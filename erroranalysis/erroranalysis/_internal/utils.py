@@ -16,7 +16,7 @@ def generate_random_unique_indexes(count, nnz):
     :param nnz: The number of unique values to choose.
     :type nnz: int
     :return: The list of unique indexes of length nnz.
-    :rtype: numpy.array
+    :rtype: numpy.ndarray
     """
     if nnz > count:
         raise Exception("Knuth n-of-k algorithms requires 0 < n < k")
