@@ -94,6 +94,9 @@ class ErrorAnalysisDashboard(Dashboard):
         explanation is not specified for the dataset explorer.
         Specify less than 10k points for optimal performance.
     :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
+    :param locale: The language in which user wants to load and access the
+        ErrorAnalysis Dashboard. The default language is english ("en").
+    :type locale: str
 
     :Example:
 
