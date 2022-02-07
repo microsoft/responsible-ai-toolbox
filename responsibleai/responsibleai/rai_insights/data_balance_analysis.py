@@ -34,7 +34,6 @@ def _get_data_balance_measures(
     if (
         not dba
         or dba.df is None
-        or dba.df.empty
         or not all([dba.cols_of_interest, dba.label_col])
     ):
         return
