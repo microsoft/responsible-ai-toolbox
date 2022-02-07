@@ -7,9 +7,9 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 import warnings
 
-from databalanceanalysis.aggregate_measures import AggregateBalanceMeasure
-from databalanceanalysis.feature_measures import FeatureBalanceMeasure
-from databalanceanalysis.distribution_measures import (
+from raimitigations.databalanceanalysis import (
+    FeatureBalanceMeasure,
+    AggregateBalanceMeasure,
     DistributionBalanceMeasure,
 )
 import pandas as pd
@@ -185,9 +185,6 @@ def _transform_feature_measures(
             del row[CLASS_A]
             del row[CLASS_B]
 
-            # TODO: This won't be necessary once cols are converted to strings
-            row: Dict[str, float] = {k.value: v for k, v in row.items()}
-
             feature_measures[feature_name][class_key] = row
 
         unique_values: Dict[str, List[str]] = {
@@ -216,13 +213,8 @@ def _transform_distribution_measures(
             r[FEATURE_NAME]: r for r in rows
         }
 
-        for feature, measures in distribution_measures.items():
+        for measures in distribution_measures.values():
             del measures[FEATURE_NAME]
-
-            # TODO: This won't be necessary once cols are converted to strings
-            # After that, we can simplify this loop to just .values()
-            measures = {k.value: v for k, v in measures.items()}
-            distribution_measures[feature] = measures
     except Exception as e:
         warnings.warn(
             (
@@ -245,11 +237,6 @@ def _transform_aggregate_measures(df: pd.DataFrame) -> Dict[str, float]:
         aggregate_measures: Dict[str, float] = df.reset_index(
             drop=True
         ).to_dict(orient="records")[0]
-
-        # TODO: This won't be necessary once cols are converted to strings
-        aggregate_measures = {
-            k.value: v for k, v in aggregate_measures.items()
-        }
     except Exception as e:
         warnings.warn(
             f"Failed to transform aggregate measures for dataset due to {e!r}."
