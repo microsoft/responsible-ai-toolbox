@@ -40,11 +40,6 @@ def _get_data_balance_measures(
         return
 
     try:
-        dba.df = dba.df.copy(deep=True)
-
-        if dba.label_func:
-            dba.df[dba.label_col] = dba.df[dba.label_col].apply(dba.label_func)
-
         (
             feat_measures_df,
             dist_measures_df,
@@ -73,21 +68,69 @@ def _get_data_balance_measures(
 
 def _compute_measures(
     dba: DataBalanceAnalysis,
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    # TODO: Try importing spark transformers
+) -> Tuple[
+    Optional[pd.DataFrame], Optional[pd.DataFrame], Optional[pd.DataFrame]
+]:
+    feature_measures: pd.DataFrame = None
+    distribution_measures: pd.DataFrame = None
+    aggregate_measures: pd.DataFrame = None
 
     try:
-        feature_measures: pd.DataFrame = FeatureBalanceMeasure(
-            dba.cols_of_interest, dba.label_col
-        ).measures(dba.df)
-        distribution_measures: pd.DataFrame = DistributionBalanceMeasure(
-            dba.cols_of_interest
-        ).measures(dba.df)
-        aggregate_measures: pd.DataFrame = AggregateBalanceMeasure(
-            dba.cols_of_interest
-        ).measures(dba.df)
+        # This inner try-catch is to catch an ImportError from importing
+        # the Spark implementation, which requires Spark env
+        # and SynapseML package to be installed
+        try:
+            from synapse.ml.exploratory import (
+                AggregateBalanceMeasure as SparkAggregateBalanceMeasure,
+                DistributionBalanceMeasure as SparkDistributionBalanceMeasure,
+                FeatureBalanceMeasure as SparkFeatureBalanceMeasure,
+            )
 
-        return feature_measures, distribution_measures, aggregate_measures
+            # If imports succeed, assume that the df is a spark df and
+            # compute measures using Spark implementation
+
+            # We don't need to deepcopy the spark df because it is immutable
+            dba.df = dba.df.withColumn(dba.label_col, dba.label_func)
+
+            feature_measures: pd.DataFrame = (
+                SparkFeatureBalanceMeasure()
+                .setSensitiveCols(dba.cols_of_interest)
+                .setLabelCol(dba.label_col)
+                .transform(dba.df)
+                .toPandas()
+            )
+            distribution_measures: pd.DataFrame = (
+                SparkDistributionBalanceMeasure()
+                .setSensitiveCols(dba.cols_of_interest)
+                .transform(dba.df)
+                .toPandas()
+            )
+            aggregate_measures: pd.DataFrame = (
+                SparkAggregateBalanceMeasure()
+                .setSensitiveCols(dba.cols_of_interest)
+                .transform(dba.df)
+                .toPandas()
+            )
+
+        # If imports fail, revert to non-Spark implementation
+        except ImportError:
+            # We need to deepcopy the df, otherwise the original df will mutate
+            dba.df = dba.df.copy(deep=True)
+
+            if dba.label_func:
+                dba.df[dba.label_col] = dba.df[dba.label_col].apply(
+                    dba.label_func
+                )
+
+            feature_measures: pd.DataFrame = FeatureBalanceMeasure(
+                dba.cols_of_interest, dba.label_col
+            ).measures(dba.df)
+            distribution_measures: pd.DataFrame = DistributionBalanceMeasure(
+                dba.cols_of_interest
+            ).measures(dba.df)
+            aggregate_measures: pd.DataFrame = AggregateBalanceMeasure(
+                dba.cols_of_interest
+            ).measures(dba.df)
     except Exception as e:
         warnings.warn(
             (
@@ -95,6 +138,8 @@ def _compute_measures(
                 f"for dataset due to {e!r}.",
             )
         )
+
+    return feature_measures, distribution_measures, aggregate_measures
 
 
 def _transform_feature_measures(
