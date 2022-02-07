@@ -17,9 +17,9 @@ import pandas as pd
 
 @dataclass
 class DataBalanceAnalysis:
-    df: pd.DataFrame
-    cols_of_interest: List[str]
-    label_col: str
+    df: pd.DataFrame = None
+    cols_of_interest: List[str] = None
+    label_col: str = None
     label_func: Callable = None
     measures: Dict[str, Any] = None
 
@@ -40,6 +40,8 @@ def _get_data_balance_measures(
         return
 
     try:
+        dba.df = dba.df.copy(deep=True)
+
         if dba.label_func:
             dba.df[dba.label_col] = dba.df[dba.label_col].apply(dba.label_func)
 
