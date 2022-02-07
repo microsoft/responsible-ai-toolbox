@@ -33,7 +33,7 @@ class DataBalanceAnalysis:
     measures: Dict[str, Any] = None
 
 
-def _get_data_balance_measures(
+def get_data_balance_measures(
     dba: DataBalanceAnalysis,
 ) -> Optional[Dict[str, Any]]:
     if dba.measures:

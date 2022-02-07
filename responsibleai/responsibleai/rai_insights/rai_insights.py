@@ -22,7 +22,7 @@ from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.rai_insights.data_balance_analysis import (
     DataBalanceAnalysis,
-    _get_data_balance_measures,
+    get_data_balance_measures,
 )
 from responsibleai.utils import _is_classifier
 
@@ -534,7 +534,7 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(self._classes)
         dashboard_dataset.name = self.dataset_name
-        dashboard_dataset.data_balance_measures = _get_data_balance_measures(
+        dashboard_dataset.data_balance_measures = get_data_balance_measures(
             dba=self.data_balance_analysis
         )
 
