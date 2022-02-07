@@ -147,10 +147,15 @@ class RAIInsights(object):
         self.data_balance_analysis = data_balance_analysis
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
-            task_type=self.task_type, train=self.train, target_column=self.target_column, classes=classes
+            task_type=self.task_type,
+            train=self.train,
+            target_column=self.target_column,
+            classes=classes,
         )
 
-        self._causal_manager = CausalManager(train, test, target_column, task_type, categorical_features)
+        self._causal_manager = CausalManager(
+            train, test, target_column, task_type, categorical_features
+        )
 
         self._counterfactual_manager = CounterfactualManager(
             model=model,
@@ -166,7 +171,12 @@ class RAIInsights(object):
         )
 
         self._explainer_manager = ExplainerManager(
-            model, train, test, target_column, self._classes, categorical_features=categorical_features
+            model,
+            train,
+            test,
+            target_column,
+            self._classes,
+            categorical_features=categorical_features,
         )
 
         self._managers = [
@@ -235,9 +245,15 @@ class RAIInsights(object):
         # TODO: Add docs for dataset_name and data_balance_analysis
         """
 
-        valid_tasks = [ModelTask.CLASSIFICATION.value, ModelTask.REGRESSION.value]
+        valid_tasks = [
+            ModelTask.CLASSIFICATION.value,
+            ModelTask.REGRESSION.value,
+        ]
         if task_type not in valid_tasks:
-            message = f"Unsupported task type '{task_type}'. " f"Should be one of {valid_tasks}"
+            message = (
+                f"Unsupported task type '{task_type}'. "
+                f"Should be one of {valid_tasks}"
+            )
             raise UserConfigValidationException(message)
 
         if model is None:
@@ -249,25 +265,34 @@ class RAIInsights(object):
 
         if dataset_name is not None:
             if not isinstance(dataset_name, str):
-                raise UserConfigValidationException("dataset_name should be a string")
+                raise UserConfigValidationException(
+                    "dataset_name should be a string"
+                )
 
         if data_balance_analysis is not None:
             if not isinstance(data_balance_analysis, DataBalanceAnalysis):
                 raise UserConfigValidationException(
-                    "data_balance_analysis should be of type " + "`responsibleai.DataBalanceAnalysis`"
+                    "data_balance_analysis should be of type ",
+                    "`responsibleai.DataBalanceAnalysis`",
                 )
 
         if serializer is not None:
             if not hasattr(serializer, "save"):
-                raise UserConfigValidationException("The serializer does not implement save()")
+                raise UserConfigValidationException(
+                    "The serializer does not implement save()"
+                )
 
             if not hasattr(serializer, "load"):
-                raise UserConfigValidationException("The serializer does not implement load()")
+                raise UserConfigValidationException(
+                    "The serializer does not implement load()"
+                )
 
             try:
                 pickle.dumps(serializer)
             except Exception:
-                raise UserConfigValidationException("The serializer should be serializable via pickle")
+                raise UserConfigValidationException(
+                    "The serializer should be serializable via pickle"
+                )
 
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
             if test.shape[0] > maximum_rows_for_test:
@@ -277,20 +302,34 @@ class RAIInsights(object):
                     + "Please resample the test data or "
                     + "adjust maximum_rows_for_test"
                 )
-                raise UserConfigValidationException(msg_fmt.format(test.shape[0], maximum_rows_for_test))
-
-            if len(set(train.columns) - set(test.columns)) != 0 or len(set(test.columns) - set(train.columns)):
-                raise UserConfigValidationException("The features in train and test data do not match")
-
-            if target_column not in list(train.columns) or target_column not in list(test.columns):
                 raise UserConfigValidationException(
-                    "Target name {0} not present in train/test data".format(target_column)
+                    msg_fmt.format(test.shape[0], maximum_rows_for_test)
                 )
 
-            if categorical_features is not None and len(categorical_features) > 0:
+            if len(set(train.columns) - set(test.columns)) != 0 or len(
+                set(test.columns) - set(train.columns)
+            ):
+                raise UserConfigValidationException(
+                    "The features in train and test data do not match"
+                )
+
+            if target_column not in list(
+                train.columns
+            ) or target_column not in list(test.columns):
+                raise UserConfigValidationException(
+                    "Target name {0} not present in train/test data".format(
+                        target_column
+                    )
+                )
+
+            if (
+                categorical_features is not None
+                and len(categorical_features) > 0
+            ):
                 if target_column in categorical_features:
                     raise UserConfigValidationException(
-                        "Found target name {0} in " "categorical feature list".format(target_column)
+                        "Found target name {0} in "
+                        "categorical feature list".format(target_column)
                     )
 
                 difference_set = set(categorical_features) - set(train.columns)
@@ -307,36 +346,44 @@ class RAIInsights(object):
                         np.unique(train[column])
                     except Exception:
                         raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. " "Please check your train data.".format(column)
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
                         )
 
                     try:
                         np.unique(test[column])
                     except Exception:
                         raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. " "Please check your test data.".format(column)
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
                         )
 
             if classes is not None and task_type == ModelTask.CLASSIFICATION:
                 if (
                     len(set(train[target_column].unique()) - set(classes)) != 0
-                    or len(set(classes) - set(train[target_column].unique())) != 0
+                    or len(set(classes) - set(train[target_column].unique()))
+                    != 0
                 ):
                     raise UserConfigValidationException(
-                        "The train labels and distinct values in " "target (train data) do not match"
+                        "The train labels and distinct values in "
+                        "target (train data) do not match"
                     )
 
                 if (
                     len(set(test[target_column].unique()) - set(classes)) != 0
-                    or len(set(classes) - set(test[target_column].unique())) != 0
+                    or len(set(classes) - set(test[target_column].unique()))
+                    != 0
                 ):
                     raise UserConfigValidationException(
-                        "The train labels and distinct values in " "target (test data) do not match"
+                        "The train labels and distinct values in "
+                        "target (test data) do not match"
                     )
 
             if model is not None:
                 # Pick one row from train and test data
-                small_train_data = train.iloc[0:1].drop([target_column], axis=1)
+                small_train_data = train.iloc[0:1].drop(
+                    [target_column], axis=1
+                )
                 small_test_data = test.iloc[0:1].drop([target_column], axis=1)
 
                 small_train_features_before = list(small_train_data.columns)
@@ -347,9 +394,14 @@ class RAIInsights(object):
                     model.predict(small_test_data)
                 except Exception:
                     raise UserConfigValidationException(
-                        "The model passed cannot be used for" " getting predictions via predict()"
+                        "The model passed cannot be used for"
+                        " getting predictions via predict()"
                     )
-                self._validate_features_same(small_train_features_before, small_train_data, SKLearn.PREDICT)
+                self._validate_features_same(
+                    small_train_features_before,
+                    small_train_data,
+                    SKLearn.PREDICT,
+                )
 
                 # Run predict_proba() of the model
                 if task_type == ModelTask.CLASSIFICATION:
@@ -358,9 +410,14 @@ class RAIInsights(object):
                         model.predict_proba(small_test_data)
                     except Exception:
                         raise UserConfigValidationException(
-                            "The model passed cannot be used for" " getting predictions via predict_proba()"
+                            "The model passed cannot be used for"
+                            " getting predictions via predict_proba()"
                         )
-                self._validate_features_same(small_train_features_before, small_train_data, SKLearn.PREDICT_PROBA)
+                self._validate_features_same(
+                    small_train_features_before,
+                    small_train_data,
+                    SKLearn.PREDICT_PROBA,
+                )
 
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
@@ -371,10 +428,13 @@ class RAIInsights(object):
                         )
         else:
             raise UserConfigValidationException(
-                "Unsupported data type for either train or test. " "Expecting pandas Dataframe for train and test."
+                "Unsupported data type for either train or test. "
+                "Expecting pandas Dataframe for train and test."
             )
 
-    def _validate_features_same(self, small_train_features_before, small_train_data, function):
+    def _validate_features_same(
+        self, small_train_features_before, small_train_data, function
+    ):
         """
         Validate the features are unmodified on the dataframe.
 
@@ -474,7 +534,9 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(self._classes)
         dashboard_dataset.name = self.dataset_name
-        dashboard_dataset.data_balance_measures = _get_data_balance_measures(dba=self.data_balance_analysis)
+        dashboard_dataset.data_balance_measures = _get_data_balance_measures(
+            dba=self.data_balance_analysis
+        )
 
         predicted_y = None
         feature_length = None
@@ -497,17 +559,27 @@ class RAIInsights(object):
             try:
                 predicted_y = _convert_to_list(predicted_y)
             except Exception as ex:
-                raise ValueError("Model prediction output of unsupported type,") from ex
+                raise ValueError(
+                    "Model prediction output of unsupported type,"
+                ) from ex
         if predicted_y is not None:
-            if self.task_type == "classification" and dashboard_dataset.class_names is not None:
-                predicted_y = [dashboard_dataset.class_names.index(y) for y in predicted_y]
+            if (
+                self.task_type == "classification"
+                and dashboard_dataset.class_names is not None
+            ):
+                predicted_y = [
+                    dashboard_dataset.class_names.index(y) for y in predicted_y
+                ]
             dashboard_dataset.predicted_y = predicted_y
         row_length = 0
 
         if list_dataset is not None:
             row_length, feature_length = np.shape(list_dataset)
             if row_length > 100000:
-                raise ValueError("Exceeds maximum number of rows" "for visualization (100000)")
+                raise ValueError(
+                    "Exceeds maximum number of rows"
+                    "for visualization (100000)"
+                )
             if feature_length > 1000:
                 raise ValueError(
                     "Exceeds maximum number of features for"
@@ -521,8 +593,13 @@ class RAIInsights(object):
         true_y = self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
-            if self.task_type == "classification" and dashboard_dataset.class_names is not None:
-                true_y = [dashboard_dataset.class_names.index(y) for y in true_y]
+            if (
+                self.task_type == "classification"
+                and dashboard_dataset.class_names is not None
+            ):
+                true_y = [
+                    dashboard_dataset.class_names.index(y) for y in true_y
+                ]
             dashboard_dataset.true_y = _convert_to_list(true_y)
 
         features = dataset.columns
@@ -541,11 +618,16 @@ class RAIInsights(object):
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
-                raise ValueError("Model does not support predict_proba method" " for given dataset type,") from ex
+                raise ValueError(
+                    "Model does not support predict_proba method"
+                    " for given dataset type,"
+                ) from ex
             try:
                 probability_y = _convert_to_list(probability_y)
             except Exception as ex:
-                raise ValueError("Model predict_proba output of unsupported type,") from ex
+                raise ValueError(
+                    "Model predict_proba output of unsupported type,"
+                ) from ex
             dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
@@ -572,15 +654,23 @@ class RAIInsights(object):
         if self.model is None:
             return
 
-        test_without_target_column = self.test.drop([self.target_column], axis=1)
+        test_without_target_column = self.test.drop(
+            [self.target_column], axis=1
+        )
 
         predict_output = self.model.predict(test_without_target_column)
-        self._write_to_file(prediction_output_path / (_PREDICT + _JSON_EXTENSION), json.dumps(predict_output.tolist()))
+        self._write_to_file(
+            prediction_output_path / (_PREDICT + _JSON_EXTENSION),
+            json.dumps(predict_output.tolist()),
+        )
 
         if hasattr(self.model, SKLearn.PREDICT_PROBA):
-            predict_proba_output = self.model.predict_proba(test_without_target_column)
+            predict_proba_output = self.model.predict_proba(
+                test_without_target_column
+            )
             self._write_to_file(
-                prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION), json.dumps(predict_proba_output.tolist())
+                prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
+                json.dumps(predict_proba_output.tolist()),
             )
 
     def _save_data(self, path):
@@ -593,12 +683,24 @@ class RAIInsights(object):
         data_directory = Path(path) / _DATA
         data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION), self.train.to_json(orient="split"))
+        self._write_to_file(
+            data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION),
+            json.dumps(dtypes),
+        )
+        self._write_to_file(
+            data_directory / (_TRAIN + _JSON_EXTENSION),
+            self.train.to_json(orient="split"),
+        )
 
         dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION), self.test.to_json(orient="split"))
+        self._write_to_file(
+            data_directory / (_TEST + _DTYPES + _JSON_EXTENSION),
+            json.dumps(dtypes),
+        )
+        self._write_to_file(
+            data_directory / (_TEST + _JSON_EXTENSION),
+            self.test.to_json(orient="split"),
+        )
 
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
@@ -636,7 +738,10 @@ class RAIInsights(object):
                 has_setstate = hasattr(self.model, "__setstate__")
                 has_getstate = hasattr(self.model, "__getstate__")
                 if not (has_setstate and has_getstate):
-                    raise ValueError("Model must be picklable or a custom serializer must" " be specified")
+                    raise ValueError(
+                        "Model must be picklable or a custom serializer must"
+                        " be specified"
+                    )
             with open(top_dir / _MODEL_PKL, "wb") as file:
                 pickle.dump(self.model, file)
 
@@ -673,12 +778,16 @@ class RAIInsights(object):
         :type path: str
         """
         data_directory = Path(path) / _DATA
-        with open(data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), "r") as file:
+        with open(
+            data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), "r"
+        ) as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), "r") as file:
             train = pd.read_json(file, dtype=types, orient="split")
         inst.__dict__[_TRAIN] = train
-        with open(data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), "r") as file:
+        with open(
+            data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), "r"
+        ) as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), "r") as file:
             test = pd.read_json(file, dtype=types, orient="split")
@@ -707,7 +816,10 @@ class RAIInsights(object):
             classes = meta[_CLASSES]
 
         inst.__dict__["_" + _CLASSES] = RAIInsights._get_classes(
-            task_type=meta[_TASK_TYPE], train=inst.__dict__[_TRAIN], target_column=meta[_TARGET_COLUMN], classes=classes
+            task_type=meta[_TASK_TYPE],
+            train=inst.__dict__[_TRAIN],
+            target_column=meta[_TARGET_COLUMN],
+            classes=classes,
         )
 
     @staticmethod

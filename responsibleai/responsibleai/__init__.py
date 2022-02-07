@@ -4,7 +4,11 @@
 """Responsible AI SDK package."""
 
 from responsibleai.modelanalysis import ModelAnalysis
-from responsibleai.rai_insights import DataBalanceAnalysis, ModelTask, RAIInsights
+from responsibleai.rai_insights import (
+    DataBalanceAnalysis,
+    ModelTask,
+    RAIInsights,
+)
 
 from .__version__ import version
 
