@@ -15,6 +15,15 @@ from databalanceanalysis.distribution_measures import (
 import pandas as pd
 
 
+FEATURE_NAME = "FeatureName"
+CLASS_A = "ClassA"
+CLASS_B = "ClassB"
+
+SPARK_AGGREGATE_COL = "AggregateBalanceMeasure.*"
+SPARK_DISTRIBUTION_COL = "DistributionBalanceMeasure.*"
+SPARK_FEATURE_COL = "FeatureBalanceMeasure.*"
+
+
 @dataclass
 class DataBalanceAnalysis:
     df: pd.DataFrame = None
@@ -96,18 +105,21 @@ def _compute_measures(
                 .setSensitiveCols(dba.cols_of_interest)
                 .setLabelCol(dba.label_col)
                 .transform(dba.df)
+                .select(FEATURE_NAME, CLASS_A, CLASS_B, SPARK_FEATURE_COL)
                 .toPandas()
             )
             distribution_measures: pd.DataFrame = (
                 SparkDistributionBalanceMeasure()
                 .setSensitiveCols(dba.cols_of_interest)
                 .transform(dba.df)
+                .select(FEATURE_NAME, SPARK_DISTRIBUTION_COL)
                 .toPandas()
             )
             aggregate_measures: pd.DataFrame = (
                 SparkAggregateBalanceMeasure()
                 .setSensitiveCols(dba.cols_of_interest)
                 .transform(dba.df)
+                .select(SPARK_AGGREGATE_COL)
                 .toPandas()
             )
 
@@ -154,24 +166,24 @@ def _transform_feature_measures(
     try:
         rows: List[Any] = df.reset_index(drop=True).to_dict(orient="records")
         unique_values: Dict[str, Set[str]] = {
-            r["feature_name"]: set() for r in rows
+            r[FEATURE_NAME]: set() for r in rows
         }
         feature_measures: Dict[str, Dict[str, Dict[str, float]]] = {
-            r["feature_name"]: {} for r in rows
+            r[FEATURE_NAME]: {} for r in rows
         }
 
         for row in rows:
-            feature_name: str = row["feature_name"]
-            class_a: str = row["classA"]
-            class_b: str = row["classB"]
+            feature_name: str = row[FEATURE_NAME]
+            class_a: str = row[CLASS_A]
+            class_b: str = row[CLASS_B]
             class_key: str = f"{class_a}__{class_b}"
 
             unique_values[feature_name].add(class_a)
             unique_values[feature_name].add(class_b)
 
-            del row["feature_name"]
-            del row["classA"]
-            del row["classB"]
+            del row[FEATURE_NAME]
+            del row[CLASS_A]
+            del row[CLASS_B]
 
             # TODO: This won't be necessary once cols are converted to strings
             row: Dict[str, float] = {k.value: v for k, v in row.items()}
@@ -201,11 +213,11 @@ def _transform_distribution_measures(
     try:
         rows: List[Any] = df.reset_index(drop=True).to_dict(orient="records")
         distribution_measures: Dict[str, Dict[str, float]] = {
-            r["feature_name"]: r for r in rows
+            r[FEATURE_NAME]: r for r in rows
         }
 
         for feature, measures in distribution_measures.items():
-            del measures["feature_name"]
+            del measures[FEATURE_NAME]
 
             # TODO: This won't be necessary once cols are converted to strings
             # After that, we can simplify this loop to just .values()
