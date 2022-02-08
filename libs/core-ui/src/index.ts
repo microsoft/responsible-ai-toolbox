@@ -70,5 +70,4 @@ export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/ICohort";
 export * from "./lib/Interfaces/IErrorAnalysisData";
 export * from "./lib/Interfaces/DataBalanceInterfaces";
-export * from "./lib/Highchart/ErrorBarChart";
 export * from "./lib/Highchart/BasicHighChart";
