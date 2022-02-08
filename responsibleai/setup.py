@@ -27,7 +27,7 @@ setuptools.setup(
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
     description="SDK API to assess explain "
-                "models, generate counterfactual examples, analyse "
+                "models, generate counterfactual examples, analyze "
                 "causal effects and analyze errors in Machine Learning "
                 "models.",
     long_description=long_description,
