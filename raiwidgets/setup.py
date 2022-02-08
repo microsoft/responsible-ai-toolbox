@@ -27,7 +27,9 @@ setuptools.setup(
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
     description="Interactive visualizations to assess fairness, explain "
-                "models, and analyze errors in Machine Learning",
+                "models, generate counterfactual examples, analyze "
+                "causal effects and analyze errors in "
+                "Machine Learning models.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/microsoft/responsible-ai-widgets",
