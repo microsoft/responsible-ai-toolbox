@@ -4,6 +4,7 @@
 import * as Highcharts from "highcharts";
 import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
+import * as Exporting from "highcharts/modules/exporting";
 import * as React from "react";
 
 import { loadModules } from "./HighchartsModules";
@@ -12,11 +13,13 @@ import { HighchartsModuleNames } from "./HighchartTypes";
 // This is the only module we load for all charts.
 // Other modules need to be loaded on demand using modules property of the chart component.
 Accessibility.default(Highcharts);
+Exporting.default(Highcharts);
 // init module
 HighchartsMore(Highcharts);
 
 interface IHighchartReactProps {
   className?: string;
+  id?: string;
   chartOptions: Highcharts.Options;
   disableUpdate?: boolean;
   modules?: HighchartsModuleNames[];
@@ -85,5 +88,5 @@ export function HighchartReact(
     };
   }, []);
 
-  return <div className={props.className} ref={containerRef} />;
+  return <div className={props.className} id={props.id} ref={containerRef} />;
 }

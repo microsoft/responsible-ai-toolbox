@@ -51,6 +51,11 @@ import {
   bostonErrorAnalysisData,
   bostonWithFairnessModelExplanationData
 } from "../model-assessment/__mock_data__/bostonData";
+import {
+  wineData as wineDataMAD,
+  wineErrorAnalysisData,
+  wineWithFairnessModelExplanationData
+} from "../model-assessment/__mock_data__/wineData";
 
 export interface IInterpretDataSet {
   data?: IExplanationDashboardData;
@@ -199,7 +204,7 @@ export const applications: IApplications = <const>{
       adultCensusIncomeNoModelData: {
         classDimension: 2,
         dataset: adultCensusWithFairnessDataset
-      },
+      } as IModelAssessmentDataSet,
       bostonData: {
         causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
@@ -207,6 +212,12 @@ export const applications: IApplications = <const>{
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
         modelExplanationData: [bostonWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
+      wineData: {
+        classDimension: 3,
+        dataset: wineDataMAD,
+        errorAnalysisData: [wineErrorAnalysisData],
+        modelExplanationData: [wineWithFairnessModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

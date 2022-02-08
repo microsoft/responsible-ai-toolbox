@@ -86,5 +86,10 @@ export enum Locators {
   MSScrollable = "#OverallMetricChart div[class^='scrollableWrapper']",
   MSCohortDropdown = "#modelPerformanceCohortPicker",
   MSDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
-  MSYAxisPoints = "#OverallMetricChart g[class^='cartesianlayer'] g[class^='ytick']"
+  MSYAxisPoints = "#OverallMetricChart g[class^='cartesianlayer'] g[class^='ytick']",
+  CausalCalloutHeader = "#causalAggregateView div[class^='calloutHeader']",
+  CausalCalloutInner = "#causalAggregateView div[class^='calloutInner']",
+  CausalAnalysisTable = "#causalAggregateView div.ms-DetailsList",
+  CausalChartXAxisValues = '#causalAggregateView svg g[class*="highcharts-xaxis-labels"] text',
+  CausalAggregateView = "#causalAggregateView"
 }

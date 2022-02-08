@@ -70,7 +70,7 @@ As before, select the sensitive feature and the performance metric. The model co
 
 ## Supported Models
 
-This fairness API supports classification and regression models that are trained on datasets in Python `numpy.array`, `pandas.DataFrame`, `iml.datatypes.DenseData`, or `scipy.sparse.csr_matrix` format.
+This fairness API supports classification and regression models that are trained on datasets in Python `numpy.ndarray`, `pandas.DataFrame`, `iml.datatypes.DenseData`, or `scipy.sparse.csr_matrix` format.
 
 <a name="getting started"></a>
 

@@ -5,6 +5,9 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 const modelAssessmentDatasets = {
   ClassificationModelDebugging: {
+    causalAnalysisData: {
+      hasCausalAnalysisComponent: false
+    },
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
@@ -127,6 +130,10 @@ const modelAssessmentDatasets = {
     }
   },
   DiabetesDecisionMaking: {
+    causalAnalysisData: {
+      featureListInCausalTable: ["s2(num)", "bmi(num)", "bp(num)"],
+      hasCausalAnalysisComponent: true
+    },
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "0.05",
@@ -173,6 +180,9 @@ const modelAssessmentDatasets = {
     }
   },
   DiabetesRegressionModelDebugging: {
+    causalAnalysisData: {
+      hasCausalAnalysisComponent: false
+    },
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "0.05",
@@ -227,6 +237,9 @@ const modelAssessmentDatasets = {
     }
   },
   HousingClassificationModelDebugging: {
+    causalAnalysisData: {
+      hasCausalAnalysisComponent: false
+    },
     cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "150",

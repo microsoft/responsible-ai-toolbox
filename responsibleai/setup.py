@@ -26,8 +26,10 @@ setuptools.setup(
     version=version,  # noqa: F821
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
-    description="SDK API to explain models, and analyze "
-                "errors in Machine Learning",
+    description="SDK API to assess explain "
+                "models, generate counterfactual examples, analyze "
+                "causal effects and analyze errors in Machine Learning "
+                "models.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/microsoft/responsible-ai-widgets",
