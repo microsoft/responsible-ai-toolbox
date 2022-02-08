@@ -129,7 +129,7 @@
     "eslint-plugin-unicorn": "21.0.0",
     "jest": "27.0.3",
     "jest-canvas-mock": "2.2.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "prettier": "2.3.1",
     "prettier-plugin-packagejson": "2.2.5",
     "semver": "7.3.2",
