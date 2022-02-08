@@ -36,15 +36,14 @@ class DataBalanceAnalysis:
 def get_data_balance_measures(
     dba: DataBalanceAnalysis,
 ) -> Optional[Dict[str, Any]]:
+    if dba is None:
+        return
+
     if dba.measures:
         # Assume that they have been pre-computed and are valid, so return them
         return dba.measures
 
-    if (
-        not dba
-        or dba.df is None
-        or not all([dba.cols_of_interest, dba.label_col])
-    ):
+    if dba.df is None or not all([dba.cols_of_interest, dba.label_col]):
         return
 
     try:
