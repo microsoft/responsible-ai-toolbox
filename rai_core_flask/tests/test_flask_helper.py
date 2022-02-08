@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import time
+
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -39,7 +41,8 @@ class TestFlaskHelper(object):
         def hello():
             return "Hello"
 
-        response = http.get(f"{flask_service.env.base_url}/hello")
+        response = call_get_with_retries(
+            http, f"{flask_service.env.base_url}/hello")
 
         assert(response.status_code == 200)
         assert(response.text == "Hello")
@@ -57,7 +60,31 @@ class TestFlaskHelper(object):
         def hello_two():
             return "Hello"
 
-        response = http.get(f"{flask_service.env.base_url}/hello_two")
+        response = call_get_with_retries(
+            http, f"{flask_service.env.base_url}/hello_two")
 
         assert(response.status_code == 200)
         assert(response.text == "Hello")
+
+
+def call_get_with_retries(http_client,
+                          url_route,
+                          max_retries=4,
+                          retry_delay=60):
+    """Call http get on route with retries until successful."""
+    for i in range(max_retries):
+        try:
+            print("Calling get attempt {0} of {1}".format(i + 1, max_retries))
+            response = http_client.get(url_route)
+            break
+        except Exception as e:  # noqa: B902
+            print("Calling get attempt failed with exception:")
+            print(e)
+            if i + 1 != max_retries:
+                print("Will retry after {0} seconds".format(retry_delay))
+                time.sleep(retry_delay)
+                retry_delay = retry_delay * 2
+    else:
+        raise RuntimeError("Unable to call get on the given url route")
+
+    return response
