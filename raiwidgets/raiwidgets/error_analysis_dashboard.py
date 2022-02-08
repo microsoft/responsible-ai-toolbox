@@ -58,7 +58,7 @@ class ErrorAnalysisDashboard(Dashboard):
         Only needed if providing a sample dataset for the UI while using
         the full dataset for the tree view and heatmap. Otherwise specify
         pred_y parameter only.
-    :type pred_y_dataset: numpy.array or list[] or pandas.Series
+    :type pred_y_dataset: numpy.ndarray or list[] or pandas.Series
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
