@@ -5,40 +5,38 @@
 
 from typing import Any, List
 
-import pandas as pd
-
 from responsibleai.exceptions import UserConfigValidationException
 
 
 class CohortFilterMethods:
     """Defines different methods for cohort filters.
     """
-    GreaterThan = "greater"  # Strictly greater than a value
+    METHOD_GREATER = "greater"  # Strictly greater than a value
     # Greater than or equal to a value
-    GreaterThanEqualTo = "greater and equal"
-    LessThan = "less"  # Strictly lesser than a value
-    LessThanEqualTo = "less and equal"  # Lesser than or equal to a value
-    Equal = "equal"  # Equal to a value
-    Includes = "includes"  # Includes a set of values
-    Excludes = "excludes"  # Excludes a set of values
-    InTheRangeOf = "in the range of"  # In a given range of two values
+    METHOD_GREATER_AND_EQUAL = "greater and equal"
+    METHOD_LESS = "less"  # Strictly lesser than a value
+    METHOD_LESS_AND_EQUAL = "less and equal"  # Lesser than or equal to a value
+    METHOD_EQUAL = "equal"  # Equal to a value
+    METHOD_INCLUDES = "includes"  # Includes a set of values
+    METHOD_EXCLUDES = "excludes"  # Excludes a set of values
+    METHOD_RANGE = "in the range of"  # In a given range of two values
 
     # List of all filter methods
-    ALL = [GreaterThan,
-           GreaterThanEqualTo,
-           LessThan,
-           LessThanEqualTo,
-           Equal,
-           Includes,
-           Excludes,
-           InTheRangeOf]
+    ALL = [METHOD_GREATER,
+           METHOD_GREATER_AND_EQUAL,
+           METHOD_LESS,
+           METHOD_LESS_AND_EQUAL,
+           METHOD_EQUAL,
+           METHOD_INCLUDES,
+           METHOD_EXCLUDES,
+           METHOD_RANGE]
 
     # List of filter methods which expect a single value from the user
-    SINGLE_VALUE_METHODS = [GreaterThanEqualTo,
-                            GreaterThan,
-                            LessThanEqualTo,
-                            LessThan,
-                            Equal]
+    SINGLE_VALUE_METHODS = [METHOD_GREATER_AND_EQUAL,
+                            METHOD_GREATER,
+                            METHOD_LESS_AND_EQUAL,
+                            METHOD_LESS,
+                            METHOD_EQUAL]
 
 
 def cohort_filter_json_converter(obj):
@@ -131,12 +129,12 @@ class CohortFilter:
                         " or ".join(CohortFilterMethods.SINGLE_VALUE_METHODS))
                 )
 
-        if method == CohortFilterMethods.InTheRangeOf:
+        if method == CohortFilterMethods.METHOD_RANGE:
             if len(arg) != 2:
                 raise UserConfigValidationException(
                     "Expected two entries in arg for "
                     "cohort method {0}.".format(
-                        CohortFilterMethods.InTheRangeOf)
+                        CohortFilterMethods.METHOD_RANGE)
                 )
             if ((not isinstance(arg[0], int) and
                  not isinstance(arg[0], float)) or
@@ -145,19 +143,19 @@ class CohortFilter:
                 raise UserConfigValidationException(
                     "Expected int or float type for arg "
                     "with cohort method {0}.".format(
-                        CohortFilterMethods.InTheRangeOf)
+                        CohortFilterMethods.METHOD_RANGE)
                 )
 
 
 class Cohort:
     """Defines the cohort which will be injected from SDK into the Dashboard.
-    :param method: Name of the cohort.
-    :type method: str
+    :param name: Name of the cohort.
+    :type name: str
     """
     def __init__(self, name: str):
         """Defines the cohort which will be injected from SDK into the Dashboard.
-        :param method: Name of the cohort.
-        :type method: str
+        :param name: Name of the cohort.
+        :type name: str
         """
         self.name = name
         self.cohort_filter_list = None
@@ -171,9 +169,3 @@ class Cohort:
             self.cohort_filter_list = [cohort_filter]
         else:
             self.cohort_filter_list.append(cohort_filter)
-
-    def _validate_cohort_with_test_data(
-            self, test_data: pd.DataFrame):
-        # TODO: Add validations for checking cohort and cohort filter against
-        #       test data.
-        pass
