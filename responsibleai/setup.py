@@ -26,7 +26,7 @@ setuptools.setup(
     version=version,  # noqa: F821
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
-    description="SDK API to assess fairness, explain "
+    description="SDK API to assess explain "
                 "models, generate counterfactual examples, analyse "
                 "causal effects and analyze errors in Machine Learning "
                 "models.",
