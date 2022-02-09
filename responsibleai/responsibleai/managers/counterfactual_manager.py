@@ -108,6 +108,7 @@ def _get_schema_version(counterfactuals_dict):
 
 
 class CounterfactualConfig(BaseConfig):
+    """Defines the configuration for generating counterfactuals."""
     METHOD = 'method'
     CONTINUOUS_FEATURES = 'continuous_features'
     TOTAL_CFS = 'total_CFs'
@@ -319,6 +320,9 @@ class CounterfactualConfig(BaseConfig):
 
 
 class CounterfactualManager(BaseManager):
+    """Defines the CounterfactualManager for generating counterfactuals
+        from a model.
+    """
     _TRAIN = '_train'
     _TEST = '_test'
     _MODEL = '_model'
@@ -329,8 +333,7 @@ class CounterfactualManager(BaseManager):
 
     def __init__(self, model, train, test, target_column, task_type,
                  categorical_features):
-        """Defines the CounterfactualManager for generating counterfactuals
-           from a model.
+        """Creates a CounterfactualManager object.
 
         :param model: The model to generate counterfactuals from.
             A model that implements sklearn.predict or sklearn.predict_proba
