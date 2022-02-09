@@ -329,6 +329,37 @@ const modelAssessmentDatasets = {
       datapoint: 89,
       hasFeatureImportanceComponent: false
     },
+    causalAnalysisData: {
+      featureListInCausalTable: ["s2(num)", "bmi(num)", "bp(num)"],
+      hasCausalAnalysisComponent: true
+    },
+    datasetExplorerData: {
+      cohortDatasetNewValue: "0.05",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "age"
+    },
+    modelStatisticsData: {
+      defaultXAxis: "Error",
+      defaultXAxisPanelValue: "Error",
+      defaultYAxis: "Cohort",
+      yAxisNewPanelValue: "Dataset",
+      yAxisNewValue: "age",
+      yAxisNumberOfBins: "8"
+    },
+    whatIfCounterfactualsData: {
+      checkForClassField: false,
+      columnHeaderAfterSort: "s5",
+      columnHeaderBeforeSort: "age",
+      createYourOwnCounterfactualInputFieldUpdated: "25",
+      searchBarQuery: "sex",
+      selectedDatapoint: "Index 5",
+      whatIfNameLabel: "Copy of row 5",
+      whatIfNameLabelUpdated: "New Copy of row 5",
+      yAxisNewValue: "s3",
+      yAxisValue: "age"
+    },
     featureNames: [
       "s5",
       "bmi",
