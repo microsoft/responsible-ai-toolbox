@@ -85,23 +85,31 @@ def compute_error_tree(analyzer,
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
     input_data = filtered_df.drop(columns=dropped_cols)
+
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
+
     if is_model_analyzer:
-        pred_y = analyzer.model.predict(input_data)
+        pred_y = analyzer.model.predict(
+            input_data.drop(columns=analyzer._metadata_columns))
+
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     else:
         diff = pred_y - true_y
+
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
+
     if not isinstance(pred_y, np.ndarray):
         pred_y = np.array(pred_y)
+
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
+
     indexes = []
     for feature in features:
         indexes.append(analyzer.feature_names.index(feature))

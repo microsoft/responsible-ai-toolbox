@@ -40,6 +40,10 @@ class BaseAnalyzer(ABC):
     :type feature_names: numpy.array or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -68,12 +72,14 @@ class BaseAnalyzer(ABC):
                  true_y,
                  feature_names,
                  categorical_features,
+                 metadata_columns,
                  model_task,
                  metric,
                  classes):
         self._dataset = self._make_pandas_copy(dataset)
         self._true_y = true_y
         self._categorical_features = categorical_features
+        self._metadata_columns = metadata_columns
         if isinstance(feature_names, np.ndarray):
             feature_names = feature_names.tolist()
         self._feature_names = feature_names
@@ -445,6 +451,10 @@ class ModelAnalyzer(BaseAnalyzer):
     :type feature_names: numpy.array or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -474,6 +484,7 @@ class ModelAnalyzer(BaseAnalyzer):
                  true_y,
                  feature_names,
                  categorical_features,
+                 metadata_columns=None,
                  model_task=ModelTask.UNKNOWN,
                  metric=None,
                  classes=None):
@@ -489,6 +500,7 @@ class ModelAnalyzer(BaseAnalyzer):
                                             true_y,
                                             feature_names,
                                             categorical_features,
+                                            metadata_columns,
                                             model_task,
                                             metric,
                                             classes)
@@ -520,9 +532,13 @@ class ModelAnalyzer(BaseAnalyzer):
         :rtype: numpy.array
         """
         if self._model_task == ModelTask.CLASSIFICATION:
-            return self.model.predict(self.dataset) != self.true_y
+            return self.model.predict(
+                self.dataset.drop(columns=self._metadata_columns)) \
+                != self.true_y
         else:
-            return self.model.predict(self.dataset) - self.true_y
+            return self.model.predict(
+                self.dataset.drop(columns=self._metadata_columns)) \
+                - self.true_y
 
 
 class PredictionsAnalyzer(BaseAnalyzer):
@@ -543,6 +559,10 @@ class PredictionsAnalyzer(BaseAnalyzer):
     :type feature_names: numpy.array or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -572,6 +592,7 @@ class PredictionsAnalyzer(BaseAnalyzer):
                  true_y,
                  feature_names,
                  categorical_features,
+                 metadata_columns,
                  model_task=ModelTask.CLASSIFICATION,
                  metric=None,
                  classes=None):
@@ -583,6 +604,7 @@ class PredictionsAnalyzer(BaseAnalyzer):
                                                   true_y,
                                                   feature_names,
                                                   categorical_features,
+                                                  metadata_columns,
                                                   model_task,
                                                   metric,
                                                   classes)

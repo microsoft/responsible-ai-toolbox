@@ -104,6 +104,9 @@ class RAIInsights(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self.metadata_columns = metadata_columns
+        exclude_columns = []
+        if metadata_columns:
+            exclude_columns = metadata_columns
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -116,19 +119,19 @@ class RAIInsights(object):
             train, test, target_column, task_type, categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=model, train=train.drop(columns=self.metadata_columns),
-            test=test.drop(columns=self.metadata_columns),
+            model=model, train=train.drop(columns=exclude_columns),
+            test=test.drop(columns=exclude_columns),
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
 
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column,
             self._classes,
-            categorical_features)
+            categorical_features, metadata_columns)
 
         self._explainer_manager = ExplainerManager(
-            model, train.drop(columns=self.metadata_columns),
-            test.drop(columns=self.metadata_columns),
+            model, train.drop(columns=exclude_columns),
+            test.drop(columns=exclude_columns),
             target_column,
             self._classes,
             categorical_features=categorical_features)
@@ -480,7 +483,10 @@ class RAIInsights(object):
         exclude_columns = [self.target_column]
         if self.metadata_columns:
             exclude_columns += self.metadata_columns
-        dataset: pd.DataFrame = self.test.drop(exclude_columns, axis=1)
+        dataset: pd.DataFrame = \
+            self.test.drop(columns=[self.target_column], axis=1)
+        dataset_features_only: pd.DataFrame = \
+            self.test.drop(columns=exclude_columns, axis=1)
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
@@ -489,9 +495,9 @@ class RAIInsights(object):
         except Exception as ex:
             raise ValueError(
                 "Unsupported dataset type") from ex
-        if dataset is not None and self.model is not None:
+        if dataset_features_only is not None and self.model is not None:
             try:
-                predicted_y = self.model.predict(dataset)
+                predicted_y = self.model.predict(dataset_features_only)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
                 "dataset type"
@@ -515,7 +521,7 @@ class RAIInsights(object):
                 raise ValueError(
                     "Exceeds maximum number of rows"
                     "for visualization (100000)")
-            if feature_length > 1000:
+            if feature_length - len(self.metadata_columns or []) > 1000:
                 raise ValueError("Exceeds maximum number of features for"
                                  " visualization (1000). Please regenerate the"
                                  " explanation using fewer features or"
@@ -542,9 +548,9 @@ class RAIInsights(object):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if _is_classifier(self.model) and dataset is not None:
+        if _is_classifier(self.model) and dataset_features_only is not None:
             try:
-                probability_y = self.model.predict_proba(dataset)
+                probability_y = self.model.predict_proba(dataset_features_only)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex

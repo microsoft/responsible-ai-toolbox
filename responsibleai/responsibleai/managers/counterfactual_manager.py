@@ -331,7 +331,7 @@ class CounterfactualManager(BaseManager):
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
 
     def __init__(self, model, train, test, target_column, task_type,
-                 categorical_features, metadata_columns):
+                 categorical_features):
         """Creates a CounterfactualManager object.
 
         :param model: The model to generate counterfactuals from.

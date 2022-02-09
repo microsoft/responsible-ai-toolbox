@@ -155,7 +155,7 @@ class ErrorAnalysisManager(BaseManager):
     """Defines the ErrorAnalysisManager for discovering errors in a model."""
 
     def __init__(self, model, dataset, target_column, classes=None,
-                 categorical_features=None):
+                 categorical_features=None, metadata_columns=None):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -172,12 +172,17 @@ class ErrorAnalysisManager(BaseManager):
         :type classes: list
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
+        :param metadata_columns: The set of columns that are not passed
+            to the model or explainers. These columns can be used for
+            other analyses.
+        :type metadata_columns: list[str]
         """
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
         self._feature_names = list(self._dataset.columns)
         self._classes = classes
         self._categorical_features = categorical_features
+        self._metadata_columns = metadata_columns
         self._ea_config_list = []
         self._ea_report_list = []
         self._analyzer = ModelAnalyzer(model,
@@ -185,6 +190,7 @@ class ErrorAnalysisManager(BaseManager):
                                        self._true_y,
                                        self._feature_names,
                                        self._categorical_features,
+                                       self._metadata_columns,
                                        classes=self._classes)
 
     def add(self, max_depth=3, num_leaves=31,
