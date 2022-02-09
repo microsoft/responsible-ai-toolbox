@@ -16,8 +16,9 @@ class TestCausalManager:
 
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, None)
-
-        result = manager.add(['AveRooms'])
+        manager.add(['AveRooms'])
+        manager.compute()
+        result = manager.get()[0]
 
         assert len(result.policies) == 1
         assert len(result.config.treatment_features) == 1
@@ -32,6 +33,8 @@ class TestCausalManager:
             None, train_df, test_df, target_feature, ModelTask.REGRESSION)
 
         insights.causal.add(['AveRooms'])
+        insights.compute()
+
         pre_results = insights.causal.get()
         pre_result = pre_results[0]
 
@@ -54,6 +57,7 @@ class TestCausalManager:
         expected = "Increase the value 50"
         with pytest.raises(ValueError, match=expected):
             manager.add(['state'])
+            manager.compute()
 
     def test_causal_train_test_categories(self, parks_data):
         train_df, test_df, target_feature = parks_data
@@ -92,6 +96,8 @@ class TestCausalManagerTreatmentCosts:
             try:
                 cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                                  treatment_cost=0)
+                cost_manager.compute()
+
             except TypeError:
                 pass
             mock_create.assert_any_call(ANY, ANY, 'AveRooms', 0, ANY, ANY, ANY)
@@ -109,6 +115,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=5)
+            cost_manager.compute()
 
     def test_nonlist_cost(self, cost_manager):
         message = ("treatment_cost must be a list with the same number of "
@@ -120,6 +127,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=message):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=np.array([1, 2]))
+            cost_manager.compute()
 
     def test_invalid_cost_list_length(self, cost_manager):
         expected = ("treatment_cost must be a list with the same number of "
@@ -128,6 +136,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(UserConfigValidationException, match=expected):
             cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                              treatment_cost=[1, 2])
+            cost_manager.compute()
 
     def test_constant_cost_per_treatment_feature(self, cost_manager):
         with patch.object(cost_manager, '_create_policy', return_value=None)\
@@ -135,6 +144,7 @@ class TestCausalManagerTreatmentCosts:
             try:
                 cost_manager.add(['AveRooms', 'Population', 'AveOccup'],
                                  treatment_cost=[1, 2, 3])
+                cost_manager.compute()
             except TypeError:
                 pass
             mock_create.assert_any_call(ANY, ANY, 'AveRooms', 1, ANY, ANY, ANY)
@@ -152,6 +162,7 @@ class TestCausalManagerTreatmentCosts:
             try:
                 cost_manager.add(['AveRooms', 'Population'],
                                  treatment_cost=costs)
+                cost_manager.compute()
             except TypeError:
                 pass
             mock_create.assert_any_call(
@@ -167,6 +178,7 @@ class TestCausalManagerTreatmentCosts:
         with pytest.raises(Exception):
             cost_manager.add(['AveRooms', 'Population'], treatment_cost=costs,
                              skip_cat_limit_checks=True)
+            cost_manager.compute()
 
 
 class TestCausalDashboardData:
@@ -187,6 +199,8 @@ class TestCausalDashboardData:
 
         result = manager.add(['HouseAge_CAT', 'Population_CAT'],
                              random_state=42)
+        manager.compute()
+        result = manager.get()[0]
         dashboard_data = result._get_dashboard_data()
 
         policies = dashboard_data['policies']
