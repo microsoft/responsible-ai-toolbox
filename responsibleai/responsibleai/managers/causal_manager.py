@@ -25,7 +25,7 @@ from responsibleai.rai_insights.constants import ModelTask
 
 
 class CausalManager(BaseManager):
-    """Manager for causal analysis."""
+    """Manager for generating causal analyses from a dataset."""
 
     def __init__(
         self,
@@ -36,12 +36,12 @@ class CausalManager(BaseManager):
         categorical_features: Optional[List[str]]
     ):
         """Construct a CausalManager for generating causal analyses
-           from a dataset.
+            from a dataset.
         :param train: Dataset on which to compute global causal effects
-                     (#samples x #features).
+            (#samples x #features).
         :type train: pandas.DataFrame
         :param test: Dataset on which to compute local causal effects
-                     (#samples x #features).
+            (#samples x #features).
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
