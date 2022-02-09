@@ -7,6 +7,7 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import _, { Dictionary } from "lodash";
 
 export function getDependenceData(
@@ -26,7 +27,6 @@ export function getDependenceData(
   }
   let xData: number[] = [];
   let yData: number[] = [];
-  // const hoverTemplates: string[] = [];
 
   const customData = cohort.unwrap(JointDataset.IndexLabel).map((val) => {
     const dict: Dictionary<any> = {};
@@ -35,6 +35,7 @@ export function getDependenceData(
   });
   if (chartProps.xAxis) {
     const rawX = cohort.unwrap(chartProps.xAxis.property);
+    const xLabel = jointData.metaDict[chartProps.xAxis.property].label;
     if (chartProps.xAxis.options.dither) {
       const dithered = cohort.unwrap(JointDataset.DitherLabel);
       xData = dithered.map((dither, index) => {
@@ -50,19 +51,32 @@ export function getDependenceData(
         } else {
           customData[index].X = val;
         }
+        customData[index].template = `${xLabel}: ${customData[index].x}<br>`;
       });
     } else {
       xData = _.cloneDeep(rawX);
     }
   }
   if (chartProps.yAxis) {
+    const yLabel = localization.Interpret.Charts.featureImportance;
     yData = cohort.unwrap(chartProps.yAxis.property);
     yData.forEach((val, index) => {
       customData[index].Yformatted = val.toLocaleString(undefined, {
         maximumFractionDigits: 3
       });
+      customData[
+        index
+      ].template = `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
   }
+  const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
+  indecies.forEach((absoluteIndex, i) => {
+    customData[i].AbsoluteIndex = absoluteIndex;
+    customData[
+      i
+    ].template += `${localization.Interpret.Charts.rowIndex}: ${absoluteIndex}<br>`;
+    customData[i].template += "<extra></extra>";
+  });
   const result = customData.map((d, index) => {
     return {
       customData: d,

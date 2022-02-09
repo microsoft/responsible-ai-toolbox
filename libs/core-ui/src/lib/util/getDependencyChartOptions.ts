@@ -13,7 +13,7 @@ export interface IDependenceData {
 
 export function getDependencyChartOptions(
   data: IDependenceData[],
-  xLabel: string,
+  _xLabel: string,
   _yLabel: string,
   theme?: ITheme
 ): IHighchartsConfig {
@@ -43,7 +43,7 @@ export function getDependencyChartOptions(
         },
         tooltip: {
           headerFormat: "",
-          pointFormat: `${xLabel}: {point.x}<br>`
+          pointFormat: `{point.customData.template}`
         }
       }
     },
