@@ -13618,3 +13618,41 @@ export const adultCohortDataIndex: IPreBuiltCohort = {
     }
   ]
 };
+
+export const adultCohortDataPredictedY: IPreBuiltCohort = {
+  cohortName: "Cohort Predicted Y",
+  filterList: [
+    {
+      arg: ["<=50K", ">50K"],
+      column: "Predicted Y",
+      method: FilterMethods.Includes
+    }
+  ]
+};
+
+export const adultCohortDataTrueY: IPreBuiltCohort = {
+  cohortName: "Cohort True Y",
+  filterList: [
+    {
+      arg: ["<=50K", ">50K"],
+      column: "True Y",
+      method: FilterMethods.Includes
+    }
+  ]
+};
+
+export const adultCohortDataClassificationOutcome: IPreBuiltCohort = {
+  cohortName: "Cohort Classification Outcome",
+  filterList: [
+    {
+      arg: [
+        "True positive",
+        "True negative",
+        "False negative",
+        "False positive"
+      ],
+      column: "Classification Outcome",
+      method: FilterMethods.Includes
+    }
+  ]
+};
