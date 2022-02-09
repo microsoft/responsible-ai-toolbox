@@ -142,6 +142,20 @@ class TestCohortFilter:
 
 
 class TestCohort:
+    def test_cohort_configuration_validations(self):
+        with pytest.raises(
+            UserConfigValidationException,
+            match="Got unexpected type <class 'int'> for cohort name. "
+                  "Expected string type."):
+            Cohort(name=1)
+
+        with pytest.raises(
+            UserConfigValidationException,
+            match="Got unexpected type <class 'list'> for cohort filter. "
+                  "Expected CohortFilter type"):
+            cohort = Cohort(name="Cohort New")
+            cohort.add_cohort_filter(cohort_filter=[])
+
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)
     def test_cohort_serialization_single_value_method(self, method):

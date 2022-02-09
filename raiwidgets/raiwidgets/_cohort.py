@@ -5,6 +5,8 @@
 
 from typing import Any, List
 
+import pandas as pd
+
 from responsibleai.exceptions import UserConfigValidationException
 
 
@@ -39,6 +41,18 @@ class CohortFilterMethods:
                             METHOD_EQUAL]
 
 
+class ClassificationOutcomes:
+    """Defines the possible values for classification outcomes.
+    """
+    FALSE_NEGATIVE = 'False negative'
+    FALSE_POSITIVE = 'False positive'
+    TRUE_NEGATIVE = 'True negative'
+    TRUE_POSITIVE = 'True positive'
+
+    ALL = [FALSE_NEGATIVE, FALSE_POSITIVE,
+           TRUE_NEGATIVE, TRUE_POSITIVE]
+
+
 def cohort_filter_json_converter(obj):
     """Helper function to convert CohortFilter object to json.
     :param obj: Object to convert to json.
@@ -64,6 +78,17 @@ class CohortFilter:
                    will be applied.
     :type column: str
     """
+    PREDICTED_Y = 'Predicted Y'
+    TRUE_Y = 'True Y'
+    INDEX = 'Index'
+    CLASSIFICATION_OUTCOME = 'Classification Outcome'
+    REGRESSION_ERROR = 'Regression Error'
+
+    SPECIAL_COLUMN_LIST = [PREDICTED_Y,
+                           TRUE_Y,
+                           CLASSIFICATION_OUTCOME,
+                           REGRESSION_ERROR]
+
     def __init__(self, method: str, arg: List[Any], column: str):
         """Defines the cohort filter.
         :param method: Cohort filter method from one of CohortFilterMethods.
@@ -146,6 +171,56 @@ class CohortFilter:
                         CohortFilterMethods.METHOD_RANGE)
                 )
 
+    def _validate_with_test_data(self, test_data: pd.DataFrame,
+                                 target_column: str):
+        """
+        Validate the cohort filters parameters with respect to test data.
+
+        :param test_data: Test data over which cohort analysis will be done
+            in ResponsibleAI Dashboard.
+        :type test_data: pd.DataFrame
+        :param target_column: The target column in the test data.
+        :type target_column: str
+
+        The following validations need to be performed:-
+
+        High level validations
+        1. Validate if the filter column is present in the test data.
+        2. Validate if the filter column is present in the special column
+           list.
+
+        "Index" Filter validations
+        1. The Index filter only takes integer arguments.
+        2. The Index filter doesn't take CohortFilterMethods.EXCLUDES
+           filter method.
+
+        "Classification Outcome" Filter validations
+        1. Validate that "Classification Outcome" filter is not configure for
+           multiclass classification and regression.
+        2. The "Classification Outcome" filter only contains values from set
+           ClassificationOutcomes.
+        3. The "Classification Outcome" filter only takes
+           CohortFilterMethods.INCLUDES filter method.
+
+        "Regression Error" Filter validations
+        1. Validate that "Regression Error" filter is not configure for
+           multiclass classification and binary classification.
+        2. Only integer or floating points can be configured as arguments.
+        3. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES
+           filter methods cannot be configured for this filter.
+
+        "Predicted Y/True Y" Filter validations
+        1. The set of classes configured in case of classification is a
+           superset of the classes available in the test data.
+        2. The CohortFilterMethods.INCLUDES is only allowed to be
+           configured for "Predicted Y" filter in case of classification.
+        3. Only integer or floating points can be configured as arguments
+           for regression.
+        4. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES
+           filter methods cannot be configured for this filter for regression.
+        """
+        pass
+
 
 class Cohort:
     """Defines the cohort which will be injected from SDK into the Dashboard.
@@ -157,6 +232,11 @@ class Cohort:
         :param name: Name of the cohort.
         :type name: str
         """
+        if not isinstance(name, str):
+            raise UserConfigValidationException(
+                "Got unexpected type {0} for cohort name. "
+                "Expected string type.".format(type(name))
+            )
         self.name = name
         self.cohort_filter_list = None
 
@@ -165,7 +245,30 @@ class Cohort:
         :param cohort_filter: Cohort filter defined by CohortFilter class.
         :type: CohortFilter
         """
+        if not isinstance(cohort_filter, CohortFilter):
+            raise UserConfigValidationException(
+                "Got unexpected type {0} for cohort filter. "
+                "Expected CohortFilter type.".format(type(cohort_filter))
+            )
         if self.cohort_filter_list is None:
             self.cohort_filter_list = [cohort_filter]
         else:
             self.cohort_filter_list.append(cohort_filter)
+
+    def _validate_with_test_data(self, test_data: pd.DataFrame,
+                                 target_column: str):
+        """
+        Validate the cohort and cohort filters parameters with respect to
+        test data.
+
+        :param test_data: Test data over which cohort analysis will be done
+            in ResponsibleAI Dashboard.
+        :type test_data: pd.DataFrame
+        :param target_column: The target column in the test data.
+        :type target_column: str
+        """
+        if self.cohort_filter_list is None:
+            return
+        for cohort_filter in self.cohort_filter_list:
+            cohort_filter._validate_with_test_data(test_data=test_data,
+                                                   target_column=target_column)
