@@ -24,6 +24,9 @@ export function getErrorBarChartOptions(
       type: "lowmedhigh",
       zoomType: "xy"
     },
+    exporting: {
+      enabled: true
+    },
     legend: {},
     plotOptions: {
       scatter: {

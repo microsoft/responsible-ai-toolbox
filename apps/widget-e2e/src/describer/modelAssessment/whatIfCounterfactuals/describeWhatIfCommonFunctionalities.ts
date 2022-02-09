@@ -22,7 +22,6 @@ export function describeWhatIfCommonFunctionalities(
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
-      cy.task("log", props.chart.Elements.length);
       expect(props.chart.Elements.length).equals(
         dataShape.featureImportanceData?.datapoint
       );

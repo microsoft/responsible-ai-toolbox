@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
@@ -42,15 +44,15 @@ class ExplanationDashboardInput:
             Will overwrite any set on explanation object already.
             Must have fewer than
             10000 rows and fewer than 1000 columns.
-        :type dataset: numpy.array or list[][]
+        :type dataset: numpy.ndarray or list[][]
         :param true_y: The true labels for the provided dataset.
             Will overwrite any set on
             explanation object already.
-        :type true_y: numpy.array or list[]
+        :type true_y: numpy.ndarray or list[]
         :param classes: The class names.
-        :type classes: numpy.array or list[]
+        :type classes: numpy.ndarray or list[]
         :param features: Feature names.
-        :type features: numpy.array or list[]
+        :type features: numpy.ndarray or list[]
         """
         self._model = model
         self._is_classifier = _is_classifier(model)
@@ -124,14 +126,17 @@ class ExplanationDashboardInput:
                     "Exceeds maximum number of rows"
                     "for visualization (100000)")
             if feature_length > 1000:
-                raise ValueError("Exceeds maximum number of features for"
-                                 " visualization (1000). Please regenerate the"
-                                 " explanation using fewer features or"
-                                 " initialize the dashboard without passing a"
-                                 " dataset.")
-            self.dashboard_input[
-                ExplanationDashboardInterface.TRAINING_DATA
-            ] = serialize_json_safe(list_dataset)
+                warnings.warn("Exceeds maximum number of features for"
+                              " visualization (1000)."
+                              " Please regenerate the"
+                              " explanation using fewer features or"
+                              " initialize the dashboard without"
+                              " passing a dataset. Dashboard will"
+                              " show limited view.")
+            else:
+                self.dashboard_input[
+                    ExplanationDashboardInterface.TRAINING_DATA
+                ] = serialize_json_safe(list_dataset)
             self.dashboard_input[
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier
@@ -147,10 +152,6 @@ class ExplanationDashboardInput:
             try:
                 local_explanation["scores"] = _convert_to_list(
                     local_explanation["scores"], EXP_VIZ_ERR_MSG)
-                if np.shape(local_explanation["scores"])[-1] > 1000:
-                    raise ValueError("Exceeds maximum number of features for "
-                                     "visualization (1000). Please regenerate"
-                                     " the explanation using fewer features.")
                 local_explanation["intercept"] = _convert_to_list(
                     local_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 # We can ignore perf explanation data.

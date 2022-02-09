@@ -25,12 +25,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import {
-  IMatrixAreaState,
-  IMatrixFilterState
-} from "../../../MatrixFilterState";
 import { MetricSelector } from "../../MetricSelector/MetricSelector";
 import { MatrixArea } from "../MatrixArea/MatrixArea";
+import {
+  createInitialMatrixFilterState,
+  IMatrixFilterState
+} from "../MatrixFilterState";
 import { MatrixLegend } from "../MatrixLegend/MatrixLegend";
 import { MatrixSummary } from "../MatrixSummary/MatrixSummary";
 
@@ -55,10 +55,6 @@ export interface IMatrixFilterProps {
   ) => void;
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  state: IMatrixFilterState;
-  matrixAreaState: IMatrixAreaState;
-  setMatrixAreaState: (matrixAreaState: IMatrixAreaState) => void;
-  setMatrixFilterState: (matrixFilterState: IMatrixFilterState) => void;
   isEnabled: boolean;
 }
 
@@ -69,12 +65,21 @@ export class MatrixFilter extends React.PureComponent<
   IMatrixFilterState
 > {
   public static contextType = ModelAssessmentContext;
+  private static savedState: IMatrixFilterState | undefined;
+  private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private options: IComboBoxOption[];
   public constructor(props: IMatrixFilterProps) {
     super(props);
-    this.state = this.props.state;
+    if (
+      this.props.selectedCohort !== this.props.baseCohort &&
+      MatrixFilter.savedState
+    ) {
+      this.state = MatrixFilter.savedState;
+    } else {
+      this.state = createInitialMatrixFilterState();
+    }
     this.options = [
       { key: "", text: localization.ErrorAnalysis.noFeature },
       ...props.features.map((feature) => {
@@ -89,10 +94,19 @@ export class MatrixFilter extends React.PureComponent<
         selectedFeature2: features[1]
       };
     }
+    MatrixFilter.saveStateOnUnmount = true;
+  }
+
+  public static resetState(): void {
+    MatrixFilter.saveStateOnUnmount = false;
   }
 
   public componentWillUnmount(): void {
-    this.props.setMatrixFilterState(this.state);
+    if (MatrixFilter.saveStateOnUnmount) {
+      MatrixFilter.savedState = this.state;
+    } else {
+      MatrixFilter.savedState = undefined;
+    }
   }
 
   public render(): React.ReactNode {
@@ -117,9 +131,7 @@ export class MatrixFilter extends React.PureComponent<
             />
             <Stack.Item key="feature1key">
               <ComboBox
-                defaultSelectedKey={
-                  this.props.matrixAreaState?.matrixFeature1 || ""
-                }
+                defaultSelectedKey={this.state.selectedFeature1 || ""}
                 label="Rows: Feature 1"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -134,9 +146,7 @@ export class MatrixFilter extends React.PureComponent<
             </Stack.Item>
             <Stack.Item key="feature2key">
               <ComboBox
-                defaultSelectedKey={
-                  this.props.matrixAreaState?.matrixFeature2 || ""
-                }
+                defaultSelectedKey={this.state.selectedFeature2 || ""}
                 label="Columns: Feature 2"
                 options={this.options}
                 dropdownMaxWidth={300}
@@ -146,7 +156,7 @@ export class MatrixFilter extends React.PureComponent<
                   calloutMaxHeight: 300,
                   directionalHintFixed: true
                 }}
-                defaultValue={this.props.matrixAreaState?.matrixFeature2}
+                defaultValue={this.state.selectedFeature2}
                 disabled={!this.props.isEnabled}
               />
             </Stack.Item>
@@ -170,8 +180,6 @@ export class MatrixFilter extends React.PureComponent<
               selectedCohort={this.props.selectedCohort}
               baseCohort={this.props.baseCohort}
               updateMatrixLegendState={this.updateMatrixLegendState}
-              state={this.props.matrixAreaState}
-              setMatrixAreaState={this.props.setMatrixAreaState}
               isEnabled={this.props.isEnabled}
               metric={this.context.errorAnalysisData!.metric}
             />
