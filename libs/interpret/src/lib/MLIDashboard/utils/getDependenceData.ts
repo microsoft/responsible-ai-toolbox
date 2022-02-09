@@ -51,7 +51,7 @@ export function getDependenceData(
         } else {
           customData[index].X = val;
         }
-        customData[index].template = `${xLabel}: ${customData[index].x}<br>`;
+        customData[index].template = `${xLabel}: ${customData[index].X}<br>`;
       });
     } else {
       xData = _.cloneDeep(rawX);
@@ -66,7 +66,7 @@ export function getDependenceData(
       });
       customData[
         index
-      ].template = `${yLabel}: ${customData[index].Yformatted}<br>`;
+      ].template += `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
   }
   const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
