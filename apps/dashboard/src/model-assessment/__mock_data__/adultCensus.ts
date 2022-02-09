@@ -4,13 +4,13 @@
 import {
   ICausalAnalysisData,
   ICounterfactualData,
-  ICohort,
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
   ComparisonTypes,
   Metrics,
-  FilterMethods
+  FilterMethods,
+  IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -13581,7 +13581,7 @@ export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   numLeaves: 11
 };
 
-export const adultCohortDataContinuous: ICohort = {
+export const adultCohortDataContinuous: IPreBuiltCohort = {
   cohortName: "Cohort Continuous",
   filterList: [
     {
@@ -13597,18 +13597,18 @@ export const adultCohortDataContinuous: ICohort = {
   ]
 };
 
-// export const adultCohortDataCategorical: ICohort = {
-//   cohortName: "Cohort Categorical",
-//   filterList: [
-//     {
-//       arg: ["HS-Grad", "Bachelors"],
-//       column: "education",
-//       method: FilterMethods.Includes
-//     }
-//   ]
-// };
+export const adultCohortDataCategorical: IPreBuiltCohort = {
+  cohortName: "Cohort Categorical",
+  filterList: [
+    {
+      arg: ["HS-Grad", "Bachelors"],
+      column: "education",
+      method: FilterMethods.Includes
+    }
+  ]
+};
 
-export const adultCohortDataIndex: ICohort = {
+export const adultCohortDataIndex: IPreBuiltCohort = {
   cohortName: "Cohort Index",
   filterList: [
     {
