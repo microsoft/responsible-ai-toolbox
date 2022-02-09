@@ -53,23 +53,23 @@ const modelAssessmentDatasets = {
       "capital-loss"
     ],
     modelStatisticsData: {
-      hasModelStatisticsComponent: true,
-      hasSideBar: true,
       defaultXAxis: "Probability : <=50K",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
+      hasModelStatisticsComponent: true,
+      hasSideBar: true,
+      xAxisNewValue: "Probability : <=50K",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8",
-      xAxisNewValue: "Probability : <=50K"
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
-      hasWhatIfCounterfactualsComponent: true,
       checkForClassField: true,
       classValue: "Probability : <=50K",
       columnHeaderAfterSort: "capital-gain",
       columnHeaderBeforeSort: "age",
       createYourOwnCounterfactualInputFieldUpdated: "25",
+      hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
       selectedDatapoint: "Index 5",
@@ -109,22 +109,22 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
-      hasModelStatisticsComponent: true,
-      hasSideBar: true,
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
+      hasModelStatisticsComponent: true,
+      hasSideBar: true,
+      xAxisNewValue: "Error",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8",
-      xAxisNewValue: "Error"
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
-      hasWhatIfCounterfactualsComponent: true,
       checkForClassField: false,
       columnHeaderAfterSort: "s5",
       columnHeaderBeforeSort: "age",
       createYourOwnCounterfactualInputFieldUpdated: "25",
+      hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "sex",
       selectedDatapoint: "Index 5",
       whatIfNameLabel: "Copy of row 5",
@@ -170,22 +170,22 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
-      hasModelStatisticsComponent: true,
-      hasSideBar: true,
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
+      hasModelStatisticsComponent: true,
+      hasSideBar: true,
+      xAxisNewValue: "Error",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8",
-      xAxisNewValue: "Error"
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
-      hasWhatIfCounterfactualsComponent: true,
       checkForClassField: false,
       columnHeaderAfterSort: "s5",
       columnHeaderBeforeSort: "age",
       createYourOwnCounterfactualInputFieldUpdated: "25",
+      hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "s6",
       selectedDatapoint: "Index 5",
       whatIfNameLabel: "Copy of row 5",
@@ -259,23 +259,23 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     modelStatisticsData: {
-      hasModelStatisticsComponent: true,
-      hasSideBar: true,
       defaultXAxis: "Probability : Less than median",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
+      hasModelStatisticsComponent: true,
+      hasSideBar: true,
+      xAxisNewValue: "Probability : Less than median",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "LotFrontage",
-      yAxisNumberOfBins: "8",
-      xAxisNewValue: "Probability : Less than median"
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
-      hasWhatIfCounterfactualsComponent: true,
       checkForClassField: true,
       classValue: "Probability : Less than median",
       columnHeaderAfterSort: "OverallQual",
       columnHeaderBeforeSort: "LotFrontage",
       createYourOwnCounterfactualInputFieldUpdated: "25",
+      hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : More than median",
       searchBarQuery: "Wood",
       selectedDatapoint: "Index 5",
@@ -286,10 +286,6 @@ const modelAssessmentDatasets = {
     }
   },
   HousingDecisionMaking: {
-    cohortDefaultName: "All data",
-    featureImportanceData: {
-      hasFeatureImportanceComponent: false
-    },
     causalAnalysisData: {
       featureListInCausalTable: [
         "GarageCars(num)",
@@ -300,6 +296,7 @@ const modelAssessmentDatasets = {
       ],
       hasCausalAnalysisComponent: true
     },
+    cohortDefaultName: "All data",
     datasetExplorerData: {
       cohortDatasetNewValue: "100",
       colorValueButton: "Index",
@@ -313,12 +310,8 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
     },
-    modelStatisticsData: {
-      hasModelStatisticsComponent: false,
-      hasSideBar: false
-    },
-    whatIfCounterfactualsData: {
-      hasWhatIfCounterfactualsComponent: false
+    featureImportanceData: {
+      hasFeatureImportanceComponent: false
     },
     featureNames: [
       "LotFrontage",
@@ -353,11 +346,27 @@ const modelAssessmentDatasets = {
       "ScreenPorch",
       "PoolArea",
       "YrSold"
-    ]
+    ],
+    modelStatisticsData: {
+      hasModelStatisticsComponent: false,
+      hasSideBar: false
+    },
+    whatIfCounterfactualsData: {
+      hasWhatIfCounterfactualsComponent: false
+    }
   },
   MulticlassDnnModelDebugging: {
-    isMulticlass: true,
+    causalAnalysisData: {
+      hasCausalAnalysisComponent: false
+    },
     cohortDefaultName: "All data",
+    datasetExplorerData: {
+      cohortDatasetNewValue: "14.5",
+      colorValueButton: "Predicted Y",
+      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
+      defaultXAxis: "Index",
+      defaultYAxis: "alcohol"
+    },
     featureImportanceData: {
       correctPredictionDatapoint: "60",
       datapoint: 500,
@@ -369,9 +378,9 @@ const modelAssessmentDatasets = {
       noDataset: false,
       noFeatureImportance: false,
       noLocalImportance: false,
+      rowToSelect: "24",
       topFeaturesCurrentValue: "4",
-      topFeaturesText: "Top 4 features by their importance",
-      rowToSelect: "24"
+      topFeaturesText: "Top 4 features by their importance"
     },
     featureNames: [
       "total_phenols",
@@ -388,26 +397,17 @@ const modelAssessmentDatasets = {
       "nonflavanoid_phenols",
       "color_intensity"
     ],
-    causalAnalysisData: {
-      hasCausalAnalysisComponent: false
-    },
-    datasetExplorerData: {
-      cohortDatasetNewValue: "14.5",
-      colorValueButton: "Predicted Y",
-      datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
-      defaultXAxis: "Index",
-      defaultYAxis: "alcohol"
-    },
+    isMulticlass: true,
     modelStatisticsData: {
-      hasModelStatisticsComponent: true,
-      hasSideBar: false,
       defaultXAxis: "Predicted Y",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
+      hasModelStatisticsComponent: true,
+      hasSideBar: false,
+      xAxisNewValue: "Probability : 0",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "alcohol",
-      yAxisNumberOfBins: "8",
-      xAxisNewValue: "Probability : 0"
+      yAxisNumberOfBins: "8"
     },
     whatIfCounterfactualsData: {
       hasWhatIfCounterfactualsComponent: false

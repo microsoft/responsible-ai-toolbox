@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "apps/widget-e2e/src/util/BarChart";
+import { BarChart } from "../../../util/BarChart";
 import { BoxChart } from "../../../util/BoxChart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
