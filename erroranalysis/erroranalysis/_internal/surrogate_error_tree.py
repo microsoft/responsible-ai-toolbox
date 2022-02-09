@@ -295,7 +295,7 @@ def traverse(df,
              classes=None):
     """Traverses the current node in the tree to create a list of nodes.
 
-    :param df: The dataframe containing the features and labels.
+    :param df: The DataFrame containing the features and labels.
     :type df: pandas.DataFrame
     :param tree: The current node in the tree to traverse.
     :type tree: dict
@@ -522,9 +522,9 @@ def node_to_dict(df, tree, nodeid, categories, json,
 
 
 def get_regression_metric_data(df):
-    """Compute regression metric data from a dataframe.
+    """Compute regression metric data from a DataFrame.
 
-    :param df: dataframe
+    :param df: DataFrame
     :type df: pandas.DataFrame
     :return: pred_y, true_y, error
     :rtype: numpy.ndarray, numpy.ndarray, int
@@ -537,9 +537,9 @@ def get_regression_metric_data(df):
 
 
 def get_classification_metric_data(df):
-    """Compute classification metric data from a dataframe.
+    """Compute classification metric data from a DataFrame.
 
-    :param df: dataframe
+    :param df: DataFrame
     :type df: pandas.DataFrame
     :return: pred_y, true_y, error
     :rtype: numpy.ndarray, numpy.ndarray, int
