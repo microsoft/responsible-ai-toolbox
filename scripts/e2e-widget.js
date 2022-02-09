@@ -6,11 +6,14 @@ const commander = require("commander");
 
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
+// Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
 const fileNames = [
   "responsibleaidashboard-census-classification-model-debugging",
   "responsibleaidashboard-diabetes-regression-model-debugging",
   "responsibleaidashboard-housing-classification-model-debugging",
-  "responsibleaidashboard-diabetes-decision-making"
+  "responsibleaidashboard-diabetes-decision-making",
+  "responsibleaidashboard-housing-decision-making",
+  "responsibleaidashboard-multiclass-dnn-model-debugging"
 ];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
@@ -46,6 +49,21 @@ async function runNotebook(name) {
       throw error;
     });
   });
+}
+
+function checkIfAllNotebooksHaveTests() {
+  console.log(`Checking if all notebooks under ${baseDir} has tests`);
+  const files = fs
+    .readdirSync(baseDir)
+    .filter((f) => f.startsWith(filePrefix) && f.endsWith(".ipynb"))
+    .map((f) => f.replace(".ipynb", ""));
+  const allNotebooksHaveTests = _.isEqual(_.sortBy(files), _.sortBy(fileNames));
+  if (!allNotebooksHaveTests) {
+    throw new Error(
+      `Some of the notebooks doesn't have tests. If a new notebook is added, Please add tests.`
+    );
+  }
+  console.log(`All notebooks have tests.`);
 }
 
 function convertNotebook() {
@@ -119,6 +137,7 @@ async function main() {
     .option("-w, --watch", "Watch mode")
     .parse(process.argv)
     .outputHelp();
+  checkIfAllNotebooksHaveTests();
   convertNotebook();
   const hosts = await runNotebooks();
   writeCypressSettings(hosts);

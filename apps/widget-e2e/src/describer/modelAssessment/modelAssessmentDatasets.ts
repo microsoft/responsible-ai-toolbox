@@ -322,6 +322,57 @@ const modelAssessmentDatasets = {
       yAxisNewValue: "1stFlrSF",
       yAxisValue: "LotFrontage"
     }
+  },
+  HousingDecisionMaking: {
+    cohortDefaultName: "All data",
+    featureImportanceData: {
+      datapoint: 89,
+      hasFeatureImportanceComponent: false
+    },
+    featureNames: [
+      "s5",
+      "bmi",
+      "bp",
+      "s3",
+      "sex",
+      "s1",
+      "s4",
+      "s2",
+      "age",
+      "s6"
+    ]
+  },
+  MulticlassDnnModelDebugging: {
+    cohortDefaultName: "All data",
+    featureImportanceData: {
+      correctPredictionDatapoint: "398",
+      datapoint: 500,
+      dropdownRowName: "Row 4",
+      hasCorrectIncorrectDatapoints: true,
+      hasFeatureImportanceComponent: true,
+      incorrectPredictionDatapoint: "102",
+      newFeatureDropdownValue: "workclass",
+      noDataset: false,
+      noFeatureImportance: false,
+      noLocalImportance: false,
+      topFeaturesCurrentValue: "4",
+      topFeaturesText: "Top 4 features by their importance"
+    },
+    featureNames: [
+      "total_phenols",
+      "proline",
+      "hue",
+      "alcohol",
+      "proanthocyanins",
+      "od280/od315_of_diluted_wines",
+      "malic_acid",
+      "ash",
+      "alcalinity_of_ash",
+      "magnesium",
+      "flavanoids",
+      "nonflavanoid_phenols",
+      "color_intensity"
+    ]
   }
 };
 
