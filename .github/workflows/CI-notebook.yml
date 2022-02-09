@@ -72,10 +72,6 @@ jobs:
         shell: bash -l {0}
         run: python -m pytest notebooks
 
-      - name: Run widget tests
-        shell: bash -l {0}
-        run: yarn e2e-widget
-
       - name: Upload notebook test result
         if: always()
         uses: actions/upload-artifact@v2
