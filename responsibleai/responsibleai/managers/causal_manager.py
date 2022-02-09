@@ -150,8 +150,6 @@ class CausalManager(BaseManager):
         :type verbose: int
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
-        :return: Causal result.
-        :rtype: CausalResult
         """
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
