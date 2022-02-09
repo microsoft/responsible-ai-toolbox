@@ -52,7 +52,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the row", () => {
-        selectRow("Index", "4");
+        selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { BarChart } from "apps/widget-e2e/src/util/BarChart";
 import { BoxChart } from "../../../util/BoxChart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
@@ -10,11 +11,17 @@ export function describeModelPerformanceBoxChart(
 ): void {
   describe("Model performance box chart", () => {
     const props = {
-      chart: undefined as unknown as BoxChart,
+      chart: dataShape.isMulticlass
+        ? (undefined as unknown as BoxChart)
+        : (undefined as unknown as BarChart),
       dataShape
     };
     beforeEach(() => {
-      props.chart = new BoxChart("#OverallMetricChart");
+      if (dataShape.isMulticlass) {
+        props.chart = new BarChart("#OverallMetricChart");
+      } else {
+        props.chart = new BoxChart("#OverallMetricChart");
+      }
     });
     it("should render", () => {
       expect(props.chart.Elements.length).greaterThan(0);
@@ -60,7 +67,7 @@ export function describeModelPerformanceBoxChart(
 
     it("should change to different x-axis title", () => {
       cy.get(`${Locators.MSCHorizontalAxis} button`).click();
-      cy.get(`${Locators.DECChoiceFieldGroup} label:eq(3)`)
+      cy.get(`${Locators.DECChoiceFieldGroup} label:eq(2)`)
         .invoke("text")
         .then((text1) => {
           cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
@@ -75,7 +82,7 @@ export function describeModelPerformanceBoxChart(
         .click();
       cy.get(Locators.SelectButton).click();
       cy.get(`${Locators.MSCHorizontalAxis}`).contains(
-        dataShape.modelStatisticsData?.defaultXAxis || "Probability : <=50K"
+        dataShape.modelStatisticsData?.xAxisNewValue || ""
       );
     });
   });

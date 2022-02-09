@@ -10,9 +10,11 @@ export interface IModelAssessmentData {
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
   cohortDefaultName?: string;
+  isMulticlass?: boolean;
 }
 
 export interface IErrorAnalysisData {
+  hasErrorAnalysisComponent?: boolean;
   errorMessage?: string;
   hoverNodeData?: { [key: string]: string };
   defaultMetric?: string;
@@ -33,9 +35,12 @@ export interface IErrorAnalysisData {
 }
 
 export interface IModelStatisticsData {
+  hasModelStatisticsComponent?: boolean;
+  hasSideBar?: boolean;
   defaultYAxis?: string;
   defaultXAxis?: string;
   defaultXAxisPanelValue?: string;
+  xAxisNewValue?: string;
   yAxisNewPanelValue?: string;
   yAxisNewValue?: string;
   yAxisNumberOfBins?: string;
@@ -68,6 +73,7 @@ export interface IDEWhiskerPlotData {
 }
 
 export interface IDEDotPlotData {
+  hasDataExplorerComponent?: boolean;
   defaultYAxis?: string;
   defaultXAxis?: string;
   yAxisPanelOptions?: string[];
@@ -80,6 +86,7 @@ export interface IFeatureImportanceData {
   hasCorrectIncorrectDatapoints?: boolean;
   correctPredictionDatapoint?: string;
   incorrectPredictionDatapoint?: string;
+  rowToSelect?: string;
   noLocalImportance?: boolean;
   noPredict?: boolean;
   noFeatureImportance?: boolean;
@@ -108,6 +115,7 @@ export interface ICausalAnalysisData {
 }
 
 export interface IWhatIfCounterfactualsData {
+  hasWhatIfCounterfactualsComponent?: boolean;
   isClassification?: boolean;
   noPredict?: boolean;
   noY?: boolean;

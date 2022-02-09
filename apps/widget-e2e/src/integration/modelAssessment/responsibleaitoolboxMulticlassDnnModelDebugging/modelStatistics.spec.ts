@@ -3,4 +3,4 @@
 
 import { describeModelStatistics } from "../../../describer/modelAssessment/modelStatistics/describeModelStatistics";
 
-describeModelStatistics("HousingDecisionMaking");
+describeModelStatistics("MulticlassDnnModelDebugging");
