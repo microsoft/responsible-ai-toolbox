@@ -52,6 +52,12 @@ class CausalResult(BaseResult['CausalResult']):
 
     @property
     def is_computed(self):
+        """Check if the causal analysis was performed.
+
+        :return: True if causal analysis was performed and False
+            otherwise.
+        :rtype: boolean
+        """
         return self.causal_analysis is not None or \
             self.global_effects is not None or \
             self.local_effects is not None or \
