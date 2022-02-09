@@ -159,6 +159,12 @@ class CausalManager(BaseManager):
                        f"not exist in train data: {list(difference_set)}")
             raise UserConfigValidationException(message)
 
+        is_multiclass = len(np.unique(
+            self._train[self._target_column].values).tolist()) > 2
+        if is_multiclass:
+            raise UserConfigValidationException(
+                "Multiclass classification isn't supported")
+
         if nuisance_model not in [ModelTypes.AUTOML,
                                   ModelTypes.LINEAR]:
             message = (f"nuisance_model should be one of "
