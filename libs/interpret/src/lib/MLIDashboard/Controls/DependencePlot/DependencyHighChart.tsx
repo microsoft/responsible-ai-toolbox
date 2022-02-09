@@ -16,6 +16,8 @@ import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { getDependenceData } from "../../utils/getDependenceData";
+
 import { dependencePlotStyles } from "./DependencePlot.styles";
 
 export interface IDependencyHighChartProps {
@@ -67,8 +69,15 @@ export class DependencyHighChart extends React.PureComponent<IDependencyHighChar
             <div className={classNames.chart}>
               <BasicHighChart
                 configOverride={getDependencyChartOptions(
-                  undefined,
-                  yAxisLabel,
+                  getDependenceData(
+                    this.props.chartProps,
+                    this.props.jointDataset,
+                    this.props.cohort
+                  ),
+                  this.props.jointDataset.metaDict[
+                    this.props.chartProps.xAxis.property
+                  ].label,
+                  localization.Interpret.Charts.featureImportance,
                   getTheme()
                 )}
               />

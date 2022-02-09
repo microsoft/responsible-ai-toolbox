@@ -5,9 +5,16 @@ import { ITheme } from "@fluentui/react";
 
 import { IHighchartsConfig } from "../Highchart/HighchartTypes";
 
+export interface IDependenceData {
+  x: number;
+  y: number;
+  customData: any[];
+}
+
 export function getDependencyChartOptions(
-  data: number[][],
-  additionalData: any[],
+  data: IDependenceData[],
+  xLabel: string,
+  _yLabel: string,
   theme?: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
@@ -16,15 +23,9 @@ export function getDependencyChartOptions(
     backgroundColor: theme?.palette.white,
     fontColor: theme?.semanticColors.bodyText
   };
-  const highchartData = data.map((p, index) => {
-    return {
-      custom: additionalData[index],
-      x: p[0],
-      y: p[1]
-    };
-  });
   return {
     chart: {
+      backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
     },
@@ -32,31 +33,24 @@ export function getDependencyChartOptions(
     plotOptions: {
       scatter: {
         marker: {
-          radius: 5,
+          radius: 2,
           states: {
             hover: {
               enabled: true,
-              lineColor: "rgb(100,100,100)"
+              lineColor: colorTheme.axisColor
             }
           }
         },
-        states: {
-          hover: {
-            // marker: {
-            //   enabled: false
-            // }
-          }
-        },
         tooltip: {
-          headerFormat: "<b>{series.name}</b><br>",
-          pointFormat: "{point.x} cm, {point.y} kg"
+          headerFormat: "",
+          pointFormat: `${xLabel}: {point.x}<br>`
         }
       }
     },
     series: [
       {
-        // color: 'rgba(223, 83, 83, .5)',
-        data: highchartData,
+        color: colorTheme.fontColor,
+        data,
         name: "",
         type: "scatter"
       }
@@ -64,16 +58,23 @@ export function getDependencyChartOptions(
     subtitle: {},
     title: { text: "" },
     xAxis: {
+      labels: {
+        style: {
+          color: colorTheme.fontColor
+        }
+      },
       title: {
-        text: "Height (cm)"
+        text: ""
       }
-      // startOnTick: true,
-      // endOnTick: true,
-      // showLastLabel: true
     },
     yAxis: {
+      labels: {
+        style: {
+          color: colorTheme.fontColor
+        }
+      },
       title: {
-        text: "Weight (kg)"
+        text: ""
       }
     }
   };
