@@ -13,8 +13,7 @@ export interface IDependenceData {
 
 export function getDependencyChartOptions(
   data: IDependenceData[],
-  _xLabel: string,
-  _yLabel: string,
+  xLabels: string[] | undefined,
   theme?: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
@@ -58,6 +57,7 @@ export function getDependencyChartOptions(
     subtitle: {},
     title: { text: "" },
     xAxis: {
+      categories: xLabels,
       labels: {
         style: {
           color: colorTheme.fontColor

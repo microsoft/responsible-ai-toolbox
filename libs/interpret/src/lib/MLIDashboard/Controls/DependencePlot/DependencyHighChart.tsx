@@ -76,8 +76,7 @@ export class DependencyHighChart extends React.PureComponent<IDependencyHighChar
                   ),
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
-                  ].label,
-                  localization.Interpret.Charts.featureImportance,
+                  ].sortedCategoricalValues,
                   getTheme()
                 )}
               />
