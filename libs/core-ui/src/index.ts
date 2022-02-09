@@ -30,7 +30,6 @@ export * from "./lib/util/getRandomId";
 export * from "./lib/util/getCohortFilterCount";
 export * from "./lib/util/getTreatmentBarChartOptions";
 export * from "./lib/util/getDependencyChartOptions";
-export * from "./lib/util/getDependencyChartOptions";
 export * from "./lib/util/IGenericChartProps";
 export * from "./lib/util/initializeOfficeFabric";
 export * from "./lib/util/ModelExplanationUtils";
