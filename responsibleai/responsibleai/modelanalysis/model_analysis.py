@@ -3,6 +3,8 @@
 
 """Defines the ModelAnalysis class."""
 
+import numpy as np
+from typing import Any, List, Optional
 import warnings
 
 from responsibleai.managers.causal_manager import CausalManager

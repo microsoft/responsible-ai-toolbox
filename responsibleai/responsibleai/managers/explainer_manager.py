@@ -6,6 +6,7 @@
 import json
 import warnings
 from pathlib import Path
+from typing import List, Optional
 
 import numpy as np
 from interpret_community.common.constants import ModelTask

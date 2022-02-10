@@ -4,6 +4,7 @@
 """Defines the Counterfactual Manager class."""
 import json
 from pathlib import Path
+from typing import List, Optional, Union
 
 import dice_ml
 import jsonschema
