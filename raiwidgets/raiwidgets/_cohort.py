@@ -218,6 +218,18 @@ class CohortFilter:
            for regression.
         4. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES
            filter methods cannot be configured for this filter for regression.
+
+        "Dataset" Filter validations
+        1. For continuous features all filter methods other than
+           CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES can
+           be configured.
+        2. For continuous features the allowed values that be configured should
+           be within the range of minimum and maximum values available within
+           the continuous feature column in the test data.
+        2. For categorical features only CohortFilterMethods.INCLUDES can be
+           configured.
+        3. For categorical features the values allowed are a subset of the
+           the values available in the categorical column in the test data.
         """
         pass
 

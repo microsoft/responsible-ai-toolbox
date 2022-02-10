@@ -61,6 +61,33 @@ export function buildInitialModelAssessmentContext(
   console.log(typeof jointDataset.metaDict);
   console.log(jointDataset.metaDict);
 
+  if (props.cohortData !== undefined) {
+    for (const preBuiltCohort of props.cohortData) {
+      console.log(preBuiltCohort);
+      // let filterList: IFilter[];
+      for (const preBuiltCohortFilter of preBuiltCohort.filterList) {
+        console.log(preBuiltCohortFilter);
+        switch (preBuiltCohortFilter.column) {
+          case "Predicted Y":
+            // const filter: IFilter = {
+            //   arg: preBuiltCohortFilter.arg,
+            //   column: "PredictedY",
+            //   method: preBuiltCohortFilter.method
+            // } as IFilter;
+            // filterList.push(filter);
+            break;
+          case "True Y":
+            break;
+          case "Classification Outcome":
+            break;
+          case "Index":
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
   let key = undefined;
   let value = undefined;
   for (key in jointDataset.metaDict) {
