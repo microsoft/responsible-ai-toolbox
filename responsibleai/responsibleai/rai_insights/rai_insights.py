@@ -50,7 +50,7 @@ class RAIInsights(object):
     single API.
     """
 
-    def __init__(self, model, train: pd.DataFrame, test: pd.DataFrame,
+    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
                  target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
@@ -144,7 +144,7 @@ class RAIInsights(object):
             return None
 
     def _validate_model_analysis_input_parameters(
-            self, model, train: pd.DataFrame, test: pd.DataFrame,
+            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
             serializer,

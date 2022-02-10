@@ -5,7 +5,7 @@
 
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import jsonschema
 import pandas as pd
@@ -156,7 +156,7 @@ class ErrorAnalysisConfig(BaseConfig):
 class ErrorAnalysisManager(BaseManager):
     """Defines the ErrorAnalysisManager for discovering errors in a model."""
 
-    def __init__(self, model, dataset: pd.DataFrame, target_column: str,
+    def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.

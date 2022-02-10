@@ -24,7 +24,7 @@ class ModelAnalysis(object):
     single API.
     """
 
-    def __init__(self, model, train: pd.DataFrame, test: pd.DataFrame,
+    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
                  target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  train_labels: Optional[np.ndarray] = None,

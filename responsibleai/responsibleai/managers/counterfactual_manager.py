@@ -4,7 +4,7 @@
 """Defines the Counterfactual Manager class."""
 import json
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import dice_ml
 import jsonschema
@@ -333,7 +333,7 @@ class CounterfactualManager(BaseManager):
     _CATEGORICAL_FEATURES = '_categorical_features'
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
 
-    def __init__(self, model, train: pd.DataFrame, test: pd.DataFrame,
+    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
                  target_column: str, task_type: str,
                  categorical_features: List[str]):
         """Creates a CounterfactualManager object.

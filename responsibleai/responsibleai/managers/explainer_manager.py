@@ -6,7 +6,7 @@
 import json
 import warnings
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -49,7 +49,7 @@ class ExplainerManager(BaseManager):
 
     """Defines the ExplainerManager for explaining a model."""
 
-    def __init__(self, model, initialization_examples: pd.DataFrame,
+    def __init__(self, model: Any, initialization_examples: pd.DataFrame,
                  evaluation_examples: pd.DataFrame,
                  target_column: str,
                  classes: Optional[List] = None,
