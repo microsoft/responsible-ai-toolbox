@@ -50,8 +50,10 @@ class RAIInsights(object):
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features=None, classes=None,
-                 serializer=None,
+                 task_type,
+                 categorical_features: Optional[List[str]] = None,
+                 classes: Optional[np.ndarray] = None,
+                 serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
@@ -70,7 +72,7 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods for custom model serialization.
             The save method writes the model to file given a parent directory.

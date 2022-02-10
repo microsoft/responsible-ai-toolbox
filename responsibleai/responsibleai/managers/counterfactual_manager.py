@@ -451,36 +451,33 @@ class CounterfactualManager(BaseManager):
     def add(self,
             total_CFs,
             method=CounterfactualConstants.RANDOM,
-            desired_class=None,
-            desired_range=None,
-            permitted_range=None,
+            desired_class: Optional[Union[str, int]] = None,
+            desired_range: Optional[List] = None,
+            permitted_range: Optional[dict] = None,
             features_to_vary='all',
             feature_importance=True):
         """Add a counterfactual generation configuration to be computed later.
 
-        :param method: Type of dice-ml explainer. Either of "random", "genetic"
-                       or "kdtree".
-        :type method: str
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
+        :param method: Type of dice-ml explainer. Either of "random", "genetic"
+            or "kdtree".
+        :type method: str
         :param desired_class: Desired counterfactual class. For binary
-                              classification, this needs to be set as
-                              "opposite".
+            classification, this needs to be set as "opposite".
         :type desired_class: string or int
         :param desired_range: For regression problems.
-                              Contains the outcome range
-                              to generate counterfactuals in.
+            Contains the outcome range to generate counterfactuals in.
         :type desired_range: list
         :param permitted_range: Dictionary with feature names as keys and
-                                permitted range in list as values.
-                                Defaults to the range inferred from training
-                                data.
+            permitted range in list as values. Defaults to the range inferred
+            from training data.
         :type permitted_range: dict
         :param features_to_vary: Either a string "all" or a list of
-                                 feature names to vary.
+            feature names to vary.
         :type features_to_vary: list
         :param feature_importance: Flag to compute feature importance using
-                                   dice-ml.
+            dice-ml.
         :type feature_importance: bool
         """
         if self._categorical_features is None:
@@ -553,7 +550,7 @@ class CounterfactualManager(BaseManager):
 
         :param failed_to_compute: Get the failure reasons if counterfactual
                                   examples failed to compute.
-        :type failed_to_compute: bool
+        :type failed_to_compute: Optional[bool]
         """
         if not failed_to_compute:
             counterfactual_obj_list = []

@@ -48,7 +48,9 @@ class ExplainerManager(BaseManager):
     """Defines the ExplainerManager for explaining a model."""
 
     def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column, classes=None, categorical_features=None):
+                 target_column,
+                 classes: Optional[List] = None,
+                 categorical_features: Optional[List[str]] = None):
         """Creates an ExplainerManager object.
 
         :param model: The model to explain.

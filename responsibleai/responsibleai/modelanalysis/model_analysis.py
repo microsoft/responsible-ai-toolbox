@@ -18,39 +18,16 @@ class ModelAnalysis(object):
     Use ModelAnalysis to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-    :param model: The model to compute RAI insights for.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
-    :param test: The test dataset including the label column.
-    :type test: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param task_type: The task to run, can be `classification` or
-        `regression`.
-    :type task_type: str
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    :param train_labels: The class labels in the training dataset
-    :type train_labels: ndarray
-    :param serializer: Picklable custom serializer with save and load
-        methods for custom model serialization.
-        The save method writes the model to file given a parent directory.
-        The load method returns the deserialized model from the same
-        parent directory.
-    :type serializer: object
     """
 
     def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features=None, train_labels=None,
-                 serializer=None,
+                 task_type,
+                 categorical_features: Optional[List[str]] = None,
+                 train_labels: Optional[np.ndarray] = None,
+                 serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000):
-        """Defines the top-level Model Analysis API.
-        Use ModelAnalysis to analyze errors, explain the most important
-        features, compute counterfactuals and run causal analysis in a
-        single API.
+        """Creates a ModelAnalysis object.
+
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -67,7 +44,7 @@ class ModelAnalysis(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param train_labels: The class labels in the training dataset
-        :type train_labels: ndarray
+        :type train_labels: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -169,8 +146,8 @@ class ModelAnalysis(object):
         """Load the ModelAnalysis from the given path.
         :param path: The directory path to load the ModelAnalysis from.
         :type path: str
-        :return: The ModelAnlysis object after loading.
-        :rtype: ModelAnlysis
+        :return: The ModelAnalysis object after loading.
+        :rtype: ModelAnalysis
         """
         # create the ModelAnalysis without any properties using the __new__
         # function, similar to pickle

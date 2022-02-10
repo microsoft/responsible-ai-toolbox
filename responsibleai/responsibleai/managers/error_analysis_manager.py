@@ -154,8 +154,9 @@ class ErrorAnalysisConfig(BaseConfig):
 class ErrorAnalysisManager(BaseManager):
     """Defines the ErrorAnalysisManager for discovering errors in a model."""
 
-    def __init__(self, model, dataset, target_column, classes=None,
-                 categorical_features=None):
+    def __init__(self, model, dataset, target_column,
+                 classes: Optional[List] = None,
+                 categorical_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -192,15 +193,15 @@ class ErrorAnalysisManager(BaseManager):
         """Add an error analyzer to be computed later.
 
         :param max_depth: The maximum depth of the tree.
-        :type max_depth: int
+        :type max_depth: Optional[int]
         :param num_leaves: The number of leaves in the tree.
-        :type num_leaves: int
+        :type num_leaves: Optional[int]
         :param min_child_samples: The minimal number of data required to
             create one leaf.
-        :type min_child_samples: int
+        :type min_child_samples: Optional[int]
         :param filter_features: One or two features to use for the
             matrix filter.
-        :type filter_features: list
+        :type filter_features: Optional[list]
         """
         if self._analyzer.model is None:
             raise UserConfigValidationException(
