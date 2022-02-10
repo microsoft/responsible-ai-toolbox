@@ -24,6 +24,7 @@ export function getDependencyChartOptions(
   };
   return {
     chart: {
+      animation: false,
       backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
