@@ -20,7 +20,7 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
-    metadata_columns: List[List]
+    metadata_columns: List[str]
 
 
 class BoundedCoordinates:
