@@ -10,10 +10,8 @@ export interface IHighScatter extends IChartElement {
   readonly radius: number;
 }
 export class ScatterHighchart extends Chart<IHighScatter> {
-  public get Elements(): IHighScatter[] {
-    return this.getHtmlElements(
-      "svg g.highcharts-series-group > g[class*='highcharts-tracker'] path"
-    ).map((b, i) => this.getCoordinate(b, i));
+  public get Elements(): any[] {
+    return this.getHighChartHtmlElements("path");
   }
 
   public sortByH(): IHighScatter[] {

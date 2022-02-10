@@ -62,10 +62,10 @@ export function describeGlobalExplanationChart<
       if (!props.dataShape.noDataset) {
         const dependencePlotChart = new ScatterHighchart("#DependencePlot");
         describe("DependencePlot", () => {
-          beforeEach(() => {
-            selectComboBox("#DependencePlotFeatureSelection", 0);
+          before(() => {
+            selectComboBox("#DependencePlotFeatureSelection", 1);
           });
-          it.skip("should render", () => {
+          it("should render", () => {
             expect(dependencePlotChart.Elements.length).greaterThan(0);
           });
           it("should have x axis match selected value", () => {
