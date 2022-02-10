@@ -70,7 +70,7 @@ export function describeGlobalExplanationChart<
 
       if (!props.dataShape.featureImportanceData?.noDataset) {
         const dependencePlotChart = new ScatterHighchart("#DependencePlot");
-        describe.only("DependencePlot", () => {
+        describe("DependencePlot", () => {
           beforeEach(() => {
             selectComboBox("#DependencePlotFeatureSelection", 0);
           });
