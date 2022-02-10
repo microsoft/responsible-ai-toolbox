@@ -279,7 +279,7 @@ class TestModelAnalysisValidations:
                 target_column='target',
                 task_type='classification')
         assert "Unsupported data type for either train or test. " + \
-            "Expecting pandas Dataframe for train and test." in str(ucve.value)
+            "Expecting pandas DataFrame for train and test." in str(ucve.value)
 
     def test_train_labels(self):
         X_train, X_test, y_train, y_test, _, _ = \

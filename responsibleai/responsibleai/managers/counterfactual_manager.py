@@ -108,6 +108,7 @@ def _get_schema_version(counterfactuals_dict):
 
 
 class CounterfactualConfig(BaseConfig):
+    """Defines the configuration for generating counterfactuals."""
     METHOD = 'method'
     CONTINUOUS_FEATURES = 'continuous_features'
     TOTAL_CFS = 'total_CFs'

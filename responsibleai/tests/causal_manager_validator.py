@@ -38,7 +38,7 @@ def validate_causal(rai_insights, data, target_column,
                     treatment_features, max_cat_expansion):
     if rai_insights.task_type == ModelTask.CLASSIFICATION and \
             len(np.unique(data[target_column])) > 2:
-        with pytest.raises(AssertionError,
+        with pytest.raises(UserConfigValidationException,
                            match="Multiclass classification isn't supported"):
             rai_insights.causal.add(
                 treatment_features,
@@ -54,6 +54,7 @@ def validate_causal(rai_insights, data, target_column,
         treatment_features,
         nuisance_model='automl',
         upper_bound_on_cat_expansion=max_cat_expansion)
+    rai_insights.compute()
 
     results = rai_insights.causal.get()
     assert results is not None
@@ -73,6 +74,7 @@ def validate_causal(rai_insights, data, target_column,
     # Add the second configuration
     rai_insights.causal.add(treatment_features,
                             nuisance_model='linear')
+    rai_insights.compute()
     results = rai_insights.causal.get()
     assert results is not None
     assert isinstance(results, list)

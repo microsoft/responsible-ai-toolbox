@@ -49,8 +49,31 @@ def compute_json_error_tree(analyzer,
                             max_depth=DEFAULT_MAX_DEPTH,
                             num_leaves=DEFAULT_NUM_LEAVES,
                             min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
-    # Note: this is for backcompat for older versions
-    # of raiwidgets pypi package
+    """Computes the error tree for the given dataset.
+
+    Note: this is for backcompat for older versions
+    of raiwidgets pypi package
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param filters: The filters to apply to the dataset.
+    :type filters: numpy.ndarray or pandas.DataFrame
+    :param composite_filters: The composite filters to apply to the dataset.
+    :type composite_filters: numpy.ndarray or pandas.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     return compute_error_tree(analyzer,
                               features,
                               filters,
@@ -67,6 +90,28 @@ def compute_error_tree(analyzer,
                        max_depth=DEFAULT_MAX_DEPTH,
                        num_leaves=DEFAULT_NUM_LEAVES,
                        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
+    """Computes the error tree for the given dataset.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param filters: The filters to apply to the dataset.
+    :type filters: numpy.ndarray or pandas.DataFrame
+    :param composite_filters: The composite filters to apply to the dataset.
+    :type composite_filters: numpy.ndarray or pandas.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     # Fit a surrogate model on errors
     if max_depth is None:
         max_depth = DEFAULT_MAX_DEPTH
@@ -170,9 +215,9 @@ def create_surrogate_model(analyzer,
     :type analyzer: BaseAnalyzer
     :param dataset_sub_features: The subset of features to train the
         surrogate model on.
-    :type dataset_sub_features: numpy.array or pandas.DataFrame
+    :type dataset_sub_features: numpy.ndarray or pandas.DataFrame
     :param diff: The difference between the true and predicted labels column.
-    :type diff: numpy.array
+    :type diff: numpy.ndarray
     :param max_depth: The maximum depth of the surrogate tree trained
         on errors.
     :type max_depth: int
@@ -232,6 +277,11 @@ def get_categorical_info(analyzer, dataset_sub_names):
 
 
 def get_max_split_index(tree):
+    """Gets the max split index for the tree recursively.
+
+    :param tree: The tree to get the max split index for.
+    :type tree: dict
+    """
     if SPLIT_INDEX in tree:
         max_index = tree[SPLIT_INDEX]
         index1 = get_max_split_index(tree[TreeSide.LEFT_CHILD])
@@ -251,6 +301,31 @@ def traverse(df,
              side=TreeSide.UNKNOWN,
              metric=None,
              classes=None):
+    """Traverses the current node in the tree to create a list of nodes.
+
+    :param df: The DataFrame containing the features and labels.
+    :type df: pandas.DataFrame
+    :param tree: The current node in the tree to traverse.
+    :type tree: dict
+    :param max_split_index: The max split index for the tree.
+    :type max_split_index: int
+    :param categories: The list of categorical features and categories.
+    :type categories: list[tuple]
+    :param dict: The dictionary to store the nodes in.
+    :type dict: dict
+    :param feature_names: The list of feature names.
+    :type feature_names: list[str]
+    :param parent: The parent node of the current node.
+    :type parent: Node or None
+    :param side: The side of the parent node the current node is on.
+    :type side: TreeSide
+    :param metric: The metric to use for the current node.
+    :type metric: str
+    :param classes: The list of classes for the current node.
+    :type classes: list[str]
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -279,11 +354,37 @@ def traverse(df,
 
 
 def create_categorical_arg(parent_threshold):
+    """Create the categorical argument for given parent threshold.
+
+    The argument contains the categories to split on.
+
+    :param parent_threshold: The parent threshold to create the categorical.
+    :type parent_threshold: float
+    :return: The categorical argument.
+    :rtype: list[float]
+    """
     return [float(i) for i in parent_threshold.split('||')]
 
 
 def create_categorical_query(method, arg, p_node_name, p_node_query,
                              parent, categories):
+    """Create the categorical query for given method and argument.
+
+    :param method: The method to use for the categorical query.
+    :type method: str
+    :param arg: The argument to use for the categorical query.
+    :type arg: list[float]
+    :param p_node_name: The name of the node.
+    :type p_node_name: str
+    :param p_node_query: The reference to the node to be used in the query.
+    :type p_node_query: str
+    :param parent: The parent node.
+    :type parent: dict
+    :param categories: The list of categories for the current node.
+    :type categories: list[tuple]
+    :return: The categorical query and condition.
+    :rtype: tuple(str, str)
+    """
     if method == CohortFilterMethods.METHOD_INCLUDES:
         operation = "=="
     else:
@@ -429,6 +530,13 @@ def node_to_dict(df, tree, nodeid, categories, json,
 
 
 def get_regression_metric_data(df):
+    """Compute regression metric data from a DataFrame.
+
+    :param df: DataFrame
+    :type df: pandas.DataFrame
+    :return: pred_y, true_y, error
+    :rtype: numpy.ndarray, numpy.ndarray, int
+    """
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     # total abs error at the node
@@ -437,6 +545,13 @@ def get_regression_metric_data(df):
 
 
 def get_classification_metric_data(df):
+    """Compute classification metric data from a DataFrame.
+
+    :param df: DataFrame
+    :type df: pandas.DataFrame
+    :return: pred_y, true_y, error
+    :rtype: numpy.ndarray, numpy.ndarray, int
+    """
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     error = df[DIFF].values.sum()
@@ -444,6 +559,21 @@ def get_classification_metric_data(df):
 
 
 def compute_metric_value(func, classes, true_y, pred_y, metric):
+    """Compute metric from the given function, true and predicted values.
+
+    :param func: The metric function to evaluate.
+    :type func: function
+    :param classes: List of classes.
+    :type classes: list
+    :param true_y: True y values.
+    :type true_y: numpy.ndarray
+    :param pred_y: Predicted y values.
+    :type pred_y: numpy.ndarray
+    :param metric: Metric to compute.
+    :type metric: str
+    :return: The computed metric value.
+    :rtype: float
+    """
     requires_pos_label = (metric == Metrics.RECALL_SCORE or
                           metric == Metrics.PRECISION_SCORE or
                           metric == Metrics.F1_SCORE)

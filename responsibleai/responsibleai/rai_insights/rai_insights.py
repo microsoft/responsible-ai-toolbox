@@ -366,7 +366,7 @@ class RAIInsights(object):
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas Dataframe for train and test."
+                "Expecting pandas DataFrame for train and test."
             )
 
     def _validate_features_same(self, small_train_features_before,
@@ -377,7 +377,7 @@ class RAIInsights(object):
         :param small_train_features_before: The features saved before
             an operation was performed.
         :type small_train_features_before: list[str]
-        :param small_train_data: The dataframe after the operation.
+        :param small_train_data: The DataFrame after the operation.
         :type small_train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str

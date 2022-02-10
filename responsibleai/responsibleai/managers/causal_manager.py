@@ -151,14 +151,19 @@ class CausalManager(BaseManager):
         :type verbose: int
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
-        :return: Causal result.
-        :rtype: CausalResult
         """
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
             message = ("Feature names in treatment_features do "
                        f"not exist in train data: {list(difference_set)}")
             raise UserConfigValidationException(message)
+
+        if self._task_type == ModelTask.CLASSIFICATION:
+            is_multiclass = len(np.unique(
+                self._train[self._target_column].values).tolist()) > 2
+            if is_multiclass:
+                raise UserConfigValidationException(
+                    "Multiclass classification isn't supported")
 
         if nuisance_model not in [ModelTypes.AUTOML,
                                   ModelTypes.LINEAR]:
@@ -168,33 +173,11 @@ class CausalManager(BaseManager):
                        f"got {nuisance_model}")
             raise UserConfigValidationException(message)
 
-        X_train = self._train.drop([self._target_column], axis=1)
-        X_test = self._test.drop([self._target_column], axis=1)
-        y_train = self._train[self._target_column].values.ravel()
-
         validate_train_test_categories(
             train_data=self._train,
             test_data=self._test,
             rai_compute_type='Causal analysis',
             categoricals=self._categorical_features)
-
-        is_classification = self._task_type == ModelTask.CLASSIFICATION
-        analysis = CausalAnalysis(
-            treatment_features,
-            self._categorical_features,
-            heterogeneity_inds=heterogeneity_features,
-            classification=is_classification,
-            nuisance_models=nuisance_model,
-            heterogeneity_model=heterogeneity_model,
-            upper_bound_on_cat_expansion=upper_bound_on_cat_expansion,
-            skip_cat_limit_checks=skip_cat_limit_checks,
-            n_jobs=n_jobs,
-            categories=categories,
-            verbose=verbose,
-            random_state=random_state,
-        )
-        self._fit_causal_analysis(analysis, X_train, y_train,
-                                  upper_bound_on_cat_expansion)
 
         result = CausalResult()
         result.config = CausalConfig(
@@ -214,49 +197,7 @@ class CausalManager(BaseManager):
             random_state=random_state,
             categorical_features=self._categorical_features,
         )
-
-        result.causal_analysis = analysis
-
-        result.global_effects = analysis.global_causal_effect(
-            alpha=alpha, keep_all_levels=True)
-        result.local_effects = analysis.local_causal_effect(
-            X_test, alpha=alpha, keep_all_levels=True)
-
-        result.policies = []
-
-        # Check treatment_cost is valid
-        if isinstance(treatment_cost, int) and treatment_cost == 0:
-            treatment_cost = [0] * len(treatment_features)
-
-        if not isinstance(treatment_cost, list):
-            message = ("treatment_cost must be a list with "
-                       "the same number of elements as "
-                       "treatment_features where each element "
-                       "is either a constant cost of treatment "
-                       "or an array specifying the cost of "
-                       "treatment per sample. "
-                       "Found treatment_cost of type "
-                       f"{type(treatment_cost)}, expected list.")
-            raise UserConfigValidationException(message)
-        elif len(treatment_cost) != len(treatment_features):
-            message = ("treatment_cost must be a list with "
-                       "the same number of elements as "
-                       "treatment_features. "
-                       "Length of treatment_cost was "
-                       f"{len(treatment_cost)}, expected "
-                       f"{len(treatment_features)}.")
-            raise UserConfigValidationException(message)
-
-        for i in range(len(treatment_features)):
-            policy = self._create_policy(
-                analysis, X_test,
-                treatment_features[i], treatment_cost[i],
-                alpha, max_tree_depth, min_tree_leaf_samples)
-            result.policies.append(policy)
-
-        result._validate_schema()
         self._results.append(result)
-        return result
 
     def _fit_causal_analysis(
         self,
@@ -322,8 +263,83 @@ class CausalManager(BaseManager):
                               y, alpha=alpha).to_dict(orient="records")
 
     def compute(self):
-        """No-op function to comply with model analysis design."""
-        pass
+        """Computes the causal effects by running the causal
+           configuration."""
+        is_classification = self._task_type == ModelTask.CLASSIFICATION
+        for result in self._results:
+            causal_config = result.config
+            if not result.is_computed:
+                analysis = CausalAnalysis(
+                    causal_config.treatment_features,
+                    self._categorical_features,
+                    heterogeneity_inds=causal_config.heterogeneity_features,
+                    classification=is_classification,
+                    nuisance_models=causal_config.nuisance_model,
+                    heterogeneity_model=causal_config.heterogeneity_model,
+                    upper_bound_on_cat_expansion=causal_config.
+                    upper_bound_on_cat_expansion,
+                    skip_cat_limit_checks=causal_config.skip_cat_limit_checks,
+                    n_jobs=causal_config.n_jobs,
+                    categories=causal_config.categories,
+                    verbose=causal_config.verbose,
+                    random_state=causal_config.random_state,
+                )
+
+                X_train = self._train.drop([self._target_column], axis=1)
+                X_test = self._test.drop([self._target_column], axis=1)
+                y_train = self._train[self._target_column].values.ravel()
+
+                self._fit_causal_analysis(
+                    analysis, X_train, y_train,
+                    causal_config.upper_bound_on_cat_expansion)
+                result.causal_analysis = analysis
+
+                result.global_effects = analysis.global_causal_effect(
+                    alpha=causal_config.alpha, keep_all_levels=True)
+                result.local_effects = analysis.local_causal_effect(
+                    X_test, alpha=causal_config.alpha, keep_all_levels=True)
+
+                result.policies = []
+
+                # Check treatment_cost is valid
+                if isinstance(causal_config.treatment_cost, int) and \
+                        causal_config.treatment_cost == 0:
+                    revised_treatment_cost = [0] * len(
+                        causal_config.treatment_features)
+                else:
+                    revised_treatment_cost = causal_config.treatment_cost
+
+                if not isinstance(revised_treatment_cost, list):
+                    message = (
+                        "treatment_cost must be a list with "
+                        "the same number of elements as "
+                        "treatment_features where each element "
+                        "is either a constant cost of treatment "
+                        "or an array specifying the cost of "
+                        "treatment per sample. "
+                        "Found treatment_cost of type "
+                        f"{type(revised_treatment_cost)}, expected list.")
+                    raise UserConfigValidationException(message)
+                elif len(revised_treatment_cost) != \
+                        len(causal_config.treatment_features):
+                    message = ("treatment_cost must be a list with "
+                               "the same number of elements as "
+                               "treatment_features. "
+                               "Length of treatment_cost was "
+                               f"{len(revised_treatment_cost)}, expected "
+                               f"{len(causal_config.treatment_features)}.")
+                    raise UserConfigValidationException(message)
+
+                for i in range(len(causal_config.treatment_features)):
+                    policy = self._create_policy(
+                        analysis, X_test,
+                        causal_config.treatment_features[i],
+                        revised_treatment_cost[i],
+                        causal_config.alpha, causal_config.max_tree_depth,
+                        causal_config.min_tree_leaf_samples)
+                    result.policies.append(policy)
+
+                result._validate_schema()
 
     def get(self):
         """Get the computed causal insights."""
