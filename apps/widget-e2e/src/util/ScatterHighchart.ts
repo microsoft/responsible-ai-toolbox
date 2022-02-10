@@ -12,7 +12,7 @@ export interface IHighScatter extends IChartElement {
 export class ScatterHighchart extends Chart<IHighScatter> {
   public get Elements(): IHighScatter[] {
     return this.getHtmlElements(
-      "svg g.highcharts-series-group > g[class*='highcharts-tracker']:eq(1) path"
+      "svg g.highcharts-series-group > g[class*='highcharts-tracker'] path"
     ).map((b, i) => this.getCoordinate(b, i));
   }
 
