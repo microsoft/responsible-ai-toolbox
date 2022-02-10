@@ -93,6 +93,7 @@ def validate_causal(rai_insights, data, target_column,
         rai_insights.causal.add(treatment_features,
                                 heterogeneity_model='fake_model')
 
+
 def _check_causal_properties(
         causal_props, expected_causal_effects):
     assert causal_props[ListProperties.MANAGER_TYPE] == \
