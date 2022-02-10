@@ -61,12 +61,14 @@ export function buildInitialModelAssessmentContext(
   console.log(typeof jointDataset.metaDict);
   console.log(jointDataset.metaDict);
 
+  const cohortList = undefined;
   if (props.cohortData !== undefined) {
+    const cohortList: Cohort[] = [];
     for (const preBuiltCohort of props.cohortData) {
       console.log(preBuiltCohort);
-      // let filterList: IFilter[];
+      const filterList: IFilter[] = [];
       for (const preBuiltCohortFilter of preBuiltCohort.filterList) {
-        console.log(preBuiltCohortFilter);
+        // console.log(preBuiltCohortFilter);
         switch (preBuiltCohortFilter.column) {
           case "Predicted Y":
             // const filter: IFilter = {
@@ -80,13 +82,34 @@ export function buildInitialModelAssessmentContext(
             break;
           case "Classification Outcome":
             break;
-          case "Index":
+          case "Index": {
+            console.log(preBuiltCohortFilter);
+            const filter: IFilter = {
+              arg: preBuiltCohortFilter.arg,
+              column: "Index",
+              method: preBuiltCohortFilter.method
+            } as IFilter;
+            filterList.push(filter);
             break;
+          }
           default:
             break;
         }
       }
+      const cohortEntry = new Cohort(
+        preBuiltCohort.cohortName,
+        jointDataset,
+        filterList
+      );
+      cohortList.push(cohortEntry);
+      console.log(cohortEntry);
     }
+  }
+  console.log(cohortList);
+  if (cohortList !== undefined) {
+    console.log("cohort list has translated cohorts");
+  } else {
+    console.log("cohort list is empty");
   }
   let key = undefined;
   let value = undefined;

@@ -5,6 +5,8 @@ import json
 
 import pytest
 
+import pandas as pd
+
 from raiwidgets._cohort import (Cohort, CohortFilter, CohortFilterMethods,
                                 cohort_filter_json_converter)
 from responsibleai.exceptions import UserConfigValidationException
@@ -141,6 +143,22 @@ class TestCohortFilter:
         assert 'age' in json_str
 
 
+class TestCohortFilterDataValidations:
+    def test_validate_with_test_data_basic_data_checks(self):
+        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
+                                 columns=["age", "target"])
+
+        cohort_filter_not_a_feature = \
+            CohortFilter(method=CohortFilterMethods.METHOD_LESS,
+                         arg=[65], column='fake_column')
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Unknown column fake_column specified in cohort filter"):
+            cohort_filter_not_a_feature._validate_with_test_data(
+                test_data=test_data, target_column="target")
+
+
 class TestCohort:
     def test_cohort_configuration_validations(self):
         with pytest.raises(
@@ -155,6 +173,36 @@ class TestCohort:
                   "Expected CohortFilter type"):
             cohort = Cohort(name="Cohort New")
             cohort.add_cohort_filter(cohort_filter=[])
+
+    def test_cohort_validate_with_test_data(self):
+        cohort_filter_1 = \
+            CohortFilter(method=CohortFilterMethods.METHOD_LESS,
+                         arg=[65], column='age')
+        cohort_1 = Cohort(name="Cohort New")
+        cohort_1.add_cohort_filter(cohort_filter_1)
+        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
+                                 columns=["age", "target"])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="The test_data should be a pandas DataFrame"):
+            cohort_1._validate_with_test_data(
+                test_data=[], target_column='income')
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="The target_column should be string."):
+            cohort_1._validate_with_test_data(
+                test_data=test_data,
+                target_column=1)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="The target_column fake_target "
+                      "was not found in test_data."):
+            cohort_1._validate_with_test_data(
+                test_data=test_data,
+                target_column="fake_target")
 
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)

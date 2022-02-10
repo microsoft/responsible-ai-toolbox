@@ -226,12 +226,18 @@ class CohortFilter:
         2. For continuous features the allowed values that be configured should
            be within the range of minimum and maximum values available within
            the continuous feature column in the test data.
-        2. For categorical features only CohortFilterMethods.INCLUDES can be
+        3. For categorical features only CohortFilterMethods.INCLUDES can be
            configured.
-        3. For categorical features the values allowed are a subset of the
+        4. For categorical features the values allowed are a subset of the
            the values available in the categorical column in the test data.
         """
-        pass
+        if self.column not in CohortFilter.SPECIAL_COLUMN_LIST or \
+                (self.column not in
+                    (set(test_data.columns) - set([target_column]))):
+            raise UserConfigValidationException(
+                "Unknown column {0} specified in cohort filter".format(
+                    self.column)
+            )
 
 
 class Cohort:
@@ -281,6 +287,17 @@ class Cohort:
         """
         if self.cohort_filter_list is None:
             return
+        if not isinstance(test_data, pd.DataFrame):
+            raise UserConfigValidationException(
+                "The test_data should be a pandas DataFrame.")
+        if not isinstance(target_column, str):
+            raise UserConfigValidationException(
+                "The target_column should be string.")
+        if target_column not in test_data.columns:
+            raise UserConfigValidationException(
+                "The target_column {0} was not found in test_data.".format(
+                    target_column)
+            )
         for cohort_filter in self.cohort_filter_list:
             cohort_filter._validate_with_test_data(test_data=test_data,
                                                    target_column=target_column)
