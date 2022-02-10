@@ -11,7 +11,7 @@ export interface IHighScatter extends IChartElement {
 }
 export class ScatterHighchart extends Chart<IHighScatter> {
   public get Elements(): IHighScatter[] {
-    return this.getHtmlElements(
+    return this.getHighChartHtmlElements(
       "svg g.highcharts-series-group > g[class*='highcharts-tracker'] path"
     ).map((b, i) => this.getCoordinate(b, i));
   }

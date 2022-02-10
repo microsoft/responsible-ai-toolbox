@@ -74,7 +74,7 @@ export function describeGlobalExplanationChart<
           beforeEach(() => {
             selectComboBox("#DependencePlotFeatureSelection", 0);
           });
-          it("should render", () => {
+          it.skip("should render", () => {
             expect(dependencePlotChart.Elements.length).greaterThan(0);
           });
           it("should have x axis match selected value", () => {
