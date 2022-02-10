@@ -84,8 +84,6 @@ export interface IDEDotPlotData {
 export interface IFeatureImportanceData {
   hasFeatureImportanceComponent?: boolean;
   hasCorrectIncorrectDatapoints?: boolean;
-  correctPredictionDatapoint?: string;
-  incorrectPredictionDatapoint?: string;
   rowToSelect?: string;
   noLocalImportance?: boolean;
   noPredict?: boolean;

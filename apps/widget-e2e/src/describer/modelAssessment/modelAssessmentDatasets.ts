@@ -3,6 +3,8 @@
 
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
+export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
+
 const modelAssessmentDatasets = {
   ClassificationModelDebugging: {
     causalAnalysisData: {
@@ -23,12 +25,10 @@ const modelAssessmentDatasets = {
       defaultYAxis: "age"
     },
     featureImportanceData: {
-      correctPredictionDatapoint: "398",
       datapoint: 500,
       dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
-      incorrectPredictionDatapoint: "102",
       newFeatureDropdownValue: "workclass",
       noDataset: false,
       noFeatureImportance: false,
@@ -368,12 +368,10 @@ const modelAssessmentDatasets = {
       defaultYAxis: "alcohol"
     },
     featureImportanceData: {
-      correctPredictionDatapoint: "60",
       datapoint: 500,
       dropdownRowName: "Row 24",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
-      incorrectPredictionDatapoint: "29",
       newFeatureDropdownValue: "ash",
       noDataset: false,
       noFeatureImportance: false,
