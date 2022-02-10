@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import numpy as np
+import pandas as pd
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
@@ -48,8 +49,9 @@ class ExplainerManager(BaseManager):
 
     """Defines the ExplainerManager for explaining a model."""
 
-    def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column,
+    def __init__(self, model, initialization_examples: pd.DataFrame,
+                 evaluation_examples: pd.DataFrame,
+                 target_column: str,
                  classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None):
         """Creates an ExplainerManager object.

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import jsonschema
+import pandas as pd
 
 from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -84,8 +85,8 @@ def as_error_config(json_dict):
 class ErrorAnalysisConfig(BaseConfig):
     """Defines the ErrorAnalysisConfig, specifying the parameters to run."""
 
-    def __init__(self, max_depth, num_leaves,
-                 min_child_samples, filter_features):
+    def __init__(self, max_depth: int, num_leaves: int,
+                 min_child_samples: int, filter_features: List):
         """Creates an ErrorAnalysisConfig, specifying the parameters to run.
 
         :param max_depth: The maximum depth of the tree.
@@ -155,7 +156,7 @@ class ErrorAnalysisConfig(BaseConfig):
 class ErrorAnalysisManager(BaseManager):
     """Defines the ErrorAnalysisManager for discovering errors in a model."""
 
-    def __init__(self, model, dataset, target_column,
+    def __init__(self, model, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
                  categorical_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.
@@ -189,8 +190,9 @@ class ErrorAnalysisManager(BaseManager):
                                        self._categorical_features,
                                        classes=self._classes)
 
-    def add(self, max_depth=3, num_leaves=31,
-            min_child_samples=20, filter_features=None):
+    def add(self, max_depth: int = 3, num_leaves: int = 31,
+            min_child_samples: int = 20,
+            filter_features: Optional[List] = None):
         """Add an error analyzer to be computed later.
 
         :param max_depth: The maximum depth of the tree.

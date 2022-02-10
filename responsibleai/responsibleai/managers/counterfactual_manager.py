@@ -9,6 +9,7 @@ from typing import List, Optional, Union
 import dice_ml
 import jsonschema
 import numpy as np
+import pandas as pd
 from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
 
@@ -332,8 +333,9 @@ class CounterfactualManager(BaseManager):
     _CATEGORICAL_FEATURES = '_categorical_features'
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
 
-    def __init__(self, model, train, test, target_column, task_type,
-                 categorical_features):
+    def __init__(self, model, train: pd.DataFrame, test: pd.DataFrame,
+                 target_column: str, task_type: str,
+                 categorical_features: List[str]):
         """Creates a CounterfactualManager object.
 
         :param model: The model to generate counterfactuals from.
@@ -450,13 +452,13 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list.append(new_counterfactual_config)
 
     def add(self,
-            total_CFs,
-            method=CounterfactualConstants.RANDOM,
+            total_CFs: int,
+            method: str = CounterfactualConstants.RANDOM,
             desired_class: Optional[Union[str, int]] = None,
             desired_range: Optional[List] = None,
             permitted_range: Optional[dict] = None,
-            features_to_vary='all',
-            feature_importance=True):
+            features_to_vary: Union[str, List[str]] = 'all',
+            feature_importance: bool = True):
         """Add a counterfactual generation configuration to be computed later.
 
         :param total_CFs: Total number of counterfactuals required.

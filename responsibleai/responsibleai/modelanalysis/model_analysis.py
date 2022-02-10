@@ -7,6 +7,7 @@ import warnings
 from typing import Any, List, Optional
 
 import numpy as np
+import pandas as pd
 
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
@@ -23,8 +24,8 @@ class ModelAnalysis(object):
     single API.
     """
 
-    def __init__(self, model, train, test, target_column,
-                 task_type,
+    def __init__(self, model, train: pd.DataFrame, test: pd.DataFrame,
+                 target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  train_labels: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
