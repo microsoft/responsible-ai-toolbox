@@ -7,6 +7,7 @@ import json
 import pickle
 import warnings
 from pathlib import Path
+from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -52,9 +53,9 @@ class RAIInsights(object):
 
     def __init__(self, model, train, test, target_column,
                  task_type, categorical_features=None,
-                 metadata_columns=None, classes=None,
-                 serializer=None,
-                 maximum_rows_for_test: int = 5000):
+                 classes=None, serializer=None,
+                 maximum_rows_for_test: int = 5000,
+                 metadata_columns: Optional[List[str]] = None):
         """Creates an RAIInsights object.
 
         :param model: The model to compute RAI insights for.
@@ -72,10 +73,6 @@ class RAIInsights(object):
         :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
-        :param metadata_columns: The set of columns that are not passed
-            to the model or explainers. However, these columns can be used for
-            other analyses such as disaggregated analysis or error analysis.
-        :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -87,6 +84,10 @@ class RAIInsights(object):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param metadata_columns: The set of columns that are not passed
+            to the model or explainers. However, these columns can be used for
+            other analyses such as disaggregated analysis or error analysis.
+        :type metadata_columns: list[str]
         """
         categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
@@ -158,9 +159,9 @@ class RAIInsights(object):
     def _validate_model_analysis_input_parameters(
             self, model, train, test, target_column,
             task_type, categorical_features,
-            metadata_columns, classes,
-            serializer,
-            maximum_rows_for_test: int):
+            classes, serializer,
+            maximum_rows_for_test: int,
+            metadata_columns: Union[List[str], None]):
         """
         Validate the inputs for the RAIInsights constructor.
 
@@ -179,10 +180,6 @@ class RAIInsights(object):
         :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
-        :param metadata_columns: The set of columns that are not passed
-            to the model or explainers. However, these columns can be used for
-            other analyses such as disaggregated analysis or error analysis.
-        :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -193,6 +190,10 @@ class RAIInsights(object):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param metadata_columns: The set of columns that are not passed
+            to the model or explainers. However, these columns can be used for
+            other analyses such as disaggregated analysis or error analysis.
+        :type metadata_columns: list[str]
         """
 
         valid_tasks = [

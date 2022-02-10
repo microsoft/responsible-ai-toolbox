@@ -40,10 +40,6 @@ class BaseAnalyzer(ABC):
     :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
-    :param metadata_columns: The set of columns that are not passed
-        to the model or explainers. These columns can be used for
-        other analyses.
-    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -66,16 +62,20 @@ class BaseAnalyzer(ABC):
     :type metric: str
     :param classes: The class names.
     :type classes: numpy.ndarray or list[]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     """
     def __init__(self,
                  dataset,
                  true_y,
                  feature_names,
                  categorical_features,
-                 metadata_columns,
                  model_task,
                  metric,
-                 classes):
+                 classes,
+                 metadata_columns: Optional[List[str]]):
         self._dataset = self._make_pandas_copy(dataset)
         self._true_y = true_y
         self._categorical_features = categorical_features
@@ -451,10 +451,6 @@ class ModelAnalyzer(BaseAnalyzer):
     :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
-    :param metadata_columns: The set of columns that are not passed
-        to the model or explainers. These columns can be used for
-        other analyses.
-    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -477,6 +473,10 @@ class ModelAnalyzer(BaseAnalyzer):
     :type metric: str
     :param classes: The class names.
     :type classes: numpy.ndarray or list[]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     """
     def __init__(self,
                  model,
@@ -484,10 +484,10 @@ class ModelAnalyzer(BaseAnalyzer):
                  true_y,
                  feature_names,
                  categorical_features,
-                 metadata_columns=None,
                  model_task=ModelTask.UNKNOWN,
                  metric=None,
-                 classes=None):
+                 classes=None,
+                 metadata_columns: Optional[List[str]] = None):
         self._model = model
         if model_task == ModelTask.UNKNOWN:
             # Try to automatically infer the model task
@@ -559,10 +559,6 @@ class PredictionsAnalyzer(BaseAnalyzer):
     :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
-    :param metadata_columns: The set of columns that are not passed
-        to the model or explainers. These columns can be used for
-        other analyses.
-    :type metadata_columns: list[str]
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -585,6 +581,10 @@ class PredictionsAnalyzer(BaseAnalyzer):
     :type metric: str
     :param classes: The class names.
     :type classes: numpy.ndarray or list[]
+    :param metadata_columns: The set of columns that are not passed
+        to the model or explainers. These columns can be used for
+        other analyses.
+    :type metadata_columns: list[str]
     """
     def __init__(self,
                  pred_y,
@@ -592,10 +592,10 @@ class PredictionsAnalyzer(BaseAnalyzer):
                  true_y,
                  feature_names,
                  categorical_features,
-                 metadata_columns,
                  model_task=ModelTask.CLASSIFICATION,
                  metric=None,
-                 classes=None):
+                 classes=None,
+                 metadata_columns: Optional[List[str]] = None):
         self._pred_y = pred_y
         if model_task == ModelTask.UNKNOWN:
             raise ValueError(
