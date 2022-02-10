@@ -21,6 +21,9 @@ class ResponsibleAIDashboard(Dashboard):
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
+    :param locale: The language in which user wants to load and access the
+        ResponsibleAI Dashboard. The default language is english ("en").
+    :type locale: str
     :param cohort_filter_list:
         List of cohorts defined by the user for the dashboard.
     :type cohort_filter_list: List[Cohort]
