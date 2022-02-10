@@ -28,7 +28,6 @@ export function describeAggregateFeatureImportance(
         return obj.file === RAINotebookNames[name];
       });
       cy.task("log", hostDetails.host);
-      cy.task("log", Cypress.browser);
       cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
