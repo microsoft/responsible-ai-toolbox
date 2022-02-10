@@ -83,5 +83,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.packageDirectory }}-e2e-screen-shot
+          name: raiwidgets-e2e-screen-shot
           path: dist/cypress
