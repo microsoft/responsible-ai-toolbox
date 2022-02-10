@@ -24,7 +24,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       });
 
       it("should have right number of incorrect prediction datapoints", () => {
-        cy.get(Locators.IFIExpandCollapseButton).click();
+        cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
         cy.get(Locators.IFIPredictionSpan)
           .eq(1)
           .invoke("text")
