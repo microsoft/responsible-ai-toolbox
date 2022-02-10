@@ -173,8 +173,8 @@ class ErrorAnalysisManager(BaseManager):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param metadata_columns: The set of columns that are not passed
-            to the model or explainers. These columns can be used for
-            other analyses.
+            to the model or explainers. However, these columns can be used for
+            other analyses such as disaggregated analysis or error analysis.
         :type metadata_columns: list[str]
         """
         self._true_y = dataset[target_column]

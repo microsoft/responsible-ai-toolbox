@@ -73,8 +73,8 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param metadata_columns: The set of columns that are not passed
-            to the model or explainers. These columns can be used for
-            other analyses.
+            to the model or explainers. However, these columns can be used for
+            other analyses such as disaggregated analysis or error analysis.
         :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
@@ -180,8 +180,8 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param metadata_columns: The set of columns that are not passed
-            to the model or explainers. These columns can be used for
-            other analyses.
+            to the model or explainers. However, these columns can be used for
+            other analyses such as disaggregated analysis or error analysis.
         :type metadata_columns: list[str]
         :param classes: The class labels in the training dataset
         :type classes: ndarray
