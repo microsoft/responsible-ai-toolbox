@@ -104,10 +104,10 @@ class RAIInsights(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self.metadata_columns = metadata_columns or []
-        columns_no_metadata = list(set(self.train.columns) \
-            - set(self.metadata_columns))
-        categorical_no_metadata = list(set(categorical_features or []) \
-            - set(self.metadata_columns))
+        columns_no_metadata = list(set(self.train.columns) -
+                                   set(self.metadata_columns))
+        categorical_no_metadata = list(set(categorical_features or []) -
+                                       set(self.metadata_columns))
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -583,8 +583,9 @@ class RAIInsights(object):
         if self.model is None:
             return
 
-        data_columns = list(set(self.test.columns) \
-            - {self.target_column} - set(self.metadata_columns))
+        data_columns = list(set(self.test.columns) -
+                            {self.target_column} -
+                            set(self.metadata_columns))
         test_data = self.test[data_columns]
 
         predict_output = self.model.predict(test_data)
