@@ -103,10 +103,11 @@ class RAIInsights(object):
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
-        self.metadata_columns = metadata_columns
-        exclude_columns = []
-        if metadata_columns:
-            exclude_columns = metadata_columns
+        self.metadata_columns = metadata_columns or []
+        columns_no_metadata = list(set(self.train.columns) \
+            - set(self.metadata_columns))
+        categorical_no_metadata = list(set(categorical_features or []) \
+            - set(self.metadata_columns))
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -119,10 +120,10 @@ class RAIInsights(object):
             train, test, target_column, task_type, categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=model, train=train.drop(columns=exclude_columns),
-            test=test.drop(columns=exclude_columns),
+            model=model, train=train[columns_no_metadata],
+            test=test[columns_no_metadata],
             target_column=target_column, task_type=task_type,
-            categorical_features=categorical_features)
+            categorical_features=categorical_no_metadata)
 
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column,
@@ -130,11 +131,11 @@ class RAIInsights(object):
             categorical_features, metadata_columns)
 
         self._explainer_manager = ExplainerManager(
-            model, train.drop(columns=exclude_columns),
-            test.drop(columns=exclude_columns),
+            model, train[columns_no_metadata],
+            test[columns_no_metadata],
             target_column,
             self._classes,
-            categorical_features=categorical_features)
+            categorical_features=categorical_no_metadata)
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
@@ -467,7 +468,7 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
-        dashboard_dataset.metadata_columns = self.metadata_columns
+        dashboard_dataset.metadata_columns = self.metadata_columns or []
         if self.metadata_columns:
             metadata = self.test[self.metadata_columns]
             try:
@@ -480,14 +481,11 @@ class RAIInsights(object):
         predicted_y = None
         feature_length = None
 
-        exclude_columns = [self.target_column]
-        if self.metadata_columns:
-            exclude_columns += self.metadata_columns
+        data_columns = list(set(self.test.columns) - {self.target_column})
         dataset: pd.DataFrame = \
-            self.test.drop(columns=[self.target_column], axis=1)
+            self.test[data_columns + dashboard_dataset.metadata_columns]
         dataset_features_only: pd.DataFrame = \
-            self.test.drop(columns=exclude_columns, axis=1)
-
+            self.test[data_columns]
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
         try:
@@ -585,17 +583,17 @@ class RAIInsights(object):
         if self.model is None:
             return
 
-        test_without_target_column = self.test.drop(
-            [self.target_column], axis=1)
+        data_columns = list(set(self.test.columns) \
+            - {self.target_column} - set(self.metadata_columns))
+        test_data = self.test[data_columns]
 
-        predict_output = self.model.predict(test_without_target_column)
+        predict_output = self.model.predict(test_data)
         self._write_to_file(
             prediction_output_path / (_PREDICT + _JSON_EXTENSION),
             json.dumps(predict_output.tolist()))
 
         if hasattr(self.model, SKLearn.PREDICT_PROBA):
-            predict_proba_output = self.model.predict_proba(
-                test_without_target_column)
+            predict_proba_output = self.model.predict_proba(test_data)
             self._write_to_file(
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(predict_proba_output.tolist()))

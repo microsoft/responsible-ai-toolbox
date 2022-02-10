@@ -182,7 +182,7 @@ class ErrorAnalysisManager(BaseManager):
         self._feature_names = list(self._dataset.columns)
         self._classes = classes
         self._categorical_features = categorical_features
-        self._metadata_columns = metadata_columns
+        self._metadata_columns = metadata_columns or []
         self._ea_config_list = []
         self._ea_report_list = []
         self._analyzer = ModelAnalyzer(model,
