@@ -129,5 +129,7 @@ export enum RAINotebookNames {
   "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
-  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py"
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
+  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
 }
