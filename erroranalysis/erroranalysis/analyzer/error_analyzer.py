@@ -4,6 +4,7 @@
 """Defines the BaseAnalyzer, the ModelAnalyzer and PredictionsAnalyzer."""
 
 from abc import ABC, abstractmethod
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
