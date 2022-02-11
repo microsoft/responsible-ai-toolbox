@@ -28,7 +28,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { DependencePlot } from "../DependencePlot/DependencePlot";
+import { DependencyHighChart } from "../DependencePlot/DependencyHighChart";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
@@ -255,7 +255,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               className={classNames.secondaryChartAndLegend}
               ref={this.depPlot}
             >
-              <DependencePlot
+              <DependencyHighChart
                 chartProps={this.state.dependenceProps}
                 cohortIndex={this.state.selectedCohortIndex}
                 cohort={this.props.cohorts[this.state.selectedCohortIndex]}
