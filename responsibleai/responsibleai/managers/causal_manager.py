@@ -173,6 +173,14 @@ class CausalManager(BaseManager):
                        f"got {nuisance_model}")
             raise UserConfigValidationException(message)
 
+        if heterogeneity_model not in [ModelTypes.FOREST,
+                                       ModelTypes.LINEAR]:
+            message = (f"heterogeneity_model should be one of "
+                       f"['{ModelTypes.FOREST}', "
+                       f"'{ModelTypes.LINEAR}'], "
+                       f"got {heterogeneity_model}")
+            raise UserConfigValidationException(message)
+
         validate_train_test_categories(
             train_data=self._train,
             test_data=self._test,
