@@ -96,6 +96,7 @@ export interface IFeatureImportanceData {
 }
 
 export interface ICausalAnalysisData {
+  hasCausalAnalysisComponent?: boolean;
   dataPointsOnHover?: string[];
   dataOnXAxis?: string[];
   defaultYAxis?: string;
@@ -103,6 +104,7 @@ export interface ICausalAnalysisData {
   xAxisPanelOptions?: { [key: string]: string[] };
   yAxisPanelOptions?: { [key: string]: string[] };
   treatmentPolicyData?: { [key: string]: string[] };
+  featureListInCausalTable?: string[];
 }
 
 export interface IWhatIfCounterfactualsData {
@@ -127,5 +129,7 @@ export enum RAINotebookNames {
   "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
-  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py"
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
+  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
 }

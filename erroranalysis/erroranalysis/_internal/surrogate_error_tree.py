@@ -26,6 +26,8 @@ MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31
 DEFAULT_MIN_CHILD_SAMPLES = 20
+CACHED_SUBTREE_FEATURES = 'cache_subtree_features'
+LEAF_VALUE = 'leaf_value'
 
 
 class TreeSide(str, Enum):
@@ -49,8 +51,31 @@ def compute_json_error_tree(analyzer,
                             max_depth=DEFAULT_MAX_DEPTH,
                             num_leaves=DEFAULT_NUM_LEAVES,
                             min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
-    # Note: this is for backcompat for older versions
-    # of raiwidgets pypi package
+    """Computes the error tree for the given dataset.
+
+    Note: this is for backcompat for older versions
+    of raiwidgets pypi package
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param filters: The filters to apply to the dataset.
+    :type filters: numpy.ndarray or pandas.DataFrame
+    :param composite_filters: The composite filters to apply to the dataset.
+    :type composite_filters: numpy.ndarray or pandas.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     return compute_error_tree(analyzer,
                               features,
                               filters,
@@ -67,6 +92,28 @@ def compute_error_tree(analyzer,
                        max_depth=DEFAULT_MAX_DEPTH,
                        num_leaves=DEFAULT_NUM_LEAVES,
                        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
+    """Computes the error tree for the given dataset.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param filters: The filters to apply to the dataset.
+    :type filters: numpy.ndarray or pandas.DataFrame
+    :param composite_filters: The composite filters to apply to the dataset.
+    :type composite_filters: numpy.ndarray or pandas.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     # Fit a surrogate model on errors
     if max_depth is None:
         max_depth = DEFAULT_MAX_DEPTH
@@ -136,6 +183,7 @@ def compute_error_tree(analyzer,
     dumped_model = surrogate._Booster.dump_model()
     tree_structure = dumped_model["tree_info"][0]['tree_structure']
     max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
     tree = traverse(filtered_indexed_df,
                     tree_structure,
                     max_split_index,
@@ -162,9 +210,9 @@ def create_surrogate_model(analyzer,
     :type analyzer: BaseAnalyzer
     :param dataset_sub_features: The subset of features to train the
         surrogate model on.
-    :type dataset_sub_features: numpy.array or pandas.DataFrame
+    :type dataset_sub_features: numpy.ndarray or pandas.DataFrame
     :param diff: The difference between the true and predicted labels column.
-    :type diff: numpy.array
+    :type diff: numpy.ndarray
     :param max_depth: The maximum depth of the surrogate tree trained
         on errors.
     :type max_depth: int
@@ -224,6 +272,11 @@ def get_categorical_info(analyzer, dataset_sub_names):
 
 
 def get_max_split_index(tree):
+    """Gets the max split index for the tree recursively.
+
+    :param tree: The tree to get the max split index for.
+    :type tree: dict
+    """
     if SPLIT_INDEX in tree:
         max_index = tree[SPLIT_INDEX]
         index1 = get_max_split_index(tree[TreeSide.LEFT_CHILD])
@@ -243,6 +296,31 @@ def traverse(df,
              side=TreeSide.UNKNOWN,
              metric=None,
              classes=None):
+    """Traverses the current node in the tree to create a list of nodes.
+
+    :param df: The DataFrame containing the features and labels.
+    :type df: pandas.DataFrame
+    :param tree: The current node in the tree to traverse.
+    :type tree: dict
+    :param max_split_index: The max split index for the tree.
+    :type max_split_index: int
+    :param categories: The list of categorical features and categories.
+    :type categories: list[tuple]
+    :param dict: The dictionary to store the nodes in.
+    :type dict: dict
+    :param feature_names: The list of feature names.
+    :type feature_names: list[str]
+    :param parent: The parent node of the current node.
+    :type parent: Node or None
+    :param side: The side of the parent node the current node is on.
+    :type side: TreeSide
+    :param metric: The metric to use for the current node.
+    :type metric: str
+    :param classes: The list of classes for the current node.
+    :type classes: list[str]
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -250,13 +328,16 @@ def traverse(df,
     else:
         nodeid = 0
 
+    # reduce dataframe to just features split on at each step for perf
+    df = filter_to_used_features(df, tree)
+
     # write current node to a dictionary that can be saved as json
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
                             feature_names, metric, parent, side,
                             classes)
 
     # write children to a dictionary that can be saved as json
-    if 'leaf_value' not in tree:
+    if LEAF_VALUE not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
         dict = traverse(df, left_child, max_split_index,
@@ -270,12 +351,81 @@ def traverse(df,
     return dict
 
 
+def filter_to_used_features(df, tree):
+    """Filters the dataframe to only include features used in the tree.
+
+    :param df: The dataframe to filter.
+    :type df: pandas.DataFrame
+    :param tree: The tree to get the features from.
+    :type tree: dict
+    :return: The filtered dataframe.
+    :rtype: pandas.DataFrame
+    """
+    features = tree[CACHED_SUBTREE_FEATURES]
+    features = features.union({PRED_Y, TRUE_Y, DIFF})
+    return df[features]
+
+
+def cache_subtree_features(tree, feature_names, parent=None):
+    """Caches the features of the subtree on each of the tree nodes.
+
+    :param tree: The current node in the tree to cache the features on.
+    :type tree: dict
+    :param feature_names: The set of feature names.
+    :type feature_names: set[str]
+    :param parent: The parent node of the current node.
+    :type parent: Node or None
+    :return: The features from the tree.
+    :rtype: list[str]
+    """
+    if parent is not None:
+        p_node_name_val = feature_names[parent[SPLIT_FEATURE]]
+        features = {p_node_name_val}
+    else:
+        features = set()
+    if LEAF_VALUE not in tree:
+        left_child = tree[TreeSide.LEFT_CHILD]
+        features = features.union(
+            cache_subtree_features(left_child, feature_names, tree))
+        right_child = tree[TreeSide.RIGHT_CHILD]
+        features = features.union(
+            cache_subtree_features(right_child, feature_names, tree))
+    tree[CACHED_SUBTREE_FEATURES] = features
+    return features
+
+
 def create_categorical_arg(parent_threshold):
+    """Create the categorical argument for given parent threshold.
+
+    The argument contains the categories to split on.
+
+    :param parent_threshold: The parent threshold to create the categorical.
+    :type parent_threshold: float
+    :return: The categorical argument.
+    :rtype: list[float]
+    """
     return [float(i) for i in parent_threshold.split('||')]
 
 
 def create_categorical_query(method, arg, p_node_name, p_node_query,
                              parent, categories):
+    """Create the categorical query for given method and argument.
+
+    :param method: The method to use for the categorical query.
+    :type method: str
+    :param arg: The argument to use for the categorical query.
+    :type arg: list[float]
+    :param p_node_name: The name of the node.
+    :type p_node_name: str
+    :param p_node_query: The reference to the node to be used in the query.
+    :type p_node_query: str
+    :param parent: The parent node.
+    :type parent: dict
+    :param categories: The list of categories for the current node.
+    :type categories: list[tuple]
+    :return: The categorical query and condition.
+    :rtype: tuple(str, str)
+    """
     if method == CohortFilterMethods.METHOD_INCLUDES:
         operation = "=="
     else:
@@ -421,6 +571,13 @@ def node_to_dict(df, tree, nodeid, categories, json,
 
 
 def get_regression_metric_data(df):
+    """Compute regression metric data from a DataFrame.
+
+    :param df: DataFrame
+    :type df: pandas.DataFrame
+    :return: pred_y, true_y, error
+    :rtype: numpy.ndarray, numpy.ndarray, int
+    """
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     # total abs error at the node
@@ -429,6 +586,13 @@ def get_regression_metric_data(df):
 
 
 def get_classification_metric_data(df):
+    """Compute classification metric data from a DataFrame.
+
+    :param df: DataFrame
+    :type df: pandas.DataFrame
+    :return: pred_y, true_y, error
+    :rtype: numpy.ndarray, numpy.ndarray, int
+    """
     pred_y = df[PRED_Y]
     true_y = df[TRUE_Y]
     error = df[DIFF].values.sum()
@@ -436,6 +600,21 @@ def get_classification_metric_data(df):
 
 
 def compute_metric_value(func, classes, true_y, pred_y, metric):
+    """Compute metric from the given function, true and predicted values.
+
+    :param func: The metric function to evaluate.
+    :type func: function
+    :param classes: List of classes.
+    :type classes: list
+    :param true_y: True y values.
+    :type true_y: numpy.ndarray
+    :param pred_y: Predicted y values.
+    :type pred_y: numpy.ndarray
+    :param metric: Metric to compute.
+    :type metric: str
+    :return: The computed metric value.
+    :rtype: float
+    """
     requires_pos_label = (metric == Metrics.RECALL_SCORE or
                           metric == Metrics.PRECISION_SCORE or
                           metric == Metrics.F1_SCORE)

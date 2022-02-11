@@ -21,8 +21,12 @@ export function getErrorBarChartOptions(
   };
   return {
     chart: {
+      animation: false,
       type: "lowmedhigh",
       zoomType: "xy"
+    },
+    exporting: {
+      enabled: true
     },
     legend: {},
     plotOptions: {

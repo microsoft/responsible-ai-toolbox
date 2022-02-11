@@ -21,9 +21,10 @@ class ResponsibleAIDashboard(Dashboard):
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
-
+    :param locale: The language in which user wants to load and access the
+        ResponsibleAI Dashboard. The default language is english ("en").
+    :type locale: str
     """
-
     def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None):
         self.input = ResponsibleAIDashboardInput(analysis)

@@ -21,17 +21,26 @@ jobs:
 
       # build wheel
       - uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+
       - name: install requirements.txt for erroranalysis
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: erroranalysis
+
       - name: pip freeze
         run: pip freeze
+
       - name: build wheel for erroranalysis
         run: python setup.py sdist bdist_wheel
         working-directory: erroranalysis

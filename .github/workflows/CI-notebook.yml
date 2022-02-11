@@ -44,7 +44,7 @@ jobs:
       - name: Setup tools
         shell: bash -l {0}
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip~=21.3
           pip install --upgrade setuptools
           pip install --upgrade pip-tools
 
@@ -72,13 +72,16 @@ jobs:
         shell: bash -l {0}
         run: python -m pytest notebooks
 
-      - name: Run widget tests
-        shell: bash -l {0}
-        run: yarn e2e-widget
-
       - name: Upload notebook test result
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: notebook-test-${{ matrix.operatingSystem }}-${{ matrix.pythonVersion }}
           path: notebooks
+
+      - name: Upload e2e test screen shot
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: raiwidgets-e2e-screen-shot
+          path: dist/cypress

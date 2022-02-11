@@ -18,7 +18,6 @@ export interface IMatrixFilterState {
 
 export interface IMatrixAreaState {
   jsonMatrix?: IErrorAnalysisMatrix;
-  maxMetricValue: number;
   selectedCells?: boolean[];
   matrixFeature1?: string;
   matrixFeature2?: string;
@@ -36,14 +35,16 @@ export function createInitialMatrixFilterState(): IMatrixFilterState {
   };
 }
 
-export function createInitialMatrixAreaState(): IMatrixAreaState {
+export function createInitialMatrixAreaState(
+  selectedFeature1: string | undefined,
+  selectedFeature2: string | undefined
+): IMatrixAreaState {
   return {
     disableClearAll: true,
     disableSelectAll: false,
     jsonMatrix: undefined,
-    matrixFeature1: undefined,
-    matrixFeature2: undefined,
-    maxMetricValue: 0,
+    matrixFeature1: selectedFeature1,
+    matrixFeature2: selectedFeature2,
     numBins: defaultNumBins,
     quantileBinning: false,
     selectedCells: undefined
