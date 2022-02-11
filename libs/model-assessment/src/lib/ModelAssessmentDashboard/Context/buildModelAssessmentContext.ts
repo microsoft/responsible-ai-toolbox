@@ -61,9 +61,16 @@ export function buildInitialModelAssessmentContext(
   console.log(typeof jointDataset.metaDict);
   console.log(jointDataset.metaDict);
 
-  const cohortList = undefined;
+  const defaultErrorCohort = new ErrorCohort(
+    new Cohort(
+      localization.ErrorAnalysis.Cohort.defaultLabel,
+      jointDataset,
+      []
+    ),
+    jointDataset
+  );
+  const errorCohortList: ErrorCohort[] = [defaultErrorCohort];
   if (props.cohortData !== undefined) {
-    const cohortList: Cohort[] = [];
     for (const preBuiltCohort of props.cohortData) {
       console.log(preBuiltCohort);
       const filterList: IFilter[] = [];
@@ -96,56 +103,58 @@ export function buildInitialModelAssessmentContext(
             break;
         }
       }
-      const cohortEntry = new Cohort(
-        preBuiltCohort.cohortName,
-        jointDataset,
-        filterList
+      const errorCohortEntry = new ErrorCohort(
+        new Cohort(preBuiltCohort.cohortName, jointDataset, filterList),
+        jointDataset
       );
-      cohortList.push(cohortEntry);
-      console.log(cohortEntry);
+      errorCohortList.push(errorCohortEntry);
+      console.log(errorCohortEntry);
     }
   }
-  console.log(cohortList);
-  if (cohortList !== undefined) {
+  console.log(errorCohortList);
+  if (errorCohortList.length > 0) {
     console.log("cohort list has translated cohorts");
   } else {
     console.log("cohort list is empty");
   }
-  let key = undefined;
-  let value = undefined;
-  for (key in jointDataset.metaDict) {
-    value = jointDataset.metaDict[key].abbridgedLabel;
-    console.log(typeof value);
-    console.log(typeof key);
-    if (value === "age") {
-      console.log(value);
-      break;
-    }
-  }
-  console.log(key);
-  console.log(value);
-  const nums = [1];
-  const cohort_filter_1: IFilter = {
-    arg: nums,
-    column: key,
-    method: "less"
-  } as IFilter;
+  // let key = undefined;
+  // let value = undefined;
+  // for (key in jointDataset.metaDict) {
+  //   value = jointDataset.metaDict[key].abbridgedLabel;
+  //   console.log(typeof value);
+  //   console.log(typeof key);
+  //   if (value === "age") {
+  //     console.log(value);
+  //     break;
+  //   }
+  // }
+  // console.log(key);
+  // console.log(value);
+  // const nums = [1];
+  // const cohort_filter_1: IFilter = {
+  //   arg: nums,
+  //   column: key,
+  //   method: "less"
+  // } as IFilter;
 
   // consider taking filters in as param arg for programmatic users
-  const cohorts = [
-    new ErrorCohort(
-      new Cohort(
-        localization.ErrorAnalysis.Cohort.defaultLabel,
-        jointDataset,
-        []
-      ),
-      jointDataset
-    ),
-    new ErrorCohort(
-      new Cohort("Cohort New", jointDataset, [cohort_filter_1]),
-      jointDataset
-    )
-  ];
+  // const cohorts = [
+  //   new ErrorCohort(
+  //     new Cohort(
+  //       localization.ErrorAnalysis.Cohort.defaultLabel,
+  //       jointDataset,
+  //       []
+  //     ),
+  //     jointDataset
+  //   ),
+  //   new ErrorCohort(
+  //     new Cohort("Cohort New", jointDataset, [cohort_filter_1]),
+  //     jointDataset
+  //   ),
+  //   errorCohortList
+  // ];
+  const cohorts = errorCohortList;
+
   const weightVectorLabels = {
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
