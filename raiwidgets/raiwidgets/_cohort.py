@@ -84,7 +84,8 @@ class CohortFilter:
     CLASSIFICATION_OUTCOME = 'Classification Outcome'
     REGRESSION_ERROR = 'Error'
 
-    SPECIAL_COLUMN_LIST = [PREDICTED_Y,
+    SPECIAL_COLUMN_LIST = [INDEX,
+                           PREDICTED_Y,
                            TRUE_Y,
                            CLASSIFICATION_OUTCOME,
                            REGRESSION_ERROR]
@@ -161,10 +162,8 @@ class CohortFilter:
                     "cohort method {0}.".format(
                         CohortFilterMethods.METHOD_RANGE)
                 )
-            if ((not isinstance(arg[0], int) and
-                 not isinstance(arg[0], float)) or
-                (not isinstance(arg[1], int) and
-                 not isinstance(arg[1], float))):
+            if (not all(isinstance(entry, int) for entry in arg) and
+                    not all(isinstance(entry, float) for entry in arg)):
                 raise UserConfigValidationException(
                     "Expected int or float type for arg "
                     "with cohort method {0}.".format(
@@ -231,13 +230,29 @@ class CohortFilter:
         4. For categorical features the values allowed are a subset of the
            the values available in the categorical column in the test data.
         """
-        if self.column not in CohortFilter.SPECIAL_COLUMN_LIST or \
+        # High level validations
+        if self.column not in CohortFilter.SPECIAL_COLUMN_LIST and \
                 (self.column not in
                     (set(test_data.columns) - set([target_column]))):
             raise UserConfigValidationException(
                 "Unknown column {0} specified in cohort filter".format(
                     self.column)
             )
+
+        # "Index" Filter validations
+        if self.column == CohortFilter.INDEX:
+            if self.method == CohortFilterMethods.METHOD_EXCLUDES:
+                raise UserConfigValidationException(
+                    "{0} filter is not supported with {1} based "
+                    "selection.".format(
+                        CohortFilterMethods.METHOD_EXCLUDES,
+                        CohortFilter.INDEX)
+                )
+
+            if not all(isinstance(entry, int) for entry in self.arg):
+                raise UserConfigValidationException(
+                    "All entries in arg should be of type int."
+                )
 
 
 class Cohort:

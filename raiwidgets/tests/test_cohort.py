@@ -144,7 +144,7 @@ class TestCohortFilter:
 
 
 class TestCohortFilterDataValidations:
-    def test_validate_with_test_data_basic_data_checks(self):
+    def test_validate_with_test_data_high_level_validations(self):
         test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
                                  columns=["age", "target"])
 
@@ -157,6 +157,31 @@ class TestCohortFilterDataValidations:
                 match="Unknown column fake_column specified in cohort filter"):
             cohort_filter_not_a_feature._validate_with_test_data(
                 test_data=test_data, target_column="target")
+
+    def test_validate_with_test_data_index_filter_validations(self):
+        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
+                                 columns=["age", "target"])
+
+        cohort_filter_index_excludes = \
+            CohortFilter(method=CohortFilterMethods.METHOD_EXCLUDES,
+                         arg=[65], column='Index')
+        with pytest.raises(
+                UserConfigValidationException,
+                match="excludes filter is not supported with Index based "
+                      "selection."):
+            cohort_filter_index_excludes._validate_with_test_data(
+                test_data=test_data, target_column="target"
+            )
+
+        cohort_filter_index_incorrect_args = \
+            CohortFilter(method=CohortFilterMethods.METHOD_GREATER,
+                         arg=[65.0], column='Index')
+        with pytest.raises(
+                UserConfigValidationException,
+                match="All entries in arg should be of type int."):
+            cohort_filter_index_incorrect_args._validate_with_test_data(
+                test_data=test_data, target_column="target"
+            )
 
 
 class TestCohort:
