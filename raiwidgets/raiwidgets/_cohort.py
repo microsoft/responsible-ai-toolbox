@@ -82,7 +82,7 @@ class CohortFilter:
     TRUE_Y = 'True Y'
     INDEX = 'Index'
     CLASSIFICATION_OUTCOME = 'Classification Outcome'
-    REGRESSION_ERROR = 'Regression Error'
+    REGRESSION_ERROR = 'Error'
 
     SPECIAL_COLUMN_LIST = [PREDICTED_Y,
                            TRUE_Y,
@@ -202,8 +202,8 @@ class CohortFilter:
         3. The "Classification Outcome" filter only takes
            CohortFilterMethods.INCLUDES filter method.
 
-        "Regression Error" Filter validations
-        1. Validate that "Regression Error" filter is not configure for
+        "Error" Filter validations
+        1. Validate that "Error" filter is not configure for
            multiclass classification and binary classification.
         2. Only integer or floating points can be configured as arguments.
         3. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES

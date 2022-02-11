@@ -93,14 +93,43 @@ export function buildInitialModelAssessmentContext(
             console.log(preBuiltCohortFilter);
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: "Index",
+              column: preBuiltCohortFilter.column,
               method: preBuiltCohortFilter.method
             } as IFilter;
             filterList.push(filter);
             break;
           }
-          default:
+          case "Error":
             break;
+          default: {
+            let jointDatasetFeatureName = undefined;
+            let userDatasetFeatureName = undefined;
+            for (jointDatasetFeatureName in jointDataset.metaDict) {
+              userDatasetFeatureName =
+                jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
+              if (userDatasetFeatureName === preBuiltCohortFilter.column) {
+                console.log(userDatasetFeatureName);
+                break;
+              }
+            }
+            console.log(jointDatasetFeatureName);
+            console.log(userDatasetFeatureName);
+
+            // TODO: Translate categorical values to sorted categorical indices
+            // if (preBuiltCohortFilter.method === FilterMethods.Includes) {
+            //   const indicies: number[] = [];
+            //   for (const categoricalValue of preBuiltCohortFilter.arg) {
+            //     jointDataset.metaDict[jointDatasetFeatureName];
+            //   }
+            // }
+            const filter: IFilter = {
+              arg: preBuiltCohortFilter.arg,
+              column: jointDatasetFeatureName,
+              method: preBuiltCohortFilter.method
+            } as IFilter;
+            filterList.push(filter);
+            break;
+          }
         }
       }
       const errorCohortEntry = new ErrorCohort(
@@ -117,25 +146,6 @@ export function buildInitialModelAssessmentContext(
   } else {
     console.log("cohort list is empty");
   }
-  // let key = undefined;
-  // let value = undefined;
-  // for (key in jointDataset.metaDict) {
-  //   value = jointDataset.metaDict[key].abbridgedLabel;
-  //   console.log(typeof value);
-  //   console.log(typeof key);
-  //   if (value === "age") {
-  //     console.log(value);
-  //     break;
-  //   }
-  // }
-  // console.log(key);
-  // console.log(value);
-  // const nums = [1];
-  // const cohort_filter_1: IFilter = {
-  //   arg: nums,
-  //   column: key,
-  //   method: "less"
-  // } as IFilter;
 
   // consider taking filters in as param arg for programmatic users
   // const cohorts = [
