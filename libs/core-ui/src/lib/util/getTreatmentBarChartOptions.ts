@@ -34,6 +34,7 @@ export function getTreatmentBarChartOptions(
     : [localization.Counterfactuals.recommendedPolicy];
   return {
     chart: {
+      animation: false,
       backgroundColor: colorTheme.backgroundColor,
       type: "bar"
     },
