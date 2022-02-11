@@ -6,8 +6,10 @@
 import json
 import warnings
 from pathlib import Path
+from typing import Any, List, Optional
 
 import numpy as np
+import pandas as pd
 from interpret_community.common.constants import ModelTask
 from interpret_community.explanation.explanation import (
     FeatureImportanceExplanation, load_explanation, save_explanation)
@@ -47,8 +49,11 @@ class ExplainerManager(BaseManager):
 
     """Defines the ExplainerManager for explaining a model."""
 
-    def __init__(self, model, initialization_examples, evaluation_examples,
-                 target_column, classes=None, categorical_features=None):
+    def __init__(self, model: Any, initialization_examples: pd.DataFrame,
+                 evaluation_examples: pd.DataFrame,
+                 target_column: str,
+                 classes: Optional[List] = None,
+                 categorical_features: Optional[List[str]] = None):
         """Creates an ExplainerManager object.
 
         :param model: The model to explain.
