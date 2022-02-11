@@ -83,10 +83,15 @@ def validate_causal(rai_insights, data, target_column,
     _check_causal_properties(rai_insights.causal.list(),
                              expected_causal_effects=2)
 
-    # Add a bad configuration
+    # Add a bad configuration for nuisance_model
     with pytest.raises(UserConfigValidationException):
         rai_insights.causal.add(treatment_features,
                                 nuisance_model='fake_model')
+
+    # Add a bad configuration for heterogeneity_model
+    with pytest.raises(UserConfigValidationException):
+        rai_insights.causal.add(treatment_features,
+                                heterogeneity_model='fake_model')
 
 
 def _check_causal_properties(

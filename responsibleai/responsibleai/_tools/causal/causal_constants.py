@@ -8,6 +8,7 @@ class ModelTypes:
     """Model type constants."""
     AUTOML = 'automl'
     LINEAR = 'linear'
+    FOREST = 'forest'
 
 
 class DefaultParams:
