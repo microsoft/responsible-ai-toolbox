@@ -3,8 +3,9 @@
 
 """Module for defining cohorts in raiwidgets package."""
 
-from typing import Any, List
+from typing import Any, List, Optional
 
+import numpy as np
 import pandas as pd
 
 from responsibleai.exceptions import UserConfigValidationException
@@ -171,7 +172,8 @@ class CohortFilter:
                 )
 
     def _validate_with_test_data(self, test_data: pd.DataFrame,
-                                 target_column: str):
+                                 target_column: str,
+                                 is_classification: Optional[bool] = True):
         """
         Validate the cohort filters parameters with respect to test data.
 
@@ -180,6 +182,10 @@ class CohortFilter:
         :type test_data: pd.DataFrame
         :param target_column: The target column in the test data.
         :type target_column: str
+        :param is_classification: True to indicate if this validation needs
+            to be done for a classification scenario and False to indicate
+            that this needs to be done for regression scenario.
+        :type is_classification: bool
 
         The following validations need to be performed:-
 
@@ -254,6 +260,34 @@ class CohortFilter:
                     "All entries in arg should be of type int."
                 )
 
+        # "Classification Outcome" Filter validations
+        if self.column == CohortFilter.CLASSIFICATION_OUTCOME:
+            is_multiclass = len(np.unique(
+                test_data[target_column].values).tolist()) > 2
+
+            if not is_classification or is_multiclass:
+                raise UserConfigValidationException(
+                    "{0} cannot be configured for multi class classification"
+                    " and regression scenarios.".format(
+                        CohortFilter.CLASSIFICATION_OUTCOME)
+                )
+
+            if self.method != CohortFilterMethods.METHOD_INCLUDES:
+                raise UserConfigValidationException(
+                    "{0} can only be configured with "
+                    "cohort filter {1}.".format(
+                        CohortFilter.CLASSIFICATION_OUTCOME,
+                        CohortFilterMethods.METHOD_INCLUDES)
+                )
+
+            for classification_outcome in self.arg:
+                if classification_outcome not in ClassificationOutcomes.ALL:
+                    raise UserConfigValidationException(
+                        "{0} can only take argument values from {1}.".format(
+                            CohortFilter.CLASSIFICATION_OUTCOME,
+                            " or ".join(ClassificationOutcomes.ALL))
+                    )
+
 
 class Cohort:
     """Defines the cohort which will be injected from SDK into the Dashboard.
@@ -289,7 +323,8 @@ class Cohort:
             self.cohort_filter_list.append(cohort_filter)
 
     def _validate_with_test_data(self, test_data: pd.DataFrame,
-                                 target_column: str):
+                                 target_column: str,
+                                 is_classification: Optional[bool] = True):
         """
         Validate the cohort and cohort filters parameters with respect to
         test data.
@@ -299,6 +334,10 @@ class Cohort:
         :type test_data: pd.DataFrame
         :param target_column: The target column in the test data.
         :type target_column: str
+        :param is_classification: True to indicate if this validation needs
+            to be done for a classification scenario and False to indicate
+            that this needs to be done for regression scenario.
+        :type is_classification: bool
         """
         if self.cohort_filter_list is None:
             return
@@ -314,5 +353,7 @@ class Cohort:
                     target_column)
             )
         for cohort_filter in self.cohort_filter_list:
-            cohort_filter._validate_with_test_data(test_data=test_data,
-                                                   target_column=target_column)
+            cohort_filter._validate_with_test_data(
+                test_data=test_data,
+                target_column=target_column,
+                is_classification=is_classification)
