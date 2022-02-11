@@ -5,7 +5,7 @@ import { toNumber } from "lodash";
 
 import { Chart, IChartElement } from "../../../../util/Chart";
 import { getComboBoxValue, selectComboBox } from "../../../../util/comboBox";
-import { ScatterChart } from "../../../../util/ScatterChart";
+import { ScatterHighchart } from "../../../../util/ScatterHighchart";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 const topKLabelReg = /^Top (\d+) features by their importance$/;
@@ -69,7 +69,7 @@ export function describeGlobalExplanationChart<
       });
 
       if (!props.dataShape.featureImportanceData?.noDataset) {
-        const dependencePlotChart = new ScatterChart("#DependencePlot");
+        const dependencePlotChart = new ScatterHighchart("#DependencePlot");
         describe("DependencePlot", () => {
           beforeEach(() => {
             selectComboBox("#DependencePlotFeatureSelection", 0);
