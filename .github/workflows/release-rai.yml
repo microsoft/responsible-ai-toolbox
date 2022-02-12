@@ -29,9 +29,9 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: 3.7
 
       - name: Use Node.js ${{ env.node-version }}
@@ -60,54 +60,85 @@ jobs:
         run: |
           yarn buildall
 
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
       - name: update and upgrade pip, setuptools, wheel, and twine
+        shell: bash -l {0}
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
 
       - name: install requirements.txt for raiwidgets
+        shell: bash -l {0}
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: ${{ env.widgetDirectory }}
+
       - name: install requirements.txt for responsibleai
+        shell: bash -l {0}
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: ${{ env.raiDirectory }}
+
       - name: pip freeze
+        shell: bash -l {0}
         run: pip freeze
+
       - name: replace README for raiwidgets
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./${{ env.widgetDirectory }}/
+
       - name: replace README for responsibleai
         run: |
           sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
           cp ./README.md ./${{ env.raiDirectory }}/
+
       - name: build wheel for raiwidgets
+        shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.widgetDirectory }}
+
       - name: build wheel for responsibleai
+        shell: bash -l {0}
         run: python setup.py sdist bdist_wheel
         working-directory: ${{ env.raiDirectory }}
 
       # run tests before publishing to PyPI
       - name: install raiwidgets wheel locally
+        shell: bash -l {0}
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.widgetDirectory }}
+
       - name: install responsibleai wheel locally
+        shell: bash -l {0}
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
         working-directory: ${{ env.raiDirectory }}
 
       - name: run raiwidgets tests
+        shell: bash -l {0}
         run: pytest ./tests/
         working-directory: ${{ env.widgetDirectory }}
+
       - name: run responsibleai tests
+        shell: bash -l {0}
         run: pytest ./tests/
         working-directory: ${{ env.raiDirectory }}
 
       - name: Run widget tests
+        shell: bash -l {0}
         run: yarn e2e-widget
 
       - name: Upload a raiwidgets build result
@@ -136,10 +167,11 @@ jobs:
         package: [responsibleai, raiwidgets]
 
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: 3.7
+
       - id: download
         name: Download a Build Artifact
         uses: actions/download-artifact@v2
@@ -148,6 +180,7 @@ jobs:
           path: ${{ matrix.package }}
 
       - name: Publish responsibleai package to Test PyPI
+        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -155,14 +188,18 @@ jobs:
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{steps.download.outputs.download-path}}
+
       - name: Publish responsibleai package to Prod PyPI
+        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
           packages_dir: ${{steps.download.outputs.download-path}}
+
       - name: Publish raiwidgets package to Test PyPI
+        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -170,7 +207,9 @@ jobs:
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: ${{steps.download.outputs.download-path}}
+
       - name: Publish raiwidgets package to Prod PyPI
+        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -202,12 +241,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.node-version }}
+
       - id: download
         name: Download a Build Artifact
         uses: actions/download-artifact@v2
         with:
           name: ${{ env.typescriptBuildArtifactName }}
           path: ${{ env.typescriptBuildOutput }}
+
       - id: publish
         name: NPM Publish
         uses: JS-DevTools/npm-publish@v1
@@ -217,6 +258,7 @@ jobs:
           dry-run: ${{github.event.inputs.releaseType == 'Test'}}
           access: public
           # tag: next
+
       - if: steps.publish.type != 'none'
         run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"

@@ -5,6 +5,7 @@ import { getMenu } from "../../../../util/getMenu";
 import { selectRow } from "../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
+import { regExForNumbersWithBrackets } from "../../modelAssessmentDatasets";
 
 import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
@@ -18,20 +19,16 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       it("should have right number of correct prediction datapoints", () => {
         cy.get(Locators.IFIPredictionSpan)
           .first()
-          .should(
-            "contain.text",
-            dataShape.featureImportanceData?.correctPredictionDatapoint
-          );
+          .invoke("text")
+          .should("match", regExForNumbersWithBrackets);
       });
 
       it("should have right number of incorrect prediction datapoints", () => {
-        cy.get(Locators.IFIExpandCollapseButton).click();
+        cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
         cy.get(Locators.IFIPredictionSpan)
           .eq(1)
-          .should(
-            "contain.text",
-            dataShape.featureImportanceData?.incorrectPredictionDatapoint
-          );
+          .invoke("text")
+          .should("match", regExForNumbersWithBrackets);
       });
     }
 
@@ -52,7 +49,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the row", () => {
-        selectRow("Index", "4");
+        selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
