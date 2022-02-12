@@ -8,7 +8,9 @@ import {
   IErrorAnalysisData,
   IModelExplanationData,
   ComparisonTypes,
-  Metrics
+  Metrics,
+  IPreBuiltCohort,
+  FilterMethods
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
@@ -3441,9 +3443,81 @@ export const bostonCensusCausalAnalysisData: ICausalAnalysisData = {
     }
   ]
 };
+
 export const bostonErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
   metric: Metrics.MeanSquaredError,
   minChildSamples: 21,
   numLeaves: 11
+};
+
+export const bostonCohortDataContinuous: IPreBuiltCohort = {
+  cohortName: "Cohort Continuous",
+  filterList: [
+    {
+      arg: [30.5],
+      column: "AGE",
+      method: FilterMethods.LessThan
+    },
+    {
+      arg: [5.5],
+      column: "CRIM",
+      method: FilterMethods.GreaterThan
+    }
+  ]
+};
+
+export const bostonCohortDataCategorical: IPreBuiltCohort = {
+  cohortName: "Cohort Categorical",
+  filterList: [
+    {
+      arg: [0, 1],
+      column: "CHAS",
+      method: FilterMethods.Includes
+    }
+  ]
+};
+
+export const bostonCohortDataIndex: IPreBuiltCohort = {
+  cohortName: "Cohort Index",
+  filterList: [
+    {
+      arg: [23],
+      column: "Index",
+      method: FilterMethods.LessThan
+    }
+  ]
+};
+
+export const bostonCohortDataPredictedY: IPreBuiltCohort = {
+  cohortName: "Cohort Predicted Y",
+  filterList: [
+    {
+      arg: [30, 45],
+      column: "Predicted Y",
+      method: FilterMethods.InTheRangeOf
+    }
+  ]
+};
+
+export const bostonCohortDataTrueY: IPreBuiltCohort = {
+  cohortName: "Cohort True Y",
+  filterList: [
+    {
+      arg: [45.8],
+      column: "True Y",
+      method: FilterMethods.LessThan
+    }
+  ]
+};
+
+export const bostonCohortDataRegressionError: IPreBuiltCohort = {
+  cohortName: "Cohort Regression Error",
+  filterList: [
+    {
+      arg: [50.5],
+      column: "Error",
+      method: FilterMethods.GreaterThan
+    }
+  ]
 };

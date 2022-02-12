@@ -53,7 +53,13 @@ import {
   bostonCounterfactualData,
   bostonData as bostonDataMAD,
   bostonErrorAnalysisData,
-  bostonWithFairnessModelExplanationData
+  bostonWithFairnessModelExplanationData,
+  bostonCohortDataContinuous,
+  bostonCohortDataCategorical,
+  bostonCohortDataIndex,
+  bostonCohortDataPredictedY,
+  bostonCohortDataRegressionError,
+  bostonCohortDataTrueY
 } from "../model-assessment/__mock_data__/bostonData";
 import {
   wineData as wineDataMAD,
@@ -218,6 +224,14 @@ export const applications: IApplications = <const>{
       bostonData: {
         causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
+        cohortData: [
+          bostonCohortDataTrueY,
+          bostonCohortDataCategorical,
+          bostonCohortDataContinuous,
+          bostonCohortDataIndex,
+          bostonCohortDataRegressionError,
+          bostonCohortDataPredictedY
+        ],
         counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
