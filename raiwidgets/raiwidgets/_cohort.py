@@ -267,7 +267,7 @@ class CohortFilter:
 
             if not is_classification or is_multiclass:
                 raise UserConfigValidationException(
-                    "{0} cannot be configured for multi class classification"
+                    "{0} cannot be configured for multi-class classification"
                     " and regression scenarios.".format(
                         CohortFilter.CLASSIFICATION_OUTCOME)
                 )
@@ -287,6 +287,31 @@ class CohortFilter:
                             CohortFilter.CLASSIFICATION_OUTCOME,
                             " or ".join(ClassificationOutcomes.ALL))
                     )
+
+        # "Error" Filter validations
+        if self.column == CohortFilter.REGRESSION_ERROR:
+            if is_classification:
+                raise UserConfigValidationException(
+                    "{0} cannot be configured for classification"
+                    " scenarios.".format(CohortFilter.REGRESSION_ERROR)
+                )
+
+            if self.method == CohortFilterMethods.METHOD_INCLUDES or \
+                    self.method == CohortFilterMethods.METHOD_EXCLUDES:
+                raise UserConfigValidationException(
+                    "{0} cannot be configured with either {1} or {2}.".format(
+                        CohortFilter.REGRESSION_ERROR,
+                        CohortFilterMethods.METHOD_INCLUDES,
+                        CohortFilterMethods.METHOD_EXCLUDES
+                    )
+                )
+
+            if not all(isinstance(entry, int) for entry in self.arg) and \
+                    not all(isinstance(entry, float) for entry in self.arg):
+                raise UserConfigValidationException(
+                    "All entries in arg should be of type int or float"
+                    " for {} cohort.".format(CohortFilter.REGRESSION_ERROR)
+                )
 
 
 class Cohort:

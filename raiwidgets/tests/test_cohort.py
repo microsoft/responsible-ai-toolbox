@@ -7,7 +7,8 @@ import pytest
 
 import pandas as pd
 
-from raiwidgets._cohort import (Cohort, CohortFilter, CohortFilterMethods,
+from raiwidgets._cohort import (ClassificationOutcomes, Cohort,
+                                CohortFilter, CohortFilterMethods,
                                 cohort_filter_json_converter)
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -164,7 +165,7 @@ class TestCohortFilterDataValidations:
 
         cohort_filter_index_excludes = \
             CohortFilter(method=CohortFilterMethods.METHOD_EXCLUDES,
-                         arg=[65], column='Index')
+                         arg=[65], column=CohortFilter.INDEX)
         with pytest.raises(
                 UserConfigValidationException,
                 match="excludes filter is not supported with Index based "
@@ -175,13 +176,125 @@ class TestCohortFilterDataValidations:
 
         cohort_filter_index_incorrect_args = \
             CohortFilter(method=CohortFilterMethods.METHOD_GREATER,
-                         arg=[65.0], column='Index')
+                         arg=[65.0], column=CohortFilter.INDEX)
         with pytest.raises(
                 UserConfigValidationException,
                 match="All entries in arg should be of type int."):
             cohort_filter_index_incorrect_args._validate_with_test_data(
                 test_data=test_data, target_column="target"
             )
+
+    def test_validate_with_test_data_classification_error_filter_validations(
+            self):
+        test_data_multiclass = pd.DataFrame(
+            data=[[23, 'X'], [25, 'Y'], [25, 'Z']],
+            columns=["age", "target"])
+
+        test_data_binary = pd.DataFrame(
+            data=[[23, 'X'], [25, 'Y']],
+            columns=["age", "target"])
+
+        cohort_filter_classification_excludes = \
+            CohortFilter(method=CohortFilterMethods.METHOD_EXCLUDES,
+                         arg=[ClassificationOutcomes.FALSE_NEGATIVE],
+                         column=CohortFilter.CLASSIFICATION_OUTCOME)
+
+        cohort_filter_classification_includes = \
+            CohortFilter(method=CohortFilterMethods.METHOD_INCLUDES,
+                         arg=["random"],
+                         column=CohortFilter.CLASSIFICATION_OUTCOME)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Classification Outcome cannot be "
+                      "configured for multi-class classification"
+                      " and regression scenarios."):
+            cohort_filter_classification_excludes._validate_with_test_data(
+                test_data=test_data_multiclass, target_column="target",
+                is_classification=True
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Classification Outcome cannot be "
+                      "configured for multi-class classification"
+                      " and regression scenarios."):
+            cohort_filter_classification_excludes._validate_with_test_data(
+                test_data=test_data_binary, target_column="target",
+                is_classification=False
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Classification Outcome can only be configured with "
+                      "cohort filter includes."):
+            cohort_filter_classification_excludes._validate_with_test_data(
+                test_data=test_data_binary, target_column="target",
+                is_classification=True
+            )
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Classification Outcome can only take argument values "
+                      "from False negative or False positive or True "
+                      "negative or True positive."):
+            cohort_filter_classification_includes._validate_with_test_data(
+                test_data=test_data_binary, target_column="target",
+                is_classification=True)
+
+    def test_validate_with_test_data_regression_error_filter_validations(
+            self):
+        test_data_regression = pd.DataFrame(
+            data=[[23, 2.5], [25, 3.6], [25, 4.6]],
+            columns=["age", "target"])
+
+        cohort_filter_regression = \
+            CohortFilter(method=CohortFilterMethods.METHOD_LESS,
+                         arg=[2.5],
+                         column=CohortFilter.REGRESSION_ERROR)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Error cannot be configured for classification"
+                      " scenarios."):
+            cohort_filter_regression._validate_with_test_data(
+                test_data=test_data_regression,
+                target_column="target",
+                is_classification=True)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Error cannot be configured with either includes"
+                      " or excludes."):
+            cohort_filter_regression.method = \
+                CohortFilterMethods.METHOD_INCLUDES
+            cohort_filter_regression._validate_with_test_data(
+                test_data=test_data_regression,
+                target_column="target",
+                is_classification=False)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Error cannot be configured with either includes"
+                      " or excludes."):
+            cohort_filter_regression.method = \
+                CohortFilterMethods.METHOD_EXCLUDES
+            cohort_filter_regression._validate_with_test_data(
+                test_data=test_data_regression,
+                target_column="target",
+                is_classification=False)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="All entries in arg should be of type int or float"
+                      " for Error cohort."):
+            cohort_filter_regression.method = \
+                CohortFilterMethods.METHOD_GREATER
+            cohort_filter_regression.arg = ['val1', 'val2']
+            cohort_filter_regression._validate_with_test_data(
+                test_data=test_data_regression,
+                target_column="target",
+                is_classification=False)
 
 
 class TestCohort:
