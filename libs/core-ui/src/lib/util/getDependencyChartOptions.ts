@@ -24,16 +24,12 @@ export function getDependencyChartOptions(
   };
   return {
     chart: {
-      animation: false,
-      backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
     },
-    legend: {},
     plotOptions: {
       scatter: {
         marker: {
-          radius: 2,
           states: {
             hover: {
               enabled: true,
@@ -55,28 +51,8 @@ export function getDependencyChartOptions(
         type: "scatter"
       }
     ],
-    subtitle: {},
-    title: { text: "" },
     xAxis: {
-      categories: xLabels,
-      labels: {
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      title: {
-        text: ""
-      }
-    },
-    yAxis: {
-      labels: {
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      title: {
-        text: ""
-      }
+      categories: xLabels
     }
   };
 }
