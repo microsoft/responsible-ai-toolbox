@@ -7,6 +7,7 @@ import json
 import pickle
 import warnings
 from pathlib import Path
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -47,54 +48,27 @@ _PREDICT_PROBA = "predict_proba"
 
 
 class RAIInsights(object):
-
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-    :param model: The model to compute RAI insights for.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
-    :param test: The test dataset including the label column.
-    :type test: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param task_type: The task to run, can be `classification` or
-        `regression`.
-    :type task_type: str
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    :param classes: The class labels in the training dataset
-    :type classes: ndarray
-    :param serializer: Picklable custom serializer with save and load
-        methods for custom model serialization.
-        The save method writes the model to file given a parent directory.
-        The load method returns the deserialized model from the same
-        parent directory.
-    :type serializer: object
     """
 
     def __init__(
         self,
-        model,
-        train,
-        test,
-        target_column,
-        task_type,
-        categorical_features=None,
-        classes=None,
+        model: Any,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
+        categorical_features: Optional[List[str]] = None,
+        classes: Optional[np.ndarray] = None,
+        serializer: Optional[Any] = None,
         dataset_name=None,
         data_balance_analysis=None,
-        serializer=None,
         maximum_rows_for_test: int = 5000,
     ):
-        """Defines the top-level Model Analysis API.
-        Use RAIInsights to analyze errors, explain the most important
-        features, compute counterfactuals and run causal analysis in a
-        single API.
+        """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -111,11 +85,12 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
-            methods defined for model that is not serializable. The save
-            method returns a dictionary state and load method returns the
-            model.
+            methods for custom model serialization.
+            The save method writes the model to file given a parent directory.
+            The load method returns the deserialized model from the same
+            parent directory.
         :type serializer: object
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
@@ -201,20 +176,19 @@ class RAIInsights(object):
 
     def _validate_model_analysis_input_parameters(
         self,
-        model,
-        train,
-        test,
-        target_column,
-        task_type,
-        categorical_features,
-        classes,
+        model: Any,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
+        categorical_features: List[str],
+        classes: np.ndarray,
         serializer,
         dataset_name,
         data_balance_analysis,
         maximum_rows_for_test: int,
     ):
-        """
-        Validate the inputs for RAIInsights class.
+        """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -232,7 +206,7 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -265,9 +239,7 @@ class RAIInsights(object):
 
         if dataset_name is not None:
             if not isinstance(dataset_name, str):
-                raise UserConfigValidationException(
-                    "dataset_name should be a string"
-                )
+                raise UserConfigValidationException("dataset_name should be a string")
 
         if data_balance_analysis is not None:
             if not isinstance(data_balance_analysis, DataBalanceAnalysis):
@@ -313,19 +285,16 @@ class RAIInsights(object):
                     "The features in train and test data do not match"
                 )
 
-            if target_column not in list(
-                train.columns
-            ) or target_column not in list(test.columns):
+            if target_column not in list(train.columns) or target_column not in list(
+                test.columns
+            ):
                 raise UserConfigValidationException(
                     "Target name {0} not present in train/test data".format(
                         target_column
                     )
                 )
 
-            if (
-                categorical_features is not None
-                and len(categorical_features) > 0
-            ):
+            if categorical_features is not None and len(categorical_features) > 0:
                 if target_column in categorical_features:
                     raise UserConfigValidationException(
                         "Found target name {0} in "
@@ -361,8 +330,7 @@ class RAIInsights(object):
             if classes is not None and task_type == ModelTask.CLASSIFICATION:
                 if (
                     len(set(train[target_column].unique()) - set(classes)) != 0
-                    or len(set(classes) - set(train[target_column].unique()))
-                    != 0
+                    or len(set(classes) - set(train[target_column].unique())) != 0
                 ):
                     raise UserConfigValidationException(
                         "The train labels and distinct values in "
@@ -371,8 +339,7 @@ class RAIInsights(object):
 
                 if (
                     len(set(test[target_column].unique()) - set(classes)) != 0
-                    or len(set(classes) - set(test[target_column].unique()))
-                    != 0
+                    or len(set(classes) - set(test[target_column].unique())) != 0
                 ):
                     raise UserConfigValidationException(
                         "The train labels and distinct values in "
@@ -381,9 +348,7 @@ class RAIInsights(object):
 
             if model is not None:
                 # Pick one row from train and test data
-                small_train_data = train.iloc[0:1].drop(
-                    [target_column], axis=1
-                )
+                small_train_data = train.iloc[0:1].drop([target_column], axis=1)
                 small_test_data = test.iloc[0:1].drop([target_column], axis=1)
 
                 small_train_features_before = list(small_train_data.columns)
@@ -398,9 +363,7 @@ class RAIInsights(object):
                         " getting predictions via predict()"
                     )
                 self._validate_features_same(
-                    small_train_features_before,
-                    small_train_data,
-                    SKLearn.PREDICT,
+                    small_train_features_before, small_train_data, SKLearn.PREDICT,
                 )
 
                 # Run predict_proba() of the model
@@ -429,19 +392,19 @@ class RAIInsights(object):
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas Dataframe for train and test."
+                "Expecting pandas DataFrame for train and test."
             )
 
     def _validate_features_same(
         self, small_train_features_before, small_train_data, function
     ):
         """
-        Validate the features are unmodified on the dataframe.
+        Validate the features are unmodified on the DataFrame.
 
         :param small_train_features_before: The features saved before
             an operation was performed.
         :type small_train_features_before: list[str]
-        :param small_train_data: The dataframe after the operation.
+        :param small_train_data: The DataFrame after the operation.
         :type small_train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str
@@ -559,9 +522,7 @@ class RAIInsights(object):
             try:
                 predicted_y = _convert_to_list(predicted_y)
             except Exception as ex:
-                raise ValueError(
-                    "Model prediction output of unsupported type,"
-                ) from ex
+                raise ValueError("Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
             if (
                 self.task_type == "classification"
@@ -577,8 +538,7 @@ class RAIInsights(object):
             row_length, feature_length = np.shape(list_dataset)
             if row_length > 100000:
                 raise ValueError(
-                    "Exceeds maximum number of rows"
-                    "for visualization (100000)"
+                    "Exceeds maximum number of rows" "for visualization (100000)"
                 )
             if feature_length > 1000:
                 raise ValueError(
@@ -597,9 +557,7 @@ class RAIInsights(object):
                 self.task_type == "classification"
                 and dashboard_dataset.class_names is not None
             ):
-                true_y = [
-                    dashboard_dataset.class_names.index(y) for y in true_y
-                ]
+                true_y = [dashboard_dataset.class_names.index(y) for y in true_y]
             dashboard_dataset.true_y = _convert_to_list(true_y)
 
         features = dataset.columns
@@ -654,9 +612,7 @@ class RAIInsights(object):
         if self.model is None:
             return
 
-        test_without_target_column = self.test.drop(
-            [self.target_column], axis=1
-        )
+        test_without_target_column = self.test.drop([self.target_column], axis=1)
 
         predict_output = self.model.predict(test_without_target_column)
         self._write_to_file(
@@ -665,9 +621,7 @@ class RAIInsights(object):
         )
 
         if hasattr(self.model, SKLearn.PREDICT_PROBA):
-            predict_proba_output = self.model.predict_proba(
-                test_without_target_column
-            )
+            predict_proba_output = self.model.predict_proba(test_without_target_column)
             self._write_to_file(
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(predict_proba_output.tolist()),
@@ -684,8 +638,7 @@ class RAIInsights(object):
         data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
         self._write_to_file(
-            data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION),
-            json.dumps(dtypes),
+            data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), json.dumps(dtypes),
         )
         self._write_to_file(
             data_directory / (_TRAIN + _JSON_EXTENSION),
@@ -694,8 +647,7 @@ class RAIInsights(object):
 
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(
-            data_directory / (_TEST + _DTYPES + _JSON_EXTENSION),
-            json.dumps(dtypes),
+            data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), json.dumps(dtypes),
         )
         self._write_to_file(
             data_directory / (_TEST + _JSON_EXTENSION),
@@ -778,16 +730,12 @@ class RAIInsights(object):
         :type path: str
         """
         data_directory = Path(path) / _DATA
-        with open(
-            data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), "r"
-        ) as file:
+        with open(data_directory / (_TRAIN + _DTYPES + _JSON_EXTENSION), "r") as file:
             types = json.load(file)
         with open(data_directory / (_TRAIN + _JSON_EXTENSION), "r") as file:
             train = pd.read_json(file, dtype=types, orient="split")
         inst.__dict__[_TRAIN] = train
-        with open(
-            data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), "r"
-        ) as file:
+        with open(data_directory / (_TEST + _DTYPES + _JSON_EXTENSION), "r") as file:
             types = json.load(file)
         with open(data_directory / (_TEST + _JSON_EXTENSION), "r") as file:
             test = pd.read_json(file, dtype=types, orient="split")
