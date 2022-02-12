@@ -87,13 +87,42 @@ export function buildInitialModelAssessmentContext(
             break;
           case "True Y":
             break;
-          case "Classification Outcome":
+          case "Classification Outcome": {
+            console.log(preBuiltCohortFilter);
+            const index: number[] = [];
+            if (JointDataset.ClassificationError in jointDataset.metaDict) {
+              const allowedCalssificationErrorValues =
+                jointDataset.metaDict[JointDataset.ClassificationError]
+                  .sortedCategoricalValues;
+
+              if (allowedCalssificationErrorValues !== undefined) {
+                for (const classificationError of preBuiltCohortFilter.arg) {
+                  const indexclassificationError =
+                    allowedCalssificationErrorValues.indexOf(
+                      classificationError
+                    );
+
+                  if (indexclassificationError !== -1) {
+                    index.push(indexclassificationError);
+                  }
+                }
+              }
+            }
+            index.sort((a, b) => a - b);
+            console.log(index);
+            const filter: IFilter = {
+              arg: index,
+              column: JointDataset.ClassificationError,
+              method: preBuiltCohortFilter.method
+            } as IFilter;
+            filterList.push(filter);
             break;
+          }
           case "Index": {
             console.log(preBuiltCohortFilter);
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: preBuiltCohortFilter.column,
+              column: JointDataset.IndexLabel,
               method: preBuiltCohortFilter.method
             } as IFilter;
             filterList.push(filter);
@@ -103,7 +132,7 @@ export function buildInitialModelAssessmentContext(
             console.log(preBuiltCohortFilter);
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
-              column: `Regression${preBuiltCohortFilter.column}`,
+              column: JointDataset.RegressionError,
               method: preBuiltCohortFilter.method
             } as IFilter;
             filterList.push(filter);
