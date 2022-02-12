@@ -64,7 +64,12 @@ import {
 import {
   wineData as wineDataMAD,
   wineErrorAnalysisData,
-  wineWithFairnessModelExplanationData
+  wineWithFairnessModelExplanationData,
+  wineCohortDataCategorical,
+  wineCohortDataContinuous,
+  wineCohortDataPredictedY,
+  wineCohortDataTrueY,
+  wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
 export interface IInterpretDataSet {
@@ -239,6 +244,13 @@ export const applications: IApplications = <const>{
       } as IModelAssessmentDataSet,
       wineData: {
         classDimension: 3,
+        cohortData: [
+          wineCohortDataIndex,
+          wineCohortDataPredictedY,
+          wineCohortDataTrueY,
+          wineCohortDataCategorical,
+          wineCohortDataContinuous
+        ],
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
