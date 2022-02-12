@@ -3515,7 +3515,7 @@ export const bostonCohortDataRegressionError: IPreBuiltCohort = {
   cohortName: "Cohort Regression Error",
   filterList: [
     {
-      arg: [50.5],
+      arg: [20.5],
       column: "Error",
       method: FilterMethods.GreaterThan
     }

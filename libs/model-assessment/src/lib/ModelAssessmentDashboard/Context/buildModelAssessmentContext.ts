@@ -99,8 +99,16 @@ export function buildInitialModelAssessmentContext(
             filterList.push(filter);
             break;
           }
-          case "Error":
+          case "Error": {
+            console.log(preBuiltCohortFilter);
+            const filter: IFilter = {
+              arg: preBuiltCohortFilter.arg,
+              column: `Regression${preBuiltCohortFilter.column}`,
+              method: preBuiltCohortFilter.method
+            } as IFilter;
+            filterList.push(filter);
             break;
+          }
           default: {
             let jointDatasetFeatureName = undefined;
             let userDatasetFeatureName = undefined;
