@@ -313,6 +313,41 @@ class CohortFilter:
                     " for {} cohort.".format(CohortFilter.REGRESSION_ERROR)
                 )
 
+        # "Predicted Y/True Y" Filter validations
+        if self.column == CohortFilter.PREDICTED_Y or \
+                self.column == CohortFilter.TRUE_Y:
+            if is_classification:
+                if self.method != CohortFilterMethods.METHOD_INCLUDES:
+                    raise UserConfigValidationException(
+                        "{0} can only be configured with "
+                        "filter {1} for classification".format(
+                            self.column,
+                            CohortFilterMethods.METHOD_INCLUDES)
+                    )
+
+                test_classes = np.unique(
+                    test_data[target_column].values).tolist()
+
+                if not all(entry in test_classes for entry in self.arg):
+                    raise UserConfigValidationException(
+                        "Found a class in arg which is not present in "
+                        "test data")
+            else:
+                if self.method == CohortFilterMethods.METHOD_INCLUDES or \
+                        self.method == CohortFilterMethods.METHOD_EXCLUDES:
+                    raise UserConfigValidationException(
+                        "{0} can only be configured with "
+                        "filter {1} for classification".format(
+                            self.column, self.method)
+                    )
+
+            if not all(isinstance(entry, int) for entry in self.arg) and \
+                    not all(isinstance(entry, float) for entry in self.arg):
+                raise UserConfigValidationException(
+                    "All entries in arg should be of type int or float"
+                    " for {} cohort.".format(self.column)
+                )
+
 
 class Cohort:
     """Defines the cohort which will be injected from SDK into the Dashboard.
