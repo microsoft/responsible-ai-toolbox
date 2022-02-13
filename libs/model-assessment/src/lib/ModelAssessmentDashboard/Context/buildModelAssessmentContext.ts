@@ -77,16 +77,40 @@ export function buildInitialModelAssessmentContext(
       for (const preBuiltCohortFilter of preBuiltCohort.filterList) {
         // console.log(preBuiltCohortFilter);
         switch (preBuiltCohortFilter.column) {
-          case "Predicted Y":
-            // const filter: IFilter = {
-            //   arg: preBuiltCohortFilter.arg,
-            //   column: "PredictedY",
-            //   method: preBuiltCohortFilter.method
-            // } as IFilter;
-            // filterList.push(filter);
+          case "Predicted Y": {
+            switch (jointDataset.getModelType()) {
+              case ModelTypes.Binary:
+              case ModelTypes.Multiclass:
+                break;
+              default: {
+                const filter: IFilter = {
+                  arg: preBuiltCohortFilter.arg,
+                  column: JointDataset.PredictedYLabel,
+                  method: preBuiltCohortFilter.method
+                } as IFilter;
+                filterList.push(filter);
+                break;
+              }
+            }
             break;
-          case "True Y":
+          }
+          case "True Y": {
+            switch (jointDataset.getModelType()) {
+              case ModelTypes.Binary:
+              case ModelTypes.Multiclass:
+                break;
+              default: {
+                const filter: IFilter = {
+                  arg: preBuiltCohortFilter.arg,
+                  column: JointDataset.TrueYLabel,
+                  method: preBuiltCohortFilter.method
+                } as IFilter;
+                filterList.push(filter);
+                break;
+              }
+            }
             break;
+          }
           case "Classification Outcome": {
             console.log(preBuiltCohortFilter);
             const index: number[] = [];
