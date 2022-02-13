@@ -38,6 +38,20 @@ class ResponsibleAIDashboardInput:
         model = analysis.model
         self._is_classifier = _is_classifier(model)
         self.dashboard_input = analysis.get_data()
+
+        if cohort_filter_list is not None:
+            test_data = pd.DataFrame(
+                data=self.dashboard_input.dataset.features,
+                columns=self.dashboard_input.dataset.feature_names)
+            test_data[self.dashboard_input.dataset.target_column] = \
+                self.dashboard_input.dataset.true_y
+
+            for cohort in cohort_filter_list:
+                cohort._validate_with_test_data(
+                    test_data=test_data,
+                    target_column=self.dashboard_input.dataset.target_column,
+                    is_classification=self._is_classifier)
+
         # Add cohort_filter_list to dashboard_input
         self.dashboard_input.cohortData = json.loads(
             json.dumps(cohort_filter_list,
