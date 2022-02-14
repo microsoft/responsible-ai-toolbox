@@ -80,8 +80,26 @@ export function buildInitialModelAssessmentContext(
           case "Predicted Y": {
             switch (jointDataset.getModelType()) {
               case ModelTypes.Binary:
-              case ModelTypes.Multiclass:
+              case ModelTypes.Multiclass: {
+                const modelClasses = jointDataset.getModelClasses();
+                const index: number[] = [];
+                for (const modelClass of preBuiltCohortFilter.arg) {
+                  const indexModelClass = modelClasses.indexOf(modelClass);
+
+                  if (indexModelClass !== -1) {
+                    index.push(indexModelClass);
+                  }
+                }
+                index.sort((a, b) => a - b);
+                console.log(index);
+                const filter: IFilter = {
+                  arg: index,
+                  column: JointDataset.PredictedYLabel,
+                  method: preBuiltCohortFilter.method
+                } as IFilter;
+                filterList.push(filter);
                 break;
+              }
               default: {
                 const filter: IFilter = {
                   arg: preBuiltCohortFilter.arg,
@@ -97,8 +115,26 @@ export function buildInitialModelAssessmentContext(
           case "True Y": {
             switch (jointDataset.getModelType()) {
               case ModelTypes.Binary:
-              case ModelTypes.Multiclass:
+              case ModelTypes.Multiclass: {
+                const modelClasses = jointDataset.getModelClasses();
+                const index: number[] = [];
+                for (const modelClass of preBuiltCohortFilter.arg) {
+                  const indexModelClass = modelClasses.indexOf(modelClass);
+
+                  if (indexModelClass !== -1) {
+                    index.push(indexModelClass);
+                  }
+                }
+                index.sort((a, b) => a - b);
+                console.log(index);
+                const filter: IFilter = {
+                  arg: index,
+                  column: JointDataset.TrueYLabel,
+                  method: preBuiltCohortFilter.method
+                } as IFilter;
+                filterList.push(filter);
                 break;
+              }
               default: {
                 const filter: IFilter = {
                   arg: preBuiltCohortFilter.arg,
