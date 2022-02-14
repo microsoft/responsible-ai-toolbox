@@ -121,7 +121,7 @@ class TestResponsibleAIDashboard:
             arg=[2, 6, 4],
             column='Marital Status')
 
-        user_cohort_categorical = Cohort(name='Cohort Index')
+        user_cohort_categorical = Cohort(name='Cohort Categorical')
         user_cohort_categorical.add_cohort_filter(cohort_filter_categorical)
 
         cohort_filter_index = CohortFilter(
@@ -138,6 +138,4 @@ class TestResponsibleAIDashboard:
                          user_cohort_categorical,
                          user_cohort_index])
 
-        import pdb
-        pdb.set_trace()
         self.validate_rai_dashboard_data(widget)
