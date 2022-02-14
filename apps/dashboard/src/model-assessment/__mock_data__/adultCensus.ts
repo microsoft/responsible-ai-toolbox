@@ -13582,8 +13582,7 @@ export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
 };
 
 export const adultCohortDataContinuous: IPreBuiltCohort = {
-  cohortName: "Cohort Continuous",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [65],
       column: "age",
@@ -13594,56 +13593,56 @@ export const adultCohortDataContinuous: IPreBuiltCohort = {
       column: "hours-per-week",
       method: FilterMethods.GreaterThan
     }
-  ]
+  ],
+  name: "Cohort Continuous"
 };
 
 export const adultCohortDataCategorical: IPreBuiltCohort = {
-  cohortName: "Cohort Categorical",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: ["HS-Grad", "Bachelors"],
       column: "education",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Categorical"
 };
 
 export const adultCohortDataIndex: IPreBuiltCohort = {
-  cohortName: "Cohort Index",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [23],
       column: "Index",
       method: FilterMethods.LessThan
     }
-  ]
+  ],
+  name: "Cohort Index"
 };
 
 export const adultCohortDataPredictedY: IPreBuiltCohort = {
-  cohortName: "Cohort Predicted Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: ["<=50K", ">50K"],
       column: "Predicted Y",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Predicted Y"
 };
 
 export const adultCohortDataTrueY: IPreBuiltCohort = {
-  cohortName: "Cohort True Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: ["<=50K", ">50K"],
       column: "True Y",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort True Y"
 };
 
 export const adultCohortDataClassificationOutcome: IPreBuiltCohort = {
-  cohortName: "Cohort Classification Outcome",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [
         "True positive",
@@ -13654,5 +13653,6 @@ export const adultCohortDataClassificationOutcome: IPreBuiltCohort = {
       column: "Classification Outcome",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Classification Outcome"
 };

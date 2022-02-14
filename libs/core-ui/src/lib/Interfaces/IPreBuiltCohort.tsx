@@ -4,6 +4,6 @@
 import { IPreBuiltFilter } from "./IPreBuiltFilter";
 
 export interface IPreBuiltCohort {
-  filterList: IPreBuiltFilter[];
-  cohortName: string;
+  cohort_filter_list: IPreBuiltFilter[];
+  name: string;
 }

@@ -74,7 +74,7 @@ export function buildInitialModelAssessmentContext(
     for (const preBuiltCohort of props.cohortData) {
       console.log(preBuiltCohort);
       const filterList: IFilter[] = [];
-      for (const preBuiltCohortFilter of preBuiltCohort.filterList) {
+      for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
         // console.log(preBuiltCohortFilter);
         switch (preBuiltCohortFilter.column) {
           case "Predicted Y": {
@@ -230,7 +230,7 @@ export function buildInitialModelAssessmentContext(
         }
       }
       const errorCohortEntry = new ErrorCohort(
-        new Cohort(preBuiltCohort.cohortName, jointDataset, filterList),
+        new Cohort(preBuiltCohort.name, jointDataset, filterList),
         jointDataset
       );
       errorCohortList.push(errorCohortEntry);

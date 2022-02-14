@@ -3766,8 +3766,7 @@ export const wineErrorAnalysisData: IErrorAnalysisData = {
 };
 
 export const wineCohortDataContinuous: IPreBuiltCohort = {
-  cohortName: "Cohort Continuous",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [12.09],
       column: "alcohol",
@@ -3778,49 +3777,50 @@ export const wineCohortDataContinuous: IPreBuiltCohort = {
       column: "ash",
       method: FilterMethods.GreaterThan
     }
-  ]
+  ],
+  name: "Cohort Continuous"
 };
 
 export const wineCohortDataCategorical: IPreBuiltCohort = {
-  cohortName: "Cohort Categorical",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [80, 81, 82],
       column: "magnesium",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Categorical"
 };
 
 export const wineCohortDataIndex: IPreBuiltCohort = {
-  cohortName: "Cohort Index",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [54],
       column: "Index",
       method: FilterMethods.LessThan
     }
-  ]
+  ],
+  name: "Cohort Index"
 };
 
 export const wineCohortDataPredictedY: IPreBuiltCohort = {
-  cohortName: "Cohort Predicted Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: ["Class 0", "Class 1", "Class 2"],
       column: "Predicted Y",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Predicted Y"
 };
 
 export const wineCohortDataTrueY: IPreBuiltCohort = {
-  cohortName: "Cohort True Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: ["Class 0", "Class 1", "Class 2"],
       column: "True Y",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort True Y"
 };

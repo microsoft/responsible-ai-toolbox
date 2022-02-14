@@ -45,6 +45,7 @@
           "ci_lower",
           "ci_upper",
           "class_names",
+          "cohort_filter_list",
           "comparison_value",
           "control_treatment",
           "demographic_parity_difference",

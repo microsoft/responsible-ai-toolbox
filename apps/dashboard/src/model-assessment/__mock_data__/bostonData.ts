@@ -3452,8 +3452,7 @@ export const bostonErrorAnalysisData: IErrorAnalysisData = {
 };
 
 export const bostonCohortDataContinuous: IPreBuiltCohort = {
-  cohortName: "Cohort Continuous",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [30.5],
       column: "AGE",
@@ -3464,60 +3463,61 @@ export const bostonCohortDataContinuous: IPreBuiltCohort = {
       column: "CRIM",
       method: FilterMethods.GreaterThan
     }
-  ]
+  ],
+  name: "Cohort Continuous"
 };
 
 export const bostonCohortDataCategorical: IPreBuiltCohort = {
-  cohortName: "Cohort Categorical",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [0, 1],
       column: "CHAS",
       method: FilterMethods.Includes
     }
-  ]
+  ],
+  name: "Cohort Categorical"
 };
 
 export const bostonCohortDataIndex: IPreBuiltCohort = {
-  cohortName: "Cohort Index",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [23],
       column: "Index",
       method: FilterMethods.LessThan
     }
-  ]
+  ],
+  name: "Cohort Index"
 };
 
 export const bostonCohortDataPredictedY: IPreBuiltCohort = {
-  cohortName: "Cohort Predicted Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [30, 45],
       column: "Predicted Y",
       method: FilterMethods.InTheRangeOf
     }
-  ]
+  ],
+  name: "Cohort Predicted Y"
 };
 
 export const bostonCohortDataTrueY: IPreBuiltCohort = {
-  cohortName: "Cohort True Y",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [45.8],
       column: "True Y",
       method: FilterMethods.LessThan
     }
-  ]
+  ],
+  name: "Cohort True Y"
 };
 
 export const bostonCohortDataRegressionError: IPreBuiltCohort = {
-  cohortName: "Cohort Regression Error",
-  filterList: [
+  cohort_filter_list: [
     {
       arg: [20.5],
       column: "Error",
       method: FilterMethods.GreaterThan
     }
-  ]
+  ],
+  name: "Cohort Regression Error"
 };

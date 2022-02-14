@@ -138,6 +138,6 @@ class TestResponsibleAIDashboard:
                          user_cohort_categorical,
                          user_cohort_index])
 
-        # import pdb
-        # pdb.set_trace()
+        import pdb
+        pdb.set_trace()
         self.validate_rai_dashboard_data(widget)
