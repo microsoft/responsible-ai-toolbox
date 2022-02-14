@@ -219,9 +219,7 @@ class CohortFilter:
            superset of the classes available in the test data.
         2. The CohortFilterMethods.INCLUDES is only allowed to be
            configured for "Predicted Y" filter in case of classification.
-        3. Only integer or floating points can be configured as arguments
-           for regression.
-        4. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES
+        3. The CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES
            filter methods cannot be configured for this filter for regression.
 
         "Dataset" Filter validations
@@ -336,17 +334,10 @@ class CohortFilter:
                 if self.method == CohortFilterMethods.METHOD_INCLUDES or \
                         self.method == CohortFilterMethods.METHOD_EXCLUDES:
                     raise UserConfigValidationException(
-                        "{0} can only be configured with "
-                        "filter {1} for classification".format(
+                        "{0} cannot be configured with "
+                        "filter {1} for regression.".format(
                             self.column, self.method)
                     )
-
-            if not all(isinstance(entry, int) for entry in self.arg) and \
-                    not all(isinstance(entry, float) for entry in self.arg):
-                raise UserConfigValidationException(
-                    "All entries in arg should be of type int or float"
-                    " for {} cohort.".format(self.column)
-                )
 
 
 class Cohort:

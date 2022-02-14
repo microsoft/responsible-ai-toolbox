@@ -296,6 +296,69 @@ class TestCohortFilterDataValidations:
                 target_column="target",
                 is_classification=False)
 
+    @pytest.mark.parametrize('target_filter_type',
+                             [CohortFilter.PREDICTED_Y,
+                              CohortFilter.TRUE_Y])
+    @pytest.mark.parametrize('method',
+                             [CohortFilterMethods.METHOD_INCLUDES,
+                              CohortFilterMethods.METHOD_EXCLUDES])
+    def test_validate_with_test_data_regression_target_filter_validations(
+            self, target_filter_type, method):
+        test_data_regression = pd.DataFrame(
+            data=[[23, 2.5], [25, 3.6], [25, 4.6]],
+            columns=["age", "target"])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="{0} cannot be configured with "
+                      "filter {1} for regression.".format(target_filter_type,
+                                                          method)):
+            cohort_filter_regression = \
+                CohortFilter(method=method,
+                             arg=[2.5],
+                             column=target_filter_type)
+            cohort_filter_regression._validate_with_test_data(
+                test_data=test_data_regression,
+                target_column="target",
+                is_classification=False)
+
+    @pytest.mark.parametrize('target_filter_type',
+                             [CohortFilter.PREDICTED_Y,
+                              CohortFilter.TRUE_Y])
+    def test_validate_with_test_data_classification_target_filter_validations(
+            self, target_filter_type):
+        test_data_classification = pd.DataFrame(
+            data=[[23, 'A'], [25, 'B'], [25, 'B']],
+            columns=["age", "target"])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="{0} can only be configured with "
+                      "filter {1} for classification".format(
+                          target_filter_type,
+                          CohortFilterMethods.METHOD_INCLUDES)):
+            cohort_filter_classification = \
+                CohortFilter(method=CohortFilterMethods.METHOD_EXCLUDES,
+                             arg=['A'],
+                             column=target_filter_type)
+            cohort_filter_classification._validate_with_test_data(
+                test_data=test_data_classification,
+                target_column="target",
+                is_classification=True)
+
+        with pytest.raises(
+            UserConfigValidationException,
+            match="Found a class in arg which is not present in "
+                  "test data"):
+            cohort_filter_classification = \
+                CohortFilter(method=CohortFilterMethods.METHOD_INCLUDES,
+                             arg=['Z'],
+                             column=target_filter_type)
+            cohort_filter_classification._validate_with_test_data(
+                test_data=test_data_classification,
+                target_column="target",
+                is_classification=True)
+
 
 class TestCohort:
     def test_cohort_configuration_validations(self):
