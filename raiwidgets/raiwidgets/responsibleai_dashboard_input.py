@@ -5,9 +5,10 @@ import json
 import traceback
 from typing import List, Optional
 
+import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import display_name_to_metric
+from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 
@@ -43,8 +44,17 @@ class ResponsibleAIDashboardInput:
             test_data = pd.DataFrame(
                 data=self.dashboard_input.dataset.features,
                 columns=self.dashboard_input.dataset.feature_names)
-            test_data[self.dashboard_input.dataset.target_column] = \
-                self.dashboard_input.dataset.true_y
+            if self.dashboard_input.dataset.task_type == \
+                    ModelTask.CLASSIFICATION:
+                class_names_list = self.dashboard_input.dataset.class_names
+                true_y_array = self.dashboard_input.dataset.true_y
+                true_class_array = np.array(
+                    [class_names_list[index] for index in true_y_array])
+                test_data[self.dashboard_input.dataset.target_column] = \
+                    true_class_array
+            else:
+                test_data[self.dashboard_input.dataset.target_column] = \
+                    self.dashboard_input.dataset.true_y
 
             for cohort in cohort_list:
                 cohort._validate_with_test_data(
