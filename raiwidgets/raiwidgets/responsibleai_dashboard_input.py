@@ -24,37 +24,37 @@ class ResponsibleAIDashboardInput:
     def __init__(
             self,
             analysis: RAIInsights,
-            cohort_filter_list: Optional[List[Cohort]] = None):
+            cohort_list: Optional[List[Cohort]] = None):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
             A RAIInsights object that represents an explanation.
         :type analysis: RAIInsights
-        :param cohort_filter_list:
+        :param cohort_list:
             List of cohorts defined by the user for the dashboard.
-        :type cohort_filter_list: List[Cohort]
+        :type cohort_list: List[Cohort]
         """
         self._analysis = analysis
         model = analysis.model
         self._is_classifier = _is_classifier(model)
         self.dashboard_input = analysis.get_data()
 
-        if cohort_filter_list is not None:
+        if cohort_list is not None:
             test_data = pd.DataFrame(
                 data=self.dashboard_input.dataset.features,
                 columns=self.dashboard_input.dataset.feature_names)
             test_data[self.dashboard_input.dataset.target_column] = \
                 self.dashboard_input.dataset.true_y
 
-            for cohort in cohort_filter_list:
+            for cohort in cohort_list:
                 cohort._validate_with_test_data(
                     test_data=test_data,
                     target_column=self.dashboard_input.dataset.target_column,
                     is_classification=self._is_classifier)
 
-        # Add cohort_filter_list to dashboard_input
+        # Add cohort_list to dashboard_input
         self.dashboard_input.cohortData = json.loads(
-            json.dumps(cohort_filter_list,
+            json.dumps(cohort_list,
                        default=cohort_filter_json_converter)
         )
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
