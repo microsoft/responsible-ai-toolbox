@@ -3,12 +3,11 @@
 
 import json
 
+import pandas as pd
 import pytest
 
-import pandas as pd
-
-from raiwidgets._cohort import (ClassificationOutcomes, Cohort,
-                                CohortFilter, CohortFilterMethods,
+from raiwidgets._cohort import (ClassificationOutcomes, Cohort, CohortFilter,
+                                CohortFilterMethods,
                                 cohort_filter_json_converter)
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -487,7 +486,6 @@ class TestCohort:
                 test_data=test_data,
                 target_column="target",
                 categorical_features=["hours-per-week"])
-
 
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)
