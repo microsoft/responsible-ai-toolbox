@@ -13600,7 +13600,7 @@ export const adultCohortDataContinuous: IPreBuiltCohort = {
 export const adultCohortDataCategorical: IPreBuiltCohort = {
   cohort_filter_list: [
     {
-      arg: ["HS-Grad", "Bachelors"],
+      arg: ["HS-grad", "Bachelors"],
       column: "education",
       method: FilterMethods.Includes
     }

@@ -15,7 +15,8 @@ import {
   buildIndexedNames,
   getClassLength,
   getModelType,
-  IFilter
+  IFilter,
+  FilterMethods
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -75,7 +76,6 @@ export function buildInitialModelAssessmentContext(
       console.log(preBuiltCohort);
       const filterList: IFilter[] = [];
       for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
-        // console.log(preBuiltCohortFilter);
         switch (preBuiltCohortFilter.column) {
           case "Predicted Y": {
             switch (jointDataset.getModelType()) {
@@ -212,19 +212,49 @@ export function buildInitialModelAssessmentContext(
             console.log(jointDatasetFeatureName);
             console.log(userDatasetFeatureName);
 
-            // TODO: Translate categorical values to sorted categorical indices
-            // if (preBuiltCohortFilter.method === FilterMethods.Includes) {
-            //   const indicies: number[] = [];
-            //   for (const categoricalValue of preBuiltCohortFilter.arg) {
-            //     jointDataset.metaDict[jointDatasetFeatureName];
-            //   }
-            // }
-            const filter: IFilter = {
-              arg: preBuiltCohortFilter.arg,
-              column: jointDatasetFeatureName,
-              method: preBuiltCohortFilter.method
-            } as IFilter;
-            filterList.push(filter);
+            if (
+              jointDatasetFeatureName === undefined ||
+              userDatasetFeatureName === undefined
+            ) {
+              throw new Error("Feature name not found in the dataset");
+            }
+
+            if (preBuiltCohortFilter.method === FilterMethods.Includes) {
+              if (
+                !jointDataset.metaDict[jointDatasetFeatureName].isCategorical
+              ) {
+                // throw an error to the user
+              } else {
+                const index: number[] = [];
+                const categorcialValues =
+                  jointDataset.metaDict[jointDatasetFeatureName]
+                    .sortedCategoricalValues;
+                if (categorcialValues !== undefined) {
+                  for (const categoricalValue of preBuiltCohortFilter.arg) {
+                    const indexCategoricalValue =
+                      categorcialValues.indexOf(categoricalValue);
+                    if (indexCategoricalValue !== -1) {
+                      index.push(indexCategoricalValue);
+                    }
+                  }
+                  index.sort((a, b) => a - b);
+                  console.log(index);
+                  const filter: IFilter = {
+                    arg: index,
+                    column: jointDatasetFeatureName,
+                    method: preBuiltCohortFilter.method
+                  } as IFilter;
+                  filterList.push(filter);
+                }
+              }
+            } else {
+              const filter: IFilter = {
+                arg: preBuiltCohortFilter.arg,
+                column: jointDatasetFeatureName,
+                method: preBuiltCohortFilter.method
+              } as IFilter;
+              filterList.push(filter);
+            }
             break;
           }
         }
