@@ -120,7 +120,27 @@ class CohortFilter:
         :param column: The column name from the dataset on which the filter
                        will be applied.
         :type column: str
+
+        The following validations can be performed on the cohort filter:-
+
+        1. Verify the correct types for method (expected string), column
+           (expected string) and arg (expected list).
+        2. The method value should be one of the filter string from
+           CohortFilterMethods.ALL.
+        3. The arg shouldn't be an empty list.
+        4. For all cohort filter methods in
+           CohortFilterMethods.SINGLE_VALUE_METHODS, the value in the arg
+           should be integer or float and there should be utmost one value
+           in arg.
+        5. For cohort filter method CohortFilterMethods.METHOD_RANGE,
+           the values in the arg should be integer or float and there
+           should be utmost two values in arg.
         """
+        if not isinstance(method, str):
+            raise UserConfigValidationException(
+                "Got unexpected type {0} for method. "
+                "Expected string type.".format(type(method))
+            )
         if method not in CohortFilterMethods.ALL:
             raise UserConfigValidationException(
                 "Got unexpected value {0} for method. "
@@ -190,7 +210,8 @@ class CohortFilter:
             that this needs to be done for regression scenario.
         :type is_classification: bool
 
-        The following validations need to be performed:-
+        The following validations need to be performed for cohort filter with
+        test data:-
 
         High level validations
         1. Validate if the filter column is present in the test data.
@@ -417,11 +438,28 @@ class Cohort:
         if not isinstance(target_column, str):
             raise UserConfigValidationException(
                 "The target_column should be string.")
+        if not isinstance(categorical_features, list):
+            raise UserConfigValidationException(
+                "Expected a list type for categorical columns.")
+        if not all(isinstance(entry, str) for entry in categorical_features):
+            raise UserConfigValidationException(
+                "All entries in categorical_features need of string type."
+            )
+
         if target_column not in test_data.columns:
             raise UserConfigValidationException(
                 "The target_column {0} was not found in test_data.".format(
                     target_column)
             )
+
+        test_data_columns_set = set(test_data.columns) - set([target_column])
+        if not all(entry in test_data_columns_set
+                   for entry in categorical_features):
+            raise UserConfigValidationException(
+                "Found some categorical feature name which is not"
+                " present in test data."
+            )
+
         for cohort_filter in self.cohort_filter_list:
             cohort_filter._validate_with_test_data(
                 test_data=test_data,

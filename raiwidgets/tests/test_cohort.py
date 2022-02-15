@@ -17,6 +17,13 @@ class TestCohortFilter:
     def test_cohort_filter_validate_method(self):
         with pytest.raises(
                 UserConfigValidationException,
+                match="Got unexpected type <class 'int'> for method. "
+                      "Expected string type."):
+            CohortFilter(method=1,
+                         arg=[], column=1)
+
+        with pytest.raises(
+                UserConfigValidationException,
                 match="Got unexpected value random for method. "
                       "Expected either of greater or "
                       "greater and equal or "
@@ -453,6 +460,34 @@ class TestCohort:
                 test_data=test_data,
                 target_column="fake_target",
                 categorical_features=[])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Expected a list type for "
+                      "categorical columns."):
+            cohort_1._validate_with_test_data(
+                test_data=test_data,
+                target_column="target",
+                categorical_features={})
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="All entries in categorical_features "
+                      "need of string type."):
+            cohort_1._validate_with_test_data(
+                test_data=test_data,
+                target_column="target",
+                categorical_features=[1, 2])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found some categorical feature name which is not"
+                      " present in test data."):
+            cohort_1._validate_with_test_data(
+                test_data=test_data,
+                target_column="target",
+                categorical_features=["hours-per-week"])
+
 
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)
