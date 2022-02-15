@@ -157,7 +157,8 @@ class TestCohortFilterDataValidations:
                 UserConfigValidationException,
                 match="Unknown column fake_column specified in cohort filter"):
             cohort_filter_not_a_feature._validate_with_test_data(
-                test_data=test_data, target_column="target")
+                test_data=test_data, target_column="target",
+                categorical_features=[])
 
     def test_validate_with_test_data_index_filter_validations(self):
         test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
@@ -171,7 +172,8 @@ class TestCohortFilterDataValidations:
                 match="excludes filter is not supported with Index based "
                       "selection."):
             cohort_filter_index_excludes._validate_with_test_data(
-                test_data=test_data, target_column="target"
+                test_data=test_data, target_column="target",
+                categorical_features=[]
             )
 
         cohort_filter_index_incorrect_args = \
@@ -181,7 +183,8 @@ class TestCohortFilterDataValidations:
                 UserConfigValidationException,
                 match="All entries in arg should be of type int."):
             cohort_filter_index_incorrect_args._validate_with_test_data(
-                test_data=test_data, target_column="target"
+                test_data=test_data, target_column="target",
+                categorical_features=[]
             )
 
     def test_validate_with_test_data_classification_error_filter_validations(
@@ -211,7 +214,7 @@ class TestCohortFilterDataValidations:
                       " and regression scenarios."):
             cohort_filter_classification_excludes._validate_with_test_data(
                 test_data=test_data_multiclass, target_column="target",
-                is_classification=True
+                categorical_features=[], is_classification=True
             )
 
         with pytest.raises(
@@ -221,7 +224,7 @@ class TestCohortFilterDataValidations:
                       " and regression scenarios."):
             cohort_filter_classification_excludes._validate_with_test_data(
                 test_data=test_data_binary, target_column="target",
-                is_classification=False
+                categorical_features=[], is_classification=False
             )
 
         with pytest.raises(
@@ -230,7 +233,7 @@ class TestCohortFilterDataValidations:
                       "cohort filter includes."):
             cohort_filter_classification_excludes._validate_with_test_data(
                 test_data=test_data_binary, target_column="target",
-                is_classification=True
+                categorical_features=[], is_classification=True
             )
 
         with pytest.raises(
@@ -240,7 +243,7 @@ class TestCohortFilterDataValidations:
                       "negative or True positive."):
             cohort_filter_classification_includes._validate_with_test_data(
                 test_data=test_data_binary, target_column="target",
-                is_classification=True)
+                categorical_features=[], is_classification=True)
 
     def test_validate_with_test_data_regression_error_filter_validations(
             self):
@@ -260,6 +263,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_regression._validate_with_test_data(
                 test_data=test_data_regression,
                 target_column="target",
+                categorical_features=[],
                 is_classification=True)
 
         with pytest.raises(
@@ -271,6 +275,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_regression._validate_with_test_data(
                 test_data=test_data_regression,
                 target_column="target",
+                categorical_features=[],
                 is_classification=False)
 
         with pytest.raises(
@@ -282,6 +287,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_regression._validate_with_test_data(
                 test_data=test_data_regression,
                 target_column="target",
+                categorical_features=[],
                 is_classification=False)
 
         with pytest.raises(
@@ -294,6 +300,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_regression._validate_with_test_data(
                 test_data=test_data_regression,
                 target_column="target",
+                categorical_features=[],
                 is_classification=False)
 
     @pytest.mark.parametrize('target_filter_type',
@@ -320,6 +327,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_regression._validate_with_test_data(
                 test_data=test_data_regression,
                 target_column="target",
+                categorical_features=[],
                 is_classification=False)
 
     @pytest.mark.parametrize('target_filter_type',
@@ -344,6 +352,7 @@ class TestCohortFilterDataValidations:
             cohort_filter_classification._validate_with_test_data(
                 test_data=test_data_classification,
                 target_column="target",
+                categorical_features=[],
                 is_classification=True)
 
         with pytest.raises(
@@ -357,6 +366,43 @@ class TestCohortFilterDataValidations:
             cohort_filter_classification._validate_with_test_data(
                 test_data=test_data_classification,
                 target_column="target",
+                categorical_features=[],
+                is_classification=True)
+
+    def test_validate_with_test_data_with_dataset_validations(
+            self):
+        test_data = pd.DataFrame(
+            data=[[23, 'new', 'A'], [25, 'new, ''B'], [25, 'old', 'B']],
+            columns=["age", 'type', "target"])
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="{0} is a categorical feature and should be only "
+                      "configured with {1} cohort filter.".format(
+                          "type",
+                          CohortFilterMethods.METHOD_INCLUDES)):
+            cohort_filter = \
+                CohortFilter(method=CohortFilterMethods.METHOD_EXCLUDES,
+                             arg=['new'],
+                             column='type')
+            cohort_filter._validate_with_test_data(
+                test_data=test_data,
+                target_column="target",
+                categorical_features=['type'],
+                is_classification=True)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found a category in arg which is not present in "
+                      "test data"):
+            cohort_filter = \
+                CohortFilter(method=CohortFilterMethods.METHOD_INCLUDES,
+                             arg=['mid'],
+                             column='type')
+            cohort_filter._validate_with_test_data(
+                test_data=test_data,
+                target_column="target",
+                categorical_features=['type'],
                 is_classification=True)
 
 
@@ -388,14 +434,16 @@ class TestCohort:
                 UserConfigValidationException,
                 match="The test_data should be a pandas DataFrame"):
             cohort_1._validate_with_test_data(
-                test_data=[], target_column='income')
+                test_data=[], target_column='income',
+                categorical_features=[])
 
         with pytest.raises(
                 UserConfigValidationException,
                 match="The target_column should be string."):
             cohort_1._validate_with_test_data(
                 test_data=test_data,
-                target_column=1)
+                target_column=1,
+                categorical_features=[])
 
         with pytest.raises(
                 UserConfigValidationException,
@@ -403,7 +451,8 @@ class TestCohort:
                       "was not found in test_data."):
             cohort_1._validate_with_test_data(
                 test_data=test_data,
-                target_column="fake_target")
+                target_column="fake_target",
+                categorical_features=[])
 
     @pytest.mark.parametrize('method',
                              CohortFilterMethods.SINGLE_VALUE_METHODS)

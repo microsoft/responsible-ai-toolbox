@@ -56,10 +56,13 @@ class ResponsibleAIDashboardInput:
                 test_data[self.dashboard_input.dataset.target_column] = \
                     self.dashboard_input.dataset.true_y
 
+            categorical_features = \
+                self.dashboard_input.dataset.categorical_features
             for cohort in cohort_list:
                 cohort._validate_with_test_data(
                     test_data=test_data,
                     target_column=self.dashboard_input.dataset.target_column,
+                    categorical_features=categorical_features,
                     is_classification=self._is_classifier)
 
         # Add cohort_list to dashboard_input

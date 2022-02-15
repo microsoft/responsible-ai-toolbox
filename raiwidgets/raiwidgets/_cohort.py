@@ -173,6 +173,7 @@ class CohortFilter:
 
     def _validate_with_test_data(self, test_data: pd.DataFrame,
                                  target_column: str,
+                                 categorical_features: List[str],
                                  is_classification: Optional[bool] = True):
         """
         Validate the cohort filters parameters with respect to test data.
@@ -182,6 +183,8 @@ class CohortFilter:
         :type test_data: pd.DataFrame
         :param target_column: The target column in the test data.
         :type target_column: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param is_classification: True to indicate if this validation needs
             to be done for a classification scenario and False to indicate
             that this needs to be done for regression scenario.
@@ -223,15 +226,12 @@ class CohortFilter:
            filter methods cannot be configured for this filter for regression.
 
         "Dataset" Filter validations
-        1. For continuous features all filter methods other than
-           CohortFilterMethods.INCLUDES and CohortFilterMethods.EXCLUDES can
-           be configured.
-        2. For continuous features the allowed values that be configured should
-           be within the range of minimum and maximum values available within
-           the continuous feature column in the test data.
-        3. For categorical features only CohortFilterMethods.INCLUDES can be
+        1. TODO:- For continuous features the allowed values that be configured
+           should be within the range of minimum and maximum values available
+           within the continuous feature column in the test data.
+        2. For categorical features only CohortFilterMethods.INCLUDES can be
            configured.
-        4. For categorical features the values allowed are a subset of the
+        3. For categorical features the values allowed are a subset of the
            the values available in the categorical column in the test data.
         """
         # High level validations
@@ -243,8 +243,8 @@ class CohortFilter:
                     self.column)
             )
 
-        # "Index" Filter validations
         if self.column == CohortFilter.INDEX:
+            # "Index" Filter validations
             if self.method == CohortFilterMethods.METHOD_EXCLUDES:
                 raise UserConfigValidationException(
                     "{0} filter is not supported with {1} based "
@@ -257,9 +257,8 @@ class CohortFilter:
                 raise UserConfigValidationException(
                     "All entries in arg should be of type int."
                 )
-
-        # "Classification Outcome" Filter validations
-        if self.column == CohortFilter.CLASSIFICATION_OUTCOME:
+        elif self.column == CohortFilter.CLASSIFICATION_OUTCOME:
+            # "Classification Outcome" Filter validations
             is_multiclass = len(np.unique(
                 test_data[target_column].values).tolist()) > 2
 
@@ -285,9 +284,8 @@ class CohortFilter:
                             CohortFilter.CLASSIFICATION_OUTCOME,
                             " or ".join(ClassificationOutcomes.ALL))
                     )
-
-        # "Error" Filter validations
-        if self.column == CohortFilter.REGRESSION_ERROR:
+        elif self.column == CohortFilter.REGRESSION_ERROR:
+            # "Error" Filter validations
             if is_classification:
                 raise UserConfigValidationException(
                     "{0} cannot be configured for classification"
@@ -310,10 +308,9 @@ class CohortFilter:
                     "All entries in arg should be of type int or float"
                     " for {} cohort.".format(CohortFilter.REGRESSION_ERROR)
                 )
-
-        # "Predicted Y/True Y" Filter validations
-        if self.column == CohortFilter.PREDICTED_Y or \
+        elif self.column == CohortFilter.PREDICTED_Y or \
                 self.column == CohortFilter.TRUE_Y:
+            # "Predicted Y/True Y" Filter validations
             if is_classification:
                 if self.method != CohortFilterMethods.METHOD_INCLUDES:
                     raise UserConfigValidationException(
@@ -337,6 +334,25 @@ class CohortFilter:
                         "{0} cannot be configured with "
                         "filter {1} for regression.".format(
                             self.column, self.method)
+                    )
+        else:
+            # "Dataset" Filter validations
+            if self.column in categorical_features:
+                if self.method != CohortFilterMethods.METHOD_INCLUDES:
+                    raise UserConfigValidationException(
+                        "{0} is a categorical feature and should be only "
+                        "configured with {1} cohort filter.".format(
+                            self.column,
+                            CohortFilterMethods.METHOD_INCLUDES)
+                    )
+
+                categories = np.unique(
+                    test_data[self.column].values).tolist()
+
+                if not all(entry in categories for entry in self.arg):
+                    raise UserConfigValidationException(
+                        "Found a category in arg which is not present in "
+                        "test data"
                     )
 
 
@@ -375,6 +391,7 @@ class Cohort:
 
     def _validate_with_test_data(self, test_data: pd.DataFrame,
                                  target_column: str,
+                                 categorical_features: List[str],
                                  is_classification: Optional[bool] = True):
         """
         Validate the cohort and cohort filters parameters with respect to
@@ -385,6 +402,8 @@ class Cohort:
         :type test_data: pd.DataFrame
         :param target_column: The target column in the test data.
         :type target_column: str
+        :param categorical_features: The categorical feature names.
+        :type categorical_features: list[str]
         :param is_classification: True to indicate if this validation needs
             to be done for a classification scenario and False to indicate
             that this needs to be done for regression scenario.
@@ -407,4 +426,5 @@ class Cohort:
             cohort_filter._validate_with_test_data(
                 test_data=test_data,
                 target_column=target_column,
+                categorical_features=categorical_features,
                 is_classification=is_classification)
