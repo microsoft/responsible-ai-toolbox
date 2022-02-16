@@ -7,12 +7,18 @@ import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
-import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../Interfaces/IExplanationContext";
 import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
+import { FabricStyles } from "../util/FabricStyles";
 import { getDependenceData } from "../util/getDependenceData";
+import { getDependencyChartOptions } from "../util/getDependencyChartOptions";
 import { IGenericChartProps } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
 
+import { BasicHighChart } from "./BasicHighChart";
 import { dependencePlotStyles } from "./FeatureImportanceDependence.styles";
 
 export interface IFeatureImportanceDependenceProps {
