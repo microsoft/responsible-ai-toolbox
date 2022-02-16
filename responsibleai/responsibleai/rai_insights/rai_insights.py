@@ -7,6 +7,7 @@ import json
 import pickle
 import warnings
 from pathlib import Path
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -47,54 +48,27 @@ _PREDICT_PROBA = "predict_proba"
 
 
 class RAIInsights(object):
-
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-    :param model: The model to compute RAI insights for.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
-    :param test: The test dataset including the label column.
-    :type test: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param task_type: The task to run, can be `classification` or
-        `regression`.
-    :type task_type: str
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    :param classes: The class labels in the training dataset
-    :type classes: ndarray
-    :param serializer: Picklable custom serializer with save and load
-        methods for custom model serialization.
-        The save method writes the model to file given a parent directory.
-        The load method returns the deserialized model from the same
-        parent directory.
-    :type serializer: object
     """
 
     def __init__(
         self,
-        model,
-        train,
-        test,
-        target_column,
-        task_type,
-        categorical_features=None,
-        classes=None,
-        dataset_name=None,
-        data_balance_analysis=None,
-        serializer=None,
+        model: Any,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
+        categorical_features: Optional[List[str]] = None,
+        classes: Optional[np.ndarray] = None,
+        dataset_name: Optional[str] = None,
+        data_balance_analysis: Optional[DataBalanceAnalysis] = None,
+        serializer: Optional[Any] = None,
         maximum_rows_for_test: int = 5000,
     ):
-        """Defines the top-level Model Analysis API.
-        Use RAIInsights to analyze errors, explain the most important
-        features, compute counterfactuals and run causal analysis in a
-        single API.
+        """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -111,11 +85,12 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
-            methods defined for model that is not serializable. The save
-            method returns a dictionary state and load method returns the
-            model.
+            methods for custom model serialization.
+            The save method writes the model to file given a parent directory.
+            The load method returns the deserialized model from the same
+            parent directory.
         :type serializer: object
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
@@ -201,20 +176,19 @@ class RAIInsights(object):
 
     def _validate_model_analysis_input_parameters(
         self,
-        model,
-        train,
-        test,
-        target_column,
-        task_type,
-        categorical_features,
-        classes,
+        model: Any,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
+        categorical_features: List[str],
+        classes: np.ndarray,
+        dataset_name: str,
+        data_balance_analysis: DataBalanceAnalysis,
         serializer,
-        dataset_name,
-        data_balance_analysis,
         maximum_rows_for_test: int,
     ):
-        """
-        Validate the inputs for RAIInsights class.
+        """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -232,7 +206,7 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -429,19 +403,19 @@ class RAIInsights(object):
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas Dataframe for train and test."
+                "Expecting pandas DataFrame for train and test."
             )
 
     def _validate_features_same(
         self, small_train_features_before, small_train_data, function
     ):
         """
-        Validate the features are unmodified on the dataframe.
+        Validate the features are unmodified on the DataFrame.
 
         :param small_train_features_before: The features saved before
             an operation was performed.
         :type small_train_features_before: list[str]
-        :param small_train_data: The dataframe after the operation.
+        :param small_train_data: The DataFrame after the operation.
         :type small_train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str

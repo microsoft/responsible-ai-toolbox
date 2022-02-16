@@ -24,23 +24,6 @@ export function getErrorBarChartOptions(
       type: "lowmedhigh",
       zoomType: "xy"
     },
-    exporting: {
-      enabled: true
-    },
-    legend: {},
-    plotOptions: {
-      scatter: {
-        marker: {
-          radius: 5,
-          states: {
-            hover: {
-              enabled: true,
-              lineColor: "green"
-            }
-          }
-        }
-      }
-    },
     series: [
       {
         color: colorTheme.fontColor,
@@ -62,12 +45,6 @@ export function getErrorBarChartOptions(
         type: "errorbar"
       }
     ],
-    title: {
-      text: ""
-    },
-    tooltip: {
-      shared: true
-    },
     xAxis: [
       {
         categories: data.map((d) => getCausalDisplayFeatureName(d)),
@@ -88,9 +65,6 @@ export function getErrorBarChartOptions(
             color: colorTheme.fontColor,
             fontSize: "14px"
           }
-        },
-        title: {
-          text: ""
         }
       }
     ]

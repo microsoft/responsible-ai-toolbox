@@ -26,6 +26,8 @@ MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
 DEFAULT_NUM_LEAVES = 31
 DEFAULT_MIN_CHILD_SAMPLES = 20
+CACHED_SUBTREE_FEATURES = 'cache_subtree_features'
+LEAF_VALUE = 'leaf_value'
 
 
 class TreeSide(str, Enum):
@@ -181,6 +183,7 @@ def compute_error_tree(analyzer,
     dumped_model = surrogate._Booster.dump_model()
     tree_structure = dumped_model["tree_info"][0]['tree_structure']
     max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
     tree = traverse(filtered_indexed_df,
                     tree_structure,
                     max_split_index,
@@ -295,7 +298,7 @@ def traverse(df,
              classes=None):
     """Traverses the current node in the tree to create a list of nodes.
 
-    :param df: The dataframe containing the features and labels.
+    :param df: The DataFrame containing the features and labels.
     :type df: pandas.DataFrame
     :param tree: The current node in the tree to traverse.
     :type tree: dict
@@ -325,13 +328,16 @@ def traverse(df,
     else:
         nodeid = 0
 
+    # reduce dataframe to just features split on at each step for perf
+    df = filter_to_used_features(df, tree)
+
     # write current node to a dictionary that can be saved as json
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
                             feature_names, metric, parent, side,
                             classes)
 
     # write children to a dictionary that can be saved as json
-    if 'leaf_value' not in tree:
+    if LEAF_VALUE not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
         dict = traverse(df, left_child, max_split_index,
@@ -343,6 +349,49 @@ def traverse(df,
                         tree, TreeSide.RIGHT_CHILD, metric,
                         classes)
     return dict
+
+
+def filter_to_used_features(df, tree):
+    """Filters the dataframe to only include features used in the tree.
+
+    :param df: The dataframe to filter.
+    :type df: pandas.DataFrame
+    :param tree: The tree to get the features from.
+    :type tree: dict
+    :return: The filtered dataframe.
+    :rtype: pandas.DataFrame
+    """
+    features = tree[CACHED_SUBTREE_FEATURES]
+    features = features.union({PRED_Y, TRUE_Y, DIFF})
+    return df[features]
+
+
+def cache_subtree_features(tree, feature_names, parent=None):
+    """Caches the features of the subtree on each of the tree nodes.
+
+    :param tree: The current node in the tree to cache the features on.
+    :type tree: dict
+    :param feature_names: The set of feature names.
+    :type feature_names: set[str]
+    :param parent: The parent node of the current node.
+    :type parent: Node or None
+    :return: The features from the tree.
+    :rtype: list[str]
+    """
+    if parent is not None:
+        p_node_name_val = feature_names[parent[SPLIT_FEATURE]]
+        features = {p_node_name_val}
+    else:
+        features = set()
+    if LEAF_VALUE not in tree:
+        left_child = tree[TreeSide.LEFT_CHILD]
+        features = features.union(
+            cache_subtree_features(left_child, feature_names, tree))
+        right_child = tree[TreeSide.RIGHT_CHILD]
+        features = features.union(
+            cache_subtree_features(right_child, feature_names, tree))
+    tree[CACHED_SUBTREE_FEATURES] = features
+    return features
 
 
 def create_categorical_arg(parent_threshold):
@@ -522,9 +571,9 @@ def node_to_dict(df, tree, nodeid, categories, json,
 
 
 def get_regression_metric_data(df):
-    """Compute regression metric data from a dataframe.
+    """Compute regression metric data from a DataFrame.
 
-    :param df: dataframe
+    :param df: DataFrame
     :type df: pandas.DataFrame
     :return: pred_y, true_y, error
     :rtype: numpy.ndarray, numpy.ndarray, int
@@ -537,9 +586,9 @@ def get_regression_metric_data(df):
 
 
 def get_classification_metric_data(df):
-    """Compute classification metric data from a dataframe.
+    """Compute classification metric data from a DataFrame.
 
-    :param df: dataframe
+    :param df: DataFrame
     :type df: pandas.DataFrame
     :return: pred_y, true_y, error
     :rtype: numpy.ndarray, numpy.ndarray, int

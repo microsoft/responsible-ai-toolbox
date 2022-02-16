@@ -4,10 +4,12 @@
 """Defines the Counterfactual Manager class."""
 import json
 from pathlib import Path
+from typing import Any, List, Optional, Union
 
 import dice_ml
 import jsonschema
 import numpy as np
+import pandas as pd
 from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
 
@@ -108,6 +110,7 @@ def _get_schema_version(counterfactuals_dict):
 
 
 class CounterfactualConfig(BaseConfig):
+    """Defines the configuration for generating counterfactuals."""
     METHOD = 'method'
     CONTINUOUS_FEATURES = 'continuous_features'
     TOTAL_CFS = 'total_CFs'
@@ -319,6 +322,9 @@ class CounterfactualConfig(BaseConfig):
 
 
 class CounterfactualManager(BaseManager):
+    """Defines the CounterfactualManager for generating counterfactuals
+        from a model.
+    """
     _TRAIN = '_train'
     _TEST = '_test'
     _MODEL = '_model'
@@ -327,10 +333,10 @@ class CounterfactualManager(BaseManager):
     _CATEGORICAL_FEATURES = '_categorical_features'
     _COUNTERFACTUAL_CONFIG_LIST = '_counterfactual_config_list'
 
-    def __init__(self, model, train, test, target_column, task_type,
-                 categorical_features):
-        """Defines the CounterfactualManager for generating counterfactuals
-           from a model.
+    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+                 target_column: str, task_type: str,
+                 categorical_features: List[str]):
+        """Creates a CounterfactualManager object.
 
         :param model: The model to generate counterfactuals from.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -446,38 +452,35 @@ class CounterfactualManager(BaseManager):
             self._counterfactual_config_list.append(new_counterfactual_config)
 
     def add(self,
-            total_CFs,
-            method=CounterfactualConstants.RANDOM,
-            desired_class=None,
-            desired_range=None,
-            permitted_range=None,
-            features_to_vary='all',
-            feature_importance=True):
+            total_CFs: int,
+            method: str = CounterfactualConstants.RANDOM,
+            desired_class: Optional[Union[str, int]] = None,
+            desired_range: Optional[List] = None,
+            permitted_range: Optional[dict] = None,
+            features_to_vary: Union[str, List[str]] = 'all',
+            feature_importance: bool = True):
         """Add a counterfactual generation configuration to be computed later.
 
-        :param method: Type of dice-ml explainer. Either of "random", "genetic"
-                       or "kdtree".
-        :type method: str
         :param total_CFs: Total number of counterfactuals required.
         :type total_CFs: int
+        :param method: Type of dice-ml explainer. Either of "random", "genetic"
+            or "kdtree".
+        :type method: str
         :param desired_class: Desired counterfactual class. For binary
-                              classification, this needs to be set as
-                              "opposite".
+            classification, this needs to be set as "opposite".
         :type desired_class: string or int
         :param desired_range: For regression problems.
-                              Contains the outcome range
-                              to generate counterfactuals in.
+            Contains the outcome range to generate counterfactuals in.
         :type desired_range: list
         :param permitted_range: Dictionary with feature names as keys and
-                                permitted range in list as values.
-                                Defaults to the range inferred from training
-                                data.
+            permitted range in list as values. Defaults to the range inferred
+            from training data.
         :type permitted_range: dict
         :param features_to_vary: Either a string "all" or a list of
-                                 feature names to vary.
+            feature names to vary.
         :type features_to_vary: list
         :param feature_importance: Flag to compute feature importance using
-                                   dice-ml.
+            dice-ml.
         :type feature_importance: bool
         """
         if self._categorical_features is None:
@@ -550,7 +553,7 @@ class CounterfactualManager(BaseManager):
 
         :param failed_to_compute: Get the failure reasons if counterfactual
                                   examples failed to compute.
-        :type failed_to_compute: bool
+        :type failed_to_compute: Optional[bool]
         """
         if not failed_to_compute:
             counterfactual_obj_list = []

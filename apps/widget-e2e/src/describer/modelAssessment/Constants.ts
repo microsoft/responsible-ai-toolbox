@@ -91,5 +91,7 @@ export enum Locators {
   CausalCalloutInner = "#causalAggregateView div[class^='calloutInner']",
   CausalAnalysisTable = "#causalAggregateView div.ms-DetailsList",
   CausalChartXAxisValues = '#causalAggregateView svg g[class*="highcharts-xaxis-labels"] text',
-  CausalAggregateView = "#causalAggregateView"
+  CausalAggregateView = "#causalAggregateView",
+  ModelOverviewHeader = "#ModelAssessmentDashboard #modelStatisticsHeader",
+  CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')"
 }
