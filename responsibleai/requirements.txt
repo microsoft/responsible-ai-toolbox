@@ -7,6 +7,7 @@ lightgbm>=2.0.11
 numpy>=1.17.2
 numba<0.54.0
 pandas>=0.25.1
+raimitigations==0.0.0
 scikit-learn>=0.22.1
 scipy>=1.4.1
 semver~=2.13.0
