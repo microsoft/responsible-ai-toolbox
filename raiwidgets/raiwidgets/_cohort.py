@@ -130,11 +130,11 @@ class CohortFilter:
         3. The arg shouldn't be an empty list.
         4. For all cohort filter methods in
            CohortFilterMethods.SINGLE_VALUE_METHODS, the value in the arg
-           should be integer or float and there should be utmost one value
+           should be integer or float and there should be only one value
            in arg.
         5. For cohort filter method CohortFilterMethods.METHOD_RANGE,
            the values in the arg should be integer or float and there
-           should be utmost two values in arg.
+           should be only two values in arg.
         """
         if not isinstance(method, str):
             raise UserConfigValidationException(
@@ -443,7 +443,8 @@ class Cohort:
                 "Expected a list type for categorical columns.")
         if not all(isinstance(entry, str) for entry in categorical_features):
             raise UserConfigValidationException(
-                "All entries in categorical_features need of string type."
+                "All entries in categorical_features need to be of "
+                "string type."
             )
 
         if target_column not in test_data.columns:
