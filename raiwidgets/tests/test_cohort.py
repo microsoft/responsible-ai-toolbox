@@ -214,7 +214,7 @@ class TestCohortFilterDataValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Classification Outcome cannot be "
+                match="Classification outcome cannot be "
                       "configured for multi-class classification"
                       " and regression scenarios."):
             cohort_filter_classification_excludes._validate_with_test_data(
@@ -224,7 +224,7 @@ class TestCohortFilterDataValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Classification Outcome cannot be "
+                match="Classification outcome cannot be "
                       "configured for multi-class classification"
                       " and regression scenarios."):
             cohort_filter_classification_excludes._validate_with_test_data(
@@ -234,7 +234,7 @@ class TestCohortFilterDataValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Classification Outcome can only be configured with "
+                match="Classification outcome can only be configured with "
                       "cohort filter includes."):
             cohort_filter_classification_excludes._validate_with_test_data(
                 test_data=test_data_binary, target_column="target",
@@ -243,7 +243,7 @@ class TestCohortFilterDataValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Classification Outcome can only take argument values "
+                match="Classification outcome can only take argument values "
                       "from False negative or False positive or True "
                       "negative or True positive."):
             cohort_filter_classification_includes._validate_with_test_data(

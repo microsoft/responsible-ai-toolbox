@@ -17,7 +17,7 @@ export enum CohortColumnNames {
   PredictedY = "Predicted Y",
   TrueY = "True Y",
   Index = "index",
-  ClassificationOutcome = "Classification Outcome",
+  ClassificationOutcome = "Classification outcome",
   RegressionError = "Error"
 }
 

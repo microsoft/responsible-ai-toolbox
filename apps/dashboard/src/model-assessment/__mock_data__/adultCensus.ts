@@ -13650,9 +13650,9 @@ export const adultCohortDataClassificationOutcome: IPreBuiltCohort = {
         "False negative",
         "False positive"
       ],
-      column: "Classification Outcome",
+      column: "Classification outcome",
       method: FilterMethods.Includes
     }
   ],
-  name: "Cohort Classification Outcome"
+  name: "Cohort Classification outcome"
 };

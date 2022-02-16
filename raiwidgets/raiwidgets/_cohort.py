@@ -82,7 +82,7 @@ class CohortFilter:
     PREDICTED_Y = 'Predicted Y'
     TRUE_Y = 'True Y'
     INDEX = 'Index'
-    CLASSIFICATION_OUTCOME = 'Classification Outcome'
+    CLASSIFICATION_OUTCOME = 'Classification outcome'
     REGRESSION_ERROR = 'Error'
 
     SPECIAL_COLUMN_LIST = [INDEX,
@@ -223,12 +223,12 @@ class CohortFilter:
         2. The Index filter doesn't take CohortFilterMethods.EXCLUDES
            filter method.
 
-        "Classification Outcome" Filter validations
-        1. Validate that "Classification Outcome" filter is not configure for
+        "Classification outcome" Filter validations
+        1. Validate that "Classification outcome" filter is not configure for
            multiclass classification and regression.
-        2. The "Classification Outcome" filter only contains values from set
+        2. The "Classification outcome" filter only contains values from set
            ClassificationOutcomes.
-        3. The "Classification Outcome" filter only takes
+        3. The "Classification outcome" filter only takes
            CohortFilterMethods.INCLUDES filter method.
 
         "Error" Filter validations
@@ -279,7 +279,7 @@ class CohortFilter:
                     "All entries in arg should be of type int."
                 )
         elif self.column == CohortFilter.CLASSIFICATION_OUTCOME:
-            # "Classification Outcome" Filter validations
+            # "Classification outcome" Filter validations
             is_multiclass = len(np.unique(
                 test_data[target_column].values).tolist()) > 2
 
