@@ -12,6 +12,23 @@ from raiwidgets._cohort import (ClassificationOutcomes, Cohort, CohortFilter,
 from responsibleai.exceptions import UserConfigValidationException
 
 
+def get_toy_binary_classification_dataset():
+    return pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
+                        columns=["age", "target"])
+
+
+def get_toy_multiclass_classification_dataset():
+    return pd.DataFrame(
+        data=[[23, 'X'], [25, 'Y'], [25, 'Z']],
+        columns=["age", "target"])
+
+
+def get_toy_regression_dataset():
+    return pd.DataFrame(
+        data=[[23, 2.5], [25, 3.6], [25, 4.6]],
+        columns=["age", "target"])
+
+
 class TestCohortFilter:
     def test_cohort_filter_validate_method(self):
         with pytest.raises(
@@ -151,8 +168,7 @@ class TestCohortFilter:
 
 class TestCohortFilterDataValidations:
     def test_validate_with_test_data_high_level_validations(self):
-        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
-                                 columns=["age", "target"])
+        test_data = get_toy_binary_classification_dataset()
 
         cohort_filter_not_a_feature = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
@@ -166,8 +182,7 @@ class TestCohortFilterDataValidations:
                 categorical_features=[])
 
     def test_validate_with_test_data_index_filter_validations(self):
-        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
-                                 columns=["age", "target"])
+        test_data = get_toy_binary_classification_dataset()
 
         cohort_filter_index_excludes = CohortFilter(
             method=CohortFilterMethods.METHOD_EXCLUDES,
@@ -194,13 +209,9 @@ class TestCohortFilterDataValidations:
 
     def test_validate_with_test_data_classification_error_filter_validations(
             self):
-        test_data_multiclass = pd.DataFrame(
-            data=[[23, 'X'], [25, 'Y'], [25, 'Z']],
-            columns=["age", "target"])
+        test_data_multiclass = get_toy_multiclass_classification_dataset()
 
-        test_data_binary = pd.DataFrame(
-            data=[[23, 'X'], [25, 'Y']],
-            columns=["age", "target"])
+        test_data_binary = get_toy_binary_classification_dataset()
 
         cohort_filter_classification_excludes = CohortFilter(
             method=CohortFilterMethods.METHOD_EXCLUDES,
@@ -252,9 +263,7 @@ class TestCohortFilterDataValidations:
 
     def test_validate_with_test_data_regression_error_filter_validations(
             self):
-        test_data_regression = pd.DataFrame(
-            data=[[23, 2.5], [25, 3.6], [25, 4.6]],
-            columns=["age", "target"])
+        test_data_regression = get_toy_regression_dataset()
 
         cohort_filter_regression = CohortFilter(
             method=CohortFilterMethods.METHOD_LESS,
@@ -316,9 +325,7 @@ class TestCohortFilterDataValidations:
                               CohortFilterMethods.METHOD_EXCLUDES])
     def test_validate_with_test_data_regression_target_filter_validations(
             self, target_filter_type, method):
-        test_data_regression = pd.DataFrame(
-            data=[[23, 2.5], [25, 3.6], [25, 4.6]],
-            columns=["age", "target"])
+        test_data_regression = get_toy_regression_dataset()
 
         with pytest.raises(
                 UserConfigValidationException,
@@ -340,9 +347,7 @@ class TestCohortFilterDataValidations:
                               CohortFilter.TRUE_Y])
     def test_validate_with_test_data_classification_target_filter_validations(
             self, target_filter_type):
-        test_data_classification = pd.DataFrame(
-            data=[[23, 'A'], [25, 'B'], [25, 'B']],
-            columns=["age", "target"])
+        test_data_classification = get_toy_binary_classification_dataset()
 
         with pytest.raises(
                 UserConfigValidationException,
@@ -352,7 +357,7 @@ class TestCohortFilterDataValidations:
                           CohortFilterMethods.METHOD_INCLUDES)):
             cohort_filter_classification = CohortFilter(
                 method=CohortFilterMethods.METHOD_EXCLUDES,
-                arg=['A'],
+                arg=['X'],
                 column=target_filter_type)
             cohort_filter_classification._validate_with_test_data(
                 test_data=test_data_classification,
@@ -398,8 +403,8 @@ class TestCohortFilterDataValidations:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Found a category in arg which is not present in "
-                      "test data"):
+                match="Found a category {0} in arg which is not present "
+                      "in test data column {1}.".format('mid', 'type')):
             cohort_filter = CohortFilter(
                 method=CohortFilterMethods.METHOD_INCLUDES,
                 arg=['mid'],
@@ -432,14 +437,13 @@ class TestCohort:
             arg=[65], column='age')
         cohort_1 = Cohort(name="Cohort New")
         cohort_1.add_cohort_filter(cohort_filter_1)
-        test_data = pd.DataFrame(data=[[23, 'X'], [25, 'Y']],
-                                 columns=["age", "target"])
+        test_data = get_toy_binary_classification_dataset()
 
         with pytest.raises(
                 UserConfigValidationException,
                 match="The test_data should be a pandas DataFrame"):
             cohort_1._validate_with_test_data(
-                test_data=[], target_column='income',
+                test_data=[], target_column='target',
                 categorical_features=[])
 
         with pytest.raises(
@@ -470,8 +474,8 @@ class TestCohort:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="All entries in categorical_features "
-                      "need to be of string type."):
+                match="Feature 1 in categorical_features need to be of "
+                      "string type."):
             cohort_1._validate_with_test_data(
                 test_data=test_data,
                 target_column="target",
@@ -479,7 +483,7 @@ class TestCohort:
 
         with pytest.raises(
                 UserConfigValidationException,
-                match="Found some categorical feature name which is not"
+                match="Found categorical feature hours-per-week which is not"
                       " present in test data."):
             cohort_1._validate_with_test_data(
                 test_data=test_data,

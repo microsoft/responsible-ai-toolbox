@@ -370,11 +370,13 @@ class CohortFilter:
                 categories = np.unique(
                     test_data[self.column].values).tolist()
 
-                if not all(entry in categories for entry in self.arg):
-                    raise UserConfigValidationException(
-                        "Found a category in arg which is not present in "
-                        "test data"
-                    )
+                for entry in self.arg:
+                    if entry not in categories:
+                        raise UserConfigValidationException(
+                            "Found a category {0} in arg which is not present "
+                            "in test data column {1}.".format(
+                                entry, self.column)
+                        )
 
 
 class Cohort:
@@ -441,11 +443,12 @@ class Cohort:
         if not isinstance(categorical_features, list):
             raise UserConfigValidationException(
                 "Expected a list type for categorical columns.")
-        if not all(isinstance(entry, str) for entry in categorical_features):
-            raise UserConfigValidationException(
-                "All entries in categorical_features need to be of "
-                "string type."
-            )
+        for categorical_feature in categorical_features:
+            if not isinstance(categorical_feature, str):
+                raise UserConfigValidationException(
+                    "Feature {0} in categorical_features need to be of "
+                    "string type.".format(categorical_feature)
+                )
 
         if target_column not in test_data.columns:
             raise UserConfigValidationException(
@@ -454,12 +457,12 @@ class Cohort:
             )
 
         test_data_columns_set = set(test_data.columns) - set([target_column])
-        if not all(entry in test_data_columns_set
-                   for entry in categorical_features):
-            raise UserConfigValidationException(
-                "Found some categorical feature name which is not"
-                " present in test data."
-            )
+        for categorical_feature in categorical_features:
+            if categorical_feature not in test_data_columns_set:
+                raise UserConfigValidationException(
+                    "Found categorical feature {0} which is not"
+                    " present in test data.".format(categorical_feature)
+                )
 
         for cohort_filter in self.cohort_filter_list:
             cohort_filter._validate_with_test_data(
