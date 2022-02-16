@@ -9,18 +9,19 @@ import {
   WeightVectorOption,
   IGenericChartProps,
   BasicHighChart,
-  getDependencyChartOptions
+  getDependencyChartOptions,
+  FabricStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { getDependenceData } from "../../utils/getDependenceData";
+import { getDependenceData } from "../util/getDependenceData";
 
-import { dependencePlotStyles } from "./DependencePlot.styles";
+import { dependencePlotStyles } from "./FeatureImportanceDependence.styles";
 
-export interface IDependencyHighChartProps {
+export interface IFeatureImportanceDependenceProps {
   chartProps: IGenericChartProps | undefined;
   jointDataset: JointDataset;
   cohort: Cohort;
@@ -31,7 +32,7 @@ export interface IDependencyHighChartProps {
   onChange: (props: IGenericChartProps) => void;
 }
 
-export class DependencyHighChart extends React.PureComponent<IDependencyHighChartProps> {
+export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
   public render(): React.ReactNode {
     const classNames = dependencePlotStyles();
     if (this.props.chartProps === undefined) {
@@ -77,6 +78,7 @@ export class DependencyHighChart extends React.PureComponent<IDependencyHighChar
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
+                  FabricStyles.fabricColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
               />
