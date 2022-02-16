@@ -82,7 +82,7 @@ class CohortFilter:
     PREDICTED_Y = 'Predicted Y'
     TRUE_Y = 'True Y'
     INDEX = 'Index'
-    CLASSIFICATION_OUTCOME = 'Classification Outcome'
+    CLASSIFICATION_OUTCOME = 'Classification outcome'
     REGRESSION_ERROR = 'Error'
 
     SPECIAL_COLUMN_LIST = [INDEX,
@@ -130,11 +130,11 @@ class CohortFilter:
         3. The arg shouldn't be an empty list.
         4. For all cohort filter methods in
            CohortFilterMethods.SINGLE_VALUE_METHODS, the value in the arg
-           should be integer or float and there should be utmost one value
+           should be integer or float and there should be only one value
            in arg.
         5. For cohort filter method CohortFilterMethods.METHOD_RANGE,
            the values in the arg should be integer or float and there
-           should be utmost two values in arg.
+           should be only two values in arg.
         """
         if not isinstance(method, str):
             raise UserConfigValidationException(
@@ -223,12 +223,12 @@ class CohortFilter:
         2. The Index filter doesn't take CohortFilterMethods.EXCLUDES
            filter method.
 
-        "Classification Outcome" Filter validations
-        1. Validate that "Classification Outcome" filter is not configure for
+        "Classification outcome" Filter validations
+        1. Validate that "Classification outcome" filter is not configure for
            multiclass classification and regression.
-        2. The "Classification Outcome" filter only contains values from set
+        2. The "Classification outcome" filter only contains values from set
            ClassificationOutcomes.
-        3. The "Classification Outcome" filter only takes
+        3. The "Classification outcome" filter only takes
            CohortFilterMethods.INCLUDES filter method.
 
         "Error" Filter validations
@@ -279,7 +279,7 @@ class CohortFilter:
                     "All entries in arg should be of type int."
                 )
         elif self.column == CohortFilter.CLASSIFICATION_OUTCOME:
-            # "Classification Outcome" Filter validations
+            # "Classification outcome" Filter validations
             is_multiclass = len(np.unique(
                 test_data[target_column].values).tolist()) > 2
 
@@ -370,11 +370,13 @@ class CohortFilter:
                 categories = np.unique(
                     test_data[self.column].values).tolist()
 
-                if not all(entry in categories for entry in self.arg):
-                    raise UserConfigValidationException(
-                        "Found a category in arg which is not present in "
-                        "test data"
-                    )
+                for entry in self.arg:
+                    if entry not in categories:
+                        raise UserConfigValidationException(
+                            "Found a category {0} in arg which is not present "
+                            "in test data column {1}.".format(
+                                entry, self.column)
+                        )
 
 
 class Cohort:
@@ -441,10 +443,12 @@ class Cohort:
         if not isinstance(categorical_features, list):
             raise UserConfigValidationException(
                 "Expected a list type for categorical columns.")
-        if not all(isinstance(entry, str) for entry in categorical_features):
-            raise UserConfigValidationException(
-                "All entries in categorical_features need of string type."
-            )
+        for categorical_feature in categorical_features:
+            if not isinstance(categorical_feature, str):
+                raise UserConfigValidationException(
+                    "Feature {0} in categorical_features need to be of "
+                    "string type.".format(categorical_feature)
+                )
 
         if target_column not in test_data.columns:
             raise UserConfigValidationException(
@@ -453,12 +457,12 @@ class Cohort:
             )
 
         test_data_columns_set = set(test_data.columns) - set([target_column])
-        if not all(entry in test_data_columns_set
-                   for entry in categorical_features):
-            raise UserConfigValidationException(
-                "Found some categorical feature name which is not"
-                " present in test data."
-            )
+        for categorical_feature in categorical_features:
+            if categorical_feature not in test_data_columns_set:
+                raise UserConfigValidationException(
+                    "Found categorical feature {0} which is not"
+                    " present in test data.".format(categorical_feature)
+                )
 
         for cohort_filter in self.cohort_filter_list:
             cohort_filter._validate_with_test_data(
