@@ -1,23 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  JointDataset,
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption,
-  IGenericChartProps,
-  BasicHighChart,
-  getDependencyChartOptions,
-  FabricStyles
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { Cohort } from "../Cohort/Cohort";
+import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
 import { getDependenceData } from "../util/getDependenceData";
+import { IGenericChartProps } from "../util/IGenericChartProps";
+import { JointDataset } from "../util/JointDataset";
 
 import { dependencePlotStyles } from "./FeatureImportanceDependence.styles";
 
