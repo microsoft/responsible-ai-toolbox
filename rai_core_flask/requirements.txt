@@ -1,5 +1,6 @@
-Flask~=1.0.0
-Flask-Cors==3.0.9
-ipython==7.16.3
-greenlet==0.4.17
-gevent==20.9.0
+Flask~=1.1.0
+Flask-Cors==3.0.10
+ipython==7.16.3; python_version <= '3.6'
+ipython==7.31.1; python_version > '3.6'
+greenlet==1.1.2
+gevent==21.12.0
