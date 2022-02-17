@@ -2,50 +2,20 @@
 # Licensed under the MIT License.
 
 import mock
-import shap
-import sklearn
-from sklearn.model_selection import train_test_split
 
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
-from responsibleai import RAIInsights
 
 
 class TestResponsibleAIDashboardInput:
-    def test_model_analysis_adult(self):
-        X, y = shap.datasets.adult()
-        y = [1 if r else 0 for r in y]
+    def test_model_analysis_adult(self, create_rai_insights_object):
+        ri = create_rai_insights_object
+        knn = ri.model
+        test_data = ri.test
 
-        X, y = sklearn.utils.resample(
-            X, y, n_samples=1000, random_state=7, stratify=y)
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=7, stratify=y)
-
-        knn = sklearn.neighbors.KNeighborsClassifier()
-        knn.fit(X_train, y_train)
-
-        X['Income'] = y
-        X_test['Income'] = y_test
-
-        ma = RAIInsights(knn, X, X_test, 'Income', 'classification',
-                         categorical_features=['Workclass', 'Education-Num',
-                                               'Marital Status',
-                                               'Occupation', 'Relationship',
-                                               'Race',
-                                               'Sex', 'Country'])
-        # ma.explainer.add()
-        # ma.counterfactual.add(10, desired_class='opposite')
-        ma.error_analysis.add()
-        # ma.causal.add(treatment_features=['Hours per week', 'Occupation'],
-        #               heterogeneity_features=None,
-        #               upper_bound_on_cat_expansion=42,
-        #               skip_cat_limit_checks=True)
-        ma.compute()
-
-        dashboard_input = ResponsibleAIDashboardInput(ma)
+        dashboard_input = ResponsibleAIDashboardInput(ri)
         with mock.patch.object(knn, "predict_proba") as predict_mock:
-            test_pred_data = X_test.head(1).drop("Income", axis=1).values
+            test_pred_data = test_data.head(1).drop("Income", axis=1).values
             dashboard_input.on_predict(
                 test_pred_data)
 
