@@ -18,13 +18,10 @@ from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
-from responsibleai.rai_insights.data_balance_analysis import (
-    DataBalanceAnalysis,
-    get_data_balance_measures,
-)
 from responsibleai.utils import _is_classifier
 
 _DATA = "data"
@@ -64,7 +61,6 @@ class RAIInsights(object):
         categorical_features: Optional[List[str]] = None,
         classes: Optional[np.ndarray] = None,
         dataset_name: Optional[str] = None,
-        data_balance_analysis: Optional[DataBalanceAnalysis] = None,
         serializer: Optional[Any] = None,
         maximum_rows_for_test: int = 5000,
     ):
@@ -109,7 +105,6 @@ class RAIInsights(object):
             classes=classes,
             serializer=serializer,
             dataset_name=dataset_name,
-            data_balance_analysis=data_balance_analysis,
             maximum_rows_for_test=maximum_rows_for_test,
         )
         self.model = model
@@ -119,7 +114,6 @@ class RAIInsights(object):
         self.task_type = task_type
         self.categorical_features = categorical_features
         self.dataset_name = dataset_name
-        self.data_balance_analysis = data_balance_analysis
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -141,6 +135,13 @@ class RAIInsights(object):
             categorical_features=categorical_features,
         )
 
+        self._data_balance_manager = DataBalanceManager(
+            train=train,
+            test=test,
+            target_column=target_column,
+            dataset_name=dataset_name,
+        )
+
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column, self._classes, categorical_features
         )
@@ -157,6 +158,7 @@ class RAIInsights(object):
         self._managers = [
             self._causal_manager,
             self._counterfactual_manager,
+            self._data_balance_manager,
             self._error_analysis_manager,
             self._explainer_manager,
         ]
@@ -184,7 +186,6 @@ class RAIInsights(object):
         categorical_features: List[str],
         classes: np.ndarray,
         dataset_name: str,
-        data_balance_analysis: DataBalanceAnalysis,
         serializer,
         maximum_rows_for_test: int,
     ):
@@ -241,13 +242,6 @@ class RAIInsights(object):
             if not isinstance(dataset_name, str):
                 raise UserConfigValidationException(
                     "dataset_name should be a string"
-                )
-
-        if data_balance_analysis is not None:
-            if not isinstance(data_balance_analysis, DataBalanceAnalysis):
-                raise UserConfigValidationException(
-                    "data_balance_analysis should be of type ",
-                    "`responsibleai.DataBalanceAnalysis`",
                 )
 
         if serializer is not None:
@@ -447,6 +441,14 @@ class RAIInsights(object):
         return self._counterfactual_manager
 
     @property
+    def data_balance(self) -> DataBalanceManager:
+        """Get the data balance manager.
+        :return: The data balance manager.
+        :rtype: DataBalanceManager
+        """
+        return self._data_balance_manager
+
+    @property
     def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
         :return: The error analysis manager.
@@ -508,9 +510,7 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(self._classes)
         dashboard_dataset.name = self.dataset_name
-        dashboard_dataset.data_balance_measures = get_data_balance_measures(
-            dba=self.data_balance_analysis
-        )
+        dashboard_dataset.data_balance_measures = self.data_balance.get_data()
 
         predicted_y = None
         feature_length = None
@@ -839,6 +839,7 @@ class RAIInsights(object):
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
             ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
             ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
             ManagerNames.EXPLAINER: ExplainerManager,
         }
