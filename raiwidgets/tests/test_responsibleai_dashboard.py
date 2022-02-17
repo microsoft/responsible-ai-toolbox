@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 from raiwidgets import ResponsibleAIDashboard
-from raiwidgets._cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
 
