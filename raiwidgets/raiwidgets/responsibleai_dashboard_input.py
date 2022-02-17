@@ -11,6 +11,7 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
+from responsibleai.exceptions import UserConfigValidationException
 
 from ._cohort import Cohort, cohort_filter_json_converter
 from .constants import ErrorMessages
@@ -40,31 +41,7 @@ class ResponsibleAIDashboardInput:
         self._is_classifier = _is_classifier(model)
         self.dashboard_input = analysis.get_data()
 
-        if cohort_list is not None:
-            test_data = pd.DataFrame(
-                data=self.dashboard_input.dataset.features,
-                columns=self.dashboard_input.dataset.feature_names)
-            if self.dashboard_input.dataset.task_type == \
-                    ModelTask.CLASSIFICATION:
-                class_names_list = self.dashboard_input.dataset.class_names
-                true_y_array = self.dashboard_input.dataset.true_y
-                true_class_array = np.array(
-                    [class_names_list[index] for index in true_y_array])
-                test_data[self.dashboard_input.dataset.target_column] = \
-                    true_class_array
-            else:
-                test_data[self.dashboard_input.dataset.target_column] = \
-                    self.dashboard_input.dataset.true_y
-
-            categorical_features = \
-                self.dashboard_input.dataset.categorical_features
-            for cohort in cohort_list:
-                cohort._validate_with_test_data(
-                    test_data=test_data,
-                    target_column=self.dashboard_input.dataset.target_column,
-                    categorical_features=categorical_features,
-                    is_classification=self._is_classifier)
-
+        self._validate_cohort_list(cohort_list)
         # Add cohort_list to dashboard_input
         self.dashboard_input.cohortData = json.loads(
             json.dumps(cohort_list,
@@ -73,6 +50,42 @@ class ResponsibleAIDashboardInput:
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer
+
+    def _validate_cohort_list(self, cohort_list=None):
+        if cohort_list is None:
+            return
+
+        if not isinstance(cohort_list, list):
+            raise UserConfigValidationException(
+                "cohort_list parameter should be a list.")
+
+        if not all(isinstance(entry, Cohort) for entry in cohort_list):
+            raise UserConfigValidationException(
+                "All entries in cohort_list should be of type Cohort.")
+
+        test_data = pd.DataFrame(
+            data=self.dashboard_input.dataset.features,
+            columns=self.dashboard_input.dataset.feature_names)
+        if self.dashboard_input.dataset.task_type == \
+                ModelTask.CLASSIFICATION:
+            class_names_list = self.dashboard_input.dataset.class_names
+            true_y_array = self.dashboard_input.dataset.true_y
+            true_class_array = np.array(
+                [class_names_list[index] for index in true_y_array])
+            test_data[self.dashboard_input.dataset.target_column] = \
+                true_class_array
+        else:
+            test_data[self.dashboard_input.dataset.target_column] = \
+                self.dashboard_input.dataset.true_y
+
+        categorical_features = \
+            self.dashboard_input.dataset.categorical_features
+        for cohort in cohort_list:
+            cohort._validate_with_test_data(
+                test_data=test_data,
+                target_column=self.dashboard_input.dataset.target_column,
+                categorical_features=categorical_features,
+                is_classification=self._is_classifier)
 
     def on_predict(self, data):
         try:
