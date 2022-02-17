@@ -63,6 +63,14 @@ class ResponsibleAIDashboardInput:
             raise UserConfigValidationException(
                 "All entries in cohort_list should be of type Cohort.")
 
+        all_cohort_names = [cohort.name for cohort in cohort_list]
+        unique_cohort_names = np.unique(all_cohort_names).tolist()
+
+        if len(unique_cohort_names) != len(all_cohort_names):
+            raise UserConfigValidationException(
+                "Found cohorts with duplicate names. "
+                "All pre-defined cohorts need to have distinct names.")
+
         test_data = pd.DataFrame(
             data=self.dashboard_input.dataset.features,
             columns=self.dashboard_input.dataset.feature_names)

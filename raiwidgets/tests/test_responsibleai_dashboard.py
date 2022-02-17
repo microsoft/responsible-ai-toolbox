@@ -1,10 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import pytest
+
 from raiwidgets import ResponsibleAIDashboard
 from raiwidgets._cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
+from responsibleai.exceptions import UserConfigValidationException
 
 
 class TestResponsibleAIDashboard:
@@ -40,7 +43,7 @@ class TestResponsibleAIDashboard:
         self.validate_rai_dashboard_data(widget_copy)
 
     def test_responsibleai_adult_with_pre_defined_cohorts(
-            self, tmpdir, create_rai_insights_object):
+            self, create_rai_insights_object):
         ri = create_rai_insights_object
 
         cohort_filter_continuous_1 = CohortFilter(
@@ -79,3 +82,55 @@ class TestResponsibleAIDashboard:
                          user_cohort_index])
 
         self.validate_rai_dashboard_data(widget)
+
+    def test_responsibleai_adult_with_ill_defined_cohorts(
+            self, create_rai_insights_object):
+        ri = create_rai_insights_object
+
+        cohort_filter_continuous_1 = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[65],
+            column='Age')
+        cohort_filter_continuous_2 = CohortFilter(
+            method=CohortFilterMethods.METHOD_GREATER,
+            arg=[40],
+            column='Hours per week')
+
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="cohort_list parameter should be a list."):
+            ResponsibleAIDashboard(ri, cohort_list={})
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="All entries in cohort_list should be of type Cohort."):
+            ResponsibleAIDashboard(
+                ri, cohort_list=[user_cohort_continuous, {}])
+
+    def test_responsibleai_adult_duplicate_cohort_names(
+            self, create_rai_insights_object):
+        ri = create_rai_insights_object
+
+        cohort_filter_continuous_1 = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[65],
+            column='Age')
+        cohort_filter_continuous_2 = CohortFilter(
+            method=CohortFilterMethods.METHOD_GREATER,
+            arg=[40],
+            column='Hours per week')
+
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found cohorts with duplicate names. "
+                      "All pre-defined cohorts need to have distinct names."):
+            ResponsibleAIDashboard(ri, cohort_list=[
+                user_cohort_continuous, user_cohort_continuous])
