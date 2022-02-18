@@ -10,7 +10,8 @@ from pandas import read_csv
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
 from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
-                              load_iris, load_wine, make_classification)
+                              load_diabetes, load_iris, load_wine,
+                              make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
@@ -131,6 +132,17 @@ def create_cancer_data():
     feature_names = breast_cancer_data.feature_names
     classes = breast_cancer_data.target_names.tolist()
     return X_train, X_test, y_train, y_test, feature_names, classes
+
+
+def create_diabetes_data():
+    diabetes_data = load_diabetes()
+    X = diabetes_data.data
+    y = diabetes_data.target
+    feature_names = diabetes_data.feature_names
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=0)
+    return X_train, X_test, y_train, y_test, feature_names
 
 
 def create_binary_classification_dataset(n_samples=100):
