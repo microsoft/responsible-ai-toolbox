@@ -1,14 +1,16 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import shap
-import sklearn
-from sklearn.model_selection import train_test_split
+import json
+
+import pytest
 
 from raiwidgets import ResponsibleAIDashboard
-from responsibleai import RAIInsights
+from raiwidgets._cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
+from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class TestResponsibleAIDashboard:
@@ -30,36 +32,16 @@ class TestResponsibleAIDashboard:
             rai_widget.input.dashboard_input.counterfactualData[0],
             CounterfactualData)
 
-    def test_responsibleai_adult(self, tmpdir):
-        X, y = shap.datasets.adult()
-        y = [1 if r else 0 for r in y]
+        if rai_widget.input.dashboard_input.cohortData is not None:
+            assert isinstance(rai_widget.input.dashboard_input.cohortData[0],
+                              Cohort)
 
-        X, y = sklearn.utils.resample(
-            X, y, n_samples=1000, random_state=7, stratify=y)
+        # Make sure the dashboard input can be serialized
+        json.dumps(rai_widget.input.dashboard_input,
+                   default=serialize_json_safe)
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.02, random_state=7, stratify=y)
-
-        knn = sklearn.neighbors.KNeighborsClassifier()
-        knn.fit(X_train, y_train)
-
-        X['Income'] = y
-        X_test['Income'] = y_test
-
-        ri = RAIInsights(knn, X, X_test, 'Income', 'classification',
-                         categorical_features=['Workclass', 'Education-Num',
-                                               'Marital Status',
-                                               'Occupation', 'Relationship',
-                                               'Race',
-                                               'Sex', 'Country'])
-        ri.explainer.add()
-        ri.counterfactual.add(10, desired_class='opposite')
-        ri.error_analysis.add()
-        ri.causal.add(treatment_features=['Hours per week', 'Occupation'],
-                      heterogeneity_features=None,
-                      upper_bound_on_cat_expansion=42,
-                      skip_cat_limit_checks=True)
-        ri.compute()
+    def test_responsibleai_adult(self, tmpdir, create_rai_insights_object):
+        ri = create_rai_insights_object
 
         widget = ResponsibleAIDashboard(ri)
         self.validate_rai_dashboard_data(widget)
@@ -70,3 +52,96 @@ class TestResponsibleAIDashboard:
 
         widget_copy = ResponsibleAIDashboard(ri_copy)
         self.validate_rai_dashboard_data(widget_copy)
+
+    def test_responsibleai_adult_with_pre_defined_cohorts(
+            self, create_rai_insights_object):
+        ri = create_rai_insights_object
+
+        cohort_filter_continuous_1 = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[65],
+            column='Age')
+        cohort_filter_continuous_2 = CohortFilter(
+            method=CohortFilterMethods.METHOD_GREATER,
+            arg=[40],
+            column='Hours per week')
+
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
+
+        cohort_filter_categorical = CohortFilter(
+            method=CohortFilterMethods.METHOD_INCLUDES,
+            arg=[2, 6, 4],
+            column='Marital Status')
+
+        user_cohort_categorical = Cohort(name='Cohort Categorical')
+        user_cohort_categorical.add_cohort_filter(cohort_filter_categorical)
+
+        cohort_filter_index = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[20],
+            column='Index')
+
+        user_cohort_index = Cohort(name='Cohort Index')
+        user_cohort_index.add_cohort_filter(cohort_filter_index)
+
+        widget = ResponsibleAIDashboard(
+            ri,
+            cohort_list=[user_cohort_continuous,
+                         user_cohort_categorical,
+                         user_cohort_index])
+
+        self.validate_rai_dashboard_data(widget)
+
+    def test_responsibleai_adult_with_ill_defined_cohorts(
+            self, create_rai_insights_object):
+        ri = create_rai_insights_object
+
+        cohort_filter_continuous_1 = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[65],
+            column='Age')
+        cohort_filter_continuous_2 = CohortFilter(
+            method=CohortFilterMethods.METHOD_GREATER,
+            arg=[40],
+            column='Hours per week')
+
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="cohort_list parameter should be a list."):
+            ResponsibleAIDashboard(ri, cohort_list={})
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="All entries in cohort_list should be of type Cohort."):
+            ResponsibleAIDashboard(
+                ri, cohort_list=[user_cohort_continuous, {}])
+
+    def test_responsibleai_adult_duplicate_cohort_names(
+            self, create_rai_insights_object):
+        ri = create_rai_insights_object
+
+        cohort_filter_continuous_1 = CohortFilter(
+            method=CohortFilterMethods.METHOD_LESS,
+            arg=[65],
+            column='Age')
+        cohort_filter_continuous_2 = CohortFilter(
+            method=CohortFilterMethods.METHOD_GREATER,
+            arg=[40],
+            column='Hours per week')
+
+        user_cohort_continuous = Cohort(name='Cohort Continuous')
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_1)
+        user_cohort_continuous.add_cohort_filter(cohort_filter_continuous_2)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match="Found cohorts with duplicate names. "
+                      "All pre-defined cohorts need to have distinct names."):
+            ResponsibleAIDashboard(ri, cohort_list=[
+                user_cohort_continuous, user_cohort_continuous])
