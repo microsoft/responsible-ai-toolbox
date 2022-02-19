@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 // import { localization } from "@responsible-ai/localization";
-import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
@@ -42,10 +41,6 @@ export interface IFeatureBarProps {
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 
-export interface IFeatureBarState {
-  plotlyProps: IPlotlyProperty | undefined;
-}
-
 export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
   public componentDidUpdate(prevProps: IFeatureBarProps): void {
     if (
@@ -58,23 +53,6 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
   }
 
   public render(): React.ReactNode {
-    // const plotlyProps = this.buildBarPlotlyProps();
-    // if (plotlyProps) {
-    //   _.set(plotlyProps, "layout.xaxis.range", [-0.5, +this.props.topK - 0.5]);
-    // }
-
-    // if (
-    //   !this.props.unsortedSeries ||
-    //   this.props.unsortedSeries.length === 0 ||
-    //   !this.props.sortArray ||
-    //   this.props.sortArray.length === 0
-    // ) {
-    //   return (
-    //     <div className={featureImportanceBarStyles.noData}>
-    //       <Text variant={"xxLarge"}>{localization.Core.NoData}</Text>
-    //     </div>
-    //   );
-    // }
     return (
       <div
         id="FeatureImportanceBar"
@@ -96,16 +74,18 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
             </div>
           </div>
         </div>
-        <BasicHighChart
-          configOverride={getFeatureImportanceBarOptions(
-            this.props.sortArray,
-            this.props.unsortedX,
-            this.props.unsortedSeries,
-            this.props.topK,
-            this.props.originX,
-            getTheme()
-          )}
-        />
+        <div className={featureImportanceBarStyles.container}>
+          <BasicHighChart
+            configOverride={getFeatureImportanceBarOptions(
+              this.props.sortArray,
+              this.props.unsortedX,
+              this.props.unsortedSeries,
+              this.props.topK,
+              this.props.originX,
+              getTheme()
+            )}
+          />
+        </div>
       </div>
     );
   }

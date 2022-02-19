@@ -37,30 +37,26 @@ export function getFeatureImportanceBarOptions(
   unsortedSeries.forEach((series) => {
     allData.push({
       color: FabricStyles.fabricColorPalette[series.colorIndex],
-      customdata: sortedIndexVector
-        .map((value, index) => {
-          return {
-            HoverText: xOriginText[index],
-            Name: series.name,
-            Yformatted: series.unsortedAggregateY[value].toLocaleString(
-              undefined,
-              {
-                maximumFractionDigits: 3
-              }
-            ),
-            Yvalue: series.unsortedFeatureValues
-              ? series.unsortedFeatureValues[value]
-              : undefined
-          };
-        })
-        .slice(0, topK),
+      customdata: sortedIndexVector.map((value, index) => {
+        return {
+          HoverText: xOriginText[index],
+          Name: series.name,
+          Yformatted: series.unsortedAggregateY[value].toLocaleString(
+            undefined,
+            {
+              maximumFractionDigits: 3
+            }
+          ),
+          Yvalue: series.unsortedFeatureValues
+            ? series.unsortedFeatureValues[value]
+            : undefined
+        };
+      }),
       name: series.name,
       orientation: "v",
-      text: xText.slice(0, topK),
-      x: x.slice(0, topK),
-      y: sortedIndexVector
-        .map((index) => series.unsortedAggregateY[index])
-        .slice(0, topK)
+      text: xText,
+      x,
+      y: sortedIndexVector.map((index) => series.unsortedAggregateY[index])
     });
   });
   const seriesData: SeriesOptionsType[] = allData.map((d: any) => {
@@ -84,7 +80,8 @@ export function getFeatureImportanceBarOptions(
       text: ""
     },
     xAxis: {
-      categories: xText.slice(0, topK)
+      categories: xText,
+      max: topK - 1
     },
     yAxis: {
       min: 0,

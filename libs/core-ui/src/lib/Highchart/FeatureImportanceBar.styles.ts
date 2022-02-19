@@ -13,6 +13,7 @@ export interface IFeatureImportanceBarStyles {
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
   boldText: IStyle;
+  container: IStyle;
 }
 
 export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBarStyles> =
@@ -24,6 +25,9 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       display: "flex",
       flexDirection: "row",
       flexGrow: "1"
+    },
+    container: {
+      width: "1500px"
     },
     noData: {
       flex: "1",
