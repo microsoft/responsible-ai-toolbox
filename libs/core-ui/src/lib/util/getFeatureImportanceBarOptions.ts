@@ -15,7 +15,8 @@ export function getFeatureImportanceBarOptions(
   unsortedSeries: IGlobalSeries[],
   topK: number,
   originX?: string[],
-  theme?: ITheme
+  theme?: ITheme,
+  onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void
 ): IHighchartsConfig {
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
@@ -66,14 +67,30 @@ export function getFeatureImportanceBarOptions(
       dataLabels: {
         color: colorTheme.fontColor
       },
-      name: d.name,
-      type: "column"
+      name: d.name
     };
   });
 
   return {
     chart: {
       type: "column"
+    },
+    plotOptions: {
+      series: {
+        cursor: "pointer",
+        point: {
+          events: {
+            click() {
+              if (onFeatureSelection === undefined) {
+                return;
+              }
+
+              const featureNumber = sortArray[this.x];
+              onFeatureSelection(0, featureNumber);
+            }
+          }
+        }
+      }
     },
     series: seriesData,
     title: {

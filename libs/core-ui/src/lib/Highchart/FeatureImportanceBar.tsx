@@ -82,7 +82,8 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
               this.props.unsortedSeries,
               this.props.topK,
               this.props.originX,
-              getTheme()
+              getTheme(),
+              this.props.onFeatureSelection
             )}
           />
         </div>
