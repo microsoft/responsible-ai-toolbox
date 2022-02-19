@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import json
 import traceback
 from typing import List, Optional
 
@@ -13,7 +12,7 @@ from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 from responsibleai.exceptions import UserConfigValidationException
 
-from ._cohort import Cohort, cohort_filter_json_converter
+from ._cohort import Cohort
 from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .interfaces import WidgetRequestResponseConstants
@@ -43,10 +42,8 @@ class ResponsibleAIDashboardInput:
 
         self._validate_cohort_list(cohort_list)
         # Add cohort_list to dashboard_input
-        self.dashboard_input.cohortData = json.loads(
-            json.dumps(cohort_list,
-                       default=cohort_filter_json_converter)
-        )
+        self.dashboard_input.cohortData = cohort_list
+
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
         self._error_analyzer = analysis.error_analysis._analyzer

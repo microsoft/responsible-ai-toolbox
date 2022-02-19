@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
 import pytest
 
 from raiwidgets import ResponsibleAIDashboard
@@ -8,6 +9,7 @@ from raiwidgets._cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.serialization_utilities import serialize_json_safe
 
 
 class TestResponsibleAIDashboard:
@@ -28,6 +30,14 @@ class TestResponsibleAIDashboard:
         assert isinstance(
             rai_widget.input.dashboard_input.counterfactualData[0],
             CounterfactualData)
+
+        if rai_widget.input.dashboard_input.cohortData is not None:
+            assert isinstance(rai_widget.input.dashboard_input.cohortData[0],
+                              Cohort)
+
+        # Make sure the dashboard input can be serialized
+        json.dumps(rai_widget.input.dashboard_input,
+                   default=serialize_json_safe)
 
     def test_responsibleai_adult(self, tmpdir, create_rai_insights_object):
         ri = create_rai_insights_object
