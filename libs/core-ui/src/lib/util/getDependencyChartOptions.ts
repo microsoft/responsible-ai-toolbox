@@ -14,6 +14,7 @@ export interface IDependenceData {
 export function getDependencyChartOptions(
   data: IDependenceData[],
   xLabels: string[] | undefined,
+  pointColor: string,
   theme?: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
@@ -45,7 +46,7 @@ export function getDependencyChartOptions(
     },
     series: [
       {
-        color: colorTheme.fontColor,
+        color: pointColor,
         data,
         name: "",
         type: "scatter"

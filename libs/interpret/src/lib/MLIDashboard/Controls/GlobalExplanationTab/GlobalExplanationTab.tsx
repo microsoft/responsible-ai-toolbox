@@ -13,6 +13,7 @@ import {
   ModelAssessmentContext,
   FabricStyles,
   LabelWithCallout,
+  FeatureImportanceDependence,
   FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -29,7 +30,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { DependencyHighChart } from "../DependencePlot/DependencyHighChart";
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 
@@ -255,7 +255,7 @@ export class GlobalExplanationTab extends React.PureComponent<
               className={classNames.secondaryChartAndLegend}
               ref={this.depPlot}
             >
-              <DependencyHighChart
+              <FeatureImportanceDependence
                 chartProps={this.state.dependenceProps}
                 cohortIndex={this.state.selectedCohortIndex}
                 cohort={this.props.cohorts[this.state.selectedCohortIndex]}
