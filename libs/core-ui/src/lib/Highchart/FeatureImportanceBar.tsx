@@ -1,17 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
-// import { LoadingSpinner } from "../components/LoadingSpinner";
-// import { FabricStyles } from "../util/FabricStyles";
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";
+import { getFeatureImportanceBoxOptions } from "../util/getFeatureImportanceBoxOptions";
 import { ChartTypes } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
-// import { PartialRequired } from "../util/PartialRequired";
 
 import { BasicHighChart } from "./BasicHighChart";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
@@ -76,15 +73,26 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
         </div>
         <div className={featureImportanceBarStyles.container}>
           <BasicHighChart
-            configOverride={getFeatureImportanceBarOptions(
-              this.props.sortArray,
-              this.props.unsortedX,
-              this.props.unsortedSeries,
-              this.props.topK,
-              this.props.originX,
-              getTheme(),
-              this.props.onFeatureSelection
-            )}
+            configOverride={
+              this.props.chartType === ChartTypes.Bar
+                ? getFeatureImportanceBarOptions(
+                    this.props.sortArray,
+                    this.props.unsortedX,
+                    this.props.unsortedSeries,
+                    this.props.topK,
+                    this.props.originX,
+                    getTheme(),
+                    this.props.onFeatureSelection
+                  )
+                : getFeatureImportanceBoxOptions(
+                    this.props.sortArray,
+                    this.props.unsortedX,
+                    this.props.unsortedSeries,
+                    this.props.topK,
+                    getTheme(),
+                    this.props.onFeatureSelection
+                  )
+            }
           />
         </div>
       </div>

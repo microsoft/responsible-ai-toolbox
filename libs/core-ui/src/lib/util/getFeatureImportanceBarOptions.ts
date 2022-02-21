@@ -84,7 +84,6 @@ export function getFeatureImportanceBarOptions(
               if (onFeatureSelection === undefined) {
                 return;
               }
-
               const featureNumber = sortArray[this.x];
               onFeatureSelection(0, featureNumber);
             }
