@@ -7,7 +7,7 @@ import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/HighchartTypes";
 
 import { FabricStyles } from "./FabricStyles";
-import { groupByFeature } from "./groupByFeature";
+import { getBoxData } from "./getBoxData";
 
 export function getFeatureImportanceBoxOptions(
   sortArray: number[],
@@ -47,27 +47,10 @@ export function getFeatureImportanceBoxOptions(
   const boxGroupData = boxTempData.map((data: any) => {
     return {
       color: data.color,
-      data: groupByFeature(data.y, xText.length),
+      data: getBoxData(data.x, data.y),
       name: data.name
     };
   });
-
-  //   const seriesData: SeriesOptionsType[] = [
-  //     {
-  //       color: "red",
-  //       data: [
-  //         [760, 801, 848, 895, 965],
-  //         [733, 853, 939, 980, 1080],
-  //         [714, 762, 817, 870, 918],
-  //         [724, 802, 806, 871, 950],
-  //         [834, 836, 864, 882, 910]
-  //       ],
-  //       //   dataLabels: {
-  //       //     color: colorTheme.fontColor
-  //       //   },
-  //       name: "111"
-  //     } as unknown as SeriesOptionsType
-  //   ];
 
   return {
     chart: {
@@ -94,6 +77,12 @@ export function getFeatureImportanceBoxOptions(
     xAxis: {
       categories: xText,
       max: topK - 1
+    },
+    yAxis: {
+      min: -1,
+      title: {
+        align: "high"
+      }
     }
   };
 }
