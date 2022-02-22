@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IButtonProps, IconButton } from "@fluentui/react";
 import {
   ConfirmationDialog,
   IConfirmationDialogProps
 } from "@responsible-ai/core-ui";
 import { shallow, ShallowWrapper } from "enzyme";
+import { IButtonProps, IconButton } from "office-ui-fabric-react";
 import React from "react";
 
 import {
