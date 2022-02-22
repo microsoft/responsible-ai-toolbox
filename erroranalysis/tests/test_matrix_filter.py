@@ -6,8 +6,9 @@ import pandas as pd
 import pytest
 from common_utils import (create_adult_census_data,
                           create_binary_classification_dataset,
-                          create_cancer_data, create_housing_data,
-                          create_iris_data, create_kneighbors_classifier,
+                          create_cancer_data, create_diabetes_data,
+                          create_housing_data, create_iris_data,
+                          create_kneighbors_classifier,
                           create_models_classification,
                           create_models_regression, create_simple_titanic_data,
                           create_titanic_pipeline, create_wine_data)
@@ -83,6 +84,24 @@ class TestMatrixFilter(object):
                                      model_task,
                                      quantile_binning=True)
 
+    @pytest.mark.parametrize('metric', [Metrics.MEAN_SQUARED_ERROR,
+                                        Metrics.MEAN_ABSOLUTE_ERROR])
+    @pytest.mark.parametrize('num_bins', [4, 8, 10, 20])
+    def test_matrix_filter_diabetes_quantile_binning(self, num_bins, metric):
+        # this dataset seemed to have unique errors for quantile binning
+        (X_train, X_test, y_train, y_test,
+            feature_names) = create_diabetes_data()
+
+        model_task = ModelTask.REGRESSION
+        matrix_features = ['age']
+        run_error_analyzer_on_models(X_train, y_train, X_test,
+                                     y_test, feature_names,
+                                     model_task,
+                                     matrix_features=matrix_features,
+                                     quantile_binning=True,
+                                     num_bins=num_bins,
+                                     metric=metric)
+
     @pytest.mark.parametrize('string_labels', [True, False])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.PRECISION_SCORE,
@@ -92,8 +111,8 @@ class TestMatrixFilter(object):
     def test_matrix_filter_adult_census_quantile_binning(self,
                                                          string_labels,
                                                          metric):
-        X_train, X_test, y_train, y_test, categorical_features = \
-            create_adult_census_data(string_labels)
+        (X_train, X_test, y_train, y_test,
+            categorical_features) = create_adult_census_data(string_labels)
 
         model_task = ModelTask.CLASSIFICATION
         feature_names = X_test.columns.tolist()
@@ -186,8 +205,8 @@ class TestMatrixFilter(object):
                                      metric=metric)
 
     def test_matrix_filter_cancer(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = \
-            create_cancer_data()
+        (X_train, X_test, y_train, y_test,
+            feature_names, _) = create_cancer_data()
 
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
@@ -197,8 +216,8 @@ class TestMatrixFilter(object):
     def test_matrix_filter_cancer_filters(self):
         # Validate the shift cohort functionality where base
         # cohort was chosen in matrix view
-        X_train, X_test, y_train, y_test, feature_names, _ = \
-            create_cancer_data()
+        (X_train, X_test, y_train, y_test,
+            feature_names, _) = create_cancer_data()
 
         composite_filters = [{'compositeFilters':
                              [{'compositeFilters':
@@ -229,16 +248,16 @@ class TestMatrixFilter(object):
                                      composite_filters=composite_filters)
 
     def test_matrix_filter_binary_classification(self):
-        X_train, y_train, X_test, y_test, _ = \
-            create_binary_classification_dataset()
+        (X_train, y_train, X_test,
+            y_test, _) = create_binary_classification_dataset()
         feature_names = list(X_train.columns)
         model_task = ModelTask.CLASSIFICATION
         run_error_analyzer_on_models(X_train, y_train, X_test,
                                      y_test, feature_names, model_task)
 
     def test_matrix_filter_titanic(self):
-        X_train, X_test, y_train, y_test, numeric, categorical = \
-            create_simple_titanic_data()
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
         feature_names = categorical + numeric
         clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
@@ -288,8 +307,8 @@ class TestMatrixFilter(object):
     def test_matrix_filter_housing_quantile_binning(self):
         # Test quantile binning on CRIM feature in california housing dataset,
         # which errored out due to first category not fitting into bins
-        X_train, X_test, y_train, y_test, feature_names = \
-            create_housing_data(test_size=0.5)
+        (X_train, X_test, y_train, y_test,
+            feature_names) = create_housing_data(test_size=0.5)
 
         model_task = ModelTask.REGRESSION
         matrix_features = ['Population']
