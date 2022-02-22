@@ -1,14 +1,19 @@
 import { configure } from "enzyme";
-import ReactSixteenAdapter from "enzyme-adapter-react-16";
+import ReactSeventeenAdapter from "@wojtekmaj/enzyme-adapter-react-17";
 import "jest-canvas-mock";
-import { initializeIcons } from "office-ui-fabric-react";
+import { initializeIcons } from "@fluentui/react";
 
-// Icons must be loaded from Microsoft domain for compliance
-initializeIcons(
-  "https://static2.sharepointonline.com/files/fabric/assets/icons/"
-);
+initializeIcons();
 
 jest.setTimeout(30000);
+
+// mock moment timezone
+const moment = jest.requireActual("moment-timezone");
+jest.doMock("moment", () => {
+  // Use timezone other than PST and UTC to show independence
+  moment.tz.setDefault("Australia/Sydney");
+  return moment;
+});
 
 if (!window.URL.createObjectURL) {
   window.URL.createObjectURL = () => "";
@@ -21,4 +26,4 @@ beforeEach(() => {
   dateTimeNowSpy.mockReturnValue(0);
 });
 
-configure({ adapter: new ReactSixteenAdapter() });
+configure({ adapter: new ReactSeventeenAdapter() });
