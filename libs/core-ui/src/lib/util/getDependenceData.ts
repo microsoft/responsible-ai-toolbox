@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  IDependenceData,
-  IGenericChartProps,
-  JointDataset
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _, { Dictionary } from "lodash";
+
+import { Cohort } from "../Cohort/Cohort";
+
+import { IDependenceData } from "./getDependencyChartOptions";
+import { IGenericChartProps } from "./IGenericChartProps";
+import { JointDataset } from "./JointDataset";
 
 export function getDependenceData(
   chartProps: IGenericChartProps | undefined,
