@@ -12,6 +12,15 @@ module.exports = {
         statements: 100
       }
   },
+  coverageThreshold: {
+    "libs/model-assessment/src/lib/ModelAssessmentDashboard/Cohort/ProcessPreBuiltCohort.ts":
+      {
+        branches: 69,
+        functions: 100,
+        lines: 90,
+        statements: 90
+      }
+  },
   displayName: "model-assessment",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "html"],
   preset: "../../jest.preset.js",

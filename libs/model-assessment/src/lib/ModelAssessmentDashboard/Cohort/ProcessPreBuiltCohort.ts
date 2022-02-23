@@ -16,7 +16,7 @@ import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps
 export enum CohortColumnNames {
   PredictedY = "Predicted Y",
   TrueY = "True Y",
-  Index = "index",
+  Index = "Index",
   ClassificationOutcome = "Classification outcome",
   RegressionError = "Error"
 }
@@ -97,6 +97,7 @@ export function processPreBuiltCohort(
       console.log(errorCohortEntry);
     }
   }
+  console.log(errorCohortList);
   return errorCohortList;
 }
 
@@ -131,7 +132,6 @@ function translatePreBuiltCohortFilterForTarget(
       column: filterColumnName,
       method: preBuiltCohortFilter.method
     } as IFilter;
-
     return filter;
   }
   const filter: IFilter = {
