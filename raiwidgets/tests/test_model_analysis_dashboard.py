@@ -2,12 +2,8 @@
 # Licensed under the MIT License.
 
 import pytest
-import shap
-import sklearn
-from sklearn.model_selection import train_test_split
 
 from raiwidgets import ModelAnalysisDashboard
-from responsibleai import RAIInsights
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
 
