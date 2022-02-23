@@ -25,6 +25,7 @@ export function getFeatureImportanceBoxOptions(
   };
   const xText = sortArray.map((i) => unsortedX[i]);
   const boxTempData: any = [];
+  let yAxisMin = Infinity;
 
   unsortedSeries.forEach((series) => {
     const base: number[] = [];
@@ -37,6 +38,8 @@ export function getFeatureImportanceBoxOptions(
     const y = base.concat(
       ...sortArray.map((index) => series.unsortedIndividualY?.[index] || [])
     );
+    const curMin = Math.min(...y);
+    yAxisMin = Math.min(yAxisMin, curMin);
     boxTempData.push({
       color: FabricStyles.fabricColorPalette[series.colorIndex],
       name: series.name,
@@ -51,7 +54,6 @@ export function getFeatureImportanceBoxOptions(
       name: data.name
     };
   });
-
   return {
     chart: {
       backgroundColor: colorTheme.fontColor,
