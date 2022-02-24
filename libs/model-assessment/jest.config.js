@@ -4,21 +4,19 @@
 module.exports = {
   coverageDirectory: "../../coverage/libs/model-assessment",
   coverageThreshold: {
-    "libs/model-assessment/src/lib/ModelAssessmentDashboard/Controls/DashboardSettingDeleteButton.tsx":
-      {
-        branches: 100,
-        functions: 100,
-        lines: 100,
-        statements: 100
-      }
-  },
-  coverageThreshold: {
     "libs/model-assessment/src/lib/ModelAssessmentDashboard/Cohort/ProcessPreBuiltCohort.ts":
       {
         branches: 69,
         functions: 100,
         lines: 90,
         statements: 90
+      },
+    "libs/model-assessment/src/lib/ModelAssessmentDashboard/Controls/DashboardSettingDeleteButton.tsx":
+      {
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        statements: 100
       }
   },
   displayName: "model-assessment",
