@@ -60,7 +60,6 @@ export function processPreBuiltCohort(
             break;
           }
           case CohortColumnNames.Index: {
-            console.log(preBuiltCohortFilter);
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
               column: JointDataset.IndexLabel,
@@ -70,7 +69,6 @@ export function processPreBuiltCohort(
             break;
           }
           case CohortColumnNames.RegressionError: {
-            console.log(preBuiltCohortFilter);
             const filter: IFilter = {
               arg: preBuiltCohortFilter.arg,
               column: JointDataset.RegressionError,
@@ -94,7 +92,7 @@ export function processPreBuiltCohort(
         jointDataset
       );
       errorCohortList.push(errorCohortEntry);
-      console.log(errorCohortEntry);
+      //console.log(errorCohortEntry);
     }
   }
   console.log(errorCohortList);

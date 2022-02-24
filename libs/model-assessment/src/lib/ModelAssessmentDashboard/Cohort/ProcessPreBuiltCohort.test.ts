@@ -209,47 +209,99 @@ function getJointDatasetClassification(): JointDataset {
 }
 
 describe("Translate user defined cohorts for classification", () => {
-  const jointDataset = getJointDatasetClassification();
+  const mockJointDataset = getJointDatasetClassification();
   it("should be able to translate index cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataIndex]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(adultCohortDataIndex.name);
+    expect(errorCohortList[0].cohort.filters.length).toBe(
+      adultCohortDataIndex.cohort_filter_list.length
+    );
+    expect(errorCohortList[0].cohort.filters[0].column).toBe(
+      adultCohortDataIndex.cohort_filter_list[0].column
+    );
+    expect(errorCohortList[0].cohort.filters[0].method).toBe(
+      adultCohortDataIndex.cohort_filter_list[0].method
+    );
+    expect(errorCohortList[0].cohort.filters[0].arg).toEqual(
+      adultCohortDataIndex.cohort_filter_list[0].arg
+    );
   });
   it("should be able to translate dataset continuous cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataContinuous]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(adultCohortDataContinuous.name);
   });
   it("should be able to translate dataset categorical cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataCategorical]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
   });
   it("should be able to translate classification outcome cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataClassificationOutcome]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(
+      adultCohortDataClassificationOutcome.name
+    );
+    expect(errorCohortList[0].cohort.filters.length).toBe(
+      adultCohortDataClassificationOutcome.cohort_filter_list.length
+    );
+    expect(errorCohortList[0].cohort.filters[0].column).toBe(
+      JointDataset.ClassificationError
+    );
+    expect(errorCohortList[0].cohort.filters[0].method).toBe(
+      adultCohortDataClassificationOutcome.cohort_filter_list[0].method
+    );
+    console.log(errorCohortList[0].cohort.filters[0].arg);
+    expect(errorCohortList[0].cohort.filters[0].arg).toEqual([0, 1, 2, 3]);
   });
   it("should be able to translate predicted y cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataPredictedY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(adultCohortDataPredictedY.name);
+    expect(errorCohortList[0].cohort.filters.length).toBe(
+      adultCohortDataPredictedY.cohort_filter_list.length
+    );
+    expect(errorCohortList[0].cohort.filters[0].column).toBe(
+      JointDataset.PredictedYLabel
+    );
+    expect(errorCohortList[0].cohort.filters[0].method).toBe(
+      adultCohortDataPredictedY.cohort_filter_list[0].method
+    );
+    console.log(errorCohortList[0].cohort.filters[0].arg);
+    expect(errorCohortList[0].cohort.filters[0].arg).toEqual([0, 1]);
   });
   it("should be able to translate true y cohort", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataTrueY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, jointDataset);
-    expect(errorCohortList.length === 1);
+    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(adultCohortDataTrueY.name);
+    expect(errorCohortList[0].cohort.filters.length).toBe(
+      adultCohortDataTrueY.cohort_filter_list.length
+    );
+    expect(errorCohortList[0].cohort.filters[0].column).toBe(
+      JointDataset.TrueYLabel
+    );
+    expect(errorCohortList[0].cohort.filters[0].method).toBe(
+      adultCohortDataTrueY.cohort_filter_list[0].method
+    );
+    console.log(errorCohortList[0].cohort.filters[0].arg);
+    expect(errorCohortList[0].cohort.filters[0].arg).toEqual([0, 1]);
   });
 });

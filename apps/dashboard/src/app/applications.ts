@@ -65,7 +65,6 @@ import {
   wineData as wineDataMAD,
   wineErrorAnalysisData,
   wineWithFairnessModelExplanationData,
-  wineCohortDataCategorical,
   wineCohortDataContinuous,
   wineCohortDataPredictedY,
   wineCohortDataTrueY,
@@ -248,7 +247,6 @@ export const applications: IApplications = <const>{
           wineCohortDataIndex,
           wineCohortDataPredictedY,
           wineCohortDataTrueY,
-          wineCohortDataCategorical,
           wineCohortDataContinuous
         ],
         dataset: wineDataMAD,
