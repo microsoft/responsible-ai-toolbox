@@ -54,7 +54,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   public constructor(props: IModelAssessmentDashboardProps) {
     super(props);
-    console.log(props);
     if (this.props.locale) {
       localization.setLanguage(this.props.locale);
     }
@@ -381,7 +380,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     ) {
       return;
     }
-    console.log(manuallyCreatedCohort);
     const newErrorCohort = new ErrorCohort(
       manuallyCreatedCohort,
       this.state.jointDataset,
@@ -404,7 +402,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     if (editIndex === -1) {
       return;
     }
-    console.log(editCohort);
     const newErrorCohort = new ErrorCohort(
       editCohort,
       this.state.jointDataset,

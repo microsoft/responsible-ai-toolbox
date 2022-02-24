@@ -22,7 +22,6 @@ export class ErrorCohort {
     public isTemporary: boolean = false,
     cohortStats: MetricCohortStats | undefined = undefined
   ) {
-    console.log(cohort);
     this.cohort = cohort;
     this.jointDataset = jointDataset;
     this.metricValue = 0;

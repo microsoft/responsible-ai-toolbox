@@ -28,7 +28,6 @@ export function processPreBuiltCohort(
   const errorCohortList: ErrorCohort[] = [];
   if (props.cohortData !== undefined) {
     for (const preBuiltCohort of props.cohortData) {
-      console.log(preBuiltCohort);
       const filterList: IFilter[] = [];
       for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
         switch (preBuiltCohortFilter.column) {
@@ -92,10 +91,8 @@ export function processPreBuiltCohort(
         jointDataset
       );
       errorCohortList.push(errorCohortEntry);
-      //console.log(errorCohortEntry);
     }
   }
-  console.log(errorCohortList);
   return errorCohortList;
 }
 
@@ -123,7 +120,6 @@ function translatePreBuiltCohortFilterForTarget(
     }
 
     index.sort((a, b) => a - b);
-    console.log(index);
 
     const filter: IFilter = {
       arg: index,
@@ -162,7 +158,6 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
     }
   }
   index.sort((a, b) => a - b);
-  console.log(index);
   const filter: IFilter = {
     arg: index,
     column: JointDataset.ClassificationError,
@@ -181,12 +176,9 @@ function translatePreBuiltCohortFilterForDataset(
     userDatasetFeatureName =
       jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
     if (userDatasetFeatureName === preBuiltCohortFilter.column) {
-      console.log(userDatasetFeatureName);
       break;
     }
   }
-  console.log(jointDatasetFeatureName);
-  console.log(userDatasetFeatureName);
 
   if (
     jointDatasetFeatureName === undefined ||
@@ -211,7 +203,6 @@ function translatePreBuiltCohortFilterForDataset(
           }
         }
         index.sort((a, b) => a - b);
-        console.log(index);
         const filter: IFilter = {
           arg: index,
           column: jointDatasetFeatureName,

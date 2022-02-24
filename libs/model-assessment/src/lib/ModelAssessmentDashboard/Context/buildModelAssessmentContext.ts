@@ -57,9 +57,6 @@ export function buildInitialModelAssessmentContext(
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
-  console.log(props);
-  console.log(typeof jointDataset.metaDict);
-  console.log(jointDataset.metaDict);
 
   const defaultErrorCohort = new ErrorCohort(
     new Cohort(
@@ -75,13 +72,6 @@ export function buildInitialModelAssessmentContext(
     jointDataset
   );
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
-
-  console.log(errorCohortList);
-  if (errorCohortList.length > 0) {
-    console.log("cohort list has translated cohorts");
-  } else {
-    console.log("cohort list is empty");
-  }
   const cohorts = errorCohortList;
 
   const weightVectorLabels = {

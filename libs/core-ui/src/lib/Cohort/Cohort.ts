@@ -34,10 +34,6 @@ export class Cohort {
     public filters: IFilter[] = [],
     public compositeFilters: ICompositeFilter[] = []
   ) {
-    console.log(name);
-    console.log(jointDataset);
-    console.log(filters);
-    console.log(compositeFilters);
     this.cohortIndex = Cohort._cohortIndex;
     this.name = name;
     Cohort._cohortIndex += 1;
