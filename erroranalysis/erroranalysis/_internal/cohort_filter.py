@@ -10,6 +10,7 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                CohortFilterMethods,
                                                CohortFilterOps, ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
+from erroranalysis._internal.utils import is_spark
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
@@ -32,12 +33,13 @@ def filter_from_cohort(analyzer, filters, composite_filters):
     true_y = analyzer.true_y
     categorical_features = analyzer.categorical_features
     categories = analyzer.categories
-    if not isinstance(df, pd.DataFrame):
-        df = pd.DataFrame(df, columns=feature_names)
-    else:
-        # Note: we make a non-deep copy of the input DataFrame since
-        # we will add columns below
-        df = df.copy()
+    if not is_spark(df):
+        if not isinstance(df, pd.DataFrame):
+            df = pd.DataFrame(df, columns=feature_names)
+        else:
+            # Note: we make a non-deep copy of the input DataFrame since
+            # we will add columns below
+            df = df.copy()
     add_filter_cols(analyzer, df, filters, true_y)
     df = apply_recursive_filter(df, filters, categorical_features, categories)
     df = apply_recursive_filter(df, composite_filters,
@@ -81,11 +83,15 @@ def add_filter_cols(analyzer, df, filters, true_y):
     """
     has_classification_outcome = filters_has_classification_outcome(analyzer,
                                                                     filters)
-    df[TRUE_Y] = true_y
+    if isinstance(true_y, str):
+        df.rename(columns={true_y: TRUE_Y})
+    else:
+        df[TRUE_Y] = true_y
     is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         df[PRED_Y] = analyzer.pred_y
-    df[ROW_INDEX] = np.arange(0, len(true_y))
+    if not is_spark(df):
+        df[ROW_INDEX] = np.arange(0, len(true_y))
     if has_classification_outcome:
         if PRED_Y in df:
             pred_y = df[PRED_Y]
