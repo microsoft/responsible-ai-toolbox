@@ -81,7 +81,7 @@ export function getFeatureImportanceBoxOptions(
       max: topK - 1
     },
     yAxis: {
-      min: -1,
+      min: yAxisMin,
       title: {
         align: "high"
       }
