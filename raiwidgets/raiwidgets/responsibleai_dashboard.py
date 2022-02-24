@@ -24,10 +24,15 @@ class ResponsibleAIDashboard(Dashboard):
     :param locale: The language in which user wants to load and access the
         ResponsibleAI Dashboard. The default language is english ("en").
     :type locale: str
+    :param cohort_list:
+        List of cohorts defined by the user for the dashboard.
+    :type cohort_list: List[Cohort]
     """
     def __init__(self, analysis: RAIInsights,
-                 public_ip=None, port=None, locale=None):
-        self.input = ResponsibleAIDashboardInput(analysis)
+                 public_ip=None, port=None, locale=None,
+                 cohort_list=None):
+        self.input = ResponsibleAIDashboardInput(
+            analysis, cohort_list=cohort_list)
 
         super(ResponsibleAIDashboard, self).__init__(
             dashboard_type="ResponsibleAI",
