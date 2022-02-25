@@ -32,7 +32,7 @@ class TestResponsibleAIDashboard:
             rai_widget.input.dashboard_input.counterfactualData[0],
             CounterfactualData)
 
-        if rai_widget.input.dashboard_input.cohortData is not None:
+        if len(rai_widget.input.dashboard_input.cohortData) != 0:
             assert isinstance(rai_widget.input.dashboard_input.cohortData[0],
                               Cohort)
 
