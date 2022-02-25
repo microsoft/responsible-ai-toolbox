@@ -76,7 +76,7 @@ export class FeatureImportanceBar extends React.PureComponent<
     ) {
       return (
         <div className={featureImportanceBarStyles.noData}>
-          <Text variant={"xxLarge"}>{localization.Core.NoData}</Text>
+          <Text variant={"xxLarge"}>{localization.Core.NoData.Title}</Text>
         </div>
       );
     }
