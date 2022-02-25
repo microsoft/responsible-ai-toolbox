@@ -36,8 +36,8 @@ export function describeGlobalExplanationChart<
         );
       }
     });
-    it.skip(`should have ${props.dataShape.featureNames.length} elements`, () => {
-      expect(props.chart.Elements).length(props.dataShape.featureNames.length);
+    it(`should have box elements`, () => {
+      expect(props.chart.Elements.length).greaterThan(0);
     });
     if (!props.dataShape.noLocalImportance) {
       describe.skip("Chart Settings", () => {
