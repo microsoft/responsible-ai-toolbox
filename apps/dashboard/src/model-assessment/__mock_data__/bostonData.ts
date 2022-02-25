@@ -3454,12 +3454,12 @@ export const bostonErrorAnalysisData: IErrorAnalysisData = {
 export const bostonCohortDataContinuous: IPreBuiltCohort = {
   cohort_filter_list: [
     {
-      arg: [30.5],
+      arg: [5],
       column: "AGE",
-      method: FilterMethods.LessThan
+      method: FilterMethods.GreaterThan
     },
     {
-      arg: [5.5],
+      arg: [1],
       column: "CRIM",
       method: FilterMethods.GreaterThan
     }
