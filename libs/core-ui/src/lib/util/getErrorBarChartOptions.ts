@@ -7,6 +7,7 @@ import { localization } from "@responsible-ai/localization";
 import { IHighchartsConfig } from "../Highchart/HighchartTypes";
 import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 
+import { FabricStyles } from "./FabricStyles";
 import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export function getErrorBarChartOptions(
@@ -26,7 +27,7 @@ export function getErrorBarChartOptions(
     },
     series: [
       {
-        color: colorTheme.fontColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: data.map((d) => d.point),
         showInLegend: false,
         tooltip: {
@@ -35,7 +36,7 @@ export function getErrorBarChartOptions(
         type: "spline"
       },
       {
-        color: colorTheme.fontColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: data.map((d) => [d.ci_lower, d.ci_upper]),
         tooltip: {
           pointFormat:

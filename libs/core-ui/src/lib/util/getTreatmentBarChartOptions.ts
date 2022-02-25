@@ -7,6 +7,8 @@ import { localization } from "@responsible-ai/localization";
 import { IHighchartsConfig } from "../Highchart/HighchartTypes";
 import { ICausalPolicyGains } from "../Interfaces/ICausalAnalysisData";
 
+import { FabricStyles } from "./FabricStyles";
+
 export function getTreatmentBarChartOptions(
   data: ICausalPolicyGains,
   title: string,
@@ -38,7 +40,7 @@ export function getTreatmentBarChartOptions(
     },
     series: [
       {
-        color: colorTheme.axisColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: xData,
         dataLabels: {
           color: colorTheme.fontColor
