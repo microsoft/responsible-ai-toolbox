@@ -33,6 +33,17 @@ const adultCohortDataContinuous: IPreBuiltCohort = {
   name: "Cohort Continuous"
 };
 
+const adultCohortDataContinuousWithIncludesFilter: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [65],
+      column: "age",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Continuous with includes filter"
+};
+
 const adultCohortDataCategorical: IPreBuiltCohort = {
   cohort_filter_list: [
     {
@@ -42,6 +53,17 @@ const adultCohortDataCategorical: IPreBuiltCohort = {
     }
   ],
   name: "Cohort Categorical"
+};
+
+const adultCohortDataInvalidFeatureName: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [10],
+      column: "InvalidFeatureName",
+      method: FilterMethods.LessThan
+    }
+  ],
+  name: "Cohort Invalid Feature Name"
 };
 
 const adultCohortDataIndex: IPreBuiltCohort = {
@@ -214,7 +236,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataIndex]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(adultCohortDataIndex.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
@@ -234,7 +260,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataContinuous]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(adultCohortDataContinuous.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
@@ -260,7 +290,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataCategorical]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       adultCohortDataCategorical.name
@@ -280,7 +314,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataClassificationOutcome]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       adultCohortDataClassificationOutcome.name
@@ -300,7 +338,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataPredictedY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(adultCohortDataPredictedY.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
@@ -318,7 +360,11 @@ describe("Translate user defined cohorts for classification", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [adultCohortDataTrueY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(adultCohortDataTrueY.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
@@ -331,5 +377,37 @@ describe("Translate user defined cohorts for classification", () => {
       adultCohortDataTrueY.cohort_filter_list[0].method
     );
     expect(errorCohortList[0].cohort.filters[0].arg).toEqual([0, 1]);
+  });
+  it("should not be able to translate cohort which doesn't a valid feature name", () => {
+    const mockProp: IModelAssessmentDashboardProps = {
+      cohortData: [adultCohortDataInvalidFeatureName]
+    } as IModelAssessmentDashboardProps;
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(1);
+    expect(errorStrings[0]).toBe("Feature name not found in the dataset");
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(
+      adultCohortDataInvalidFeatureName.name
+    );
+    expect(errorCohortList[0].cohort.filters.length).toBe(0);
+  });
+  it("should not be able to translate continuous cohort with includes filter", () => {
+    const mockProp: IModelAssessmentDashboardProps = {
+      cohortData: [adultCohortDataContinuousWithIncludesFilter]
+    } as IModelAssessmentDashboardProps;
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(1);
+    expect(errorStrings[0]).toBe("Feature is not categorical");
+    expect(errorCohortList.length).toBe(1);
+    expect(errorCohortList[0].cohort.name).toBe(
+      adultCohortDataContinuousWithIncludesFilter.name
+    );
+    expect(errorCohortList[0].cohort.filters.length).toBe(0);
   });
 });

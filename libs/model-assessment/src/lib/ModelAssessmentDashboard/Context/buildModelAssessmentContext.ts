@@ -67,10 +67,7 @@ export function buildInitialModelAssessmentContext(
     jointDataset
   );
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
-  const preBuiltErrorCohortList: ErrorCohort[] = processPreBuiltCohort(
-    props,
-    jointDataset
-  );
+  const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 

@@ -24,7 +24,8 @@ export enum CohortColumnNames {
 export function processPreBuiltCohort(
   props: IModelAssessmentDashboardProps,
   jointDataset: JointDataset
-): ErrorCohort[] {
+): [ErrorCohort[], string[]] {
+  let errorStrings: string[] = [];
   const errorCohortList: ErrorCohort[] = [];
   if (props.cohortData !== undefined) {
     for (const preBuiltCohort of props.cohortData) {
@@ -77,11 +78,16 @@ export function processPreBuiltCohort(
             break;
           }
           default: {
-            const filter = translatePreBuiltCohortFilterForDataset(
+            let [filter, errorString] = translatePreBuiltCohortFilterForDataset(
               preBuiltCohortFilter,
               jointDataset
             );
-            filterList.push(filter);
+            if (filter !== undefined) {
+              filterList.push(filter);
+            } else if (errorString !== undefined) {
+              errorStrings.push(errorString);
+            }
+
             break;
           }
         }
@@ -93,7 +99,7 @@ export function processPreBuiltCohort(
       errorCohortList.push(errorCohortEntry);
     }
   }
-  return errorCohortList;
+  return [errorCohortList, errorStrings];
 }
 
 function translatePreBuiltCohortFilterForTarget(
@@ -169,27 +175,32 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
 function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
-): IFilter {
+): [IFilter | undefined, string | undefined] {
   let jointDatasetFeatureName = undefined;
   let userDatasetFeatureName = undefined;
   for (jointDatasetFeatureName in jointDataset.metaDict) {
-    userDatasetFeatureName =
-      jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
-    if (userDatasetFeatureName === preBuiltCohortFilter.column) {
+    if (
+      jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel ===
+      preBuiltCohortFilter.column
+    ) {
+      userDatasetFeatureName =
+        jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
       break;
     }
   }
-
+  console.log(preBuiltCohortFilter);
+  console.log(jointDatasetFeatureName);
+  console.log(userDatasetFeatureName);
   if (
     jointDatasetFeatureName === undefined ||
     userDatasetFeatureName === undefined
   ) {
-    throw new Error("Feature name not found in the dataset");
+    return [undefined, "Feature name not found in the dataset"];
   }
 
   if (preBuiltCohortFilter.method === FilterMethods.Includes) {
     if (!jointDataset.metaDict[jointDatasetFeatureName].isCategorical) {
-      throw new Error("Feature is not categorical");
+      return [undefined, "Feature is not categorical"];
     } else {
       const index: number[] = [];
       const categorcialValues =
@@ -208,7 +219,7 @@ function translatePreBuiltCohortFilterForDataset(
           column: jointDatasetFeatureName,
           method: preBuiltCohortFilter.method
         } as IFilter;
-        return filter;
+        return [filter, undefined];
       }
     }
   }
@@ -218,5 +229,5 @@ function translatePreBuiltCohortFilterForDataset(
     column: jointDatasetFeatureName,
     method: preBuiltCohortFilter.method
   } as IFilter;
-  return filter;
+  return [filter, undefined];
 }

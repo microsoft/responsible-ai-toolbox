@@ -173,7 +173,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataIndex]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(bostonCohortDataIndex.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
@@ -193,7 +197,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataContinuous]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       bostonCohortDataContinuous.name
@@ -221,7 +229,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataCategorical]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       bostonCohortDataCategorical.name
@@ -241,7 +253,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataRegressionError]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       bostonCohortDataRegressionError.name
@@ -263,7 +279,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataPredictedY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       bostonCohortDataPredictedY.name
@@ -285,7 +305,11 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataTrueY]
     } as IModelAssessmentDashboardProps;
-    const errorCohortList = processPreBuiltCohort(mockProp, mockJointDataset);
+    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+      mockProp,
+      mockJointDataset
+    );
+    expect(errorStrings.length).toBe(0);
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(bostonCohortDataTrueY.name);
     expect(errorCohortList[0].cohort.filters.length).toBe(
