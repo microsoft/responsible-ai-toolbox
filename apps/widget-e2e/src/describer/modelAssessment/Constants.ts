@@ -9,7 +9,7 @@ export enum Locators {
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
   IFIDropdownSelectedOption = "div[class^='featureImportanceChartAndLegend']",
   IFIScrollableTable = "div.tabularDataView div.ms-ScrollablePane div.ms-ScrollablePane--contentContainer",
-  IFINumberOfBars = "#FeatureImportanceBar svg .plot .points .point path",
+  IFINumberOfBars = "#FeatureImportanceBar svg g.highcharts-series-group rect",
   IFIYAxisValue = '#FeatureImportanceBar div[class^="rotatedVerticalBox-"]',
   IFIXAxisValue = '#FeatureImportanceBar g[class^="cartesianlayer"] g[class^="xtick"]',
   ICEPlot = '#subPlotChoice label:contains("ICE")', // ICE - Individual Conditional Expectation
