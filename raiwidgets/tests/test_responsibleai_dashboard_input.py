@@ -8,8 +8,9 @@ from raiwidgets.responsibleai_dashboard_input import \
 
 
 class TestResponsibleAIDashboardInput:
-    def test_model_analysis_adult(self, create_rai_insights_object):
-        ri = create_rai_insights_object
+    def test_model_analysis_adult(
+            self, create_rai_insights_object_classification):
+        ri = create_rai_insights_object_classification
         knn = ri.model
         test_data = ri.test
 
