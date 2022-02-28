@@ -173,7 +173,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataIndex]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
@@ -197,7 +197,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataContinuous]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
@@ -229,7 +229,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataCategorical]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
@@ -253,7 +253,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataRegressionError]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
@@ -279,7 +279,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataPredictedY]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
@@ -305,7 +305,7 @@ describe("Translate user defined cohorts for regression", () => {
     const mockProp: IModelAssessmentDashboardProps = {
       cohortData: [bostonCohortDataTrueY]
     } as IModelAssessmentDashboardProps;
-    let [errorCohortList, errorStrings] = processPreBuiltCohort(
+    const [errorCohortList, errorStrings] = processPreBuiltCohort(
       mockProp,
       mockJointDataset
     );
