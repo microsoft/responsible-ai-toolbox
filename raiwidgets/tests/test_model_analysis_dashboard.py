@@ -27,8 +27,9 @@ class TestModelAnalysisDashboard:
             rai_widget.input.dashboard_input.counterfactualData[0],
             CounterfactualData)
 
-    def test_model_analysis_adult(self, tmpdir, create_rai_insights_object):
-        ri = create_rai_insights_object
+    def test_model_analysis_adult(self, tmpdir,
+                                  create_rai_insights_object_classification):
+        ri = create_rai_insights_object_classification
         with pytest.warns(
             DeprecationWarning,
             match="MODULE-DEPRECATION-WARNING: "
