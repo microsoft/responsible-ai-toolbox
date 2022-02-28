@@ -154,6 +154,7 @@ function buildModelMetadata(
 export function buildInitialExplanationContext(
   props: IExplanationDashboardProps
 ): INewExplanationDashboardState {
+  console.log("spurious log");
   const modelMetadata = buildModelMetadata(props);
   const validationCheck = new ValidateProperties(props, modelMetadata);
 

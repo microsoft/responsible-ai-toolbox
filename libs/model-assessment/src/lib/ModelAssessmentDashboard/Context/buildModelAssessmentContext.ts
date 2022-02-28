@@ -33,6 +33,7 @@ export function buildInitialModelAssessmentContext(
 ): IModelAssessmentDashboardState {
   const modelMetadata = buildModelMetadata(props);
 
+  console.log("spurious log");
   let localExplanations:
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance

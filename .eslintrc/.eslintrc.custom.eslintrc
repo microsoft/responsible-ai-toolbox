@@ -204,6 +204,7 @@
     "no-script-url": "error",
     "no-self-assign": "error",
     "no-self-compare": "error",
+    "no-console": 1,
     "no-sequences": "error",
     "no-shadow-restricted-names": "error",
     "no-sparse-arrays": "error",
