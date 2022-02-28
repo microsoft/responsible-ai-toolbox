@@ -41,8 +41,11 @@ class ResponsibleAIDashboardInput:
         self.dashboard_input = analysis.get_data()
 
         self._validate_cohort_list(cohort_list)
-        # Add cohort_list to dashboard_input
-        self.dashboard_input.cohortData = cohort_list
+        if cohort_list is not None:
+            # Add cohort_list to dashboard_input
+            self.dashboard_input.cohortData = cohort_list
+        else:
+            self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         self._row_length = len(self.dashboard_input.dataset.features)
