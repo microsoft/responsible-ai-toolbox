@@ -84,6 +84,10 @@
     "ShiftCohort": {
       "title": "Shift Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
     }
   },
   "Counterfactuals": {

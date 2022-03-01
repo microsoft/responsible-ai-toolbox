@@ -6,6 +6,7 @@ import {
   FilterMethods,
   IPreBuiltCohort
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import {
@@ -387,7 +388,9 @@ describe("Translate user defined cohorts for classification", () => {
       mockJointDataset
     );
     expect(errorStrings.length).toBe(1);
-    expect(errorStrings[0]).toBe("Feature name not found in the dataset");
+    expect(errorStrings[0]).toBe(
+      localization.Core.PreBuiltCohort.featureNameNotFound
+    );
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       adultCohortDataInvalidFeatureName.name
@@ -403,7 +406,9 @@ describe("Translate user defined cohorts for classification", () => {
       mockJointDataset
     );
     expect(errorStrings.length).toBe(1);
-    expect(errorStrings[0]).toBe("Feature is not categorical");
+    expect(errorStrings[0]).toBe(
+      localization.Core.PreBuiltCohort.notACategoricalFeature
+    );
     expect(errorCohortList.length).toBe(1);
     expect(errorCohortList[0].cohort.name).toBe(
       adultCohortDataContinuousWithIncludesFilter.name

@@ -10,6 +10,7 @@ import {
   Cohort,
   IPreBuiltFilter
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 
@@ -27,7 +28,7 @@ export function processPreBuiltCohort(
 ): [ErrorCohort[], string[]] {
   const errorStrings: string[] = [];
   const errorCohortList: ErrorCohort[] = [];
-  if (props.cohortData !== undefined) {
+  if (props.cohortData) {
     for (const preBuiltCohort of props.cohortData) {
       const filterList: IFilter[] = [];
       for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
@@ -148,7 +149,7 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
   jointDataset: JointDataset
 ): IFilter {
   const index: number[] = [];
-  if (JointDataset.ClassificationError in jointDataset.metaDict) {
+  if (jointDataset.metaDict[JointDataset.ClassificationError]) {
     const allowedCalssificationErrorValues =
       jointDataset.metaDict[JointDataset.ClassificationError]
         .sortedCategoricalValues;
@@ -194,12 +195,15 @@ function translatePreBuiltCohortFilterForDataset(
     jointDatasetFeatureName === undefined ||
     userDatasetFeatureName === undefined
   ) {
-    return [undefined, "Feature name not found in the dataset"];
+    return [undefined, localization.Core.PreBuiltCohort.featureNameNotFound];
   }
 
   if (preBuiltCohortFilter.method === FilterMethods.Includes) {
     if (!jointDataset.metaDict[jointDatasetFeatureName].isCategorical) {
-      return [undefined, "Feature is not categorical"];
+      return [
+        undefined,
+        localization.Core.PreBuiltCohort.notACategoricalFeature
+      ];
     }
     const index: number[] = [];
     const categorcialValues =
