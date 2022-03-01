@@ -14,10 +14,10 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
   describe("Sub bar chart", () => {
     before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(15);
+      props.chart.clickNthPoint(14);
     });
     after(() => {
-      props.chart.clickNthPoint(15);
+      props.chart.clickNthPoint(14);
     });
     it("should have right number of bars", () => {
       cy.get(
