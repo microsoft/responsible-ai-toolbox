@@ -14,7 +14,7 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
   describe("Sub bar chart", () => {
     before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
     });
     after(() => {
       props.chart.clickNthPoint(0);
