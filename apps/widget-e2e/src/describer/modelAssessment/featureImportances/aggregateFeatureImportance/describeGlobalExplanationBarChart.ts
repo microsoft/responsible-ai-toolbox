@@ -33,7 +33,7 @@ export function describeGlobalExplanationBarChart(
 export function describeGlobalExplanationBarChartExplicitValues(
   dataShape: IModelAssessmentData
 ): void {
-  describe("Bar chart - explicit values", () => {
+  describe.skip("Bar chart - explicit values", () => {
     before(() => {
       getMenu("Aggregate feature importance").click();
     });
