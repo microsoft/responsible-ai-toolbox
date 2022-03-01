@@ -11,7 +11,7 @@ export enum Locators {
   IFIScrollableTable = "div.tabularDataView div.ms-ScrollablePane div.ms-ScrollablePane--contentContainer",
   IFINumberOfBars = "#FeatureImportanceBar svg g.highcharts-series-group rect",
   IFIYAxisValue = '#FeatureImportanceBar div[class^="rotatedVerticalBox-"]',
-  IFIXAxisValue = '#FeatureImportanceBar g[class^="cartesianlayer"] g[class^="xtick"]',
+  IFIXAxisValue = "#FeatureImportanceBar g.highcharts-xaxis-labels text",
   ICEPlot = '#subPlotChoice label:contains("ICE")', // ICE - Individual Conditional Expectation
   ICENoOfPoints = "#subPlotContainer svg g[class^='plot'] .points .point",
   IFITopFeaturesText = "div[class^='featureImportanceControls'] span[class^='sliderLabel']",
