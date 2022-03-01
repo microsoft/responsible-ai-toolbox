@@ -17,7 +17,7 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
       props.chart.clickNthPoint(1);
     });
     after(() => {
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
     });
     it("should have right number of bars", () => {
       cy.get("#FeatureImportanceBar svg g.highcharts-series-group rect").should(
