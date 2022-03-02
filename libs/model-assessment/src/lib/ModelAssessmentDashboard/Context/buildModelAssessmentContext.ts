@@ -21,6 +21,7 @@ import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
+import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
   IModelAssessmentDashboardState,
@@ -56,17 +57,20 @@ export function buildInitialModelAssessmentContext(
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
-  // consider taking filters in as param arg for programmatic users
-  const cohorts = [
-    new ErrorCohort(
-      new Cohort(
-        localization.ErrorAnalysis.Cohort.defaultLabel,
-        jointDataset,
-        []
-      ),
-      jointDataset
-    )
-  ];
+
+  const defaultErrorCohort = new ErrorCohort(
+    new Cohort(
+      localization.ErrorAnalysis.Cohort.defaultLabel,
+      jointDataset,
+      []
+    ),
+    jointDataset
+  );
+  let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
+  const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
+  errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
+  const cohorts = errorCohortList;
+
   const weightVectorLabels = {
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
