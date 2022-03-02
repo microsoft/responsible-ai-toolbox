@@ -5,7 +5,9 @@ import {
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
-  Metrics
+  Metrics,
+  IPreBuiltCohort,
+  FilterMethods
 } from "@responsible-ai/core-ui";
 
 export const wineData: IDataset = {
@@ -3761,4 +3763,64 @@ export const wineErrorAnalysisData: IErrorAnalysisData = {
   metric: Metrics.AccuracyScore,
   minChildSamples: 20,
   numLeaves: 11
+};
+
+export const wineCohortDataContinuous: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [12.09],
+      column: "alcohol",
+      method: FilterMethods.LessThan
+    },
+    {
+      arg: [2.5],
+      column: "ash",
+      method: FilterMethods.GreaterThan
+    }
+  ],
+  name: "Cohort Continuous"
+};
+
+export const wineCohortDataCategorical: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [80, 81, 82],
+      column: "magnesium",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Categorical"
+};
+
+export const wineCohortDataIndex: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [54],
+      column: "Index",
+      method: FilterMethods.LessThan
+    }
+  ],
+  name: "Cohort Index"
+};
+
+export const wineCohortDataPredictedY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["Class 0", "Class 1", "Class 2"],
+      column: "Predicted Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Predicted Y"
+};
+
+export const wineCohortDataTrueY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["Class 0", "Class 1", "Class 2"],
+      column: "True Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort True Y"
 };
