@@ -8,7 +8,7 @@ import { ScatterChart } from "../../../util/ScatterChart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-import { describeSubBarChart } from "./describeSubBarChart";
+// import { describeSubBarChart } from "./describeSubBarChart";
 
 export function describeWhatIfCommonFunctionalities(
   dataShape: IModelAssessmentData
@@ -59,11 +59,11 @@ export function describeWhatIfCommonFunctionalities(
       });
     });
 
-    if (
-      !dataShape.featureImportanceData?.noLocalImportance &&
-      !dataShape.featureImportanceData?.noFeatureImportance
-    ) {
-      describeSubBarChart(dataShape);
-    }
+    // if (
+    //   !dataShape.featureImportanceData?.noLocalImportance &&
+    //   !dataShape.featureImportanceData?.noFeatureImportance
+    // ) {
+    //   describeSubBarChart(dataShape);
+    // }
   });
 }
