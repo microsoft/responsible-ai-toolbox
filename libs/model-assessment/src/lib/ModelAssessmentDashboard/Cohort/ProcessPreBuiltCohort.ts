@@ -65,7 +65,7 @@ export function processPreBuiltCohort(
               arg: preBuiltCohortFilter.arg,
               column: JointDataset.IndexLabel,
               method: preBuiltCohortFilter.method
-            } as IFilter;
+            };
             filterList.push(filter);
             break;
           }
@@ -74,7 +74,7 @@ export function processPreBuiltCohort(
               arg: preBuiltCohortFilter.arg,
               column: JointDataset.RegressionError,
               method: preBuiltCohortFilter.method
-            } as IFilter;
+            };
             filterList.push(filter);
             break;
           }
@@ -133,14 +133,14 @@ function translatePreBuiltCohortFilterForTarget(
       arg: index,
       column: filterColumnName,
       method: preBuiltCohortFilter.method
-    } as IFilter;
+    };
     return filter;
   }
   const filter: IFilter = {
     arg: preBuiltCohortFilter.arg,
     column: filterColumnName,
     method: preBuiltCohortFilter.method
-  } as IFilter;
+  };
   return filter;
 }
 
@@ -150,14 +150,14 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
 ): IFilter {
   const index: number[] = [];
   if (jointDataset.metaDict[JointDataset.ClassificationError]) {
-    const allowedCalssificationErrorValues =
+    const allowedClassificationErrorValues =
       jointDataset.metaDict[JointDataset.ClassificationError]
         .sortedCategoricalValues;
 
-    if (allowedCalssificationErrorValues !== undefined) {
+    if (allowedClassificationErrorValues !== undefined) {
       for (const classificationError of preBuiltCohortFilter.arg) {
         const indexclassificationError =
-          allowedCalssificationErrorValues.indexOf(classificationError);
+          allowedClassificationErrorValues.indexOf(classificationError);
 
         if (indexclassificationError !== -1) {
           index.push(indexclassificationError);
@@ -170,7 +170,7 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
     arg: index,
     column: JointDataset.ClassificationError,
     method: preBuiltCohortFilter.method
-  } as IFilter;
+  };
   return filter;
 }
 
@@ -221,7 +221,7 @@ function translatePreBuiltCohortFilterForDataset(
         arg: index,
         column: jointDatasetFeatureName,
         method: preBuiltCohortFilter.method
-      } as IFilter;
+      };
       return [filter, undefined];
     }
   }
@@ -230,6 +230,6 @@ function translatePreBuiltCohortFilterForDataset(
     arg: preBuiltCohortFilter.arg,
     column: jointDatasetFeatureName,
     method: preBuiltCohortFilter.method
-  } as IFilter;
+  };
   return [filter, undefined];
 }
