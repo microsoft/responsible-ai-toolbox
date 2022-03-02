@@ -35,6 +35,9 @@ export abstract class Chart<TElement extends IChartElement> {
       )
       .get();
   }
+  protected getHighChartBarElements(selector: string): HTMLElement[] {
+    return cy.$$(`${this.container} svg > ${selector}`).get();
+  }
   private getSvgWidth(): number | undefined {
     return cy.$$(`${this.container} svg`).width();
   }

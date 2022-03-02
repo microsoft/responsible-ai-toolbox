@@ -14,6 +14,10 @@ export interface IBox extends IChartElement {
   readonly mean?: number;
 }
 export class BoxChart extends Chart<IBox> {
+  public get BoxElements(): HTMLElement[] {
+    const boxElements = this.getBoxElements();
+    return boxElements;
+  }
   public get Elements(): IBox[] {
     const boxElements = this.getBoxElements();
     const meanElements = this.getMeanElements();
@@ -184,11 +188,13 @@ export class BoxChart extends Chart<IBox> {
   };
 
   private getBoxElements(): HTMLElement[] {
-    return this.getHtmlElements(".trace.boxes > path.box");
+    return this.getHtmlElements("g.highcharts-point");
   }
 
   private getMeanElements(): HTMLElement[] {
-    return this.getHtmlElements(".trace.boxes > path.mean");
+    return this.getHtmlElements(
+      "g.highcharts-point path.highcharts-boxplot-box"
+    );
   }
 
   private getPointElements(): HTMLElement[] {
