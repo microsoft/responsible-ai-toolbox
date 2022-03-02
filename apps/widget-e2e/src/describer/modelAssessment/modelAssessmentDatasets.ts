@@ -53,6 +53,7 @@ const modelAssessmentDatasets = {
       "capital-loss"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Probability : <=50K",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
@@ -109,6 +110,14 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: [
+        "All data",
+        "Cohort Index",
+        "Cohort Predicted Y",
+        "Cohort True Y",
+        "Cohort Regression Error",
+        "Cohort Continuous"
+      ],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
@@ -170,6 +179,7 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
@@ -259,6 +269,7 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Probability : Less than median",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
@@ -397,6 +408,7 @@ const modelAssessmentDatasets = {
     ],
     isMulticlass: true,
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Predicted Y",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
