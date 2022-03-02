@@ -62,7 +62,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       !dataShape.featureImportanceData?.noLocalImportance &&
       !dataShape.featureImportanceData?.noFeatureImportance
     ) {
-      describeSubBarChart(dataShape);
+      describeSubBarChart.skip(dataShape);
     }
     if (!dataShape.featureImportanceData?.noPredict) {
       describeSubLineChart(dataShape);
