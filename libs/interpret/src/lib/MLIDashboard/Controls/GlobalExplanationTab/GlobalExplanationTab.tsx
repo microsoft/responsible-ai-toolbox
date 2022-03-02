@@ -13,7 +13,8 @@ import {
   ModelAssessmentContext,
   FabricStyles,
   LabelWithCallout,
-  FeatureImportanceDependence
+  FeatureImportanceDependence,
+  FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -30,7 +31,6 @@ import {
 import React from "react";
 
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
