@@ -15,6 +15,9 @@ lightgbm==2.3.0
 
 fairlearn==0.6.0
 
+# Jupyter dependency that fails with python 3.6
+pywinpty==2.0.2; python_version <= '3.6' and sys_platform == 'windows'
+
 # Required for notebook tests
 nbformat
 papermill
