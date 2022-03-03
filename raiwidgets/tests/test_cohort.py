@@ -6,9 +6,9 @@ import json
 import pandas as pd
 import pytest
 
-from raiwidgets._cohort import (ClassificationOutcomes, Cohort, CohortFilter,
-                                CohortFilterMethods,
-                                cohort_filter_json_converter)
+from raiwidgets.cohort import (ClassificationOutcomes, Cohort, CohortFilter,
+                               CohortFilterMethods,
+                               cohort_filter_json_converter)
 from responsibleai.exceptions import UserConfigValidationException
 
 
