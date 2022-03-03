@@ -45,7 +45,7 @@ jobs:
         name: build pywinpty from conda
         shell: bash -l {0}
         run: |
-          conda install -c conda-forge pywinpty
+          conda install -c conda-forge pywinpty>=1.1.0
 
       - name: Setup tools
         shell: bash -l {0}
