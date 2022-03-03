@@ -41,6 +41,12 @@ jobs:
         run: |
           conda install --yes --quiet pytorch torchvision captum -c pytorch
 
+      - if: ${{ matrix.operatingSystem == 'windows-latest' }}
+        name: build pywinpty from conda
+        shell: bash -l {0}
+        run: |
+          conda install -c conda-forge pywinpty
+
       - name: Setup tools
         shell: bash -l {0}
         run: |
