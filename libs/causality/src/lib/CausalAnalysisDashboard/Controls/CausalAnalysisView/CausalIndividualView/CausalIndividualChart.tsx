@@ -13,15 +13,11 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  rowErrorSize
+  rowErrorSize,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import {
   getTheme,
@@ -36,6 +32,7 @@ import React from "react";
 import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
 import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
+import { getIndividualChartOptions } from "./getIndividualChartOptions";
 
 export interface ICausalIndividualChartProps {
   onDataClick: (data: number | undefined) => void;
@@ -161,11 +158,16 @@ export class CausalIndividualChart extends React.PureComponent<
               </MissingParametersPlaceholder>
             )}
             {canRenderChart && (
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme()}
-                onClickHandler={this.selectPointFromChart}
-              />
+              <div id="highchartContainer">
+                <BasicHighChart
+                  configOverride={getIndividualChartOptions(
+                    plotlyProps,
+                    this.selectPointFromChart
+                  )}
+                  theme={getTheme()}
+                  id="CausalAggregateChart"
+                />
+              </div>
             )}
           </div>
           <div className={classNames.horizontalAxisWithPadding}>
@@ -249,8 +251,7 @@ export class CausalIndividualChart extends React.PureComponent<
   };
 
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
+    const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
   };
