@@ -12,7 +12,7 @@ from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 from responsibleai.exceptions import UserConfigValidationException
 
-from ._cohort import Cohort
+from .cohort import Cohort
 from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .interfaces import WidgetRequestResponseConstants
