@@ -118,14 +118,9 @@ function translatePreBuiltCohortFilterForTarget(
     jointDataset.getModelType() === ModelTypes.Binary
   ) {
     const modelClasses = jointDataset.getModelClasses();
-    const index: number[] = [];
-    for (const modelClass of preBuiltCohortFilter.arg) {
-      const indexModelClass = modelClasses.indexOf(modelClass);
-
-      if (indexModelClass !== -1) {
-        index.push(indexModelClass);
-      }
-    }
+    const index = preBuiltCohortFilter.arg
+      .map((modelClass) => modelClasses.indexOf(modelClass))
+      .filter((index) => index !== -1);
 
     index.sort((a, b) => a - b);
 
@@ -148,21 +143,18 @@ function translatePreBuiltCohortFilterForClassificationOutcome(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): IFilter {
-  const index: number[] = [];
+  let index: number[] = [];
   if (jointDataset.metaDict[JointDataset.ClassificationError]) {
     const allowedClassificationErrorValues =
       jointDataset.metaDict[JointDataset.ClassificationError]
         .sortedCategoricalValues;
 
     if (allowedClassificationErrorValues !== undefined) {
-      for (const classificationError of preBuiltCohortFilter.arg) {
-        const indexclassificationError =
-          allowedClassificationErrorValues.indexOf(classificationError);
-
-        if (indexclassificationError !== -1) {
-          index.push(indexclassificationError);
-        }
-      }
+      index = preBuiltCohortFilter.arg
+        .map((classificationError) =>
+          allowedClassificationErrorValues.indexOf(classificationError)
+        )
+        .filter((index) => index !== -1);
     }
   }
   index.sort((a, b) => a - b);
@@ -205,17 +197,13 @@ function translatePreBuiltCohortFilterForDataset(
         localization.Core.PreBuiltCohort.notACategoricalFeature
       ];
     }
-    const index: number[] = [];
+    let index: number[] = [];
     const categorcialValues =
       jointDataset.metaDict[jointDatasetFeatureName].sortedCategoricalValues;
     if (categorcialValues !== undefined) {
-      for (const categoricalValue of preBuiltCohortFilter.arg) {
-        const indexCategoricalValue =
-          categorcialValues.indexOf(categoricalValue);
-        if (indexCategoricalValue !== -1) {
-          index.push(indexCategoricalValue);
-        }
-      }
+      index = preBuiltCohortFilter.arg
+        .map((categoricalValue) => categorcialValues.indexOf(categoricalValue))
+        .filter((index) => index !== -1);
       index.sort((a, b) => a - b);
       const filter: IFilter = {
         arg: index,
