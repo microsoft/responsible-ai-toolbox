@@ -41,10 +41,7 @@ export function getIndividualChartOptions(
     plotOptions: {
       scatter: {
         tooltip: {
-          pointFormat: template.replace(
-            new RegExp("%{customdata", "g"),
-            "{point.customdata"
-          )
+          pointFormat: template
         }
       },
       series: {

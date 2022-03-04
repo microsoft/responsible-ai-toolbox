@@ -4,7 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 
 import { FabricStyles } from "./FabricStyles";
