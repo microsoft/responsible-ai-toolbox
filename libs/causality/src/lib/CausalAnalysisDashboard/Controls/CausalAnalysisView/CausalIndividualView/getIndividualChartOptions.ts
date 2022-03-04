@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// import { IHighchartsConfig } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getIndividualChartOptions(
@@ -8,15 +9,19 @@ export function getIndividualChartOptions(
   onClickHandler?: (data: any) => void
 ): any {
   let template = "";
-  const data = plotlyProperty.data.map((series) => {
+  const data = plotlyProperty.data.map((series, seriesIndex) => {
     const data: any = [];
     series.x?.forEach((p, index) => {
       const temp = {
         customdata: series?.customdata?.[index],
         marker: {
-          fillColor: series?.marker?.color?.[index],
-          radius: 4,
-          symbol: series?.marker?.symbol?.[index]
+          fillColor:
+            seriesIndex === 0 ? series?.marker?.color?.[index] : undefined,
+          lineColor: seriesIndex === 0 ? undefined : "red",
+          lineWidth: seriesIndex === 0 ? undefined : 6,
+          radius: seriesIndex === 0 ? 4 : 8,
+          symbol:
+            seriesIndex === 0 ? series?.marker?.symbol?.[index] : "diamond"
         },
         x: p,
         y: series?.y?.[index]
@@ -30,7 +35,8 @@ export function getIndividualChartOptions(
   const series = data.map((d) => {
     return {
       data: d,
-      showInLegend: false
+      showInLegend: false,
+      type: "scatter"
     };
   });
   return {
