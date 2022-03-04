@@ -6,8 +6,6 @@ import {
   ISingleClassLocalFeatureImportance,
   JointDataset,
   Cohort,
-  WeightVectors,
-  ModelTypes,
   IExplanationModelMetadata,
   isThreeDimArray,
   ErrorCohort,
@@ -71,21 +69,6 @@ export function buildInitialModelAssessmentContext(
   errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
   const cohorts = errorCohortList;
 
-  const weightVectorLabels = {
-    [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
-  };
-  const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
-    weightVectorOptions.push(WeightVectors.AbsAvg);
-  }
-  modelMetadata.classNames.forEach((name, index) => {
-    weightVectorLabels[index] = localization.formatString(
-      localization.Interpret.WhatIfTab.classLabel,
-      name
-    );
-    weightVectorOptions.push(index);
-  });
-
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
     props,
@@ -97,7 +80,6 @@ export function buildInitialModelAssessmentContext(
       name: item.text as string
     };
   });
-  const importances = props.errorAnalysisData?.[0]?.importances ?? [];
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
@@ -108,26 +90,15 @@ export function buildInitialModelAssessmentContext(
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
     globalImportanceIntercept: globalProps.globalImportanceIntercept,
-    importances,
     isGlobalImportanceDerivedFromLocal:
       globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
-    mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
-    mapShiftVisible: false,
     modelChartConfig: undefined,
     modelMetadata,
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
-    selectedFeatures: props.dataset.feature_names,
-    selectedWeightVector:
-      modelMetadata.modelType === ModelTypes.Multiclass
-        ? WeightVectors.AbsAvg
-        : 0,
     selectedWhatIfIndex: undefined,
-    sortVector: undefined,
-    weightVectorLabels,
-    weightVectorOptions,
-    whatIfChartConfig: undefined
+    sortVector: undefined
   };
 }
 
