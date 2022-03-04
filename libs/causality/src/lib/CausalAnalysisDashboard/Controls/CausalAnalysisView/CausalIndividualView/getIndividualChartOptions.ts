@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { IHighchartsConfig } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getIndividualChartOptions(
