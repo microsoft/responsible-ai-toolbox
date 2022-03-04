@@ -42,19 +42,35 @@ import {
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
   adultCensusCausalErrorAnalysisData,
-  adultCounterfactualData
+  adultCounterfactualData,
+  adultCohortDataContinuous,
+  adultCohortDataIndex,
+  adultCohortDataCategorical,
+  adultCohortDataClassificationOutcome,
+  adultCohortDataPredictedY,
+  adultCohortDataTrueY
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
   bostonCensusCausalAnalysisData,
   bostonCounterfactualData,
   bostonData as bostonDataMAD,
   bostonErrorAnalysisData,
-  bostonWithFairnessModelExplanationData
+  bostonWithFairnessModelExplanationData,
+  bostonCohortDataContinuous,
+  bostonCohortDataCategorical,
+  bostonCohortDataIndex,
+  bostonCohortDataPredictedY,
+  bostonCohortDataRegressionError,
+  bostonCohortDataTrueY
 } from "../model-assessment/__mock_data__/bostonData";
 import {
   wineData as wineDataMAD,
   wineErrorAnalysisData,
-  wineWithFairnessModelExplanationData
+  wineWithFairnessModelExplanationData,
+  wineCohortDataContinuous,
+  wineCohortDataPredictedY,
+  wineCohortDataTrueY,
+  wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
 export interface IInterpretDataSet {
@@ -182,6 +198,14 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        cohortData: [
+          adultCohortDataContinuous,
+          adultCohortDataIndex,
+          adultCohortDataCategorical,
+          adultCohortDataTrueY,
+          adultCohortDataPredictedY,
+          adultCohortDataClassificationOutcome
+        ],
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisData: [adultCensusCausalErrorAnalysisData],
@@ -208,6 +232,14 @@ export const applications: IApplications = <const>{
       bostonData: {
         causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
+        cohortData: [
+          bostonCohortDataTrueY,
+          bostonCohortDataCategorical,
+          bostonCohortDataContinuous,
+          bostonCohortDataIndex,
+          bostonCohortDataRegressionError,
+          bostonCohortDataPredictedY
+        ],
         counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
@@ -215,6 +247,12 @@ export const applications: IApplications = <const>{
       } as IModelAssessmentDataSet,
       wineData: {
         classDimension: 3,
+        cohortData: [
+          wineCohortDataIndex,
+          wineCohortDataPredictedY,
+          wineCohortDataTrueY,
+          wineCohortDataContinuous
+        ],
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]

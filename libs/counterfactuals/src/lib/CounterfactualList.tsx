@@ -51,6 +51,11 @@ export interface ICounterfactualListProps {
     isString: boolean,
     newValue?: string | number
   ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
+  ): void;
 }
 
 interface ICounterfactualListState {
@@ -270,8 +275,9 @@ export class CounterfactualList extends React.Component<
     return columns;
   }
 
-  private updateDropdownColValue = (
+  private updateComboBoxColValue = (
     key: string | number,
+    options: IComboBoxOption[],
     _event: React.FormEvent<IComboBox>,
     option?: IComboBoxOption
   ): void => {
@@ -279,10 +285,17 @@ export class CounterfactualList extends React.Component<
     const keyIndex =
       this.props.data?.feature_names_including_target.indexOf(id);
     if (option?.text) {
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, option.text);
+      const optionIndex = options.findIndex(
+        (feature) => feature.key === option.text
+      );
+      this.props.setCustomRowPropertyComboBox(
+        `Data${keyIndex}`,
+        optionIndex,
+        option.text
+      );
       this.setState((prevState) => {
         prevState.data[id] = option.text;
-        return { data: prevState.data };
+        return { data: { ...prevState.data } };
       });
     }
   };
@@ -298,7 +311,7 @@ export class CounterfactualList extends React.Component<
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
-      return { data: prevState.data };
+      return { data: { ...prevState.data } };
     });
   };
 
@@ -343,7 +356,17 @@ export class CounterfactualList extends React.Component<
               allowFreeform
               selectedKey={`${this.state.data[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
-              onChange={this.updateDropdownColValue.bind(this, column.key)}
+              onChange={(
+                _event: React.FormEvent<IComboBox>,
+                option?: IComboBoxOption
+              ) =>
+                this.updateComboBoxColValue(
+                  column.key,
+                  dropdownOption.data.categoricalOptions,
+                  _event,
+                  option
+                )
+              }
             />
           </Stack.Item>
         </Stack>

@@ -26,7 +26,7 @@ const modelAssessmentDatasets = {
     },
     featureImportanceData: {
       datapoint: 500,
-      dropdownRowName: "Row 4",
+      dropdownRowName: "Row 34",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "workclass",

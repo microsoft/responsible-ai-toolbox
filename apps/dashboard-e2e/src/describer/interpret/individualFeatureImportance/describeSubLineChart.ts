@@ -12,12 +12,12 @@ export function describeSubLineChart(dataShape: IInterpretData): void {
   describe("Sub line chart", () => {
     before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
 
       cy.get('#subPlotChoice label:contains("ICE")').click();
     });
     after(() => {
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
     });
     it("should have more than one point", () => {
       cy.get("#subPlotContainer svg g[class^='plot'] .points .point")

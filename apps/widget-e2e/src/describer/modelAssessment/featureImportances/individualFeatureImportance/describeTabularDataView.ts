@@ -7,7 +7,7 @@ import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 import { regExForNumbersWithBrackets } from "../../modelAssessmentDatasets";
 
-import { describeSubBarChart } from "./describeSubBarChart";
+// import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
 
 export function describeTabularDataView(dataShape: IModelAssessmentData): void {
@@ -58,12 +58,12 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
       });
     });
 
-    if (
-      !dataShape.featureImportanceData?.noLocalImportance &&
-      !dataShape.featureImportanceData?.noFeatureImportance
-    ) {
-      describeSubBarChart(dataShape);
-    }
+    // if (
+    //   !dataShape.featureImportanceData?.noLocalImportance &&
+    //   !dataShape.featureImportanceData?.noFeatureImportance
+    // ) {
+    //   describeSubBarChart(dataShape);
+    // }
     if (!dataShape.featureImportanceData?.noPredict) {
       describeSubLineChart(dataShape);
     }

@@ -41,6 +41,11 @@ export interface ICounterfactualPanelProps {
     isString: boolean,
     newValue?: string
   ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
+  ): void;
 }
 interface ICounterfactualState {
   filterText?: string;
@@ -84,6 +89,9 @@ export class CounterfactualPanel extends React.Component<
               data={this.props.data}
               temporaryPoint={this.props.temporaryPoint}
               setCustomRowProperty={this.props.setCustomRowProperty}
+              setCustomRowPropertyComboBox={
+                this.props.setCustomRowPropertyComboBox
+              }
               sortFeatures={this.state.sortFeatures}
             />
           </Stack.Item>

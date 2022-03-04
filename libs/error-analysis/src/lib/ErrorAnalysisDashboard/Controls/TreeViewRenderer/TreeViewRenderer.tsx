@@ -12,7 +12,8 @@ import {
   MetricCohortStats,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
-  IErrorAnalysisTreeNode
+  IErrorAnalysisTreeNode,
+  IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
@@ -80,7 +81,10 @@ export class TreeViewRenderer extends React.PureComponent<
   private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  public constructor(props: ITreeViewRendererProps) {
+  public constructor(
+    props: ITreeViewRendererProps,
+    context: IModelAssessmentContext
+  ) {
     super(props);
     if (
       this.props.selectedCohort !== this.props.baseCohort &&
@@ -88,7 +92,7 @@ export class TreeViewRenderer extends React.PureComponent<
     ) {
       this.state = TreeViewRenderer.savedState;
     } else {
-      this.state = createInitialTreeViewState(this.context.errorAnalysisData);
+      this.state = createInitialTreeViewState(context.errorAnalysisData);
     }
     TreeViewRenderer.saveStateOnUnmount = true;
   }

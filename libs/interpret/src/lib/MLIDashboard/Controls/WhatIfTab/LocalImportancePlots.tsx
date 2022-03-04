@@ -9,7 +9,8 @@ import {
   ModelExplanationUtils,
   ChartTypes,
   MissingParametersPlaceholder,
-  FabricStyles
+  FabricStyles,
+  FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -31,7 +32,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 
