@@ -17,9 +17,10 @@ export function getIndividualChartOptions(
         marker: {
           fillColor:
             seriesIndex === 0 ? series?.marker?.color?.[index] : undefined,
-          lineColor: seriesIndex === 0 ? undefined : "red",
-          lineWidth: seriesIndex === 0 ? undefined : 6,
-          radius: seriesIndex === 0 ? 4 : 8,
+          lineColor:
+            seriesIndex === 0 ? undefined : series?.marker?.line?.color,
+          lineWidth: seriesIndex === 0 ? undefined : 3,
+          radius: seriesIndex === 0 ? 4 : 6,
           symbol:
             seriesIndex === 0 ? series?.marker?.symbol?.[index] : "diamond"
         },
@@ -35,8 +36,7 @@ export function getIndividualChartOptions(
   const series = data.map((d) => {
     return {
       data: d,
-      showInLegend: false,
-      type: "scatter"
+      showInLegend: false
     };
   });
   return {

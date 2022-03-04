@@ -134,7 +134,7 @@ export class CausalIndividualChart extends React.PureComponent<
               onCancel={this.setXOpen.bind(this, false)}
             />
           )}
-          <div className={classNames.chartWithVertical}>
+          <Stack className={classNames.chartWithVertical}>
             <div className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
                 <DefaultButton
@@ -158,17 +158,19 @@ export class CausalIndividualChart extends React.PureComponent<
               </MissingParametersPlaceholder>
             )}
             {canRenderChart && (
-              <BasicHighChart
-                configOverride={getIndividualChartOptions(
-                  plotlyProps,
-                  this.selectPointFromChart
-                )}
-                theme={getTheme()}
-                id="CausalAggregateChart"
-              />
+              <div className={classNames.highchartContainer}>
+                <BasicHighChart
+                  configOverride={getIndividualChartOptions(
+                    plotlyProps,
+                    this.selectPointFromChart
+                  )}
+                  theme={getTheme()}
+                  id="CausalAggregateChart"
+                />
+              </div>
             )}
-          </div>
-          <div className={classNames.horizontalAxisWithPadding}>
+          </Stack>
+          <Stack className={classNames.horizontalAxisWithPadding}>
             <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <DefaultButton
@@ -185,7 +187,7 @@ export class CausalIndividualChart extends React.PureComponent<
                 }
               />
             </div>
-          </div>
+          </Stack>
         </div>
         <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
           <ComboBox
