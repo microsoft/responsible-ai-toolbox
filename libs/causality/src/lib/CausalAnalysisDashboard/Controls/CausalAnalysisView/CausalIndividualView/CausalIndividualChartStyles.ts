@@ -72,6 +72,7 @@ export interface ICausalIndividualChartStyles {
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
+  highchartContainer: IStyle;
 }
 
 export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndividualChartStyles> =
@@ -198,6 +199,9 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
       helperText: {
         paddingLeft: "15px",
         paddingRight: "120px"
+      },
+      highchartContainer: {
+        width: "1100px"
       },
       horizontalAxis: {
         flex: 1,

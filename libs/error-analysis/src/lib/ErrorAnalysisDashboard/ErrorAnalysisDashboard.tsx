@@ -328,8 +328,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
-      weightVectorOptions,
-      whatIfChartConfig: undefined
+      weightVectorOptions
     };
   }
 
