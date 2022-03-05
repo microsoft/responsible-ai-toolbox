@@ -5,7 +5,7 @@ import { ITheme } from "@fluentui/react";
 import { SeriesOptionsType } from "highcharts";
 
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
 import { FabricStyles } from "./FabricStyles";
 
