@@ -40,7 +40,8 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
       },
       header: {
         fontSize: 14,
-        fontWeight: "600"
+        fontWeight: "600",
+        paddingTop: "70px"
       },
       individualTable: {
         width: "70%"

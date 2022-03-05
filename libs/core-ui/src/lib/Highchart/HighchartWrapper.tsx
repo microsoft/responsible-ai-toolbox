@@ -9,7 +9,8 @@ import * as React from "react";
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";
 import { getHighchartsTheme } from "./getHighchartsTheme";
 import { HighchartReact } from "./HighchartReact";
-import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
+import { HighchartsModuleNames } from "./HighchartTypes";
+import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IHighchartWrapperProps {
   chartOptions?: IHighchartsConfig;
