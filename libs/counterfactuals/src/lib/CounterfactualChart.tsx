@@ -327,7 +327,7 @@ export class CounterfactualChart extends React.PureComponent<
                   styles={FabricStyles.smallDropdownStyle}
                 />
                 <div className={classNames.legendLabel}>
-                  <b>{`${localization.Counterfactuals.currentClass}: `}</b>
+                  <b>{`${this.getTargetIdentifier()}: `}</b>
                   {this.getCurrentLabel()}
                 </div>
                 <PrimaryButton
@@ -389,6 +389,13 @@ export class CounterfactualChart extends React.PureComponent<
       );
     }
     return this.props.data.desired_class || "";
+  }
+
+  private getTargetIdentifier(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return localization.Counterfactuals.currentRange;
+    }
+    return localization.Counterfactuals.currentClass;
   }
 
   private buildRowOptions(cohortIndex: number): void {
