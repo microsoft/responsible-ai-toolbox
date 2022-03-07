@@ -74,6 +74,3 @@ docs/build/*
 */.mypy_cache/*
 
 notebooks/responsibleaitoolbox-dashboard/*.py
-
-package.json
-package-lock.json
