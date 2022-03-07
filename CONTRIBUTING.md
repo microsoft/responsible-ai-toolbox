@@ -67,7 +67,7 @@ Follow this part only when your branch has become stale and would like to pull t
 1. First, add and commit your changes if you have any.
 2. Run `git clean -fdx` to remove all untracked files. Note that this will remove all untracked files including node modules, but it ensures that you have a working build.
 3. Fetch the upstream repo changes with `git fetch upstream`.
-4. Merge the changes from `upstream/main` into your branch with `git merge upstream/main`. Fix any merge conflicts that may occur.
+4. Merge the changes from upstream/main into your branch with `git merge upstream/main`. Fix any merge conflicts that may occur.
 5. Run `yarn install` to install the dependencies.
 6. Feel free to push your changes and latest changes to your remote branch with `git push`.
 7. Continue iterating.
