@@ -53,10 +53,10 @@ export class CausalIndividualView extends React.PureComponent<
         <Stack.Item>
           <CausalIndividualChart onDataClick={this.handleOnClick} />
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className={styles.header}>
           <Stack horizontal={false}>
             <Stack.Item>
-              <Text variant={"medium"} className={styles.header}>
+              <Text variant={"medium"}>
                 {localization.CausalAnalysis.IndividualView.directIndividual}
               </Text>
             </Stack.Item>
