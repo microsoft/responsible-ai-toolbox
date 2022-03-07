@@ -180,7 +180,6 @@ jobs:
           path: ${{ matrix.package }}
 
       - name: Publish responsibleai package to Test PyPI
-        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -190,7 +189,6 @@ jobs:
           packages_dir: ${{steps.download.outputs.download-path}}
 
       - name: Publish responsibleai package to Prod PyPI
-        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -199,7 +197,6 @@ jobs:
           packages_dir: ${{steps.download.outputs.download-path}}
 
       - name: Publish raiwidgets package to Test PyPI
-        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
@@ -209,7 +206,6 @@ jobs:
           packages_dir: ${{steps.download.outputs.download-path}}
 
       - name: Publish raiwidgets package to Prod PyPI
-        shell: bash -l {0}
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
         uses: pypa/gh-action-pypi-publish@master
         with:

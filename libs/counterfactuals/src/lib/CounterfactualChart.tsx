@@ -203,6 +203,7 @@ export class CounterfactualChart extends React.PureComponent<
               closePanel={this.togglePanel}
               saveAsPoint={this.saveAsPoint}
               setCustomRowProperty={this.setCustomRowProperty}
+              setCustomRowPropertyComboBox={this.setCustomRowPropertyComboBox}
               temporaryPoint={this.temporaryPoint}
               isPanelOpen={this.state.isPanelOpen}
               data={this.context.counterfactualData}
@@ -843,6 +844,24 @@ export class CounterfactualChart extends React.PureComponent<
         this.fetchData(editingData);
       }
     }
+  };
+
+  private setCustomRowPropertyComboBox = (
+    key: string | number,
+    index?: number,
+    value?: string
+  ): void => {
+    if (!this.temporaryPoint || (!value && !index)) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    if (index !== undefined) {
+      // User selected/de-selected an existing option
+      editingData[key] = index;
+    }
+
+    this.forceUpdate();
+    this.fetchData(editingData);
   };
 
   private disableCounterfactualPanel = (): boolean => {

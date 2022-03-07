@@ -3,7 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
 export interface IDependenceData {
   x: number;
@@ -14,6 +14,7 @@ export interface IDependenceData {
 export function getDependencyChartOptions(
   data: IDependenceData[],
   xLabels: string[] | undefined,
+  pointColor: string,
   theme?: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
@@ -24,16 +25,12 @@ export function getDependencyChartOptions(
   };
   return {
     chart: {
-      animation: false,
-      backgroundColor: colorTheme.backgroundColor,
       type: "scatter",
       zoomType: "xy"
     },
-    legend: {},
     plotOptions: {
       scatter: {
         marker: {
-          radius: 2,
           states: {
             hover: {
               enabled: true,
@@ -49,34 +46,14 @@ export function getDependencyChartOptions(
     },
     series: [
       {
-        color: colorTheme.fontColor,
+        color: pointColor,
         data,
         name: "",
         type: "scatter"
       }
     ],
-    subtitle: {},
-    title: { text: "" },
     xAxis: {
-      categories: xLabels,
-      labels: {
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      title: {
-        text: ""
-      }
-    },
-    yAxis: {
-      labels: {
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      title: {
-        text: ""
-      }
+      categories: xLabels
     }
   };
 }

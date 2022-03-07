@@ -14,13 +14,13 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
   describe("Sub bar chart", () => {
     before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
     });
     after(() => {
-      props.chart.clickNthPoint(0);
+      props.chart.clickNthPoint(1);
     });
     it("should have right number of bars", () => {
-      cy.get("#FeatureImportanceBar svg .plot .points .point path").should(
+      cy.get("#FeatureImportanceBar svg g.highcharts-series-group rect").should(
         "have.length",
         props.dataShape.featureNames.length
       );
@@ -32,9 +32,7 @@ export function describeSubBarChart(dataShape: IInterpretData): void {
       );
     });
     it("should have right number of x axis labels", () => {
-      cy.get(
-        '#FeatureImportanceBar g[class^="cartesianlayer"] g[class^="xtick"]'
-      )
+      cy.get("#FeatureImportanceBar g.highcharts-xaxis-labels text")
         .its("length")
         .should("be", props.dataShape.featureNames.length);
     });
