@@ -13,15 +13,11 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  rowErrorSize
+  rowErrorSize,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import {
   getTheme,
@@ -36,6 +32,7 @@ import React from "react";
 import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
 import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
+import { getIndividualChartOptions } from "./getIndividualChartOptions";
 
 export interface ICausalIndividualChartProps {
   onDataClick: (data: number | undefined) => void;
@@ -137,7 +134,7 @@ export class CausalIndividualChart extends React.PureComponent<
               onCancel={this.setXOpen.bind(this, false)}
             />
           )}
-          <div className={classNames.chartWithVertical}>
+          <Stack className={classNames.chartWithVertical}>
             <div className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
                 <DefaultButton
@@ -161,14 +158,19 @@ export class CausalIndividualChart extends React.PureComponent<
               </MissingParametersPlaceholder>
             )}
             {canRenderChart && (
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme()}
-                onClickHandler={this.selectPointFromChart}
-              />
+              <div className={classNames.highchartContainer}>
+                <BasicHighChart
+                  configOverride={getIndividualChartOptions(
+                    plotlyProps,
+                    this.selectPointFromChart
+                  )}
+                  theme={getTheme()}
+                  id="CausalAggregateChart"
+                />
+              </div>
             )}
-          </div>
-          <div className={classNames.horizontalAxisWithPadding}>
+          </Stack>
+          <Stack className={classNames.horizontalAxisWithPadding}>
             <div className={classNames.paddingDiv} />
             <div className={classNames.horizontalAxis}>
               <DefaultButton
@@ -185,7 +187,7 @@ export class CausalIndividualChart extends React.PureComponent<
                 }
               />
             </div>
-          </div>
+          </Stack>
         </div>
         <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
           <ComboBox
@@ -249,8 +251,7 @@ export class CausalIndividualChart extends React.PureComponent<
   };
 
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
+    const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
   };
@@ -378,7 +379,7 @@ export class CausalIndividualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
+      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
@@ -405,7 +406,7 @@ export class CausalIndividualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
+      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
@@ -427,7 +428,7 @@ export class CausalIndividualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
