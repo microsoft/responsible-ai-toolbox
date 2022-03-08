@@ -3,10 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 import {
-  IDataset,
-  IDatasetSummary,
   IExplanationDashboardData,
-  IModelInformation,
   ITelemetryMessage
 } from "@responsible-ai/core-ui";
 import {
@@ -19,8 +16,7 @@ import { Language } from "@responsible-ai/localization";
 import React from "react";
 
 interface IAppProps {
-  data?: IExplanationDashboardData;
-  dataset?: IDataset;
+  dataset: IExplanationDashboardData;
   theme: ITheme;
   language: Language;
   version: 1 | 2;
@@ -39,17 +35,7 @@ export class App extends React.Component<IAppProps> {
 
   public render(): React.ReactNode {
     const dashboardProp: IExplanationDashboardProps = {
-      ...(this.props.data ?? {
-        dataSummary: {} as IDatasetSummary,
-        modelInformation: {} as IModelInformation
-      }),
-      ...(this.props.dataset ?? {
-        categorical_features: [],
-        feature_names: [],
-        features: [[]],
-        task_type: undefined,
-        true_y: []
-      }),
+      ...this.props.dataset,
       explanationMethod: "mimic",
       locale: this.props.language,
       requestPredictions: !this.props.classDimension

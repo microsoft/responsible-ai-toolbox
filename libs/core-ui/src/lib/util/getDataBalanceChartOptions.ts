@@ -3,7 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import {
   featureBalanceMeasureMap,
   getDistributionBalanceMeasures,
@@ -44,14 +44,14 @@ export function getDistributionBalanceChartOptions(
     },
     series: [
       {
+        data: distData,
         name: "race",
-        type: "column",
-        data: distData
+        type: "column"
       },
       {
+        data: distData2,
         name: "sex",
-        type: "column",
-        data: distData2
+        type: "column"
       }
     ]
     // xAxis: {
@@ -107,18 +107,18 @@ export function getFeatureBalanceChartOptions(
       backgroundColor: colorTheme.backgroundColor,
       type: "heatmap"
     },
+    series: [
+      {
+        data,
+        name: "race",
+        type: "heatmap"
+      }
+    ],
     xAxis: {
       categories: featureNames
     },
     yAxis: {
       categories: featureNames
-    },
-    series: [
-      {
-        name: "race",
-        type: "heatmap",
-        data: data
-      }
-    ]
+    }
   };
 }

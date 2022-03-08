@@ -5,11 +5,12 @@ import {
   WeightVectorOption,
   Cohort,
   ModelAssessmentContext,
+  IDataset,
   IModelExplanationData,
   ErrorCohort,
   CohortBar
 } from "@responsible-ai/core-ui";
-import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
+import { DefaultTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
@@ -88,7 +89,7 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.cohorts[0],
             this.state.jointDataset
           ),
-          dataset: this.state.dataset,
+          dataset: {} as IDataset,
           deleteCohort: () => undefined,
           editCohort: () => undefined,
           errorCohorts: this.state.cohorts.map(
@@ -172,7 +173,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ModelPerformance && <ModelPerformanceTab />}
                   {this.state.activeGlobalTab ===
-                    GlobalTabKeys.DataExploration && <DatasetExplorerTab />}
+                    GlobalTabKeys.DataExploration && <DefaultTab />}
                   {this.state.activeGlobalTab ===
                     GlobalTabKeys.ExplanationTab && (
                     <GlobalExplanationTab

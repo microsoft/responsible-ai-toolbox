@@ -10,8 +10,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes,
   TelemetryLevels,
-  WeightVectorOption,
-  IDataset
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
@@ -26,7 +25,6 @@ export interface INewExplanationDashboardState {
   selectedCohort: Cohort;
   activeGlobalTab: GlobalTabKeys;
   jointDataset: JointDataset;
-  dataset: IDataset;
   modelMetadata: IExplanationModelMetadata;
   validationWarnings: string[];
   showingDataSizeWarning: boolean;
@@ -166,7 +164,6 @@ export function buildInitialExplanationContext(
   if (props?.precomputedExplanations?.localFeatureImportance?.scores) {
     localExplanations = props.precomputedExplanations.localFeatureImportance;
   }
-  const dataset = props as IDataset;
   const jointDataset = new JointDataset({
     dataset: props.testData,
     localExplanations,
@@ -206,7 +203,6 @@ export function buildInitialExplanationContext(
   return {
     activeGlobalTab: GlobalTabKeys.ExplanationTab,
     cohorts,
-    dataset,
     jointDataset,
     modelMetadata,
     requestPredictions: props.requestPredictions,

@@ -4,8 +4,7 @@
 import {
   IExplanationDashboardData,
   ISerializedExplanationData,
-  IFairnessData,
-  IDataset
+  IFairnessData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -19,7 +18,6 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
-import { adultCensusWithDataBalanceMeasures } from "../interpret/__mock_data__/adultCensus";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -42,40 +40,23 @@ import {
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
   adultCensusCausalErrorAnalysisData,
-  adultCounterfactualData,
-  adultCohortDataContinuous,
-  adultCohortDataIndex,
-  adultCohortDataCategorical,
-  adultCohortDataClassificationOutcome,
-  adultCohortDataPredictedY,
-  adultCohortDataTrueY
+  adultCounterfactualData
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
   bostonCensusCausalAnalysisData,
   bostonCounterfactualData,
   bostonData as bostonDataMAD,
   bostonErrorAnalysisData,
-  bostonWithFairnessModelExplanationData,
-  bostonCohortDataContinuous,
-  bostonCohortDataCategorical,
-  bostonCohortDataIndex,
-  bostonCohortDataPredictedY,
-  bostonCohortDataRegressionError,
-  bostonCohortDataTrueY
+  bostonWithFairnessModelExplanationData
 } from "../model-assessment/__mock_data__/bostonData";
 import {
   wineData as wineDataMAD,
   wineErrorAnalysisData,
-  wineWithFairnessModelExplanationData,
-  wineCohortDataContinuous,
-  wineCohortDataPredictedY,
-  wineCohortDataTrueY,
-  wineCohortDataIndex
+  wineWithFairnessModelExplanationData
 } from "../model-assessment/__mock_data__/wineData";
 
 export interface IInterpretDataSet {
-  data?: IExplanationDashboardData;
-  dataset?: IDataset;
+  data: IExplanationDashboardData;
   classDimension?: 1 | 2 | 3;
 }
 
@@ -169,7 +150,6 @@ export const applications: IApplications = <const>{
   },
   interpret: {
     datasets: {
-      adultCensus: { dataset: adultCensusWithDataBalanceMeasures },
       automlMimicAdult: { data: automlMimicAdult },
       bostonData: { classDimension: 1, data: bostonData },
       bostonDataGlobal: { classDimension: 1, data: bostonDataGlobal },
@@ -198,14 +178,6 @@ export const applications: IApplications = <const>{
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
-        cohortData: [
-          adultCohortDataContinuous,
-          adultCohortDataIndex,
-          adultCohortDataCategorical,
-          adultCohortDataTrueY,
-          adultCohortDataPredictedY,
-          adultCohortDataClassificationOutcome
-        ],
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisData: [adultCensusCausalErrorAnalysisData],
@@ -232,14 +204,6 @@ export const applications: IApplications = <const>{
       bostonData: {
         causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
-        cohortData: [
-          bostonCohortDataTrueY,
-          bostonCohortDataCategorical,
-          bostonCohortDataContinuous,
-          bostonCohortDataIndex,
-          bostonCohortDataRegressionError,
-          bostonCohortDataPredictedY
-        ],
         counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
@@ -247,12 +211,6 @@ export const applications: IApplications = <const>{
       } as IModelAssessmentDataSet,
       wineData: {
         classDimension: 3,
-        cohortData: [
-          wineCohortDataIndex,
-          wineCohortDataPredictedY,
-          wineCohortDataTrueY,
-          wineCohortDataContinuous
-        ],
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
