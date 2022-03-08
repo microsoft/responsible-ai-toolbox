@@ -356,7 +356,9 @@ class DataBalanceManager(BaseManager):
                     "featureValues": unique_values,
                     "measures": feature_measures,
                 },
-                "aggregateBalanceMeasures": aggregate_measures,
+                "aggregateBalanceMeasures": {
+                    "measures": aggregate_measures,
+                },
             }
         except Exception as e:
             warnings.warn(

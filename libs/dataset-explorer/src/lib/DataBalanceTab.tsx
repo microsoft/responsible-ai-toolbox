@@ -10,9 +10,7 @@ import {
   ModelAssessmentContext,
   featureBalanceMeasureMap,
   getFeatureBalanceMeasures,
-  getDistributionBalanceMeasures,
-  IFeatureBalanceMeasures,
-  IDistributionBalanceMeasures
+  IFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
 import {
   AccessibleChart,
@@ -30,6 +28,8 @@ import { Annotations, Layout } from "plotly.js";
 import React from "react";
 
 import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
+import { DistributionBalanceMeasureChart } from "./DistributionBalanceMeasureChart";
+import { FeatureBalanceMeasureChart } from "./FeatureBalanceMeasureChart";
 
 export class IDataBalanceTabProps {}
 
@@ -77,7 +77,12 @@ export class DataBalanceTab extends React.Component<
   public render(): React.ReactNode {
     const classNames = dataBalanceTabStyles();
 
-    if (!this.context.dataset.data_balance_measures) {
+    if (
+      !this.context.dataset.data_balance_measures ||
+      (!this.context.dataset.data_balance_measures.featureBalanceMeasures &&
+        !this.context.dataset.data_balance_measures.aggregateBalanceMeasures &&
+        !this.context.dataset.data_balance_measures.distributionBalanceMeasures)
+    ) {
       return (
         <MissingParametersPlaceholder>
           {
@@ -87,8 +92,8 @@ export class DataBalanceTab extends React.Component<
       );
     }
 
-    // If some types of measures are available but others are not (i.e. feature balance measures are not available but distribution balance measures are),
-    // we still display the measures that are available.
+    // If some types of measures are available but others are not (i.e. feature balance measures are not available but
+    // distribution balance measures are), we still display the measures that are available.
     const dataBalanceMeasures = this.context.dataset.data_balance_measures;
 
     const featureBalanceMeasures = dataBalanceMeasures.featureBalanceMeasures;
@@ -130,27 +135,16 @@ export class DataBalanceTab extends React.Component<
 
     const distributionBalanceMeasures =
       dataBalanceMeasures.distributionBalanceMeasures;
-    let barPlotlyProps = undefined;
-    if (
-      distributionBalanceMeasures &&
-      distributionBalanceMeasures.measures &&
-      distributionBalanceMeasures.features
-    ) {
-      barPlotlyProps = generateBarPlotlyProps(
-        distributionBalanceMeasures,
-        this.context.dataset.name
-      );
 
-      // TODO: This doesn't work with data_balance_measures={}
-      if (!heatmapPlotlyProps && !barPlotlyProps) {
-        return (
-          <MissingParametersPlaceholder>
-            {
-              "You tried to specify data balance measures, but we were unable to visualize them. Please ensure the format is correct." // TODO: Replace with localization
-            }
-          </MissingParametersPlaceholder>
-        );
-      }
+    // TODO: This doesn't work with data_balance_measures={}
+    if (!heatmapPlotlyProps) {
+      return (
+        <MissingParametersPlaceholder>
+          {
+            "You tried to specify data balance measures, but we were unable to visualize them. Please ensure the format is correct." // TODO: Replace with localization
+          }
+        </MissingParametersPlaceholder>
+      );
     }
 
     return (
@@ -219,16 +213,19 @@ export class DataBalanceTab extends React.Component<
 
         <br />
 
-        {barPlotlyProps && (
-          <div>
-            <Text variant="large" className={classNames.leftLabel}>
-              {
-                "Distribution Balance Measures" // TODO: Replace with localization
-              }
-            </Text>
-            <br />
-            <AccessibleChart plotlyProps={barPlotlyProps} theme={getTheme()} />
-          </div>
+        {distributionBalanceMeasures && (
+          <DistributionBalanceMeasureChart
+            distributionBalanceMeasures={distributionBalanceMeasures}
+            datasetName={this.context.dataset.name}
+          />
+        )}
+
+        <br />
+
+        {featureBalanceMeasures && (
+          <FeatureBalanceMeasureChart
+            featureBalanceMeasures={featureBalanceMeasures}
+          />
         )}
       </div>
     );
@@ -387,86 +384,6 @@ function generateHeatmapPlotlyProps(
 
   plotlyProps.data[0].z = data;
   layout.annotations = annotations;
-
-  return plotlyProps;
-}
-
-const baseBarPlotlyProperties: IPlotlyProperty = {
-  config: { displaylogo: false, displayModeBar: false, responsive: true },
-  data: [],
-  layout: {
-    autosize: true,
-    dragmode: false,
-    font: {
-      size: 10
-    },
-    hovermode: "closest",
-    margin: {
-      b: 50,
-      t: 50
-    },
-    showlegend: true,
-    title: {
-      font: { size: 16 },
-      pad: { b: 10, t: 10 },
-      xanchor: "center",
-      yanchor: "top"
-    },
-    xaxis: {
-      color: FabricStyles.chartAxisColor,
-      mirror: true,
-      tickfont: {
-        family: FabricStyles.fontFamilies,
-        size: 11
-      },
-      title: "Distribution Measure",
-      zeroline: true
-    },
-    yaxis: {
-      automargin: true,
-      color: FabricStyles.chartAxisColor,
-      gridcolor: "#e5e5e5",
-      showgrid: true,
-      tickfont: {
-        family: "Roboto, Helvetica Neue, sans-serif",
-        size: 11
-      },
-      title: "Measure Value",
-      zeroline: true
-    }
-  }
-};
-
-function generateBarPlotlyProps(
-  distributionBalanceMeasures: IDistributionBalanceMeasures,
-  datasetName?: string
-): IPlotlyProperty {
-  const plotlyProps = _.cloneDeep(baseBarPlotlyProperties);
-
-  const features = distributionBalanceMeasures.features;
-
-  const layout = plotlyProps.layout as Partial<Layout>;
-
-  const title = layout.title as Partial<{ text: string }>;
-  title.text = `Comparison of ${features.join(", ")} with Uniform Distribution`;
-
-  if (datasetName) {
-    title.text += ` in ${datasetName}`;
-  }
-
-  features.forEach((featureName: string) => {
-    const distMeasures = getDistributionBalanceMeasures(
-      distributionBalanceMeasures.measures,
-      featureName
-    );
-
-    plotlyProps.data.push({
-      name: featureName,
-      type: "bar",
-      x: Object.keys(distMeasures),
-      y: Object.values(distMeasures)
-    });
-  });
 
   return plotlyProps;
 }

@@ -63,17 +63,18 @@ export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
     ["Kendall Rank Correlation", { range: [0, 1], varName: "krc" }],
     ["Log-Likelihood Ratio", { range: [0, 1], varName: "llr" }],
     [
-      "Normalized PMI,	p(x,y) normalization",
+      "Normalized PMI, p(x,y) normalization",
       { range: [0, 1], varName: "n_pmi_xy" }
     ],
     [
-      "Normalized PMI,	p(y) normalization",
+      "Normalized PMI, p(y) normalization",
       { range: [0, 1], varName: "n_pmi_y" }
     ],
     ["Pointwise Mutual Information (PMI)", { range: [0, 1], varName: "pmi" }],
     ["Sorensen-Dice Coefficient", { range: [0, 1], varName: "sdc" }],
     ["Squared PMI", { range: [0, 1], varName: "s_pmi" }],
-    ["t-test", { range: [0, 1], varName: "t_test" }]
+    ["t-test", { range: [0, 1], varName: "t_test" }],
+    ["t-test, p-value", { range: [0, 1], varName: "ttest_pvalue" }]
   ]
 );
 

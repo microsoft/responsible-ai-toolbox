@@ -2,66 +2,84 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import { SeriesOptionsType, TitleOptions } from "highcharts";
 
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import {
   featureBalanceMeasureMap,
   getDistributionBalanceMeasures,
   getFeatureBalanceMeasures,
-  IDataBalanceMeasures
+  IDistributionBalanceMeasures,
+  IFeatureBalanceMeasures
 } from "../Interfaces/DataBalanceInterfaces";
 
 export function getDistributionBalanceChartOptions(
-  balanceMeasures: IDataBalanceMeasures,
+  distributionBalanceMeasures: IDistributionBalanceMeasures,
+  datasetName?: string,
   theme?: ITheme
 ): IHighchartsConfig {
+  if (
+    !distributionBalanceMeasures ||
+    !distributionBalanceMeasures.measures ||
+    !distributionBalanceMeasures.features
+  ) {
+    return {};
+  }
+
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
     backgroundColor: theme?.palette.white,
     fontColor: theme?.semanticColors.bodyText
   };
-  if (!balanceMeasures.distributionBalanceMeasures) {
-    return {};
+
+  const features = distributionBalanceMeasures.features;
+  const titleOptions: TitleOptions = {
+    text: `Comparison of ${features.join(", ")} with Uniform Distribution`
+  };
+
+  if (datasetName) {
+    titleOptions.text += ` in ${datasetName}`;
   }
-  const distData = Object.values(
-    getDistributionBalanceMeasures(
-      balanceMeasures.distributionBalanceMeasures.measures,
-      "race"
-    )
+
+  const data = features.map(
+    (featureName: string) =>
+      ({
+        data: Object.values(
+          getDistributionBalanceMeasures(
+            distributionBalanceMeasures.measures,
+            featureName
+          )
+        ),
+        name: featureName,
+        type: "column"
+      } as SeriesOptionsType)
   );
-  const distData2 = Object.values(
-    getDistributionBalanceMeasures(
-      balanceMeasures.distributionBalanceMeasures.measures,
-      "sex"
-    )
-  );
+
+  // Assume that every feature has the same measures calculated
+  // and use the 1st feature to get a list of measure types
+  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0];
+  const measureTypes = Object.keys(firstMeasure);
 
   return {
     chart: {
       backgroundColor: colorTheme.backgroundColor,
       type: "column"
     },
-    series: [
-      {
-        data: distData,
-        name: "race",
-        type: "column"
-      },
-      {
-        data: distData2,
-        name: "sex",
-        type: "column"
-      }
-    ]
-    // xAxis: {
-    //   categories: measureNames
-    // }
+    series: data,
+    title: titleOptions,
+    xAxis: {
+      categories: measureTypes,
+      title: { text: "Distribution Measure" }
+    },
+    yAxis: {
+      title: { text: "Measure Value" }
+    }
   };
 }
 
 export function getFeatureBalanceChartOptions(
-  balanceMeasures: IDataBalanceMeasures,
+  featureBalanceMeasures: IFeatureBalanceMeasures,
   selectedFeature: string,
   selectedMeasure: string,
   theme?: ITheme
@@ -72,7 +90,6 @@ export function getFeatureBalanceChartOptions(
     backgroundColor: theme?.palette.white,
     fontColor: theme?.semanticColors.bodyText
   };
-  const featureBalanceMeasures = balanceMeasures.featureBalanceMeasures;
   if (!featureBalanceMeasures) {
     return {};
   }
