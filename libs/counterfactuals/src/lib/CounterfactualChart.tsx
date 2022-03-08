@@ -17,16 +17,12 @@ import {
   FabricStyles,
   rowErrorSize,
   InteractiveLegend,
-  ICounterfactualData
+  ICounterfactualData,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import {
   getTheme,
@@ -40,6 +36,7 @@ import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { getIndividualChartOptions } from "./getIndividualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualChartProps {
   data: ICounterfactualData;
@@ -286,11 +283,16 @@ export class CounterfactualChart extends React.PureComponent<
                     </MissingParametersPlaceholder>
                   )}
                   {canRenderChart && (
-                    <AccessibleChart
-                      plotlyProps={plotlyProps}
-                      theme={getTheme() as any}
-                      onClickHandler={this.selectPointFromChart}
-                    />
+                    <div className={classNames.highchartContainer}>
+                      <BasicHighChart
+                        configOverride={getIndividualChartOptions(
+                          plotlyProps,
+                          this.selectPointFromChart
+                        )}
+                        theme={getTheme()}
+                        id="CounterfactualChart"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className={classNames.horizontalAxisWithPadding}>
@@ -361,11 +363,13 @@ export class CounterfactualChart extends React.PureComponent<
                 )}
               </div>
             </div>
-            <LocalImportanceChart
-              rowNumber={this.state.selectedPointsIndexes[0]}
-              currentClass={this.getCurrentLabel()}
-              data={this.props.data}
-            />
+            <div className={classNames.localImportance}>
+              <LocalImportanceChart
+                rowNumber={this.state.selectedPointsIndexes[0]}
+                currentClass={this.getCurrentLabel()}
+                data={this.props.data}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -466,13 +470,9 @@ export class CounterfactualChart extends React.PureComponent<
   };
 
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
-    // non-custom point
-    if (trace.curveNumber !== 1) {
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-    }
+    const index = data.customdata[JointDataset.IndexLabel];
+    this.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.toggleSelectionOfPoint(index);
   };
 
   private getOriginalData(

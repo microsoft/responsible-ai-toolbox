@@ -64,9 +64,9 @@ export function getDependenceData(
       customData[index].Yformatted = val.toLocaleString(undefined, {
         maximumFractionDigits: 3
       });
-      customData[
-        index
-      ].template += `${yLabel}: ${customData[index].Yformatted}<br>`;
+      customData[index].template = customData[index].template
+        ? `${customData[index].template}${yLabel}: ${customData[index].Yformatted}<br>`
+        : `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
   }
   const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
