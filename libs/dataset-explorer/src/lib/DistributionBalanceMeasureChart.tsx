@@ -6,7 +6,7 @@ import {
   getDistributionBalanceChartOptions,
   IDistributionBalanceMeasures
 } from "@responsible-ai/core-ui";
-import { getTheme, Text } from "office-ui-fabric-react";
+import { Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
@@ -18,6 +18,13 @@ export interface IDistributionBalanceMeasureProps {
 
 export class DistributionBalanceMeasureChart extends React.PureComponent<IDistributionBalanceMeasureProps> {
   public render(): React.ReactNode {
+    if (
+      !this.props.distributionBalanceMeasures.features ||
+      !this.props.distributionBalanceMeasures.measures
+    ) {
+      return;
+    }
+
     const styles = dataBalanceTabStyles();
 
     return (
@@ -27,12 +34,14 @@ export class DistributionBalanceMeasureChart extends React.PureComponent<IDistri
             "Distribution Balance Measures" // TODO: Replace with localization
           }
         </Text>
+
         <br />
+
         <BasicHighChart
+          id="distributionBalanceMeasureChart"
           configOverride={getDistributionBalanceChartOptions(
             this.props.distributionBalanceMeasures,
-            this.props.datasetName,
-            getTheme()
+            this.props.datasetName
           )}
         />
       </div>

@@ -52,29 +52,33 @@ export interface IFeatureBalanceMeasures {
 
 interface IFeatureBalanceMeasure {
   varName: string;
-  range: [number, number];
+  range?: [number, number];
+  description?: string;
 }
 
 // Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
 export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
   [
+    // TODO: Figure out ranges for these measures
     ["Demographic Parity", { range: [-1, 1], varName: "dp" }],
-    ["Jaccard Index", { range: [0, 1], varName: "ji" }],
-    ["Kendall Rank Correlation", { range: [0, 1], varName: "krc" }],
-    ["Log-Likelihood Ratio", { range: [0, 1], varName: "llr" }],
     [
-      "Normalized PMI, p(x,y) normalization",
-      { range: [0, 1], varName: "n_pmi_xy" }
+      "Jaccard Index",
+      {
+        description:
+          "The Jaccard Similarity Index is a measure of the similarity between two sets of data. The index ranges from 0 to 1. The closer to 1, the more similar the two sets of data.",
+        range: [0, 1],
+        varName: "ji"
+      }
     ],
-    [
-      "Normalized PMI, p(y) normalization",
-      { range: [0, 1], varName: "n_pmi_y" }
-    ],
-    ["Pointwise Mutual Information (PMI)", { range: [0, 1], varName: "pmi" }],
-    ["Sorensen-Dice Coefficient", { range: [0, 1], varName: "sdc" }],
-    ["Squared PMI", { range: [0, 1], varName: "s_pmi" }],
-    ["t-test", { range: [0, 1], varName: "t_test" }],
-    ["t-test, p-value", { range: [0, 1], varName: "ttest_pvalue" }]
+    ["Kendall Rank Correlation", { varName: "krc" }],
+    ["Log-Likelihood Ratio", { varName: "llr" }],
+    ["Normalized PMI, p(x,y) normalization", { varName: "n_pmi_xy" }],
+    ["Normalized PMI, p(y) normalization", { varName: "n_pmi_y" }],
+    ["Pointwise Mutual Information (PMI)", { varName: "pmi" }],
+    ["Sorensen-Dice Coefficient", { varName: "sdc" }],
+    ["Squared PMI", { varName: "s_pmi" }],
+    ["t-test", { varName: "t_test" }],
+    ["t-test, p-value", { varName: "ttest_pvalue" }]
   ]
 );
 
