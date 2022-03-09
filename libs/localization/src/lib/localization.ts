@@ -21,6 +21,7 @@ import ZhHans from "./en.zh-Hans.json";
 import ZhHant from "./en.zh-Hant.json";
 import { getLocalization } from "./getLocalization";
 import { Language } from "./Language";
+import { Pseudoloc } from "./Pseudoloc";
 
 export const localization = getLocalization({
   [Language.En]: En,
@@ -40,5 +41,6 @@ export const localization = getLocalization({
   [Language.PtPT]: PtPT,
   [Language.Pl]: Pl,
   [Language.Sv]: Sv,
-  [Language.Tr]: Tr
+  [Language.Tr]: Tr,
+  [Language.QpsPloc]: Pseudoloc.pseudolocalizeStrings(En)
 });

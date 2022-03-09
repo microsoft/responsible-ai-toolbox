@@ -3,6 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
+  getCausalDisplayFeatureName,
   ICausalAnalysisSingleData,
   ModelAssessmentContext,
   nameof
@@ -21,8 +22,6 @@ import {
   TooltipHost
 } from "office-ui-fabric-react";
 import React from "react";
-
-import { getCausalDisplayFeatureName } from "../../../getCausalDisplayFeatureName";
 
 export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];

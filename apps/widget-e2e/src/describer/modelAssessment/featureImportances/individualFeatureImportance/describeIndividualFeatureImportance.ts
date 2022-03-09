@@ -25,7 +25,6 @@ export function describeIndividualFeatureImportance(
       cy.task("log", hostDetails.host);
       cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
-      getMenu("Individual feature importance").click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
       it("should render no data message", () => {
@@ -35,6 +34,13 @@ export function describeIndividualFeatureImportance(
       });
       return;
     }
-    describeTabularDataView(datasetShape);
+    if (!datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
+      it("should not have 'Feature importance' for decision making notebooks", () => {
+        getMenu("Individual feature importance").should("not.exist");
+      });
+    }
+    if (datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
+      describeTabularDataView(datasetShape);
+    }
   });
 }

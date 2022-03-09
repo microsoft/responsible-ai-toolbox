@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       type:
-        description: "Test or Prod?"
+        description: "Test or Prod PyPI?"
         required: true
         default: "Test"
 
@@ -21,17 +21,26 @@ jobs:
 
       # build wheel
       - uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+
       - name: install requirements.txt for rai_core_flask
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
         working-directory: rai_core_flask
+
       - name: pip freeze
         run: pip freeze
+
       - name: build wheel for wrapped flask
         run: python setup.py sdist bdist_wheel
         working-directory: rai_core_flask
@@ -46,7 +55,7 @@ jobs:
         run: pytest ./tests/
         working-directory: rai_core_flask
 
-      ####### publish to PyPI
+      # publish to PyPI
       - name: Publish rai_core_flask package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
         uses: pypa/gh-action-pypi-publish@master

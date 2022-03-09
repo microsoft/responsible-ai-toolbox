@@ -90,7 +90,7 @@ export class EditCohort extends React.Component<
       >
         <TextField
           label={localization.ErrorAnalysis.EditCohort.cohortName}
-          onChange={this.updateCohortName.bind(this)}
+          onChange={this.updateCohortName}
           defaultValue={this.state.cohortName}
           styles={textFieldStyles}
         />
@@ -105,17 +105,14 @@ export class EditCohort extends React.Component<
           >
             <Stack.Item align="start">
               <DefaultButton
-                onClick={this.deleteCohort.bind(this)}
+                onClick={this.deleteCohort}
                 text="Delete"
                 disabled={disableDelete}
               />
             </Stack.Item>
             <Stack.Item align="end">
               <Stack horizontal tokens={stackTokens}>
-                <PrimaryButton
-                  onClick={this.editCohort.bind(this)}
-                  text="Save"
-                />
+                <PrimaryButton onClick={this.editCohort} text="Save" />
                 <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
               </Stack>
             </Stack.Item>
@@ -125,22 +122,22 @@ export class EditCohort extends React.Component<
     );
   }
 
-  private updateCohortName(
+  private updateCohortName = (
     _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
-  ): void {
+  ) => {
     if (!newValue) {
       newValue = "";
     }
     this.setState({ cohortName: newValue });
-  }
+  };
 
-  private deleteCohort(): void {
+  private deleteCohort = () => {
     this.props.onDismiss();
     this.props.onDelete(this.props.errorCohort);
-  }
+  };
 
-  private editCohort(): void {
+  private editCohort = () => {
     this.props.onDismiss();
     const errorCohort = this.props.errorCohort;
     const savedCohort = new ErrorCohort(
@@ -157,5 +154,5 @@ export class EditCohort extends React.Component<
       errorCohort.cohortStats
     );
     this.props.onSave(errorCohort, savedCohort);
-  }
+  };
 }

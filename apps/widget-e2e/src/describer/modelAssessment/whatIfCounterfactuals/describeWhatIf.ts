@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Locators } from "../Constants";
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeAxisFlyouts } from "./describeAxisFlyouts";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
+import { describeWhatIfCreate } from "./describeWhatIfCreate";
 
 const testName = "What If";
 
@@ -23,7 +25,19 @@ export function describeWhatIf(
       cy.visit(hostDetails.host);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
-    describeWhatIfCommonFunctionalities(datasetShape);
-    describeAxisFlyouts(datasetShape);
+    if (
+      !datasetShape.whatIfCounterfactualsData?.hasWhatIfCounterfactualsComponent
+    ) {
+      it("should not have 'What-If Counterfactuals' component for the notebook", () => {
+        cy.get(Locators.CounterfactualHeader).should("not.exist");
+      });
+    }
+    if (
+      datasetShape.whatIfCounterfactualsData?.hasWhatIfCounterfactualsComponent
+    ) {
+      describeWhatIfCommonFunctionalities(datasetShape);
+      describeAxisFlyouts(datasetShape);
+      describeWhatIfCreate(datasetShape);
+    }
   });
 }

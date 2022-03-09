@@ -44,6 +44,7 @@
       "@responsible-ai/error-analysis": ["libs/error-analysis/src/index.ts"],
       "@responsible-ai/fairness": ["libs/fairness/src/index.ts"],
       "@responsible-ai/interpret": ["libs/interpret/src/index.ts"],
+      "@responsible-ai/interpret-text": ["libs/interpret-text/src/index.ts"],
       "@responsible-ai/localization": ["libs/localization/src/index.ts"],
       "@responsible-ai/mlchartlib": ["libs/mlchartlib/src/index.ts"],
       "@responsible-ai/model-assessment": ["libs/model-assessment/src/index.ts"]

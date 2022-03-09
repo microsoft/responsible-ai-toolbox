@@ -274,7 +274,8 @@ def bin_data(df, feat, bins, quantile_binning=False):
     if quantile_binning and not feat_col.empty:
         bindf = pd.qcut(feat_col, bins, precision=PRECISION, duplicates=DROP)
         zero_interval = bindf.cat.categories[0]
-        left = zero_interval.left - ZERO_BIN_TOL * zero_interval.left
+        left_abs = abs(zero_interval.left)
+        left = zero_interval.left - ZERO_BIN_TOL * left_abs
         zero_interval = pd.Interval(left=left, right=zero_interval.right,
                                     closed=zero_interval.closed)
         indexes = [zero_interval]
@@ -284,6 +285,15 @@ def bin_data(df, feat, bins, quantile_binning=False):
                                 dtype=bindf.cat.categories.dtype,
                                 name=bindf.cat.categories.name)
         bindf.cat.categories = cats
+        # re-bin data according to new categories, otherwise can have
+        # issues with precision when using pd.qcut.
+        # Specifically, it can bin some points incorrectly for low precision,
+        # for example a point with value -0.0127796318808497
+        # will be binned incorrectly in interval
+        # (-0.0309423241359475, -0.012779631880849702]
+        # even though it should be binned in the interval above since
+        # -0.0127796318808497 > -0.012779631880849702
+        bindf = bin_data(df, feat, bindf.cat.categories, quantile_binning)
         return bindf
     else:
         return pd.cut(feat_col, bins, precision=PRECISION)
@@ -389,7 +399,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category1_max_interval.append(cat1.right)
             category1.append(str(cat1))
         else:
-            category1.append(cat1)
+            category1.append(get_py_value(cat1))
         for col_index in range(len(categories2)):
             cat2 = categories2[col_index]
             index_exists_err = cat1 in matrix_err_counts.index
@@ -454,7 +464,7 @@ def matrix_2d(categories1, categories2, matrix_counts,
             category2_max_interval.append(cat2.right)
             category2.append(str(cat2))
         else:
-            category2.append(cat2)
+            category2.append(get_py_value(cat2))
     category1 = {VALUES: category1,
                  INTERVAL_MIN: category1_min_interval,
                  INTERVAL_MAX: category1_max_interval}
@@ -528,7 +538,7 @@ def matrix_1d(categories, values_err, counts, counts_err,
             category_max_interval.append(cat.right)
             category.append(str(cat))
         else:
-            category.append(cat)
+            category.append(get_py_value(cat))
     category1 = {VALUES: category,
                  INTERVAL_MIN: category_min_interval,
                  INTERVAL_MAX: category_max_interval}
@@ -540,3 +550,9 @@ def fill_matrix_nulls(matrix, null_value):
     idx_tuples = list(zip(idx_arrays[0], idx_arrays[1]))
     for tuple in idx_tuples:
         matrix.iloc[tuple] = null_value
+
+
+def get_py_value(value):
+    if isinstance(value, np.generic):
+        return value.item()
+    return value

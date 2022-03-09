@@ -47,11 +47,25 @@ class ErrorAnalysisManagerKeys(object):
     REPORTS = 'reports'
 
 
+class CounterfactualManagerKeys(object):
+    """Provide constants for CounterfactualManager key properties."""
+    COUNTERFACTUALS = 'counterfactuals'
+
+
+class CausalManagerKeys(object):
+    """Provide constants for CausalManager key properties."""
+    CAUSAL_EFFECTS = 'causal_effects'
+    GLOBAL_EFFECTS_COMPUTED = 'global_effects_computed'
+    LOCAL_EFFECTS_COMPUTED = 'local_effects_computed'
+    POLICIES_COMPUTED = 'policies_computed'
+
+
 class SKLearn(object):
     """Provide scikit-learn related constants."""
 
     EXAMPLES = 'examples'
     LABELS = 'labels'
+    PREDICT = 'predict'
     PREDICTIONS = 'predictions'
     PREDICT_PROBA = 'predict_proba'
 

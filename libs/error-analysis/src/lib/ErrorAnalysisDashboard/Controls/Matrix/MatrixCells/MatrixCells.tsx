@@ -143,7 +143,14 @@ export class MatrixCells extends React.PureComponent<IMatrixCellsProps> {
               baseError = falseCount;
             } else {
               metricValue = value.metricValue;
-              error = value.metricValue * value.count;
+              if (
+                metricName === Metrics.MeanSquaredError ||
+                metricName === Metrics.MeanAbsoluteError
+              ) {
+                error = value.metricValue * value.count;
+              } else {
+                error = value.error;
+              }
               baseError = totalError;
             }
             const filterProps = new FilterProps(

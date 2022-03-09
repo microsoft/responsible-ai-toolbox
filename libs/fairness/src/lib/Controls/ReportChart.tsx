@@ -115,7 +115,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
           defaultSelectedKey={this.state.chartKey}
           options={displayOptions}
           disabled={false}
-          onChange={this.onChange.bind(this)}
+          onChange={this.onChange}
         />
         {this.state.chartKey === performanceKey && (
           <PerformancePlot
@@ -158,10 +158,10 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
     );
   }
 
-  public onChange(
+  public onChange = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption | undefined
-  ): void {
+  ) => {
     if (!option) {
       return;
     }
@@ -170,5 +170,5 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
       this.props.onUpdateChartKey(newChartKey);
       this.setState({ chartKey: newChartKey });
     }
-  }
+  };
 }

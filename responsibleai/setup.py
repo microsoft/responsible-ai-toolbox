@@ -26,11 +26,13 @@ setuptools.setup(
     version=version,  # noqa: F821
     author="Roman Lutz, Ilya Matiach, Ke Xu",
     author_email="raiwidgets-maintain@microsoft.com",
-    description="SDK API to explain models, and analyze "
-                "errors in Machine Learning",
+    description="SDK API to explain "
+                "models, generate counterfactual examples, analyze "
+                "causal effects and analyze errors in Machine Learning "
+                "models.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/responsible-ai-widgets",
+    url="https://github.com/microsoft/responsible-ai-toolbox",
     packages=setuptools.find_packages(),
     package_data={
         '': [
@@ -46,6 +48,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha"

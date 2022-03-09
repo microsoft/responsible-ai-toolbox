@@ -92,7 +92,10 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           automargin: true
         },
         yaxis: {
-          automargin: true
+          automargin: true,
+          title:
+            localization.Counterfactuals.WhatIf
+              .percentCounterfactualLocalImportance
         }
       }
     };

@@ -340,7 +340,7 @@ export class FairnessWizard extends React.PureComponent<
               errorPickerProps={errorPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               selectedModelIndex={this.state.selectedModelId}
-              onHideIntro={this.hideIntro.bind(this)}
+              onHideIntro={this.hideIntro}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}
@@ -356,7 +356,7 @@ export class FairnessWizard extends React.PureComponent<
               fairnessPickerProps={fairnessPickerProps}
               errorPickerProps={errorPickerProps}
               featureBinPickerProps={featureBinPickerProps}
-              onHideIntro={this.hideIntro.bind(this)}
+              onHideIntro={this.hideIntro}
               onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}

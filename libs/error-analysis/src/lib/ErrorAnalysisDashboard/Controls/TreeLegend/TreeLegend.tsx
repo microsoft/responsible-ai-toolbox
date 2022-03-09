@@ -8,10 +8,10 @@ import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { MetricUtils, MetricLocalizationType } from "../../MetricUtils";
-import { INodeDetail } from "../../TreeViewState";
 import { Gradient } from "../Gradient/Gradient";
 import { InfoCallout } from "../InfoCallout/InfoCallout";
 import { MetricSelector } from "../MetricSelector/MetricSelector";
+import { INodeDetail } from "../TreeViewRenderer/TreeViewState";
 
 import { treeLegendStyles } from "./TreeLegend.styles";
 

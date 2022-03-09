@@ -14,14 +14,14 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
   describe("Sub bar chart", () => {
     before(() => {
       props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
-      props.chart.clickNthPoint(15);
+      props.chart.clickNthPoint(14);
     });
     after(() => {
-      props.chart.clickNthPoint(15);
+      props.chart.clickNthPoint(14);
     });
     it("should have right number of bars", () => {
       cy.get(
-        "#WhatIfFeatureImportanceBar svg .plot .points .point path"
+        "#WhatIfFeatureImportanceBar g.highcharts-xaxis-labels text"
       ).should("have.length", props.dataShape.featureNames?.length);
     });
     it.skip("should have y axis with matched value", () => {
@@ -30,9 +30,7 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
       ).should("contain.text", "Feature importance");
     });
     it("should have right number of x axis labels", () => {
-      cy.get(
-        '#WhatIfFeatureImportanceBar g[class^="cartesianlayer"] g[class^="xtick"]'
-      )
+      cy.get("#WhatIfFeatureImportanceBar g.highcharts-xaxis-labels text")
         .its("length")
         .should("be", props.dataShape.featureNames?.length);
     });

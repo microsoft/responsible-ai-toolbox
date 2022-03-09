@@ -4,16 +4,19 @@
 import logging
 from unittest.mock import MagicMock
 
+import numpy as np
 import pandas as pd
 import pytest
-import numpy as np
+from lightgbm import LGBMClassifier
 
-from responsibleai.exceptions import UserConfigValidationException
 from responsibleai import RAIInsights
+from responsibleai.exceptions import UserConfigValidationException
 
 from .common_utils import (create_binary_classification_dataset,
                            create_cancer_data, create_iris_data,
                            create_lightgbm_classifier)
+
+TARGET = 'target'
 
 
 class TestRAIInsightsValidations:
@@ -22,8 +25,8 @@ class TestRAIInsightsValidations:
             create_iris_data()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         message = ("Unsupported task type 'regre'. "
                    "Should be one of \\['classification', 'regression'\\]")
@@ -32,7 +35,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='regre')
 
     def test_validate_test_data_size(self):
@@ -40,8 +43,8 @@ class TestRAIInsightsValidations:
             create_iris_data()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
@@ -51,7 +54,7 @@ class TestRAIInsightsValidations:
                 target_column='bad_target',
                 task_type='classification',
                 maximum_rows_for_test=len(y_test) - 1)
-        assert "The test data has 30 rows, but limit is set to 29 rows" in \
+        assert "The test data has 31 rows, but limit is set to 30 rows" in \
             str(ucve.value)
         assert "Please resample the test data or " +\
             "adjust maximum_rows_for_test" in \
@@ -62,8 +65,8 @@ class TestRAIInsightsValidations:
             create_iris_data()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
@@ -80,17 +83,17 @@ class TestRAIInsightsValidations:
             create_iris_data()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
-                categorical_features=['target'])
+                categorical_features=[TARGET])
         assert 'Found target name target in categorical feature list' in \
             str(ucve.value)
 
@@ -99,8 +102,8 @@ class TestRAIInsightsValidations:
             create_iris_data()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         message = ("Feature names in categorical_features "
                    "do not exist in train data: \\['not_a_feature'\\]")
@@ -109,7 +112,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 categorical_features=['not_a_feature'])
 
@@ -118,8 +121,8 @@ class TestRAIInsightsValidations:
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             class LoadOnlySerializer:
@@ -134,7 +137,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 serializer=serializer
             )
@@ -153,7 +156,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 serializer=serializer
             )
@@ -176,7 +179,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 serializer=serializer
             )
@@ -187,8 +190,8 @@ class TestRAIInsightsValidations:
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         model = MagicMock()
         model.predict.side_effect = Exception()
@@ -197,7 +200,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification')
 
         assert 'The model passed cannot be used for getting predictions ' + \
@@ -207,8 +210,8 @@ class TestRAIInsightsValidations:
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         model = MagicMock()
         model.predict.return_value = [0]
@@ -219,7 +222,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification')
 
         assert 'The model passed cannot be used for getting predictions ' + \
@@ -230,8 +233,8 @@ class TestRAIInsightsValidations:
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         err_msg = ('INVALID-TASK-TYPE-WARNING: The regression model'
                    'provided has a predict_proba function. '
@@ -241,7 +244,7 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='regression')
 
     def test_mismatch_train_test_features(self):
@@ -249,7 +252,7 @@ class TestRAIInsightsValidations:
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
+        X_train[TARGET] = y_train
         X_test['bad_target'] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
@@ -257,58 +260,98 @@ class TestRAIInsightsValidations:
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification')
         assert 'The features in train and test data do not match' in \
             str(ucve.value)
+
+    def test_dirty_train_test_data(self):
+        X_train = pd.DataFrame(data=[['1', np.nan], ['2', '3']],
+                               columns=['c1', 'c2'])
+        y_train = np.array([1, 0])
+        X_test = pd.DataFrame(data=[['1', '2'], ['2', '3']],
+                              columns=['c1', 'c2'])
+        y_test = np.array([1, 0])
+
+        model = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
+                               max_depth=5, n_estimators=200, n_jobs=1,
+                               random_state=777)
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                categorical_features=['c2'],
+                task_type='classification')
+
+        assert 'Error finding unique values in column c2. ' + \
+            'Please check your train data.' in str(ucve.value)
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_test,
+                test=X_train,
+                target_column=TARGET,
+                categorical_features=['c2'],
+                task_type='classification')
+
+        assert 'Error finding unique values in column c2. ' + \
+            'Please check your test data.' in str(ucve.value)
 
     def test_unsupported_train_test_types(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
-        X_test['bad_target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
                 model=model,
                 train=X_train.values,
                 test=X_test.values,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification')
+
         assert "Unsupported data type for either train or test. " + \
-            "Expecting pandas Dataframe for train and test." in str(ucve.value)
+            "Expecting pandas DataFrame for train and test." in str(ucve.value)
 
     def test_classes_exceptions(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 classes=[0, 1, 2])
         assert 'The train labels and distinct values in ' + \
             'target (train data) do not match' in str(ucve.value)
 
         y_train[0] = 2
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 classes=[0, 1])
         assert 'The train labels and distinct values in target ' + \
@@ -316,15 +359,15 @@ class TestRAIInsightsValidations:
 
         y_train[0] = 0
         y_test[0] = 2
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         with pytest.raises(UserConfigValidationException) as ucve:
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='target',
+                target_column=TARGET,
                 task_type='classification',
                 classes=[0, 1])
 
@@ -336,14 +379,14 @@ class TestRAIInsightsValidations:
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
 
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
         # validate classes are always sorted
         classes = rai._classes
@@ -357,14 +400,14 @@ class TestCausalUserConfigValidations:
             create_binary_classification_dataset()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
 
         message = ("Feature names in treatment_features "
@@ -380,14 +423,14 @@ class TestCounterfactualUserConfigValidations:
             create_binary_classification_dataset()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
 
         message = ("Feature names in features_to_vary do "
@@ -401,14 +444,14 @@ class TestCounterfactualUserConfigValidations:
             create_binary_classification_dataset()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
 
         message = ("Feature names in permitted_range do "
@@ -422,14 +465,14 @@ class TestCounterfactualUserConfigValidations:
             create_binary_classification_dataset()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
         with pytest.raises(
                 UserConfigValidationException,
@@ -445,14 +488,14 @@ class TestCounterfactualUserConfigValidations:
             create_binary_classification_dataset()
 
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='regression')
         with pytest.raises(
                 UserConfigValidationException,
@@ -466,14 +509,14 @@ class TestCounterfactualUserConfigValidations:
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
 
         with pytest.raises(
@@ -490,14 +533,14 @@ class TestCounterfactualUserConfigValidations:
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train['target'] = y_train
-        X_test['target'] = y_test
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
 
         rai_insights = RAIInsights(
             model=model,
             train=X_train,
             test=X_test,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification')
 
         with pytest.raises(
@@ -516,22 +559,22 @@ class TestCounterfactualUserConfigValidations:
             data=[[1, 2, 0],
                   [2, 3, 1],
                   [3, 3, 0]],
-            columns=['c1', 'c2', 'target']
+            columns=['c1', 'c2', TARGET]
         )
         test_data = pd.DataFrame(
             data=[[1, 1, 0]],
-            columns=['c1', 'c2', 'target']
+            columns=['c1', 'c2', TARGET]
         )
 
-        X_train = train_data.drop(['target'], axis=1)
-        y_train = train_data['target']
+        X_train = train_data.drop([TARGET], axis=1)
+        y_train = train_data[TARGET]
         model = create_lightgbm_classifier(X_train, y_train)
 
         rai_insights = RAIInsights(
             model=model,
             train=train_data,
             test=test_data,
-            target_column='target',
+            target_column=TARGET,
             task_type='classification',
             categorical_features=['c2'])
 
@@ -547,3 +590,77 @@ class TestCounterfactualUserConfigValidations:
                 total_CFs=10,
                 method='random',
                 desired_class='opposite')
+
+    def test_weird_predict_function(self):
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+
+        # A weird model that modifies the input dataset by
+        # adding back the target column
+        class WeirdModelPredictWrapper():
+            def __init__(self, model):
+                self.model = model
+
+            def predict(self, test_data_pandas):
+                if TARGET not in test_data_pandas.columns:
+                    test_data_pandas[TARGET] = 0
+                return self.model.predict(
+                    test_data_pandas.drop(columns=TARGET))
+
+            def predict_proba(self, test_data_pandas):
+                return self.model.predict_proba(test_data_pandas)
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        model = WeirdModelPredictWrapper(model)
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = ('Calling model predict function modifies '
+                   'input dataset features. Please check if '
+                   'predict function is defined correctly.')
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification')
+
+    def test_weird_predict_proba_function(self):
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+
+        # A weird model that modifies the input dataset by
+        # adding back the target column
+        class WeirdModelPredictProbaWrapper():
+            def __init__(self, model):
+                self.model = model
+
+            def predict(self, test_data_pandas):
+                return self.model.predict(test_data_pandas)
+
+            def predict_proba(self, test_data_pandas):
+                if TARGET not in test_data_pandas.columns:
+                    test_data_pandas[TARGET] = 0
+                return self.model.predict_proba(
+                    test_data_pandas.drop(columns=TARGET))
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        model = WeirdModelPredictProbaWrapper(model)
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        message = ('Calling model predict_proba function modifies '
+                   'input dataset features. Please check if '
+                   'predict function is defined correctly.')
+        with pytest.raises(
+                UserConfigValidationException, match=message):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification')

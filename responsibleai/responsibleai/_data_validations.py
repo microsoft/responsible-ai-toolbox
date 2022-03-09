@@ -19,8 +19,8 @@ def validate_train_test_categories(
     if categoricals is None:
         return
     discovered = {}
-    for column in train_data.columns:
-        if column in categoricals:
+    for column in categoricals:
+        if column in train_data.columns:
             train_unique = np.unique(train_data[column])
             test_unique = np.unique(test_data[column])
             difference = np.setdiff1d(test_unique, train_unique)

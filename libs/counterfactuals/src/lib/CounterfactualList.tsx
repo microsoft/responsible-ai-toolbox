@@ -16,10 +16,14 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
+  DetailsRowFields,
   IColumn,
   IComboBox,
   IComboBoxOption,
   IDetailsFooterProps,
+  IDetailsRowFieldsProps,
+  IDetailsRowProps,
+  IRenderFunction,
   Link,
   SelectionMode,
   Stack,
@@ -46,6 +50,11 @@ export interface ICounterfactualListProps {
     key: string | number,
     isString: boolean,
     newValue?: string | number
+  ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
   ): void;
 }
 
@@ -93,10 +102,31 @@ export class CounterfactualList extends React.Component<
         setKey="set"
         constrainMode={ConstrainMode.unconstrained}
         layoutMode={DetailsListLayoutMode.fixedColumns}
+        onRenderItemColumn={this.renderItemColumn}
+        onRenderRow={this.renderRow}
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
   }
+
+  private renderRow: IRenderFunction<IDetailsRowProps> = (
+    props?: IDetailsRowProps
+  ): JSX.Element | null => {
+    if (!props) {
+      return <div />;
+    }
+    return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
+  };
+
+  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+    const classNames = counterfactualListStyle();
+    const rowClass = props?.itemIndex === 0 ? classNames.highlightRow : "";
+    return (
+      <span className={rowClass}>
+        <DetailsRowFields {...props} />
+      </span>
+    );
+  };
 
   private getItems(): Array<Record<string, string | number>> {
     const items: Array<Record<string, string | number>> = [];
@@ -245,8 +275,9 @@ export class CounterfactualList extends React.Component<
     return columns;
   }
 
-  private updateDropdownColValue = (
+  private updateComboBoxColValue = (
     key: string | number,
+    options: IComboBoxOption[],
     _event: React.FormEvent<IComboBox>,
     option?: IComboBoxOption
   ): void => {
@@ -254,10 +285,17 @@ export class CounterfactualList extends React.Component<
     const keyIndex =
       this.props.data?.feature_names_including_target.indexOf(id);
     if (option?.text) {
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, option.text);
+      const optionIndex = options.findIndex(
+        (feature) => feature.key === option.text
+      );
+      this.props.setCustomRowPropertyComboBox(
+        `Data${keyIndex}`,
+        optionIndex,
+        option.text
+      );
       this.setState((prevState) => {
         prevState.data[id] = option.text;
-        return { data: prevState.data };
+        return { data: { ...prevState.data } };
       });
     }
   };
@@ -273,7 +311,7 @@ export class CounterfactualList extends React.Component<
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
-      return { data: prevState.data };
+      return { data: { ...prevState.data } };
     });
   };
 
@@ -283,6 +321,16 @@ export class CounterfactualList extends React.Component<
         showCallout: !preState.showCallout
       };
     });
+  };
+
+  private renderItemColumn = (item: any, index?: number, column?: IColumn) => {
+    const classNames = counterfactualListStyle();
+    const fieldContent = item[column?.fieldName as unknown as string] as string;
+    const itemClass =
+      index !== 0 && fieldContent !== "-"
+        ? classNames.editCell
+        : classNames.originalCell;
+    return <div className={itemClass}>{fieldContent}</div>;
   };
 
   private renderDetailsFooterItemColumn = (
@@ -304,12 +352,21 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <ComboBox
               key={`${column.key}`}
-              // label={metaInfo.abbridgedLabel}
               autoComplete={"on"}
               allowFreeform
               selectedKey={`${this.state.data[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
-              onChange={this.updateDropdownColValue.bind(this, column.key)}
+              onChange={(
+                _event: React.FormEvent<IComboBox>,
+                option?: IComboBoxOption
+              ) =>
+                this.updateComboBoxColValue(
+                  column.key,
+                  dropdownOption.data.categoricalOptions,
+                  _event,
+                  option
+                )
+              }
             />
           </Stack.Item>
         </Stack>
@@ -336,8 +393,10 @@ export class CounterfactualList extends React.Component<
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
     if (detailsFooterProps && this.context.requestPredictions) {
+      const classNames = counterfactualListStyle();
       return (
         <DetailsRow
+          styles={{ root: classNames.highlightRow }}
           {...detailsFooterProps}
           columns={detailsFooterProps.columns}
           item={this.state.data}

@@ -3,15 +3,18 @@
 
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
-  IModelStatisticsData?: IModelStatisticsData;
+  modelStatisticsData?: IModelStatisticsData;
   datasetExplorerData?: IDatasetExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
+  cohortDefaultName?: string;
+  isMulticlass?: boolean;
 }
 
 export interface IErrorAnalysisData {
+  hasErrorAnalysisComponent?: boolean;
   errorMessage?: string;
   hoverNodeData?: { [key: string]: string };
   defaultMetric?: string;
@@ -32,8 +35,15 @@ export interface IErrorAnalysisData {
 }
 
 export interface IModelStatisticsData {
+  hasModelStatisticsComponent?: boolean;
+  hasSideBar?: boolean;
   defaultYAxis?: string;
   defaultXAxis?: string;
+  defaultXAxisPanelValue?: string;
+  xAxisNewValue?: string;
+  yAxisNewPanelValue?: string;
+  yAxisNewValue?: string;
+  yAxisNumberOfBins?: string;
   yAxisPanelOptions?: string[];
   newYAxisChartValues?: { [key: string]: string[] };
   xAxisPanelOptions?: string[];
@@ -45,6 +55,12 @@ export interface IModelStatisticsData {
 export interface IDatasetExplorerData {
   whiskerPlot?: IDEWhiskerPlotData;
   dotPlot?: IDEDotPlotData;
+  datasetBarLabel?: string[];
+  defaultXAxis?: string;
+  defaultYAxis?: string;
+  colorValueButton?: string;
+  noY?: boolean;
+  cohortDatasetNewValue?: string;
 }
 
 export interface IDEWhiskerPlotData {
@@ -57,6 +73,7 @@ export interface IDEWhiskerPlotData {
 }
 
 export interface IDEDotPlotData {
+  hasDataExplorerComponent?: boolean;
   defaultYAxis?: string;
   defaultXAxis?: string;
   yAxisPanelOptions?: string[];
@@ -65,8 +82,9 @@ export interface IDEDotPlotData {
 }
 
 export interface IFeatureImportanceData {
-  correctPredictionDatapoint?: string;
-  incorrectPredictionDatapoint?: string;
+  hasFeatureImportanceComponent?: boolean;
+  hasCorrectIncorrectDatapoints?: boolean;
+  rowToSelect?: string;
   noLocalImportance?: boolean;
   noPredict?: boolean;
   noFeatureImportance?: boolean;
@@ -76,12 +94,14 @@ export interface IFeatureImportanceData {
   topFeaturesText?: string;
   topFeaturesCurrentValue?: string;
   datapoint?: number;
+  newFeatureDropdownValue?: string;
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
 }
 
 export interface ICausalAnalysisData {
+  hasCausalAnalysisComponent?: boolean;
   dataPointsOnHover?: string[];
   dataOnXAxis?: string[];
   defaultYAxis?: string;
@@ -89,16 +109,33 @@ export interface ICausalAnalysisData {
   xAxisPanelOptions?: { [key: string]: string[] };
   yAxisPanelOptions?: { [key: string]: string[] };
   treatmentPolicyData?: { [key: string]: string[] };
+  featureListInCausalTable?: string[];
 }
 
 export interface IWhatIfCounterfactualsData {
+  hasWhatIfCounterfactualsComponent?: boolean;
   isClassification?: boolean;
   noPredict?: boolean;
   noY?: boolean;
+  selectedDatapoint?: string;
+  columnHeaderBeforeSort?: string;
+  columnHeaderAfterSort?: string;
+  searchBarQuery?: string;
+  whatIfNameLabel?: string;
+  whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualInputFieldUpdated?: string;
+  yAxisValue?: string;
+  yAxisNewValue?: string;
+  checkForClassField?: boolean;
+  classValue?: string;
+  newClassValue?: string;
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelAssessment" = "responsibleaitoolbox-classification-model-assessment.py",
-  "RegressionDecisionMaking" = "responsibleaitoolbox-regression-decision-making.py",
-  "RegressionModelAssessment" = "responsibleaitoolbox-regression-model-assessment.py"
+  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
+  "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
+  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
 }

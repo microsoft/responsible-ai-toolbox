@@ -93,7 +93,7 @@ def _convert_to_string_list_dict(
             result[k] = _convert_to_list(v)
     else:
         # Assume it's something which can go into np.as_array
-        f_arr = np.squeeze(np.asarray(ys, dtype=np.object))
+        f_arr = np.squeeze(np.asarray(ys, dtype=object))
         if len(f_arr.shape) == 1:
             check_consistent_length(f_arr, sample_array)
             result[base_name_format.format(0)] = _convert_to_list(f_arr)

@@ -1,16 +1,19 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import warnings
+
 import numpy as np
 import pandas as pd
 
 from responsibleai._input_processing import _convert_to_list
 from responsibleai.serialization_utilities import serialize_json_safe
 
-from .constants import ErrorMessages, SKLearn
+from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
+from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -41,20 +44,18 @@ class ExplanationDashboardInput:
             Will overwrite any set on explanation object already.
             Must have fewer than
             10000 rows and fewer than 1000 columns.
-        :type dataset: numpy.array or list[][]
+        :type dataset: numpy.ndarray or list[][]
         :param true_y: The true labels for the provided dataset.
             Will overwrite any set on
             explanation object already.
-        :type true_y: numpy.array or list[]
+        :type true_y: numpy.ndarray or list[]
         :param classes: The class names.
-        :type classes: numpy.array or list[]
+        :type classes: numpy.ndarray or list[]
         :param features: Feature names.
-        :type features: numpy.array or list[]
+        :type features: numpy.ndarray or list[]
         """
         self._model = model
-        self._is_classifier = model is not None\
-            and hasattr(model, SKLearn.PREDICT_PROBA) and \
-            model.predict_proba is not None
+        self._is_classifier = _is_classifier(model)
         self._dataframeColumns = None
         self.dashboard_input = {}
         # List of explanations, key of explanation type is "explanation_type"
@@ -125,14 +126,17 @@ class ExplanationDashboardInput:
                     "Exceeds maximum number of rows"
                     "for visualization (100000)")
             if feature_length > 1000:
-                raise ValueError("Exceeds maximum number of features for"
-                                 " visualization (1000). Please regenerate the"
-                                 " explanation using fewer features or"
-                                 " initialize the dashboard without passing a"
-                                 " dataset.")
-            self.dashboard_input[
-                ExplanationDashboardInterface.TRAINING_DATA
-            ] = serialize_json_safe(list_dataset)
+                warnings.warn("Exceeds maximum number of features for"
+                              " visualization (1000)."
+                              " Please regenerate the"
+                              " explanation using fewer features or"
+                              " initialize the dashboard without"
+                              " passing a dataset. Dashboard will"
+                              " show limited view.")
+            else:
+                self.dashboard_input[
+                    ExplanationDashboardInterface.TRAINING_DATA
+                ] = serialize_json_safe(list_dataset)
             self.dashboard_input[
                 ExplanationDashboardInterface.IS_CLASSIFIER
             ] = self._is_classifier
@@ -148,10 +152,6 @@ class ExplanationDashboardInput:
             try:
                 local_explanation["scores"] = _convert_to_list(
                     local_explanation["scores"], EXP_VIZ_ERR_MSG)
-                if np.shape(local_explanation["scores"])[-1] > 1000:
-                    raise ValueError("Exceeds maximum number of features for "
-                                     "visualization (1000). Please regenerate"
-                                     " the explanation using fewer features.")
                 local_explanation["intercept"] = _convert_to_list(
                     local_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 # We can ignore perf explanation data.
@@ -234,8 +234,7 @@ class ExplanationDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
-        if model is not None and hasattr(model, SKLearn.PREDICT_PROBA) \
-                and model.predict_proba is not None and dataset is not None:
+        if _is_classifier(model) and dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:

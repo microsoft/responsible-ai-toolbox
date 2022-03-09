@@ -5,7 +5,7 @@
 This project welcomes contributions and suggestions. Most contributions
 require you to agree to a Contributor License Agreement (CLA) declaring that
 you have the right to, and actually do, grant us the rights to use your
-contribution. For details, visit https://cla.opensource.microsoft.com.
+contribution. For details, visit <https://cla.opensource.microsoft.com>.
 
 When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status
@@ -50,7 +50,22 @@ All pull requests need to abide by the following criteria to be accepted:
 
 ## Development process
 
+First ensure you have
+[npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+installed (which in turn may require installing `node`).
+Using npm you can install `yarn` as follows:
+
+```
+npm install -g yarn
+```
+
+If `yarn --version` succeeds you can proceed.
+If not, you may have to follow the instructions printed by your shell.
+If you're using Powershell you may have to bypass the execution policy
+to allow `yarn` to execute. One way to do this is `Set-ExecutionPolicy -ExecutionPolicy Bypass`.
+
 For all further steps `yarn install` is a prerequisite.
+Run the `yarn install` command from your repository root directory.
 
 To run the dashboards locally run the following from the root of the
 repository on your machine:
@@ -89,9 +104,49 @@ or alternatively `yarn buildall` to build all of them. Since most apps have
 dependencies on `mlchartlib` it makes sense to run `yarn buildall` at least
 once.
 
-Tests are in the `apps` directory. To execute them run `yarn e2eall`.
-Sometimes it is preferable to watch the execution and select only individual
-test cases. This is possible using `yarn e2e-watch`.
+### Testing
+
+#### Run e2e tests locally with mock data
+
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
+2. `cd responsible-ai-toolbox`
+3. `yarn install`
+4. `yarn build`
+5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`
+
+cypress window will open locally - select test file to run the tests
+
+#### Run e2e tests locally with notebook data
+
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
+2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
+3. `yarn install`
+4. `yarn buildall` or `yarn build widget`
+5. `pip install -e responsibleai` to install responsibleai locally.
+6. `pip install -e raiwidgets` to install raiwidgets locally.
+7. `pip install jupyter`
+8. `cd notebooks\responsibleaidashboard`
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`
+
+cypress window will open locally - select test file to run the tests
+
+#### Test UX and SDK changes
+
+For any new change, which involves changing any of the python SDK components and UI components, the manual testing of the code change can be done using the following steps:
+
+1. git clone <https://github.com/microsoft/responsible-ai-toolbox>
+2. `cd responsible-ai-toolbox` (It is recommended to create a new virtual environment and install the dependencies)
+3. You should commit all your current set of changes for SDK and UX using `git commit`.
+4. Clean all untracked files using `git clean -fdx`
+5. Run `yarn install` and `yarn buildall` to build the UX changes.
+6. Run `pip install -e responsibleai` to install responsibleai locally.
+7. Run `pip install -e raiwidgets` to install raiwidgets locally.
+8. Run `pip install -e erroranalysis` to install erroranalysis locally.
+9. Run `pip install -e rai_core_flask` to install rai_core_flask locally.
+10. Install `jupyter` using `pip install jupyter`
+11. Open any notebook using python SDK and any widget from `responsible-ai-toolbox` and test your changes.
+
+The steps from 3 to 11 need to be repeated if you incrementally change UI or SDK.
 
 ### Debugging
 
