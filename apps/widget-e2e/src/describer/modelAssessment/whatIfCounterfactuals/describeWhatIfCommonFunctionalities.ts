@@ -4,7 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 
 import { getSpan } from "../../../util/getSpan";
-import { ScatterChart } from "../../../util/ScatterChart";
+import { ScatterHighchart } from "../../../util/ScatterHighchart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
@@ -15,11 +15,11 @@ export function describeWhatIfCommonFunctionalities(
 ): void {
   describe("What if common functionalities", () => {
     const props = {
-      chart: undefined as unknown as ScatterChart,
+      chart: undefined as unknown as ScatterHighchart,
       dataShape
     };
     beforeEach(() => {
-      props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
+      props.chart = new ScatterHighchart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
       expect(props.chart.Elements.length).equals(
