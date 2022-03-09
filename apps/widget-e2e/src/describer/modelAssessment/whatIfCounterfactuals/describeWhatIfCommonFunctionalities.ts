@@ -13,7 +13,7 @@ import { IModelAssessmentData } from "../IModelAssessmentData";
 export function describeWhatIfCommonFunctionalities(
   dataShape: IModelAssessmentData
 ): void {
-  describe("What if common functionalities", () => {
+  describe.skip("What if common functionalities", () => {
     const props = {
       chart: undefined as unknown as ScatterHighchart,
       dataShape
