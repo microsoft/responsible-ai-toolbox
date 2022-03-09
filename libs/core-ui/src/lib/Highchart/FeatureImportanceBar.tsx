@@ -50,6 +50,25 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
   }
 
   public render(): React.ReactNode {
+    const highchartOption =
+      this.props.chartType === ChartTypes.Bar
+        ? getFeatureImportanceBarOptions(
+            this.props.sortArray,
+            this.props.unsortedX,
+            this.props.unsortedSeries,
+            this.props.topK,
+            this.props.originX,
+            getTheme(),
+            this.props.onFeatureSelection
+          )
+        : getFeatureImportanceBoxOptions(
+            this.props.sortArray,
+            this.props.unsortedX,
+            this.props.unsortedSeries,
+            this.props.topK,
+            getTheme(),
+            this.props.onFeatureSelection
+          );
     return (
       <div
         id="FeatureImportanceBar"
@@ -72,28 +91,7 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
           </div>
         </div>
         <div className={featureImportanceBarStyles.container}>
-          <BasicHighChart
-            configOverride={
-              this.props.chartType === ChartTypes.Bar
-                ? getFeatureImportanceBarOptions(
-                    this.props.sortArray,
-                    this.props.unsortedX,
-                    this.props.unsortedSeries,
-                    this.props.topK,
-                    this.props.originX,
-                    getTheme(),
-                    this.props.onFeatureSelection
-                  )
-                : getFeatureImportanceBoxOptions(
-                    this.props.sortArray,
-                    this.props.unsortedX,
-                    this.props.unsortedSeries,
-                    this.props.topK,
-                    getTheme(),
-                    this.props.onFeatureSelection
-                  )
-            }
-          />
+          <BasicHighChart configOverride={highchartOption} />
         </div>
       </div>
     );
