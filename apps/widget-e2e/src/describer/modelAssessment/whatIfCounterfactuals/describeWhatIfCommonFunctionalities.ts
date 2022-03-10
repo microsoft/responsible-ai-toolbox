@@ -54,8 +54,8 @@ export function describeWhatIfCommonFunctionalities(
 
       it("should update when combo box change", () => {
         cy.get(Locators.WICDatapointDropbox).click();
-        getSpan("Index 5").click();
-        cy.get(Locators.WICLocalImportanceDescription).contains("Row 5");
+        getSpan("Index 1").click();
+        cy.get(Locators.WICLocalImportanceDescription).contains("Row 1");
       });
     });
 
