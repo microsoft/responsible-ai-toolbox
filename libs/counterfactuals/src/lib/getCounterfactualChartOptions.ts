@@ -3,7 +3,7 @@
 
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
-export function getIndividualChartOptions(
+export function getCounterfactualChartOptions(
   plotlyProperty: IPlotlyProperty,
   onClickHandler?: (data: any) => void
 ): any {
@@ -35,6 +35,7 @@ export function getIndividualChartOptions(
   const series = data.map((d) => {
     return {
       data: d,
+      name: "",
       showInLegend: false
     };
   });

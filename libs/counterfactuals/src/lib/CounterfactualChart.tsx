@@ -36,7 +36,7 @@ import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
-import { getIndividualChartOptions } from "./getIndividualChartOptions";
+import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualChartProps {
   data: ICounterfactualData;
@@ -285,7 +285,7 @@ export class CounterfactualChart extends React.PureComponent<
                   {canRenderChart && (
                     <div className={classNames.highchartContainer}>
                       <BasicHighChart
-                        configOverride={getIndividualChartOptions(
+                        configOverride={getCounterfactualChartOptions(
                           plotlyProps,
                           this.selectPointFromChart
                         )}
