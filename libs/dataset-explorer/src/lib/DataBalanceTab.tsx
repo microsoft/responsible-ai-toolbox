@@ -9,6 +9,7 @@ import {
 import _ from "lodash";
 import React from "react";
 
+import { AggregateBalanceMeasureChart } from "./AggregateBalanceMeasureChart";
 import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 import { DistributionBalanceMeasureChart } from "./DistributionBalanceMeasureChart";
 import { FeatureBalanceMeasureChart } from "./FeatureBalanceMeasureChart";
@@ -40,10 +41,11 @@ export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
 
     // If some types of measures are available but others are not (i.e. feature balance measures are not available but
     // distribution balance measures are), we still display the measures that are available.
-    const dataBalanceMeasures = this.context.dataset.data_balance_measures;
-    const featureBalanceMeasures = dataBalanceMeasures.featureBalanceMeasures;
-    const distributionBalanceMeasures =
-      dataBalanceMeasures.distributionBalanceMeasures;
+    const dataBalanceMeasures = this.context.dataset.data_balance_measures,
+      featureBalanceMeasures = dataBalanceMeasures.featureBalanceMeasures,
+      distributionBalanceMeasures =
+        dataBalanceMeasures.distributionBalanceMeasures,
+      aggregateBalanceMeasures = dataBalanceMeasures.aggregateBalanceMeasures;
 
     return (
       <div className={classNames.page}>
@@ -64,6 +66,13 @@ export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
         )}
 
         <br />
+
+        {aggregateBalanceMeasures && (
+          <AggregateBalanceMeasureChart
+            aggregateBalanceMeasures={aggregateBalanceMeasures}
+            datasetName={this.context.dataset.name}
+          />
+        )}
       </div>
     );
   }

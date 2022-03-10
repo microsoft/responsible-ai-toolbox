@@ -8,6 +8,6 @@ export type {
   ChartSelectionContextObject as HighchartSelectionContext
 } from "highcharts";
 
-export type HighchartsModuleNames = "heatmap";
+export type HighchartsModuleNames = "data" | "export-data" | "heatmap";
 
 export type { IChartColorNames };
