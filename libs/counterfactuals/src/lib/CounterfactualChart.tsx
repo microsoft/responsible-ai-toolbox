@@ -700,7 +700,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
+      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
@@ -727,7 +727,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
+      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
@@ -749,7 +749,7 @@ export class CounterfactualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
