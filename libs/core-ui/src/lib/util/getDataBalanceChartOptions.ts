@@ -164,7 +164,11 @@ export function getFeatureBalanceChartOptions(
         )}</b> and <b>${getPointCategoryName(
           this.point,
           "y"
-        )}</b> have a <b>${selectedMeasure}</b> of <b>${this.point.value}</b>`;
+        )}</b> have a <b>${selectedMeasure}</b> of <b>${
+          this.point.value
+        }</b><br><br>${
+          featureBalanceMeasureMap.get(selectedMeasure)?.description
+        }`;
       }
     },
     xAxis: {
@@ -198,6 +202,8 @@ export function getAggregateBalanceChartOptions(
   const data = Object.entries(aggregateBalanceMeasures.measures).map(
     ([k, v]) => ({ data: [v], name: k, type: "bar" } as SeriesOptionsType)
   );
+
+  // TODO: Don't use series so we can show proper tooltips
 
   const titleOptions = {
     text: `Aggregate Balance Measures`

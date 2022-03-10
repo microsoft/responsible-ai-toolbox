@@ -22,6 +22,9 @@ export interface IDistributionBalanceMeasures {
   measures: { [featureName: string]: { [measureName: string]: number } };
 }
 
+// TODO: Create a map of Distribution Balance Measure descriptions to use for tooltips
+// TODO: Don't render the variable names, instead use the proper measure names
+
 const blockedDistributionMeasures = new Set(["chi_sq_stat", "chi_sq_p_value"]);
 
 export function getDistributionBalanceMeasures(
@@ -52,8 +55,8 @@ export interface IFeatureBalanceMeasures {
 
 interface IFeatureBalanceMeasure {
   varName: string;
+  description: string;
   range?: [number, number];
-  description?: string;
 }
 
 // Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
@@ -64,7 +67,7 @@ export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
       "Demographic Parity",
       {
         description:
-          "Demographic Parity measures how much one class receives the positive outcome compared to the other class. As close to 0 means the classes receive the positive outcome equally.",
+          "<b>Demographic Parity</b> measures how much one class receives the positive outcome compared to the other class. As close to 0 means both classes receive the positive outcome equally.",
         range: [-1, 1],
         varName: "dp"
       }
@@ -73,20 +76,29 @@ export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
       "Jaccard Index",
       {
         description:
-          "The Jaccard Similarity Index is a measure of the similarity between the two classes. The index ranges from 0 to 1. The closer to 1, the more similar the two classes.",
+          "<b>Jaccard Index</b> is a measure of the similarity between the two classes. The index ranges from 0 to 1. The closer to 1, the more similar the two classes.",
         range: [0, 1],
         varName: "ji"
       }
     ],
-    ["Kendall Rank Correlation", { varName: "krc" }],
-    ["Log-Likelihood Ratio", { varName: "llr" }],
-    ["Normalized PMI, p(x,y) normalization", { varName: "n_pmi_xy" }],
-    ["Normalized PMI, p(y) normalization", { varName: "n_pmi_y" }],
-    ["Pointwise Mutual Information (PMI)", { varName: "pmi" }],
-    ["Sorensen-Dice Coefficient", { varName: "sdc" }],
-    ["Squared PMI", { varName: "s_pmi" }],
-    ["t-test", { varName: "t_test" }],
-    ["t-test, p-value", { varName: "ttest_pvalue" }]
+    ["Kendall Rank Correlation", { description: "TODO", varName: "krc" }],
+    ["Log-Likelihood Ratio", { description: "TODO", varName: "llr" }],
+    [
+      "Normalized PMI, p(x,y) normalization",
+      { description: "TODO", varName: "n_pmi_xy" }
+    ],
+    [
+      "Normalized PMI, p(y) normalization",
+      { description: "TODO", varName: "n_pmi_y" }
+    ],
+    [
+      "Pointwise Mutual Information (PMI)",
+      { description: "TODO", varName: "pmi" }
+    ],
+    ["Sorensen-Dice Coefficient", { description: "TODO", varName: "sdc" }],
+    ["Squared PMI", { description: "TODO", varName: "s_pmi" }],
+    ["t-test", { description: "TODO", varName: "t_test" }],
+    ["t-test, p-value", { description: "TODO", varName: "ttest_pvalue" }]
   ]
 );
 
@@ -141,7 +153,6 @@ export function getFeatureBalanceMeasures(
 interface IAggregateBalanceMeasure {
   name: string;
   description: string;
-  interpretation: string;
 }
 
 export const aggregateBalanceMeasureMap = new Map<
@@ -152,9 +163,7 @@ export const aggregateBalanceMeasureMap = new Map<
     "atkinson_index",
     {
       description:
-        "It presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. This measure depends on the degree of society aversion to inequality (a theoretical parameter decided by the researcher), where a higher value entails greater social utility or willingness by individuals to accept smaller incomes in exchange for a more equal distribution. An important feature of the Atkinson index is that it can be decomposed into within-group and between-group inequality.",
-      interpretation:
-        "Range: [0, 1]. 0 if perfect equality. 1 means maximum inequality. In our case, it is the proportion of records for a sensitive columns’ combination.",
+        "<b>Atkinson Index</b> measures the percentage of total data that must be removed in order to have a perfectly balanced dataset, with respect to the selected features. Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality.",
       name: "Atkinson Index"
     }
   ],
@@ -162,18 +171,14 @@ export const aggregateBalanceMeasureMap = new Map<
     "theil_t_index",
     {
       description:
-        "GE(1) = Theil's T and is more sensitive to differences at the top of the distribution. The Theil index is a statistic used to measure economic inequality. The Theil index measures an entropic 'distance' the population is away from the 'ideal' egalitarian state of everyone having the same income.",
-      interpretation:
-        "If everyone has the same income, then T_T equals 0. If one person has all the income, then T_T gives the result ln(N). 0 means equal income and larger values mean higher level of disproportion.",
+        "If the data contains every feature combination equally, then the Theil T Index equals 0. If one feature combination is seen in 100% of the data, then the Theil T Index equals ln(N) (where N = number of features).",
       name: "Theil T Index"
     }
   ],
   [
     "theil_l_index",
     {
-      description:
-        "GE(0) = Theil's L and is more sensitive to differences at the lower end of the distribution. Logarithm of (mean income)/(income i), over all the incomes included in the summation. It is also referred to as the mean log deviation measure. Because a transfer from a larger income to a smaller one will change the smaller income's ratio more than it changes the larger income's ratio, the transfer-principle is satisfied by this index.",
-      interpretation: "Same interpretation as Theil T Index.",
+      description: "TODO",
       name: "Theil L Index"
     }
   ]
