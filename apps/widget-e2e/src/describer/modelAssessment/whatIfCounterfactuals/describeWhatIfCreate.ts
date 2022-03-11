@@ -88,7 +88,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     });
   });
 
-  describe("What-If save scenario", () => {
+  describe.skip("What-If save scenario", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
