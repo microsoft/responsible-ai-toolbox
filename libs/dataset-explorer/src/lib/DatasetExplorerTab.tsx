@@ -26,7 +26,7 @@ export class DatasetExplorerTab extends React.Component<IDatasetExplorerTabProps
         </PivotItem>
         <PivotItem
           itemKey={DatasetExplorerTabKeys.DataBalanceTab}
-          headerText="Data Balance Analysis" // TODO: Replace with localization
+          headerText="Data Balance" // TODO: Replace with localization
         >
           <DataBalanceTab />
         </PivotItem>

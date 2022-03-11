@@ -88,7 +88,7 @@ export const FeatureBalanceMeasureInfoMap = new Map<
     "Demographic Parity",
     {
       description:
-        "<b>Demographic Parity</b> measures how much one class receives the positive outcome compared to the other class. As close to 0 means both classes receive the positive outcome equally.",
+        "<b>Demographic Parity</b> measures how much one class receives the positive outcome compared to the other class.<br>As close to 0 means both classes receive the positive outcome equally. A <b>positive value</b> means the first class<br>sees the positive label more than the second class. A <b>negative value</b> means the opposite.",
       range: [-1, 1],
       varName: "dp"
     }
@@ -97,7 +97,7 @@ export const FeatureBalanceMeasureInfoMap = new Map<
     "Jaccard Index",
     {
       description:
-        "<b>Jaccard Index</b> is a measure of the similarity between the two classes. The index ranges from 0 to 1. The closer to 1, the more similar the two classes.",
+        "<b>Jaccard Index</b> is a measure of the similarity between the two classes.<br>The index ranges from 0 to 1. The closer to 1, the more similar the two classes.",
       range: [0, 1],
       varName: "ji"
     }
@@ -174,7 +174,7 @@ export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
     "atkinson_index",
     {
       description:
-        "<b>Atkinson Index</b> measures the percentage of total data that must be removed in order to have a perfectly balanced dataset, with respect to the selected features. Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality.",
+        "<b>Atkinson Index</b> measures the percentage of total data that must be removed<br>in order to have a perfectly balanced dataset, with respect to the selected features.<br>Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality.",
       name: "Atkinson Index"
     }
   ],
@@ -182,7 +182,7 @@ export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
     "theil_t_index",
     {
       description:
-        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution. If the data contains every feature combination equally, then the <b>Theil T Index</b> equals 0. If one feature combination is seen in 100% of the data, then the Theil T Index equals ln(N) (where N = number of feature combinations).",
+        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution.<br>If the data contains every feature combination equally, then the it equals 0.<br>If one feature combination is seen in 100% of the data,<br>then the Theil T Index equals ln(N) (where N = number of feature combinations).",
       name: "Theil T Index"
     }
   ],
@@ -190,7 +190,7 @@ export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
     "theil_l_index",
     {
       description:
-        "<b>Theil's L Index</b> is more sensitive to differences at the lower end of the distribution. The <b>Theil L Index</b> is 0 when feature combination is seen equally and takes larger positive values as feature combinations become more unequal, especially at the high end.",
+        "<b>Theil L Index</b> is more sensitive to differences at the lower end of the distribution.<br>It is 0 when feature combination is seen equally and takes larger positive values<br>as feature combinations become more unequal, especially at the high end.",
       name: "Theil L Index"
     }
   ]

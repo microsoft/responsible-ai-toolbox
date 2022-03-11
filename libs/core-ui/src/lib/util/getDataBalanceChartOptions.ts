@@ -49,10 +49,7 @@ export function getFeatureBalanceChartOptions(
         // Feature values don't exist for the diagonal of the heatmap (i.e. the same class)
         // Additionally, some feature values may be undefined/invalid/NaN
         if (featureValue && colIndex !== rowIndex) {
-          featureValues.push(
-            [colIndex, rowIndex, featureValue],
-            [rowIndex, colIndex, featureValue]
-          );
+          featureValues.push([colIndex, rowIndex, featureValue]);
         }
       });
     });
