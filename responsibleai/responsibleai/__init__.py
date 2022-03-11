@@ -10,4 +10,4 @@ from .__version__ import version
 
 __version__ = version
 
-__all__ = ["ModelAnalysis", "ModelTask", "RAIInsights"]
+__all__ = ['ModelAnalysis', 'ModelTask', 'RAIInsights']

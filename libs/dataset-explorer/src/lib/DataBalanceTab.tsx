@@ -22,7 +22,7 @@ export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    const classNames = dataBalanceTabStyles();
+    const styles = dataBalanceTabStyles();
 
     if (
       !this.context.dataset.data_balance_measures ||
@@ -48,7 +48,7 @@ export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
       aggregateBalanceMeasures = dataBalanceMeasures.aggregateBalanceMeasures;
 
     return (
-      <div className={classNames.page}>
+      <div className={styles.page}>
         {featureBalanceMeasures && (
           <FeatureBalanceMeasureChart
             featureBalanceMeasures={featureBalanceMeasures}
