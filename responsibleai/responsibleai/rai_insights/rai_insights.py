@@ -136,10 +136,7 @@ class RAIInsights(object):
         )
 
         self._data_balance_manager = DataBalanceManager(
-            train=train,
-            test=test,
-            target_column=target_column,
-            dataset_name=dataset_name,
+            train=train, test=test, target_column=target_column
         )
 
         self._error_analysis_manager = ErrorAnalysisManager(
@@ -217,7 +214,7 @@ class RAIInsights(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
 
-        # TODO: Add docs for dataset_name and data_balance_analysis
+        # TODO: Add docs for dataset_name
         """
 
         valid_tasks = [

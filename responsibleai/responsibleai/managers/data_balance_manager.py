@@ -30,16 +30,11 @@ SUPPORTED_BACKENDS = ["pandas", "spark"]
 
 class DataBalanceManager(BaseManager):
     def __init__(
-        self,
-        train: pd.DataFrame,
-        test: pd.DataFrame,
-        target_column: str,
-        dataset_name: Optional[str] = None,
+        self, train: pd.DataFrame, test: pd.DataFrame, target_column: str
     ):
         self._train = train
         self._test = test
         self._target_column = target_column
-        self._dataset_name = dataset_name
 
         # Populated in compute()
         self._data_balance_measures = None
