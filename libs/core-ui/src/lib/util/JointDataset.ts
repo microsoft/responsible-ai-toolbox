@@ -434,6 +434,9 @@ export class JointDataset {
           featureArray.map((val) => [val])
         );
       }
+      case ModelTypes.TextClassification: {
+        return localExplanationRaw as number[][][];
+      }
       case ModelTypes.Binary:
       case ModelTypes.Multiclass:
       default: {

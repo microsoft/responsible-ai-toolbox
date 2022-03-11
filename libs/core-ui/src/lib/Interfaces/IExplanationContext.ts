@@ -8,7 +8,8 @@ import { JointDataset } from "../util/JointDataset";
 export enum ModelTypes {
   Regression = "regression",
   Binary = "binary",
-  Multiclass = "multiclass"
+  Multiclass = "multiclass",
+  TextClassification = "text_classification"
 }
 
 export interface IExplanationContext {
