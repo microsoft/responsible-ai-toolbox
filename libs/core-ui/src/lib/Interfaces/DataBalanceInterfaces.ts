@@ -65,14 +65,11 @@ interface FeatureBalanceMeasureInfo {
   range?: [number, number];
 }
 
-// It's easier to work with an info map where the key is the formatted name instead of var name because its keys are used to populate the Measure Dropdown
-// TODO: Need to figure out which measures to visualize in heatmap
-// Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
+// The key is the formatted name instead of var name because its keys are used to populate the Measure Dropdown
 export const ApprovedFeatureBalanceMeasures = new Map<
   string,
   FeatureBalanceMeasureInfo
 >([
-  // TODO: Figure out ranges for these measures
   [
     "Demographic Parity",
     {
@@ -80,6 +77,15 @@ export const ApprovedFeatureBalanceMeasures = new Map<
         "<b>Demographic Parity</b> measures how much one class receives the positive outcome compared to the other class.<br>As close to 0 means both classes receive the positive outcome equally. A <b>positive value</b> means the first class<br>sees the positive label more than the second class. A <b>negative value</b> means the opposite.",
       range: [-1, 1],
       varName: "dp"
+    }
+  ],
+  [
+    "Pointwise Mutual Information (PMI)",
+    {
+      // range: [-inf, +inf] => not specified so chart uses min/max values
+      description:
+        "The <b>PMI</b> of a pair of classes quantifies the discrepancy between the probability of their coincidence<br>given their joint distribution and their individual distributions (assuming independence).",
+      varName: "pmi"
     }
   ],
   [
@@ -91,24 +97,33 @@ export const ApprovedFeatureBalanceMeasures = new Map<
       varName: "ji"
     }
   ],
-  ["Kendall Rank Correlation", { description: "TODO", varName: "krc" }],
-  ["Log-Likelihood Ratio", { description: "TODO", varName: "llr" }],
   [
-    "Normalized PMI, p(x,y) normalization",
-    { description: "TODO", varName: "n_pmi_xy" }
+    "Sorensen-Dice Coefficient (SDC)",
+    {
+      description:
+        "The <b>SDC</b> is used to gauge the similarity of two samples. Related to F1 score.<br>It equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+      range: [0, 1],
+      varName: "sdc"
+    }
   ],
   [
-    "Normalized PMI, p(y) normalization",
-    { description: "TODO", varName: "n_pmi_y" }
+    "Kendall Rank Correlation",
+    {
+      description:
+        "<b>Kendall Rank Correlation</b> is a statistic used to measure the ordinal association between two measured quantities.<br>It is high when observations have a similar rank and low when observations have a dissimilar rank between the two classes.",
+      range: [-1, 1],
+      varName: "krc"
+    }
   ],
   [
-    "Pointwise Mutual Information (PMI)",
-    { description: "TODO", varName: "pmi" }
-  ],
-  ["Sorensen-Dice Coefficient", { description: "TODO", varName: "sdc" }],
-  ["Squared PMI", { description: "TODO", varName: "s_pmi" }],
-  ["t-test", { description: "TODO", varName: "t_test" }],
-  ["t-test, p-value", { description: "TODO", varName: "ttest_pvalue" }]
+    "Log-Likelihood Ratio",
+    {
+      // range: [-inf, +inf] => not specified so chart uses min/max values
+      description:
+        "<b>Log-Likelihood Ratio</b> calculates the degree to which data supports one variable versus another.<br>Log of the likelihood ratio, which gives the probability of correctly predicting the label in ratio to probability of incorrectly predicting label.<br>If likelihoods are similar, it should be close to 0.",
+      varName: "llr"
+    }
+  ]
 ]);
 
 export function getFeatureBalanceMeasures(
@@ -171,7 +186,7 @@ export const ApprovedAggregateMeasures = new Map<string, AggregateMeasureInfo>([
     "theil_t_index",
     {
       description:
-        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution.<br>If the data contains every feature combination equally, then it equals 0.<br>If one feature combination is seen in 100% of the data,<br>then the Theil T Index equals ln(N) (where N = TODO).",
+        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution.<br>If the data contains every feature combination equally, then it equals 0.<br>If one feature combination is seen in 100% of the data,<br>then the Theil T Index equals ln(N) (where N = number of feature combinations).",
       name: "Theil T Index"
     }
   ],

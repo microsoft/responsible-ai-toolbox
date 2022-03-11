@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Point, SeriesOptionsType, TitleOptions } from "highcharts";
+import {
+  ColorAxisOptions,
+  Point,
+  SeriesOptionsType,
+  TitleOptions
+} from "highcharts";
 
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import {
@@ -28,7 +33,7 @@ export function getFeatureBalanceChartOptions(
     return {};
   }
 
-  const featureValues: number[][] = [];
+  const data: number[][] = [];
   uniqueClasses.forEach((classA, colIndex) => {
     uniqueClasses.forEach((classB, rowIndex) => {
       const featureValue = getFeatureBalanceMeasures(
@@ -43,7 +48,7 @@ export function getFeatureBalanceChartOptions(
       if (featureValue && colIndex !== rowIndex) {
         // Add the feature value for comparing class A (col index) to class B (row index)
         // The feature value may not be the same as the feature value when comparing class B to class A (swapped row and col)
-        featureValues.push([colIndex, rowIndex, featureValue]);
+        data.push([colIndex, rowIndex, featureValue]);
       }
     });
   });
@@ -53,6 +58,15 @@ export function getFeatureBalanceChartOptions(
   } as TitleOptions;
   if (datasetName) {
     titleOptions.text += ` in ${datasetName}`;
+  }
+
+  const colorAxisOptions = {} as ColorAxisOptions;
+  if (measure.range) {
+    [colorAxisOptions.min, colorAxisOptions.max] = measure.range;
+  } else {
+    const featureValues = data.map((row) => row[2]);
+    colorAxisOptions.min = Math.min(...featureValues);
+    colorAxisOptions.max = Math.max(...featureValues);
   }
 
   return {
@@ -71,10 +85,7 @@ export function getFeatureBalanceChartOptions(
       numberFormatter: (value: number) => value.toFixed(3),
       type: "heatmap"
     },
-    colorAxis: {
-      max: measure.range ? measure.range[1] : undefined, // undefined range => max value is used
-      min: measure.range ? measure.range[0] : undefined // undefined range => min value is used
-    },
+    colorAxis: colorAxisOptions,
     legend: {
       align: "right",
       layout: "vertical",
@@ -85,7 +96,7 @@ export function getFeatureBalanceChartOptions(
     },
     series: [
       {
-        data: featureValues,
+        data,
         dataLabels: {
           enabled: true
         },
