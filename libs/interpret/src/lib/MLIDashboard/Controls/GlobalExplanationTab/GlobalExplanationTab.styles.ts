@@ -85,6 +85,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       },
       legendAndSort: {
         height: "100%",
+        paddingTop: "55px",
         width: rightMarginWidth
       },
       legendHelpText: {
@@ -109,7 +110,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       secondaryChartAndLegend: {
         display: "flex",
         flexDirection: "row",
-        height: "300px",
+        height: "100%",
         width: "100%"
       },
       sliderLabel: {

@@ -178,7 +178,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       featureImportanceChartAndLegend: {
         display: "flex",
         flexDirection: "row",
-        height: "300px",
+        minHeight: "300px",
         width: "100%"
       },
       featureImportanceControls: {

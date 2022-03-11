@@ -201,7 +201,7 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
         paddingRight: "120px"
       },
       highchartContainer: {
-        width: "1100px"
+        width: "1300px"
       },
       horizontalAxis: {
         flex: 1,

@@ -54,12 +54,6 @@ export function getTreatmentBarChartOptions(
     },
     xAxis: {
       categories: yData
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        align: "high"
-      }
     }
   };
 }
