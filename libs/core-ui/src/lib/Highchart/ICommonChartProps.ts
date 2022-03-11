@@ -3,6 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 
+import { HighchartsModuleNames } from "./HighchartTypes";
 import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface ICommonChartProps {
@@ -11,4 +12,5 @@ export interface ICommonChartProps {
   fallback?: React.ReactNode;
   configOverride?: IHighchartsConfig;
   theme?: ITheme;
+  modules?: HighchartsModuleNames[];
 }

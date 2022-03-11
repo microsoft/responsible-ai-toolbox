@@ -12,7 +12,14 @@ import { ICommonChartProps } from "./ICommonChartProps";
 export class BasicHighChart extends React.Component<ICommonChartProps> {
   public render(): React.ReactNode {
     const defaultOptions = getDefaultHighchartOptions(getTheme());
-    const { className, id, fallback, configOverride = {}, theme } = this.props;
+    const {
+      className,
+      id,
+      fallback,
+      configOverride = {},
+      theme,
+      modules
+    } = this.props;
     const chartOptions = _.merge({}, configOverride, defaultOptions);
 
     return (
@@ -22,6 +29,7 @@ export class BasicHighChart extends React.Component<ICommonChartProps> {
         chartOptions={chartOptions}
         fallback={fallback}
         theme={theme}
+        modules={modules}
       />
     );
   }

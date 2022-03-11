@@ -22,6 +22,27 @@ export interface IDistributionBalanceMeasures {
   measures: { [featureName: string]: { [measureName: string]: number } };
 }
 
+interface DistributionMeasureInfo {
+  name: string;
+  description?: string;
+}
+
+// TODO: Currently description is not used. It was too complicated to display them as part of a tooltip.
+// Things tried but failed to work:
+// - Appending to the default tooltip (could not access default tooltip)
+// - Overriding the default tooltip with a custom one (worked but could not get the colored circles that default tooltip has)
+// - Adding a custom hover-over as a load() event (could not figure out which measure was being hovered over)
+export const DistributionMeasureInfoMap = new Map<
+  string,
+  DistributionMeasureInfo
+>([
+  ["inf_norm_dist", { name: "Infinite Norm Distance" }],
+  ["js_dist", { name: "Jensen–Shannon Distance" }],
+  ["kl_divergence", { name: "Kullback-Leibler Divergence" }],
+  ["total_variation_dist", { name: "Total Variation Distance" }],
+  ["wasserstein_dist", { name: "Wasserstein Distance" }]
+]);
+
 const blockedDistributionMeasures = new Set(["chi_sq_stat", "chi_sq_p_value"]);
 
 export function getDistributionBalanceMeasures(
@@ -50,32 +71,56 @@ export interface IFeatureBalanceMeasures {
   };
 }
 
-interface IFeatureBalanceMeasure {
+interface FeatureBalanceMeasureInfo {
   varName: string;
-  range: [number, number];
+  description: string;
+  range?: [number, number];
 }
 
+// TODO: Need to figure out which measures to visualize in heatmap
 // Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
-export const featureBalanceMeasureMap = new Map<string, IFeatureBalanceMeasure>(
+export const FeatureBalanceMeasureInfoMap = new Map<
+  string,
+  FeatureBalanceMeasureInfo
+>([
+  // TODO: Figure out ranges for these measures
   [
-    ["Demographic Parity", { range: [-1, 1], varName: "dp" }],
-    ["Jaccard Index", { range: [0, 1], varName: "ji" }],
-    ["Kendall Rank Correlation", { range: [0, 1], varName: "krc" }],
-    ["Log-Likelihood Ratio", { range: [0, 1], varName: "llr" }],
-    [
-      "Normalized PMI,	p(x,y) normalization",
-      { range: [0, 1], varName: "n_pmi_xy" }
-    ],
-    [
-      "Normalized PMI,	p(y) normalization",
-      { range: [0, 1], varName: "n_pmi_y" }
-    ],
-    ["Pointwise Mutual Information (PMI)", { range: [0, 1], varName: "pmi" }],
-    ["Sorensen-Dice Coefficient", { range: [0, 1], varName: "sdc" }],
-    ["Squared PMI", { range: [0, 1], varName: "s_pmi" }],
-    ["t-test", { range: [0, 1], varName: "t_test" }]
-  ]
-);
+    "Demographic Parity",
+    {
+      description:
+        "<b>Demographic Parity</b> measures how much one class receives the positive outcome compared to the other class. As close to 0 means both classes receive the positive outcome equally.",
+      range: [-1, 1],
+      varName: "dp"
+    }
+  ],
+  [
+    "Jaccard Index",
+    {
+      description:
+        "<b>Jaccard Index</b> is a measure of the similarity between the two classes. The index ranges from 0 to 1. The closer to 1, the more similar the two classes.",
+      range: [0, 1],
+      varName: "ji"
+    }
+  ],
+  ["Kendall Rank Correlation", { description: "TODO", varName: "krc" }],
+  ["Log-Likelihood Ratio", { description: "TODO", varName: "llr" }],
+  [
+    "Normalized PMI, p(x,y) normalization",
+    { description: "TODO", varName: "n_pmi_xy" }
+  ],
+  [
+    "Normalized PMI, p(y) normalization",
+    { description: "TODO", varName: "n_pmi_y" }
+  ],
+  [
+    "Pointwise Mutual Information (PMI)",
+    { description: "TODO", varName: "pmi" }
+  ],
+  ["Sorensen-Dice Coefficient", { description: "TODO", varName: "sdc" }],
+  ["Squared PMI", { description: "TODO", varName: "s_pmi" }],
+  ["t-test", { description: "TODO", varName: "t_test" }],
+  ["t-test, p-value", { description: "TODO", varName: "ttest_pvalue" }]
+]);
 
 export function getFeatureBalanceMeasures(
   measures: {
@@ -106,12 +151,6 @@ export function getFeatureBalanceMeasures(
           case "dp":
             finalMeasures[measure] = -1 * measures[measure];
             break;
-          // case "prA":
-          //   finalMeasures.prA = measures.prB;
-          //   finalMeasures.prB = measures.prA;
-          //   break;
-          // case "prB":
-          //   break;
           default:
             finalMeasures[measure] = measures[measure];
             break;
@@ -124,3 +163,35 @@ export function getFeatureBalanceMeasures(
 
   return {};
 }
+
+interface AggregateMeasureInfo {
+  name: string;
+  description: string;
+}
+
+export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
+  [
+    "atkinson_index",
+    {
+      description:
+        "<b>Atkinson Index</b> measures the percentage of total data that must be removed in order to have a perfectly balanced dataset, with respect to the selected features. Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality.",
+      name: "Atkinson Index"
+    }
+  ],
+  [
+    "theil_t_index",
+    {
+      description:
+        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution. If the data contains every feature combination equally, then the <b>Theil T Index</b> equals 0. If one feature combination is seen in 100% of the data, then the Theil T Index equals ln(N) (where N = number of feature combinations).",
+      name: "Theil T Index"
+    }
+  ],
+  [
+    "theil_l_index",
+    {
+      description:
+        "<b>Theil's L Index</b> is more sensitive to differences at the lower end of the distribution. The <b>Theil L Index</b> is 0 when feature combination is seen equally and takes larger positive values as feature combinations become more unequal, especially at the high end.",
+      name: "Theil L Index"
+    }
+  ]
+]);
