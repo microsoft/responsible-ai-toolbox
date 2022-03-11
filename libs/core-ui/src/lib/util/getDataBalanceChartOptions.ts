@@ -5,9 +5,9 @@ import { Point, SeriesOptionsType, TitleOptions } from "highcharts";
 
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import {
-  AggregateMeasureInfoMap,
-  DistributionMeasureInfoMap,
-  FeatureBalanceMeasureInfoMap,
+  ApprovedAggregateMeasures,
+  ApprovedDistributionMeasures,
+  ApprovedFeatureBalanceMeasures,
   getAggregateBalanceMeasures,
   getDistributionBalanceMeasures,
   getFeatureBalanceMeasures,
@@ -22,13 +22,9 @@ export function getFeatureBalanceChartOptions(
   selectedMeasure: string,
   datasetName?: string
 ): IHighchartsConfig {
-  const measure = FeatureBalanceMeasureInfoMap.get(selectedMeasure);
-  if (!measure) {
-    return {};
-  }
-
+  const measure = ApprovedFeatureBalanceMeasures.get(selectedMeasure);
   const uniqueClasses = featureBalanceMeasures.uniqueClasses[selectedFeature];
-  if (!uniqueClasses) {
+  if (!measure || !uniqueClasses) {
     return {};
   }
 
@@ -113,7 +109,7 @@ export function getFeatureBalanceChartOptions(
         )}</b> have a <b>${selectedMeasure}</b> of <b>${
           this.point.value
         }</b><br><br>${
-          FeatureBalanceMeasureInfoMap.get(selectedMeasure)?.description
+          ApprovedFeatureBalanceMeasures.get(selectedMeasure)?.description
         }`;
       }
     },
@@ -143,29 +139,41 @@ export function getDistributionBalanceChartOptions(
   distributionBalanceMeasures: IDistributionBalanceMeasures,
   datasetName?: string
 ): IHighchartsConfig {
-  const features = distributionBalanceMeasures.features;
-  const data = features.map(
-    (featureName: string) =>
-      ({
-        data: Object.values(
-          getDistributionBalanceMeasures(
-            distributionBalanceMeasures.measures,
-            featureName
-          )
-        ),
-        name: featureName,
-        type: "column"
-      } as SeriesOptionsType)
-  );
+  const approvedMeasureVarNames = new Set([
+    ...ApprovedDistributionMeasures.keys()
+  ]);
 
   // Assume that every feature has the same measures computed
   // and use the 1st feature to get a list of computed measures
-  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0]; // i.e. 'race'
-  const measureTypes = Object.keys(firstMeasure).map(
-    // i.e. ['inf_norm_dist', 'js_dist', 'kl_divergence']
-    (measureName: string) =>
-      DistributionMeasureInfoMap.get(measureName)?.name ?? measureName
-  );
+  const computedMeasures = Object.keys(
+    Object.values(distributionBalanceMeasures.measures)[0] // gets the measures dict for the 1st feature (i.e. 'race')
+  ); //  gets just the keys of the measures dict (i.e. ['inf_norm_dist', 'js_dist', 'kl_divergence'])
+
+  const measureOptions = computedMeasures
+    .filter((measureVarName) => approvedMeasureVarNames.has(measureVarName))
+    .map(
+      (measureVarName) =>
+        ApprovedDistributionMeasures.get(measureVarName)?.name ?? measureVarName
+    );
+
+  const features = distributionBalanceMeasures.features;
+  const data = features.map((featureName: string) => {
+    const measures = Object.entries(
+      getDistributionBalanceMeasures(
+        distributionBalanceMeasures.measures,
+        featureName
+      )
+    );
+    return {
+      data: measures
+        .filter(([measureVarNames]) =>
+          approvedMeasureVarNames.has(measureVarNames)
+        )
+        .map(([_, value]) => value),
+      name: featureName,
+      type: "column"
+    } as SeriesOptionsType;
+  });
 
   const titleOptions = {
     text: `Comparing ${features.join(", ")} with Uniform Distribution`
@@ -190,7 +198,7 @@ export function getDistributionBalanceChartOptions(
     },
     title: titleOptions,
     xAxis: {
-      categories: measureTypes,
+      categories: measureOptions,
       title: { text: "Distribution Measure" }
     },
     yAxis: {
@@ -207,7 +215,7 @@ export function getAggregateBalanceChartOptions(
   const data = Object.entries(
     getAggregateBalanceMeasures(aggregateBalanceMeasures.measures)
   ).map(([k, v], i) => {
-    const name = AggregateMeasureInfoMap.get(k)?.name;
+    const name = ApprovedAggregateMeasures.get(k)?.name;
     if (!name) {
       return {} as SeriesOptionsType;
     }
@@ -249,7 +257,7 @@ export function getAggregateBalanceChartOptions(
     tooltip: {
       formatter() {
         const point = this.points?.[0];
-        for (const v of AggregateMeasureInfoMap.values()) {
+        for (const v of ApprovedAggregateMeasures.values()) {
           if (v.name === point?.series.name) {
             return `<b>${point?.x}</b>: ${point?.y}<br><br>${v.description}`;
           }

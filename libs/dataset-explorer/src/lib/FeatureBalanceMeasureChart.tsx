@@ -3,7 +3,7 @@
 
 import {
   BasicHighChart,
-  FeatureBalanceMeasureInfoMap,
+  ApprovedFeatureBalanceMeasures,
   getFeatureBalanceChartOptions,
   IFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
@@ -57,7 +57,7 @@ export class FeatureBalanceMeasureChart extends React.PureComponent<
       )[0] // gets the measures dict for that feature (i.e. {'dp': 0f, 'ji': 1f})
     ); // gets just the keys of the measures dict (i.e. ['dp', 'ji'])
 
-    const measureOptions = [...FeatureBalanceMeasureInfoMap]
+    const measureOptions = [...ApprovedFeatureBalanceMeasures]
       .filter(([, measureInfo]) =>
         computedMeasures.includes(measureInfo.varName)
       )

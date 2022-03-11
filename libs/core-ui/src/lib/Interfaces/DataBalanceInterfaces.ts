@@ -27,7 +27,7 @@ interface DistributionMeasureInfo {
   description?: string;
 }
 
-export const DistributionMeasureInfoMap = new Map<
+export const ApprovedDistributionMeasures = new Map<
   string,
   DistributionMeasureInfo
 >([
@@ -38,18 +38,11 @@ export const DistributionMeasureInfoMap = new Map<
   ["wasserstein_dist", { name: "Wasserstein Distance" }]
 ]);
 
-const blockedDistributionMeasures = new Set(["chi_sq_stat", "chi_sq_p_value"]);
-
 export function getDistributionBalanceMeasures(
   measures: { [featureName: string]: { [measureName: string]: number } },
   featureName: string
 ): { [measureName: string]: number } {
   if (featureName in measures) {
-    // Don't return measures that cannot be plotted in the same range as the other measures
-    blockedDistributionMeasures.forEach((measureName) => {
-      delete measures[featureName][measureName];
-    });
-
     return measures[featureName];
   }
 
@@ -75,7 +68,7 @@ interface FeatureBalanceMeasureInfo {
 // It's easier to work with an info map where the key is the formatted name instead of var name because its keys are used to populate the Measure Dropdown
 // TODO: Need to figure out which measures to visualize in heatmap
 // Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
-export const FeatureBalanceMeasureInfoMap = new Map<
+export const ApprovedFeatureBalanceMeasures = new Map<
   string,
   FeatureBalanceMeasureInfo
 >([
@@ -165,7 +158,7 @@ interface AggregateMeasureInfo {
   description: string;
 }
 
-export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
+export const ApprovedAggregateMeasures = new Map<string, AggregateMeasureInfo>([
   [
     "atkinson_index",
     {
