@@ -73,9 +73,9 @@ const modelAssessmentDatasets = {
       hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "occupation",
       yAxisValue: "age"
     }
@@ -135,9 +135,9 @@ const modelAssessmentDatasets = {
       createYourOwnCounterfactualInputFieldUpdated: "25",
       hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "sex",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "s3",
       yAxisValue: "age"
     }
@@ -197,9 +197,9 @@ const modelAssessmentDatasets = {
       createYourOwnCounterfactualInputFieldUpdated: "25",
       hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "s6",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "bmi",
       yAxisValue: "age"
     }
@@ -289,9 +289,9 @@ const modelAssessmentDatasets = {
       hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : More than median",
       searchBarQuery: "Wood",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "1stFlrSF",
       yAxisValue: "LotFrontage"
     }

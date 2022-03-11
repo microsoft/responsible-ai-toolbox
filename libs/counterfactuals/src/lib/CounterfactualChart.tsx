@@ -17,16 +17,12 @@ import {
   FabricStyles,
   rowErrorSize,
   InteractiveLegend,
-  ICounterfactualData
+  ICounterfactualData,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import {
   getTheme,
@@ -40,6 +36,7 @@ import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualChartProps {
   data: ICounterfactualData;
@@ -286,11 +283,16 @@ export class CounterfactualChart extends React.PureComponent<
                     </MissingParametersPlaceholder>
                   )}
                   {canRenderChart && (
-                    <AccessibleChart
-                      plotlyProps={plotlyProps}
-                      theme={getTheme() as any}
-                      onClickHandler={this.selectPointFromChart}
-                    />
+                    <div className={classNames.highchartContainer}>
+                      <BasicHighChart
+                        configOverride={getCounterfactualChartOptions(
+                          plotlyProps,
+                          this.selectPointFromChart
+                        )}
+                        theme={getTheme()}
+                        id="CounterfactualChart"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className={classNames.horizontalAxisWithPadding}>
@@ -361,11 +363,13 @@ export class CounterfactualChart extends React.PureComponent<
                 )}
               </div>
             </div>
-            <LocalImportanceChart
-              rowNumber={this.state.selectedPointsIndexes[0]}
-              currentClass={this.getCurrentLabel()}
-              data={this.props.data}
-            />
+            <div className={classNames.localImportance}>
+              <LocalImportanceChart
+                rowNumber={this.state.selectedPointsIndexes[0]}
+                currentClass={this.getCurrentLabel()}
+                data={this.props.data}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -473,13 +477,9 @@ export class CounterfactualChart extends React.PureComponent<
   };
 
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
-    // non-custom point
-    if (trace.curveNumber !== 1) {
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-    }
+    const index = data.customdata[JointDataset.IndexLabel];
+    this.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.toggleSelectionOfPoint(index);
   };
 
   private getOriginalData(
@@ -700,7 +700,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
+      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
@@ -727,7 +727,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
+      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
@@ -749,7 +749,7 @@ export class CounterfactualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
