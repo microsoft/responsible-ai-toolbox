@@ -26,7 +26,7 @@ export class ScatterHighchart extends Chart<IHighScatter> {
     if (!offset) {
       return;
     }
-    cy.get(`${this.container} .nsewdrag.drag`).trigger("mousedown", {
+    cy.get(`${this.container} .highcharts-series-group`).trigger("mousedown", {
       clientX: offset.left,
       clientY: offset.top,
       eventConstructor: "MouseEvent",

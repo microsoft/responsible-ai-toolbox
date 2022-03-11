@@ -85,7 +85,7 @@ export function getFeatureImportanceBarOptions(
                 return;
               }
               const featureNumber = sortArray[this.x];
-              onFeatureSelection(0, featureNumber);
+              onFeatureSelection(this.series.index, featureNumber);
             }
           }
         }
@@ -98,12 +98,6 @@ export function getFeatureImportanceBarOptions(
     xAxis: {
       categories: xText,
       max: topK - 1
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        align: "high"
-      }
     }
   };
 }

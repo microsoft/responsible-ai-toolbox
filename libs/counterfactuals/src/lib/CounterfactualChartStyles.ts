@@ -37,6 +37,8 @@ export interface ICounterfactualChartStyles {
   multiclassWeightLabelText: IStyle;
   infoButton: IStyle;
   notAvailable: IStyle;
+  highchartContainer: IStyle;
+  localImportance: IStyle;
 }
 
 export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactualChartStyles> =
@@ -97,6 +99,9 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
         maxHeight: "350px",
         overflowY: "auto"
       },
+      highchartContainer: {
+        width: "1300px"
+      },
       horizontalAxis: {
         flex: 1,
         textAlign: "center"
@@ -133,6 +138,10 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
       legendLabel: {
         paddingBottom: "10px",
         paddingTop: "10px"
+      },
+      localImportance: {
+        height: "100%",
+        paddingTop: "50px"
       },
       mainArea: {
         alignItems: "stretch",

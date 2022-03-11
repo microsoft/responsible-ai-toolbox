@@ -27,7 +27,7 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       flexGrow: "1"
     },
     container: {
-      width: "1500px"
+      width: "1200px"
     },
     noData: {
       flex: "1",
