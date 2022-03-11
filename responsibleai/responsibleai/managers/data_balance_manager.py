@@ -3,7 +3,7 @@
 
 """Defines the Data Balance Manager class."""
 
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Literal, Optional, Set, Tuple, Union
 import warnings
 
 import pandas as pd
@@ -24,6 +24,8 @@ CLASS_B = "ClassB"
 SPARK_AGGREGATE_COL = "AggregateBalanceMeasure.*"
 SPARK_DISTRIBUTION_COL = "DistributionBalanceMeasure.*"
 SPARK_FEATURE_COL = "FeatureBalanceMeasure.*"
+
+SUPPORTED_BACKENDS = ["pandas", "spark"]
 
 
 class DataBalanceManager(BaseManager):
@@ -47,25 +49,16 @@ class DataBalanceManager(BaseManager):
         cols_of_interest: List[str],
         pos_label: Optional[str] = None,
         custom_data: Optional[Any] = None,
+        backend: Literal["pandas", "spark"] = "pandas",
     ):
         self._cols_of_interest = cols_of_interest
         self._pos_label = pos_label
         self._custom_data = custom_data
+        self._backend = backend
 
     def compute(self):
-        if (
-            self._train is None
-            or self._train.empty
-            or not all([self._cols_of_interest, self._target_column])
-        ):
+        if not self._validate():
             return
-
-        if self._custom_data is not None:
-            self._df = self._custom_data
-        elif self._test is not None and not self._test.empty:
-            self._df = pd.concat([self._train, self._test])
-        else:
-            self._df = self._train
 
         self._data_balance_measures = (
             DataBalanceManager._get_data_balance_measures(
@@ -73,6 +66,7 @@ class DataBalanceManager(BaseManager):
                 cols_of_interest=self._cols_of_interest,
                 target_column=self._target_column,
                 pos_label=self._pos_label,
+                backend=self._backend,
             )
         )
 
@@ -91,12 +85,77 @@ class DataBalanceManager(BaseManager):
     def name(self):
         return ManagerNames.DATA_BALANCE
 
+    def _save(self, path):
+        """Abstract method to save the manager.
+
+        :param path: The directory path to save the manager to.
+        :type path: str
+        """
+        ...
+
+    @staticmethod
+    def _load(path, rai_insights):
+        """Static method to load the manager.
+
+        :param path: The directory path to load the manager from.
+        :type path: str
+        :param rai_insights: The loaded parent RAIInsights.
+        :type rai_insights: RAIInsights
+        :return: The BaseManager after loading.
+        :rtype: BaseManager
+        """
+        ...
+
+    def _validate(self) -> bool:
+        if self._custom_data is not None:
+            self._df = self._custom_data
+        elif (
+            self._train is not None
+            and not self._train.empty
+            and self._test is not None
+            and not self._test.empty
+        ):
+            self._df = pd.concat([self._train, self._test])
+        elif self._train is not None and not self._train.empty:
+            self._df = self._train
+        elif self._test is not None and not self._test.empty:
+            self._df = self._test
+        else:
+            warnings.warn(
+                (
+                    "Either `train`, `test`, or `custom_data` must be provided"
+                    " to compute data balance measures."
+                )
+            )
+            return False
+
+        if not all([self._cols_of_interest, self._target_column]):
+            warnings.warn(
+                (
+                    "Both `cols_of_interest` and `target_column` must be"
+                    " provided to compute data balance measures."
+                )
+            )
+            return False
+
+        if self._backend not in SUPPORTED_BACKENDS:
+            warnings.warn(
+                (
+                    "`backend` must be one of the supported backends:"
+                    f" {SUPPORTED_BACKENDS} to compute data balance measures."
+                )
+            )
+            return False
+
+        return True
+
     @staticmethod
     def _get_data_balance_measures(
         df: Union[pd.DataFrame, Any],
         cols_of_interest: List[str],
         target_column: str,
         pos_label: str,
+        backend: Literal["pandas", "spark"],
     ) -> Optional[Dict[str, Any]]:
         try:
             (
@@ -108,6 +167,7 @@ class DataBalanceManager(BaseManager):
                 cols_of_interest=cols_of_interest,
                 target_column=target_column,
                 pos_label=pos_label,
+                backend=backend,
             )
 
             (
@@ -136,106 +196,112 @@ class DataBalanceManager(BaseManager):
         except Exception as e:
             warnings.warn(f"Failed to get data balance measures due to {e!r}.")
 
-    def _save(self, path):
-        """Abstract method to save the manager.
-
-        :param path: The directory path to save the manager to.
-        :type path: str
-        """
-        ...
-
-    @staticmethod
-    def _load(path, rai_insights):
-        """Static method to load the manager.
-
-        :param path: The directory path to load the manager from.
-        :type path: str
-        :param rai_insights: The loaded parent RAIInsights.
-        :type rai_insights: RAIInsights
-        :return: The BaseManager after loading.
-        :rtype: BaseManager
-        """
-        ...
-
     @staticmethod
     def _compute_measures(
         df: Union[pd.DataFrame, Any],
         cols_of_interest: List[str],
         target_column: str,
         pos_label: str,
+        backend: Literal["pandas", "spark"],
     ) -> Tuple[
         Optional[pd.DataFrame], Optional[pd.DataFrame], Optional[pd.DataFrame]
     ]:
-        feature_measures: pd.DataFrame = None
-        distribution_measures: pd.DataFrame = None
-        aggregate_measures: pd.DataFrame = None
-
-        try:
-            # This inner try-catch is to catch an ImportError from importing
-            # the Spark implementation, which requires Spark env
-            # and SynapseML package to be installed
+        if backend == "spark":
             try:
-                from synapse.ml import exploratory as SparkDataBalance
-                import pyspark.sql.functions as F
-
-                # If imports succeed, assume that the df is a spark df and
-                # compute measures using Spark implementation
-
-                # We don't need to deepcopy the spark df because it's immutable
-                if pos_label:
-                    df = df.withColumn(
-                        target_column,
-                        F.when(
-                            F.col(target_column).contains(pos_label), F.lit(1)
-                        ).otherwise(F.lit(0)),
-                    )
-
-                feature_measures: pd.DataFrame = (
-                    SparkDataBalance.FeatureBalanceMeasure()
-                    .setSensitiveCols(cols_of_interest)
-                    .setLabelCol(target_column)
-                    .transform(df)
-                    .select(FEATURE_NAME, CLASS_A, CLASS_B, SPARK_FEATURE_COL)
-                    .toPandas()
+                return DataBalanceManager._compute_measures_spark(
+                    df=df,
+                    cols_of_interest=cols_of_interest,
+                    target_column=target_column,
+                    pos_label=pos_label,
                 )
-                distribution_measures: pd.DataFrame = (
-                    SparkDataBalance.DistributionBalanceMeasure()
-                    .setSensitiveCols(cols_of_interest)
-                    .transform(df)
-                    .select(FEATURE_NAME, SPARK_DISTRIBUTION_COL)
-                    .toPandas()
-                )
-                aggregate_measures: pd.DataFrame = (
-                    SparkDataBalance.AggregateBalanceMeasure()
-                    .setSensitiveCols(cols_of_interest)
-                    .transform(df)
-                    .select(SPARK_AGGREGATE_COL)
-                    .toPandas()
+            except Exception as e:
+                warnings.warn(
+                    f"Failed to compute data balance with spark due to {e!r}.",
                 )
 
-            # If imports fail, revert to non-Spark implementation
-            except ImportError:
-                # We need to deepcopy the df otherwise original df will mutate
-                df = df.copy(deep=True)
-
-                if pos_label and pos_label in df[target_column].unique():
-                    df[target_column] = df[target_column].apply(
-                        lambda x: 1 if x == pos_label else 0
-                    )
-
-                feature_measures: pd.DataFrame = FeatureBalanceMeasure(
-                    cols_of_interest, target_column
-                ).measures(df)
-                distribution_measures: pd.DataFrame = (
-                    DistributionBalanceMeasure(cols_of_interest).measures(df)
-                )
-                aggregate_measures: pd.DataFrame = AggregateBalanceMeasure(
-                    cols_of_interest
-                ).measures(df)
+        # If spark backend fails or backend == "pandas", use pandas backend
+        try:
+            return DataBalanceManager._compute_measures_pandas(
+                df=df,
+                cols_of_interest=cols_of_interest,
+                target_column=target_column,
+                pos_label=pos_label,
+            )
         except Exception as e:
             warnings.warn(
-                f"Failed to compute all data balance measures due to {e!r}.",
+                f"Failed to compute data balance with pandas due to {e!r}.",
             )
+
+    @staticmethod
+    def _compute_measures_spark(
+        df: Union[pd.DataFrame, Any],
+        cols_of_interest: List[str],
+        target_column: str,
+        pos_label: str,
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        from synapse.ml import exploratory as SparkDataBalance
+        import pyspark.sql.functions as F
+
+        # If imports succeed, assume that the df is a spark df and
+        # compute measures using Spark implementation
+        # We don't need to deepcopy the spark df because it's immutable
+        if pos_label:
+            df = df.withColumn(
+                target_column,
+                F.when(
+                    F.col(target_column).contains(pos_label), F.lit(1)
+                ).otherwise(F.lit(0)),
+            )
+
+        feature_measures: pd.DataFrame = (
+            SparkDataBalance.FeatureBalanceMeasure()
+            .setSensitiveCols(cols_of_interest)
+            .setLabelCol(target_column)
+            .transform(df)
+            .select(FEATURE_NAME, CLASS_A, CLASS_B, SPARK_FEATURE_COL)
+            .toPandas()
+        )
+        distribution_measures: pd.DataFrame = (
+            SparkDataBalance.DistributionBalanceMeasure()
+            .setSensitiveCols(cols_of_interest)
+            .transform(df)
+            .select(FEATURE_NAME, SPARK_DISTRIBUTION_COL)
+            .toPandas()
+        )
+        aggregate_measures: pd.DataFrame = (
+            SparkDataBalance.AggregateBalanceMeasure()
+            .setSensitiveCols(cols_of_interest)
+            .transform(df)
+            .select(SPARK_AGGREGATE_COL)
+            .toPandas()
+        )
+
+        return feature_measures, distribution_measures, aggregate_measures
+
+    @staticmethod
+    def _compute_measures_pandas(
+        df: pd.DataFrame,
+        cols_of_interest: List[str],
+        target_column: str,
+        pos_label: str,
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        # We need to deepcopy the df otherwise original df will mutate
+        df = df.copy(deep=True)
+
+        if pos_label and pos_label in df[target_column].unique():
+            df[target_column] = df[target_column].apply(
+                lambda x: 1 if x == pos_label else 0
+            )
+
+        feature_measures: pd.DataFrame = FeatureBalanceMeasure(
+            cols_of_interest, target_column
+        ).measures(df)
+        distribution_measures: pd.DataFrame = DistributionBalanceMeasure(
+            cols_of_interest
+        ).measures(df)
+        aggregate_measures: pd.DataFrame = AggregateBalanceMeasure(
+            cols_of_interest
+        ).measures(df)
 
         return feature_measures, distribution_measures, aggregate_measures
 

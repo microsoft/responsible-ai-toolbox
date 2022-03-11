@@ -92,7 +92,7 @@ class RAIInsights(object):
             (for performance reasons)
         :type maximum_rows_for_test: int
 
-        # TODO: Add docs for dataset_name and data_balance_analysis
+        # TODO: Add docs for dataset_name
         """
         categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
