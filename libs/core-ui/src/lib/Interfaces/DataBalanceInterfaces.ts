@@ -27,11 +27,6 @@ interface DistributionMeasureInfo {
   description?: string;
 }
 
-// TODO: Currently description is not used. It was too complicated to display them as part of a tooltip.
-// Things tried but failed to work:
-// - Appending to the default tooltip (could not access default tooltip)
-// - Overriding the default tooltip with a custom one (worked but could not get the colored circles that default tooltip has)
-// - Adding a custom hover-over as a load() event (could not figure out which measure was being hovered over)
 export const DistributionMeasureInfoMap = new Map<
   string,
   DistributionMeasureInfo
@@ -62,7 +57,7 @@ export function getDistributionBalanceMeasures(
 }
 
 export interface IFeatureBalanceMeasures {
-  featureValues: { [featureName: string]: string[] };
+  uniqueClasses: { [featureName: string]: string[] };
   features: string[];
   measures: {
     [featureName: string]: {
@@ -77,6 +72,7 @@ interface FeatureBalanceMeasureInfo {
   range?: [number, number];
 }
 
+// It's easier to work with an info map where the key is the formatted name instead of var name because its keys are used to populate the Measure Dropdown
 // TODO: Need to figure out which measures to visualize in heatmap
 // Positive rates aren't good to visualize in a heatmap because it is per feature value, not a combination of feature values, so we exclude prA and prB
 export const FeatureBalanceMeasureInfoMap = new Map<
@@ -174,7 +170,7 @@ export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
     "atkinson_index",
     {
       description:
-        "<b>Atkinson Index</b> measures the percentage of total data that must be removed<br>in order to have a perfectly balanced dataset, with respect to the selected features.<br>Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality.",
+        "<b>Atkinson Index</b> measures the percentage of total data that must be removed<br>in order to have a perfectly balanced dataset, with respect to the selected features.<br>Its range is [0, 1], where 0 means perfect equality and 1 means maximum inequality for the features selected.",
       name: "Atkinson Index"
     }
   ],
@@ -182,7 +178,7 @@ export const AggregateMeasureInfoMap = new Map<string, AggregateMeasureInfo>([
     "theil_t_index",
     {
       description:
-        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution.<br>If the data contains every feature combination equally, then the it equals 0.<br>If one feature combination is seen in 100% of the data,<br>then the Theil T Index equals ln(N) (where N = number of feature combinations).",
+        "<b>Theil T Index</b> is more sensitive to differences at the top of the distribution.<br>If the data contains every feature combination equally, then it equals 0.<br>If one feature combination is seen in 100% of the data,<br>then the Theil T Index equals ln(N) (where N = TODO).",
       name: "Theil T Index"
     }
   ],

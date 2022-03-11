@@ -166,7 +166,7 @@ class DataBalanceManager(BaseManager):
             )
 
             (
-                unique_values,
+                unique_classes,
                 feature_measures,
             ) = DataBalanceManager._transform_feature_measures(
                 df=feat_measures_df
@@ -183,7 +183,7 @@ class DataBalanceManager(BaseManager):
             )
 
             return DataBalanceManager._transform_data_balance_measures(
-                unique_values=unique_values,
+                unique_classes=unique_classes,
                 feature_measures=feature_measures,
                 distribution_measures=distribution_measures,
                 aggregate_measures=aggregate_measures,
@@ -308,14 +308,14 @@ class DataBalanceManager(BaseManager):
         Transform the feature balance measures df into a dictionary
         acceptable by the RAI dashboard
         """
-        unique_values: Dict[str, Set[str]] = {}
+        unique_classes: Dict[str, Set[str]] = {}
         feature_measures: Dict[str, Dict[str, Dict[str, float]]] = {}
 
         try:
             rows: List[Any] = df.reset_index(drop=True).to_dict(
                 orient="records"
             )
-            unique_values: Dict[str, Set[str]] = {
+            unique_classes: Dict[str, Set[str]] = {
                 r[FEATURE_NAME]: set() for r in rows
             }
             feature_measures: Dict[str, Dict[str, Dict[str, float]]] = {
@@ -328,8 +328,8 @@ class DataBalanceManager(BaseManager):
                 class_b: str = row[CLASS_B]
                 class_key: str = f"{class_a}__{class_b}"
 
-                unique_values[feature_name].add(class_a)
-                unique_values[feature_name].add(class_b)
+                unique_classes[feature_name].add(class_a)
+                unique_classes[feature_name].add(class_b)
 
                 del row[FEATURE_NAME]
                 del row[CLASS_A]
@@ -337,15 +337,15 @@ class DataBalanceManager(BaseManager):
 
                 feature_measures[feature_name][class_key] = row
 
-            unique_values: Dict[str, List[str]] = {
-                k: list(v) for k, v in unique_values.items()
+            unique_classes: Dict[str, List[str]] = {
+                k: list(v) for k, v in unique_classes.items()
             }
         except Exception as e:
             warnings.warn(
                 f"Failed to transform feature measures due to {e!r}."
             )
 
-        return unique_values, feature_measures
+        return unique_classes, feature_measures
 
     @staticmethod
     def _transform_distribution_measures(
@@ -395,7 +395,7 @@ class DataBalanceManager(BaseManager):
 
     @staticmethod
     def _transform_data_balance_measures(
-        unique_values,
+        unique_classes,
         feature_measures,
         distribution_measures,
         aggregate_measures,
@@ -414,7 +414,7 @@ class DataBalanceManager(BaseManager):
                 },
                 "featureBalanceMeasures": {
                     "features": list(feature_measures.keys()),
-                    "featureValues": unique_values,
+                    "uniqueClasses": unique_classes,
                     "measures": feature_measures,
                 },
                 "aggregateBalanceMeasures": {

@@ -38,7 +38,7 @@ export class FeatureBalanceMeasureChart extends React.PureComponent<
   public render(): React.ReactNode {
     const featureBalanceMeasures = this.props.featureBalanceMeasures;
     if (
-      !featureBalanceMeasures.featureValues ||
+      !featureBalanceMeasures.uniqueClasses ||
       !featureBalanceMeasures.measures ||
       !featureBalanceMeasures.features
     ) {
@@ -48,9 +48,22 @@ export class FeatureBalanceMeasureChart extends React.PureComponent<
     const featureOptions = featureBalanceMeasures.features.map(
       (feature, index) => ({ key: index, text: feature } as IDropdownOption)
     );
-    const measureOptions = [...FeatureBalanceMeasureInfoMap].map(
-      ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
-    );
+
+    // Assume that every feature has the same measures computed
+    // and use the 1st feature to get a list of computed measures
+    const computedMeasures = Object.keys(
+      Object.values(
+        Object.values(featureBalanceMeasures.measures)[0] // gets the 1st feature (i.e. 'race')
+      )[0] // gets the measures dict for that feature (i.e. {'dp': 0f, 'ji': 1f})
+    ); // gets just the keys of the measures dict (i.e. ['dp', 'ji'])
+
+    const measureOptions = [...FeatureBalanceMeasureInfoMap]
+      .filter(([, measureInfo]) =>
+        computedMeasures.includes(measureInfo.varName)
+      )
+      .map(
+        ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
+      );
 
     const styles = dataBalanceTabStyles();
 

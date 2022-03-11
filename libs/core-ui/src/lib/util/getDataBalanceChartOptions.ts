@@ -27,31 +27,28 @@ export function getFeatureBalanceChartOptions(
     return {};
   }
 
-  const features = new Map<string, string[]>([
-    [selectedFeature, featureBalanceMeasures.featureValues[selectedFeature]]
-  ]);
-  const featureNames = features.get(selectedFeature);
-  if (!featureNames) {
+  const uniqueClasses = featureBalanceMeasures.uniqueClasses[selectedFeature];
+  if (!uniqueClasses) {
     return {};
   }
 
   const featureValues: number[][] = [];
-  features.forEach((classes, featureName) => {
-    classes.forEach((classA, colIndex) => {
-      classes.forEach((classB, rowIndex) => {
-        const featureValue = getFeatureBalanceMeasures(
-          featureBalanceMeasures.measures,
-          featureName,
-          classA,
-          classB
-        )[measure.varName];
+  uniqueClasses.forEach((classA, colIndex) => {
+    uniqueClasses.forEach((classB, rowIndex) => {
+      const featureValue = getFeatureBalanceMeasures(
+        featureBalanceMeasures.measures,
+        selectedFeature,
+        classA,
+        classB
+      )[measure.varName];
 
-        // Feature values don't exist for the diagonal of the heatmap (i.e. the same class)
-        // Additionally, some feature values may be undefined/invalid/NaN
-        if (featureValue && colIndex !== rowIndex) {
-          featureValues.push([colIndex, rowIndex, featureValue]);
-        }
-      });
+      // Feature values don't exist for the diagonal of the heatmap (i.e. the same class)
+      // Additionally, some feature values may be undefined/invalid/NaN
+      if (featureValue && colIndex !== rowIndex) {
+        // Add the feature value for comparing class A (col index) to class B (row index)
+        // The feature value may not be the same as the feature value when comparing class B to class A (swapped row and col)
+        featureValues.push([colIndex, rowIndex, featureValue]);
+      }
     });
   });
 
@@ -101,7 +98,7 @@ export function getFeatureBalanceChartOptions(
       }
     ],
     subtitle: {
-      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures">Click here to learn more about Feature Balance Measures</a>`,
+      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures">Reference Link for Feature Balance Measures</a>`,
       useHTML: true
     },
     title: titleOptions,
@@ -121,11 +118,11 @@ export function getFeatureBalanceChartOptions(
       }
     },
     xAxis: {
-      categories: featureNames,
+      categories: uniqueClasses,
       title: { text: "Class B" }
     },
     yAxis: {
-      categories: featureNames,
+      categories: uniqueClasses,
       title: { text: "Class A" }
     }
   };
@@ -161,10 +158,11 @@ export function getDistributionBalanceChartOptions(
       } as SeriesOptionsType)
   );
 
-  // Assume that every feature has the same measures calculated
-  // and use the 1st feature to get a list of measure types
-  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0];
+  // Assume that every feature has the same measures computed
+  // and use the 1st feature to get a list of computed measures
+  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0]; // i.e. 'race'
   const measureTypes = Object.keys(firstMeasure).map(
+    // i.e. ['inf_norm_dist', 'js_dist', 'kl_divergence']
     (measureName: string) =>
       DistributionMeasureInfoMap.get(measureName)?.name ?? measureName
   );
@@ -176,6 +174,10 @@ export function getDistributionBalanceChartOptions(
     titleOptions.text += ` in ${datasetName}`;
   }
 
+  // TODO: Show the measure's description in a tooltip. Things tried but failed to work:
+  // - Appending to the default tooltip (could not access default tooltip text)
+  // - Overriding the default tooltip with a custom one (worked but could not render the colored circles that default tooltip has)
+  // - Adding a custom hover-over as a load() event (could not figure out which measure was being hovered over)
   return {
     chart: {
       numberFormatter: (value: number) => value.toFixed(3),
@@ -183,7 +185,7 @@ export function getDistributionBalanceChartOptions(
     },
     series: data,
     subtitle: {
-      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures">Click here to learn more about Distribution Balance Measures</a>`,
+      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures">Reference Link for Distribution Balance Measures</a>`,
       useHTML: true
     },
     title: titleOptions,
@@ -240,7 +242,7 @@ export function getAggregateBalanceChartOptions(
     },
     series: data,
     subtitle: {
-      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures">Click here to learn more about Aggregate Balance Measures</a>`,
+      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures">Reference Link for Aggregate Balance Measures</a>`,
       useHTML: true
     },
     title: titleOptions,
