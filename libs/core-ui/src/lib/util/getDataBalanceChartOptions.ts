@@ -5,8 +5,10 @@ import { Point, SeriesOptionsType, TitleOptions } from "highcharts";
 
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import {
-  aggregateBalanceMeasureMap,
-  featureBalanceMeasureMap,
+  AggregateMeasureInfoMap,
+  DistributionMeasureInfoMap,
+  FeatureBalanceMeasureInfoMap,
+  getAggregateBalanceMeasures,
   getDistributionBalanceMeasures,
   getFeatureBalanceMeasures,
   IAggregateBalanceMeasures,
@@ -14,65 +16,13 @@ import {
   IFeatureBalanceMeasures
 } from "../Interfaces/DataBalanceInterfaces";
 
-export function getDistributionBalanceChartOptions(
-  distributionBalanceMeasures: IDistributionBalanceMeasures,
-  datasetName?: string
-): IHighchartsConfig {
-  const features = distributionBalanceMeasures.features;
-  const data = features.map(
-    (featureName: string) =>
-      ({
-        data: Object.values(
-          getDistributionBalanceMeasures(
-            distributionBalanceMeasures.measures,
-            featureName
-          )
-        ),
-        name: featureName,
-        type: "column"
-      } as SeriesOptionsType)
-  );
-
-  // Assume that every feature has the same measures calculated
-  // and use the 1st feature to get a list of measure types
-  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0];
-  const measureTypes = Object.keys(firstMeasure);
-
-  const titleOptions = {
-    text: `Comparing ${features.join(", ")} with Uniform Distribution`
-  } as TitleOptions;
-  if (datasetName) {
-    titleOptions.text += ` in ${datasetName}`;
-  }
-
-  return {
-    chart: {
-      numberFormatter: (value: number) => value.toFixed(3),
-      type: "column"
-    },
-    series: data,
-    subtitle: {
-      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures">Click here to learn more about Distribution Balance Measures</a>`,
-      useHTML: true
-    },
-    title: titleOptions,
-    xAxis: {
-      categories: measureTypes,
-      title: { text: "Distribution Measure" }
-    },
-    yAxis: {
-      title: { text: "Measure Value" }
-    }
-  };
-}
-
 export function getFeatureBalanceChartOptions(
   featureBalanceMeasures: IFeatureBalanceMeasures,
   selectedFeature: string,
   selectedMeasure: string,
   datasetName?: string
 ): IHighchartsConfig {
-  const measure = featureBalanceMeasureMap.get(selectedMeasure);
+  const measure = FeatureBalanceMeasureInfoMap.get(selectedMeasure);
   if (!measure) {
     return {};
   }
@@ -81,12 +31,14 @@ export function getFeatureBalanceChartOptions(
     [selectedFeature, featureBalanceMeasures.featureValues[selectedFeature]]
   ]);
   const featureNames = features.get(selectedFeature);
-  const featureValues: number[][] = [];
+  if (!featureNames) {
+    return {};
+  }
 
+  const featureValues: number[][] = [];
   features.forEach((classes, featureName) => {
     classes.forEach((classA, colIndex) => {
       classes.forEach((classB, rowIndex) => {
-        // TODO: Need to figure out which measures are ok to use for heatmap
         const featureValue = getFeatureBalanceMeasures(
           featureBalanceMeasures.measures,
           featureName,
@@ -167,7 +119,7 @@ export function getFeatureBalanceChartOptions(
         )}</b> have a <b>${selectedMeasure}</b> of <b>${
           this.point.value
         }</b><br><br>${
-          featureBalanceMeasureMap.get(selectedMeasure)?.description
+          FeatureBalanceMeasureInfoMap.get(selectedMeasure)?.description
         }`;
       }
     },
@@ -193,17 +145,80 @@ function getPointCategoryName(point: Point, dimension: "x" | "y"): string {
   return axis.categories[isY ? point.y : point.x];
 }
 
+export function getDistributionBalanceChartOptions(
+  distributionBalanceMeasures: IDistributionBalanceMeasures,
+  datasetName?: string
+): IHighchartsConfig {
+  const features = distributionBalanceMeasures.features;
+  const data = features.map(
+    (featureName: string) =>
+      ({
+        data: Object.values(
+          getDistributionBalanceMeasures(
+            distributionBalanceMeasures.measures,
+            featureName
+          )
+        ),
+        name: featureName,
+        type: "column"
+      } as SeriesOptionsType)
+  );
+
+  // Assume that every feature has the same measures calculated
+  // and use the 1st feature to get a list of measure types
+  const firstMeasure = Object.values(distributionBalanceMeasures.measures)[0];
+  const measureTypes = Object.keys(firstMeasure).map(
+    (measureName: string) =>
+      DistributionMeasureInfoMap.get(measureName)?.name ?? measureName
+  );
+
+  const titleOptions = {
+    text: `Comparing ${features.join(", ")} with Uniform Distribution`
+  } as TitleOptions;
+  if (datasetName) {
+    titleOptions.text += ` in ${datasetName}`;
+  }
+
+  return {
+    chart: {
+      numberFormatter: (value: number) => value.toFixed(3),
+      type: "column"
+    },
+    series: data,
+    subtitle: {
+      text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures">Click here to learn more about Distribution Balance Measures</a>`,
+      useHTML: true
+    },
+    title: titleOptions,
+    xAxis: {
+      categories: measureTypes,
+      title: { text: "Distribution Measure" }
+    },
+    yAxis: {
+      title: { text: "Measure Value" }
+    }
+  };
+}
+
 export function getAggregateBalanceChartOptions(
   aggregateBalanceMeasures: IAggregateBalanceMeasures,
   datasetName?: string
 ): IHighchartsConfig {
-  console.log(aggregateBalanceMeasureMap);
-
-  const data = Object.entries(aggregateBalanceMeasures.measures).map(
-    ([k, v]) => ({ data: [v], name: k, type: "bar" } as SeriesOptionsType)
-  );
-
-  // TODO: Don't use series so we can show proper tooltips
+  const categories: string[] = [];
+  const data = Object.entries(
+    getAggregateBalanceMeasures(aggregateBalanceMeasures.measures)
+  ).map(([k, v], i) => {
+    const name = AggregateMeasureInfoMap.get(k)?.name;
+    if (!name) {
+      return {} as SeriesOptionsType;
+    }
+    categories.push(name);
+    return {
+      data: [[i, v]],
+      name,
+      type: "bar"
+    } as SeriesOptionsType;
+  });
 
   const titleOptions = {
     text: `Aggregate Balance Measures`
@@ -219,14 +234,33 @@ export function getAggregateBalanceChartOptions(
     exporting: {
       showTable: false
     },
+    plotOptions: {
+      bar: {
+        dataLabels: {
+          enabled: true
+        }
+      }
+    },
     series: data,
     subtitle: {
       text: `<a target="_blank" href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures">Click here to learn more about Aggregate Balance Measures</a>`,
       useHTML: true
     },
     title: titleOptions,
+    tooltip: {
+      formatter() {
+        const point = this.points?.[0];
+        for (const v of AggregateMeasureInfoMap.values()) {
+          if (v.name === point?.series.name) {
+            return `<b>${point?.x}</b>: ${point?.y}<br><br>${v.description}`;
+          }
+        }
+
+        return "";
+      }
+    },
     xAxis: {
-      categories: ["Aggregate Measures"]
+      categories
     },
     yAxis: {
       title: { text: "Measure Value" }

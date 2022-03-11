@@ -3,7 +3,7 @@
 
 import {
   BasicHighChart,
-  featureBalanceMeasureMap,
+  FeatureBalanceMeasureInfoMap,
   getFeatureBalanceChartOptions,
   IFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
@@ -48,7 +48,7 @@ export class FeatureBalanceMeasureChart extends React.PureComponent<
     const featureOptions = featureBalanceMeasures.features.map(
       (feature, index) => ({ key: index, text: feature } as IDropdownOption)
     );
-    const measureOptions = [...featureBalanceMeasureMap].map(
+    const measureOptions = [...FeatureBalanceMeasureInfoMap].map(
       ([name, _], index) => ({ key: index, text: name } as IDropdownOption)
     );
 
