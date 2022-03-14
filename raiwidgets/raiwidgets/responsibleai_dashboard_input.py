@@ -10,6 +10,7 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
+from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 
 from .cohort import Cohort
@@ -48,8 +49,8 @@ class ResponsibleAIDashboardInput:
             self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
-        self._row_length = len(self.dashboard_input.dataset.features)
-        self._error_analyzer = analysis.error_analysis._analyzer
+        if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
+            self._error_analyzer = analysis.error_analysis._analyzer
 
     def _validate_cohort_list(self, cohort_list=None):
         if cohort_list is None:
