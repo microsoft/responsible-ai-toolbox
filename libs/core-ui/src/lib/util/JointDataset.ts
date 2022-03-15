@@ -398,7 +398,7 @@ export class JointDataset {
     }
   }
 
-  private static buildLocalFeatureMatrix(
+  public static buildLocalFeatureMatrix(
     localExplanationRaw: number[][] | number[][][],
     modelType: ModelTypes
   ): number[][][] {
