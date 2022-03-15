@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IColumn } from "office-ui-fabric-react";
+import { ColumnActionsMode, IColumn } from "office-ui-fabric-react";
 
 import { JointDataset } from "../util/JointDataset";
 
@@ -84,7 +84,8 @@ export function constructCols(
     key: "column0",
     maxWidth: 100,
     minWidth: 50,
-    name: "Index"
+    name: "Index",
+    columnActionsMode: ColumnActionsMode.disabled
   });
   let index = 1;
   if (hasColors) {
@@ -94,7 +95,8 @@ export function constructCols(
       key: "color",
       maxWidth: 100,
       minWidth: 50,
-      name: "Color"
+      name: "Color",
+      columnActionsMode: ColumnActionsMode.disabled
     });
     index++;
   }
@@ -105,7 +107,8 @@ export function constructCols(
       key: `column${index}`,
       maxWidth: 100,
       minWidth: 50,
-      name: "TrueY"
+      name: "TrueY",
+      columnActionsMode: ColumnActionsMode.disabled
     });
     index++;
   }
@@ -116,7 +119,8 @@ export function constructCols(
       key: `column${index}`,
       maxWidth: 100,
       minWidth: 50,
-      name: "PredictedY"
+      name: "PredictedY",
+      columnActionsMode: ColumnActionsMode.disabled
     });
     index++;
   }
@@ -127,7 +131,8 @@ export function constructCols(
       key: `column${index}`,
       maxWidth: 200,
       minWidth: 100,
-      name: featureNames[i]
+      name: featureNames[i],
+      columnActionsMode: ColumnActionsMode.disabled
     });
     index += 1;
   }
