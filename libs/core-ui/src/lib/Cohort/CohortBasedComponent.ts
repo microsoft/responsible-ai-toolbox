@@ -45,7 +45,7 @@ export abstract class CohortBasedComponent<
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
-      selectedCohortName = "Unsaved";
+      selectedCohortName = "Temporary cohort";
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
