@@ -40,7 +40,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
       localization.ModelAssessment.CohortInformation.Filters
     } = ${currentCohort.cohort.filters.length.toString()}`;
     return (
-      <Stack grow tokens={{ childrenGap: 10, padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "l1" }}>
         <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
         <Stack>
           <Text>{datapointsCountString}</Text>

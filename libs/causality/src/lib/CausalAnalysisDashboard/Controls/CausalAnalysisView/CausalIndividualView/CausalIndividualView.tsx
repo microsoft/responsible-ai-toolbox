@@ -44,7 +44,7 @@ export class CausalIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalIndividualStyles();
     return (
-      <Stack id="causalIndividualView" grow tokens={{ padding: "16px 8px" }}>
+      <Stack id="causalIndividualView" grow tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"} className={styles.label}>
             {localization.CausalAnalysis.IndividualView.description}
