@@ -241,7 +241,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       const newlySelectedCohort = newCohorts[editIndex];
       this.setState({
         cohorts: newCohorts,
-        selectedCohort: newlySelectedCohort,
+        selectedCohort: newlySelectedCohort
       });
       return;
     }
