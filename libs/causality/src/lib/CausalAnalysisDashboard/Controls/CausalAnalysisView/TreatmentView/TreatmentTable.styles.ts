@@ -16,17 +16,15 @@ export interface ITreatmentTableStyles {
   spinButtonText: IStyle;
   table: IStyle;
   label: IStyle;
-  chartContainer: IStyle;
+  treatmentBarContainer: IStyle;
 }
 
 export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyles> =
   () => {
     return mergeStyleSets<ITreatmentTableStyles>({
-      chartContainer: {
-        minHeight: "500px"
-      },
       description: {
-        paddingTop: "110px"
+        paddingTop: "10px",
+        width: "45%"
       },
       detailsList: {
         width: "75%"
@@ -66,6 +64,10 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         },
         textAlign: "center",
         width: "50vw"
+      },
+      treatmentBarContainer: {
+        hight: "100%",
+        width: "100%"
       }
     });
   };
