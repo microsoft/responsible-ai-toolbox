@@ -51,7 +51,7 @@ export function HighchartReact(
     if (chartRef.current) {
       if (!props.disableUpdate) {
         // Update is requested and we let Highcharts to the update
-        chartRef.current.update(props.chartOptions);
+        chartRef.current.update(props.chartOptions, undefined, true);
 
         // See caller needs to do something after the update
         if (props.onUpdate) {
