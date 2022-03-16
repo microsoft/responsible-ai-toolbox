@@ -238,11 +238,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     newCohorts[editIndex] = newErrorCohort;
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
     if (switchNew) {
-      const newBaseCohort = newCohorts[editIndex];
+      const newlySelectedCohort = newCohorts[editIndex];
       this.setState({
         cohorts: newCohorts,
-        selectedCohort: newBaseCohort,
-        //baseCohort: newBaseCohort
+        selectedCohort: newlySelectedCohort,
       });
       return;
     }
