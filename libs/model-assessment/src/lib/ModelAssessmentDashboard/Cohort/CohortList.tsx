@@ -220,13 +220,27 @@ export class CohortList extends React.Component<
     const all = this.getAllCohort();
     if (index >= 0 && index < all.length) {
       const originCohort = all[index];
+      const duplicatedCohortNameStub =
+        originCohort.cohort.name + localization.Interpret.CohortBanner.copy;
+      let duplicatedCohortName = duplicatedCohortNameStub;
+      let cohortCopyIndex = 0;
+      while (this.existsCohort(all, duplicatedCohortName)) {
+        cohortCopyIndex++;
+        duplicatedCohortName = `${duplicatedCohortNameStub}(${cohortCopyIndex})`;
+      }
       const newCohort = new Cohort(
-        `${originCohort.cohort.name} copy`,
+        duplicatedCohortName,
         this.context.jointDataset,
         originCohort.cohort.filters
       );
       this.context.addCohort(newCohort);
     }
+  }
+
+  private existsCohort(cohorts: ErrorCohort[], name: string): boolean {
+    return cohorts.some((errorCohort) => {
+      return errorCohort.cohort.name === name;
+    });
   }
 
   private onEditCohortClick(index: number): void {
