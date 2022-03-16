@@ -220,12 +220,11 @@ export class CohortList extends React.Component<
     const all = this.getAllCohort();
     if (index >= 0 && index < all.length) {
       const originCohort = all[index];
-      const duplicatedCohortNameStub = originCohort.cohort.name + localization.Interpret.CohortBanner.copy;
+      const duplicatedCohortNameStub =
+        originCohort.cohort.name + localization.Interpret.CohortBanner.copy;
       let duplicatedCohortName = duplicatedCohortNameStub;
       let cohortCopyIndex = 0;
-      while (all.some((errorCohort) => {
-        return errorCohort.cohort.name === duplicatedCohortName
-      })){
+      while (this.existsCohort(all, duplicatedCohortName)) {
         cohortCopyIndex++;
         duplicatedCohortName = `${duplicatedCohortNameStub}(${cohortCopyIndex})`;
       }
@@ -236,6 +235,12 @@ export class CohortList extends React.Component<
       );
       this.context.addCohort(newCohort);
     }
+  }
+
+  private existsCohort(cohorts: ErrorCohort[], name: string): boolean {
+    return cohorts.some((errorCohort) => {
+      return errorCohort.cohort.name === name;
+    });
   }
 
   private onEditCohortClick(index: number): void {
