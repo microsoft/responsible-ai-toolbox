@@ -12,10 +12,10 @@ import { JointDataset } from "../util/JointDataset";
 
 import { BasicHighChart } from "./BasicHighChart";
 import { featureImportanceBarStyles } from "./FeatureImportanceBar.styles";
+import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IGlobalSeries {
   unsortedAggregateY: number[];
-  // feature x row, given how lookup is done
   unsortedIndividualY?: number[][];
   unsortedFeatureValues?: number[];
   name: string;
@@ -38,37 +38,34 @@ export interface IFeatureBarProps {
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void;
 }
 
-export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
+interface IFeatureImportanceBarState {
+  highchartOption: IHighchartsConfig;
+}
+
+export class FeatureImportanceBar extends React.Component<
+  IFeatureBarProps,
+  IFeatureImportanceBarState
+> {
+  public constructor(props: IFeatureBarProps) {
+    super(props);
+    this.state = {
+      highchartOption: this.getHightChartOption()
+    };
+  }
+
   public componentDidUpdate(prevProps: IFeatureBarProps): void {
     if (
       this.props.unsortedSeries !== prevProps.unsortedSeries ||
       this.props.sortArray !== prevProps.sortArray ||
       this.props.chartType !== prevProps.chartType
     ) {
-      this.forceUpdate();
+      this.setState({
+        highchartOption: this.getHightChartOption()
+      });
     }
   }
 
   public render(): React.ReactNode {
-    const highchartOption =
-      this.props.chartType === ChartTypes.Bar
-        ? getFeatureImportanceBarOptions(
-            this.props.sortArray,
-            this.props.unsortedX,
-            this.props.unsortedSeries,
-            this.props.topK,
-            this.props.originX,
-            getTheme(),
-            this.props.onFeatureSelection
-          )
-        : getFeatureImportanceBoxOptions(
-            this.props.sortArray,
-            this.props.unsortedX,
-            this.props.unsortedSeries,
-            this.props.topK,
-            getTheme(),
-            this.props.onFeatureSelection
-          );
     return (
       <Stack
         horizontal
@@ -92,9 +89,30 @@ export class FeatureImportanceBar extends React.Component<IFeatureBarProps> {
           </div>
         </Stack.Item>
         <Stack.Item className={featureImportanceBarStyles.chart}>
-          <BasicHighChart configOverride={highchartOption} />
+          <BasicHighChart configOverride={this.state.highchartOption} />
         </Stack.Item>
       </Stack>
     );
+  }
+
+  private getHightChartOption(): IHighchartsConfig {
+    return this.props.chartType === ChartTypes.Bar
+      ? getFeatureImportanceBarOptions(
+          this.props.sortArray,
+          this.props.unsortedX,
+          this.props.unsortedSeries,
+          this.props.topK,
+          this.props.originX,
+          getTheme(),
+          this.props.onFeatureSelection
+        )
+      : getFeatureImportanceBoxOptions(
+          this.props.sortArray,
+          this.props.unsortedX,
+          this.props.unsortedSeries,
+          this.props.topK,
+          getTheme(),
+          this.props.onFeatureSelection
+        );
   }
 }
