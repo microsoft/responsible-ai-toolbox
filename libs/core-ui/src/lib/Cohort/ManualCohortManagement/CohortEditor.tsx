@@ -385,12 +385,12 @@ export class CohortEditor extends React.PureComponent<
       //default values for in the range operation
       const meta =
         this.props.jointDataset.metaDict[openedFilter.column].featureRange;
-      if(meta?.min === undefined){
+      if (meta?.min === undefined) {
         openedFilter.arg[0] = Number.MIN_SAFE_INTEGER;
       } else {
         openedFilter.arg[0] = meta.min;
       }
-      if(meta?.max === undefined){
+      if (meta?.max === undefined) {
         openedFilter.arg[1] = Number.MAX_SAFE_INTEGER;
       } else {
         openedFilter.arg[1] = meta.max;
