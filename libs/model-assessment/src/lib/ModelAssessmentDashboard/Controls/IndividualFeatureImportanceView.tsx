@@ -134,7 +134,7 @@ export class IndividualFeatureImportanceView extends React.Component<
       });
 
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
+      <Stack tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
