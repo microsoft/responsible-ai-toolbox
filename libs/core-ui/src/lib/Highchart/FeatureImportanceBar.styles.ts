@@ -8,12 +8,12 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IFeatureImportanceBarStyles {
+  chart: IStyle;
   chartWithVertical: IStyle;
   noData: IStyle;
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
   boldText: IStyle;
-  container: IStyle;
 }
 
 export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBarStyles> =
@@ -21,13 +21,11 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
     boldText: {
       fontWeight: "600"
     },
-    chartWithVertical: {
-      display: "flex",
-      flexDirection: "row",
-      flexGrow: "1"
+    chart: {
+      width: "95%"
     },
-    container: {
-      width: "1200px"
+    chartWithVertical: {
+      width: "100%"
     },
     noData: {
       flex: "1",
