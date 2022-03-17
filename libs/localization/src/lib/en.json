@@ -140,8 +140,14 @@
       "cohort": "Cohort",
       "defaultLabel": "All data"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "GlobalCohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Instances in base cohort",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Basic Information",
       "cohortInformation": "Cohort information",
       "correct": "Correct",
