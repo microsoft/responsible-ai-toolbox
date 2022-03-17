@@ -42,7 +42,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "100%"
       },
       chartLeftPart: {
-        width: "100%"
+        width: "80%"
       },
       chartRightPart: {
         width: "20%"

@@ -24,7 +24,7 @@ export enum Locators {
   ICEToolTipButton = "#subPlotContainer button:contains('How to read this chart')",
   ICECalloutTitle = "#subPlotContainer div.ms-Callout-container span[class^='calloutTitle']",
   ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']",
-  SortByDropdown = "div[class^='globalChartWithLegend'] div.ms-Dropdown-container",
+  SortByDropdown = "#featureImportanceChartContainer div.ms-Dropdown-container",
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   CohortOnOffSelectionContainer = "#iterative-container",
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",

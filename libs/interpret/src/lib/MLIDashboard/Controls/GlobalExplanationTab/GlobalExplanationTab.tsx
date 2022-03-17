@@ -199,8 +199,12 @@ export class GlobalExplanationTab extends React.PureComponent<
           )}
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal className={classNames.chartContainer}>
-            <Stack.Item className={classNames.globalChartWithLegend}>
+          <Stack
+            horizontal
+            id="featureImportanceChartContainer"
+            className={classNames.chartContainer}
+          >
+            <Stack.Item className={classNames.chartLeftPart}>
               <FeatureImportanceBar
                 jointDataset={this.context.jointDataset}
                 yAxisLabels={[
