@@ -749,7 +749,8 @@
     "Cohort": {
       "_cohort.comment": "a subset of the data is called a cohort",
       "cohort": "Cohort",
-      "defaultLabel": "All data"
+      "defaultLabel": "All data",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "_addCohort.comment": "button text to create a new cohort",
