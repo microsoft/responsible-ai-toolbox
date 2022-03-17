@@ -141,7 +141,7 @@ export class IndividualFeatureImportanceView extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item className="tabularDataView">
-          <div style={{ height: "800px", position: "relative" }}>
+          <div style={{ height: "500px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                 <MarqueeSelection selection={this.selection}>
