@@ -175,7 +175,7 @@ export class CounterfactualPanel extends React.Component<
       return <div />;
     }
     return (
-      <Stack horizontal tokens={{ childrenGap: "15px" }}>
+      <Stack horizontal tokens={{ childrenGap: "l1" }}>
         <Stack.Item align="end" grow={1}>
           <TextField
             id="whatIfNameLabel"

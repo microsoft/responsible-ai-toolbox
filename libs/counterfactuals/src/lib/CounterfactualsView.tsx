@@ -45,7 +45,7 @@ export class CounterfactualsView extends React.PureComponent<
 
   public render(): React.ReactNode {
     return (
-      <Stack grow tokens={{ padding: "16px 0" }}>
+      <Stack grow tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"}>
             {localization.Counterfactuals.whatifDescription}

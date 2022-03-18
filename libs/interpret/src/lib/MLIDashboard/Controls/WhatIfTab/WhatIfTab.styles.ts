@@ -135,7 +135,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       cohortPickerLabel: {
         fontWeight: "600",
-        paddingRight: "8px"
+        padding: "0 8px 10px 0"
       },
       cohortPickerWrapper: {
         alignItems: "center",
