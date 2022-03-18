@@ -274,7 +274,8 @@ def bin_data(df, feat, bins, quantile_binning=False):
     if quantile_binning and not feat_col.empty:
         bindf = pd.qcut(feat_col, bins, precision=PRECISION, duplicates=DROP)
         zero_interval = bindf.cat.categories[0]
-        left = zero_interval.left - ZERO_BIN_TOL * zero_interval.left
+        left_abs = abs(zero_interval.left)
+        left = zero_interval.left - ZERO_BIN_TOL * left_abs
         zero_interval = pd.Interval(left=left, right=zero_interval.right,
                                     closed=zero_interval.closed)
         indexes = [zero_interval]
@@ -284,6 +285,15 @@ def bin_data(df, feat, bins, quantile_binning=False):
                                 dtype=bindf.cat.categories.dtype,
                                 name=bindf.cat.categories.name)
         bindf.cat.categories = cats
+        # re-bin data according to new categories, otherwise can have
+        # issues with precision when using pd.qcut.
+        # Specifically, it can bin some points incorrectly for low precision,
+        # for example a point with value -0.0127796318808497
+        # will be binned incorrectly in interval
+        # (-0.0309423241359475, -0.012779631880849702]
+        # even though it should be binned in the interval above since
+        # -0.0127796318808497 > -0.012779631880849702
+        bindf = bin_data(df, feat, bindf.cat.categories, quantile_binning)
         return bindf
     else:
         return pd.cut(feat_col, bins, precision=PRECISION)

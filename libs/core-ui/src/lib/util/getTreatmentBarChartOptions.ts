@@ -4,8 +4,10 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalPolicyGains } from "../Interfaces/ICausalAnalysisData";
+
+import { FabricStyles } from "./FabricStyles";
 
 export function getTreatmentBarChartOptions(
   data: ICausalPolicyGains,
@@ -34,24 +36,11 @@ export function getTreatmentBarChartOptions(
     : [localization.Counterfactuals.recommendedPolicy];
   return {
     chart: {
-      animation: false,
-      backgroundColor: colorTheme.backgroundColor,
       type: "bar"
-    },
-    credits: {
-      enabled: false
-    },
-    legend: {},
-    plotOptions: {
-      bar: {
-        dataLabels: {
-          enabled: true
-        }
-      }
     },
     series: [
       {
-        color: colorTheme.axisColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: xData,
         dataLabels: {
           color: colorTheme.fontColor
@@ -61,35 +50,10 @@ export function getTreatmentBarChartOptions(
       }
     ],
     title: {
-      style: {
-        color: colorTheme.fontColor,
-        fontSize: "13px"
-      },
       text: title
     },
     xAxis: {
-      categories: yData,
-      labels: {
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      title: {
-        text: ""
-      }
-    },
-    yAxis: {
-      labels: {
-        overflow: "justify",
-        style: {
-          color: colorTheme.fontColor
-        }
-      },
-      min: 0,
-      title: {
-        align: "high",
-        text: ""
-      }
+      categories: yData
     }
   };
 }

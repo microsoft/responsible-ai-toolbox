@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Locators } from "../Constants";
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
@@ -22,7 +23,16 @@ export function describeModelStatistics(
       cy.task("log", hostDetails.host);
       cy.visit(hostDetails.host);
     });
-    describeModelPerformanceBoxChart(datasetShape);
-    describeModelPerformanceSideBar(datasetShape);
+    if (!datasetShape.modelStatisticsData?.hasModelStatisticsComponent) {
+      it("should not have 'Model statistics' component for the notebook", () => {
+        cy.get(Locators.ModelOverviewHeader).should("not.exist");
+      });
+    }
+    if (datasetShape.modelStatisticsData?.hasModelStatisticsComponent) {
+      describeModelPerformanceBoxChart(datasetShape);
+      if (datasetShape.modelStatisticsData.hasSideBar) {
+        describeModelPerformanceSideBar(datasetShape);
+      }
+    }
   });
 }

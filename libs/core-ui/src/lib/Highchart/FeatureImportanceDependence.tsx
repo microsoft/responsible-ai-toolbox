@@ -1,26 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  JointDataset,
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption,
-  IGenericChartProps,
-  BasicHighChart,
-  getDependencyChartOptions
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { getTheme, Text } from "office-ui-fabric-react";
+import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { getDependenceData } from "../../utils/getDependenceData";
+import { Cohort } from "../Cohort/Cohort";
+import {
+  IExplanationModelMetadata,
+  ModelTypes
+} from "../Interfaces/IExplanationContext";
+import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
+import { FabricStyles } from "../util/FabricStyles";
+import { getDependenceData } from "../util/getDependenceData";
+import { getDependencyChartOptions } from "../util/getDependencyChartOptions";
+import { IGenericChartProps } from "../util/IGenericChartProps";
+import { JointDataset } from "../util/JointDataset";
 
-import { dependencePlotStyles } from "./DependencePlot.styles";
+import { BasicHighChart } from "./BasicHighChart";
+import { dependencePlotStyles } from "./FeatureImportanceDependence.styles";
 
-export interface IDependencyHighChartProps {
+export interface IFeatureImportanceDependenceProps {
   chartProps: IGenericChartProps | undefined;
   jointDataset: JointDataset;
   cohort: Cohort;
@@ -31,7 +32,7 @@ export interface IDependencyHighChartProps {
   onChange: (props: IGenericChartProps) => void;
 }
 
-export class DependencyHighChart extends React.PureComponent<IDependencyHighChartProps> {
+export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
   public render(): React.ReactNode {
     const classNames = dependencePlotStyles();
     if (this.props.chartProps === undefined) {
@@ -55,18 +56,18 @@ export class DependencyHighChart extends React.PureComponent<IDependencyHighChar
             ].label
           } : ${this.props.selectedWeightLabel}`;
     return (
-      <div className={classNames.DependencePlot}>
-        <div className={classNames.chartWithAxes}>
-          <div className={classNames.chartWithVertical}>
-            <div className={classNames.verticalAxis}>
+      <Stack horizontal={false} className={classNames.DependencePlot}>
+        <Stack.Item className={classNames.chartWithVertical}>
+          <Stack horizontal className={classNames.chartWithVertical}>
+            <Stack.Item className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
-                <Text variant={"medium"} block>
+                <Text variant={"medium"} block className={classNames.boldText}>
                   {localization.Interpret.DependencePlot.featureImportanceOf}
                 </Text>
                 <Text variant={"medium"}>{yAxisLabel}</Text>
               </div>
-            </div>
-            <div className={classNames.chart}>
+            </Stack.Item>
+            <Stack.Item className={classNames.chart}>
               <BasicHighChart
                 configOverride={getDependencyChartOptions(
                   getDependenceData(
@@ -77,25 +78,26 @@ export class DependencyHighChart extends React.PureComponent<IDependencyHighChar
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
+                  FabricStyles.fabricColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
               />
-            </div>
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
+        <Stack.Item className={classNames.horizontalAxisWithPadding}>
+          <div className={classNames.paddingDiv} />
+          <div className={classNames.horizontalAxis}>
+            <Text variant={"medium"}>
+              {
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.xAxis.property
+                ].label
+              }
+            </Text>
           </div>
-          <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <Text variant={"medium"}>
-                {
-                  this.props.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].label
-                }
-              </Text>
-            </div>
-          </div>
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack>
     );
   }
 }

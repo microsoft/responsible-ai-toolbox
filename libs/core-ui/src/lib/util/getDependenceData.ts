@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  IDependenceData,
-  IGenericChartProps,
-  JointDataset
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _, { Dictionary } from "lodash";
+
+import { Cohort } from "../Cohort/Cohort";
+
+import { IDependenceData } from "./getDependencyChartOptions";
+import { IGenericChartProps } from "./IGenericChartProps";
+import { JointDataset } from "./JointDataset";
 
 export function getDependenceData(
   chartProps: IGenericChartProps | undefined,
@@ -64,9 +64,9 @@ export function getDependenceData(
       customData[index].Yformatted = val.toLocaleString(undefined, {
         maximumFractionDigits: 3
       });
-      customData[
-        index
-      ].template += `${yLabel}: ${customData[index].Yformatted}<br>`;
+      customData[index].template = customData[index].template
+        ? `${customData[index].template}${yLabel}: ${customData[index].Yformatted}<br>`
+        : `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
   }
   const indecies = cohort.unwrap(JointDataset.IndexLabel, false);

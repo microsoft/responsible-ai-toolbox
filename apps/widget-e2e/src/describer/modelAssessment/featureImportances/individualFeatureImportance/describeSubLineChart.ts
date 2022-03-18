@@ -22,7 +22,7 @@ export function describeSubLineChart(dataShape: IModelAssessmentData): void {
     });
 
     it("should update x-axis value when 'Feature' dropdown is changed", () => {
-      cy.get(Locators.ICEFeatureDropdown).click();
+      cy.get(Locators.ICEFeatureDropdown).eq(0).click(); // feature dropdown
       cy.get(".ms-Callout")
         .should("be.visible")
         .contains(

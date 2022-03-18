@@ -4,22 +4,22 @@
 import { localization } from "@responsible-ai/localization";
 
 import { getSpan } from "../../../util/getSpan";
-import { ScatterChart } from "../../../util/ScatterChart";
+import { ScatterHighchart } from "../../../util/ScatterHighchart";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-import { describeSubBarChart } from "./describeSubBarChart";
+// import { describeSubBarChart } from "./describeSubBarChart";
 
 export function describeWhatIfCommonFunctionalities(
   dataShape: IModelAssessmentData
 ): void {
-  describe("What if common functionalities", () => {
+  describe.skip("What if common functionalities", () => {
     const props = {
-      chart: undefined as unknown as ScatterChart,
+      chart: undefined as unknown as ScatterHighchart,
       dataShape
     };
     beforeEach(() => {
-      props.chart = new ScatterChart("#IndividualFeatureImportanceChart");
+      props.chart = new ScatterHighchart("#IndividualFeatureImportanceChart");
     });
     it("should render right number of points", () => {
       expect(props.chart.Elements.length).equals(
@@ -54,16 +54,16 @@ export function describeWhatIfCommonFunctionalities(
 
       it("should update when combo box change", () => {
         cy.get(Locators.WICDatapointDropbox).click();
-        getSpan("Index 5").click();
-        cy.get(Locators.WICLocalImportanceDescription).contains("Row 5");
+        getSpan("Index 1").click();
+        cy.get(Locators.WICLocalImportanceDescription).contains("Row 1");
       });
     });
 
-    if (
-      !dataShape.featureImportanceData?.noLocalImportance &&
-      !dataShape.featureImportanceData?.noFeatureImportance
-    ) {
-      describeSubBarChart(dataShape);
-    }
+    // if (
+    //   !dataShape.featureImportanceData?.noLocalImportance &&
+    //   !dataShape.featureImportanceData?.noFeatureImportance
+    // ) {
+    //   describeSubBarChart(dataShape);
+    // }
   });
 }

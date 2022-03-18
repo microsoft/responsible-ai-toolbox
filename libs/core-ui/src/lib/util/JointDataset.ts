@@ -398,7 +398,7 @@ export class JointDataset {
     }
   }
 
-  private static buildLocalFeatureMatrix(
+  public static buildLocalFeatureMatrix(
     localExplanationRaw: number[][] | number[][][],
     modelType: ModelTypes
   ): number[][][] {
@@ -443,6 +443,14 @@ export class JointDataset {
       });
     });
     return result;
+  }
+
+  public getModelType(): ModelTypes {
+    return this._modelMeta.modelType;
+  }
+
+  public getModelClasses(): any[] {
+    return this._modelMeta.classNames;
   }
 
   public getRow(index: number): { [key: string]: number } {

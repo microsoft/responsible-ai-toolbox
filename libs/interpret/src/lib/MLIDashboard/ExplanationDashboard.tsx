@@ -108,27 +108,6 @@ export class ExplanationDashboard extends React.Component<
     "ICE"
   ];
 
-  private static transposeLocalImportanceMatrix: (
-    input: number[][][]
-  ) => number[][][] = memoize((input: number[][][]): number[][][] => {
-    const numClasses = input.length;
-    const numRows = input[0].length;
-    const numFeatures = input[0][0].length;
-    const result: number[][][] = new Array(numRows)
-      .fill(0)
-      .map(() =>
-        new Array(numFeatures).fill(0).map(() => new Array(numClasses).fill(0))
-      );
-    input.forEach((rowByFeature, classIndex) => {
-      rowByFeature.forEach((featureArray, rowIndex) => {
-        featureArray.forEach((value, featureIndex) => {
-          result[rowIndex][featureIndex][classIndex] = value;
-        });
-      });
-    });
-    return result;
-  });
-
   private static buildWeightDropdownOptions: (
     explanationContext: IExplanationContext
   ) => IDropdownOption[] = memoize(
@@ -345,7 +324,7 @@ export class ExplanationDashboard extends React.Component<
       const weighting = props.predictedY
         ? WeightVectors.Predicted
         : WeightVectors.AbsAvg;
-      const localFeatureMatrix = ExplanationDashboard.buildLocalFeatureMatrix(
+      const localFeatureMatrix = JointDataset.buildLocalFeatureMatrix(
         props.precomputedExplanations.localFeatureImportance.scores,
         modelMetadata.modelType
       );
@@ -489,32 +468,6 @@ export class ExplanationDashboard extends React.Component<
     ) {
       initializeIcons(props.iconUrl);
       ExplanationDashboard.iconsInitialized = true;
-    }
-  }
-
-  private static buildLocalFeatureMatrix(
-    localExplanationRaw: number[][] | number[][][],
-    modelType: ModelTypes
-  ): number[][][] {
-    switch (modelType) {
-      case ModelTypes.Regression: {
-        return (localExplanationRaw as number[][]).map((featureArray) =>
-          featureArray.map((val) => [val])
-        );
-      }
-      case ModelTypes.Binary: {
-        return ExplanationDashboard.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        ).map((featuresByClasses) =>
-          featuresByClasses.map((classArray) => classArray.slice(0, 1))
-        );
-      }
-      case ModelTypes.Multiclass:
-      default: {
-        return ExplanationDashboard.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        );
-      }
     }
   }
 
@@ -999,11 +952,10 @@ export class ExplanationDashboard extends React.Component<
           this.setState((prevState) => {
             const weighting =
               prevState.dashboardContext.weightContext.selectedKey;
-            const localFeatureMatrix =
-              ExplanationDashboard.buildLocalFeatureMatrix(
-                result,
-                modelMetadata.modelType
-              );
+            const localFeatureMatrix = JointDataset.buildLocalFeatureMatrix(
+              result,
+              modelMetadata.modelType
+            );
             const flattenedFeatureMatrix =
               ExplanationDashboard.buildLocalFlattenMatrix(
                 localFeatureMatrix,

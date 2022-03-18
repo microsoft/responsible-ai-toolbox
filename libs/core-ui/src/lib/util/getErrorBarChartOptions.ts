@@ -4,9 +4,10 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 
+import { FabricStyles } from "./FabricStyles";
 import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export function getErrorBarChartOptions(
@@ -21,30 +22,12 @@ export function getErrorBarChartOptions(
   };
   return {
     chart: {
-      animation: false,
       type: "lowmedhigh",
       zoomType: "xy"
     },
-    exporting: {
-      enabled: true
-    },
-    legend: {},
-    plotOptions: {
-      scatter: {
-        marker: {
-          radius: 5,
-          states: {
-            hover: {
-              enabled: true,
-              lineColor: "green"
-            }
-          }
-        }
-      }
-    },
     series: [
       {
-        color: colorTheme.fontColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: data.map((d) => d.point),
         showInLegend: false,
         tooltip: {
@@ -53,7 +36,7 @@ export function getErrorBarChartOptions(
         type: "spline"
       },
       {
-        color: colorTheme.fontColor,
+        color: FabricStyles.fabricColorPalette[0],
         data: data.map((d) => [d.ci_lower, d.ci_upper]),
         tooltip: {
           pointFormat:
@@ -63,12 +46,6 @@ export function getErrorBarChartOptions(
         type: "errorbar"
       }
     ],
-    title: {
-      text: ""
-    },
-    tooltip: {
-      shared: true
-    },
     xAxis: [
       {
         categories: data.map((d) => getCausalDisplayFeatureName(d)),
@@ -89,9 +66,6 @@ export function getErrorBarChartOptions(
             color: colorTheme.fontColor,
             fontSize: "14px"
           }
-        },
-        title: {
-          text: ""
         }
       }
     ]

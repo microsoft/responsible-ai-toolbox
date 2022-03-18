@@ -5,8 +5,10 @@
 
 import json
 from pathlib import Path
+from typing import Any, List, Optional
 
 import jsonschema
+import pandas as pd
 
 from erroranalysis._internal.constants import metric_to_display_name
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -83,8 +85,8 @@ def as_error_config(json_dict):
 class ErrorAnalysisConfig(BaseConfig):
     """Defines the ErrorAnalysisConfig, specifying the parameters to run."""
 
-    def __init__(self, max_depth, num_leaves,
-                 min_child_samples, filter_features):
+    def __init__(self, max_depth: int, num_leaves: int,
+                 min_child_samples: int, filter_features: List):
         """Creates an ErrorAnalysisConfig, specifying the parameters to run.
 
         :param max_depth: The maximum depth of the tree.
@@ -154,8 +156,9 @@ class ErrorAnalysisConfig(BaseConfig):
 class ErrorAnalysisManager(BaseManager):
     """Defines the ErrorAnalysisManager for discovering errors in a model."""
 
-    def __init__(self, model, dataset, target_column, classes=None,
-                 categorical_features=None):
+    def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
+                 classes: Optional[List] = None,
+                 categorical_features: Optional[List[str]] = None):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -187,20 +190,21 @@ class ErrorAnalysisManager(BaseManager):
                                        self._categorical_features,
                                        classes=self._classes)
 
-    def add(self, max_depth=3, num_leaves=31,
-            min_child_samples=20, filter_features=None):
+    def add(self, max_depth: int = 3, num_leaves: int = 31,
+            min_child_samples: int = 20,
+            filter_features: Optional[List] = None):
         """Add an error analyzer to be computed later.
 
         :param max_depth: The maximum depth of the tree.
-        :type max_depth: int
+        :type max_depth: Optional[int]
         :param num_leaves: The number of leaves in the tree.
-        :type num_leaves: int
+        :type num_leaves: Optional[int]
         :param min_child_samples: The minimal number of data required to
             create one leaf.
-        :type min_child_samples: int
+        :type min_child_samples: Optional[int]
         :param filter_features: One or two features to use for the
             matrix filter.
-        :type filter_features: list
+        :type filter_features: Optional[list]
         """
         if self._analyzer.model is None:
             raise UserConfigValidationException(

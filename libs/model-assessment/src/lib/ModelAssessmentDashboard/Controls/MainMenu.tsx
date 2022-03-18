@@ -172,7 +172,11 @@ export class MainMenu extends React.PureComponent<
 
     return (
       <TooltipHost content={this.getCohortStats()}>
-        <CommandButton className={classNames.mainMenuItem}>
+        <CommandButton
+          className={classNames.mainMenuItem}
+          // cursor should not change when hovering because we don't want users to think that something will happen if they click
+          styles={{ rootHovered: { cursor: "default" } }}
+        >
           {cohortInfoTitle}
         </CommandButton>
       </TooltipHost>
