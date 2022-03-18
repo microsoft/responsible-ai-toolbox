@@ -137,7 +137,6 @@ export class ErrorAnalysisViewTab extends React.Component<
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
             onSaveCohortClick={this.props.onSaveCohortClick}
-            includeDividers={false}
             disabledView={this.props.disabledView}
           />
         </Stack>
