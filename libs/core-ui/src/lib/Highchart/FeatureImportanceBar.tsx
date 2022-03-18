@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
-import { getTheme, Text } from "office-ui-fabric-react";
+import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";
@@ -67,11 +67,12 @@ export class FeatureImportanceBar extends React.Component<
 
   public render(): React.ReactNode {
     return (
-      <div
+      <Stack
+        horizontal
         id="FeatureImportanceBar"
         className={featureImportanceBarStyles.chartWithVertical}
       >
-        <div className={featureImportanceBarStyles.verticalAxis}>
+        <Stack.Item className={featureImportanceBarStyles.verticalAxis}>
           <div className={featureImportanceBarStyles.rotatedVerticalBox}>
             <div>
               {this.props.yAxisLabels.map((label, i) => (
@@ -86,11 +87,11 @@ export class FeatureImportanceBar extends React.Component<
               ))}
             </div>
           </div>
-        </div>
-        <div className={featureImportanceBarStyles.container}>
+        </Stack.Item>
+        <Stack.Item className={featureImportanceBarStyles.chart}>
           <BasicHighChart configOverride={this.state.highchartOption} />
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack>
     );
   }
 

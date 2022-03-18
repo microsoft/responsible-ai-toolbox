@@ -92,7 +92,7 @@ export class TabsView extends React.PureComponent<
         localization.ErrorAnalysis.Cohort.defaultLabel;
     const classNames = tabsViewStyles();
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "50px 0 0 0" }}>
+      <Stack tokens={{ padding: "l1" }}>
         {this.props.activeGlobalTabs[0]?.key !==
           GlobalTabKeys.ErrorAnalysisTab && (
           <Stack.Item className={classNames.buttonSection}>
