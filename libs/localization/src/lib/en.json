@@ -142,7 +142,7 @@
     },
     "CohortBaseAndFilters": {
       "globalCohortAndFilters": "Global cohort and filters",
-      "globalCohort": "GlobalCohort",
+      "globalCohort": "Global cohort",
       "errorExplorer": "Error explorer",
       "filters": "Filters"
     },
