@@ -28,7 +28,8 @@ import {
   Dropdown,
   IDropdownOption,
   Label,
-  Toggle
+  Toggle,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -186,30 +187,29 @@ export class LocalImportancePlots extends React.Component<
                 topK={this.state.topK}
               />
               <div className={classNames.featureImportanceLegend}>
-                <Text
-                  variant={"medium"}
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Interpret.GlobalTab.sortBy}
-                </Text>
-                <Toggle
-                  label={localization.Interpret.GlobalTab.absoluteValues}
-                  inlineLabel
-                  checked={this.state.sortAbsolute}
-                  onChange={this.toggleSortAbsolute}
-                />
-                <Text
-                  variant={"medium"}
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Interpret.GlobalTab.datapoint}
-                </Text>
-                <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
-                  options={featureImportanceSortOptions}
-                  selectedKey={this.state.sortingSeriesIndex}
-                  onChange={this.setSortIndex}
-                />
+                <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
+                  <Stack.Item className={classNames.cohortPickerLabel}>
+                    <Text variant={"medium"}>
+                      {localization.Interpret.GlobalTab.sortBy}
+                    </Text>
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Dropdown
+                      styles={{ dropdown: { width: 150 } }}
+                      options={featureImportanceSortOptions}
+                      selectedKey={this.state.sortingSeriesIndex}
+                      onChange={this.setSortIndex}
+                    />
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Toggle
+                      label={localization.Interpret.GlobalTab.absoluteValues}
+                      inlineLabel
+                      checked={this.state.sortAbsolute}
+                      onChange={this.toggleSortAbsolute}
+                    />
+                  </Stack.Item>
+                </Stack>
 
                 {this.props.metadata.modelType === ModelTypes.Multiclass && (
                   <div>
