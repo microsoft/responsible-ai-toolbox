@@ -74,9 +74,11 @@ export function getIceChartOption(
   ) as any;
   const xAxisSetting =
     rangeType === RangeTypes.Categorical
-      ? { categories: data[0]?.x, title: featureName }
+      ? { categories: data[0]?.x, title: { text: featureName } }
       : {
-          title: featureName
+          title: {
+            text: featureName
+          }
         };
   const dataSeries: any = data.map((d) => {
     return {
@@ -128,7 +130,9 @@ export function getIceChartOption(
     },
     xAxis: xAxisSetting,
     yAxis: {
-      title: buildYAxis(metadata, selectedClass)
+      title: {
+        text: buildYAxis(metadata, selectedClass)
+      }
     }
   };
 }
