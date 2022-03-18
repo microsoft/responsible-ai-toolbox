@@ -967,7 +967,7 @@
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
       "_viewDependencePlotFor.comment": "label for dropdown to select feature to be shown in a dependence plot (a kind of graph)",
       "_weightOptions.comment": "Weight how importance values are averaged https://en.wikipedia.org/wiki/Weighted_arithmetic_mean",
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Aggregate feature importance",
       "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
       "datapoint": "Datapoint",
@@ -980,7 +980,7 @@
       "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
-      "sortBy": "Sort by",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
       "weightOptions": "Class importance weights"
