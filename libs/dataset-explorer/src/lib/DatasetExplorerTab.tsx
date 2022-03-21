@@ -12,10 +12,10 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  rowErrorSize
+  rowErrorSize,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   getTheme,
@@ -29,6 +29,7 @@ import React from "react";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
 import { generatePlotlyProps } from "./generatePlotlyProps";
+import { getDatasetOption } from "./getDatasetOption";
 import { SidePanel } from "./SidePanel";
 
 export class IDatasetExplorerTabProps {}
@@ -235,7 +236,14 @@ export class DatasetExplorerTab extends React.Component<
                 </div>
               </div>
               {canRenderChart ? (
-                <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
+                <BasicHighChart
+                  configOverride={getDatasetOption(
+                    plotlyProps,
+                    this.context.jointDataset,
+                    this.state.chartProps
+                  )}
+                  theme={getTheme()}
+                />
               ) : (
                 <MissingParametersPlaceholder>
                   {localization.Interpret.ValidationErrors.datasizeError}
