@@ -57,6 +57,7 @@ export class FeatureImportanceBar extends React.Component<
     if (
       this.props.unsortedSeries !== prevProps.unsortedSeries ||
       this.props.sortArray !== prevProps.sortArray ||
+      this.props.topK !== prevProps.topK ||
       this.props.chartType !== prevProps.chartType
     ) {
       this.setState({
