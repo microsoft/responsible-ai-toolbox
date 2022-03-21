@@ -23,7 +23,8 @@ import {
   Dropdown,
   DefaultButton,
   Text,
-  IChoiceGroupOption
+  IChoiceGroupOption,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -50,7 +51,7 @@ export class DatasetExplorerTab extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  private readonly chartAndConfigsId = "DatasetExplorerChart";
+  // private readonly chartAndConfigsId = "DatasetExplorerChart";
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
@@ -128,97 +129,89 @@ export class DatasetExplorerTab extends React.Component<
       yAxisCategories.push(ColumnCategories.None);
     }
     return (
-      <div className={classNames.page}>
-        <div className={classNames.infoWithText}>
+      <Stack
+        horizontal={false}
+        grow
+        tokens={{ childrenGap: "l1" }}
+        className={classNames.page}
+      >
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {localization.Interpret.DatasetExplorer.helperText}
           </Text>
-        </div>
-        <div className={classNames.cohortPickerWrapper}>
+        </Stack.Item>
+        <Stack.Item className={classNames.cohortPickerWrapper}>
           <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
             {localization.Interpret.ModelPerformance.cohortPickerLabel}
           </Text>
           {cohortOptions && (
             <Dropdown
-              styles={{
-                callout: {
-                  selectors: {
-                    ".ms-Button-flexContainer": {
-                      width: "100%"
-                    }
-                  }
-                },
-                dropdown: {
-                  width: 150
-                }
-              }}
+              className={classNames.cohortDropdown}
               id="dataExplorerCohortDropdown"
               options={cohortOptions}
               selectedKey={this.state.selectedCohortIndex}
               onChange={this.setSelectedCohort}
             />
           )}
-        </div>
-        <div className={classNames.mainArea} id={this.chartAndConfigsId}>
-          <div className={classNames.chartWithAxes}>
-            {this.state.yDialogOpen && (
-              <AxisConfigDialog
-                jointDataset={this.context.jointDataset}
-                orderedGroupTitles={yAxisCategories}
-                selectedColumn={this.state.chartProps.yAxis}
-                canBin={false}
-                mustBin={false}
-                canDither={
-                  this.state.chartProps.chartType === ChartTypes.Scatter
-                }
-                onAccept={this.onYSet}
-                onCancel={this.setYOpen.bind(this, false)}
-              />
-            )}
-            {this.state.xDialogOpen && (
-              <AxisConfigDialog
-                jointDataset={this.context.jointDataset}
-                orderedGroupTitles={[
-                  ColumnCategories.Index,
-                  ColumnCategories.Dataset,
-                  ColumnCategories.Outcome
-                ]}
-                selectedColumn={this.state.chartProps.xAxis}
-                canBin={
-                  this.state.chartProps.chartType === ChartTypes.Histogram ||
-                  this.state.chartProps.chartType === ChartTypes.Box
-                }
-                mustBin={
-                  this.state.chartProps.chartType === ChartTypes.Histogram ||
-                  this.state.chartProps.chartType === ChartTypes.Box
-                }
-                canDither={
-                  this.state.chartProps.chartType === ChartTypes.Scatter
-                }
-                onAccept={this.onXSet}
-                onCancel={this.setXOpen.bind(this, false)}
-              />
-            )}
-            {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
-              <AxisConfigDialog
-                jointDataset={this.context.jointDataset}
-                orderedGroupTitles={[
-                  ColumnCategories.Index,
-                  ColumnCategories.Dataset,
-                  ColumnCategories.Outcome
-                ]}
-                selectedColumn={this.state.chartProps.colorAxis}
-                canBin
-                mustBin={false}
-                canDither={false}
-                onAccept={this.onColorSet}
-                onCancel={this.setColorClose}
-              />
-            )}
-            <div className={classNames.chartWithVertical}>
-              <div className={classNames.verticalAxis}>
-                <div className={classNames.rotatedVerticalBox}>
-                  <div>
+        </Stack.Item>
+        <Stack.Item>
+          {this.state.yDialogOpen && (
+            <AxisConfigDialog
+              jointDataset={this.context.jointDataset}
+              orderedGroupTitles={yAxisCategories}
+              selectedColumn={this.state.chartProps.yAxis}
+              canBin={false}
+              mustBin={false}
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
+              onAccept={this.onYSet}
+              onCancel={this.setYOpen.bind(this, false)}
+            />
+          )}
+          {this.state.xDialogOpen && (
+            <AxisConfigDialog
+              jointDataset={this.context.jointDataset}
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={this.state.chartProps.xAxis}
+              canBin={
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
+              }
+              mustBin={
+                this.state.chartProps.chartType === ChartTypes.Histogram ||
+                this.state.chartProps.chartType === ChartTypes.Box
+              }
+              canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
+              onAccept={this.onXSet}
+              onCancel={this.setXOpen.bind(this, false)}
+            />
+          )}
+          {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
+            <AxisConfigDialog
+              jointDataset={this.context.jointDataset}
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={this.state.chartProps.colorAxis}
+              canBin
+              mustBin={false}
+              canDither={false}
+              onAccept={this.onColorSet}
+              onCancel={this.setColorClose}
+            />
+          )}
+        </Stack.Item>
+        <Stack.Item className={classNames.mainArea}>
+          <Stack horizontal grow>
+            <Stack.Item className={classNames.chartWithAxes}>
+              <Stack horizontal className={classNames.chartWithVertical}>
+                <Stack.Item className={classNames.verticalAxis}>
+                  <div className={classNames.rotatedVerticalBox}>
                     <DefaultButton
                       onClick={this.setYOpen.bind(this, true)}
                       text={
@@ -233,56 +226,60 @@ export class DatasetExplorerTab extends React.Component<
                       }
                     />
                   </div>
-                </div>
-              </div>
-              {canRenderChart ? (
-                <BasicHighChart
-                  configOverride={getDatasetOption(
-                    plotlyProps,
-                    this.context.jointDataset,
-                    this.state.chartProps
+                </Stack.Item>
+                <Stack.Item className={classNames.chartContainer}>
+                  {canRenderChart ? (
+                    <BasicHighChart
+                      configOverride={getDatasetOption(
+                        plotlyProps,
+                        this.context.jointDataset,
+                        this.state.chartProps
+                      )}
+                      theme={getTheme()}
+                    />
+                  ) : (
+                    <MissingParametersPlaceholder>
+                      {localization.Interpret.ValidationErrors.datasizeError}
+                    </MissingParametersPlaceholder>
                   )}
-                  theme={getTheme()}
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+            <Stack.Item className={classNames.sidePanel}>
+              <SidePanel
+                chartProps={this.state.chartProps}
+                cohorts={this.context.errorCohorts.map(
+                  (errorCohort) => errorCohort.cohort
+                )}
+                jointDataset={this.context.jointDataset}
+                selectedCohortIndex={this.state.selectedCohortIndex}
+                setColorOpen={this.setColorOpen}
+                onChartTypeChange={this.onChartTypeChange}
+              />
+            </Stack.Item>
+          </Stack>
+          <div className={classNames.horizontalAxisWithPadding}>
+            <div className={classNames.paddingDiv} />
+            <div className={classNames.horizontalAxis}>
+              <div>
+                <DefaultButton
+                  onClick={this.setXOpen.bind(this, true)}
+                  text={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.xAxis.property
+                    ].abbridgedLabel
+                  }
+                  title={
+                    this.context.jointDataset.metaDict[
+                      this.state.chartProps.xAxis.property
+                    ].label
+                  }
                 />
-              ) : (
-                <MissingParametersPlaceholder>
-                  {localization.Interpret.ValidationErrors.datasizeError}
-                </MissingParametersPlaceholder>
-              )}
-            </div>
-            <div className={classNames.horizontalAxisWithPadding}>
-              <div className={classNames.paddingDiv} />
-              <div className={classNames.horizontalAxis}>
-                <div>
-                  <DefaultButton
-                    onClick={this.setXOpen.bind(this, true)}
-                    text={
-                      this.context.jointDataset.metaDict[
-                        this.state.chartProps.xAxis.property
-                      ].abbridgedLabel
-                    }
-                    title={
-                      this.context.jointDataset.metaDict[
-                        this.state.chartProps.xAxis.property
-                      ].label
-                    }
-                  />
-                </div>
               </div>
             </div>
           </div>
-          <SidePanel
-            chartProps={this.state.chartProps}
-            cohorts={this.context.errorCohorts.map(
-              (errorCohort) => errorCohort.cohort
-            )}
-            jointDataset={this.context.jointDataset}
-            selectedCohortIndex={this.state.selectedCohortIndex}
-            setColorOpen={this.setColorOpen}
-            onChartTypeChange={this.onChartTypeChange}
-          />
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack>
     );
   }
 
