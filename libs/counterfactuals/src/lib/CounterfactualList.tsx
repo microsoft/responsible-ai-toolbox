@@ -345,7 +345,7 @@ export class CounterfactualList extends React.Component<
     const styles = counterfactualListStyle();
     if (column && dropdownOption?.data?.categoricalOptions) {
       return (
-        <Stack horizontal={false} tokens={{ childrenGap: "5px" }}>
+        <Stack horizontal={false} tokens={{ childrenGap: "s1" }}>
           <Stack.Item className={styles.dropdownLabel}>
             <Text>{column.key}</Text>
           </Stack.Item>

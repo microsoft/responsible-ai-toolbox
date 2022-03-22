@@ -15,6 +15,7 @@
     "auto-version": "node ./scripts/auto-version.js",
     "build": "nx build",
     "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --configuration=production --all",
+    "builddebug": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --all",
     "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn e2e",
     "copytest": "node ./scripts/copyTest.js",
     "dep-graph": "nx dep-graph",

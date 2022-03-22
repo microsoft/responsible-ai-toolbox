@@ -69,7 +69,7 @@ export function getFeatureImportanceBoxOptions(
                 return;
               }
               const featureNumber = sortArray[this.x];
-              onFeatureSelection(0, featureNumber);
+              onFeatureSelection(this.series.index, featureNumber);
             }
           }
         }
