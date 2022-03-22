@@ -27,7 +27,6 @@ from responsibleai.exceptions import (ConfigAndResultMismatchException,
 from responsibleai.managers.base_manager import BaseManager
 from responsibleai.utils import _measure_time
 
-
 REPORTS = 'reports'
 CONFIG = 'config'
 MAX_DEPTH = Keys.MAX_DEPTH

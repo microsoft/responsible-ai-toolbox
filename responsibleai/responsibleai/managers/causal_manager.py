@@ -276,7 +276,6 @@ class CausalManager(BaseManager):
            configuration."""
         print("Causal Effects")
         print('Current Status: Generating Causal Effects.')
-        print('Current Status: Finished generating causal effects.')
         is_classification = self._task_type == ModelTask.CLASSIFICATION
         for result in self._results:
             causal_config = result.config
@@ -352,6 +351,7 @@ class CausalManager(BaseManager):
                     result.policies.append(policy)
 
                 result._validate_schema()
+        print('Current Status: Finished generating causal effects.')
 
     def get(self):
         """Get the computed causal insights."""
