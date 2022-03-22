@@ -120,6 +120,7 @@ class ExplainerManager(BaseManager):
     @_measure_time
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
+        print("Explanations")
         if not self._is_added:
             return
         if self._is_run:
