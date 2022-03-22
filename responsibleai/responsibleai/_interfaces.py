@@ -20,6 +20,8 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
+    name: str
+    data_balance_measures: Any
 
 
 class BoundedCoordinates:

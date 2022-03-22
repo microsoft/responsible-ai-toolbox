@@ -9,6 +9,7 @@ class ManagerNames(object):
 
     CAUSAL = 'causal'
     COUNTERFACTUAL = 'counterfactual'
+    DATA_BALANCE = 'data_balance'
     ERROR_ANALYSIS = 'error_analysis'
     EXPLAINER = 'explainer'
 
@@ -45,6 +46,16 @@ class ErrorAnalysisManagerKeys(object):
     MIN_CHILD_SAMPLES = 'min_child_samples'
     FILTER_FEATURES = 'filter_features'
     REPORTS = 'reports'
+
+
+class DataBalanceManagerKeys(object):
+    """Provide constants for DataBalanceManager key properties."""
+    IS_COMPUTED = 'is_computed'
+    COLS_OF_INTEREST = 'cols_of_interest'
+    TARGET_COLUMN = 'target_column'
+    POS_LABEL = 'pos_label'
+    BACKEND = 'backend'
+    CUSTOM_DATA_SPECIFIED = 'custom_data_specified'
 
 
 class CounterfactualManagerKeys(object):

@@ -18,6 +18,7 @@ from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
@@ -54,6 +55,7 @@ class RAIInsights(object):
                  target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
+                 dataset_name: Optional[str] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000):
         """Creates an RAIInsights object.
@@ -74,6 +76,8 @@ class RAIInsights(object):
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
+        :param dataset_name: The name of the dataset.
+        :type dataset_name: str
         :param serializer: Picklable custom serializer with save and load
             methods for custom model serialization.
             The save method writes the model to file given a parent directory.
@@ -90,6 +94,7 @@ class RAIInsights(object):
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
             classes=classes,
+            dataset_name=dataset_name,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
         self.model = model
@@ -98,6 +103,7 @@ class RAIInsights(object):
         self.target_column = target_column
         self.task_type = task_type
         self.categorical_features = categorical_features
+        self.dataset_name = dataset_name
         self._serializer = serializer
         self._classes = RAIInsights._get_classes(
             task_type=self.task_type,
@@ -114,6 +120,10 @@ class RAIInsights(object):
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features)
 
+        self._data_balance_manager = DataBalanceManager(
+            train=train, test=test, target_column=target_column
+        )
+
         self._error_analysis_manager = ErrorAnalysisManager(
             model, test, target_column,
             self._classes,
@@ -127,6 +137,7 @@ class RAIInsights(object):
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
+                          self._data_balance_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
 
@@ -147,6 +158,7 @@ class RAIInsights(object):
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
+            dataset_name: str,
             serializer,
             maximum_rows_for_test: int):
         """Validate the inputs for the RAIInsights constructor.
@@ -168,6 +180,8 @@ class RAIInsights(object):
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
+        :param dataset_name: The name of the dataset.
+        :type dataset_name: str
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -192,6 +206,11 @@ class RAIInsights(object):
                 'INVALID-MODEL-WARNING: No valid model is supplied. '
                 'The explanations, error analysis and counterfactuals '
                 'may not work')
+
+        if dataset_name is not None:
+            if not isinstance(dataset_name, str):
+                raise UserConfigValidationException(
+                    'dataset_name should be a string')
 
         if serializer is not None:
             if not hasattr(serializer, 'save'):
@@ -368,6 +387,14 @@ class RAIInsights(object):
         return self._counterfactual_manager
 
     @property
+    def data_balance(self) -> DataBalanceManager:
+        """Get the data balance manager.
+        :return: The data balance manager.
+        :rtype: DataBalanceManager
+        """
+        return self._data_balance_manager
+
+    @property
     def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
         :return: The error analysis manager.
@@ -429,6 +456,8 @@ class RAIInsights(object):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
+        dashboard_dataset.name = self.dataset_name
+        dashboard_dataset.data_balance_measures = self.data_balance.get_data()
 
         predicted_y = None
         feature_length = None
@@ -730,6 +759,7 @@ class RAIInsights(object):
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
             ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
             ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
             ManagerNames.EXPLAINER: ExplainerManager,
         }
