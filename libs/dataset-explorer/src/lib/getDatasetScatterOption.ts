@@ -15,25 +15,21 @@ export function getDatasetScatterOption(
   const dataSeries = getDatasetScatter(jointData, plotlyProps, chartProps);
   return {
     chart: {
-      type: "scatter",
-      zoomType: "xy"
+      type: "scatter"
     },
     plotOptions: {
       scatter: {
-        marker: {
-          states: {
-            hover: {
-              enabled: true
-              // lineColor: colorTheme.axisColor
-            }
-          }
-        },
         tooltip: {
           headerFormat: "",
           pointFormat: `{point.customData.template}`
         }
       }
     },
-    series: dataSeries
+    series: dataSeries,
+    xAxis: {
+      labels: {
+        enabled: false
+      }
+    }
   };
 }
