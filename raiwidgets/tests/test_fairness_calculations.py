@@ -3,6 +3,7 @@
 
 import numpy as np
 import pytest
+from pytest import approx
 
 from raiwidgets.fairness_metric_calculation import (compute_wilson_bounds,
                                                     false_negative_rate_wilson,
@@ -58,23 +59,23 @@ def test_false_negative_rate_wilson(sample_binary_data):
 
 def test_mse_standard_normal_binary(sample_binary_data):
     y_true, y_pred = sample_binary_data
-    assert pytest.approx(mse_standard_normal(y_true, y_pred), (0.0160, 0.5840))
+    mse = mse_standard_normal(y_true, y_pred)
+    assert mse == approx((0.0160, 0.5840), rel=1e-3, abs=1e-3)
 
 
 def test_mae_standard_normal_binary(sample_binary_data):
     y_true, y_pred = sample_binary_data
-    assert pytest.approx(mae_standard_normal(y_true, y_pred), (0.0160, 0.5840))
+    mae = mae_standard_normal(y_true, y_pred)
+    assert mae == approx((0.0160, 0.5840), rel=1e-3, abs=1e-3)
 
 
 def test_mse_standard_normal_continuous(sample_continuous_data):
     y_true, y_pred = sample_continuous_data
-    assert pytest.approx(
-        mse_standard_normal(y_true, y_pred), (57.7926, 637.2074)
-    )
+    mse = mse_standard_normal(y_true, y_pred)
+    assert mse == approx((57.7926, 637.2074), rel=1e-3, abs=1e-3)
 
 
 def test_mae_standard_normal_continuous(sample_continuous_data):
     y_true, y_pred = sample_continuous_data
-    assert pytest.approx(
-        mae_standard_normal(y_true, y_pred), (9.4708, 21.9292)
-    )
+    mae = mae_standard_normal(y_true, y_pred)
+    assert mae == approx((9.4708, 21.9292), rel=1e-3, abs=1e-3)
