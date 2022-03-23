@@ -11,6 +11,7 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.metrics import metric_to_func
+from raiutils.models import is_classifier
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
@@ -21,7 +22,6 @@ from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
-from .utils import _is_classifier
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
@@ -135,7 +135,7 @@ class ErrorAnalysisDashboardInput:
         self._string_ind_data = None
         self._categories = []
         self._categorical_indexes = []
-        self._is_classifier = _is_classifier(model)
+        self._is_classifier = is_classifier(model)
         self._dataframeColumns = None
         self.dashboard_input = {}
         has_explanation = explanation is not None
@@ -236,7 +236,7 @@ class ErrorAnalysisDashboardInput:
                                  " feature names length differs"
                                  " from local explanations dimension")
             self.dashboard_input[FEATURE_NAMES] = features
-        if model_available and _is_classifier(model) and \
+        if model_available and is_classifier(model) and \
                 dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
