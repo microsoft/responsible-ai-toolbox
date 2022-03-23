@@ -51,7 +51,7 @@ export class DatasetExplorerTab extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  // private readonly chartAndConfigsId = "DatasetExplorerChart";
+  private readonly chartAndConfigsId = "DatasetExplorerChart";
 
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
@@ -134,6 +134,7 @@ export class DatasetExplorerTab extends React.Component<
         grow
         tokens={{ childrenGap: "l1" }}
         className={classNames.page}
+        id={this.chartAndConfigsId}
       >
         <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
