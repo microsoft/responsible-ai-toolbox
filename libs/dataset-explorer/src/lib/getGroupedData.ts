@@ -6,52 +6,25 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
-import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
-import { getGroupedData } from "./getGroupedData";
+import { IDatasetExplorerSeries } from "./getDatasetScatter";
 
-export interface IDatasetExplorerSeries {
-  name?: string;
-  color: any;
-  data: IDatasetExplorerData[];
-}
-export interface IDatasetExplorerData {
-  x: number;
-  y: number;
-  customData: any;
-  template: string | undefined;
-}
-
-export function getDatasetScatter(
+export function getGroupedData(
+  xData: number[],
+  yData: number[],
+  customData: any,
+  groups: any,
+  styles: any,
   jointData: JointDataset,
-  plotlyProps: IPlotlyProperty,
   chartProps?: IGenericChartProps
 ): IDatasetExplorerSeries[] {
   const groupedData: any = [];
   const result: IDatasetExplorerSeries[] = [];
-  const customData = plotlyProps.data[0].customdata;
-  const xData = plotlyProps.data[0].x;
-  const yData = plotlyProps.data[0].y;
-  const groups = plotlyProps.data[0].transforms?.[0].groups;
-  const styles = plotlyProps.data[0].transforms?.[0].styles;
-
-  if (groups) {
-    return getGroupedData(
-      xData as number[],
-      yData as number[],
-      customData,
-      groups,
-      styles,
-      jointData,
-      chartProps
-    );
-  }
-
   if (yData) {
     yData.forEach((data, index) => {
-      const curGroup = groups?.[index] || 0;
+      const curGroup = groups?.[index];
       if (curGroup !== undefined) {
         if (groupedData[curGroup] === undefined) {
           groupedData[curGroup] = [];
