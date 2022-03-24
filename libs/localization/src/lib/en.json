@@ -1310,7 +1310,7 @@
       "modelStatistics": "Model statistics"
     },
     "ModelOverview": {
-      "Metrics": "Metric(s)",
+      "metricsDropdown": "Metric(s)",
       "accuracy": "Accuracy",
       "f1Score": "F1 score",
       "meanAbsoluteError": "Mean absolute error",
@@ -1323,7 +1323,11 @@
       "meanPrediction": "Mean prediction",
       "manuallyCreatedCohorts": "Manually created cohorts",
       "sensitiveFeatureCohorts": "Sensitive feature cohorts",
-      "notAvailable": "N/A"
+      "notAvailable": "N/A",
+      "countColumnHeader": "Count",
+      "dataCohortsHeatmapHeader": "Data cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "featuresDropdown": "Feature(s)"
     }
   }
 }

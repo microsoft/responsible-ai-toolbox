@@ -153,7 +153,7 @@ export class TabsView extends React.PureComponent<
                       }
                     </Text>
                   </div>
-                  <ModelOverview />
+                  <ModelOverview showNewModelOverviewExperience={true} />
                 </>
               )}
               {t.key === GlobalTabKeys.DataExplorerTab && (
