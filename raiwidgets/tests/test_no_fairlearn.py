@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import mock
+from unittest.mock import patch
+
 import pytest
 
 from raiwidgets import FairnessDashboard
@@ -9,7 +10,7 @@ from raiwidgets.fairness_metric_calculation import \
     MODULE_NOT_INSTALLED_ERROR_MESSAGE
 
 
-@mock.patch("importlib.import_module")
+@patch("importlib.import_module")
 def test_no_fairlearn(importlib_mock):
     importlib_mock.side_effect = \
         ModuleNotFoundError("No module named 'fairlearn.metrics'")

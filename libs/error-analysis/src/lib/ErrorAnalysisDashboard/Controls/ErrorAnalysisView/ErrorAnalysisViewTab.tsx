@@ -69,7 +69,7 @@ export class ErrorAnalysisViewTab extends React.Component<
       <Stack horizontal>
         <Stack
           grow
-          tokens={{ padding: "16px 24px" }}
+          tokens={{ padding: "l1" }}
           className={classNames.errorAnalysis}
         >
           <Text variant={"xxLarge"} id="errorAnalysisHeader">
@@ -130,17 +130,13 @@ export class ErrorAnalysisViewTab extends React.Component<
             selectedFeatures={this.props.features}
           />
         </Stack>
-        <Stack tokens={{ padding: "100px 0 0 0" }}>
+        <Stack tokens={{ padding: "l1" }}>
           <Separator vertical styles={{ root: { height: "100%" } }} />
         </Stack>
-        <Stack
-          className={classNames.cohortInfo}
-          tokens={{ padding: "100px 80px 0 0" }}
-        >
+        <Stack className={classNames.cohortInfo} tokens={{ padding: "l1" }}>
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
             onSaveCohortClick={this.props.onSaveCohortClick}
-            includeDividers={false}
             disabledView={this.props.disabledView}
           />
         </Stack>
