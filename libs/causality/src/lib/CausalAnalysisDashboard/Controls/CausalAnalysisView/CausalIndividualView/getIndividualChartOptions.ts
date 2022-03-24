@@ -35,7 +35,7 @@ export function getIndividualChartOptions(
   const series = data.map((d) => {
     return {
       data: d,
-      showInLegend: false
+      name: ""
     };
   });
   return {
