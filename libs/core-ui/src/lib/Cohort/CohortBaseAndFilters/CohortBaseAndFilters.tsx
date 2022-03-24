@@ -33,17 +33,31 @@ export class CohortBaseAndFilters extends React.Component<ICohortBaseAndFiltersP
       <div>
         <div className={classNames.section} />
         <div className={classNames.subsection}>
-          <div className={classNames.header}>{localization.ErrorAnalysis.CohortBaseAndFilters.globalCohortAndFilters}</div>
+          <div className={classNames.header}>
+            {
+              localization.ErrorAnalysis.CohortBaseAndFilters
+                .globalCohortAndFilters
+            }
+          </div>
           <Stack horizontal>
             <Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>{localization.ErrorAnalysis.CohortBaseAndFilters.globalCohort}</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortBaseAndFilters.globalCohort}
+                </div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>{localization.ErrorAnalysis.CohortBaseAndFilters.errorExplorer}</div>
+                <div className={classNames.tableData}>
+                  {
+                    localization.ErrorAnalysis.CohortBaseAndFilters
+                      .errorExplorer
+                  }
+                </div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>{localization.ErrorAnalysis.CohortBaseAndFilters.filters}</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortBaseAndFilters.filters}
+                </div>
               </Stack>
             </Stack>
             <Stack>
