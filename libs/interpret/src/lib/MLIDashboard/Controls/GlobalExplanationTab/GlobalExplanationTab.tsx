@@ -287,7 +287,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                     />
                   </div>
                 </Stack.Item>
-                <Stack.Item className={classNames.chartRightPart}>
+                <Stack.Item className={classNames.legendAndSort}>
                   {featureOptions && (
                     <ComboBox
                       id="DependencePlotFeatureSelection"
@@ -304,7 +304,6 @@ export class GlobalExplanationTab extends React.PureComponent<
                       selectedKey={this.state.dependenceProps?.xAxis.property}
                       onChange={this.onXSet}
                       calloutProps={FabricStyles.calloutProps}
-                      styles={FabricStyles.defaultDropdownStyle}
                     />
                   )}
                   {cohortOptions && (

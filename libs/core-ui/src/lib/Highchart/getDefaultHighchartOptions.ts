@@ -34,6 +34,9 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    legend: {
+      enabled: false
+    },
     plotOptions: {
       area: {
         marker: {

@@ -20,7 +20,7 @@ export function describeSubLineChart(dataShape: IInterpretData): void {
       props.chart.clickNthPoint(1);
     });
     it("should have more than one point", () => {
-      cy.get("#subPlotContainer svg g[class^='plot'] .points .point")
+      cy.get("#subPlotContainer svg g[class^='highcharts-series-group'] path")
         .its("length")
         .should("be.gte", 1);
     });
