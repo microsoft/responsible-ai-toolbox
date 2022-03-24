@@ -71,7 +71,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-          pip install .
+          pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Pip freeze
@@ -116,7 +116,6 @@ jobs:
           files: ./${{ matrix.packageDirectory }}/coverage.xml
           flags: unittests
           name: codecov-umbrella
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
         if: ${{ always() }}
 
