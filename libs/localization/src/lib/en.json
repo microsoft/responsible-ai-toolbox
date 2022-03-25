@@ -1294,7 +1294,7 @@
         "Delete": "Delete",
         "Title": "Delete {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Dashboard configuration"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
@@ -1304,7 +1304,7 @@
       "LocalExplanation": "Individual feature importance"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
