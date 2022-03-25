@@ -5,7 +5,7 @@ import { toNumber } from "lodash";
 
 import { Chart, IChartElement } from "../../../../util/Chart";
 import { getComboBoxValue, selectComboBox } from "../../../../util/comboBox";
-import { ScatterChart } from "../../../../util/ScatterChart";
+import { ScatterHighchart } from "../../../../util/ScatterHighchart";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 const topKLabelReg = /^Top (\d+) features by their importance$/;
@@ -27,23 +27,22 @@ export function describeGlobalExplanationChart<
         "Aggregate feature importance"
       );
     });
-    it("should have x axis label", () => {
-      const columns = props.dataShape.featureNames?.slice(0, 4);
-      if (columns) {
-        for (const [i, column] of columns.entries()) {
-          cy.get(
-            `#FeatureImportanceBar svg g.xaxislayer-above g.xtick:nth-child(${
-              i + 1
-            }) text`
-          ).should("contain.text", column);
+    it.skip("should have x axis label", () => {
+      if (props.dataShape.featureNames) {
+        const columns = props.dataShape.featureNames.slice(0, 4);
+        for (const column of columns) {
+          cy.get(`#FeatureImportanceBar svg g.highcharts-xaxis-labels`).should(
+            "contain.text",
+            column
+          );
         }
       }
     });
-    it(`should have ${props.dataShape.featureNames?.length} elements`, () => {
+    it.skip(`should have ${props.dataShape.featureNames?.length} elements`, () => {
       expect(props.chart.Elements).length(props.dataShape.featureNames!.length);
     });
     if (!props.dataShape.featureImportanceData?.noLocalImportance) {
-      describe("Chart Settings", () => {
+      describe.skip("Chart Settings", () => {
         it("chart elements should match top K setting", () => {
           const topK = getTopKValue();
           expect(props.chart.VisibleElements).length(topK);
@@ -62,7 +61,7 @@ export function describeGlobalExplanationChart<
       });
 
       if (!props.dataShape.featureImportanceData?.noDataset) {
-        const dependencePlotChart = new ScatterChart("#DependencePlot");
+        const dependencePlotChart = new ScatterHighchart("#DependencePlot");
         describe("DependencePlot", () => {
           beforeEach(() => {
             selectComboBox("#DependencePlotFeatureSelection", 0);

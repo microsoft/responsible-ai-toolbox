@@ -46,7 +46,8 @@ export class CausalInsightsTab extends React.PureComponent<
       <Stack
         grow
         className={classNames.container}
-        tokens={{ padding: "16px 24px" }}
+        id="causalInsightsTab"
+        tokens={{ padding: "l1" }}
       >
         <Stack.Item>
           <Text variant={"xxLarge"} id="causalAnalysisHeader">
@@ -59,7 +60,7 @@ export class CausalInsightsTab extends React.PureComponent<
           </MessageBar>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack horizontal tokens={{ childrenGap: "s1" }}>
             <Pivot onLinkClick={this.onViewTypeChange}>
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}

@@ -11,7 +11,8 @@ import {
   ICounterfactualData,
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -23,6 +24,7 @@ export interface IModelAssessmentData {
   causalAnalysisData?: ICausalAnalysisData[];
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
+  cohortData?: IPreBuiltCohort[];
 }
 
 export interface IModelAssessmentDashboardProps

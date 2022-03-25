@@ -1,10 +1,9 @@
 # Requirements for raiwidgets development
 
-pytest==5.0.1
-mock==4.0.1
+pytest==7.0.1
 pytest-cov
-pytest-mock==3.1.1
-requests==2.24.0
+pytest-mock==3.6.1
+requests==2.25.1
 
 requirements-parser==0.2.0
 
@@ -14,6 +13,9 @@ wheel
 lightgbm==2.3.0
 
 fairlearn==0.6.0
+
+# Jupyter dependency that fails with python 3.6
+pywinpty==2.0.2; python_version <= '3.6' and sys_platform == 'win32'
 
 # Required for notebook tests
 nbformat

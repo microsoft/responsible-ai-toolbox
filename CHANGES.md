@@ -24,6 +24,95 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.17.0
+
+- educational materials
+  - add e2e test steps to CONTRIBUTING.md file for developers/contributors
+  - add steps for validating UX and SDK changes to documentation
+  - replace boston housing dataset with california housing dataset in tests and example notebook due to ethical concerns and biases
+  - update dnn pytorch notebook example to give more interesting results by increasing model epochs
+- new features
+  - ## Responsible AI Dashboard
+    - move performance metric chart, disaggregated metric table, and StatisticsUtils into core-ui
+    - add highchart, all components will be moved to highchart instead of plotly gradually
+    - add metrics to StatisticsUtils - F1 score, selection rate, mean absolute error
+    - add cohort and filter definitions in raiwidgets SDK
+    - enable highchart exporting functionality
+  - ## Responsible AI Dashboard for Text
+    - add new interpret-text library skeleton
+  - ## Causal
+    - add treatment bar chart
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - add e2e UI tests for Causal Analysis - classification tests
+    - add e2e UI tests for Feature Importance - aggregate importances
+    - add e2e UI tests for Feature Importance - individual importances
+    - add e2e UI tests for What-If Counterfactuals
+    - add e2e UI tests for Data Explorer - diabetes-regression-model-debugging notebook
+    - add e2e UI tests for Causal Analysis - diabetes-regression-model-debugging notebook
+    - add e2e UI tests for Model Overview - diabetes-regression-model-debugging notebook
+    - add e2e UI tests for responsibleaidashboard-housing-classification-model-debugging notebook
+    - fix e2e UI What-if sort test
+    - add e2e UI tests for Feature Importance - responsibleaidashboard-diabetes-decision-making notebook
+    - add e2e UI tests for What-if, Model Overview and Data explorer - responsibleaidashboard-diabetes-decision-making notebook
+    - add e2e UI tests for Aggregate Causal Analysis - diabetes-decision-making notebook
+    - add multiclass classification dataset to UI test app and set up basic model-assessment tests for Model Overview
+    - add notebook test for pytorch example notebook and add pytorch to CI
+    - move to new fluentUI dependency
+    - correctly annotate python warnings
+    - separate out raiwidgets and UI tests into its own workflow, and added new pipeline to run RAIwidget e2e tests
+    - add js and raiwidget code coverage
+    - add upload step to e2e test for CI RAIWidgets Python Typescript pipeline
+    - add upload step to e2e test to CI notebooks pipeline
+    - return exception details to UI
+    - add docstrings for locale parameter
+  - ## RAIInsights
+    - catch dirty data conditions in RAI Insights validation
+    - update responsibleai to interpret-community 0.24.0
+    - update responsibleai to interpret-community 0.24.1
+    - update responsibleai to interpret-community 0.24.2
+    - make responsibleai managers public and add back compat connectors
+    - make explanations save behavior similar to other managers
+    - change logic to walk categorical columns in validate_train_test_categories
+    - cover missing test scenario in state_directory_management.py
+    - default categorical feature to array
+    - add error analysis test for regression task in RAIInsights
+    - make causal manager add and compute behavior similar to other managers
+  - ## Counterfactual
+    - add feature importance description for counterfactual local importance
+    - update Counterfactual explanation text description
+  - ## Error Analysis
+    - fix importances taking too long to calculate for large data in error analysis
+    - add a perf test for validating training the surrogate error tree on large data and a minor optimization for traversing the tree
+    - add filtering on index to error analysis backend for RAI dashboard cohort switch
+    - remove unnecessary multiple calls to tree api
+    - refactor tree view state to be private static in tree view renderer and not in parent
+    - create github action to release erroranalysis
+    - add excludes cohort filter test in erroranalysis
+    - refactor matrix filter and area state to be private static
+    - make search case insensitive in feature list
+    - add more docs for error analysis surrogate tree
+    - optimize tree traversal logic in error analysis to reduce execution time when running on several million rows
+  - ## Interpret
+    - allow ExplanationDashboard to show limited view for more than 1k features instead of erroring
+  - ## Causal
+    - improve documentation for nuisance_model and heterogeneity_model
+    - implement list method in causal manager
+- ## other
+  - fix pypi releases by reverting back to pypi token per package
+  - fix dummy counterfactual feature importance values for UI test app
+  - add pseudo language for localization test
+  - integrate codecov into responsible-ai-toolbox repository
+  - remove test warning due to use of deprecated np.object
+  - add python 3.9 tests
+  - fix ipython dependency in rai-core-flask and remove from raiwidgets
+  - update setup.py files to carry python 3.9 classifiers
+  - fix broken builds due to pip upgrade which broke pip-tools
+  - remove mac temporarily from rai widgets step to fix failing builds
+  - remove node-version from CI-python.yml
+  - fix flaky flask test
+  - improve description for responsibleai and raiwidgets pypi packages
+
 ## v0.16.0
 
 - educational materials

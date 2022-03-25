@@ -45,7 +45,7 @@ describe("calculateFairnessMetric", () => {
     };
     expect(result).toEqual(expectedResult);
   });
-  it("should return only overall result if binBounds falsey", () => {
+  it("should return only overall result if binBounds falsely", () => {
     const mockValue = {
       binBounds: [],
       bins: [0.3, 0.7],

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
@@ -9,7 +10,6 @@ import {
   IModelAssessmentDashboardProps,
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -19,6 +19,7 @@ import {
   DatasetName,
   generateJsonTreeBoston,
   generateJsonTreeAdultCensusIncome,
+  generateJsonTreeWine,
   getJsonMatrix,
   getJsonTreeAdultCensusIncome
 } from "../error-analysis/utils";
@@ -69,7 +70,7 @@ export class App extends React.Component<IAppProps> {
             this.props.dataset.feature_names,
             DatasetName.Boston
           );
-      } else {
+      } else if (this.props.classDimension === 2) {
         // Adult
         modelAssessmentDashboardProps.requestDebugML =
           generateJsonTreeAdultCensusIncome;
@@ -77,6 +78,14 @@ export class App extends React.Component<IAppProps> {
           createJsonImportancesGenerator(
             this.props.dataset.feature_names,
             DatasetName.AdultCensusIncome
+          );
+      } else {
+        // Wine
+        modelAssessmentDashboardProps.requestDebugML = generateJsonTreeWine;
+        modelAssessmentDashboardProps.requestImportances =
+          createJsonImportancesGenerator(
+            this.props.dataset.feature_names,
+            DatasetName.Wine
           );
       }
     } else {

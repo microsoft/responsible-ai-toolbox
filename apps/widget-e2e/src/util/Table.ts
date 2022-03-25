@@ -49,3 +49,40 @@ export function assertRowSelected(
         .and("contain", "true");
     });
 }
+
+export function getTableColumnsValues(
+  columnNames: string[],
+  srPrefix?: string
+) {
+  const selectorPrefix = srPrefix ? `${srPrefix}` : "";
+  const columnValuesToSkipLocalization: string[][] = [];
+  columnNames.forEach((columnName) => {
+    columnValuesToSkipLocalization.push(
+      getTableColumnValues(columnName, selectorPrefix)
+    );
+  });
+  return columnValuesToSkipLocalization;
+}
+
+export function getTableColumnValues(columnName: string, srPrefix: string) {
+  const columnValues: string[] = [];
+  Cypress.$(`${srPrefix}  [data-automationid="ColumnsHeaderColumn"]`).each(
+    (columnIndex, columnValue) => {
+      if (
+        columnValue.textContent &&
+        columnValue.textContent.includes(columnName)
+      ) {
+        Cypress.$(
+          `${srPrefix} [data-automationid="ListCell"] [aria-colindex="${
+            columnIndex + 1
+          }"]`
+        ).each((_colIndex, colValue) => {
+          if (colValue.textContent) {
+            columnValues.push(colValue.textContent);
+          }
+        });
+      }
+    }
+  );
+  return columnValues;
+}

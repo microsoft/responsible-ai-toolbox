@@ -10,7 +10,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-interface IConfirmationDialogProps {
+export interface IConfirmationDialogProps {
   confirmButtonText: string;
   cancelButtonText: string;
   title: string;

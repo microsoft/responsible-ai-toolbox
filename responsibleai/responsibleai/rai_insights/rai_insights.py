@@ -7,6 +7,7 @@ import json
 import pickle
 import warnings
 from pathlib import Path
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -14,12 +15,11 @@ import pandas as pd
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
-from responsibleai._managers.causal_manager import CausalManager
-from responsibleai._managers.counterfactual_manager import \
-    CounterfactualManager
-from responsibleai._managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai._managers.explainer_manager import ExplainerManager
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.managers.causal_manager import CausalManager
+from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
+from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.utils import _is_classifier
 
@@ -44,44 +44,19 @@ _PREDICT_PROBA = 'predict_proba'
 
 
 class RAIInsights(object):
-
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
-    :param model: The model to compute RAI insights for.
-        A model that implements sklearn.predict or sklearn.predict_proba
-        or function that accepts a 2d ndarray.
-    :type model: object
-    :param train: The training dataset including the label column.
-    :type train: pandas.DataFrame
-    :param test: The test dataset including the label column.
-    :type test: pandas.DataFrame
-    :param target_column: The name of the label column.
-    :type target_column: str
-    :param task_type: The task to run, can be `classification` or
-        `regression`.
-    :type task_type: str
-    :param categorical_features: The categorical feature names.
-    :type categorical_features: list[str]
-    :param classes: The class labels in the training dataset
-    :type classes: ndarray
-    :param serializer: Picklable custom serializer with save and load
-        methods for custom model serialization.
-        The save method writes the model to file given a parent directory.
-        The load method returns the deserialized model from the same
-        parent directory.
-    :type serializer: object
     """
 
-    def __init__(self, model, train, test, target_column,
-                 task_type, categorical_features=None, classes=None,
-                 serializer=None,
+    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+                 target_column: str, task_type: str,
+                 categorical_features: Optional[List[str]] = None,
+                 classes: Optional[np.ndarray] = None,
+                 serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000):
-        """Defines the top-level Model Analysis API.
-        Use RAIInsights to analyze errors, explain the most important
-        features, compute counterfactuals and run causal analysis in a
-        single API.
+        """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -98,16 +73,18 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
-            methods defined for model that is not serializable. The save
-            method returns a dictionary state and load method returns the
-            model.
+            methods for custom model serialization.
+            The save method writes the model to file given a parent directory.
+            The load method returns the deserialized model from the same
+            parent directory.
         :type serializer: object
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
         """
+        categorical_features = categorical_features or []
         self._validate_model_analysis_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
@@ -167,12 +144,12 @@ class RAIInsights(object):
             return None
 
     def _validate_model_analysis_input_parameters(
-            self, model, train, test, target_column,
-            task_type, categorical_features, classes,
+            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+            target_column: str, task_type: str,
+            categorical_features: List[str], classes: np.ndarray,
             serializer,
             maximum_rows_for_test: int):
-        """
-        Validate the inputs for RAIInsights class.
+        """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -190,7 +167,7 @@ class RAIInsights(object):
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
-        :type classes: ndarray
+        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -270,6 +247,23 @@ class RAIInsights(object):
                                f"{list(difference_set)}")
                     raise UserConfigValidationException(message)
 
+                for column in categorical_features:
+                    try:
+                        np.unique(train[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your train data.".format(column)
+                        )
+
+                    try:
+                        np.unique(test[column])
+                    except Exception:
+                        raise UserConfigValidationException(
+                            "Error finding unique values in column {0}. "
+                            "Please check your test data.".format(column)
+                        )
+
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
                 if len(set(train[target_column].unique()) -
@@ -333,18 +327,18 @@ class RAIInsights(object):
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
-                "Expecting pandas Dataframe for train and test."
+                "Expecting pandas DataFrame for train and test."
             )
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
         """
-        Validate the features are unmodified on the dataframe.
+        Validate the features are unmodified on the DataFrame.
 
         :param small_train_features_before: The features saved before
             an operation was performed.
         :type small_train_features_before: list[str]
-        :param small_train_data: The dataframe after the operation.
+        :param small_train_data: The DataFrame after the operation.
         :type small_train_data: pandas.DataFrame
         :param function: The name of the operation performed.
         :type function: str

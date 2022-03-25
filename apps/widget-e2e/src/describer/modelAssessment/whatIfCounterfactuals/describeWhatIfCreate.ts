@@ -10,7 +10,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
-        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
+        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
       ).click();
       cy.get(Locators.CreateWhatIfCounterfactualButton)
         .click()
@@ -20,36 +20,36 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     after(() => {
       cy.get(Locators.WhatIfCloseButton).click();
     });
-    it("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
+    it.skip("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || "age"
+          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
         );
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort ||
-            "capital-gain"
-        );
+        .invoke("text")
+        .then((text1) => {
+          expect(text1).to.not.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
+          );
+        });
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
 
     it("should filter by included letters in search query", () => {
       cy.get(Locators.WhatIfSearchBar).type(
-        dataShape.whatIfCounterfactualsData?.searchBarQuery || "occupation"
+        dataShape.whatIfCounterfactualsData?.searchBarQuery || ""
       );
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.searchBarQuery || "occupation"
-        );
+        .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
       cy.get(Locators.WhatIfSearchBarClearTextButton).click();
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || "age"
+          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
         );
     });
 
@@ -59,7 +59,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .clear()
         .type(
           dataShape.whatIfCounterfactualsData
-            ?.CreateYourOwnCounterfactualInputFieldUpdated || "25"
+            ?.createYourOwnCounterfactualInputFieldUpdated || "25"
         );
       cy.get(Locators.CreateYourOwnCounterfactualInputField).eq(2).focus();
       cy.focused()
@@ -67,32 +67,32 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .and(
           "contain",
           dataShape.whatIfCounterfactualsData
-            ?.CreateYourOwnCounterfactualInputFieldUpdated || "25"
+            ?.createYourOwnCounterfactualInputFieldUpdated || "25"
         );
     });
 
     it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
       cy.get(Locators.WhatIfNameLabel)
         .should("have.attr", "value")
-        .and("contain", dataShape.whatIfCounterfactualsData?.WhatIfNameLabel);
+        .and("contain", dataShape.whatIfCounterfactualsData?.whatIfNameLabel);
       cy.get(Locators.WhatIfNameLabel).type(
-        dataShape.whatIfCounterfactualsData?.WhatIfNameLabelUpdated ||
-          "New Copy of row 5"
+        dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated ||
+          "New Copy of row 1"
       );
       cy.get(Locators.WhatIfNameLabel)
         .should("have.attr", "value")
         .and(
           "contain",
-          dataShape.whatIfCounterfactualsData?.WhatIfNameLabelUpdated
+          dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated
         );
     });
   });
 
-  describe("What-If save scenario", () => {
+  describe.skip("What-If save scenario", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
-        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
+        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
       )
         .scrollIntoView()
         .click({ force: true });
@@ -106,7 +106,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfSaveAsNewDatapointButton).click();
       cy.get(Locators.WhatIfSaveAsDataPoints).should(
         "contain",
-        dataShape.whatIfCounterfactualsData!.WhatIfNameLabel
+        dataShape.whatIfCounterfactualsData!.whatIfNameLabel
       );
 
       // Should be able to delete datapoint created

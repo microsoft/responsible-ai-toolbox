@@ -26,9 +26,12 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { IMatrixAreaState } from "../../../MatrixFilterState";
 import { FeatureRowCategories } from "../FeatureRowCategories/FeatureRowCategories";
 import { MatrixCells } from "../MatrixCells/MatrixCells";
+import {
+  createInitialMatrixAreaState,
+  IMatrixAreaState
+} from "../MatrixFilterState";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";
 import { MatrixOptions } from "../MatrixOptions/MatrixOptions";
 
@@ -56,26 +59,33 @@ export class MatrixArea extends React.PureComponent<
   IMatrixAreaState
 > {
   public static contextType = ModelAssessmentContext;
+  private static savedState: IMatrixAreaState | undefined;
+  private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private layerHostId: string;
   public constructor(props: IMatrixAreaProps) {
     super(props);
-    this.state = {
-      disableClearAll: this.props.state.disableClearAll,
-      disableSelectAll: this.props.state.disableSelectAll,
-      jsonMatrix: this.props.state.jsonMatrix,
-      matrixFeature1: this.props.selectedFeature1,
-      matrixFeature2: this.props.selectedFeature2,
-      maxMetricValue: this.props.state.maxMetricValue,
-      numBins: this.props.state.numBins,
-      quantileBinning: this.props.state.quantileBinning,
-      selectedCells: this.props.state.selectedCells
-    };
+    if (
+      this.props.selectedCohort !== this.props.baseCohort &&
+      MatrixArea.savedState
+    ) {
+      this.state = MatrixArea.savedState;
+    } else {
+      this.state = createInitialMatrixAreaState(
+        this.props.selectedFeature1,
+        this.props.selectedFeature2
+      );
+    }
     this.layerHostId = getId("matrixAreaHost");
-    if (this.props.state.selectedCells === undefined) {
+    if (this.state.selectedCells === undefined) {
       this.reloadData();
     }
+    MatrixArea.saveStateOnUnmount = true;
+  }
+
+  public static resetState(): void {
+    MatrixArea.saveStateOnUnmount = false;
   }
 
   public componentDidUpdate(prevProps: IMatrixAreaProps): void {
@@ -95,7 +105,11 @@ export class MatrixArea extends React.PureComponent<
   }
 
   public componentWillUnmount(): void {
-    this.props.setMatrixAreaState(this.state);
+    if (MatrixArea.saveStateOnUnmount) {
+      MatrixArea.savedState = this.state;
+    } else {
+      MatrixArea.savedState = undefined;
+    }
   }
 
   public render(): React.ReactNode {
@@ -303,7 +317,6 @@ export class MatrixArea extends React.PureComponent<
         jsonMatrix,
         matrixFeature1: this.props.selectedFeature1,
         matrixFeature2: this.props.selectedFeature2,
-        maxMetricValue,
         selectedCells
       },
       () => {

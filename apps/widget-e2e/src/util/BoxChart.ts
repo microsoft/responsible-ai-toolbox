@@ -170,14 +170,14 @@ export class BoxChart extends Chart<IBox> {
       q1,
       right,
       left2,
-      bottom,
+      q32,
       right2,
       q12,
       center,
       top,
       q3,
       center2,
-      q32,
+      bottom,
       top2,
       sTop,
       sTop3,
@@ -193,14 +193,14 @@ export class BoxChart extends Chart<IBox> {
     if (left !== left2) {
       throw new Error(`box${idx} left: ${right}, ${right2} do not match`);
     }
-    if (bottom !== bottom2) {
-      throw new Error(`box${idx} bottom: ${bottom}, ${bottom2} do not match`);
+    if (q3 !== q32) {
+      throw new Error(`box${idx} q3: ${q3}, ${q32} do not match`);
     }
     if (q1 !== q12) {
       throw new Error(`box${idx} q1: ${q1}, ${q12} do not match`);
     }
-    if (q3 !== q32) {
-      throw new Error(`box${idx} q3: ${q3}, ${q32} do not match`);
+    if (bottom2 !== bottom) {
+      throw new Error(`box${idx} bottom: ${bottom2}, ${bottom} do not match`);
     }
     if (top !== top2) {
       throw new Error(`box${idx} top: ${top}, ${top2} do not match`);

@@ -41,6 +41,11 @@ export interface ICounterfactualPanelProps {
     isString: boolean,
     newValue?: string
   ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
+  ): void;
 }
 interface ICounterfactualState {
   filterText?: string;
@@ -84,6 +89,9 @@ export class CounterfactualPanel extends React.Component<
               data={this.props.data}
               temporaryPoint={this.props.temporaryPoint}
               setCustomRowProperty={this.props.setCustomRowProperty}
+              setCustomRowPropertyComboBox={
+                this.props.setCustomRowPropertyComboBox
+              }
               sortFeatures={this.state.sortFeatures}
             />
           </Stack.Item>
@@ -123,10 +131,7 @@ export class CounterfactualPanel extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <Text variant={"medium"}>
-            {localization.formatString(
-              localization.Counterfactuals.panelDescription,
-              this.props.data?.desired_class
-            )}
+            {localization.Counterfactuals.panelDescription}
           </Text>
         </Stack.Item>
         <Stack.Item className={classes.buttonRow}>
@@ -170,7 +175,7 @@ export class CounterfactualPanel extends React.Component<
       return <div />;
     }
     return (
-      <Stack horizontal tokens={{ childrenGap: "15px" }}>
+      <Stack horizontal tokens={{ childrenGap: "l1" }}>
         <Stack.Item align="end" grow={1}>
           <TextField
             id="whatIfNameLabel"

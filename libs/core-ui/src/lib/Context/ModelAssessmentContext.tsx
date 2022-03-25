@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme } from "@fluentui/react";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";

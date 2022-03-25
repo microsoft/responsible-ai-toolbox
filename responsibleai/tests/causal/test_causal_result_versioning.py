@@ -8,9 +8,9 @@ import pytest
 from jsonschema import ValidationError
 
 from responsibleai import ModelTask
-from responsibleai._managers.causal_manager import CausalManager
 from responsibleai._tools.causal.causal_result import CausalResult
 from responsibleai._tools.shared.versions import CausalVersions
+from responsibleai.managers.causal_manager import CausalManager
 
 
 @pytest.fixture(scope='module')
@@ -19,9 +19,11 @@ def causal_result(parks_data):
     manager = CausalManager(train_df, test_df, target_feature,
                             ModelTask.REGRESSION, ['state', 'attraction'])
 
-    return manager.add(['attraction'],
-                       skip_cat_limit_checks=True,
-                       upper_bound_on_cat_expansion=50)
+    manager.add(['attraction'],
+                skip_cat_limit_checks=True,
+                upper_bound_on_cat_expansion=50)
+    manager.compute()
+    return manager.get()[0]
 
 
 class TestCausalVersioning:

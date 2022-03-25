@@ -37,7 +37,6 @@ export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> 
         <CohortInfo
           onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
-          includeDividers
           disabledView={false}
         />
       </Panel>

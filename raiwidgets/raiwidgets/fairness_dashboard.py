@@ -29,8 +29,15 @@ class FairnessDashboard(Dashboard):
         names of "Model <n>" are generated
     :type y_pred: pandas.Series, pandas.DataFrame, list, Dict[str,1d array]
         or something convertible to numpy.ndarray
+    :param locale: The language in which user wants to load and access the
+        Fairness Dashboard. The default language is english ("en").
+    :type locale: str
+    :param public_ip: Optional. If running on a remote vm,
+        the external public ip address of the VM.
+    :type public_ip: str
+    :param port: The port to use on locally hosted service.
+    :type port: int
     """
-
     def __init__(
             self, *,
             sensitive_features,

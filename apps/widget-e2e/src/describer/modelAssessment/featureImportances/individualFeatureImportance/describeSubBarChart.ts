@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { toNumber } from "lodash";
+
 import { BarChart } from "../../../../util/BarChart";
 import { ScatterChart } from "../../../../util/ScatterChart";
 import { assertRowSelected, selectRow } from "../../../../util/Table";
@@ -48,25 +50,19 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         "aria-valuenow",
         dataShape.featureImportanceData?.topFeaturesCurrentValue
       );
-      const currentValue = 4;
-      const newValue = 6;
-      const increment = 1;
-      const steps = (newValue - currentValue) / increment;
-      const arrows = "{rightarrow}".repeat(steps);
 
-      cy.get(Locators.IFITopFeaturesValue)
-        .should(
-          "have.attr",
-          "aria-valuenow",
-          dataShape.featureImportanceData?.topFeaturesCurrentValue
-        )
-        .type(arrows);
-
-      cy.get(Locators.IFITopFeaturesValue).should(
-        "have.attr",
-        "aria-valuenow",
-        11
-      );
+      props.subBarChart = new BarChart("#FeatureImportanceBar");
+      const topK = getTopKValue();
+      cy.get(
+        "#subPlotContainer div[class^='featureImportanceControls'] .ms-Slider-slideBox"
+      )
+        .focus()
+        .type("{rightarrow}")
+        .then(() => {
+          expect(props.subBarChart.VisibleElements).length(
+            Math.min(topK + 1, props.dataShape.featureNames!.length)
+          );
+        });
     });
 
     it("should be able to select different 'datapoint'", () => {
@@ -80,4 +76,15 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         .should("have.class", "is-checked");
     });
   });
+}
+
+const topKLabelReg = /^Top (\d+) features by their importance$/;
+function getTopKValue(): number {
+  const exec = topKLabelReg.exec(
+    cy.$$("div[class^='featureImportanceControls'] span").text()
+  );
+  if (!exec || !exec[1]) {
+    throw new Error("Cannot find top k label");
+  }
+  return toNumber(exec[1]);
 }

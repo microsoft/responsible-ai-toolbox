@@ -16174,7 +16174,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---------------------------------------------------------
 
-rai-core-flask 0.2.4 - MIT
+rai-core-flask 0.2.5 - MIT
 
 
 

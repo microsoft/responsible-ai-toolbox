@@ -17,16 +17,12 @@ import {
   FabricStyles,
   rowErrorSize,
   InteractiveLegend,
-  ICounterfactualData
+  ICounterfactualData,
+  BasicHighChart
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
 import {
   getTheme,
@@ -34,12 +30,14 @@ import {
   IComboBoxOption,
   ComboBox,
   IComboBox,
-  PrimaryButton
+  PrimaryButton,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChartStyles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualChartProps {
   data: ICounterfactualData;
@@ -193,181 +191,180 @@ export class CounterfactualChart extends React.PureComponent<
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
+    if (!canRenderChart) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ValidationErrors.datasizeError}
+        </MissingParametersPlaceholder>
+      );
+    }
+
     return (
-      <div className={classNames.page}>
-        <div className={classNames.mainArea}>
-          {this.state.originalData && (
-            <CounterfactualPanel
-              originalData={this.state.originalData}
-              selectedIndex={this.state.selectedPointsIndexes[0] || 0}
-              closePanel={this.togglePanel}
-              saveAsPoint={this.saveAsPoint}
-              setCustomRowProperty={this.setCustomRowProperty}
-              temporaryPoint={this.temporaryPoint}
-              isPanelOpen={this.state.isPanelOpen}
-              data={this.context.counterfactualData}
-            />
-          )}
-          <div className={classNames.chartsArea}>
-            <div
-              className={classNames.topArea}
-              id={"IndividualFeatureContainer"}
-            >
-              <div
-                className={classNames.chartWithAxes}
-                id={this.chartAndConfigsId}
-              >
-                {this.state.yDialogOpen && (
-                  <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
-                    orderedGroupTitles={[
-                      ColumnCategories.Index,
-                      ColumnCategories.Dataset,
-                      ColumnCategories.Outcome
-                    ]}
-                    selectedColumn={this.state.chartProps.yAxis}
-                    canBin={false}
-                    mustBin={false}
-                    canDither={
-                      this.state.chartProps.chartType === ChartTypes.Scatter
-                    }
-                    onAccept={this.onYSet}
-                    onCancel={this.setYOpen.bind(this, false)}
-                  />
-                )}
-                {this.state.xDialogOpen && (
-                  <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
-                    orderedGroupTitles={[
-                      ColumnCategories.Index,
-                      ColumnCategories.Dataset,
-                      ColumnCategories.Outcome
-                    ]}
-                    selectedColumn={this.state.chartProps.xAxis}
-                    canBin={
-                      this.state.chartProps.chartType ===
-                        ChartTypes.Histogram ||
-                      this.state.chartProps.chartType === ChartTypes.Box
-                    }
-                    mustBin={
-                      this.state.chartProps.chartType ===
-                        ChartTypes.Histogram ||
-                      this.state.chartProps.chartType === ChartTypes.Box
-                    }
-                    canDither={
-                      this.state.chartProps.chartType === ChartTypes.Scatter
-                    }
-                    onAccept={this.onXSet}
-                    onCancel={this.setXOpen.bind(this, false)}
-                  />
-                )}
-                <div className={classNames.chartWithVertical}>
-                  <div className={classNames.verticalAxis}>
-                    <div className={classNames.rotatedVerticalBox}>
-                      <DefaultButton
-                        onClick={this.setYOpen.bind(this, true)}
-                        text={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].abbridgedLabel
-                        }
-                        title={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].label
-                        }
-                      />
-                    </div>
-                  </div>
-                  {!canRenderChart && (
-                    <MissingParametersPlaceholder>
-                      {localization.Interpret.ValidationErrors.datasizeError}
-                    </MissingParametersPlaceholder>
-                  )}
-                  {canRenderChart && (
-                    <AccessibleChart
-                      plotlyProps={plotlyProps}
-                      theme={getTheme() as any}
-                      onClickHandler={this.selectPointFromChart}
-                    />
-                  )}
-                </div>
-                <div className={classNames.horizontalAxisWithPadding}>
-                  <div className={classNames.paddingDiv} />
-                  <div className={classNames.horizontalAxis}>
-                    <div>
-                      <DefaultButton
-                        onClick={this.setXOpen.bind(this, true)}
-                        text={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.xAxis.property
-                          ].abbridgedLabel
-                        }
-                        title={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.xAxis.property
-                          ].label
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={classNames.legendAndText}>
-                <ComboBox
-                  id={"CounterfactualSelectedDatapoint"}
-                  className={classNames.legendLabel}
-                  label={localization.Counterfactuals.selectedDatapoint}
-                  onChange={this.selectPointFromDropdown}
-                  options={this.getDataOptions()}
-                  selectedKey={`${this.state.selectedPointsIndexes[0]}`}
-                  ariaLabel={"datapoint picker"}
-                  useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
-                />
-                <div className={classNames.legendLabel}>
-                  <b>{`${localization.Counterfactuals.currentClass}: `}</b>
-                  {this.getCurrentLabel()}
-                </div>
-                <PrimaryButton
-                  className={classNames.legendLabel}
-                  onClick={this.togglePanel}
-                  disabled={this.disableCounterfactualPanel()}
-                  text={
-                    this.context.requestPredictions
-                      ? localization.Counterfactuals.createWhatIfCounterfactual
-                      : localization.Counterfactuals.createCounterfactual
+      <Stack horizontal={false}>
+        <Stack.Item>
+          <Stack horizontal id={"IndividualFeatureContainer"}>
+            <Stack.Item className={classNames.chartWithAxes}>
+              {this.state.originalData && (
+                <CounterfactualPanel
+                  originalData={this.state.originalData}
+                  selectedIndex={this.state.selectedPointsIndexes[0] || 0}
+                  closePanel={this.togglePanel}
+                  saveAsPoint={this.saveAsPoint}
+                  setCustomRowProperty={this.setCustomRowProperty}
+                  setCustomRowPropertyComboBox={
+                    this.setCustomRowPropertyComboBox
                   }
+                  temporaryPoint={this.temporaryPoint}
+                  isPanelOpen={this.state.isPanelOpen}
+                  data={this.context.counterfactualData}
                 />
-                {this.state.customPoints.length > 0 && (
-                  <InteractiveLegend
-                    items={this.state.customPoints.map((row, rowIndex) => {
-                      return {
-                        activated: this.state.customPointIsActive[rowIndex],
-                        color:
-                          FabricStyles.fabricColorPalette[
-                            rowIndex + WhatIfConstants.MAX_SELECTION + 1
-                          ],
-                        name: row[WhatIfConstants.namePath],
-                        onClick: this.toggleCustomActivation.bind(
-                          this,
-                          rowIndex
-                        ),
-                        onDelete: this.removeCustomPoint.bind(this, rowIndex)
-                      };
-                    })}
-                  />
-                )}
+              )}
+              {this.state.yDialogOpen && (
+                <AxisConfigDialog
+                  jointDataset={this.context.jointDataset}
+                  orderedGroupTitles={[
+                    ColumnCategories.Index,
+                    ColumnCategories.Dataset,
+                    ColumnCategories.Outcome
+                  ]}
+                  selectedColumn={this.state.chartProps.yAxis}
+                  canBin={false}
+                  mustBin={false}
+                  canDither={
+                    this.state.chartProps.chartType === ChartTypes.Scatter
+                  }
+                  onAccept={this.onYSet}
+                  onCancel={this.setYOpen.bind(this, false)}
+                />
+              )}
+              {this.state.xDialogOpen && (
+                <AxisConfigDialog
+                  jointDataset={this.context.jointDataset}
+                  orderedGroupTitles={[
+                    ColumnCategories.Index,
+                    ColumnCategories.Dataset,
+                    ColumnCategories.Outcome
+                  ]}
+                  selectedColumn={this.state.chartProps.xAxis}
+                  canBin={
+                    this.state.chartProps.chartType === ChartTypes.Histogram ||
+                    this.state.chartProps.chartType === ChartTypes.Box
+                  }
+                  mustBin={
+                    this.state.chartProps.chartType === ChartTypes.Histogram ||
+                    this.state.chartProps.chartType === ChartTypes.Box
+                  }
+                  canDither={
+                    this.state.chartProps.chartType === ChartTypes.Scatter
+                  }
+                  onAccept={this.onXSet}
+                  onCancel={this.setXOpen.bind(this, false)}
+                />
+              )}
+              <Stack horizontal={false}>
+                <Stack.Item className={classNames.chartWithVertical}>
+                  <Stack horizontal id={this.chartAndConfigsId}>
+                    <Stack.Item className={classNames.verticalAxis}>
+                      <div className={classNames.rotatedVerticalBox}>
+                        <DefaultButton
+                          onClick={this.setYOpen.bind(this, true)}
+                          text={
+                            this.context.jointDataset.metaDict[
+                              this.state.chartProps.yAxis.property
+                            ].abbridgedLabel
+                          }
+                          title={
+                            this.context.jointDataset.metaDict[
+                              this.state.chartProps.yAxis.property
+                            ].label
+                          }
+                        />
+                      </div>
+                    </Stack.Item>
+                    <Stack.Item className={classNames.mainChartContainer}>
+                      <BasicHighChart
+                        configOverride={getCounterfactualChartOptions(
+                          plotlyProps,
+                          this.selectPointFromChart
+                        )}
+                        theme={getTheme()}
+                        id="CounterfactualChart"
+                      />
+                    </Stack.Item>
+                  </Stack>
+                </Stack.Item>
+                <Stack className={classNames.horizontalAxisWithPadding}>
+                  <div className={classNames.horizontalAxis}>
+                    <DefaultButton
+                      onClick={this.setXOpen.bind(this, true)}
+                      text={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.xAxis.property
+                        ].abbridgedLabel
+                      }
+                      title={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.xAxis.property
+                        ].label
+                      }
+                    />
+                  </div>
+                </Stack>
+              </Stack>
+            </Stack.Item>
+            <Stack className={classNames.legendAndText}>
+              <ComboBox
+                id={"CounterfactualSelectedDatapoint"}
+                className={classNames.legendLabel}
+                label={localization.Counterfactuals.selectedDatapoint}
+                onChange={this.selectPointFromDropdown}
+                options={this.getDataOptions()}
+                selectedKey={`${this.state.selectedPointsIndexes[0]}`}
+                ariaLabel={"datapoint picker"}
+                useComboBoxAsMenuWidth
+                styles={FabricStyles.smallDropdownStyle}
+              />
+              <div className={classNames.legendLabel}>
+                <b>{`${this.getTargetDescription()}: `}</b>
+                {this.getCurrentLabel()}
               </div>
-            </div>
-            <LocalImportanceChart
-              rowNumber={this.state.selectedPointsIndexes[0]}
-              currentClass={this.getCurrentLabel()}
-              data={this.props.data}
-            />
-          </div>
-        </div>
-      </div>
+              <PrimaryButton
+                className={classNames.legendLabel}
+                onClick={this.togglePanel}
+                disabled={this.disableCounterfactualPanel()}
+                text={
+                  this.context.requestPredictions
+                    ? localization.Counterfactuals.createWhatIfCounterfactual
+                    : localization.Counterfactuals.createCounterfactual
+                }
+              />
+              {this.state.customPoints.length > 0 && (
+                <InteractiveLegend
+                  items={this.state.customPoints.map((row, rowIndex) => {
+                    return {
+                      activated: this.state.customPointIsActive[rowIndex],
+                      color:
+                        FabricStyles.fabricColorPalette[
+                          rowIndex + WhatIfConstants.MAX_SELECTION + 1
+                        ],
+                      name: row[WhatIfConstants.namePath],
+                      onClick: this.toggleCustomActivation.bind(this, rowIndex),
+                      onDelete: this.removeCustomPoint.bind(this, rowIndex)
+                    };
+                  })}
+                />
+              )}
+            </Stack>
+          </Stack>
+        </Stack.Item>
+        <Stack.Item className={classNames.lowerChartContainer}>
+          <LocalImportanceChart
+            rowNumber={this.state.selectedPointsIndexes[0]}
+            currentClass={this.getCurrentLabel()}
+            data={this.props.data}
+          />
+        </Stack.Item>
+      </Stack>
     );
   }
 
@@ -380,14 +377,14 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   private getCurrentLabel(): string {
-    if (this.context.dataset.task_type === "regression") {
-      return (
-        (this.props.data.desired_range &&
-          this.props.data.desired_range.join("->")) ||
-        ""
-      );
-    }
     return this.props.data.desired_class || "";
+  }
+
+  private getTargetDescription(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return localization.Counterfactuals.currentRange;
+    }
+    return localization.Counterfactuals.currentClass;
   }
 
   private buildRowOptions(cohortIndex: number): void {
@@ -465,13 +462,9 @@ export class CounterfactualChart extends React.PureComponent<
   };
 
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
-    // non-custom point
-    if (trace.curveNumber !== 1) {
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-    }
+    const index = data.customdata[JointDataset.IndexLabel];
+    this.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.toggleSelectionOfPoint(index);
   };
 
   private getOriginalData(
@@ -692,7 +685,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
+      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
         if (metaX.treatAsCategorical) {
@@ -719,7 +712,7 @@ export class CounterfactualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
+      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
         if (metaY.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
@@ -741,7 +734,7 @@ export class CounterfactualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
@@ -843,6 +836,24 @@ export class CounterfactualChart extends React.PureComponent<
         this.fetchData(editingData);
       }
     }
+  };
+
+  private setCustomRowPropertyComboBox = (
+    key: string | number,
+    index?: number,
+    value?: string
+  ): void => {
+    if (!this.temporaryPoint || (!value && !index)) {
+      return;
+    }
+    const editingData = this.temporaryPoint;
+    if (index !== undefined) {
+      // User selected/de-selected an existing option
+      editingData[key] = index;
+    }
+
+    this.forceUpdate();
+    this.fetchData(editingData);
   };
 
   private disableCounterfactualPanel = (): boolean => {

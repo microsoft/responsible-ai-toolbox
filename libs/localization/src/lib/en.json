@@ -84,6 +84,10 @@
     "ShiftCohort": {
       "title": "Shift Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
     }
   },
   "Counterfactuals": {
@@ -95,6 +99,7 @@
     "WhatIf": {
       "setValue": "Set Value",
       "sortFeatures": "Sort feature columns by counterfactual feature importance",
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
       "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
       "toggleToolTipHeader": "Ranked counterfactual features"
     },
@@ -104,6 +109,7 @@
     "createCounterfactual": "Counterfactual",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
+    "currentRange": "Current range",
     "decreaseByOne": "Decrease value by 1",
     "desiredClass": "Desired class for counterfactual(s)",
     "header": "What-If counterfactuals",
@@ -115,7 +121,7 @@
     "localImportanceSelectData": "Select a data point to view local importance chart",
     "noData": "No data",
     "noFeatures": "No features available",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
     "whatIfPanelHeader": "What-if counterfactuals",
     "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Recommended policy gain",
@@ -737,7 +743,8 @@
     "Cohort": {
       "_cohort.comment": "a subset of the data is called a cohort",
       "cohort": "Cohort",
-      "defaultLabel": "All data"
+      "defaultLabel": "All data",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "_addCohort.comment": "button text to create a new cohort",
@@ -960,7 +967,7 @@
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
       "_viewDependencePlotFor.comment": "label for dropdown to select feature to be shown in a dependence plot (a kind of graph)",
       "_weightOptions.comment": "Weight how importance values are averaged https://en.wikipedia.org/wiki/Weighted_arithmetic_mean",
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Aggregate feature importance",
       "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
       "datapoint": "Datapoint",
@@ -973,7 +980,7 @@
       "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
-      "sortBy": "Sort by",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
       "weightOptions": "Class importance weights"
@@ -1043,13 +1050,16 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
-      "fnr": "False Negative Rates: {0}",
-      "fpr": "False Positive Rates: {0}",
+      "fnr": "False negative rate: {0}",
+      "fpr": "False positive rate: {0}",
       "meanPrediction": "Mean prediction {0}",
-      "mse": "MSE: {0}",
+      "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
-      "rSquared": "R-squared: {0}",
-      "recall": "Recall: {0}"
+      "rSquared": "R²: {0}",
+      "recall": "Recall: {0}",
+      "selectionRate": "Selection rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",
@@ -1278,7 +1288,7 @@
         "Delete": "Delete",
         "Title": "Delete {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Dashboard configuration"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
@@ -1288,7 +1298,7 @@
       "LocalExplanation": "Individual feature importance"
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",

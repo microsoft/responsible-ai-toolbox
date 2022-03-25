@@ -70,7 +70,7 @@ export function describeModelPerformanceSideBar(
       cy.get(Locators.MSDropdownOptions).should("exist");
       cy.get(Locators.MSCohortDropdown).click();
 
-      //Chart contains newly created cohort
+      // Chart contains newly created cohort
       cy.get(`${Locators.MSCRotatedVerticalBox} button`)
         .click()
         .get(

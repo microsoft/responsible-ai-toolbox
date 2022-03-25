@@ -17,10 +17,12 @@ from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
+from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
+IMPORTANCES_THRESHOLD = 50000
 
 
 class BaseAnalyzer(ABC):
@@ -31,11 +33,11 @@ class BaseAnalyzer(ABC):
 
     :param dataset:  A matrix of feature vector examples
         (# examples x # features).
-    :type dataset: numpy.array or list[][] or pandas.DataFrame
+    :type dataset: numpy.ndarray or list[][] or pandas.DataFrame
     :param true_y: The true labels for the provided dataset.
-    :type true_y: numpy.array or list[] or pandas.Series
+    :type true_y: numpy.ndarray or list[] or pandas.Series
     :param feature_names: Feature names.
-    :type feature_names: numpy.array or list[]
+    :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
     :param model_task: Optional parameter to specify whether the model
@@ -59,7 +61,7 @@ class BaseAnalyzer(ABC):
         'mean_squared_error', 'r2_score', and 'median_absolute_error'.
     :type metric: str
     :param classes: The class names.
-    :type classes: numpy.array or list[]
+    :type classes: numpy.ndarray or list[]
     """
     def __init__(self,
                  dataset,
@@ -145,7 +147,7 @@ class BaseAnalyzer(ABC):
         """Get the class names.
 
         :return: The class names.
-        :rtype: numpy.array or list[]
+        :rtype: numpy.ndarray or list[]
         """
         return self._classes
 
@@ -155,7 +157,7 @@ class BaseAnalyzer(ABC):
 
         :return: A matrix of feature vector examples
             (# examples x # features).
-        :rtype: numpy.array or list[][] or pandas.DataFrame
+        :rtype: numpy.ndarray or list[][] or pandas.DataFrame
         """
         return self._dataset
 
@@ -164,7 +166,7 @@ class BaseAnalyzer(ABC):
         """Get the feature names.
 
         :return: The feature names.
-        :rtype: numpy.array or list[]
+        :rtype: numpy.ndarray or list[]
         """
         return self._feature_names
 
@@ -173,7 +175,7 @@ class BaseAnalyzer(ABC):
         """Get the string indexed dataset for categorical features.
 
         :return: The string indexed dataset for categorical features.
-        :rtype: numpy.array or list[][] or pandas.DataFrame
+        :rtype: numpy.ndarray or list[][] or pandas.DataFrame
         """
         return self._string_ind_data
 
@@ -359,6 +361,14 @@ class BaseAnalyzer(ABC):
             string_ind_data = self.string_indexed_data
             for idx, c_i in enumerate(indexes):
                 input_data[:, c_i] = string_ind_data[:, idx]
+        # for very large number of rows mutual information
+        # will be very expensive to compute, hence we sample
+        num_rows = input_data.shape[0]
+        if num_rows > IMPORTANCES_THRESHOLD:
+            indexes = generate_random_unique_indexes(num_rows,
+                                                     IMPORTANCES_THRESHOLD)
+            input_data = input_data[indexes]
+            diff = diff[indexes]
         if self._model_task == ModelTask.CLASSIFICATION:
             # compute the feature importances using mutual information
             return mutual_info_classif(input_data, diff).tolist()
@@ -391,9 +401,9 @@ class BaseAnalyzer(ABC):
 
         :param dataset:  A matrix of feature vector examples
             (# examples x # features).
-        :type dataset: numpy.array or list[][] or pandas.DataFrame
+        :type dataset: numpy.ndarray or list[][] or pandas.DataFrame
         :return: The new dataset if a pandas dataframe or the original one.
-        :rtype: numpy.array or list[][] or pandas.DataFrame
+        :rtype: numpy.ndarray or list[][] or pandas.DataFrame
         """
         if isinstance(dataset, pd.DataFrame):
             return dataset.copy()
@@ -407,7 +417,7 @@ class BaseAnalyzer(ABC):
 
         :return: The difference between the predictions
             and true y labels.
-        :rtype: numpy.array
+        :rtype: numpy.ndarray
         """
         pass
 
@@ -428,11 +438,11 @@ class ModelAnalyzer(BaseAnalyzer):
     :type model: object
     :param dataset:  A matrix of feature vector examples
         (# examples x # features).
-    :type dataset: numpy.array or list[][] or pandas.DataFrame
+    :type dataset: numpy.ndarray or list[][] or pandas.DataFrame
     :param true_y: The true labels for the provided dataset.
-    :type true_y: numpy.array or list[] or pandas.Series
+    :type true_y: numpy.ndarray or list[] or pandas.Series
     :param feature_names: Feature names.
-    :type feature_names: numpy.array or list[]
+    :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
     :param model_task: Optional parameter to specify whether the model
@@ -456,7 +466,7 @@ class ModelAnalyzer(BaseAnalyzer):
         'mean_squared_error', 'r2_score', and 'median_absolute_error'.
     :type metric: str
     :param classes: The class names.
-    :type classes: numpy.array or list[]
+    :type classes: numpy.ndarray or list[]
     """
     def __init__(self,
                  model,
@@ -507,7 +517,7 @@ class ModelAnalyzer(BaseAnalyzer):
 
         :return: The difference between the model's predictions
             and true y labels.
-        :rtype: numpy.array
+        :rtype: numpy.ndarray
         """
         if self._model_task == ModelTask.CLASSIFICATION:
             return self.model.predict(self.dataset) != self.true_y
@@ -526,11 +536,11 @@ class PredictionsAnalyzer(BaseAnalyzer):
     :type pred_y: numpy.ndarray or list[] or pandas.Series
     :param dataset:  A matrix of feature vector examples
         (# examples x # features).
-    :type dataset: numpy.array or list[][] or pandas.DataFrame
+    :type dataset: numpy.ndarray or list[][] or pandas.DataFrame
     :param true_y: The true labels for the provided dataset.
-    :type true_y: numpy.array or list[] or pandas.Series
+    :type true_y: numpy.ndarray or list[] or pandas.Series
     :param feature_names: Feature names.
-    :type feature_names: numpy.array or list[]
+    :type feature_names: numpy.ndarray or list[]
     :param categorical_features: The categorical feature names.
     :type categorical_features: list[str]
     :param model_task: Optional parameter to specify whether the model
@@ -554,7 +564,7 @@ class PredictionsAnalyzer(BaseAnalyzer):
         'mean_squared_error', 'r2_score', and 'median_absolute_error'.
     :type metric: str
     :param classes: The class names.
-    :type classes: numpy.array or list[]
+    :type classes: numpy.ndarray or list[]
     """
     def __init__(self,
                  pred_y,
@@ -596,6 +606,6 @@ class PredictionsAnalyzer(BaseAnalyzer):
 
         :return: The difference between the predictions
             and true y labels.
-        :rtype: numpy.array
+        :rtype: numpy.ndarray
         """
         return self.pred_y != self.true_y

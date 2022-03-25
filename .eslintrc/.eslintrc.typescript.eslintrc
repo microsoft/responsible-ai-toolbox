@@ -42,7 +42,7 @@
       },
       {
         "selector": ["variable", "function"],
-        "format": ["camelCase"],
+        "format": ["camelCase", "PascalCase"],
         "filter": {
           "regex": "^(.*Styles)$",
           "match": false
