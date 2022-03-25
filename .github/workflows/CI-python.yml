@@ -58,7 +58,7 @@ jobs:
 
       - name: Install package
         run: |
-          pip install -v .
+          pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
@@ -84,6 +84,5 @@ jobs:
           files: ./${{ matrix.packageDirectory }}/coverage.xml
           flags: unittests
           name: codecov-umbrella
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
         if: ${{ always() }}
