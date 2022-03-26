@@ -266,7 +266,7 @@ export class MatrixArea extends React.PureComponent<
       this.props.baseCohort,
       this.props.selectedFeature1,
       this.props.selectedFeature2,
-      this.context.errorAnalysisData!.metric,
+      this.context.errorAnalysisData?.metric,
       this.props.getMatrix,
       this.props.matrix
     );
