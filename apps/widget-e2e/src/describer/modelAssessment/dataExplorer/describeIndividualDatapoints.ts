@@ -29,7 +29,7 @@ export function describeIndividualDatapoints(
       it("should render", () => {
         expect(props.chart.Elements.length).greaterThan(0);
       });
-      it("Should render datapoint info on hover", () => {
+      it.skip("Should render datapoint info on hover", () => {
         props.chart.clickNthPoint(15);
         cy.get("#DatasetExplorerChart").should(
           "contain",
