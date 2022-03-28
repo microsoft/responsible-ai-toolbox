@@ -314,8 +314,8 @@ export class CohortList extends React.Component<
     return allItems;
   }
 
-  private saveEditedCohort = (cohort: Cohort) => {
-    this.context.editCohort(cohort);
+  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean) => {
+    this.context.editCohort(cohort, switchNew);
     this.toggleEditPanel();
   };
 
