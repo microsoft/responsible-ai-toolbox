@@ -21,7 +21,7 @@ export function describeIndividualDatapoints(
       props.chart = new ScatterHighchart("#DatasetExplorerChart");
     });
     describe("Dataset explorer Chart", () => {
-      it("should have color label", () => {
+      it.skip("should have color label", () => {
         cy.get('#DatasetExplorerChart label:contains("Color value")').should(
           "exist"
         );
