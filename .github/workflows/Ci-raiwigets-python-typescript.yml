@@ -106,18 +106,33 @@ jobs:
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
-      - name: Upload coverage to Codecov
+      - if: ${{ (matrix.operatingSystem == 'ubuntu-latest') && (matrix.pythonVersion == '3.7') }}
+        name: Upload to codecov
+        id: codecovupload1
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ matrix.packageDirectory }}
           env_vars: OS,PYTHON
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: ./${{ matrix.packageDirectory }}/coverage.xml
           flags: unittests
           name: codecov-umbrella
           verbose: true
-        if: ${{ always() }}
+
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.7') && (matrix.operatingSystem == 'ubuntu-latest') }}
+        name: Retry upload to codecov
+        id: codecovupload2
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
 
       - name: Upload e2e test screen shot
         if: always()
@@ -125,3 +140,12 @@ jobs:
         with:
           name: ${{ matrix.packageDirectory }}-e2e-screen-shot
           path: dist/cypress
+
+      - name: Set codecov status
+        if: ${{ (matrix.pythonVersion == '3.7') && (matrix.operatingSystem == 'ubuntu-latest') }}
+        run: |
+          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
+            echo fine
+          else
+            exit 1
+          fi
