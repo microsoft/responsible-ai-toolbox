@@ -20,8 +20,8 @@ export function describeIndividualDatapoints(
       ).click();
       props.chart = new ScatterHighchart("#DatasetExplorerChart");
     });
-    describe("Dataset explorer Chart", () => {
-      it.skip("should have color label", () => {
+    describe.skip("Dataset explorer Chart", () => {
+      it("should have color label", () => {
         cy.get('#DatasetExplorerChart label:contains("Color value")').should(
           "exist"
         );
@@ -29,7 +29,7 @@ export function describeIndividualDatapoints(
       it("should render", () => {
         expect(props.chart.Elements.length).greaterThan(0);
       });
-      it.skip("Should render datapoint info on hover", () => {
+      it("Should render datapoint info on hover", () => {
         props.chart.clickNthPoint(15);
         cy.get("#DatasetExplorerChart").should(
           "contain",
