@@ -4,12 +4,16 @@
 import { calculateBoxData } from "./calculateBoxData";
 
 export function getBoxData(x: number[], y: number[]): number[][] {
-  const result = [];
-  let i = 0;
-  while (i < x.length && i < y.length) {
-    let j = i;
-    while (j < x.length && x[i] === x[j]) j++;
-    const temp = calculateBoxData(y.splice(i, j));
+  const dataSet: number[][] = [];
+  x.forEach((value, index) => {
+    if (dataSet[value] === undefined) {
+      dataSet[value] = [];
+    }
+    dataSet[value].push(y[index]);
+  });
+  const result: number[][] = [];
+  const calculatedData = dataSet.map((v) => calculateBoxData(v));
+  calculatedData.forEach((temp) => {
     result.push([
       temp.min,
       temp.lowerPercentile,
@@ -17,7 +21,6 @@ export function getBoxData(x: number[], y: number[]): number[][] {
       temp.upperPercentile,
       temp.max
     ]);
-    i = j;
-  }
+  });
   return result;
 }
