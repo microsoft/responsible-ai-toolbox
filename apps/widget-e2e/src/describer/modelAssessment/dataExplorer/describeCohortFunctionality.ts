@@ -45,7 +45,7 @@ export function describeCohortFunctionality(
       cy.get(Locators.DEAggregatePlots).click();
     });
 
-    it("should update chart on selecting new cohort", () => {
+    it.skip("should update chart on selecting new cohort", () => {
       cy.get(Locators.DECohortDropdown).click();
       cy.get(Locators.DEDropdownOptions).should("exist").click();
       cy.get(Locators.DEYAxisPoints)
