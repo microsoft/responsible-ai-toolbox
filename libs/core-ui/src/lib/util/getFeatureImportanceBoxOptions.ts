@@ -60,8 +60,7 @@ export function getFeatureImportanceBoxOptions(
       type: "boxplot"
     },
     plotOptions: {
-      series: {
-        cursor: "pointer",
+      boxplot: {
         point: {
           events: {
             click() {
