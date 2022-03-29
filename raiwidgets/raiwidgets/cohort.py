@@ -3,6 +3,7 @@
 
 """Module for defining cohorts in raiwidgets package."""
 
+import json
 from typing import Any, List, Optional
 
 import numpy as np
@@ -396,6 +397,75 @@ class Cohort:
             )
         self.name = name
         self.cohort_filter_list = None
+
+    @staticmethod
+    def _cohort_serializer(obj):
+        """The function to serialize the Cohort class object.
+
+        :param obj: Any member of the Cohort class object.
+        :type: Any
+        :return: Python dictionary.
+        :rtype: dict[Any, Any]
+        """
+        return obj.__dict__
+
+    def to_json(self):
+        """Returns a serialized JSON string for the Cohort object.
+
+        :return: The JSON string for the cohort.
+        :rtype: str
+        """
+        return json.dumps(self, default=Cohort._cohort_serializer)
+
+    @staticmethod
+    def _get_cohort_object(json_dict):
+        """Method to read a JSON dictionary and return a Cohort object.
+
+        :param json_dict: JSON dictionary containing cohort data.
+        :type: dict[str, str]
+        :return: The Cohort object.
+        :rtype: Cohort
+        """
+        if "name" not in json_dict:
+            raise UserConfigValidationException(
+                "No name field found for cohort deserialization")
+        if "cohort_filter_list" not in json_dict:
+            raise UserConfigValidationException(
+                "No cohort_filter_list field found for cohort deserialization")
+        if not isinstance(json_dict['cohort_filter_list'], list):
+            raise UserConfigValidationException(
+                "Field cohort_filter_list not of type list for "
+                "cohort deserialization")
+
+        deserialized_cohort = Cohort(json_dict['name'])
+        for serialized_cohort_filter in json_dict['cohort_filter_list']:
+            if "method" not in serialized_cohort_filter:
+                raise UserConfigValidationException(
+                    "Field method not found for cohort filter deserialization")
+            if "arg" not in serialized_cohort_filter:
+                raise UserConfigValidationException(
+                    "Field arg not found for cohort filter deserialization")
+            if "column" not in serialized_cohort_filter:
+                raise UserConfigValidationException(
+                    "Field column not found for cohort filter deserialization")
+            cohort_filter = CohortFilter(
+                method=serialized_cohort_filter['method'],
+                arg=serialized_cohort_filter['arg'],
+                column=serialized_cohort_filter['column'])
+            deserialized_cohort.add_cohort_filter(cohort_filter=cohort_filter)
+        return deserialized_cohort
+
+    @staticmethod
+    def from_json(json_str):
+        """Method to read a json string and return a Cohort object.
+
+        :param json_str: Serialized JSON string.
+        :type: str
+        :return: The Cohort object.
+        :rtype: Cohort
+        """
+        json_dict = json.loads(json_str)
+        return Cohort._get_cohort_object(json_dict)
 
     def add_cohort_filter(self, cohort_filter: CohortFilter):
         """Add a cohort filter into the cohort.
