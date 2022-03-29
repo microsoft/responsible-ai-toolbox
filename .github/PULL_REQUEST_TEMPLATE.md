@@ -23,10 +23,11 @@ npm packages changed:
 
 Python packages changed:
 
-- [ ] raiwidgets
-- [ ] responsibleai
 - [ ] erroranalysis
+- [ ] raiutils
+- [ ] raiwidgets
 - [ ] rai_core_flask
+- [ ] responsibleai
 
 ## Tests
 

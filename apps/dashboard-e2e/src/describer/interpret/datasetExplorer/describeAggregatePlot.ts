@@ -22,9 +22,9 @@ export function describeAggregatePlot(dataShape: IInterpretData): void {
         if (columns) {
           for (const [i, column] of columns.entries()) {
             cy.get(
-              `#DatasetExplorerChart svg g.xaxislayer-above g.xtick:nth-child(${
+              `#DatasetExplorerChart g.highcharts-xaxis-labels text:nth-child(${
                 i + 1
-              }) text`
+              })`
             ).should("contain.text", column);
           }
         }
