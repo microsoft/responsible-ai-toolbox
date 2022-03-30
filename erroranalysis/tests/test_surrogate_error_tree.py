@@ -16,8 +16,8 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
                                                TRUE_Y, Metrics)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.surrogate_error_tree import (
-    TreeSide, create_surrogate_model, get_categorical_info,
-    get_max_split_index, traverse)
+    TreeSide, cache_subtree_features, create_surrogate_model,
+    get_categorical_info, get_max_split_index, traverse)
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -62,6 +62,7 @@ class TestSurrogateErrorTree(object):
         max_depth = 3
         num_leaves = 31
         min_child_samples = 20
+        categories_reindexed = []
         cat_ind_reindexed = []
         diff = model_analyzer.get_diff()
         surrogate = create_surrogate_model(model_analyzer,
@@ -73,7 +74,8 @@ class TestSurrogateErrorTree(object):
                                            cat_ind_reindexed)
         t1 = time.time()
         execution_time = t1 - t0
-        print(execution_time)
+        print("creating surrogate model took {} seconds".format(
+            execution_time))
         # assert we don't take too long to train the tree on 1 million rows
         # note we train on >1 million rows in ~1 second
         assert execution_time < 20
@@ -81,6 +83,26 @@ class TestSurrogateErrorTree(object):
         tree_structure = model_json["tree_info"][0]['tree_structure']
         max_split_index = get_max_split_index(tree_structure) + 1
         assert max_split_index == 3
+        cache_subtree_features(tree_structure, feature_names)
+        pred_y = model_analyzer.model.predict(X_test)
+        traversed_X_test = X_test.copy()
+        traversed_X_test[DIFF] = diff
+        traversed_X_test[TRUE_Y] = y_test
+        traversed_X_test[PRED_Y] = pred_y
+        t2 = time.time()
+        tree = traverse(traversed_X_test,
+                        tree_structure,
+                        max_split_index,
+                        (categories_reindexed,
+                         cat_ind_reindexed),
+                        [],
+                        feature_names,
+                        metric=model_analyzer.metric,
+                        classes=model_analyzer.classes)
+        t3 = time.time()
+        execution_time = t3 - t2
+        print("traversing tree took {} seconds".format(execution_time))
+        assert tree is not None
 
     @pytest.mark.parametrize('string_labels', [True, False])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
@@ -119,6 +141,7 @@ class TestSurrogateErrorTree(object):
         filtered_indexed_df[DIFF] = diff
         filtered_indexed_df[TRUE_Y] = y_test
         filtered_indexed_df[PRED_Y] = pred_y
+        cache_subtree_features(tree_structure, feature_names)
         tree = traverse(filtered_indexed_df,
                         tree_structure,
                         max_split_index,

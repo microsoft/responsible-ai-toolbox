@@ -5,11 +5,14 @@ import { Locators } from "../Constants";
 import { RAINotebookNames } from "../IModelAssessmentData";
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
+import { describeAggregateCausalAffects } from "./describeAggregateCausalAffects";
+
 const testName = "Causal Analysis";
 
 export function describeCausalAnalysis(
   name: keyof typeof modelAssessmentDatasets
 ): void {
+  const datasetShape = modelAssessmentDatasets[name];
   describe(testName, () => {
     let fileName: string;
     before(() => {
@@ -24,13 +27,13 @@ export function describeCausalAnalysis(
     });
 
     it("should not have causal analysis for model debugging", () => {
-      if (
-        fileName === RAINotebookNames.ClassificationModelDebugging ||
-        fileName === RAINotebookNames.DiabetesRegressionModelDebugging ||
-        fileName === RAINotebookNames.HousingClassificationModelDebugging
-      ) {
+      if (!datasetShape.causalAnalysisData?.hasCausalAnalysisComponent) {
         cy.get(Locators.CausalAnalysisHeader).should("not.exist");
       }
     });
+
+    if (datasetShape.causalAnalysisData?.hasCausalAnalysisComponent) {
+      describeAggregateCausalAffects(datasetShape);
+    }
   });
 }

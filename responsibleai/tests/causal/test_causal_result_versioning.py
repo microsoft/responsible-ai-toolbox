@@ -19,9 +19,11 @@ def causal_result(parks_data):
     manager = CausalManager(train_df, test_df, target_feature,
                             ModelTask.REGRESSION, ['state', 'attraction'])
 
-    return manager.add(['attraction'],
-                       skip_cat_limit_checks=True,
-                       upper_bound_on_cat_expansion=50)
+    manager.add(['attraction'],
+                skip_cat_limit_checks=True,
+                upper_bound_on_cat_expansion=50)
+    manager.compute()
+    return manager.get()[0]
 
 
 class TestCausalVersioning:

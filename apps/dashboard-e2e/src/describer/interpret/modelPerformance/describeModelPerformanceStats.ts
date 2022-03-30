@@ -23,35 +23,29 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
       cy.get('#OverallMetricChart div[class*="statsBox"]').should("exist");
     });
     it("should have some stats", () => {
+      let expectedMetrics: string[];
       if (dataShape.isClassification) {
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "Accuracy"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "Precision"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("Recall");
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "False positive rate"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "False negative rate"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+        expectedMetrics = [
+          "Accuracy",
+          "Precision",
+          "F1 score",
+          "False positive rate",
+          "False negative rate",
           "Selection rate"
-        );
+        ];
       } else {
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "Mean squared error"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
-          "Mean absolute error"
-        );
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains("R²");
-        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+        expectedMetrics = [
+          "Mean squared error",
+          "Mean absolute error",
+          "R²",
           "Mean prediction"
-        );
+        ];
       }
+      expectedMetrics.forEach((metricName) => {
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          metricName
+        );
+      });
     });
   });
 }

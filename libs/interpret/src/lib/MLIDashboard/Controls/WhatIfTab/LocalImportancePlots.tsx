@@ -9,7 +9,8 @@ import {
   ModelExplanationUtils,
   ChartTypes,
   MissingParametersPlaceholder,
-  FabricStyles
+  FabricStyles,
+  FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -27,11 +28,11 @@ import {
   Dropdown,
   IDropdownOption,
   Label,
-  Toggle
+  Toggle,
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 
@@ -110,7 +111,10 @@ export class LocalImportancePlots extends React.Component<
       prevProps.sortingSeriesIndex !== this.props.sortingSeriesIndex
     ) {
       this.setState({
-        sortArray: this.props.sortArray,
+        sortArray: this.getSortedArray(
+          this.props.sortingSeriesIndex,
+          this.state.sortAbsolute
+        ),
         sortingSeriesIndex: this.props.sortingSeriesIndex
       });
     }
@@ -186,30 +190,29 @@ export class LocalImportancePlots extends React.Component<
                 topK={this.state.topK}
               />
               <div className={classNames.featureImportanceLegend}>
-                <Text
-                  variant={"medium"}
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Interpret.GlobalTab.sortBy}
-                </Text>
-                <Toggle
-                  label={localization.Interpret.GlobalTab.absoluteValues}
-                  inlineLabel
-                  checked={this.state.sortAbsolute}
-                  onChange={this.toggleSortAbsolute}
-                />
-                <Text
-                  variant={"medium"}
-                  className={classNames.cohortPickerLabel}
-                >
-                  {localization.Interpret.GlobalTab.datapoint}
-                </Text>
-                <Dropdown
-                  styles={{ dropdown: { width: 150 } }}
-                  options={featureImportanceSortOptions}
-                  selectedKey={this.state.sortingSeriesIndex}
-                  onChange={this.setSortIndex}
-                />
+                <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
+                  <Stack.Item className={classNames.cohortPickerLabel}>
+                    <Text variant={"medium"}>
+                      {localization.Interpret.GlobalTab.sortBy}
+                    </Text>
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Dropdown
+                      styles={{ dropdown: { width: 150 } }}
+                      options={featureImportanceSortOptions}
+                      selectedKey={this.state.sortingSeriesIndex}
+                      onChange={this.setSortIndex}
+                    />
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Toggle
+                      label={localization.Interpret.GlobalTab.absoluteValues}
+                      inlineLabel
+                      checked={this.state.sortAbsolute}
+                      onChange={this.toggleSortAbsolute}
+                    />
+                  </Stack.Item>
+                </Stack>
 
                 {this.props.metadata.modelType === ModelTypes.Multiclass && (
                   <div>
@@ -501,21 +504,27 @@ export class LocalImportancePlots extends React.Component<
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      let sortArray: number[] = [];
-      if (this.state.sortingSeriesIndex !== undefined) {
-        sortArray = checked
-          ? ModelExplanationUtils.getAbsoluteSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse()
-          : ModelExplanationUtils.getSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse();
-      }
+      const sortArray = this.getSortedArray(
+        this.state.sortingSeriesIndex,
+        checked
+      );
       this.setState({ sortAbsolute: checked, sortArray });
     }
+  };
+
+  private getSortedArray = (
+    sortIndex: number | undefined,
+    checked: boolean
+  ) => {
+    if (sortIndex !== undefined) {
+      return checked
+        ? ModelExplanationUtils.getAbsoluteSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse()
+        : ModelExplanationUtils.getSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse();
+    }
+    return this.props.sortArray;
   };
 }

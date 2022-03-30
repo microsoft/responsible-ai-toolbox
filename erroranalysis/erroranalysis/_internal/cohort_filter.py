@@ -34,7 +34,7 @@ def filter_from_cohort(analyzer, filters, composite_filters):
     if not isinstance(df, pd.DataFrame):
         df = pd.DataFrame(df, columns=feature_names)
     else:
-        # Note: we make a non-deep copy of the input dataframe since
+        # Note: we make a non-deep copy of the input DataFrame since
         # we will add columns below
         df = df.copy()
     add_filter_cols(analyzer, df, filters, true_y)

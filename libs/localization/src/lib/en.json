@@ -84,6 +84,10 @@
     "ShiftCohort": {
       "title": "Shift Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
     }
   },
   "Counterfactuals": {
@@ -105,6 +109,7 @@
     "createCounterfactual": "Counterfactual",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
+    "currentRange": "Current range",
     "decreaseByOne": "Decrease value by 1",
     "desiredClass": "Desired class for counterfactual(s)",
     "header": "What-If counterfactuals",
@@ -135,8 +140,14 @@
       "cohort": "Cohort",
       "defaultLabel": "All data"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Instances in base cohort",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Basic Information",
       "cohortInformation": "Cohort information",
       "correct": "Correct",
@@ -738,7 +749,8 @@
     "Cohort": {
       "_cohort.comment": "a subset of the data is called a cohort",
       "cohort": "Cohort",
-      "defaultLabel": "All data"
+      "defaultLabel": "All data",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "_addCohort.comment": "button text to create a new cohort",
@@ -961,7 +973,7 @@
       "_topAtoB.comment": "label on a slider, will tell user the index of the features they are currently seeing, like Top 5-10 features",
       "_viewDependencePlotFor.comment": "label for dropdown to select feature to be shown in a dependence plot (a kind of graph)",
       "_weightOptions.comment": "Weight how importance values are averaged https://en.wikipedia.org/wiki/Weighted_arithmetic_mean",
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Aggregate feature importance",
       "collapsedHelperText": "Explore the top k important features that impact your overall model predictions.",
       "datapoint": "Datapoint",
@@ -974,7 +986,7 @@
       "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
-      "sortBy": "Sort by",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
       "weightOptions": "Class importance weights"
@@ -1282,7 +1294,7 @@
         "Delete": "Delete",
         "Title": "Delete {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Dashboard configuration"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
@@ -1293,7 +1305,7 @@
       "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",

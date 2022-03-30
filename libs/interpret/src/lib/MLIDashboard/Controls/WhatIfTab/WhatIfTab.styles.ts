@@ -135,7 +135,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       cohortPickerLabel: {
         fontWeight: "600",
-        paddingRight: "8px"
+        padding: "0 8px 10px 0"
       },
       cohortPickerWrapper: {
         alignItems: "center",
@@ -178,7 +178,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       featureImportanceChartAndLegend: {
         display: "flex",
         flexDirection: "row",
-        height: "300px",
+        minHeight: "300px",
         width: "100%"
       },
       featureImportanceControls: {

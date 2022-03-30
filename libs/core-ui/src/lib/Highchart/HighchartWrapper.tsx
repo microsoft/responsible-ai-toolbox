@@ -3,17 +3,19 @@
 
 import { ITheme } from "@fluentui/react";
 import _ from "lodash";
-import { mergeStyles } from "office-ui-fabric-react";
+import { getTheme, mergeStyles } from "office-ui-fabric-react";
 import * as React from "react";
 
-import { defaultHighchartsOptions } from "./defaultHighchartsOptions";
+import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";
 import { getHighchartsTheme } from "./getHighchartsTheme";
 import { HighchartReact } from "./HighchartReact";
-import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
+import { HighchartsModuleNames } from "./HighchartTypes";
+import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IHighchartWrapperProps {
   chartOptions?: IHighchartsConfig;
   className?: string;
+  id?: string;
   fallback?: React.ReactNode;
   modules?: HighchartsModuleNames[];
   plotClassName?: string;
@@ -34,7 +36,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
     // Theme options need to be applied on to everything to make sure we have the same look for all charts
     const mergedOptions = _.merge(
       {},
-      defaultHighchartsOptions,
+      getDefaultHighchartOptions(getTheme()),
       chartOptions,
       plotClassName && { chart: { className: plotClassName } },
       themeOptions
@@ -68,6 +70,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
       <React.Suspense fallback={fallback}>
         <HighchartReact
           className={className}
+          id={this.props.id}
           chartOptions={mergedOptions}
           disableUpdate={custom.disableUpdate}
           modules={modules}

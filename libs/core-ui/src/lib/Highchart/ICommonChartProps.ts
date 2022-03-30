@@ -3,9 +3,10 @@
 
 import { ITheme } from "@fluentui/react";
 
-import { IHighchartsConfig } from "./HighchartTypes";
+import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface ICommonChartProps {
+  id?: string;
   className?: string;
   fallback?: React.ReactNode;
   configOverride?: IHighchartsConfig;

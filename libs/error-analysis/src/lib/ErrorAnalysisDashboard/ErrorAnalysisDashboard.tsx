@@ -328,8 +328,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
-      weightVectorOptions,
-      whatIfChartConfig: undefined
+      weightVectorOptions
     };
   }
 
@@ -692,7 +691,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
-      selectedCohortName = "Unsaved";
+      selectedCohortName = localization.Interpret.Cohort.temporaryCohort;
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;

@@ -134,14 +134,14 @@ export class IndividualFeatureImportanceView extends React.Component<
       });
 
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "15px 38px 0 38px" }}>
+      <Stack tokens={{ padding: "l1" }}>
         <Stack.Item>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>
         </Stack.Item>
         <Stack.Item className="tabularDataView">
-          <div style={{ height: "800px", position: "relative" }}>
+          <div style={{ height: "500px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                 <MarqueeSelection selection={this.selection}>

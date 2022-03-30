@@ -25,7 +25,8 @@ class ExplanationDashboard(Dashboard):
         (# examples x # features),
         the same samples used to build the explanation.
         Overwrites any existing dataset on the explanation object.
-        Must have fewer than 10000 rows and fewer than 1000 columns.
+        Must have fewer than 100000 rows and fewer than 1000 columns.
+        Note dashboard may become slow or crash for more than 10000 rows.
     :type dataset: numpy.ndarray or list[][]
     :param true_y: The true labels for the provided dataset.
         Overwrites any existing dataset on the explanation object.
@@ -39,9 +40,10 @@ class ExplanationDashboard(Dashboard):
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
-
+    :param locale: The language in which user wants to load and access the
+        Explanation Dashboard. The default language is english ("en").
+    :type locale: str
     """
-
     def __init__(self, explanation, model=None, dataset=None,
                  true_y=None, classes=None, features=None,
                  public_ip=None, port=None, locale=None):

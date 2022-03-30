@@ -37,9 +37,10 @@ class ModelPerformanceDashboard(Dashboard):
     :type public_ip: str
     :param port: The port to use on locally hosted service.
     :type port: int
-
+    :param locale: The language in which user wants to load and access the
+        ModelPerformance Dashboard. The default language is english ("en").
+    :type locale: str
     """
-
     def __init__(self, model=None, dataset=None,
                  true_y=None, classes=None, features=None,
                  public_ip=None, port=None, locale=None):

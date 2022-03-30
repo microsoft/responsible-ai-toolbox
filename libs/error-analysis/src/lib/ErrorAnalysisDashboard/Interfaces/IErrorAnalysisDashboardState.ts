@@ -25,7 +25,6 @@ export interface IErrorAnalysisDashboardState
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
-  whatIfChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;
   globalImportanceIntercept: number[];
   globalImportance: number[][];

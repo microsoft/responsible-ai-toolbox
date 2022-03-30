@@ -58,7 +58,7 @@ class ErrorAnalysisDashboard(Dashboard):
         Only needed if providing a sample dataset for the UI while using
         the full dataset for the tree view and heatmap. Otherwise specify
         pred_y parameter only.
-    :type pred_y_dataset: numpy.array or list[] or pandas.Series
+    :type pred_y_dataset: numpy.ndarray or list[] or pandas.Series
     :param model_task: Optional parameter to specify whether the model
         is a classification or regression model. In most cases, the
         type of the model can be inferred based on the shape of the
@@ -94,6 +94,9 @@ class ErrorAnalysisDashboard(Dashboard):
         explanation is not specified for the dataset explorer.
         Specify less than 10k points for optimal performance.
     :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
+    :param locale: The language in which user wants to load and access the
+        ErrorAnalysis Dashboard. The default language is english ("en").
+    :type locale: str
 
     :Example:
 
