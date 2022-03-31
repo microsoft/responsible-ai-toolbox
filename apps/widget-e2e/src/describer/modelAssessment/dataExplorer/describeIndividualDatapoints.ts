@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ScatterHighchart } from "../../../util/ScatterHighchart";
+import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
@@ -20,6 +21,30 @@ export function describeIndividualDatapoints(
       ).click();
       props.chart = new ScatterHighchart("#DatasetExplorerChart");
     });
+
+    if (dataShape.isRegression) {
+      it("Should have clickable individual datapoints that are positive for regression error", () => {
+        cy.get(Locators.DEIndividualDatapoints).click();
+        cy.get(`${Locators.DECohortDropdown} span`).should(
+          "contain",
+          dataShape.cohortDefaultName
+        );
+        axisSelection("Error");
+
+        cy.get(Locators.DEPoints).each((point) => {
+          cy.wrap(point).trigger("mouseover", { force: true });
+          cy.get("#DatasetExplorerChart")
+            .find(Locators.DEPointTooltip)
+            .then((tooltip) => {
+              cy.wrap(tooltip).should("contain", "Regression error");
+              cy.wrap(tooltip).should("not.have.value", "Regression error: -");
+            });
+        });
+        axisSelection("Index");
+        cy.get(Locators.DEAggregatePlots).click();
+      });
+    }
+
     describe.skip("Dataset explorer Chart", () => {
       it("should have color label", () => {
         cy.get('#DatasetExplorerChart label:contains("Color value")').should(
@@ -51,4 +76,17 @@ export function describeIndividualDatapoints(
       );
     }
   });
+}
+
+export function axisSelection(label: string): void {
+  cy.get(Locators.DECHorizontalAxisButton)
+    .click()
+    .get(
+      `#AxisConfigPanel div[class*='ms-ChoiceFieldGroup'] label:contains('${label}')`
+    )
+    .click()
+    .get("#AxisConfigPanel")
+    .find("button")
+    .contains("Select")
+    .click();
 }
