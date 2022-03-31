@@ -34,9 +34,14 @@ import {
   TooltipHost,
   IColumn,
   IGroup,
-  Text
+  Text,
+  MessageBar,
+  IDetailsGroupDividerProps,
+  Icon
 } from "office-ui-fabric-react";
 import React from "react";
+
+import { individualFeatureImportanceViewStyles } from "./IndividualFeatureImportanceView.styles";
 
 export interface IIndividualFeatureImportanceProps {
   features: string[];
@@ -59,6 +64,8 @@ export interface IIndividualFeatureImportanceTableState {
 export interface IIndividualFeatureImportanceState
   extends IIndividualFeatureImportanceTableState {
   featureImportances: IGlobalSeries[];
+  indexToUnselect?: number;
+  selectedIndices: number[];
   sortArray: number[];
   sortingSeriesIndex?: number;
 }
@@ -70,9 +77,22 @@ export class IndividualFeatureImportanceView extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private readonly maxSelectable = 5;
 
   private selection: Selection = new Selection({
     onSelectionChanged: (): void => {
+      const c = this.selection.getSelectedCount();
+      const indices = this.selection.getSelectedIndices();
+      if (c === this.maxSelectable) {
+        this.setState({ selectedIndices: indices });
+      }
+      if (c > this.maxSelectable) {
+        for (const index of indices) {
+          if (!this.state.selectedIndices.includes(index)) {
+            this.setState({ indexToUnselect: index });
+          }
+        }
+      }
       this.updateViewedFeatureImportances();
     }
   });
@@ -84,6 +104,8 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     this.state = {
       featureImportances: [],
+      indexToUnselect: undefined,
+      selectedIndices: [],
       sortArray: [],
       ...tableState
     };
@@ -94,6 +116,10 @@ export class IndividualFeatureImportanceView extends React.Component<
   ): void {
     if (this.props.selectedCohort !== prevProps.selectedCohort) {
       this.setState(this.updateItems());
+    }
+    if (this.state.indexToUnselect) {
+      this.selection.toggleIndexSelected(this.state.indexToUnselect);
+      this.setState({ indexToUnselect: undefined });
     }
   }
 
@@ -136,6 +162,11 @@ export class IndividualFeatureImportanceView extends React.Component<
     return (
       <Stack tokens={{ padding: "l1" }}>
         <Stack.Item>
+          <MessageBar>
+            {localization.ModelAssessment.FeatureImportances.SelectionLimit}
+          </MessageBar>
+        </Stack.Item>
+        <Stack.Item>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>
@@ -155,10 +186,12 @@ export class IndividualFeatureImportanceView extends React.Component<
                     onRenderDetailsHeader={this.onRenderDetailsHeader}
                     selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
-                    ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                     checkButtonAriaLabel="Row checkbox"
                     // checkButtonGroupAriaLabel="Group checkbox"
-                    groupProps={{ showEmptyGroups: true }}
+                    groupProps={{
+                      onRenderHeader: this._onRenderGroupHeader,
+                      showEmptyGroups: true
+                    }}
                     selectionMode={SelectionMode.multiple}
                     selection={this.selection}
                   />
@@ -328,5 +361,30 @@ export class IndividualFeatureImportanceView extends React.Component<
         })}
       </div>
     );
+  };
+
+  private _onRenderGroupHeader = (props?: IDetailsGroupDividerProps) => {
+    const classNames = individualFeatureImportanceViewStyles();
+    const iconName = props?.group?.isCollapsed
+      ? "ChevronRightMed"
+      : "ChevronDownMed";
+    return (
+      <Stack className={classNames.header} horizontal>
+        <Icon
+          className={classNames.chevronButton}
+          iconName={iconName}
+          onClick={this._onToggleCollapse(props)}
+        />
+        <Stack.Item className={classNames.headerTitle}>
+          {props?.group!.name}
+        </Stack.Item>
+      </Stack>
+    );
+  };
+
+  private _onToggleCollapse = (props?: IDetailsGroupDividerProps) => {
+    return () => {
+      props!.onToggleCollapse!(props!.group!);
+    };
   };
 }
