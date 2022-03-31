@@ -17,7 +17,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
     });
     if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
       it("should have right number of correct prediction datapoints", () => {
-        cy.get(Locators.IFIPredictionSpan)
+        cy.get(Locators.IFIPredictionCount)
           .first()
           .invoke("text")
           .should("match", regExForNumbersWithBrackets);
@@ -25,7 +25,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
 
       it("should have right number of incorrect prediction datapoints", () => {
         cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
-        cy.get(Locators.IFIPredictionSpan)
+        cy.get(Locators.IFIPredictionCount)
           .eq(1)
           .invoke("text")
           .should("match", regExForNumbersWithBrackets);

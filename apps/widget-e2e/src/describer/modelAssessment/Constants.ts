@@ -4,7 +4,7 @@
 export enum Locators {
   SelectButton = "button:contains('Select')",
   CancelButton = "button:contains('Cancel')",
-  IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
+  IFIPredictionCount = "div[class^='headerCount']", // IFI - Individual feature importance
   IFIExpandCollapseButton = "[aria-label='expand collapse group']",
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
   IFIDropdownSelectedOption = "div[class^='featureImportanceChartAndLegend']",
