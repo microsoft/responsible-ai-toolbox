@@ -381,8 +381,9 @@ export class JointDataset {
     modelType: ModelTypes
   ): void {
     if (modelType === ModelTypes.Regression) {
-      row[JointDataset.RegressionError] =
-        row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel];
+      row[JointDataset.RegressionError] = Math.abs(
+        row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel]
+      );
       return;
     }
     if (modelType === ModelTypes.Binary) {
