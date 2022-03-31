@@ -11,6 +11,7 @@ import {
 export interface IFeatureImportanceStyles {
   chevronButton: IStyle;
   header: IStyle;
+  headerCount: IStyle;
   headerTitle: IStyle;
 }
 
@@ -30,10 +31,17 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
         position: "relative",
         zIndex: 100
       },
+      headerCount: [
+        "headerCount",
+        theme.fonts.medium,
+        {
+          paddingTop: 4
+        }
+      ],
       headerTitle: [
         theme.fonts.medium,
         {
-          padding: "4px 12px"
+          paddingTop: 4
         }
       ]
     });

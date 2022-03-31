@@ -378,6 +378,10 @@ export class IndividualFeatureImportanceView extends React.Component<
         <Stack.Item className={classNames.headerTitle}>
           {props?.group!.name}
         </Stack.Item>
+        &nbsp;
+        <Stack.Item className={classNames.headerCount}>
+          {`(${props?.group!.count})`}
+        </Stack.Item>
       </Stack>
     );
   };
