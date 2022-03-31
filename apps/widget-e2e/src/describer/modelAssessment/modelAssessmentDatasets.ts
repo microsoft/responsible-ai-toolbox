@@ -178,6 +178,7 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
       cohortDropDownValues: ["All data"],
       defaultXAxis: "Error",
