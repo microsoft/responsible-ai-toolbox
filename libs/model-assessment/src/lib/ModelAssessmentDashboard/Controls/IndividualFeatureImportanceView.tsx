@@ -382,17 +382,16 @@ export class IndividualFeatureImportanceView extends React.Component<
     return (
       <Stack className={classNames.header} horizontal>
         <Icon
+          ariaLabel="expand collapse group"
           className={classNames.chevronButton}
           iconName={iconName}
           onClick={this._onToggleCollapse(props)}
         />
-        <Stack.Item className={classNames.headerTitle}>
-          {props?.group!.name}
-        </Stack.Item>
+        <span className={classNames.headerTitle}>{props?.group!.name}</span>
         &nbsp;
-        <Stack.Item className={classNames.headerCount}>
+        <span className={classNames.headerCount}>
           {`(${props?.group!.count})`}
-        </Stack.Item>
+        </span>
       </Stack>
     );
   };
