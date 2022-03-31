@@ -11,7 +11,8 @@ import {
   FabricStyles,
   constructRows,
   constructCols,
-  ModelTypes
+  ModelTypes,
+  LabelWithCallout
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -35,7 +36,6 @@ import {
   IColumn,
   IGroup,
   Text,
-  MessageBar,
   IDetailsGroupDividerProps,
   Icon
 } from "office-ui-fabric-react";
@@ -158,18 +158,29 @@ export class IndividualFeatureImportanceView extends React.Component<
           text: meta.abbridgedLabel
         };
       });
+    const classNames = individualFeatureImportanceViewStyles();
 
     return (
       <Stack tokens={{ padding: "l1" }}>
         <Stack.Item>
-          <MessageBar>
-            {localization.ModelAssessment.FeatureImportances.SelectionLimit}
-          </MessageBar>
-        </Stack.Item>
-        <Stack.Item>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>
+        </Stack.Item>
+        <Stack.Item className={classNames.selectionCounter}>
+          <LabelWithCallout
+            label={localization.formatString(
+              localization.ModelAssessment.FeatureImportances.SelectionCounter,
+              this.selection.count,
+              this.maxSelectable
+            )}
+            calloutTitle={undefined}
+            type="label"
+          >
+            <Text block>
+              {localization.ModelAssessment.FeatureImportances.SelectionLimit}
+            </Text>
+          </LabelWithCallout>
         </Stack.Item>
         <Stack.Item className="tabularDataView">
           <div style={{ height: "500px", position: "relative" }}>

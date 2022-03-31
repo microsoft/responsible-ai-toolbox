@@ -13,6 +13,7 @@ export interface IFeatureImportanceStyles {
   header: IStyle;
   headerCount: IStyle;
   headerTitle: IStyle;
+  selectionCounter: IStyle;
 }
 
 export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFeatureImportanceStyles> =
@@ -43,6 +44,9 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
         {
           paddingTop: 4
         }
-      ]
+      ],
+      selectionCounter: {
+        paddingTop: 12
+      }
     });
   };
