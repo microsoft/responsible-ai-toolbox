@@ -571,7 +571,8 @@ class TestCohort:
         test_dict = {'name': 'Cohort New'}
         with pytest.raises(
                 UserConfigValidationException,
-                match="No cohort_filter_list field found for cohort deserialization"):
+                match="No cohort_filter_list field found for "
+                      "cohort deserialization"):
             Cohort.from_json(json.dumps(test_dict))
 
         test_dict = {'name': 'Cohort New', 'cohort_filter_list': {}}
@@ -583,7 +584,8 @@ class TestCohort:
         test_dict = {'name': 'Cohort New', 'cohort_filter_list': [{}]}
         with pytest.raises(
                 UserConfigValidationException,
-                match="No method field found for cohort filter deserialization"):
+                match="No method field found for cohort filter "
+                      "deserialization"):
             Cohort.from_json(json.dumps(test_dict))
 
         test_dict = {
@@ -599,7 +601,8 @@ class TestCohort:
             'cohort_filter_list': [{"method": "fake_method", "arg": []}]}
         with pytest.raises(
                 UserConfigValidationException,
-                match="No column field found for cohort filter deserialization"):
+                match="No column field found for cohort filter "
+                      "deserialization"):
             Cohort.from_json(json.dumps(test_dict))
 
 
