@@ -542,6 +542,8 @@ class TestCohort:
         assert 'val2' in json_str
         assert 'val3' in json_str
         assert 'age' in json_str
+        cohort_str_new = Cohort.from_json(json_str)
+        assert cohort_str == cohort_str_new
 
         cohort_filter_int = CohortFilter(method=method,
                                          arg=[1, 2, 3],
@@ -557,11 +559,48 @@ class TestCohort:
         assert 'age' in json_str
 
         cohort_int_new = Cohort.from_json(json_str)
-        assert cohort_int_new.name == cohort_int.name
-        assert len(cohort_int_new.cohort_filter_list) == \
-            len(cohort_int.cohort_filter_list)
-        assert cohort_int_new.cohort_filter_list[0].method == \
-            cohort_int.cohort_filter_list[0].method
+        assert cohort_int == cohort_int_new
+
+    def test_cohort_deserialization_error_conditions(self):
+        test_dict = {}
+        with pytest.raises(
+                UserConfigValidationException,
+                match="No name field found for cohort deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
+
+        test_dict = {'name': 'Cohort New'}
+        with pytest.raises(
+                UserConfigValidationException,
+                match="No cohort_filter_list field found for cohort deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
+
+        test_dict = {'name': 'Cohort New', 'cohort_filter_list': {}}
+        with pytest.raises(UserConfigValidationException,
+                           match="Field cohort_filter_list not of type list "
+                                 "for cohort deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
+
+        test_dict = {'name': 'Cohort New', 'cohort_filter_list': [{}]}
+        with pytest.raises(
+                UserConfigValidationException,
+                match="No method field found for cohort filter deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
+
+        test_dict = {
+            'name': 'Cohort New',
+            'cohort_filter_list': [{"method": "fake_method"}]}
+        with pytest.raises(
+                UserConfigValidationException,
+                match="No arg field found for cohort filter deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
+
+        test_dict = {
+            'name': 'Cohort New',
+            'cohort_filter_list': [{"method": "fake_method", "arg": []}]}
+        with pytest.raises(
+                UserConfigValidationException,
+                match="No column field found for cohort filter deserialization"):
+            Cohort.from_json(json.dumps(test_dict))
 
 
 class TestCohortList:
