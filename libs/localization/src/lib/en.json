@@ -1325,9 +1325,11 @@
       "sensitiveFeatureCohorts": "Sensitive feature cohorts",
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
-      "dataCohortsHeatmapHeader": "Data cohorts",
+      "dataCohortsHeatmapHeader": "Dataset cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
-      "featuresDropdown": "Feature(s)"
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class"
     }
   }
 }

@@ -22,18 +22,24 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import {
-  Text,
+  ActionButton,
   Dropdown,
   IDropdownOption,
   Stack,
   Dialog,
+  Text,
   DefaultButton,
   DialogFooter,
-  PrimaryButton
+  PrimaryButton,
+  Pivot,
+  PivotItem,
+  IDropdown
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { modelOverviewStyles } from "./ModelOverview.styles";
+import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
+import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 
 interface IModelOverviewProps {
   showNewModelOverviewExperience: boolean;
@@ -52,6 +58,7 @@ export class ModelOverview extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private featureDropdownRef = React.createRef<IDropdown>();
 
   constructor(props: IModelOverviewProps) {
     super(props);
@@ -274,14 +281,16 @@ export class ModelOverview extends React.Component<
 
     return (
       <div className={classNames.page}>
-        <div className={classNames.infoWithText}>
+        {/* <div className={classNames.infoWithText}> */}
           <Text variant="medium">
             {localization.Interpret.ModelPerformance.helperText}
           </Text>
-        </div>
-        <OverallMetricChart
-          showMetricSummary={!this.props.showNewModelOverviewExperience}
-        />
+        {/* </div> */}
+        {!this.props.showNewModelOverviewExperience && (
+          <OverallMetricChart
+            showMetricSummary={!this.props.showNewModelOverviewExperience}
+          />
+        )}
         {this.props.showNewModelOverviewExperience && (
           <>
             <Stack horizontal tokens={{ childrenGap: "20px" }}>
@@ -297,6 +306,7 @@ export class ModelOverview extends React.Component<
                 styles={{ dropdown: { width: 400 } }}
               />
               <Dropdown
+                componentRef={this.featureDropdownRef}
                 placeholder="Select features to use for a disaggregated analysis."
                 label={
                   localization.ModelAssessment.ModelOverview.featuresDropdown
@@ -427,89 +437,120 @@ export class ModelOverview extends React.Component<
                 }
               }}
             />
-            <HeatmapHighChart
-              configOverride={{
-                chart: {
-                  type: "heatmap",
-                  height: featureBasedCohorts.length * 40 + 120
-                },
-                title: {
-                  text: localization.ModelAssessment.ModelOverview
-                    .disaggregatedAnalysisHeatmapHeader,
-                  align: "left"
-                },
-                xAxis: {
-                  categories: columns,
-                  opposite: true
-                },
-                yAxis: {
-                  categories: featureBasedCohorts.map(
-                    (errorCohort) => errorCohort.cohort.name
-                  ),
-                  labels: {
-                    align: "left",
-                    reserveSpace: true,
-                    // format labels to cap the line length at 20 characters
-                    formatter: function () {
-                      return ModelOverview.wrapYAxisLabels(this.value, false);
-                    }
-                  }
-                },
-                series: [
-                  {
-                    name: "Metrics",
-                    colorKey: "colorValue",
-                    data: featureBasedCohortItems,
+            {this.state.selectedFeatures.length === 0 && (
+              <ActionButton
+                styles={{}}
+                onClick={() => {
+                  this.featureDropdownRef.current?.focus(true);
+                }}
+              >
+                Select features and fairness metrics to generate the
+                disaggregated analysis.
+              </ActionButton>
+            )}
+            {this.state.selectedFeatures.length > 0 && (
+              <HeatmapHighChart
+                configOverride={{
+                  chart: {
                     type: "heatmap",
-                    dataLabels: {
-                      enabled: true
-                    },
-                    borderWidth: 1
-                  }
-                ],
-                colorAxis: {
-                  min: 0,
-                  max: 1,
-                  minColor: "#FFFFFF",
-                  maxColor: "#1634F6"
-                },
-                legend: {
-                  enabled: false
-                },
-                tooltip: {
-                  formatter: function () {
-                    if (
-                      this.point.y === undefined ||
-                      this.point.value === undefined
-                    ) {
-                      return undefined;
+                    height: featureBasedCohorts.length * 40 + 120
+                  },
+                  title: {
+                    text: localization.ModelAssessment.ModelOverview
+                      .disaggregatedAnalysisHeatmapHeader,
+                    align: "left"
+                  },
+                  xAxis: {
+                    categories: columns,
+                    opposite: true
+                  },
+                  yAxis: {
+                    categories: featureBasedCohorts.map(
+                      (errorCohort) => errorCohort.cohort.name
+                    ),
+                    labels: {
+                      align: "left",
+                      reserveSpace: true,
+                      // format labels to cap the line length at 20 characters
+                      formatter: function () {
+                        return ModelOverview.wrapYAxisLabels(this.value, false);
+                      }
                     }
-                    if (this.point.x === 0) {
-                      // Count column
-                      return (
-                        "Cohort " +
-                        this.series["yAxis"].categories[this.point.y] +
-                        " contains " +
-                        this.point.value +
-                        " instances."
-                      );
-                    } else {
-                      // Metric columns
-                      return (
-                        "The model's " +
-                        this.series["xAxis"].categories[
-                          this.point.x
-                        ].toLowerCase() +
-                        " on cohort " +
-                        this.series["yAxis"].categories[this.point.y] +
-                        " is " +
-                        this.point.value
-                      );
+                  },
+                  series: [
+                    {
+                      name: "Metrics",
+                      colorKey: "colorValue",
+                      data: featureBasedCohortItems,
+                      type: "heatmap",
+                      dataLabels: {
+                        enabled: true
+                      },
+                      borderWidth: 1
+                    }
+                  ],
+                  colorAxis: {
+                    min: 0,
+                    max: 1,
+                    minColor: "#FFFFFF",
+                    maxColor: "#1634F6"
+                  },
+                  legend: {
+                    enabled: false
+                  },
+                  tooltip: {
+                    formatter: function () {
+                      if (
+                        this.point.y === undefined ||
+                        this.point.value === undefined
+                      ) {
+                        return undefined;
+                      }
+                      if (this.point.x === 0) {
+                        // Count column
+                        return (
+                          "Cohort " +
+                          this.series["yAxis"].categories[this.point.y] +
+                          " contains " +
+                          this.point.value +
+                          " instances."
+                        );
+                      } else {
+                        // Metric columns
+                        return (
+                          "The model's " +
+                          this.series["xAxis"].categories[
+                            this.point.x
+                          ].toLowerCase() +
+                          " on cohort " +
+                          this.series["yAxis"].categories[this.point.y] +
+                          " is " +
+                          this.point.value
+                        );
+                      }
                     }
                   }
-                }
-              }}
-            />
+                }}
+              />
+            )}
+
+            <Pivot>
+              <PivotItem headerText={"Probability distribution"}>
+                <ProbabilityDistributionChart
+                  datasetCohorts={this.context.errorCohorts}
+                  featureBasedCohorts={featureBasedCohorts}
+                />
+              </PivotItem>
+              <PivotItem headerText={"Metrics visualizations"}>
+                <ModelOverviewMetricChart
+                  selectableMetrics={selectableMetrics}
+                  datasetCohorts={this.context.errorCohorts}
+                  featureBasedCohorts={featureBasedCohorts}
+                  datasetCohortStats={datasetCohortLabeledStatistics}
+                  featureBasedCohortStats={featureBasedCohortLabeledStatistics}
+                />
+              </PivotItem>
+            </Pivot>
           </>
         )}
       </div>
