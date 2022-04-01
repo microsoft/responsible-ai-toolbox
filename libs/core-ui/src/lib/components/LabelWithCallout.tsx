@@ -18,6 +18,7 @@ import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
 export interface ILabelWithCalloutProps {
   label: string;
   calloutTitle: string | undefined;
+  renderOnNewLayer?: boolean;
   type?: "label" | "button";
 }
 interface ILabelWithCalloutState {
@@ -62,7 +63,7 @@ export class LabelWithCallout extends React.Component<
         )}
         {this.state.showCallout && (
           <FabricCallout
-            doNotLayer
+            doNotLayer={!this.props.renderOnNewLayer}
             target={`#${id}`}
             setInitialFocus
             onDismiss={this.toggleCallout}
