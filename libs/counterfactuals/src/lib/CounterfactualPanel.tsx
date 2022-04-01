@@ -21,7 +21,9 @@ import {
   TooltipDelay,
   DirectionalHint,
   IconButton,
-  ITooltipProps
+  ITooltipProps,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -81,6 +83,13 @@ export class CounterfactualPanel extends React.Component<
         onRenderFooterContent={this.renderClose}
       >
         <Stack tokens={{ childrenGap: "m1" }}>
+          <Stack.Item>
+            {this.props.data?.error_message && (
+              <MessageBar messageBarType={MessageBarType.error}>
+                {this.props.data.error_message}
+              </MessageBar>
+            )}
+          </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
