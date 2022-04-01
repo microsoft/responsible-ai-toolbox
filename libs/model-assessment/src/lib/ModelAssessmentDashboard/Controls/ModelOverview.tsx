@@ -27,15 +27,6 @@ export class ModelOverview extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IModelOverviewProps) {
-    super(props);
-    this.state = {
-      selectedMetrics: [],
-      selectedFeatures: [],
-      isFeaturePickerLimitExceededDialogOpen: false
-    };
-  }
-
   public render(): React.ReactNode {
     if (!this.context.jointDataset.hasPredictedY) {
       return (
