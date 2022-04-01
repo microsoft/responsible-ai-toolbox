@@ -84,9 +84,9 @@ export class CounterfactualPanel extends React.Component<
       >
         <Stack tokens={{ childrenGap: "m1" }}>
           <Stack.Item>
-            {this.props.data?.error_message && (
+            {this.props.data?.errorMessage && (
               <MessageBar messageBarType={MessageBarType.error}>
-                {this.props.data.error_message}
+                {this.props.data.errorMessage}
               </MessageBar>
             )}
           </Stack.Item>
