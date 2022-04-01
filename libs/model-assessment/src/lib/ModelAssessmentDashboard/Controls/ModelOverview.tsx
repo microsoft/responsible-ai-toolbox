@@ -37,7 +37,6 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 
@@ -90,7 +89,6 @@ export class ModelOverview extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const classNames = modelOverviewStyles();
     if (!this.context.jointDataset.hasPredictedY) {
       return (
         <MissingParametersPlaceholder>
@@ -280,12 +278,10 @@ export class ModelOverview extends React.Component<
     );
 
     return (
-      <div className={classNames.page}>
-        {/* <div className={classNames.infoWithText}> */}
-          <Text variant="medium">
-            {localization.Interpret.ModelPerformance.helperText}
-          </Text>
-        {/* </div> */}
+      <Stack tokens={{ padding: "14px 40px 10px 40px", childrenGap: "10px" }}>
+        <Text variant="medium">
+          {localization.Interpret.ModelPerformance.helperText}
+        </Text>
         {!this.props.showNewModelOverviewExperience && (
           <OverallMetricChart
             showMetricSummary={!this.props.showNewModelOverviewExperience}
@@ -553,7 +549,7 @@ export class ModelOverview extends React.Component<
             </Pivot>
           </>
         )}
-      </div>
+      </Stack>
     );
   }
 
