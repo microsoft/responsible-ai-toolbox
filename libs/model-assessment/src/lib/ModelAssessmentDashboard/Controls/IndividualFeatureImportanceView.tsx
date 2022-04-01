@@ -175,6 +175,7 @@ export class IndividualFeatureImportanceView extends React.Component<
               this.maxSelectable
             )}
             calloutTitle={undefined}
+            renderOnNewLayer
             type="label"
           >
             <Text block>
