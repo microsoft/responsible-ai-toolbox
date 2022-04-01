@@ -8,21 +8,35 @@ import {
   OverallMetricChart
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import { Text } from "office-ui-fabric-react";
+import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { modelOverviewStyles } from "./ModelOverview.styles";
+interface IModelOverviewProps {
+  showNewModelOverviewExperience: boolean;
+}
 
-class ModelOverviewProps {}
+// This will be an interface shortly.
+// As long as it has no members it needs to remain a class for code style reasons.
+class IModelOverviewState {}
 
-export class ModelOverview extends React.PureComponent<ModelOverviewProps> {
+export class ModelOverview extends React.Component<
+  IModelOverviewProps,
+  IModelOverviewState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  constructor(props: IModelOverviewProps) {
+    super(props);
+    this.state = {
+      selectedMetrics: [],
+      selectedFeatures: [],
+      isFeaturePickerLimitExceededDialogOpen: false
+    };
+  }
+
   public render(): React.ReactNode {
-    const classNames = modelOverviewStyles();
     if (!this.context.jointDataset.hasPredictedY) {
       return (
         <MissingParametersPlaceholder>
@@ -32,14 +46,12 @@ export class ModelOverview extends React.PureComponent<ModelOverviewProps> {
     }
 
     return (
-      <div className={classNames.page}>
-        <div className={classNames.infoWithText}>
-          <Text variant="medium">
-            {localization.Interpret.ModelPerformance.helperText}
-          </Text>
-        </div>
-        <OverallMetricChart />
-      </div>
+      <Stack tokens={{ padding: "16px 40px 10px 40px" }}>
+        <Text variant="medium">
+          {localization.Interpret.ModelPerformance.helperText}
+        </Text>
+        {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
+      </Stack>
     );
   }
 }
