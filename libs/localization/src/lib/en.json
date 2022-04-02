@@ -1264,8 +1264,8 @@
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Shift cohort",
-      "CreateNewCohort": "Save cohort",
+      "ShiftCohort": "Shift cohort",
+      "SaveCohort": "Save cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
       "Filters": "Number of filters",
