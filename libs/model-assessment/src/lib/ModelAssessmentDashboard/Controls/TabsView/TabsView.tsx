@@ -112,36 +112,51 @@ export class TabsView extends React.PureComponent<
             >
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
-                  <ErrorAnalysisViewTab
-                    disabledView={disabledView}
-                    tree={this.props.errorAnalysisData[0].tree}
-                    matrix={this.props.errorAnalysisData[0].matrix}
-                    matrixFeatures={
-                      this.props.errorAnalysisData[0].matrix_features
-                    }
-                    messages={this.props.stringParams?.contextualHelp}
-                    getTreeNodes={this.props.requestDebugML}
-                    getMatrix={this.props.requestMatrix}
-                    updateSelectedCohort={this.props.updateSelectedCohort}
-                    features={
-                      this.props.errorAnalysisData[0].tree_features ||
-                      this.props.dataset.feature_names
-                    }
-                    selectedFeatures={this.state.selectedFeatures}
-                    errorAnalysisOption={this.state.errorAnalysisOption}
-                    selectedCohort={this.props.selectedCohort}
-                    baseCohort={this.props.baseCohort}
-                    selectFeatures={(features: string[]): void =>
-                      this.setState({ selectedFeatures: features })
-                    }
-                    importances={this.state.importances}
-                    onSaveCohortClick={(): void => {
-                      this.props.setSaveCohortVisible();
-                    }}
-                    showCohortName={false}
-                    handleErrorDetectorChanged={this.handleErrorDetectorChanged}
-                    selectedKey={this.state.errorAnalysisOption}
-                  />
+                  <>
+                    <div
+                      className={classNames.sectionHeader}
+                      id="errorAnalysisHeader"
+                    >
+                      <Text variant={"xxLarge"}>
+                        {
+                          localization.ModelAssessment.ComponentNames
+                            .ErrorAnalysis
+                        }
+                      </Text>
+                    </div>
+                    <ErrorAnalysisViewTab
+                      disabledView={disabledView}
+                      tree={this.props.errorAnalysisData[0].tree}
+                      matrix={this.props.errorAnalysisData[0].matrix}
+                      matrixFeatures={
+                        this.props.errorAnalysisData[0].matrix_features
+                      }
+                      messages={this.props.stringParams?.contextualHelp}
+                      getTreeNodes={this.props.requestDebugML}
+                      getMatrix={this.props.requestMatrix}
+                      updateSelectedCohort={this.props.updateSelectedCohort}
+                      features={
+                        this.props.errorAnalysisData[0].tree_features ||
+                        this.props.dataset.feature_names
+                      }
+                      selectedFeatures={this.state.selectedFeatures}
+                      errorAnalysisOption={this.state.errorAnalysisOption}
+                      selectedCohort={this.props.selectedCohort}
+                      baseCohort={this.props.baseCohort}
+                      selectFeatures={(features: string[]): void =>
+                        this.setState({ selectedFeatures: features })
+                      }
+                      importances={this.state.importances}
+                      onSaveCohortClick={(): void => {
+                        this.props.setSaveCohortVisible();
+                      }}
+                      showCohortName={false}
+                      handleErrorDetectorChanged={
+                        this.handleErrorDetectorChanged
+                      }
+                      selectedKey={this.state.errorAnalysisOption}
+                    />
+                  </>
                 )}
               {t.key === GlobalTabKeys.ModelOverviewTab && (
                 <>
@@ -168,28 +183,58 @@ export class TabsView extends React.PureComponent<
               )}
               {t.key === GlobalTabKeys.FeatureImportancesTab &&
                 this.props.modelExplanationData?.[0] && (
-                  <FeatureImportancesTab
-                    modelMetadata={this.props.modelMetadata}
-                    modelExplanationData={this.props.modelExplanationData}
-                    selectedWeightVector={this.state.selectedWeightVector}
-                    weightVectorOptions={this.state.weightVectorOptions}
-                    weightVectorLabels={this.state.weightVectorLabels}
-                    requestPredictions={this.props.requestPredictions}
-                    onWeightVectorChange={this.onWeightVectorChange}
-                  />
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"} id="featureImportanceHeader">
+                        {
+                          localization.ModelAssessment.ComponentNames
+                            .FeatureImportances
+                        }
+                      </Text>
+                    </div>
+                    <FeatureImportancesTab
+                      modelMetadata={this.props.modelMetadata}
+                      modelExplanationData={this.props.modelExplanationData}
+                      selectedWeightVector={this.state.selectedWeightVector}
+                      weightVectorOptions={this.state.weightVectorOptions}
+                      weightVectorLabels={this.state.weightVectorLabels}
+                      requestPredictions={this.props.requestPredictions}
+                      onWeightVectorChange={this.onWeightVectorChange}
+                    />
+                  </>
                 )}
               {t.key === GlobalTabKeys.CausalAnalysisTab &&
                 this.props.causalAnalysisData?.[0] && (
-                  <CausalInsightsTab
-                    data={this.props.causalAnalysisData?.[0]}
-                  />
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"} id="causalInsightsTab">
+                        {
+                          localization.ModelAssessment.ComponentNames
+                            .CausalAnalysis
+                        }
+                      </Text>
+                    </div>
+                    <CausalInsightsTab
+                      data={this.props.causalAnalysisData?.[0]}
+                    />
+                  </>
                 )}
 
               {t.key === GlobalTabKeys.CounterfactualsTab &&
                 this.props.counterfactualData?.[0] && (
-                  <CounterfactualsTab
-                    data={this.props.counterfactualData?.[0]}
-                  />
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"}>
+                        {
+                          localization.ModelAssessment.ComponentNames
+                            .Counterfactuals
+                        }
+                      </Text>
+                    </div>
+                    <CounterfactualsTab
+                      data={this.props.counterfactualData?.[0]}
+                    />
+                  </>
                 )}
             </Stack.Item>
             <Stack.Item className={classNames.buttonSection}>
