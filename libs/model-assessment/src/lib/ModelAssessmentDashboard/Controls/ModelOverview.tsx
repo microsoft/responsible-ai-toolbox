@@ -278,7 +278,7 @@ export class ModelOverview extends React.Component<
     );
 
     return (
-      <Stack tokens={{ padding: "14px 40px 10px 40px", childrenGap: "10px" }}>
+      <Stack tokens={{ padding: "16px 40px 10px 40px", childrenGap: "10px" }}>
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
