@@ -1337,7 +1337,15 @@
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
-      "probabilityForClassSelectionHeader": "Probability for class"
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "featureSelectionLimitWarningTitle": "Feature selection limit met",
+      "featureSelectionLimitWarningSubTitle": "Only two features can be selected at the same time. Please unselect one of the two selected features before selecting another one.",
+      "resetFeatureSelection": "Reset feature selection",
+      "cancelFeatureSelectionWarningDialog": "Cancel",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations"
     }
   }
 }
