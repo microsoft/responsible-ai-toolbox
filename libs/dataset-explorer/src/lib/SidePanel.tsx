@@ -17,8 +17,7 @@ import {
   DefaultButton,
   IChoiceGroupOption,
   Label,
-  Stack,
-  Text
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -72,7 +71,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
               }
             />
             <div className={classNames.legendAndText}>
-              {colorSeries?.length ? (
+              {colorSeries?.length && (
                 <InteractiveLegend
                   items={colorSeries.map((name, i) => {
                     return {
@@ -82,10 +81,6 @@ export class SidePanel extends React.Component<ISidePanelProps> {
                     };
                   })}
                 />
-              ) : (
-                <Text variant={"xSmall"} className={classNames.smallItalic}>
-                  {localization.Interpret.DatasetExplorer.noColor}
-                </Text>
               )}
             </div>
           </Stack.Item>
