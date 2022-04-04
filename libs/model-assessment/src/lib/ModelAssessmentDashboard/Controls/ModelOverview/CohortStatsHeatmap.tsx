@@ -31,10 +31,6 @@ export class CohortStatsHeatmap extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: ICohortStatsHeatmapProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
@@ -83,9 +79,9 @@ export class CohortStatsHeatmap extends React.Component<
           },
           series: [
             {
+              borderWidth: 1,
               colorKey: "colorValue",
               data: items,
-              borderWidth: 1,
               dataLabels: {
                 enabled: true
               },

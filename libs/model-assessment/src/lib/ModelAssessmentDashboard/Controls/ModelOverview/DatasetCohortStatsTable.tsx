@@ -3,7 +3,8 @@
 
 import {
   defaultModelAssessmentContext,
-  ModelAssessmentContext} from "@responsible-ai/core-ui";
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 

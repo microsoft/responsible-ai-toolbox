@@ -21,8 +21,6 @@ interface IModelOverviewProps {
 
 interface IModelOverviewState {
   selectedMetrics: string[];
-  selectedFeatures: number[];
-  isFeaturePickerLimitExceededDialogOpen: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -36,8 +34,6 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      isFeaturePickerLimitExceededDialogOpen: false,
-      selectedFeatures: [],
       selectedMetrics: []
     };
   }
