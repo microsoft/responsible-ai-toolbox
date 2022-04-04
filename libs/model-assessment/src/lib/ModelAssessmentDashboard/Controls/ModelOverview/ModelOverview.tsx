@@ -12,6 +12,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
+
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 
 interface IModelOverviewProps {
@@ -35,9 +36,9 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      selectedMetrics: [],
+      isFeaturePickerLimitExceededDialogOpen: false,
       selectedFeatures: [],
-      isFeaturePickerLimitExceededDialogOpen: false
+      selectedMetrics: []
     };
   }
 
@@ -70,7 +71,7 @@ export class ModelOverview extends React.Component<
       );
     }
 
-    let selectableMetrics: IDropdownOption[] = [];
+    const selectableMetrics: IDropdownOption[] = [];
     if (this.context.dataset.task_type === "classification") {
       // TODO: add case for multiclass classification
       selectableMetrics.push(
@@ -135,7 +136,7 @@ export class ModelOverview extends React.Component<
     );
 
     return (
-      <Stack tokens={{ padding: "16px 40px 10px 40px", childrenGap: "10px" }}>
+      <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
@@ -183,7 +184,7 @@ export class ModelOverview extends React.Component<
         !item.selected &&
         this.state.selectedMetrics.includes(item.key.toString())
       ) {
-        let selectedMetrics = this.state.selectedMetrics;
+        const selectedMetrics = this.state.selectedMetrics;
         const unselectedMetricIndex = selectedMetrics.findIndex(
           (key) => key === item.key.toString()
         );

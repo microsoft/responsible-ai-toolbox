@@ -6,6 +6,7 @@ import {
   ModelAssessmentContext} from "@responsible-ai/core-ui";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
+
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
 
 interface IDatasetCohortStatsTableProps {

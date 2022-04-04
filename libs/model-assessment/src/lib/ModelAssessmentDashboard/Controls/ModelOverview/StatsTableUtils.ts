@@ -11,14 +11,18 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[]
 ) {
-  let items: PointOptionsObject[] = cohorts.map((errorCohort, cohortIndex) => {
-    return {
-      x: 0, // metric index for Count column
-      y: cohortIndex,
-      value: errorCohort.cohortStats.totalCohort,
-      colorValue: 0
-    };
-  });
+  const items: PointOptionsObject[] = cohorts.map(
+    (errorCohort, cohortIndex) => {
+      return {
+        colorValue: 0,
+        value: errorCohort.cohortStats.totalCohort,
+
+        x: 0,
+        // metric index for Count column
+        y: cohortIndex
+      };
+    }
+  );
   selectableMetrics
     .filter((element: IDropdownOption) =>
       selectedMetrics.includes(element.key.toString())
@@ -48,18 +52,18 @@ export function generateCohortsStatsTable(
         );
         if (stat && !Number.isNaN(stat.stat)) {
           items.push({
-            x: metricIndex + 1,
-            y: cohortIndex,
+            colorValue: (stat.stat - metricMin) / metricMinMaxDiff,
             value: Number(stat.stat.toFixed(3)),
-            colorValue: (stat.stat - metricMin) / metricMinMaxDiff
+            x: metricIndex + 1,
+            y: cohortIndex
           });
         } else {
           // not a numeric value (NaN), so just put null
           items.push({
-            x: metricIndex + 1,
-            y: cohortIndex,
+            color: "#808080",
             value: Number.NaN,
-            color: "#808080" // gray
+            x: metricIndex + 1,
+            y: cohortIndex // gray
           });
         }
       });
@@ -67,47 +71,45 @@ export function generateCohortsStatsTable(
   return items;
 }
 
-export function wrapYAxisLabels(obj: any, wrapOnWhitespace: boolean = false) {
+export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
   const maxLineLength = 40;
   const maxLines = 2;
   const lineWrapHtmlTag = "<br />";
   const ellipsis = "...";
-  var label = obj.toString();
 
   // check if there are suitable spots for a linewrap
   // if not just wrap after maxLineLength characters
-  let slicing_index = maxLineLength;
-  const closing_parenthesis = ") ";
-  const opening_parenthesis = " (";
+  let slicingIndex = maxLineLength;
+  const closingParenthesis = ") ";
+  const openingParenthesis = " (";
   const whitespace = " ";
-  const searchString = label.slice(
-    slicing_index - maxLineLength / 2,
-    slicing_index
+  const searchString = new Set(
+    label.slice(slicingIndex - maxLineLength / 2, slicingIndex)
   );
 
-  if (searchString.includes(closing_parenthesis)) {
+  if (searchString.has(closingParenthesis)) {
     // option 1: wrap after closing parenthesis
-    slicing_index =
-      label.indexOf(closing_parenthesis, slicing_index - maxLineLength / 2) + 2;
-  } else if (searchString.includes(opening_parenthesis)) {
+    slicingIndex =
+      label.indexOf(closingParenthesis, slicingIndex - maxLineLength / 2) + 2;
+  } else if (searchString.has(openingParenthesis)) {
     // option 2: wrap before opening parenthesis
-    slicing_index =
-      label.indexOf(opening_parenthesis, slicing_index - maxLineLength / 2) + 1;
-  } else if (wrapOnWhitespace && searchString.includes(whitespace)) {
+    slicingIndex =
+      label.indexOf(openingParenthesis, slicingIndex - maxLineLength / 2) + 1;
+  } else if (wrapOnWhitespace && searchString.has(whitespace)) {
     // option 3: wrap after maxLineLength characters
-    slicing_index =
-      label.indexOf(whitespace, slicing_index - maxLineLength / 2) + 1;
+    slicingIndex =
+      label.indexOf(whitespace, slicingIndex - maxLineLength / 2) + 1;
   }
   label =
-    label.slice(0, slicing_index) +
+    label.slice(0, slicingIndex) +
     lineWrapHtmlTag +
-    label.slice(slicing_index, label.length);
+    label.slice(slicingIndex, label.length);
 
   if (label.length > maxLineLength * maxLines + lineWrapHtmlTag.length) {
     label =
       label.slice(
         0,
-        maxLineLength * maxLines - ellipsis.length + lineWrapHtmlTag
+        maxLineLength * maxLines - ellipsis.length + lineWrapHtmlTag.length
       ) + ellipsis;
   }
   return label;

@@ -12,6 +12,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
+
 import { generateCohortsStatsTable, wrapYAxisLabels } from "./StatsTableUtils";
 
 interface ICohortStatsHeatmapProps {
@@ -57,7 +58,7 @@ export class CohortStatsHeatmap extends React.Component<
       this.context.modelMetadata.modelType
     );
 
-    let items = generateCohortsStatsTable(
+    const items = generateCohortsStatsTable(
       this.props.cohorts,
       this.props.selectableMetrics,
       cohortLabeledStatistics,
@@ -68,54 +69,37 @@ export class CohortStatsHeatmap extends React.Component<
       <HeatmapHighChart
         configOverride={{
           chart: {
-            type: "heatmap",
-            height: this.props.cohorts.length * 40 + 120
+            height: this.props.cohorts.length * 40 + 120,
+            type: "heatmap"
           },
-          title: {
-            text: localization.ModelAssessment.ModelOverview
-              .dataCohortsHeatmapHeader,
-            align: "left"
-          },
-          xAxis: {
-            categories: columns,
-            opposite: true
-          },
-          yAxis: {
-            categories: this.props.cohorts.map(
-              (errorCohort) => errorCohort.cohort.name
-            ),
-            labels: {
-              align: "left",
-              reserveSpace: true,
-              // format labels to cap the line length at 20 characters
-              formatter: function () {
-                return wrapYAxisLabels(this.value, true);
-              }
-            }
-          },
-          series: [
-            {
-              name: "Metrics",
-              colorKey: "colorValue",
-              data: items,
-              type: "heatmap",
-              dataLabels: {
-                enabled: true
-              },
-              borderWidth: 1
-            }
-          ],
           colorAxis: {
-            min: 0,
             max: 1,
-            minColor: "#FFFFFF",
-            maxColor: "#1634F6"
+            maxColor: "#1634F6",
+            min: 0,
+            minColor: "#FFFFFF"
           },
           legend: {
             enabled: false
           },
+          series: [
+            {
+              colorKey: "colorValue",
+              data: items,
+              borderWidth: 1,
+              dataLabels: {
+                enabled: true
+              },
+              name: "Metrics",
+              type: "heatmap"
+            }
+          ],
+          title: {
+            align: "left",
+            text: localization.ModelAssessment.ModelOverview
+              .dataCohortsHeatmapHeader
+          },
           tooltip: {
-            formatter: function () {
+            formatter() {
               if (
                 this.point.y === undefined ||
                 this.point.value === undefined ||
@@ -127,18 +111,35 @@ export class CohortStatsHeatmap extends React.Component<
                 // Count column
                 return localization.formatString(
                   localization.ModelAssessment.ModelOverview.tableCountTooltip,
-                  this.series["yAxis"].categories[this.point.y],
-                  this.point.value
-                );
-              } else {
-                // Metric columns
-                return localization.formatString(
-                  localization.ModelAssessment.ModelOverview.tableMetricTooltip,
-                  this.series["xAxis"].categories[this.point.x].toLowerCase(),
-                  this.series["yAxis"].categories[this.point.y],
+                  this.series.yAxis.categories[this.point.y],
                   this.point.value
                 );
               }
+              // Metric columns
+              return localization.formatString(
+                localization.ModelAssessment.ModelOverview.tableMetricTooltip,
+                this.series.xAxis.categories[this.point.x].toLowerCase(),
+                this.series.yAxis.categories[this.point.y],
+                this.point.value
+              );
+            }
+          },
+          xAxis: {
+            categories: columns,
+            opposite: true
+          },
+          yAxis: {
+            categories: this.props.cohorts.map(
+              (errorCohort) => errorCohort.cohort.name
+            ),
+            labels: {
+              align: "left",
+              // format labels to cap the line length
+              formatter() {
+                return wrapYAxisLabels(this.value.toString(), true);
+              },
+
+              reserveSpace: true
             }
           }
         }}
