@@ -1316,6 +1316,25 @@
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
+    },
+    "ModelOverview": {
+      "metricsDropdown": "Metric(s)",
+      "accuracy": "Accuracy",
+      "f1Score": "F1 score",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanSquaredError": "Mean squared error",
+      "precision": "Precision score",
+      "recall": "Recall score",
+      "falsePositiveRate": "False positive rate",
+      "falseNegativeRate":"False negative rate",
+      "selectionRate": "Selection rate",
+      "meanPrediction": "Mean prediction",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Count",
+      "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
     }
   }
 }
