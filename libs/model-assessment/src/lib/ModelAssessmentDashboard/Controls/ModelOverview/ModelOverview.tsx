@@ -273,6 +273,7 @@ export class ModelOverview extends React.Component<
               selectedMetrics={this.state.selectedMetrics}
               selectedFeatures={this.state.selectedFeatures}
               featureBasedCohorts={featureBasedCohorts}
+              featureDropdownRef={this.featureDropdownRef}
             />
 
             <Pivot>

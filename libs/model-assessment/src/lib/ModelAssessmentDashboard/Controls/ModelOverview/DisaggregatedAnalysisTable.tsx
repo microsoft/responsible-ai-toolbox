@@ -15,12 +15,12 @@ import {
 import React from "react";
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
 
-
 interface IDisaggregatedAnalysisTableProps {
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   selectedFeatures: number[];
   featureBasedCohorts: ErrorCohort[];
+  featureDropdownRef: React.RefObject<IDropdown>;
 }
 
 class IDisaggregatedAnalysisTableState {}
@@ -32,7 +32,6 @@ export class DisaggregatedAnalysisTable extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private featureDropdownRef = React.createRef<IDropdown>();
 
   public render(): React.ReactNode {
     return (
@@ -40,7 +39,7 @@ export class DisaggregatedAnalysisTable extends React.Component<
         {this.props.selectedFeatures.length === 0 && (
           <ActionButton
             onClick={() => {
-              this.featureDropdownRef.current?.focus(true);
+              this.props.featureDropdownRef.current?.focus(true);
             }}
           >
             {
