@@ -121,7 +121,12 @@ export class ProbabilityDistributionChart extends React.Component<
         this.state.probabilityOption!.key.toString()
       );
     });
-    const outlierData = boxplotData.map((cohortDict) => cohortDict["outliers"]);
+    const outlierData = boxplotData
+      .map((cohortDict) => cohortDict["outliers"])
+      .map((outlierProbs, cohortIndex) => {
+        return outlierProbs.map((prob) => [cohortIndex, prob]);
+      })
+      .reduce((list1, list2) => list1.concat(list2));
 
     const noCohortSelected =
       this.state.selectedDatasetCohorts.length +
@@ -370,7 +375,7 @@ export class ProbabilityDistributionChart extends React.Component<
     const lowerFence = firstQuartile - interquartileRange * 1.5;
     const upperFence = thirdQuartile + interquartileRange * 1.5;
     const nonOutliers = sortedData.filter(
-      (element) => element > lowerFence && element < upperFence
+      (element) => element >= lowerFence && element <= upperFence
     );
     const outliers = sortedData.filter(
       (element) => element < lowerFence || element > upperFence
