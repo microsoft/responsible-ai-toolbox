@@ -41,6 +41,7 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
+// this is a class only because we can't create an empty interface
 class IOverallMetricChartProps {}
 
 export class OverallMetricChart extends React.PureComponent<
