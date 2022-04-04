@@ -183,11 +183,7 @@ export class ModelOverview extends React.Component<
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
-        {!this.props.showNewModelOverviewExperience && (
-          <OverallMetricChart
-            showMetricSummary={!this.props.showNewModelOverviewExperience}
-          />
-        )}
+        {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
         {this.props.showNewModelOverviewExperience && (
           <>
             <Stack horizontal tokens={{ childrenGap: "20px" }}>
