@@ -41,10 +41,12 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
-class OverallMetricChartProps {}
+interface IOverallMetricChartProps {
+  showMetricSummary: boolean;
+}
 
 export class OverallMetricChart extends React.PureComponent<
-  OverallMetricChartProps,
+  IOverallMetricChartProps,
   IOverallMetricChartState
 > {
   public static contextType = ModelAssessmentContext;
@@ -53,7 +55,7 @@ export class OverallMetricChart extends React.PureComponent<
 
   private readonly chartAndConfigsId = "OverallMetricChart";
 
-  public constructor(props: OverallMetricChartProps) {
+  public constructor(props: IOverallMetricChartProps) {
     super(props);
     this.state = {
       chartProps: undefined,
@@ -171,35 +173,39 @@ export class OverallMetricChart extends React.PureComponent<
                     theme={getTheme() as any}
                   />
                 </div>
-                {this.context.modelMetadata.modelType !==
-                  ModelTypes.Multiclass && (
-                  <div className={classNames.rightPanel}>
-                    {!this.context.jointDataset.hasTrueY && (
-                      <MissingParametersPlaceholder>
-                        {localization.Interpret.ModelPerformance.missingTrueY}
-                      </MissingParametersPlaceholder>
-                    )}
-                    {this.context.jointDataset.hasTrueY &&
-                      metricsList.map((stats, index) => {
-                        return (
-                          <div className={classNames.statsBox} key={index}>
-                            {stats.map((labeledStat, statIndex) => {
-                              return (
-                                <Text block key={statIndex}>
-                                  {localization.formatString(
-                                    labeledStat.label,
-                                    labeledStat.stat.toLocaleString(undefined, {
-                                      maximumFractionDigits: 3
-                                    })
-                                  )}
-                                </Text>
-                              );
-                            })}
-                          </div>
-                        );
-                      })}
-                  </div>
-                )}
+                {this.props.showMetricSummary &&
+                  this.context.modelMetadata.modelType !==
+                    ModelTypes.Multiclass && (
+                    <div className={classNames.rightPanel}>
+                      {!this.context.jointDataset.hasTrueY && (
+                        <MissingParametersPlaceholder>
+                          {localization.Interpret.ModelPerformance.missingTrueY}
+                        </MissingParametersPlaceholder>
+                      )}
+                      {this.context.jointDataset.hasTrueY &&
+                        metricsList.map((stats, index) => {
+                          return (
+                            <div className={classNames.statsBox} key={index}>
+                              {stats.map((labeledStat, statIndex) => {
+                                return (
+                                  <Text block key={statIndex}>
+                                    {localization.formatString(
+                                      labeledStat.label,
+                                      labeledStat.stat.toLocaleString(
+                                        undefined,
+                                        {
+                                          maximumFractionDigits: 3
+                                        }
+                                      )
+                                    )}
+                                  </Text>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  )}
               </div>
             </div>
           </div>

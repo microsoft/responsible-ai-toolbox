@@ -38,7 +38,7 @@ export class ModelPerformanceTab extends React.PureComponent<ModelPerformanceTab
             {localization.Interpret.ModelPerformance.helperText}
           </Text>
         </div>
-        <OverallMetricChart />
+        <OverallMetricChart showMetricSummary />
       </div>
     );
   }
