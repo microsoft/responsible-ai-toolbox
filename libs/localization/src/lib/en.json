@@ -1334,6 +1334,8 @@
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
@@ -1348,7 +1350,18 @@
       "metricsVisualizationsPivotItem": "Metrics visualizations",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
-      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "boxPlot": {
+        "upperFence": "Upper fence",
+        "lowerFence": "Lower fence",
+        "median": "Median",
+        "upperQuartile": "Upper quartile",
+        "lowerQuartile": "Lower quartile",
+        "outlierProbability": "probability"
+      },
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "selectAllButton": "Select all",
+      "unselectAllButton": "Unselect all"
     }
   }
 }

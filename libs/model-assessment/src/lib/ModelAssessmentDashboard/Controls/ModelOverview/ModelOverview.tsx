@@ -9,7 +9,8 @@ import {
   BinaryClassificationMetrics,
   RegressionMetrics,
   JointDataset,
-  generateMetrics
+  generateMetrics,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -26,6 +27,7 @@ import {
   IDropdown
 } from "office-ui-fabric-react";
 import React from "react";
+import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
@@ -41,6 +43,8 @@ interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
   isFeaturePickerLimitExceededDialogOpen: boolean;
+  selectedDatasetCohorts: number[];
+  selectedFeatureBasedCohorts: number[];
 }
 
 export class ModelOverview extends React.Component<
@@ -57,7 +61,13 @@ export class ModelOverview extends React.Component<
     this.state = {
       selectedMetrics: [],
       selectedFeatures: [],
-      isFeaturePickerLimitExceededDialogOpen: false
+      isFeaturePickerLimitExceededDialogOpen: false,
+      selectedDatasetCohorts: this.context.errorCohorts.map(
+        (_cohort, index) => {
+          return index;
+        }
+      ),
+      selectedFeatureBasedCohorts: []
     };
   }
 
@@ -275,19 +285,34 @@ export class ModelOverview extends React.Component<
               featureBasedCohorts={featureBasedCohorts}
               featureDropdownRef={this.featureDropdownRef}
             />
-
+            <ChartConfigurationFlyout
+              datasetCohorts={this.context.errorCohorts}
+              featureBasedCohorts={featureBasedCohorts}
+              selectedDatasetCohorts={this.state.selectedDatasetCohorts}
+              selectedFeatureBasedCohorts={
+                this.state.selectedFeatureBasedCohorts
+              }
+              updateDatasetCohortSelection={(selectedDatasetCohorts) =>
+                this.setState({ selectedDatasetCohorts })
+              }
+              updateFeatureBasedCohortSelection={(
+                selectedFeatureBasedCohorts
+              ) => this.setState({ selectedFeatureBasedCohorts })}
+            />
             <Pivot>
-              <PivotItem
-                headerText={
-                  localization.ModelAssessment.ModelOverview
-                    .probabilityDistributionPivotItem
-                }
-              >
-                <ProbabilityDistributionChart
-                  datasetCohorts={this.context.errorCohorts}
-                  featureBasedCohorts={featureBasedCohorts}
-                />
-              </PivotItem>
+              {this.context.modelMetadata.modelType === ModelTypes.Binary && (
+                <PivotItem
+                  headerText={
+                    localization.ModelAssessment.ModelOverview
+                      .probabilityDistributionPivotItem
+                  }
+                >
+                  <ProbabilityDistributionChart
+                    datasetCohorts={this.context.errorCohorts}
+                    featureBasedCohorts={featureBasedCohorts}
+                  />
+                </PivotItem>
+              )}
               <PivotItem
                 headerText={
                   localization.ModelAssessment.ModelOverview
