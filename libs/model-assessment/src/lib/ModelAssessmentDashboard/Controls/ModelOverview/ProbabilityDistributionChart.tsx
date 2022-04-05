@@ -15,8 +15,7 @@ import {
   getTheme,
   IDropdownOption,
   Stack,
-  Text,
-  DefaultButton
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -80,17 +79,6 @@ export class ProbabilityDistributionChart extends React.Component<
     );
     const selectedCohortNames = selectedCohorts.map(
       (cohort) => cohort.cohort.name
-    );
-
-    const datasetCohortOptions = this.props.datasetCohorts.map(
-      (cohort, index) => {
-        return { key: index, text: cohort.cohort.name };
-      }
-    );
-    const featureBasedCohortOptions = this.props.featureBasedCohorts.map(
-      (cohort, index) => {
-        return { key: index, text: cohort.cohort.name };
-      }
     );
 
     const probabilityOptions: IDropdownOption[] = new Array(
@@ -183,11 +171,11 @@ export class ProbabilityDistributionChart extends React.Component<
                         pointFormatter: function () {
                           return `<span style="color:${this.color}">●</span>
                             <b> ${this.series.name}</b><br/>
-                            Upper fence: ${this.options.high}<br/>
-                            Upper quartile: ${this.options.q3}<br/>
-                            Median: ${this.options.median}<br/>
-                            Lower quartile: ${this.options.q1}<br/>
-                            Lower fence: ${this.options.low}<br/>`;
+                            ${localization.ModelAssessment.ModelOverview.boxPlot.upperFence}: ${this.options.high}<br/>
+                            ${localization.ModelAssessment.ModelOverview.boxPlot.upperQuartile}: ${this.options.q3}<br/>
+                            ${localization.ModelAssessment.ModelOverview.boxPlot.median}: ${this.options.median}<br/>
+                            ${localization.ModelAssessment.ModelOverview.boxPlot.lowerQuartile}: ${this.options.q1}<br/>
+                            ${localization.ModelAssessment.ModelOverview.boxPlot.lowerFence}: ${this.options.low}<br/>`;
                         }
                       }
                     },
@@ -197,7 +185,7 @@ export class ProbabilityDistributionChart extends React.Component<
                       data: outlierData,
                       tooltip: {
                         pointFormatter: function () {
-                          return `probability: <b>${this.y}</b>`;
+                          return `${localization.ModelAssessment.ModelOverview.boxPlot.outlierProbability}: <b>${this.y}</b>`;
                         }
                       }
                     }
@@ -206,138 +194,10 @@ export class ProbabilityDistributionChart extends React.Component<
               />
             )}
           </Stack.Item>
-          <Stack tokens={{ childrenGap: "10px" }}>
-            <Stack tokens={{ childrenGap: "10px" }}>
-              <Dropdown
-                label={"Dataset cohorts"}
-                multiSelect
-                options={datasetCohortOptions}
-                styles={{ dropdown: { width: 250 } }}
-                onChange={this.onChartDatasetCohortOptionSelectionChange}
-                selectedKeys={this.state.selectedDatasetCohorts}
-                errorMessage={
-                  noCohortSelected
-                    ? "Select at least one cohort overall to view the box plot."
-                    : undefined
-                }
-              />
-              <Stack horizontal tokens={{ childrenGap: "10px" }}>
-                <DefaultButton
-                  text="Select all"
-                  onClick={() =>
-                    this.setState({
-                      selectedDatasetCohorts: this.getAllDatasetCohorts()
-                    })
-                  }
-                />
-                <DefaultButton
-                  text="Unselect all"
-                  onClick={() =>
-                    this.setState({
-                      selectedDatasetCohorts: []
-                    })
-                  }
-                />
-              </Stack>
-            </Stack>
-            {this.props.featureBasedCohorts.length > 0 && (
-              <Stack tokens={{ childrenGap: "10px" }}>
-                <Dropdown
-                  label={"Feature-based cohorts"}
-                  multiSelect
-                  options={featureBasedCohortOptions}
-                  styles={{ dropdown: { width: 200 } }}
-                  onChange={this.onChartFeatureBasedCohortOptionSelectionChange}
-                  selectedKeys={this.state.selectedFeatureBasedCohorts}
-                  errorMessage={
-                    noCohortSelected
-                      ? "Select at least one cohort overall to view the box plot."
-                      : undefined
-                  }
-                />
-                <Stack horizontal tokens={{ childrenGap: "10px" }}>
-                  <DefaultButton
-                    text="Select all"
-                    onClick={() =>
-                      this.setState({
-                        selectedFeatureBasedCohorts:
-                          this.getAllFeatureBasedCohorts()
-                      })
-                    }
-                  />
-                  <DefaultButton
-                    text="Unselect all"
-                    onClick={() =>
-                      this.setState({
-                        selectedFeatureBasedCohorts: []
-                      })
-                    }
-                  />
-                </Stack>
-              </Stack>
-            )}
-          </Stack>
         </Stack>
       </>
     );
   }
-
-  private getAllDatasetCohorts() {
-    return this.props.datasetCohorts.map((_cohort, index) => {
-      return index;
-    });
-  }
-
-  private getAllFeatureBasedCohorts() {
-    return this.props.featureBasedCohorts.map((_cohort, index) => {
-      return index;
-    });
-  }
-
-  private onChartDatasetCohortOptionSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item) {
-      this.setState({
-        selectedDatasetCohorts: this.makeChartCohortOptionSelectionChange(
-          this.state.selectedDatasetCohorts,
-          item
-        )
-      });
-    }
-  };
-
-  private onChartFeatureBasedCohortOptionSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item) {
-      this.setState({
-        selectedFeatureBasedCohorts: this.makeChartCohortOptionSelectionChange(
-          this.state.selectedFeatureBasedCohorts,
-          item
-        )
-      });
-    }
-  };
-
-  private makeChartCohortOptionSelectionChange = (
-    currentlySelected: number[],
-    item: IDropdownOption
-  ): number[] => {
-    const key = Number(item.key);
-
-    if (item.selected && !currentlySelected.includes(key)) {
-      // update with newly selected item
-      return currentlySelected.concat([key]);
-    } else if (!item.selected && currentlySelected.includes(key)) {
-      // update by removing the unselected item
-      return currentlySelected.filter((idx) => idx !== key);
-    }
-
-    return currentlySelected;
-  };
 
   private onProbabilityOptionSelectionChange = (
     _: React.FormEvent<HTMLDivElement>,
