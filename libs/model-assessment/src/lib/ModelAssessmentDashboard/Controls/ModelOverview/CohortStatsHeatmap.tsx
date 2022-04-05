@@ -96,19 +96,21 @@ export class CohortStatsHeatmap extends React.Component<
           },
           tooltip: {
             formatter() {
+              // to avoid semantic error during build cast point to any
               if (
                 this.point.y === undefined ||
-                this.point.value === undefined ||
-                this.point.value === null
+                (this.point as any).value === undefined ||
+                (this.point as any).value === null
               ) {
                 return undefined;
               }
+              const value = (this.point as any).value;
               if (this.point.x === 0) {
                 // Count column
                 return localization.formatString(
                   localization.ModelAssessment.ModelOverview.tableCountTooltip,
                   this.series.yAxis.categories[this.point.y],
-                  this.point.value
+                  value
                 );
               }
               // Metric columns
@@ -116,7 +118,7 @@ export class CohortStatsHeatmap extends React.Component<
                 localization.ModelAssessment.ModelOverview.tableMetricTooltip,
                 this.series.xAxis.categories[this.point.x].toLowerCase(),
                 this.series.yAxis.categories[this.point.y],
-                this.point.value
+                value
               );
             }
           },
