@@ -182,6 +182,9 @@
       "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
       "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
+    },
     "FilterTooltip": {
       "correctNum": "Correct (#): ",
       "countNum": "Count (#): ",
