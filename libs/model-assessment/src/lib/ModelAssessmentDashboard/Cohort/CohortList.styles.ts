@@ -14,7 +14,7 @@ export interface ICohortListStyles {
 export const cohortListStyles = (): IProcessedStyleSet<ICohortListStyles> => {
   return mergeStyleSets<ICohortListStyles>({
     link: {
-      fontSize: "12px"
+      fontSize: "14px"
     }
   });
 };
