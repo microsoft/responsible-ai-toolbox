@@ -28,7 +28,7 @@ export enum Locators {
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   CohortOnOffSelectionContainer = "#iterative-container",
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
-  CreateNewCohortButton = "button:contains('Create new cohort')",
+  CreateNewCohortButton = "button:contains('Save cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
