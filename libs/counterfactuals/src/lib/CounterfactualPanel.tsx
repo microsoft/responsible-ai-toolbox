@@ -74,7 +74,8 @@ export class CounterfactualPanel extends React.Component<
       <Panel
         id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
-        type={PanelType.largeFixed}
+        type={PanelType.custom}
+        customWidth={"100%"}
         onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
