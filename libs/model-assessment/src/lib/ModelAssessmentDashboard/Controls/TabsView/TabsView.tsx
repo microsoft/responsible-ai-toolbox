@@ -206,7 +206,10 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.CausalAnalysisTab &&
                 this.props.causalAnalysisData?.[0] && (
                   <>
-                    <div className={classNames.sectionHeader}>
+                    <div
+                      className={classNames.sectionHeader}
+                      id="causalAnalysisHeader"
+                    >
                       <Text variant={"xxLarge"} id="causalInsightsTab">
                         {
                           localization.ModelAssessment.ComponentNames
