@@ -392,6 +392,24 @@ class TestRAIInsightsValidations:
         classes = rai._classes
         assert np.all(classes[:-1] <= classes[1:])
 
+    def test_no_model_but_serializer_provided(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=None,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                serializer={})
+        assert 'No valid model is specified but model serializer provided.' \
+            in str(ucve.value)
+
 
 class TestCausalUserConfigValidations:
 
