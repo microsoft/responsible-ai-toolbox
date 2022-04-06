@@ -7,7 +7,8 @@ import {
   ModelAssessmentContext,
   OverallMetricChart,
   BinaryClassificationMetrics,
-  RegressionMetrics
+  RegressionMetrics,
+  classificationTask
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dropdown, IDropdownOption, Stack, Text } from "office-ui-fabric-react";
@@ -40,7 +41,7 @@ export class ModelOverview extends React.Component<
 
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === classificationTask) {
       defaultSelectedMetrics = [
         BinaryClassificationMetrics.Accuracy,
         BinaryClassificationMetrics.FalsePositiveRate,
@@ -68,7 +69,7 @@ export class ModelOverview extends React.Component<
     }
 
     const selectableMetrics: IDropdownOption[] = [];
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === classificationTask) {
       // TODO: add case for multiclass classification
       selectableMetrics.push(
         {
