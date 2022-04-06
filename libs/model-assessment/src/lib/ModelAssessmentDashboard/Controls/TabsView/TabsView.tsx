@@ -25,7 +25,7 @@ import * as React from "react";
 import { AddTabButton } from "../../AddTabButton";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import { FeatureImportancesTab } from "../FeatureImportances";
-import { ModelOverview } from "../ModelOverview";
+import { ModelOverview } from "../ModelOverview/ModelOverview";
 
 import { tabsViewStyles } from "./TabsView.styles";
 import { ITabsViewProps } from "./TabsViewProps";
