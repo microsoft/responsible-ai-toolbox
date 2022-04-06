@@ -73,7 +73,7 @@ export class ModelOverview extends React.Component<
 
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === classificationTask) {
       defaultSelectedMetrics = [
         BinaryClassificationMetrics.Accuracy,
         BinaryClassificationMetrics.FalsePositiveRate,

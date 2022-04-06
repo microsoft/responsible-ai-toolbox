@@ -28,38 +28,38 @@ export function generateCohortsStatsTable(
       let metricMin = Number.MAX_SAFE_INTEGER;
       let metricMax = Number.MIN_SAFE_INTEGER;
       cohorts.forEach((_errorCohort, cohortIndex) => {
-        const stat = labeledStatistics[cohortIndex].find(
-          (stat) => stat.key === metricOption.key
+        const labeledStat = labeledStatistics[cohortIndex].find(
+          (labeledStat) => labeledStat.key === metricOption.key
         );
-        if (stat) {
-          if (stat.stat > metricMax) {
-            metricMax = stat.stat;
+        if (labeledStat) {
+          if (labeledStat.stat > metricMax) {
+            metricMax = labeledStat.stat;
           }
-          if (stat.stat < metricMin) {
-            metricMin = stat.stat;
+          if (labeledStat.stat < metricMin) {
+            metricMin = labeledStat.stat;
           }
         }
       });
       // use min and max to normalize the colors
       const metricMinMaxDiff = metricMax - metricMin;
       cohorts.forEach((_errorCohort, cohortIndex) => {
-        const stat = labeledStatistics[cohortIndex].find(
-          (stat) => stat.key === metricOption.key
+        const labeledStat = labeledStatistics[cohortIndex].find(
+          (labeledStat) => labeledStat.key === metricOption.key
         );
-        if (stat && !Number.isNaN(stat.stat)) {
+        if (labeledStat && !Number.isNaN(labeledStat.stat)) {
           items.push({
+            colorValue: (labeledStat.stat - metricMin) / metricMinMaxDiff,
+            value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
-            y: cohortIndex,
-            value: Number(stat.stat.toFixed(3)),
-            colorValue: (stat.stat - metricMin) / metricMinMaxDiff
+            y: cohortIndex
           });
         } else {
-          // not a numeric value (NaN), so just put null
+          // not a numeric value (NaN), so just put null and use color gray
           items.push({
-            x: metricIndex + 1,
-            y: cohortIndex,
+            color: "#808080",
             value: Number.NaN,
-            color: "#808080" // gray
+            x: metricIndex + 1,
+            y: cohortIndex
           });
         }
       });
@@ -75,38 +75,26 @@ export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
 
   // check if there are suitable spots for a linewrap
   // if not just wrap after maxLineLength characters
+  // consider suitable wrapping spots based on whitespace
+  // starting at half the line length
+  const startingPosition = maxLineLength / 2;
   let slicingIndex = maxLineLength;
-  const closingParenthesis = ") ";
-  const openingParenthesis = " (";
   const whitespace = " ";
-  const searchString = new Set(
-    label.slice(slicingIndex - maxLineLength / 2, slicingIndex)
-  );
+  const searchString = new Set(label.slice(startingPosition, slicingIndex));
 
-  if (searchString.has(closingParenthesis)) {
-    // option 1: wrap after closing parenthesis
-    slicingIndex =
-      label.indexOf(closingParenthesis, slicingIndex - maxLineLength / 2) + 2;
-  } else if (searchString.has(openingParenthesis)) {
-    // option 2: wrap before opening parenthesis
-    slicingIndex =
-      label.indexOf(openingParenthesis, slicingIndex - maxLineLength / 2) + 1;
-  } else if (wrapOnWhitespace && searchString.has(whitespace)) {
+  if (wrapOnWhitespace && searchString.has(whitespace)) {
     // option 3: wrap after maxLineLength characters
-    slicingIndex =
-      label.indexOf(whitespace, slicingIndex - maxLineLength / 2) + 1;
+    slicingIndex = label.indexOf(whitespace, startingPosition) + 1;
   }
   label =
     label.slice(0, slicingIndex) +
     lineWrapHtmlTag +
     label.slice(slicingIndex, label.length);
 
-  if (label.length > maxLineLength * maxLines + lineWrapHtmlTag.length) {
-    label =
-      label.slice(
-        0,
-        maxLineLength * maxLines - ellipsis.length + lineWrapHtmlTag.length
-      ) + ellipsis;
+  const maxLabelLength = maxLineLength * maxLines + lineWrapHtmlTag.length;
+  if (label.length > maxLabelLength) {
+    // cut off label and add ellipsis at the end
+    label = label.slice(0, maxLabelLength - ellipsis.length) + ellipsis;
   }
   return label;
 }
