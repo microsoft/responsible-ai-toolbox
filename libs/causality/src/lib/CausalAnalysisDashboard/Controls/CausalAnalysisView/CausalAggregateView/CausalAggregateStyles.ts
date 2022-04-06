@@ -26,8 +26,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         margin: "-5px 0 0 -15px"
       },
       container: {
-        height: "500px",
-        overflowY: "scroll"
+        height: "100%"
       },
       description: {
         display: "flex",
