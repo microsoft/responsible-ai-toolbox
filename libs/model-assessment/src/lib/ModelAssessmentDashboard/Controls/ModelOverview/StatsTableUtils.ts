@@ -67,26 +67,46 @@ export function generateCohortsStatsTable(
   return items;
 }
 
-export function wrapYAxisLabels(obj: any, wrapOnWhitespace: boolean = false) {
-  var label = obj.toString();
-  for (let index = 20; index < label.length; index += 20) {
-    // check if there are suitable spots for a linewrap
-    // if not just wrap after 20 characters
-    const closing_parenthesis = ") ";
-    const opening_parenthesis = " (";
-    const whitespace = " ";
-    const searchString = label.slice(index - 10, index);
-    if (searchString.includes(closing_parenthesis)) {
-      index = label.indexOf(closing_parenthesis, index - 10) + 2;
-    } else if (searchString.includes(opening_parenthesis)) {
-      index = label.indexOf(opening_parenthesis, index - 10) + 1;
-    } else if (wrapOnWhitespace && searchString.includes(whitespace)) {
-      index = label.indexOf(whitespace, index - 10) + 1;
-    }
-    label = label.slice(0, index) + "<br />" + label.slice(index, label.length);
+export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
+  const maxLineLength = 40;
+  const maxLines = 2;
+  const lineWrapHtmlTag = "<br />";
+  const ellipsis = "...";
+
+  // check if there are suitable spots for a linewrap
+  // if not just wrap after maxLineLength characters
+  let slicingIndex = maxLineLength;
+  const closingParenthesis = ") ";
+  const openingParenthesis = " (";
+  const whitespace = " ";
+  const searchString = new Set(
+    label.slice(slicingIndex - maxLineLength / 2, slicingIndex)
+  );
+
+  if (searchString.has(closingParenthesis)) {
+    // option 1: wrap after closing parenthesis
+    slicingIndex =
+      label.indexOf(closingParenthesis, slicingIndex - maxLineLength / 2) + 2;
+  } else if (searchString.has(openingParenthesis)) {
+    // option 2: wrap before opening parenthesis
+    slicingIndex =
+      label.indexOf(openingParenthesis, slicingIndex - maxLineLength / 2) + 1;
+  } else if (wrapOnWhitespace && searchString.has(whitespace)) {
+    // option 3: wrap after maxLineLength characters
+    slicingIndex =
+      label.indexOf(whitespace, slicingIndex - maxLineLength / 2) + 1;
   }
-  if (label.length > 40) {
-    label = label.slice(0, 37) + "...";
+  label =
+    label.slice(0, slicingIndex) +
+    lineWrapHtmlTag +
+    label.slice(slicingIndex, label.length);
+
+  if (label.length > maxLineLength * maxLines + lineWrapHtmlTag.length) {
+    label =
+      label.slice(
+        0,
+        maxLineLength * maxLines - ellipsis.length + lineWrapHtmlTag.length
+      ) + ellipsis;
   }
   return label;
 }

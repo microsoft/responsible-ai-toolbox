@@ -27,7 +27,7 @@ jobs:
           echo "Only Test or Prod can be used."
           exit 1
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -35,7 +35,7 @@ jobs:
           python-version: 3.7
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 
@@ -234,7 +234,7 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 

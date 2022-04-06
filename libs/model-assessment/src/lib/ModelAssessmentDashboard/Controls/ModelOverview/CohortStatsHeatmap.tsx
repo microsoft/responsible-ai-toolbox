@@ -30,10 +30,6 @@ export class CohortStatsHeatmap extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: ICohortStatsHeatmapProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
@@ -57,7 +53,7 @@ export class CohortStatsHeatmap extends React.Component<
       this.context.modelMetadata.modelType
     );
 
-    let items = generateCohortsStatsTable(
+    const items = generateCohortsStatsTable(
       this.props.cohorts,
       this.props.selectableMetrics,
       cohortLabeledStatistics,
@@ -68,14 +64,62 @@ export class CohortStatsHeatmap extends React.Component<
       <HeatmapHighChart
         configOverride={{
           chart: {
-            type: "heatmap",
-            spacingLeft: 50,
-            height: this.props.cohorts.length * 40 + 120
+            height: this.props.cohorts.length * 40 + 120,
+            type: "heatmap"
           },
+          colorAxis: {
+            max: 1,
+            maxColor: "#1634F6",
+            min: 0,
+            minColor: "#FFFFFF"
+          },
+          legend: {
+            enabled: false
+          },
+          series: [
+            {
+              borderWidth: 1,
+              colorKey: "colorValue",
+              data: items,
+              dataLabels: {
+                enabled: true
+              },
+              name: "Metrics",
+              type: "heatmap"
+            }
+          ],
           title: {
+            align: "left",
             text: localization.ModelAssessment.ModelOverview
-              .dataCohortsHeatmapHeader,
-            align: "left"
+              .dataCohortsHeatmapHeader
+          },
+          tooltip: {
+            formatter() {
+              // to avoid semantic error during build cast point to any
+              if (
+                this.point.y === undefined ||
+                (this.point as any).value === undefined ||
+                (this.point as any).value === null
+              ) {
+                return undefined;
+              }
+              const value = (this.point as any).value;
+              if (this.point.x === 0) {
+                // Count column
+                return localization.formatString(
+                  localization.ModelAssessment.ModelOverview.tableCountTooltip,
+                  this.series.yAxis.categories[this.point.y],
+                  value
+                );
+              }
+              // Metric columns
+              return localization.formatString(
+                localization.ModelAssessment.ModelOverview.tableMetricTooltip,
+                this.series.xAxis.categories[this.point.x].toLowerCase(),
+                this.series.yAxis.categories[this.point.y],
+                value
+              );
+            }
           },
           xAxis: {
             categories: columns,
@@ -87,59 +131,11 @@ export class CohortStatsHeatmap extends React.Component<
             ),
             labels: {
               align: "left",
-              reserveSpace: true,
-              // format labels to cap the line length at 20 characters
-              formatter: function () {
-                return wrapYAxisLabels(this.value, true);
-              }
-            }
-          },
-          series: [
-            {
-              name: "Metrics",
-              colorKey: "colorValue",
-              data: items,
-              type: "heatmap",
-              dataLabels: {
-                enabled: true
+              // format labels to cap the line length
+              formatter() {
+                return wrapYAxisLabels(this.value.toString(), true);
               },
-              borderWidth: 1
-            }
-          ],
-          colorAxis: {
-            min: 0,
-            max: 1,
-            minColor: "#FFFFFF",
-            maxColor: "#1634F6"
-          },
-          legend: {
-            enabled: false
-          },
-          tooltip: {
-            formatter: function () {
-              if (
-                this.point.y === undefined ||
-                this.point.value === undefined ||
-                this.point.value === null
-              ) {
-                return undefined;
-              }
-              if (this.point.x === 0) {
-                // Count column
-                return localization.formatString(
-                  localization.ModelAssessment.ModelOverview.tableCountTooltip,
-                  this.series["yAxis"].categories[this.point.y],
-                  this.point.value
-                );
-              } else {
-                // Metric columns
-                return localization.formatString(
-                  localization.ModelAssessment.ModelOverview.tableMetricTooltip,
-                  this.series["xAxis"].categories[this.point.x].toLowerCase(),
-                  this.series["yAxis"].categories[this.point.y],
-                  this.point.value
-                );
-              }
+              reserveSpace: true
             }
           }
         }}
