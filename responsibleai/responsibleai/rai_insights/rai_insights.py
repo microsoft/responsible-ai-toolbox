@@ -21,20 +21,14 @@ from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
+from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 from responsibleai.utils import _is_classifier
 
-_DATA = 'data'
 _PREDICTIONS = 'predictions'
-_DTYPES = 'dtypes'
 _TRAIN = 'train'
-_TEST = 'test'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
-_MODEL = Metadata.MODEL
-_MODEL_PKL = _MODEL + '.pkl'
-_SERIALIZER = 'serializer'
 _CLASSES = 'classes'
-_MANAGERS = 'managers'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
@@ -43,15 +37,15 @@ _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
 
 
-class RAIInsights(object):
+class RAIInsights(RAIBaseInsights):
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
     """
 
-    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
-                 target_column: str, task_type: str,
+    def __init__(self, model: Optional[Any], train: pd.DataFrame,
+                 test: pd.DataFrame, target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
@@ -92,38 +86,43 @@ class RAIInsights(object):
             classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
-        self.model = model
-        self.train = train
-        self.test = test
-        self.target_column = target_column
-        self.task_type = task_type
-        self.categorical_features = categorical_features
-        self._serializer = serializer
         self._classes = RAIInsights._get_classes(
-            task_type=self.task_type,
-            train=self.train,
-            target_column=self.target_column,
+            task_type=task_type,
+            train=train,
+            target_column=target_column,
             classes=classes
         )
+        self.categorical_features = categorical_features
 
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type,
+            serializer)
+
+    def _initialize_managers(self):
+        """Initializes the managers.
+
+        Initialized the causal, counterfactual, error analysis
+        and explainer managers.
+        """
         self._causal_manager = CausalManager(
-            train, test, target_column, task_type, categorical_features)
+            self.train, self.test, self.target_column,
+            self.task_type, self.categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type,
-            categorical_features=categorical_features)
+            model=self.model, train=self.train, test=self.test,
+            target_column=self.target_column, task_type=self.task_type,
+            categorical_features=self.categorical_features)
 
         self._error_analysis_manager = ErrorAnalysisManager(
-            model, test, target_column,
+            self.model, self.test, self.target_column,
             self._classes,
-            categorical_features)
+            self.categorical_features)
 
         self._explainer_manager = ExplainerManager(
-            model, train, test,
-            target_column,
+            self.model, self.train, self.test,
+            self.target_column,
             self._classes,
-            categorical_features=categorical_features)
+            categorical_features=self.categorical_features)
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
@@ -383,32 +382,6 @@ class RAIInsights(object):
         """
         return self._explainer_manager
 
-    def compute(self):
-        """Calls compute on each of the managers."""
-        for manager in self._managers:
-            manager.compute()
-
-    def list(self):
-        """List information about each of the managers.
-        :return: Information about each of the managers.
-        :rtype: dict
-        """
-        configs = {}
-        for manager in self._managers:
-            configs[manager.name] = manager.list()
-        return configs
-
-    def get(self):
-        """List information about each of the managers.
-
-        :return: Information about each of the managers.
-        :rtype: dict
-        """
-        configs = {}
-        for manager in self._managers:
-            configs[manager.name] = manager.get()
-        return configs
-
     def get_data(self):
         """Get all data as RAIInsightsData object
 
@@ -511,16 +484,6 @@ class RAIInsights(object):
 
         return dashboard_dataset
 
-    def _write_to_file(self, file_path, content):
-        """Save the string content to the given file path.
-        :param file_path: The file path to save the content to.
-        :type file_path: str
-        :param content: The string content to save.
-        :type content: str
-        """
-        with open(file_path, 'w') as file:
-            file.write(content)
-
     def _save_predictions(self, path):
         """Save the predict() and predict_proba() output.
 
@@ -548,29 +511,6 @@ class RAIInsights(object):
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(predict_proba_output.tolist()))
 
-    def _save_data(self, path):
-        """Save the copy of raw data (train and test sets) and
-           their related metadata.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        data_directory = Path(path) / _DATA
-        data_directory.mkdir(parents=True, exist_ok=True)
-        dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory /
-                            (_TRAIN + _DTYPES + _JSON_EXTENSION),
-                            json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            self.train.to_json(orient='split'))
-
-        dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory /
-                            (_TEST + _DTYPES + _JSON_EXTENSION),
-                            json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
-                            self.test.to_json(orient='split'))
-
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
            task type and the classes (if any).
@@ -588,76 +528,6 @@ class RAIInsights(object):
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
-
-    def _save_model(self, path):
-        """Save the model and the serializer (if any).
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        top_dir = Path(path)
-        if self._serializer is not None:
-            # save the model
-            self._serializer.save(self.model, top_dir)
-            # save the serializer
-            with open(top_dir / _SERIALIZER, 'wb') as file:
-                pickle.dump(self._serializer, file)
-        else:
-            if self.model is not None:
-                has_setstate = hasattr(self.model, '__setstate__')
-                has_getstate = hasattr(self.model, '__getstate__')
-                if not (has_setstate and has_getstate):
-                    raise ValueError(
-                        "Model must be picklable or a custom serializer must"
-                        " be specified")
-            with open(top_dir / _MODEL_PKL, 'wb') as file:
-                pickle.dump(self.model, file)
-
-    def _save_managers(self, path):
-        """Save the state of individual managers.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        top_dir = Path(path)
-        # save each of the individual managers
-        for manager in self._managers:
-            manager._save(top_dir / manager.name)
-
-    def save(self, path):
-        """Save the RAIInsights to the given path.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        self._save_managers(path)
-        self._save_data(path)
-        self._save_metadata(path)
-        self._save_model(path)
-        self._save_predictions(path)
-
-    @staticmethod
-    def _load_data(inst, path):
-        """Load the raw data (train and test sets).
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to data location.
-        :type path: str
-        """
-        data_directory = Path(path) / _DATA
-        with open(data_directory /
-                  (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
-            types = json.load(file)
-        with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TRAIN] = train
-        with open(data_directory /
-                  (_TEST + _DTYPES + _JSON_EXTENSION), 'r') as file:
-            types = json.load(file)
-        with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
-            test = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TEST] = test
 
     @staticmethod
     def _load_metadata(inst, path):
@@ -689,61 +559,6 @@ class RAIInsights(object):
         )
 
     @staticmethod
-    def _load_model(inst, path):
-        """Load the model.
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to model location.
-        :type path: str
-        """
-        top_dir = Path(path)
-        serializer_path = top_dir / _SERIALIZER
-        if serializer_path.exists():
-            with open(serializer_path, 'rb') as file:
-                serializer = pickle.load(file)
-            inst.__dict__['_' + _SERIALIZER] = serializer
-            inst.__dict__[_MODEL] = serializer.load(top_dir)
-        else:
-            inst.__dict__['_' + _SERIALIZER] = None
-            try:
-                with open(top_dir / _MODEL_PKL, 'rb') as file:
-                    inst.__dict__[_MODEL] = pickle.load(file)
-            except Exception:
-                warnings.warn(
-                    'ERROR-LOADING-USER-MODEL: '
-                    'There was an error loading the user model. '
-                    'Some of RAI dashboard features may not work.')
-                inst.__dict__[_MODEL] = None
-
-    @staticmethod
-    def _load_managers(inst, path):
-        """Load the model.
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to manager location.
-        :type path: str
-        """
-        top_dir = Path(path)
-        # load each of the individual managers
-        manager_map = {
-            ManagerNames.CAUSAL: CausalManager,
-            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
-            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
-            ManagerNames.EXPLAINER: ExplainerManager,
-        }
-        managers = []
-        for manager_name, manager_class in manager_map.items():
-            full_name = f'_{manager_name}_manager'
-            manager_dir = top_dir / manager_name
-            manager = manager_class._load(manager_dir, inst)
-            inst.__dict__[full_name] = manager
-            managers.append(manager)
-
-        inst.__dict__['_' + _MANAGERS] = managers
-
-    @staticmethod
     def load(path):
         """Load the RAIInsights from the given path.
 
@@ -756,10 +571,15 @@ class RAIInsights(object):
         # function, similar to pickle
         inst = RAIInsights.__new__(RAIInsights)
 
+        manager_map = {
+            ManagerNames.CAUSAL: CausalManager,
+            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
+            ManagerNames.EXPLAINER: ExplainerManager,
+        }
+
         # load current state
-        RAIInsights._load_data(inst, path)
-        RAIInsights._load_metadata(inst, path)
-        RAIInsights._load_model(inst, path)
-        RAIInsights._load_managers(inst, path)
+        RAIBaseInsights._load(path, inst, manager_map,
+                              RAIInsights._load_metadata)
 
         return inst
