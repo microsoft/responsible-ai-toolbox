@@ -25,7 +25,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
         fillColor: FabricStyles.fabricColorPalette[0],
         lineWidth: 35
       },
-      name: "",
+      name: "outlier",
       type: "scatter"
     });
   });
