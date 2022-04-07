@@ -517,6 +517,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
+                    onClearCohortSelectionClick={(): void =>
+                      this.clearCohortSelection()
+                    }
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     disabledView={false}
                     features={this.props.features}
@@ -723,6 +726,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       selectedCohort
     });
   }
+
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
+    });
+    this.context.selectedErrorCohort = this.state.baseCohort;
+  };
 
   private handleGlobalTabClick = (item: PivotItem | undefined): void => {
     if (item?.props.itemKey) {
