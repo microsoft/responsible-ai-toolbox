@@ -10,13 +10,13 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-import { ICounterfactualsViewState } from "./CounterfactualsView";
+import { ICounterfactualsTabState } from "./CounterfactualsTab";
 
 export function buildCounterfactualState(
   dataset: IDataset,
   jointDataset: JointDataset,
   modelType: ModelTypes
-): ICounterfactualsViewState {
+): ICounterfactualsTabState {
   const cohorts = [
     new Cohort(localization.Interpret.Cohort.defaultLabel, jointDataset, [])
   ];
