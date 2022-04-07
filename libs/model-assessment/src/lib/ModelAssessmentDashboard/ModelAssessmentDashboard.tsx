@@ -108,6 +108,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               baseCohort={this.state.baseCohort}
               selectedCohort={this.state.selectedCohort}
               dataset={this.props.dataset}
+              onClearCohortSelectionClick={this.clearCohortSelection}
               requestPredictions={this.props.requestPredictions}
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
@@ -174,6 +175,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
   private setSelectedCohort = (cohort: ErrorCohort): void => {
     this.setState({
       selectedCohort: cohort
+    });
+  };
+
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
     });
   };
 

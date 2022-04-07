@@ -36,6 +36,7 @@ export interface IErrorAnalysisViewProps {
   matrix?: IErrorAnalysisMatrix;
   matrixFeatures?: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
+  onClearCohortSelectionClick: () => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
@@ -65,6 +66,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             tree={this.props.tree}
             features={this.props.features}
             selectedFeatures={this.props.selectedFeatures}
+            onClearCohortSelectionClick={this.props.onClearCohortSelectionClick}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}

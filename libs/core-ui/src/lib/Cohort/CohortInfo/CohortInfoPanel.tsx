@@ -12,7 +12,6 @@ import { CohortInfo } from "./CohortInfo";
 export interface ICohortInfoPanelProps {
   isOpen: boolean;
   currentCohort: ErrorCohort;
-  // hostId: string
   onDismiss: () => void;
   onSaveCohortClick: () => void;
 }
@@ -35,9 +34,9 @@ export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> 
         onDismiss={this.props.onDismiss}
       >
         <CohortInfo
-          onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
           disabledView={false}
+          onSaveCohortClick={this.props.onSaveCohortClick}
         />
       </Panel>
     );
