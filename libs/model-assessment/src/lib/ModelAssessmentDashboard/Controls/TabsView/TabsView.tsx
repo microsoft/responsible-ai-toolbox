@@ -147,6 +147,9 @@ export class TabsView extends React.PureComponent<
                         this.setState({ selectedFeatures: features })
                       }
                       importances={this.state.importances}
+                      onClearCohortSelectionClick={(): void => {
+                        this.props.onClearCohortSelectionClick();
+                      }}
                       onSaveCohortClick={(): void => {
                         this.props.setSaveCohortVisible();
                       }}
