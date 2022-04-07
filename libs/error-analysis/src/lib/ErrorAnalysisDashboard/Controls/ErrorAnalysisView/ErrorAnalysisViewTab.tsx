@@ -38,6 +38,7 @@ export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
+  onClearCohortSelectionClick: () => void;
   onSaveCohortClick: () => void;
   selectedKey: ErrorAnalysisOptions;
 }
@@ -111,6 +112,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             matrix={this.props.matrix}
             matrixFeatures={this.props.matrixFeatures}
             errorAnalysisOption={this.props.errorAnalysisOption}
+            onClearCohortSelectionClick={this.props.onClearCohortSelectionClick}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
@@ -132,8 +134,8 @@ export class ErrorAnalysisViewTab extends React.Component<
         <Stack className={classNames.cohortInfo} tokens={{ padding: "l1" }}>
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
-            onSaveCohortClick={this.props.onSaveCohortClick}
             disabledView={this.props.disabledView}
+            onSaveCohortClick={this.props.onSaveCohortClick}
           />
         </Stack>
       </Stack>

@@ -123,6 +123,14 @@ export class TreeViewRenderer extends React.PureComponent<
           this.context.errorAnalysisData.metric !== this.state.metric))
     ) {
       this.fetchTreeNodes();
+    } else if (
+      this.props.selectedCohort.isTemporary === false &&
+      prevProps.selectedCohort.isTemporary === true &&
+      this.state.root !== undefined
+    ) {
+      // This is for the clear selection button
+      // We don't necessarily want to re-fetch all tree nodes in this case
+      this.selectNode(this.state.root, false);
     }
   }
 
@@ -295,6 +303,9 @@ export class TreeViewRenderer extends React.PureComponent<
               isErrorMetric={this.state.isErrorMetric}
               isEnabled={this.props.getTreeNodes !== undefined}
               setMetric={this.setMetric}
+              onClearCohortSelectionClick={
+                this.props.onClearCohortSelectionClick
+              }
               disabledView={this.props.disabledView}
             />
             <svg
@@ -613,6 +624,13 @@ export class TreeViewRenderer extends React.PureComponent<
     if (this.props.disabledView) {
       return;
     }
+    this.selectNode(node, true);
+  };
+
+  private selectNode(
+    node: HierarchyPointNode<ITreeNode>,
+    createTemporaryCohort: boolean
+  ): void {
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -625,13 +643,11 @@ export class TreeViewRenderer extends React.PureComponent<
       // Get filters and update
       const filters = this.getFilters(node);
       const cohortStats = this.calculateCohortStats(node.data);
-      this.props.updateSelectedCohort(
-        filters,
-        [],
-        CohortSource.TreeMap,
-        0,
-        cohortStats
-      );
+
+      const source = createTemporaryCohort
+        ? CohortSource.TreeMap
+        : CohortSource.None;
+      this.props.updateSelectedCohort(filters, [], source, 0, cohortStats);
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
@@ -654,7 +670,7 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
-  };
+  }
 
   private getNodeDetail(node: HierarchyPointNode<ITreeNode>): INodeDetail {
     const nodeDetail = {
