@@ -10,7 +10,6 @@ import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
   IIconProps,
-  Text,
   Pivot,
   PivotItem,
   Stack,
@@ -72,9 +71,6 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ padding: "l1" }}
           className={classNames.errorAnalysis}
         >
-          <Text variant={"xxLarge"} id="errorAnalysisHeader">
-            {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
-          </Text>
           <Stack horizontal>
             <Stack.Item>
               <Pivot
