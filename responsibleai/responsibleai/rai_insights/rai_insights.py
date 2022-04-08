@@ -191,6 +191,10 @@ class RAIInsights(RAIBaseInsights):
                 'INVALID-MODEL-WARNING: No valid model is supplied. '
                 'The explanations, error analysis and counterfactuals '
                 'may not work')
+            if serializer is not None:
+                raise UserConfigValidationException(
+                    'No valid model is specified but model '
+                    'serializer provided.')
 
         if serializer is not None:
             if not hasattr(serializer, 'save'):
