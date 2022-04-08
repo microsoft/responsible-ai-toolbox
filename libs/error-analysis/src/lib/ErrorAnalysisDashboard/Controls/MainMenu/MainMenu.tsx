@@ -173,7 +173,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
       iconProps: { iconName: "Save" },
       key: "saveCohort",
       onClick: (): any => this.props.onSaveCohortClick(),
-      text: localization.ErrorAnalysis.MainMenu.saveCohort
+      text: localization.ErrorAnalysis.MainMenu.newCohort
     });
     subMenuPropItems.push({
       iconProps: { iconName: "PageList" },

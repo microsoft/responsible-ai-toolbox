@@ -103,7 +103,7 @@ export class MainMenu extends React.PureComponent<
         },
         key: "addCohort",
         onClick: this.toggleCreateCohortVisibility,
-        text: localization.ModelAssessment.CohortInformation.SaveCohort
+        text: localization.ModelAssessment.CohortInformation.NewCohort
       }
     ];
     return (
