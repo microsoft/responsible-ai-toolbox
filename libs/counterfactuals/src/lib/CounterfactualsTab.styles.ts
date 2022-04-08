@@ -17,7 +17,8 @@ export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactuals
     const theme = getTheme();
     return mergeStyleSets<ICounterfactualsTabStyles>({
       container: {
-        color: theme.semanticColors.bodyText
+        color: theme.semanticColors.bodyText,
+        padding: "0 40px 10px 40px"
       }
     });
   };
