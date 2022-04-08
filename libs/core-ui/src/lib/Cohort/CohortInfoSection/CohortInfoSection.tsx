@@ -52,7 +52,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
             onClick={this.props.toggleShiftCohortVisibility}
           />
           <DefaultButton
-            text={localization.ModelAssessment.CohortInformation.SaveCohort}
+            text={localization.ModelAssessment.CohortInformation.NewCohort}
             onClick={this.props.toggleCreateCohortVisibility}
           />
         </Stack>
