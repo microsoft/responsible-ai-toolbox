@@ -4,8 +4,6 @@
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
 export function calculateBoxData(data: number[]): IHighchartBoxData {
-  const min = Math.min(...data);
-  const max = Math.max(...data);
   const q1 = getPercentile(data, 25);
   const median = getPercentile(data, 50);
   const q3 = getPercentile(data, 75);
@@ -21,10 +19,10 @@ export function calculateBoxData(data: number[]): IHighchartBoxData {
   }
   return {
     lowerPercentile: q1,
-    max,
+    max: upperFence,
     mean: mean(data),
     median,
-    min,
+    min: lowerFence,
     outliers,
     upperPercentile: q3
   };
