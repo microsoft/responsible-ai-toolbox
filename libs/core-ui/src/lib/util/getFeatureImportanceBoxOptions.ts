@@ -47,12 +47,20 @@ export function getFeatureImportanceBoxOptions(
       y
     });
   });
-  const boxGroupData = boxTempData.map((data: any) => {
-    return {
+  const boxGroupData: any = [];
+  boxTempData.forEach((data: any) => {
+    const temp = getBoxData(data.x, data.y);
+    boxGroupData.push({
       color: data.color,
-      data: getBoxData(data.x, data.y),
+      data: temp.box,
       name: data.name
-    };
+    });
+    boxGroupData.push({
+      color: data.color,
+      data: temp.outlier,
+      name: data.name,
+      type: "scatter"
+    });
   });
   return {
     chart: {
