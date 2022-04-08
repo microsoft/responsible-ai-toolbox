@@ -10,7 +10,6 @@ import { localization } from "@responsible-ai/localization";
 import {
   Dropdown,
   Stack,
-  DefaultButton,
   IDropdownOption,
   Panel
 } from "office-ui-fabric-react";
@@ -28,6 +27,8 @@ interface IChartConfigurationFlyoutProps {
 }
 
 class IChartConfigurationFlyoutState {}
+
+const selectAllOptionKey = "selectAll";
 
 export class ChartConfigurationFlyout extends React.Component<
   IChartConfigurationFlyoutProps,
@@ -61,14 +62,18 @@ export class ChartConfigurationFlyout extends React.Component<
   }
 
   public render(): React.ReactNode {
+    const selectAllOption = {
+      key: selectAllOptionKey,
+      text: localization.ModelAssessment.ModelOverview.selectAllCohortsOption
+    };
     const datasetCohortOptions = this.props.datasetCohorts.map(
       (cohort, index) => {
-        return { key: index, text: cohort.cohort.name };
+        return { key: index.toString(), text: cohort.cohort.name };
       }
     );
     const featureBasedCohortOptions = this.props.featureBasedCohorts.map(
       (cohort, index) => {
-        return { key: index, text: cohort.cohort.name };
+        return { key: index.toString(), text: cohort.cohort.name };
       }
     );
 
@@ -77,6 +82,26 @@ export class ChartConfigurationFlyout extends React.Component<
         this.props.selectedFeatureBasedCohorts.length ===
       0;
 
+    let datasetCohortDropdownSelectedKeys: string[] =
+      this.props.selectedDatasetCohorts.map((n) => n.toString());
+    if (
+      this.props.selectedDatasetCohorts.length > 0 &&
+      this.props.selectedDatasetCohorts.length ==
+        this.props.datasetCohorts.length
+    ) {
+      datasetCohortDropdownSelectedKeys.push(selectAllOptionKey);
+    }
+
+    let featureBasedCohortDropdownSelectedKeys: string[] =
+      this.props.selectedFeatureBasedCohorts.map((n) => n.toString());
+    if (
+      this.props.featureBasedCohorts.length > 0 &&
+      this.props.selectedFeatureBasedCohorts.length ==
+        this.props.featureBasedCohorts.length
+    ) {
+      featureBasedCohortDropdownSelectedKeys.push(selectAllOptionKey);
+    }
+
     return (
       <Panel
         isOpen={this.props.isOpen}
@@ -84,17 +109,34 @@ export class ChartConfigurationFlyout extends React.Component<
         onDismiss={this.props.onDismissFlyout}
       >
         <Stack tokens={{ childrenGap: "10px" }}>
-          <Stack tokens={{ childrenGap: "10px" }}>
+          <Dropdown
+            label={
+              localization.ModelAssessment.ModelOverview
+                .dataCohortsChartSelectionHeader
+            }
+            multiSelect
+            options={[selectAllOption, ...datasetCohortOptions]}
+            styles={{ dropdown: { width: 250 } }}
+            onChange={this.onChartDatasetCohortOptionSelectionChange}
+            selectedKeys={datasetCohortDropdownSelectedKeys}
+            errorMessage={
+              noCohortSelected
+                ? localization.ModelAssessment.ModelOverview
+                    .chartCohortSelectionPlaceholder
+                : undefined
+            }
+          />
+          {this.props.featureBasedCohorts.length > 0 && (
             <Dropdown
               label={
                 localization.ModelAssessment.ModelOverview
-                  .dataCohortsChartSelectionHeader
+                  .featureBasedCohortsChartSelectionHeader
               }
               multiSelect
-              options={datasetCohortOptions}
-              styles={{ dropdown: { width: 250 } }}
-              onChange={this.onChartDatasetCohortOptionSelectionChange}
-              selectedKeys={this.props.selectedDatasetCohorts}
+              options={[selectAllOption, ...featureBasedCohortOptions]}
+              styles={{ dropdown: { width: 200 } }}
+              onChange={this.onChartFeatureBasedCohortOptionSelectionChange}
+              selectedKeys={featureBasedCohortDropdownSelectedKeys}
               errorMessage={
                 noCohortSelected
                   ? localization.ModelAssessment.ModelOverview
@@ -102,75 +144,10 @@ export class ChartConfigurationFlyout extends React.Component<
                   : undefined
               }
             />
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
-              <DefaultButton
-                text={
-                  localization.ModelAssessment.ModelOverview.selectAllButton
-                }
-                onClick={() =>
-                  this.props.updateDatasetCohortSelection(
-                    this.getAllDatasetCohorts()
-                  )
-                }
-              />
-              <DefaultButton
-                text={
-                  localization.ModelAssessment.ModelOverview.unselectAllButton
-                }
-                onClick={() => this.props.updateDatasetCohortSelection([])}
-              />
-            </Stack>
-          </Stack>
-          {this.props.featureBasedCohorts.length > 0 && (
-            <Stack tokens={{ childrenGap: "10px" }}>
-              <Dropdown
-                label={
-                  localization.ModelAssessment.ModelOverview
-                    .featureBasedCohortsChartSelectionHeader
-                }
-                multiSelect
-                options={featureBasedCohortOptions}
-                styles={{ dropdown: { width: 200 } }}
-                onChange={this.onChartFeatureBasedCohortOptionSelectionChange}
-                selectedKeys={this.props.selectedFeatureBasedCohorts}
-                errorMessage={
-                  noCohortSelected
-                    ? localization.ModelAssessment.ModelOverview
-                        .chartCohortSelectionPlaceholder
-                    : undefined
-                }
-              />
-              <Stack horizontal tokens={{ childrenGap: "10px" }}>
-                <DefaultButton
-                  text={
-                    localization.ModelAssessment.ModelOverview.selectAllButton
-                  }
-                  onClick={() =>
-                    this.props.updateFeatureBasedCohortSelection(
-                      this.getAllFeatureBasedCohorts()
-                    )
-                  }
-                />
-                <DefaultButton
-                  text={
-                    localization.ModelAssessment.ModelOverview.unselectAllButton
-                  }
-                  onClick={() =>
-                    this.props.updateFeatureBasedCohortSelection([])
-                  }
-                />
-              </Stack>
-            </Stack>
           )}
         </Stack>
       </Panel>
     );
-  }
-
-  private getAllDatasetCohorts() {
-    return this.props.datasetCohorts.map((_cohort, index) => {
-      return index;
-    });
   }
 
   private getAllFeatureBasedCohorts() {
@@ -186,6 +163,7 @@ export class ChartConfigurationFlyout extends React.Component<
       this.props.updateDatasetCohortSelection(
         this.makeChartCohortOptionSelectionChange(
           this.props.selectedDatasetCohorts,
+          this.props.datasetCohorts.map((_cohort, index) => index),
           item
         )
       );
@@ -200,6 +178,7 @@ export class ChartConfigurationFlyout extends React.Component<
       this.props.updateFeatureBasedCohortSelection(
         this.makeChartCohortOptionSelectionChange(
           this.props.selectedFeatureBasedCohorts,
+          this.props.featureBasedCohorts.map((_cohort, index) => index),
           item
         )
       );
@@ -208,16 +187,27 @@ export class ChartConfigurationFlyout extends React.Component<
 
   private makeChartCohortOptionSelectionChange = (
     currentlySelected: number[],
+    allItems: number[],
     item: IDropdownOption
   ): number[] => {
-    const key = Number(item.key);
+    if (item.key === selectAllOptionKey) {
+      // if all items were selected before then unselect all now
+      // if at least some items were not selected before then select all now
+      if (currentlySelected.length !== allItems.length) {
+        return allItems;
+      } else {
+        return [];
+      }
+    } else {
+      const key = Number(item.key);
 
-    if (item.selected && !currentlySelected.includes(key)) {
-      // update with newly selected item
-      return currentlySelected.concat([key]);
-    } else if (!item.selected && currentlySelected.includes(key)) {
-      // update by removing the unselected item
-      return currentlySelected.filter((idx) => idx !== key);
+      if (item.selected && !currentlySelected.includes(key)) {
+        // update with newly selected item
+        return currentlySelected.concat([key]);
+      } else if (!item.selected && currentlySelected.includes(key)) {
+        // update by removing the unselected item
+        return currentlySelected.filter((idx) => idx !== key);
+      }
     }
 
     return currentlySelected;

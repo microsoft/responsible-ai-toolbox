@@ -1329,8 +1329,6 @@
       "falseNegativeRate":"False negative rate",
       "selectionRate": "Selection rate",
       "meanPrediction": "Mean prediction",
-      "manuallyCreatedCohorts": "Manually created cohorts",
-      "sensitiveFeatureCohorts": "Sensitive feature cohorts",
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Dataset cohorts",
@@ -1342,10 +1340,6 @@
       "probabilityForClassSelectionHeader": "Probability for class",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
-      "featureSelectionLimitWarningTitle": "Feature selection limit met",
-      "featureSelectionLimitWarningSubTitle": "Only two features can be selected at the same time. Please unselect one of the two selected features before selecting another one.",
-      "resetFeatureSelection": "Reset feature selection",
-      "cancelFeatureSelectionWarningDialog": "Cancel",
       "probabilityDistributionPivotItem": "Probability distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
@@ -1362,11 +1356,10 @@
         "boxPlotSeriesLabel": "Box Plot"
       },
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
-      "selectAllButton": "Select all",
-      "unselectAllButton": "Unselect all",
       "metricSelectionButton": "Choose metric",
       "cohortSelectionButton": "Choose cohorts",
-      "probabilityLabelSelectionButton": "Choose label"
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all"
     }
   }
 }

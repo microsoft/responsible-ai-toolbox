@@ -117,7 +117,7 @@ export class ProbabilityDistributionChart extends React.Component<
       .map((outlierProbs, cohortIndex) => {
         return outlierProbs.map((prob) => [cohortIndex, prob]);
       })
-      .reduce((list1, list2) => list1.concat(list2));
+      .reduce((list1, list2) => list1.concat(list2), []);
 
     const noCohortSelected =
       this.props.selectedDatasetCohorts.length +
@@ -127,18 +127,23 @@ export class ProbabilityDistributionChart extends React.Component<
     return (
       <>
         <Stack horizontal>
-          <Stack.Item className={classNames.verticalAxis}>
-            <DefaultButton
-              className={classNames.rotatedVerticalBox}
-              text={
-                localization.ModelAssessment.ModelOverview.cohortSelectionButton
-              }
-              onClick={this.props.onChooseCohorts}
-            />
-          </Stack.Item>
+          {!noCohortSelected && (
+            <Stack.Item className={classNames.verticalAxis}>
+              <DefaultButton
+                className={classNames.rotatedVerticalBox}
+                text={
+                  localization.ModelAssessment.ModelOverview
+                    .cohortSelectionButton
+                }
+                onClick={this.props.onChooseCohorts}
+              />
+            </Stack.Item>
+          )}
           <Stack.Item className={classNames.chart}>
             {noCohortSelected && (
+              <div className={classNames.placeholderText}>
               <Text>Select at least one cohort to view the box plot.</Text>
+              </div>
             )}
             {!noCohortSelected && (
               <Stack>
@@ -166,7 +171,8 @@ export class ProbabilityDistributionChart extends React.Component<
                     },
                     series: [
                       {
-                        name: localization.ModelAssessment.ModelOverview.boxPlot.boxPlotSeriesLabel,
+                        name: localization.ModelAssessment.ModelOverview.boxPlot
+                          .boxPlotSeriesLabel,
                         data: boxplotData,
                         type: "boxplot",
                         fillColor: "#c8cffc",

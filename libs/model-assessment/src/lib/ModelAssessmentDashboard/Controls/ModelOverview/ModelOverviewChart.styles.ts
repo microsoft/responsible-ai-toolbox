@@ -12,6 +12,7 @@ export interface IModelOverviewChartStyles {
   horizontalAxis: IStyle;
   verticalAxis: IStyle;
   chart: IStyle;
+  placeholderText: IStyle;
 }
 
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
@@ -36,6 +37,10 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
       },
       chart: {
         width: "100%"
+      },
+      placeholderText: {
+        marginTop: "15px",
+        marginBottom: "15px"
       }
     });
   };
