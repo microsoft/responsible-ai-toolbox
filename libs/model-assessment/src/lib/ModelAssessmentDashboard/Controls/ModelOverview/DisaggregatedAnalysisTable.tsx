@@ -50,6 +50,8 @@ export class DisaggregatedAnalysisTable extends React.Component<
         )}
         {this.props.selectedFeatures.length > 0 && (
           <CohortStatsHeatmap
+            title={localization.ModelAssessment.ModelOverview
+              .disaggregatedAnalysisHeatmapHeader}
             cohorts={this.props.featureBasedCohorts}
             selectableMetrics={this.props.selectableMetrics}
             selectedMetrics={this.props.selectedMetrics}

@@ -9,21 +9,31 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { getTheme, IDropdownOption, Dropdown } from "office-ui-fabric-react";
+import {
+  getTheme,
+  IDropdownOption,
+  Dropdown,
+  Stack,
+  DefaultButton,
+  Panel
+} from "office-ui-fabric-react";
 import React from "react";
+import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IModelOverviewMetricChartProps {
+  onChooseCohorts: () => void;
   datasetCohorts: ErrorCohort[];
   featureBasedCohorts: ErrorCohort[];
   datasetCohortStats: ILabeledStatistic[][];
   featureBasedCohortStats: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
+  selectedDatasetCohorts: number[];
+  selectedFeatureBasedCohorts: number[];
 }
 
 interface IModelOverviewMetricChartState {
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
   selectedMetric: string;
+  metricSelectionFlyoutIsVisible: boolean;
 }
 
 export class ModelOverviewMetricChart extends React.Component<
@@ -37,16 +47,7 @@ export class ModelOverviewMetricChart extends React.Component<
   constructor(props: IModelOverviewMetricChartProps) {
     super(props);
     this.state = {
-      selectedDatasetCohorts: this.props.datasetCohorts.map(
-        (_cohort, index) => {
-          return index;
-        }
-      ),
-      selectedFeatureBasedCohorts: this.props.featureBasedCohorts.map(
-        (_cohort, index) => {
-          return index;
-        }
-      ),
+      metricSelectionFlyoutIsVisible: false,
       selectedMetric: this.props.selectableMetrics[0].key.toString()
     };
   }
@@ -54,24 +55,26 @@ export class ModelOverviewMetricChart extends React.Component<
   public render(): React.ReactNode {
     const theme = getTheme();
 
+    const classNames = modelOverviewChartStyles();
+
     const selectedDatasetCohorts = this.props.datasetCohorts.filter(
       (_cohort, index) => {
-        return this.state.selectedDatasetCohorts.includes(index);
+        return this.props.selectedDatasetCohorts.includes(index);
       }
     );
     const selectedFeatureBasedCohorts = this.props.featureBasedCohorts.filter(
       (_cohort, index) => {
-        return this.state.selectedFeatureBasedCohorts.includes(index);
+        return this.props.selectedFeatureBasedCohorts.includes(index);
       }
     );
     const selectedCohortNames = selectedDatasetCohorts
       .map((cohort) => cohort.cohort.name)
       .concat(selectedFeatureBasedCohorts.map((cohort) => cohort.cohort.name));
     const selectedCohortStats = this.props.datasetCohortStats
-      .filter((_, index) => this.state.selectedDatasetCohorts.includes(index))
+      .filter((_, index) => this.props.selectedDatasetCohorts.includes(index))
       .concat(
         this.props.featureBasedCohortStats.filter((_, index) =>
-          this.state.selectedFeatureBasedCohorts.includes(index)
+          this.props.selectedFeatureBasedCohorts.includes(index)
         )
       )
       .map((labeledStats) => {
@@ -83,45 +86,86 @@ export class ModelOverviewMetricChart extends React.Component<
 
     return (
       <>
-        <Dropdown
-          label={
-            localization.ModelAssessment.ModelOverview
-              .metricChartDropdownSelectionHeader
-          }
-          options={this.props.selectableMetrics}
-          styles={{ dropdown: { width: 400 } }}
-          onChange={this.onMetricSelectionChange}
-          selectedKey={this.state.selectedMetric}
-        />
-        <BasicHighChart
-          id={"ModelOverviewMetricChart"}
-          theme={theme}
-          configOverride={{
-            chart: {
-              type: "bar"
-            },
-            xAxis: {
-              categories: selectedCohortNames
-            },
-            plotOptions: {
-              bar: {
-                dataLabels: {
-                  enabled: true
-                }
+        <Stack horizontal grow>
+          <Stack.Item className={classNames.verticalAxis}>
+            <DefaultButton
+              className={classNames.rotatedVerticalBox}
+              text={
+                localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
-            },
-            series: [
-              {
-                name: this.props.selectableMetrics.find(
-                  (metricOption) =>
-                    metricOption.key === this.state.selectedMetric
-                )?.text,
-                data: selectedCohortStats,
-                type: "bar"
-              }
-            ]
+              onClick={this.props.onChooseCohorts}
+            />
+          </Stack.Item>
+          <Stack.Item className={classNames.chart}>
+            <Stack>
+              <BasicHighChart
+                id={"ModelOverviewMetricChart"}
+                theme={theme}
+                configOverride={{
+                  chart: {
+                    type: "bar"
+                  },
+                  xAxis: {
+                    categories: selectedCohortNames
+                  },
+                  yAxis: {
+                    title: this.props.selectableMetrics.find(
+                      (option) => option.key === this.state.selectedMetric
+                    )
+                  },
+                  plotOptions: {
+                    bar: {
+                      dataLabels: {
+                        enabled: true
+                      }
+                    }
+                  },
+                  series: [
+                    {
+                      name: this.props.selectableMetrics.find(
+                        (metricOption) =>
+                          metricOption.key === this.state.selectedMetric
+                      )?.text,
+                      data: selectedCohortStats,
+                      type: "bar"
+                    }
+                  ]
+                }}
+              />
+              <Stack.Item className={classNames.horizontalAxis}>
+                <DefaultButton
+                  text={
+                    localization.ModelAssessment.ModelOverview
+                      .metricSelectionButton
+                  }
+                  onClick={() =>
+                    this.setState({
+                      metricSelectionFlyoutIsVisible: true
+                    })
+                  }
+                />
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+        <Panel
+          isOpen={this.state.metricSelectionFlyoutIsVisible}
+          closeButtonAriaLabel="Close"
+          onDismiss={() => {
+            this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
-        />
+        >
+          <Dropdown
+            label={
+              localization.ModelAssessment.ModelOverview
+                .metricChartDropdownSelectionHeader
+            }
+            options={this.props.selectableMetrics}
+            styles={{ dropdown: { width: 250 } }}
+            onChange={this.onMetricSelectionChange}
+            selectedKey={this.state.selectedMetric}
+          />
+        </Panel>
       </>
     );
   }

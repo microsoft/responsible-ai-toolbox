@@ -11,23 +11,28 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { cloneDeep } from "lodash";
 import {
+  DefaultButton,
   Dropdown,
   getTheme,
   IDropdownOption,
+  Panel,
   Stack,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IProbabilityDistributionChartProps {
   datasetCohorts: ErrorCohort[];
   featureBasedCohorts: ErrorCohort[];
+  selectedDatasetCohorts: number[];
+  selectedFeatureBasedCohorts: number[];
+  onChooseCohorts: () => void;
 }
 
 interface IProbabilityDistributionChartState {
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
   probabilityOption?: IDropdownOption;
+  probabilityFlyoutIsVisible: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -40,25 +45,23 @@ export class ProbabilityDistributionChart extends React.Component<
 
   constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = {
-      selectedDatasetCohorts: this.getAllDatasetCohorts(),
-      selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
-    };
+    this.state = { probabilityFlyoutIsVisible: false };
   }
 
-  componentDidUpdate(
-    prevProps: IProbabilityDistributionChartProps,
-    _prevState: IProbabilityDistributionChartState
-  ) {
-    if (this.props.featureBasedCohorts !== prevProps.featureBasedCohorts) {
-      // feature-based cohorts changed, update state
-      this.setState({
-        selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
-      });
-    }
-  }
+  // componentDidUpdate(
+  //   prevProps: IProbabilityDistributionChartProps,
+  //   _prevState: IProbabilityDistributionChartState
+  // ) {
+  //   if (this.props.featureBasedCohorts !== prevProps.featureBasedCohorts) {
+  //     // feature-based cohorts changed, update state
+  //     this.setState({
+  //       selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
+  //     });
+  //   }
+  // }
 
   public render(): React.ReactNode {
+    const classNames = modelOverviewChartStyles();
     if (!this.context.jointDataset.hasPredictedProbabilities) {
       return <></>;
     }
@@ -66,12 +69,12 @@ export class ProbabilityDistributionChart extends React.Component<
 
     const selectedDatasetCohorts = this.props.datasetCohorts.filter(
       (_cohort, index) => {
-        return this.state.selectedDatasetCohorts.includes(index);
+        return this.props.selectedDatasetCohorts.includes(index);
       }
     );
     const selectedFeatureBasedCohorts = this.props.featureBasedCohorts.filter(
       (_cohort, index) => {
-        return this.state.selectedFeatureBasedCohorts.includes(index);
+        return this.props.selectedFeatureBasedCohorts.includes(index);
       }
     );
     const selectedCohorts = selectedDatasetCohorts.concat(
@@ -117,84 +120,117 @@ export class ProbabilityDistributionChart extends React.Component<
       .reduce((list1, list2) => list1.concat(list2));
 
     const noCohortSelected =
-      this.state.selectedDatasetCohorts.length +
-        this.state.selectedFeatureBasedCohorts.length ===
+      this.props.selectedDatasetCohorts.length +
+        this.props.selectedFeatureBasedCohorts.length ===
       0;
 
     return (
       <>
-        <Dropdown
-          label={
-            localization.ModelAssessment.ModelOverview
-              .probabilityForClassSelectionHeader
-          }
-          options={probabilityOptions}
-          styles={{ dropdown: { width: 400 } }}
-          onChange={this.onProbabilityOptionSelectionChange}
-          selectedKey={this.state.probabilityOption!.key}
-        />
         <Stack horizontal>
-          <Stack.Item styles={{ root: { width: "90%" } }}>
+          <Stack.Item className={classNames.verticalAxis}>
+            <DefaultButton
+              className={classNames.rotatedVerticalBox}
+              text={
+                localization.ModelAssessment.ModelOverview.cohortSelectionButton
+              }
+              onClick={this.props.onChooseCohorts}
+            />
+          </Stack.Item>
+          <Stack.Item className={classNames.chart}>
             {noCohortSelected && (
               <Text>Select at least one cohort to view the box plot.</Text>
             )}
             {!noCohortSelected && (
-              <BasicHighChart
-                id={"ProbabilityDistributionChart"}
-                theme={theme}
-                configOverride={{
-                  chart: {
-                    type: "boxplot",
-                    inverted: true,
-                    height: selectedCohorts.length * 40 + 120
-                  },
-                  xAxis: {
-                    categories: selectedCohortNames
-                  },
-                  yAxis: {
-                    title: { text: this.state.probabilityOption!.text }
-                  },
-                  plotOptions: {
-                    bar: {
-                      dataLabels: {
-                        enabled: true
-                      }
-                    }
-                  },
-                  series: [
-                    {
-                      name: "Box Plot",
-                      data: boxplotData,
+              <Stack>
+                <BasicHighChart
+                  id={"ProbabilityDistributionChart"}
+                  theme={theme}
+                  configOverride={{
+                    chart: {
                       type: "boxplot",
-                      fillColor: "#c8cffc",
-                      tooltip: {
-                        pointFormatter: function () {
-                          return `<span style="color:${this.color}">●</span>
+                      inverted: true,
+                      height: selectedCohorts.length * 40 + 120
+                    },
+                    xAxis: {
+                      categories: selectedCohortNames
+                    },
+                    yAxis: {
+                      title: { text: this.state.probabilityOption!.text }
+                    },
+                    plotOptions: {
+                      bar: {
+                        dataLabels: {
+                          enabled: true
+                        }
+                      }
+                    },
+                    series: [
+                      {
+                        name: localization.ModelAssessment.ModelOverview.boxPlot.boxPlotSeriesLabel,
+                        data: boxplotData,
+                        type: "boxplot",
+                        fillColor: "#c8cffc",
+                        tooltip: {
+                          pointFormatter: function () {
+                            return `<span style="color:${this.color}">●</span>
                             <b> ${this.series.name}</b><br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.upperFence}: ${this.options.high}<br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.upperQuartile}: ${this.options.q3}<br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.median}: ${this.options.median}<br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.lowerQuartile}: ${this.options.q1}<br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.lowerFence}: ${this.options.low}<br/>`;
+                          }
+                        }
+                      },
+                      {
+                        name: localization.ModelAssessment.ModelOverview.boxPlot
+                          .outlierLabel,
+                        type: "scatter",
+                        data: outlierData,
+                        tooltip: {
+                          pointFormatter: function () {
+                            return `${localization.ModelAssessment.ModelOverview.boxPlot.outlierProbability}: <b>${this.y}</b>`;
+                          }
                         }
                       }
-                    },
-                    {
-                      name: "Outliers",
-                      type: "scatter",
-                      data: outlierData,
-                      tooltip: {
-                        pointFormatter: function () {
-                          return `${localization.ModelAssessment.ModelOverview.boxPlot.outlierProbability}: <b>${this.y}</b>`;
-                        }
-                      }
+                    ]
+                  }}
+                />
+                <Stack.Item className={classNames.horizontalAxis}>
+                  <DefaultButton
+                    text={
+                      localization.ModelAssessment.ModelOverview
+                        .probabilityLabelSelectionButton
                     }
-                  ]
-                }}
-              />
+                    onClick={() =>
+                      this.setState({
+                        probabilityFlyoutIsVisible: true
+                      })
+                    }
+                  />
+                </Stack.Item>
+              </Stack>
             )}
           </Stack.Item>
         </Stack>
+        <Panel
+          isOpen={this.state.probabilityFlyoutIsVisible}
+          closeButtonAriaLabel="Close"
+          onDismiss={() => {
+            this.setState({ probabilityFlyoutIsVisible: false });
+          }}
+        >
+          <Dropdown
+            label={
+              localization.ModelAssessment.ModelOverview
+                .probabilityForClassSelectionHeader
+            }
+            options={probabilityOptions}
+            styles={{ dropdown: { width: 250 } }}
+            onChange={this.onProbabilityOptionSelectionChange}
+            selectedKey={this.state.probabilityOption!.key}
+          />
+        </Panel>
       </>
     );
   }

@@ -11,11 +11,14 @@ import {
   Dropdown,
   Stack,
   DefaultButton,
-  IDropdownOption
+  IDropdownOption,
+  Panel
 } from "office-ui-fabric-react";
 import React from "react";
 
 interface IChartConfigurationFlyoutProps {
+  isOpen: boolean;
+  onDismissFlyout: () => void;
   datasetCohorts: ErrorCohort[];
   featureBasedCohorts: ErrorCohort[];
   selectedDatasetCohorts: number[];
@@ -34,23 +37,26 @@ export class ChartConfigurationFlyout extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IChartConfigurationFlyoutProps) {
-    super(props);
-    this.state = {
-      selectedDatasetCohorts: this.getAllDatasetCohorts(),
-      selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
-    };
-  }
-
   componentDidUpdate(
     prevProps: IChartConfigurationFlyoutProps,
     _prevState: IChartConfigurationFlyoutState
   ) {
-    if (this.props.featureBasedCohorts !== prevProps.featureBasedCohorts) {
-      // feature-based cohorts changed, update state
-      this.setState({
-        selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
-      });
+    if (
+      this.props.featureBasedCohorts.length !==
+        prevProps.featureBasedCohorts.length ||
+      this.props.featureBasedCohorts.some(
+        (value, index) =>
+          value.cohort.name !== prevProps.featureBasedCohorts[index].cohort.name
+      )
+    ) {
+      // Feature-based cohorts changed, so update state accordingly.
+      // If there are at least 10 selected dataset cohorts
+      // don't select feature-based cohorts by default
+      this.props.updateFeatureBasedCohortSelection(
+        this.props.selectedDatasetCohorts.length >= 10
+          ? []
+          : this.getAllFeatureBasedCohorts()
+      );
     }
   }
 
@@ -72,54 +78,23 @@ export class ChartConfigurationFlyout extends React.Component<
       0;
 
     return (
-      <Stack tokens={{ childrenGap: "10px" }}>
+      <Panel
+        isOpen={this.props.isOpen}
+        closeButtonAriaLabel="Close"
+        onDismiss={this.props.onDismissFlyout}
+      >
         <Stack tokens={{ childrenGap: "10px" }}>
-          <Dropdown
-            label={
-              localization.ModelAssessment.ModelOverview
-                .dataCohortsChartSelectionHeader
-            }
-            multiSelect
-            options={datasetCohortOptions}
-            styles={{ dropdown: { width: 250 } }}
-            onChange={this.onChartDatasetCohortOptionSelectionChange}
-            selectedKeys={this.props.selectedDatasetCohorts}
-            errorMessage={
-              noCohortSelected
-                ? localization.ModelAssessment.ModelOverview
-                    .chartCohortSelectionPlaceholder
-                : undefined
-            }
-          />
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
-            <DefaultButton
-              text={localization.ModelAssessment.ModelOverview.selectAllButton}
-              onClick={() =>
-                this.props.updateDatasetCohortSelection(
-                  this.getAllDatasetCohorts()
-                )
-              }
-            />
-            <DefaultButton
-              text={
-                localization.ModelAssessment.ModelOverview.unselectAllButton
-              }
-              onClick={() => this.props.updateDatasetCohortSelection([])}
-            />
-          </Stack>
-        </Stack>
-        {this.props.featureBasedCohorts.length > 0 && (
           <Stack tokens={{ childrenGap: "10px" }}>
             <Dropdown
               label={
                 localization.ModelAssessment.ModelOverview
-                  .featureBasedCohortsChartSelectionHeader
+                  .dataCohortsChartSelectionHeader
               }
               multiSelect
-              options={featureBasedCohortOptions}
-              styles={{ dropdown: { width: 200 } }}
-              onChange={this.onChartFeatureBasedCohortOptionSelectionChange}
-              selectedKeys={this.props.selectedFeatureBasedCohorts}
+              options={datasetCohortOptions}
+              styles={{ dropdown: { width: 250 } }}
+              onChange={this.onChartDatasetCohortOptionSelectionChange}
+              selectedKeys={this.props.selectedDatasetCohorts}
               errorMessage={
                 noCohortSelected
                   ? localization.ModelAssessment.ModelOverview
@@ -133,8 +108,8 @@ export class ChartConfigurationFlyout extends React.Component<
                   localization.ModelAssessment.ModelOverview.selectAllButton
                 }
                 onClick={() =>
-                  this.props.updateFeatureBasedCohortSelection(
-                    this.getAllFeatureBasedCohorts()
+                  this.props.updateDatasetCohortSelection(
+                    this.getAllDatasetCohorts()
                   )
                 }
               />
@@ -142,12 +117,53 @@ export class ChartConfigurationFlyout extends React.Component<
                 text={
                   localization.ModelAssessment.ModelOverview.unselectAllButton
                 }
-                onClick={() => this.props.updateFeatureBasedCohortSelection([])}
+                onClick={() => this.props.updateDatasetCohortSelection([])}
               />
             </Stack>
           </Stack>
-        )}
-      </Stack>
+          {this.props.featureBasedCohorts.length > 0 && (
+            <Stack tokens={{ childrenGap: "10px" }}>
+              <Dropdown
+                label={
+                  localization.ModelAssessment.ModelOverview
+                    .featureBasedCohortsChartSelectionHeader
+                }
+                multiSelect
+                options={featureBasedCohortOptions}
+                styles={{ dropdown: { width: 200 } }}
+                onChange={this.onChartFeatureBasedCohortOptionSelectionChange}
+                selectedKeys={this.props.selectedFeatureBasedCohorts}
+                errorMessage={
+                  noCohortSelected
+                    ? localization.ModelAssessment.ModelOverview
+                        .chartCohortSelectionPlaceholder
+                    : undefined
+                }
+              />
+              <Stack horizontal tokens={{ childrenGap: "10px" }}>
+                <DefaultButton
+                  text={
+                    localization.ModelAssessment.ModelOverview.selectAllButton
+                  }
+                  onClick={() =>
+                    this.props.updateFeatureBasedCohortSelection(
+                      this.getAllFeatureBasedCohorts()
+                    )
+                  }
+                />
+                <DefaultButton
+                  text={
+                    localization.ModelAssessment.ModelOverview.unselectAllButton
+                  }
+                  onClick={() =>
+                    this.props.updateFeatureBasedCohortSelection([])
+                  }
+                />
+              </Stack>
+            </Stack>
+          )}
+        </Stack>
+      </Panel>
     );
   }
 

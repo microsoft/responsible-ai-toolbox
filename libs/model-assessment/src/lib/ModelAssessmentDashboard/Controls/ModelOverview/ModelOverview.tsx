@@ -10,18 +10,15 @@ import {
   RegressionMetrics,
   JointDataset,
   generateMetrics,
-  ModelTypes
+  ModelTypes,
+  classificationTask
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   Dropdown,
   IDropdownOption,
   Stack,
-  Dialog,
   Text,
-  DefaultButton,
-  DialogFooter,
-  PrimaryButton,
   Pivot,
   PivotItem,
   IDropdown
@@ -45,6 +42,7 @@ interface IModelOverviewState {
   isFeaturePickerLimitExceededDialogOpen: boolean;
   selectedDatasetCohorts: number[];
   selectedFeatureBasedCohorts: number[];
+  chartConfigurationIsVisible: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -62,12 +60,9 @@ export class ModelOverview extends React.Component<
       selectedMetrics: [],
       selectedFeatures: [],
       isFeaturePickerLimitExceededDialogOpen: false,
-      selectedDatasetCohorts: this.context.errorCohorts.map(
-        (_cohort, index) => {
-          return index;
-        }
-      ),
-      selectedFeatureBasedCohorts: []
+      selectedDatasetCohorts: [],
+      selectedFeatureBasedCohorts: [],
+      chartConfigurationIsVisible: false
     };
   }
 
@@ -88,7 +83,14 @@ export class ModelOverview extends React.Component<
         RegressionMetrics.MeanPrediction
       ];
     }
-    this.setState({ selectedMetrics: defaultSelectedMetrics });
+    this.setState({
+      selectedMetrics: defaultSelectedMetrics,
+      selectedDatasetCohorts: this.context.errorCohorts.map(
+        (_cohort, index) => {
+          return index;
+        }
+      )
+    });
   }
 
   public render(): React.ReactNode {
@@ -101,7 +103,7 @@ export class ModelOverview extends React.Component<
     }
 
     let selectableMetrics: IDropdownOption[] = [];
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === classificationTask) {
       // TODO: add case for multiclass classification
       selectableMetrics.push(
         {
@@ -188,6 +190,19 @@ export class ModelOverview extends React.Component<
       this.context.modelMetadata.modelType
     );
 
+    const featureSelectionLimitReached =
+      this.state.selectedFeatures.length >= 2;
+    const featureSelectionOptions: IDropdownOption[] =
+      this.context.dataset.feature_names.map((feature_name, index) => {
+        return {
+          key: index,
+          text: feature_name,
+          disabled:
+            featureSelectionLimitReached &&
+            !this.state.selectedFeatures.includes(index)
+        };
+      });
+
     return (
       <Stack tokens={{ padding: "16px 40px 10px 40px", childrenGap: "10px" }}>
         <Text variant="medium">
@@ -221,58 +236,11 @@ export class ModelOverview extends React.Component<
                   localization.ModelAssessment.ModelOverview.featuresDropdown
                 }
                 selectedKeys={this.state.selectedFeatures}
-                options={this.context.dataset.feature_names.map(
-                  (feature_name, index) => {
-                    return { key: index, text: feature_name };
-                  }
-                )}
+                options={featureSelectionOptions}
                 onChange={this.onFeatureSelectionChange}
                 multiSelect
                 styles={{ dropdown: { width: 400 } }}
               />
-              <Dialog
-                hidden={!this.state.isFeaturePickerLimitExceededDialogOpen}
-                onDismiss={() =>
-                  this.setState({
-                    isFeaturePickerLimitExceededDialogOpen: false
-                  })
-                }
-                dialogContentProps={{
-                  title:
-                    localization.ModelAssessment.ModelOverview
-                      .featureSelectionLimitWarningTitle,
-                  closeButtonAriaLabel: "Close",
-                  subText:
-                    localization.ModelAssessment.ModelOverview
-                      .featureSelectionLimitWarningSubTitle
-                }}
-              >
-                <DialogFooter>
-                  <DefaultButton
-                    onClick={() => {
-                      this.setState({
-                        isFeaturePickerLimitExceededDialogOpen: false,
-                        selectedFeatures: []
-                      });
-                    }}
-                    text={
-                      localization.ModelAssessment.ModelOverview
-                        .resetFeatureSelection
-                    }
-                  />
-                  <PrimaryButton
-                    onClick={() => {
-                      this.setState({
-                        isFeaturePickerLimitExceededDialogOpen: false
-                      });
-                    }}
-                    text={
-                      localization.ModelAssessment.ModelOverview
-                        .cancelFeatureSelectionWarningDialog
-                    }
-                  />
-                </DialogFooter>
-              </Dialog>
             </Stack>
             <DatasetCohortStatsTable
               selectableMetrics={selectableMetrics}
@@ -286,6 +254,10 @@ export class ModelOverview extends React.Component<
               featureDropdownRef={this.featureDropdownRef}
             />
             <ChartConfigurationFlyout
+              isOpen={this.state.chartConfigurationIsVisible}
+              onDismissFlyout={() => {
+                this.setState({ chartConfigurationIsVisible: false });
+              }}
               datasetCohorts={this.context.errorCohorts}
               featureBasedCohorts={featureBasedCohorts}
               selectedDatasetCohorts={this.state.selectedDatasetCohorts}
@@ -308,8 +280,13 @@ export class ModelOverview extends React.Component<
                   }
                 >
                   <ProbabilityDistributionChart
+                    onChooseCohorts={this.onChooseCohorts}
                     datasetCohorts={this.context.errorCohorts}
                     featureBasedCohorts={featureBasedCohorts}
+                    selectedDatasetCohorts={this.state.selectedDatasetCohorts}
+                    selectedFeatureBasedCohorts={
+                      this.state.selectedFeatureBasedCohorts
+                    }
                   />
                 </PivotItem>
               )}
@@ -320,11 +297,16 @@ export class ModelOverview extends React.Component<
                 }
               >
                 <ModelOverviewMetricChart
+                  onChooseCohorts={this.onChooseCohorts}
                   selectableMetrics={selectableMetrics}
                   datasetCohorts={this.context.errorCohorts}
                   featureBasedCohorts={featureBasedCohorts}
                   datasetCohortStats={datasetCohortLabeledStatistics}
                   featureBasedCohortStats={featureBasedCohortLabeledStatistics}
+                  selectedDatasetCohorts={this.state.selectedDatasetCohorts}
+                  selectedFeatureBasedCohorts={
+                    this.state.selectedFeatureBasedCohorts
+                  }
                 />
               </PivotItem>
             </Pivot>
@@ -333,6 +315,9 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onChooseCohorts = () =>
+    this.setState({ chartConfigurationIsVisible: true });
 
   private onMetricSelectionChange = (
     _: React.FormEvent<HTMLDivElement>,
@@ -373,15 +358,11 @@ export class ModelOverview extends React.Component<
     if (item && item.selected !== undefined && typeof item.key === "number") {
       // technically we know it's only numbers but item.key has type string | number
       if (item.selected && !this.state.selectedFeatures.includes(item.key)) {
-        if (this.state.selectedFeatures.length >= 2) {
-          this.setState({ isFeaturePickerLimitExceededDialogOpen: true });
-        } else {
-          this.setState({
-            selectedFeatures: this.state.selectedFeatures.concat([
-              item.key as number
-            ])
-          });
-        }
+        this.setState({
+          selectedFeatures: this.state.selectedFeatures.concat([
+            item.key as number
+          ])
+        });
       }
       if (!item.selected && this.state.selectedFeatures.includes(item.key)) {
         let selectedFeatures = this.state.selectedFeatures;

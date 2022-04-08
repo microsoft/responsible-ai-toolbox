@@ -1357,11 +1357,16 @@
         "median": "Median",
         "upperQuartile": "Upper quartile",
         "lowerQuartile": "Lower quartile",
-        "outlierProbability": "probability"
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
       },
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
       "selectAllButton": "Select all",
-      "unselectAllButton": "Unselect all"
+      "unselectAllButton": "Unselect all",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label"
     }
   }
 }
