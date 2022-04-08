@@ -124,6 +124,8 @@ def compute_error_tree(analyzer,
     filtered_df = filter_from_cohort(analyzer,
                                      filters,
                                      composite_filters)
+    if filtered_df.shape[0] == 0:
+        return create_empty_node(analyzer.metric)
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
@@ -548,7 +550,62 @@ def node_to_dict(df, tree, nodeid, categories, json,
         node_name = feature_names[tree[SPLIT_FEATURE]]
     else:
         node_name = None
-    json.append({
+    json.append(get_json_node(arg, condition, error, nodeid, method,
+                              node_name, parentid, p_node_name,
+                              total, success, metric_name,
+                              metric_value, is_error_metric))
+    return json, df
+
+
+def create_empty_node(metric):
+    """Create an empty node for the tree.
+
+    :param metric: The metric to use for the node.
+    :type metric: str
+    :return: The empty node.
+    :rtype: dict
+    """
+    metric_name = metric_to_display_name[metric]
+    is_error_metric = metric in error_metrics
+    return [get_json_node(None, None, 0, 0, None, None, None,
+                          None, 0, 0, metric_name, 0, is_error_metric)]
+
+
+def get_json_node(arg, condition, error, nodeid, method, node_name,
+                  parentid, p_node_name, total, success, metric_name,
+                  metric_value, is_error_metric):
+    """Get the json node for the tree.
+
+    :param arg: The arg for the node.
+    :type arg: str
+    :param condition: The condition for the node.
+    :type condition: str
+    :param error: The error for the node.
+    :type error: int
+    :param nodeid: The node id for the node.
+    :type nodeid: int
+    :param method: The method for the node.
+    :type method: str
+    :param node_name: The node name for the node.
+    :type node_name: str
+    :param parentid: The parent id for the node.
+    :type parentid: int
+    :param p_node_name: The parent node name for the node.
+    :type p_node_name: str
+    :param total: The total number of instances in the node.
+    :type total: int
+    :param success: The total number of success instances for the node.
+    :type success: int
+    :param metric_name: The metric name for the node.
+    :type metric_name: str
+    :param metric_value: The metric value for the node.
+    :type metric_value: float
+    :param is_error_metric: Whether the metric is an error metric.
+    :type is_error_metric: bool
+    :return: The json node.
+    :rtype: dict
+    """
+    return {
         "arg": arg,
         "badFeaturesRowCount": 0,  # Note: remove this eventually
         "condition": condition,
@@ -566,8 +623,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
         "metricName": metric_name,
         "metricValue": float(metric_value),
         "isErrorMetric": is_error_metric
-    })
-    return json, df
+    }
 
 
 def get_regression_metric_data(df):
