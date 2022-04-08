@@ -1151,7 +1151,7 @@
       "dataPointInfo": "Data point info",
       "deltaLabel": "Delta",
       "disclaimer": "Disclaimer: These are explanations based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
-      "featureImportanceGetStartedText": "Select a point to see its local importance",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Provide local feature importances to see how each feature impacts individual predictions.",
       "featureImportancePlot": "Feature importance plot",
       "featureValues": "Feature values",
