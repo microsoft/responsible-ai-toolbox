@@ -30,7 +30,7 @@ export class CreateGlobalCohortButton extends React.Component<
     return (
       <>
         <DefaultButton
-          text={localization.ModelAssessment.CohortInformation.SaveCohort}
+          text={localization.ModelAssessment.CohortInformation.NewCohort}
           onClick={this.toggleVisibility}
         />
         <CreateGlobalCohort

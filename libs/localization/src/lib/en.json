@@ -210,7 +210,7 @@
       "featureList": "Feature list",
       "fullscreen": "Fullscreen",
       "heatMap": "Heat map",
-      "saveCohort": "Save cohort",
+      "newCohort": "New cohort",
       "shiftCohort": "Shift cohort",
       "treeMap": "Tree map",
       "whatIf": "What-If"
@@ -1268,7 +1268,7 @@
     },
     "CohortInformation": {
       "ShiftCohort": "Shift cohort",
-      "SaveCohort": "Save cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
       "Filters": "Number of filters",
@@ -1314,7 +1314,6 @@
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
       "createCohort": "Create cohort",
-      "saveCohort": "Save cohort",
       "shiftCohort": "Shift cohort"
     },
     "Navigation": {
