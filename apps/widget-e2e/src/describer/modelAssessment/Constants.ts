@@ -26,8 +26,6 @@ export enum Locators {
   ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']",
   SortByDropdown = "#featureImportanceChartContainer div.ms-Dropdown-container",
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
-  CohortOnOffSelectionContainer = "#iterative-container",
-  CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
   CreateNewCohortButton = "button:contains('New cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
