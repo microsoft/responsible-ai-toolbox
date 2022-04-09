@@ -15,7 +15,7 @@ import {
 function generateFiltersCartesianProduct(
   filters: ICompositeFilter[][]
 ): ICompositeFilter[] {
-  if (filters.length == 0) {
+  if (filters.length === 0) {
     return [];
   }
   if (filters.length === 1) {
@@ -42,12 +42,12 @@ export function generateCohortsCartesianProduct(
   jointDataset: JointDataset
 ) {
   return generateFiltersCartesianProduct(filters).map((compositeFilter) => {
-    const cohort_name = getCompositeFilterString(
+    const cohortName = getCompositeFilterString(
       [compositeFilter],
       jointDataset
     )[0];
     return new ErrorCohort(
-      new Cohort(cohort_name, jointDataset, [], [compositeFilter]),
+      new Cohort(cohortName, jointDataset, [], [compositeFilter]),
       jointDataset
     );
   });
@@ -59,19 +59,19 @@ export function generateOverlappingFeatureBasedCohorts(
   selectedFeatures: number[]
 ) {
   // TODO: restrict by current cohort
-  // TODO: make n_groups_per_feature configurable
-  const n_groups_per_feature = 3;
-  let filters: ICompositeFilter[][] = [];
-  selectedFeatures.forEach((feature_index) => {
-    const feature_name = dataset.feature_names[feature_index];
-    const feature_meta_name = JointDataset.DataLabelRoot + feature_index;
-    if (dataset.categorical_features.includes(feature_name)) {
+  // TODO: make nGroupsPerFeature configurable
+  const nGroupsPerFeature = 3;
+  const filters: ICompositeFilter[][] = [];
+  selectedFeatures.forEach((featureIndex) => {
+    const featureName = dataset.feature_names[featureIndex];
+    const featureMetaName = JointDataset.DataLabelRoot + featureIndex;
+    if (dataset.categorical_features.includes(featureName)) {
       const featureFilters = jointDataset.metaDict[
-        feature_meta_name
-      ].sortedCategoricalValues?.map((_category, category_index) => {
+        featureMetaName
+      ].sortedCategoricalValues?.map((_category, categoryIndex) => {
         return {
-          arg: [category_index],
-          column: feature_meta_name,
+          arg: [categoryIndex],
+          column: featureMetaName,
           method: FilterMethods.Includes
         };
       });
@@ -82,46 +82,43 @@ export function generateOverlappingFeatureBasedCohorts(
       let min = Number.MAX_SAFE_INTEGER;
       let max = Number.MIN_SAFE_INTEGER;
       dataset.features.forEach((instanceFeatures) => {
-        const feature_value = instanceFeatures[feature_index];
-        if (typeof feature_value !== "number") {
+        const featureValue = instanceFeatures[featureIndex];
+        if (typeof featureValue !== "number") {
           return;
         }
-        if (feature_value > max) {
-          max = feature_value;
+        if (featureValue > max) {
+          max = featureValue;
         }
-        if (feature_value < min) {
-          min = feature_value;
+        if (featureValue < min) {
+          min = featureValue;
         }
       });
-      if (min === Number.MAX_SAFE_INTEGER || max === Number.MIN_SAFE_INTEGER) {
-        // TODO: should we have an error message for this?
-        return;
-      }
-      const interval_width = (max - min) / n_groups_per_feature;
-      let featureFilters: ICompositeFilter[] = [
+
+      const intervalWidth = (max - min) / nGroupsPerFeature;
+      const featureFilters: ICompositeFilter[] = [
         {
           // left-most bin
-          arg: [min + interval_width],
-          column: feature_meta_name,
+          arg: [min + intervalWidth],
+          column: featureMetaName,
           method: FilterMethods.LessThan
         }
       ];
       for (
         // middle bins
-        let bin_index = 1;
-        bin_index < n_groups_per_feature - 1;
-        bin_index++
+        let binIndex = 1;
+        binIndex < nGroupsPerFeature - 1;
+        binIndex++
       ) {
         featureFilters.push({
           compositeFilters: [
             {
-              arg: [min + interval_width * bin_index],
-              column: feature_meta_name,
+              arg: [min + intervalWidth * binIndex],
+              column: featureMetaName,
               method: FilterMethods.GreaterThanEqualTo
             },
             {
-              arg: [min + interval_width * (bin_index + 1)],
-              column: feature_meta_name,
+              arg: [min + intervalWidth * (binIndex + 1)],
+              column: featureMetaName,
               method: FilterMethods.LessThan
             }
           ],
@@ -130,8 +127,8 @@ export function generateOverlappingFeatureBasedCohorts(
       }
       featureFilters.push({
         // right-most bin
-        arg: [min + interval_width * (n_groups_per_feature - 1)],
-        column: feature_meta_name,
+        arg: [min + intervalWidth * (nGroupsPerFeature - 1)],
+        column: featureMetaName,
         method: FilterMethods.GreaterThanEqualTo
       });
       filters.push(featureFilters);

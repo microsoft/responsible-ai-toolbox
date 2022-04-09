@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, ILabeledStatistic } from "@responsible-ai/core-ui";
+import {
+  BinaryClassificationMetrics,
+  classificationTask,
+  ErrorCohort,
+  ILabeledStatistic,
+  RegressionMetrics
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 
@@ -11,14 +18,18 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[]
 ) {
-  let items: PointOptionsObject[] = cohorts.map((errorCohort, cohortIndex) => {
-    return {
-      x: 0, // metric index for Count column
-      y: cohortIndex,
-      value: errorCohort.cohortStats.totalCohort,
-      colorValue: 0
-    };
-  });
+  const items: PointOptionsObject[] = cohorts.map(
+    (errorCohort, cohortIndex) => {
+      return {
+        colorValue: 0,
+        value: errorCohort.cohortStats.totalCohort,
+
+        x: 0,
+        // metric index for Count column
+        y: cohortIndex
+      };
+    }
+  );
   selectableMetrics
     .filter((element: IDropdownOption) =>
       selectedMetrics.includes(element.key.toString())
@@ -97,4 +108,60 @@ export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
     label = label.slice(0, maxLabelLength - ellipsis.length) + ellipsis;
   }
   return label;
+}
+
+export function getSelectableMetrics(
+  taskType: "classification" | "regression"
+) {
+  const selectableMetrics: IDropdownOption[] = [];
+  if (taskType === classificationTask) {
+    // TODO: add case for multiclass classification
+    selectableMetrics.push(
+      {
+        key: BinaryClassificationMetrics.Accuracy,
+        text: localization.ModelAssessment.ModelOverview.accuracy
+      },
+      {
+        key: BinaryClassificationMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.f1Score
+      },
+      {
+        key: BinaryClassificationMetrics.Precision,
+        text: localization.ModelAssessment.ModelOverview.precision
+      },
+      {
+        key: BinaryClassificationMetrics.Recall,
+        text: localization.ModelAssessment.ModelOverview.recall
+      },
+      {
+        key: BinaryClassificationMetrics.FalsePositiveRate,
+        text: localization.ModelAssessment.ModelOverview.falsePositiveRate
+      },
+      {
+        key: BinaryClassificationMetrics.FalseNegativeRate,
+        text: localization.ModelAssessment.ModelOverview.falseNegativeRate
+      },
+      {
+        key: BinaryClassificationMetrics.SelectionRate,
+        text: localization.ModelAssessment.ModelOverview.selectionRate
+      }
+    );
+  } else {
+    // task_type === "regression"
+    selectableMetrics.push(
+      {
+        key: RegressionMetrics.MeanAbsoluteError,
+        text: localization.ModelAssessment.ModelOverview.meanAbsoluteError
+      },
+      {
+        key: RegressionMetrics.MeanSquaredError,
+        text: localization.ModelAssessment.ModelOverview.meanSquaredError
+      },
+      {
+        key: RegressionMetrics.MeanPrediction,
+        text: localization.ModelAssessment.ModelOverview.meanPrediction
+      }
+    );
+  }
+  return selectableMetrics;
 }

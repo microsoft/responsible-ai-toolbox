@@ -18,6 +18,16 @@ export interface IModelOverviewChartStyles {
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
   () => {
     return mergeStyleSets<IModelOverviewChartStyles>({
+      chart: {
+        width: "100%"
+      },
+      horizontalAxis: {
+        textAlign: "center"
+      },
+      placeholderText: {
+        marginBottom: "15px",
+        marginTop: "15px"
+      },
       rotatedVerticalBox: {
         marginLeft: "28px",
         position: "absolute",
@@ -26,21 +36,11 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
         width: "max-content"
       },
-      horizontalAxis: {
-        textAlign: "center"
-      },
       verticalAxis: {
         height: "auto",
         position: "relative",
         top: "0px",
         width: "65px"
-      },
-      chart: {
-        width: "100%"
-      },
-      placeholderText: {
-        marginTop: "15px",
-        marginBottom: "15px"
       }
     });
   };

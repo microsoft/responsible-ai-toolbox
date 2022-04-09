@@ -20,6 +20,7 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IProbabilityDistributionChartProps {
@@ -63,7 +64,7 @@ export class ProbabilityDistributionChart extends React.Component<
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
     if (!this.context.jointDataset.hasPredictedProbabilities) {
-      return <></>;
+      return;
     }
     const theme = getTheme();
 
@@ -97,12 +98,12 @@ export class ProbabilityDistributionChart extends React.Component<
       });
 
     if (probabilityOptions.length === 0) {
-      return <></>;
+      return;
     }
 
     if (this.state.probabilityOption === undefined) {
       this.setState({ probabilityOption: probabilityOptions[0] });
-      return <></>;
+      return;
     }
 
     const boxplotData = selectedCohorts.map((cohort, index) => {
@@ -113,7 +114,7 @@ export class ProbabilityDistributionChart extends React.Component<
       );
     });
     const outlierData = boxplotData
-      .map((cohortDict) => cohortDict["outliers"])
+      .map((cohortDict) => cohortDict.outliers)
       .map((outlierProbs, cohortIndex) => {
         return outlierProbs.map((prob) => [cohortIndex, prob]);
       })
@@ -142,7 +143,7 @@ export class ProbabilityDistributionChart extends React.Component<
           <Stack.Item className={classNames.chart}>
             {noCohortSelected && (
               <div className={classNames.placeholderText}>
-              <Text>Select at least one cohort to view the box plot.</Text>
+                <Text>Select at least one cohort to view the box plot.</Text>
               </div>
             )}
             {!noCohortSelected && (
@@ -152,15 +153,9 @@ export class ProbabilityDistributionChart extends React.Component<
                   theme={theme}
                   configOverride={{
                     chart: {
-                      type: "boxplot",
+                      height: selectedCohorts.length * 40 + 120,
                       inverted: true,
-                      height: selectedCohorts.length * 40 + 120
-                    },
-                    xAxis: {
-                      categories: selectedCohortNames
-                    },
-                    yAxis: {
-                      title: { text: this.state.probabilityOption!.text }
+                      type: "boxplot"
                     },
                     plotOptions: {
                       bar: {
@@ -171,13 +166,12 @@ export class ProbabilityDistributionChart extends React.Component<
                     },
                     series: [
                       {
+                        data: boxplotData,
+                        fillColor: "#c8cffc",
                         name: localization.ModelAssessment.ModelOverview.boxPlot
                           .boxPlotSeriesLabel,
-                        data: boxplotData,
-                        type: "boxplot",
-                        fillColor: "#c8cffc",
                         tooltip: {
-                          pointFormatter: function () {
+                          pointFormatter() {
                             return `<span style="color:${this.color}">●</span>
                             <b> ${this.series.name}</b><br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.upperFence}: ${this.options.high}<br/>
@@ -186,20 +180,27 @@ export class ProbabilityDistributionChart extends React.Component<
                             ${localization.ModelAssessment.ModelOverview.boxPlot.lowerQuartile}: ${this.options.q1}<br/>
                             ${localization.ModelAssessment.ModelOverview.boxPlot.lowerFence}: ${this.options.low}<br/>`;
                           }
-                        }
+                        },
+                        type: "boxplot"
                       },
                       {
+                        data: outlierData,
                         name: localization.ModelAssessment.ModelOverview.boxPlot
                           .outlierLabel,
-                        type: "scatter",
-                        data: outlierData,
                         tooltip: {
-                          pointFormatter: function () {
+                          pointFormatter() {
                             return `${localization.ModelAssessment.ModelOverview.boxPlot.outlierProbability}: <b>${this.y}</b>`;
                           }
-                        }
+                        },
+                        type: "scatter"
                       }
-                    ]
+                    ],
+                    xAxis: {
+                      categories: selectedCohortNames
+                    },
+                    yAxis: {
+                      title: { text: this.state.probabilityOption!.text }
+                    }
                   }}
                 />
                 <Stack.Item className={classNames.horizontalAxis}>
@@ -251,9 +252,9 @@ export class ProbabilityDistributionChart extends React.Component<
   };
 
   private getPercentile(sortedData: number[], percentile: number) {
-    var index = (percentile / 100) * sortedData.length;
-    var result;
-    if (Math.floor(index) == index) {
+    const index = (percentile / 100) * sortedData.length;
+    let result;
+    if (Math.floor(index) === index) {
       result = (sortedData[index - 1] + sortedData[index]) / 2;
     } else {
       result = sortedData[Math.floor(index)];
@@ -263,7 +264,7 @@ export class ProbabilityDistributionChart extends React.Component<
 
   private getBoxPlotData(errorCohort: ErrorCohort, index: number, key: string) {
     // key is the identifier for the column (e.g., probability)
-    let sortedData: number[] = cloneDeep(
+    const sortedData: number[] = cloneDeep(
       errorCohort.cohort.filteredData.map((dict) => dict[key])
     ).sort((number1: number, number2: number) => {
       return number1 - number2;
@@ -285,15 +286,15 @@ export class ProbabilityDistributionChart extends React.Component<
     const lowerWhisker = nonOutliers[0];
     const upperWhisker = nonOutliers[nonOutliers.length - 1];
     return {
-      x: index,
-      min,
+      high: upperWhisker,
+      low: lowerWhisker,
       max,
+      median,
+      min,
       outliers,
       q1: firstQuartile,
-      median,
       q3: thirdQuartile,
-      low: lowerWhisker,
-      high: upperWhisker
+      x: index
     };
   }
 }

@@ -12,6 +12,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
+
 import { generateCohortsStatsTable, wrapYAxisLabels } from "./StatsTableUtils";
 
 interface ICohortStatsHeatmapProps {

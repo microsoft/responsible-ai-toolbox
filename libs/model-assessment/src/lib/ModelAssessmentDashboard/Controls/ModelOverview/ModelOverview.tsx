@@ -24,13 +24,14 @@ import {
   IDropdown
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
-
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
+import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   showNewModelOverviewExperience: boolean;
@@ -39,7 +40,6 @@ interface IModelOverviewProps {
 interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
-  isFeaturePickerLimitExceededDialogOpen: boolean;
   selectedDatasetCohorts: number[];
   selectedFeatureBasedCohorts: number[];
   chartConfigurationIsVisible: boolean;
@@ -57,12 +57,11 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      selectedMetrics: [],
-      selectedFeatures: [],
-      isFeaturePickerLimitExceededDialogOpen: false,
+      chartConfigurationIsVisible: false,
       selectedDatasetCohorts: [],
       selectedFeatureBasedCohorts: [],
-      chartConfigurationIsVisible: false
+      selectedFeatures: [],
+      selectedMetrics: []
     };
   }
 
@@ -84,12 +83,12 @@ export class ModelOverview extends React.Component<
       ];
     }
     this.setState({
-      selectedMetrics: defaultSelectedMetrics,
       selectedDatasetCohorts: this.context.errorCohorts.map(
         (_cohort, index) => {
           return index;
         }
-      )
+      ),
+      selectedMetrics: defaultSelectedMetrics
     });
   }
 
@@ -101,57 +100,9 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
-
-    let selectableMetrics: IDropdownOption[] = [];
-    if (this.context.dataset.task_type === classificationTask) {
-      // TODO: add case for multiclass classification
-      selectableMetrics.push(
-        {
-          key: BinaryClassificationMetrics.Accuracy,
-          text: localization.ModelAssessment.ModelOverview.accuracy
-        },
-        {
-          key: BinaryClassificationMetrics.F1Score,
-          text: localization.ModelAssessment.ModelOverview.f1Score
-        },
-        {
-          key: BinaryClassificationMetrics.Precision,
-          text: localization.ModelAssessment.ModelOverview.precision
-        },
-        {
-          key: BinaryClassificationMetrics.Recall,
-          text: localization.ModelAssessment.ModelOverview.recall
-        },
-        {
-          key: BinaryClassificationMetrics.FalsePositiveRate,
-          text: localization.ModelAssessment.ModelOverview.falsePositiveRate
-        },
-        {
-          key: BinaryClassificationMetrics.FalseNegativeRate,
-          text: localization.ModelAssessment.ModelOverview.falseNegativeRate
-        },
-        {
-          key: BinaryClassificationMetrics.SelectionRate,
-          text: localization.ModelAssessment.ModelOverview.selectionRate
-        }
-      );
-    } else {
-      // task_type === "regression"
-      selectableMetrics.push(
-        {
-          key: RegressionMetrics.MeanAbsoluteError,
-          text: localization.ModelAssessment.ModelOverview.meanAbsoluteError
-        },
-        {
-          key: RegressionMetrics.MeanSquaredError,
-          text: localization.ModelAssessment.ModelOverview.meanSquaredError
-        },
-        {
-          key: RegressionMetrics.MeanPrediction,
-          text: localization.ModelAssessment.ModelOverview.meanPrediction
-        }
-      );
-    }
+    const selectableMetrics = getSelectableMetrics(
+      this.context.dataset.task_type
+    );
 
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
@@ -193,18 +144,18 @@ export class ModelOverview extends React.Component<
     const featureSelectionLimitReached =
       this.state.selectedFeatures.length >= 2;
     const featureSelectionOptions: IDropdownOption[] =
-      this.context.dataset.feature_names.map((feature_name, index) => {
+      this.context.dataset.feature_names.map((featureName, index) => {
         return {
-          key: index,
-          text: feature_name,
           disabled:
             featureSelectionLimitReached &&
-            !this.state.selectedFeatures.includes(index)
+            !this.state.selectedFeatures.includes(index),
+          key: index,
+          text: featureName
         };
       });
 
     return (
-      <Stack tokens={{ padding: "16px 40px 10px 40px", childrenGap: "10px" }}>
+      <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
@@ -338,7 +289,7 @@ export class ModelOverview extends React.Component<
         !item.selected &&
         this.state.selectedMetrics.includes(item.key.toString())
       ) {
-        let selectedMetrics = this.state.selectedMetrics;
+        const selectedMetrics = this.state.selectedMetrics;
         const unselectedMetricIndex = selectedMetrics.findIndex(
           (key) => key === item.key.toString()
         );
@@ -365,7 +316,7 @@ export class ModelOverview extends React.Component<
         });
       }
       if (!item.selected && this.state.selectedFeatures.includes(item.key)) {
-        let selectedFeatures = this.state.selectedFeatures;
+        const selectedFeatures = this.state.selectedFeatures;
         const unselectedFeatureIndex = selectedFeatures.findIndex(
           (key) => key === item.key
         );

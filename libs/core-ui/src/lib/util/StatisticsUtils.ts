@@ -62,9 +62,12 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
       label: localization.Interpret.Statistics.recall,
       stat: truePosCount / (truePosCount + falseNegCount)
     },
-    { key: BinaryClassificationMetrics.F1Score,
+    {
+      key: BinaryClassificationMetrics.F1Score,
       label: localization.Interpret.Statistics.f1Score,
-    stat: truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))},
+      stat:
+        truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
+    },
     {
       key: BinaryClassificationMetrics.F1Score,
       label: localization.Interpret.Statistics.f1Score,

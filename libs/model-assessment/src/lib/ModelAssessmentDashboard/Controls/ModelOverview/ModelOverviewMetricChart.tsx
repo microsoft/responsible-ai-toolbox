@@ -18,6 +18,7 @@ import {
   Panel
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IModelOverviewMetricChartProps {
@@ -79,7 +80,7 @@ export class ModelOverviewMetricChart extends React.Component<
       )
       .map((labeledStats) => {
         const stat = labeledStats.find(
-          (stat) => stat.key == this.state.selectedMetric
+          (stat) => stat.key === this.state.selectedMetric
         );
         return stat ? Number(stat.stat.toFixed(3)) : Number.NaN;
       });
@@ -105,14 +106,6 @@ export class ModelOverviewMetricChart extends React.Component<
                   chart: {
                     type: "bar"
                   },
-                  xAxis: {
-                    categories: selectedCohortNames
-                  },
-                  yAxis: {
-                    title: this.props.selectableMetrics.find(
-                      (option) => option.key === this.state.selectedMetric
-                    )
-                  },
                   plotOptions: {
                     bar: {
                       dataLabels: {
@@ -122,14 +115,22 @@ export class ModelOverviewMetricChart extends React.Component<
                   },
                   series: [
                     {
+                      data: selectedCohortStats,
                       name: this.props.selectableMetrics.find(
                         (metricOption) =>
                           metricOption.key === this.state.selectedMetric
                       )?.text,
-                      data: selectedCohortStats,
                       type: "bar"
                     }
-                  ]
+                  ],
+                  xAxis: {
+                    categories: selectedCohortNames
+                  },
+                  yAxis: {
+                    title: this.props.selectableMetrics.find(
+                      (option) => option.key === this.state.selectedMetric
+                    )
+                  }
                 }}
               />
               <Stack.Item className={classNames.horizontalAxis}>

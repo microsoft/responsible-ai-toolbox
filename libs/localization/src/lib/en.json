@@ -1328,7 +1328,7 @@
       "precision": "Precision score",
       "recall": "Recall score",
       "falsePositiveRate": "False positive rate",
-      "falseNegativeRate":"False negative rate",
+      "falseNegativeRate": "False negative rate",
       "selectionRate": "Selection rate",
       "meanPrediction": "Mean prediction",
       "notAvailable": "N/A",

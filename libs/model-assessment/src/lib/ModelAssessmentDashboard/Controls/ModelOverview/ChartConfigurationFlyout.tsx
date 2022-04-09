@@ -82,21 +82,21 @@ export class ChartConfigurationFlyout extends React.Component<
         this.props.selectedFeatureBasedCohorts.length ===
       0;
 
-    let datasetCohortDropdownSelectedKeys: string[] =
+    const datasetCohortDropdownSelectedKeys: string[] =
       this.props.selectedDatasetCohorts.map((n) => n.toString());
     if (
       this.props.selectedDatasetCohorts.length > 0 &&
-      this.props.selectedDatasetCohorts.length ==
+      this.props.selectedDatasetCohorts.length ===
         this.props.datasetCohorts.length
     ) {
       datasetCohortDropdownSelectedKeys.push(selectAllOptionKey);
     }
 
-    let featureBasedCohortDropdownSelectedKeys: string[] =
+    const featureBasedCohortDropdownSelectedKeys: string[] =
       this.props.selectedFeatureBasedCohorts.map((n) => n.toString());
     if (
       this.props.featureBasedCohorts.length > 0 &&
-      this.props.selectedFeatureBasedCohorts.length ==
+      this.props.selectedFeatureBasedCohorts.length ===
         this.props.featureBasedCohorts.length
     ) {
       featureBasedCohortDropdownSelectedKeys.push(selectAllOptionKey);
@@ -195,19 +195,17 @@ export class ChartConfigurationFlyout extends React.Component<
       // if at least some items were not selected before then select all now
       if (currentlySelected.length !== allItems.length) {
         return allItems;
-      } else {
-        return [];
       }
-    } else {
-      const key = Number(item.key);
+      return [];
+    }
+    const key = Number(item.key);
 
-      if (item.selected && !currentlySelected.includes(key)) {
-        // update with newly selected item
-        return currentlySelected.concat([key]);
-      } else if (!item.selected && currentlySelected.includes(key)) {
-        // update by removing the unselected item
-        return currentlySelected.filter((idx) => idx !== key);
-      }
+    if (item.selected && !currentlySelected.includes(key)) {
+      // update with newly selected item
+      return currentlySelected.concat([key]);
+    } else if (!item.selected && currentlySelected.includes(key)) {
+      // update by removing the unselected item
+      return currentlySelected.filter((idx) => idx !== key);
     }
 
     return currentlySelected;
