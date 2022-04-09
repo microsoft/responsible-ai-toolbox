@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { calculateBoxData } from "./calculateBoxData";
+import { calculateBoxPlotData } from "./calculateBoxData";
 
 export interface IBoxData {
   box: number[][];
@@ -20,14 +20,14 @@ export function getBoxData(x: number[], y: number[]): IBoxData {
     box: [],
     outlier: []
   };
-  const calculatedData = dataSet.map((v) => calculateBoxData(v));
+  const calculatedData = dataSet.map((v) => calculateBoxPlotData(v));
   calculatedData.forEach((temp, index) => {
     result.box.push([
-      temp.min,
-      temp.lowerPercentile,
+      temp.lowerFence,
+      temp.lowerQuartile,
       temp.median,
-      temp.upperPercentile,
-      temp.max
+      temp.upperQuartile,
+      temp.upperFence
     ]);
     temp.outliers?.forEach((d) => {
       result.outlier.push([index, d]);

@@ -3,13 +3,13 @@
 
 import {
   BasicHighChart,
+  calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
   JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { cloneDeep } from "lodash";
 import {
   DefaultButton,
   Dropdown,
@@ -20,6 +20,7 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
+import { PointOptionsObject } from "highcharts";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
@@ -49,17 +50,14 @@ export class ProbabilityDistributionChart extends React.Component<
     this.state = { probabilityFlyoutIsVisible: false };
   }
 
-  // componentDidUpdate(
-  //   prevProps: IProbabilityDistributionChartProps,
-  //   _prevState: IProbabilityDistributionChartState
-  // ) {
-  //   if (this.props.featureBasedCohorts !== prevProps.featureBasedCohorts) {
-  //     // feature-based cohorts changed, update state
-  //     this.setState({
-  //       selectedFeatureBasedCohorts: this.getAllFeatureBasedCohorts()
-  //     });
-  //   }
-  // }
+  public componentDidMount(): void {
+    if (this.state.probabilityOption === undefined) {
+      const probabilityOptions = this.getProbabilityOptions();
+      if (probabilityOptions.length > 0) {
+        this.setState({ probabilityOption: probabilityOptions[0] });
+      }
+    }
+  }
 
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
@@ -85,36 +83,36 @@ export class ProbabilityDistributionChart extends React.Component<
       (cohort) => cohort.cohort.name
     );
 
-    const probabilityOptions: IDropdownOption[] = new Array(
-      this.context.jointDataset.predictionClassCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.ProbabilityYRoot + index.toString();
-        return {
-          key,
-          text: this.context.jointDataset.metaDict[key].label
-        };
-      });
+    const probabilityOptions = this.getProbabilityOptions();
 
     if (probabilityOptions.length === 0) {
-      return;
+      return React.Fragment;
     }
 
     if (this.state.probabilityOption === undefined) {
       this.setState({ probabilityOption: probabilityOptions[0] });
-      return;
+      return React.Fragment;
     }
 
     const boxplotData = selectedCohorts.map((cohort, index) => {
-      return this.getBoxPlotData(
+      return calculateBoxPlotDataFromErrorCohort(
         cohort,
         index,
         this.state.probabilityOption!.key.toString()
       );
     });
+    // map to highcharts-specific naming convention
+    const boxData = boxplotData.map((cohortBoxPlotData) => {
+      return {
+        q1: cohortBoxPlotData.lowerQuartile,
+        q3: cohortBoxPlotData.upperQuartile,
+        high: cohortBoxPlotData.upperFence,
+        low: cohortBoxPlotData.lowerFence,
+        median: cohortBoxPlotData.median
+      } as PointOptionsObject;
+    });
     const outlierData = boxplotData
-      .map((cohortDict) => cohortDict.outliers)
+      .map((cohortBoxPlotData) => cohortBoxPlotData.outliers)
       .map((outlierProbs, cohortIndex) => {
         return outlierProbs.map((prob) => [cohortIndex, prob]);
       })
@@ -143,7 +141,12 @@ export class ProbabilityDistributionChart extends React.Component<
           <Stack.Item className={classNames.chart}>
             {noCohortSelected && (
               <div className={classNames.placeholderText}>
-                <Text>Select at least one cohort to view the box plot.</Text>
+                <Text>
+                  {
+                    localization.ModelAssessment.ModelOverview.boxPlot
+                      .boxPlotPlaceholder
+                  }
+                </Text>
               </div>
             )}
             {!noCohortSelected && (
@@ -166,7 +169,7 @@ export class ProbabilityDistributionChart extends React.Component<
                     },
                     series: [
                       {
-                        data: boxplotData,
+                        data: boxData,
                         fillColor: "#c8cffc",
                         name: localization.ModelAssessment.ModelOverview.boxPlot
                           .boxPlotSeriesLabel,
@@ -251,50 +254,15 @@ export class ProbabilityDistributionChart extends React.Component<
     }
   };
 
-  private getPercentile(sortedData: number[], percentile: number) {
-    const index = (percentile / 100) * sortedData.length;
-    let result;
-    if (Math.floor(index) === index) {
-      result = (sortedData[index - 1] + sortedData[index]) / 2;
-    } else {
-      result = sortedData[Math.floor(index)];
-    }
-    return result;
-  }
-
-  private getBoxPlotData(errorCohort: ErrorCohort, index: number, key: string) {
-    // key is the identifier for the column (e.g., probability)
-    const sortedData: number[] = cloneDeep(
-      errorCohort.cohort.filteredData.map((dict) => dict[key])
-    ).sort((number1: number, number2: number) => {
-      return number1 - number2;
-    });
-    const min = sortedData[0];
-    const max = sortedData[sortedData.length - 1];
-    const firstQuartile = this.getPercentile(sortedData, 25);
-    const median = this.getPercentile(sortedData, 50);
-    const thirdQuartile = this.getPercentile(sortedData, 75);
-    const interquartileRange = thirdQuartile - firstQuartile;
-    const lowerFence = firstQuartile - interquartileRange * 1.5;
-    const upperFence = thirdQuartile + interquartileRange * 1.5;
-    const nonOutliers = sortedData.filter(
-      (element) => element >= lowerFence && element <= upperFence
-    );
-    const outliers = sortedData.filter(
-      (element) => element < lowerFence || element > upperFence
-    );
-    const lowerWhisker = nonOutliers[0];
-    const upperWhisker = nonOutliers[nonOutliers.length - 1];
-    return {
-      high: upperWhisker,
-      low: lowerWhisker,
-      max,
-      median,
-      min,
-      outliers,
-      q1: firstQuartile,
-      q3: thirdQuartile,
-      x: index
-    };
+  private getProbabilityOptions(): IDropdownOption[] {
+    return new Array(this.context.jointDataset.predictionClassCount)
+      .fill(0)
+      .map((_, index) => {
+        const key = JointDataset.ProbabilityYRoot + index.toString();
+        return {
+          key,
+          text: this.context.jointDataset.metaDict[key].label
+        };
+      });
   }
 }

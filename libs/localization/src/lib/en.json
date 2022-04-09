@@ -1355,7 +1355,8 @@
         "lowerQuartile": "Lower quartile",
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "boxPlotSeriesLabel": "Box Plot",
+        "boxPlotPlaceholder": "Select at least one cohort to view the box plot."
       },
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
       "metricSelectionButton": "Choose metric",

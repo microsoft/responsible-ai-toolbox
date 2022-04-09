@@ -2,39 +2,62 @@
 // Licensed under the MIT License.
 
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 
-export function calculateBoxData(data: number[]): IHighchartBoxData {
-  const q1 = getPercentile(data, 25);
+export function calculateBoxPlotDataFromErrorCohort(
+  errorCohort: ErrorCohort,
+  index: number,
+  key: string
+) {
+  // key is the identifier for the column (e.g., probability)
+  return calculateBoxPlotData(
+    errorCohort.cohort.filteredData.map((dict) => dict[key]),
+    index
+  );
+}
+
+export function calculateBoxPlotData(data: number[], index?: number): IHighchartBoxData {
+  data.sort((number1: number, number2: number) => {
+    return number1 - number2;
+  });
+  const min = data[0];
+  const max = data[data.length - 1];
+  const firstQuartile = getPercentile(data, 25);
   const median = getPercentile(data, 50);
-  const q3 = getPercentile(data, 75);
-  const iqr = q3 - q1;
-  const lowerFence = q1 - iqr * 1.5;
-  const upperFence = q3 + iqr * 1.5;
-  const outliers = [];
-
-  for (const datum of data) {
-    if (datum < lowerFence || datum > upperFence) {
-      outliers.push(datum);
-    }
-  }
+  const thirdQuartile = getPercentile(data, 75);
+  const interquartileRange = thirdQuartile - firstQuartile;
+  // calculate fences as min and max allowed values to be inside the box
+  const lowerFence = firstQuartile - interquartileRange * 1.5;
+  const upperFence = thirdQuartile + interquartileRange * 1.5;
+  const nonOutliers = data.filter(
+    (element) => element >= lowerFence && element <= upperFence
+  );
+  const outliers = data.filter(
+    (element) => element < lowerFence || element > upperFence
+  );
   return {
-    lowerPercentile: q1,
-    max: upperFence,
-    mean: mean(data),
+    upperFence: nonOutliers[nonOutliers.length - 1],
+    lowerFence: nonOutliers[0],
+    max,
     median,
-    min: lowerFence,
+    mean: mean(data),
+    min,
     outliers,
-    upperPercentile: q3
+    lowerQuartile: firstQuartile,
+    upperQuartile: thirdQuartile,
+    x: index
   };
 }
 
-function getPercentile(data: number[], percentile: number): number {
-  data.sort((a, b) => a - b);
-  const index = (percentile / 100) * data.length;
+function getPercentile(sortedData: number[], percentile: number) {
+  const index = (percentile / 100) * sortedData.length;
+  let result;
   if (Math.floor(index) === index) {
-    return (data[index - 1] + data[index]) / 2;
+    result = (sortedData[index - 1] + sortedData[index]) / 2;
+  } else {
+    result = sortedData[Math.floor(index)];
   }
-  return data[Math.floor(index)];
+  return result;
 }
 
 function mean(data: number[]) {

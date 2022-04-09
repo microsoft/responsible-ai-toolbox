@@ -3,10 +3,13 @@
 
 export interface IHighchartBoxData {
   min: number;
-  lowerPercentile: number;
+  lowerQuartile: number;
   median: number;
-  upperPercentile: number;
+  upperQuartile: number;
   max: number;
   mean: number;
-  outliers?: number[];
+  outliers: number[];
+  upperFence: number;
+  lowerFence: number;
+  x?: number;
 }
