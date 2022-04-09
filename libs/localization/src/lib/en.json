@@ -1334,7 +1334,12 @@
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
     }
