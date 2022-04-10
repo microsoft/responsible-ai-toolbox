@@ -75,6 +75,9 @@ export function getFeatureImportanceBarOptions(
     chart: {
       type: "column"
     },
+    legend: {
+      enabled: true
+    },
     plotOptions: {
       series: {
         cursor: "pointer",
