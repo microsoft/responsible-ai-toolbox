@@ -120,7 +120,7 @@ export class ModelOverview extends React.Component<
 
     return (
       <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
-        <Text variant="medium">
+        <Text variant="medium" style={{ maxWidth: "750px" }}>
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}

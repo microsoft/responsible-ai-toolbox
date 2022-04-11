@@ -235,6 +235,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
+        maxWidth: "750px",
         paddingLeft: "25px",
         width: "100%"
       },

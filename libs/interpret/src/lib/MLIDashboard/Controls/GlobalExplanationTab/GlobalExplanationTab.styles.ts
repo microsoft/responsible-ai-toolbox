@@ -69,6 +69,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "23px"
       },
       infoWithText: {
+        maxWidth: "750px",
         paddingLeft: "25px",
         width: "100%"
       },

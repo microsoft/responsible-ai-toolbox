@@ -16,6 +16,7 @@ export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
   filledNodeText: IStyle;
+  infoWithText: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
   node: IStyle;
@@ -56,6 +57,7 @@ export const treeViewRendererStyles = (props?: {
         fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
+    infoWithText: { maxWidth: "750px" },
     legend: {
       pointerEvents: "none"
     },

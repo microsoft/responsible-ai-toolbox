@@ -42,6 +42,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         display: "inline-block",
         flex: "1",
         fontSize: 14,
+        maxWidth: "750px",
         paddingBottom: "5px",
         textAlign: "left"
       },

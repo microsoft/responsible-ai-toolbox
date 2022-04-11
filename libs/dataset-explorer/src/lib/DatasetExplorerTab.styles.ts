@@ -110,6 +110,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "23px"
       },
       infoWithText: {
+        maxWidth: "750px",
         paddingLeft: "33px",
         width: "100%"
       },

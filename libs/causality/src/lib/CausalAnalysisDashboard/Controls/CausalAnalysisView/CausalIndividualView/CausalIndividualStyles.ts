@@ -37,6 +37,7 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
         display: "inline-block",
         flex: "1",
         fontSize: 14,
+        maxWidth: "750px",
         paddingBottom: "15px",
         textAlign: "left"
       },

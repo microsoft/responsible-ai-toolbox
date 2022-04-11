@@ -10,6 +10,7 @@ import {
 
 export interface ICounterfactualsTabStyles {
   container: IStyle;
+  infoWithText: IStyle;
 }
 
 export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactualsTabStyles> =
@@ -19,6 +20,7 @@ export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactuals
       container: {
         color: theme.semanticColors.bodyText,
         padding: "0 40px 10px 40px"
-      }
+      },
+      infoWithText: { maxWidth: "750px" }
     });
   };

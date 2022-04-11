@@ -21,6 +21,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
+        maxWidth: "750px",
         paddingLeft: "25px",
         width: "100%"
       },
