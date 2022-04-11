@@ -4,6 +4,8 @@
 export enum Locators {
   SelectButton = "button:contains('Select')",
   CancelButton = "button:contains('Cancel')",
+  SaveAsNewCohortButton = "button:contains('Save as a new cohort')",
+  ClearSelectionButton = "button:contains('Clear selection')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
   IFIExpandCollapseButton = "[aria-label='expand collapse group']",
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
@@ -82,6 +84,7 @@ export enum Locators {
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
+  ErrorAnalysisHeader = "#ModelAssessmentDashboard #errorAnalysisHeader",
   MSSideBarCards = "#OverallMetricChart div[class^='statsBox']",
   MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
   MSScrollable = "#OverallMetricChart div[class^='scrollableWrapper']",
