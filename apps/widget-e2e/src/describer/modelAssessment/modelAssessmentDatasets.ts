@@ -24,6 +24,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
+    },
     featureImportanceData: {
       datapoint: 500,
       dropdownRowName: "Row 34",
@@ -93,6 +96,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
+    },
     featureImportanceData: {
       datapoint: 89,
       hasFeatureImportanceComponent: false
@@ -153,6 +159,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "age"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 89,
@@ -222,6 +231,9 @@ const modelAssessmentDatasets = {
       ],
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 730,
@@ -322,6 +334,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
+    },
     featureImportanceData: {
       hasFeatureImportanceComponent: false
     },
@@ -378,6 +393,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "alcohol"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 500,
