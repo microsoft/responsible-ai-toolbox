@@ -4,6 +4,7 @@
 export enum Locators {
   SelectButton = "button:contains('Select')",
   CancelButton = "button:contains('Cancel')",
+  YesButton = "button:contains('Yes')",
   SaveAsNewCohortButton = "button:contains('Save as a new cohort')",
   ClearSelectionButton = "button:contains('Clear selection')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
@@ -33,7 +34,9 @@ export enum Locators {
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
+  CohortSaveButton = "button:contains('Save')",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
+  CohortEmptyDialogCloseButton = ".emptyCohortDialog button",
   NewCohortSpan = "span:contains('CohortCreateE2E')",
   WICDatapointDropbox = "#IndividualFeatureContainer div[class^='ms-Stack legendAndText'] div[class^='ms-ComboBox-container']",
   WICLocalImportanceDescription = "#LocalImportanceDescription",
