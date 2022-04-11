@@ -170,7 +170,7 @@ export class ProbabilityDistributionChart extends React.Component<
                     series: [
                       {
                         data: boxData,
-                        fillColor: "#c8cffc",
+                        fillColor: "#b2d6f2",
                         name: localization.ModelAssessment.ModelOverview.boxPlot
                           .boxPlotSeriesLabel,
                         tooltip: {
