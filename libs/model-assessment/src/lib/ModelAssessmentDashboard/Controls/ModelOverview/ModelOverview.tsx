@@ -23,6 +23,7 @@ import React from "react";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
+import { modelOverviewStyles } from "./ModelOverview.styles";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -32,6 +33,9 @@ interface IModelOverviewProps {
 interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
+  selectedDatasetCohorts: number[];
+  selectedFeatureBasedCohorts: number[];
+  chartConfigurationIsVisible: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -46,6 +50,9 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
+      chartConfigurationIsVisible: false,
+      selectedDatasetCohorts: [],
+      selectedFeatureBasedCohorts: [],
       selectedFeatures: [],
       selectedMetrics: []
     };
@@ -69,6 +76,11 @@ export class ModelOverview extends React.Component<
       ];
     }
     this.setState({
+      selectedDatasetCohorts: this.context.errorCohorts.map(
+        (_cohort, index) => {
+          return index;
+        }
+      ),
       selectedMetrics: defaultSelectedMetrics
     });
   }
@@ -81,6 +93,9 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
+
+    const classNames = modelOverviewStyles();
+
     const selectableMetrics = getSelectableMetrics(
       this.context.dataset.task_type
     );
@@ -119,7 +134,7 @@ export class ModelOverview extends React.Component<
       });
 
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
+      <Stack className={classNames.sectionStack} tokens={{ childrenGap: "10px" }}>
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
@@ -139,7 +154,7 @@ export class ModelOverview extends React.Component<
                 options={selectableMetrics}
                 onChange={this.onMetricSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
               />
               <Dropdown
                 componentRef={this.featureDropdownRef}
@@ -154,7 +169,7 @@ export class ModelOverview extends React.Component<
                 options={featureSelectionOptions}
                 onChange={this.onFeatureSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
               />
             </Stack>
             <DatasetCohortStatsTable
