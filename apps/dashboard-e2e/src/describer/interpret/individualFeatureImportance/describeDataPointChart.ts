@@ -29,7 +29,7 @@ export function describeDataPointChart(dataShape: IInterpretData): void {
       it("should show message on sub chart", () => {
         const message =
           !dataShape.noLocalImportance && !dataShape.noFeatureImportance
-            ? "Select a point to see its local importance"
+            ? "Select a datapoint in the table above to view its local feature importances"
             : "Provide local feature importances to see how each feature impacts individual predictions.";
         cy.get("#subPlotContainer").should("contain.text", message);
       });
