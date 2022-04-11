@@ -29,6 +29,7 @@ import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
+import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
@@ -100,6 +101,9 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
+
+    const classNames = modelOverviewStyles();
+
     const selectableMetrics = getSelectableMetrics(
       this.context.dataset.task_type
     );
@@ -155,7 +159,7 @@ export class ModelOverview extends React.Component<
       });
 
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
+      <Stack className={classNames.sectionStack} tokens={{ childrenGap: "10px" }}>
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
@@ -175,7 +179,7 @@ export class ModelOverview extends React.Component<
                 options={selectableMetrics}
                 onChange={this.onMetricSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
               />
               <Dropdown
                 componentRef={this.featureDropdownRef}
@@ -190,7 +194,7 @@ export class ModelOverview extends React.Component<
                 options={featureSelectionOptions}
                 onChange={this.onFeatureSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
               />
             </Stack>
             <DatasetCohortStatsTable
