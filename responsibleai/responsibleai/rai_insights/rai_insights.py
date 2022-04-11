@@ -323,8 +323,8 @@ class RAIInsights(RAIBaseInsights):
 
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
-                        warnings.warn(
-                            'INVALID-TASK-TYPE-WARNING: The regression model'
+                        raise UserConfigValidationException(
+                            'The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
         else:
