@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   getTheme,
@@ -235,7 +235,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
-        maxWidth: "750px",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },

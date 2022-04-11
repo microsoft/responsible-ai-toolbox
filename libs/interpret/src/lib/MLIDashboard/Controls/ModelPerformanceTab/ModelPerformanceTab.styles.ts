@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -21,7 +22,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
-        maxWidth: "750px",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },

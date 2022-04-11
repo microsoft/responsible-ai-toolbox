@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import { Property } from "csstype";
 import {
   IStyle,
@@ -57,7 +58,7 @@ export const treeViewRendererStyles = (props?: {
         fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
-    infoWithText: { maxWidth: "750px" },
+    infoWithText: { maxWidth: descriptionMaxWidth },
     legend: {
       pointerEvents: "none"
     },

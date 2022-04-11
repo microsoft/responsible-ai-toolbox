@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -110,7 +110,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "23px"
       },
       infoWithText: {
-        maxWidth: "750px",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "33px",
         width: "100%"
       },

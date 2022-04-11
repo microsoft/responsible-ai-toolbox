@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -69,7 +70,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "23px"
       },
       infoWithText: {
-        maxWidth: "750px",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },

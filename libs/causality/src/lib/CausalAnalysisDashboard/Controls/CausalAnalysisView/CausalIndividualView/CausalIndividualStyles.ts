@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   IStyle,
@@ -37,7 +38,7 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
         display: "inline-block",
         flex: "1",
         fontSize: 14,
-        maxWidth: "750px",
+        maxWidth: descriptionMaxWidth,
         paddingBottom: "15px",
         textAlign: "left"
       },

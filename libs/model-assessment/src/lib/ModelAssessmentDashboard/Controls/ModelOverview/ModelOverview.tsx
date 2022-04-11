@@ -8,7 +8,8 @@ import {
   OverallMetricChart,
   BinaryClassificationMetrics,
   RegressionMetrics,
-  classificationTask
+  classificationTask,
+  descriptionMaxWidth
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -120,7 +121,7 @@ export class ModelOverview extends React.Component<
 
     return (
       <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
-        <Text variant="medium" style={{ maxWidth: "750px" }}>
+        <Text variant="medium" style={{ maxWidth: descriptionMaxWidth }}>
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
