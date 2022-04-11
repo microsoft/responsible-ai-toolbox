@@ -10,7 +10,6 @@ import pandas as pd
 import pytest
 
 from responsibleai.exceptions import UserConfigValidationException
-from responsibleai.modelanalysis import model_analysis
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
 
 from .common_utils import (create_binary_classification_dataset,
