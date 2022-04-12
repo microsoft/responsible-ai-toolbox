@@ -55,6 +55,8 @@ export interface ICohortEditorState {
   cohortName?: string;
   selectedFilterCategory?: string;
   showConfirmation: boolean;
+  showInvalidMinMaxValueError: boolean;
+  showInvalidValueError: boolean;
 }
 
 export class CohortEditor extends React.PureComponent<
@@ -94,7 +96,9 @@ export class CohortEditor extends React.PureComponent<
       filters: this.props.filterList || [],
       openedFilter: undefined,
       selectedFilterCategory: undefined,
-      showConfirmation: false
+      showConfirmation: false,
+      showInvalidMinMaxValueError: false,
+      showInvalidValueError: false
     };
     this._isInitialized = true;
   }
@@ -153,6 +157,10 @@ export class CohortEditor extends React.PureComponent<
                   setComparison={this.setComparison}
                   setNumericValue={this.setNumericValue}
                   setSelectedProperty={this.setSelectedProperty}
+                  showInvalidValueError={this.state.showInvalidValueError}
+                  showInvalidMinMaxValueError={
+                    this.state.showInvalidMinMaxValueError
+                  }
                   filterIndex={this.state.filterIndex}
                 />
               )}
@@ -428,21 +436,37 @@ export class CohortEditor extends React.PureComponent<
         numberVal > max ||
         numberVal < min
       ) {
+        this.setState({
+          showInvalidMinMaxValueError: false,
+          showInvalidValueError: true
+        });
         return this.state.openedFilter.arg[index].toString();
       }
+      this.setState({ showInvalidValueError: false });
       openArg[index] = numberVal;
     } else {
       const prevVal = openArg[index];
       const newVal = prevVal + delta;
       if (newVal > max || newVal < min) {
+        this.setState({
+          showInvalidMinMaxValueError: false,
+          showInvalidValueError: true
+        });
         return prevVal.toString();
       }
+      this.setState({ showInvalidValueError: false });
       openArg[index] = newVal;
     }
 
     // in the range validation
     if (openArg[1] <= openArg[0]) {
       openArg[1] = max;
+      this.setState({
+        showInvalidMinMaxValueError: true,
+        showInvalidValueError: false
+      });
+    } else {
+      this.setState({ showInvalidMinMaxValueError: false });
     }
 
     this.setState({

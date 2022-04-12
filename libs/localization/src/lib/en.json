@@ -811,6 +811,8 @@
       "clearAllFilters": "Clear all filters",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Delete",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
