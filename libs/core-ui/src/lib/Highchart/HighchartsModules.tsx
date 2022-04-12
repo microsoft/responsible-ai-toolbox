@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import * as Highcharts from "highcharts";
-import heatmap from "highcharts/modules/heatmap";
 import gantt from "highcharts/modules/gantt";
+import heatmap from "highcharts/modules/heatmap";
 import PatternFillModule from "highcharts/modules/pattern-fill";
 
 import { HighchartsModuleNames } from "./HighchartTypes";

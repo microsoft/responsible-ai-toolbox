@@ -33,9 +33,6 @@ interface IModelOverviewProps {
 interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
-  chartConfigurationIsVisible: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -50,9 +47,6 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      chartConfigurationIsVisible: false,
-      selectedDatasetCohorts: [],
-      selectedFeatureBasedCohorts: [],
       selectedFeatures: [],
       selectedMetrics: []
     };
@@ -76,11 +70,6 @@ export class ModelOverview extends React.Component<
       ];
     }
     this.setState({
-      selectedDatasetCohorts: this.context.errorCohorts.map(
-        (_cohort, index) => {
-          return index;
-        }
-      ),
       selectedMetrics: defaultSelectedMetrics
     });
   }
@@ -134,7 +123,10 @@ export class ModelOverview extends React.Component<
       });
 
     return (
-      <Stack className={classNames.sectionStack} tokens={{ childrenGap: "10px" }}>
+      <Stack
+        className={classNames.sectionStack}
+        tokens={{ childrenGap: "10px" }}
+      >
         <Text variant="medium">
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
