@@ -15,6 +15,23 @@ export function describeCohortFunctionality(
         dataShape.cohortDefaultName
       );
     });
+    it("should have save and save and switch buttons disabled by default", () => {
+      cy.get(Locators.CreateNewCohortButton).click();
+      cy.get(Locators.CohortSaveButton).should("be.disabled");
+      cy.get(Locators.CohortSaveAndSwitchButton).should("be.disabled");
+      cy.get(Locators.CancelButton).click();
+      cy.get(Locators.YesButton).click();
+    });
+    it("should not allow creating empty cohort", () => {
+      cy.get(Locators.CreateNewCohortButton).click();
+      cy.get(Locators.CohortFilterSelection).first().check();
+      cy.get(Locators.CohortDatasetValueInput).clear().type("0");
+      cy.get(Locators.CohortAddFilterButton).click();
+      cy.get(Locators.CohortSaveAndSwitchButton).click();
+      cy.get(Locators.CohortEmptyDialogCloseButton).click();
+      cy.get(Locators.CancelButton).click();
+      cy.get(Locators.YesButton).click();
+    });
     it("Should update dataset selection with new cohort when a new cohort is created", () => {
       cy.get(Locators.CreateNewCohortButton).click();
       cy.get("#cohortEditPanel").should("exist");

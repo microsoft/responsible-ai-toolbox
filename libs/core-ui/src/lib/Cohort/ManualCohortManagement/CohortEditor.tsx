@@ -31,6 +31,7 @@ import { Cohort } from "../Cohort";
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { CohortEditorFilter } from "./CohortEditorFilter";
 import { CohortEditorFilterList } from "./CohortEditorFilterList";
+import { EmptyCohortDialog } from "./EmptyCohortDialog";
 
 export interface ICohortEditorProps {
   jointDataset: JointDataset;
@@ -55,6 +56,7 @@ export interface ICohortEditorState {
   cohortName?: string;
   selectedFilterCategory?: string;
   showConfirmation: boolean;
+  showEmptyCohortError: boolean;
 }
 
 export class CohortEditor extends React.PureComponent<
@@ -94,7 +96,8 @@ export class CohortEditor extends React.PureComponent<
       filters: this.props.filterList || [],
       openedFilter: undefined,
       selectedFilterCategory: undefined,
-      showConfirmation: false
+      showConfirmation: false,
+      showEmptyCohortError: false
     };
     this._isInitialized = true;
   }
@@ -178,6 +181,7 @@ export class CohortEditor extends React.PureComponent<
           </Stack>
         </Panel>
         {this.renderCancelDialog()}
+        {this.renderEmptyCohortDialog()}
       </>
     );
   }
@@ -196,13 +200,13 @@ export class CohortEditor extends React.PureComponent<
         )}
         <PrimaryButton
           onClick={() => this.saveCohort()}
-          disabled={this.isDuplicate()}
+          disabled={this.isSaveDisabled()}
         >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton
           onClick={() => this.saveCohort(true)}
-          disabled={this.isDuplicate()}
+          disabled={this.isSaveDisabled()}
         >
           {localization.Interpret.CohortEditor.saveAndSwitch}
         </DefaultButton>
@@ -230,6 +234,20 @@ export class CohortEditor extends React.PureComponent<
         onConfirm={this.onCancelConfirm}
         onClose={this.onCancelClose}
       />
+    );
+  };
+
+  private readonly renderEmptyCohortDialog = (): React.ReactNode => {
+    if (!this.state.showEmptyCohortError) {
+      return undefined;
+    }
+    return <EmptyCohortDialog onClose={this.onEmptyCohortClose} />;
+  };
+
+  private isSaveDisabled = (): boolean => {
+    return (
+      this.isDuplicate() ||
+      (!this.state.compositeFilters?.length && !this.state.filters?.length)
     );
   };
 
@@ -265,6 +283,10 @@ export class CohortEditor extends React.PureComponent<
 
   private readonly onCancelClose = (): void => {
     this.setState({ showConfirmation: false });
+  };
+
+  private readonly onEmptyCohortClose = (): void => {
+    this.setState({ showEmptyCohortError: false });
   };
 
   private readonly setAsCategorical = (
@@ -513,7 +535,11 @@ export class CohortEditor extends React.PureComponent<
         this.state.filters,
         this.state.compositeFilters
       );
-      this.props.onSave(newCohort, switchNew);
+      if (newCohort.filteredData.length === 0) {
+        this.setState({ showEmptyCohortError: true });
+      } else {
+        this.props.onSave(newCohort, switchNew);
+      }
     }
   };
 
