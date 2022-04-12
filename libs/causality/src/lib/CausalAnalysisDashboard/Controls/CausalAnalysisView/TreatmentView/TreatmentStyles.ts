@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   IStyle,
@@ -41,6 +42,7 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
       header: {
         fontSize: 14,
         margin: "20px",
+        maxWidth: descriptionMaxWidth,
         textAlign: "left"
       },
       label: {
