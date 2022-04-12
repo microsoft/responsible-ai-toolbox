@@ -82,7 +82,7 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
-      "title": "Shift Cohort",
+      "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "PreBuiltCohort": {
@@ -215,7 +215,7 @@
       "fullscreen": "Fullscreen",
       "heatMap": "Heat map",
       "newCohort": "New cohort",
-      "shiftCohort": "Shift cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Tree map",
       "whatIf": "What-If"
     },
@@ -815,6 +815,8 @@
       "clearAllFilters": "Clear all filters",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Delete",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
@@ -1267,11 +1269,11 @@
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "ShiftCohort": "Shift cohort",
+      "ShiftCohort": "Switch cohort",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
@@ -1318,7 +1320,7 @@
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
       "createCohort": "Create cohort",
-      "shiftCohort": "Shift cohort"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
