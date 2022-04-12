@@ -7,9 +7,11 @@ import uuid
 _ErrorReportVersion1 = '1.0'
 _ErrorReportVersion2 = '2.0'
 _ErrorReportVersion3 = '3.0'
+_ErrorReportVersion4 = '4.0'
 _AllVersions = [_ErrorReportVersion1,
                 _ErrorReportVersion2,
-                _ErrorReportVersion3]
+                _ErrorReportVersion3,
+                _ErrorReportVersion4]
 _VERSION = 'version'
 
 TREE = 'tree'
@@ -19,6 +21,7 @@ MATRIX_FEATURES = 'matrix_features'
 IMPORTANCES = 'importances'
 ID = 'id'
 METADATA = 'metadata'
+ROOT_STATS = 'root_stats'
 
 
 def json_converter(obj):
@@ -57,19 +60,18 @@ def as_error_report(error_dict):
             return ErrorReport(error_dict[TREE],
                                error_dict[MATRIX],
                                error_dict[ID])
-        elif IMPORTANCES not in error_dict:
-            return ErrorReport(error_dict[TREE],
-                               error_dict[MATRIX],
-                               error_dict[TREE_FEATURES],
-                               error_dict[MATRIX_FEATURES],
-                               id=error_dict[ID])
-        else:
-            return ErrorReport(error_dict[TREE],
-                               error_dict[MATRIX],
-                               error_dict[TREE_FEATURES],
-                               error_dict[MATRIX_FEATURES],
-                               importances=error_dict[IMPORTANCES],
-                               id=error_dict[ID])
+        extra_args = {}
+        if IMPORTANCES in error_dict:
+            extra_args[IMPORTANCES] = error_dict[IMPORTANCES]
+        if ROOT_STATS in error_dict:
+            extra_args[ROOT_STATS] = error_dict[ROOT_STATS]
+        if ID in error_dict:
+            extra_args[ID] = error_dict[ID]
+        return ErrorReport(error_dict[TREE],
+                           error_dict[MATRIX],
+                           error_dict[TREE_FEATURES],
+                           error_dict[MATRIX_FEATURES],
+                           **extra_args)
     else:
         return error_dict
 
@@ -93,6 +95,7 @@ class ErrorReport(object):
                  tree_features=None,
                  matrix_features=None,
                  importances=None,
+                 root_stats=None,
                  id=None):
         """Defines the ErrorReport, which contains the tree and matrix filter.
 
@@ -109,6 +112,8 @@ class ErrorReport(object):
         :param importances: The feature importances calculated using mutual
             information with the error on the true labels.
         :type importances: list[float]
+        :param root_stats: The statistics for the root all data cohort.
+        :type root_stats: dict
         :param id: The unique identifier for the ErrorReport.
             A new unique id is created if none is specified.
         :type id: str
@@ -119,7 +124,8 @@ class ErrorReport(object):
         self._tree_features = tree_features
         self._matrix_features = matrix_features
         self._importances = importances
-        self._metadata = {_VERSION: _ErrorReportVersion3}
+        self._root_stats = root_stats
+        self._metadata = {_VERSION: _ErrorReportVersion4}
 
     @property
     def __dict__(self):
@@ -139,6 +145,8 @@ class ErrorReport(object):
                              METADATA: self._metadata}
         if self._importances is not None:
             error_report_dict[IMPORTANCES] = self._importances
+        if self._root_stats is not None:
+            error_report_dict[ROOT_STATS] = self._root_stats
         return error_report_dict
 
     @property
@@ -196,6 +204,19 @@ class ErrorReport(object):
         :rtype: list[float]
         """
         return self._importances
+
+    @property
+    def root_stats(self):
+        """Returns the root cohort statistics.
+
+        The root cohort statistics are displayed for both the
+        heatmap and tree view.  They include the metric name
+        and value for the all data cohort.
+
+        :return: The root all data cohort statistics.
+        :rtype: dict
+        """
+        return self._root_stats
 
     @property
     def id(self):
