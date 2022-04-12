@@ -58,6 +58,7 @@
     "localized-strings": "^0.2.4",
     "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",
+    "minimist": "^1.2.6",
     "moment": "^2.24.0",
     "office-ui-fabric-react": "^7.117.0",
     "plotly.js": "^1.48.0",

@@ -182,6 +182,9 @@
       "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
       "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
+    },
     "FilterTooltip": {
       "correctNum": "Correct (#): ",
       "countNum": "Count (#): ",
@@ -207,7 +210,7 @@
       "featureList": "Feature list",
       "fullscreen": "Fullscreen",
       "heatMap": "Heat map",
-      "saveCohort": "Save cohort",
+      "newCohort": "New cohort",
       "shiftCohort": "Shift cohort",
       "treeMap": "Tree map",
       "whatIf": "What-If"
@@ -1148,7 +1151,7 @@
       "dataPointInfo": "Data point info",
       "deltaLabel": "Delta",
       "disclaimer": "Disclaimer: These are explanations based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
-      "featureImportanceGetStartedText": "Select a point to see its local importance",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Provide local feature importances to see how each feature impacts individual predictions.",
       "featureImportancePlot": "Feature importance plot",
       "featureValues": "Feature values",
@@ -1264,8 +1267,8 @@
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "Create new cohort",
+      "ShiftCohort": "Shift cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
       "Filters": "Number of filters",
@@ -1311,11 +1314,34 @@
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
       "createCohort": "Create cohort",
-      "saveCohort": "Save cohort",
       "shiftCohort": "Shift cohort"
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
+    },
+    "ModelOverview": {
+      "metricsDropdown": "Metric(s)",
+      "accuracy": "Accuracy",
+      "f1Score": "F1 score",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanSquaredError": "Mean squared error",
+      "precision": "Precision score",
+      "recall": "Recall score",
+      "falsePositiveRate": "False positive rate",
+      "falseNegativeRate": "False negative rate",
+      "selectionRate": "Selection rate",
+      "meanPrediction": "Mean prediction",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Count",
+      "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
     }
   }
 }

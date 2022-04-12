@@ -165,7 +165,7 @@ export class CohortList extends React.Component<
               </Stack>
             );
           }
-          return <span>{fieldContent}</span>;
+          return <span className={style.link}>{fieldContent}</span>;
         case "detailsColumn":
           if (item.details && item.details.length === 2 && index !== 0) {
             return (

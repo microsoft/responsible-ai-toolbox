@@ -8,12 +8,9 @@ import {
   ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import _, { isEqual } from "lodash";
-import { Text, Link, Stack, getTheme } from "office-ui-fabric-react";
+import { getTheme } from "office-ui-fabric-react";
 import React from "react";
-
-import { CausalAggregateStyles } from "./CausalAggregateStyles";
 
 export interface ICausalAggregateChartProps {
   data: ICausalAnalysisSingleData[];
@@ -25,45 +22,12 @@ export class CausalAggregateChart extends React.PureComponent<ICausalAggregateCh
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    const styles = CausalAggregateStyles();
     return (
-      <Stack horizontal verticalFill className={styles.container}>
-        <Stack.Item grow className={styles.leftPane}>
-          <BasicHighChart
-            configOverride={getErrorBarChartOptions(
-              this.props.data,
-              getTheme()
-            )}
-            theme={getTheme()}
-            id="CausalAggregateChart"
-          />
-        </Stack.Item>
-        <Stack.Item grow className={styles.rightPane}>
-          <Stack horizontal={false}>
-            <Stack.Item className={styles.label}>
-              <Text variant={"xLarge"} className={styles.header}>
-                {localization.CausalAnalysis.AggregateView.continuous}
-              </Text>
-              {localization.CausalAnalysis.AggregateView.continuousDescription}
-            </Stack.Item>
-            <Stack.Item className={styles.label}>
-              <Text variant={"xLarge"} className={styles.header}>
-                {localization.CausalAnalysis.AggregateView.binary}
-              </Text>
-              {localization.CausalAnalysis.AggregateView.binaryDescription}
-            </Stack.Item>
-            <Stack.Item className={styles.lasso}>
-              {localization.CausalAnalysis.AggregateView.lasso}{" "}
-              <Link
-                href="https://econml.azurewebsites.net/spec/estimation/dml.html"
-                target="_blank"
-              >
-                {localization.CausalAnalysis.AggregateView.here}
-              </Link>
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
-      </Stack>
+      <BasicHighChart
+        configOverride={getErrorBarChartOptions(this.props.data, getTheme())}
+        theme={getTheme()}
+        id="CausalAggregateChart"
+      />
     );
   }
 

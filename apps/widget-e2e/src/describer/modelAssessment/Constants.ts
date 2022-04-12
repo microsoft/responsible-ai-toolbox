@@ -4,6 +4,8 @@
 export enum Locators {
   SelectButton = "button:contains('Select')",
   CancelButton = "button:contains('Cancel')",
+  SaveAsNewCohortButton = "button:contains('Save as a new cohort')",
+  ClearSelectionButton = "button:contains('Clear selection')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
   IFIExpandCollapseButton = "[aria-label='expand collapse group']",
   IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
@@ -26,9 +28,7 @@ export enum Locators {
   ICECalloutBody = "#subPlotContainer div.ms-Callout-container div[class^='calloutInner']",
   SortByDropdown = "#featureImportanceChartContainer div.ms-Dropdown-container",
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
-  CohortOnOffSelectionContainer = "#iterative-container",
-  CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
-  CreateNewCohortButton = "button:contains('Create new cohort')",
+  CreateNewCohortButton = "button:contains('New cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
@@ -84,6 +84,7 @@ export enum Locators {
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
+  ErrorAnalysisHeader = "#ModelAssessmentDashboard #errorAnalysisHeader",
   MSSideBarCards = "#OverallMetricChart div[class^='statsBox']",
   MSSideBarNumberOfBinsInput = "#AxisConfigPanel input[class^='ms-spinButton-input']",
   MSScrollable = "#OverallMetricChart div[class^='scrollableWrapper']",
