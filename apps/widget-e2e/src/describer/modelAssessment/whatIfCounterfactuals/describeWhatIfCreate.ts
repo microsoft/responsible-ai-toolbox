@@ -49,7 +49,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
+          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
         );
     });
 
