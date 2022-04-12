@@ -33,6 +33,7 @@ export interface ICounterfactualPanelStyles {
   stackHeader: IStyle;
   counterfactualName: IStyle;
   tooltipHostDisplay: IStyle;
+  saveDescription: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -104,6 +105,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       predictedLink: {
         color: theme.palette.blue
       },
+      saveDescription: { color: theme.semanticColors.buttonTextDisabled },
       searchBox: {
         width: "210px"
       },
