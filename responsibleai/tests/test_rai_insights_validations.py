@@ -13,8 +13,9 @@ from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
 
 from .common_utils import (create_binary_classification_dataset,
-                           create_cancer_data, create_iris_data,
-                           create_lightgbm_classifier)
+                           create_cancer_data, create_housing_data,
+                           create_iris_data, create_lightgbm_classifier,
+                           create_sklearn_random_forest_regressor)
 
 TARGET = 'target'
 
@@ -236,10 +237,10 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
-        err_msg = ('INVALID-TASK-TYPE-WARNING: The regression model'
+        err_msg = ('The regression model'
                    'provided has a predict_proba function. '
                    'Please check the task_type.')
-        with pytest.warns(UserWarning, match=err_msg):
+        with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(
                 model=model,
                 train=X_train,
@@ -502,10 +503,12 @@ class TestCounterfactualUserConfigValidations:
                 method='random')
 
     def test_desired_range_not_set(self):
-        X_train, y_train, X_test, y_test, _ = \
-            create_binary_classification_dataset()
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_housing_data()
 
-        model = create_lightgbm_classifier(X_train, y_train)
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 

@@ -209,7 +209,7 @@ export class CounterfactualPanel extends React.Component<
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} className={classes.saveDescription}>
             {localization.Counterfactuals.saveDescription}
           </Text>
         </Stack.Item>
