@@ -249,13 +249,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
     let metricStats: MetricCohortStats | undefined = undefined;
-    if (props.rootStats) {
+    if (props.errorAnalysisData.root_stats) {
       metricStats = new MetricCohortStats(
-        props.rootStats.totalSize,
-        props.rootStats.totalSize,
-        props.rootStats.metricValue,
-        props.rootStats.metricName,
-        props.rootStats.errorCoverage
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.metricValue,
+        props.errorAnalysisData.root_stats.metricName,
+        props.errorAnalysisData.root_stats.errorCoverage
       );
     }
     const cohorts = [
@@ -550,9 +550,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         <PivotItem key={props.itemKey} {...props} />
                       ))}
                     </Pivot>
-                    {this.props.rootStats &&
+                    {this.props.errorAnalysisData.root_stats &&
                       this.state.jointDataset.datasetRowCount !==
-                        this.props.rootStats.totalSize && (
+                        this.props.errorAnalysisData.root_stats.totalSize && (
                         <MessageBar messageBarType={MessageBarType.warning}>
                           <Text>{localization.ErrorAnalysis.scaleWarning}</Text>
                         </MessageBar>
