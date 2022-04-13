@@ -277,7 +277,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const svgHeight = maxY - minY;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {this.props.getTreeNodes
               ? localization.ErrorAnalysis.TreeView.treeDescription

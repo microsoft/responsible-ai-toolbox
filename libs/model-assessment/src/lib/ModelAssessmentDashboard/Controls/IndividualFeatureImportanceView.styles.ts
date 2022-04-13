@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -13,6 +14,7 @@ export interface IFeatureImportanceStyles {
   header: IStyle;
   headerCount: IStyle;
   headerTitle: IStyle;
+  infoWithText: IStyle;
   selectionCounter: IStyle;
 }
 
@@ -45,6 +47,7 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
           paddingTop: 4
         }
       ],
+      infoWithText: { maxWidth: descriptionMaxWidth },
       selectionCounter: {
         paddingTop: 12
       }
