@@ -104,8 +104,8 @@ export class ModelOverviewMetricChart extends React.Component<
                 theme={theme}
                 configOverride={{
                   chart: {
-                    type: "bar",
-                    height: 100 + 40 * selectedCohortNames.length
+                    height: 100 + 40 * selectedCohortNames.length,
+                    type: "bar"
                   },
                   plotOptions: {
                     bar: {

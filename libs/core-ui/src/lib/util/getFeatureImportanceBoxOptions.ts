@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { SeriesOptionsType } from "highcharts";
-import { boxPlotTooltip } from "../Highchart/BoxPlotTooltip";
 
+import { boxPlotTooltip } from "../Highchart/BoxPlotTooltip";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 

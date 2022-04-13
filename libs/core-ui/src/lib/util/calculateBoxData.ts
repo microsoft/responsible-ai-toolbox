@@ -37,11 +37,11 @@ export function calculateBoxPlotData(
     (element) => element < lowerFence || element > upperFence
   );
   return {
+    high: nonOutliers[nonOutliers.length - 1],
     low: nonOutliers[0],
-    q1: firstQuartile,
     median,
     outliers,
-    high: nonOutliers[nonOutliers.length - 1],
+    q1: firstQuartile,
     q3: thirdQuartile,
     x: index
   };
