@@ -21,7 +21,9 @@ import {
   Text,
   Pivot,
   PivotItem,
-  IDropdown
+  IComboBox,
+  IComboBoxOption,
+  ComboBox
 } from "office-ui-fabric-react";
 import React from "react";
 
