@@ -50,8 +50,8 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
       ],
       infoWithText: { maxWidth: descriptionMaxWidth, paddingLeft: 25 },
       selectionCounter: {
-        paddingTop: 12,
-        paddingLeft: 25
+        paddingLeft: 25,
+        paddingTop: 12
       },
       tabularDataView: { paddingLeft: 25 }
     });

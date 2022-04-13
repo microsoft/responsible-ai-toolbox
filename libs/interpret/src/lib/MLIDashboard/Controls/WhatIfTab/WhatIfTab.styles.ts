@@ -343,6 +343,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flex: 1,
         paddingRight: legendWidth
       },
+      subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {
         alignItems: "flex-start",
         boxSizing: "border-box",
@@ -384,7 +385,6 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         position: "relative",
         top: "0px",
         width: "67px"
-      },
-      subPlotContainer: { paddingLeft: 25 }
+      }
     });
   };

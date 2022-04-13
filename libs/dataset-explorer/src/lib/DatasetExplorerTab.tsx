@@ -142,7 +142,7 @@ export class DatasetExplorerTab extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item className={classNames.cohortPickerWrapper}>
-          <Stack horizontal={true} grow>
+          <Stack horizontal grow>
             <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
               {localization.Interpret.ModelPerformance.cohortPickerLabel}
             </Text>

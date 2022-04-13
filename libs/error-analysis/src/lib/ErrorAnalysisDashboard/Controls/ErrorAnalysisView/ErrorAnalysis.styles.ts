@@ -28,9 +28,9 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         overflow: "auto",
         width: "100%"
       },
+      errorAnalysisWrapper: { paddingLeft: "15px" },
       featureList: {
         padding: "16px 0 10px 0"
-      },
-      errorAnalysisWrapper: { paddingLeft: "15px" }
+      }
     });
   };
