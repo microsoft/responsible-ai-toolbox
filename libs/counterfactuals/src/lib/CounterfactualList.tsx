@@ -35,8 +35,8 @@ import React from "react";
 import { getCategoricalOption } from "../util/getCategoricalOption";
 import { getFilterFeatures } from "../util/getFilterFeatures";
 
-import { counterfactualListStyle } from "./CounterfactualListStyles";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualListStyle } from "./CounterfactualList.styles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 
 export interface ICounterfactualListProps {

@@ -28,7 +28,7 @@ import {
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
