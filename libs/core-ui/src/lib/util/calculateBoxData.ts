@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
-import { ErrorCohort } from "@responsible-ai/core-ui";
 
 export function calculateBoxPlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
@@ -16,12 +16,13 @@ export function calculateBoxPlotDataFromErrorCohort(
   );
 }
 
-export function calculateBoxPlotData(data: number[], index?: number): IHighchartBoxData {
+export function calculateBoxPlotData(
+  data: number[],
+  index?: number
+): IHighchartBoxData {
   data.sort((number1: number, number2: number) => {
     return number1 - number2;
   });
-  const min = data[0];
-  const max = data[data.length - 1];
   const firstQuartile = getPercentile(data, 25);
   const median = getPercentile(data, 50);
   const thirdQuartile = getPercentile(data, 75);
@@ -36,15 +37,12 @@ export function calculateBoxPlotData(data: number[], index?: number): IHighchart
     (element) => element < lowerFence || element > upperFence
   );
   return {
-    upperFence: nonOutliers[nonOutliers.length - 1],
-    lowerFence: nonOutliers[0],
-    max,
+    low: nonOutliers[0],
+    q1: firstQuartile,
     median,
-    mean: mean(data),
-    min,
     outliers,
-    lowerQuartile: firstQuartile,
-    upperQuartile: thirdQuartile,
+    high: nonOutliers[nonOutliers.length - 1],
+    q3: thirdQuartile,
     x: index
   };
 }
@@ -58,10 +56,4 @@ function getPercentile(sortedData: number[], percentile: number) {
     result = sortedData[Math.floor(index)];
   }
   return result;
-}
-
-function mean(data: number[]) {
-  let sum = 0;
-  data.forEach((d) => (sum += d));
-  return sum / data.length;
 }

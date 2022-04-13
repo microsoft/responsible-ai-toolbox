@@ -5,6 +5,7 @@ import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { SeriesOptionsType } from "highcharts";
+import { boxPlotTooltip } from "libs/core-ui/src/lib/Highchart/BoxPlotTooltip";
 import _ from "lodash";
 
 export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
@@ -15,21 +16,11 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
   const boxGroupData: SeriesOptionsType[] = [];
   boxData.forEach((data: any) => {
     boxGroupData.push({
-      type: "boxplot",
       color: data.color,
       data,
       name: localization.Core.BoxPlot.boxPlotSeriesLabel,
-      tooltip: {
-        pointFormatter() {
-          return `<span style="color:${this.color}">●</span>
-          <b> ${this.series.name}</b><br/>
-          ${localization.Core.BoxPlot.upperFence}: ${this.options.high}<br/>
-          ${localization.Core.BoxPlot.upperQuartile}: ${this.options.q3}<br/>
-          ${localization.Core.BoxPlot.median}: ${this.options.median}<br/>
-          ${localization.Core.BoxPlot.lowerQuartile}: ${this.options.q1}<br/>
-          ${localization.Core.BoxPlot.lowerFence}: ${this.options.low}<br/>`;
-        }
-      }
+      tooltip: boxPlotTooltip,
+      type: "boxplot"
     });
   });
   outlier.forEach((data: any) => {

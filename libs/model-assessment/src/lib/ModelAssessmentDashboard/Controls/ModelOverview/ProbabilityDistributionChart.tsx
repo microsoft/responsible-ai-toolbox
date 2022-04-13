@@ -10,6 +10,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { boxPlotTooltip } from "libs/core-ui/src/lib/Highchart/BoxPlotTooltip";
 import {
   DefaultButton,
   Dropdown,
@@ -20,7 +21,6 @@ import {
   Text
 } from "office-ui-fabric-react";
 import React from "react";
-import { PointOptionsObject } from "highcharts";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
@@ -94,7 +94,7 @@ export class ProbabilityDistributionChart extends React.Component<
       return React.Fragment;
     }
 
-    const boxplotData = selectedCohorts.map((cohort, index) => {
+    const boxPlotData = selectedCohorts.map((cohort, index) => {
       return calculateBoxPlotDataFromErrorCohort(
         cohort,
         index,
@@ -102,16 +102,16 @@ export class ProbabilityDistributionChart extends React.Component<
       );
     });
     // map to highcharts-specific naming convention
-    const boxData = boxplotData.map((cohortBoxPlotData) => {
-      return {
-        q1: cohortBoxPlotData.lowerQuartile,
-        q3: cohortBoxPlotData.upperQuartile,
-        high: cohortBoxPlotData.upperFence,
-        low: cohortBoxPlotData.lowerFence,
-        median: cohortBoxPlotData.median
-      } as PointOptionsObject;
-    });
-    const outlierData = boxplotData
+    // const boxData = boxplotData.map((cohortBoxPlotData) => {
+    //   return {
+    //     high: cohortBoxPlotData.upperFence,
+    //     low: cohortBoxPlotData.lowerFence,
+    //     median: cohortBoxPlotData.median,
+    //     q1: cohortBoxPlotData.lowerQuartile,
+    //     q3: cohortBoxPlotData.upperQuartile
+    //   } as PointOptionsObject;
+    // });
+    const outlierData = boxPlotData
       .map((cohortBoxPlotData) => cohortBoxPlotData.outliers)
       .map((outlierProbs, cohortIndex) => {
         return outlierProbs.map((prob) => [cohortIndex, prob]);
@@ -169,20 +169,10 @@ export class ProbabilityDistributionChart extends React.Component<
                     },
                     series: [
                       {
-                        data: boxData,
+                        data: boxPlotData,
                         fillColor: "#b2d6f2",
                         name: localization.Core.BoxPlot.boxPlotSeriesLabel,
-                        tooltip: {
-                          pointFormatter() {
-                            return `<span style="color:${this.color}">●</span>
-                            <b> ${this.series.name}</b><br/>
-                            ${localization.Core.BoxPlot.upperFence}: ${this.options.high}<br/>
-                            ${localization.Core.BoxPlot.upperQuartile}: ${this.options.q3}<br/>
-                            ${localization.Core.BoxPlot.median}: ${this.options.median}<br/>
-                            ${localization.Core.BoxPlot.lowerQuartile}: ${this.options.q1}<br/>
-                            ${localization.Core.BoxPlot.lowerFence}: ${this.options.low}<br/>`;
-                          }
-                        },
+                        tooltip: boxPlotTooltip,
                         type: "boxplot"
                       },
                       {

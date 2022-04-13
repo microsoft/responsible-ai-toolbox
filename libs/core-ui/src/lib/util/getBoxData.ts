@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { PointOptionsObject } from "highcharts";
+
 import { calculateBoxPlotData } from "./calculateBoxData";
 
 export interface IBoxData {
@@ -24,11 +25,11 @@ export function getBoxData(x: number[], y: number[]): IBoxData {
   const calculatedData = dataSet.map((v) => calculateBoxPlotData(v));
   calculatedData.forEach((temp, index) => {
     result.box.push({
-      low: temp.lowerFence,
-      q1: temp.lowerQuartile,
+      high: temp.high,
+      low: temp.low,
       median: temp.median,
-      q3: temp.upperQuartile,
-      high: temp.upperFence
+      q1: temp.q1,
+      q3: temp.q3
     });
     temp.outliers?.forEach((d) => {
       result.outlier.push([index, d]);

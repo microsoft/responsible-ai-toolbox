@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
+import { boxPlotTooltip } from "../Highchart/BoxPlotTooltip";
+
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -47,18 +48,8 @@ export function getFeatureImportanceBoxOptions(
       color: data.color,
       data: boxData.box,
       name: data.name,
-      type: "boxplot",
-      tooltip: {
-        pointFormatter() {
-          return `<span style="color:${this.color}">●</span>
-          <b> ${this.series.name}</b><br/>
-          ${localization.Core.BoxPlot.upperFence}: ${this.options.high}<br/>
-          ${localization.Core.BoxPlot.upperQuartile}: ${this.options.q3}<br/>
-          ${localization.Core.BoxPlot.median}: ${this.options.median}<br/>
-          ${localization.Core.BoxPlot.lowerQuartile}: ${this.options.q1}<br/>
-          ${localization.Core.BoxPlot.lowerFence}: ${this.options.low}<br/>`;
-        }
-      }
+      tooltip: boxPlotTooltip,
+      type: "boxplot"
     });
     boxGroupData.push({
       color: data.color,

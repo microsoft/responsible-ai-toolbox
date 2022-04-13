@@ -115,7 +115,7 @@ export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
 
   if (wrapOnWhitespace) {
     // find last whitespace in the first line
-    for (var index = maxLineLength - 1; index >= startingPosition; index -= 1) {
+    for (let index = maxLineLength - 1; index >= startingPosition; index -= 1) {
       if (label[index] === whitespace) {
         slicingIndex = index;
         break;
