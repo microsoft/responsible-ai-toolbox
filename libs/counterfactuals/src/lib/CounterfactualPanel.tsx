@@ -28,7 +28,7 @@ import {
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -209,7 +209,7 @@ export class CounterfactualPanel extends React.Component<
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} className={classes.saveDescription}>
             {localization.Counterfactuals.saveDescription}
           </Text>
         </Stack.Item>

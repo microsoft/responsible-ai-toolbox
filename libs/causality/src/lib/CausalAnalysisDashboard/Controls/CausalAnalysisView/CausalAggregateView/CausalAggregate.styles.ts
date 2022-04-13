@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   IStyle,
@@ -26,8 +27,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         margin: "-5px 0 0 -15px"
       },
       container: {
-        height: "500px",
-        overflowY: "scroll"
+        height: "100%"
       },
       description: {
         display: "flex",
@@ -43,6 +43,7 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         display: "inline-block",
         flex: "1",
         fontSize: 14,
+        maxWidth: descriptionMaxWidth,
         paddingBottom: "5px",
         textAlign: "left"
       },

@@ -44,7 +44,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
         const message =
           !dataShape.featureImportanceData?.noLocalImportance &&
           !dataShape.featureImportanceData?.noFeatureImportance
-            ? "Select a point to see its local importance"
+            ? "Select a datapoint in the table above to view its local feature importances"
             : "Provide local feature importances to see how each feature impacts individual predictions.";
         cy.get("#subPlotContainer").should("contain.text", message);
       });

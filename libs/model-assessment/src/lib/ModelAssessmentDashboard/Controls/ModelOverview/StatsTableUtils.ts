@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, ILabeledStatistic } from "@responsible-ai/core-ui";
+import {
+  BinaryClassificationMetrics,
+  classificationTask,
+  ErrorCohort,
+  ILabeledStatistic,
+  RegressionMetrics
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 
@@ -32,38 +39,53 @@ export function generateCohortsStatsTable(
       let metricMin = Number.MAX_SAFE_INTEGER;
       let metricMax = Number.MIN_SAFE_INTEGER;
       cohorts.forEach((_errorCohort, cohortIndex) => {
-        const stat = labeledStatistics[cohortIndex].find(
-          (stat) => stat.key === metricOption.key
+        const labeledStat = labeledStatistics[cohortIndex].find(
+          (labeledStat) => labeledStat.key === metricOption.key
         );
-        if (stat) {
-          if (stat.stat > metricMax) {
-            metricMax = stat.stat;
+        if (labeledStat) {
+          if (labeledStat.stat > metricMax) {
+            metricMax = labeledStat.stat;
           }
-          if (stat.stat < metricMin) {
-            metricMin = stat.stat;
+          if (labeledStat.stat < metricMin) {
+            metricMin = labeledStat.stat;
           }
         }
       });
       // use min and max to normalize the colors
       const metricMinMaxDiff = metricMax - metricMin;
       cohorts.forEach((_errorCohort, cohortIndex) => {
-        const stat = labeledStatistics[cohortIndex].find(
-          (stat) => stat.key === metricOption.key
+        const labeledStat = labeledStatistics[cohortIndex].find(
+          (labeledStat) => labeledStat.key === metricOption.key
         );
-        if (stat && !Number.isNaN(stat.stat)) {
+        if (labeledStat && !Number.isNaN(labeledStat.stat)) {
           items.push({
-            colorValue: (stat.stat - metricMin) / metricMinMaxDiff,
-            value: Number(stat.stat.toFixed(3)),
+            colorValue: (labeledStat.stat - metricMin) / metricMinMaxDiff,
+            value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
             y: cohortIndex
           });
         } else {
-          // not a numeric value (NaN), so just put null
+          // not a numeric value (NaN), so just put null and use textured color
           items.push({
-            color: "#808080",
+            color: {
+              pattern: {
+                aspectRatio: 1,
+                backgroundColor: "white",
+                color: "pink",
+                height: 10,
+                image: "",
+                opacity: 0.5,
+                path: {
+                  d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
+                  strokeWidth: 3
+                },
+                patternTransform: "",
+                width: 10
+              }
+            },
             value: Number.NaN,
             x: metricIndex + 1,
-            y: cohortIndex // gray
+            y: cohortIndex
           });
         }
       });
@@ -73,44 +95,98 @@ export function generateCohortsStatsTable(
 
 export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
   const maxLineLength = 40;
+
+  if (label.length <= maxLineLength) {
+    // label is short enough to fit on one line
+    return label;
+  }
+
   const maxLines = 2;
   const lineWrapHtmlTag = "<br />";
   const ellipsis = "...";
 
   // check if there are suitable spots for a linewrap
   // if not just wrap after maxLineLength characters
+  // consider suitable wrapping spots based on whitespace
+  // starting at half the line length
+  const startingPosition = maxLineLength / 2;
   let slicingIndex = maxLineLength;
-  const closingParenthesis = ") ";
-  const openingParenthesis = " (";
   const whitespace = " ";
-  const searchString = new Set(
-    label.slice(slicingIndex - maxLineLength / 2, slicingIndex)
-  );
 
-  if (searchString.has(closingParenthesis)) {
-    // option 1: wrap after closing parenthesis
-    slicingIndex =
-      label.indexOf(closingParenthesis, slicingIndex - maxLineLength / 2) + 2;
-  } else if (searchString.has(openingParenthesis)) {
-    // option 2: wrap before opening parenthesis
-    slicingIndex =
-      label.indexOf(openingParenthesis, slicingIndex - maxLineLength / 2) + 1;
-  } else if (wrapOnWhitespace && searchString.has(whitespace)) {
-    // option 3: wrap after maxLineLength characters
-    slicingIndex =
-      label.indexOf(whitespace, slicingIndex - maxLineLength / 2) + 1;
+  if (wrapOnWhitespace) {
+    // find last whitespace in the first line
+    for (let index = maxLineLength - 1; index >= startingPosition; index -= 1) {
+      if (label[index] === whitespace) {
+        slicingIndex = index;
+        break;
+      }
+    }
   }
   label =
     label.slice(0, slicingIndex) +
     lineWrapHtmlTag +
     label.slice(slicingIndex, label.length);
 
-  if (label.length > maxLineLength * maxLines + lineWrapHtmlTag.length) {
-    label =
-      label.slice(
-        0,
-        maxLineLength * maxLines - ellipsis.length + lineWrapHtmlTag.length
-      ) + ellipsis;
+  const maxLabelLength = maxLineLength * maxLines + lineWrapHtmlTag.length;
+  if (label.length > maxLabelLength) {
+    // cut off label and add ellipsis at the end
+    label = label.slice(0, maxLabelLength - ellipsis.length) + ellipsis;
   }
   return label;
+}
+
+export function getSelectableMetrics(
+  taskType: "classification" | "regression"
+) {
+  const selectableMetrics: IDropdownOption[] = [];
+  if (taskType === classificationTask) {
+    // TODO: add case for multiclass classification
+    selectableMetrics.push(
+      {
+        key: BinaryClassificationMetrics.Accuracy,
+        text: localization.ModelAssessment.ModelOverview.accuracy
+      },
+      {
+        key: BinaryClassificationMetrics.F1Score,
+        text: localization.ModelAssessment.ModelOverview.f1Score
+      },
+      {
+        key: BinaryClassificationMetrics.Precision,
+        text: localization.ModelAssessment.ModelOverview.precision
+      },
+      {
+        key: BinaryClassificationMetrics.Recall,
+        text: localization.ModelAssessment.ModelOverview.recall
+      },
+      {
+        key: BinaryClassificationMetrics.FalsePositiveRate,
+        text: localization.ModelAssessment.ModelOverview.falsePositiveRate
+      },
+      {
+        key: BinaryClassificationMetrics.FalseNegativeRate,
+        text: localization.ModelAssessment.ModelOverview.falseNegativeRate
+      },
+      {
+        key: BinaryClassificationMetrics.SelectionRate,
+        text: localization.ModelAssessment.ModelOverview.selectionRate
+      }
+    );
+  } else {
+    // task_type === "regression"
+    selectableMetrics.push(
+      {
+        key: RegressionMetrics.MeanAbsoluteError,
+        text: localization.ModelAssessment.ModelOverview.meanAbsoluteError
+      },
+      {
+        key: RegressionMetrics.MeanSquaredError,
+        text: localization.ModelAssessment.ModelOverview.meanSquaredError
+      },
+      {
+        key: RegressionMetrics.MeanPrediction,
+        text: localization.ModelAssessment.ModelOverview.meanPrediction
+      }
+    );
+  }
+  return selectableMetrics;
 }

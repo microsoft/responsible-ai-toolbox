@@ -6,6 +6,8 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 import pytest
+import shap
+from sklearn.model_selection import train_test_split
 
 from ..common_utils import create_adult_income_dataset, create_housing_data
 
@@ -103,3 +105,31 @@ def parks_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
 
     target_feature = 'area'
     return train_df, test_df, target_feature
+
+
+@pytest.fixture(scope='session')
+def get_adult_shap_dataset():
+    X, y = shap.datasets.adult()
+
+    target_feature = "income"
+    y = [1 if y_i else 0 for y_i in y]
+
+    full_data = X.copy()
+    full_data[target_feature] = y
+
+    data_train, data_test = train_test_split(
+        full_data, test_size=1000, random_state=96132,
+        stratify=full_data[target_feature]
+    )
+
+    data_train.reset_index(drop=True, inplace=True)
+    data_test.reset_index(drop=True, inplace=True)
+
+    treatment_features = ["Age", "Sex"]
+    heterogeneity_features = ["Marital Status"]
+
+    cat_cols = ["Race", "Sex", "Workclass", "Marital Status",
+                "Country", "Occupation"]
+
+    return data_train, data_test, treatment_features, \
+        heterogeneity_features, cat_cols, target_feature

@@ -162,7 +162,7 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>

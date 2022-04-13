@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "@fluentui/react";
-
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -14,15 +12,8 @@ export function getFeatureImportanceBoxOptions(
   unsortedX: string[],
   unsortedSeries: IGlobalSeries[],
   topK: number,
-  theme?: ITheme,
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void
 ): IHighchartsConfig {
-  const colorTheme = {
-    axisColor: theme?.palette.neutralPrimary,
-    axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
-    fontColor: theme?.semanticColors.bodyText
-  };
   const xText = sortArray.map((i) => unsortedX[i]);
   const boxTempData: any = [];
   let yAxisMin = Infinity;
@@ -47,17 +38,27 @@ export function getFeatureImportanceBoxOptions(
       y
     });
   });
-  const boxGroupData = boxTempData.map((data: any) => {
-    return {
+  const boxGroupData: any = [];
+  boxTempData.forEach((data: any) => {
+    const temp = getBoxData(data.x, data.y);
+    boxGroupData.push({
       color: data.color,
-      data: getBoxData(data.x, data.y),
+      data: temp.box,
       name: data.name
-    };
+    });
+    boxGroupData.push({
+      color: data.color,
+      data: temp.outlier,
+      name: data.name,
+      type: "scatter"
+    });
   });
   return {
     chart: {
-      backgroundColor: colorTheme.fontColor,
       type: "boxplot"
+    },
+    legend: {
+      enabled: true
     },
     plotOptions: {
       boxplot: {
