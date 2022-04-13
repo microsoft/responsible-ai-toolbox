@@ -21,7 +21,9 @@ import {
   TooltipDelay,
   DirectionalHint,
   IconButton,
-  ITooltipProps
+  ITooltipProps,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -72,7 +74,8 @@ export class CounterfactualPanel extends React.Component<
       <Panel
         id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
-        type={PanelType.largeFixed}
+        type={PanelType.custom}
+        customWidth={"100%"}
         onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
@@ -81,6 +84,13 @@ export class CounterfactualPanel extends React.Component<
         onRenderFooterContent={this.renderClose}
       >
         <Stack tokens={{ childrenGap: "m1" }}>
+          <Stack.Item>
+            {this.props.data?.errorMessage && (
+              <MessageBar messageBarType={MessageBarType.error}>
+                {this.props.data.errorMessage}
+              </MessageBar>
+            )}
+          </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}

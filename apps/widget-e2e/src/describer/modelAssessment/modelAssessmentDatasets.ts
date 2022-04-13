@@ -169,6 +169,7 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",

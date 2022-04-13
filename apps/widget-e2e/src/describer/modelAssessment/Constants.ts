@@ -28,7 +28,7 @@ export enum Locators {
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   CohortOnOffSelectionContainer = "#iterative-container",
   CohortOnOffCohortCreateE2E = "#iterative-container div:contains(CohortCreateE2E) [role='checkbox']",
-  CreateNewCohortButton = "button:contains('Create new cohort')",
+  CreateNewCohortButton = "button:contains('Save cohort')",
   CohortNameInput = "#cohortEditPanel input:eq(0)",
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
@@ -70,6 +70,7 @@ export enum Locators {
   WhatIfSetValueButton = "#CounterfactualPanel button:contains('Set Value')",
   DECRotatedVerticalBox = "#DatasetExplorerChart div[class*='rotatedVerticalBox']", // DEC- Data explorer chart
   DECHorizontalAxis = "#DatasetExplorerChart div[class*='horizontalAxis']",
+  DECHorizontalAxisButton = "#DatasetExplorerChart div[class*='horizontalAxis'] button",
   DECChoiceFieldGroup = "#AxisConfigPanel div[class*='ms-ChoiceFieldGroup']",
   DECCloseButton = "#AxisConfigPanel button.ms-Panel-closeButton",
   DECAxisPanel = "#AxisConfigPanel div.ms-Panel-main",
@@ -78,6 +79,8 @@ export enum Locators {
   DEIndividualDatapoints = "#ChartTypeSelection label:contains('Individual datapoints')",
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick'] text",
+  DEPoints = "#DatasetExplorerChart .highcharts-scatter-series > path.highcharts-point",
+  DEPointTooltip = ".highcharts-tooltip",
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",

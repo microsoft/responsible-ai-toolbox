@@ -95,7 +95,7 @@ export class MainMenu extends React.PureComponent<
         },
         key: "changeCohort",
         onClick: this.toggleChangeCohortVisibility,
-        text: localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
+        text: localization.ModelAssessment.CohortInformation.ShiftCohort
       },
       {
         iconProps: {
@@ -103,7 +103,7 @@ export class MainMenu extends React.PureComponent<
         },
         key: "addCohort",
         onClick: this.toggleCreateCohortVisibility,
-        text: localization.ModelAssessment.CohortInformation.CreateNewCohort
+        text: localization.ModelAssessment.CohortInformation.SaveCohort
       }
     ];
     return (
