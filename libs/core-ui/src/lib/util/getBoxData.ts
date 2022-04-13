@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { PointOptionsObject } from "highcharts";
 import { calculateBoxPlotData } from "./calculateBoxData";
 
 export interface IBoxData {
-  box: number[][];
+  box: PointOptionsObject[];
   outlier: number[][];
 }
 
@@ -22,13 +23,13 @@ export function getBoxData(x: number[], y: number[]): IBoxData {
   };
   const calculatedData = dataSet.map((v) => calculateBoxPlotData(v));
   calculatedData.forEach((temp, index) => {
-    result.box.push([
-      temp.lowerFence,
-      temp.lowerQuartile,
-      temp.median,
-      temp.upperQuartile,
-      temp.upperFence
-    ]);
+    result.box.push({
+      low: temp.lowerFence,
+      q1: temp.lowerQuartile,
+      median: temp.median,
+      q3: temp.upperQuartile,
+      high: temp.upperFence
+    });
     temp.outliers?.forEach((d) => {
       result.outlier.push([index, d]);
     });

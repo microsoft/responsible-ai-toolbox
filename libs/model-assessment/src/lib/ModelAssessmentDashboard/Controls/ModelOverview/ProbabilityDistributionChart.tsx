@@ -143,7 +143,7 @@ export class ProbabilityDistributionChart extends React.Component<
               <div className={classNames.placeholderText}>
                 <Text>
                   {
-                    localization.ModelAssessment.ModelOverview.boxPlot
+                    localization.ModelAssessment.ModelOverview
                       .boxPlotPlaceholder
                   }
                 </Text>
@@ -171,28 +171,26 @@ export class ProbabilityDistributionChart extends React.Component<
                       {
                         data: boxData,
                         fillColor: "#b2d6f2",
-                        name: localization.ModelAssessment.ModelOverview.boxPlot
-                          .boxPlotSeriesLabel,
+                        name: localization.Core.BoxPlot.boxPlotSeriesLabel,
                         tooltip: {
                           pointFormatter() {
                             return `<span style="color:${this.color}">●</span>
                             <b> ${this.series.name}</b><br/>
-                            ${localization.ModelAssessment.ModelOverview.boxPlot.upperFence}: ${this.options.high}<br/>
-                            ${localization.ModelAssessment.ModelOverview.boxPlot.upperQuartile}: ${this.options.q3}<br/>
-                            ${localization.ModelAssessment.ModelOverview.boxPlot.median}: ${this.options.median}<br/>
-                            ${localization.ModelAssessment.ModelOverview.boxPlot.lowerQuartile}: ${this.options.q1}<br/>
-                            ${localization.ModelAssessment.ModelOverview.boxPlot.lowerFence}: ${this.options.low}<br/>`;
+                            ${localization.Core.BoxPlot.upperFence}: ${this.options.high}<br/>
+                            ${localization.Core.BoxPlot.upperQuartile}: ${this.options.q3}<br/>
+                            ${localization.Core.BoxPlot.median}: ${this.options.median}<br/>
+                            ${localization.Core.BoxPlot.lowerQuartile}: ${this.options.q1}<br/>
+                            ${localization.Core.BoxPlot.lowerFence}: ${this.options.low}<br/>`;
                           }
                         },
                         type: "boxplot"
                       },
                       {
                         data: outlierData,
-                        name: localization.ModelAssessment.ModelOverview.boxPlot
-                          .outlierLabel,
+                        name: localization.Core.BoxPlot.outlierLabel,
                         tooltip: {
                           pointFormatter() {
-                            return `${localization.ModelAssessment.ModelOverview.boxPlot.outlierProbability}: <b>${this.y}</b>`;
+                            return `${localization.Core.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                           }
                         },
                         type: "scatter"

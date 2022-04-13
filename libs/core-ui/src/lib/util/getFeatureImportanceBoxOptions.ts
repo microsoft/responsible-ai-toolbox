@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
+import { SeriesOptionsType } from "highcharts";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -38,17 +40,29 @@ export function getFeatureImportanceBoxOptions(
       y
     });
   });
-  const boxGroupData: any = [];
+  const boxGroupData: SeriesOptionsType[] = [];
   boxTempData.forEach((data: any) => {
-    const temp = getBoxData(data.x, data.y);
+    const boxData = getBoxData(data.x, data.y);
     boxGroupData.push({
       color: data.color,
-      data: temp.box,
-      name: data.name
+      data: boxData.box,
+      name: data.name,
+      type: "boxplot",
+      tooltip: {
+        pointFormatter() {
+          return `<span style="color:${this.color}">●</span>
+          <b> ${this.series.name}</b><br/>
+          ${localization.Core.BoxPlot.upperFence}: ${this.options.high}<br/>
+          ${localization.Core.BoxPlot.upperQuartile}: ${this.options.q3}<br/>
+          ${localization.Core.BoxPlot.median}: ${this.options.median}<br/>
+          ${localization.Core.BoxPlot.lowerQuartile}: ${this.options.q1}<br/>
+          ${localization.Core.BoxPlot.lowerFence}: ${this.options.low}<br/>`;
+        }
+      }
     });
     boxGroupData.push({
       color: data.color,
-      data: temp.outlier,
+      data: boxData.outlier,
       name: data.name,
       type: "scatter"
     });
