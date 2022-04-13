@@ -65,20 +65,20 @@ export function generateCohortsStatsTable(
             y: cohortIndex
           });
         } else {
-          // not a numeric value (NaN), so just put null and use color gray
+          // not a numeric value (NaN), so just put null and use textured color
           items.push({
             color: {
               pattern: {
-                path: {
-                  d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
-                  strokeWidth: 3
-                },
                 aspectRatio: 1,
                 backgroundColor: "white",
                 color: "pink",
                 height: 10,
                 image: "",
                 opacity: 0.5,
+                path: {
+                  d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
+                  strokeWidth: 3
+                },
                 patternTransform: "",
                 width: 10
               }

@@ -21,7 +21,7 @@ interface IDisaggregatedAnalysisTableProps {
   selectedMetrics: string[];
   selectedFeatures: number[];
   featureBasedCohorts: ErrorCohort[];
-  featureDropdownRef: React.RefObject<IDropdown>;
+  featureComboBoxRef: React.RefObject<IDropdown>;
 }
 
 class IDisaggregatedAnalysisTableState {}
@@ -40,7 +40,7 @@ export class DisaggregatedAnalysisTable extends React.Component<
         {this.props.selectedFeatures.length === 0 && (
           <ActionButton
             onClick={() => {
-              this.props.featureDropdownRef.current?.focus(true);
+              this.props.featureComboBoxRef.current?.focus(true);
             }}
           >
             {

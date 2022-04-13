@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import * as Highcharts from "highcharts";
+import gantt from "highcharts/modules/gantt";
 import heatmap from "highcharts/modules/heatmap";
 import gantt from "highcharts/modules/gantt";
 import PatternFillModule from "highcharts/modules/pattern-fill";

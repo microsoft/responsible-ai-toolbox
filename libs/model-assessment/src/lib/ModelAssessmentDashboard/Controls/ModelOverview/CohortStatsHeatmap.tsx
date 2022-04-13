@@ -132,9 +132,8 @@ export class CohortStatsHeatmap extends React.Component<
             categories: this.props.cohorts.map(
               (errorCohort) => errorCohort.cohort.name
             ),
-            type: "category",
             grid: {
-              enabled: true,
+              borderWidth: 2,
               columns: [
                 {
                   labels: {
@@ -146,8 +145,9 @@ export class CohortStatsHeatmap extends React.Component<
                   }
                 }
               ],
-              borderWidth: 2
-            }
+              enabled: true
+            },
+            type: "category"
           }
         }}
       />
