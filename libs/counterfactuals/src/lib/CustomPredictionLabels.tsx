@@ -12,7 +12,7 @@ import { IconButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { CounterfactualConstants } from "./CounterfactualConstants";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 
 export interface ICustomPredictionLabelsProps {
   metadata: IExplanationModelMetadata;
