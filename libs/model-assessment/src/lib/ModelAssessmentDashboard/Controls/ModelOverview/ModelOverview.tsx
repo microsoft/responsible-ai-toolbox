@@ -9,21 +9,23 @@ import {
   BinaryClassificationMetrics,
   RegressionMetrics,
   classificationTask,
+  FabricStyles,
   descriptionMaxWidth
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  Dropdown,
-  IDropdownOption,
   Stack,
   Text,
-  IDropdown
+  ComboBox,
+  IComboBox,
+  IComboBoxOption
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
+import { modelOverviewStyles } from "./ModelOverview.styles";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -42,7 +44,7 @@ export class ModelOverview extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private featureDropdownRef = React.createRef<IDropdown>();
+  private featureComboBoxRef = React.createRef<IComboBox>();
 
   constructor(props: IModelOverviewProps) {
     super(props);
@@ -82,6 +84,9 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
+
+    const classNames = modelOverviewStyles();
+
     const selectableMetrics = getSelectableMetrics(
       this.context.dataset.task_type
     );
@@ -108,7 +113,7 @@ export class ModelOverview extends React.Component<
 
     const featureSelectionLimitReached =
       this.state.selectedFeatures.length >= 2;
-    const featureSelectionOptions: IDropdownOption[] =
+    const featureSelectionOptions: IComboBoxOption[] =
       this.context.dataset.feature_names.map((featureName, index) => {
         return {
           disabled:
@@ -120,7 +125,10 @@ export class ModelOverview extends React.Component<
       });
 
     return (
-      <Stack tokens={{ childrenGap: "10px", padding: "16px 40px 10px 40px" }}>
+      <Stack
+        className={classNames.sectionStack}
+        tokens={{ childrenGap: "10px" }}
+      >
         <Text variant="medium" style={{ maxWidth: descriptionMaxWidth }}>
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
@@ -128,7 +136,7 @@ export class ModelOverview extends React.Component<
         {this.props.showNewModelOverviewExperience && (
           <>
             <Stack horizontal tokens={{ childrenGap: "20px" }}>
-              <Dropdown
+              <ComboBox
                 placeholder={
                   localization.ModelAssessment.ModelOverview
                     .metricSelectionDropdownPlaceholder
@@ -136,14 +144,15 @@ export class ModelOverview extends React.Component<
                 label={
                   localization.ModelAssessment.ModelOverview.metricsDropdown
                 }
-                selectedKeys={this.state.selectedMetrics}
+                selectedKey={this.state.selectedMetrics}
                 options={selectableMetrics}
                 onChange={this.onMetricSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
+                styles={FabricStyles.limitedSizeMenuDropdown}
               />
-              <Dropdown
-                componentRef={this.featureDropdownRef}
+              <ComboBox
+                componentRef={this.featureComboBoxRef}
                 placeholder={
                   localization.ModelAssessment.ModelOverview
                     .featureSelectionDropdownPlaceholder
@@ -151,11 +160,12 @@ export class ModelOverview extends React.Component<
                 label={
                   localization.ModelAssessment.ModelOverview.featuresDropdown
                 }
-                selectedKeys={this.state.selectedFeatures}
+                selectedKey={this.state.selectedFeatures}
                 options={featureSelectionOptions}
                 onChange={this.onFeatureSelectionChange}
                 multiSelect
-                styles={{ dropdown: { width: 400 } }}
+                className={classNames.dropdown}
+                styles={FabricStyles.limitedSizeMenuDropdown}
               />
             </Stack>
             <DatasetCohortStatsTable
@@ -167,7 +177,7 @@ export class ModelOverview extends React.Component<
               selectedMetrics={this.state.selectedMetrics}
               selectedFeatures={this.state.selectedFeatures}
               featureBasedCohorts={featureBasedCohorts}
-              featureDropdownRef={this.featureDropdownRef}
+              featureComboBoxRef={this.featureComboBoxRef}
             />
           </>
         )}
@@ -176,27 +186,20 @@ export class ModelOverview extends React.Component<
   }
 
   private onMetricSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
   ): void => {
     if (item && item.selected !== undefined) {
-      if (
-        item.selected &&
-        !this.state.selectedMetrics.includes(item.key.toString())
-      ) {
+      const metric = item.key.toString();
+      if (item.selected && !this.state.selectedMetrics.includes(metric)) {
         this.setState({
-          selectedMetrics: this.state.selectedMetrics.concat([
-            item.key.toString()
-          ])
+          selectedMetrics: this.state.selectedMetrics.concat([metric])
         });
       }
-      if (
-        !item.selected &&
-        this.state.selectedMetrics.includes(item.key.toString())
-      ) {
+      if (!item.selected && this.state.selectedMetrics.includes(metric)) {
         const selectedMetrics = this.state.selectedMetrics;
         const unselectedMetricIndex = selectedMetrics.findIndex(
-          (key) => key === item.key.toString()
+          (key) => key === metric
         );
         // remove unselected metric
         selectedMetrics.splice(unselectedMetricIndex, 1);
@@ -208,8 +211,8 @@ export class ModelOverview extends React.Component<
   };
 
   private onFeatureSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    _: React.FormEvent<IComboBox>,
+    item?: IComboBoxOption
   ): void => {
     if (item && item.selected !== undefined && typeof item.key === "number") {
       // technically we know it's only numbers but item.key has type string | number
