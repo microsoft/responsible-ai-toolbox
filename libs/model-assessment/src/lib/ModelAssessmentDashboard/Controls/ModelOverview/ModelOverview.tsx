@@ -190,20 +190,12 @@ export class ModelOverview extends React.Component<
   ): void => {
     if (item && item.selected !== undefined) {
       const metric = item.key.toString();
-      if (
-        item.selected &&
-        !this.state.selectedMetrics.includes(metric)
-      ) {
+      if (item.selected && !this.state.selectedMetrics.includes(metric)) {
         this.setState({
-          selectedMetrics: this.state.selectedMetrics.concat([
-            metric
-          ])
+          selectedMetrics: this.state.selectedMetrics.concat([metric])
         });
       }
-      if (
-        !item.selected &&
-        this.state.selectedMetrics.includes(metric)
-      ) {
+      if (!item.selected && this.state.selectedMetrics.includes(metric)) {
         const selectedMetrics = this.state.selectedMetrics;
         const unselectedMetricIndex = selectedMetrics.findIndex(
           (key) => key === metric
