@@ -132,14 +132,22 @@ export class CohortStatsHeatmap extends React.Component<
             categories: this.props.cohorts.map(
               (errorCohort) => errorCohort.cohort.name
             ),
-            labels: {
-              align: "left",
-              // format labels to cap the line length
-              formatter() {
-                return wrapYAxisLabels(this.value.toString(), true);
-              },
-              reserveSpace: true
-            }
+            grid: {
+              borderWidth: 2,
+              columns: [
+                {
+                  labels: {
+                    // format labels to cap the line length
+                    formatter() {
+                      return wrapYAxisLabels(this.value.toString(), true);
+                    },
+                    reserveSpace: true
+                  }
+                }
+              ],
+              enabled: true
+            },
+            type: "category"
           }
         }}
       />
