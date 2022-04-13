@@ -11,7 +11,8 @@ import {
   JointDataset,
   generateMetrics,
   ModelTypes,
-  classificationTask
+  classificationTask,
+  descriptionMaxWidth
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -159,8 +160,11 @@ export class ModelOverview extends React.Component<
       });
 
     return (
-      <Stack className={classNames.sectionStack} tokens={{ childrenGap: "10px" }}>
-        <Text variant="medium">
+      <Stack
+        className={classNames.sectionStack}
+        tokens={{ childrenGap: "10px" }}
+      >
+        <Text variant="medium" style={{ maxWidth: descriptionMaxWidth }}>
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}

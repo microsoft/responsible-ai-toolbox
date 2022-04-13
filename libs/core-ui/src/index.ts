@@ -40,6 +40,7 @@ export * from "./lib/util/rowErrorSize";
 export * from "./lib/util/getBoxData";
 export * from "./lib/util/getBasicFilterString";
 export * from "./lib/util/getCausalDisplayFeatureName";
+export * from "./lib/util/getCommonStyles";
 export * from "./lib/util/getCompositeFilterString";
 export * from "./lib/util/getErrorBarChartOptions";
 export * from "./lib/util/getFeatureOptions";
