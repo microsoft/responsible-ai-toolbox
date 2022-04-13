@@ -1340,6 +1340,8 @@
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
