@@ -21,11 +21,15 @@ import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { FabricStyles } from "../../util/FabricStyles";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 
+import { cohortEditorStyles } from "./CohortEditor.styles";
+
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;
   jointDataset: JointDataset;
   filterIndex?: number;
   filters: IFilter[];
+  showInvalidMinMaxValueError: boolean;
+  showInvalidValueError: boolean;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -99,7 +103,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
     const isEditingFilter =
       this.props.filterIndex !== this.props.filters.length;
-
+    const styles = cohortEditorStyles();
     let minVal, maxVal;
     if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
       // Numerical values treated as categorical are stored with the values in the column,
@@ -228,6 +232,17 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                       this.props.setNumericValue(0, selectedMeta, 1, value);
                     }}
                   />
+                  {this.props.showInvalidMinMaxValueError &&
+                    selectedMeta.featureRange && (
+                      <p className={styles.invalidValueError}>
+                        {localization.formatString(
+                          localization.Interpret.CohortEditor
+                            .minimumGreaterThanMaximum,
+                          selectedMeta.featureRange.min,
+                          selectedMeta.featureRange.max
+                        )}
+                      </p>
+                    )}
                 </>
               ) : (
                 <SpinButton
@@ -257,6 +272,15 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                   }}
                 />
               ))}
+            {this.props.showInvalidValueError && selectedMeta.featureRange && (
+              <p className={styles.invalidValueError}>
+                {localization.formatString(
+                  localization.Interpret.CohortEditor.invalidValueError,
+                  selectedMeta.featureRange.min,
+                  selectedMeta.featureRange.max
+                )}
+              </p>
+            )}
           </>
         )}
         <Stack horizontal tokens={{ childrenGap: "l1" }}>

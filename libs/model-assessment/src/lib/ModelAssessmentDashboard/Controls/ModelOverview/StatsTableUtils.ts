@@ -65,9 +65,24 @@ export function generateCohortsStatsTable(
             y: cohortIndex
           });
         } else {
-          // not a numeric value (NaN), so just put null and use color gray
+          // not a numeric value (NaN), so just put null and use textured color
           items.push({
-            color: "#808080",
+            color: {
+              pattern: {
+                aspectRatio: 1,
+                backgroundColor: "white",
+                color: "pink",
+                height: 10,
+                image: "",
+                opacity: 0.5,
+                path: {
+                  d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
+                  strokeWidth: 3
+                },
+                patternTransform: "",
+                width: 10
+              }
+            },
             value: Number.NaN,
             x: metricIndex + 1,
             y: cohortIndex
@@ -80,6 +95,12 @@ export function generateCohortsStatsTable(
 
 export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
   const maxLineLength = 40;
+
+  if (label.length <= maxLineLength) {
+    // label is short enough to fit on one line
+    return label;
+  }
+
   const maxLines = 2;
   const lineWrapHtmlTag = "<br />";
   const ellipsis = "...";
@@ -91,11 +112,15 @@ export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
   const startingPosition = maxLineLength / 2;
   let slicingIndex = maxLineLength;
   const whitespace = " ";
-  const searchString = new Set(label.slice(startingPosition, slicingIndex));
 
-  if (wrapOnWhitespace && searchString.has(whitespace)) {
-    // option 3: wrap after maxLineLength characters
-    slicingIndex = label.indexOf(whitespace, startingPosition) + 1;
+  if (wrapOnWhitespace) {
+    // find last whitespace in the first line
+    for (let index = maxLineLength - 1; index >= startingPosition; index -= 1) {
+      if (label[index] === whitespace) {
+        slicingIndex = index;
+        break;
+      }
+    }
   }
   label =
     label.slice(0, slicingIndex) +
