@@ -82,12 +82,16 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
-      "title": "Shift Cohort",
+      "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
       "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -211,7 +215,7 @@
       "fullscreen": "Fullscreen",
       "heatMap": "Heat map",
       "newCohort": "New cohort",
-      "shiftCohort": "Shift cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Tree map",
       "whatIf": "What-If"
     },
@@ -811,6 +815,8 @@
       "clearAllFilters": "Clear all filters",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Delete",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
@@ -1151,7 +1157,7 @@
       "dataPointInfo": "Data point info",
       "deltaLabel": "Delta",
       "disclaimer": "Disclaimer: These are explanations based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
-      "featureImportanceGetStartedText": "Select a point to see its local importance",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Provide local feature importances to see how each feature impacts individual predictions.",
       "featureImportancePlot": "Feature importance plot",
       "featureValues": "Feature values",
@@ -1263,11 +1269,11 @@
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "ShiftCohort": "Shift cohort",
+      "ShiftCohort": "Switch cohort",
       "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
@@ -1314,7 +1320,7 @@
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
       "createCohort": "Create cohort",
-      "shiftCohort": "Shift cohort"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
@@ -1334,7 +1340,14 @@
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
     }

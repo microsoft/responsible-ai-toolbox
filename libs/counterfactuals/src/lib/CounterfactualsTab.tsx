@@ -48,7 +48,7 @@ export class CounterfactualsTab extends React.PureComponent<
     const classNames = counterfactualsTabStyles();
     return (
       <Stack grow tokens={{ padding: "l1" }} className={classNames.container}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant={"medium"}>
             {localization.Counterfactuals.whatifDescription}
           </Text>
