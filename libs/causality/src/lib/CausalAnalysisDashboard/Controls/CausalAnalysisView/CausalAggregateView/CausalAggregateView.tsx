@@ -13,8 +13,8 @@ import React from "react";
 
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalAggregateStyles } from "./CausalAggregate.styles";
 import { CausalAggregateChart } from "./CausalAggregateChart";
-import { CausalAggregateStyles } from "./CausalAggregateStyles";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {

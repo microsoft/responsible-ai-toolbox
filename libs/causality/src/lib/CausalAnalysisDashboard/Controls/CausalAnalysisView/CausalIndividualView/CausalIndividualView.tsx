@@ -17,8 +17,8 @@ import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChar
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
-import { CausalIndividualStyles } from "./CausalIndividualStyles";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;

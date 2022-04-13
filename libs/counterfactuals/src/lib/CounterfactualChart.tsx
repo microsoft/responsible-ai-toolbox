@@ -35,7 +35,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { counterfactualChartStyles } from "./CounterfactualChartStyles";
+import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
