@@ -142,18 +142,20 @@ export class DatasetExplorerTab extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item className={classNames.cohortPickerWrapper}>
-          <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
-            {localization.Interpret.ModelPerformance.cohortPickerLabel}
-          </Text>
-          {cohortOptions && (
-            <Dropdown
-              className={classNames.cohortDropdown}
-              id="dataExplorerCohortDropdown"
-              options={cohortOptions}
-              selectedKey={this.state.selectedCohortIndex}
-              onChange={this.setSelectedCohort}
-            />
-          )}
+          <Stack horizontal={true} grow>
+            <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
+              {localization.Interpret.ModelPerformance.cohortPickerLabel}
+            </Text>
+            {cohortOptions && (
+              <Dropdown
+                className={classNames.cohortDropdown}
+                id="dataExplorerCohortDropdown"
+                options={cohortOptions}
+                selectedKey={this.state.selectedCohortIndex}
+                onChange={this.setSelectedCohort}
+              />
+            )}
+          </Stack>
         </Stack.Item>
         <Stack.Item>
           {this.state.yDialogOpen && (

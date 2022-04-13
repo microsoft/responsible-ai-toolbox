@@ -16,6 +16,7 @@ export interface IFeatureImportanceStyles {
   headerTitle: IStyle;
   infoWithText: IStyle;
   selectionCounter: IStyle;
+  tabularDataView: IStyle;
 }
 
 export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFeatureImportanceStyles> =
@@ -47,9 +48,11 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
           paddingTop: 4
         }
       ],
-      infoWithText: { maxWidth: descriptionMaxWidth },
+      infoWithText: { maxWidth: descriptionMaxWidth, paddingLeft: 25 },
       selectionCounter: {
-        paddingTop: 12
-      }
+        paddingTop: 12,
+        paddingLeft: 25
+      },
+      tabularDataView: { paddingLeft: 25 }
     });
   };

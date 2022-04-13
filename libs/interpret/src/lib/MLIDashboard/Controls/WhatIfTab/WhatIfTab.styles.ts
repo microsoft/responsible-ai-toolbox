@@ -75,6 +75,7 @@ export interface IWhatIfTabStyles {
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
+  subPlotContainer: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -383,6 +384,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         position: "relative",
         top: "0px",
         width: "67px"
-      }
+      },
+      subPlotContainer: { paddingLeft: 25 }
     });
   };

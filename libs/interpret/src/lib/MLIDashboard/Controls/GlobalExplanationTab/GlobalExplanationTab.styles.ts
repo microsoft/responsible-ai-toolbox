@@ -40,7 +40,8 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "80%"
       },
       chartContainer: {
-        width: "100%"
+        width: "100%",
+        paddingLeft: "25px"
       },
       chartLeftPart: {
         width: "80%"
@@ -99,7 +100,8 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         display: "flex",
         flexDirection: "row",
         height: "100%",
-        width: "100%"
+        width: "100%",
+        paddingLeft: "25px"
       },
       sliderLabel: {
         fontWeight: "600",

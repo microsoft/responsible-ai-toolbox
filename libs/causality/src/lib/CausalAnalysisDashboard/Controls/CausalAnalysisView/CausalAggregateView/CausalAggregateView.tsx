@@ -30,7 +30,11 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
     const styles = CausalAggregateStyles();
     this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
     return (
-      <Stack id="causalAggregateView" grow tokens={{ padding: "l1" }}>
+      <Stack
+        id="causalAggregateView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack horizontal={false}>
           <Stack.Item>
             <Text variant={"medium"} className={styles.label}>
