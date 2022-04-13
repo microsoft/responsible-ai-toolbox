@@ -22,7 +22,7 @@ export class HeatmapHighChart extends React.Component<ICommonChartProps> {
         chartOptions={chartOptions}
         fallback={fallback}
         theme={theme}
-        modules={["heatmap"]}
+        modules={["heatmap", "gantt", "pattern-fill"]}
       />
     );
   }
