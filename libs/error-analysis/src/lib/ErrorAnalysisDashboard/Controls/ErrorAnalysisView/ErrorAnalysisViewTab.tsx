@@ -72,7 +72,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ padding: "l1" }}
           className={classNames.errorAnalysis}
         >
-          <Stack horizontal>
+          <Stack horizontal className={classNames.errorAnalysisWrapper}>
             <Stack.Item>
               <Pivot
                 onLinkClick={this.handleTabClick}

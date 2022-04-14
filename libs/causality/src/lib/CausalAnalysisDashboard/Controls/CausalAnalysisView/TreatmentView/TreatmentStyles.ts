@@ -41,7 +41,6 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
       },
       header: {
         fontSize: 14,
-        margin: "20px",
         maxWidth: descriptionMaxWidth,
         textAlign: "left"
       },
