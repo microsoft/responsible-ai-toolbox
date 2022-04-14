@@ -65,7 +65,7 @@ export class CounterfactualPanel extends React.Component<
     super(props);
     this.state = {
       filterText: undefined,
-      sortFeatures: false
+      sortFeatures: true
     };
   }
   public render(): React.ReactNode {
