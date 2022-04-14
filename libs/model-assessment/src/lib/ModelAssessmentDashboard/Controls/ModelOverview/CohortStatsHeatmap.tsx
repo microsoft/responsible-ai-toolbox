@@ -131,17 +131,16 @@ export class CohortStatsHeatmap extends React.Component<
               borderWidth: 2,
               columns: [
                 {
-                  title: {
-                    text: localization.ModelAssessment.ModelOverview
-                      .dataCohortsHeatmapHeader,
-                    
-                  },
                   labels: {
                     // format labels to cap the line length
                     formatter() {
                       return wrapYAxisLabels(this.value.toString(), true);
                     },
                     reserveSpace: true
+                  },
+                  title: {
+                    text: localization.ModelAssessment.ModelOverview
+                      .dataCohortsHeatmapHeader
                   }
                 }
               ],

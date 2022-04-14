@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
+import {
+  boxPlotTooltip,
+  FabricStyles,
+  getBoxData
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { SeriesOptionsType } from "highcharts";
-import { boxPlotTooltip } from "libs/core-ui/src/lib/Highchart/BoxPlotTooltip";
 import _ from "lodash";
 
 export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {

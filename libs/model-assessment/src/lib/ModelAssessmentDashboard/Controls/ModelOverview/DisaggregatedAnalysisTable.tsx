@@ -29,16 +29,15 @@ export class DisaggregatedAnalysisTable extends React.Component<
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    return (
-      <>
-        {this.props.selectedFeatures.length > 0 && (
-          <CohortStatsHeatmap
-            cohorts={this.props.featureBasedCohorts}
-            selectableMetrics={this.props.selectableMetrics}
-            selectedMetrics={this.props.selectedMetrics}
-          />
-        )}
-      </>
-    );
+    if (this.props.selectedFeatures.length > 0) {
+      return (
+        <CohortStatsHeatmap
+          cohorts={this.props.featureBasedCohorts}
+          selectableMetrics={this.props.selectableMetrics}
+          selectedMetrics={this.props.selectedMetrics}
+        />
+      );
+    }
+    return React.Fragment;
   }
 }

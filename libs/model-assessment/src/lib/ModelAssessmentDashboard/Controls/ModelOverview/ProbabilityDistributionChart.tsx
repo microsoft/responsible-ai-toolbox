@@ -7,10 +7,10 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  boxPlotTooltip
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { boxPlotTooltip } from "libs/core-ui/src/lib/Highchart/BoxPlotTooltip";
 import {
   DefaultButton,
   Dropdown,
