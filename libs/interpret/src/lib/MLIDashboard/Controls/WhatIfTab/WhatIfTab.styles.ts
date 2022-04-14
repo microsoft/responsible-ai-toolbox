@@ -75,6 +75,7 @@ export interface IWhatIfTabStyles {
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
+  subPlotContainer: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -342,6 +343,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flex: 1,
         paddingRight: legendWidth
       },
+      subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {
         alignItems: "flex-start",
         boxSizing: "border-box",
