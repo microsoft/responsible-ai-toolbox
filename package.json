@@ -59,7 +59,7 @@
     "lodash": "^4.17.21",
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "office-ui-fabric-react": "^7.117.0",
     "plotly.js": "^1.48.0",
     "react": "17.0.2",
