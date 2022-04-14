@@ -23,7 +23,8 @@ import {
   PivotItem,
   IComboBox,
   IComboBoxOption,
-  ComboBox
+  ComboBox,
+  ActionButton
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -170,50 +171,63 @@ export class ModelOverview extends React.Component<
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
         {this.props.showNewModelOverviewExperience && (
-          <>
-            <Stack horizontal tokens={{ childrenGap: "20px" }}>
-              <ComboBox
-                placeholder={
-                  localization.ModelAssessment.ModelOverview
-                    .metricSelectionDropdownPlaceholder
-                }
-                label={
-                  localization.ModelAssessment.ModelOverview.metricsDropdown
-                }
-                selectedKey={this.state.selectedMetrics}
-                options={selectableMetrics}
-                onChange={this.onMetricSelectionChange}
-                multiSelect
-                className={classNames.dropdown}
-                styles={FabricStyles.limitedSizeMenuDropdown}
-              />
-              <ComboBox
-                componentRef={this.featureComboBoxRef}
-                placeholder={
-                  localization.ModelAssessment.ModelOverview
-                    .featureSelectionDropdownPlaceholder
-                }
-                label={
-                  localization.ModelAssessment.ModelOverview.featuresDropdown
-                }
-                selectedKey={this.state.selectedFeatures}
-                options={featureSelectionOptions}
-                onChange={this.onFeatureSelectionChange}
-                multiSelect
-                className={classNames.dropdown}
-                styles={FabricStyles.limitedSizeMenuDropdown}
-              />
-            </Stack>
+          <Stack tokens={{ childrenGap: "10px" }}>
+            <ComboBox
+              placeholder={
+                localization.ModelAssessment.ModelOverview
+                  .metricSelectionDropdownPlaceholder
+              }
+              label={localization.ModelAssessment.ModelOverview.metricsDropdown}
+              selectedKey={this.state.selectedMetrics}
+              options={selectableMetrics}
+              onChange={this.onMetricSelectionChange}
+              multiSelect
+              className={classNames.dropdown}
+              styles={FabricStyles.limitedSizeMenuDropdown}
+            />
             <DatasetCohortStatsTable
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
+            />
+            <Text variant="large">
+              {
+                localization.ModelAssessment.ModelOverview
+                  .disaggregatedAnalysisHeatmapHeader
+              }
+            </Text>
+            {this.state.selectedFeatures.length === 0 && (
+              <ActionButton
+                onClick={() => {
+                  this.featureComboBoxRef.current?.focus(true);
+                }}
+              >
+                {
+                  localization.ModelAssessment.ModelOverview
+                    .disaggregatedAnalysisFeatureSelectionPlaceholder
+                }
+              </ActionButton>
+            )}
+            <ComboBox
+              componentRef={this.featureComboBoxRef}
+              placeholder={
+                localization.ModelAssessment.ModelOverview
+                  .featureSelectionDropdownPlaceholder
+              }
+              label={
+                localization.ModelAssessment.ModelOverview.featuresDropdown
+              }
+              selectedKey={this.state.selectedFeatures}
+              options={featureSelectionOptions}
+              onChange={this.onFeatureSelectionChange}
+              multiSelect
+              className={classNames.dropdown}
+              styles={FabricStyles.limitedSizeMenuDropdown}
             />
             <DisaggregatedAnalysisTable
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
               selectedFeatures={this.state.selectedFeatures}
               featureBasedCohorts={featureBasedCohorts}
-              featureComboBoxRef={this.featureComboBoxRef}
             />
             <ChartConfigurationFlyout
               isOpen={this.state.chartConfigurationIsVisible}
@@ -272,7 +286,7 @@ export class ModelOverview extends React.Component<
                 />
               </PivotItem>
             </Pivot>
-          </>
+          </Stack>
         )}
       </Stack>
     );
