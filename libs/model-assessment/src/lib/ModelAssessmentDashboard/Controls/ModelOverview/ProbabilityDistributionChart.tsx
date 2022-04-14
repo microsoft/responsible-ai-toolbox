@@ -101,16 +101,6 @@ export class ProbabilityDistributionChart extends React.Component<
         this.state.probabilityOption!.key.toString()
       );
     });
-    // map to highcharts-specific naming convention
-    // const boxData = boxplotData.map((cohortBoxPlotData) => {
-    //   return {
-    //     high: cohortBoxPlotData.upperFence,
-    //     low: cohortBoxPlotData.lowerFence,
-    //     median: cohortBoxPlotData.median,
-    //     q1: cohortBoxPlotData.lowerQuartile,
-    //     q3: cohortBoxPlotData.upperQuartile
-    //   } as PointOptionsObject;
-    // });
     const outlierData = boxPlotData
       .map((cohortBoxPlotData) => cohortBoxPlotData.outliers)
       .map((outlierProbs, cohortIndex) => {
