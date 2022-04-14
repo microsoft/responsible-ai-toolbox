@@ -19,7 +19,7 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
         minWidth: "120px"
       },
       container: {
-        padding: `65px 0 0 20px`
+        padding: "65px 0 0 20px"
       }
     });
   };
