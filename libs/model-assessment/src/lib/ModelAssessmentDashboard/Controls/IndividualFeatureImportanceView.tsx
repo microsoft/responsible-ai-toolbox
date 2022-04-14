@@ -183,7 +183,7 @@ export class IndividualFeatureImportanceView extends React.Component<
             </Text>
           </LabelWithCallout>
         </Stack.Item>
-        <Stack.Item className="tabularDataView">
+        <Stack.Item className={classNames.tabularDataView}>
           <div style={{ height: "500px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

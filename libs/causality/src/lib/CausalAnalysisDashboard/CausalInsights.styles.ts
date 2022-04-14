@@ -18,7 +18,7 @@ export const causalInsightsStyles: () => IProcessedStyleSet<ICausalInsightsStyle
     return mergeStyleSets<ICausalInsightsStyles>({
       container: {
         color: theme.semanticColors.bodyText,
-        padding: "0 40px 10px 20px"
+        padding: "0 40px 10px 40px"
       }
     });
   };
