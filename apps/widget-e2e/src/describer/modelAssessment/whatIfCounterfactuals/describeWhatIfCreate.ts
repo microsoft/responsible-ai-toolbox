@@ -45,11 +45,6 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
       cy.get(Locators.WhatIfColumnHeaders)
         .eq(2)
         .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
-      cy.get(Locators.WhatIfColumnHeaders)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
-        )
-        .not("not.exist");
       cy.get(Locators.WhatIfSearchBarClearTextButton).click();
       cy.get(Locators.WhatIfColumnHeaders).contains(
         dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
