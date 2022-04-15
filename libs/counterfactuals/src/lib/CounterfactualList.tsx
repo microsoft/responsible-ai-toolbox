@@ -87,6 +87,13 @@ export class CounterfactualList extends React.Component<
   public render(): React.ReactNode {
     const items = this.getItems();
     const columns = this.getColumns();
+    const targetFeature = this.getTargetFeatureName();
+    for (const column of columns) {
+      if (targetFeature !== undefined && column.fieldName === targetFeature) {
+        column.name = `${this.getTargetPrefix()} (${column.fieldName})`;
+      }
+    }
+
     if (columns.length === 0) {
       return (
         <MissingParametersPlaceholder>
@@ -107,6 +114,18 @@ export class CounterfactualList extends React.Component<
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
+  }
+
+  private getTargetFeatureName(): string | undefined {
+    return this.props.data?.feature_names_including_target[
+      this.props.data?.feature_names_including_target.length - 1
+    ];
+  }
+  private getTargetPrefix(): string {
+    if (this.props.data?.desired_range !== undefined) {
+      return localization.Counterfactuals.WhatIf.predictedValue;
+    }
+    return localization.Counterfactuals.WhatIf.predictedClass;
   }
 
   private renderRow: IRenderFunction<IDetailsRowProps> = (
@@ -231,10 +250,7 @@ export class CounterfactualList extends React.Component<
   };
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
-    const targetFeature =
-      this.props.data?.feature_names_including_target[
-        this.props.data?.feature_names_including_target.length - 1
-      ];
+    const targetFeature = this.getTargetFeatureName();
     const featureNames = getFilterFeatures(
       this.props.data,
       this.props.selectedIndex,
@@ -378,7 +394,7 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]?.toString()}
-              label={column.key}
+              label={column.name || column.key}
               id={column.key}
               onChange={this.updateColValue}
             />
