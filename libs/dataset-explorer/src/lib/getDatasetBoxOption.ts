@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  FabricStyles,
-  getBoxData
-} from "@responsible-ai/core-ui";
+import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -19,7 +16,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
-      name: localization.Core.BoxPlot.boxPlotSeriesLabel,
+      name: localization.Core.BoxPlot.boxPlotSeriesLabel
     });
   });
   outlier.forEach((data: any) => {
