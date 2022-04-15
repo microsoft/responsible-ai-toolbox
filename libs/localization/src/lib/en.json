@@ -94,11 +94,6 @@
       "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     },
     "BoxPlot": {
-      "upperFence": "Upper fence",
-      "lowerFence": "Lower fence",
-      "median": "Median",
-      "upperQuartile": "Upper quartile",
-      "lowerQuartile": "Lower quartile",
       "outlierProbability": "probability",
       "outlierLabel": "Outliers",
       "boxPlotSeriesLabel": "Box Plot"

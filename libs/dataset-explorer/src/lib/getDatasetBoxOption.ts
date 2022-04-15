@@ -2,13 +2,11 @@
 // Licensed under the MIT License.
 
 import {
-  boxPlotTooltip,
   FabricStyles,
   getBoxData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import { SeriesOptionsType } from "highcharts";
 import _ from "lodash";
 
 export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
@@ -16,14 +14,12 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
   const outlier = plotlyProps.data.map(
     (d: any) => getBoxData(d.x, d.y).outlier
   );
-  const boxGroupData: SeriesOptionsType[] = [];
+  const boxGroupData: any = [];
   boxData.forEach((data: any) => {
     boxGroupData.push({
       color: data.color,
       data,
       name: localization.Core.BoxPlot.boxPlotSeriesLabel,
-      tooltip: boxPlotTooltip,
-      type: "boxplot"
     });
   });
   outlier.forEach((data: any) => {

@@ -3,7 +3,6 @@
 
 import { SeriesOptionsType } from "highcharts";
 
-import { boxPlotTooltip } from "../Highchart/BoxPlotTooltip";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -48,7 +47,6 @@ export function getFeatureImportanceBoxOptions(
       color: data.color,
       data: boxData.box,
       name: data.name,
-      tooltip: boxPlotTooltip,
       type: "boxplot"
     });
     boxGroupData.push({

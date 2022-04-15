@@ -7,8 +7,7 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   JointDataset,
-  ModelAssessmentContext,
-  boxPlotTooltip
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -162,7 +161,6 @@ export class ProbabilityDistributionChart extends React.Component<
                         data: boxPlotData,
                         fillColor: "#b2d6f2",
                         name: localization.Core.BoxPlot.boxPlotSeriesLabel,
-                        tooltip: boxPlotTooltip,
                         type: "boxplot"
                       },
                       {
