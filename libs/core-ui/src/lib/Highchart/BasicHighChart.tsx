@@ -17,6 +17,7 @@ export class BasicHighChart extends React.Component<ICommonChartProps> {
 
     return (
       <HighchartWrapper
+        key={this.props.configOverride?.chart?.type}
         className={className}
         id={id}
         chartOptions={chartOptions}
