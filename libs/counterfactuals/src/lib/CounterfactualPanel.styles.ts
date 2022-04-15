@@ -90,6 +90,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
             paddingLeft: 24,
             paddingRight: 24
           },
+          ".ms-Panel-navigation": {
+            justifyContent: "space-between"
+          },
           ".scrollableContent": { height: "100%", paddingTop: 1 }
         }
       },
