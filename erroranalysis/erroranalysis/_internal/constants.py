@@ -92,6 +92,29 @@ class Metrics(str, Enum):
     ERROR_RATE = 'error_rate'
 
 
+class MetricKeys(str, Enum):
+    """Provide keys for properties related to metrics.
+    """
+    METRIC_NAME = 'metricName'
+    METRIC_VALUE = 'metricValue'
+
+
+class RootKeys(str, Enum):
+    """Provide keys for the root cohort.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
+    TOTAL_SIZE = 'totalSize'
+    ERROR_COVERAGE = 'errorCoverage'
+
+
+class TreeNode(str, Enum):
+    """Provide the tree node properties.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
+
+
 metric_to_display_name = {
     Metrics.ACCURACY_SCORE: 'Accuracy score',
     Metrics.MEAN_ABSOLUTE_ERROR: 'Mean absolute error',
