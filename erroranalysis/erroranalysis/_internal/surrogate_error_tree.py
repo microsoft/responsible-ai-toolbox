@@ -15,7 +15,7 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               Metrics, ModelTask,
+                                               Metrics, ModelTask, TreeNode,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
@@ -620,8 +620,8 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
         "size": float(total),
         "sourceRowKeyHash": "hashkey",  # Note: remove this eventually
         "success": float(success),  # Note: remove this eventually
-        "metricName": metric_name,
-        "metricValue": float(metric_value),
+        TreeNode.METRIC_NAME: metric_name,
+        TreeNode.METRIC_VALUE: float(metric_value),
         "isErrorMetric": is_error_metric
     }
 
