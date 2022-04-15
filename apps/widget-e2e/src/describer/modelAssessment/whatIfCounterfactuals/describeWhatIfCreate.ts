@@ -46,11 +46,9 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .eq(2)
         .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
       cy.get(Locators.WhatIfSearchBarClearTextButton).click();
-      cy.get(Locators.WhatIfColumnHeaders)
-        .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
-        );
+      cy.get(Locators.WhatIfColumnHeaders).contains(
+        dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
+      );
     });
 
     it("Should have 'Create your own counterfactual' section and it should be editable", () => {

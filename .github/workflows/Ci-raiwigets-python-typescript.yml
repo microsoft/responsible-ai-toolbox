@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -31,7 +31,7 @@ jobs:
           python-version: ${{ matrix.pythonVersion }}
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 
@@ -106,7 +106,7 @@ jobs:
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
-      - if: ${{ (matrix.operatingSystem == 'ubuntu-latest') && (matrix.pythonVersion == '3.7') }}
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
         name: Upload to codecov
         id: codecovupload1
         uses: codecov/codecov-action@v2
@@ -120,7 +120,7 @@ jobs:
           name: codecov-umbrella
           verbose: true
 
-      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.7') && (matrix.operatingSystem == 'ubuntu-latest') }}
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
         name: Retry upload to codecov
         id: codecovupload2
         uses: codecov/codecov-action@v2
@@ -142,7 +142,8 @@ jobs:
           path: dist/cypress
 
       - name: Set codecov status
-        if: ${{ (matrix.pythonVersion == '3.7') && (matrix.operatingSystem == 'ubuntu-latest') }}
+        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        shell: bash
         run: |
           if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
             echo fine

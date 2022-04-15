@@ -24,6 +24,7 @@ export interface ITreeViewRendererProps {
     abortSignal: AbortSignal
   ) => Promise<IErrorAnalysisTreeNode[]>;
   tree?: IErrorAnalysisTreeNode[];
+  onClearCohortSelectionClick: () => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],

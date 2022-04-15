@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   getTheme,
@@ -75,6 +75,7 @@ export interface IWhatIfTabStyles {
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
+  subPlotContainer: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -235,6 +236,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },
@@ -341,6 +343,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flex: 1,
         paddingRight: legendWidth
       },
+      subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {
         alignItems: "flex-start",
         boxSizing: "border-box",

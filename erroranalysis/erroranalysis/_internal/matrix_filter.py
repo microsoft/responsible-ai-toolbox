@@ -11,8 +11,8 @@ from sklearn.metrics import multilabel_confusion_matrix
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
-                                               MatrixParams, Metrics,
-                                               ModelTask,
+                                               MatrixParams, MetricKeys,
+                                               Metrics, ModelTask,
                                                metric_to_display_name)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
@@ -26,8 +26,8 @@ FALSE_COUNT = 'falseCount'
 INTERVAL_MIN = 'intervalMin'
 INTERVAL_MAX = 'intervalMax'
 MATRIX = 'matrix'
-METRIC_VALUE = 'metricValue'
-METRIC_NAME = 'metricName'
+METRIC_VALUE = MetricKeys.METRIC_VALUE
+METRIC_NAME = MetricKeys.METRIC_NAME
 VALUES = 'values'
 PRECISION = 100
 TP = 'tp'

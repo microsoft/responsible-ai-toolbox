@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -80,8 +80,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       cohortPickerWrapper: {
         alignItems: "center",
-        height: "32px",
-        padding: "0 0 0 33px"
+        height: "32px"
       },
       colorBox: {
         borderRadius: "6px",
@@ -110,7 +109,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "23px"
       },
       infoWithText: {
-        paddingLeft: "33px",
+        maxWidth: descriptionMaxWidth,
         width: "100%"
       },
       legendAndText: {
@@ -134,7 +133,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       page: {
         color: theme.semanticColors.bodyText,
         height: "100%",
-        padding: "16px 40px 0 14px",
+        padding: "0 40px 10px 40px",
         width: "100%"
       },
       rotatedVerticalBox: {
