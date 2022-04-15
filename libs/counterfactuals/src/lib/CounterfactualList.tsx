@@ -87,12 +87,6 @@ export class CounterfactualList extends React.Component<
   public render(): React.ReactNode {
     const items = this.getItems();
     const columns = this.getColumns();
-    const targetFeature = this.getTargetFeatureName();
-    for (const column of columns) {
-      if (targetFeature !== undefined && column.fieldName === targetFeature) {
-        column.name = `${this.getTargetPrefix()} (${column.fieldName})`;
-      }
-    }
 
     if (columns.length === 0) {
       return (
@@ -288,6 +282,11 @@ export class CounterfactualList extends React.Component<
           name: f
         })
       );
+    for (const column of columns) {
+      if (targetFeature !== undefined && column.fieldName === targetFeature) {
+        column.name = `${this.getTargetPrefix()} (${column.fieldName})`;
+      }
+    }
     return columns;
   }
 
