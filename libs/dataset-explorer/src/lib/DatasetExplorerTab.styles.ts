@@ -80,8 +80,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       cohortPickerWrapper: {
         alignItems: "center",
-        height: "32px",
-        padding: "0 0 0 33px"
+        height: "32px"
       },
       colorBox: {
         borderRadius: "6px",
@@ -111,7 +110,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       infoWithText: {
         maxWidth: descriptionMaxWidth,
-        paddingLeft: "33px",
         width: "100%"
       },
       legendAndText: {
@@ -135,7 +133,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       page: {
         color: theme.semanticColors.bodyText,
         height: "100%",
-        padding: "16px 40px 0 14px",
+        padding: "0 40px 10px 40px",
         width: "100%"
       },
       rotatedVerticalBox: {

@@ -1314,7 +1314,7 @@
       "CorrectPredictions": "Correct predictions",
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.",
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
       "LocalExplanation": "Individual feature importance",
       "SelectionCounter": "{0}/{1} datapoints selected",
       "SelectionLimit": "Up to 5 datapoints can be selected at this time."

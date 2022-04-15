@@ -36,7 +36,6 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         paddingTop: "50px"
       },
       dropdown: {
-        paddingLeft: "20px",
         width: "220px"
       },
       label: {

@@ -12,6 +12,7 @@ export interface IErrorAnalysisStyles {
   errorAnalysis: IStyle;
   cohortInfo: IStyle;
   featureList: IStyle;
+  errorAnalysisWrapper: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -27,6 +28,7 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         overflow: "auto",
         width: "100%"
       },
+      errorAnalysisWrapper: { paddingLeft: "15px" },
       featureList: {
         padding: "16px 0 10px 0"
       }
