@@ -165,6 +165,25 @@
         }
       ]
     },
+    "root_stats": {
+      "description": "The statistics about the root node.",
+      "type": "object",
+      "properties": {
+        "metricName": {
+          "type": "string"
+        },
+        "metricValue": {
+          "type": "number"
+        },
+        "totalSize": {
+          "type": "number"
+        },
+        "errorCoverage": {
+          "type": "number"
+        }
+      },
+      "required": ["metricName", "metricValue", "totalSize", "errorCoverage"]
+    },
     "metadata": {
       "description": "The metadata about the generated error analysis report.",
       "type": "object",
