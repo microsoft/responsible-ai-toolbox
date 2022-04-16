@@ -10,7 +10,6 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
                                                metric_to_display_name)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
-from erroranalysis._internal.metrics import metric_to_func
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
@@ -25,7 +24,6 @@ from .utils import _is_classifier
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
-ROOT_COVERAGE = 100
 
 
 class ErrorAnalysisDashboardInput:
@@ -307,7 +305,6 @@ class ErrorAnalysisDashboardInput:
                 ErrorAnalysisDashboardInterface.METHOD
             ] = method
 
-        self.set_root_metric(full_pred_y, full_true_y, metric)
         data = self.get_error_analysis_data(max_depth,
                                             num_leaves,
                                             min_child_samples,
@@ -323,35 +320,8 @@ class ErrorAnalysisDashboardInput:
         data.numLeaves = num_leaves
         data.minChildSamples = min_child_samples
         data.metric = metric_to_display_name[metric]
+        data.root_stats = self._error_analyzer.compute_root_stats()
         return data
-
-    def set_root_metric(self, predicted_y, true_y, metric):
-        if metric != Metrics.ERROR_RATE:
-            metric_func = metric_to_func[metric]
-            metric_value = metric_func(predicted_y, true_y)
-        else:
-            total = len(true_y)
-            if total == 0:
-                metric_value = 0
-            else:
-                if not isinstance(predicted_y, np.ndarray):
-                    predicted_y = np.array(predicted_y)
-                if not isinstance(true_y, np.ndarray):
-                    true_y = np.array(true_y)
-                diff = predicted_y != true_y
-                error = sum(diff)
-                metric_value = (error / total) * 100
-        metric_name = metric_to_display_name[metric]
-        root_stats = {
-            ExplanationDashboardInterface.ROOT_METRIC_NAME: metric_name,
-            ExplanationDashboardInterface.ROOT_METRIC_VALUE: metric_value,
-            ExplanationDashboardInterface.ROOT_TOTAL_SIZE: len(true_y),
-            ExplanationDashboardInterface.ROOT_ERROR_COVERAGE: ROOT_COVERAGE
-        }
-
-        self.dashboard_input[
-            ExplanationDashboardInterface.ROOT_STATS
-        ] = root_stats
 
     def compute_predicted_y(self, model, dataset):
         predicted_y = None

@@ -11,7 +11,16 @@ export interface IErrorAnalysisData {
   numLeaves: number;
   minChildSamples: number;
   metric: string;
+  root_stats?: IErrorAnalysisRootStats;
 }
+
+export interface IErrorAnalysisRootStats {
+  metricName: string;
+  metricValue: number;
+  totalSize: number;
+  errorCoverage: number;
+}
+
 // Represents the data retrieved from the backend
 export interface IErrorAnalysisTreeNode {
   arg: number | number[] | undefined;
