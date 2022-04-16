@@ -37,7 +37,11 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         });
       cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
-
+    it("should contain the output label name", () => {
+      cy.get(Locators.WhatIfColumnHeaders).contains(
+        dataShape.whatIfCounterfactualsData?.outputColumnName || ""
+      );
+    });
     it("should filter by included letters in search query", () => {
       cy.get(Locators.WhatIfSearchBar).type(
         dataShape.whatIfCounterfactualsData?.searchBarQuery || ""
@@ -50,7 +54,6 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
       );
     });
-
     it("Should have 'Create your own counterfactual' section and it should be editable", () => {
       cy.get(Locators.CreateYourOwnCounterfactualInputField)
         .eq(2)
@@ -68,7 +71,6 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
             ?.createYourOwnCounterfactualInputFieldUpdated || "25"
         );
     });
-
     it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
       cy.get(Locators.WhatIfNameLabel)
         .should("have.attr", "value")
@@ -85,7 +87,6 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         );
     });
   });
-
   describe.skip("What-If save scenario", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();

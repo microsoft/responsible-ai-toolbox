@@ -130,6 +130,7 @@ export interface IWhatIfCounterfactualsData {
   checkForClassField?: boolean;
   classValue?: string;
   newClassValue?: string;
+  outputColumnName?: string;
 }
 
 export enum RAINotebookNames {
