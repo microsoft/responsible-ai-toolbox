@@ -16,7 +16,7 @@
     "build": "nx build",
     "buildall": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --configuration=production --all",
     "builddebug": "cross-env NODE_OPTIONS=--max_old_space_size=6144 nx run-many --target=build --all",
-    "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn e2e",
+    "ci": "yarn install --frozen-lock-file && yarn testall --codeCoverage && yarn lintall && yarn buildall && yarn test && yarn e2e",
     "copytest": "node ./scripts/copyTest.js",
     "dep-graph": "nx dep-graph",
     "e2e": "nx e2e dashboard-e2e",
@@ -36,6 +36,7 @@
     "startprod": "serve ./dist/apps/dashboard -s",
     "test": "nx test",
     "testall": "nx run-many --target=test --all",
+    "test-unit": "nx run dashboard:test",
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator"
   },
