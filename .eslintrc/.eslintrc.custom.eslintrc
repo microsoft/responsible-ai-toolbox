@@ -105,6 +105,7 @@
           "rms_error",
           "roc_auc_score_min",
           "root_mean_squared_error",
+          "root_stats",
           "scores_range",
           "selection_rate",
           "shap_deep",
