@@ -6,13 +6,15 @@ import {
   ISingleClassLocalFeatureImportance,
   JointDataset,
   Cohort,
+  CohortSource,
   IExplanationModelMetadata,
   isThreeDimArray,
   ErrorCohort,
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
-  getModelType
+  getModelType,
+  MetricCohortStats
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -56,13 +58,28 @@ export function buildInitialModelAssessmentContext(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
 
+  let metricStats: MetricCohortStats | undefined = undefined;
+  if (props.errorAnalysisData?.[0]?.root_stats) {
+    const rootStats = props.errorAnalysisData?.[0]?.root_stats;
+    metricStats = new MetricCohortStats(
+      rootStats.totalSize,
+      rootStats.totalSize,
+      rootStats.metricValue,
+      rootStats.metricName,
+      rootStats.errorCoverage
+    );
+  }
   const defaultErrorCohort = new ErrorCohort(
     new Cohort(
       localization.ErrorAnalysis.Cohort.defaultLabel,
       jointDataset,
       []
     ),
-    jointDataset
+    jointDataset,
+    0,
+    CohortSource.None,
+    false,
+    metricStats
   );
   let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
   const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
