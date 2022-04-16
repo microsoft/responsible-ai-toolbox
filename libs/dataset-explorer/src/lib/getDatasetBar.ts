@@ -27,10 +27,11 @@ export function getDatasetBar(
 
   if (customData && xData) {
     for (const [i, customDatum] of customData.entries()) {
-      if (!groupedData[(customDatum as any).Y]) {
-        groupedData[(customDatum as any).Y] = new Array(xDataTypeCount).fill(0);
+      const yValue = (customDatum as any).Y;
+      if (!groupedData[yValue]) {
+        groupedData[yValue] = new Array(xDataTypeCount).fill(0);
       }
-      groupedData[(customDatum as any).Y][xData[i]] += 1;
+      groupedData[yValue][xData[i]] += 1;
     }
   }
 

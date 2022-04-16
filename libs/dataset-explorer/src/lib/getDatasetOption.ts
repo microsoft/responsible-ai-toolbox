@@ -21,10 +21,11 @@ export function getDatasetOption(
   if (chartProps?.chartType === ChartTypes.Scatter) {
     return getDatasetScatterOption(jointData, plotlyProps, chartProps);
   }
+  const yAxisProp = chartProps?.yAxis.property;
   if (
-    chartProps?.yAxis.property &&
-    (jointData.metaDict[chartProps.yAxis.property].isCategorical ||
-      jointData.metaDict[chartProps.yAxis.property].treatAsCategorical)
+    yAxisProp &&
+    (jointData.metaDict[yAxisProp].isCategorical ||
+      jointData.metaDict[yAxisProp].treatAsCategorical)
   ) {
     return getDatasetBarOption(jointData, plotlyProps, chartProps);
   }

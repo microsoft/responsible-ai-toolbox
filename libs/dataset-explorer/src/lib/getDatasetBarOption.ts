@@ -13,6 +13,7 @@ export function getDatasetBarOption(
   chartProps?: IGenericChartProps
 ): any {
   const series = getDatasetBar(jointData, plotlyProps, chartProps);
+  const xAxisProp = chartProps?.xAxis.property;
 
   return {
     chart: {
@@ -21,8 +22,7 @@ export function getDatasetBarOption(
     series,
     xAxis: {
       categories:
-        chartProps?.xAxis.property &&
-        jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues
+        xAxisProp && jointData.metaDict[xAxisProp].sortedCategoricalValues
     }
   };
 }
