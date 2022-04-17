@@ -293,7 +293,7 @@ const modelAssessmentDatasets = {
       createYourOwnCounterfactualInputFieldUpdated: "25",
       hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : More than median",
-      outputColumnName: "Predicted value (SalePriceK)",
+      outputColumnName: "Predicted value (Sold_HigherThan_Median)",
       searchBarQuery: "Wood",
       selectedDatapoint: "Index 1",
       whatIfNameLabel: "Copy of row 1",
