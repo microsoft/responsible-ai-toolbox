@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// eslint-disable-next-line eslint-comments/no-use
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { wrapYAxisLabels } from "libs/model-assessment/src/lib/ModelAssessmentDashboard/Controls/ModelOverview/StatsTableUtils";
 
 describe("wrapYAxisLabels", () => {

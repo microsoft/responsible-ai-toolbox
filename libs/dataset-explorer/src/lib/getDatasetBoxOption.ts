@@ -16,7 +16,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
-      name: localization.Core.BoxPlot.boxPlotSeriesLabel
+      name: localization.ModelAssessment.ModelOverview.BoxPlot.boxPlotSeriesLabel
     });
   });
   outlier.forEach((data: any) => {
@@ -26,7 +26,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
         fillColor: FabricStyles.fabricColorPalette[0],
         lineWidth: 35
       },
-      name: localization.Core.BoxPlot.outlierLabel,
+      name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
       type: "scatter"
     });
   });

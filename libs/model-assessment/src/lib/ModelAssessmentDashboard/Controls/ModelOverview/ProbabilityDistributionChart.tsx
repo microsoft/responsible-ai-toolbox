@@ -10,14 +10,16 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { PointOptionsObject } from "highcharts";
 import {
   DefaultButton,
-  Dropdown,
+  ChoiceGroup,
   getTheme,
-  IDropdownOption,
+  IChoiceGroupOption,
   Panel,
   Stack,
-  Text
+  Text,
+  PrimaryButton
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -32,7 +34,8 @@ interface IProbabilityDistributionChartProps {
 }
 
 interface IProbabilityDistributionChartState {
-  probabilityOption?: IDropdownOption;
+  probabilityOption?: IChoiceGroupOption;
+  newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
 }
 
@@ -53,7 +56,11 @@ export class ProbabilityDistributionChart extends React.Component<
     if (this.state.probabilityOption === undefined) {
       const probabilityOptions = this.getProbabilityOptions();
       if (probabilityOptions.length > 0) {
-        this.setState({ probabilityOption: probabilityOptions[0] });
+        const firstOption = probabilityOptions[0];
+        this.setState({
+          probabilityOption: firstOption,
+          newlySelectedProbabilityOption: firstOption
+        });
       }
     }
   }
@@ -101,11 +108,12 @@ export class ProbabilityDistributionChart extends React.Component<
       );
     });
     const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData.outliers)
+      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
       .map((outlierProbs, cohortIndex) => {
-        return outlierProbs.map((prob) => [cohortIndex, prob]);
+        return outlierProbs?.map((prob) => [cohortIndex, prob]);
       })
-      .reduce((list1, list2) => list1.concat(list2), []);
+      .filter((list) => list !== undefined)
+      .reduce((list1, list2) => list1!.concat(list2!), []);
 
     const noCohortSelected =
       this.props.selectedDatasetCohorts.length +
@@ -158,17 +166,21 @@ export class ProbabilityDistributionChart extends React.Component<
                     },
                     series: [
                       {
-                        data: boxPlotData,
+                        data: boxPlotData.map(
+                          (boxData) => boxData as PointOptionsObject
+                        ),
                         fillColor: "#b2d6f2",
-                        name: localization.Core.BoxPlot.boxPlotSeriesLabel,
+                        name: localization.ModelAssessment.ModelOverview.BoxPlot
+                          .boxPlotSeriesLabel,
                         type: "boxplot"
                       },
                       {
                         data: outlierData,
-                        name: localization.Core.BoxPlot.outlierLabel,
+                        name: localization.ModelAssessment.ModelOverview.BoxPlot
+                          .outlierLabel,
                         tooltip: {
                           pointFormatter() {
-                            return `${localization.Core.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
+                            return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                           }
                         },
                         type: "scatter"
@@ -206,31 +218,56 @@ export class ProbabilityDistributionChart extends React.Component<
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
         >
-          <Dropdown
-            label={
-              localization.ModelAssessment.ModelOverview
-                .probabilityForClassSelectionHeader
-            }
-            options={probabilityOptions}
-            styles={{ dropdown: { width: 250 } }}
-            onChange={this.onProbabilityOptionSelectionChange}
-            selectedKey={this.state.probabilityOption!.key}
-          />
+          <Stack tokens={{ childrenGap: "10px" }}>
+            <ChoiceGroup
+              className={classNames.chartConfigDropdown}
+              label={
+                localization.ModelAssessment.ModelOverview
+                  .probabilityForClassSelectionHeader
+              }
+              options={probabilityOptions}
+              onChange={this.onProbabilityOptionSelectionChange}
+              selectedKey={this.state.newlySelectedProbabilityOption?.key}
+            />
+            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+              <PrimaryButton
+                onClick={() => {
+                  if (this.state.newlySelectedProbabilityOption)
+                    this.setState({
+                      probabilityOption:
+                        this.state.newlySelectedProbabilityOption,
+                      probabilityFlyoutIsVisible: false
+                    });
+                }}
+                text={
+                  localization.ModelAssessment.ModelOverview.chartConfigConfirm
+                }
+              />
+              <DefaultButton
+                onClick={() => {
+                  this.setState({ probabilityFlyoutIsVisible: false });
+                }}
+                text={
+                  localization.ModelAssessment.ModelOverview.chartConfigCancel
+                }
+              />
+            </Stack>
+          </Stack>
         </Panel>
       </>
     );
   }
 
   private onProbabilityOptionSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    _: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    item?: IChoiceGroupOption
   ): void => {
     if (item) {
-      this.setState({ probabilityOption: item });
+      this.setState({ newlySelectedProbabilityOption: item });
     }
   };
 
-  private getProbabilityOptions(): IDropdownOption[] {
+  private getProbabilityOptions(): IChoiceGroupOption[] {
     return new Array(this.context.jointDataset.predictionClassCount)
       .fill(0)
       .map((_, index) => {

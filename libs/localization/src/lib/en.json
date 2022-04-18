@@ -92,11 +92,6 @@
     "EmptyCohortDialog": {
       "title": "Dataset cohort contains no datapoints",
       "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
-    },
-    "BoxPlot": {
-      "outlierProbability": "probability",
-      "outlierLabel": "Outliers",
-      "boxPlotSeriesLabel": "Box Plot"
     }
   },
   "Counterfactuals": {
@@ -1363,7 +1358,16 @@
       "metricSelectionButton": "Choose metric",
       "cohortSelectionButton": "Choose cohorts",
       "probabilityLabelSelectionButton": "Choose label",
-      "selectAllCohortsOption": "Select all"
+      "selectAllCohortsOption": "Select all",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigConfirm": "Confirm",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts"
     }
   }
 }

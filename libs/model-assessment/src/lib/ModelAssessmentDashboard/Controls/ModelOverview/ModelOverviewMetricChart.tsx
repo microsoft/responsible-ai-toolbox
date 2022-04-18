@@ -12,10 +12,12 @@ import { localization } from "@responsible-ai/localization";
 import {
   getTheme,
   IDropdownOption,
-  Dropdown,
+  IChoiceGroupOption,
   Stack,
   DefaultButton,
-  Panel
+  Panel,
+  ChoiceGroup,
+  PrimaryButton
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -34,6 +36,7 @@ interface IModelOverviewMetricChartProps {
 
 interface IModelOverviewMetricChartState {
   selectedMetric: string;
+  newlySelectedMetric: string;
   metricSelectionFlyoutIsVisible: boolean;
 }
 
@@ -47,9 +50,11 @@ export class ModelOverviewMetricChart extends React.Component<
 
   constructor(props: IModelOverviewMetricChartProps) {
     super(props);
+    const firstMetric = this.props.selectableMetrics[0].key.toString();
     this.state = {
       metricSelectionFlyoutIsVisible: false,
-      selectedMetric: this.props.selectableMetrics[0].key.toString()
+      selectedMetric: firstMetric,
+      newlySelectedMetric: firstMetric
     };
   }
 
@@ -157,27 +162,55 @@ export class ModelOverviewMetricChart extends React.Component<
             this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
         >
-          <Dropdown
-            label={
-              localization.ModelAssessment.ModelOverview
-                .metricChartDropdownSelectionHeader
-            }
-            options={this.props.selectableMetrics}
-            styles={{ dropdown: { width: 250 } }}
-            onChange={this.onMetricSelectionChange}
-            selectedKey={this.state.selectedMetric}
-          />
+          <Stack tokens={{ childrenGap: "10px" }}>
+            <ChoiceGroup
+              className={classNames.chartConfigDropdown}
+              label={
+                localization.ModelAssessment.ModelOverview
+                  .metricChartDropdownSelectionHeader
+              }
+              options={this.props.selectableMetrics.map((metricOption) => {
+                return {
+                  key: metricOption.key,
+                  text: metricOption.text
+                } as IChoiceGroupOption;
+              })}
+              onChange={this.onMetricSelectionChange}
+              selectedKey={this.state.newlySelectedMetric}
+            />
+            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+              <PrimaryButton
+                onClick={() => {
+                  this.setState({
+                    selectedMetric: this.state.newlySelectedMetric,
+                    metricSelectionFlyoutIsVisible: false
+                  });
+                }}
+                text={
+                  localization.ModelAssessment.ModelOverview.chartConfigConfirm
+                }
+              />
+              <DefaultButton
+                onClick={() => {
+                  this.setState({ metricSelectionFlyoutIsVisible: false });
+                }}
+                text={
+                  localization.ModelAssessment.ModelOverview.chartConfigCancel
+                }
+              />
+            </Stack>
+          </Stack>
         </Panel>
       </>
     );
   }
 
   private onMetricSelectionChange = (
-    _: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
+    _: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    item?: IChoiceGroupOption
   ): void => {
     if (item) {
-      this.setState({ selectedMetric: item.key.toString() });
+      this.setState({ newlySelectedMetric: item.key.toString() });
     }
   };
 }

@@ -6,13 +6,13 @@ import { calculateBoxPlotData, getPercentile } from "@responsible-ai/core-ui";
 describe("calculateBoxPlot", () => {
   it.each`
     input                      | expectedResult
-    ${[0]}                     | ${{ high: 0, low: 0, q1: 0, q3: 0, median: 0 }}
-    ${[1]}                     | ${{ high: 1, low: 1, q1: 1, q3: 1, median: 1 }}
-    ${[100000]}                | ${{ high: 100000, low: 100000, q1: 100000, q3: 100000, median: 100000 }}
-    ${[0, 1]}                  | ${{ high: 1, low: 0, q1: 0, q3: 1, median: 0.5 }}
-    ${[1, 0]}                  | ${{ high: 1, low: 0, q1: 0, q3: 1, median: 0.5 }}
-    ${[1, 0, 2]}               | ${{ high: 2, low: 0, q1: 0, q3: 2, median: 1 }}
-    ${[10, 5, -10, -5, 2, -2]} | ${{ high: 10, low: -10, q1: -5, q3: 5, median: 0 }}
+    ${[0]}                     | ${{ high: 0, low: 0, median: 0, q1: 0, q3: 0 }}
+    ${[1]}                     | ${{ high: 1, low: 1, median: 1, q1: 1, q3: 1 }}
+    ${[100000]}                | ${{ high: 100000, low: 100000, median: 100000, q1: 100000, q3: 100000 }}
+    ${[0, 1]}                  | ${{ high: 1, low: 0, median: 0.5, q1: 0, q3: 1 }}
+    ${[1, 0]}                  | ${{ high: 1, low: 0, median: 0.5, q1: 0, q3: 1 }}
+    ${[1, 0, 2]}               | ${{ high: 2, low: 0, median: 1, q1: 0, q3: 2 }}
+    ${[10, 5, -10, -5, 2, -2]} | ${{ high: 10, low: -10, median: 0, q1: -5, q3: 5 }}
   `("should return correct box values", ({ input, expectedResult }) => {
     const boxPlotData = calculateBoxPlotData(input)!;
     expect(boxPlotData.high).toEqual(expectedResult.high);

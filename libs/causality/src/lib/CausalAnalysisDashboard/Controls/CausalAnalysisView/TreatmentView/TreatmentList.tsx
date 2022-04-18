@@ -35,7 +35,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
 
   public render(): React.ReactNode {
     if (!this.props.data) {
-      return <>No Data</>;
+      return <>{localization.CausalAnalysis.TreatmentPolicy.noData}</>;
     }
     const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [

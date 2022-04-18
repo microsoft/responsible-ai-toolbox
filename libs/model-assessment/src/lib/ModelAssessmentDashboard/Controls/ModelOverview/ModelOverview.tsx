@@ -44,8 +44,8 @@ interface IModelOverviewProps {
 interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
+  selectedDatasetCohorts?: number[];
+  selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
 }
 
@@ -62,8 +62,6 @@ export class ModelOverview extends React.Component<
     super(props);
     this.state = {
       chartConfigurationIsVisible: false,
-      selectedDatasetCohorts: [],
-      selectedFeatureBasedCohorts: [],
       selectedFeatures: [],
       selectedMetrics: []
     };
@@ -240,52 +238,51 @@ export class ModelOverview extends React.Component<
               selectedFeatureBasedCohorts={
                 this.state.selectedFeatureBasedCohorts
               }
-              updateDatasetCohortSelection={(selectedDatasetCohorts) =>
-                this.setState({ selectedDatasetCohorts })
-              }
-              updateFeatureBasedCohortSelection={(
-                selectedFeatureBasedCohorts
-              ) => this.setState({ selectedFeatureBasedCohorts })}
+              updateCohortSelection={this.updateCohortSelection}
             />
-            <Pivot>
-              {this.context.modelMetadata.modelType === ModelTypes.Binary && (
+            {this.state.selectedDatasetCohorts && (
+              <Pivot>
+                {this.context.modelMetadata.modelType === ModelTypes.Binary && (
+                  <PivotItem
+                    headerText={
+                      localization.ModelAssessment.ModelOverview
+                        .probabilityDistributionPivotItem
+                    }
+                  >
+                    <ProbabilityDistributionChart
+                      onChooseCohorts={this.onChooseCohorts}
+                      datasetCohorts={this.context.errorCohorts}
+                      featureBasedCohorts={featureBasedCohorts}
+                      selectedDatasetCohorts={this.state.selectedDatasetCohorts}
+                      selectedFeatureBasedCohorts={
+                        this.state.selectedFeatureBasedCohorts ?? []
+                      }
+                    />
+                  </PivotItem>
+                )}
                 <PivotItem
                   headerText={
                     localization.ModelAssessment.ModelOverview
-                      .probabilityDistributionPivotItem
+                      .metricsVisualizationsPivotItem
                   }
                 >
-                  <ProbabilityDistributionChart
+                  <ModelOverviewMetricChart
                     onChooseCohorts={this.onChooseCohorts}
+                    selectableMetrics={selectableMetrics}
                     datasetCohorts={this.context.errorCohorts}
                     featureBasedCohorts={featureBasedCohorts}
+                    datasetCohortStats={datasetCohortLabeledStatistics}
+                    featureBasedCohortStats={
+                      featureBasedCohortLabeledStatistics
+                    }
                     selectedDatasetCohorts={this.state.selectedDatasetCohorts}
                     selectedFeatureBasedCohorts={
-                      this.state.selectedFeatureBasedCohorts
+                      this.state.selectedFeatureBasedCohorts ?? []
                     }
                   />
                 </PivotItem>
-              )}
-              <PivotItem
-                headerText={
-                  localization.ModelAssessment.ModelOverview
-                    .metricsVisualizationsPivotItem
-                }
-              >
-                <ModelOverviewMetricChart
-                  onChooseCohorts={this.onChooseCohorts}
-                  selectableMetrics={selectableMetrics}
-                  datasetCohorts={this.context.errorCohorts}
-                  featureBasedCohorts={featureBasedCohorts}
-                  datasetCohortStats={datasetCohortLabeledStatistics}
-                  featureBasedCohortStats={featureBasedCohortLabeledStatistics}
-                  selectedDatasetCohorts={this.state.selectedDatasetCohorts}
-                  selectedFeatureBasedCohorts={
-                    this.state.selectedFeatureBasedCohorts
-                  }
-                />
-              </PivotItem>
-            </Pivot>
+              </Pivot>
+            )}
           </Stack>
         )}
       </Stack>
@@ -294,6 +291,16 @@ export class ModelOverview extends React.Component<
 
   private onChooseCohorts = () =>
     this.setState({ chartConfigurationIsVisible: true });
+
+  private updateCohortSelection = (
+    selectedDatasetCohorts: number[],
+    selectedFeatureBasedCohorts: number[]
+  ) =>
+    this.setState({
+      selectedDatasetCohorts,
+      selectedFeatureBasedCohorts,
+      chartConfigurationIsVisible: false
+    });
 
   private onMetricSelectionChange = (
     _: React.FormEvent<IComboBox>,
@@ -330,7 +337,8 @@ export class ModelOverview extends React.Component<
         this.setState({
           selectedFeatures: this.state.selectedFeatures.concat([
             item.key as number
-          ])
+          ]),
+          selectedFeatureBasedCohorts: []
         });
       }
       if (!item.selected && this.state.selectedFeatures.includes(item.key)) {
@@ -338,10 +346,11 @@ export class ModelOverview extends React.Component<
         const unselectedFeatureIndex = selectedFeatures.findIndex(
           (key) => key === item.key
         );
-        // remove unselected metric
+        // remove unselected feature
         selectedFeatures.splice(unselectedFeatureIndex, 1);
         this.setState({
-          selectedFeatures
+          selectedFeatures,
+          selectedFeatureBasedCohorts: []
         });
       }
     }

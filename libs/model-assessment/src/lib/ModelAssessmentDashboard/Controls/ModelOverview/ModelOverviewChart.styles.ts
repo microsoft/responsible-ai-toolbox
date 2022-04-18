@@ -13,6 +13,7 @@ export interface IModelOverviewChartStyles {
   verticalAxis: IStyle;
   chart: IStyle;
   placeholderText: IStyle;
+  chartConfigDropdown: IStyle;
 }
 
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
@@ -41,6 +42,9 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         position: "relative",
         top: "0px",
         width: "65px"
+      },
+      chartConfigDropdown: {
+        width: "250px"
       }
     });
   };
