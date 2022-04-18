@@ -204,7 +204,7 @@ export class LocalImportancePlots extends React.Component<
                       onChange={this.setSortIndex}
                     />
                   </Stack.Item>
-                  <Stack.Item>
+                  <Stack.Item className={classNames.absoluteValueToggle}>
                     <Toggle
                       label={localization.Interpret.GlobalTab.absoluteValues}
                       inlineLabel
