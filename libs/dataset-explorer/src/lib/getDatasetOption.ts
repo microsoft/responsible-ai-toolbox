@@ -9,6 +9,7 @@ import {
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
+import { getDatasetBarOption } from "./getDatasetBarOption";
 import { getDatasetBoxOption } from "./getDatasetBoxOption";
 import { getDatasetScatterOption } from "./getDatasetScatterOption";
 
@@ -19,6 +20,14 @@ export function getDatasetOption(
 ): any {
   if (chartProps?.chartType === ChartTypes.Scatter) {
     return getDatasetScatterOption(jointData, plotlyProps, chartProps);
+  }
+  const yAxisProp = chartProps?.yAxis.property;
+  if (
+    yAxisProp &&
+    (jointData.metaDict[yAxisProp].isCategorical ||
+      jointData.metaDict[yAxisProp].treatAsCategorical)
+  ) {
+    return getDatasetBarOption(jointData, plotlyProps, chartProps);
   }
   return getDatasetBoxOption(plotlyProps);
 }
