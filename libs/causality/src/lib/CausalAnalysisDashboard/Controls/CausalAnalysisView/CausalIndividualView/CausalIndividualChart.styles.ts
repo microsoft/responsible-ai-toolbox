@@ -24,7 +24,7 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
     return mergeStyleSets<ICausalIndividualChartStyles>({
       chartWithAxes: {
         paddingTop: "30px",
-        width: "97%"
+        width: "80%"
       },
       chartWithVertical: {
         width: "100%"
