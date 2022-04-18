@@ -35,8 +35,8 @@
     "start": "nx serve",
     "startprod": "serve ./dist/apps/dashboard -s",
     "test": "nx test",
-    "testall": "nx run-many --target=test --all",
     "test-unit": "nx run dashboard:test",
+    "testall": "nx run-many --target=test --all",
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator"
   },

@@ -53,8 +53,8 @@ export class ModelOverviewMetricChart extends React.Component<
     const firstMetric = this.props.selectableMetrics[0].key.toString();
     this.state = {
       metricSelectionFlyoutIsVisible: false,
-      selectedMetric: firstMetric,
-      newlySelectedMetric: firstMetric
+      newlySelectedMetric: firstMetric,
+      selectedMetric: firstMetric
     };
   }
 
@@ -182,8 +182,8 @@ export class ModelOverviewMetricChart extends React.Component<
               <PrimaryButton
                 onClick={() => {
                   this.setState({
-                    selectedMetric: this.state.newlySelectedMetric,
-                    metricSelectionFlyoutIsVisible: false
+                    metricSelectionFlyoutIsVisible: false,
+                    selectedMetric: this.state.newlySelectedMetric
                   });
                 }}
                 text={

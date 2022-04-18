@@ -16,6 +16,7 @@ import {
   DefaultButton
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IChartConfigurationFlyoutProps {

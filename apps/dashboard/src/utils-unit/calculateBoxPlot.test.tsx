@@ -31,7 +31,7 @@ describe("calculateBoxPlotEmptyArray", () => {
 
 describe("calculateBoxPlotWithIndex", () => {
   it("should return index as x", () => {
-    const index = 15
+    const index = 15;
     expect(calculateBoxPlotData([1], index)!.x!).toBe(index);
   });
 });

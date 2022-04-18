@@ -58,8 +58,8 @@ export class ProbabilityDistributionChart extends React.Component<
       if (probabilityOptions.length > 0) {
         const firstOption = probabilityOptions[0];
         this.setState({
-          probabilityOption: firstOption,
-          newlySelectedProbabilityOption: firstOption
+          newlySelectedProbabilityOption: firstOption,
+          probabilityOption: firstOption
         });
       }
     }
@@ -234,9 +234,9 @@ export class ProbabilityDistributionChart extends React.Component<
                 onClick={() => {
                   if (this.state.newlySelectedProbabilityOption)
                     this.setState({
+                      probabilityFlyoutIsVisible: false,
                       probabilityOption:
-                        this.state.newlySelectedProbabilityOption,
-                      probabilityFlyoutIsVisible: false
+                        this.state.newlySelectedProbabilityOption
                     });
                 }}
                 text={

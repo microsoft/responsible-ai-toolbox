@@ -22,6 +22,9 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
       chart: {
         width: "100%"
       },
+      chartConfigDropdown: {
+        width: "250px"
+      },
       horizontalAxis: {
         textAlign: "center"
       },
@@ -42,9 +45,6 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         position: "relative",
         top: "0px",
         width: "65px"
-      },
-      chartConfigDropdown: {
-        width: "250px"
       }
     });
   };

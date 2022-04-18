@@ -16,7 +16,8 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
-      name: localization.ModelAssessment.ModelOverview.BoxPlot.boxPlotSeriesLabel
+      name: localization.ModelAssessment.ModelOverview.BoxPlot
+        .boxPlotSeriesLabel
     });
   });
   outlier.forEach((data: any) => {

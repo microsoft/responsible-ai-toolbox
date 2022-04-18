@@ -297,9 +297,9 @@ export class ModelOverview extends React.Component<
     selectedFeatureBasedCohorts: number[]
   ) =>
     this.setState({
+      chartConfigurationIsVisible: false,
       selectedDatasetCohorts,
-      selectedFeatureBasedCohorts,
-      chartConfigurationIsVisible: false
+      selectedFeatureBasedCohorts
     });
 
   private onMetricSelectionChange = (
@@ -335,10 +335,10 @@ export class ModelOverview extends React.Component<
       // technically we know it's only numbers but item.key has type string | number
       if (item.selected && !this.state.selectedFeatures.includes(item.key)) {
         this.setState({
+          selectedFeatureBasedCohorts: [],
           selectedFeatures: this.state.selectedFeatures.concat([
             item.key as number
-          ]),
-          selectedFeatureBasedCohorts: []
+          ])
         });
       }
       if (!item.selected && this.state.selectedFeatures.includes(item.key)) {
@@ -349,8 +349,8 @@ export class ModelOverview extends React.Component<
         // remove unselected feature
         selectedFeatures.splice(unselectedFeatureIndex, 1);
         this.setState({
-          selectedFeatures,
-          selectedFeatureBasedCohorts: []
+          selectedFeatureBasedCohorts: [],
+          selectedFeatures
         });
       }
     }
