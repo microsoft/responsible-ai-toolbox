@@ -19,7 +19,7 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         width: "400px"
       },
       sectionStack: {
-        padding: "16px 40px 10px 40px"
+        padding: "0 40px 10px 40px"
       }
     });
   };
