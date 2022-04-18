@@ -59,6 +59,21 @@ export class ChartConfigurationFlyout extends React.Component<
     };
   }
 
+  public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps) {
+    // reset feature-based cohort selection if the underlying feature-based cohorts changed
+    if (
+      prevProps.featureBasedCohorts.length !==
+        this.props.featureBasedCohorts.length ||
+      prevProps.featureBasedCohorts.some(
+        (errorCohort, index) =>
+          errorCohort.cohort.name !==
+          this.props.featureBasedCohorts[index].cohort.name
+      )
+    ) {
+      this.setState({ newlySelectedFeatureBasedCohorts: [] });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
 
@@ -149,14 +164,20 @@ export class ChartConfigurationFlyout extends React.Component<
               }
             />
           )}
-          <PrimaryButton
-            onClick={this.onConfirm}
-            text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
-          />
-          <DefaultButton
-            onClick={this.props.onDismissFlyout}
-            text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
-          />
+          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+            <PrimaryButton
+              onClick={this.onConfirm}
+              text={
+                localization.ModelAssessment.ModelOverview.chartConfigConfirm
+              }
+            />
+            <DefaultButton
+              onClick={this.props.onDismissFlyout}
+              text={
+                localization.ModelAssessment.ModelOverview.chartConfigCancel
+              }
+            />
+          </Stack>
         </Stack>
       </Panel>
     );
