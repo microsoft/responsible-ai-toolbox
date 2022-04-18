@@ -25,7 +25,7 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
     return mergeStyleSets<ICounterfactualChartStyles>({
       chartWithAxes: {
         paddingTop: "30px",
-        width: "97%"
+        width: "80%"
       },
       chartWithVertical: {
         width: "100%"

@@ -10,6 +10,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IWhatIfTabStyles {
+  absoluteValueToggle: IStyle;
   page: IStyle;
   blackIcon: IStyle;
   expandedPanel: IStyle;
@@ -83,6 +84,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
     const legendWidth = "160px";
     const theme = getTheme();
     return mergeStyleSets<IWhatIfTabStyles>({
+      absoluteValueToggle: {
+        width: "170px"
+      },
       blackIcon: {
         color: theme.semanticColors.bodyText
       },
