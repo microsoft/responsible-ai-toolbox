@@ -93,7 +93,7 @@ export function generateCohortsStatsTable(
   return items;
 }
 
-export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
+export function wrapYAxisLabels(label: string, wrapOnWhitespace = true) {
   const maxLineLength = 40;
 
   if (label.length <= maxLineLength) {
