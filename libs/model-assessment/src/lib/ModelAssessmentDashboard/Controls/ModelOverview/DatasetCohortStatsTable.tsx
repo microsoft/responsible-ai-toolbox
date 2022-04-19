@@ -5,7 +5,6 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
@@ -29,9 +28,6 @@ export class DatasetCohortStatsTable extends React.Component<
   public render(): React.ReactNode {
     return (
       <CohortStatsHeatmap
-        title={
-          localization.ModelAssessment.ModelOverview.dataCohortsHeatmapHeader
-        }
         cohorts={this.context.errorCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}

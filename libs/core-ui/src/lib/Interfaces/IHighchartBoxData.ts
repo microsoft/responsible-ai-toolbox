@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 export interface IHighchartBoxData {
-  min: number;
-  lowerPercentile: number;
+  low: number;
   median: number;
-  upperPercentile: number;
-  max: number;
-  mean: number;
-  outliers?: number[];
+  high: number;
+  outliers: number[];
+  q1: number;
+  q3: number;
+  x?: number;
 }
