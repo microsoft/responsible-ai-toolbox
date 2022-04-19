@@ -1456,6 +1456,7 @@ export const bostonCounterfactualData: ICounterfactualData = {
       0.019684409444774342
     ]
   ],
+  model_type: "regressor",
   summary_importance: [
     0.9566005028923481, 0.4171610785143338, 0.3876619352564288,
     0.6052537471845021
