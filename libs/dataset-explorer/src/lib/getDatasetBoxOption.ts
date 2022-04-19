@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 
@@ -15,7 +16,8 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
-      name: ""
+      name: localization.ModelAssessment.ModelOverview.BoxPlot
+        .boxPlotSeriesLabel
     });
   });
   outlier.forEach((data: any) => {
@@ -25,7 +27,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
         fillColor: FabricStyles.fabricColorPalette[0],
         lineWidth: 35
       },
-      name: "outlier",
+      name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
       type: "scatter"
     });
   });

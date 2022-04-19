@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { SeriesOptionsType } from "highcharts";
+
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -38,17 +40,18 @@ export function getFeatureImportanceBoxOptions(
       y
     });
   });
-  const boxGroupData: any = [];
+  const boxGroupData: SeriesOptionsType[] = [];
   boxTempData.forEach((data: any) => {
-    const temp = getBoxData(data.x, data.y);
+    const boxData = getBoxData(data.x, data.y);
     boxGroupData.push({
       color: data.color,
-      data: temp.box,
-      name: data.name
+      data: boxData.box,
+      name: data.name,
+      type: "boxplot"
     });
     boxGroupData.push({
       color: data.color,
-      data: temp.outlier,
+      data: boxData.outlier,
       name: data.name,
       type: "scatter"
     });

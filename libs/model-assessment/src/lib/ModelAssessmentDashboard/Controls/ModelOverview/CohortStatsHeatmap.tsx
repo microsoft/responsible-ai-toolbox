@@ -19,7 +19,6 @@ interface ICohortStatsHeatmapProps {
   cohorts: ErrorCohort[];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
-  title: string;
 }
 
 class ICohortStatsHeatmapState {}
@@ -90,10 +89,6 @@ export class CohortStatsHeatmap extends React.Component<
               type: "heatmap"
             }
           ],
-          title: {
-            align: "left",
-            text: this.props.title
-          },
           tooltip: {
             formatter() {
               // to avoid semantic error during build cast point to any
@@ -142,6 +137,10 @@ export class CohortStatsHeatmap extends React.Component<
                       return wrapYAxisLabels(this.value.toString(), true);
                     },
                     reserveSpace: true
+                  },
+                  title: {
+                    text: localization.ModelAssessment.ModelOverview
+                      .dataCohortsHeatmapHeader
                   }
                 }
               ],
