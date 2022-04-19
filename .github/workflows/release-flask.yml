@@ -52,7 +52,7 @@ jobs:
         working-directory: rai_core_flask
 
       - name: run rai_core_flask tests
-        run: pytest ./tests/
+        run: pytest ./tests/ -s -v
         working-directory: rai_core_flask
 
       # publish to PyPI
