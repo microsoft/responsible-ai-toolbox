@@ -25,7 +25,7 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       width: "95%"
     },
     chartWithVertical: {
-      width: "100%"
+      width: "80%"
     },
     noData: {
       flex: "1",

@@ -6,12 +6,7 @@ import {
   ModelAssessmentContext,
   ErrorCohort
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
-  ActionButton,
-  IDropdownOption,
-  IDropdown
-} from "office-ui-fabric-react";
+import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
@@ -21,7 +16,6 @@ interface IDisaggregatedAnalysisTableProps {
   selectedMetrics: string[];
   selectedFeatures: number[];
   featureBasedCohorts: ErrorCohort[];
-  featureComboBoxRef: React.RefObject<IDropdown>;
 }
 
 class IDisaggregatedAnalysisTableState {}
@@ -35,32 +29,15 @@ export class DisaggregatedAnalysisTable extends React.Component<
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    return (
-      <>
-        {this.props.selectedFeatures.length === 0 && (
-          <ActionButton
-            onClick={() => {
-              this.props.featureComboBoxRef.current?.focus(true);
-            }}
-          >
-            {
-              localization.ModelAssessment.ModelOverview
-                .disaggregatedAnalysisFeatureSelectionPlaceholder
-            }
-          </ActionButton>
-        )}
-        {this.props.selectedFeatures.length > 0 && (
-          <CohortStatsHeatmap
-            title={
-              localization.ModelAssessment.ModelOverview
-                .disaggregatedAnalysisHeatmapHeader
-            }
-            cohorts={this.props.featureBasedCohorts}
-            selectableMetrics={this.props.selectableMetrics}
-            selectedMetrics={this.props.selectedMetrics}
-          />
-        )}
-      </>
-    );
+    if (this.props.selectedFeatures.length > 0) {
+      return (
+        <CohortStatsHeatmap
+          cohorts={this.props.featureBasedCohorts}
+          selectableMetrics={this.props.selectableMetrics}
+          selectedMetrics={this.props.selectedMetrics}
+        />
+      );
+    }
+    return React.Fragment;
   }
 }
