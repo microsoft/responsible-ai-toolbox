@@ -49,12 +49,6 @@ export function getFeatureImportanceBoxOptions(
       name: data.name,
       type: "boxplot"
     });
-    boxGroupData.push({
-      color: data.color,
-      data: boxData.outlier,
-      name: data.name,
-      type: "scatter"
-    });
   });
   return {
     chart: {
