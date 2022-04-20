@@ -24,8 +24,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       data,
       marker: {
-        fillColor: FabricStyles.fabricColorPalette[0],
-        lineWidth: 35
+        fillColor: FabricStyles.fabricColorPalette[0]
       },
       name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
       type: "scatter"
