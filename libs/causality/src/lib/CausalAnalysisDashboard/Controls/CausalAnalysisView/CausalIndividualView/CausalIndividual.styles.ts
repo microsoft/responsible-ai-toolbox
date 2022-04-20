@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   IStyle,
@@ -13,8 +14,8 @@ export interface ICausalIndividualStyles {
   container: IStyle;
   description: IStyle;
   header: IStyle;
-  label: IStyle;
   lasso: IStyle;
+  individualChart: IStyle;
   individualTable: IStyle;
 }
 
@@ -34,23 +35,23 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
         flexDirection: "row"
       },
       description: {
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "10px"
+        display: "inline-block",
+        flex: "1",
+        fontSize: 14,
+        maxWidth: descriptionMaxWidth,
+        paddingBottom: "15px",
+        textAlign: "left"
       },
       header: {
         fontSize: 14,
         fontWeight: "600",
         paddingTop: "70px"
       },
+      individualChart: {
+        width: "100%"
+      },
       individualTable: {
         width: "70%"
-      },
-      label: {
-        display: "inline-block",
-        flex: "1",
-        fontSize: 14,
-        textAlign: "left"
       },
       lasso: {
         display: "inline-block",

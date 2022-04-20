@@ -2,7 +2,44 @@
 /erroranalysis @gaugup @imatiach-msft
 
 # Responsible AI widgets package
-/raiwidgets @imatiach-msft @xuke444 @zhb000 @vinuthakaranth @RubyZ10 @tongyu-microsoft @romanlutz
+/raiwidgets @imatiach-msft @xuke444 @romanlutz
 
 # Responsible AI SDK package
 /responsibleai @gaugup @imatiach-msft @riedgar-ms @xuke444 @kicha0
+
+# workspace settings
+#/* @xuke444
+
+# App
+/apps @xuke444 @vinuthakaranth @zhb000 @romanlutz
+
+#causal ui
+/libs/causality @zhb000 @xuke444
+
+#counterfactuals ui
+/libs/counterfactuals @zhb000 @xuke444
+
+#dataset-explorer ui
+/libs/dataset-explorer @zhb000 @romanlutz @xuke444
+
+#error-analysis ui
+/libs/error-analysis @zhb000 @romanlutz @imatiach-msft @xuke444
+
+#fairness ui
+/libs/fairness @romanlutz @riedgar-ms @xuke444
+
+#interpret ui
+/libs/interpret @zhb000 @romanlutz @gaugup @xuke444
+
+#interpret-text ui
+/libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444
+
+#model-assessment ui
+/libs/model-assessment @zhb000 @romanlutz @xuke444
+
+
+
+
+
+
+

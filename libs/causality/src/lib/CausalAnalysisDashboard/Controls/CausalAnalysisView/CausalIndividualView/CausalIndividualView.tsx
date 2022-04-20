@@ -17,8 +17,8 @@ import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChar
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
-import { CausalIndividualStyles } from "./CausalIndividualStyles";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
@@ -44,13 +44,17 @@ export class CausalIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalIndividualStyles();
     return (
-      <Stack id="causalIndividualView" grow tokens={{ padding: "16px 8px" }}>
+      <Stack
+        id="causalIndividualView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack.Item>
-          <Text variant={"medium"} className={styles.label}>
+          <Text variant={"medium"} className={styles.description}>
             {localization.CausalAnalysis.IndividualView.description}
           </Text>
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className={styles.individualChart}>
           <CausalIndividualChart onDataClick={this.handleOnClick} />
         </Stack.Item>
         <Stack.Item className={styles.header}>
@@ -77,7 +81,6 @@ export class CausalIndividualView extends React.PureComponent<
                 </Link>
               </LabelWithCallout>
             </Stack.Item>
-            {/* <CausalCallout /> */}
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>

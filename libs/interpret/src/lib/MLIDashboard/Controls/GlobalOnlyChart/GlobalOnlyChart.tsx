@@ -122,7 +122,10 @@ export class GlobalOnlyChart extends React.PureComponent<
             showValue={false}
           />
         </div>
-        <div className={classNames.globalChartWithLegend}>
+        <div
+          id="featureImportanceChartContainer"
+          className={classNames.globalChartWithLegend}
+        >
           <FeatureImportanceBar
             jointDataset={undefined}
             yAxisLabels={[

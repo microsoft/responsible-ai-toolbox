@@ -13,8 +13,8 @@ import React from "react";
 
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalAggregateStyles } from "./CausalAggregate.styles";
 import { CausalAggregateChart } from "./CausalAggregateChart";
-import { CausalAggregateStyles } from "./CausalAggregateStyles";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
@@ -30,7 +30,11 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
     const styles = CausalAggregateStyles();
     this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
     return (
-      <Stack id="causalAggregateView" grow tokens={{ padding: "16px 8px" }}>
+      <Stack
+        id="causalAggregateView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack horizontal={false}>
           <Stack.Item>
             <Text variant={"medium"} className={styles.label}>
@@ -60,12 +64,44 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
             </LabelWithCallout>
           </Stack.Item>
         </Stack>
-        <Stack>
-          <Stack.Item className={styles.table}>
-            <CausalAggregateTable data={this.props.data.global_effects} />
+        <Stack horizontal verticalFill className={styles.container}>
+          <Stack.Item grow className={styles.leftPane}>
+            <Stack horizontal={false}>
+              <Stack.Item>
+                <CausalAggregateTable data={this.props.data.global_effects} />
+              </Stack.Item>
+              <Stack.Item>
+                <CausalAggregateChart data={this.props.data.global_effects} />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
-          <Stack.Item>
-            <CausalAggregateChart data={this.props.data.global_effects} />
+          <Stack.Item grow className={styles.rightPane}>
+            <Stack horizontal={false}>
+              <Stack.Item className={styles.label}>
+                <Text variant={"xLarge"} className={styles.header}>
+                  {localization.CausalAnalysis.AggregateView.continuous}
+                </Text>
+                {
+                  localization.CausalAnalysis.AggregateView
+                    .continuousDescription
+                }
+              </Stack.Item>
+              <Stack.Item className={styles.label}>
+                <Text variant={"xLarge"} className={styles.header}>
+                  {localization.CausalAnalysis.AggregateView.binary}
+                </Text>
+                {localization.CausalAnalysis.AggregateView.binaryDescription}
+              </Stack.Item>
+              <Stack.Item className={styles.lasso}>
+                {localization.CausalAnalysis.AggregateView.lasso}{" "}
+                <Link
+                  href="https://econml.azurewebsites.net/spec/estimation/dml.html"
+                  target="_blank"
+                >
+                  {localization.CausalAnalysis.AggregateView.here}
+                </Link>
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
         </Stack>
       </Stack>

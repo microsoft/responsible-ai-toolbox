@@ -29,7 +29,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
+import { causalIndividualChartStyles } from "./CausalIndividualChart.styles";
 import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
 import { getIndividualChartOptions } from "./getIndividualChartOptions";
@@ -83,19 +83,27 @@ export class CausalIndividualChart extends React.PureComponent<
     if (this.state.chartProps === undefined) {
       return <div />;
     }
-    const plotlyProps = this.generatePlotlyProps(
-      this.context.jointDataset,
-      this.state.chartProps,
-      this.context.selectedErrorCohort.cohort
-    );
     const cohortLength =
       this.context.selectedErrorCohort.cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
+    if (!canRenderChart) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ValidationErrors.datasizeError}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    const plotlyProps = this.generatePlotlyProps(
+      this.context.jointDataset,
+      this.state.chartProps,
+      this.context.selectedErrorCohort.cohort
+    );
     return (
-      <div className={classNames.topArea} id={"CausalIndividualContainer"}>
-        <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
+      <Stack horizontal id={this.chartAndConfigsId}>
+        <Stack.Item className={classNames.chartWithAxes}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
               jointDataset={this.context.jointDataset}
@@ -134,62 +142,58 @@ export class CausalIndividualChart extends React.PureComponent<
               onCancel={this.setXOpen.bind(this, false)}
             />
           )}
-          <Stack className={classNames.chartWithVertical}>
-            <div className={classNames.verticalAxis}>
-              <div className={classNames.rotatedVerticalBox}>
+          <Stack horizontal={false}>
+            <Stack.Item className={classNames.chartWithVertical}>
+              <Stack horizontal>
+                <Stack.Item className={classNames.verticalAxis}>
+                  <div className={classNames.rotatedVerticalBox}>
+                    <DefaultButton
+                      onClick={this.setYOpen.bind(this, true)}
+                      text={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.yAxis.property
+                        ].abbridgedLabel
+                      }
+                      title={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.yAxis.property
+                        ].label
+                      }
+                    />
+                  </div>
+                </Stack.Item>
+                <Stack.Item className={classNames.individualChartContainer}>
+                  <BasicHighChart
+                    configOverride={getIndividualChartOptions(
+                      plotlyProps,
+                      this.selectPointFromChart
+                    )}
+                    theme={getTheme()}
+                    id="CausalAggregateChart"
+                  />
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+            <Stack className={classNames.horizontalAxisWithPadding}>
+              <div className={classNames.horizontalAxis}>
                 <DefaultButton
-                  onClick={this.setYOpen.bind(this, true)}
+                  onClick={this.setXOpen.bind(this, true)}
                   text={
                     this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
+                      this.state.chartProps.xAxis.property
                     ].abbridgedLabel
                   }
                   title={
                     this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
+                      this.state.chartProps.xAxis.property
                     ].label
                   }
                 />
               </div>
-            </div>
-            {!canRenderChart && (
-              <MissingParametersPlaceholder>
-                {localization.Interpret.ValidationErrors.datasizeError}
-              </MissingParametersPlaceholder>
-            )}
-            {canRenderChart && (
-              <div className={classNames.highchartContainer}>
-                <BasicHighChart
-                  configOverride={getIndividualChartOptions(
-                    plotlyProps,
-                    this.selectPointFromChart
-                  )}
-                  theme={getTheme()}
-                  id="CausalAggregateChart"
-                />
-              </div>
-            )}
+            </Stack>
           </Stack>
-          <Stack className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <DefaultButton
-                onClick={this.setXOpen.bind(this, true)}
-                text={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].label
-                }
-              />
-            </div>
-          </Stack>
-        </div>
-        <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
+        </Stack.Item>
+        <Stack className={classNames.legendAndText}>
           <ComboBox
             label={localization.CausalAnalysis.IndividualView.datapointIndex}
             onChange={this.selectPointFromDropdown}
@@ -201,7 +205,7 @@ export class CausalIndividualChart extends React.PureComponent<
           />
           <CausalWhatIf selectedIndex={this.state.selectedIndex} />
         </Stack>
-      </div>
+      </Stack>
     );
   }
 

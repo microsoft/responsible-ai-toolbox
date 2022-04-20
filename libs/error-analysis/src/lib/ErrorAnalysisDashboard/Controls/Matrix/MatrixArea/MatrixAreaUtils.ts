@@ -30,7 +30,7 @@ export async function fetchMatrix(
   baseCohort: ErrorCohort,
   selectedFeature1: string | undefined,
   selectedFeature2: string | undefined,
-  metric: string,
+  metric: string | undefined,
   getMatrix?: (
     request: any,
     abortSignal: AbortSignal
@@ -40,7 +40,11 @@ export async function fetchMatrix(
   if (!getMatrix && matrix) {
     return matrix;
   }
-  if (getMatrix === undefined || (!selectedFeature1 && !selectedFeature2)) {
+  if (
+    getMatrix === undefined ||
+    !metric ||
+    (!selectedFeature1 && !selectedFeature2)
+  ) {
     return undefined;
   }
   const filtersRelabeled = ErrorCohort.getLabeledFilters(

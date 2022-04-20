@@ -38,6 +38,7 @@ export interface ITabsViewProps {
   baseCohort: ErrorCohort;
   selectedCohort: ErrorCohort;
   dataset: IDataset;
+  onClearCohortSelectionClick: () => void;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal

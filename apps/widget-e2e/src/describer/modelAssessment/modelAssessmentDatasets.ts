@@ -24,6 +24,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
+    },
     featureImportanceData: {
       datapoint: 500,
       dropdownRowName: "Row 34",
@@ -80,9 +83,9 @@ const modelAssessmentDatasets = {
       hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : >50K",
       searchBarQuery: "occupation",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "occupation",
       yAxisValue: "age"
     }
@@ -99,6 +102,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "age"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
     },
     featureImportanceData: {
       datapoint: 89,
@@ -135,9 +141,9 @@ const modelAssessmentDatasets = {
       createYourOwnCounterfactualInputFieldUpdated: "25",
       hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "sex",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "s3",
       yAxisValue: "age"
     }
@@ -153,6 +159,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "age"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 89,
@@ -178,6 +187,7 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
       cohortDropDownValues: ["All data"],
       defaultXAxis: "Error",
@@ -197,9 +207,9 @@ const modelAssessmentDatasets = {
       createYourOwnCounterfactualInputFieldUpdated: "25",
       hasWhatIfCounterfactualsComponent: true,
       searchBarQuery: "s6",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "bmi",
       yAxisValue: "age"
     }
@@ -221,6 +231,9 @@ const modelAssessmentDatasets = {
       ],
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 730,
@@ -289,9 +302,9 @@ const modelAssessmentDatasets = {
       hasWhatIfCounterfactualsComponent: true,
       newClassValue: "Probability : More than median",
       searchBarQuery: "Wood",
-      selectedDatapoint: "Index 5",
-      whatIfNameLabel: "Copy of row 5",
-      whatIfNameLabelUpdated: "New Copy of row 5",
+      selectedDatapoint: "Index 1",
+      whatIfNameLabel: "Copy of row 1",
+      whatIfNameLabelUpdated: "New Copy of row 1",
       yAxisNewValue: "1stFlrSF",
       yAxisValue: "LotFrontage"
     }
@@ -320,6 +333,9 @@ const modelAssessmentDatasets = {
       ],
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
     },
     featureImportanceData: {
       hasFeatureImportanceComponent: false
@@ -378,6 +394,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "alcohol"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 500,

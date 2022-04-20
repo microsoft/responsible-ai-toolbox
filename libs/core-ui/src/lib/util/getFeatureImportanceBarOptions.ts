@@ -42,7 +42,7 @@ export function getFeatureImportanceBarOptions(
         return {
           HoverText: xOriginText[index],
           Name: series.name,
-          Yformatted: series.unsortedAggregateY[value].toLocaleString(
+          Yformatted: series.unsortedAggregateY[value]?.toLocaleString(
             undefined,
             {
               maximumFractionDigits: 3
@@ -75,6 +75,9 @@ export function getFeatureImportanceBarOptions(
     chart: {
       type: "column"
     },
+    legend: {
+      enabled: true
+    },
     plotOptions: {
       series: {
         cursor: "pointer",
@@ -85,7 +88,7 @@ export function getFeatureImportanceBarOptions(
                 return;
               }
               const featureNumber = sortArray[this.x];
-              onFeatureSelection(0, featureNumber);
+              onFeatureSelection(this.series.index, featureNumber);
             }
           }
         }
@@ -98,12 +101,6 @@ export function getFeatureImportanceBarOptions(
     xAxis: {
       categories: xText,
       max: topK - 1
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        align: "high"
-      }
     }
   };
 }

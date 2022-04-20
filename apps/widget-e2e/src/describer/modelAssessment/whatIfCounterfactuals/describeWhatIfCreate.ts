@@ -10,7 +10,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
-        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
+        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
       ).click();
       cy.get(Locators.CreateWhatIfCounterfactualButton)
         .click()
@@ -46,11 +46,9 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .eq(2)
         .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
       cy.get(Locators.WhatIfSearchBarClearTextButton).click();
-      cy.get(Locators.WhatIfColumnHeaders)
-        .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
-        );
+      cy.get(Locators.WhatIfColumnHeaders).contains(
+        dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
+      );
     });
 
     it("Should have 'Create your own counterfactual' section and it should be editable", () => {
@@ -77,7 +75,7 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         .and("contain", dataShape.whatIfCounterfactualsData?.whatIfNameLabel);
       cy.get(Locators.WhatIfNameLabel).type(
         dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated ||
-          "New Copy of row 5"
+          "New Copy of row 1"
       );
       cy.get(Locators.WhatIfNameLabel)
         .should("have.attr", "value")
@@ -88,11 +86,11 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
     });
   });
 
-  describe("What-If save scenario", () => {
+  describe.skip("What-If save scenario", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
       getSpan(
-        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 5"
+        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
       )
         .scrollIntoView()
         .click({ force: true });

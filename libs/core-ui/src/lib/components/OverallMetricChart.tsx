@@ -41,10 +41,11 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
-class OverallMetricChartProps {}
+// this is a class only because we can't create an empty interface
+class IOverallMetricChartProps {}
 
 export class OverallMetricChart extends React.PureComponent<
-  OverallMetricChartProps,
+  IOverallMetricChartProps,
   IOverallMetricChartState
 > {
   public static contextType = ModelAssessmentContext;
@@ -53,7 +54,7 @@ export class OverallMetricChart extends React.PureComponent<
 
   private readonly chartAndConfigsId = "OverallMetricChart";
 
-  public constructor(props: OverallMetricChartProps) {
+  public constructor(props: IOverallMetricChartProps) {
     super(props);
     this.state = {
       chartProps: undefined,
