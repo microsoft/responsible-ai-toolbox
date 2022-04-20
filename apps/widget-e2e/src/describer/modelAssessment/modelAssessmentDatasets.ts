@@ -58,8 +58,8 @@ const modelAssessmentDatasets = {
     modelStatisticsData: {
       cohortDropDownValues: [
         "All data",
-        "Cohort Continuous",
-        "Cohort Categorical",
+        "Cohort Age and Hours-Per-Week",
+        "Cohort Marital-Status",
         "Cohort Index",
         "Cohort Predicted Y",
         "Cohort True Y"
