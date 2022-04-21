@@ -19,7 +19,12 @@ export function describeModelPerformanceSideBar(
     });
 
     it("Side bar should be updated with updated values", () => {
-      cy.get(Locators.MSSideBarCards).should("have.length", 1);
+      cy.get(Locators.MSSideBarCards).should(
+        "have.length",
+        dataShape.modelStatisticsData?.cohortDropDownValues
+          ? dataShape.modelStatisticsData?.cohortDropDownValues.length
+          : 0
+      );
       cy.get(`${Locators.MSCRotatedVerticalBox} button`)
         .click()
         .get(
@@ -50,7 +55,12 @@ export function describeModelPerformanceSideBar(
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.defaultYAxis || "Cohort"
       );
-      cy.get(Locators.MSSideBarCards).should("have.length", 1);
+      cy.get(Locators.MSSideBarCards).should(
+        "have.length",
+        dataShape.modelStatisticsData?.cohortDropDownValues
+          ? dataShape.modelStatisticsData?.cohortDropDownValues.length
+          : 0
+      );
     });
 
     it("Should have dropdown to select cohort when y axis is changed to different value than cohort", () => {
