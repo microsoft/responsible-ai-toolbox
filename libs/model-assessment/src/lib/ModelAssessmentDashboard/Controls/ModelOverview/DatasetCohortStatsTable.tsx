@@ -7,7 +7,6 @@ import {
   JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 

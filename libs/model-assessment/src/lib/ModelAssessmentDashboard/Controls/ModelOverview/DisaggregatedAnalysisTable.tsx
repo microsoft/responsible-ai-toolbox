@@ -9,12 +9,7 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  ActionButton,
-  IDropdownOption,
-  IDropdown,
-  Stack
-} from "office-ui-fabric-react";
+import { ActionButton, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
@@ -26,7 +21,6 @@ interface IDisaggregatedAnalysisTableProps {
   selectedMetrics: string[];
   selectedFeatures: number[];
   featureBasedCohorts: ErrorCohort[];
-  featureComboBoxRef: React.RefObject<IDropdown>;
 }
 
 class IDisaggregatedAnalysisTableState {}

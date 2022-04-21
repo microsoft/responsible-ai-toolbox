@@ -75,10 +75,6 @@ export class CohortStatsHeatmap extends React.Component<
               type: "heatmap"
             }
           ],
-          title: {
-            align: "left",
-            text: this.props.title
-          },
           tooltip: {
             formatter() {
               // to avoid semantic error during build cast point to any
@@ -123,6 +119,10 @@ export class CohortStatsHeatmap extends React.Component<
                       return `<div style='width:300px'>${text}</div>`;
                     },
                     useHTML: true
+                  },
+                  title: {
+                    text: localization.ModelAssessment.ModelOverview
+                      .dataCohortsHeatmapHeader
                   }
                 }
               ],

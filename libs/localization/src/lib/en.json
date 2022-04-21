@@ -1341,22 +1341,40 @@
       "meanPrediction": "Mean prediction",
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
-      "dataCohortsHeatmapHeader": "Dataset cohorts",
+      "dataCohortsHeatmapHeader": "Cohorts",
       "dataCohortsChartSelectionHeader": "Dataset cohorts",
       "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
       "fairnessMetricsHeatmapHeader": "Fairness metrics",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
       "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
       "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
       "fairnessMetricDifference": "Difference",
-      "fairnessMetricRatio": "Ratio"
+      "fairnessMetricRatio": "Ratio",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigConfirm": "Confirm",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts"
     }
   }
 }

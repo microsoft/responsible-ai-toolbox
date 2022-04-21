@@ -150,7 +150,7 @@ export function generateCohortsStatsTable(
   return { fairnessStats, items };
 }
 
-export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
+export function wrapYAxisLabels(label: string, wrapOnWhitespace = true) {
   const maxLineLength = 40;
 
   if (label.length <= maxLineLength) {
