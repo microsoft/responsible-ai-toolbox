@@ -123,7 +123,14 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
-      cohortDropDownValues: ["All data"],
+      cohortDropDownValues: [
+        "All data",
+        "Cohort Index",
+        "Cohort Predicted Y",
+        "Cohort True Y",
+        "Cohort Regression Error",
+        "Cohort Age and BMI"
+      ],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
