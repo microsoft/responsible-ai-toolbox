@@ -1345,13 +1345,18 @@
       "dataCohortsChartSelectionHeader": "Dataset cohorts",
       "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
-      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}"
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "fairnessMetricDifference": "Difference",
+      "fairnessMetricRatio": "Ratio"
     }
   }
 }

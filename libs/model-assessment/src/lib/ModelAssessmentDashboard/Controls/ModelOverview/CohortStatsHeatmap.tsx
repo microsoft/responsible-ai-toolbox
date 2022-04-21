@@ -5,21 +5,20 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   HeatmapHighChart,
-  JointDataset,
-  generateMetrics,
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
-
-import { generateCohortsStatsTable, wrapYAxisLabels } from "./StatsTableUtils";
+import { PointOptionsObject } from "highcharts";
+import { wrapYAxisLabels } from "./StatsTableUtils";
 
 interface ICohortStatsHeatmapProps {
   cohorts: ErrorCohort[];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   title: string;
+  items: PointOptionsObject[];
 }
 
 class ICohortStatsHeatmapState {}
@@ -46,22 +45,6 @@ export class CohortStatsHeatmap extends React.Component<
         })
     );
 
-    // generate table contents
-    const cohortLabeledStatistics = generateMetrics(
-      this.context.jointDataset,
-      this.props.cohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-
-    const items = generateCohortsStatsTable(
-      this.props.cohorts,
-      this.props.selectableMetrics,
-      cohortLabeledStatistics,
-      this.props.selectedMetrics
-    );
-
     return (
       <HeatmapHighChart
         configOverride={{
@@ -82,9 +65,10 @@ export class CohortStatsHeatmap extends React.Component<
             {
               borderWidth: 1,
               colorKey: "colorValue",
-              data: items,
+              data: this.props.items,
               dataLabels: {
-                enabled: true
+                enabled: true,
+                nullFormat: 'N/A'
               },
               name: "Metrics",
               type: "heatmap"
@@ -100,8 +84,7 @@ export class CohortStatsHeatmap extends React.Component<
               const pointValue = (this.point as any).value;
               if (
                 this.point.y === undefined ||
-                pointValue === undefined ||
-                pointValue === null
+                pointValue === undefined
               ) {
                 return undefined;
               }
@@ -120,7 +103,7 @@ export class CohortStatsHeatmap extends React.Component<
                 // make metric name lower case in sentence
                 this.series.xAxis.categories[this.point.x].toLowerCase(),
                 this.series.yAxis.categories[this.point.y],
-                pointValue
+                pointValue === null ? "N/A" : pointValue
               );
             }
           },
@@ -129,23 +112,24 @@ export class CohortStatsHeatmap extends React.Component<
             opposite: true
           },
           yAxis: {
+            reversed: true,
             categories: this.props.cohorts.map(
               (errorCohort) => errorCohort.cohort.name
             ),
             grid: {
               borderWidth: 2,
+              enabled: true,
               columns: [
                 {
                   labels: {
-                    // format labels to cap the line length
-                    formatter() {
-                      return wrapYAxisLabels(this.value.toString(), true);
+                    formatter: function () {
+                      const text = wrapYAxisLabels(this.value.toString());
+                      return `<div style='width:300px'>${text}</div>`;
                     },
-                    reserveSpace: true
+                    useHTML: true
                   }
                 }
-              ],
-              enabled: true
+              ]
             },
             type: "category"
           }

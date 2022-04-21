@@ -12,12 +12,24 @@ import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 
+export interface IFairnessStats {
+  max: number;
+  min: number;
+  maxCohortName: string;
+  minCohortName: string;
+  difference: number;
+  ratio: number | undefined;
+}
+
 export function generateCohortsStatsTable(
   cohorts: ErrorCohort[],
   selectableMetrics: IDropdownOption[],
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[]
 ) {
+  // The "count" metric has to be treated separately
+  // since it's not handled like other metrics, but
+  // is part of the ErrorCohort object.
   const items: PointOptionsObject[] = cohorts.map(
     (errorCohort, cohortIndex) => {
       return {
@@ -30,6 +42,31 @@ export function generateCohortsStatsTable(
       };
     }
   );
+  let countMax = Number.MIN_SAFE_INTEGER;
+  let countMin = Number.MAX_SAFE_INTEGER;
+  let countMinCohortName = "";
+  let countMaxCohortName = "";
+  cohorts.forEach((errorCohort) => {
+    const cohortCount = errorCohort.cohortStats.totalCohort;
+    if (cohortCount > countMax) {
+      countMax = cohortCount;
+      countMaxCohortName = errorCohort.cohort.name;
+    }
+    if (cohortCount < countMin) {
+      countMin = cohortCount;
+      countMinCohortName = errorCohort.cohort.name;
+    }
+  });
+  let fairnessStats: IFairnessStats[] = [
+    {
+      max: countMax,
+      min: countMin,
+      maxCohortName: countMaxCohortName,
+      minCohortName: countMinCohortName,
+      difference: countMax - countMin,
+      ratio: countMin / countMax
+    }
+  ];
   selectableMetrics
     .filter((element: IDropdownOption) =>
       selectedMetrics.includes(element.key.toString())
@@ -37,22 +74,39 @@ export function generateCohortsStatsTable(
     .forEach((metricOption: IDropdownOption, metricIndex: number) => {
       // first determine min and max values
       let metricMin = Number.MAX_SAFE_INTEGER;
+      let metricMinCohortName = "";
       let metricMax = Number.MIN_SAFE_INTEGER;
-      cohorts.forEach((_errorCohort, cohortIndex) => {
+      let metricMaxCohortName = "";
+      cohorts.forEach((errorCohort, cohortIndex) => {
         const labeledStat = labeledStatistics[cohortIndex].find(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat) {
           if (labeledStat.stat > metricMax) {
             metricMax = labeledStat.stat;
+            metricMaxCohortName = errorCohort.cohort.name;
           }
           if (labeledStat.stat < metricMin) {
             metricMin = labeledStat.stat;
+            metricMinCohortName = errorCohort.cohort.name;
           }
         }
       });
       // use min and max to normalize the colors
       const metricMinMaxDiff = metricMax - metricMin;
+      let metricMinMaxRatio: number | undefined = undefined;
+      if (metricMax !== 0) {
+        metricMinMaxRatio = metricMin / metricMax;
+      }
+      const metricFairnessStats: IFairnessStats = {
+        max: metricMax,
+        min: metricMin,
+        maxCohortName: metricMaxCohortName,
+        minCohortName: metricMinCohortName,
+        difference: metricMinMaxDiff,
+        ratio: metricMinMaxRatio
+      };
+      fairnessStats.push(metricFairnessStats);
       cohorts.forEach((_errorCohort, cohortIndex) => {
         const labeledStat = labeledStatistics[cohortIndex].find(
           (labeledStat) => labeledStat.key === metricOption.key
@@ -83,14 +137,14 @@ export function generateCohortsStatsTable(
                 width: 10
               }
             },
-            value: Number.NaN,
+            value: null,
             x: metricIndex + 1,
             y: cohortIndex
           });
         }
       });
     });
-  return items;
+  return { items, fairnessStats };
 }
 
 export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
