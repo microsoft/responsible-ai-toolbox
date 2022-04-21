@@ -18,7 +18,6 @@ interface ICohortStatsHeatmapProps {
   cohorts: ErrorCohort[];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
-  title: string;
   items: PointOptionsObject[];
 }
 

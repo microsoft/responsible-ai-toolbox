@@ -48,9 +48,6 @@ export class DatasetCohortStatsTable extends React.Component<
     return (
       <CohortStatsHeatmap
         items={items}
-        title={
-          localization.ModelAssessment.ModelOverview.dataCohortsHeatmapHeader
-        }
         cohorts={this.context.errorCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}

@@ -9,7 +9,7 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { ActionButton, IDropdownOption, Stack } from "office-ui-fabric-react";
+import { IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
@@ -49,45 +49,28 @@ export class DisaggregatedAnalysisTable extends React.Component<
       cohortLabeledStatistics,
       this.props.selectedMetrics
     );
+    if (this.props.selectedFeatures.length === 0) {
+      return React.Fragment;
+    }
     return (
-      <>
-        {this.props.selectedFeatures.length === 0 && (
-          <ActionButton
-            onClick={() => {
-              this.props.featureComboBoxRef.current?.focus(true);
-            }}
-          >
-            {
-              localization.ModelAssessment.ModelOverview
-                .disaggregatedAnalysisFeatureSelectionPlaceholder
-            }
-          </ActionButton>
-        )}
-        {this.props.selectedFeatures.length > 0 && (
-          <Stack>
-            <CohortStatsHeatmap
-              items={cohortStatsInfo.items}
-              title={
-                localization.ModelAssessment.ModelOverview
-                  .disaggregatedAnalysisHeatmapHeader
-              }
-              cohorts={this.props.featureBasedCohorts}
-              selectableMetrics={this.props.selectableMetrics}
-              selectedMetrics={this.props.selectedMetrics}
-            />
-            <FairnessMetricTable
-              fairnessStats={cohortStatsInfo.fairnessStats}
-              title={
-                localization.ModelAssessment.ModelOverview
-                  .fairnessMetricsHeatmapHeader
-              }
-              cohorts={this.props.featureBasedCohorts}
-              selectableMetrics={this.props.selectableMetrics}
-              selectedMetrics={this.props.selectedMetrics}
-            />
-          </Stack>
-        )}
-      </>
+      <Stack>
+        <CohortStatsHeatmap
+          items={cohortStatsInfo.items}
+          cohorts={this.props.featureBasedCohorts}
+          selectableMetrics={this.props.selectableMetrics}
+          selectedMetrics={this.props.selectedMetrics}
+        />
+        <FairnessMetricTable
+          fairnessStats={cohortStatsInfo.fairnessStats}
+          title={
+            localization.ModelAssessment.ModelOverview
+              .fairnessMetricsHeatmapHeader
+          }
+          cohorts={this.props.featureBasedCohorts}
+          selectableMetrics={this.props.selectableMetrics}
+          selectedMetrics={this.props.selectedMetrics}
+        />
+      </Stack>
     );
   }
 }
