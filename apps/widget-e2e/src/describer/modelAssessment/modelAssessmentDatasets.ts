@@ -129,7 +129,7 @@ const modelAssessmentDatasets = {
         "Cohort Predicted Y",
         "Cohort True Y",
         "Cohort Regression Error",
-        "Cohort Continuous"
+        "Cohort Age and BMI"
       ],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
