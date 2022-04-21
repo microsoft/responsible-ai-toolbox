@@ -44,7 +44,7 @@ export function getFeatureImportanceBoxOptions(
     if (numberOfCohorts % 2) {
       return 0.14 * (index - Math.floor(numberOfCohorts / 2));
     }
-    return 0.075 + 0.15 * (index - Math.floor(numberOfCohorts / 2));
+    return 0.08 + 0.16 * (index - Math.floor(numberOfCohorts / 2));
   };
   boxTempData.forEach((data: any, index: number) => {
     const boxData = getBoxData(data.x, data.y);
