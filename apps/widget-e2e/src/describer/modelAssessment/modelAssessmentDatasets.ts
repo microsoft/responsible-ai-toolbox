@@ -56,7 +56,14 @@ const modelAssessmentDatasets = {
       "capital-loss"
     ],
     modelStatisticsData: {
-      cohortDropDownValues: ["All data"],
+      cohortDropDownValues: [
+        "All data",
+        "Cohort Age and Hours-Per-Week",
+        "Cohort Marital-Status",
+        "Cohort Index",
+        "Cohort Predicted Y",
+        "Cohort True Y"
+      ],
       defaultXAxis: "Probability : <=50K",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
@@ -375,6 +382,7 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       hasModelStatisticsComponent: false,
       hasSideBar: false
     },
