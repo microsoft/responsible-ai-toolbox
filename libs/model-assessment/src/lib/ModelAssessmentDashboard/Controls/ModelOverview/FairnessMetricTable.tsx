@@ -11,6 +11,7 @@ import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
+
 import { IFairnessStats } from "./StatsTableUtils";
 
 interface IFairnessMetricTableProps {
@@ -23,7 +24,7 @@ interface IFairnessMetricTableProps {
 
 class IFairnessMetricTableState {}
 
-interface FairnessMetricPointOptionsObject extends PointOptionsObject {
+interface IFairnessMetricPointOptionsObject extends PointOptionsObject {
   min?: number;
   max?: number;
   minCohort?: string;
@@ -55,28 +56,28 @@ export class FairnessMetricTable extends React.Component<
     const items = this.props.fairnessStats
       .map((metricFairnessStats, metricIndex) => {
         return {
+          color: "transparent",
+          max: metricFairnessStats.max,
+          maxCohort: metricFairnessStats.maxCohortName,
+          min: metricFairnessStats.min,
+          minCohort: metricFairnessStats.minCohortName,
           value: Number(metricFairnessStats.difference.toFixed(3)),
           x: metricIndex,
-          y: 0,
-          min: metricFairnessStats.min,
-          max: metricFairnessStats.max,
-          minCohort: metricFairnessStats.minCohortName,
-          maxCohort: metricFairnessStats.maxCohortName,
-          color: "transparent"
-        } as FairnessMetricPointOptionsObject;
+          y: 0
+        } as IFairnessMetricPointOptionsObject;
       })
       .concat(
         this.props.fairnessStats.map((metricFairnessStats, metricIndex) => {
           return {
+            color: "transparent",
+            max: metricFairnessStats.max,
+            maxCohort: metricFairnessStats.maxCohortName,
+            min: metricFairnessStats.min,
+            minCohort: metricFairnessStats.minCohortName,
             value: Number(metricFairnessStats.ratio?.toFixed(3)),
             x: metricIndex,
-            y: 1,
-            min: metricFairnessStats.min,
-            max: metricFairnessStats.max,
-            minCohort: metricFairnessStats.minCohortName,
-            maxCohort: metricFairnessStats.maxCohortName,
-            color: "transparent"
-          } as FairnessMetricPointOptionsObject;
+            y: 1
+          } as IFairnessMetricPointOptionsObject;
         })
       );
 
@@ -95,8 +96,8 @@ export class FairnessMetricTable extends React.Component<
               borderWidth: 1,
               data: items,
               dataLabels: {
-                enabled: true,
-                color: "black"
+                color: "black",
+                enabled: true
               },
               name: "Metrics",
               type: "heatmap"
@@ -141,7 +142,6 @@ export class FairnessMetricTable extends React.Component<
             opposite: true
           },
           yAxis: {
-            reversed: true,
             categories: [
               localization.ModelAssessment.ModelOverview
                 .fairnessMetricDifference,
@@ -149,18 +149,19 @@ export class FairnessMetricTable extends React.Component<
             ],
             grid: {
               borderWidth: 2,
-              enabled: true,
               columns: [
                 {
                   labels: {
-                    formatter: function () {
+                    formatter() {
                       return `<div style='width:300px'><p>${this.value}</p></div>`;
                     },
                     useHTML: true
                   }
                 }
-              ]
+              ],
+              enabled: true
             },
+            reversed: true,
             type: "category"
           }
         }}

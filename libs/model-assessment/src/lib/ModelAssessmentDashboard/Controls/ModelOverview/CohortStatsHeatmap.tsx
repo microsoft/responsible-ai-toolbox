@@ -8,9 +8,10 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
-import { PointOptionsObject } from "highcharts";
+
 import { wrapYAxisLabels } from "./StatsTableUtils";
 
 interface ICohortStatsHeatmapProps {
@@ -68,7 +69,7 @@ export class CohortStatsHeatmap extends React.Component<
               data: this.props.items,
               dataLabels: {
                 enabled: true,
-                nullFormat: 'N/A'
+                nullFormat: "N/A"
               },
               name: "Metrics",
               type: "heatmap"
@@ -82,10 +83,7 @@ export class CohortStatsHeatmap extends React.Component<
             formatter() {
               // to avoid semantic error during build cast point to any
               const pointValue = (this.point as any).value;
-              if (
-                this.point.y === undefined ||
-                pointValue === undefined
-              ) {
+              if (this.point.y === undefined || pointValue === undefined) {
                 return undefined;
               }
 
@@ -112,25 +110,25 @@ export class CohortStatsHeatmap extends React.Component<
             opposite: true
           },
           yAxis: {
-            reversed: true,
             categories: this.props.cohorts.map(
               (errorCohort) => errorCohort.cohort.name
             ),
             grid: {
               borderWidth: 2,
-              enabled: true,
               columns: [
                 {
                   labels: {
-                    formatter: function () {
+                    formatter() {
                       const text = wrapYAxisLabels(this.value.toString());
                       return `<div style='width:300px'>${text}</div>`;
                     },
                     useHTML: true
                   }
                 }
-              ]
+              ],
+              enabled: true
             },
+            reversed: true,
             type: "category"
           }
         }}

@@ -57,13 +57,13 @@ export function generateCohortsStatsTable(
       countMinCohortName = errorCohort.cohort.name;
     }
   });
-  let fairnessStats: IFairnessStats[] = [
+  const fairnessStats: IFairnessStats[] = [
     {
-      max: countMax,
-      min: countMin,
-      maxCohortName: countMaxCohortName,
-      minCohortName: countMinCohortName,
       difference: countMax - countMin,
+      max: countMax,
+      maxCohortName: countMaxCohortName,
+      min: countMin,
+      minCohortName: countMinCohortName,
       ratio: countMin / countMax
     }
   ];
@@ -99,11 +99,11 @@ export function generateCohortsStatsTable(
         metricMinMaxRatio = metricMin / metricMax;
       }
       const metricFairnessStats: IFairnessStats = {
-        max: metricMax,
-        min: metricMin,
-        maxCohortName: metricMaxCohortName,
-        minCohortName: metricMinCohortName,
         difference: metricMinMaxDiff,
+        max: metricMax,
+        maxCohortName: metricMaxCohortName,
+        min: metricMin,
+        minCohortName: metricMinCohortName,
         ratio: metricMinMaxRatio
       };
       fairnessStats.push(metricFairnessStats);
@@ -137,6 +137,9 @@ export function generateCohortsStatsTable(
                 width: 10
               }
             },
+            // null is treated as a special value by highcharts
+            // sadly there's no alternative (undefined doesn't work)
+            // eslint-disable-next-line unicorn/no-null
             value: null,
             x: metricIndex + 1,
             y: cohortIndex
@@ -144,7 +147,7 @@ export function generateCohortsStatsTable(
         }
       });
     });
-  return { items, fairnessStats };
+  return { fairnessStats, items };
 }
 
 export function wrapYAxisLabels(label: string, wrapOnWhitespace = false) {
