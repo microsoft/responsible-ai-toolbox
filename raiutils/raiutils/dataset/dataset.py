@@ -41,7 +41,7 @@ def fetch_dataset(url, filename, max_retries=4, retry_delay=60):
     :type retry_delay: int
     """
     retriever = Retriever(url, filename)
-    action_name = "Download"
+    action_name = "Dataset download"
     err_msg = "Failed to download dataset"
     retry_function(retriever.retrieve, action_name, err_msg,
                    max_retries=max_retries, retry_delay=retry_delay)
