@@ -33,6 +33,7 @@ export interface ICounterfactualPanelStyles {
   stackHeader: IStyle;
   counterfactualName: IStyle;
   tooltipHostDisplay: IStyle;
+  saveDescription: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -89,6 +90,9 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
             paddingLeft: 24,
             paddingRight: 24
           },
+          ".ms-Panel-navigation": {
+            justifyContent: "space-between"
+          },
           ".scrollableContent": { height: "100%", paddingTop: 1 }
         }
       },
@@ -104,6 +108,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       predictedLink: {
         color: theme.palette.blue
       },
+      saveDescription: { color: theme.semanticColors.buttonTextDisabled },
       searchBox: {
         width: "210px"
       },

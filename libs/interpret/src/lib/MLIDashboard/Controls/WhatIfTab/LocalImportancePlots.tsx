@@ -111,7 +111,10 @@ export class LocalImportancePlots extends React.Component<
       prevProps.sortingSeriesIndex !== this.props.sortingSeriesIndex
     ) {
       this.setState({
-        sortArray: this.props.sortArray,
+        sortArray: this.getSortedArray(
+          this.props.sortingSeriesIndex,
+          this.state.sortAbsolute
+        ),
         sortingSeriesIndex: this.props.sortingSeriesIndex
       });
     }
@@ -201,7 +204,7 @@ export class LocalImportancePlots extends React.Component<
                       onChange={this.setSortIndex}
                     />
                   </Stack.Item>
-                  <Stack.Item>
+                  <Stack.Item className={classNames.absoluteValueToggle}>
                     <Toggle
                       label={localization.Interpret.GlobalTab.absoluteValues}
                       inlineLabel
@@ -399,7 +402,7 @@ export class LocalImportancePlots extends React.Component<
       }
     ];
     return (
-      <div id="subPlotContainer">
+      <div id="subPlotContainer" className={classNames.subPlotContainer}>
         {this.props.invokeModel ? (
           <div className={classNames.choiceBoxArea} id="subPlotChoice">
             <Text variant="medium" className={classNames.boldText}>
@@ -501,21 +504,27 @@ export class LocalImportancePlots extends React.Component<
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      let sortArray: number[] = [];
-      if (this.state.sortingSeriesIndex !== undefined) {
-        sortArray = checked
-          ? ModelExplanationUtils.getAbsoluteSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse()
-          : ModelExplanationUtils.getSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse();
-      }
+      const sortArray = this.getSortedArray(
+        this.state.sortingSeriesIndex,
+        checked
+      );
       this.setState({ sortAbsolute: checked, sortArray });
     }
+  };
+
+  private getSortedArray = (
+    sortIndex: number | undefined,
+    checked: boolean
+  ) => {
+    if (sortIndex !== undefined) {
+      return checked
+        ? ModelExplanationUtils.getAbsoluteSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse()
+        : ModelExplanationUtils.getSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse();
+    }
+    return this.props.sortArray;
   };
 }

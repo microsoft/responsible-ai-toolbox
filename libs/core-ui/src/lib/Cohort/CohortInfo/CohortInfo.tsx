@@ -28,7 +28,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           className={classNames.button}
           text={localization.ErrorAnalysis.CohortInfo.saveCohort}
           onClick={(): any => this.props.onSaveCohortClick()}
-          disabled={this.props.disabledView}
+          disabled={
+            this.props.disabledView || !this.props.currentCohort.isTemporary
+          }
         />
         <Stack>
           <Label>

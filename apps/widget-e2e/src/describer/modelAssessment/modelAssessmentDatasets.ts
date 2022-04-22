@@ -24,6 +24,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
+    },
     featureImportanceData: {
       datapoint: 500,
       dropdownRowName: "Row 34",
@@ -53,6 +56,14 @@ const modelAssessmentDatasets = {
       "capital-loss"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: [
+        "All data",
+        "Cohort Age and Hours-Per-Week",
+        "Cohort Marital-Status",
+        "Cohort Index",
+        "Cohort Predicted Y",
+        "Cohort True Y"
+      ],
       defaultXAxis: "Probability : <=50K",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
@@ -92,6 +103,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
+    },
     featureImportanceData: {
       datapoint: 89,
       hasFeatureImportanceComponent: false
@@ -109,6 +123,14 @@ const modelAssessmentDatasets = {
       "s6"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: [
+        "All data",
+        "Cohort Index",
+        "Cohort Predicted Y",
+        "Cohort True Y",
+        "Cohort Regression Error",
+        "Cohort Age and BMI"
+      ],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
@@ -145,6 +167,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "age"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
+    },
     featureImportanceData: {
       datapoint: 89,
       dropdownRowName: "Row 4",
@@ -169,7 +194,9 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Error",
       defaultXAxisPanelValue: "Error",
       defaultYAxis: "Cohort",
@@ -211,6 +238,9 @@ const modelAssessmentDatasets = {
       ],
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 730,
@@ -259,6 +289,7 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Probability : Less than median",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",
@@ -310,6 +341,9 @@ const modelAssessmentDatasets = {
       defaultXAxis: "Index",
       defaultYAxis: "LotFrontage"
     },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: false
+    },
     featureImportanceData: {
       hasFeatureImportanceComponent: false
     },
@@ -348,6 +382,7 @@ const modelAssessmentDatasets = {
       "YrSold"
     ],
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       hasModelStatisticsComponent: false,
       hasSideBar: false
     },
@@ -366,6 +401,9 @@ const modelAssessmentDatasets = {
       datasetBarLabel: ["0 - 17", "18 - 35", "36 - 52", "53 - 70", "71 - 88"],
       defaultXAxis: "Index",
       defaultYAxis: "alcohol"
+    },
+    errorAnalysisData: {
+      hasErrorAnalysisComponent: true
     },
     featureImportanceData: {
       datapoint: 500,
@@ -397,6 +435,7 @@ const modelAssessmentDatasets = {
     ],
     isMulticlass: true,
     modelStatisticsData: {
+      cohortDropDownValues: ["All data"],
       defaultXAxis: "Predicted Y",
       defaultXAxisPanelValue: "Prediction probabilities",
       defaultYAxis: "Cohort",

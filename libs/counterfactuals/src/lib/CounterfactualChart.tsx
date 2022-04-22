@@ -35,7 +35,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { counterfactualChartStyles } from "./CounterfactualChartStyles";
+import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
@@ -377,6 +377,10 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   private getCurrentLabel(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return `[${this.props.data.desired_range}]`;
+    }
+
     return this.props.data.desired_class || "";
   }
 

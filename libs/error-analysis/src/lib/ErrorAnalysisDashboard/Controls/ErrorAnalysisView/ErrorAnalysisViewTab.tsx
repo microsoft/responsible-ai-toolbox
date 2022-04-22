@@ -10,7 +10,6 @@ import { localization } from "@responsible-ai/localization";
 import {
   CommandBarButton,
   IIconProps,
-  Text,
   Pivot,
   PivotItem,
   Stack,
@@ -39,6 +38,7 @@ export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
+  onClearCohortSelectionClick: () => void;
   onSaveCohortClick: () => void;
   selectedKey: ErrorAnalysisOptions;
 }
@@ -72,10 +72,7 @@ export class ErrorAnalysisViewTab extends React.Component<
           tokens={{ padding: "l1" }}
           className={classNames.errorAnalysis}
         >
-          <Text variant={"xxLarge"} id="errorAnalysisHeader">
-            {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
-          </Text>
-          <Stack horizontal>
+          <Stack horizontal className={classNames.errorAnalysisWrapper}>
             <Stack.Item>
               <Pivot
                 onLinkClick={this.handleTabClick}
@@ -115,6 +112,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             matrix={this.props.matrix}
             matrixFeatures={this.props.matrixFeatures}
             errorAnalysisOption={this.props.errorAnalysisOption}
+            onClearCohortSelectionClick={this.props.onClearCohortSelectionClick}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
@@ -136,8 +134,8 @@ export class ErrorAnalysisViewTab extends React.Component<
         <Stack className={classNames.cohortInfo} tokens={{ padding: "l1" }}>
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
-            onSaveCohortClick={this.props.onSaveCohortClick}
             disabledView={this.props.disabledView}
+            onSaveCohortClick={this.props.onSaveCohortClick}
           />
         </Stack>
       </Stack>

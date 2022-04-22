@@ -39,11 +39,11 @@ class ExplainerManagerKeys(object):
 
 class ErrorAnalysisManagerKeys(object):
     """Provide constants for ErrorAnalysisManager key properties."""
+    FILTER_FEATURES = 'filter_features'
     IS_COMPUTED = 'is_computed'
     MAX_DEPTH = 'max_depth'
-    NUM_LEAVES = 'num_leaves'
     MIN_CHILD_SAMPLES = 'min_child_samples'
-    FILTER_FEATURES = 'filter_features'
+    NUM_LEAVES = 'num_leaves'
     REPORTS = 'reports'
 
 

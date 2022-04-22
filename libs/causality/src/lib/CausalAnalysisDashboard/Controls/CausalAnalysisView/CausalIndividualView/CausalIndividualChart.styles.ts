@@ -7,25 +7,24 @@ import {
   IStyle
 } from "office-ui-fabric-react";
 
-export interface ICounterfactualChartStyles {
+export interface ICausalIndividualChartStyles {
+  legendAndText: IStyle;
   chartWithAxes: IStyle;
   chartWithVertical: IStyle;
-  horizontalAxis: IStyle;
-  horizontalAxisWithPadding: IStyle;
-  mainChartContainer: IStyle;
-  legendAndText: IStyle;
-  legendLabel: IStyle;
-  lowerChartContainer: IStyle;
-  rotatedVerticalBox: IStyle;
   verticalAxis: IStyle;
+  rotatedVerticalBox: IStyle;
+  horizontalAxisWithPadding: IStyle;
+  horizontalAxis: IStyle;
+  individualChartContainer: IStyle;
 }
 
-export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactualChartStyles> =
+export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndividualChartStyles> =
   () => {
-    return mergeStyleSets<ICounterfactualChartStyles>({
+    const legendWidth = "400px";
+    return mergeStyleSets<ICausalIndividualChartStyles>({
       chartWithAxes: {
         paddingTop: "30px",
-        width: "97%"
+        width: "80%"
       },
       chartWithVertical: {
         width: "100%"
@@ -39,22 +38,15 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
         flexDirection: "row",
         paddingBottom: "30px"
       },
+      individualChartContainer: {
+        width: "90%"
+      },
       legendAndText: {
         boxSizing: "border-box",
         height: "100%",
         paddingLeft: "10px",
-        paddingRight: "10px"
-      },
-      legendLabel: {
-        paddingBottom: "10px",
-        paddingTop: "10px"
-      },
-      lowerChartContainer: {
-        height: "100%",
-        paddingTop: "50px"
-      },
-      mainChartContainer: {
-        width: "90%"
+        paddingRight: "10px",
+        width: legendWidth
       },
       rotatedVerticalBox: {
         marginLeft: "28px",
