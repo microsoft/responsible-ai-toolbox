@@ -48,7 +48,12 @@ export function generateCohortsCartesianProduct(
       jointDataset
     )[0];
     return new ErrorCohort(
-      new Cohort(cohortName, jointDataset, [], [compositeFilter, ...globalCohort.cohort.compositeFilters]),
+      new Cohort(
+        cohortName,
+        jointDataset,
+        [],
+        [compositeFilter, ...globalCohort.cohort.compositeFilters]
+      ),
       jointDataset
     );
   });
