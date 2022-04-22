@@ -249,13 +249,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
     let metricStats: MetricCohortStats | undefined = undefined;
-    if (props.rootStats) {
+    if (props.errorAnalysisData.root_stats) {
       metricStats = new MetricCohortStats(
-        props.rootStats.totalSize,
-        props.rootStats.totalSize,
-        props.rootStats.metricValue,
-        props.rootStats.metricName,
-        props.rootStats.errorCoverage
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.metricValue,
+        props.errorAnalysisData.root_stats.metricName,
+        props.errorAnalysisData.root_stats.errorCoverage
       );
     }
     const cohorts = [
@@ -328,8 +328,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
-      weightVectorOptions,
-      whatIfChartConfig: undefined
+      weightVectorOptions
     };
   }
 
@@ -518,6 +517,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
+                    onClearCohortSelectionClick={(): void =>
+                      this.clearCohortSelection()
+                    }
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     disabledView={false}
                     features={this.props.features}
@@ -548,9 +550,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         <PivotItem key={props.itemKey} {...props} />
                       ))}
                     </Pivot>
-                    {this.props.rootStats &&
+                    {this.props.errorAnalysisData.root_stats &&
                       this.state.jointDataset.datasetRowCount !==
-                        this.props.rootStats.totalSize && (
+                        this.props.errorAnalysisData.root_stats.totalSize && (
                         <MessageBar messageBarType={MessageBarType.warning}>
                           <Text>{localization.ErrorAnalysis.scaleWarning}</Text>
                         </MessageBar>
@@ -692,7 +694,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
-      selectedCohortName = "Unsaved";
+      selectedCohortName = localization.Interpret.Cohort.temporaryCohort;
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
@@ -724,6 +726,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       selectedCohort
     });
   }
+
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
+    });
+    this.context.selectedErrorCohort = this.state.baseCohort;
+  };
 
   private handleGlobalTabClick = (item: PivotItem | undefined): void => {
     if (item?.props.itemKey) {

@@ -13,6 +13,8 @@
           "highcharts/modules/exporting",
           "highcharts/highcharts-more",
           "highcharts/modules/heatmap",
+          "highcharts/modules/pattern-fill",
+          "highcharts/modules/gantt",
           "@nrwl/cypress/plugins/preprocessor"
         ]
       }

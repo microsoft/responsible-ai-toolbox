@@ -4,7 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalPolicyGains } from "../Interfaces/ICausalAnalysisData";
 
 import { FabricStyles } from "./FabricStyles";
@@ -54,12 +54,6 @@ export function getTreatmentBarChartOptions(
     },
     xAxis: {
       categories: yData
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        align: "high"
-      }
     }
   };
 }

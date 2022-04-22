@@ -45,6 +45,7 @@ export interface ICohortEditorStyles {
   cohortEditor: IStyle;
   saveAndDeleteDiv: IStyle;
   clearFilter: IStyle;
+  invalidValueError: IStyle;
 }
 
 export const cohortEditorStyles: () => IProcessedStyleSet<ICohortEditorStyles> =
@@ -197,6 +198,11 @@ export const cohortEditorStyles: () => IProcessedStyleSet<ICohortEditorStyles> =
         padding: "1px 9px 6px 11px",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap"
+      },
+      invalidValueError: {
+        color: theme.semanticColors.severeWarningIcon,
+        fontSize: "12px",
+        marginTop: "4px"
       },
       leftHalf: {
         height: "344px",

@@ -53,7 +53,7 @@ export interface IModelAssessmentContext {
     | undefined;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
-  editCohort(cohort: Cohort): void;
+  editCohort(cohort: Cohort, switchNew?: boolean): void;
   deleteCohort(cohort: ErrorCohort): void;
 }
 

@@ -381,8 +381,9 @@ export class JointDataset {
     modelType: ModelTypes
   ): void {
     if (modelType === ModelTypes.Regression) {
-      row[JointDataset.RegressionError] =
-        row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel];
+      row[JointDataset.RegressionError] = Math.abs(
+        row[JointDataset.TrueYLabel] - row[JointDataset.PredictedYLabel]
+      );
       return;
     }
     if (modelType === ModelTypes.Binary) {
@@ -398,7 +399,7 @@ export class JointDataset {
     }
   }
 
-  private static buildLocalFeatureMatrix(
+  public static buildLocalFeatureMatrix(
     localExplanationRaw: number[][] | number[][][],
     modelType: ModelTypes
   ): number[][][] {

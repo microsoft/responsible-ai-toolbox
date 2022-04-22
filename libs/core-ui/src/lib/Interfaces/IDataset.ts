@@ -19,3 +19,6 @@ export interface IDatasetSummary {
   classNames?: string[];
   categoricalMap?: { [key: number]: string[] };
 }
+
+export const classificationTask = "classification";
+export const regressionTask = "regression";
