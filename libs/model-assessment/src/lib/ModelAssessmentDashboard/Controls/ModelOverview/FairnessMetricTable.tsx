@@ -12,7 +12,7 @@ import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { IFairnessStats } from "./StatsTableUtils";
+import { IFairnessStats, wrapText } from "./StatsTableUtils";
 
 interface IFairnessMetricTableProps {
   cohorts: ErrorCohort[];
@@ -121,19 +121,31 @@ export class FairnessMetricTable extends React.Component<
                 return undefined;
               }
 
-              return localization.formatString(
-                point.y === 0
-                  ? localization.ModelAssessment.ModelOverview
-                      .tableDifferenceTooltip
-                  : localization.ModelAssessment.ModelOverview
-                      .tableRatioTooltip,
-                // make metric name lower case in sentence
-                this.series.xAxis.categories[point.x].toLowerCase(),
-                pointValue,
-                point.min.toFixed(3),
-                point.minCohort,
-                point.max.toFixed(3),
-                point.maxCohort
+              let min = point.min.toFixed(3);
+              let max = point.max.toFixed(3);
+              if (point.x === 0) {
+                // Don't show 3 decimals in the count column
+                min = point.min;
+                max = point.max;
+              }
+
+              return wrapText(
+                localization.formatString(
+                  point.y === 0
+                    ? localization.ModelAssessment.ModelOverview
+                        .tableDifferenceTooltip
+                    : localization.ModelAssessment.ModelOverview
+                        .tableRatioTooltip,
+                  // make metric name lower case in sentence
+                  this.series.xAxis.categories[point.x].toLowerCase(),
+                  pointValue,
+                  min,
+                  `<b>${point.minCohort}</b>`,
+                  max,
+                  `<b>${point.maxCohort}</b>`
+                ),
+                40,
+                10
               );
             }
           },
@@ -153,7 +165,7 @@ export class FairnessMetricTable extends React.Component<
                 {
                   labels: {
                     formatter() {
-                      return `<div style='width:300px'><p>${this.value}</p></div>`;
+                      return `<div style='width:300px'>${this.value}</div>`;
                     },
                     useHTML: true
                   }

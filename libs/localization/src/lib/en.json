@@ -1374,7 +1374,8 @@
       "chartConfigConfirm": "Confirm",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
-      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts"
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A"
     }
   }
 }

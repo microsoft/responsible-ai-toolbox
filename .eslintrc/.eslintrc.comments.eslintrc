@@ -1,10 +1,5 @@
 {
   "plugins": ["eslint-plugin-eslint-comments"],
   "extends": ["plugin:eslint-comments/recommended"],
-  "rules": {
-    "eslint-comments/no-use": [
-      "error",
-      { "allow": ["eslint-disable-next-line"] }
-    ]
-  }
+  "rules": { "eslint-comments/no-use": ["error", { "allow": [] }] }
 }

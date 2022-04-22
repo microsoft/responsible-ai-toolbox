@@ -5,6 +5,7 @@ import {
   BinaryClassificationMetrics,
   classificationTask,
   ErrorCohort,
+  HighchartsNull,
   ILabeledStatistic,
   RegressionMetrics
 } from "@responsible-ai/core-ui";
@@ -139,8 +140,7 @@ export function generateCohortsStatsTable(
             },
             // null is treated as a special value by highcharts
             // sadly there's no alternative (undefined doesn't work)
-            // eslint-disable-next-line unicorn/no-null
-            value: null,
+            value: HighchartsNull,
             x: metricIndex + 1,
             y: cohortIndex
           });
@@ -150,46 +150,63 @@ export function generateCohortsStatsTable(
   return { fairnessStats, items };
 }
 
-export function wrapYAxisLabels(label: string, wrapOnWhitespace = true) {
-  const maxLineLength = 40;
-
-  if (label.length <= maxLineLength) {
-    // label is short enough to fit on one line
-    return label;
+export function wrapText(
+  text: string,
+  maxLineLength = 40,
+  maxLines = 2,
+  lineStart = 0,
+  currentLine = 0
+) {
+  if (text.length <= lineStart + maxLineLength) {
+    // label is short enough to fit on current line
+    return text;
   }
 
-  const maxLines = 2;
+  const wrapStartingPosition = lineStart + maxLineLength / 2;
   const lineWrapHtmlTag = "<br />";
   const ellipsis = "...";
+
+  if (currentLine === maxLines - 1 && text.length > lineStart + maxLineLength) {
+    return (
+      text.slice(0, lineStart + maxLineLength - ellipsis.length) + ellipsis
+    );
+  }
 
   // check if there are suitable spots for a linewrap
   // if not just wrap after maxLineLength characters
   // consider suitable wrapping spots based on whitespace
-  // starting at half the line length
-  const startingPosition = maxLineLength / 2;
-  let slicingIndex = maxLineLength;
+  let slicingIndex = lineStart + maxLineLength;
   const whitespace = " ";
 
-  if (wrapOnWhitespace) {
-    // find last whitespace in the first line
-    for (let index = maxLineLength - 1; index >= startingPosition; index -= 1) {
-      if (label[index] === whitespace) {
-        slicingIndex = index;
-        break;
-      }
+  // find last whitespace in the current line
+  for (
+    let index = lineStart + maxLineLength - 1;
+    index >= wrapStartingPosition;
+    index -= 1
+  ) {
+    if (text[index] === whitespace) {
+      slicingIndex = index;
+      break;
     }
   }
-  label =
-    label.slice(0, slicingIndex) +
+  text =
+    text.slice(0, slicingIndex) +
     lineWrapHtmlTag +
-    label.slice(slicingIndex, label.length);
+    text.slice(slicingIndex, text.length);
 
-  const maxLabelLength = maxLineLength * maxLines + lineWrapHtmlTag.length;
-  if (label.length > maxLabelLength) {
-    // cut off label and add ellipsis at the end
-    label = label.slice(0, maxLabelLength - ellipsis.length) + ellipsis;
+  // check if remainer is still too long for next line
+  if (text.length - slicingIndex + lineWrapHtmlTag.length > maxLineLength) {
+    // if so call recursively with adjusted window
+    text = wrapText(
+      text,
+      maxLineLength,
+      maxLines,
+      slicingIndex + lineWrapHtmlTag.length,
+      currentLine + 1
+    );
   }
-  return label;
+
+  return text;
 }
 
 export function getSelectableMetrics(

@@ -12,7 +12,7 @@ import { PointOptionsObject } from "highcharts";
 import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { wrapYAxisLabels } from "./StatsTableUtils";
+import { wrapText } from "./StatsTableUtils";
 
 interface ICohortStatsHeatmapProps {
   cohorts: ErrorCohort[];
@@ -84,19 +84,30 @@ export class CohortStatsHeatmap extends React.Component<
 
               if (this.point.x === 0) {
                 // Count column
-                return localization.formatString(
-                  localization.ModelAssessment.ModelOverview.tableCountTooltip,
-                  this.series.yAxis.categories[this.point.y],
-                  pointValue
+                return wrapText(
+                  localization.formatString(
+                    localization.ModelAssessment.ModelOverview
+                      .tableCountTooltip,
+                    this.series.yAxis.categories[this.point.y],
+                    pointValue
+                  ),
+                  40,
+                  10
                 );
               }
               // Metric columns
-              return localization.formatString(
-                localization.ModelAssessment.ModelOverview.tableMetricTooltip,
-                // make metric name lower case in sentence
-                this.series.xAxis.categories[this.point.x].toLowerCase(),
-                this.series.yAxis.categories[this.point.y],
-                pointValue === null ? "N/A" : pointValue
+              return wrapText(
+                localization.formatString(
+                  localization.ModelAssessment.ModelOverview.tableMetricTooltip,
+                  // make metric name lower case in sentence
+                  this.series.xAxis.categories[this.point.x].toLowerCase(),
+                  this.series.yAxis.categories[this.point.y],
+                  pointValue === null
+                    ? localization.ModelAssessment.ModelOverview.nA
+                    : pointValue
+                ),
+                40,
+                10
               );
             }
           },
@@ -114,7 +125,7 @@ export class CohortStatsHeatmap extends React.Component<
                 {
                   labels: {
                     formatter() {
-                      const text = wrapYAxisLabels(this.value.toString());
+                      const text = wrapText(this.value.toString());
                       return `<div style='width:300px'>${text}</div>`;
                     },
                     useHTML: true
