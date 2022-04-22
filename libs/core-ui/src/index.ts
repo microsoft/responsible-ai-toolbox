@@ -79,3 +79,4 @@ export * from "./lib/Highchart/FeatureImportanceDependence";
 export * from "./lib/Highchart/FeatureImportanceBar";
 export * from "./lib/Highchart/HeatmapHighChart";
 export * from "./lib/Highchart/IHighchartsConfig";
+export * from "./lib/Highchart/Null";
