@@ -838,7 +838,9 @@
       "predictedProbabilities": "Prediction probabilities",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
-      "truePositive": "True positive"
+      "truePositive": "True positive",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "_enumeratedClassInfo.comment": "explains the weights for selecting a single class",

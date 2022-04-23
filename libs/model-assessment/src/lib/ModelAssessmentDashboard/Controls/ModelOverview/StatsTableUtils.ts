@@ -7,6 +7,7 @@ import {
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
+  MulticlassClassificationMetrics,
   RegressionMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -210,41 +211,48 @@ export function wrapText(
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression"
+  taskType: "classification" | "regression",
+  isMulticlass: boolean
 ) {
   const selectableMetrics: IDropdownOption[] = [];
   if (taskType === classificationTask) {
-    // TODO: add case for multiclass classification
-    selectableMetrics.push(
-      {
-        key: BinaryClassificationMetrics.Accuracy,
+    if (isMulticlass) {
+      selectableMetrics.push({
+        key: MulticlassClassificationMetrics.Accuracy,
         text: localization.ModelAssessment.ModelOverview.accuracy
-      },
-      {
-        key: BinaryClassificationMetrics.F1Score,
-        text: localization.ModelAssessment.ModelOverview.f1Score
-      },
-      {
-        key: BinaryClassificationMetrics.Precision,
-        text: localization.ModelAssessment.ModelOverview.precision
-      },
-      {
-        key: BinaryClassificationMetrics.Recall,
-        text: localization.ModelAssessment.ModelOverview.recall
-      },
-      {
-        key: BinaryClassificationMetrics.FalsePositiveRate,
-        text: localization.ModelAssessment.ModelOverview.falsePositiveRate
-      },
-      {
-        key: BinaryClassificationMetrics.FalseNegativeRate,
-        text: localization.ModelAssessment.ModelOverview.falseNegativeRate
-      },
-      {
-        key: BinaryClassificationMetrics.SelectionRate,
-        text: localization.ModelAssessment.ModelOverview.selectionRate
-      }
-    );
+      });
+    } else {
+      selectableMetrics.push(
+        {
+          key: BinaryClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.accuracy
+        },
+        {
+          key: BinaryClassificationMetrics.F1Score,
+          text: localization.ModelAssessment.ModelOverview.f1Score
+        },
+        {
+          key: BinaryClassificationMetrics.Precision,
+          text: localization.ModelAssessment.ModelOverview.precision
+        },
+        {
+          key: BinaryClassificationMetrics.Recall,
+          text: localization.ModelAssessment.ModelOverview.recall
+        },
+        {
+          key: BinaryClassificationMetrics.FalsePositiveRate,
+          text: localization.ModelAssessment.ModelOverview.falsePositiveRate
+        },
+        {
+          key: BinaryClassificationMetrics.FalseNegativeRate,
+          text: localization.ModelAssessment.ModelOverview.falseNegativeRate
+        },
+        {
+          key: BinaryClassificationMetrics.SelectionRate,
+          text: localization.ModelAssessment.ModelOverview.selectionRate
+        }
+      );
+    }
   } else {
     // task_type === "regression"
     selectableMetrics.push(
