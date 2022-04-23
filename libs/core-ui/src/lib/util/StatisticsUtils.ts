@@ -1,12 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { MulticlassClassificationEnum } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 
-import { ClassificationEnum, JointDataset } from "./JointDataset";
+import {
+  ClassificationEnum,
+  JointDataset,
+  MulticlassClassificationEnum
+} from "./JointDataset";
 
 export interface ILabeledStatistic {
   key: string;
