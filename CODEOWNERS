@@ -11,31 +11,31 @@
 #/* @xuke444
 
 # App
-/apps @xuke444 @vinuthakaranth @zhb000 @romanlutz
+/apps @xuke444 @vinuthakaranth @romanlutz
 
 #causal ui
-/libs/causality @zhb000 @xuke444
+/libs/causality @xuke444
 
 #counterfactuals ui
-/libs/counterfactuals @zhb000 @xuke444
+/libs/counterfactuals @xuke444
 
 #dataset-explorer ui
-/libs/dataset-explorer @zhb000 @romanlutz @xuke444
+/libs/dataset-explorer @romanlutz @xuke444
 
 #error-analysis ui
-/libs/error-analysis @zhb000 @romanlutz @imatiach-msft @xuke444
+/libs/error-analysis @romanlutz @imatiach-msft @xuke444
 
 #fairness ui
 /libs/fairness @romanlutz @riedgar-ms @xuke444
 
 #interpret ui
-/libs/interpret @zhb000 @romanlutz @gaugup @xuke444
+/libs/interpret @romanlutz @gaugup @xuke444
 
 #interpret-text ui
 /libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444
 
 #model-assessment ui
-/libs/model-assessment @zhb000 @romanlutz @xuke444
+/libs/model-assessment @romanlutz @xuke444
 
 
 
