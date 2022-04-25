@@ -24,7 +24,8 @@ import {
   IComboBox,
   IComboBoxOption,
   ComboBox,
-  ActionButton
+  ActionButton,
+  MessageBar
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -133,6 +134,7 @@ export class ModelOverview extends React.Component<
 
     // generate table contents for selected feature cohorts
     const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
+      this.context.baseErrorCohort,
       this.context.jointDataset,
       this.context.dataset,
       this.state.selectedFeatures
@@ -221,6 +223,29 @@ export class ModelOverview extends React.Component<
               className={classNames.dropdown}
               styles={FabricStyles.limitedSizeMenuDropdown}
             />
+            {this.state.selectedFeatures.length > 0 && (
+              <>
+                <Text>
+                  {localization.formatString(
+                    localization.ModelAssessment.ModelOverview
+                      .disaggregatedAnalysisBaseCohortDislaimer,
+                    this.context.baseErrorCohort.cohort.name
+                  )}
+                </Text>
+                {this.context.baseErrorCohort.cohort.filters.length +
+                  this.context.baseErrorCohort.cohort.compositeFilters.length >
+                  0 && (
+                  <MessageBar>
+                    {localization.formatString(
+                      localization.ModelAssessment.ModelOverview
+                        .disaggregatedAnalysisBaseCohortWarning,
+                      localization.ErrorAnalysis.Cohort.defaultLabel,
+                      this.context.baseErrorCohort.cohort.name
+                    )}
+                  </MessageBar>
+                )}
+              </>
+            )}
             <DisaggregatedAnalysisTable
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
