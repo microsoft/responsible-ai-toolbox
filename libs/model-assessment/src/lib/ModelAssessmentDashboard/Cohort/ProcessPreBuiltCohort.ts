@@ -198,11 +198,11 @@ function translatePreBuiltCohortFilterForDataset(
       ];
     }
     let index: number[] = [];
-    const categorcialValues =
+    const categoricalValues =
       jointDataset.metaDict[jointDatasetFeatureName].sortedCategoricalValues;
-    if (categorcialValues !== undefined) {
+    if (categoricalValues !== undefined) {
       index = preBuiltCohortFilter.arg
-        .map((categoricalValue) => categorcialValues.indexOf(categoricalValue))
+        .map((categoricalValue) => categoricalValues.indexOf(categoricalValue))
         .filter((index) => index !== -1);
       index.sort((a, b) => a - b);
       const filter: IFilter = {
