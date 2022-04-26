@@ -5,10 +5,10 @@
       "root": "libs/causality",
       "sourceRoot": "libs/causality/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/causality/**/*.js",
@@ -28,7 +28,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/causality",
             "tsConfig": "libs/causality/tsconfig.lib.json",
@@ -61,7 +61,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/causality/jest.config.js",
             "passWithNoTests": true
@@ -74,10 +74,10 @@
       "root": "libs/core-ui",
       "sourceRoot": "libs/core-ui/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/core-ui/**/*.js",
@@ -97,7 +97,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/core-ui",
             "tsConfig": "libs/core-ui/tsconfig.lib.json",
@@ -130,7 +130,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/core-ui/jest.config.js",
             "passWithNoTests": true
@@ -143,10 +143,10 @@
       "root": "libs/counterfactuals",
       "sourceRoot": "libs/counterfactuals/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/counterfactuals/**/*.js",
@@ -166,7 +166,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/counterfactuals",
             "tsConfig": "libs/counterfactuals/tsconfig.lib.json",
@@ -199,7 +199,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/counterfactuals/jest.config.js",
             "passWithNoTests": true
@@ -212,10 +212,10 @@
       "root": "apps/dashboard",
       "sourceRoot": "apps/dashboard/src",
       "projectType": "application",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "executor": "@nrwl/web:build",
           "options": {
             "baseHref": ".",
             "outputPath": "dist/apps/dashboard",
@@ -266,7 +266,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "serve": {
-          "builder": "@nrwl/web:dev-server",
+          "executor": "@nrwl/web:dev-server",
           "options": {
             "buildTarget": "dashboard:build"
           },
@@ -277,7 +277,7 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "apps/dashboard/**/*.js",
@@ -297,7 +297,7 @@
           }
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/dashboard/jest.config.js",
             "passWithNoTests": true
@@ -310,9 +310,9 @@
       "root": "apps/dashboard-e2e",
       "sourceRoot": "apps/dashboard-e2e/src",
       "projectType": "application",
-      "architect": {
+      "targets": {
         "e2e": {
-          "builder": "@nrwl/cypress:cypress",
+          "executor": "@nrwl/cypress:cypress",
           "options": {
             "cypressConfig": "apps/dashboard-e2e/cypress.json",
             "tsConfig": "apps/dashboard-e2e/tsconfig.e2e.json",
@@ -325,7 +325,7 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "apps/dashboard-e2e/src/**/*.ts",
@@ -339,10 +339,10 @@
       "root": "libs/dataset-explorer",
       "sourceRoot": "libs/dataset-explorer/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/dataset-explorer/**/*.js",
@@ -362,7 +362,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/dataset-explorer",
             "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
@@ -395,7 +395,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/dataset-explorer/jest.config.js",
             "passWithNoTests": true
@@ -408,10 +408,10 @@
       "root": "libs/error-analysis",
       "sourceRoot": "libs/error-analysis/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/error-analysis/**/*.js",
@@ -431,7 +431,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/error-analysis",
             "tsConfig": "libs/error-analysis/tsconfig.lib.json",
@@ -464,7 +464,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/error-analysis/jest.config.js",
             "passWithNoTests": true
@@ -477,10 +477,10 @@
       "root": "libs/fairness",
       "sourceRoot": "libs/fairness/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/fairness/**/*.js",
@@ -500,7 +500,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/fairness",
             "tsConfig": "libs/fairness/tsconfig.lib.json",
@@ -533,7 +533,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/fairness/jest.config.js",
             "passWithNoTests": true
@@ -546,10 +546,10 @@
       "root": "libs/interpret",
       "sourceRoot": "libs/interpret/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/interpret/**/*.js",
@@ -569,7 +569,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/interpret",
             "tsConfig": "libs/interpret/tsconfig.lib.json",
@@ -602,7 +602,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/interpret/jest.config.js",
             "passWithNoTests": true
@@ -615,9 +615,9 @@
       "root": "libs/interpret-text",
       "sourceRoot": "libs/interpret-text/src",
       "projectType": "library",
-      "architect": {
+      "targets": {
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/interpret-text",
@@ -636,13 +636,13 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/interpret-text/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "outputs": ["coverage/libs/interpret-text"],
           "options": {
             "jestConfig": "libs/interpret-text/jest.config.js",
@@ -655,10 +655,10 @@
       "root": "libs/localization",
       "sourceRoot": "libs/localization/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/localization/**/*.js",
@@ -674,7 +674,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/localization",
             "tsConfig": "libs/localization/tsconfig.lib.json",
@@ -707,7 +707,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/localization/jest.config.js",
             "passWithNoTests": true
@@ -720,10 +720,10 @@
       "root": "libs/mlchartlib",
       "sourceRoot": "libs/mlchartlib/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/mlchartlib/**/*.js",
@@ -743,7 +743,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/mlchartlib",
             "tsConfig": "libs/mlchartlib/tsconfig.lib.json",
@@ -776,7 +776,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/mlchartlib/jest.config.js",
             "passWithNoTests": true
@@ -789,10 +789,10 @@
       "root": "libs/model-assessment",
       "sourceRoot": "libs/model-assessment/src",
       "projectType": "library",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "libs/model-assessment/**/*.js",
@@ -812,7 +812,7 @@
           }
         },
         "build": {
-          "builder": "@nrwl/web:package",
+          "executor": "@nrwl/web:package",
           "options": {
             "outputPath": "dist/libs/model-assessment",
             "tsConfig": "libs/model-assessment/tsconfig.lib.json",
@@ -845,7 +845,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/model-assessment/jest.config.js",
             "passWithNoTests": true
@@ -858,10 +858,10 @@
       "root": "apps/widget",
       "sourceRoot": "apps/widget/src",
       "projectType": "application",
-      "schematics": {},
-      "architect": {
+      "generators": {},
+      "targets": {
         "build": {
-          "builder": "@nrwl/web:build",
+          "executor": "@nrwl/web:build",
           "options": {
             "baseHref": "/widget/",
             "outputPath": "raiwidgets/raiwidgets/widget",
@@ -909,7 +909,7 @@
           "outputs": ["{options.outputPath}"]
         },
         "serve": {
-          "builder": "@nrwl/web:dev-server",
+          "executor": "@nrwl/web:dev-server",
           "options": {
             "buildTarget": "widget:build"
           },
@@ -920,7 +920,7 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "apps/widget/**/*.js",
@@ -940,7 +940,7 @@
           }
         },
         "test": {
-          "builder": "@nrwl/jest:jest",
+          "executor": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/widget/jest.config.js",
             "passWithNoTests": true
@@ -953,9 +953,9 @@
       "root": "apps/widget-e2e",
       "sourceRoot": "apps/widget-e2e/src",
       "projectType": "application",
-      "architect": {
+      "targets": {
         "e2e": {
-          "builder": "@nrwl/cypress:cypress",
+          "executor": "@nrwl/cypress:cypress",
           "options": {
             "cypressConfig": "apps/widget-e2e/cypress.json",
             "tsConfig": "apps/widget-e2e/tsconfig.e2e.json"
@@ -967,7 +967,7 @@
           }
         },
         "lint": {
-          "builder": "@nrwl/linter:eslint",
+          "executor": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
               "apps/widget-e2e/src/**/*.ts",
@@ -981,7 +981,7 @@
   "cli": {
     "defaultCollection": "@nrwl/react"
   },
-  "schematics": {
+  "generators": {
     "@nrwl/workspace": {
       "library": {
         "linter": "eslint"
