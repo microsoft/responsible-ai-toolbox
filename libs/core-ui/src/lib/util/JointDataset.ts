@@ -50,6 +50,11 @@ export enum ClassificationEnum {
   TruePositive = 3
 }
 
+export enum MulticlassClassificationEnum {
+  Correct = 0,
+  Misclassified = 1
+}
+
 // The object that will store user-facing strings and associated metadata
 // It stores the categorical labels for any numeric bins
 export interface IJointMeta {
@@ -297,6 +302,19 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
+      if (args.metadata.modelType === ModelTypes.Multiclass) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.correctlyClassified,
+            localization.Interpret.Columns.misclassified
+          ],
+          treatAsCategorical: true
+        };
+      }
     }
     if (args.localExplanations) {
       this.rawLocalImportance = JointDataset.buildLocalFeatureMatrix(
@@ -395,6 +413,13 @@ export class JointDataset {
       const predictionCategory =
         2 * row[JointDataset.TrueYLabel] + row[JointDataset.PredictedYLabel];
       row[JointDataset.ClassificationError] = predictionCategory;
+      return;
+    }
+    if (modelType === ModelTypes.Multiclass) {
+      row[JointDataset.ClassificationError] =
+        row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+          ? MulticlassClassificationEnum.Misclassified
+          : MulticlassClassificationEnum.Correct;
       return;
     }
   }
