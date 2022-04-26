@@ -39,7 +39,8 @@ function generateFiltersCartesianProduct(
 
 export function generateCohortsCartesianProduct(
   filters: ICompositeFilter[][],
-  jointDataset: JointDataset
+  jointDataset: JointDataset,
+  globalCohort: ErrorCohort
 ) {
   return generateFiltersCartesianProduct(filters).map((compositeFilter) => {
     const cohortName = getCompositeFilterString(
@@ -47,18 +48,23 @@ export function generateCohortsCartesianProduct(
       jointDataset
     )[0];
     return new ErrorCohort(
-      new Cohort(cohortName, jointDataset, [], [compositeFilter]),
+      new Cohort(
+        cohortName,
+        jointDataset,
+        [],
+        [compositeFilter, ...globalCohort.cohort.compositeFilters]
+      ),
       jointDataset
     );
   });
 }
 
 export function generateOverlappingFeatureBasedCohorts(
+  globalCohort: ErrorCohort,
   jointDataset: JointDataset,
   dataset: IDataset,
   selectedFeatures: number[]
 ) {
-  // TODO: restrict by current cohort
   // TODO: make nGroupsPerFeature configurable
   const nGroupsPerFeature = 3;
   const filters: ICompositeFilter[][] = [];
@@ -136,7 +142,7 @@ export function generateOverlappingFeatureBasedCohorts(
   });
 
   return (
-    generateCohortsCartesianProduct(filters, jointDataset)
+    generateCohortsCartesianProduct(filters, jointDataset, globalCohort)
       // filter the empty cohorts resulting from overlapping dimensions
       .filter((errorCohort) => errorCohort.cohortStats.totalCohort > 0)
   );

@@ -377,6 +377,10 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   private getCurrentLabel(): string {
+    if (this.context.dataset.task_type === "regression") {
+      return `[${this.props.data.desired_range}]`;
+    }
+
     return this.props.data.desired_class || "";
   }
 

@@ -838,7 +838,9 @@
       "predictedProbabilities": "Prediction probabilities",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
-      "truePositive": "True positive"
+      "truePositive": "True positive",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "_enumeratedClassInfo.comment": "explains the weights for selecting a single class",
@@ -1345,6 +1347,7 @@
       "dataCohortsChartSelectionHeader": "Dataset cohorts",
       "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
       "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
       "probabilityForClassSelectionHeader": "Probability for class",
@@ -1355,6 +1358,10 @@
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "fairnessMetricDifference": "Difference",
+      "fairnessMetricRatio": "Ratio",
       "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
       "metricSelectionButton": "Choose metric",
@@ -1369,7 +1376,10 @@
       "chartConfigConfirm": "Confirm",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
-      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts"
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following disaggregated analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset."
     }
   }
 }

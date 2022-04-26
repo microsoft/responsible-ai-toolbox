@@ -13,7 +13,8 @@ import {
   ModelTypes,
   classificationTask,
   FabricStyles,
-  descriptionMaxWidth
+  descriptionMaxWidth,
+  MulticlassClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -24,7 +25,8 @@ import {
   IComboBox,
   IComboBoxOption,
   ComboBox,
-  ActionButton
+  ActionButton,
+  MessageBar
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -70,12 +72,16 @@ export class ModelOverview extends React.Component<
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
     if (this.context.dataset.task_type === classificationTask) {
-      defaultSelectedMetrics = [
-        BinaryClassificationMetrics.Accuracy,
-        BinaryClassificationMetrics.FalsePositiveRate,
-        BinaryClassificationMetrics.FalseNegativeRate,
-        BinaryClassificationMetrics.SelectionRate
-      ];
+      if (this.context.jointDataset.getModelType() === ModelTypes.Binary) {
+        defaultSelectedMetrics = [
+          BinaryClassificationMetrics.Accuracy,
+          BinaryClassificationMetrics.FalsePositiveRate,
+          BinaryClassificationMetrics.FalseNegativeRate,
+          BinaryClassificationMetrics.SelectionRate
+        ];
+      } else {
+        defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
+      }
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
@@ -106,7 +112,8 @@ export class ModelOverview extends React.Component<
     const classNames = modelOverviewStyles();
 
     const selectableMetrics = getSelectableMetrics(
-      this.context.dataset.task_type
+      this.context.dataset.task_type,
+      this.context.jointDataset.getModelType() === ModelTypes.Multiclass
     );
 
     const columns: string[] = [
@@ -133,6 +140,7 @@ export class ModelOverview extends React.Component<
 
     // generate table contents for selected feature cohorts
     const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
+      this.context.baseErrorCohort,
       this.context.jointDataset,
       this.context.dataset,
       this.state.selectedFeatures
@@ -221,6 +229,29 @@ export class ModelOverview extends React.Component<
               className={classNames.dropdown}
               styles={FabricStyles.limitedSizeMenuDropdown}
             />
+            {this.state.selectedFeatures.length > 0 && (
+              <>
+                <Text>
+                  {localization.formatString(
+                    localization.ModelAssessment.ModelOverview
+                      .disaggregatedAnalysisBaseCohortDislaimer,
+                    this.context.baseErrorCohort.cohort.name
+                  )}
+                </Text>
+                {this.context.baseErrorCohort.cohort.filters.length +
+                  this.context.baseErrorCohort.cohort.compositeFilters.length >
+                  0 && (
+                  <MessageBar>
+                    {localization.formatString(
+                      localization.ModelAssessment.ModelOverview
+                        .disaggregatedAnalysisBaseCohortWarning,
+                      localization.ErrorAnalysis.Cohort.defaultLabel,
+                      this.context.baseErrorCohort.cohort.name
+                    )}
+                  </MessageBar>
+                )}
+              </>
+            )}
             <DisaggregatedAnalysisTable
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
