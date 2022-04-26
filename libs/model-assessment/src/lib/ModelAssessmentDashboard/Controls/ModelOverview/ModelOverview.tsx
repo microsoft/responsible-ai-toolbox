@@ -13,7 +13,8 @@ import {
   ModelTypes,
   classificationTask,
   FabricStyles,
-  descriptionMaxWidth
+  descriptionMaxWidth,
+  MulticlassClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -71,12 +72,16 @@ export class ModelOverview extends React.Component<
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
     if (this.context.dataset.task_type === classificationTask) {
-      defaultSelectedMetrics = [
-        BinaryClassificationMetrics.Accuracy,
-        BinaryClassificationMetrics.FalsePositiveRate,
-        BinaryClassificationMetrics.FalseNegativeRate,
-        BinaryClassificationMetrics.SelectionRate
-      ];
+      if (this.context.jointDataset.getModelType() === ModelTypes.Binary) {
+        defaultSelectedMetrics = [
+          BinaryClassificationMetrics.Accuracy,
+          BinaryClassificationMetrics.FalsePositiveRate,
+          BinaryClassificationMetrics.FalseNegativeRate,
+          BinaryClassificationMetrics.SelectionRate
+        ];
+      } else {
+        defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
+      }
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
@@ -107,7 +112,8 @@ export class ModelOverview extends React.Component<
     const classNames = modelOverviewStyles();
 
     const selectableMetrics = getSelectableMetrics(
-      this.context.dataset.task_type
+      this.context.dataset.task_type,
+      this.context.jointDataset.getModelType() === ModelTypes.Multiclass
     );
 
     const columns: string[] = [
