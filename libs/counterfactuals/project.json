@@ -1,0 +1,70 @@
+{
+  "root": "libs/counterfactuals",
+  "sourceRoot": "libs/counterfactuals/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/counterfactuals/**/*.js",
+          "libs/counterfactuals/**/*.jsx",
+          "libs/counterfactuals/**/*.ts",
+          "libs/counterfactuals/**/*.tsx",
+          "libs/counterfactuals/**/*.test.ts",
+          "libs/counterfactuals/**/*.test.tsx",
+          "libs/counterfactuals/**/*.test.js",
+          "libs/counterfactuals/**/*.test.jsx",
+          "libs/counterfactuals/**/*.spec.ts",
+          "libs/counterfactuals/**/*.spec.tsx",
+          "libs/counterfactuals/**/*.spec.js",
+          "libs/counterfactuals/**/*.spec.jsx",
+          "libs/counterfactuals/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/web:package",
+      "options": {
+        "outputPath": "dist/libs/counterfactuals",
+        "tsConfig": "libs/counterfactuals/tsconfig.lib.json",
+        "project": "libs/counterfactuals/package.json",
+        "entryFile": "libs/counterfactuals/src/index.ts",
+        "external": [
+          "@fluentui/react",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "office-ui-fabric-react",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "libs/counterfactuals/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/libs/counterfactuals"]
+    }
+  },
+  "tags": []
+}

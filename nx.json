@@ -20,55 +20,7 @@
       "options": {}
     }
   },
-  "projects": {
-    "causality": {
-      "tags": []
-    },
-    "core-ui": {
-      "tags": []
-    },
-    "counterfactuals": {
-      "tags": []
-    },
-    "dashboard": {
-      "tags": []
-    },
-    "dashboard-e2e": {
-      "tags": [],
-      "implicitDependencies": ["dashboard"]
-    },
-    "dataset-explorer": {
-      "tags": []
-    },
-    "error-analysis": {
-      "tags": []
-    },
-    "fairness": {
-      "tags": []
-    },
-    "interpret": {
-      "tags": []
-    },
-    "interpret-text": {
-      "tags": []
-    },
-    "localization": {
-      "tags": []
-    },
-    "mlchartlib": {
-      "tags": []
-    },
-    "model-assessment": {
-      "tags": []
-    },
-    "widget": {
-      "tags": []
-    },
-    "widget-e2e": {
-      "tags": [],
-      "implicitDependencies": ["widget"]
-    }
-  },
+  "projects": {},
   "targetDependencies": {
     "build": [
       {

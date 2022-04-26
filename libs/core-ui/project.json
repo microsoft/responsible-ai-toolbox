@@ -1,0 +1,70 @@
+{
+  "root": "libs/core-ui",
+  "sourceRoot": "libs/core-ui/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/core-ui/**/*.js",
+          "libs/core-ui/**/*.jsx",
+          "libs/core-ui/**/*.ts",
+          "libs/core-ui/**/*.tsx",
+          "libs/core-ui/**/*.test.ts",
+          "libs/core-ui/**/*.test.tsx",
+          "libs/core-ui/**/*.test.js",
+          "libs/core-ui/**/*.test.jsx",
+          "libs/core-ui/**/*.spec.ts",
+          "libs/core-ui/**/*.spec.tsx",
+          "libs/core-ui/**/*.spec.js",
+          "libs/core-ui/**/*.spec.jsx",
+          "libs/core-ui/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/web:package",
+      "options": {
+        "outputPath": "dist/libs/core-ui",
+        "tsConfig": "libs/core-ui/tsconfig.lib.json",
+        "project": "libs/core-ui/package.json",
+        "entryFile": "libs/core-ui/src/index.ts",
+        "external": [
+          "@fluentui/react",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "office-ui-fabric-react",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "libs/core-ui/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/libs/core-ui"]
+    }
+  },
+  "tags": []
+}
