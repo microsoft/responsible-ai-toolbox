@@ -14,7 +14,9 @@ import {
   classificationTask,
   FabricStyles,
   descriptionMaxWidth,
-  MulticlassClassificationMetrics
+  MulticlassClassificationMetrics,
+  ErrorCohort,
+  ILabeledStatistic
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -49,6 +51,8 @@ interface IModelOverviewState {
   selectedDatasetCohorts?: number[];
   selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
+  datasetCohortViewIsVisible: boolean;
+  datasetCohortChartIsVisible: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -59,13 +63,17 @@ export class ModelOverview extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
+  private datasetCohortViewPivotKey = "datasetCohortView";
+  private disaggregatedAnalysisPivotKey = "disaggregatedAnalysis";
 
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
       chartConfigurationIsVisible: false,
       selectedFeatures: [],
-      selectedMetrics: []
+      selectedMetrics: [],
+      datasetCohortViewIsVisible: true,
+      datasetCohortChartIsVisible: true
     };
   }
 
@@ -167,6 +175,26 @@ export class ModelOverview extends React.Component<
         };
       });
 
+    let chartCohorts: ErrorCohort[];
+    let someCohortSelected: boolean;
+    let selectedChartCohorts: number[];
+    let labeledStatistics: ILabeledStatistic[][];
+    if (this.state.datasetCohortChartIsVisible) {
+      chartCohorts = this.context.errorCohorts;
+      someCohortSelected =
+        this.state.selectedDatasetCohorts !== undefined &&
+        this.state.selectedDatasetCohorts.length > 0;
+      selectedChartCohorts = this.state.selectedDatasetCohorts ?? [];
+      labeledStatistics = datasetCohortLabeledStatistics;
+    } else {
+      chartCohorts = featureBasedCohorts;
+      someCohortSelected =
+        this.state.selectedFeatureBasedCohorts !== undefined &&
+        this.state.selectedFeatureBasedCohorts.length > 0;
+      selectedChartCohorts = this.state.selectedFeatureBasedCohorts ?? [];
+      labeledStatistics = featureBasedCohortLabeledStatistics;
+    }
+
     return (
       <Stack
         className={classNames.sectionStack}
@@ -178,86 +206,108 @@ export class ModelOverview extends React.Component<
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
         {this.props.showNewModelOverviewExperience && (
           <Stack tokens={{ childrenGap: "10px" }}>
-            <ComboBox
-              placeholder={
-                localization.ModelAssessment.ModelOverview
-                  .metricSelectionDropdownPlaceholder
-              }
-              label={localization.ModelAssessment.ModelOverview.metricsDropdown}
-              selectedKey={this.state.selectedMetrics}
-              options={selectableMetrics}
-              onChange={this.onMetricSelectionChange}
-              multiSelect
-              className={classNames.dropdown}
-              styles={FabricStyles.limitedSizeMenuDropdown}
-            />
-            <DatasetCohortStatsTable
-              selectableMetrics={selectableMetrics}
-              selectedMetrics={this.state.selectedMetrics}
-            />
-            <Text variant="large">
-              {
-                localization.ModelAssessment.ModelOverview
-                  .disaggregatedAnalysisHeatmapHeader
-              }
-            </Text>
-            {this.state.selectedFeatures.length === 0 && (
-              <ActionButton
-                onClick={() => {
-                  this.featureComboBoxRef.current?.focus(true);
-                }}
-              >
-                {
+            <Pivot onLinkClick={this.handleViewPivot}>
+              <PivotItem
+                headerText={
                   localization.ModelAssessment.ModelOverview
-                    .disaggregatedAnalysisFeatureSelectionPlaceholder
+                    .dataCohortsChartSelectionHeader
                 }
-              </ActionButton>
-            )}
-            <ComboBox
-              componentRef={this.featureComboBoxRef}
-              placeholder={
-                localization.ModelAssessment.ModelOverview
-                  .featureSelectionDropdownPlaceholder
-              }
-              label={
-                localization.ModelAssessment.ModelOverview.featuresDropdown
-              }
-              selectedKey={this.state.selectedFeatures}
-              options={featureSelectionOptions}
-              onChange={this.onFeatureSelectionChange}
-              multiSelect
-              className={classNames.dropdown}
-              styles={FabricStyles.limitedSizeMenuDropdown}
-            />
-            {this.state.selectedFeatures.length > 0 && (
-              <>
-                <Text>
-                  {localization.formatString(
+                itemKey={this.datasetCohortViewPivotKey}
+              />
+              <PivotItem
+                headerText={
+                  localization.ModelAssessment.ModelOverview
+                    .disaggregatedAnalysisHeatmapHeader
+                }
+                itemKey={this.disaggregatedAnalysisPivotKey}
+              />
+            </Pivot>
+            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+              <ComboBox
+                placeholder={
+                  localization.ModelAssessment.ModelOverview
+                    .metricSelectionDropdownPlaceholder
+                }
+                label={
+                  localization.ModelAssessment.ModelOverview.metricsDropdown
+                }
+                selectedKey={this.state.selectedMetrics}
+                options={selectableMetrics}
+                onChange={this.onMetricSelectionChange}
+                multiSelect
+                className={classNames.dropdown}
+                styles={FabricStyles.limitedSizeMenuDropdown}
+              />
+              {!this.state.datasetCohortViewIsVisible && (
+                <ComboBox
+                  componentRef={this.featureComboBoxRef}
+                  placeholder={
                     localization.ModelAssessment.ModelOverview
-                      .disaggregatedAnalysisBaseCohortDislaimer,
-                    this.context.baseErrorCohort.cohort.name
-                  )}
-                </Text>
-                {this.context.baseErrorCohort.cohort.filters.length +
-                  this.context.baseErrorCohort.cohort.compositeFilters.length >
-                  0 && (
-                  <MessageBar>
-                    {localization.formatString(
+                      .featureSelectionDropdownPlaceholder
+                  }
+                  label={
+                    localization.ModelAssessment.ModelOverview.featuresDropdown
+                  }
+                  selectedKey={this.state.selectedFeatures}
+                  options={featureSelectionOptions}
+                  onChange={this.onFeatureSelectionChange}
+                  multiSelect
+                  className={classNames.dropdown}
+                  styles={FabricStyles.limitedSizeMenuDropdown}
+                />
+              )}
+            </Stack>
+            {this.state.datasetCohortViewIsVisible ? (
+              <DatasetCohortStatsTable
+                selectableMetrics={selectableMetrics}
+                selectedMetrics={this.state.selectedMetrics}
+              />
+            ) : (
+              <>
+                {this.state.selectedFeatures.length === 0 && (
+                  <ActionButton
+                    onClick={() => {
+                      this.featureComboBoxRef.current?.focus(true);
+                    }}
+                  >
+                    {
                       localization.ModelAssessment.ModelOverview
-                        .disaggregatedAnalysisBaseCohortWarning,
-                      localization.ErrorAnalysis.Cohort.defaultLabel,
-                      this.context.baseErrorCohort.cohort.name
-                    )}
-                  </MessageBar>
+                        .disaggregatedAnalysisFeatureSelectionPlaceholder
+                    }
+                  </ActionButton>
                 )}
+                {this.state.selectedFeatures.length > 0 && (
+                  <>
+                    <Text>
+                      {localization.formatString(
+                        localization.ModelAssessment.ModelOverview
+                          .disaggregatedAnalysisBaseCohortDislaimer,
+                        this.context.baseErrorCohort.cohort.name
+                      )}
+                    </Text>
+                    {this.context.baseErrorCohort.cohort.filters.length +
+                      this.context.baseErrorCohort.cohort.compositeFilters
+                        .length >
+                      0 && (
+                      <MessageBar>
+                        {localization.formatString(
+                          localization.ModelAssessment.ModelOverview
+                            .disaggregatedAnalysisBaseCohortWarning,
+                          localization.ErrorAnalysis.Cohort.defaultLabel,
+                          this.context.baseErrorCohort.cohort.name
+                        )}
+                      </MessageBar>
+                    )}
+                  </>
+                )}
+                <DisaggregatedAnalysisTable
+                  selectableMetrics={selectableMetrics}
+                  selectedMetrics={this.state.selectedMetrics}
+                  selectedFeatures={this.state.selectedFeatures}
+                  featureBasedCohorts={featureBasedCohorts}
+                />
               </>
             )}
-            <DisaggregatedAnalysisTable
-              selectableMetrics={selectableMetrics}
-              selectedMetrics={this.state.selectedMetrics}
-              selectedFeatures={this.state.selectedFeatures}
-              featureBasedCohorts={featureBasedCohorts}
-            />
             <ChartConfigurationFlyout
               isOpen={this.state.chartConfigurationIsVisible}
               onDismissFlyout={() => {
@@ -270,8 +320,11 @@ export class ModelOverview extends React.Component<
                 this.state.selectedFeatureBasedCohorts
               }
               updateCohortSelection={this.updateCohortSelection}
+              datasetCohortViewIsSelected={
+                this.state.datasetCohortChartIsVisible
+              }
             />
-            {this.state.selectedDatasetCohorts && (
+            {someCohortSelected && (
               <Pivot>
                 {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                   <PivotItem
@@ -282,12 +335,8 @@ export class ModelOverview extends React.Component<
                   >
                     <ProbabilityDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
-                      datasetCohorts={this.context.errorCohorts}
-                      featureBasedCohorts={featureBasedCohorts}
-                      selectedDatasetCohorts={this.state.selectedDatasetCohorts}
-                      selectedFeatureBasedCohorts={
-                        this.state.selectedFeatureBasedCohorts ?? []
-                      }
+                      cohorts={chartCohorts}
+                      selectedCohorts={selectedChartCohorts}
                     />
                   </PivotItem>
                 )}
@@ -300,16 +349,9 @@ export class ModelOverview extends React.Component<
                   <ModelOverviewMetricChart
                     onChooseCohorts={this.onChooseCohorts}
                     selectableMetrics={selectableMetrics}
-                    datasetCohorts={this.context.errorCohorts}
-                    featureBasedCohorts={featureBasedCohorts}
-                    datasetCohortStats={datasetCohortLabeledStatistics}
-                    featureBasedCohortStats={
-                      featureBasedCohortLabeledStatistics
-                    }
-                    selectedDatasetCohorts={this.state.selectedDatasetCohorts}
-                    selectedFeatureBasedCohorts={
-                      this.state.selectedFeatureBasedCohorts ?? []
-                    }
+                    cohorts={chartCohorts}
+                    cohortStats={labeledStatistics}
+                    selectedCohorts={selectedChartCohorts}
                   />
                 </PivotItem>
               </Pivot>
@@ -325,12 +367,14 @@ export class ModelOverview extends React.Component<
 
   private updateCohortSelection = (
     selectedDatasetCohorts: number[],
-    selectedFeatureBasedCohorts: number[]
+    selectedFeatureBasedCohorts: number[],
+    datasetCohortChartIsSelected: boolean
   ) =>
     this.setState({
       chartConfigurationIsVisible: false,
       selectedDatasetCohorts,
-      selectedFeatureBasedCohorts
+      selectedFeatureBasedCohorts,
+      datasetCohortChartIsVisible: datasetCohortChartIsSelected
     });
 
   private onMetricSelectionChange = (
@@ -363,25 +407,59 @@ export class ModelOverview extends React.Component<
     item?: IComboBoxOption
   ): void => {
     if (item && item.selected !== undefined && typeof item.key === "number") {
+      let newlySelectedFeatures = this.state.selectedFeatures;
       // technically we know it's only numbers but item.key has type string | number
       if (item.selected && !this.state.selectedFeatures.includes(item.key)) {
-        this.setState({
-          selectedFeatureBasedCohorts: [],
-          selectedFeatures: this.state.selectedFeatures.concat([
-            item.key as number
-          ])
-        });
+        newlySelectedFeatures = newlySelectedFeatures.concat([
+          item.key as number
+        ]);
       }
       if (!item.selected && this.state.selectedFeatures.includes(item.key)) {
-        const selectedFeatures = this.state.selectedFeatures;
-        const unselectedFeatureIndex = selectedFeatures.findIndex(
+        const unselectedFeatureIndex = newlySelectedFeatures.findIndex(
           (key) => key === item.key
         );
         // remove unselected feature
-        selectedFeatures.splice(unselectedFeatureIndex, 1);
+        newlySelectedFeatures.splice(unselectedFeatureIndex, 1);
+      }
+      const featureBasedCohorts = this.generateFeatureBasedCohorts(
+        newlySelectedFeatures
+      );
+      this.setState({
+        selectedFeatureBasedCohorts: featureBasedCohorts.map(
+          (_, index) => index
+        ),
+        selectedFeatures: newlySelectedFeatures
+      });
+    }
+  };
+
+  private generateFeatureBasedCohorts(selectedFeatures: number[]) {
+    return generateOverlappingFeatureBasedCohorts(
+      this.context.baseErrorCohort,
+      this.context.jointDataset,
+      this.context.dataset,
+      selectedFeatures
+    );
+  }
+
+  private handleViewPivot = (item?: PivotItem | undefined): void => {
+    if (item) {
+      // The table and chart are handled with separate flags here
+      // because users may still want to configure the chart differently
+      // from the table. However, by default we present the chart matching
+      // the table, i.e., if the dataset cohort view is chosen we show
+      // the dataset cohort chart and if the disaggregated analysis view
+      // is chosen we show the feature-based cohort chart.
+      if (item.props.itemKey === this.datasetCohortViewPivotKey) {
         this.setState({
-          selectedFeatureBasedCohorts: [],
-          selectedFeatures
+          datasetCohortViewIsVisible: true,
+          datasetCohortChartIsVisible: true
+        });
+      }
+      if (item.props.itemKey === this.disaggregatedAnalysisPivotKey) {
+        this.setState({
+          datasetCohortViewIsVisible: false,
+          datasetCohortChartIsVisible: false
         });
       }
     }

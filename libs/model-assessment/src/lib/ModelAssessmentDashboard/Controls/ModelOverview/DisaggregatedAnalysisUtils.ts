@@ -41,7 +41,7 @@ export function generateCohortsCartesianProduct(
   filters: ICompositeFilter[][],
   jointDataset: JointDataset,
   globalCohort: ErrorCohort
-) {
+): ErrorCohort[] {
   return generateFiltersCartesianProduct(filters).map((compositeFilter) => {
     const cohortName = getCompositeFilterString(
       [compositeFilter],

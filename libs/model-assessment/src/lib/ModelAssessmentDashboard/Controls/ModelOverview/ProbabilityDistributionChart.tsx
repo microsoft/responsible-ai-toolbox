@@ -26,10 +26,8 @@ import React from "react";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IProbabilityDistributionChartProps {
-  datasetCohorts: ErrorCohort[];
-  featureBasedCohorts: ErrorCohort[];
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
+  cohorts: ErrorCohort[];
+  selectedCohorts: number[];
   onChooseCohorts: () => void;
 }
 
@@ -72,19 +70,9 @@ export class ProbabilityDistributionChart extends React.Component<
     }
     const theme = getTheme();
 
-    const selectedDatasetCohorts = this.props.datasetCohorts.filter(
-      (_cohort, index) => {
-        return this.props.selectedDatasetCohorts.includes(index);
-      }
-    );
-    const selectedFeatureBasedCohorts = this.props.featureBasedCohorts.filter(
-      (_cohort, index) => {
-        return this.props.selectedFeatureBasedCohorts.includes(index);
-      }
-    );
-    const selectedCohorts = selectedDatasetCohorts.concat(
-      selectedFeatureBasedCohorts
-    );
+    const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
+      return this.props.selectedCohorts.includes(index);
+    });
     const selectedCohortNames = selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
@@ -115,10 +103,7 @@ export class ProbabilityDistributionChart extends React.Component<
       .filter((list) => list !== undefined)
       .reduce((list1, list2) => list1!.concat(list2!), []);
 
-    const noCohortSelected =
-      this.props.selectedDatasetCohorts.length +
-        this.props.selectedFeatureBasedCohorts.length ===
-      0;
+    const noCohortSelected = this.props.selectedCohorts.length === 0;
 
     return (
       <>
