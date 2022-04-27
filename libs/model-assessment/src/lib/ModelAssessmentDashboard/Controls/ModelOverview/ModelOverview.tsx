@@ -181,8 +181,8 @@ export class ModelOverview extends React.Component<
         <Text
           variant="medium"
           style={{
-            maxWidth: descriptionMaxWidth,
-            color: theme.semanticColors.bodyText
+            color: theme.semanticColors.bodyText,
+            maxWidth: descriptionMaxWidth
           }}
         >
           {localization.Interpret.ModelPerformance.helperText}

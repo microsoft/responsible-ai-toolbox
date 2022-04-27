@@ -62,9 +62,9 @@ export class CohortStatsHeatmap extends React.Component<
           },
           colorAxis: {
             max: 1,
-            maxColor: maxColor,
+            maxColor,
             min: 0,
-            minColor: minColor
+            minColor
           },
           legend: {
             enabled: false
