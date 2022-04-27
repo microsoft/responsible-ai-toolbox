@@ -194,7 +194,10 @@ export class ModelOverview extends React.Component<
               styles={FabricStyles.limitedSizeMenuDropdown}
             />
             <Toggle
-              label={localization.ModelAssessment.ModelOverview.visualDisplayToggleLabel}
+              label={
+                localization.ModelAssessment.ModelOverview
+                  .visualDisplayToggleLabel
+              }
               inlineLabel
               onChange={this.onVisualDisplayToggleChange}
             />
