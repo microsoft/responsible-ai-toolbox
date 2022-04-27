@@ -74,7 +74,7 @@ class RAIBaseInsights(ABC):
         pass
 
     @abstractmethod
-    def _validate_model_analysis_input_parameters(self, *args):
+    def _validate_rai_insights_input_parameters(self, *args):
         """Abstract method to validate the inputs for the constructor."""
         pass
 
