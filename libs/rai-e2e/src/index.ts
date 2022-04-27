@@ -3,3 +3,9 @@ export * from "./lib/describer/modelAssessment/featureImportances/aggregateFeatu
 export * from "./lib/describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeGlobalExplanationBarChart";
 export * from "./lib/describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeGlobalExplanationBoxChart";
 export * from "./lib/describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeGlobalExplanationChart";
+export * from "./lib/describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
+export * from "./lib/describer/modelAssessment/dataExplorer/describeDatasetExplorer";
+export * from "./lib/describer/modelAssessment/errorAnalysis/describeErrorAnalysis";
+export * from "./lib/describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
+export * from "./lib/describer/modelAssessment/modelStatistics/describeModelStatistics";
+export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";

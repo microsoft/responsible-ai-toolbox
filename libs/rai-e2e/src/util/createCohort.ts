@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../describer/modelAssessment/Constants";
+import { Locators } from "../lib/describer/modelAssessment/Constants";
 
 export function createCohort(): void {
   cy.get(Locators.CreateNewCohortButton).click();

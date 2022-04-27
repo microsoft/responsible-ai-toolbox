@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeModelStatistics } from "../../../describer/modelAssessment/modelStatistics/describeModelStatistics";
+import { describeModelStatistics } from "@responsible-ai/rai-e2e";
 
 describeModelStatistics("ClassificationModelDebugging");

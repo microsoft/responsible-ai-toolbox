@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeIndividualFeatureImportance } from "../../../describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
+import { describeIndividualFeatureImportance } from "@responsible-ai/rai-e2e";
 
 describeIndividualFeatureImportance("HousingClassificationModelDebugging");
