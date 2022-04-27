@@ -52,7 +52,7 @@ export class ChartConfigurationFlyout extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private datasetCohortsChoiceGroupOption = "datasetCohorts";
-  private featureBasecCohortsChoiceGroupOption = "featureBasedCohorts";
+  private featureBasedCohortsChoiceGroupOption = "featureBasedCohorts";
 
   constructor(props: IChartConfigurationFlyoutProps) {
     super(props);
@@ -170,7 +170,7 @@ export class ChartConfigurationFlyout extends React.Component<
       },
       {
         disabled: this.props.featureBasedCohorts.length === 0,
-        key: this.featureBasecCohortsChoiceGroupOption,
+        key: this.featureBasedCohortsChoiceGroupOption,
         text: localization.ModelAssessment.ModelOverview
           .featureBasedCohortsChartSelectionHeader
       }
@@ -189,7 +189,7 @@ export class ChartConfigurationFlyout extends React.Component<
             selectedKey={
               this.state.datasetCohortViewIsNewlySelected
                 ? this.datasetCohortsChoiceGroupOption
-                : this.featureBasecCohortsChoiceGroupOption
+                : this.featureBasedCohortsChoiceGroupOption
             }
           />
           <Dropdown
@@ -266,7 +266,7 @@ export class ChartConfigurationFlyout extends React.Component<
       if (option.key === this.datasetCohortsChoiceGroupOption) {
         this.setState({ datasetCohortViewIsNewlySelected: true });
       }
-      if (option.key === this.featureBasecCohortsChoiceGroupOption) {
+      if (option.key === this.featureBasedCohortsChoiceGroupOption) {
         this.setState({ datasetCohortViewIsNewlySelected: false });
       }
     }

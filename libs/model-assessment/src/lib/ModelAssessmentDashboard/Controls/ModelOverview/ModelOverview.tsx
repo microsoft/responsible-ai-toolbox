@@ -55,6 +55,9 @@ interface IModelOverviewState {
   datasetCohortChartIsVisible: boolean;
 }
 
+const datasetCohortViewPivotKey = "datasetCohortView";
+const disaggregatedAnalysisPivotKey = "disaggregatedAnalysis";
+
 export class ModelOverview extends React.Component<
   IModelOverviewProps,
   IModelOverviewState
@@ -63,8 +66,6 @@ export class ModelOverview extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
-  private datasetCohortViewPivotKey = "datasetCohortView";
-  private disaggregatedAnalysisPivotKey = "disaggregatedAnalysis";
 
   constructor(props: IModelOverviewProps) {
     super(props);
@@ -212,14 +213,14 @@ export class ModelOverview extends React.Component<
                   localization.ModelAssessment.ModelOverview
                     .dataCohortsChartSelectionHeader
                 }
-                itemKey={this.datasetCohortViewPivotKey}
+                itemKey={datasetCohortViewPivotKey}
               />
               <PivotItem
                 headerText={
                   localization.ModelAssessment.ModelOverview
                     .disaggregatedAnalysisHeatmapHeader
                 }
-                itemKey={this.disaggregatedAnalysisPivotKey}
+                itemKey={disaggregatedAnalysisPivotKey}
               />
             </Pivot>
             <Stack horizontal tokens={{ childrenGap: "10px" }}>
@@ -450,13 +451,13 @@ export class ModelOverview extends React.Component<
       // the table, i.e., if the dataset cohort view is chosen we show
       // the dataset cohort chart and if the disaggregated analysis view
       // is chosen we show the feature-based cohort chart.
-      if (item.props.itemKey === this.datasetCohortViewPivotKey) {
+      if (item.props.itemKey === datasetCohortViewPivotKey) {
         this.setState({
           datasetCohortChartIsVisible: true,
           datasetCohortViewIsVisible: true
         });
       }
-      if (item.props.itemKey === this.disaggregatedAnalysisPivotKey) {
+      if (item.props.itemKey === disaggregatedAnalysisPivotKey) {
         this.setState({
           datasetCohortChartIsVisible: false,
           datasetCohortViewIsVisible: false
