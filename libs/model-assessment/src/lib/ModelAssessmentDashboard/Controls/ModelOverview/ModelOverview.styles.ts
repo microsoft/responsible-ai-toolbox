@@ -19,15 +19,15 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
   () => {
     const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
+      descriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth
+      },
       dropdown: {
         width: "400px"
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
-      },
-      descriptionText: {
-        color: theme.semanticColors.bodyText,
-        maxWidth: descriptionMaxWidth
       }
     });
   };
