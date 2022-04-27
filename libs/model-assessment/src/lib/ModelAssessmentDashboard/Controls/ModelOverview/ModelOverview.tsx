@@ -70,10 +70,10 @@ export class ModelOverview extends React.Component<
     super(props);
     this.state = {
       chartConfigurationIsVisible: false,
-      selectedFeatures: [],
-      selectedMetrics: [],
+      datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
-      datasetCohortChartIsVisible: true
+      selectedFeatures: [],
+      selectedMetrics: []
     };
   }
 
@@ -372,9 +372,9 @@ export class ModelOverview extends React.Component<
   ) =>
     this.setState({
       chartConfigurationIsVisible: false,
+      datasetCohortChartIsVisible: datasetCohortChartIsSelected,
       selectedDatasetCohorts,
-      selectedFeatureBasedCohorts,
-      datasetCohortChartIsVisible: datasetCohortChartIsSelected
+      selectedFeatureBasedCohorts
     });
 
   private onMetricSelectionChange = (
@@ -452,14 +452,14 @@ export class ModelOverview extends React.Component<
       // is chosen we show the feature-based cohort chart.
       if (item.props.itemKey === this.datasetCohortViewPivotKey) {
         this.setState({
-          datasetCohortViewIsVisible: true,
-          datasetCohortChartIsVisible: true
+          datasetCohortChartIsVisible: true,
+          datasetCohortViewIsVisible: true
         });
       }
       if (item.props.itemKey === this.disaggregatedAnalysisPivotKey) {
         this.setState({
-          datasetCohortViewIsVisible: false,
-          datasetCohortChartIsVisible: false
+          datasetCohortChartIsVisible: false,
+          datasetCohortViewIsVisible: false
         });
       }
     }

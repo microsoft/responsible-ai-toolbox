@@ -57,13 +57,13 @@ export class ChartConfigurationFlyout extends React.Component<
   constructor(props: IChartConfigurationFlyoutProps) {
     super(props);
     this.state = {
+      datasetCohortViewIsNewlySelected: this.props.datasetCohortViewIsSelected,
       newlySelectedDatasetCohorts:
         this.props.selectedDatasetCohorts ??
         this.props.datasetCohorts.map((_, index) => index),
       newlySelectedFeatureBasedCohorts:
         this.props.selectedFeatureBasedCohorts ??
-        this.props.featureBasedCohorts.map((_, index) => index),
-      datasetCohortViewIsNewlySelected: this.props.datasetCohortViewIsSelected
+        this.props.featureBasedCohorts.map((_, index) => index)
     };
   }
 
@@ -109,16 +109,16 @@ export class ChartConfigurationFlyout extends React.Component<
     if (
       this.state.datasetCohortViewIsNewlySelected !==
         datasetCohortViewIsSelected ||
-      (this.state.newlySelectedFeatureBasedCohorts.length !==
+      this.state.newlySelectedFeatureBasedCohorts.length !==
         newlySelectedFeatureBasedCohorts.length ||
-        this.state.newlySelectedFeatureBasedCohorts.some(
-          (num, index) => num !== newlySelectedFeatureBasedCohorts[index]
-        ))
+      this.state.newlySelectedFeatureBasedCohorts.some(
+        (num, index) => num !== newlySelectedFeatureBasedCohorts[index]
+      )
     )
       this.setState({
         ...this.state,
         datasetCohortViewIsNewlySelected: datasetCohortViewIsSelected,
-        newlySelectedFeatureBasedCohorts: newlySelectedFeatureBasedCohorts
+        newlySelectedFeatureBasedCohorts
       });
   }
 
@@ -169,10 +169,10 @@ export class ChartConfigurationFlyout extends React.Component<
           .dataCohortsChartSelectionHeader
       },
       {
+        disabled: this.props.featureBasedCohorts.length === 0,
         key: this.featureBasecCohortsChoiceGroupOption,
         text: localization.ModelAssessment.ModelOverview
-          .featureBasedCohortsChartSelectionHeader,
-        disabled: this.props.featureBasedCohorts.length === 0
+          .featureBasedCohortsChartSelectionHeader
       }
     ];
 

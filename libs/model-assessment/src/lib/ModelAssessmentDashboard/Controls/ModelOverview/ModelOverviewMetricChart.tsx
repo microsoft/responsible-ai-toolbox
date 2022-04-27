@@ -60,7 +60,7 @@ export class ModelOverviewMetricChart extends React.Component<
 
     const classNames = modelOverviewChartStyles();
 
-    let cohorts = this.props.cohorts.filter((_cohort, index) => {
+    const cohorts = this.props.cohorts.filter((_cohort, index) => {
       return this.props.selectedCohorts.includes(index);
     });
 
