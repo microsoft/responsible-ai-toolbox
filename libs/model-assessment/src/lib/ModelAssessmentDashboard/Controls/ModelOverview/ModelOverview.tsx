@@ -344,9 +344,7 @@ export class ModelOverview extends React.Component<
     checked?: boolean | undefined
   ) => {
     if (checked) {
-      this.setState({ showHeatmapColors: true });
-    } else {
-      this.setState({ showHeatmapColors: false });
+      this.setState({ showHeatmapColors: checked });
     }
   };
 
