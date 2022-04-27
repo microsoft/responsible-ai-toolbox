@@ -289,7 +289,7 @@ def validate_state_directory(path, manager_type):
         elif manager_type == ManagerNames.COUNTERFACTUAL:
             assert config_path.exists()
             assert data_path.exists()
-            assert not generators_path.exists()
+            assert generators_path.exists()
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             assert config_path.exists()
             assert data_path.exists()
