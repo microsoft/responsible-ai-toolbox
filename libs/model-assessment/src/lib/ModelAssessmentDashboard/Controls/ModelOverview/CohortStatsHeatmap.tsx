@@ -47,8 +47,10 @@ export class CohortStatsHeatmap extends React.Component<
     );
 
     const theme = getTheme();
-    const minColor = this.props.showColors ? "#FFFFFF" : "transparent";
-    const maxColor = this.props.showColors ? "#0078D4" : "transparent";
+    const minColor = this.props.showColors
+      ? theme.semanticColors.bodyBackground
+      : "transparent";
+    const maxColor = this.props.showColors ? theme.palette.blue : "transparent";
     const colorConfig = this.props.showColors
       ? {}
       : { color: theme.semanticColors.bodyText };

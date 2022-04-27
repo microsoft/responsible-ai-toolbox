@@ -343,7 +343,7 @@ export class ModelOverview extends React.Component<
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
   ) => {
-    if (checked) {
+    if (checked !== undefined) {
       this.setState({ showHeatmapColors: checked });
     }
   };
