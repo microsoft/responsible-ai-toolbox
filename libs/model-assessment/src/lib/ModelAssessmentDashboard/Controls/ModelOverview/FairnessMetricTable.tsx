@@ -9,7 +9,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { IDropdownOption } from "office-ui-fabric-react";
+import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { IFairnessStats, wrapText } from "./StatsTableUtils";
@@ -40,6 +40,8 @@ export class FairnessMetricTable extends React.Component<
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const theme = getTheme();
+
     const columns: string[] = [
       localization.ModelAssessment.ModelOverview.countColumnHeader
     ];
@@ -96,7 +98,7 @@ export class FairnessMetricTable extends React.Component<
               borderWidth: 1,
               data: items,
               dataLabels: {
-                color: "black",
+                color: theme.semanticColors.bodyText,
                 enabled: true
               },
               name: "Metrics",

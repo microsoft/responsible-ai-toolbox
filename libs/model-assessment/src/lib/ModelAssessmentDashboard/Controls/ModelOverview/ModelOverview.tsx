@@ -26,7 +26,9 @@ import {
   IComboBoxOption,
   ComboBox,
   ActionButton,
-  MessageBar
+  MessageBar,
+  Toggle,
+  getTheme
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -49,6 +51,7 @@ interface IModelOverviewState {
   selectedDatasetCohorts?: number[];
   selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
+  showHeatmapColors: boolean;
 }
 
 export class ModelOverview extends React.Component<
@@ -65,7 +68,8 @@ export class ModelOverview extends React.Component<
     this.state = {
       chartConfigurationIsVisible: false,
       selectedFeatures: [],
-      selectedMetrics: []
+      selectedMetrics: [],
+      showHeatmapColors: false
     };
   }
 
@@ -108,6 +112,8 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
+
+    const theme = getTheme();
 
     const classNames = modelOverviewStyles();
 
@@ -172,7 +178,13 @@ export class ModelOverview extends React.Component<
         className={classNames.sectionStack}
         tokens={{ childrenGap: "10px" }}
       >
-        <Text variant="medium" style={{ maxWidth: descriptionMaxWidth }}>
+        <Text
+          variant="medium"
+          style={{
+            maxWidth: descriptionMaxWidth,
+            color: theme.semanticColors.bodyText
+          }}
+        >
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
@@ -191,9 +203,15 @@ export class ModelOverview extends React.Component<
               className={classNames.dropdown}
               styles={FabricStyles.limitedSizeMenuDropdown}
             />
+            <Toggle
+              label={"Visual display"}
+              inlineLabel
+              onChange={this.onVisualDisplayToggleChange}
+            />
             <DatasetCohortStatsTable
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
+              showHeatmapColors={this.state.showHeatmapColors}
             />
             <Text variant="large">
               {
@@ -257,6 +275,7 @@ export class ModelOverview extends React.Component<
               selectedMetrics={this.state.selectedMetrics}
               selectedFeatures={this.state.selectedFeatures}
               featureBasedCohorts={featureBasedCohorts}
+              showHeatmapColors={this.state.showHeatmapColors}
             />
             <ChartConfigurationFlyout
               isOpen={this.state.chartConfigurationIsVisible}
@@ -319,6 +338,17 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onVisualDisplayToggleChange = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ) => {
+    if (checked) {
+      this.setState({ showHeatmapColors: true });
+    } else {
+      this.setState({ showHeatmapColors: false });
+    }
+  };
 
   private onChooseCohorts = () =>
     this.setState({ chartConfigurationIsVisible: true });
