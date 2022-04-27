@@ -1,25 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
-  IProcessedStyleSet
+  IProcessedStyleSet,
+  getTheme
 } from "office-ui-fabric-react";
 
 export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
+  descriptionText: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
   () => {
+    const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
       dropdown: {
         width: "400px"
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
+      },
+      descriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth
       }
     });
   };

@@ -12,7 +12,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { IDropdownOption } from "office-ui-fabric-react";
+import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 
 export interface IFairnessStats {
   max: number;
@@ -122,14 +122,15 @@ export function generateCohortsStatsTable(
             y: cohortIndex
           });
         } else {
+          const theme = getTheme();
           // not a numeric value (NaN), so just put null and use textured color
           const colorConfig = useTexturedBackgroundForNaN
             ? {
                 color: {
                   pattern: {
                     aspectRatio: 1,
-                    backgroundColor: "white",
-                    color: "pink",
+                    backgroundColor: theme.semanticColors.bodyBackground,
+                    color: theme.palette.magentaLight,
                     height: 10,
                     image: "",
                     opacity: 0.5,

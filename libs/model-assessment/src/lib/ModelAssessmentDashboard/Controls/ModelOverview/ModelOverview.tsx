@@ -13,7 +13,6 @@ import {
   ModelTypes,
   classificationTask,
   FabricStyles,
-  descriptionMaxWidth,
   MulticlassClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -27,8 +26,7 @@ import {
   ComboBox,
   ActionButton,
   MessageBar,
-  Toggle,
-  getTheme
+  Toggle
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -113,8 +111,6 @@ export class ModelOverview extends React.Component<
       );
     }
 
-    const theme = getTheme();
-
     const classNames = modelOverviewStyles();
 
     const selectableMetrics = getSelectableMetrics(
@@ -178,13 +174,7 @@ export class ModelOverview extends React.Component<
         className={classNames.sectionStack}
         tokens={{ childrenGap: "10px" }}
       >
-        <Text
-          variant="medium"
-          style={{
-            color: theme.semanticColors.bodyText,
-            maxWidth: descriptionMaxWidth
-          }}
-        >
+        <Text variant="medium" className={classNames.descriptionText}>
           {localization.Interpret.ModelPerformance.helperText}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
