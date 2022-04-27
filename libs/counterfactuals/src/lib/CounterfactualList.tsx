@@ -116,7 +116,7 @@ export class CounterfactualList extends React.Component<
     ];
   }
   private getTargetPrefix(): string {
-    if (this.props.data?.desired_range !== undefined) {
+    if (this.props.data?.model_type === "regressor") {
       return localization.Counterfactuals.WhatIf.predictedValue;
     }
     return localization.Counterfactuals.WhatIf.predictedClass;
