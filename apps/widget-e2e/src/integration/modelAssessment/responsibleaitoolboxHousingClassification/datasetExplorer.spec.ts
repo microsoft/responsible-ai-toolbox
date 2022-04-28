@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeDatasetExplorer } from "@responsible-ai/rai-e2e";
+import {
+  describeDatasetExplorer,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeDatasetExplorer("HousingClassificationModelDebugging");
+const datasetShape =
+  modelAssessmentDatasets["HousingClassificationModelDebugging"];
+describeDatasetExplorer(datasetShape, "HousingClassificationModelDebugging");

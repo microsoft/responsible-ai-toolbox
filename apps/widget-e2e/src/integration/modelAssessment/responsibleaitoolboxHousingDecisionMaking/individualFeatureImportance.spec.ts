@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeIndividualFeatureImportance } from "@responsible-ai/rai-e2e";
+import {
+  describeIndividualFeatureImportance,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeIndividualFeatureImportance("HousingDecisionMaking");
+const datasetShape = modelAssessmentDatasets["HousingDecisionMaking"];
+describeIndividualFeatureImportance(datasetShape, "HousingDecisionMaking");

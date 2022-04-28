@@ -1,6 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeAggregateFeatureImportance } from "@responsible-ai/rai-e2e";
+import {
+  describeAggregateFeatureImportance,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeAggregateFeatureImportance("HousingClassificationModelDebugging");
+const datasetShape =
+  modelAssessmentDatasets["HousingClassificationModelDebugging"];
+describeAggregateFeatureImportance(
+  datasetShape,
+  "HousingClassificationModelDebugging"
+);

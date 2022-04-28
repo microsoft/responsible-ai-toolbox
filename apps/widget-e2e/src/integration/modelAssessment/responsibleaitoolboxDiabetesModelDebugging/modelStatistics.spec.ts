@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeModelStatistics } from "@responsible-ai/rai-e2e";
-
-describeModelStatistics("DiabetesRegressionModelDebugging");
+import {
+  describeModelStatistics,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
+const datasetShape =
+  modelAssessmentDatasets["DiabetesRegressionModelDebugging"];
+describeModelStatistics(datasetShape, "DiabetesRegressionModelDebugging");

@@ -1,6 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeIndividualFeatureImportance } from "@responsible-ai/rai-e2e";
-
-describeIndividualFeatureImportance("DiabetesRegressionModelDebugging");
+import {
+  describeIndividualFeatureImportance,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
+const datasetShape =
+  modelAssessmentDatasets["DiabetesRegressionModelDebugging"];
+describeIndividualFeatureImportance(
+  datasetShape,
+  "DiabetesRegressionModelDebugging"
+);

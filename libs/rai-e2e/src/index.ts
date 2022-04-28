@@ -5,3 +5,4 @@ export * from "./lib/describer/modelAssessment/errorAnalysis/describeErrorAnalys
 export * from "./lib/describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
 export * from "./lib/describer/modelAssessment/modelStatistics/describeModelStatistics";
 export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
+export * from "./lib/describer/modelAssessment/modelAssessmentDatasets";
