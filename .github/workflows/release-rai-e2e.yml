@@ -1,0 +1,200 @@
+name: Release to PyPI
+
+env:
+  node-version: 16.8
+  raiE2EDirectory: rai-e2e
+  typescriptBuildOutput: dist
+  typescriptBuildArtifactName: typescript
+
+# trigger manually only ("collaborator" or more permissions required)
+on:
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: "Test or Prod PyPI?"
+        required: true
+        default: "Test"
+
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.releaseType == 'Test' || github.event.inputs.releaseType == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
+          exit 1
+
+      - uses: actions/checkout@v3
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.7
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: |
+          npm install yarn -g
+
+      - name: install typescript dependencies
+        run: |
+          yarn install --frozen-lock-file
+
+      - name: auto version
+        if: ${{ github.event.inputs.releaseType == 'Test' }}
+        run: |
+          yarn auto-version -r
+      - name: auto version
+        if: ${{ github.event.inputs.releaseType == 'Prod' }}
+        run: |
+          yarn auto-version -r -t
+
+      - name: build typescript
+        run: |
+          yarn buildall
+
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Install pytorch on non-MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet pytorch torchvision captum -c pytorch
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        shell: bash -l {0}
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+
+      - name: install requirements.txt for rai-e2e
+        shell: bash -l {0}
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: ${{ env.raiE2EDirectory }}
+
+      - name: pip freeze
+        shell: bash -l {0}
+        run: pip freeze
+
+      - name: replace README for rai-e2e
+        run: |
+          sed -i 's/(.\/img\//(https:\/\/raw.githubusercontent.com\/microsoft\/responsible-ai-widgets\/main\/img\//g' README.md
+          cp ./README.md ./${{ env.raiE2EDirectory }}/
+
+      - name: build wheel for rai-e2e
+        shell: bash -l {0}
+        run: python setup.py sdist bdist_wheel
+        working-directory: ${{ env.raiE2EDirectory }}
+
+      # run tests before publishing to PyPI
+      - name: install rai-e2e wheel locally
+        shell: bash -l {0}
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: ${{ env.raiE2EDirectory }}
+
+      - name: run rai-e2e tests
+        shell: bash -l {0}
+        run: pytest ./tests/
+        working-directory: ${{ env.raiE2EDirectory }}
+
+      - name: Run widget tests
+        shell: bash -l {0}
+        run: yarn e2e-widget
+
+      - name: Upload a rai-e2e build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.raiE2EDirectory }}
+          path: ${{ env.raiE2EDirectory }}/dist/
+
+      - name: Upload a typescript build result
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.typescriptBuildArtifactName }}
+          path: ${{ env.typescriptBuildOutput }}
+
+  release-python:
+    needs: release-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [rai-e2e]
+
+    steps:
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.7
+
+      - id: download
+        name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ matrix.package }}
+          path: ${{ matrix.package }}
+
+      - name: Publish rai-e2e package to Test PyPI
+        if: ${{ github.event.inputs.releaseType == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIE2E }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: rai-e2e/dist/
+
+      - name: Publish rai-e2e package to Prod PyPI
+        if: ${{ github.event.inputs.releaseType == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIE2E }}
+          packages_dir: rai-e2e/dist/
+
+  release-typescript:
+    needs: release-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          [
+            rai-e2e
+          ]
+
+    steps:
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - id: download
+        name: Download a Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.typescriptBuildArtifactName }}
+          path: ${{ env.typescriptBuildOutput }}
+
+      - id: publish
+        name: NPM Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ${{steps.download.outputs.download-path}}/libs/${{ matrix.package }}/package.json
+          dry-run: ${{github.event.inputs.releaseType == 'Test'}}
+          access: public
+          # tag: next
+
+      - if: steps.publish.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
