@@ -167,10 +167,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package:
-          [
-            rai-e2e
-          ]
+        package: [rai-e2e]
 
     steps:
       - name: Use Node.js ${{ env.node-version }}
