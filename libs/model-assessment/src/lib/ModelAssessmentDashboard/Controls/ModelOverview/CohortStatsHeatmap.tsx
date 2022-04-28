@@ -9,7 +9,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { IDropdownOption } from "office-ui-fabric-react";
+import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { wrapText } from "./StatsTableUtils";
@@ -19,6 +19,7 @@ interface ICohortStatsHeatmapProps {
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   items: PointOptionsObject[];
+  showColors: boolean;
 }
 
 class ICohortStatsHeatmapState {}
@@ -45,6 +46,15 @@ export class CohortStatsHeatmap extends React.Component<
         })
     );
 
+    const theme = getTheme();
+    const minColor = this.props.showColors
+      ? theme.semanticColors.bodyBackground
+      : "transparent";
+    const maxColor = this.props.showColors ? theme.palette.blue : "transparent";
+    const colorConfig = this.props.showColors
+      ? {}
+      : { color: theme.semanticColors.bodyText };
+
     return (
       <HeatmapHighChart
         configOverride={{
@@ -54,9 +64,9 @@ export class CohortStatsHeatmap extends React.Component<
           },
           colorAxis: {
             max: 1,
-            maxColor: "#0078D4",
+            maxColor,
             min: 0,
-            minColor: "#FFFFFF"
+            minColor
           },
           legend: {
             enabled: false
@@ -68,7 +78,8 @@ export class CohortStatsHeatmap extends React.Component<
               data: this.props.items,
               dataLabels: {
                 enabled: true,
-                nullFormat: "N/A"
+                nullFormat: "N/A",
+                ...colorConfig
               },
               name: "Metrics",
               type: "heatmap"
