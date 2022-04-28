@@ -13,6 +13,7 @@ export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
   descriptionText: IStyle;
+  generalText: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -22,6 +23,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       descriptionText: {
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth
+      },
+      generalText: {
+        color: theme.semanticColors.bodyText
       },
       dropdown: {
         width: "400px"

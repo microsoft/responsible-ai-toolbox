@@ -290,7 +290,7 @@ export class ModelOverview extends React.Component<
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>
-                    <Text>
+                    <Text className={classNames.generalText}>
                       {localization.formatString(
                         localization.ModelAssessment.ModelOverview
                           .disaggregatedAnalysisBaseCohortDislaimer,
