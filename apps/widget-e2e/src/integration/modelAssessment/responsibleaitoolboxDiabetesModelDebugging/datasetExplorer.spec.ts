@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeDatasetExplorer } from "../../../describer/modelAssessment/dataExplorer/describeDatasetExplorer";
-
-describeDatasetExplorer("DiabetesRegressionModelDebugging");
+import {
+  describeDatasetExplorer,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
+const datasetShape = modelAssessmentDatasets.DiabetesRegressionModelDebugging;
+describeDatasetExplorer(datasetShape, "DiabetesRegressionModelDebugging");
