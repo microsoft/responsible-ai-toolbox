@@ -261,13 +261,13 @@ export class ModelOverview extends React.Component<
               )}
             </Stack>
             <Toggle
-            label={
-              localization.ModelAssessment.ModelOverview
-                .visualDisplayToggleLabel
-            }
-            inlineLabel
-            onChange={this.onVisualDisplayToggleChange}
-          />
+              label={
+                localization.ModelAssessment.ModelOverview
+                  .visualDisplayToggleLabel
+              }
+              inlineLabel
+              onChange={this.onVisualDisplayToggleChange}
+            />
             {this.state.datasetCohortViewIsVisible ? (
               <DatasetCohortStatsTable
                 selectableMetrics={selectableMetrics}

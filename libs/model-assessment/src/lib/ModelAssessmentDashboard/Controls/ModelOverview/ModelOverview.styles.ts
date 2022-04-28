@@ -24,11 +24,11 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth
       },
-      generalText: {
-        color: theme.semanticColors.bodyText
-      },
       dropdown: {
         width: "400px"
+      },
+      generalText: {
+        color: theme.semanticColors.bodyText
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
