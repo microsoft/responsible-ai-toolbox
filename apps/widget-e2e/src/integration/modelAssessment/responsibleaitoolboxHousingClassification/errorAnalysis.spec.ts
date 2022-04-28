@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeErrorAnalysis } from "../../../describer/modelAssessment/errorAnalysis/describeErrorAnalysis";
+import {
+  describeErrorAnalysis,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeErrorAnalysis("HousingClassificationModelDebugging");
+const datasetShape =
+  modelAssessmentDatasets.HousingClassificationModelDebugging;
+describeErrorAnalysis(datasetShape, "HousingClassificationModelDebugging");

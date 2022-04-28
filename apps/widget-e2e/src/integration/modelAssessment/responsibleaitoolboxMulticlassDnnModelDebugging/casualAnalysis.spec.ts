@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeCausalAnalysis } from "../../../describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
+import {
+  describeCausalAnalysis,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeCausalAnalysis("MulticlassDnnModelDebugging");
+const datasetShape = modelAssessmentDatasets.MulticlassDnnModelDebugging;
+describeCausalAnalysis(datasetShape, "MulticlassDnnModelDebugging");
