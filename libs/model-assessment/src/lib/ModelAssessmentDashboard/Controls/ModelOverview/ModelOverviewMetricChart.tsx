@@ -25,13 +25,10 @@ import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IModelOverviewMetricChartProps {
   onChooseCohorts: () => void;
-  datasetCohorts: ErrorCohort[];
-  featureBasedCohorts: ErrorCohort[];
-  datasetCohortStats: ILabeledStatistic[][];
-  featureBasedCohortStats: ILabeledStatistic[][];
+  cohorts: ErrorCohort[];
+  cohortStats: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
-  selectedDatasetCohorts: number[];
-  selectedFeatureBasedCohorts: number[];
+  selectedCohorts: number[];
 }
 
 interface IModelOverviewMetricChartState {
@@ -63,26 +60,13 @@ export class ModelOverviewMetricChart extends React.Component<
 
     const classNames = modelOverviewChartStyles();
 
-    const selectedDatasetCohorts = this.props.datasetCohorts.filter(
-      (_cohort, index) => {
-        return this.props.selectedDatasetCohorts.includes(index);
-      }
-    );
-    const selectedFeatureBasedCohorts = this.props.featureBasedCohorts.filter(
-      (_cohort, index) => {
-        return this.props.selectedFeatureBasedCohorts.includes(index);
-      }
-    );
-    const selectedCohortNames = selectedDatasetCohorts
-      .map((cohort) => cohort.cohort.name)
-      .concat(selectedFeatureBasedCohorts.map((cohort) => cohort.cohort.name));
-    const selectedCohortStats = this.props.datasetCohortStats
-      .filter((_, index) => this.props.selectedDatasetCohorts.includes(index))
-      .concat(
-        this.props.featureBasedCohortStats.filter((_, index) =>
-          this.props.selectedFeatureBasedCohorts.includes(index)
-        )
-      )
+    const cohorts = this.props.cohorts.filter((_cohort, index) => {
+      return this.props.selectedCohorts.includes(index);
+    });
+
+    const selectedCohortNames = cohorts.map((cohort) => cohort.cohort.name);
+    const selectedCohortStats = this.props.cohortStats
+      .filter((_, index) => this.props.selectedCohorts.includes(index))
       .map((labeledStats) => {
         const stat = labeledStats.find(
           (stat) => stat.key === this.state.selectedMetric
