@@ -5,6 +5,5 @@ import {
   describeWhatIf,
   modelAssessmentDatasets
 } from "@responsible-ai/rai-e2e";
-const datasetShape =
-  modelAssessmentDatasets["DiabetesRegressionModelDebugging"];
+const datasetShape = modelAssessmentDatasets.DiabetesRegressionModelDebugging;
 describeWhatIf(datasetShape, "DiabetesRegressionModelDebugging");

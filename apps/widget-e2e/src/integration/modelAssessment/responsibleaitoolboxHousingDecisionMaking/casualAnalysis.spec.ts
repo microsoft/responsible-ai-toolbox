@@ -6,5 +6,5 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/rai-e2e";
 
-const datasetShape = modelAssessmentDatasets["HousingDecisionMaking"];
+const datasetShape = modelAssessmentDatasets.HousingDecisionMaking;
 describeCausalAnalysis(datasetShape, "HousingDecisionMaking");

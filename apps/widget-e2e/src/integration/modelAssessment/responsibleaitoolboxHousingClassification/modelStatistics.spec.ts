@@ -7,5 +7,5 @@ import {
 } from "@responsible-ai/rai-e2e";
 
 const datasetShape =
-  modelAssessmentDatasets["HousingClassificationModelDebugging"];
+  modelAssessmentDatasets.HousingClassificationModelDebugging;
 describeModelStatistics(datasetShape, "HousingClassificationModelDebugging");

@@ -6,8 +6,7 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/rai-e2e";
 
-const datasetShape =
-  modelAssessmentDatasets["DiabetesRegressionModelDebugging"];
+const datasetShape = modelAssessmentDatasets.DiabetesRegressionModelDebugging;
 describeAggregateFeatureImportance(
   datasetShape,
   "DiabetesRegressionModelDebugging"

@@ -1,7 +1,6 @@
-# rai-e2e
+# Responsible AI sharable e2e tests
 
-This library was generated with [Nx](https://nx.dev).
+The Responsible AI sharable e2e tests package contains tests shared across RAI OSS and AML repo.
 
-## Running unit tests
-
-Run `nx test rai-e2e` to execute the unit tests via [Jest](https://jestjs.io).
+The open source code can be found here:
+https://github.com/microsoft/responsible-ai-toolbox
