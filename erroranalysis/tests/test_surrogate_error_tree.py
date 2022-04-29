@@ -227,11 +227,12 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                        min_child_samples=20,
                        filters=None,
                        composite_filters=None,
-                       metric=None):
+                       metric=None, model_task=None):
     error_analyzer = ModelAnalyzer(model, X_test, y_test,
                                    feature_names,
                                    categorical_features,
-                                   metric=metric)
+                                   metric=metric,
+                                   model_task=model_task)
     if tree_features is None:
         tree_features = feature_names
     tree = error_analyzer.compute_error_tree(
