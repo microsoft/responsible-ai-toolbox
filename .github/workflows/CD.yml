@@ -199,7 +199,8 @@ jobs:
             interpret,
             localization,
             error-analysis,
-            model-assessment
+            model-assessment,
+            rai-e2e
           ]
 
     steps:
