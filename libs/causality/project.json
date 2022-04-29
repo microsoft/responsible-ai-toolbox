@@ -25,7 +25,7 @@
       }
     },
     "build": {
-      "executor": "@nrwl/web:package",
+      "executor": "@nrwl/web:rollup",
       "options": {
         "outputPath": "dist/libs/causality",
         "tsConfig": "libs/causality/tsconfig.lib.json",

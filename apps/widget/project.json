@@ -5,7 +5,7 @@
   "generators": {},
   "targets": {
     "build": {
-      "executor": "@nrwl/web:build",
+      "executor": "@nrwl/web:webpack",
       "options": {
         "baseHref": "/widget/",
         "outputPath": "raiwidgets/raiwidgets/widget",
