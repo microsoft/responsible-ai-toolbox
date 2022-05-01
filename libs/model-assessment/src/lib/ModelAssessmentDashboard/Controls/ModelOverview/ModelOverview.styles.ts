@@ -10,6 +10,7 @@ import {
 export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
+  configurationActionButton: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -20,6 +21,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
+      },
+      configurationActionButton: {
+        paddingTop: "44px"
       }
     });
   };

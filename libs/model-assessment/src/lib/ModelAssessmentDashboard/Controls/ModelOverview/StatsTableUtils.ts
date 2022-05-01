@@ -37,7 +37,6 @@ export function generateCohortsStatsTable(
       return {
         colorValue: 0,
         value: errorCohort.cohortStats.totalCohort,
-
         x: 0,
         // metric index for Count column
         y: cohortIndex
