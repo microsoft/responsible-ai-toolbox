@@ -12,7 +12,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { IDropdownOption } from "office-ui-fabric-react";
+import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 
 export interface IFairnessStats {
   max: number;
@@ -27,7 +27,8 @@ export function generateCohortsStatsTable(
   cohorts: ErrorCohort[],
   selectableMetrics: IDropdownOption[],
   labeledStatistics: ILabeledStatistic[][],
-  selectedMetrics: string[]
+  selectedMetrics: string[],
+  useTexturedBackgroundForNaN: boolean
 ) {
   // The "count" metric has to be treated separately
   // since it's not handled like other metrics, but
@@ -120,24 +121,30 @@ export function generateCohortsStatsTable(
             y: cohortIndex
           });
         } else {
+          const theme = getTheme();
           // not a numeric value (NaN), so just put null and use textured color
-          items.push({
-            color: {
-              pattern: {
-                aspectRatio: 1,
-                backgroundColor: "white",
-                color: "pink",
-                height: 10,
-                image: "",
-                opacity: 0.5,
-                path: {
-                  d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
-                  strokeWidth: 3
-                },
-                patternTransform: "",
-                width: 10
+          const colorConfig = useTexturedBackgroundForNaN
+            ? {
+                color: {
+                  pattern: {
+                    aspectRatio: 1,
+                    backgroundColor: theme.semanticColors.bodyBackground,
+                    color: theme.palette.magentaLight,
+                    height: 10,
+                    image: "",
+                    opacity: 0.5,
+                    path: {
+                      d: "M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11",
+                      strokeWidth: 3
+                    },
+                    patternTransform: "",
+                    width: 10
+                  }
+                }
               }
-            },
+            : { color: "transparent" };
+          items.push({
+            ...colorConfig,
             // null is treated as a special value by highcharts
             // sadly there's no alternative (undefined doesn't work)
             value: HighchartsNull,

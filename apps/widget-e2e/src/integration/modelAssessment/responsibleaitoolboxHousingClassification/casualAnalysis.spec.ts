@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeCausalAnalysis } from "../../../describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
+import {
+  describeCausalAnalysis,
+  modelAssessmentDatasets
+} from "@responsible-ai/rai-e2e";
 
-describeCausalAnalysis("HousingClassificationModelDebugging");
+const datasetShape =
+  modelAssessmentDatasets.HousingClassificationModelDebugging;
+describeCausalAnalysis(datasetShape, "HousingClassificationModelDebugging");

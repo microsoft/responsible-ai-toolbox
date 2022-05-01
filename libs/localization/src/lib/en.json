@@ -1392,7 +1392,8 @@
         "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
         "continuousFeatureBinningLabel": "Change the number of bins",
         "tooManyFeaturesSelectedWarning": "Please select only up to two features."
-      }
+      },
+      "visualDisplayToggleLabel": "Visual display"
     }
   }
 }
