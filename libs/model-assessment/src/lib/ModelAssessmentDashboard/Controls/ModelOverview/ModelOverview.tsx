@@ -13,7 +13,6 @@ import {
   ModelTypes,
   classificationTask,
   FabricStyles,
-  descriptionMaxWidth,
   MulticlassClassificationMetrics,
   ErrorCohort,
   ILabeledStatistic
