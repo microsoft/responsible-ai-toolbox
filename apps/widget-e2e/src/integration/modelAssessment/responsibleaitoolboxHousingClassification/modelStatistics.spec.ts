@@ -1,6 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeModelStatistics } from "../../../describer/modelAssessment/modelStatistics/describeModelStatistics";
+import {
+  describeModelStatistics,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeModelStatistics("HousingClassificationModelDebugging");
+const datasetShape =
+  modelAssessmentDatasets.HousingClassificationModelDebugging;
+describeModelStatistics(datasetShape, "HousingClassificationModelDebugging");

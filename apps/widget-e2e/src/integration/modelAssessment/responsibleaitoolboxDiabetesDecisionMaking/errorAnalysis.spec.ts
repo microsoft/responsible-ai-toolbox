@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeErrorAnalysis } from "../../../describer/modelAssessment/errorAnalysis/describeErrorAnalysis";
+import {
+  describeErrorAnalysis,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeErrorAnalysis("DiabetesDecisionMaking");
+const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
+describeErrorAnalysis(datasetShape, "DiabetesDecisionMaking");

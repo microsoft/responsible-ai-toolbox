@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeCausalAnalysis } from "../../../describer/modelAssessment/causalAnalysis/describeCausalAnalysis";
+import {
+  describeCausalAnalysis,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeCausalAnalysis("DiabetesRegressionModelDebugging");
+const datasetShape = modelAssessmentDatasets.DiabetesRegressionModelDebugging;
+describeCausalAnalysis(datasetShape, "DiabetesRegressionModelDebugging");
