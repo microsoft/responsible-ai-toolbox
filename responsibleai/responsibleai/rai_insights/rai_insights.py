@@ -49,7 +49,6 @@ class RAIInsights(RAIBaseInsights):
                  test: pd.DataFrame, target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
-                 dataset_name: Optional[str] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000):
         """Creates an RAIInsights object.
@@ -70,8 +69,6 @@ class RAIInsights(RAIBaseInsights):
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
-        :param dataset_name: The name of the dataset.
-        :type dataset_name: str
         :param serializer: Picklable custom serializer with save and load
             methods for custom model serialization.
             The save method writes the model to file given a parent directory.
@@ -88,7 +85,6 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
             classes=classes,
-            dataset_name=dataset_name,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
         self._classes = RAIInsights._get_classes(
@@ -119,7 +115,7 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=self.categorical_features)
 
         self._data_balance_manager = DataBalanceManager(
-            train=train, test=test, target_column=target_column
+            target_column=self.target_column, train=self.train, test=self.test,
         )
 
         self._error_analysis_manager = ErrorAnalysisManager(
@@ -156,7 +152,6 @@ class RAIInsights(RAIBaseInsights):
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
-            dataset_name: str,
             serializer,
             maximum_rows_for_test: int):
         """Validate the inputs for the RAIInsights constructor.
@@ -178,8 +173,6 @@ class RAIInsights(RAIBaseInsights):
         :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
-        :param dataset_name: The name of the dataset.
-        :type dataset_name: str
         :param serializer: Picklable custom serializer with save and load
             methods defined for model that is not serializable. The save
             method returns a dictionary state and load method returns the
@@ -208,11 +201,6 @@ class RAIInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     'No valid model is specified but model '
                     'serializer provided.')
-
-        if dataset_name is not None:
-            if not isinstance(dataset_name, str):
-                raise UserConfigValidationException(
-                    'dataset_name should be a string')
 
         if serializer is not None:
             if not hasattr(serializer, 'save'):
@@ -432,7 +420,6 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
-        dashboard_dataset.name = self.dataset_name
         dashboard_dataset.data_balance_measures = self.data_balance.get_data()
 
         predicted_y = None

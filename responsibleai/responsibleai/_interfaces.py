@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from enum import Enum
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 
 class TaskType(str, Enum):
@@ -20,8 +20,7 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
-    name: str
-    data_balance_measures: Any
+    data_balance_measures: Optional[Dict[str, Any]]
 
 
 class BoundedCoordinates:
