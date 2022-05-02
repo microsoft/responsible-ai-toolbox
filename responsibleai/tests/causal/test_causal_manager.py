@@ -61,7 +61,12 @@ class TestCausalManager:
             causal_analysis_pkl_file_path = \
                 dm.get_data_directory() / "causal_analysis.pkl"
             os.remove(causal_analysis_pkl_file_path)
-        manager = insights.causal._load(save_dir, insights)
+
+        model_load_err = ('ERROR-LOADING-EXPLAINER: '
+                          'There was an error loading the explainer. '
+                          'Some of RAI dashboard features may not work.')
+        with pytest.warns(UserWarning, match=model_load_err):
+            manager = insights.causal._load(save_dir, insights)
         post_results = manager.get()
         post_result = post_results[0]
         assert post_result.id == pre_result.id

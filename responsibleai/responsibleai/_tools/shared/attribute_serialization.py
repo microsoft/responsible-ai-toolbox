@@ -4,6 +4,7 @@
 
 import json
 import pickle
+import warnings
 from pathlib import Path
 from typing import Any, List, Union
 
@@ -118,7 +119,10 @@ def _load_attribute(
             with open(path, 'rb') as f:
                 val = pickle.load(f)
         except Exception:
-            pass
+            model_load_err = ('ERROR-LOADING-EXPLAINER: '
+                              'There was an error loading the explainer. '
+                              'Some of RAI dashboard features may not work.')
+            warnings.warn(model_load_err, UserWarning)
         return val
     elif file_format == SerializationFormats.JSON:
         with open(path, 'r') as f:
