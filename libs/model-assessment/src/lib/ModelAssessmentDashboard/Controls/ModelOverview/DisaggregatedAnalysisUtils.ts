@@ -12,7 +12,7 @@ import {
   Operations
 } from "@responsible-ai/core-ui";
 
-import { defaultNumberOfContinuousFeatureBins } from "./FeatureConfigurationFlyout";
+import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 
 function generateFiltersCartesianProduct(
   filters: ICompositeFilter[][]

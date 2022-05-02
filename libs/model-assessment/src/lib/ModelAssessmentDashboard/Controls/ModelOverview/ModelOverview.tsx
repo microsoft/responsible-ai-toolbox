@@ -33,13 +33,11 @@ import {
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
+import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
-import {
-  FeatureConfigurationFlyout,
-  defaultNumberOfContinuousFeatureBins
-} from "./FeatureConfigurationFlyout";
+import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";

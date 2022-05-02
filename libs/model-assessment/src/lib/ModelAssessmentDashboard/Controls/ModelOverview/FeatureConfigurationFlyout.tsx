@@ -26,6 +26,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
+import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { generateFeatureBasedFilters } from "./DisaggregatedAnalysisUtils";
 
 interface IFeatureConfigurationFlyoutProps {
@@ -53,7 +54,6 @@ interface IFeatureConfigurationRow {
   continuousFeatureBinningEnabled: boolean;
 }
 
-export const defaultNumberOfContinuousFeatureBins = 3;
 const maxFeatureBins = 10;
 const minFeatureBins = 2;
 
