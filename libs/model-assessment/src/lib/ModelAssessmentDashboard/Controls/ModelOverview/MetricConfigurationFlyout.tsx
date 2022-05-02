@@ -104,11 +104,11 @@ export class MetricConfigurationFlyout extends React.Component<
       },
       {
         fieldName: "metricDescription",
+        isMultiline: true,
         key: "metricDescription",
         minWidth: 300,
         name: localization.ModelAssessment.ModelOverview.metricConfiguration
-          .metricDescriptionColumnHeader,
-        isMultiline: true
+          .metricDescriptionColumnHeader
       }
     ];
 
