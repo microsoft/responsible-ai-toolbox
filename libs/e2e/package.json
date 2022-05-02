@@ -1,4 +1,5 @@
 {
-  "name": "@responsible-ai/e2e",
-  "version": "0.0.1"
+    "name": "@responsible-ai/e2e",
+    "version": "0.0.1",
+    "license": "MIT"
 }
