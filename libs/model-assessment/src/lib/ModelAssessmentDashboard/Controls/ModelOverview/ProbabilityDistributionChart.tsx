@@ -2,28 +2,27 @@
 // Licensed under the MIT License.
 
 import {
-  BasicHighChart,
-  calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
   JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { PointOptionsObject } from "highcharts";
 import {
   DefaultButton,
   ChoiceGroup,
-  getTheme,
   IChoiceGroupOption,
   Panel,
   Stack,
   Text,
-  PrimaryButton
+  PrimaryButton,
+  Toggle
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
+import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
+import { ProbabilityDistributionLineChart } from "./ProbabilityDistributionLineChart";
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
@@ -35,6 +34,7 @@ interface IProbabilityDistributionChartState {
   probabilityOption?: IChoiceGroupOption;
   newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
+  showLineChart: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -47,7 +47,7 @@ export class ProbabilityDistributionChart extends React.Component<
 
   constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = { probabilityFlyoutIsVisible: false };
+    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
   }
 
   public componentDidMount(): void {
@@ -68,14 +68,10 @@ export class ProbabilityDistributionChart extends React.Component<
     if (!this.context.jointDataset.hasPredictedProbabilities) {
       return;
     }
-    const theme = getTheme();
 
     const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
       return this.props.selectedCohorts.includes(index);
     });
-    const selectedCohortNames = selectedCohorts.map(
-      (cohort) => cohort.cohort.name
-    );
 
     const probabilityOptions = this.getProbabilityOptions();
 
@@ -88,27 +84,35 @@ export class ProbabilityDistributionChart extends React.Component<
       return React.Fragment;
     }
 
-    const boxPlotData = selectedCohorts.map((cohort, index) => {
-      return calculateBoxPlotDataFromErrorCohort(
-        cohort,
-        index,
-        this.state.probabilityOption!.key.toString()
-      );
-    });
-    const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierProbs, cohortIndex) => {
-        return outlierProbs?.map((prob) => [cohortIndex, prob]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
-
     const noCohortSelected = this.props.selectedCohorts.length === 0;
 
     return (
-      <>
+      <Stack tokens={{ childrenGap: "10px" }}>
+        <Stack
+          horizontal
+          tokens={{ padding: "10px 0 0 0", childrenGap: "10px" }}
+        >
+          <Stack.Item className={classNames.chartToggle}>
+            <Toggle
+              label={
+                localization.ModelAssessment.ModelOverview
+                  .probabilityLineChartToggleLabel
+              }
+              inlineLabel
+              onChange={this.onLineChartToggleChange}
+            />
+          </Stack.Item>
+          {this.state.showLineChart && (
+            <DefaultButton
+              text={
+                localization.ModelAssessment.ModelOverview.cohortSelectionButton
+              }
+              onClick={this.props.onChooseCohorts}
+            />
+          )}
+        </Stack>
         <Stack horizontal>
-          {!noCohortSelected && (
+          {!noCohortSelected && !this.state.showLineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
                 className={classNames.rotatedVerticalBox}
@@ -133,53 +137,24 @@ export class ProbabilityDistributionChart extends React.Component<
             )}
             {!noCohortSelected && (
               <Stack>
-                <BasicHighChart
-                  id={"ProbabilityDistributionChart"}
-                  theme={theme}
-                  configOverride={{
-                    chart: {
-                      height: selectedCohorts.length * 40 + 120,
-                      inverted: true,
-                      type: "boxplot"
-                    },
-                    plotOptions: {
-                      bar: {
-                        dataLabels: {
-                          enabled: true
-                        }
-                      }
-                    },
-                    series: [
-                      {
-                        data: boxPlotData.map(
-                          (boxData) => boxData as PointOptionsObject
-                        ),
-                        fillColor: "#b2d6f2",
-                        name: localization.ModelAssessment.ModelOverview.BoxPlot
-                          .boxPlotSeriesLabel,
-                        type: "boxplot"
-                      },
-                      {
-                        data: outlierData,
-                        name: localization.ModelAssessment.ModelOverview.BoxPlot
-                          .outlierLabel,
-                        tooltip: {
-                          pointFormatter() {
-                            return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
-                          }
-                        },
-                        type: "scatter"
-                      }
-                    ],
-                    xAxis: {
-                      categories: selectedCohortNames
-                    },
-                    yAxis: {
-                      title: { text: this.state.probabilityOption!.text }
-                    }
-                  }}
-                />
-                <Stack.Item className={classNames.horizontalAxis}>
+                {this.state.showLineChart ? (
+                  <ProbabilityDistributionLineChart
+                    selectedCohorts={selectedCohorts}
+                    probabilityOption={this.state.probabilityOption}
+                  />
+                ) : (
+                  <ProbabilityDistributionBoxChart
+                    selectedCohorts={selectedCohorts}
+                    probabilityOption={this.state.probabilityOption}
+                  />
+                )}
+                <Stack.Item
+                  className={
+                    this.state.showLineChart
+                      ? classNames.horizontalAxisNoExtraLeftPadding
+                      : classNames.horizontalAxis
+                  }
+                >
                   <DefaultButton
                     text={
                       localization.ModelAssessment.ModelOverview
@@ -239,7 +214,7 @@ export class ProbabilityDistributionChart extends React.Component<
             </Stack>
           </Stack>
         </Panel>
-      </>
+      </Stack>
     );
   }
 
@@ -263,4 +238,13 @@ export class ProbabilityDistributionChart extends React.Component<
         };
       });
   }
+
+  private onLineChartToggleChange = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ) => {
+    if (checked !== undefined) {
+      this.setState({ showLineChart: checked });
+    }
+  };
 }

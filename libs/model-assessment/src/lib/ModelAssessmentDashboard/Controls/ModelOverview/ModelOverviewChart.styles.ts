@@ -10,10 +10,12 @@ import {
 export interface IModelOverviewChartStyles {
   rotatedVerticalBox: IStyle;
   horizontalAxis: IStyle;
+  horizontalAxisNoExtraLeftPadding: IStyle;
   verticalAxis: IStyle;
   chart: IStyle;
   placeholderText: IStyle;
   chartConfigDropdown: IStyle;
+  chartToggle: IStyle;
 }
 
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
@@ -26,7 +28,12 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         width: "250px"
       },
       horizontalAxis: {
-        textAlign: "center"
+        textAlign: "center",
+        paddingLeft: "150px"
+      },
+      horizontalAxisNoExtraLeftPadding: {
+        textAlign: "center",
+        paddingLeft: "50px"
       },
       placeholderText: {
         marginBottom: "15px",
@@ -45,6 +52,9 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         position: "relative",
         top: "0px",
         width: "65px"
+      },
+      chartToggle: {
+        paddingLeft: "10px"
       }
     });
   };

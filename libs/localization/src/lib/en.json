@@ -1380,7 +1380,9 @@
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following disaggregated analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "visualDisplayToggleLabel": "Visual display"
+      "visualDisplayToggleLabel": "Visual display",
+      "probabilityLineChartToggleLabel": "Use line chart",
+      "countAxisLabel": "Count"
     }
   }
 }
