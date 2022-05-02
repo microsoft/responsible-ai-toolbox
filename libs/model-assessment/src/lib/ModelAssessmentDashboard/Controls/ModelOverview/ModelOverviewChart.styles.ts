@@ -27,13 +27,16 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
       chartConfigDropdown: {
         width: "250px"
       },
+      chartToggle: {
+        paddingLeft: "10px"
+      },
       horizontalAxis: {
-        textAlign: "center",
-        paddingLeft: "150px"
+        paddingLeft: "150px",
+        textAlign: "center"
       },
       horizontalAxisNoExtraLeftPadding: {
-        textAlign: "center",
-        paddingLeft: "50px"
+        paddingLeft: "50px",
+        textAlign: "center"
       },
       placeholderText: {
         marginBottom: "15px",
@@ -52,9 +55,6 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         position: "relative",
         top: "0px",
         width: "65px"
-      },
-      chartToggle: {
-        paddingLeft: "10px"
       }
     });
   };

@@ -24,7 +24,7 @@ export function calculateLinePlotData(data: number[]) {
   }
 
   const numberOfBins = 10;
-  let binCounts: number[] = Array<number>(numberOfBins).fill(0);
+  const binCounts: number[] = new Array<number>(numberOfBins).fill(0);
 
   data.forEach((prob) => {
     let binIndex = Math.floor(prob * numberOfBins);
@@ -34,10 +34,12 @@ export function calculateLinePlotData(data: number[]) {
     }
     binCounts[binIndex] = binCounts[binIndex] + 1;
   });
-  return binCounts.map((binCount: number, index: number): IProbabilityBinCount => {
-    return {
-      binName: `${index * numberOfBins}-${(index + 1) * numberOfBins}%`,
-      binCount: binCount
-    };
-  });
+  return binCounts.map(
+    (binCount: number, index: number): IProbabilityBinCount => {
+      return {
+        binCount,
+        binName: `${index * numberOfBins}-${(index + 1) * numberOfBins}%`
+      };
+    }
+  );
 }

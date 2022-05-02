@@ -27,11 +27,6 @@ export class ProbabilityDistributionLineChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IProbabilityDistributionLineChartProps) {
-    super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
-  }
-
   public render(): React.ReactNode {
     const theme = getTheme();
 
@@ -60,8 +55,8 @@ export class ProbabilityDistributionLineChart extends React.Component<
           series: linePlotData.map((lineData, index) => {
             return {
               data: lineData.map((probBinCount) => probBinCount.binCount),
-              type: "line",
-              name: this.props.selectedCohorts[index].cohort.name
+              name: this.props.selectedCohorts[index].cohort.name,
+              type: "line"
             };
           }),
           xAxis: {

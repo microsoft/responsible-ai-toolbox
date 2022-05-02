@@ -28,11 +28,6 @@ export class ProbabilityDistributionBoxChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IProbabilityDistributionBoxChartProps) {
-    super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
-  }
-
   public render(): React.ReactNode {
     const theme = getTheme();
 
