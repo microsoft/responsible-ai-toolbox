@@ -107,7 +107,8 @@ export class MetricConfigurationFlyout extends React.Component<
         key: "metricDescription",
         minWidth: 300,
         name: localization.ModelAssessment.ModelOverview.metricConfiguration
-          .metricDescriptionColumnHeader
+          .metricDescriptionColumnHeader,
+        isMultiline: true
       }
     ];
 
