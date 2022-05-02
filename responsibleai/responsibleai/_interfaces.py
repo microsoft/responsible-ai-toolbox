@@ -72,6 +72,7 @@ class ErrorAnalysisData:
     matrix_features: List[str]
     metric: str
     importances: list
+    root_stats: Dict[str, Any]
 
 
 class CausalMetric:

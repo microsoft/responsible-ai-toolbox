@@ -82,12 +82,16 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
-      "title": "Shift Cohort",
+      "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
       "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -101,7 +105,9 @@
       "sortFeatures": "Sort feature columns by counterfactual feature importance",
       "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
       "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
-      "toggleToolTipHeader": "Ranked counterfactual features"
+      "toggleToolTipHeader": "Ranked counterfactual features",
+      "predictedClass": "Predicted class",
+      "predictedValue": "Predicted value"
     },
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
@@ -140,8 +146,14 @@
       "cohort": "Cohort",
       "defaultLabel": "All data"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Instances in base cohort",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Basic Information",
       "cohortInformation": "Cohort information",
       "correct": "Correct",
@@ -176,6 +188,9 @@
       "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
       "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
     },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
+    },
     "FilterTooltip": {
       "correctNum": "Correct (#): ",
       "countNum": "Count (#): ",
@@ -201,8 +216,8 @@
       "featureList": "Feature list",
       "fullscreen": "Fullscreen",
       "heatMap": "Heat map",
-      "saveCohort": "Save cohort",
-      "shiftCohort": "Shift cohort",
+      "newCohort": "New cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Tree map",
       "whatIf": "What-If"
     },
@@ -315,8 +330,8 @@
       "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
       "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
     },
     "WhatIfPanel": {
@@ -802,6 +817,8 @@
       "clearAllFilters": "Clear all filters",
       "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
       "delete": "Delete",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "No filters",
       "placeholderName": "Cohort {0}",
       "save": "Save",
@@ -821,7 +838,9 @@
       "predictedProbabilities": "Prediction probabilities",
       "regressionError": "Regression error",
       "trueNegative": "True negative",
-      "truePositive": "True positive"
+      "truePositive": "True positive",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "_enumeratedClassInfo.comment": "explains the weights for selecting a single class",
@@ -1142,7 +1161,7 @@
       "dataPointInfo": "Data point info",
       "deltaLabel": "Delta",
       "disclaimer": "Disclaimer: These are explanations based on many approximations and are not the \"cause\" of predictions. Without strict mathematical robustness of causal inference, we do not advise users to make real-life decisions based on this tool.",
-      "featureImportanceGetStartedText": "Select a point to see its local importance",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Provide local feature importances to see how each feature impacts individual predictions.",
       "featureImportancePlot": "Feature importance plot",
       "featureValues": "Feature values",
@@ -1254,12 +1273,12 @@
       "deleteCohort": "Deleting {0}?",
       "deleteConfirm": "Are you sure you want to delete this cohort?",
       "selectCohort": "Select a cohort",
-      "shiftCohort": "Shift cohort",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "Create new cohort",
+      "ShiftCohort": "Switch cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Number of datapoints",
       "DefaultCohort": " (default)",
       "Filters": "Number of filters",
@@ -1288,26 +1307,80 @@
         "Delete": "Delete",
         "Title": "Delete {0}?"
       },
-      "Title": "Dashboard navigation"
+      "Title": "Dashboard configuration"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.",
-      "LocalExplanation": "Individual feature importance"
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "LocalExplanation": "Individual feature importance",
+      "SelectionCounter": "{0}/{1} datapoints selected",
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "Dashboard navigation",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Cohort info",
       "cohortList": "Cohort list",
       "cohortSettings": "Cohort settings",
       "createCohort": "Create cohort",
-      "saveCohort": "Save cohort",
-      "shiftCohort": "Shift cohort"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Model statistics"
+    },
+    "ModelOverview": {
+      "metricsDropdown": "Metric(s)",
+      "accuracy": "Accuracy",
+      "f1Score": "F1 score",
+      "meanAbsoluteError": "Mean absolute error",
+      "meanSquaredError": "Mean squared error",
+      "precision": "Precision score",
+      "recall": "Recall score",
+      "falsePositiveRate": "False positive rate",
+      "falseNegativeRate": "False negative rate",
+      "selectionRate": "Selection rate",
+      "meanPrediction": "Mean prediction",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Count",
+      "dataCohortsHeatmapHeader": "Cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "fairnessMetricDifference": "Difference",
+      "fairnessMetricRatio": "Ratio",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigConfirm": "Confirm",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following disaggregated analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
+      "visualDisplayToggleLabel": "Visual display"
     }
   }
 }

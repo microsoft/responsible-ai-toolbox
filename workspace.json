@@ -854,6 +854,39 @@
         }
       }
     },
+    "rai-e2e": {
+      "root": "libs/rai-e2e",
+      "sourceRoot": "libs/rai-e2e/src",
+      "projectType": "library",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/rai-e2e/cypress.json",
+            "tsConfig": "apps/rai-e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "widget:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/rai-e2e/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/rai-e2e"],
+          "options": {
+            "jestConfig": "libs/rai-e2e/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "widget": {
       "root": "apps/widget",
       "sourceRoot": "apps/widget/src",

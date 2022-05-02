@@ -20,12 +20,12 @@ jobs:
           exit 1
 
       # build wheel
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: update and upgrade pip, setuptools, wheel, and twine
         run: |

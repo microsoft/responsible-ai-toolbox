@@ -29,7 +29,7 @@ import {
 } from "office-ui-fabric-react";
 import React from "react";
 
-import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
+import { causalIndividualChartStyles } from "./CausalIndividualChart.styles";
 import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
 import { getIndividualChartOptions } from "./getIndividualChartOptions";

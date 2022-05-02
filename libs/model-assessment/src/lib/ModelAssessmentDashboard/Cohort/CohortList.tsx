@@ -165,7 +165,7 @@ export class CohortList extends React.Component<
               </Stack>
             );
           }
-          return <span>{fieldContent}</span>;
+          return <span className={style.link}>{fieldContent}</span>;
         case "detailsColumn":
           if (item.details && item.details.length === 2 && index !== 0) {
             return (
@@ -314,8 +314,8 @@ export class CohortList extends React.Component<
     return allItems;
   }
 
-  private saveEditedCohort = (cohort: Cohort) => {
-    this.context.editCohort(cohort);
+  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean) => {
+    this.context.editCohort(cohort, switchNew);
     this.toggleEditPanel();
   };
 

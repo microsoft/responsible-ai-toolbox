@@ -21,12 +21,14 @@ import {
   TooltipDelay,
   DirectionalHint,
   IconButton,
-  ITooltipProps
+  ITooltipProps,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -63,7 +65,7 @@ export class CounterfactualPanel extends React.Component<
     super(props);
     this.state = {
       filterText: undefined,
-      sortFeatures: false
+      sortFeatures: true
     };
   }
   public render(): React.ReactNode {
@@ -72,7 +74,8 @@ export class CounterfactualPanel extends React.Component<
       <Panel
         id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
-        type={PanelType.largeFixed}
+        type={PanelType.custom}
+        customWidth={"100%"}
         onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
@@ -81,6 +84,13 @@ export class CounterfactualPanel extends React.Component<
         onRenderFooterContent={this.renderClose}
       >
         <Stack tokens={{ childrenGap: "m1" }}>
+          <Stack.Item>
+            {this.props.data?.errorMessage && (
+              <MessageBar messageBarType={MessageBarType.error}>
+                {this.props.data.errorMessage}
+              </MessageBar>
+            )}
+          </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
@@ -199,7 +209,7 @@ export class CounterfactualPanel extends React.Component<
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} className={classes.saveDescription}>
             {localization.Counterfactuals.saveDescription}
           </Text>
         </Stack.Item>

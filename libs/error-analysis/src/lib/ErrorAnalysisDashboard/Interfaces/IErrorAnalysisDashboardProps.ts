@@ -26,13 +26,6 @@ import { IStringsParam } from "./IStringsParam";
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
 
-export interface IRootStats {
-  metricName: string;
-  metricValue: number;
-  totalSize: number;
-  errorCoverage: number;
-}
-
 export interface IErrorAnalysisDashboardProps
   extends IExplanationDashboardData,
     IOfficeFabricProps {
@@ -58,7 +51,6 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
-  rootStats?: IRootStats;
   telemetryHook?: (message: ITelemetryMessage) => void;
   errorAnalysisData: IErrorAnalysisData;
 }

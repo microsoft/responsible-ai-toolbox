@@ -108,6 +108,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               baseCohort={this.state.baseCohort}
               selectedCohort={this.state.selectedCohort}
               dataset={this.props.dataset}
+              onClearCohortSelectionClick={this.clearCohortSelection}
               requestPredictions={this.props.requestPredictions}
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
@@ -177,6 +178,16 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     });
   };
 
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
+    });
+  };
+
   private onSaveCohort = (
     savedCohort: ErrorCohort,
     switchNew?: boolean
@@ -221,7 +232,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }));
   };
 
-  private editCohort = (editCohort: Cohort): void => {
+  private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {
     const editIndex = this.state.cohorts.findIndex(
       (c) => c.cohort.name === editCohort.name
     );
@@ -237,9 +248,15 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     let newCohorts = [...this.state.cohorts];
     newCohorts[editIndex] = newErrorCohort;
     newCohorts = newCohorts.filter((cohort) => !cohort.isTemporary);
-    this.setState({
-      cohorts: newCohorts
-    });
+
+    if (switchNew) {
+      this.setState({
+        cohorts: newCohorts,
+        selectedCohort: newCohorts[editIndex]
+      });
+    } else {
+      this.setState({ cohorts: newCohorts });
+    }
   };
 
   private deleteCohort = (cohort: ErrorCohort) => {

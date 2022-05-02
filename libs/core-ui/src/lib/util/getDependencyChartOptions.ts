@@ -49,6 +49,7 @@ export function getDependencyChartOptions(
         color: pointColor,
         data,
         name: "",
+        turboThreshold: 0,
         type: "scatter"
       }
     ],
