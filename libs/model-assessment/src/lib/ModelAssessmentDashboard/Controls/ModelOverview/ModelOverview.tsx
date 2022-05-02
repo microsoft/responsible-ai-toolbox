@@ -391,6 +391,9 @@ export class ModelOverview extends React.Component<
               onDismissFlyout={() => {
                 this.setState({ metricConfigurationIsVisible: false });
               }}
+              selectedMetrics={this.state.selectedMetrics}
+              updateSelectedMetrics={this.onMetricConfigurationChange}
+              selectableMetrics={selectableMetrics}
             />
             {someCohortSelected && (
               <Pivot>
@@ -494,6 +497,13 @@ export class ModelOverview extends React.Component<
       selectedFeatures: newSelectedFeatures,
       selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins,
       featureConfigurationIsVisible: false
+    });
+  };
+
+  private onMetricConfigurationChange = (metrics: string[]): void => {
+    this.setState({
+      selectedMetrics: metrics,
+      metricConfigurationIsVisible: false
     });
   };
 

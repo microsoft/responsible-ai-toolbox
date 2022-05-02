@@ -216,46 +216,79 @@ export function wrapText(
   return text;
 }
 
+export interface IMetricOption extends IDropdownOption {
+  description: string;
+}
+
 export function getSelectableMetrics(
   taskType: "classification" | "regression",
   isMulticlass: boolean
 ) {
-  const selectableMetrics: IDropdownOption[] = [];
+  const selectableMetrics: IMetricOption[] = [];
   if (taskType === classificationTask) {
     if (isMulticlass) {
       selectableMetrics.push({
         key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.accuracy
+        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name,
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.accuracy
+            .description
       });
     } else {
       selectableMetrics.push(
         {
           key: BinaryClassificationMetrics.Accuracy,
-          text: localization.ModelAssessment.ModelOverview.accuracy
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+            .name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description
         },
         {
           key: BinaryClassificationMetrics.F1Score,
-          text: localization.ModelAssessment.ModelOverview.f1Score
+          text: localization.ModelAssessment.ModelOverview.metrics.f1Score.name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.f1Score
+              .description
         },
         {
           key: BinaryClassificationMetrics.Precision,
-          text: localization.ModelAssessment.ModelOverview.precision
+          text: localization.ModelAssessment.ModelOverview.metrics.precision
+            .name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.precision
+              .description
         },
         {
           key: BinaryClassificationMetrics.Recall,
-          text: localization.ModelAssessment.ModelOverview.recall
+          text: localization.ModelAssessment.ModelOverview.metrics.recall.name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.recall
+              .description
         },
         {
           key: BinaryClassificationMetrics.FalsePositiveRate,
-          text: localization.ModelAssessment.ModelOverview.falsePositiveRate
+          text: localization.ModelAssessment.ModelOverview.metrics
+            .falsePositiveRate.name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.falsePositiveRate
+              .description
         },
         {
           key: BinaryClassificationMetrics.FalseNegativeRate,
-          text: localization.ModelAssessment.ModelOverview.falseNegativeRate
+          text: localization.ModelAssessment.ModelOverview.metrics
+            .falseNegativeRate.name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.falseNegativeRate
+              .description
         },
         {
           key: BinaryClassificationMetrics.SelectionRate,
-          text: localization.ModelAssessment.ModelOverview.selectionRate
+          text: localization.ModelAssessment.ModelOverview.metrics.selectionRate
+            .name,
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.selectionRate
+              .description
         }
       );
     }
@@ -264,15 +297,27 @@ export function getSelectableMetrics(
     selectableMetrics.push(
       {
         key: RegressionMetrics.MeanAbsoluteError,
-        text: localization.ModelAssessment.ModelOverview.meanAbsoluteError
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .meanAbsoluteError.name,
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meanAbsoluteError
+            .description
       },
       {
         key: RegressionMetrics.MeanSquaredError,
-        text: localization.ModelAssessment.ModelOverview.meanSquaredError
+        text: localization.ModelAssessment.ModelOverview.metrics
+          .meanSquaredError.name,
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meanSquaredError
+            .description
       },
       {
         key: RegressionMetrics.MeanPrediction,
-        text: localization.ModelAssessment.ModelOverview.meanPrediction
+        text: localization.ModelAssessment.ModelOverview.metrics.meanPrediction
+          .name,
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.meanPrediction
+            .description
       }
     );
   }

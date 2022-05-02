@@ -1330,17 +1330,51 @@
       "modelStatistics": "Model statistics"
     },
     "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
       "metricsDropdown": "Metric(s)",
-      "accuracy": "Accuracy",
-      "f1Score": "F1 score",
-      "meanAbsoluteError": "Mean absolute error",
-      "meanSquaredError": "Mean squared error",
-      "precision": "Precision score",
-      "recall": "Recall score",
-      "falsePositiveRate": "False positive rate",
-      "falseNegativeRate": "False negative rate",
-      "selectionRate": "Selection rate",
-      "meanPrediction": "Mean prediction",
       "notAvailable": "N/A",
       "countColumnHeader": "Count",
       "dataCohortsHeatmapHeader": "Cohorts",
@@ -1360,8 +1394,6 @@
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
       "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
       "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
-      "fairnessMetricDifference": "Difference",
-      "fairnessMetricRatio": "Ratio",
       "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
       "metricSelectionButton": "Choose metric",
@@ -1392,6 +1424,14 @@
         "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
         "continuousFeatureBinningLabel": "Change the number of bins",
         "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your performance metrics",
+        "flyoutSubHeader": "How do you want to measure performance?",
+        "flyoutDescription": "Select as many of the following metrics as you want.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
       },
       "visualDisplayToggleLabel": "Visual display"
     }
