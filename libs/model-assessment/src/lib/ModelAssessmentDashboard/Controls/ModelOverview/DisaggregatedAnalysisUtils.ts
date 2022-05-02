@@ -11,6 +11,7 @@ import {
   JointDataset,
   Operations
 } from "@responsible-ai/core-ui";
+
 import { defaultNumberOfContinuousFeatureBins } from "./FeatureConfigurationFlyout";
 
 function generateFiltersCartesianProduct(
@@ -92,7 +93,7 @@ export function generateFeatureBasedFilters(
   jointDataset: JointDataset,
   dataset: IDataset,
   featureIndex: number,
-  nGroupsPerFeature: number = 3
+  nGroupsPerFeature = 3
 ) {
   const featureName = dataset.feature_names[featureIndex];
   const featureMetaName = JointDataset.DataLabelRoot + featureIndex;
@@ -106,50 +107,49 @@ export function generateFeatureBasedFilters(
         };
       }
     );
-  } else {
-    const { min, max } = getMinMax(
-      dataset.features.map((instanceFeatures) => instanceFeatures[featureIndex])
-    );
-
-    const intervalWidth = (max - min) / nGroupsPerFeature;
-    const featureFilters: ICompositeFilter[] = [
-      {
-        // left-most bin
-        arg: [min + intervalWidth],
-        column: featureMetaName,
-        method: FilterMethods.LessThan
-      }
-    ];
-    for (
-      // middle bins
-      let binIndex = 1;
-      binIndex < nGroupsPerFeature - 1;
-      binIndex++
-    ) {
-      featureFilters.push({
-        compositeFilters: [
-          {
-            arg: [min + intervalWidth * binIndex],
-            column: featureMetaName,
-            method: FilterMethods.GreaterThanEqualTo
-          },
-          {
-            arg: [min + intervalWidth * (binIndex + 1)],
-            column: featureMetaName,
-            method: FilterMethods.LessThan
-          }
-        ],
-        operation: Operations.And
-      });
-    }
-    featureFilters.push({
-      // right-most bin
-      arg: [min + intervalWidth * (nGroupsPerFeature - 1)],
-      column: featureMetaName,
-      method: FilterMethods.GreaterThanEqualTo
-    });
-    return featureFilters;
   }
+  const { min, max } = getMinMax(
+    dataset.features.map((instanceFeatures) => instanceFeatures[featureIndex])
+  );
+
+  const intervalWidth = (max - min) / nGroupsPerFeature;
+  const featureFilters: ICompositeFilter[] = [
+    {
+      // left-most bin
+      arg: [min + intervalWidth],
+      column: featureMetaName,
+      method: FilterMethods.LessThan
+    }
+  ];
+  for (
+    // middle bins
+    let binIndex = 1;
+    binIndex < nGroupsPerFeature - 1;
+    binIndex++
+  ) {
+    featureFilters.push({
+      compositeFilters: [
+        {
+          arg: [min + intervalWidth * binIndex],
+          column: featureMetaName,
+          method: FilterMethods.GreaterThanEqualTo
+        },
+        {
+          arg: [min + intervalWidth * (binIndex + 1)],
+          column: featureMetaName,
+          method: FilterMethods.LessThan
+        }
+      ],
+      operation: Operations.And
+    });
+  }
+  featureFilters.push({
+    // right-most bin
+    arg: [min + intervalWidth * (nGroupsPerFeature - 1)],
+    column: featureMetaName,
+    method: FilterMethods.GreaterThanEqualTo
+  });
+  return featureFilters;
 }
 
 export function getMinMax(values: unknown[]) {
@@ -166,5 +166,5 @@ export function getMinMax(values: unknown[]) {
       min = value;
     }
   });
-  return { min, max };
+  return { max, min };
 }

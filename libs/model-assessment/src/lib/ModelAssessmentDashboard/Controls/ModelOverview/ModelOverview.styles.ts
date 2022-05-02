@@ -21,6 +21,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
   () => {
     const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
+      configurationActionButton: {
+        paddingTop: "44px"
+      },
       descriptionText: {
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth
@@ -33,9 +36,6 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
-      },
-      configurationActionButton: {
-        paddingTop: "44px"
       }
     });
   };

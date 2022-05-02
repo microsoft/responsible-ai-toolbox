@@ -25,6 +25,7 @@ import {
   MessageBarType
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { generateFeatureBasedFilters } from "./DisaggregatedAnalysisUtils";
 
 interface IFeatureConfigurationFlyoutProps {
@@ -109,18 +110,18 @@ export class FeatureConfigurationFlyout extends React.Component<
     const columns: IColumn[] = [
       {
         key: "featureName",
+        maxWidth: 350,
+        minWidth: 200,
         name: localization.ModelAssessment.ModelOverview.featureConfiguration
           .featureColumnHeader,
-        onRender: this.renderFeatureColumn,
-        minWidth: 200,
-        maxWidth: 350
+        onRender: this.renderFeatureColumn
       },
       {
         key: "groups",
+        minWidth: 300,
         name: localization.ModelAssessment.ModelOverview.featureConfiguration
           .groupsColumnHeader,
-        onRender: this.renderGroups,
-        minWidth: 300
+        onRender: this.renderGroups
       }
     ];
 
@@ -131,7 +132,7 @@ export class FeatureConfigurationFlyout extends React.Component<
         type={PanelType.large}
         onDismiss={this.props.onDismissFlyout}
         onRenderFooterContent={this.onRenderFooterContent}
-        isFooterAtBottom={true}
+        isFooterAtBottom
       >
         <Stack tokens={{ childrenGap: "10px" }}>
           <Text variant={"xLarge"}>
@@ -210,7 +211,7 @@ export class FeatureConfigurationFlyout extends React.Component<
   }): IFeatureConfigurationRow[] => {
     return this.context.dataset.feature_names.map(
       (featureName, featureIndex) => {
-        let featureBasedFilters = generateFeatureBasedFilters(
+        const featureBasedFilters = generateFeatureBasedFilters(
           this.context.jointDataset,
           this.context.dataset,
           featureIndex,
@@ -220,16 +221,8 @@ export class FeatureConfigurationFlyout extends React.Component<
         const isFeatureContinuous =
           !this.context.dataset.categorical_features.includes(featureName);
         return {
-          key: featureIndex.toString(),
-          featureName: featureName,
-          groups:
-            featureBasedFilters?.map((filter) => {
-              const cohortName = getCompositeFilterString(
-                [filter],
-                this.context.jointDataset
-              )[0];
-              return cohortName;
-            }) ?? [],
+          continuousFeatureBinningEnabled: isFeatureContinuous,
+          featureName,
           featureRemark: isFeatureContinuous
             ? localization.formatString(
                 localization.ModelAssessment.ModelOverview.featureConfiguration
@@ -241,7 +234,15 @@ export class FeatureConfigurationFlyout extends React.Component<
                   .categoricalGroupsCountRemark,
                 featureBasedFilters?.length
               ),
-          continuousFeatureBinningEnabled: isFeatureContinuous
+          groups:
+            featureBasedFilters?.map((filter) => {
+              const cohortName = getCompositeFilterString(
+                [filter],
+                this.context.jointDataset
+              )[0];
+              return cohortName;
+            }) ?? [],
+          key: featureIndex.toString()
         };
       }
     );
@@ -253,7 +254,7 @@ export class FeatureConfigurationFlyout extends React.Component<
       row?.groups.every((group: any) => typeof group === "string");
     if (row && isStringArray) {
       return (
-        <>
+        <Stack>
           {row?.groups.map((group) => {
             return (
               <>
@@ -262,7 +263,7 @@ export class FeatureConfigurationFlyout extends React.Component<
               </>
             );
           })}
-        </>
+        </Stack>
       );
     }
     return;
@@ -311,14 +312,15 @@ export class FeatureConfigurationFlyout extends React.Component<
   private onSpinButtonChange(delta: number, featureIndex: number) {
     const spinButtonChangeFunction = (value?: string) => {
       if (value !== undefined) {
-        let continuousFeatureBins = this.state.newNumberOfContinuousFeatureBins;
+        const continuousFeatureBins =
+          this.state.newNumberOfContinuousFeatureBins;
         const newValue = Number(value) + delta;
         if (newValue >= minFeatureBins && newValue <= maxFeatureBins) {
           continuousFeatureBins[featureIndex] = newValue;
           this.setState(
             {
-              newNumberOfContinuousFeatureBins: continuousFeatureBins,
-              items: this.getItems(continuousFeatureBins)
+              items: this.getItems(continuousFeatureBins),
+              newNumberOfContinuousFeatureBins: continuousFeatureBins
             },
             () => {
               this.updateSelection();

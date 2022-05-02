@@ -80,10 +80,10 @@ export class ModelOverview extends React.Component<
     super(props);
     this.state = {
       chartConfigurationIsVisible: false,
-      featureConfigurationIsVisible: false,
-      metricConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
+      featureConfigurationIsVisible: false,
+      metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
@@ -493,17 +493,17 @@ export class ModelOverview extends React.Component<
       numberOfContinuousFeatureBins
     );
     this.setState({
+      featureConfigurationIsVisible: false,
       selectedFeatureBasedCohorts: featureBasedCohorts.map((_, index) => index),
       selectedFeatures: newSelectedFeatures,
-      selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins,
-      featureConfigurationIsVisible: false
+      selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
     });
   };
 
   private onMetricConfigurationChange = (metrics: string[]): void => {
     this.setState({
-      selectedMetrics: metrics,
-      metricConfigurationIsVisible: false
+      metricConfigurationIsVisible: false,
+      selectedMetrics: metrics
     });
   };
 
@@ -526,7 +526,7 @@ export class ModelOverview extends React.Component<
         // remove unselected feature
         newlySelectedFeatures.splice(unselectedFeatureIndex, 1);
       }
-      let numberOfContinuousFeatureBins: {
+      const numberOfContinuousFeatureBins: {
         [featureIndex: number]: number;
       } = {};
       newlySelectedFeatures.forEach((featureIndex) => {

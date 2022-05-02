@@ -22,6 +22,7 @@ import {
   IColumn
 } from "office-ui-fabric-react";
 import React from "react";
+
 import { IMetricOption } from "./StatsTableUtils";
 
 interface IMetricConfigurationFlyoutProps {
@@ -66,8 +67,8 @@ export class MetricConfigurationFlyout extends React.Component<
     });
 
     this.state = {
-      newlySelectedMetrics: this.props.selectedMetrics,
-      items: []
+      items: [],
+      newlySelectedMetrics: this.props.selectedMetrics
     };
     this.updateSelection();
   }
@@ -82,7 +83,7 @@ export class MetricConfigurationFlyout extends React.Component<
     if (
       this.props.selectedMetrics.length !== prevProps.selectedMetrics.length ||
       this.props.selectedMetrics.some((metricName, index) => {
-        metricName !== prevProps.selectedMetrics[index];
+        return metricName !== prevProps.selectedMetrics[index];
       })
     ) {
       this.setState({ newlySelectedMetrics: this.props.selectedMetrics }, () =>
@@ -94,19 +95,19 @@ export class MetricConfigurationFlyout extends React.Component<
   public render(): React.ReactNode {
     const columns: IColumn[] = [
       {
-        key: "metricName",
         fieldName: "metricName",
-        name: localization.ModelAssessment.ModelOverview.metricConfiguration
-          .metricNameColumnHeader,
+        key: "metricName",
+        maxWidth: 200,
         minWidth: 100,
-        maxWidth: 200
+        name: localization.ModelAssessment.ModelOverview.metricConfiguration
+          .metricNameColumnHeader
       },
       {
-        key: "metricDescription",
         fieldName: "metricDescription",
+        key: "metricDescription",
+        minWidth: 300,
         name: localization.ModelAssessment.ModelOverview.metricConfiguration
-          .metricDescriptionColumnHeader,
-        minWidth: 300
+          .metricDescriptionColumnHeader
       }
     ];
 
@@ -116,7 +117,7 @@ export class MetricConfigurationFlyout extends React.Component<
         closeButtonAriaLabel="Close"
         onDismiss={this.props.onDismissFlyout}
         onRenderFooterContent={this.onRenderFooterContent}
-        isFooterAtBottom={true}
+        isFooterAtBottom
         type={PanelType.medium}
       >
         <Stack tokens={{ childrenGap: "10px" }}>
@@ -198,8 +199,8 @@ export class MetricConfigurationFlyout extends React.Component<
     return this.props.selectableMetrics.map((metricOption) => {
       return {
         key: metricOption.key.toString(),
-        metricName: metricOption.text,
-        metricDescription: metricOption.description
+        metricDescription: metricOption.description,
+        metricName: metricOption.text
       };
     });
   }
