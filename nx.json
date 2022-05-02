@@ -40,6 +40,9 @@
     "dataset-explorer": {
       "tags": []
     },
+    "e2e": {
+      "tags": []
+    },
     "error-analysis": {
       "tags": []
     },
@@ -59,9 +62,6 @@
       "tags": []
     },
     "model-assessment": {
-      "tags": []
-    },
-    "rai-e2e": {
       "tags": []
     },
     "widget": {

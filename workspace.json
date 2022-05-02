@@ -404,6 +404,58 @@
         }
       }
     },
+    "e2e": {
+      "root": "libs/e2e",
+      "sourceRoot": "libs/e2e/src",
+      "projectType": "library",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "libs/e2e/cypress.json",
+            "tsConfig": "libs/e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "widget:serve:production"
+            }
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/e2e",
+            "tsConfig": "libs/e2e/tsconfig.lib.json",
+            "project": "libs/e2e/package.json",
+            "entryFile": "libs/e2e/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/e2e/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/e2e/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/e2e"],
+          "options": {
+            "jestConfig": "libs/e2e/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "error-analysis": {
       "root": "libs/error-analysis",
       "sourceRoot": "libs/error-analysis/src",
@@ -851,39 +903,6 @@
             "passWithNoTests": true
           },
           "outputs": ["coverage/libs/model-assessment"]
-        }
-      }
-    },
-    "rai-e2e": {
-      "root": "libs/rai-e2e",
-      "sourceRoot": "libs/rai-e2e/src",
-      "projectType": "library",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/rai-e2e/cypress.json",
-            "tsConfig": "apps/rai-e2e/tsconfig.e2e.json"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "widget:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/rai-e2e/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/rai-e2e"],
-          "options": {
-            "jestConfig": "libs/rai-e2e/jest.config.js",
-            "passWithNoTests": true
-          }
         }
       }
     },
