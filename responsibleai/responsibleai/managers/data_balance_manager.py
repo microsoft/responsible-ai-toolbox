@@ -182,6 +182,28 @@ class DataBalanceManager(BaseManager):
         )
         return None
 
+    def set_precomputed_measures(
+        feature_balance_measures: Optional[pd.DataFrame],
+        distribution_balance_measures: Optional[pd.DataFrame],
+        aggregate_balance_measures: Optional[pd.DataFrame],
+    ):
+        """Set pre-computed data balance measures to visualize
+        in the RAI Dashboard. All params are optional, and the params
+        that are set will be visualized.
+
+        :param feature_balance_measures: Feature balance measures
+            of the dataset.
+        :type feature_balance_measures: pd.DataFrame
+        :param distribution_balance_measures: Distribution balance measures
+            of the dataset.
+        :type distribution_balance_measures: pd.DataFrame
+        :param aggregate_balance_measures: Aggregate balance measures
+            of the dataset.
+        :type aggregate_balance_measures: pd.DataFrame
+        """
+        # TODO
+        ...
+
     def get(self):
         """List information about the data balance manager.
 
