@@ -13,7 +13,9 @@ import pandas as pd
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai._tools.data_balance.data_balance import DataBalance
+from responsibleai._tools.data_balance.data_balance_analysis import (
+    DataBalanceAnalysis,
+)
 from responsibleai._tools.shared.backends import SupportedBackend
 from responsibleai._tools.shared.state_directory_management import (
     DirectoryManager,
@@ -143,7 +145,7 @@ class DataBalanceManager(BaseManager):
         if not self._validate() or not self._df:
             return
 
-        self._data_balance_measures = DataBalance.get_data_balance_measures(
+        self._data_balance_measures = DataBalanceAnalysis.compute_measures(
             df=self._df,
             cols_of_interest=self._cols_of_interest,
             target_column=self._target_column,

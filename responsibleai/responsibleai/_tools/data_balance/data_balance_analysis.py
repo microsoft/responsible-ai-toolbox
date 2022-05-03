@@ -27,9 +27,9 @@ SPARK_DISTRIBUTION_COL = "DistributionBalanceMeasure.*"
 SPARK_FEATURE_COL = "FeatureBalanceMeasure.*"
 
 
-class DataBalance:
+class DataBalanceAnalysis:
     @staticmethod
-    def get_data_balance_measures(
+    def compute_measures(
         df: Union[pd.DataFrame, Any],
         cols_of_interest: List[str],
         target_column: str,
@@ -37,34 +37,34 @@ class DataBalance:
         backend: str,
     ) -> Optional[Dict[str, Any]]:
         try:
-            measures_dfs = DataBalance._compute_measures(
-                df=df,
-                cols_of_interest=cols_of_interest,
-                target_column=target_column,
-                pos_label=pos_label,
-                backend=backend,
+            feat_measures_df, dist_measures_df, agg_measures_df = (
+                DataBalanceAnalysis._compute_measures(
+                    df=df,
+                    cols_of_interest=cols_of_interest,
+                    target_column=target_column,
+                    pos_label=pos_label,
+                    backend=backend,
+                )
             )
-            feat_measures_df, dist_measures_df, agg_measures_df = measures_dfs
-
-            unique_classes_feature_measures = (
-                DataBalance._transform_feature_measures(
+            
+            unique_classes, feature_measures = (
+                DataBalanceAnalysis._transform_feature_measures(
                     df=feat_measures_df
                 )
             )
-            unique_classes, feature_measures = unique_classes_feature_measures
 
             distribution_measures = (
-                DataBalance._transform_distribution_measures(
+                DataBalanceAnalysis._transform_distribution_measures(
                     df=dist_measures_df
                 )
             )
             aggregate_measures = (
-                DataBalance._transform_aggregate_measures(
+                DataBalanceAnalysis._transform_aggregate_measures(
                     df=agg_measures_df
                 )
             )
 
-            return DataBalance._transform_data_balance_measures(
+            return DataBalanceAnalysis._transform_data_balance_measures(
                 unique_classes=unique_classes,
                 feature_measures=feature_measures,
                 distribution_measures=distribution_measures,
@@ -83,7 +83,7 @@ class DataBalance:
     ) -> Optional[Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]]:
         if backend == SupportedBackend.SPARK.value:
             try:
-                return DataBalance._compute_measures_spark(
+                return DataBalanceAnalysis._compute_measures_spark(
                     df=df,
                     cols_of_interest=cols_of_interest,
                     target_column=target_column,
@@ -94,9 +94,9 @@ class DataBalance:
                     f"Failed to compute data balance with spark due to {e!r}.",
                 )
 
-        # If spark backend fails or backend != "spark", use pandas backend
+        # If spark backend fails or backend != spark, use pandas backend
         try:
-            return DataBalance._compute_measures_pandas(
+            return DataBalanceAnalysis._compute_measures_pandas(
                 df=df,
                 cols_of_interest=cols_of_interest,
                 target_column=target_column,
