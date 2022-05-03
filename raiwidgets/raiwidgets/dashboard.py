@@ -55,7 +55,8 @@ class Dashboard(object):
                  public_ip,
                  port,
                  locale,
-                 no_inline_dashboard=False):
+                 no_inline_dashboard=False,
+                 **kwargs):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -74,7 +75,8 @@ class Dashboard(object):
             'id': self.id,
             'baseUrl': self._service.env.base_url,
             'withCredentials': self._service.with_credentials,
-            'locale': locale
+            'locale': locale,
+            'featureFlights': kwargs.get('feature_flights')
         }
         self.model_data = model_data
         self.add_route()
