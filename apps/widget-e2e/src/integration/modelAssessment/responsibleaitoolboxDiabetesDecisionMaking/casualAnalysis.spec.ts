@@ -4,7 +4,7 @@
 import {
   describeCausalAnalysis,
   modelAssessmentDatasets
-} from "@responsible-ai/rai-e2e";
+} from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
 describeCausalAnalysis(datasetShape, "DiabetesDecisionMaking");
