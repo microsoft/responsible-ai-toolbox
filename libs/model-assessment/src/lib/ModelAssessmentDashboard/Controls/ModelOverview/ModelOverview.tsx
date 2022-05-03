@@ -359,9 +359,7 @@ export class ModelOverview extends React.Component<
             )}
             <ChartConfigurationFlyout
               isOpen={this.state.chartConfigurationIsVisible}
-              onDismissFlyout={() => {
-                this.setState({ chartConfigurationIsVisible: false });
-              }}
+              onDismissFlyout={this.onDismissChartConfigurationFlyout}
               datasetCohorts={this.context.errorCohorts}
               featureBasedCohorts={featureBasedCohorts}
               selectedDatasetCohorts={this.state.selectedDatasetCohorts}
@@ -375,9 +373,7 @@ export class ModelOverview extends React.Component<
             />
             <FeatureConfigurationFlyout
               isOpen={this.state.featureConfigurationIsVisible}
-              onDismissFlyout={() => {
-                this.setState({ featureConfigurationIsVisible: false });
-              }}
+              onDismissFlyout={this.onDismissFeatureConfigurationFlyout}
               selectedFeatures={this.state.selectedFeatures}
               numberOfContinuousFeatureBins={
                 this.state.selectedFeaturesContinuousFeatureBins
@@ -430,6 +426,14 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onDismissChartConfigurationFlyout = () => {
+    this.setState({ chartConfigurationIsVisible: false });
+  };
+
+  private onDismissFeatureConfigurationFlyout = () => {
+    this.setState({ featureConfigurationIsVisible: false });
+  };
 
   private onVisualDisplayToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
