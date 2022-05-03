@@ -157,9 +157,10 @@ export class FairnessMetricTable extends React.Component<
           },
           yAxis: {
             categories: [
-              localization.ModelAssessment.ModelOverview
+              localization.ModelAssessment.ModelOverview.metrics
                 .fairnessMetricDifference,
-              localization.ModelAssessment.ModelOverview.fairnessMetricRatio
+              localization.ModelAssessment.ModelOverview.metrics
+                .fairnessMetricRatio
             ],
             grid: {
               borderWidth: 2,

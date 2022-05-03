@@ -33,9 +33,12 @@ import {
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
+import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
+import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
+import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
@@ -48,12 +51,15 @@ interface IModelOverviewProps {
 interface IModelOverviewState {
   selectedMetrics: string[];
   selectedFeatures: number[];
+  selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
   selectedDatasetCohorts?: number[];
   selectedFeatureBasedCohorts?: number[];
   chartConfigurationIsVisible: boolean;
-  showHeatmapColors: boolean;
   datasetCohortViewIsVisible: boolean;
   datasetCohortChartIsVisible: boolean;
+  featureConfigurationIsVisible: boolean;
+  metricConfigurationIsVisible: boolean;
+  showHeatmapColors: boolean;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -74,7 +80,10 @@ export class ModelOverview extends React.Component<
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
+      featureConfigurationIsVisible: false,
+      metricConfigurationIsVisible: false,
       selectedFeatures: [],
+      selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
       showHeatmapColors: false
     };
@@ -154,7 +163,8 @@ export class ModelOverview extends React.Component<
       this.context.baseErrorCohort,
       this.context.jointDataset,
       this.context.dataset,
-      this.state.selectedFeatures
+      this.state.selectedFeatures,
+      this.state.selectedFeaturesContinuousFeatureBins
     );
 
     const featureBasedCohortLabeledStatistics = generateMetrics(
@@ -241,7 +251,21 @@ export class ModelOverview extends React.Component<
                 className={classNames.dropdown}
                 styles={FabricStyles.limitedSizeMenuDropdown}
               />
-              {!this.state.datasetCohortViewIsVisible && (
+              <ActionButton
+                className={classNames.configurationActionButton}
+                onClick={() =>
+                  this.setState({ metricConfigurationIsVisible: true })
+                }
+                iconProps={{ iconName: "ColumnOptions" }}
+              >
+                {
+                  localization.ModelAssessment.ModelOverview
+                    .helpMeChooseMetricsButton
+                }
+              </ActionButton>
+            </Stack>
+            {!this.state.datasetCohortViewIsVisible && (
+              <Stack horizontal tokens={{ childrenGap: "10px" }}>
                 <ComboBox
                   componentRef={this.featureComboBoxRef}
                   placeholder={
@@ -258,8 +282,20 @@ export class ModelOverview extends React.Component<
                   className={classNames.dropdown}
                   styles={FabricStyles.limitedSizeMenuDropdown}
                 />
-              )}
-            </Stack>
+                <ActionButton
+                  className={classNames.configurationActionButton}
+                  onClick={() =>
+                    this.setState({ featureConfigurationIsVisible: true })
+                  }
+                  iconProps={{ iconName: "ColumnOptions" }}
+                >
+                  {
+                    localization.ModelAssessment.ModelOverview
+                      .helpMeChooseFeaturesButton
+                  }
+                </ActionButton>
+              </Stack>
+            )}
             <Toggle
               label={
                 localization.ModelAssessment.ModelOverview
@@ -323,9 +359,7 @@ export class ModelOverview extends React.Component<
             )}
             <ChartConfigurationFlyout
               isOpen={this.state.chartConfigurationIsVisible}
-              onDismissFlyout={() => {
-                this.setState({ chartConfigurationIsVisible: false });
-              }}
+              onDismissFlyout={this.onDismissChartConfigurationFlyout}
               datasetCohorts={this.context.errorCohorts}
               featureBasedCohorts={featureBasedCohorts}
               selectedDatasetCohorts={this.state.selectedDatasetCohorts}
@@ -336,6 +370,24 @@ export class ModelOverview extends React.Component<
               datasetCohortViewIsSelected={
                 this.state.datasetCohortChartIsVisible
               }
+            />
+            <FeatureConfigurationFlyout
+              isOpen={this.state.featureConfigurationIsVisible}
+              onDismissFlyout={this.onDismissFeatureConfigurationFlyout}
+              selectedFeatures={this.state.selectedFeatures}
+              numberOfContinuousFeatureBins={
+                this.state.selectedFeaturesContinuousFeatureBins
+              }
+              updateSelectedFeatures={this.onFeatureConfigurationChange}
+            />
+            <MetricConfigurationFlyout
+              isOpen={this.state.metricConfigurationIsVisible}
+              onDismissFlyout={() => {
+                this.setState({ metricConfigurationIsVisible: false });
+              }}
+              selectedMetrics={this.state.selectedMetrics}
+              updateSelectedMetrics={this.onMetricConfigurationChange}
+              selectableMetrics={selectableMetrics}
             />
             {someCohortSelected && (
               <Pivot>
@@ -374,6 +426,14 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onDismissChartConfigurationFlyout = () => {
+    this.setState({ chartConfigurationIsVisible: false });
+  };
+
+  private onDismissFeatureConfigurationFlyout = () => {
+    this.setState({ featureConfigurationIsVisible: false });
+  };
 
   private onVisualDisplayToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -424,6 +484,31 @@ export class ModelOverview extends React.Component<
     }
   };
 
+  private onFeatureConfigurationChange = (
+    newSelectedFeatures: number[],
+    numberOfContinuousFeatureBins: {
+      [featureIndex: number]: number;
+    }
+  ): void => {
+    const featureBasedCohorts = this.generateFeatureBasedCohorts(
+      newSelectedFeatures,
+      numberOfContinuousFeatureBins
+    );
+    this.setState({
+      featureConfigurationIsVisible: false,
+      selectedFeatureBasedCohorts: featureBasedCohorts.map((_, index) => index),
+      selectedFeatures: newSelectedFeatures,
+      selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
+    });
+  };
+
+  private onMetricConfigurationChange = (metrics: string[]): void => {
+    this.setState({
+      metricConfigurationIsVisible: false,
+      selectedMetrics: metrics
+    });
+  };
+
   private onFeatureSelectionChange = (
     _: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -443,24 +528,38 @@ export class ModelOverview extends React.Component<
         // remove unselected feature
         newlySelectedFeatures.splice(unselectedFeatureIndex, 1);
       }
+      const numberOfContinuousFeatureBins: {
+        [featureIndex: number]: number;
+      } = {};
+      newlySelectedFeatures.forEach((featureIndex) => {
+        numberOfContinuousFeatureBins[featureIndex] =
+          this.state.selectedFeaturesContinuousFeatureBins[featureIndex] ??
+          defaultNumberOfContinuousFeatureBins;
+      });
       const featureBasedCohorts = this.generateFeatureBasedCohorts(
-        newlySelectedFeatures
+        newlySelectedFeatures,
+        numberOfContinuousFeatureBins
       );
       this.setState({
         selectedFeatureBasedCohorts: featureBasedCohorts.map(
           (_, index) => index
         ),
-        selectedFeatures: newlySelectedFeatures
+        selectedFeatures: newlySelectedFeatures,
+        selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
       });
     }
   };
 
-  private generateFeatureBasedCohorts(selectedFeatures: number[]) {
+  private generateFeatureBasedCohorts(
+    selectedFeatures: number[],
+    numberOfContinuousFeatureBins: { [featureIndex: number]: number }
+  ) {
     return generateOverlappingFeatureBasedCohorts(
       this.context.baseErrorCohort,
       this.context.jointDataset,
       this.context.dataset,
-      selectedFeatures
+      selectedFeatures,
+      numberOfContinuousFeatureBins
     );
   }
 
