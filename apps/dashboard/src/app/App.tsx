@@ -4,6 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
+import { parseFeatureFlights } from "@responsible-ai/model-assessment";
 import _ from "lodash";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
@@ -121,6 +122,11 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
+              featureFlights={
+                this.state.featureFlights === "none"
+                  ? []
+                  : parseFeatureFlights(this.state.featureFlights)
+              }
             />
           )}
         </div>
@@ -150,6 +156,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
+      featureFlights: props.featureFlights ?? "none",
       iteration: props.iteration + 1,
       language:
         !props.language || !Language[props.language]

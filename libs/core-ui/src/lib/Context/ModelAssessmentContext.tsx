@@ -25,13 +25,16 @@ export interface IModelAssessmentContext {
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
-  // Everything below this comment should eventually be removed.
-  // Instead, dataset and modelExplanationData should suffice.
+  featureFlights?: string[];
   errorCohorts: ErrorCohort[];
   readonly baseErrorCohort: ErrorCohort;
   readonly selectedErrorCohort: ErrorCohort;
+
+  // jointDataset and modelMetadata should eventually be removed.
+  // Instead, dataset and modelExplanationData should suffice.
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
+
   telemetryHook: (message: ITelemetryMessage) => void;
   requestCausalWhatIf?: (
     id: string,
