@@ -12,6 +12,7 @@ import {
 export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
+  configurationActionButton: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
 }
@@ -20,6 +21,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
   () => {
     const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
+      configurationActionButton: {
+        paddingTop: "44px"
+      },
       descriptionText: {
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth
