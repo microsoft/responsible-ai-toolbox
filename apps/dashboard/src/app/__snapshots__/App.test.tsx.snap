@@ -5,6 +5,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
   <AppHeader
     application="interpret"
     dataset="automlMimicAdult"
+    featureFlights="none"
     iteration={1}
     language="en"
     onSettingChanged={[Function]}
