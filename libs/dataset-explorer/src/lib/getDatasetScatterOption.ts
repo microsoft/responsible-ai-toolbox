@@ -25,11 +25,6 @@ export function getDatasetScatterOption(
         }
       }
     },
-    series: dataSeries,
-    xAxis: {
-      labels: {
-        enabled: false
-      }
-    }
+    series: dataSeries
   };
 }
