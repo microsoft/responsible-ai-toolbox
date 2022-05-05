@@ -33,12 +33,12 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       dropdown: {
         width: "400px"
       },
-      generalText: {
-        color: theme.semanticColors.bodyText
-      },
       generalSemiBoldText: {
         color: theme.semanticColors.bodyText,
         fontWeight: FontWeights.semibold
+      },
+      generalText: {
+        color: theme.semanticColors.bodyText
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
