@@ -51,7 +51,7 @@ class TestCausalManager:
         assert post_result.local_effects is not None
         assert post_result.policies is not None
 
-        # Remove the causal analaysis models to test the loading of
+        # Remove the causal analysis models to test the loading of
         # causal models in case there is error in loading of the causal
         # models.
         all_causal_dirs = DirectoryManager.list_sub_directories(save_dir)
