@@ -1330,38 +1330,70 @@
       "modelStatistics": "Model statistics"
     },
     "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
       "metricsDropdown": "Metric(s)",
-      "accuracy": "Accuracy",
-      "f1Score": "F1 score",
-      "meanAbsoluteError": "Mean absolute error",
-      "meanSquaredError": "Mean squared error",
-      "precision": "Precision score",
-      "recall": "Recall score",
-      "falsePositiveRate": "False positive rate",
-      "falseNegativeRate": "False negative rate",
-      "selectionRate": "Selection rate",
-      "meanPrediction": "Mean prediction",
       "notAvailable": "N/A",
-      "countColumnHeader": "Count",
+      "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
       "dataCohortsChartSelectionHeader": "Dataset cohorts",
-      "featureBasedCohortsChartSelectionHeader": "Feature-based cohorts",
-      "disaggregatedAnalysisHeatmapHeader": "Disaggregated analysis",
+      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
       "fairnessMetricsHeatmapHeader": "Fairness metrics",
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
       "probabilityForClassSelectionHeader": "Probability for class",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
-      "featureSelectionDropdownPlaceholder": "Select features to use for a disaggregated analysis.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
-      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the disaggregated analysis.",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
       "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
       "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
-      "fairnessMetricDifference": "Difference",
-      "fairnessMetricRatio": "Ratio",
       "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
       "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
       "metricSelectionButton": "Choose metric",
@@ -1378,9 +1410,34 @@
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following disaggregated analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "visualDisplayToggleLabel": "Visual display"
+      "probabilityLineChartToggleLabel": "Use line chart",
+      "countAxisLabel": "Count",
+      "helpMeChooseFeaturesButton": "Help me choose features",
+      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "featureConfiguration": {
+        "flyoutHeader": "Choose your features",
+        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
+        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "featureColumnHeader": "Features",
+        "groupsColumnHeader": "Groups",
+        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
+        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
+        "continuousFeatureBinningLabel": "Change the number of bins",
+        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your metrics",
+        "flyoutSubHeader": "How would you like to measure your model's performance?",
+        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "visualDisplayToggleLabel": "Show heatmap",
+      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
     }
   }
 }

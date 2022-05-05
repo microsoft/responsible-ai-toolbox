@@ -46,6 +46,7 @@ export * from "./lib/util/getErrorBarChartOptions";
 export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/getFilterBoundsArgs";
 export * from "./lib/util/calculateBoxData";
+export * from "./lib/util/calculateLineData";
 export * from "./lib/util/StatisticsUtils";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
