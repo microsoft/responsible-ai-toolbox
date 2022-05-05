@@ -6,7 +6,8 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  getTheme
+  getTheme,
+  FontWeights
 } from "office-ui-fabric-react";
 
 export interface IModelOverviewStyles {
@@ -15,6 +16,7 @@ export interface IModelOverviewStyles {
   configurationActionButton: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
+  generalSemiBoldText: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -30,6 +32,10 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       dropdown: {
         width: "400px"
+      },
+      generalSemiBoldText: {
+        color: theme.semanticColors.bodyText,
+        fontWeight: FontWeights.semibold
       },
       generalText: {
         color: theme.semanticColors.bodyText
