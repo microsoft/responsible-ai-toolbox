@@ -21,7 +21,9 @@ import {
   generateJsonTreeAdultCensusIncome,
   generateJsonTreeWine,
   getJsonMatrix,
-  getJsonTreeAdultCensusIncome
+  getJsonTreeAdultCensusIncome,
+  getJsonTreeBoston,
+  getJsonTreeWine
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -90,9 +92,16 @@ export class App extends React.Component<IAppProps> {
           );
       }
     } else {
-      const staticTree = getJsonTreeAdultCensusIncome(
+      let staticTree = getJsonTreeAdultCensusIncome(
         this.props.dataset.feature_names
       );
+      if (this.props.classDimension === 1) {
+        // Boston
+        staticTree = getJsonTreeBoston(this.props.dataset.feature_names);
+      } else if (this.props.classDimension !== 2) {
+        // Wine
+        staticTree = getJsonTreeWine(this.props.dataset.feature_names);
+      }
       const staticMatrix = getJsonMatrix();
       modelAssessmentDashboardProps = {
         ...this.props,
