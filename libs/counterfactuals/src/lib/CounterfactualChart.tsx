@@ -682,7 +682,10 @@ export class CounterfactualChart extends React.PureComponent<
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
-    let hovertemplate = "";
+    dictionary.forEach((val, index) => {
+      customdata[index].Name = val.Name ? val.Name : val.Index;
+    });
+    let hovertemplate = `{point.customdata.Name}<br>`;
     if (chartProps.xAxis) {
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
