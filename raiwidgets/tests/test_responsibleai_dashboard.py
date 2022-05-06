@@ -222,7 +222,8 @@ class TestResponsibleAIDashboard:
                 match=re.escape(invalid_feature_flights_error)):
             ResponsibleAIDashboard(ri, feature_flights=flights)
 
-    @pytest.mark.parametrize("flights", ["f", "aMuchLongerFlightName", "f1&f2"])
+    @pytest.mark.parametrize("flights",
+                             ["f", "aMuchLongerFlightName", "f1&f2"])
     def test_responsibleai_feature_flights_valid_flights(
             self, create_rai_insights_object_classification, flights):
         ri = create_rai_insights_object_classification

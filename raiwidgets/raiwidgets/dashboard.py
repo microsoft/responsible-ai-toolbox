@@ -15,6 +15,7 @@ invalid_feature_flights_error = \
     "feature_flights should be of type string. Separate multiple flights " \
     "using ampersand (&)."
 
+
 class InLineScript(HTMLParser):
     def __init__(self, load_widget_file):
         HTMLParser.__init__(self)
