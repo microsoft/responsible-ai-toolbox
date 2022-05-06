@@ -2,12 +2,13 @@
 # Licensed under the MIT License.
 
 import json
-import pytest
 import re
 
+import pytest
+
 from raiwidgets import ResponsibleAIDashboard
-from raiwidgets.dashboard import invalid_feature_flights_error
 from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
+from raiwidgets.dashboard import invalid_feature_flights_error
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
 from responsibleai.exceptions import UserConfigValidationException
