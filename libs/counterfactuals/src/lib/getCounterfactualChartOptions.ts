@@ -67,7 +67,8 @@ export function getCounterfactualChartOptions(
               onClickHandler(this);
             }
           }
-        }
+        },
+        turboThreshold: 0
       }
     },
     series
