@@ -23,7 +23,6 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
     const legendWidth = "400px";
     return mergeStyleSets<ICausalIndividualChartStyles>({
       chartWithAxes: {
-        paddingTop: "30px",
         width: "80%"
       },
       chartWithVertical: {
