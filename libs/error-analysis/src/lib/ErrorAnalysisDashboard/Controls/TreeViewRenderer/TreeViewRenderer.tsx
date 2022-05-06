@@ -551,20 +551,21 @@ export class TreeViewRenderer extends React.PureComponent<
         treeNodes
       };
     };
-    this.setState(reloadDataFunc);
-    // Clear filters
-    const filters: IFilter[] = [];
-    let cohortStats: MetricCohortStats | undefined = undefined;
-    if (this.state.root) {
-      cohortStats = this.calculateCohortStats(this.state.root.data);
-    }
-    this.props.updateSelectedCohort(
-      filters,
-      [],
-      CohortSource.None,
-      0,
-      cohortStats
-    );
+    this.setState(reloadDataFunc, () => {
+      // Clear filters
+      const filters: IFilter[] = [];
+      let cohortStats: MetricCohortStats | undefined = undefined;
+      if (this.state.root) {
+        cohortStats = this.calculateCohortStats(this.state.root.data);
+      }
+      this.props.updateSelectedCohort(
+        filters,
+        [],
+        CohortSource.None,
+        0,
+        cohortStats
+      );
+    });
   }
 
   private getTextBB(

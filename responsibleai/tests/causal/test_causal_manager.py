@@ -1,11 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+import os
 from unittest.mock import ANY, patch
 
 import numpy as np
 import pytest
 
 from responsibleai import ModelTask, RAIInsights
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 
@@ -44,6 +47,30 @@ class TestCausalManager:
         post_result = post_results[0]
         assert post_result.id == pre_result.id
         assert post_result.causal_analysis is not None
+        assert post_result.global_effects is not None
+        assert post_result.local_effects is not None
+        assert post_result.policies is not None
+
+        # Remove the causal analysis models to test the loading of
+        # causal models in case there is error in loading of the causal
+        # models.
+        all_causal_dirs = DirectoryManager.list_sub_directories(save_dir)
+        for causal_dir in all_causal_dirs:
+            dm = DirectoryManager(parent_directory_path=save_dir,
+                                  sub_directory_name=causal_dir)
+            causal_analysis_pkl_file_path = \
+                dm.get_data_directory() / "causal_analysis.pkl"
+            os.remove(causal_analysis_pkl_file_path)
+
+        model_load_err = ('ERROR-LOADING-EXPLAINER: '
+                          'There was an error loading the explainer. '
+                          'Some of RAI dashboard features may not work.')
+        with pytest.warns(UserWarning, match=model_load_err):
+            manager = insights.causal._load(save_dir, insights)
+        post_results = manager.get()
+        post_result = post_results[0]
+        assert post_result.id == pre_result.id
+        assert post_result.causal_analysis is None
         assert post_result.global_effects is not None
         assert post_result.local_effects is not None
         assert post_result.policies is not None
