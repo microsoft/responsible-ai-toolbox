@@ -24,7 +24,8 @@ export const matrixLegendStyles: () => IProcessedStyleSet<IMatrixLegendStyles> =
     const commonTextStyles = textStyles();
     return mergeStyleSets<IMatrixLegendStyles>({
       matrixLegend: {
-        padding: "10px"
+        marginTop: "0px !important",
+        padding: "0 10px 10px 10px"
       },
       metricBarBlack: commonMetricStyles.metricBarBlack,
       metricBarGreen: commonMetricStyles.metricBarGreen,
