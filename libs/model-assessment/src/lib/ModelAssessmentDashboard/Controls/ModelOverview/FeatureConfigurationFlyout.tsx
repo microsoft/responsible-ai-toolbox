@@ -70,7 +70,7 @@ export class FeatureConfigurationFlyout extends React.Component<
     super(props);
 
     this._selection = new Selection({
-      onSelectionChanged: () => {
+      onSelectionChanged: (): void => {
         const selectedIndices = this._selection.getSelectedIndices().slice();
         this.setState({ newlySelectedFeatures: selectedIndices });
       }
@@ -94,15 +94,15 @@ export class FeatureConfigurationFlyout extends React.Component<
   }
 
   componentDidUpdate(prevProps: IFeatureConfigurationFlyoutProps) {
-    if (
-      this.props.selectedFeatures.length !==
-        prevProps.selectedFeatures.length ||
-      this.props.selectedFeatures.some(
-        (featureIndex, index) =>
-          featureIndex !== prevProps.selectedFeatures[index]
-      )
-    ) {
-      this.setState({ newlySelectedFeatures: this.props.selectedFeatures });
+    // Update selected features in state whenever the flyout is opened.
+    // At other times we can't update with props since they may be outdated compared to the state.
+    if (this.props.isOpen && !prevProps.isOpen) {
+      this.setState(
+        { newlySelectedFeatures: this.props.selectedFeatures },
+        () => {
+          this.updateSelection();
+        }
+      );
     }
   }
 
