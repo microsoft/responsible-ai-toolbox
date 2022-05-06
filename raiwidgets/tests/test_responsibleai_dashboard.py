@@ -2,10 +2,11 @@
 # Licensed under the MIT License.
 
 import json
-
 import pytest
+import re
 
 from raiwidgets import ResponsibleAIDashboard
+from raiwidgets.dashboard import invalid_feature_flights_error
 from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from responsibleai._interfaces import (CausalData, CounterfactualData, Dataset,
                                        ErrorAnalysisData, ModelExplanationData)
@@ -210,3 +211,20 @@ class TestResponsibleAIDashboard:
                       "All pre-defined cohorts need to have distinct names."):
             ResponsibleAIDashboard(ri, cohort_list=[
                 user_cohort_continuous, user_cohort_continuous])
+
+    @pytest.mark.parametrize("flights", [["f"], ["f1", "f2"]])
+    def test_responsibleai_feature_flights_invalid_flights_list(
+            self, create_rai_insights_object_classification, flights):
+        ri = create_rai_insights_object_classification
+
+        with pytest.raises(
+                ValueError,
+                match=re.escape(invalid_feature_flights_error)):
+            ResponsibleAIDashboard(ri, feature_flights=flights)
+
+    @pytest.mark.parametrize("flights", ["f", "aMuchLongerFlightName", "f1&f2"])
+    def test_responsibleai_feature_flights_valid_flights(
+            self, create_rai_insights_object_classification, flights):
+        ri = create_rai_insights_object_classification
+        widget = ResponsibleAIDashboard(ri, feature_flights=flights)
+        self.validate_rai_dashboard_data(widget)

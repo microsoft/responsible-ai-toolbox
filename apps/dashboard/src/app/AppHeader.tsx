@@ -15,7 +15,7 @@ import {
 import React from "react";
 
 import { applications, IApplications } from "./applications";
-import { IAppSetting } from "./IAppSetting";
+import { IAppSetting, noFlights } from "./IAppSetting";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {
@@ -30,14 +30,6 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
   private readonly onApplicationSelect = this.onSelect.bind(
     this,
     "application"
-  );
-  private readonly onVersionSelect = this.onSelect.bind(this, "version");
-  private readonly onDatasetSelect = this.onSelect.bind(this, "dataset");
-  private readonly onThemeSelect = this.onSelect.bind(this, "theme");
-  private readonly onLanguageSelect = this.onSelect.bind(this, "language");
-  private readonly onFeatureFlightSelect = this.onFlightSelect.bind(
-    this,
-    "featureFlights"
   );
 
   public render(): React.ReactNode {
@@ -114,7 +106,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
             this.onFeatureFlightSelect,
             true,
             parseFeatureFlights(
-              this.props.featureFlights === "none"
+              this.props.featureFlights === noFlights
                 ? ""
                 : this.props.featureFlights
             )
@@ -155,6 +147,37 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     return true;
   }
 
+  private readonly onVersionSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onSelect("version", _ev, item);
+  };
+  private readonly onDatasetSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onSelect("dataset", _ev, item);
+  };
+  private readonly onThemeSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onSelect("theme", _ev, item);
+  };
+  private readonly onLanguageSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onSelect("language", _ev, item);
+  };
+  private readonly onFeatureFlightSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onFlightSelect("featureFlights", _ev, item);
+  };
+
   private onFlightSelect(
     field: keyof IAppSetting,
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
@@ -174,7 +197,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
           this.props.onSettingChanged(
             field,
             newFlights.length === 0
-              ? "none"
+              ? noFlights
               : newFlights.join(featureFlightSeparator)
           );
         }
@@ -182,7 +205,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
         // need to add flight
         this.props.onSettingChanged(
           field,
-          this.props.featureFlights === "none"
+          this.props.featureFlights === noFlights
             ? item.data
             : this.props.featureFlights.concat(
                 featureFlightSeparator,

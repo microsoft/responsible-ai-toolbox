@@ -16,7 +16,7 @@ import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, routeKey } from "./IAppSetting";
+import { IAppSetting, noFlights, routeKey } from "./IAppSetting";
 import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
@@ -123,7 +123,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 ]
               }
               featureFlights={
-                this.state.featureFlights === "none"
+                this.state.featureFlights === noFlights
                   ? []
                   : parseFeatureFlights(this.state.featureFlights)
               }
@@ -156,7 +156,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
-      featureFlights: props.featureFlights ?? "none",
+      featureFlights: props.featureFlights ?? noFlights,
       iteration: props.iteration + 1,
       language:
         !props.language || !Language[props.language]
