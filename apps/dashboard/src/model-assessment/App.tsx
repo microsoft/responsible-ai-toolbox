@@ -31,6 +31,7 @@ interface IAppProps extends IModelAssessmentData {
   language: Language;
   version: 1 | 2;
   classDimension?: 1 | 2 | 3;
+  featureFlights?: string[];
 }
 
 export class App extends React.Component<IAppProps> {
@@ -116,6 +117,7 @@ export class App extends React.Component<IAppProps> {
             tree_features: staticTree.features
           }
         ],
+        featureFlights: this.props.featureFlights,
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
         stringParams: { contextualHelp: this.messages },
