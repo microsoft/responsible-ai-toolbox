@@ -18,7 +18,6 @@ interface IFairnessMetricTableProps {
   cohorts: ErrorCohort[];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
-  title: string;
   fairnessStats: IFairnessStats[];
 }
 
@@ -105,10 +104,6 @@ export class FairnessMetricTable extends React.Component<
               type: "heatmap"
             }
           ],
-          title: {
-            align: "left",
-            text: this.props.title
-          },
           tooltip: {
             formatter() {
               // to avoid semantic error during build cast point to any
@@ -157,9 +152,10 @@ export class FairnessMetricTable extends React.Component<
           },
           yAxis: {
             categories: [
-              localization.ModelAssessment.ModelOverview
+              localization.ModelAssessment.ModelOverview.metrics
                 .fairnessMetricDifference,
-              localization.ModelAssessment.ModelOverview.fairnessMetricRatio
+              localization.ModelAssessment.ModelOverview.metrics
+                .fairnessMetricRatio
             ],
             grid: {
               borderWidth: 2,
@@ -170,6 +166,9 @@ export class FairnessMetricTable extends React.Component<
                       return `<div style='width:300px'>${this.value}</div>`;
                     },
                     useHTML: true
+                  },
+                  title: {
+                    text: `<b>${localization.ModelAssessment.ModelOverview.fairnessMetricsHeatmapHeader}</b>`
                   }
                 }
               ],

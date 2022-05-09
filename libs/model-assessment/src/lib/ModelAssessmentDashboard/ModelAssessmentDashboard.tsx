@@ -67,6 +67,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           editCohort: this.editCohort,
           errorAnalysisData: this.props.errorAnalysisData?.[0],
           errorCohorts: this.state.cohorts,
+          featureFlights: this.props.featureFlights,
           jointDataset: this.state.jointDataset,
           modelExplanationData: this.props.modelExplanationData?.[0]
             ? {

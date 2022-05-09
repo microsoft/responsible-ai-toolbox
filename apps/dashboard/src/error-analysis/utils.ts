@@ -74,6 +74,13 @@ export function getJsonTreeBoston(featureNames: string[]): any {
   };
 }
 
+export function getJsonTreeWine(featureNames: string[]): any {
+  return {
+    data: getJsonTree(DatasetName.Wine),
+    features: featureNames
+  };
+}
+
 export function getJsonTree(dataset: DatasetName): any {
   if (dataset === DatasetName.BreastCancer) {
     return _.cloneDeep(dummyTreeBreastCancerData);
