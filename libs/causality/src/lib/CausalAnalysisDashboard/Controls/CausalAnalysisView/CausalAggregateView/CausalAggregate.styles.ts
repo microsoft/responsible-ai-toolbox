@@ -27,7 +27,8 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         margin: "-5px 0 0 -15px"
       },
       container: {
-        height: "100%"
+        height: "100%",
+        marginTop: "0px !important"
       },
       description: {
         display: "flex",
@@ -56,10 +57,11 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
         textAlign: "left"
       },
       leftPane: {
-        padding: "10px",
+        padding: "0 10px 10px 10px",
         width: "70%"
       },
       rightPane: {
+        paddingTop: "16px",
         width: "25%"
       },
       table: {
