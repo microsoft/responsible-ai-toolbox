@@ -13,9 +13,7 @@ import pandas as pd
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai.managers.base_manager import BaseManager
-from responsibleai._tools.data_balance.data_balance_analysis import (
-    DataBalanceAnalysis,
-)
+from responsibleai._tools.data_balance.data_balance import DataBalance
 from responsibleai._tools.shared.backends import SupportedBackend
 from responsibleai._tools.shared.state_directory_management import (
     DirectoryManager,
@@ -145,12 +143,31 @@ class DataBalanceManager(BaseManager):
         if not self._validate() or not self._df:
             return
 
-        self._data_balance_measures = DataBalanceAnalysis.compute_measures(
-            df=self._df,
-            cols_of_interest=self._cols_of_interest,
-            target_column=self._target_column,
-            pos_label=self._pos_label,
-            backend=self._backend,
+        feat_measures, dist_measures, agg_measures = (
+            DataBalance.compute_measures(
+                df=self._df,
+                cols_of_interest=self._cols_of_interest,
+                target_column=self._target_column,
+                pos_label=self._pos_label,
+                backend=self._backend,
+            )
+        )
+        self.set_data_balance_measures(
+            feature_balance_measures=feat_measures,
+            distribution_balance_measures=dist_measures,
+            aggregate_balance_measures=agg_measures,
+        )
+
+    def set_data_balance_measures(
+        self,
+        feature_balance_measures: pd.DataFrame,
+        distribution_balance_measures: pd.DataFrame,
+        aggregate_balance_measures: pd.DataFrame
+    ):
+        self._data_balance_measures = DataBalance.transform_measures_to_dict(
+            feature_balance_measures=feature_balance_measures,
+            distribution_balance_measures=distribution_balance_measures,
+            aggregate_balance_measures=aggregate_balance_measures,
         )
 
     def get(self):
@@ -159,7 +176,9 @@ class DataBalanceManager(BaseManager):
         :return: The computed data balance measures.
         :rtype: Dict[str, Any]
         """
-        return self._data_balance_measures
+        return (
+            self._data_balance_measures if self._data_balance_measures else {}
+        )
 
     def list(self):
         """List information about the data balance manager.
@@ -222,10 +241,8 @@ class DataBalanceManager(BaseManager):
             data_path = dir_manager.create_data_directory() / DATA_JSON
             if self._backend == SupportedBackend.SPARK:
                 self._df.write.json(data_path)
-
             elif self._backend == SupportedBackend.PANDAS:
-                with open(data_path, "w") as f:
-                    f.write(self._df.to_json(orient="split"))
+                self._df.to_json(data_path, orient="split")
 
     @staticmethod
     def _load(path, rai_insights):
@@ -258,7 +275,7 @@ class DataBalanceManager(BaseManager):
                 manager_info = json.load(f)
                 for k in [
                     Keys.COLS_OF_INTEREST,
-                    Keys.TARGET_COLUMN,
+                    Keys.TARGET_COLUMN,  # overrides rai_insights.target_column
                     Keys.POS_LABEL,
                     Keys.BACKEND,
                 ]:
