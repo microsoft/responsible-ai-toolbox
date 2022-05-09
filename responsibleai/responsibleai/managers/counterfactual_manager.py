@@ -6,6 +6,7 @@ import json
 import pickle
 from pathlib import Path
 from typing import Any, List, Optional, Union
+import warnings
 
 import dice_ml
 import jsonschema
@@ -723,6 +724,13 @@ class CounterfactualManager(BaseManager):
             )
 
             if counterfactual_config.explainer is None:
+                explainer_load_err = (
+                    'ERROR-LOADING-COUNTERFACTUAL-EXPLAINER: '
+                    'There was an error loading the '
+                    'counterfactual explainer model. '
+                    'Retraining the counterfactual '
+                    'explainer.')
+                warnings.warn(explainer_load_err)
                 counterfactual_config.explainer = \
                     inst._create_diceml_explainer(
                         counterfactual_config.method,
