@@ -12,6 +12,7 @@ export interface IAppConfig {
   baseUrl: string;
   withCredentials: boolean;
   locale: string | undefined;
+  featureFlights: string | undefined;
 }
 
 export const config: IAppConfig = JSON.parse("__rai_config__");
