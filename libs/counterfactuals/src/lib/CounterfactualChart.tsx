@@ -858,11 +858,6 @@ export class CounterfactualChart extends React.PureComponent<
 
     this.forceUpdate();
     this.fetchData(editingData);
-    console.log(
-      "okok cf chart row combo box new value - fetch data:",
-      value,
-      editingData
-    );
   };
 
   private disableCounterfactualPanel = (): boolean => {
