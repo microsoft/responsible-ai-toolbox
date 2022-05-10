@@ -53,7 +53,6 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   isPanelOpen: boolean;
-  editingDataCustomIndex?: number;
   customPoints: Array<{ [key: string]: any }>;
   request?: AbortController;
   selectedPointsIndexes: number[];
@@ -84,7 +83,6 @@ export class CounterfactualChart extends React.PureComponent<
     this.state = {
       customPointIsActive: [],
       customPoints: [],
-      editingDataCustomIndex: undefined,
       isPanelOpen: false,
       originalData: undefined,
       pointIsActive: [],
@@ -684,7 +682,10 @@ export class CounterfactualChart extends React.PureComponent<
       dict[JointDataset.IndexLabel] = val;
       return dict;
     });
-    let hovertemplate = "";
+    dictionary.forEach((val, index) => {
+      customdata[index].Name = val.Name ? val.Name : val.Index;
+    });
+    let hovertemplate = `{point.customdata.Name}<br>`;
     if (chartProps.xAxis) {
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
@@ -795,10 +796,6 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   private saveAsPoint = (): void => {
-    const editingDataCustomIndex =
-      this.state.editingDataCustomIndex !== undefined
-        ? this.state.editingDataCustomIndex
-        : this.state.customPoints.length;
     const customPoints = [...this.state.customPoints];
     const customPointIsActive = [...this.state.customPointIsActive];
     if (this.temporaryPoint) {
@@ -808,8 +805,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
     this.setState({
       customPointIsActive,
-      customPoints,
-      editingDataCustomIndex
+      customPoints
     });
   };
 

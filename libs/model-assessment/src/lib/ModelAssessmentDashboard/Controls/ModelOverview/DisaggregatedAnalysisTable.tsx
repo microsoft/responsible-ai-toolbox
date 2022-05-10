@@ -8,7 +8,6 @@ import {
   generateMetrics,
   JointDataset
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import { IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
@@ -65,10 +64,6 @@ export class DisaggregatedAnalysisTable extends React.Component<
         />
         <FairnessMetricTable
           fairnessStats={cohortStatsInfo.fairnessStats}
-          title={
-            localization.ModelAssessment.ModelOverview
-              .fairnessMetricsHeatmapHeader
-          }
           cohorts={this.props.featureBasedCohorts}
           selectableMetrics={this.props.selectableMetrics}
           selectedMetrics={this.props.selectedMetrics}

@@ -39,10 +39,10 @@ export class TreatmentTableSection extends React.Component<ITreatmentTableSectio
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal grow tokens={{ padding: "l1" }}>
-            <Stack.Item>
+            <Stack.Item className={styles.leftTable}>
               <TreatmentTable data={this.props.data.policy_tree} />
             </Stack.Item>
-            <Stack.Item>
+            <Stack.Item className={styles.tableDescription}>
               <Text variant={"medium"} className={styles.label}>
                 {localization.CausalAnalysis.TreatmentPolicy.TableDescription}
               </Text>

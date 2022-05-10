@@ -214,7 +214,7 @@ export class ModelOverview extends React.Component<
         tokens={{ childrenGap: "10px" }}
       >
         <Text variant="medium" className={classNames.descriptionText}>
-          {localization.Interpret.ModelPerformance.helperText}
+          {localization.ModelAssessment.ModelOverview.topLevelDescription}
         </Text>
         {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
         {this.props.showNewModelOverviewExperience && (
@@ -235,6 +235,14 @@ export class ModelOverview extends React.Component<
                 itemKey={disaggregatedAnalysisPivotKey}
               />
             </Pivot>
+            {!this.state.datasetCohortViewIsVisible && (
+              <Text>
+                {
+                  localization.ModelAssessment.ModelOverview
+                    .featureBasedViewDescription
+                }
+              </Text>
+            )}
             <Stack horizontal tokens={{ childrenGap: "10px" }}>
               <ComboBox
                 placeholder={
@@ -326,7 +334,7 @@ export class ModelOverview extends React.Component<
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>
-                    <Text className={classNames.generalText}>
+                    <Text className={classNames.generalSemiBoldText}>
                       {localization.formatString(
                         localization.ModelAssessment.ModelOverview
                           .disaggregatedAnalysisBaseCohortDislaimer,

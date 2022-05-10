@@ -11,6 +11,10 @@ from html.parser import HTMLParser
 from rai_core_flask import FlaskHelper  # , environment_detector
 from responsibleai.serialization_utilities import serialize_json_safe
 
+invalid_feature_flights_error = \
+    "feature_flights should be of type string. Separate multiple flights " \
+    "using ampersand (&)."
+
 
 class InLineScript(HTMLParser):
     def __init__(self, load_widget_file):
@@ -55,7 +59,8 @@ class Dashboard(object):
                  public_ip,
                  port,
                  locale,
-                 no_inline_dashboard=False):
+                 no_inline_dashboard=False,
+                 **kwargs):
         """Initialize the dashboard."""
 
         if model_data is None or type is None:
@@ -69,12 +74,17 @@ class Dashboard(object):
 
         self.id = uuid.uuid4().hex
 
+        feature_flights = kwargs.get('feature_flights')
+        if feature_flights and not isinstance(feature_flights, str):
+            raise ValueError(invalid_feature_flights_error)
+
         self.config = {
             'dashboardType': dashboard_type,
             'id': self.id,
             'baseUrl': self._service.env.base_url,
             'withCredentials': self._service.with_credentials,
-            'locale': locale
+            'locale': locale,
+            'featureFlights': feature_flights
         }
         self.model_data = model_data
         self.add_route()

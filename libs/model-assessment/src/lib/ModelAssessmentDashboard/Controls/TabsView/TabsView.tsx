@@ -5,7 +5,10 @@ import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
   ModelTypes,
-  WeightVectors
+  WeightVectors,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext,
+  IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -23,6 +26,10 @@ import { DefaultEffects, PivotItem, Stack, Text } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
+import {
+  isFlightActive,
+  newModelOverviewExperienceFlight
+} from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import { FeatureImportancesTab } from "../FeatureImportances";
 import { ModelOverview } from "../ModelOverview/ModelOverview";
@@ -45,6 +52,9 @@ export class TabsView extends React.PureComponent<
   ITabsViewProps,
   ITabsViewState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: IModelAssessmentContext = defaultModelAssessmentContext;
+
   public constructor(props: ITabsViewProps) {
     super(props);
     const weightVectorLabels = {
@@ -171,7 +181,12 @@ export class TabsView extends React.PureComponent<
                       }
                     </Text>
                   </div>
-                  <ModelOverview showNewModelOverviewExperience={false} />
+                  <ModelOverview
+                    showNewModelOverviewExperience={isFlightActive(
+                      newModelOverviewExperienceFlight,
+                      this.context.featureFlights
+                    )}
+                  />
                 </>
               )}
               {t.key === GlobalTabKeys.DataExplorerTab && (
