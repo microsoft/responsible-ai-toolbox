@@ -177,6 +177,8 @@ export class ProbabilityDistributionChart extends React.Component<
           onDismiss={() => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
+          onRenderFooterContent={this.onRenderFooterContent}
+          isFooterAtBottom
         >
           <Stack tokens={{ childrenGap: "10px" }}>
             <ChoiceGroup
@@ -189,34 +191,34 @@ export class ProbabilityDistributionChart extends React.Component<
               onChange={this.onProbabilityOptionSelectionChange}
               selectedKey={this.state.newlySelectedProbabilityOption?.key}
             />
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
-              <PrimaryButton
-                onClick={() => {
-                  if (this.state.newlySelectedProbabilityOption)
-                    this.setState({
-                      probabilityFlyoutIsVisible: false,
-                      probabilityOption:
-                        this.state.newlySelectedProbabilityOption
-                    });
-                }}
-                text={
-                  localization.ModelAssessment.ModelOverview.chartConfigConfirm
-                }
-              />
-              <DefaultButton
-                onClick={() => {
-                  this.setState({ probabilityFlyoutIsVisible: false });
-                }}
-                text={
-                  localization.ModelAssessment.ModelOverview.chartConfigCancel
-                }
-              />
-            </Stack>
           </Stack>
         </Panel>
       </Stack>
     );
   }
+
+  private onRenderFooterContent = () => {
+    return (
+      <Stack horizontal tokens={{ childrenGap: "10px" }}>
+        <PrimaryButton
+          onClick={() => {
+            if (this.state.newlySelectedProbabilityOption)
+              this.setState({
+                probabilityFlyoutIsVisible: false,
+                probabilityOption: this.state.newlySelectedProbabilityOption
+              });
+          }}
+          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+        />
+        <DefaultButton
+          onClick={() => {
+            this.setState({ probabilityFlyoutIsVisible: false });
+          }}
+          text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+        />
+      </Stack>
+    );
+  };
 
   private onProbabilityOptionSelectionChange = (
     _: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
