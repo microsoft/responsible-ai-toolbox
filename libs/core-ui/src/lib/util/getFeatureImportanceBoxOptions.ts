@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { SeriesOptionsType } from "highcharts";
-
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
@@ -17,7 +15,7 @@ export function getFeatureImportanceBoxOptions(
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void
 ): IHighchartsConfig {
   const xText = sortArray.map((i) => unsortedX[i]);
-  const boxTempData: any = [];
+  const boxTempData: any[] = [];
   let yAxisMin = Infinity;
 
   unsortedSeries.forEach((series) => {
@@ -40,14 +38,29 @@ export function getFeatureImportanceBoxOptions(
       y
     });
   });
-  const boxGroupData: SeriesOptionsType[] = [];
-  boxTempData.forEach((data: any) => {
+  const boxGroupData: any[] = [];
+  const numberOfCohorts: number = boxTempData.length;
+  const getPointPlacement = (index: number): number => {
+    if (numberOfCohorts % 2) {
+      return 0.14 * (index - Math.floor(numberOfCohorts / 2));
+    }
+    return 0.08 + 0.16 * (index - Math.floor(numberOfCohorts / 2));
+  };
+  boxTempData.forEach((data: any, index: number) => {
     const boxData = getBoxData(data.x, data.y);
     boxGroupData.push({
       color: data.color,
       data: boxData.box,
       name: data.name,
       type: "boxplot"
+    });
+    boxGroupData.push({
+      color: data.color,
+      data: boxData.outlier,
+      linkedTo: data.name,
+      name: data.name,
+      pointPlacement: getPointPlacement(index),
+      type: "scatter"
     });
   });
   return {
@@ -59,6 +72,7 @@ export function getFeatureImportanceBoxOptions(
     },
     plotOptions: {
       boxplot: {
+        groupPadding: 0,
         point: {
           events: {
             click() {
