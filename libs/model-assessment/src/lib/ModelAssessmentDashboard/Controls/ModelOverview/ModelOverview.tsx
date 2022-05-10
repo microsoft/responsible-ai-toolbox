@@ -214,7 +214,8 @@ export class ModelOverview extends React.Component<
       this.context.errorCohorts.length > 1;
     const showHeatmapToggleInFeatureCohortView =
       !this.state.datasetCohortViewIsVisible &&
-      this.state.selectedFeatures.length > 1;
+      this.state.selectedFeatures.length > 0 &&
+      featureBasedCohorts.length > 1;
 
     return (
       <Stack
