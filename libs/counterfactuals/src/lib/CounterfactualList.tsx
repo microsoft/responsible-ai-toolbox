@@ -172,7 +172,18 @@ export class CounterfactualList extends React.Component<
       data[k] = data[k] === "-" ? items[0][k] : data[k];
       const keyIndex =
         this.props.data?.feature_names_including_target.indexOf(k);
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+      if (typeof data[k] === "string") {
+        const dropdownOption = getCategoricalOption(
+          this.context.jointDataset,
+          k
+        );
+        const optionIndex = dropdownOption?.data.categoricalOptions.findIndex(
+          (feature: IComboBoxOption) => feature.key === data[k]
+        );
+        this.props.setCustomRowProperty(`Data${keyIndex}`, true, optionIndex);
+      } else {
+        this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+      }
     });
     data.row = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,

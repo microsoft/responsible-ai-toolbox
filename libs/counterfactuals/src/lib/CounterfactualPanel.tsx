@@ -84,13 +84,6 @@ export class CounterfactualPanel extends React.Component<
         onRenderFooterContent={this.renderClose}
       >
         <Stack tokens={{ childrenGap: "m1" }}>
-          <Stack.Item>
-            {this.props.data?.errorMessage && (
-              <MessageBar messageBarType={MessageBarType.error}>
-                {this.props.data.errorMessage}
-              </MessageBar>
-            )}
-          </Stack.Item>
           <Stack.Item className={classes.counterfactualList}>
             <CounterfactualList
               selectedIndex={this.props.selectedIndex}
@@ -127,53 +120,62 @@ export class CounterfactualPanel extends React.Component<
       )
     };
     return (
-      <Stack className={classes.stackHeader}>
-        <Stack.Item className={classes.headerText}>
-          <Text
-            variant={"xLarge"}
-            className={classes.boldText}
-            id="counterfactualHeader"
-          >
-            {this.context.requestPredictions
-              ? localization.Counterfactuals.whatIfPanelHeader
-              : localization.Counterfactuals.panelHeader}
-          </Text>
-        </Stack.Item>
-        <Stack.Item>
-          <Text variant={"medium"}>
-            {localization.Counterfactuals.panelDescription}
-          </Text>
-        </Stack.Item>
-        <Stack.Item className={classes.buttonRow}>
-          <Stack horizontal tokens={{ childrenGap: "l1" }}>
-            <Stack.Item className={classes.searchBox}>
-              <SearchBox
-                placeholder={
-                  localization.Interpret.WhatIf.filterFeaturePlaceholder
-                }
-                onChange={this.setFilterText}
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <Toggle
-                label={localization.Counterfactuals.WhatIf.sortFeatures}
-                inlineLabel
-                defaultChecked={this.state.sortFeatures}
-                onChange={this.toggleSortFeatures}
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <TooltipHost
-                tooltipProps={tooltipProps}
-                delay={TooltipDelay.zero}
-                id={WhatIfConstants.whatIfPredictionTooltipIds}
-                directionalHint={DirectionalHint.rightTopEdge}
-                className={classes.tooltipHostDisplay}
-              >
-                <IconButton iconProps={{ iconName: "info" }} />
-              </TooltipHost>
-            </Stack.Item>
-          </Stack>
+      <Stack>
+        <Stack className={classes.stackHeader}>
+          <Stack.Item className={classes.headerText}>
+            <Text
+              variant={"xLarge"}
+              className={classes.boldText}
+              id="counterfactualHeader"
+            >
+              {this.context.requestPredictions
+                ? localization.Counterfactuals.whatIfPanelHeader
+                : localization.Counterfactuals.panelHeader}
+            </Text>
+          </Stack.Item>
+          <Stack.Item>
+            <Text variant={"medium"}>
+              {localization.Counterfactuals.panelDescription}
+            </Text>
+          </Stack.Item>
+          <Stack.Item className={classes.buttonRow}>
+            <Stack horizontal tokens={{ childrenGap: "l1" }}>
+              <Stack.Item className={classes.searchBox}>
+                <SearchBox
+                  placeholder={
+                    localization.Interpret.WhatIf.filterFeaturePlaceholder
+                  }
+                  onChange={this.setFilterText}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <Toggle
+                  label={localization.Counterfactuals.WhatIf.sortFeatures}
+                  inlineLabel
+                  defaultChecked={this.state.sortFeatures}
+                  onChange={this.toggleSortFeatures}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <TooltipHost
+                  tooltipProps={tooltipProps}
+                  delay={TooltipDelay.zero}
+                  id={WhatIfConstants.whatIfPredictionTooltipIds}
+                  directionalHint={DirectionalHint.rightTopEdge}
+                  className={classes.tooltipHostDisplay}
+                >
+                  <IconButton iconProps={{ iconName: "info" }} />
+                </TooltipHost>
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+        <Stack.Item className={classes.messageBar}>
+          {this.props.data?.errorMessage && (
+            <MessageBar messageBarType={MessageBarType.error}>
+              {this.props.data.errorMessage}
+            </MessageBar>
+          )}
         </Stack.Item>
       </Stack>
     );
