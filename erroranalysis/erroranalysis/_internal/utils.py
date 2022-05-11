@@ -6,7 +6,7 @@ import random
 import numpy as np
 
 try:
-    import pyspark
+    import pyspark.pandas as ps
     spark_available = True
 except ImportError:
     spark_available = False
@@ -47,4 +47,7 @@ def is_spark(df):
     :return: True if the dataframe is a spark dataframe, False otherwise.
     :rtype: bool
     """
-    return spark_available and isinstance(df, pyspark.pandas.frame.DataFrame)
+    try:
+        return spark_available and isinstance(df, ps.frame.DataFrame)
+    except Exception:
+        return False
