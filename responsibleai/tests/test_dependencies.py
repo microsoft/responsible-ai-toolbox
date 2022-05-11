@@ -10,6 +10,7 @@ REQUIRED_DEPENDENCIES = [
     'dice-ml',
     'interpret-community',
     'erroranalysis',
+    'raimitigations',
 ]
 
 DISALLOWED_DEPENDENCIES = [

@@ -1,23 +1,23 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from responsibleai._tools.data_balance import BaseDataBalance
-from responsibleai._tools.data_balance.pandas_data_balance import (
-    PandasDataBalance
+from responsibleai._tools.data_balance import BaseDataBalanceService
+from responsibleai._tools.data_balance.pandas_data_balance_service import (
+    PandasDataBalanceService,
 )
-from responsibleai._tools.data_balance.spark_data_balance import (
-    SparkDataBalance
+from responsibleai._tools.data_balance.spark_data_balance_service import (
+    SparkDataBalanceService,
 )
 from responsibleai._tools.shared.backends import SupportedBackend
 
 
-class DataBalanceFactory(object):
+class DataBalanceServiceFactory(object):
     """
     Data balance factory.
     """
 
     @staticmethod
-    def get_service(backend: SupportedBackend) -> BaseDataBalance:
+    def get_service(backend: SupportedBackend) -> BaseDataBalanceService:
         """
         Get a specific data balance service.
 
@@ -25,8 +25,8 @@ class DataBalanceFactory(object):
         :type backend: SupportedBackend
         """
         if backend == SupportedBackend.SPARK:
-            return SparkDataBalance
+            return SparkDataBalanceService
         elif backend == SupportedBackend.PANDAS:
-            return PandasDataBalance
+            return PandasDataBalanceService
 
-        raise ValueError(f"Backend {backend} is not supported.")
+        raise ValueError(f"Backend '{backend}' is not supported.")

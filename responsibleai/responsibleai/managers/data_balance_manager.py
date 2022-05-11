@@ -143,14 +143,16 @@ class DataBalanceManager(BaseManager):
         if not self._validate() or not self._df:
             return
 
-        feat_measures, dist_measures, agg_measures = (
-            DataBalance.compute_measures(
-                df=self._df,
-                cols_of_interest=self._cols_of_interest,
-                target_column=self._target_column,
-                pos_label=self._pos_label,
-                backend=self._backend,
-            )
+        (
+            feat_measures,
+            dist_measures,
+            agg_measures,
+        ) = DataBalance.compute_measures(
+            df=self._df,
+            cols_of_interest=self._cols_of_interest,
+            target_column=self._target_column,
+            pos_label=self._pos_label,
+            backend=self._backend,
         )
         self.set_data_balance_measures(
             feature_balance_measures=feat_measures,
@@ -162,7 +164,7 @@ class DataBalanceManager(BaseManager):
         self,
         feature_balance_measures: pd.DataFrame,
         distribution_balance_measures: pd.DataFrame,
-        aggregate_balance_measures: pd.DataFrame
+        aggregate_balance_measures: pd.DataFrame,
     ):
         self._data_balance_measures = DataBalance.transform_measures_to_dict(
             feature_balance_measures=feature_balance_measures,

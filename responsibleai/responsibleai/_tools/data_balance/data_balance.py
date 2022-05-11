@@ -5,14 +5,18 @@ from typing import Any, Dict, List, Set, Union
 import warnings
 
 import pandas as pd
-from responsibleai._tools.data_balance import BaseDataBalance
-from responsibleai._tools.data_balance.factory import DataBalanceFactory
 
+from responsibleai._tools.data_balance import BaseDataBalanceService
+from responsibleai._tools.data_balance.factory import DataBalanceServiceFactory
 from responsibleai._tools.shared.backends import SupportedBackend
 
 FEATURE_BALANCE_MEASURES_KEY = "featureBalanceMeasures"
 DISTRIBUTION_BALANCE_MEASURES_KEY = "distributionBalanceMeasures"
 AGGREGATE_BALANCE_MEASURES_KEY = "aggregateBalanceMeasures"
+
+FEATURES_KEY = "features"
+MEASURES_KEY = "measures"
+UNIQUE_CLASSES_KEY = "uniqueClasses"
 
 FEATURE_NAME = "FeatureName"
 CLASS_A = "ClassA"
@@ -43,12 +47,14 @@ class DataBalance:
         :param backend: The backend to use.
         :type backend: SupportedBackend
         """
-        service: BaseDataBalance = DataBalanceFactory.get_service(
-            backend=backend
+        service: BaseDataBalanceService = (
+            DataBalanceServiceFactory.get_service(backend=backend)
         )
 
         df: pd.DataFrame = service.prepare_df(
-            df=df, target_column=target_column, pos_label=pos_label,
+            df=df,
+            target_column=target_column,
+            pos_label=pos_label,
         )
         feature_balance_measures: pd.DataFrame = (
             service.compute_feature_balance_measures(
@@ -59,12 +65,14 @@ class DataBalance:
         )
         distribution_balance_measures: pd.DataFrame = (
             service.compute_distribution_balance_measures(
-                df=df, cols_of_interest=cols_of_interest,
+                df=df,
+                cols_of_interest=cols_of_interest,
             )
         )
         aggregate_balance_measures: pd.DataFrame = (
             service.compute_aggregate_balance_measures(
-                df=df, cols_of_interest=cols_of_interest,
+                df=df,
+                cols_of_interest=cols_of_interest,
             )
         )
 
@@ -78,32 +86,32 @@ class DataBalance:
     def transform_measures_to_dict(
         feature_balance_measures: pd.DataFrame,
         distribution_balance_measures: pd.DataFrame,
-        aggregate_balance_measures: pd.DataFrame
+        aggregate_balance_measures: pd.DataFrame,
     ) -> Dict[str, Any]:
         """
         Takes computed data balance measures and transforms them into a
         dictionary acceptable by the RAI dashboard.
         """
-        feat_measures_dict: Dict[str, Dict[str, Any]] = (
-            DataBalance.transform_feature_balance_measures(
-                df=feature_balance_measures,
-            )
+        feat_measures_dict: Dict[
+            str, Dict[str, Any]
+        ] = DataBalance.transform_feature_balance_measures(
+            df=feature_balance_measures,
         )
-        dist_measures_dict: Dict[str, Dict[str, float]] = (
-            DataBalance.transform_distribution_balance_measures(
-                df=distribution_balance_measures,
-            )
+        dist_measures_dict: Dict[
+            str, Dict[str, float]
+        ] = DataBalance.transform_distribution_balance_measures(
+            df=distribution_balance_measures,
         )
-        agg_measures_dict: Dict[str, Dict[str, float]] = (
-            DataBalance.transform_aggregate_balance_measures(
-                df=aggregate_balance_measures,
-            )
+        agg_measures_dict: Dict[
+            str, Dict[str, float]
+        ] = DataBalance.transform_aggregate_balance_measures(
+            df=aggregate_balance_measures,
         )
 
         return {
             **feat_measures_dict,
             **dist_measures_dict,
-            **agg_measures_dict
+            **agg_measures_dict,
         }
 
     @staticmethod

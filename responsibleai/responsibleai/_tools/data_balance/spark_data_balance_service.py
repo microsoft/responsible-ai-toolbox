@@ -1,16 +1,18 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from typing import List
+from typing import Any, List
 import warnings
 
 import pandas as pd
-from responsibleai._tools.data_balance import BaseDataBalance
+
 try:
     import pyspark.sql.functions as F
     from synapse.ml import exploratory as SparkDataBalanceAnalysis
 except ImportError:
     pass
+
+from responsibleai._tools.data_balance import BaseDataBalanceService
 
 SPARK_AGGREGATE_COL = "AggregateBalanceMeasure.*"
 SPARK_DISTRIBUTION_COL = "DistributionBalanceMeasure.*"
@@ -21,21 +23,27 @@ CLASS_A = "ClassA"
 CLASS_B = "ClassB"
 
 
-class SparkDataBalance(BaseDataBalance):
-    @staticmethod
+class SparkDataBalanceService(BaseDataBalanceService):
+    @classmethod
     def prepare_df(
-        df: pd.DataFrame, target_column: str, pos_label: str,
+        cls, df: Any, target_column: str, pos_label: str
     ) -> pd.DataFrame:
-        if pos_label:
-            df = df.withColumn(target_column, F.when(
-                F.col(target_column).contains(pos_label), F.lit(1)).otherwise(
-                    F.lit(0)))
+        try:
+            if pos_label:
+                df = df.withColumn(
+                    target_column,
+                    F.when(
+                        F.col(target_column).contains(pos_label), F.lit(1)
+                    ).otherwise(F.lit(0)),
+                )
+        except Exception as e:
+            warnings.warn(f"Failed to prepare df due to {e!r}")
 
         return df
 
-    @staticmethod
+    @classmethod
     def compute_feature_balance_measures(
-        df: pd.DataFrame, cols_of_interest: List[str], target_column: str,
+        cls, df: Any, cols_of_interest: List[str], target_column: str
     ) -> pd.DataFrame:
         feature_balance_measures: pd.DataFrame = pd.DataFrame()
         try:
@@ -57,9 +65,9 @@ class SparkDataBalance(BaseDataBalance):
 
         return feature_balance_measures
 
-    @staticmethod
+    @classmethod
     def compute_distribution_balance_measures(
-        df: pd.DataFrame, cols_of_interest: List[str],
+        cls, df: Any, cols_of_interest: List[str]
     ) -> pd.DataFrame:
         distribution_measures: pd.DataFrame = pd.DataFrame()
         try:
@@ -80,14 +88,14 @@ class SparkDataBalance(BaseDataBalance):
 
         return distribution_measures
 
-    @staticmethod
+    @classmethod
     def compute_aggregate_balance_measures(
-        df: pd.DataFrame, cols_of_interest: List[str],
+        cls, df: Any, cols_of_interest: List[str]
     ) -> pd.DataFrame:
         aggregate_measures: pd.DataFrame = pd.DataFrame()
         try:
             aggregate_measures: pd.DataFrame = (
-                SparkDataBalance.AggregateBalanceMeasure()
+                SparkDataBalanceService.AggregateBalanceMeasure()
                 .setSensitiveCols(cols_of_interest)
                 .transform(df)
                 .select(SPARK_AGGREGATE_COL)
