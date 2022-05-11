@@ -2,9 +2,9 @@ name: CI RAIWidgets Python Typescript
 
 on:
   push:
-    branches: [main]
+    branches: [main, postbuild]
   pull_request:
-    branches: [main]
+    branches: [main, postbuild]
 
 jobs:
   ci-raiwidgets-python-typescript:
