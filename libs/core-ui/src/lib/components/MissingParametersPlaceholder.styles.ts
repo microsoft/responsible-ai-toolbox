@@ -23,8 +23,8 @@ export const missingParametersPlaceholderStyles: () => IProcessedStyleSet<IMissi
       },
       missingParametersPlaceholder: {
         height: "300px",
-        width: "100%",
-        textAlign: "center"
+        textAlign: "center",
+        width: "100%"
       },
       missingParametersPlaceholderSpacer: {
         color: theme.semanticColors.bodyText,
