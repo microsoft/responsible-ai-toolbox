@@ -92,6 +92,10 @@ const modelAssessmentDatasets = {
   },
   DiabetesDecisionMaking: {
     causalAnalysisData: {
+      binaryDescription:
+      "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
+      continuousDescription:
+      "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
       featureListInCausalTable: ["s2(num)", "bmi(num)", "bp(num)"],
       hasCausalAnalysisComponent: true
     },
@@ -325,7 +329,12 @@ const modelAssessmentDatasets = {
         "OverallCond(num)",
         "ScreenPorch(num)"
       ],
-      hasCausalAnalysisComponent: true
+      hasCausalAnalysisComponent: true,
+      causalAnalysisData: {
+        binaryDescription:
+          "On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.",
+        continuousDescription:
+          "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.",
     },
     cohortDefaultName: "All data",
     datasetExplorerData: {

@@ -77,11 +77,11 @@ export function describeAggregateCausalAffects(
       it("should have continuous and binary treatment definitions", () => {
         cy.get(Locators.CausalAggregateView).should(
           "contain",
-          localization.CausalAnalysis.AggregateView.continuousDescription
+          dataShape.causalAnalysisData?.continuousDescription
         );
         cy.get(Locators.CausalAggregateView).should(
           "contain",
-          localization.CausalAnalysis.AggregateView.binaryDescription
+          dataShape.causalAnalysisData?.binaryDescription
         );
       });
       it("should have details about lasso", () => {

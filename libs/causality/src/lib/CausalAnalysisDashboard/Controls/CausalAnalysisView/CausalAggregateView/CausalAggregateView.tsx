@@ -29,6 +29,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
     this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
+
     return (
       <Stack
         id="causalAggregateView"
@@ -81,16 +82,13 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
                 <Text variant={"xLarge"} className={styles.header}>
                   {localization.CausalAnalysis.AggregateView.continuous}
                 </Text>
-                {
-                  localization.CausalAnalysis.AggregateView
-                    .continuousDescription
-                }
+                {this.getContinuousDescription()}
               </Stack.Item>
               <Stack.Item className={styles.label}>
                 <Text variant={"xLarge"} className={styles.header}>
                   {localization.CausalAnalysis.AggregateView.binary}
                 </Text>
-                {localization.CausalAnalysis.AggregateView.binaryDescription}
+                {this.getBinaryDescription()}
               </Stack.Item>
               <Stack.Item className={styles.lasso}>
                 {localization.CausalAnalysis.AggregateView.lasso}{" "}
@@ -106,5 +104,20 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
         </Stack>
       </Stack>
     );
+  }
+
+  private getContinuousDescription(): string {
+    if (this.context.dataset.task_type === "classification") {
+      return localization.CausalAnalysis.AggregateView.continuousDescription;
+    }
+    return localization.CausalAnalysis.AggregateView
+      .continuousRegressionDescription;
+  }
+
+  private getBinaryDescription(): string {
+    if (this.context.dataset.task_type === "classification") {
+      return localization.CausalAnalysis.AggregateView.binaryDescription;
+    }
+    return localization.CausalAnalysis.AggregateView.regressionDescription;
   }
 }
