@@ -45,8 +45,10 @@ jobs:
         run: yarn buildall
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Use Homebrew to install libomp on MacOS for lightgbm
-        run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
+        name: Install latest numpy from conda-forge for MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet -c conda-forge numpy
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
@@ -59,6 +61,12 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum -c pytorch
+
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install latest lightgbm from conda-forge for MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet lightgbm -c conda-forge
 
       - name: Setup tools
         shell: bash -l {0}

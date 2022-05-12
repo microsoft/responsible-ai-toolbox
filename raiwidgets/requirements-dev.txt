@@ -9,9 +9,6 @@ requirements-parser==0.2.0
 
 wheel
 
-# Required for interpret-community 0.18.0
-lightgbm==2.3.0
-
 fairlearn==0.6.0
 
 # Jupyter dependency that fails with python 3.6
