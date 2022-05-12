@@ -223,6 +223,9 @@ export class ModelOverview extends React.Component<
         )}
         {this.props.showNewModelOverviewExperience && (
           <Stack tokens={{ childrenGap: "10px" }}>
+            <Text variant="medium" className={classNames.descriptionText}>
+              {localization.ModelAssessment.ModelOverview.topLevelDescription}
+            </Text>
             <Pivot onLinkClick={this.handleViewPivot}>
               <PivotItem
                 headerText={
