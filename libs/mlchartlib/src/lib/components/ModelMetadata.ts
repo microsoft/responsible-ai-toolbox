@@ -42,8 +42,8 @@ export class ModelMetadata {
       }
       const featureVector = testData.map((row) => row[featureIndex]);
       return {
-        max: Math.max(...featureVector),
-        min: Math.min(...featureVector),
+        max: _.max(featureVector) || 0,
+        min: _.min(featureVector) || 0,
         rangeType: featureVector.every((val) => Number.isInteger(val))
           ? RangeTypes.Integer
           : RangeTypes.Numeric

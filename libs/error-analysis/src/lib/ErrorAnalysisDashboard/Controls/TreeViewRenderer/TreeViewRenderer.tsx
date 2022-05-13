@@ -27,6 +27,7 @@ import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
+import _ from "lodash";
 import {
   getTheme,
   IProcessedStyleSet,
@@ -261,12 +262,12 @@ export class TreeViewRenderer extends React.PureComponent<
     );
     const x = rootDescendants.map((d) => d.x);
     const y = rootDescendants.map((d) => d.y);
-    const minX = Math.min(Math.min(...x) - 40, pathMin);
+    const minX = Math.min((_.min(x) || 0) - 40, pathMin);
     //100:tooltip width
-    const maxX = Math.max(Math.max(...x) + 40 + 100, pathMax);
-    const minY = Math.min(...y) - 40;
+    const maxX = Math.max((_.max(x) || 0) + 40 + 100, pathMax);
+    const minY = (_.min(y) || 0) - 40;
     //40:tooltip height
-    const maxY = Math.max(...y) + 40 + 40;
+    const maxY = (_.max(y) || 0) + 40 + 40;
     const containerStyles = mergeStyles({
       transform: `translate(${-minX}px, ${-minY}px)`
     });
