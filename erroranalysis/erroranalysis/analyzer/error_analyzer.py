@@ -334,7 +334,7 @@ class BaseAnalyzer(ABC):
                                        num_leaves=num_leaves,
                                        min_child_samples=min_child_samples)
         matrix = None
-        if filter_features is not None:
+        if filter_features:
             matrix = self.compute_matrix(filter_features,
                                          None,
                                          None)
