@@ -108,7 +108,15 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
 
   private getContinuousDescription(): string {
     if (this.context.dataset.task_type === "classification") {
-      return localization.CausalAnalysis.AggregateView.continuousDescription;
+      let positiveClass = "1";
+      if (this.context.dataset.class_names !== undefined) {
+        positiveClass = this.context.dataset.class_names[1];
+      }
+
+      return localization.formatString(
+        localization.CausalAnalysis.AggregateView.continuousDescription,
+        positiveClass
+      );
     }
     return localization.CausalAnalysis.AggregateView
       .continuousRegressionDescription;
@@ -116,7 +124,14 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
 
   private getBinaryDescription(): string {
     if (this.context.dataset.task_type === "classification") {
-      return localization.CausalAnalysis.AggregateView.binaryDescription;
+      let positiveClass = "1";
+      if (this.context.dataset.class_names !== undefined) {
+        positiveClass = this.context.dataset.class_names[1];
+      }
+      return localization.formatString(
+        localization.CausalAnalysis.AggregateView.binaryDescription,
+        positiveClass
+      );
     }
     return localization.CausalAnalysis.AggregateView.regressionDescription;
   }
