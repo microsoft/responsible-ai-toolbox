@@ -6,6 +6,7 @@ import {
   IMetricRequest,
   IMetricResponse
 } from "@responsible-ai/core-ui";
+import _ from "lodash";
 
 export const supportedBinaryClassificationPerformanceKeys = [
   "accuracy_score",
@@ -65,7 +66,7 @@ export function generateRandomMetrics(
   request: IMetricRequest,
   abortSignal?: AbortSignal
 ): Promise<IMetricResponse> {
-  const binSize = Math.max(...request.binVector);
+  const binSize = _.max(request.binVector) || 0;
   const bins: number[] = new Array(binSize + 1)
     .fill(0)
     .map(() => Math.random() / 3 + 0.33);

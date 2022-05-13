@@ -190,8 +190,8 @@ export class JointDataset {
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.PredictedYLabel].featureRange = {
-          max: Math.max(...args.predictedY),
-          min: Math.min(...args.predictedY),
+          max: _.max(args.predictedY) || 0,
+          min: _.min(args.predictedY) || 0,
           rangeType: RangeTypes.Numeric
         };
       }
@@ -223,8 +223,8 @@ export class JointDataset {
               abbridgedLabel: label,
               category: ColumnCategories.Outcome,
               featureRange: {
-                max: Math.max(...projection),
-                min: Math.min(...projection),
+                max: _.max(projection) || 0,
+                min: _.min(projection) || 0,
                 rangeType: RangeTypes.Numeric
               },
               isCategorical: false,
@@ -257,8 +257,8 @@ export class JointDataset {
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.TrueYLabel].featureRange = {
-          max: Math.max(...args.trueY),
-          min: Math.min(...args.trueY),
+          max: _.max(args.trueY) || 0,
+          min: _.min(args.trueY) || 0,
           rangeType: RangeTypes.Numeric
         };
       }
@@ -278,8 +278,8 @@ export class JointDataset {
           abbridgedLabel: localization.Interpret.Columns.error,
           category: ColumnCategories.Outcome,
           featureRange: {
-            max: Math.max(...regressionErrorArray),
-            min: Math.min(...regressionErrorArray),
+            max: _.max(regressionErrorArray) || 0,
+            min: _.min(regressionErrorArray) || 0,
             rangeType: RangeTypes.Numeric
           },
           isCategorical: false,
