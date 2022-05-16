@@ -8,34 +8,7 @@ from ..causal_manager_validator import validate_causal
 from responsibleai import RAIInsights
 
 
-def test_causal_classification_01():
-    # This test works with SciKit-Learn 1.1.0
-    # See PR #1429
-    data_train, data_test, _, _, categorical_features, \
-        _, target_name, classes = create_adult_income_dataset()
-
-    rai_i = RAIInsights(
-        model=None,
-        train=data_train,
-        test=data_test,
-        task_type='classification',
-        target_column=target_name,
-        categorical_features=categorical_features,
-        classes=classes
-    )
-    assert rai_i is not None
-
-    treatment_features = ["age", "gender"]
-    rai_i.causal.add(treatment_features=treatment_features)
-
-    rai_i.compute()
-
-    assert rai_i is not None
-    validate_causal(rai_i, data_train, target_name,
-                    treatment_features, 50)
-
-
-def test_causal_classification_02():
+def test_causal_classification_scikitlearn_issue():
     # This test gets stuck on SciKit-Learn v1.1.0
     # See PR #1429
     data_train, data_test, _, _, categorical_features, \
