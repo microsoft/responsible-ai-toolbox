@@ -26,6 +26,8 @@ def get_adult_data():
 
 
 def test_causal_classification_01():
+    # This test works with SciKit-Learn 1.1.0
+    # See PR #1429
     X, y = shap.datasets.adult()
     target_feature = "income"
     y = [1 if y_i else 0 for y_i in y]
@@ -35,7 +37,7 @@ def test_causal_classification_01():
 
     target_feature, categorical_columns, data_train, data_test = get_adult_data()
 
-    rai_i_01 = RAIInsights(
+    rai_i = RAIInsights(
         model=None,
         train=data_train,
         test=data_test,
@@ -43,16 +45,18 @@ def test_causal_classification_01():
         target_column=target_feature,
         categorical_features=categorical_columns
     )
-    assert rai_i_01 is not None
+    assert rai_i is not None
 
-    rai_i_01.causal.add(treatment_features=["Age", "Sex"])
+    rai_i.causal.add(treatment_features=["Age", "Sex"])
 
-    rai_i_01.compute()
+    rai_i.compute()
 
-    assert rai_i_01 is not None
+    assert rai_i is not None
 
 
 def test_causal_classification_02():
+    # This test gets stuck on SciKit-Learn v1.1.0
+    # See PR #1429
     X, y = shap.datasets.adult()
     target_feature = "income"
     y = [1 if y_i else 0 for y_i in y]
