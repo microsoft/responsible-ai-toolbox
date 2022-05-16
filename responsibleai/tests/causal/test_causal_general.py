@@ -1,90 +1,67 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import shap
-from sklearn.model_selection import train_test_split
+from ..common_utils import create_adult_income_dataset
+from ..causal_manager_validator import validate_causal
+
 
 from responsibleai import RAIInsights
-
-
-def get_adult_data():
-    X, y = shap.datasets.adult()
-    target_feature = "income"
-    y = [1 if y_i else 0 for y_i in y]
-
-    full_data = X.copy()
-    full_data[target_feature] = y
-
-    data_train, data_test = train_test_split(
-        full_data, test_size=1000, random_state=96132, stratify=full_data[target_feature]
-    )
-
-    categorical_columns = ["Race", "Sex", "Workclass",
-                           "Marital Status", "Country", "Occupation"]
-
-    return target_feature, categorical_columns, data_train, data_test
 
 
 def test_causal_classification_01():
     # This test works with SciKit-Learn 1.1.0
     # See PR #1429
-    X, y = shap.datasets.adult()
-    target_feature = "income"
-    y = [1 if y_i else 0 for y_i in y]
-
-    full_data = X.copy()
-    full_data[target_feature] = y
-
-    target_feature, categorical_columns, data_train, data_test = get_adult_data()
+    data_train, data_test, _, _, categorical_features, \
+        _, target_name, classes = create_adult_income_dataset()
 
     rai_i = RAIInsights(
         model=None,
         train=data_train,
         test=data_test,
         task_type='classification',
-        target_column=target_feature,
-        categorical_features=categorical_columns
+        target_column=target_name,
+        categorical_features=categorical_features,
+        classes=classes
     )
     assert rai_i is not None
 
-    rai_i.causal.add(treatment_features=["Age", "Sex"])
+    treatment_features = ["age", "gender"]
+    rai_i.causal.add(treatment_features=treatment_features)
 
     rai_i.compute()
 
     assert rai_i is not None
+    validate_causal(rai_i, data_train, target_name,
+                    treatment_features, 50)
 
 
 def test_causal_classification_02():
     # This test gets stuck on SciKit-Learn v1.1.0
     # See PR #1429
-    X, y = shap.datasets.adult()
-    target_feature = "income"
-    y = [1 if y_i else 0 for y_i in y]
-
-    full_data = X.copy()
-    full_data[target_feature] = y
-
-    target_feature, categorical_columns, data_train, data_test = get_adult_data()
+    data_train, data_test, _, _, categorical_features, \
+        _, target_name, classes = create_adult_income_dataset()
 
     rai_i = RAIInsights(
         model=None,
         train=data_train,
         test=data_test,
         task_type='classification',
-        target_column=target_feature,
-        categorical_features=categorical_columns
+        target_column=target_name,
+        categorical_features=categorical_features,
+        classes=classes
     )
     assert rai_i is not None
 
-    rai_i.causal.add(treatment_features=["Age", "Sex"],
-                     heterogeneity_features=["Marital Status"],
+    treatment_features = ["age", "gender"]
+    cat_expansion = 49
+    rai_i.causal.add(treatment_features=treatment_features,
+                     heterogeneity_features=["marital_status"],
                      nuisance_model="automl",
                      heterogeneity_model="forest",
                      alpha=0.06,
-                     upper_bound_on_cat_expansion=49,
+                     upper_bound_on_cat_expansion=cat_expansion,
                      treatment_cost=[0.1, 0.2],
                      min_tree_leaf_samples=2,
-                     max_tree_depth=1,
                      skip_cat_limit_checks=False,
                      categories="auto",
                      n_jobs=1,
@@ -95,3 +72,5 @@ def test_causal_classification_02():
     rai_i.compute()
 
     assert rai_i is not None
+    validate_causal(rai_i, data_train, target_name,
+                    treatment_features, cat_expansion)
