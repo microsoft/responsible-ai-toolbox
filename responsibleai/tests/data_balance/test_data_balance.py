@@ -192,6 +192,26 @@ class TestDataBalance:
         assert MEASURES_KEY in values
         assert len(values[MEASURES_KEY]) == 0
 
+    def test_transform_feature_balance_measures_with_empty_df(self):
+        empty_df = pd.DataFrame()
+        output = DataBalance.transform_feature_balance_measures(df=empty_df)
+        assert isinstance(output, dict)
+        assert len(output) == 1
+        assert FEATURE_BALANCE_MEASURES_KEY in output
+
+        values = output[FEATURE_BALANCE_MEASURES_KEY]
+        assert isinstance(values, dict)
+        assert len(values) == 3
+
+        assert FEATURES_KEY in values
+        assert len(values[FEATURES_KEY]) == 0
+
+        assert UNIQUE_CLASSES_KEY in values
+        assert len(values[UNIQUE_CLASSES_KEY]) == 0
+
+        assert MEASURES_KEY in values
+        assert len(values[MEASURES_KEY]) == 0
+
     def test_transform_distribution_balance_measures_with_valid_input(
         self, distribution_balance_measures
     ):
@@ -228,6 +248,25 @@ class TestDataBalance:
         assert MEASURES_KEY in values
         assert len(values[MEASURES_KEY]) == 0
 
+    def test_transform_distribution_balance_measures_with_empty_df(self):
+        empty_df = pd.DataFrame()
+        output = DataBalance.transform_distribution_balance_measures(
+            df=empty_df
+        )
+        assert isinstance(output, dict)
+        assert len(output) == 1
+        assert DISTRIBUTION_BALANCE_MEASURES_KEY in output
+
+        values = output[DISTRIBUTION_BALANCE_MEASURES_KEY]
+        assert isinstance(values, dict)
+        assert len(values) == 2
+
+        assert FEATURES_KEY in values
+        assert len(values[FEATURES_KEY]) == 0
+
+        assert MEASURES_KEY in values
+        assert len(values[MEASURES_KEY]) == 0
+
     def test_transform_aggregate_balance_measures_with_valid_input(
         self, aggregate_balance_measures
     ):
@@ -247,6 +286,20 @@ class TestDataBalance:
 
     def test_transform_aggregate_balance_measures_with_invalid_input(self):
         output = DataBalance.transform_aggregate_balance_measures(df=None)
+        assert isinstance(output, dict)
+        assert len(output) == 1
+        assert AGGREGATE_BALANCE_MEASURES_KEY in output
+
+        values = output[AGGREGATE_BALANCE_MEASURES_KEY]
+        assert isinstance(values, dict)
+        assert len(values) == 1
+
+        assert MEASURES_KEY in values
+        assert len(values[MEASURES_KEY]) == 0
+
+    def test_transform_aggregate_balance_measures_with_empty_df(self):
+        empty_df = pd.DataFrame()
+        output = DataBalance.transform_aggregate_balance_measures(df=empty_df)
         assert isinstance(output, dict)
         assert len(output) == 1
         assert AGGREGATE_BALANCE_MEASURES_KEY in output
