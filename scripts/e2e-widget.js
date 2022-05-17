@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
+const { start } = require("repl");
 
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
@@ -15,6 +16,7 @@ const fileNames = [
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging"
 ];
+const flightCombinations = [[], ["newModelOverviewExperience"]];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
 
@@ -51,8 +53,45 @@ async function runNotebook(name) {
   });
 }
 
+function addFlightsInFile(path, flights) {
+  if (!fs.existsSync(path)) {
+    throw new Error(`${path} does not exist.`);
+  }
+  let content = fs.readFileSync(path, { encoding: "utf-8" });
+  let startIndex = 0;
+  const dashboardConstructorCall = "ResponsibleAIDashboard(";
+  while (startIndex < content.length) {
+    startIndex = content.indexOf(dashboardConstructorCall, startIndex);
+    console.log(startIndex);
+    if (startIndex === -1) {
+      break;
+    }
+    let dashboardArgsIndex = startIndex + dashboardConstructorCall.length;
+    let parenthesesBalance = 1;
+    while (parenthesesBalance > 0) {
+      if (content.at(dashboardArgsIndex) === "(") {
+        parenthesesBalance += 1;
+      } else if (content.at(dashboardArgsIndex) === ")") {
+        parenthesesBalance -= 1;
+      }
+      dashboardArgsIndex += 1;
+    }
+    content =
+      content.slice(0, dashboardArgsIndex - 1) +
+      `, feature_flights="${flights.join('&')}")` +
+      content.slice(dashboardArgsIndex);
+    startIndex = dashboardArgsIndex + 1;
+  }
+  const newPath =
+    flights.length === 0
+      ? path
+      : path.slice(0, path.length - 3) + "-" + flights.join("-") + ".py";
+  console.log(`writing notebook with flights to ${newPath}`);
+  fs.writeFileSync(newPath, content, { encoding: "utf-8" });
+}
+
 function checkIfAllNotebooksHaveTests() {
-  console.log(`Checking if all notebooks under ${baseDir} has tests`);
+  console.log(`Checking if all notebooks under ${baseDir} have tests`);
   const files = fs
     .readdirSync(baseDir)
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".ipynb"))
@@ -60,27 +99,38 @@ function checkIfAllNotebooksHaveTests() {
   const allNotebooksHaveTests = _.isEqual(_.sortBy(files), _.sortBy(fileNames));
   if (!allNotebooksHaveTests) {
     throw new Error(
-      `Some of the notebooks doesn't have tests. If a new notebook is added, Please add tests.`
+      `Some of the notebooks don't have tests. If a new notebook is added, Please add tests.`
     );
   }
   console.log(`All notebooks have tests.`);
 }
 
-function convertNotebook() {
-  console.log("Converting notebook");
-  for (var fileName of fileNames) {
-    console.log(`Converting notebook  ${fileName}\r\n`);
-    const { status, stderr } = spawnSync(
-      "jupyter",
-      ["nbconvert", path.join(baseDir, `${fileName}.ipynb`), "--to", "script"],
-      {
-        stdio: "inherit"
+function convertNotebooks() {
+  console.log("Converting notebooks");
+  for (var flights of flightCombinations) {
+    for (var fileName of fileNames) {
+      console.log(
+        `Converting notebook ${fileName} with ${
+          flights.length === 0 ? "no " : ""
+        }flights ${flights.toString()}\r\n`
+      );
+      const { status, stderr } = spawnSync(
+        "jupyter",
+        [
+          "nbconvert",
+          path.join(baseDir, `${fileName}.ipynb`),
+          "--to",
+          "script"
+        ],
+        {
+          stdio: "inherit"
+        }
+      );
+      if (flights.length > 0) {
+        addFlightsInFile(path.join(baseDir, `${fileName}.py`), flights);
       }
-    );
-    if (status) {
-      throw new Error(`Failed to convert notebook:\r\n\r\n${stderr}`);
+      console.log(`Converted notebook ${fileName}\r\n`);
     }
-    console.log(`Converted notebook ${fileName}\r\n`);
   }
 }
 /**
@@ -138,7 +188,7 @@ async function main() {
     .parse(process.argv)
     .outputHelp();
   checkIfAllNotebooksHaveTests();
-  convertNotebook();
+  convertNotebooks();
   const hosts = await runNotebooks();
   writeCypressSettings(hosts);
   e2e(commander.opts().watch);
