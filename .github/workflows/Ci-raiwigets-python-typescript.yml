@@ -92,48 +92,6 @@ jobs:
         if: ${{ matrix.operatingSystem != 'macos-latest' }}
         run: yarn e2e-widget
 
-      - name: Run tests
-        shell: bash -l {0}
-        run: |
-          pytest --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
-        working-directory: ${{ matrix.packageDirectory }}
-
-      - name: Upload code coverage results
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.packageDirectory }}-code-coverage-results
-          path: ${{ matrix.packageDirectory }}/htmlcov
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
-
-      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
-        name: Upload to codecov
-        id: codecovupload1
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ${{ matrix.packageDirectory }}
-          env_vars: OS,PYTHON
-          fail_ci_if_error: false
-          files: ./${{ matrix.packageDirectory }}/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          verbose: true
-
-      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
-        name: Retry upload to codecov
-        id: codecovupload2
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ${{ matrix.packageDirectory }}
-          env_vars: OS,PYTHON
-          fail_ci_if_error: false
-          files: ./${{ matrix.packageDirectory }}/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          verbose: true
-
       - name: Upload e2e test screen shot
         if: always()
         uses: actions/upload-artifact@v2
