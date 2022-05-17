@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from ..common_utils import create_adult_income_dataset
-from ..causal_manager_validator import validate_causal
+from ..causal_manager_validator import _check_causal_result
 
 
 from responsibleai import RAIInsights
@@ -44,6 +44,8 @@ def test_causal_classification_scikitlearn_issue():
 
     rai_i.compute()
 
-    assert rai_i is not None
-    validate_causal(rai_i, data_train, target_name,
-                    treatment_features, cat_expansion)
+    results = rai_i.causal.get()
+    assert results is not None
+    assert isinstance(results, list)
+    assert len(results) == 1
+    _check_causal_result(results[0])
