@@ -1,11 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from ..common_utils import create_adult_income_dataset
-from ..causal_manager_validator import _check_causal_result
-
 
 from responsibleai import RAIInsights
+
+from ..causal_manager_validator import _check_causal_result
+from ..common_utils import create_adult_income_dataset
 
 
 def test_causal_classification_scikitlearn_issue():
