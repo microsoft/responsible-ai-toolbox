@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeDatasetExplorer } from "../../../describer/modelAssessment/dataExplorer/describeDatasetExplorer";
+import {
+  describeDatasetExplorer,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeDatasetExplorer("ClassificationModelAssessment");
+const datasetShape = modelAssessmentDatasets.ClassificationModelDebugging;
+describeDatasetExplorer(datasetShape, "ClassificationModelDebugging");

@@ -39,17 +39,25 @@ class ExplainerManagerKeys(object):
 
 class ErrorAnalysisManagerKeys(object):
     """Provide constants for ErrorAnalysisManager key properties."""
+    FILTER_FEATURES = 'filter_features'
     IS_COMPUTED = 'is_computed'
     MAX_DEPTH = 'max_depth'
-    NUM_LEAVES = 'num_leaves'
     MIN_CHILD_SAMPLES = 'min_child_samples'
-    FILTER_FEATURES = 'filter_features'
+    NUM_LEAVES = 'num_leaves'
     REPORTS = 'reports'
 
 
 class CounterfactualManagerKeys(object):
     """Provide constants for CounterfactualManager key properties."""
     COUNTERFACTUALS = 'counterfactuals'
+
+
+class CausalManagerKeys(object):
+    """Provide constants for CausalManager key properties."""
+    CAUSAL_EFFECTS = 'causal_effects'
+    GLOBAL_EFFECTS_COMPUTED = 'global_effects_computed'
+    LOCAL_EFFECTS_COMPUTED = 'local_effects_computed'
+    POLICIES_COMPUTED = 'policies_computed'
 
 
 class SKLearn(object):

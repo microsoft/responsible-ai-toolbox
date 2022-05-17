@@ -50,9 +50,20 @@ Responsible AI dashboard is designed to achieve the following goals:
 
 This repository contains the Jupyter notebooks with examples to showcase how to use this widget. Get started [here](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb).
 
+
+### Installation
+
+Use the following pip command to install the Responsible AI Toolbox.
+
+If running in jupyter, please make sure to restart the jupyter kernel after installing.
+
+```
+pip install raiwidgets
+```
+
+
 ### Responsible AI dashboard Customization
 
- 
 The Responsible AI Toolbox’s strength lies in its customizability. It empowers users to design tailored, end-to-end model debugging and decision-making workflows that address their particular needs. Need some inspiration? Here are some examples of how Toolbox components can be put together to analyze scenarios in different ways:
  
 | Responsible AI Dashboard Flow| Use Case  |
@@ -84,7 +95,7 @@ Model Debugging Examples:
 
 ## Supported Models
 
-This Responsible AI Toolbox API supports models that are trained on datasets in Python `numpy.array`, `pandas.DataFrame`, `iml.datatypes.DenseData`, or `scipy.sparse.csr_matrix` format.
+This Responsible AI Toolbox API supports models that are trained on datasets in Python `numpy.ndarray`, `pandas.DataFrame`, `iml.datatypes.DenseData`, or `scipy.sparse.csr_matrix` format.
 
 The explanation functions of [Interpret-Community](https://github.com/interpretml/interpret-community) accept both models and pipelines as input as long as the model or pipeline implements a `predict` or `predict_proba` function that conforms to the Scikit convention. If not compatible, you can wrap your model's prediction function into a wrapper function that transforms the output into the format that is supported (predict or predict_proba of Scikit), and pass that wrapper function to your selected interpretability techniques.
 

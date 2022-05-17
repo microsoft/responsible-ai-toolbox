@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -9,23 +9,22 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IGlobalTabStyles {
+  chartCallout: IStyle;
+  chartContainer: IStyle;
+  chartLeftPart: IStyle;
+  chartRightPart: IStyle;
   page: IStyle;
-  infoIcon: IStyle;
-  helperText: IStyle;
-  infoWithText: IStyle;
   globalChartControls: IStyle;
-  sliderLabel: IStyle;
-  topK: IStyle;
-  startingK: IStyle;
-  chartTypeDropdown: IStyle;
   globalChartWithLegend: IStyle;
+  helperText: IStyle;
+  infoIcon: IStyle;
+  infoWithText: IStyle;
   legendAndSort: IStyle;
-  cohortLegend: IStyle;
   legendHelpText: IStyle;
+  sliderLabel: IStyle;
   secondaryChartAndLegend: IStyle;
-  chartEditorButton: IStyle;
-  boldText: IStyle;
-  cohortLegendWithTop: IStyle;
+  startingK: IStyle;
+  topK: IStyle;
   rightJustifiedContainer: IStyle;
 }
 
@@ -33,27 +32,22 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
   () => {
     const rightMarginWidth = "200px";
     return mergeStyleSets<IGlobalTabStyles>({
-      boldText: {
-        fontWeight: "600",
-        paddingBottom: "5px"
+      chartCallout: {
+        boxSizing: "border-box",
+        display: "inline-flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        width: "80%"
       },
-      chartEditorButton: [
-        FabricStyles.chartEditorButton,
-        {
-          margin: "5px"
-        }
-      ],
-      chartTypeDropdown: {
-        margin: "0 5px 0 0"
+      chartContainer: {
+        paddingLeft: "25px",
+        width: "100%"
       },
-      cohortLegend: {
-        fontWeight: "600",
-        paddingBottom: "10px"
+      chartLeftPart: {
+        width: "80%"
       },
-      cohortLegendWithTop: {
-        fontWeight: "600",
-        paddingBottom: "10px",
-        paddingTop: "10px"
+      chartRightPart: {
+        width: "20%"
       },
       globalChartControls: {
         display: "flex",
@@ -77,23 +71,20 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "23px"
       },
       infoWithText: {
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "row",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },
       legendAndSort: {
         height: "100%",
+        paddingLeft: "25px",
+        paddingTop: "55px",
         width: rightMarginWidth
       },
       legendHelpText: {
         fontWeight: "300"
       },
       page: {
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
         height: "100%",
         padding: "16px 40px 0 14px",
         width: "100%"
@@ -109,7 +100,8 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       secondaryChartAndLegend: {
         display: "flex",
         flexDirection: "row",
-        height: "300px",
+        height: "100%",
+        paddingLeft: "25px",
         width: "100%"
       },
       sliderLabel: {
@@ -120,7 +112,8 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         flex: 1
       },
       topK: {
-        maxWidth: "200px"
+        padding: "10px 0 0 25px",
+        width: "70%"
       }
     });
   };

@@ -9,6 +9,12 @@
           "core-js/stable",
           "regenerator-runtime/runtime.js",
           "office-ui-fabric-react/lib/utilities/positioning",
+          "highcharts/modules/accessibility",
+          "highcharts/modules/exporting",
+          "highcharts/highcharts-more",
+          "highcharts/modules/heatmap",
+          "highcharts/modules/pattern-fill",
+          "highcharts/modules/gantt",
           "@nrwl/cypress/plugins/preprocessor"
         ]
       }

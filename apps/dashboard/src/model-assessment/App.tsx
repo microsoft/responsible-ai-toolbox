@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
@@ -9,7 +10,6 @@ import {
   IModelAssessmentDashboardProps,
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -19,8 +19,11 @@ import {
   DatasetName,
   generateJsonTreeBoston,
   generateJsonTreeAdultCensusIncome,
+  generateJsonTreeWine,
   getJsonMatrix,
-  getJsonTreeAdultCensusIncome
+  getJsonTreeAdultCensusIncome,
+  getJsonTreeBoston,
+  getJsonTreeWine
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -28,6 +31,7 @@ interface IAppProps extends IModelAssessmentData {
   language: Language;
   version: 1 | 2;
   classDimension?: 1 | 2 | 3;
+  featureFlights?: string[];
 }
 
 export class App extends React.Component<IAppProps> {
@@ -69,7 +73,7 @@ export class App extends React.Component<IAppProps> {
             this.props.dataset.feature_names,
             DatasetName.Boston
           );
-      } else {
+      } else if (this.props.classDimension === 2) {
         // Adult
         modelAssessmentDashboardProps.requestDebugML =
           generateJsonTreeAdultCensusIncome;
@@ -78,11 +82,26 @@ export class App extends React.Component<IAppProps> {
             this.props.dataset.feature_names,
             DatasetName.AdultCensusIncome
           );
+      } else {
+        // Wine
+        modelAssessmentDashboardProps.requestDebugML = generateJsonTreeWine;
+        modelAssessmentDashboardProps.requestImportances =
+          createJsonImportancesGenerator(
+            this.props.dataset.feature_names,
+            DatasetName.Wine
+          );
       }
     } else {
-      const staticTree = getJsonTreeAdultCensusIncome(
+      let staticTree = getJsonTreeAdultCensusIncome(
         this.props.dataset.feature_names
       );
+      if (this.props.classDimension === 1) {
+        // Boston
+        staticTree = getJsonTreeBoston(this.props.dataset.feature_names);
+      } else if (this.props.classDimension !== 2) {
+        // Wine
+        staticTree = getJsonTreeWine(this.props.dataset.feature_names);
+      }
       const staticMatrix = getJsonMatrix();
       modelAssessmentDashboardProps = {
         ...this.props,
@@ -98,6 +117,7 @@ export class App extends React.Component<IAppProps> {
             tree_features: staticTree.features
           }
         ],
+        featureFlights: this.props.featureFlights,
         locale: this.props.language,
         localUrl: "https://www.bing.com/",
         stringParams: { contextualHelp: this.messages },

@@ -32,7 +32,12 @@ export class TreatmentView extends React.Component<
   public render(): React.ReactNode {
     const styles = TreatmentStyles();
     return this.state.selectedPolicy ? (
-      <Stack horizontal={false} grow>
+      <Stack
+        id="treatmentView"
+        horizontal={false}
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack.Item className={styles.header}>
           <Text variant={"medium"}>
             {localization.CausalAnalysis.TreatmentPolicy.header}

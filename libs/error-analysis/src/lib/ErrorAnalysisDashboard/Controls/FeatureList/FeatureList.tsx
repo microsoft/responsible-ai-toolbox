@@ -379,7 +379,7 @@ export class FeatureList extends React.Component<
     this.setState(
       {
         searchedFeatures: this.props.features.filter((feature) =>
-          feature.includes(searchValue)
+          feature.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
         )
       },
       () => {

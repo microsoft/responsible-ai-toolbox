@@ -35,8 +35,8 @@ import React from "react";
 import { getCategoricalOption } from "../util/getCategoricalOption";
 import { getFilterFeatures } from "../util/getFilterFeatures";
 
-import { counterfactualListStyle } from "./CounterfactualListStyles";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualListStyle } from "./CounterfactualList.styles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 
 export interface ICounterfactualListProps {
@@ -50,6 +50,11 @@ export interface ICounterfactualListProps {
     key: string | number,
     isString: boolean,
     newValue?: string | number
+  ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
   ): void;
 }
 
@@ -82,6 +87,7 @@ export class CounterfactualList extends React.Component<
   public render(): React.ReactNode {
     const items = this.getItems();
     const columns = this.getColumns();
+
     if (columns.length === 0) {
       return (
         <MissingParametersPlaceholder>
@@ -102,6 +108,18 @@ export class CounterfactualList extends React.Component<
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
+  }
+
+  private getTargetFeatureName(): string | undefined {
+    return this.props.data?.feature_names_including_target[
+      this.props.data?.feature_names_including_target.length - 1
+    ];
+  }
+  private getTargetPrefix(): string {
+    if (this.props.data?.desired_range !== undefined) {
+      return localization.Counterfactuals.WhatIf.predictedValue;
+    }
+    return localization.Counterfactuals.WhatIf.predictedClass;
   }
 
   private renderRow: IRenderFunction<IDetailsRowProps> = (
@@ -154,7 +172,18 @@ export class CounterfactualList extends React.Component<
       data[k] = data[k] === "-" ? items[0][k] : data[k];
       const keyIndex =
         this.props.data?.feature_names_including_target.indexOf(k);
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+      if (typeof data[k] === "string") {
+        const dropdownOption = getCategoricalOption(
+          this.context.jointDataset,
+          k
+        );
+        const optionIndex = dropdownOption?.data.categoricalOptions.findIndex(
+          (feature: IComboBoxOption) => feature.key === data[k]
+        );
+        this.props.setCustomRowProperty(`Data${keyIndex}`, true, optionIndex);
+      } else {
+        this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+      }
     });
     data.row = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
@@ -226,10 +255,7 @@ export class CounterfactualList extends React.Component<
   };
   private getColumns(): IColumn[] {
     const columns: IColumn[] = [];
-    const targetFeature =
-      this.props.data?.feature_names_including_target[
-        this.props.data?.feature_names_including_target.length - 1
-      ];
+    const targetFeature = this.getTargetFeatureName();
     const featureNames = getFilterFeatures(
       this.props.data,
       this.props.selectedIndex,
@@ -267,11 +293,17 @@ export class CounterfactualList extends React.Component<
           name: f
         })
       );
+    for (const column of columns) {
+      if (targetFeature !== undefined && column.fieldName === targetFeature) {
+        column.name = `${this.getTargetPrefix()} (${column.fieldName})`;
+      }
+    }
     return columns;
   }
 
-  private updateDropdownColValue = (
+  private updateComboBoxColValue = (
     key: string | number,
+    options: IComboBoxOption[],
     _event: React.FormEvent<IComboBox>,
     option?: IComboBoxOption
   ): void => {
@@ -279,10 +311,17 @@ export class CounterfactualList extends React.Component<
     const keyIndex =
       this.props.data?.feature_names_including_target.indexOf(id);
     if (option?.text) {
-      this.props.setCustomRowProperty(`Data${keyIndex}`, false, option.text);
+      const optionIndex = options.findIndex(
+        (feature) => feature.key === option.text
+      );
+      this.props.setCustomRowPropertyComboBox(
+        `Data${keyIndex}`,
+        optionIndex,
+        option.text
+      );
       this.setState((prevState) => {
         prevState.data[id] = option.text;
-        return { data: prevState.data };
+        return { data: { ...prevState.data } };
       });
     }
   };
@@ -298,7 +337,7 @@ export class CounterfactualList extends React.Component<
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = toNumber(newValue);
-      return { data: prevState.data };
+      return { data: { ...prevState.data } };
     });
   };
 
@@ -332,7 +371,7 @@ export class CounterfactualList extends React.Component<
     const styles = counterfactualListStyle();
     if (column && dropdownOption?.data?.categoricalOptions) {
       return (
-        <Stack horizontal={false} tokens={{ childrenGap: "5px" }}>
+        <Stack horizontal={false} tokens={{ childrenGap: "s1" }}>
           <Stack.Item className={styles.dropdownLabel}>
             <Text>{column.key}</Text>
           </Stack.Item>
@@ -343,7 +382,17 @@ export class CounterfactualList extends React.Component<
               allowFreeform
               selectedKey={`${this.state.data[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
-              onChange={this.updateDropdownColValue.bind(this, column.key)}
+              onChange={(
+                _event: React.FormEvent<IComboBox>,
+                option?: IComboBoxOption
+              ) =>
+                this.updateComboBoxColValue(
+                  column.key,
+                  dropdownOption.data.categoricalOptions,
+                  _event,
+                  option
+                )
+              }
             />
           </Stack.Item>
         </Stack>
@@ -355,7 +404,7 @@ export class CounterfactualList extends React.Component<
           <Stack.Item>
             <TextField
               value={this.state.data[column.key]?.toString()}
-              label={column.key}
+              label={column.name || column.key}
               id={column.key}
               onChange={this.updateColValue}
             />

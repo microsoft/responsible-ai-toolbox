@@ -1,11 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import time
+
 from common_utils import (create_binary_classification_dataset,
-                          create_boston_data, create_cancer_data,
+                          create_cancer_data, create_housing_data,
                           create_iris_data, create_models_classification,
                           create_models_regression, create_simple_titanic_data,
-                          create_titanic_pipeline)
+                          create_sklearn_random_forest_regressor,
+                          create_titanic_pipeline, replicate_dataset)
 
 from erroranalysis._internal.constants import ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
@@ -56,15 +59,37 @@ class TestImportances(object):
         run_error_analyzer(clf, X_test, y_test, feature_names,
                            categorical_features)
 
-    def test_importances_boston(self):
+    def test_importances_housing(self):
         X_train, X_test, y_train, y_test, feature_names = \
-            create_boston_data()
+            create_housing_data()
         models = create_models_regression(X_train, y_train)
 
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
+
+    def test_large_data_importances(self):
+        # mutual information can be very costly for large number of rows
+        # hence, assert we downsample to compute importances for large data
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset(100)
+        feature_names = list(X_train.columns)
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        X_test, y_test = replicate_dataset(X_test, y_test)
+        assert X_test.shape[0] > 1000000
+        t0 = time.time()
+        categorical_features = []
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+        model_analyzer.compute_importances()
+        t1 = time.time()
+        execution_time = t1 - t0
+        print(execution_time)
+        # assert we don't take too long and downsample the dataset
+        # note execution time is in seconds
+        assert execution_time < 20
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,

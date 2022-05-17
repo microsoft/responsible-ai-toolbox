@@ -35,6 +35,7 @@
             "project": "libs/causality/package.json",
             "entryFile": "libs/causality/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -103,6 +104,7 @@
             "project": "libs/core-ui/package.json",
             "entryFile": "libs/core-ui/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -171,6 +173,7 @@
             "project": "libs/counterfactuals/package.json",
             "entryFile": "libs/counterfactuals/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -366,6 +369,7 @@
             "project": "libs/dataset-explorer/package.json",
             "entryFile": "libs/dataset-explorer/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -397,6 +401,58 @@
             "passWithNoTests": true
           },
           "outputs": ["coverage/libs/dataset-explorer"]
+        }
+      }
+    },
+    "e2e": {
+      "root": "libs/e2e",
+      "sourceRoot": "libs/e2e/src",
+      "projectType": "library",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "libs/e2e/cypress.json",
+            "tsConfig": "libs/e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "widget:serve:production"
+            }
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/e2e",
+            "tsConfig": "libs/e2e/tsconfig.lib.json",
+            "project": "libs/e2e/package.json",
+            "entryFile": "libs/e2e/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/e2e/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/e2e/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/e2e"],
+          "options": {
+            "jestConfig": "libs/e2e/jest.config.js",
+            "passWithNoTests": true
+          }
         }
       }
     },
@@ -434,6 +490,7 @@
             "project": "libs/error-analysis/package.json",
             "entryFile": "libs/error-analysis/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -502,6 +559,7 @@
             "project": "libs/fairness/package.json",
             "entryFile": "libs/fairness/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -570,6 +628,7 @@
             "project": "libs/interpret/package.json",
             "entryFile": "libs/interpret/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -604,6 +663,46 @@
         }
       }
     },
+    "interpret-text": {
+      "root": "libs/interpret-text",
+      "sourceRoot": "libs/interpret-text/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/interpret-text",
+            "tsConfig": "libs/interpret-text/tsconfig.lib.json",
+            "project": "libs/interpret-text/package.json",
+            "entryFile": "libs/interpret-text/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/interpret-text/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/interpret-text/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/interpret-text"],
+          "options": {
+            "jestConfig": "libs/interpret-text/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "localization": {
       "root": "libs/localization",
       "sourceRoot": "libs/localization/src",
@@ -634,6 +733,7 @@
             "project": "libs/localization/package.json",
             "entryFile": "libs/localization/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -702,6 +802,7 @@
             "project": "libs/mlchartlib/package.json",
             "entryFile": "libs/mlchartlib/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -770,6 +871,7 @@
             "project": "libs/model-assessment/package.json",
             "entryFile": "libs/model-assessment/src/index.ts",
             "external": [
+              "@fluentui/react",
               "jmespath",
               "localized-strings",
               "lodash",

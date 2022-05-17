@@ -17,7 +17,8 @@ import {
   IDetailsHeaderProps,
   IRenderFunction,
   SelectionMode,
-  TooltipHost
+  TooltipHost,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -35,7 +36,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
 
   public render(): React.ReactNode {
     if (!this.props.data) {
-      return <>No Data</>;
+      return <Text>{localization.CausalAnalysis.TreatmentPolicy.noData}</Text>;
     }
     const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [

@@ -56,7 +56,10 @@ import { FeatureList } from "./Controls/FeatureList/FeatureList";
 import { InstanceView } from "./Controls/InstanceView/InstanceView";
 import { MainMenu } from "./Controls/MainMenu/MainMenu";
 import { MapShift } from "./Controls/MapShift/MapShift";
+import { MatrixArea } from "./Controls/Matrix/MatrixArea/MatrixArea";
+import { MatrixFilter } from "./Controls/Matrix/MatrixFilter/MatrixFilter";
 import { Navigation } from "./Controls/Navigation/Navigation";
+import { TreeViewRenderer } from "./Controls/TreeViewRenderer/TreeViewRenderer";
 import { WhatIf } from "./Controls/WhatIf/WhatIf";
 import { ErrorAnalysisDashboardStyles } from "./ErrorAnalysisDashboard.styles";
 import {
@@ -67,16 +70,6 @@ import {
 } from "./ErrorAnalysisEnums";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { IErrorAnalysisDashboardState } from "./Interfaces/IErrorAnalysisDashboardState";
-import {
-  createInitialMatrixAreaState,
-  createInitialMatrixFilterState,
-  IMatrixAreaState,
-  IMatrixFilterState
-} from "./MatrixFilterState";
-import {
-  ITreeViewRendererState,
-  createInitialTreeViewState
-} from "./TreeViewState";
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
@@ -256,13 +249,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
     let metricStats: MetricCohortStats | undefined = undefined;
-    if (props.rootStats) {
+    if (props.errorAnalysisData.root_stats) {
       metricStats = new MetricCohortStats(
-        props.rootStats.totalSize,
-        props.rootStats.totalSize,
-        props.rootStats.metricValue,
-        props.rootStats.metricName,
-        props.rootStats.errorCoverage
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.metricValue,
+        props.errorAnalysisData.root_stats.metricName,
+        props.errorAnalysisData.root_stats.errorCoverage
       );
     }
     const cohorts = [
@@ -314,8 +307,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         globalProps.isGlobalImportanceDerivedFromLocal,
       jointDataset,
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
-      matrixAreaState: createInitialMatrixAreaState(),
-      matrixFilterState: createInitialMatrixFilterState(),
       modelChartConfig: undefined,
       modelMetadata,
       openCohortListPanel: false,
@@ -335,11 +326,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
-      treeViewState: createInitialTreeViewState(),
       viewType: ViewTypeKeys.ErrorAnalysisView,
       weightVectorLabels,
-      weightVectorOptions,
-      whatIfChartConfig: undefined
+      weightVectorOptions
     };
   }
 
@@ -448,13 +437,14 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                 });
               }}
               onShift={(): void => {
+                // reset all states on shift
+                MatrixFilter.resetState();
+                MatrixArea.resetState();
+                TreeViewRenderer.resetState();
                 this.setState({
                   errorAnalysisOption: this.state.mapShiftErrorAnalysisOption,
-                  matrixAreaState: createInitialMatrixAreaState(),
-                  matrixFilterState: createInitialMatrixFilterState(),
                   openMapShift: false,
-                  selectedCohort: this.state.baseCohort,
-                  treeViewState: createInitialTreeViewState()
+                  selectedCohort: this.state.baseCohort
                 });
               }}
             />
@@ -527,6 +517,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
+                    onClearCohortSelectionClick={(): void =>
+                      this.clearCohortSelection()
+                    }
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     disabledView={false}
                     features={this.props.features}
@@ -539,12 +532,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         ? this.props.errorAnalysisData.tree
                         : undefined
                     }
-                    treeViewState={this.state.treeViewState}
-                    setTreeViewState={this.setTreeViewState}
-                    matrixAreaState={this.state.matrixAreaState}
-                    matrixFilterState={this.state.matrixFilterState}
-                    setMatrixAreaState={this.setMatrixAreaState}
-                    setMatrixFilterState={this.setMatrixFilterState}
                     showCohortName
                   />
                 )}
@@ -563,9 +550,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         <PivotItem key={props.itemKey} {...props} />
                       ))}
                     </Pivot>
-                    {this.props.rootStats &&
+                    {this.props.errorAnalysisData.root_stats &&
                       this.state.jointDataset.datasetRowCount !==
-                        this.props.rootStats.totalSize && (
+                        this.props.errorAnalysisData.root_stats.totalSize && (
                         <MessageBar messageBarType={MessageBarType.warning}>
                           <Text>{localization.ErrorAnalysis.scaleWarning}</Text>
                         </MessageBar>
@@ -680,23 +667,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       </ModelAssessmentContext.Provider>
     );
   }
-  private setTreeViewState = (treeViewState: ITreeViewRendererState): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
-      this.setState({ treeViewState });
-    }
-  };
-  private setMatrixAreaState = (matrixAreaState: IMatrixAreaState): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
-      this.setState({ matrixAreaState });
-    }
-  };
-  private setMatrixFilterState = (
-    matrixFilterState: IMatrixFilterState
-  ): void => {
-    if (this.state.selectedCohort !== this.state.baseCohort) {
-      this.setState({ matrixFilterState });
-    }
-  };
   private setWhatIfDatapoint = (index: number): void =>
     this.setState({ selectedWhatIfIndex: index });
 
@@ -724,7 +694,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     let selectedCohortName = "";
     let addTemporaryCohort = true;
     if (source === CohortSource.TreeMap || source === CohortSource.HeatMap) {
-      selectedCohortName = "Unsaved";
+      selectedCohortName = localization.Interpret.Cohort.temporaryCohort;
     } else {
       selectedCohortName = this.state.baseCohort.cohort.name;
       addTemporaryCohort = false;
@@ -756,6 +726,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       selectedCohort
     });
   }
+
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
+    });
+    this.context.selectedErrorCohort = this.state.baseCohort;
+  };
 
   private handleGlobalTabClick = (item: PivotItem | undefined): void => {
     if (item?.props.itemKey) {

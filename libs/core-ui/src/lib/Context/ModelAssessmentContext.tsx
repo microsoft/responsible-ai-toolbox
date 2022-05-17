@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme } from "@fluentui/react";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -25,13 +25,16 @@ export interface IModelAssessmentContext {
   modelExplanationData?: IModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
-  // Everything below this comment should eventually be removed.
-  // Instead, dataset and modelExplanationData should suffice.
+  featureFlights?: string[];
   errorCohorts: ErrorCohort[];
   readonly baseErrorCohort: ErrorCohort;
   readonly selectedErrorCohort: ErrorCohort;
+
+  // jointDataset and modelMetadata should eventually be removed.
+  // Instead, dataset and modelExplanationData should suffice.
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
+
   telemetryHook: (message: ITelemetryMessage) => void;
   requestCausalWhatIf?: (
     id: string,
@@ -53,7 +56,7 @@ export interface IModelAssessmentContext {
     | undefined;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
-  editCohort(cohort: Cohort): void;
+  editCohort(cohort: Cohort, switchNew?: boolean): void;
   deleteCohort(cohort: ErrorCohort): void;
 }
 

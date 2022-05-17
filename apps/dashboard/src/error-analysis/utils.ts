@@ -15,13 +15,15 @@ import { dummyTreeBostonData } from "./__mock_data__/dummyTreeBoston";
 import { dummyTreeBreastCancerData } from "./__mock_data__/dummyTreeBreastCancer";
 import { dummyTreeBreastCancerPrecisionData } from "./__mock_data__/dummyTreeBreastCancerPrecision";
 import { dummyTreeBreastCancerRecallData } from "./__mock_data__/dummyTreeBreastCancerRecall";
+import { dummyTreeWineData } from "./__mock_data__/dummyTreeWine";
 
 export enum DatasetName {
   AdultCensusIncome = 1,
   BreastCancer,
   Boston,
   BreastCancerPrecision,
-  BreastCancerRecall
+  BreastCancerRecall,
+  Wine
 }
 
 export function getJsonMatrix(): any {
@@ -72,6 +74,13 @@ export function getJsonTreeBoston(featureNames: string[]): any {
   };
 }
 
+export function getJsonTreeWine(featureNames: string[]): any {
+  return {
+    data: getJsonTree(DatasetName.Wine),
+    features: featureNames
+  };
+}
+
 export function getJsonTree(dataset: DatasetName): any {
   if (dataset === DatasetName.BreastCancer) {
     return _.cloneDeep(dummyTreeBreastCancerData);
@@ -81,6 +90,8 @@ export function getJsonTree(dataset: DatasetName): any {
     return _.cloneDeep(dummyTreeBreastCancerPrecisionData);
   } else if (dataset === DatasetName.BreastCancerRecall) {
     return _.cloneDeep(dummyTreeBreastCancerRecallData);
+  } else if (dataset === DatasetName.Wine) {
+    return _.cloneDeep(dummyTreeWineData);
   }
   return _.cloneDeep(dummyTreeAdultCensusIncomeData);
 }
@@ -100,6 +111,8 @@ export function generateJsonTree(
         resolve(_.cloneDeep(dummyTreeBreastCancerPrecisionData));
       } else if (dataset === DatasetName.BreastCancerRecall) {
         resolve(_.cloneDeep(dummyTreeBreastCancerRecallData));
+      } else if (dataset === DatasetName.Wine) {
+        resolve(_.cloneDeep(dummyTreeWineData));
       } else {
         resolve(_.cloneDeep(dummyTreeBostonData));
       }
@@ -146,6 +159,13 @@ export function generateJsonTreeBoston(
   signal: AbortSignal
 ): Promise<any> {
   return generateJsonTree(_data, signal, DatasetName.Boston);
+}
+
+export function generateJsonTreeWine(
+  _data: any[],
+  signal: AbortSignal
+): Promise<any> {
+  return generateJsonTree(_data, signal, DatasetName.Wine);
 }
 
 export function generateJsonMatrix(dataset: DatasetName) {
@@ -200,7 +220,8 @@ export function createJsonImportancesGenerator(
             dataset === DatasetName.AdultCensusIncome ||
             dataset === DatasetName.Boston ||
             dataset === DatasetName.BreastCancerPrecision ||
-            dataset === DatasetName.BreastCancerRecall
+            dataset === DatasetName.BreastCancerRecall ||
+            dataset === DatasetName.Wine
         );
         resolve(featureNames.map(() => Math.random()));
       }, 300);

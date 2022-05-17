@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 export interface ICounterfactualData {
-  // TODO: remove featureNames when sdk integration
   cfs_list: Array<Array<Array<string | number>>>;
+  errorMessage?: string;
   feature_names: string[];
   feature_names_including_target: string[];
   summary_importance?: number[];

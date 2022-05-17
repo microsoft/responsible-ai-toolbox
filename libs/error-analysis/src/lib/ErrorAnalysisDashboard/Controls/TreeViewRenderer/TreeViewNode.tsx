@@ -7,13 +7,13 @@ import { getTheme, IProcessedStyleSet } from "office-ui-fabric-react";
 import React from "react";
 
 import { isColorDark } from "../../ColorPalette";
-import { ITreeNode } from "../../TreeViewState";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import {
   ITreeViewRendererStyles,
   treeViewRendererStyles
 } from "./TreeViewRenderer.styles";
+import { ITreeNode } from "./TreeViewState";
 
 export interface ITreeViewNodeProps {
   disabledView: boolean;

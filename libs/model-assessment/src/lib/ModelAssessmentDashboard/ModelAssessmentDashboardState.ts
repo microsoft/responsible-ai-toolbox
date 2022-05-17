@@ -4,16 +4,9 @@
 import {
   IExplanationModelMetadata,
   IGenericChartProps,
-  WeightVectorOption,
   ICohortBasedComponentState
 } from "@responsible-ai/core-ui";
-import {
-  ErrorAnalysisOptions,
-  ITreeViewRendererState,
-  IMatrixAreaState,
-  IMatrixFilterState
-} from "@responsible-ai/error-analysis";
-import { Dictionary } from "lodash";
+import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
 
@@ -24,25 +17,14 @@ export interface IModelAssessmentDashboardState
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
-  whatIfChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;
   globalImportanceIntercept: number[];
   globalImportance: number[][];
-  importances: number[];
   isGlobalImportanceDerivedFromLocal: boolean;
   sortVector?: number[];
   editingCohortIndex?: number;
-  mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
-  mapShiftVisible: boolean;
   selectedWhatIfIndex: number | undefined;
-  selectedFeatures: string[];
-  treeViewState: ITreeViewRendererState;
-  matrixAreaState: IMatrixAreaState;
-  matrixFilterState: IMatrixFilterState;
   errorAnalysisOption: ErrorAnalysisOptions;
-  selectedWeightVector: WeightVectorOption;
-  weightVectorOptions: WeightVectorOption[];
-  weightVectorLabels: Dictionary<string>;
   saveCohortVisible: boolean;
 }
 

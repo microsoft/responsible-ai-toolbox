@@ -7,8 +7,6 @@ import {
   ModelTypes,
   WeightVectorOption,
   ChartTypes,
-  FabricStyles,
-  InteractiveLegend,
   LabelWithCallout
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -18,7 +16,6 @@ import {
   Dropdown,
   IChoiceGroupOption,
   IDropdownOption,
-  Label,
   Stack,
   Text
 } from "office-ui-fabric-react";
@@ -69,20 +66,6 @@ export class SidePanel extends React.Component<
     const classNames = globalTabStyles();
     return (
       <Stack className={classNames.legendAndSort}>
-        <Label>{localization.Interpret.GlobalTab.datasetCohorts}</Label>
-        <Text variant={"small"}>
-          {localization.Interpret.GlobalTab.legendHelpText}
-        </Text>
-        <InteractiveLegend
-          items={this.props.cohortSeries.map((row, rowIndex) => {
-            return {
-              activated: this.props.seriesIsActive[rowIndex],
-              color: FabricStyles.fabricColorPalette[row.colorIndex],
-              name: row.name,
-              onClick: (): void => this.props.toggleActivation(rowIndex)
-            };
-          })}
-        />
         <Dropdown
           label={localization.Interpret.GlobalTab.sortBy}
           selectedKey={this.props.sortingSeriesIndex}

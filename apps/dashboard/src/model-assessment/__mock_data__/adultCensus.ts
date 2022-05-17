@@ -8,7 +8,9 @@ import {
   IErrorAnalysisData,
   IModelExplanationData,
   ComparisonTypes,
-  Metrics
+  Metrics,
+  FilterMethods,
+  IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -9908,7 +9910,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     "occupation",
     "relationship",
     "race",
-    "sex",
+    "gender",
     "capital-gain",
     "capital-loss",
     "hours-per-week",
@@ -9924,7 +9926,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     "occupation",
     "relationship",
     "race",
-    "sex",
+    "gender",
     "capital-gain",
     "capital-loss",
     "hours-per-week",
@@ -13577,4 +13579,80 @@ export const adultCensusCausalErrorAnalysisData: IErrorAnalysisData = {
   metric: Metrics.ErrorRate,
   minChildSamples: 21,
   numLeaves: 11
+};
+
+export const adultCohortDataContinuous: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [65],
+      column: "age",
+      method: FilterMethods.LessThan
+    },
+    {
+      arg: [40],
+      column: "hours-per-week",
+      method: FilterMethods.GreaterThan
+    }
+  ],
+  name: "Cohort Continuous"
+};
+
+export const adultCohortDataCategorical: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["HS-grad", "Bachelors"],
+      column: "education",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Categorical"
+};
+
+export const adultCohortDataIndex: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [23],
+      column: "Index",
+      method: FilterMethods.LessThan
+    }
+  ],
+  name: "Cohort Index"
+};
+
+export const adultCohortDataPredictedY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["<=50K", ">50K"],
+      column: "Predicted Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Predicted Y"
+};
+
+export const adultCohortDataTrueY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["<=50K", ">50K"],
+      column: "True Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort True Y"
+};
+
+export const adultCohortDataClassificationOutcome: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [
+        "True positive",
+        "True negative",
+        "False negative",
+        "False positive"
+      ],
+      column: "Classification outcome",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Classification outcome"
 };

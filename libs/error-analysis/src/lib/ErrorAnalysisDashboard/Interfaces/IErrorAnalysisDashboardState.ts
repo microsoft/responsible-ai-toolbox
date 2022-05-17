@@ -16,8 +16,6 @@ import {
   ErrorAnalysisOptions,
   PredictionTabKeys
 } from "../ErrorAnalysisEnums";
-import { IMatrixAreaState, IMatrixFilterState } from "../MatrixFilterState";
-import { ITreeViewRendererState } from "../TreeViewState";
 
 export interface IErrorAnalysisDashboardState
   extends ICohortBasedComponentState {
@@ -27,7 +25,6 @@ export interface IErrorAnalysisDashboardState
   modelMetadata: IExplanationModelMetadata;
   modelChartConfig?: IGenericChartProps;
   dataChartConfig?: IGenericChartProps;
-  whatIfChartConfig?: IGenericChartProps;
   dependenceProps?: IGenericChartProps;
   globalImportanceIntercept: number[];
   globalImportance: number[][];
@@ -49,9 +46,6 @@ export interface IErrorAnalysisDashboardState
   editedCohort: ErrorCohort;
   selectedFeatures: string[];
   showMessageBar: boolean;
-  treeViewState: ITreeViewRendererState;
-  matrixAreaState: IMatrixAreaState;
-  matrixFilterState: IMatrixFilterState;
   errorAnalysisOption: ErrorAnalysisOptions;
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];

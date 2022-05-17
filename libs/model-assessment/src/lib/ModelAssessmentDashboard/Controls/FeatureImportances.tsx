@@ -12,13 +12,7 @@ import {
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import {
-  Pivot,
-  PivotItem,
-  PivotLinkSize,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import { Pivot, PivotItem, PivotLinkSize, Stack } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { featureImportanceTabStyles } from "./FeatureImportances.styles";
@@ -76,11 +70,6 @@ export class FeatureImportancesTab extends React.PureComponent<
 
     return (
       <Stack className={classNames.container}>
-        <Stack.Item className={classNames.header}>
-          <Text variant={"xxLarge"}>
-            {localization.ModelAssessment.ComponentNames.FeatureImportances}
-          </Text>
-        </Stack.Item>
         <Stack.Item>
           <Pivot
             selectedKey={this.state.activeFeatureImportancesOption}

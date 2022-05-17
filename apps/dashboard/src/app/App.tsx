@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { generateRoute } from "@responsible-ai/core-ui";
 import { Language } from "@responsible-ai/localization";
+import { parseFeatureFlights } from "@responsible-ai/model-assessment";
 import _ from "lodash";
-import { ITheme } from "office-ui-fabric-react";
 import React from "react";
 import { Redirect, generatePath } from "react-router-dom";
 
@@ -15,7 +16,7 @@ import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, routeKey } from "./IAppSetting";
+import { IAppSetting, noFlights, routeKey } from "./IAppSetting";
 import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
@@ -121,6 +122,11 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
+              featureFlights={
+                this.state.featureFlights === noFlights
+                  ? []
+                  : parseFeatureFlights(this.state.featureFlights)
+              }
             />
           )}
         </div>
@@ -150,6 +156,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
+      featureFlights: props.featureFlights ?? noFlights,
       iteration: props.iteration + 1,
       language:
         !props.language || !Language[props.language]

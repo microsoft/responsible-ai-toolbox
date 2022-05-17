@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeWhatIf } from "../../../describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
+import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 
-describeWhatIf("ClassificationModelAssessment");
+const datasetShape = modelAssessmentDatasets.ClassificationModelDebugging;
+describeWhatIf(datasetShape, "ClassificationModelDebugging");

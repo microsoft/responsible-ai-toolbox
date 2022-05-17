@@ -7,13 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Text,
-  Pivot,
-  PivotItem,
-  Stack,
-  MessageBar
-} from "office-ui-fabric-react";
+import { Pivot, PivotItem, Stack, MessageBar } from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";
@@ -45,21 +39,17 @@ export class CausalInsightsTab extends React.PureComponent<
     return (
       <Stack
         grow
+        id="causalInsightsTab"
+        tokens={{ padding: "l1" }}
         className={classNames.container}
-        tokens={{ padding: "16px 24px" }}
       >
-        <Stack.Item>
-          <Text variant={"xxLarge"}>
-            {localization.ModelAssessment.ComponentNames.CausalAnalysis}
-          </Text>
-        </Stack.Item>
         <Stack.Item>
           <MessageBar>
             {localization.CausalAnalysis.MainMenu.cohortInfo}
           </MessageBar>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack horizontal tokens={{ childrenGap: "s1" }}>
             <Pivot onLinkClick={this.onViewTypeChange}>
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}

@@ -8,13 +8,13 @@ import {
   isTwoDimArray,
   IGlobalFeatureImportance,
   ModelAssessmentContext,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Icon, Slider, Text } from "office-ui-fabric-react";
 import React from "react";
 
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 
@@ -122,7 +122,10 @@ export class GlobalOnlyChart extends React.PureComponent<
             showValue={false}
           />
         </div>
-        <div className={classNames.globalChartWithLegend}>
+        <div
+          id="featureImportanceChartContainer"
+          className={classNames.globalChartWithLegend}
+        >
           <FeatureImportanceBar
             jointDataset={undefined}
             yAxisLabels={[

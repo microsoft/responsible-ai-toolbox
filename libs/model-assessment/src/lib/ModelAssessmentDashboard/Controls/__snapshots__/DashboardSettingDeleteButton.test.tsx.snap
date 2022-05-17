@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DashboardSettingDeleteButton should render successfully 1`] = `
+<Fragment>
+  <CustomizedIconButton
+    iconProps={
+      Object {
+        "iconName": "Delete",
+      }
+    }
+    onClick={[Function]}
+  />
+</Fragment>
+`;

@@ -15,39 +15,38 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
     }
     if (dataShape.isMulticlass) {
       it("should have legend", () => {
-        cy.get('#ModelPerformanceChart g[class*="infolayer"]').should("exist");
+        cy.get('#OverallMetricChart g[class*="infolayer"]').should("exist");
       });
       return;
     }
     it("should have stats box", () => {
-      cy.get('#ModelPerformanceChart div[class*="statsBox"]').should("exist");
+      cy.get('#OverallMetricChart div[class*="statsBox"]').should("exist");
     });
     it("should have some stats", () => {
+      let expectedMetrics: string[];
       if (dataShape.isClassification) {
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "Accuracy"
-        );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "Precision"
-        );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "Recall"
-        );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "False Positive Rates"
-        );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "False Negative Rates"
-        );
+        expectedMetrics = [
+          "Accuracy",
+          "Precision",
+          "Recall",
+          "F1 score",
+          "False positive rate",
+          "False negative rate",
+          "Selection rate"
+        ];
       } else {
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains("MSE");
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
-          "R-squared"
-        );
-        cy.get('#ModelPerformanceChart div[class*="statsBox"]').contains(
+        expectedMetrics = [
+          "Mean squared error",
+          "Mean absolute error",
+          "R²",
           "Mean prediction"
-        );
+        ];
       }
+      expectedMetrics.forEach((metricName) => {
+        cy.get('#OverallMetricChart div[class*="statsBox"]').contains(
+          metricName
+        );
+      });
     });
   });
 }

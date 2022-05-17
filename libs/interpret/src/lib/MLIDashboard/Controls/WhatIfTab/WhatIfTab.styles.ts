@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IProcessedStyleSet,
   getTheme,
@@ -10,6 +10,7 @@ import {
 } from "office-ui-fabric-react";
 
 export interface IWhatIfTabStyles {
+  absoluteValueToggle: IStyle;
   page: IStyle;
   blackIcon: IStyle;
   expandedPanel: IStyle;
@@ -75,6 +76,7 @@ export interface IWhatIfTabStyles {
   infoButton: IStyle;
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
+  subPlotContainer: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -82,6 +84,9 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
     const legendWidth = "160px";
     const theme = getTheme();
     return mergeStyleSets<IWhatIfTabStyles>({
+      absoluteValueToggle: {
+        width: "170px"
+      },
       blackIcon: {
         color: theme.semanticColors.bodyText
       },
@@ -135,7 +140,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       cohortPickerLabel: {
         fontWeight: "600",
-        paddingRight: "8px"
+        padding: "0 8px 10px 0"
       },
       cohortPickerWrapper: {
         alignItems: "center",
@@ -178,7 +183,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       featureImportanceChartAndLegend: {
         display: "flex",
         flexDirection: "row",
-        height: "300px",
+        minHeight: "300px",
         width: "100%"
       },
       featureImportanceControls: {
@@ -235,6 +240,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },
@@ -341,6 +347,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flex: 1,
         paddingRight: legendWidth
       },
+      subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {
         alignItems: "flex-start",
         boxSizing: "border-box",

@@ -21,12 +21,14 @@ import {
   TooltipDelay,
   DirectionalHint,
   IconButton,
-  ITooltipProps
+  ITooltipProps,
+  MessageBar,
+  MessageBarType
 } from "office-ui-fabric-react";
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
-import { counterfactualPanelStyles } from "./CounterfactualPanelStyles";
+import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -40,6 +42,11 @@ export interface ICounterfactualPanelProps {
     key: string | number,
     isString: boolean,
     newValue?: string
+  ): void;
+  setCustomRowPropertyComboBox(
+    key: string | number,
+    index?: number,
+    value?: string
   ): void;
 }
 interface ICounterfactualState {
@@ -58,7 +65,7 @@ export class CounterfactualPanel extends React.Component<
     super(props);
     this.state = {
       filterText: undefined,
-      sortFeatures: false
+      sortFeatures: true
     };
   }
   public render(): React.ReactNode {
@@ -67,7 +74,8 @@ export class CounterfactualPanel extends React.Component<
       <Panel
         id="CounterfactualPanel"
         isOpen={this.props.isPanelOpen}
-        type={PanelType.largeFixed}
+        type={PanelType.custom}
+        customWidth={"100%"}
         onDismiss={this.onClosePanel}
         closeButtonAriaLabel="Close"
         isFooterAtBottom
@@ -84,6 +92,9 @@ export class CounterfactualPanel extends React.Component<
               data={this.props.data}
               temporaryPoint={this.props.temporaryPoint}
               setCustomRowProperty={this.props.setCustomRowProperty}
+              setCustomRowPropertyComboBox={
+                this.props.setCustomRowPropertyComboBox
+              }
               sortFeatures={this.state.sortFeatures}
             />
           </Stack.Item>
@@ -109,52 +120,62 @@ export class CounterfactualPanel extends React.Component<
       )
     };
     return (
-      <Stack className={classes.stackHeader}>
-        <Stack.Item className={classes.headerText}>
-          <Text variant={"xLarge"} className={classes.boldText}>
-            {this.context.requestPredictions
-              ? localization.Counterfactuals.whatIfPanelHeader
-              : localization.Counterfactuals.panelHeader}
-          </Text>
-        </Stack.Item>
-        <Stack.Item>
-          <Text variant={"medium"}>
-            {localization.formatString(
-              localization.Counterfactuals.panelDescription,
-              this.props.data?.desired_class
-            )}
-          </Text>
-        </Stack.Item>
-        <Stack.Item className={classes.buttonRow}>
-          <Stack horizontal tokens={{ childrenGap: "l1" }}>
-            <Stack.Item className={classes.searchBox}>
-              <SearchBox
-                placeholder={
-                  localization.Interpret.WhatIf.filterFeaturePlaceholder
-                }
-                onChange={this.setFilterText}
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <Toggle
-                label={localization.Counterfactuals.WhatIf.sortFeatures}
-                inlineLabel
-                defaultChecked={this.state.sortFeatures}
-                onChange={this.toggleSortFeatures}
-              />
-            </Stack.Item>
-            <Stack.Item>
-              <TooltipHost
-                tooltipProps={tooltipProps}
-                delay={TooltipDelay.zero}
-                id={WhatIfConstants.whatIfPredictionTooltipIds}
-                directionalHint={DirectionalHint.rightTopEdge}
-                className={classes.tooltipHostDisplay}
-              >
-                <IconButton iconProps={{ iconName: "info" }} />
-              </TooltipHost>
-            </Stack.Item>
-          </Stack>
+      <Stack>
+        <Stack className={classes.stackHeader}>
+          <Stack.Item className={classes.headerText}>
+            <Text
+              variant={"xLarge"}
+              className={classes.boldText}
+              id="counterfactualHeader"
+            >
+              {this.context.requestPredictions
+                ? localization.Counterfactuals.whatIfPanelHeader
+                : localization.Counterfactuals.panelHeader}
+            </Text>
+          </Stack.Item>
+          <Stack.Item>
+            <Text variant={"medium"}>
+              {localization.Counterfactuals.panelDescription}
+            </Text>
+          </Stack.Item>
+          <Stack.Item className={classes.buttonRow}>
+            <Stack horizontal tokens={{ childrenGap: "l1" }}>
+              <Stack.Item className={classes.searchBox}>
+                <SearchBox
+                  placeholder={
+                    localization.Interpret.WhatIf.filterFeaturePlaceholder
+                  }
+                  onChange={this.setFilterText}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <Toggle
+                  label={localization.Counterfactuals.WhatIf.sortFeatures}
+                  inlineLabel
+                  defaultChecked={this.state.sortFeatures}
+                  onChange={this.toggleSortFeatures}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <TooltipHost
+                  tooltipProps={tooltipProps}
+                  delay={TooltipDelay.zero}
+                  id={WhatIfConstants.whatIfPredictionTooltipIds}
+                  directionalHint={DirectionalHint.rightTopEdge}
+                  className={classes.tooltipHostDisplay}
+                >
+                  <IconButton iconProps={{ iconName: "info" }} />
+                </TooltipHost>
+              </Stack.Item>
+            </Stack>
+          </Stack.Item>
+        </Stack>
+        <Stack.Item className={classes.messageBar}>
+          {this.props.data?.errorMessage && (
+            <MessageBar messageBarType={MessageBarType.error}>
+              {this.props.data.errorMessage}
+            </MessageBar>
+          )}
         </Stack.Item>
       </Stack>
     );
@@ -166,7 +187,7 @@ export class CounterfactualPanel extends React.Component<
       return <div />;
     }
     return (
-      <Stack horizontal tokens={{ childrenGap: "15px" }}>
+      <Stack horizontal tokens={{ childrenGap: "l1" }}>
         <Stack.Item align="end" grow={1}>
           <TextField
             id="whatIfNameLabel"
@@ -190,7 +211,7 @@ export class CounterfactualPanel extends React.Component<
           />
         </Stack.Item>
         <Stack.Item align="end" grow={3}>
-          <Text variant={"medium"}>
+          <Text variant={"medium"} className={classes.saveDescription}>
             {localization.Counterfactuals.saveDescription}
           </Text>
         </Stack.Item>

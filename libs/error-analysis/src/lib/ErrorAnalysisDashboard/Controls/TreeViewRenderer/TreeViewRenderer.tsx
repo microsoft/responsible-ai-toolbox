@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  ICompositeFilter,
   IFilter,
   FilterMethods,
   CohortSource,
@@ -13,7 +12,8 @@ import {
   MetricCohortStats,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
-  IErrorAnalysisTreeNode
+  IErrorAnalysisTreeNode,
+  IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Property } from "csstype";
@@ -30,7 +30,6 @@ import { linkVertical as d3linkVertical } from "d3-shape";
 import {
   getTheme,
   IProcessedStyleSet,
-  ITheme,
   mergeStyles,
   MessageBar,
   MessageBarType,
@@ -41,50 +40,26 @@ import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
 import { FilterProps } from "../../FilterProps";
-import { HelpMessageDict } from "../../Interfaces/IStringsParam";
-import {
-  INodeDetail,
-  ITreeNode,
-  ITreeViewRendererState
-} from "../../TreeViewState";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import { TreeViewNode } from "./TreeViewNode";
+import { ITreeViewRendererProps } from "./TreeViewProps";
 import {
   ITreeViewRendererStyles,
   treeViewRendererStyles
 } from "./TreeViewRenderer.styles";
+import {
+  createInitialTreeViewState,
+  INodeDetail,
+  ITreeNode,
+  ITreeViewRendererState
+} from "./TreeViewState";
 
 // Importing this solely to set the selectedPanelId. This component is NOT a statefulContainer
 // import StatefulContainer from '../../ap/mixins/statefulContainer.js'
 
 const viewerHeight = 300;
 const viewerWidth = 800;
-
-export interface ITreeViewRendererProps {
-  disabledView: boolean;
-  theme?: ITheme;
-  messages?: HelpMessageDict;
-  features: string[];
-  selectedFeatures: string[];
-  getTreeNodes?: (
-    request: any[],
-    abortSignal: AbortSignal
-  ) => Promise<IErrorAnalysisTreeNode[]>;
-  tree?: IErrorAnalysisTreeNode[];
-  updateSelectedCohort: (
-    filters: IFilter[],
-    compositeFilters: ICompositeFilter[],
-    source: CohortSource,
-    cells: number,
-    cohortStats: MetricCohortStats | undefined
-  ) => void;
-  selectedCohort: ErrorCohort;
-  baseCohort: ErrorCohort;
-  state: ITreeViewRendererState;
-  setTreeViewState: (treeViewState: ITreeViewRendererState) => void;
-  showCohortName: boolean;
-}
 
 export interface ISVGDatum {
   width: number;
@@ -102,12 +77,28 @@ export class TreeViewRenderer extends React.PureComponent<
   ITreeViewRendererState
 > {
   public static contextType = ModelAssessmentContext;
+  private static savedState: ITreeViewRendererState | undefined;
+  private static saveStateOnUnmount = true;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  public constructor(props: ITreeViewRendererProps) {
+  public constructor(
+    props: ITreeViewRendererProps,
+    context: IModelAssessmentContext
+  ) {
     super(props);
-    // Note: we take state from props in case
-    this.state = this.props.state;
+    if (
+      this.props.selectedCohort !== this.props.baseCohort &&
+      TreeViewRenderer.savedState
+    ) {
+      this.state = TreeViewRenderer.savedState;
+    } else {
+      this.state = createInitialTreeViewState(context.errorAnalysisData);
+    }
+    TreeViewRenderer.saveStateOnUnmount = true;
+  }
+
+  public static resetState(): void {
+    TreeViewRenderer.saveStateOnUnmount = false;
   }
 
   public componentDidMount(): void {
@@ -124,20 +115,32 @@ export class TreeViewRenderer extends React.PureComponent<
     if (
       this.props.selectedFeatures !== prevProps.selectedFeatures ||
       this.props.baseCohort !== prevProps.baseCohort ||
-      this.props.state !== prevProps.state ||
-      this.context.errorAnalysisData!.maxDepth !== this.state.maxDepth ||
-      this.context.errorAnalysisData!.numLeaves !== this.state.numLeaves ||
-      this.context.errorAnalysisData!.minChildSamples !==
-        this.state.minChildSamples ||
-      this.context.errorAnalysisData!.metric !== this.state.metric
+      (this.context.errorAnalysisData &&
+        (this.context.errorAnalysisData.maxDepth !== this.state.maxDepth ||
+          this.context.errorAnalysisData.numLeaves !== this.state.numLeaves ||
+          this.context.errorAnalysisData.minChildSamples !==
+            this.state.minChildSamples ||
+          this.context.errorAnalysisData.metric !== this.state.metric))
     ) {
       this.fetchTreeNodes();
+    } else if (
+      this.props.selectedCohort.isTemporary === false &&
+      prevProps.selectedCohort.isTemporary === true &&
+      this.state.root !== undefined
+    ) {
+      // This is for the clear selection button
+      // We don't necessarily want to re-fetch all tree nodes in this case
+      this.selectNode(this.state.root, false);
     }
   }
 
   public componentWillUnmount(): void {
     window.removeEventListener("resize", this.onResize);
-    this.props.setTreeViewState(this.state);
+    if (TreeViewRenderer.saveStateOnUnmount) {
+      TreeViewRenderer.savedState = this.state;
+    } else {
+      TreeViewRenderer.savedState = undefined;
+    }
   }
 
   public render(): React.ReactNode {
@@ -274,7 +277,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const svgHeight = maxY - minY;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {this.props.getTreeNodes
               ? localization.ErrorAnalysis.TreeView.treeDescription
@@ -300,6 +303,9 @@ export class TreeViewRenderer extends React.PureComponent<
               isErrorMetric={this.state.isErrorMetric}
               isEnabled={this.props.getTreeNodes !== undefined}
               setMetric={this.setMetric}
+              onClearCohortSelectionClick={
+                this.props.onClearCohortSelectionClick
+              }
               disabledView={this.props.disabledView}
             />
             <svg
@@ -545,20 +551,21 @@ export class TreeViewRenderer extends React.PureComponent<
         treeNodes
       };
     };
-    this.setState(reloadDataFunc);
-    // Clear filters
-    const filters: IFilter[] = [];
-    let cohortStats: MetricCohortStats | undefined = undefined;
-    if (this.state.root) {
-      cohortStats = this.calculateCohortStats(this.state.root.data);
-    }
-    this.props.updateSelectedCohort(
-      filters,
-      [],
-      CohortSource.None,
-      0,
-      cohortStats
-    );
+    this.setState(reloadDataFunc, () => {
+      // Clear filters
+      const filters: IFilter[] = [];
+      let cohortStats: MetricCohortStats | undefined = undefined;
+      if (this.state.root) {
+        cohortStats = this.calculateCohortStats(this.state.root.data);
+      }
+      this.props.updateSelectedCohort(
+        filters,
+        [],
+        CohortSource.None,
+        0,
+        cohortStats
+      );
+    });
   }
 
   private getTextBB(
@@ -618,6 +625,13 @@ export class TreeViewRenderer extends React.PureComponent<
     if (this.props.disabledView) {
       return;
     }
+    this.selectNode(node, true);
+  };
+
+  private selectNode(
+    node: HierarchyPointNode<ITreeNode>,
+    createTemporaryCohort: boolean
+  ): void {
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -630,13 +644,11 @@ export class TreeViewRenderer extends React.PureComponent<
       // Get filters and update
       const filters = this.getFilters(node);
       const cohortStats = this.calculateCohortStats(node.data);
-      this.props.updateSelectedCohort(
-        filters,
-        [],
-        CohortSource.TreeMap,
-        0,
-        cohortStats
-      );
+
+      const source = createTemporaryCohort
+        ? CohortSource.TreeMap
+        : CohortSource.None;
+      this.props.updateSelectedCohort(filters, [], source, 0, cohortStats);
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
@@ -659,7 +671,7 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
-  };
+  }
 
   private getNodeDetail(node: HierarchyPointNode<ITreeNode>): INodeDetail {
     const nodeDetail = {
@@ -681,10 +693,10 @@ export class TreeViewRenderer extends React.PureComponent<
     }
     if (!this.props.getTreeNodes) {
       if (this.props.tree) {
+        this.reloadData(this.props.tree);
         // Use set timeout as reloadData state update needs to be done outside constructor similar to fetch call
         this.onResize();
         this.forceUpdate();
-        this.reloadData(this.props.tree);
       }
       return;
     }
@@ -711,9 +723,9 @@ export class TreeViewRenderer extends React.PureComponent<
         new AbortController().signal
       )
       .then((result) => {
+        this.reloadData(result);
         this.onResize();
         this.forceUpdate();
-        this.reloadData(result);
       });
   }
 }

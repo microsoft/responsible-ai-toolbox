@@ -1,0 +1,73 @@
+name: Release raiutils to PyPI
+
+# trigger manually only ("collaborator" or more permissions required)
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: "Test or Prod PyPI?"
+        required: true
+        default: "Test"
+
+jobs:
+  release-raiutils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.type == 'Test' || github.event.inputs.type == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
+          exit 1
+
+      # build wheel
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+
+      - name: install requirements.txt for raiutils
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: raiutils
+
+      - name: pip freeze
+        run: pip freeze
+
+      - name: build wheel for raiutils
+        run: python setup.py sdist bdist_wheel
+        working-directory: raiutils
+
+      # run tests before publishing to PyPI
+
+      - name: install raiutils wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: raiutils
+
+      - name: run raiutils tests
+        run: pytest ./tests/
+        working-directory: raiutils
+
+      # publish to PyPI
+      - name: Publish raiutils package to Test PyPI
+        if: ${{ github.event.inputs.type == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIUTILS }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: raiutils/dist/
+      - name: Publish raiutils package to PyPI
+        if: ${{ github.event.inputs.type == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RAIUTILS }}
+          packages_dir: raiutils/dist/
