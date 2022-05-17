@@ -80,6 +80,12 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
       },
       xAxis: {
         categories: x
+      },
+      yAxis: {
+        title: {
+          text: localization.Counterfactuals.WhatIf
+            .percentCounterfactualLocalImportance
+        }
       }
     };
   }

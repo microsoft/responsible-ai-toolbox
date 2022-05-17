@@ -213,12 +213,19 @@ export class ModelOverview extends React.Component<
         className={classNames.sectionStack}
         tokens={{ childrenGap: "10px" }}
       >
-        <Text variant="medium" className={classNames.descriptionText}>
-          {localization.ModelAssessment.ModelOverview.topLevelDescription}
-        </Text>
-        {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
+        {!this.props.showNewModelOverviewExperience && (
+          <>
+            <Text variant="medium" className={classNames.descriptionText}>
+              {localization.Interpret.ModelPerformance.helperText}
+            </Text>
+            <OverallMetricChart />
+          </>
+        )}
         {this.props.showNewModelOverviewExperience && (
           <Stack tokens={{ childrenGap: "10px" }}>
+            <Text variant="medium" className={classNames.descriptionText}>
+              {localization.ModelAssessment.ModelOverview.topLevelDescription}
+            </Text>
             <Pivot onLinkClick={this.handleViewPivot}>
               <PivotItem
                 headerText={

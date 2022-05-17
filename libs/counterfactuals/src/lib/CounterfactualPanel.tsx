@@ -135,7 +135,9 @@ export class CounterfactualPanel extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <Text variant={"medium"}>
-              {localization.Counterfactuals.panelDescription}
+              {this.context.requestPredictions
+                ? localization.Counterfactuals.panelDescription
+                : localization.Counterfactuals.panelDescriptionWithoutSetValue}
             </Text>
           </Stack.Item>
           <Stack.Item className={classes.buttonRow}>
