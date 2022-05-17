@@ -111,6 +111,8 @@ export interface ICausalAnalysisData {
   yAxisPanelOptions?: { [key: string]: string[] };
   treatmentPolicyData?: { [key: string]: string[] };
   featureListInCausalTable?: string[];
+  continuousDescription?: string;
+  binaryDescription?: string;
 }
 
 export interface IWhatIfCounterfactualsData {

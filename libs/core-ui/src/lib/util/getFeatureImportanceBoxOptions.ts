@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { SeriesOptionsType } from "highcharts";
+import _ from "lodash";
 
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
@@ -31,7 +32,7 @@ export function getFeatureImportanceBoxOptions(
     const y = base.concat(
       ...sortArray.map((index) => series.unsortedIndividualY?.[index] || [])
     );
-    const curMin = Math.min(...y);
+    const curMin = _.min(y) || 0;
     yAxisMin = Math.min(yAxisMin, curMin);
     boxTempData.push({
       color: FabricStyles.fabricColorPalette[series.colorIndex],

@@ -19,6 +19,7 @@ export interface ICounterfactualPanelStyles {
   button: IStyle;
   boldText: IStyle;
   predictedBlock: IStyle;
+  messageBar: IStyle;
   negativeNumber: IStyle;
   predictedLink: IStyle;
   positiveNumber: IStyle;
@@ -77,6 +78,7 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         maxWidth: "900px",
         overflow: "scroll"
       },
+      messageBar: { paddingLeft: 24 },
       negativeNumber: {
         color: theme.palette.red
       },
