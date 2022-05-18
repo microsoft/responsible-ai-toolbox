@@ -115,7 +115,7 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=self.categorical_features)
 
         self._data_balance_manager = DataBalanceManager(
-            target_column=self.target_column, train=self.train, test=self.test,
+            target_column=self.target_column, train=self.train, test=self.test
         )
 
         self._error_analysis_manager = ErrorAnalysisManager(
@@ -593,6 +593,7 @@ class RAIInsights(RAIBaseInsights):
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
             ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
             ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
             ManagerNames.EXPLAINER: ExplainerManager,
         }

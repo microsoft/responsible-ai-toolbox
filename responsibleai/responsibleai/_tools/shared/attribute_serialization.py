@@ -3,6 +3,7 @@
 """Utilities for attribute serialization."""
 
 import json
+import math
 import pickle
 import warnings
 from pathlib import Path
@@ -132,3 +133,13 @@ def _load_attribute(
             return f.read()
     else:
         raise ValueError(f"Invalid format {file_format}")
+
+
+def convert_nan_to_none(val):
+    """If the value is NaN (i.e. float("nan")), converts it to None
+    for serialization. Used because NaN == NaN is always False.
+    """
+    if math.isnan(val):
+        return None
+
+    return val

@@ -8,6 +8,9 @@ import pandas as pd
 
 from responsibleai._tools.data_balance import BaseDataBalanceService
 from responsibleai._tools.data_balance.factory import DataBalanceServiceFactory
+from responsibleai._tools.shared.attribute_serialization import (
+    convert_nan_to_none,
+)
 from responsibleai._tools.shared.backends import SupportedBackend
 
 FEATURE_BALANCE_MEASURES_KEY = "featureBalanceMeasures"
@@ -169,6 +172,8 @@ class DataBalance:
                 unique_classes[feature_name].add(class_b)
 
                 del row[FEATURE_NAME], row[CLASS_A], row[CLASS_B]
+
+                row = {k: convert_nan_to_none(v) for k, v in row.items()}
 
                 feature_measures[feature_name][class_key] = row
 

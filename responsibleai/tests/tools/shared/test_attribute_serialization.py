@@ -1,9 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
+from lib2to3.pytree import convert
+import numpy as np
 import pytest
 
 from responsibleai._tools.shared.attribute_serialization import (
-    SerializationExtensions, SerializationFormats, load_attributes,
+    SerializationExtensions, SerializationFormats, convert_nan_to_none, load_attributes,
     save_attributes)
 
 
@@ -83,3 +85,16 @@ class TestAttributeSerialization:
 
         for attribute in attributes:
             assert getattr(o, attribute) == getattr(o_post, attribute)
+
+    def test_convert_nan_to_none(self):
+        # Value should not be converted to None
+        assert convert_nan_to_none(1.0) == 1.0
+        assert convert_nan_to_none(1) == 1
+
+        # Value should be converted to None
+        assert convert_nan_to_none(float("nan")) is None
+        assert convert_nan_to_none(np.nan) is None
+
+        # Value needs to be a number
+        with pytest.raises(TypeError, match="must be real number, not str"):
+            convert_nan_to_none("nan")

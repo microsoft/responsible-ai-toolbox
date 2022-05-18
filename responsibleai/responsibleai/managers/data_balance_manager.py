@@ -31,7 +31,7 @@ class DataBalanceManager(BaseManager):
 
     def __init__(
         self,
-        target_column: str,
+        target_column: Optional[str],
         train: Optional[pd.DataFrame],
         test: Optional[pd.DataFrame],
     ):
@@ -60,7 +60,6 @@ class DataBalanceManager(BaseManager):
         # Populated in add()
         self._cols_of_interest = None
         self._pos_label = None
-        self._custom_data = None
 
         # Populated in compute()
         self._data_balance_measures = None
@@ -70,6 +69,7 @@ class DataBalanceManager(BaseManager):
         cols_of_interest: List[str],
         pos_label: Optional[str] = None,
         custom_data: Optional[Any] = None,
+        custom_data_target_column: Optional[str] = None,
     ):
         """Add data balance measures to be computed later.
 
@@ -81,14 +81,20 @@ class DataBalanceManager(BaseManager):
         :param custom_data: A custom dataframe to be used for computing
             data balance measures. If this is passed in,
             `train` and `test` will be ignored.
-        :type custom_data: pd.DataFrame or pyspark.sql.DataFrame"""
+        :type custom_data: pd.DataFrame or pyspark.sql.DataFrame
+        :param custom_data_target_column: Target column for custom data
+        in case is not the same data as train and test.
+        :type custom_data_target_column: str
+        """
         self._cols_of_interest = cols_of_interest
         self._pos_label = pos_label
-        self._custom_data = custom_data
 
-        if self._custom_data is not None:
-            self._df = self._custom_data
+        if custom_data is not None:
+            self._df = custom_data
             self._backend = self._infer_backend()
+
+        if custom_data_target_column is not None:
+            self._target_column = custom_data_target_column
 
         # Let user see warnings early in add() before calling compute()
         self._validate()
@@ -119,11 +125,7 @@ class DataBalanceManager(BaseManager):
             )
             valid = False
 
-        if (
-            self._train is None
-            and self._test is None
-            and self._custom_data is None
-        ):
+        if self._train is None and self._test is None and self._df is None:
             warnings.warn(
                 (
                     "Either `train`, `test`, or `custom_data` must be provided"
@@ -263,9 +265,6 @@ class DataBalanceManager(BaseManager):
         inst.__dict__["_train"] = rai_insights.train
         inst.__dict__["_test"] = rai_insights.test
 
-        # Due to the risk of custom_data being large, we don't save or load it
-        inst.__dict__["_custom_data"] = None
-
         all_db_dirs = DirectoryManager.list_sub_directories(path)
         if len(all_db_dirs) != 0:
             dir_manager = DirectoryManager(
@@ -309,11 +308,10 @@ class DataBalanceManager(BaseManager):
 
                 inst.__dict__["_df"] = df
 
+            inst.__dict__["_data_balance_measures"] = None
             measures_path = config_dir / MEASURES_JSON
             if measures_path.exists():
                 with open(measures_path, "r") as f:
                     inst.__dict__["_data_balance_measures"] = json.load(f)
-            else:
-                inst.compute()
 
         return inst
