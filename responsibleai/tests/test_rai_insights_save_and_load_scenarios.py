@@ -60,7 +60,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             rai_2.save(save_2)
             assert len(os.listdir(save_2 / ManagerNames.CAUSAL)) == 0
             assert len(os.listdir(save_2 / ManagerNames.COUNTERFACTUAL)) == 0
-            assert len(os.listdir(save_1 / ManagerNames.DATA_BALANCE)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.DATA_BALANCE)) == 0
             assert len(os.listdir(save_2 / ManagerNames.ERROR_ANALYSIS)) == 0
             assert len(os.listdir(save_2 / ManagerNames.EXPLAINER)) == 0
 

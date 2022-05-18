@@ -50,6 +50,7 @@ class ErrorAnalysisManagerKeys(object):
 
 class DataBalanceManagerKeys(object):
     """Provide constants for DataBalanceManager key properties."""
+    IS_ADDED = 'is_added'
     COLS_OF_INTEREST = 'cols_of_interest'
     TARGET_COLUMN = 'target_column'
     POS_LABEL = 'pos_label'

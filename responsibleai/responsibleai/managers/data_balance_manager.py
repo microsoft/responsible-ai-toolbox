@@ -50,6 +50,7 @@ class DataBalanceManager(BaseManager):
         self._target_column = target_column
         self._train = train
         self._test = test
+        self._is_added = False
 
         self._df = None
         self._backend = None
@@ -98,6 +99,7 @@ class DataBalanceManager(BaseManager):
 
         # Let user see warnings early in add() before calling compute()
         self._validate()
+        self._is_added = True
 
     def _infer_backend(self) -> SupportedBackend:
         if self._df is not None:
@@ -138,7 +140,7 @@ class DataBalanceManager(BaseManager):
 
     def compute(self):
         """Computes data balance measures on the dataset."""
-        if not self._validate() or self._df is None:
+        if not self._is_added or not self._validate() or self._df is None:
             return
 
         self._df = DataBalance.prepare_df(
@@ -193,6 +195,7 @@ class DataBalanceManager(BaseManager):
         """
         props = {
             ListProperties.MANAGER_TYPE: self.name,
+            Keys.IS_ADDED: self._is_added,
             Keys.COLS_OF_INTEREST: self._cols_of_interest,
             Keys.TARGET_COLUMN: self._target_column,
             Keys.POS_LABEL: self._pos_label,
@@ -225,6 +228,9 @@ class DataBalanceManager(BaseManager):
         """
         top_dir = Path(path)
         top_dir.mkdir(parents=True, exist_ok=True)
+
+        if not self._is_added:
+            return
 
         dir_manager = DirectoryManager(parent_directory_path=path)
         config_dir = dir_manager.create_config_directory()
@@ -263,6 +269,7 @@ class DataBalanceManager(BaseManager):
         inst.__dict__["_target_column"] = rai_insights.target_column
         inst.__dict__["_train"] = rai_insights.train
         inst.__dict__["_test"] = rai_insights.test
+        inst.__dict__["_is_added"] = False
 
         all_db_dirs = DirectoryManager.list_sub_directories(path)
         if len(all_db_dirs) != 0:
@@ -278,6 +285,7 @@ class DataBalanceManager(BaseManager):
                     manager_info[Keys.BACKEND]
                 )
                 for k in [
+                    Keys.IS_ADDED,
                     Keys.COLS_OF_INTEREST,
                     Keys.TARGET_COLUMN,
                     Keys.POS_LABEL,

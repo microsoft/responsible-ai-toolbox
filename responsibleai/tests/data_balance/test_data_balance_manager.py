@@ -261,19 +261,11 @@ class TestDataBalanceManager:
         assert saved._target_column == loaded._target_column == target_col
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
-        assert_frame_equal(saved._df, loaded._df)
-        assert saved._backend == loaded._backend == SupportedBackend.PANDAS
+        assert saved._is_added == loaded._is_added == False
 
-        # These are all populated in add() so they should all be None
-        assert saved._cols_of_interest == loaded._cols_of_interest == None
-        assert saved._pos_label == loaded._pos_label == None
-
-        # These are all populated in compute() so they should all be None
-        assert (
-            saved._data_balance_measures
-            == loaded._data_balance_measures
-            == None
-        )
+        assert sorted(
+            ["_target_column", "_train", "_test", "_is_added"]
+        ) == sorted(loaded.__dict__)
 
     def test_save_and_load_with_add_on_default_data(self, tmpdir, adult_data):
         train_df, test_df, cols_of_interest, target_col = adult_data
@@ -298,6 +290,7 @@ class TestDataBalanceManager:
         assert saved._target_column == loaded._target_column == target_col
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
+        assert saved._is_added == loaded._is_added == True
         assert_frame_equal(saved._df, loaded._df)
         assert saved._backend == loaded._backend == SupportedBackend.PANDAS
 
@@ -347,6 +340,7 @@ class TestDataBalanceManager:
         assert saved._target_column == loaded._target_column == label
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
+        assert saved._is_added == loaded._is_added == True
         assert_frame_equal(saved._df, loaded._df)
         assert saved._backend == loaded._backend == SupportedBackend.PANDAS
 
@@ -386,6 +380,7 @@ class TestDataBalanceManager:
         assert saved._target_column == loaded._target_column == target_col
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
+        assert saved._is_added == loaded._is_added == True
         assert_frame_equal(saved._df, loaded._df)
         assert saved._backend == loaded._backend == SupportedBackend.PANDAS
 
@@ -431,6 +426,7 @@ class TestDataBalanceManager:
         assert saved._target_column == loaded._target_column == label
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
+        assert saved._is_added == loaded._is_added == True
         assert_frame_equal(saved._df, loaded._df)
         assert saved._backend == loaded._backend == SupportedBackend.PANDAS
 
