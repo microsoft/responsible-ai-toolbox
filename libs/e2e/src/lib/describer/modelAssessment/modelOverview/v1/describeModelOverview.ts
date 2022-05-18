@@ -13,7 +13,7 @@ import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideB
 
 const testName = "Model Statistics";
 
-export function describeModelStatistics(
+export function describeModelOverview(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasets
 ): void {

@@ -73,4 +73,4 @@ apps/*-e2e/debug.log
 docs/build/*
 */.mypy_cache/*
 
-notebooks/responsibleaitoolbox-dashboard/*.py
+notebooks/responsibleaidashboard/*.py
