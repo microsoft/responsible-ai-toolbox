@@ -82,8 +82,8 @@ export class Beehive extends React.PureComponent<
         const featureArray =
           data.testDataset.dataset?.map((row: number[]) => row[featureIndex]) ||
           [];
-        const min = Math.min(...featureArray);
-        const max = Math.max(...featureArray);
+        const min = _.min(featureArray) || 0;
+        const max = _.max(featureArray) || 0;
         const range = max - min;
         return (value: string | number): number => {
           return range !== 0 && typeof value === "number"

@@ -814,7 +814,7 @@ export class CounterfactualChart extends React.PureComponent<
     isString: boolean,
     newValue?: string | number
   ): void => {
-    if (!this.temporaryPoint || !newValue) {
+    if (!this.temporaryPoint || (!newValue && newValue !== 0)) {
       return;
     }
     const editingData = this.temporaryPoint;
