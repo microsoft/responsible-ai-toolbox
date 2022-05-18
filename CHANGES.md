@@ -24,6 +24,34 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.18.2
+
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Bug fixes on 'Set value' not copying over feature values correctly in what if counterfactual panel by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1416
+    - Fix description for model overview by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1425
+    - Fix math.min / max for array size more than 10^7 by @xuke444 in https://github.com/microsoft/responsible-ai-toolbox/pull/1427
+  - ## RAIInsights
+    - Add warning in counterfactual manager when unable to load explainer by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1412
+  - ## Counterfactual
+    - Remove "Set Value" blurb in case it is not available in counterfactual panel by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1426
+    - Add y-axis description to counterfactual feature importance chart by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1423
+  - ## Causal
+    - Fix causal UI strings according to classification/regression tasks by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1419
+    - Add the user class name to causal UI strings by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1422
+    - Upper bound SciKit-Learn to address freeze in causal by @riedgar-ms in https://github.com/microsoft/responsible-ai-toolbox/pull/1432
+  - ## Error Analysis
+    - Fix error on machines with pyspark installed where passed dataframe is not spark pandas by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1415
+    - Fix failing to create error report when filter_features is empty list by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1421
+  - ## Interpret
+    - Filter out missing values from what if dropdown to prevent explanation dashboard from crashing by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1418
+    - Fix dependency chart axis updating with incorrect values in explanation dashboard by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1437
+- ## other
+  - Add postbuild branch trigger by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1417
+  - Upgrade numpy to fix random segfault test failures by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1424
+  - Fix flaky notebook causing build failures by adding retry logic by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1431
+  - Fix codecov and widget test screenshot uploads by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1428
+
 ## v0.18.1
 
 - educational materials
