@@ -35,7 +35,7 @@ class DataBalance:
         pos_label: Optional[str] = None,
     ) -> Union[pd.DataFrame, Any]:
         """
-        Prepare and clone the dataframe using backend of choice.
+        Clone and prepare the dataframe using backend of choice.
 
         :param df: Dataframe to prepare for data balance computation.
         :type df: pd.DataFrame

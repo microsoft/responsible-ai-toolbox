@@ -193,7 +193,6 @@ class DataBalanceManager(BaseManager):
         """
         props = {
             ListProperties.MANAGER_TYPE: self.name,
-            Keys.IS_COMPUTED: self._data_balance_measures is not None,
             Keys.COLS_OF_INTEREST: self._cols_of_interest,
             Keys.TARGET_COLUMN: self._target_column,
             Keys.POS_LABEL: self._pos_label,
