@@ -46,7 +46,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload requirements
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: requirements-dev.txt
           path: ${{ matrix.packageDirectory }}/requirements-dev.txt
@@ -67,7 +67,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload code coverage results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-code-coverage-results
           path: ${{ matrix.packageDirectory }}/htmlcov
