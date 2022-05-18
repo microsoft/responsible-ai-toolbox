@@ -4,9 +4,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-from responsibleai._tools.data_balance.pandas_data_balance_service import (
-    PandasDataBalanceService,
-)
+
+from responsibleai._tools.data_balance.pandas_data_balance_service import \
+    PandasDataBalanceService
 
 
 class TestPandasDataBalance:

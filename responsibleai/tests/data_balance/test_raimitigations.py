@@ -4,11 +4,9 @@
 import json
 
 from pytest import approx
-from raimitigations.databalanceanalysis import (
-    FeatureBalanceMeasure,
-    AggregateBalanceMeasure,
-    DistributionBalanceMeasure,
-)
+from raimitigations.databalanceanalysis import (AggregateBalanceMeasure,
+                                                DistributionBalanceMeasure,
+                                                FeatureBalanceMeasure)
 
 
 class TestRAIMitigations:

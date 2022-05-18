@@ -4,20 +4,19 @@
 """Defines the Data Balance Manager class."""
 
 import json
+import warnings
 from pathlib import Path
 from typing import Any, List, Optional
-import warnings
 
 import pandas as pd
 
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
-from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.data_balance.data_balance import DataBalance
 from responsibleai._tools.shared.backends import SupportedBackend, get_spark
-from responsibleai._tools.shared.state_directory_management import (
-    DirectoryManager,
-)
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+from responsibleai.managers.base_manager import BaseManager
 
 DATA_JSON = "data.json"
 MANAGER_JSON = "manager.json"

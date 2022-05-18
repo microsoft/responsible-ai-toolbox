@@ -1,16 +1,15 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import warnings
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import pandas as pd
 
 from responsibleai._tools.data_balance import BaseDataBalanceService
 from responsibleai._tools.data_balance.factory import DataBalanceServiceFactory
-from responsibleai._tools.shared.attribute_serialization import (
-    convert_nan_to_none,
-)
+from responsibleai._tools.shared.attribute_serialization import \
+    convert_nan_to_none
 from responsibleai._tools.shared.backends import SupportedBackend
 
 FEATURE_BALANCE_MEASURES_KEY = "featureBalanceMeasures"

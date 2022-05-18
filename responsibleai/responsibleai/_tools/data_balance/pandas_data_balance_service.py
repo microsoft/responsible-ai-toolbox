@@ -1,15 +1,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from typing import Any, List
 import warnings
+from typing import Any, List
 
 import pandas as pd
-from raimitigations.databalanceanalysis import (
-    FeatureBalanceMeasure,
-    AggregateBalanceMeasure,
-    DistributionBalanceMeasure,
-)
+from raimitigations.databalanceanalysis import (AggregateBalanceMeasure,
+                                                DistributionBalanceMeasure,
+                                                FeatureBalanceMeasure)
 
 from responsibleai._tools.data_balance import BaseDataBalanceService
 

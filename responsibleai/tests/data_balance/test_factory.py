@@ -2,15 +2,12 @@
 # Licensed under the MIT License.
 
 import pytest
-from responsibleai._tools.data_balance.factory import (
-    DataBalanceServiceFactory,
-)
-from responsibleai._tools.data_balance.pandas_data_balance_service import (
-    PandasDataBalanceService,
-)
-from responsibleai._tools.data_balance.spark_data_balance_service import (
-    SparkDataBalanceService,
-)
+
+from responsibleai._tools.data_balance.factory import DataBalanceServiceFactory
+from responsibleai._tools.data_balance.pandas_data_balance_service import \
+    PandasDataBalanceService
+from responsibleai._tools.data_balance.spark_data_balance_service import \
+    SparkDataBalanceService
 from responsibleai._tools.shared.backends import SupportedBackend
 
 

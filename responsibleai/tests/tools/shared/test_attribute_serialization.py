@@ -5,8 +5,7 @@ import pytest
 
 from responsibleai._tools.shared.attribute_serialization import (
     SerializationExtensions, SerializationFormats, convert_nan_to_none,
-    load_attributes, save_attributes,
-)
+    load_attributes, save_attributes)
 
 
 class Example:

@@ -2,12 +2,10 @@
 # Licensed under the MIT License.
 
 from responsibleai._tools.data_balance import BaseDataBalanceService
-from responsibleai._tools.data_balance.pandas_data_balance_service import (
-    PandasDataBalanceService,
-)
-from responsibleai._tools.data_balance.spark_data_balance_service import (
-    SparkDataBalanceService,
-)
+from responsibleai._tools.data_balance.pandas_data_balance_service import \
+    PandasDataBalanceService
+from responsibleai._tools.data_balance.spark_data_balance_service import \
+    SparkDataBalanceService
 from responsibleai._tools.shared.backends import SupportedBackend
 
 

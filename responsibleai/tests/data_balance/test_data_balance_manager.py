@@ -2,16 +2,14 @@
 # Licensed under the MIT License.
 
 import pandas as pd
-from pandas.testing import assert_frame_equal
 import pytest
-from responsibleai._tools.data_balance.data_balance import (
-    AGGREGATE_BALANCE_MEASURES_KEY,
-    DISTRIBUTION_BALANCE_MEASURES_KEY,
-    FEATURE_BALANCE_MEASURES_KEY,
-)
+from pandas.testing import assert_frame_equal
 
-from responsibleai.managers.data_balance_manager import DataBalanceManager
+from responsibleai._tools.data_balance.data_balance import (
+    AGGREGATE_BALANCE_MEASURES_KEY, DISTRIBUTION_BALANCE_MEASURES_KEY,
+    FEATURE_BALANCE_MEASURES_KEY)
 from responsibleai._tools.shared.backends import SupportedBackend
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.rai_insights.rai_insights import RAIInsights
 
 
