@@ -25,9 +25,7 @@ CLASS_B = "ClassB"
 
 class SparkDataBalanceService(BaseDataBalanceService):
     @classmethod
-    def prepare_df(
-        cls, df: Any, target_column: str, pos_label: str
-    ) -> Any:
+    def prepare_df(cls, df: Any, target_column: str, pos_label: str) -> Any:
         try:
             if pos_label:
                 df = df.withColumn(

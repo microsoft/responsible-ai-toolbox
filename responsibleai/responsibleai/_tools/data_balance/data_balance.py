@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from typing import Any, Dict, List, Set, Union
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 import warnings
 
 import pandas as pd
@@ -25,21 +25,17 @@ CLASS_B = "ClassB"
 
 class DataBalance:
     @staticmethod
-    def compute_measures(
+    def prepare_df(
         df: Union[pd.DataFrame, Any],
-        cols_of_interest: List[str],
         target_column: str,
-        pos_label: str,
         backend: SupportedBackend,
-    ) -> Union[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        pos_label: Optional[str] = None,
+    ) -> Union[pd.DataFrame, Any]:
         """
-        Compute data balance using backend of choice.
+        Prepare and clone the dataframe using backend of choice.
 
-        :param df: Dataframe to compute data balance measures on.
+        :param df: Dataframe to prepare for data balance computation.
         :type df: pd.DataFrame
-        :param cols_of_interest: List of columns to compute
-        data balance measures on.
-        :type cols_of_interest: List[str]
         :param target_column: Name of target column.
         :type target_column: str
         :param pos_label: Positive label.
@@ -51,11 +47,38 @@ class DataBalance:
             DataBalanceServiceFactory.get_service(backend=backend)
         )
 
-        df: pd.DataFrame = service.prepare_df(
+        prepared_df: pd.DataFrame = service.prepare_df(
             df=df,
             target_column=target_column,
             pos_label=pos_label,
         )
+
+        return prepared_df
+
+    @staticmethod
+    def compute_measures(
+        df: Union[pd.DataFrame, Any],
+        cols_of_interest: List[str],
+        target_column: str,
+        backend: SupportedBackend,
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+        """
+        Compute data balance using backend of choice.
+
+        :param df: Dataframe to compute data balance measures on.
+        :type df: pd.DataFrame
+        :param cols_of_interest: List of columns to compute
+        data balance measures on.
+        :type cols_of_interest: List[str]
+        :param target_column: Name of target column.
+        :type target_column: str
+        :param backend: The backend to use.
+        :type backend: SupportedBackend
+        """
+        service: BaseDataBalanceService = (
+            DataBalanceServiceFactory.get_service(backend=backend)
+        )
+
         feature_balance_measures: pd.DataFrame = (
             service.compute_feature_balance_measures(
                 df=df,

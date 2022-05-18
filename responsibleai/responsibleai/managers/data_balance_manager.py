@@ -51,12 +51,16 @@ class DataBalanceManager(BaseManager):
         self._train = train
         self._test = test
 
+        self._df = None
+        self._backend = None
+        if self._train is not None or self._test is not None:
+            self._df = pd.concat([self._train, self._test])
+            self._backend = self._infer_backend()
+
         # Populated in add()
         self._cols_of_interest = None
         self._pos_label = None
         self._custom_data = None
-        self._df = None
-        self._backend = None
 
         # Populated in compute()
         self._data_balance_measures = None
@@ -82,12 +86,27 @@ class DataBalanceManager(BaseManager):
         self._pos_label = pos_label
         self._custom_data = custom_data
 
-        # Let user see warnings early in add() before calling compute()
-        if not self._validate():
-            return
+        if self._custom_data is not None:
+            self._df = self._custom_data
+            self._backend = self._infer_backend()
 
-        self._df = self._construct_df()
-        self._backend = self._infer_backend()
+        # Let user see warnings early in add() before calling compute()
+        self._validate()
+
+    def _infer_backend(self) -> SupportedBackend:
+        if self._df is not None:
+            if isinstance(self._df, pd.DataFrame):
+                return SupportedBackend.PANDAS
+
+            try:
+                from pyspark.sql import DataFrame as SparkDF
+
+                if isinstance(self._df, SparkDF):
+                    return SupportedBackend.SPARK
+            except ImportError:
+                pass
+
+        raise ValueError("Provided data is not a pandas or spark dataframe.")
 
     def _validate(self) -> bool:
         valid = True
@@ -115,34 +134,17 @@ class DataBalanceManager(BaseManager):
 
         return valid
 
-    def _construct_df(self) -> Union[pd.DataFrame, Any]:
-        if self._custom_data is not None:
-            # custom_data could be pd.DataFrame or pyspark.sql.DataFrame
-            return self._custom_data
-        elif (
-            # train and test are pd.DataFrames so we can check for empty
-            self._train is not None
-            and not self._train.empty
-            and self._test is not None
-            and not self._test.empty
-        ):
-            return pd.concat([self._train, self._test])
-        elif self._train is not None and not self._train.empty:
-            return self._train
-        elif self._test is not None and not self._test.empty:
-            return self._test
-
-    def _infer_backend(self) -> SupportedBackend:
-        if isinstance(self._df, pd.DataFrame):
-            return SupportedBackend.PANDAS
-
-        return SupportedBackend.SPARK
-
     def compute(self):
         """Computes data balance measures on the dataset."""
-        if not self._validate() or not self._df:
+        if not self._validate() or self._df is None:
             return
 
+        self._df = DataBalance.prepare_df(
+            df=self._df,
+            target_column=self._target_column,
+            pos_label=self._pos_label,
+            backend=self._backend,
+        )
         (
             feat_measures,
             dist_measures,
@@ -151,7 +153,6 @@ class DataBalanceManager(BaseManager):
             df=self._df,
             cols_of_interest=self._cols_of_interest,
             target_column=self._target_column,
-            pos_label=self._pos_label,
             backend=self._backend,
         )
         self.set_data_balance_measures(
@@ -194,8 +195,7 @@ class DataBalanceManager(BaseManager):
             Keys.COLS_OF_INTEREST: self._cols_of_interest,
             Keys.TARGET_COLUMN: self._target_column,
             Keys.POS_LABEL: self._pos_label,
-            Keys.BACKEND: self._backend,
-            Keys.CUSTOM_DATA_SPECIFIED: self._custom_data is not None,
+            Keys.BACKEND: self._backend.value,
         }
 
         return props
@@ -238,13 +238,11 @@ class DataBalanceManager(BaseManager):
             with open(measures_path, "w") as f:
                 json.dump(self._data_balance_measures, f)
 
-        # otherwise save the data needed to compute the measures at load time
-        else:
-            data_path = dir_manager.create_data_directory() / DATA_JSON
-            if self._backend == SupportedBackend.SPARK:
-                self._df.write.json(data_path)
-            elif self._backend == SupportedBackend.PANDAS:
-                self._df.to_json(data_path, orient="split")
+        data_path = dir_manager.create_data_directory() / DATA_JSON
+        if self._backend == SupportedBackend.SPARK:
+            self._df.write.json(data_path)
+        elif self._backend == SupportedBackend.PANDAS:
+            self._df.to_json(data_path, orient="split")
 
     @staticmethod
     def _load(path, rai_insights):
@@ -265,6 +263,9 @@ class DataBalanceManager(BaseManager):
         inst.__dict__["_train"] = rai_insights.train
         inst.__dict__["_test"] = rai_insights.test
 
+        # Due to the risk of custom_data being large, we don't save or load it
+        inst.__dict__["_custom_data"] = None
+
         all_db_dirs = DirectoryManager.list_sub_directories(path)
         if len(all_db_dirs) != 0:
             dir_manager = DirectoryManager(
@@ -275,48 +276,44 @@ class DataBalanceManager(BaseManager):
 
             with open(config_dir / MANAGER_JSON, "r") as f:
                 manager_info = json.load(f)
+                inst.__dict__["_backend"] = SupportedBackend(
+                    manager_info[Keys.BACKEND]
+                )
                 for k in [
                     Keys.COLS_OF_INTEREST,
-                    Keys.TARGET_COLUMN,  # overrides rai_insights.target_column
+                    Keys.TARGET_COLUMN,
                     Keys.POS_LABEL,
-                    Keys.BACKEND,
                 ]:
                     inst.__dict__[f"_{k}"] = manager_info[k]
 
-            measures_path = config_dir / MEASURES_JSON
+            data_path = dir_manager.get_data_directory() / DATA_JSON
+            if data_path.exists():
+                df = None
+                if (
+                    inst.__dict__.get("_backend")
+                    == SupportedBackend.SPARK.value
+                ):
+                    try:
+                        df = spark.read.json(data_path)
+                    except Exception as e:
+                        warnings.warn(
+                            (
+                                "Tried to load data using 'spark' "
+                                f"backend, but failed due to {e!r}."
+                                "Reverting to 'pandas' backend."
+                            )
+                        )
 
-            # measures have been computed
+                if df is None:
+                    df = pd.read_json(data_path, orient="split")
+
+                inst.__dict__["_df"] = df
+
+            measures_path = config_dir / MEASURES_JSON
             if measures_path.exists():
                 with open(measures_path, "r") as f:
                     inst.__dict__["_data_balance_measures"] = json.load(f)
-
-            # otherwise try to load the data and compute the measures
             else:
-                data_path = dir_manager.get_data_directory() / DATA_JSON
-                if data_path.exists():
-                    df = None
-
-                    # We use inst.__dict__.get("_backend") instead of
-                    # inst._backend because it may not have been set yet.
-                    if (
-                        inst.__dict__.get("_backend")
-                        == SupportedBackend.SPARK.value
-                    ):
-                        try:
-                            df = spark.read.json(data_path)
-                        except Exception as e:
-                            warnings.warn(
-                                (
-                                    "Tried to load data using 'spark' "
-                                    f"backend, but failed due to {e!r}."
-                                    "Reverting to 'pandas' backend."
-                                )
-                            )
-
-                    if df is None:
-                        df = pd.read_json(data_path, orient="split")
-
-                    inst.__dict__["_df"] = df
-                    inst.compute()
+                inst.compute()
 
         return inst

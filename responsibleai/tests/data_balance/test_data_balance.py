@@ -3,6 +3,7 @@
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
+import pytest
 
 from responsibleai._tools.data_balance.data_balance import (
     DataBalance,
@@ -17,6 +18,61 @@ from responsibleai._tools.shared.backends import SupportedBackend
 
 
 class TestDataBalance:
+    def test_prepare_df_with_no_pos_label(self, adult_data):
+        train_df, test_df, _, target_col = adult_data
+        df = pd.concat([train_df, test_df])
+
+        prepared_df = DataBalance.prepare_df(
+            df=df, target_column=target_col, backend=SupportedBackend.PANDAS
+        )
+        assert isinstance(prepared_df, pd.DataFrame)
+        assert df is not prepared_df
+        assert not prepared_df.empty
+        assert_frame_equal(df, prepared_df)
+
+    def test_prepare_df_with_pos_label(self, adult_data):
+        train_df, test_df, _, target_col = adult_data
+        df = pd.concat([train_df, test_df])
+
+        changed_df = df.copy(deep=True)
+        neg, pos = "<=50k", ">50k"
+        changed_df[target_col] = changed_df[target_col].apply(
+            lambda x: neg if x == 0 else pos
+        )
+        assert changed_df[target_col].unique().tolist() == [neg, pos]
+
+        prepared_df = DataBalance.prepare_df(
+            df=changed_df,
+            target_column=target_col,
+            pos_label=pos,
+            backend=SupportedBackend.PANDAS,
+        )
+        assert isinstance(prepared_df, pd.DataFrame)
+        assert df is not prepared_df
+        assert not prepared_df.empty
+        assert_frame_equal(df, prepared_df)
+
+    def test_prepare_df_with_invalid_input(self):
+        with pytest.raises(
+            ValueError, match="Backend 'None' is not supported."
+        ):
+            output = DataBalance.prepare_df(
+                df=None,
+                target_column=None,
+                pos_label=None,
+                backend=None,
+            )
+            assert output is None
+
+        with pytest.warns():
+            output = DataBalance.prepare_df(
+                df=None,
+                target_column=None,
+                pos_label=None,
+                backend=SupportedBackend.PANDAS,
+            )
+            assert output is None
+
     def test_compute_measures_with_valid_input(
         self,
         adult_data,
@@ -35,7 +91,6 @@ class TestDataBalance:
             df=df,
             cols_of_interest=cols_of_interest,
             target_column=target_col,
-            pos_label=None,
             backend=SupportedBackend.PANDAS,
         )
 
@@ -75,7 +130,6 @@ class TestDataBalance:
             df=None,
             cols_of_interest=None,
             target_column=None,
-            pos_label=None,
             backend=SupportedBackend.PANDAS,
         )
 
@@ -96,7 +150,6 @@ class TestDataBalance:
             df=df,
             cols_of_interest=None,
             target_column=None,
-            pos_label=None,
             backend=SupportedBackend.PANDAS,
         )
 

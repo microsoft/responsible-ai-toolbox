@@ -55,7 +55,6 @@ class DataBalanceManagerKeys(object):
     TARGET_COLUMN = 'target_column'
     POS_LABEL = 'pos_label'
     BACKEND = 'backend'
-    CUSTOM_DATA_SPECIFIED = 'custom_data_specified'
 
 
 class CounterfactualManagerKeys(object):
