@@ -5,7 +5,7 @@
 
 import json
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional
 import warnings
 
 import pandas as pd
@@ -14,7 +14,7 @@ from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai.managers.base_manager import BaseManager
 from responsibleai._tools.data_balance.data_balance import DataBalance
-from responsibleai._tools.shared.backends import SupportedBackend
+from responsibleai._tools.shared.backends import SupportedBackend, get_spark
 from responsibleai._tools.shared.state_directory_management import (
     DirectoryManager,
 )
@@ -281,9 +281,6 @@ class DataBalanceManager(BaseManager):
 
             with open(config_dir / MANAGER_JSON, "r") as f:
                 manager_info = json.load(f)
-                inst.__dict__["_backend"] = SupportedBackend(
-                    manager_info[Keys.BACKEND]
-                )
                 for k in [
                     Keys.IS_ADDED,
                     Keys.COLS_OF_INTEREST,
@@ -292,15 +289,16 @@ class DataBalanceManager(BaseManager):
                 ]:
                     inst.__dict__[f"_{k}"] = manager_info[k]
 
+                inst.__dict__["_backend"] = SupportedBackend(
+                    manager_info[Keys.BACKEND]
+                )
+
             data_path = dir_manager.get_data_directory() / DATA_JSON
             if data_path.exists():
                 df = None
-                if (
-                    inst.__dict__.get("_backend")
-                    == SupportedBackend.SPARK.value
-                ):
+                if inst.__dict__["_backend"] == SupportedBackend.SPARK:
                     try:
-                        df = spark.read.json(data_path)
+                        df = get_spark().read.json(data_path)
                     except Exception as e:
                         warnings.warn(
                             (

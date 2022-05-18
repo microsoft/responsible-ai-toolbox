@@ -19,15 +19,13 @@ class TestDataBalanceServiceFactory:
         assert (
             DataBalanceServiceFactory.get_service(
                 backend=SupportedBackend.SPARK
-            )
-            == SparkDataBalanceService
+            ) == SparkDataBalanceService
         )
 
         assert (
             DataBalanceServiceFactory.get_service(
                 backend=SupportedBackend.PANDAS
-            )
-            == PandasDataBalanceService
+            ) == PandasDataBalanceService
         )
 
     def test_get_service_with_invalid_backends(self):

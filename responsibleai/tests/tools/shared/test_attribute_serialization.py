@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-from lib2to3.pytree import convert
 import numpy as np
 import pytest
 
 from responsibleai._tools.shared.attribute_serialization import (
-    SerializationExtensions, SerializationFormats, convert_nan_to_none, load_attributes,
-    save_attributes)
+    SerializationExtensions, SerializationFormats, convert_nan_to_none,
+    load_attributes, save_attributes,
+)
 
 
 class Example:

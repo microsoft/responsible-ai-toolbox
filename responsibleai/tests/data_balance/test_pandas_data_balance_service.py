@@ -262,7 +262,7 @@ class TestPandasDataBalance:
         assert isinstance(output, pd.DataFrame)
         assert output.empty
 
-    def test_compute_distribution_balance_measures_with_invalid_cols_of_interest(
+    def test_compute_distribution_balance_measures_with_invalid_cols(
         self, adult_data
     ):
         train_df, _, _, _ = adult_data

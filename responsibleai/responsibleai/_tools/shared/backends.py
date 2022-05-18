@@ -9,3 +9,13 @@ class SupportedBackend(Enum):
 
     PANDAS = "pandas"
     SPARK = "spark"
+
+
+def get_spark():
+    """Tries to import and return spark. If the import fails, returns None."""
+    try:
+        from pyspark.shell import spark
+
+        return spark
+    except ImportError:
+        return None
