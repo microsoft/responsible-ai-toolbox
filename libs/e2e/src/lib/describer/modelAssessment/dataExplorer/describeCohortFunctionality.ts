@@ -37,9 +37,13 @@ export function describeCohortFunctionality(
       cy.get("#cohortEditPanel").should("exist");
       cy.get(Locators.CohortNameInput).clear().type(cohortName);
       cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
-      cy.get(Locators.CohortDatasetValueInput)
-        .clear()
-        .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || "");
+      cy.get(Locators.CohortDatasetValueInput).then(($input) => {
+        if ($input.length > 0) {
+          cy.get(Locators.CohortDatasetValueInput)
+            .clear()
+            .type(dataShape.datasetExplorerData?.cohortDatasetNewValue || "");
+        }
+      });
       cy.get(Locators.CohortAddFilterButton).click();
       cy.get(Locators.CohortSaveAndSwitchButton).eq(0).click({ force: true });
       cy.get(Locators.NewCohortSpan).should("exist");
