@@ -4,8 +4,12 @@
 import { getSpan } from "../../../../util/getSpan";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
+import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
-export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
+export function describeWhatIfCreate(
+  dataShape: IModelAssessmentData,
+  name?: keyof typeof modelAssessmentDatasets
+): void {
   describe("What if Create counterfactual", () => {
     before(() => {
       cy.get(Locators.WICDatapointDropbox).click();
@@ -50,40 +54,42 @@ export function describeWhatIfCreate(dataShape: IModelAssessmentData): void {
         dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
       );
     });
+    // if from AML do not execute these tests, as these are not available for static view
+    if (name) {
+      it("Should have 'Create your own counterfactual' section and it should be editable", () => {
+        cy.get(Locators.CreateYourOwnCounterfactualInputField)
+          .eq(2)
+          .clear()
+          .type(
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualInputFieldUpdated || "25"
+          );
+        cy.get(Locators.CreateYourOwnCounterfactualInputField).eq(2).focus();
+        cy.focused()
+          .should("have.attr", "value")
+          .and(
+            "contain",
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualInputFieldUpdated || "25"
+          );
+      });
 
-    it("Should have 'Create your own counterfactual' section and it should be editable", () => {
-      cy.get(Locators.CreateYourOwnCounterfactualInputField)
-        .eq(2)
-        .clear()
-        .type(
-          dataShape.whatIfCounterfactualsData
-            ?.createYourOwnCounterfactualInputFieldUpdated || "25"
+      it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
+        cy.get(Locators.WhatIfNameLabel)
+          .should("have.attr", "value")
+          .and("contain", dataShape.whatIfCounterfactualsData?.whatIfNameLabel);
+        cy.get(Locators.WhatIfNameLabel).type(
+          dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated ||
+            "New Copy of row 1"
         );
-      cy.get(Locators.CreateYourOwnCounterfactualInputField).eq(2).focus();
-      cy.focused()
-        .should("have.attr", "value")
-        .and(
-          "contain",
-          dataShape.whatIfCounterfactualsData
-            ?.createYourOwnCounterfactualInputFieldUpdated || "25"
-        );
-    });
-
-    it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
-      cy.get(Locators.WhatIfNameLabel)
-        .should("have.attr", "value")
-        .and("contain", dataShape.whatIfCounterfactualsData?.whatIfNameLabel);
-      cy.get(Locators.WhatIfNameLabel).type(
-        dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated ||
-          "New Copy of row 1"
-      );
-      cy.get(Locators.WhatIfNameLabel)
-        .should("have.attr", "value")
-        .and(
-          "contain",
-          dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated
-        );
-    });
+        cy.get(Locators.WhatIfNameLabel)
+          .should("have.attr", "value")
+          .and(
+            "contain",
+            dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated
+          );
+      });
+    }
   });
 
   describe.skip("What-If save scenario", () => {
