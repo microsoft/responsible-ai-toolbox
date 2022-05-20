@@ -54,7 +54,7 @@ export function describeWhatIfCreate(
         dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
       );
     });
-    // if from AML do not execute these tests, as these are not available for static view
+    // AML do not need to execute below tests, as these options are not available for static view
     if (name) {
       it("Should have 'Create your own counterfactual' section and it should be editable", () => {
         cy.get(Locators.CreateYourOwnCounterfactualInputField)

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../lib/describer/modelAssessment/Constants";
+
 import { generateId } from "./generateId";
 
 export function createCohort(): void {
