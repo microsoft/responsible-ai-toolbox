@@ -64,7 +64,7 @@ export function describeGlobalExplanationChart<
         const dependencePlotChart = new ScatterHighchart("#DependencePlot");
         describe("DependencePlot", () => {
           beforeEach(() => {
-            selectComboBox("#DependencePlotFeatureSelection", 0);
+            selectComboBox("#DependencePlotFeatureSelection", 3);
           });
           it("should render", () => {
             expect(dependencePlotChart.Elements.length).greaterThan(0);
