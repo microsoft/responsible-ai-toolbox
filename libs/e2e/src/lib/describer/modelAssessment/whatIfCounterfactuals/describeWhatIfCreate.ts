@@ -24,23 +24,6 @@ export function describeWhatIfCreate(
     after(() => {
       cy.get(Locators.WhatIfCloseButton).click();
     });
-    it.skip("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
-      cy.get(Locators.WhatIfColumnHeaders)
-        .eq(2)
-        .contains(
-          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
-        );
-      cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
-      cy.get(Locators.WhatIfColumnHeaders)
-        .eq(2)
-        .invoke("text")
-        .then((text1) => {
-          expect(text1).to.not.equal(
-            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
-          );
-        });
-      cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
-    });
 
     it("should filter by included letters in search query", () => {
       cy.get(Locators.WhatIfSearchBar).type(
@@ -116,6 +99,26 @@ export function describeWhatIfCreate(
       // Should be able to delete datapoint created
       cy.get(Locators.WhatIfSaveAsDataPointsDeleteButton).click();
       cy.get(Locators.WhatIfSaveAsDataPoints).should("not.exist");
+    });
+  });
+
+  describe.skip("What-If sort scenario", () => {
+    it("should sort feature on clicking 'Sort feature columns by counterfactual feature importance'", () => {
+      cy.get(Locators.WhatIfColumnHeaders)
+        .eq(2)
+        .contains(
+          dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort || ""
+        );
+      cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
+      cy.get(Locators.WhatIfColumnHeaders)
+        .eq(2)
+        .invoke("text")
+        .then((text1) => {
+          expect(text1).to.not.equal(
+            dataShape.whatIfCounterfactualsData?.columnHeaderBeforeSort
+          );
+        });
+      cy.get(Locators.WhatIfCreateCounterfactualSortButton).click();
     });
   });
 }
