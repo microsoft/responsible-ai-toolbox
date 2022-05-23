@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { generateId } from "libs/e2e/src/util/generateId";
+
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
@@ -34,11 +35,11 @@ export function describeCohortFunctionality(
     });
     it("Should update dataset selection with new cohort when a new cohort is created", () => {
       cy.get(Locators.CreateNewCohortButton).click();
-      cy.get("#cohortEditPanel").should("exist");
+      cy.get(Locators.CohortEditPanel).should("exist");
       const cohortName = `CohortCreateE2E-${generateId(4)}`;
       cy.get(Locators.CohortNameInput).clear().type(cohortName);
       cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
-      cy.get("#cohortEditPanel").then(($panel) => {
+      cy.get(Locators.CohortEditPanel).then(($panel) => {
         if ($panel.find(Locators.CohortDatasetValueInput).length > 0) {
           cy.get(Locators.CohortDatasetValueInput)
             .clear()

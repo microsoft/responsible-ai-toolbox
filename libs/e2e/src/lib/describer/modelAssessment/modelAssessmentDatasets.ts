@@ -143,7 +143,7 @@ const modelAssessmentDatasets = {
       xAxisNewValue: "Error",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8"
+      yAxisNumberOfBins: "5"
     },
     whatIfCounterfactualsData: {
       checkForClassField: false,
@@ -209,7 +209,7 @@ const modelAssessmentDatasets = {
       xAxisNewValue: "Error",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8"
+      yAxisNumberOfBins: "5"
     },
     whatIfCounterfactualsData: {
       checkForClassField: false,
@@ -302,7 +302,7 @@ const modelAssessmentDatasets = {
       xAxisNewValue: "Probability : Less than median",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "LotFrontage",
-      yAxisNumberOfBins: "8"
+      yAxisNumberOfBins: "5"
     },
     whatIfCounterfactualsData: {
       checkForClassField: true,
@@ -452,7 +452,7 @@ const modelAssessmentDatasets = {
       xAxisNewValue: "Probability : 0",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "alcohol",
-      yAxisNumberOfBins: "8"
+      yAxisNumberOfBins: "5"
     },
     whatIfCounterfactualsData: {
       hasWhatIfCounterfactualsComponent: false
