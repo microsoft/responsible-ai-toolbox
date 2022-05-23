@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { generateId } from "libs/e2e/src/util/generateId";
-
+import { generateId } from "../../../../util/generateId";
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
