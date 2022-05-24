@@ -6,7 +6,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
-from lightgbm import LGBMClassifier, LGBMRegressor
+from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
 
@@ -15,12 +15,22 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               Metrics, ModelTask,
+                                               Metrics, ModelTask, TreeNode,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
+from erroranalysis._internal.utils import is_spark
+
+# imports required for pyspark support
+try:
+    import glob
+
+    import pyspark.sql.functions as F
+    from synapse.ml.lightgbm import LightGBMClassifier, LightGBMRegressor
+except ImportError:
+    pass
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -28,6 +38,9 @@ DEFAULT_NUM_LEAVES = 31
 DEFAULT_MIN_CHILD_SAMPLES = 20
 CACHED_SUBTREE_FEATURES = 'cache_subtree_features'
 LEAF_VALUE = 'leaf_value'
+PREDICTION = 'prediction'
+RAW_PREDICTION = 'rawPrediction'
+PROBABILITY = 'probability'
 
 
 class TreeSide(str, Enum):
@@ -126,10 +139,74 @@ def compute_error_tree(analyzer,
                                      composite_filters)
     if filtered_df.shape[0] == 0:
         return create_empty_node(analyzer.metric)
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    indexes = []
+    for feature in features:
+        indexes.append(analyzer.feature_names.index(feature))
+    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
+    dataset_sub_names = list(dataset_sub_names)
+    if not is_spark(filtered_df):
+        booster, filtered_indexed_df, cat_info = get_surrogate_booster_local(
+            filtered_df, analyzer, is_model_analyzer, indexes,
+            dataset_sub_names, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed, categories_reindexed = cat_info
+    else:
+        booster, filtered_indexed_df = get_surrogate_booster_pyspark(
+            filtered_df, analyzer, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed = []
+        categories_reindexed = []
+    dumped_model = booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
+    max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
+    tree = traverse(filtered_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
+    return tree
+
+
+def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
+                                indexes, dataset_sub_names, max_depth,
+                                num_leaves, min_child_samples):
+    """Get surrogate booster for local pandas dataframe.
+
+    Creates the surrogate model trained on errors and returns the booster.
+
+    :param filtered_df: The filtered dataframe.
+    :type filtered_df: pandas.DataFrame
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param is_model_analyzer: Whether the analyzer is a model analyzer.
+    :type is_model_analyzer: bool
+    :param indexes: The indexes of the features to train the surrogate model
+        on.
+    :type indexes: list[int]
+    :param dataset_sub_names: The names of the features to train the
+        surrogate model on.
+    :type dataset_sub_names: list[str]
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The extracted booster from the surrogate model and the
+        scored dataset.
+    :rtype: (Booster, pandas.DataFrame, (list[str], list[int]))
+    """
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
-    is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -151,9 +228,6 @@ def compute_error_tree(analyzer,
         pred_y = np.array(pred_y)
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
-    indexes = []
-    for feature in features:
-        indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
 
@@ -162,8 +236,6 @@ def compute_error_tree(analyzer,
         for idx, c_i in enumerate(analyzer.categorical_indexes):
             input_data[:, c_i] = analyzer.string_indexed_data[row_index, idx]
     dataset_sub_features = input_data[:, indexes]
-    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
-    dataset_sub_names = list(dataset_sub_names)
 
     categorical_info = get_categorical_info(analyzer,
                                             dataset_sub_names)
@@ -182,20 +254,97 @@ def compute_error_tree(analyzer,
     filtered_indexed_df[DIFF] = diff
     filtered_indexed_df[TRUE_Y] = true_y
     filtered_indexed_df[PRED_Y] = pred_y
-    dumped_model = surrogate._Booster.dump_model()
-    tree_structure = dumped_model["tree_info"][0]['tree_structure']
-    max_split_index = get_max_split_index(tree_structure) + 1
-    cache_subtree_features(tree_structure, dataset_sub_names)
-    tree = traverse(filtered_indexed_df,
-                    tree_structure,
-                    max_split_index,
-                    (categories_reindexed,
-                     cat_ind_reindexed),
-                    [],
-                    dataset_sub_names,
-                    metric=analyzer.metric,
-                    classes=analyzer.classes)
-    return tree
+    return surrogate._Booster, filtered_indexed_df, categorical_info
+
+
+def get_surrogate_booster_pyspark(filtered_df, analyzer, max_depth,
+                                  num_leaves, min_child_samples):
+    """Get surrogate booster for pyspark dataframe.
+
+    Creates the surrogate model trained on errors and returns the booster.
+
+    :param filtered_df: The filtered dataframe.
+    :type filtered_df: pyspark.sql.DataFrame
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The extracted booster from the surrogate model and the
+        scored dataset.
+    :rtype: (Booster, pyspark.sql.DataFrame)
+    """
+    # compute the pred_y column
+    scored_data = analyzer.model.transform(filtered_df.to_spark())
+    diff_data = scored_data.withColumn(
+        DIFF,
+        F.when(F.col(analyzer.true_y) != F.col(PREDICTION),
+               1).otherwise(0))
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        diff_data = diff_data.drop(PREDICTION, RAW_PREDICTION, PROBABILITY)
+    else:
+        diff_data = diff_data.drop(PREDICTION)
+    model = create_surrogate_model_pyspark(analyzer, diff_data, max_depth,
+                                           num_leaves, min_child_samples)
+    # TODO: update lightgbm in pyspark to get around file requirement
+    model_path = "./models/lgbmclassifier.model"
+    model.saveNativeModel(model_path)
+    model_file = glob.glob(model_path + '/*.txt')[0]
+    with open(model_file) as f:
+        contents = f.read()
+    booster_args = {'objective': analyzer.model_task}
+
+    lgbm_booster = Booster(params=booster_args, model_str=contents)
+    return lgbm_booster, diff_data.to_koalas()
+
+
+def create_surrogate_model_pyspark(analyzer,
+                                   dataset,
+                                   max_depth,
+                                   num_leaves,
+                                   min_child_samples):
+    """Creates and fits the surrogate lightgbm model.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param dataset: The subset of features to train the
+        surrogate model on.
+    :type dataset: numpy.ndarray or pandas.DataFrame
+    :param diff: The difference between the true and predicted labels column.
+    :type diff: numpy.ndarray
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The trained surrogate model.
+    :rtype: LightGBMClassifier or LightGBMRegressor
+    """
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        surrogate = LightGBMClassifier(numIterations=1,
+                                       maxDepth=max_depth,
+                                       numLeaves=num_leaves,
+                                       minDataInLeaf=min_child_samples,
+                                       labelCol=DIFF)
+    else:
+        surrogate = LightGBMRegressor(numIterations=1,
+                                      maxDepth=max_depth,
+                                      numLeaves=num_leaves,
+                                      minDataInLeaf=min_child_samples,
+                                      labelCol=DIFF)
+    return surrogate.fit(dataset)
 
 
 def create_surrogate_model(analyzer,
@@ -331,7 +480,8 @@ def traverse(df,
         nodeid = 0
 
     # reduce dataframe to just features split on at each step for perf
-    df = filter_to_used_features(df, tree)
+    if not is_spark(df):
+        df = filter_to_used_features(df, tree)
 
     # write current node to a dictionary that can be saved as json
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
@@ -510,12 +660,62 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                                             parent,
                                                             categories)
                 df = df.query(query)
-    success = 0
     total = df.shape[0]
-    if df.shape[0] == 0 and metric != Metrics.ERROR_RATE:
+    if is_spark(df):
+        metric_value, success, error = compute_metrics_pyspark(
+            df, metric, total)
+    else:
+        metric_value, success, error = compute_metrics_local(
+            df, metric, total, classes)
+    metric_name = metric_to_display_name[metric]
+    is_error_metric = metric in error_metrics
+    if SPLIT_FEATURE in tree:
+        node_name = feature_names[tree[SPLIT_FEATURE]]
+    else:
+        node_name = None
+    json.append(get_json_node(arg, condition, error, nodeid, method,
+                              node_name, parentid, p_node_name,
+                              total, success, metric_name,
+                              metric_value, is_error_metric))
+    return json, df
+
+
+def compute_metrics_pyspark(df, metric, total):
+    """Compute the metric value for a given pyspark dataframe.
+
+    :param df: The dataframe to compute the metric on.
+    :type df: pyspark.sql.DataFrame
+    :param metric: The metric to compute.
+    :type metric: str
+    :param total: The total number of rows in the dataframe.
+    :type total: int
+    :return: The metric value and success/error counts.
+    :rtype: tuple(float, int, int)
+    """
+    if metric != Metrics.ERROR_RATE:
+        raise ValueError(
+            "Only Error Rate metric currently supported for pyspark case")
+    else:
+        classes = None
+        return compute_metrics_local(df, metric, total, classes)
+
+
+def compute_metrics_local(df, metric, total, classes):
+    """Compute the metric value for a given local pandas dataframe.
+
+    :param df: The dataframe to compute the metric on.
+    :type df: pandas.DataFrame
+    :param metric: The metric to compute.
+    :type metric: str
+    :param total: The total number of rows in the dataframe.
+    :type total: int
+    :return: The metric value and success/error counts.
+    :rtype: tuple(float, int, int)
+    """
+    success = 0
+    if metric != Metrics.ERROR_RATE and df.shape[0] == 0:
         metric_value = 0
         error = 0
-        success = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = mean_absolute_error(true_y, pred_y)
@@ -538,23 +738,13 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                             pred_y, metric)
         success = total - error
     else:
-        error = df[DIFF].values.sum()
+        error = int(df[DIFF].sum())
         if total == 0:
             metric_value = 0
         else:
             metric_value = error / total
         success = total - error
-    metric_name = metric_to_display_name[metric]
-    is_error_metric = metric in error_metrics
-    if SPLIT_FEATURE in tree:
-        node_name = feature_names[tree[SPLIT_FEATURE]]
-    else:
-        node_name = None
-    json.append(get_json_node(arg, condition, error, nodeid, method,
-                              node_name, parentid, p_node_name,
-                              total, success, metric_name,
-                              metric_value, is_error_metric))
-    return json, df
+    return metric_value, success, error
 
 
 def create_empty_node(metric):
@@ -620,8 +810,8 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
         "size": float(total),
         "sourceRowKeyHash": "hashkey",  # Note: remove this eventually
         "success": float(success),  # Note: remove this eventually
-        "metricName": metric_name,
-        "metricValue": float(metric_value),
+        TreeNode.METRIC_NAME: metric_name,
+        TreeNode.METRIC_VALUE: float(metric_value),
         "isErrorMetric": is_error_metric
     }
 

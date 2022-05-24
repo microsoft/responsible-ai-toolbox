@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
@@ -39,6 +40,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "80%"
       },
       chartContainer: {
+        paddingLeft: "25px",
         width: "100%"
       },
       chartLeftPart: {
@@ -69,11 +71,13 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "23px"
       },
       infoWithText: {
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },
       legendAndSort: {
         height: "100%",
+        paddingLeft: "25px",
         paddingTop: "55px",
         width: rightMarginWidth
       },
@@ -97,6 +101,7 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         display: "flex",
         flexDirection: "row",
         height: "100%",
+        paddingLeft: "25px",
         width: "100%"
       },
       sliderLabel: {

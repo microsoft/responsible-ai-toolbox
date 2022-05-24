@@ -1,46 +1,73 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
-export function calculateBoxData(data: number[]): IHighchartBoxData {
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const q1 = getPercentile(data, 25);
+export function calculateBoxPlotDataFromErrorCohort(
+  errorCohort: ErrorCohort,
+  index: number,
+  key: string
+) {
+  // key is the identifier for the column (e.g., probability)
+  return calculateBoxPlotData(
+    errorCohort.cohort.filteredData.map((dict) => dict[key]),
+    index
+  );
+}
+
+export function calculateBoxPlotData(
+  data: number[],
+  index?: number
+): IHighchartBoxData | undefined {
+  data.sort((number1: number, number2: number) => {
+    return number1 - number2;
+  });
+  if (data.length === 0) {
+    return undefined;
+  }
+  const firstQuartile = getPercentile(data, 25);
   const median = getPercentile(data, 50);
-  const q3 = getPercentile(data, 75);
-  const iqr = q3 - q1;
-  const lowerFence = q1 - iqr * 1.5;
-  const upperFence = q3 + iqr * 1.5;
-  const outliers = [];
-
-  for (const datum of data) {
-    if (datum < lowerFence || datum > upperFence) {
-      outliers.push(datum);
-    }
+  const thirdQuartile = getPercentile(data, 75);
+  if (
+    firstQuartile !== undefined &&
+    median !== undefined &&
+    thirdQuartile !== undefined
+  ) {
+    const interquartileRange = thirdQuartile - firstQuartile;
+    // calculate fences as min and max allowed values to be inside the box
+    const lowerFence = firstQuartile - interquartileRange * 1.5;
+    const upperFence = thirdQuartile + interquartileRange * 1.5;
+    const nonOutliers = data.filter(
+      (element) => element >= lowerFence && element <= upperFence
+    );
+    const outliers = data.filter(
+      (element) => element < lowerFence || element > upperFence
+    );
+    return {
+      high: nonOutliers[nonOutliers.length - 1],
+      low: nonOutliers[0],
+      median,
+      outliers,
+      q1: firstQuartile,
+      q3: thirdQuartile,
+      x: index
+    };
   }
-  return {
-    lowerPercentile: q1,
-    max,
-    mean: mean(data),
-    median,
-    min,
-    outliers,
-    upperPercentile: q3
-  };
+  return undefined;
 }
 
-function getPercentile(data: number[], percentile: number): number {
-  data.sort((a, b) => a - b);
-  const index = (percentile / 100) * data.length;
+export function getPercentile(sortedData: number[], percentile: number) {
+  if (percentile <= 0 || percentile >= 100 || sortedData.length === 0) {
+    return undefined;
+  }
+  const index = (percentile / 100) * sortedData.length;
+  let result;
   if (Math.floor(index) === index) {
-    return (data[index - 1] + data[index]) / 2;
+    // take average of the two adjacent numbers
+    result = (sortedData[index - 1] + sortedData[index]) / 2;
+  } else {
+    result = sortedData[Math.floor(index)];
   }
-  return data[Math.floor(index)];
-}
-
-function mean(data: number[]) {
-  let sum = 0;
-  data.forEach((d) => (sum += d));
-  return sum / data.length;
+  return result;
 }

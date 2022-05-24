@@ -162,7 +162,7 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     return (
       <Stack tokens={{ padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>
@@ -183,7 +183,7 @@ export class IndividualFeatureImportanceView extends React.Component<
             </Text>
           </LabelWithCallout>
         </Stack.Item>
-        <Stack.Item className="tabularDataView">
+        <Stack.Item className={classNames.tabularDataView}>
           <div style={{ height: "500px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

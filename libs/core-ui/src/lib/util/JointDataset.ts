@@ -50,6 +50,11 @@ export enum ClassificationEnum {
   TruePositive = 3
 }
 
+export enum MulticlassClassificationEnum {
+  Correct = 0,
+  Misclassified = 1
+}
+
 // The object that will store user-facing strings and associated metadata
 // It stores the categorical labels for any numeric bins
 export interface IJointMeta {
@@ -185,8 +190,8 @@ export class JointDataset {
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.PredictedYLabel].featureRange = {
-          max: Math.max(...args.predictedY),
-          min: Math.min(...args.predictedY),
+          max: _.max(args.predictedY) || 0,
+          min: _.min(args.predictedY) || 0,
           rangeType: RangeTypes.Numeric
         };
       }
@@ -218,8 +223,8 @@ export class JointDataset {
               abbridgedLabel: label,
               category: ColumnCategories.Outcome,
               featureRange: {
-                max: Math.max(...projection),
-                min: Math.min(...projection),
+                max: _.max(projection) || 0,
+                min: _.min(projection) || 0,
                 rangeType: RangeTypes.Numeric
               },
               isCategorical: false,
@@ -252,8 +257,8 @@ export class JointDataset {
       };
       if (args.metadata.modelType === ModelTypes.Regression) {
         this.metaDict[JointDataset.TrueYLabel].featureRange = {
-          max: Math.max(...args.trueY),
-          min: Math.min(...args.trueY),
+          max: _.max(args.trueY) || 0,
+          min: _.min(args.trueY) || 0,
           rangeType: RangeTypes.Numeric
         };
       }
@@ -273,8 +278,8 @@ export class JointDataset {
           abbridgedLabel: localization.Interpret.Columns.error,
           category: ColumnCategories.Outcome,
           featureRange: {
-            max: Math.max(...regressionErrorArray),
-            min: Math.min(...regressionErrorArray),
+            max: _.max(regressionErrorArray) || 0,
+            min: _.min(regressionErrorArray) || 0,
             rangeType: RangeTypes.Numeric
           },
           isCategorical: false,
@@ -293,6 +298,19 @@ export class JointDataset {
             localization.Interpret.Columns.falsePositive,
             localization.Interpret.Columns.falseNegative,
             localization.Interpret.Columns.truePositive
+          ],
+          treatAsCategorical: true
+        };
+      }
+      if (args.metadata.modelType === ModelTypes.Multiclass) {
+        this.metaDict[JointDataset.ClassificationError] = {
+          abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
+          category: ColumnCategories.Outcome,
+          isCategorical: true,
+          label: localization.Interpret.Columns.classificationOutcome,
+          sortedCategoricalValues: [
+            localization.Interpret.Columns.correctlyClassified,
+            localization.Interpret.Columns.misclassified
           ],
           treatAsCategorical: true
         };
@@ -395,6 +413,13 @@ export class JointDataset {
       const predictionCategory =
         2 * row[JointDataset.TrueYLabel] + row[JointDataset.PredictedYLabel];
       row[JointDataset.ClassificationError] = predictionCategory;
+      return;
+    }
+    if (modelType === ModelTypes.Multiclass) {
+      row[JointDataset.ClassificationError] =
+        row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+          ? MulticlassClassificationEnum.Misclassified
+          : MulticlassClassificationEnum.Correct;
       return;
     }
   }

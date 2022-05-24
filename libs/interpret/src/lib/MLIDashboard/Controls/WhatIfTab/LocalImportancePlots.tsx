@@ -204,7 +204,7 @@ export class LocalImportancePlots extends React.Component<
                       onChange={this.setSortIndex}
                     />
                   </Stack.Item>
-                  <Stack.Item>
+                  <Stack.Item className={classNames.absoluteValueToggle}>
                     <Toggle
                       label={localization.Interpret.GlobalTab.absoluteValues}
                       inlineLabel
@@ -402,7 +402,7 @@ export class LocalImportancePlots extends React.Component<
       }
     ];
     return (
-      <div id="subPlotContainer">
+      <div id="subPlotContainer" className={classNames.subPlotContainer}>
         {this.props.invokeModel ? (
           <div className={classNames.choiceBoxArea} id="subPlotChoice">
             <Text variant="medium" className={classNames.boldText}>

@@ -79,7 +79,7 @@ class RAIInsights(RAIBaseInsights):
         :type maximum_rows_for_test: int
         """
         categorical_features = categorical_features or []
-        self._validate_model_analysis_input_parameters(
+        self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
@@ -142,7 +142,7 @@ class RAIInsights(RAIBaseInsights):
         else:
             return None
 
-    def _validate_model_analysis_input_parameters(
+    def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
@@ -323,8 +323,8 @@ class RAIInsights(RAIBaseInsights):
 
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
-                        warnings.warn(
-                            'INVALID-TASK-TYPE-WARNING: The regression model'
+                        raise UserConfigValidationException(
+                            'The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
         else:

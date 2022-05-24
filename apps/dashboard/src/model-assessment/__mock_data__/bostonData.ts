@@ -3448,7 +3448,13 @@ export const bostonErrorAnalysisData: IErrorAnalysisData = {
   maxDepth: 3,
   metric: Metrics.MeanSquaredError,
   minChildSamples: 21,
-  numLeaves: 11
+  numLeaves: 11,
+  root_stats: {
+    errorCoverage: 100,
+    metricName: Metrics.MeanSquaredError,
+    metricValue: 34.93,
+    totalSize: 253
+  }
 };
 
 export const bostonCohortDataContinuous: IPreBuiltCohort = {
