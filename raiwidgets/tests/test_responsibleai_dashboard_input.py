@@ -1,9 +1,9 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+from raiwidgets.interfaces import WidgetRequestResponseConstants
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
-from raiwidgets.interfaces import WidgetRequestResponseConstants
 
 
 class TestResponsibleAIDashboardInputClassification:
