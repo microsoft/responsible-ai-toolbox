@@ -72,7 +72,7 @@ const modelAssessmentDatasets = {
       xAxisNewValue: "Probability : <=50K",
       yAxisNewPanelValue: "Dataset",
       yAxisNewValue: "age",
-      yAxisNumberOfBins: "8"
+      yAxisNumberOfBins: "5"
     },
     whatIfCounterfactualsData: {
       checkForClassField: true,
