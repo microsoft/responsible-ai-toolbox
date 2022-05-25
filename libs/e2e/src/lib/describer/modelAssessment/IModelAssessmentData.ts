@@ -4,6 +4,7 @@
 export interface IModelAssessmentData {
   errorAnalysisData?: IErrorAnalysisData;
   modelStatisticsData?: IModelStatisticsData;
+  modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
   featureImportanceData?: IFeatureImportanceData;
   causalAnalysisData?: ICausalAnalysisData;
@@ -51,6 +52,14 @@ export interface IModelStatisticsData {
   newXAxisChartValues?: { [key: string]: string[] };
   onUpdateSideBarValues?: { [key: string]: string[] };
   cohortDropDownValues?: string[];
+}
+
+export interface IModelOverviewData {
+  initialCohort: {
+    name: string,
+    sampleSize: number,
+    metrics: {[name: string]: number}
+  }
 }
 
 export interface IDatasetExplorerData {
@@ -135,10 +144,16 @@ export interface IWhatIfCounterfactualsData {
 }
 
 export enum RAINotebookNames {
-  "ClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "CensusClassificationModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-census-classification-model-debugging-newModelOverviewExperience.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
+  "DiabetesRegressionModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-diabetes-regression-model-debugging-newModelOverviewExperience.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "HousingClassificationModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-housing-classification-model-debugging-newModelOverviewExperience.py",
   "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
+  "DiabetesDecisionMakingNewModelOverviewExperience" = "responsibleaidashboard-diabetes-decision-making-newModelOverviewExperience.py",
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
-  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "HousingDecisionMakingNewModelOverviewExperience" = "responsibleaidashboard-housing-decision-making-newModelOverviewExperience.py",
+  "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
+  "MulticlassDnnModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging-newModelOverviewExperience.py"
 }

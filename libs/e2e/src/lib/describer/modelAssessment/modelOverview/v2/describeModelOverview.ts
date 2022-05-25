@@ -1,17 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../Constants";
+import { Locators } from "../../Constants";
 import {
   IModelAssessmentData,
   RAINotebookNames
-} from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+} from "../../IModelAssessmentData";
+import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
-import { describeModelPerformanceBoxChart } from "./describeModelPerformanceBoxChart";
-import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideBar";
-
-const testName = "Model Statistics";
+const testName = "Model Overview v2";
 
 export function describeNewModelOverview(
   datasetShape: IModelAssessmentData,
@@ -28,16 +25,13 @@ export function describeNewModelOverview(
         cy.visit(hostDetails.host);
       }
     });
-    if (!datasetShape.modelStatisticsData?.hasModelStatisticsComponent) {
-      it("should not have 'Model statistics' component for the notebook", () => {
-        cy.get(Locators.ModelOverviewHeader).should("not.exist");
-      });
-    }
-    if (datasetShape.modelStatisticsData?.hasModelStatisticsComponent) {
-      describeModelPerformanceBoxChart(datasetShape);
-      if (datasetShape.modelStatisticsData.hasSideBar) {
-        describeModelPerformanceSideBar(datasetShape);
-      }
-    }
+    it("should have 'Model overview' component for the notebook", () => {
+      cy.get(Locators.ModelOverviewHeader).should("exist");
+      cy.get(Locators.ModelOverviewDescription).should("exist");
+      cy.get(Locators.ModelOverviewCohortViewSelector).should("exist");
+    });
+    it("should find initial cohort in heatmap", () => {
+      console.log(datasetShape.cohortDefaultName);
+    });
   });
 }

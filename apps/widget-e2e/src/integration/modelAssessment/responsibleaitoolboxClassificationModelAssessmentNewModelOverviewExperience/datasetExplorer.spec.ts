@@ -6,5 +6,5 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.ClassificationModelDebugging;
-describeDatasetExplorer(datasetShape, "ClassificationModelDebugging");
+const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
+describeDatasetExplorer(datasetShape, "CensusClassificationModelDebuggingNewModelOverviewExperience");

@@ -4,6 +4,7 @@ const path = require("path");
 const _ = require("lodash");
 const commander = require("commander");
 const { start } = require("repl");
+const { exit } = require("process");
 
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
@@ -78,7 +79,7 @@ function addFlightsInFile(path, flights) {
     }
     content =
       content.slice(0, dashboardArgsIndex - 1) +
-      `, feature_flights="${flights.join('&')}")` +
+      `, feature_flights="${flights.join("&")}")` +
       content.slice(dashboardArgsIndex);
     startIndex = dashboardArgsIndex + 1;
   }
@@ -141,13 +142,29 @@ function convertNotebooks() {
 /**
  * @returns {Host[]}
  */
-async function runNotebooks() {
-  const files = fs
+async function runNotebooks(selectedNotebook) {
+  let files = fs
     .readdirSync(baseDir)
     .filter((f) => f.startsWith(filePrefix) && f.endsWith(".py"));
+  console.log("Available notebooks:");
+  files.forEach((file) => {
+    console.log(`    ${file}`);
+  });
+  if (selectedNotebook) {
+    console.log(`Should only run ${selectedNotebook}`);
+    files = files.filter((f) => f === selectedNotebook);
+    if (files.length === 0) {
+      console.log(
+        `Could not find any matching notebook for ${selectedNotebook}.`
+      );
+      exit(1);
+    }
+  }
   const hosts = [];
   for (const f of files) {
-    hosts.push({ file: f, host: await runNotebook(f) });
+    const host = await runNotebook(f);
+    hosts.push({ file: f, host: host });
+    console.log(`file: ${f}, host: ${host}`);
   }
   return hosts;
 }
@@ -165,12 +182,35 @@ function writeCypressSettings(hosts) {
   );
 }
 
-function e2e(watch) {
+function e2e(watch, selectedNotebook) {
   const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
   console.log("Running e2e");
+  let notebookArgs = [];
+  if (selectedNotebook) {
+    // remove prefix "responsibleaidashboard" and suffix ".py"
+    // remove dashes and make camel case
+    let notebookKey = selectedNotebook.substring(
+      22,
+      selectedNotebook.length - 3
+    );
+    notebookKey = notebookKey
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join("");
+    console.log(
+      `Determined notebook key ${notebookKey} for notebook ${selectedNotebook}.`
+    );
+    notebookArgs = ["--spec", `**/responsibleaitoolbox${notebookKey}/**`];
+  }
   const { status, stderr } = spawnSync(
     "node",
-    [nxPath, "e2e", "widget-e2e", watch ? "--watch" : undefined],
+    [
+      nxPath,
+      "e2e",
+      "widget-e2e",
+      ...notebookArgs,
+      watch ? "--watch" : undefined
+    ],
     {
       stdio: "inherit",
       cwd: path.join(__dirname, "..")
@@ -179,19 +219,23 @@ function e2e(watch) {
   if (status) {
     throw new Error(`Failed to run e2e:\r\n\r\n${stderr}`);
   }
-  console.log("E2e finished\r\n");
+  console.log("e2e finished\r\n");
 }
 
 async function main() {
   commander
     .option("-w, --watch", "Watch mode")
+    .option("--skipgen", "Skip notebook generation")
+    .option("-n, --notebook [notebook]", "Run specific notebook")
     .parse(process.argv)
     .outputHelp();
   checkIfAllNotebooksHaveTests();
-  convertNotebooks();
-  const hosts = await runNotebooks();
+  if (commander.opts().skipgen === undefined || !commander.opts().skipgen) {
+    convertNotebooks();
+  }
+  const hosts = await runNotebooks(commander.opts().notebook);
   writeCypressSettings(hosts);
-  e2e(commander.opts().watch);
+  e2e(commander.opts().watch, commander.opts().notebook);
   process.exit(0);
 }
 

@@ -6,8 +6,9 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
+const datasetShape =
+  modelAssessmentDatasets.HousingClassificationModelDebugging;
 describeIndividualFeatureImportance(
   datasetShape,
-  "CensusClassificationModelDebuggingNewModelOverviewExperience"
+  "HousingClassificationModelDebuggingNewModelOverviewExperience"
 );

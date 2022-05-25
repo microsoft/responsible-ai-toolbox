@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import {
-  describeAggregateFeatureImportance,
+  describeCausalAnalysis,
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
-describeAggregateFeatureImportance(
+describeCausalAnalysis(
   datasetShape,
-  "CensusClassificationModelDebugging"
+  "CensusClassificationModelDebuggingNewModelOverviewExperience"
 );

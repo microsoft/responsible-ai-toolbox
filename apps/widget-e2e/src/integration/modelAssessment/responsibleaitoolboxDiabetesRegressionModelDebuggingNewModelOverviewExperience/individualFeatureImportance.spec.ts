@@ -5,9 +5,9 @@ import {
   describeIndividualFeatureImportance,
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
-
-const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
+const datasetShape =
+  modelAssessmentDatasets.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
 describeIndividualFeatureImportance(
   datasetShape,
-  "CensusClassificationModelDebuggingNewModelOverviewExperience"
+  "DiabetesRegressionModelDebuggingNewModelOverviewExperience"
 );

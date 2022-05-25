@@ -5,8 +5,8 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
-const modelAssessmentDatasets = {
-  ClassificationModelDebugging: {
+const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
+  CensusClassificationModelDebugging: {
     causalAnalysisData: {
       hasCausalAnalysisComponent: false
     },
@@ -460,8 +460,43 @@ const modelAssessmentDatasets = {
   }
 };
 
+// create copy for newModelOverviewExperience to allow for additions and changes
+let modelAssessmentDatasetsNewModelOverviewExperience: {
+  [name: string]: IModelAssessmentData;
+} = {};
+Object.keys(modelAssessmentDatasets).forEach((k: string) => {
+  modelAssessmentDatasetsNewModelOverviewExperience[
+    `${k}NewModelOverviewExperience`
+  ] = JSON.parse(JSON.stringify(modelAssessmentDatasets[k]));
+});
+
+modelAssessmentDatasetsNewModelOverviewExperience[
+  "DiabetesRegressionModelDebuggingNewModelOverviewExperience"
+].modelOverviewData = {
+  initialCohort: {
+    name: "All data",
+    sampleSize: 89,
+    metrics: {
+      meanAbsoluteError: 3939.14,
+      meanSquaredError: 3129.198,
+      meanPrediction: 153.178
+    }
+  }
+};
+
 const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;
 } = modelAssessmentDatasets;
 
-export { withType as modelAssessmentDatasets };
+const allDatasets = {
+  ...modelAssessmentDatasets,
+  ...modelAssessmentDatasetsNewModelOverviewExperience
+};
+const allWithType: {
+  [key in keyof typeof allDatasets]: IModelAssessmentData;
+} = modelAssessmentDatasetsNewModelOverviewExperience;
+
+export {
+  withType as modelAssessmentDatasets,
+  allWithType as modelAssessmentDatasetsIncludingFlights
+};

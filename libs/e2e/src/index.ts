@@ -10,3 +10,4 @@ export * from "./lib/describer/modelAssessment/modelOverview/v1/describeModelOve
 export * from "./lib/describer/modelAssessment/modelOverview/v2/describeModelOverview";
 export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
 export * from "./lib/describer/modelAssessment/modelAssessmentDatasets";
+export * from "./lib/describer/modelAssessment/IModelAssessmentData";

@@ -6,5 +6,5 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.ClassificationModelDebugging;
-describeCausalAnalysis(datasetShape, "ClassificationModelDebugging");
+const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
+describeCausalAnalysis(datasetShape, "DiabetesDecisionMakingNewModelOverviewExperience");
