@@ -22,6 +22,7 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                recall_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.utils import is_spark
+from ml_wrappers import DatasetWrapper
 
 # imports required for pyspark support
 try:
@@ -228,7 +229,14 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
         pred_y = np.array(pred_y)
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
-    if is_pandas:
+
+    # handle time features
+    wrapped_input = DatasetWrapper(input_data)
+    timestamp_featurizer = wrapped_input.timestamp_featurizer()
+    wrapped_input.apply_timestamp_featurizer(timestamp_featurizer)
+    input_data = wrapped_input.dataset
+
+    if is_pandas and isinstance(input_data, pd.DataFrame):
         input_data = input_data.to_numpy()
 
     if analyzer.categorical_features:

@@ -23,6 +23,7 @@ from erroranalysis._internal.surrogate_error_tree import \
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
+from ml_wrappers import DatasetWrapper
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
@@ -365,8 +366,10 @@ class BaseAnalyzer(ABC):
         """
         input_data = self.dataset
         diff = self.get_diff()
-        if isinstance(self.dataset, pd.DataFrame):
-            input_data = input_data.to_numpy()
+        wrapped_input = DatasetWrapper(input_data)
+        timestamp_featurizer = wrapped_input.timestamp_featurizer()
+        wrapped_input.apply_timestamp_featurizer(timestamp_featurizer)
+        input_data = wrapped_input.dataset
         if self.categorical_features:
             # Inplace replacement of columns
             indexes = self.categorical_indexes
