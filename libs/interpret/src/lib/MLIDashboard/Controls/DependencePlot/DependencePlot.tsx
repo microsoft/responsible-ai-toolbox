@@ -145,7 +145,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
     if (
       chartProps.colorAxis &&
       (chartProps.colorAxis.options.bin ||
-        jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
+        jointData.metaDict[chartProps.colorAxis.property]?.treatAsCategorical)
     ) {
       cohort.sort(chartProps.colorAxis.property);
     }
@@ -160,7 +160,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       color: FabricStyles.fabricColorPalette[this.props.cohortIndex]
     };
     if (chartProps.xAxis) {
-      if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
         const xLabels =
           jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
         const xLabelIndexes = xLabels?.map((_, index) => index);
@@ -178,7 +178,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         rawX.forEach((val, index) => {
           // If categorical, show string value in tooltip
           if (
-            jointData.metaDict[chartProps.xAxis.property].treatAsCategorical
+            jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical
           ) {
             customdata[index].X =
               jointData.metaDict[
@@ -194,7 +194,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       }
     }
     if (chartProps.yAxis) {
-      if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
         const yLabels =
           jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
         const yLabelIndexes = yLabels?.map((_, index) => index);
