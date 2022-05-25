@@ -7,7 +7,7 @@ from raiwidgets.responsibleai_dashboard_input import \
 
 
 class TestResponsibleAIDashboardInputClassification:
-    def test_model_analysis_adult_on_predict_success(
+    def test_rai_dashboard_input_adult_on_predict_success(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
         knn = ri.model
@@ -25,7 +25,7 @@ class TestResponsibleAIDashboardInputClassification:
             flask_server_prediction_output
         assert (flask_server_prediction_output['data'] == knn_prediction).all()
 
-    def test_model_analysis_adult_on_predict_failure(
+    def test_rai_dashboard_input_adult_on_predict_failure(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
         test_data = ri.test
@@ -45,7 +45,7 @@ class TestResponsibleAIDashboardInputClassification:
             flask_server_prediction_output[
                 WidgetRequestResponseConstants.data]) == 0
 
-    def test_model_analysis_adult_importances_success(
+    def test_rai_dashboard_input_adult_importances_success(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
 
@@ -57,7 +57,7 @@ class TestResponsibleAIDashboardInputClassification:
         assert WidgetRequestResponseConstants.error not in \
             flask_server_prediction_output
 
-    def test_model_analysis_adult_matrix_success(
+    def test_rai_dashboard_input_adult_matrix_success(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
         features = ['Age', 'Workclass']
@@ -77,7 +77,7 @@ class TestResponsibleAIDashboardInputClassification:
         assert WidgetRequestResponseConstants.error not in \
             flask_server_prediction_output
 
-    def test_model_analysis_adult_matrix_failure(
+    def test_rai_dashboard_input_adult_matrix_failure(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
         features = ['Age', 'Workclass']
@@ -101,7 +101,7 @@ class TestResponsibleAIDashboardInputClassification:
             flask_server_prediction_output[
                 WidgetRequestResponseConstants.data]) == 0
 
-    def test_model_analysis_adult_debug_ml_success(
+    def test_rai_dashboard_input_adult_debug_ml_success(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
 
@@ -123,7 +123,7 @@ class TestResponsibleAIDashboardInputClassification:
         assert WidgetRequestResponseConstants.error not in \
             flask_server_prediction_output
 
-    def test_model_analysis_adult_debug_ml_failure(
+    def test_rai_dashboard_input_adult_debug_ml_failure(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
 
@@ -151,7 +151,7 @@ class TestResponsibleAIDashboardInputClassification:
 
 
 class TestResponsibleAIDashboardInputRegression:
-    def test_model_analysis_housing_on_predict_success(
+    def test_rai_dashboard_input_housing_on_predict_success(
             self, create_rai_insights_object_regression):
         ri = create_rai_insights_object_regression
         rf = ri.model
@@ -169,7 +169,7 @@ class TestResponsibleAIDashboardInputRegression:
             flask_server_prediction_output
         assert (flask_server_prediction_output['data'] == rf_prediction).all()
 
-    def test_model_analysis_housing_causal_whatif_success(
+    def test_rai_dashboard_input_housing_causal_whatif_success(
             self, create_rai_insights_object_regression):
         ri = create_rai_insights_object_regression
         id = ri.causal.get()[0].id
@@ -192,7 +192,7 @@ class TestResponsibleAIDashboardInputRegression:
         assert WidgetRequestResponseConstants.error not in \
             flask_server_prediction_output
 
-    def test_model_analysis_housing_causal_whatif_failure(
+    def test_rai_dashboard_input_housing_causal_whatif_failure(
             self, create_rai_insights_object_regression):
         ri = create_rai_insights_object_regression
         id = "some_id"
