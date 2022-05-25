@@ -106,5 +106,6 @@ export enum Locators {
   ModelOverviewFeatureConfigurationActionButton = "#ModelOverview #modelOverviewFeatureConfigurationActionButton",
   ModelOverviewHeatmapVisualDisplayToggle = "#ModelOverview #modelOverviewHeatmapVisualDisplayToggle",
   ModelOverviewCohortViewSelector = "#ModelOverview #modelOverviewCohortViewSelector",
+  ModelOverviewDatasetCohortStatsTable = "#ModelOverview # modelOverviewDatasetCohortStatsTable",
   CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')"
 }

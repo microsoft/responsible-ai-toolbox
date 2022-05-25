@@ -29,6 +29,11 @@ export function describeNewModelOverview(
       cy.get(Locators.ModelOverviewHeader).should("exist");
       cy.get(Locators.ModelOverviewDescription).should("exist");
       cy.get(Locators.ModelOverviewCohortViewSelector).should("exist");
+      cy.get(Locators.ModelOverviewMetricSelection).should("exist");
+      cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
+      cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should("not.exist");
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("not.exist");
+      cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
     });
     it("should find initial cohort in heatmap", () => {
       console.log(datasetShape.cohortDefaultName);
