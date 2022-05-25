@@ -208,6 +208,15 @@ export class ModelOverview extends React.Component<
       labeledStatistics = featureBasedCohortLabeledStatistics;
     }
 
+    // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
+    const showHeatmapToggleInDatasetCohortView =
+      this.state.datasetCohortViewIsVisible &&
+      this.context.errorCohorts.length > 1;
+    const showHeatmapToggleInFeatureCohortView =
+      !this.state.datasetCohortViewIsVisible &&
+      this.state.selectedFeatures.length > 0 &&
+      featureBasedCohorts.length > 1;
+
     return (
       <Stack
         className={classNames.sectionStack}
@@ -322,15 +331,18 @@ export class ModelOverview extends React.Component<
                 </ActionButton>
               </Stack>
             )}
-            <Toggle
-              id="modelOverviewHeatmapVisualDisplayToggle"
-              label={
-                localization.ModelAssessment.ModelOverview
-                  .visualDisplayToggleLabel
-              }
-              inlineLabel
-              onChange={this.onVisualDisplayToggleChange}
-            />
+            {(showHeatmapToggleInDatasetCohortView ||
+              showHeatmapToggleInFeatureCohortView) && (
+              <Toggle
+                id="modelOverviewHeatmapVisualDisplayToggle"
+                label={
+                  localization.ModelAssessment.ModelOverview
+                    .visualDisplayToggleLabel
+                }
+                inlineLabel
+                onChange={this.onVisualDisplayToggleChange}
+              />
+            )}
             {this.state.datasetCohortViewIsVisible ? (
               <DatasetCohortStatsTable
                 selectableMetrics={selectableMetrics}
@@ -340,16 +352,12 @@ export class ModelOverview extends React.Component<
             ) : (
               <>
                 {this.state.selectedFeatures.length === 0 && (
-                  <ActionButton
-                    onClick={() => {
-                      this.featureComboBoxRef.current?.focus(true);
-                    }}
-                  >
+                  <MissingParametersPlaceholder>
                     {
                       localization.ModelAssessment.ModelOverview
                         .disaggregatedAnalysisFeatureSelectionPlaceholder
                     }
-                  </ActionButton>
+                  </MissingParametersPlaceholder>
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>

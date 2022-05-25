@@ -145,6 +145,8 @@ export class ModelOverviewMetricChart extends React.Component<
           onDismiss={() => {
             this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
+          onRenderFooterContent={this.onRenderFooterContent}
+          isFooterAtBottom
         >
           <Stack tokens={{ childrenGap: "10px" }}>
             <ChoiceGroup
@@ -162,32 +164,33 @@ export class ModelOverviewMetricChart extends React.Component<
               onChange={this.onMetricSelectionChange}
               selectedKey={this.state.newlySelectedMetric}
             />
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
-              <PrimaryButton
-                onClick={() => {
-                  this.setState({
-                    metricSelectionFlyoutIsVisible: false,
-                    selectedMetric: this.state.newlySelectedMetric
-                  });
-                }}
-                text={
-                  localization.ModelAssessment.ModelOverview.chartConfigConfirm
-                }
-              />
-              <DefaultButton
-                onClick={() => {
-                  this.setState({ metricSelectionFlyoutIsVisible: false });
-                }}
-                text={
-                  localization.ModelAssessment.ModelOverview.chartConfigCancel
-                }
-              />
-            </Stack>
           </Stack>
         </Panel>
       </>
     );
   }
+
+  private onRenderFooterContent = () => {
+    return (
+      <Stack horizontal tokens={{ childrenGap: "10px" }}>
+        <PrimaryButton
+          onClick={() => {
+            this.setState({
+              metricSelectionFlyoutIsVisible: false,
+              selectedMetric: this.state.newlySelectedMetric
+            });
+          }}
+          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+        />
+        <DefaultButton
+          onClick={() => {
+            this.setState({ metricSelectionFlyoutIsVisible: false });
+          }}
+          text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+        />
+      </Stack>
+    );
+  };
 
   private onMetricSelectionChange = (
     _: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
