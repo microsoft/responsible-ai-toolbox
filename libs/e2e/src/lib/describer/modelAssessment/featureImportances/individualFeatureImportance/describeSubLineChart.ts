@@ -24,7 +24,9 @@ export function describeSubLineChart(
         selectRow("Index", "4");
       });
       it("should have more than one point", () => {
-        cy.get(Locators.ICENoOfPoints).its("length").should("be.gte", 1);
+        cy.get(Locators.ICENoOfPoints).then(($noOfPoints) => {
+          expect($noOfPoints).length.to.be.at.least(1);
+        });
       });
 
       it("should update x-axis value when 'Feature' dropdown is changed", () => {

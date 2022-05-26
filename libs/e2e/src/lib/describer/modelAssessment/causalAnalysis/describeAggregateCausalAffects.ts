@@ -59,12 +59,10 @@ export function describeAggregateCausalAffects(
       });
 
       it("should render feature names on x-axis that are passed in from SDK", () => {
-        cy.get(Locators.CausalChartXAxisValues)
-          .its("length")
-          .should(
-            "be",
-            dataShape.causalAnalysisData?.featureListInCausalTable?.length
-          );
+        cy.get(Locators.CausalChartXAxisValues).should(
+          "have.length",
+          dataShape.causalAnalysisData?.featureListInCausalTable?.length
+        );
         cy.get(`${Locators.CausalChartXAxisValues}`)
           .last()
           .invoke("text")

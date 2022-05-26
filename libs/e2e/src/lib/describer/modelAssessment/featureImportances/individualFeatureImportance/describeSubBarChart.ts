@@ -35,9 +35,10 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
       );
     });
     it("should have right number of x axis labels", () => {
-      cy.get(Locators.IFIXAxisValue)
-        .its("length")
-        .should("be", props.dataShape.featureNames?.length);
+      cy.get(Locators.IFIXAxisValue).should(
+        "have.length",
+        props.dataShape.featureNames?.length
+      );
     });
 
     it("should update x axis labels on changing top features by their importance number", () => {
