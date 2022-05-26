@@ -10,35 +10,35 @@ export function describeWhatIfCreate(
   dataShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasets
 ): void {
-  describe("What if Create counterfactual", () => {
-    before(() => {
-      cy.get(Locators.WICDatapointDropbox).click();
-      getSpan(
-        dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
-      ).click();
-      cy.get(Locators.CreateWhatIfCounterfactualButton)
-        .click()
-        .get(Locators.WhatIfCounterfactualPanel)
-        .should("exist");
-    });
-    after(() => {
-      cy.get(Locators.WhatIfCloseButton).click();
-    });
+  // AML do not need to execute below tests, as these options are not available for static view
+  if (name) {
+    describe("What if Create counterfactual", () => {
+      before(() => {
+        cy.get(Locators.WICDatapointDropbox).click();
+        getSpan(
+          dataShape.whatIfCounterfactualsData?.selectedDatapoint || "Index 1"
+        ).click();
+        cy.get(Locators.CreateWhatIfCounterfactualButton)
+          .click()
+          .get(Locators.WhatIfCounterfactualPanel)
+          .should("exist");
+      });
+      after(() => {
+        cy.get(Locators.WhatIfCloseButton).click();
+      });
 
-    it("should filter by included letters in search query", () => {
-      cy.get(Locators.WhatIfSearchBar).type(
-        dataShape.whatIfCounterfactualsData?.searchBarQuery || ""
-      );
-      cy.get(Locators.WhatIfColumnHeaders)
-        .eq(2)
-        .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
-      cy.get(Locators.WhatIfSearchBarClearTextButton).click();
-      cy.get(Locators.WhatIfColumnHeaders).contains(
-        dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
-      );
-    });
-    // AML do not need to execute below tests, as these options are not available for static view
-    if (name) {
+      it("should filter by included letters in search query", () => {
+        cy.get(Locators.WhatIfSearchBar).type(
+          dataShape.whatIfCounterfactualsData?.searchBarQuery || ""
+        );
+        cy.get(Locators.WhatIfColumnHeaders)
+          .eq(2)
+          .contains(dataShape.whatIfCounterfactualsData?.searchBarQuery || "");
+        cy.get(Locators.WhatIfSearchBarClearTextButton).click();
+        cy.get(Locators.WhatIfColumnHeaders).contains(
+          dataShape.whatIfCounterfactualsData?.columnHeaderAfterSort || ""
+        );
+      });
       it("Should have 'Create your own counterfactual' section and it should be editable", () => {
         cy.get(Locators.CreateYourOwnCounterfactualInputField)
           .eq(2)
@@ -72,8 +72,8 @@ export function describeWhatIfCreate(
             dataShape.whatIfCounterfactualsData?.whatIfNameLabelUpdated
           );
       });
-    }
-  });
+    });
+  }
 
   describe.skip("What-If save scenario", () => {
     before(() => {
