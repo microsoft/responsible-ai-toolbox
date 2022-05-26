@@ -17,6 +17,16 @@ _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
 
 def convert_to_list(array, custom_err_msg=None):
+    """Convert an array to a list.
+
+    :param array: An array like python object.
+    :type array: pd.DataFrame or pd.Series or np.ndarray or
+                 pd.Index or scipy sparse array
+    :param custom_err_msg: A custom error message to use.
+    :type custom_err_msg: str
+    :return: Python List.
+    :rtype: list
+    """
     if issparse(array):
         if array.shape[1] > 1000:
             if custom_err_msg is None:
@@ -25,13 +35,9 @@ def convert_to_list(array, custom_err_msg=None):
             else:
                 raise ValueError(custom_err_msg)
         return array.toarray().tolist()
-    if isinstance(array, pd.DataFrame):
+    if isinstance(array, pd.DataFrame) or isinstance(array, pd.Series):
         return array.values.tolist()
-    if isinstance(array, pd.Series):
-        return array.values.tolist()
-    if isinstance(array, np.ndarray):
-        return array.tolist()
-    if isinstance(array, pd.Index):
+    if isinstance(array, np.ndarray) or isinstance(array, pd.Index):
         return array.tolist()
     return array
 
@@ -44,7 +50,7 @@ def convert_to_string_list_dict(
 
     This function is used to convert arrays in a variety of types
     into a dictionary mapping column names to regular Python lists
-    (in preparation for JSON serialisation). It is a modification
+    (in preparation for JSON serialization). It is a modification
     of the feature processing code in :class:`fairlearn.metrics.MetricFrame`.
 
     The array to be converted is passed in :code:`ys`, and a variety
@@ -64,6 +70,15 @@ def convert_to_string_list_dict(
         - A Python dictionary with string keys and values which are
           convertible to lists
         - Anything convertible to a :class:`np.ndarray`
+
+    :param base_name_format: A custom name format to use.
+    :type base_name_format: str
+    :param ys: An array like python object.
+    :type ys: pd.DataFrame or pd.Series or list or dictionary
+    :param sample_array: An array like python object.
+    :type sample_array: pd.DataFrame or pd.Series or list or dictionary
+    :return: A dictionary of string and lists.
+    :rtype: Dict[str, List]
     """
     result = {}
 
@@ -116,6 +131,7 @@ def serialize_json_safe(o: Any):
     Convert a value into something that is safe to parse as JSON.
 
     :param o: Object to make JSON safe.
+    :type o: Any
     :return: Serialized object.
     """
     if type(o) in {bool, int, float, str, type(None)}:

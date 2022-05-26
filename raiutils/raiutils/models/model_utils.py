@@ -13,6 +13,11 @@ class SKLearn(object):
 
 
 def is_classifier(model):
+    """Check if the model is a classifier.
+
+    :return: True if the model is a classifier, False otherwise.
+    :rtype: bool
+    """
     return (model is not None and
             hasattr(model, SKLearn.PREDICT_PROBA) and
             model.predict_proba is not None)
