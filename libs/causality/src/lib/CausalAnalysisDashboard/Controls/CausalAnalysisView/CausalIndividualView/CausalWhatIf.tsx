@@ -235,7 +235,7 @@ export class CausalWhatIf extends React.Component<
       return v;
     }
     if (
-      (meta.isCategorical || meta.treatAsCategorical) &&
+      (meta.isCategorical || meta?.treatAsCategorical) &&
       meta.sortedCategoricalValues
     ) {
       return meta.sortedCategoricalValues[v];

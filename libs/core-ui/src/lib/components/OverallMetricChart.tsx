@@ -261,7 +261,7 @@ export class OverallMetricChart extends React.PureComponent<
     }
     newProps.xAxis = value;
     newProps.chartType = this.context.jointDataset.metaDict[value.property]
-      .treatAsCategorical
+      ?.treatAsCategorical
       ? ChartTypes.Histogram
       : ChartTypes.Box;
 

@@ -638,7 +638,7 @@ export class CounterfactualChart extends React.PureComponent<
     };
 
     if (chartProps.xAxis) {
-      if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
         const xLabels =
           jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
         const xLabelIndexes = xLabels?.map((_, index) => index);
@@ -647,7 +647,7 @@ export class CounterfactualChart extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
         const yLabels =
           jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
         const yLabelIndexes = yLabels?.map((_, index) => index);
@@ -693,7 +693,7 @@ export class CounterfactualChart extends React.PureComponent<
       hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
-        if (metaX.treatAsCategorical) {
+        if (metaX?.treatAsCategorical) {
           customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
           customdata[index].X = (val as number).toLocaleString(undefined, {
@@ -719,7 +719,7 @@ export class CounterfactualChart extends React.PureComponent<
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
       hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
-        if (metaY.treatAsCategorical) {
+        if (metaY?.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
           customdata[index].Y = (val as number).toLocaleString(undefined, {
@@ -748,7 +748,7 @@ export class CounterfactualChart extends React.PureComponent<
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
     const yKey = `${JointDataset.DataLabelRoot}0`;
     const yIsDithered =
-      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
+      this.context.jointDataset.metaDict[yKey]?.treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {

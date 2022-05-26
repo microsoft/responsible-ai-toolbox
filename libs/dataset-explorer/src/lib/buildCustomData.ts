@@ -26,7 +26,7 @@ export function buildCustomData(
       const rawX = cohort.unwrap(chartProps.xAxis.property);
       rawX.forEach((val, index) => {
         // If categorical, show string value in tooltip
-        if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
           customdata[index].X =
             jointData.metaDict[
               chartProps.xAxis.property
@@ -43,7 +43,7 @@ export function buildCustomData(
       const rawY = cohort.unwrap(chartProps.yAxis.property);
       rawY.forEach((val, index) => {
         // If categorical, show string value in tooltip
-        if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
           customdata[index].Y =
             jointData.metaDict[
               chartProps.yAxis.property
@@ -59,7 +59,7 @@ export function buildCustomData(
     if (colorAxis && colorAxis.property) {
       const rawColor = cohort.unwrap(colorAxis.property);
       rawColor.forEach((val, index) => {
-        if (jointData.metaDict[colorAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[colorAxis.property]?.treatAsCategorical) {
           customdata[index].Color =
             jointData.metaDict[colorAxis.property].sortedCategoricalValues?.[
               val
@@ -81,7 +81,7 @@ export function buildCustomData(
     chartProps.yAxis.property !== ColumnCategories.None
   ) {
     const yMeta = jointData.metaDict[chartProps.yAxis.property];
-    if (yMeta.treatAsCategorical) {
+    if (yMeta?.treatAsCategorical) {
       const rawY = cohort.unwrap(chartProps.yAxis.property);
       rawY.forEach((val, index) => {
         customdata[index].Y = yMeta.sortedCategoricalValues?.[val];
