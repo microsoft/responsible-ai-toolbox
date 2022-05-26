@@ -42,7 +42,7 @@ export function describeWhatIf(
     ) {
       describeWhatIfCommonFunctionalities(datasetShape);
       describeAxisFlyouts(datasetShape);
-      describeWhatIfCreate(datasetShape);
+      describeWhatIfCreate(datasetShape, name);
     }
   });
 }

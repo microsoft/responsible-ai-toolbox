@@ -45,7 +45,7 @@ export function describeIndividualFeatureImportance(
       });
     }
     if (datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
-      describeTabularDataView(datasetShape);
+      describeTabularDataView(datasetShape, name);
     }
   });
 }

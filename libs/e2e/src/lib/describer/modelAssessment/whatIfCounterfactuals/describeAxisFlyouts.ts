@@ -22,6 +22,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           "have.length",
           dataShape.featureNames?.length
         );
+        cy.get(Locators.WhatIfScatterChartSelectFeatureCaretButton).click();
         cy.get(Locators.WhatIfScatterChartFlyoutCancel).click();
       });
       it("should be able to select different feature", () => {

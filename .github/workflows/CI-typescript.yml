@@ -32,19 +32,19 @@ jobs:
         run: yarn ci
       - name: Upload unit test code coverage
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: unit-test-coverage-${{ matrix.node-version }}
           path: coverage
       - name: Upload e2e test screen shot
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
       - name: Upload yarn error
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: yarn-error.log-${{ matrix.node-version }}
           path: yarn-error.log
