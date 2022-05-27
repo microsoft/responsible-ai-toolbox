@@ -190,7 +190,7 @@ function e2e(watch, selectedNotebook) {
     // remove prefix "responsibleaidashboard" and suffix ".py"
     // remove dashes and make camel case
     let notebookKey = selectedNotebook.substring(
-      22,
+      "responsibleaidashboard".length,
       selectedNotebook.length - 3
     );
     notebookKey = notebookKey
