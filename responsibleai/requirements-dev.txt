@@ -7,3 +7,6 @@ pytest-mock==3.6.1
 # Required for responsibleai package tests
 deptree~=0.0.10
 xgboost<=1.0.0
+
+# Temporarily living in dev-requirements
+raimitigations~=0.0.3
