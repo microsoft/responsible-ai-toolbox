@@ -87,13 +87,17 @@ export class ProbabilityDistributionChart extends React.Component<
     const noCohortSelected = this.props.selectedCohorts.length === 0;
 
     return (
-      <Stack tokens={{ childrenGap: "10px" }}>
+      <Stack
+        tokens={{ childrenGap: "10px" }}
+        id="modelOverviewProbabilityDistributionChart"
+      >
         <Stack
           horizontal
           tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}
         >
           <Stack.Item className={classNames.chartToggle}>
             <Toggle
+              id="modelOverviewProbabilityDistributionChartToggle"
               label={
                 localization.ModelAssessment.ModelOverview
                   .probabilityLineChartToggleLabel
@@ -104,6 +108,7 @@ export class ProbabilityDistributionChart extends React.Component<
           </Stack.Item>
           {this.state.showLineChart && (
             <DefaultButton
+              id="modelOverviewProbabilityDistributionLineChartCohortSelectionButton"
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -115,6 +120,7 @@ export class ProbabilityDistributionChart extends React.Component<
           {!noCohortSelected && !this.state.showLineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
+                id="modelOverviewProbabilityDistributionBoxChartCohortSelectionButton"
                 className={classNames.rotatedVerticalBox}
                 text={
                   localization.ModelAssessment.ModelOverview
@@ -156,6 +162,7 @@ export class ProbabilityDistributionChart extends React.Component<
                   }
                 >
                   <DefaultButton
+                    id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
                     text={
                       localization.ModelAssessment.ModelOverview
                         .probabilityLabelSelectionButton
@@ -172,6 +179,7 @@ export class ProbabilityDistributionChart extends React.Component<
           </Stack.Item>
         </Stack>
         <Panel
+          id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"
           isOpen={this.state.probabilityFlyoutIsVisible}
           closeButtonAriaLabel="Close"
           onDismiss={() => {

@@ -361,7 +361,10 @@ export class ModelOverview extends React.Component<
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>
-                    <Text className={classNames.generalSemiBoldText}>
+                    <Text
+                      className={classNames.generalSemiBoldText}
+                      id="modelOverviewDisaggregatedAnalysisBaseCohortDisclaimer"
+                    >
                       {localization.formatString(
                         localization.ModelAssessment.ModelOverview
                           .disaggregatedAnalysisBaseCohortDislaimer,
@@ -372,7 +375,7 @@ export class ModelOverview extends React.Component<
                       this.context.baseErrorCohort.cohort.compositeFilters
                         .length >
                       0 && (
-                      <MessageBar>
+                      <MessageBar id="modelOverviewDisaggregatedAnalysisBaseCohortWarning">
                         {localization.formatString(
                           localization.ModelAssessment.ModelOverview
                             .disaggregatedAnalysisBaseCohortWarning,
@@ -425,7 +428,7 @@ export class ModelOverview extends React.Component<
               selectableMetrics={selectableMetrics}
             />
             {someCohortSelected && (
-              <Pivot>
+              <Pivot id="modelOverviewChartPivot">
                 {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                   <PivotItem
                     headerText={

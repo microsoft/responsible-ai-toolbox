@@ -57,8 +57,8 @@ export interface IModelStatisticsData {
 export interface IModelOverviewData {
   initialCohort: {
     name: string,
-    sampleSize: number,
-    metrics: {[name: string]: number}
+    sampleSize: string,
+    metrics: {[name: string]: string}
   }
 }
 

@@ -6,7 +6,7 @@ import {
   IModelAssessmentData,
   RAINotebookNames
 } from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
+import { modelAssessmentDatasetsIncludingFlights } from "../../modelAssessmentDatasets";
 
 import { describeModelPerformanceBoxChart } from "./describeModelPerformanceBoxChart";
 import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideBar";
@@ -15,7 +15,7 @@ const testName = "Model Overview v1";
 
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasetsIncludingFlights
 ): void {
   describe(testName, () => {
     before(() => {

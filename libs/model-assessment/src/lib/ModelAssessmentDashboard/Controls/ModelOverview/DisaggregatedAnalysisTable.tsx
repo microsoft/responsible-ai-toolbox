@@ -54,7 +54,7 @@ export class DisaggregatedAnalysisTable extends React.Component<
       return React.Fragment;
     }
     return (
-      <Stack>
+      <Stack id="modelOverviewDisaggregatedAnalysisTable">
         <CohortStatsHeatmap
           items={cohortStatsInfo.items}
           cohorts={this.props.featureBasedCohorts}

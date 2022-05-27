@@ -475,11 +475,11 @@ modelAssessmentDatasetsNewModelOverviewExperience[
 ].modelOverviewData = {
   initialCohort: {
     name: "All data",
-    sampleSize: 89,
+    sampleSize: "89",
     metrics: {
-      meanAbsoluteError: 3939.14,
-      meanSquaredError: 3129.198,
-      meanPrediction: 153.178
+      meanAbsoluteError: "3 914.84",
+      meanSquaredError: "3 092.951",
+      meanPrediction: "153.047"
     }
   }
 };
