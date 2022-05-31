@@ -5,14 +5,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from responsibleai._tools.data_balance.pandas_data_balance_service import \
-    PandasDataBalanceService
+from responsibleai._tools.data_balance.pandas_data_balance_backend import (
+    PandasDataBalanceBackend,
+)
 
 
-class TestPandasDataBalance:
+class TestPandasDataBalanceBackend:
     def test_prepare_df_ensure_cloned(self, adult_data):
         train_df, _, _, target_col = adult_data
-        output = PandasDataBalanceService.prepare_df(
+        output = PandasDataBalanceBackend.prepare_df(
             df=train_df, target_column=target_col, pos_label=None
         )
         assert train_df.equals(output)  # Same elements within the dataframes
@@ -22,7 +23,7 @@ class TestPandasDataBalance:
         train_df, _, _, target_col = adult_data
         assert train_df[target_col].unique().tolist() == [0, 1]
 
-        output = PandasDataBalanceService.prepare_df(
+        output = PandasDataBalanceBackend.prepare_df(
             df=train_df, target_column=target_col, pos_label=None
         )
         assert output[target_col].unique().tolist() == [0, 1]
@@ -40,21 +41,21 @@ class TestPandasDataBalance:
         )
         assert train_df[target_col].unique().tolist() == [neg_label, pos_label]
 
-        output = PandasDataBalanceService.prepare_df(
+        output = PandasDataBalanceBackend.prepare_df(
             df=train_df, target_column=target_col, pos_label=pos_label
         )
         assert output[target_col].unique().tolist() == [0, 1]
 
     def test_prepare_df_with_null_input(self):
-        with pytest.warns():
-            output = PandasDataBalanceService.prepare_df(
+        with pytest.raises(ValueError):
+            output = PandasDataBalanceBackend.prepare_df(
                 df=None, target_column=None, pos_label=None
             )
             assert output is None
 
     def test_prepare_df_with_empty_df(self):
         empty_df = pd.DataFrame()
-        output = PandasDataBalanceService.prepare_df(
+        output = PandasDataBalanceBackend.prepare_df(
             df=empty_df, target_column=None, pos_label=None
         )
         assert output.empty
@@ -63,22 +64,22 @@ class TestPandasDataBalance:
 
     def test_prepare_df_with_invalid_target_column(self, adult_data):
         train_df, _, _, _ = adult_data
-        with pytest.warns():
-            output = PandasDataBalanceService.prepare_df(
+        with pytest.raises(ValueError):
+            output = PandasDataBalanceBackend.prepare_df(
                 df=train_df, target_column=None, pos_label=">50k"
             )
             assert train_df.equals(output)
             assert train_df is not output
 
-        with pytest.warns():
-            output = PandasDataBalanceService.prepare_df(
+        with pytest.raises(ValueError):
+            output = PandasDataBalanceBackend.prepare_df(
                 df=train_df, target_column="", pos_label=">50k"
             )
             assert train_df.equals(output)
             assert train_df is not output
 
-        with pytest.warns():
-            output = PandasDataBalanceService.prepare_df(
+        with pytest.raises(ValueError):
+            output = PandasDataBalanceBackend.prepare_df(
                 df=train_df, target_column="invalid column", pos_label=">50k"
             )
             assert train_df.equals(output)
@@ -86,7 +87,7 @@ class TestPandasDataBalance:
 
     def test_prepare_df_with_empty_pos_label(self, adult_data):
         train_df, _, _, target_col = adult_data
-        output = PandasDataBalanceService.prepare_df(
+        output = PandasDataBalanceBackend.prepare_df(
             df=train_df, target_column=target_col, pos_label=""
         )
         assert output[target_col].unique().tolist() == [0, 1]
@@ -98,7 +99,7 @@ class TestPandasDataBalance:
         assert train_df[target_col].unique().tolist() == [0, 1]
 
         with pytest.warns():
-            output = PandasDataBalanceService.prepare_df(
+            output = PandasDataBalanceBackend.prepare_df(
                 df=train_df, target_column=target_col, pos_label="invalid"
             )
             assert output[target_col].unique().tolist() == [0, 1]
@@ -107,7 +108,7 @@ class TestPandasDataBalance:
         self, adult_data
     ):
         train_df, _, cols_of_interest, target_col = adult_data
-        output = PandasDataBalanceService.compute_feature_balance_measures(
+        output = PandasDataBalanceBackend.compute_feature_balance_measures(
             df=train_df,
             cols_of_interest=cols_of_interest,
             target_column=target_col,
@@ -137,7 +138,7 @@ class TestPandasDataBalance:
 
     def test_compute_feature_balance_measures_with_null_input(self):
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=None, cols_of_interest=None, target_column=None
             )
             assert isinstance(output, pd.DataFrame)
@@ -146,7 +147,7 @@ class TestPandasDataBalance:
     def test_compute_feature_balance_measures_with_empty_df(self, adult_data):
         _, _, cols_of_interest, target_col = adult_data
         empty_df = pd.DataFrame()
-        output = PandasDataBalanceService.compute_feature_balance_measures(
+        output = PandasDataBalanceBackend.compute_feature_balance_measures(
             df=empty_df,
             cols_of_interest=cols_of_interest,
             target_column=target_col,
@@ -159,21 +160,21 @@ class TestPandasDataBalance:
     ):
         train_df, _, _, target_col = adult_data
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df, cols_of_interest=None, target_column=target_col
             )
             assert isinstance(output, pd.DataFrame)
             assert output.empty
 
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df, cols_of_interest=[], target_column=target_col
             )
             assert isinstance(output, pd.DataFrame)
             assert output.empty
 
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df,
                 cols_of_interest=["invalid"],
                 target_column=target_col,
@@ -186,7 +187,7 @@ class TestPandasDataBalance:
     ):
         train_df, _, cols_of_interest, _ = adult_data
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df,
                 cols_of_interest=cols_of_interest,
                 target_column=None,
@@ -195,7 +196,7 @@ class TestPandasDataBalance:
             assert output.empty
 
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df,
                 cols_of_interest=cols_of_interest,
                 target_column="",
@@ -204,7 +205,7 @@ class TestPandasDataBalance:
             assert output.empty
 
         with pytest.warns():
-            output = PandasDataBalanceService.compute_feature_balance_measures(
+            output = PandasDataBalanceBackend.compute_feature_balance_measures(
                 df=train_df,
                 cols_of_interest=cols_of_interest,
                 target_column="invalid",
@@ -217,7 +218,7 @@ class TestPandasDataBalance:
     ):
         train_df, _, cols_of_interest, _ = adult_data
         output = (
-            PandasDataBalanceService.compute_distribution_balance_measures(
+            PandasDataBalanceBackend.compute_distribution_balance_measures(
                 df=train_df,
                 cols_of_interest=cols_of_interest,
             )
@@ -242,7 +243,7 @@ class TestPandasDataBalance:
     def test_compute_distribution_balance_measures_with_null_input(self):
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_distribution_balance_measures(
+                PandasDataBalanceBackend.compute_distribution_balance_measures(
                     df=None, cols_of_interest=None
                 )
             )
@@ -255,7 +256,7 @@ class TestPandasDataBalance:
         _, _, cols_of_interest, _ = adult_data
         empty_df = pd.DataFrame()
         output = (
-            PandasDataBalanceService.compute_distribution_balance_measures(
+            PandasDataBalanceBackend.compute_distribution_balance_measures(
                 df=empty_df, cols_of_interest=cols_of_interest
             )
         )
@@ -268,7 +269,7 @@ class TestPandasDataBalance:
         train_df, _, _, _ = adult_data
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_distribution_balance_measures(
+                PandasDataBalanceBackend.compute_distribution_balance_measures(
                     df=train_df, cols_of_interest=None
                 )
             )
@@ -277,7 +278,7 @@ class TestPandasDataBalance:
 
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_distribution_balance_measures(
+                PandasDataBalanceBackend.compute_distribution_balance_measures(
                     df=train_df, cols_of_interest=["invalid"]
                 )
             )
@@ -289,7 +290,7 @@ class TestPandasDataBalance:
     ):
         train_df, _, _, _ = adult_data
         output = (
-            PandasDataBalanceService.compute_distribution_balance_measures(
+            PandasDataBalanceBackend.compute_distribution_balance_measures(
                 df=train_df, cols_of_interest=[]
             )
         )
@@ -300,7 +301,7 @@ class TestPandasDataBalance:
         self, adult_data
     ):
         train_df, _, cols_of_interest, _ = adult_data
-        output = PandasDataBalanceService.compute_aggregate_balance_measures(
+        output = PandasDataBalanceBackend.compute_aggregate_balance_measures(
             df=train_df, cols_of_interest=cols_of_interest
         )
 
@@ -312,7 +313,7 @@ class TestPandasDataBalance:
     def test_compute_aggregate_balance_measures_with_null_input(self):
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_aggregate_balance_measures(
+                PandasDataBalanceBackend.compute_aggregate_balance_measures(
                     df=None, cols_of_interest=None
                 )
             )
@@ -324,7 +325,7 @@ class TestPandasDataBalance:
     ):
         _, _, cols_of_interest, _ = adult_data
         empty_df = pd.DataFrame()
-        output = PandasDataBalanceService.compute_aggregate_balance_measures(
+        output = PandasDataBalanceBackend.compute_aggregate_balance_measures(
             df=empty_df, cols_of_interest=cols_of_interest
         )
         assert isinstance(output, pd.DataFrame)
@@ -336,7 +337,7 @@ class TestPandasDataBalance:
         train_df, _, _, _ = adult_data
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_aggregate_balance_measures(
+                PandasDataBalanceBackend.compute_aggregate_balance_measures(
                     df=train_df, cols_of_interest=None
                 )
             )
@@ -345,7 +346,7 @@ class TestPandasDataBalance:
 
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_aggregate_balance_measures(
+                PandasDataBalanceBackend.compute_aggregate_balance_measures(
                     df=train_df, cols_of_interest=[]
                 )
             )
@@ -354,7 +355,7 @@ class TestPandasDataBalance:
 
         with pytest.warns():
             output = (
-                PandasDataBalanceService.compute_aggregate_balance_measures(
+                PandasDataBalanceBackend.compute_aggregate_balance_measures(
                     df=train_df, cols_of_interest=["invalid"]
                 )
             )
