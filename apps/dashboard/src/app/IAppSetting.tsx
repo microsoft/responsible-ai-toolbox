@@ -6,8 +6,11 @@ export const routeKey = [
   "dataset",
   "theme",
   "language",
-  "version"
+  "version",
+  "featureFlights"
 ] as const;
 export type IAppSetting = {
   [key in typeof routeKey[number]]?: string;
 };
+
+export const noFlights = "none";

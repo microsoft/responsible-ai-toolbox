@@ -2,6 +2,7 @@
 
 trigger:
   - main
+  - postbuild
 
 pool:
   vmImage: "ubuntu-latest"

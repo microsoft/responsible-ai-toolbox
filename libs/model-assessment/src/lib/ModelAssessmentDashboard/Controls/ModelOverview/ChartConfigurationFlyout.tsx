@@ -136,12 +136,6 @@ export class ChartConfigurationFlyout extends React.Component<
       this.props.featureBasedCohorts
     );
 
-    const noCohortSelected =
-      (this.state.datasetCohortViewIsNewlySelected &&
-        this.state.newlySelectedDatasetCohorts.length === 0) ||
-      (!this.state.datasetCohortViewIsNewlySelected &&
-        this.state.newlySelectedFeatureBasedCohorts.length === 0);
-
     const datasetCohortDropdownSelectedKeys: string[] =
       this.state.newlySelectedDatasetCohorts.map((n) => n.toString());
     if (
@@ -176,11 +170,15 @@ export class ChartConfigurationFlyout extends React.Component<
       }
     ];
 
+    const noCohortSelected = this.noCohortIsSelected();
+
     return (
       <Panel
         isOpen={this.props.isOpen}
         closeButtonAriaLabel="Close"
         onDismiss={this.props.onDismissFlyout}
+        onRenderFooterContent={this.onRenderFooterContent}
+        isFooterAtBottom
       >
         <Stack tokens={{ childrenGap: "10px" }}>
           <ChoiceGroup
@@ -238,25 +236,35 @@ export class ChartConfigurationFlyout extends React.Component<
               disabled={this.state.datasetCohortViewIsNewlySelected}
             />
           )}
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
-            <PrimaryButton
-              onClick={this.onConfirm}
-              text={
-                localization.ModelAssessment.ModelOverview.chartConfigConfirm
-              }
-              disabled={noCohortSelected}
-            />
-            <DefaultButton
-              onClick={this.props.onDismissFlyout}
-              text={
-                localization.ModelAssessment.ModelOverview.chartConfigCancel
-              }
-            />
-          </Stack>
         </Stack>
       </Panel>
     );
   }
+
+  private onRenderFooterContent = () => {
+    return (
+      <Stack horizontal tokens={{ childrenGap: "10px" }}>
+        <PrimaryButton
+          onClick={this.onConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          disabled={this.noCohortIsSelected()}
+        />
+        <DefaultButton
+          onClick={this.props.onDismissFlyout}
+          text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
+        />
+      </Stack>
+    );
+  };
+
+  private noCohortIsSelected = () => {
+    return (
+      (this.state.datasetCohortViewIsNewlySelected &&
+        this.state.newlySelectedDatasetCohorts.length === 0) ||
+      (!this.state.datasetCohortViewIsNewlySelected &&
+        this.state.newlySelectedFeatureBasedCohorts.length === 0)
+    );
+  };
 
   private onChoiceGroupChange = (
     _ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,

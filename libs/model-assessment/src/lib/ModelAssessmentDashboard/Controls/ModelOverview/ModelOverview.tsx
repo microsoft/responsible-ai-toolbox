@@ -208,17 +208,33 @@ export class ModelOverview extends React.Component<
       labeledStatistics = featureBasedCohortLabeledStatistics;
     }
 
+    // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
+    const showHeatmapToggleInDatasetCohortView =
+      this.state.datasetCohortViewIsVisible &&
+      this.context.errorCohorts.length > 1;
+    const showHeatmapToggleInFeatureCohortView =
+      !this.state.datasetCohortViewIsVisible &&
+      this.state.selectedFeatures.length > 0 &&
+      featureBasedCohorts.length > 1;
+
     return (
       <Stack
         className={classNames.sectionStack}
         tokens={{ childrenGap: "10px" }}
       >
-        <Text variant="medium" className={classNames.descriptionText}>
-          {localization.Interpret.ModelPerformance.helperText}
-        </Text>
-        {!this.props.showNewModelOverviewExperience && <OverallMetricChart />}
+        {!this.props.showNewModelOverviewExperience && (
+          <>
+            <Text variant="medium" className={classNames.descriptionText}>
+              {localization.Interpret.ModelPerformance.helperText}
+            </Text>
+            <OverallMetricChart />
+          </>
+        )}
         {this.props.showNewModelOverviewExperience && (
           <Stack tokens={{ childrenGap: "10px" }}>
+            <Text variant="medium" className={classNames.descriptionText}>
+              {localization.ModelAssessment.ModelOverview.topLevelDescription}
+            </Text>
             <Pivot onLinkClick={this.handleViewPivot}>
               <PivotItem
                 headerText={
@@ -235,6 +251,14 @@ export class ModelOverview extends React.Component<
                 itemKey={disaggregatedAnalysisPivotKey}
               />
             </Pivot>
+            {!this.state.datasetCohortViewIsVisible && (
+              <Text>
+                {
+                  localization.ModelAssessment.ModelOverview
+                    .featureBasedViewDescription
+                }
+              </Text>
+            )}
             <Stack horizontal tokens={{ childrenGap: "10px" }}>
               <ComboBox
                 placeholder={
@@ -296,14 +320,17 @@ export class ModelOverview extends React.Component<
                 </ActionButton>
               </Stack>
             )}
-            <Toggle
-              label={
-                localization.ModelAssessment.ModelOverview
-                  .visualDisplayToggleLabel
-              }
-              inlineLabel
-              onChange={this.onVisualDisplayToggleChange}
-            />
+            {(showHeatmapToggleInDatasetCohortView ||
+              showHeatmapToggleInFeatureCohortView) && (
+              <Toggle
+                label={
+                  localization.ModelAssessment.ModelOverview
+                    .visualDisplayToggleLabel
+                }
+                inlineLabel
+                onChange={this.onVisualDisplayToggleChange}
+              />
+            )}
             {this.state.datasetCohortViewIsVisible ? (
               <DatasetCohortStatsTable
                 selectableMetrics={selectableMetrics}
@@ -313,20 +340,16 @@ export class ModelOverview extends React.Component<
             ) : (
               <>
                 {this.state.selectedFeatures.length === 0 && (
-                  <ActionButton
-                    onClick={() => {
-                      this.featureComboBoxRef.current?.focus(true);
-                    }}
-                  >
+                  <MissingParametersPlaceholder>
                     {
                       localization.ModelAssessment.ModelOverview
                         .disaggregatedAnalysisFeatureSelectionPlaceholder
                     }
-                  </ActionButton>
+                  </MissingParametersPlaceholder>
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>
-                    <Text className={classNames.generalText}>
+                    <Text className={classNames.generalSemiBoldText}>
                       {localization.formatString(
                         localization.ModelAssessment.ModelOverview
                           .disaggregatedAnalysisBaseCohortDislaimer,
