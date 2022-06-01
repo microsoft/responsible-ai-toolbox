@@ -101,6 +101,7 @@ export class CausalWhatIf extends React.Component<
                 value={this.state.newTreatmentValue}
                 onChange={this.onTreatmentValueChange}
                 valueFormat={this.showNewTreatmentRawValue}
+                disabled={!this.context.requestCausalWhatIf}
               />
               <Text variant="small" className={classNames.treatmentValue}>
                 {localization.formatString(
@@ -122,16 +123,18 @@ export class CausalWhatIf extends React.Component<
                     value={this.state.currentOutcome}
                   />
                 </Stack.Item>
-                <Stack.Item className={classNames.newOutcome}>
-                  <Outcome
-                    label={
-                      localization.CausalAnalysis.IndividualView.newOutcome
-                    }
-                    value={this.state.newOutcome?.point_estimate}
-                    lower={this.state.newOutcome?.ci_lower}
-                    upper={this.state.newOutcome?.ci_upper}
-                  />
-                </Stack.Item>
+                {this.context.requestCausalWhatIf !== undefined && (
+                  <Stack.Item className={classNames.newOutcome}>
+                    <Outcome
+                      label={
+                        localization.CausalAnalysis.IndividualView.newOutcome
+                      }
+                      value={this.state.newOutcome?.point_estimate}
+                      lower={this.state.newOutcome?.ci_lower}
+                      upper={this.state.newOutcome?.ci_upper}
+                    />
+                  </Stack.Item>
+                )}
               </Stack>
             </Stack.Item>
           </Stack>
@@ -232,7 +235,7 @@ export class CausalWhatIf extends React.Component<
       return v;
     }
     if (
-      (meta.isCategorical || meta.treatAsCategorical) &&
+      (meta.isCategorical || meta?.treatAsCategorical) &&
       meta.sortedCategoricalValues
     ) {
       return meta.sortedCategoricalValues[v];

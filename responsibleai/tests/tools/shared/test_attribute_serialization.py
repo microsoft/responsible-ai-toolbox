@@ -55,12 +55,14 @@ class TestAttributeSerialization:
 
         example = Example(a='A', b='B', c='C')
 
-        save_attributes(example, ['a', 'b'], save_dir)
+        save_attributes(example, ['a', 'b'], save_dir,
+                        file_format=SerializationFormats.JSON)
 
         o_post = Example()
-        message = ".*No such file or directory: .*save-dir[\\\\/]+c.pkl"
+        message = ".*No such file or directory: .*save-dir[\\\\/]+c.json"
         with pytest.raises(FileNotFoundError, match=message):
-            load_attributes(o_post, ['a', 'b', 'c'], save_dir)
+            load_attributes(o_post, ['a', 'b', 'c'], save_dir,
+                            file_format=SerializationFormats.JSON)
 
     def test_missing_attribute_pass(self, tmpdir):
         save_dir = tmpdir.mkdir('save-dir')

@@ -124,7 +124,13 @@ class TestCounterfactualAdvancedFeatures(object):
                 directory_manager.get_generators_directory() / "explainer.pkl"
             os.remove(explainer_pkl_path)
 
-        rai_insights_copy_new = RAIInsights.load(save_dir)
+        with pytest.warns(UserWarning,
+                          match='ERROR-LOADING-COUNTERFACTUAL-EXPLAINER: '
+                                'There was an error loading the '
+                                'counterfactual explainer model. '
+                                'Retraining the counterfactual '
+                                'explainer.'):
+            rai_insights_copy_new = RAIInsights.load(save_dir)
         counterfactual_config_list = \
             rai_insights_copy_new.counterfactual._counterfactual_config_list
         assert len(counterfactual_config_list) == 2

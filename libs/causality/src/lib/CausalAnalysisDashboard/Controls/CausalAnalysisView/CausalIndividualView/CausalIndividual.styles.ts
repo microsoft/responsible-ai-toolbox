@@ -23,8 +23,8 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
   () => {
     return mergeStyleSets<ICausalIndividualStyles>({
       aggregateChart: {
-        display: "flex",
-        height: "100%"
+        height: "100%",
+        width: "80%"
       },
       callout: {
         margin: "-5px 0 0 -15px"
@@ -39,19 +39,19 @@ export const CausalIndividualStyles: () => IProcessedStyleSet<ICausalIndividualS
         flex: "1",
         fontSize: 14,
         maxWidth: descriptionMaxWidth,
-        paddingBottom: "15px",
         textAlign: "left"
       },
       header: {
         fontSize: 14,
         fontWeight: "600",
-        paddingTop: "70px"
+        marginTop: "0px !important"
       },
       individualChart: {
         width: "100%"
       },
       individualTable: {
-        width: "70%"
+        marginTop: "0px !important",
+        width: "80%"
       },
       lasso: {
         display: "inline-block",

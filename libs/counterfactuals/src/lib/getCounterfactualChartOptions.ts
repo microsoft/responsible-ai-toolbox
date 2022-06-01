@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { FabricStyles } from "@responsible-ai/core-ui";
+import { WhatIfConstants } from "@responsible-ai/interpret";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getCounterfactualChartOptions(
@@ -15,7 +17,11 @@ export function getCounterfactualChartOptions(
         customdata: series?.customdata?.[index],
         marker: {
           fillColor:
-            seriesIndex === 0 ? series?.marker?.color?.[index] : undefined,
+            seriesIndex === 0
+              ? series?.marker?.color?.[index]
+              : FabricStyles.fabricColorPalette[
+                  WhatIfConstants.MAX_SELECTION + 1 + index
+                ],
           lineColor:
             seriesIndex === 0 ? undefined : series?.marker?.line?.color,
           lineWidth: seriesIndex === 0 ? undefined : 3,
@@ -61,7 +67,8 @@ export function getCounterfactualChartOptions(
               onClickHandler(this);
             }
           }
-        }
+        },
+        turboThreshold: 0
       }
     },
     series

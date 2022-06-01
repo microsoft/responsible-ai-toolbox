@@ -31,16 +31,21 @@ export function describeModelPerformanceSideBar(
           `${Locators.DECChoiceFieldGroup} label:contains(${dataShape.modelStatisticsData?.yAxisNewPanelValue})`
         )
         .click();
-      cy.get(Locators.MSSideBarNumberOfBinsInput)
-        .clear()
-        .type(dataShape.modelStatisticsData?.yAxisNumberOfBins || "8");
+      cy.get(Locators.AxisConfigPanel).then(($panel) => {
+        if ($panel.find(Locators.MSSideBarNumberOfBinsInput).length > 0) {
+          cy.get(Locators.MSSideBarNumberOfBinsInput)
+            .clear()
+            .type(dataShape.modelStatisticsData?.yAxisNumberOfBins || "5");
+        }
+      });
+
       cy.get(Locators.SelectButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.yAxisNewValue || "age"
       );
       cy.get(Locators.MSSideBarCards).should(
         "have.length",
-        dataShape.modelStatisticsData?.yAxisNumberOfBins || "8"
+        dataShape.modelStatisticsData?.yAxisNumberOfBins || "5"
       );
       // Side bar should be scrollable when data cards overflows
       cy.get(Locators.MSScrollable).should("exist");
