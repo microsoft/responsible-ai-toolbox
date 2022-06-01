@@ -60,7 +60,7 @@ export interface ICounterfactualListProps {
 
 interface ICounterfactualListState {
   data: Record<string, string | number>;
-  // displayedData is to allow user type in decimal point
+  // displayedData allows user to type in decimal point
   displayedData: Record<string, string | number>;
   showCallout: boolean;
 }
