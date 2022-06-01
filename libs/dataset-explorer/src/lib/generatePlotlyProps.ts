@@ -30,14 +30,14 @@ export function generatePlotlyProps(
       if (
         chartProps.colorAxis &&
         (chartProps.colorAxis.options.bin ||
-          jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
+          jointData.metaDict[chartProps.colorAxis.property]?.treatAsCategorical)
       ) {
         cohort.sort(chartProps.colorAxis.property);
       }
       plotlyProps.data[0].type = chartProps.chartType;
       plotlyProps.data[0].mode = PlotlyMode.Markers;
       if (chartProps.xAxis) {
-        if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
           const xLabels =
             jointData.metaDict[chartProps.xAxis.property]
               .sortedCategoricalValues;
@@ -56,7 +56,7 @@ export function generatePlotlyProps(
         }
       }
       if (chartProps.yAxis) {
-        if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
           const yLabels =
             jointData.metaDict[chartProps.yAxis.property]
               .sortedCategoricalValues;
@@ -80,7 +80,7 @@ export function generatePlotlyProps(
 
         if (
           jointData.metaDict[chartProps.colorAxis.property]
-            .treatAsCategorical ||
+            ?.treatAsCategorical ||
           isBinned
         ) {
           const styles = jointData.metaDict[
@@ -129,7 +129,7 @@ export function generatePlotlyProps(
       const xLabels = xMeta.sortedCategoricalValues;
       const xLabelIndexes = xLabels?.map((_, index) => index);
       // color series will be set by the y axis if it is categorical, otherwise no color for aggregate charts
-      if (!jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+      if (!jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
         plotlyProps.data[0].type = "box";
         // avoid trace0 when hovered
         plotlyProps.data[0].name = "";
