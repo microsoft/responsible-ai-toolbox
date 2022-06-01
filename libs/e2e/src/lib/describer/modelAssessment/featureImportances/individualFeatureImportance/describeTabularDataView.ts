@@ -5,12 +5,18 @@ import { getMenu } from "../../../../../util/getMenu";
 import { selectRow } from "../../../../../util/Table";
 import { Locators } from "../../Constants";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
-import { regExForNumbersWithBrackets } from "../../modelAssessmentDatasets";
+import {
+  modelAssessmentDatasets,
+  regExForNumbersWithBrackets
+} from "../../modelAssessmentDatasets";
 
 // import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
 
-export function describeTabularDataView(dataShape: IModelAssessmentData): void {
+export function describeTabularDataView(
+  dataShape: IModelAssessmentData,
+  name?: keyof typeof modelAssessmentDatasets
+): void {
   describe("Tabular data view", () => {
     before(() => {
       getMenu("Individual feature importance").click();
@@ -65,7 +71,7 @@ export function describeTabularDataView(dataShape: IModelAssessmentData): void {
     //   describeSubBarChart(dataShape);
     // }
     if (!dataShape.featureImportanceData?.noPredict) {
-      describeSubLineChart(dataShape);
+      describeSubLineChart(dataShape, name);
     }
   });
 }

@@ -28,6 +28,9 @@ export function getDependencyChartOptions(
       type: "scatter",
       zoomType: "xy"
     },
+    custom: {
+      disableUpdate: true
+    },
     plotOptions: {
       scatter: {
         marker: {

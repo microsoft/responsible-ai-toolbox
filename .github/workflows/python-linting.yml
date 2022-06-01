@@ -2,9 +2,9 @@ name: Python Linting
 
 on:
   push:
-    branches: [main]
+    branches: [main, postbuild]
   pull_request:
-    branches: [main]
+    branches: [main, postbuild]
 
 jobs:
   build:

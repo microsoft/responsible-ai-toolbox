@@ -30,7 +30,7 @@ class ResponsibleAIDashboard(Dashboard):
     """
     def __init__(self, analysis: RAIInsights,
                  public_ip=None, port=None, locale=None,
-                 cohort_list=None):
+                 cohort_list=None, **kwargs):
         self.input = ResponsibleAIDashboardInput(
             analysis, cohort_list=cohort_list)
 
@@ -40,7 +40,8 @@ class ResponsibleAIDashboard(Dashboard):
             public_ip=public_ip,
             port=port,
             locale=locale,
-            no_inline_dashboard=True)
+            no_inline_dashboard=True,
+            **kwargs)
 
         def predict():
             data = request.get_json(force=True)

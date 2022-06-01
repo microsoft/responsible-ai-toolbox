@@ -8,7 +8,8 @@ import {
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
-  IModelAssessmentDashboardProps
+  IModelAssessmentDashboardProps,
+  parseFeatureFlights
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
@@ -65,6 +66,7 @@ export class ModelAssessment extends React.Component {
         localUrl={config.baseUrl}
         locale={config.locale}
         theme={undefined}
+        featureFlights={parseFeatureFlights(config.featureFlights)}
       />
     );
   }

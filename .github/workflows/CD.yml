@@ -19,7 +19,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: [main, postbuild]
   workflow_dispatch:
 
 jobs:
@@ -111,7 +111,7 @@ jobs:
         run: pytest --durations=10
 
       - name: Upload a Build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist

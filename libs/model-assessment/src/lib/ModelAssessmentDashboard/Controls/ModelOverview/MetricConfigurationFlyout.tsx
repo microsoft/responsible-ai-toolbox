@@ -124,19 +124,19 @@ export class MetricConfigurationFlyout extends React.Component<
         <Stack tokens={{ childrenGap: "10px" }}>
           <Text variant={"xLarge"}>
             {
-              localization.ModelAssessment.ModelOverview.featureConfiguration
+              localization.ModelAssessment.ModelOverview.metricConfiguration
                 .flyoutHeader
             }
           </Text>
           <Text variant={"large"}>
             {
-              localization.ModelAssessment.ModelOverview.featureConfiguration
+              localization.ModelAssessment.ModelOverview.metricConfiguration
                 .flyoutSubHeader
             }
           </Text>
           <Text>
             {
-              localization.ModelAssessment.ModelOverview.featureConfiguration
+              localization.ModelAssessment.ModelOverview.metricConfiguration
                 .flyoutDescription
             }
           </Text>
