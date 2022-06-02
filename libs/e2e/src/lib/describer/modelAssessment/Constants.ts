@@ -44,6 +44,7 @@ export enum Locators {
   WhatIfScatterChartYAxis = "#IndividualFeatureContainer div[class^='rotatedVerticalBox']",
   WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
   WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
+  WhatIfScatterChartSelectFeatureCaretButton = "#AxisConfigPanel i[data-icon-name='ChevronDown']",
   WhatIfAxisPanel = "#AxisConfigPanel",
   AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",
   AxisFeatureDropdownOption = "div.ms-ComboBox-optionsContainerWrapper  button[role='option']",

@@ -503,7 +503,7 @@ export class CohortEditor extends React.PureComponent<
   private setDefaultStateForKey(key: string): void {
     const filter: IFilter = { column: key } as IFilter;
     const meta = this.props.jointDataset.metaDict[key];
-    if (meta.treatAsCategorical && meta.sortedCategoricalValues) {
+    if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
       filter.method = FilterMethods.Includes;
       filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
     } else {
