@@ -10,6 +10,7 @@ from ..common_utils import create_adult_income_dataset
 
 def test_causal_classification_scikitlearn_issue():
     # This test gets stuck on SciKit-Learn v1.1.0
+    # Issue appears fixed with v1.1.1
     # See PR #1429
     data_train, data_test, _, _, categorical_features, \
         _, target_name, classes = create_adult_income_dataset()
