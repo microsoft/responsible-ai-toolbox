@@ -477,10 +477,14 @@ modelAssessmentDatasetsNewModelOverviewExperience[
     name: "All data",
     sampleSize: "89",
     metrics: {
-      meanAbsoluteError: "3 914.84",
-      meanSquaredError: "3 092.951",
-      meanPrediction: "153.047"
+      meanAbsoluteError: "3 859.27",
+      meanSquaredError: "2 981.101",
+      meanPrediction: "154.102"
     }
+  },
+  featureCohortView: {
+    singleFeatureCohorts: 3,
+    multiFeatureCohorts: 9
   }
 };
 

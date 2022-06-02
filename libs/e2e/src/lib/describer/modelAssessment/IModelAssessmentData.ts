@@ -59,6 +59,10 @@ export interface IModelOverviewData {
     name: string,
     sampleSize: string,
     metrics: {[name: string]: string}
+  },
+  featureCohortView: {
+    singleFeatureCohorts: number,
+    multiFeatureCohorts: number
   }
 }
 

@@ -108,6 +108,9 @@ export enum Locators {
   ModelOverviewFeatureConfigurationActionButton = "#ModelOverview #modelOverviewFeatureConfigurationActionButton",
   ModelOverviewHeatmapVisualDisplayToggle = "#ModelOverview #modelOverviewHeatmapVisualDisplayToggle",
   ModelOverviewCohortViewSelector = "#ModelOverview #modelOverviewCohortViewSelector",
+  ModelOverviewCohortViewSelectorButtons = "#ModelOverview #modelOverviewCohortViewSelector button",
+  ModelOverviewCohortViewFeatureCohortViewButton = "#ModelOverview #modelOverviewCohortViewSelector button[name='Feature cohorts']",
+  ModelOverviewCohortViewDatasetCohortViewButton = "#ModelOverview #modelOverviewCohortViewSelector button[name='Dataset cohorts']",
   ModelOverviewDatasetCohortStatsTable = "#ModelOverview #modelOverviewDatasetCohortStatsTable",
   ModelOverviewDisaggregatedAnalysisTable = "#ModelOverview #modelOverviewDisaggregatedAnalysisTable",
   ModelOverviewTableYAxisGrid = "#ModelOverview .highcharts-grid-axis > span",
@@ -115,7 +118,7 @@ export enum Locators {
   ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer = "#ModelOverview #modelOverviewDisaggregatedAnalysisBaseCohortDisclaimer",
   ModelOverviewDisaggregatedAnalysisBaseCohortWarning = "#ModelOverview #modelOverviewDisaggregatedAnalysisBaseCohortWarning",
   ModelOverviewChartPivot = "#ModelOverview #modelOverviewChartPivot",
-  ModelOverviewChartPivotItems = "#ModelOverview #modelOverviewChartPivot .button",
+  ModelOverviewChartPivotItems = "#ModelOverview #modelOverviewChartPivot .ms-Pivot-link",
   ModelOverviewProbabilityDistributionChart = "#ModelOverview #modelOverviewProbabilityDistributionChart",
   ModelOverviewProbabilityDistributionChartToggle = "#ModelOverview #modelOverviewProbabilityDistributionChartToggle",
   ModelOverviewProbabilityDistributionLineChartCohortSelectionButton = "#ModelOverview #modelOverviewProbabilityDistributionLineChartCohortSelectionButton",
@@ -123,5 +126,7 @@ export enum Locators {
   ModelOverviewProbabilityDistributionChartLabelSelectionFlyout = "#ModelOverview #modelOverviewProbabilityDistributionChartLabelSelectionFlyout",
   ModelOverviewMetricChartCohortSelectionButton = "#ModelOverview #modelOverviewMetricChartCohortSelectionButton",
   ModelOverviewMetricChart = "#ModelOverview #ModelOverviewMetricChart",
-  CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')",
+  ModelOverviewMetricChartBars = "#ModelOverview #ModelOverviewMetricChart .highcharts-bar-series > rect",
+  MissingParameterPlaceholder = "#ModelOverview #MissingParameterPlaceholder",
+  CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')"
 }
