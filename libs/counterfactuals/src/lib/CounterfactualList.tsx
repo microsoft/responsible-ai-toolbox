@@ -323,9 +323,7 @@ export class CounterfactualList extends React.Component<
       );
       this.setState((prevState) => {
         prevState.data[id] = option.text;
-        return {
-          data: { ...prevState.data }
-        };
+        return { data: { ...prevState.data } };
       });
     }
   };
@@ -343,9 +341,7 @@ export class CounterfactualList extends React.Component<
       prevState.data[id] = newValue?.endsWith(".")
         ? newValue
         : toNumber(newValue);
-      return {
-        data: { ...prevState.data }
-      };
+      return { data: { ...prevState.data } };
     });
   };
 
