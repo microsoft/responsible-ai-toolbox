@@ -61,8 +61,6 @@ export interface ICounterfactualListProps {
 
 interface ICounterfactualListState {
   data: Record<string, string | number>;
-  // displayedData allows user to type in decimal point
-  displayedData: Record<string, string | number>;
   showCallout: boolean;
 }
 
@@ -79,7 +77,6 @@ export class CounterfactualList extends React.Component<
     super(props);
     this.state = {
       data: {},
-      displayedData: {},
       showCallout: false
     };
   }
@@ -193,7 +190,7 @@ export class CounterfactualList extends React.Component<
       localization.Interpret.WhatIf.defaultCustomRootName,
       this.props.selectedIndex
     );
-    this.setState({ data, displayedData: _.cloneDeep(data) });
+    this.setState({ data });
   }
 
   private renderName = (
@@ -207,7 +204,7 @@ export class CounterfactualList extends React.Component<
         <Stack>
           <Stack.Item>
             <TextField
-              value={this.state.displayedData[nameColumnKey]?.toString()}
+              value={this.state.data[nameColumnKey]?.toString()}
               label={localization.Counterfactuals.createOwn}
               id={nameColumnKey}
               disabled
@@ -326,10 +323,8 @@ export class CounterfactualList extends React.Component<
       );
       this.setState((prevState) => {
         prevState.data[id] = option.text;
-        prevState.displayedData[id] = option.text;
         return {
-          data: { ...prevState.data },
-          displayedData: { ...prevState.displayedData }
+          data: { ...prevState.data }
         };
       });
     }
@@ -345,13 +340,11 @@ export class CounterfactualList extends React.Component<
       this.props.data?.feature_names_including_target.indexOf(id);
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
-      prevState.data[id] = toNumber(newValue);
-      prevState.displayedData[id] = newValue?.endsWith(".")
+      prevState.data[id] = newValue?.endsWith(".")
         ? newValue
         : toNumber(newValue);
       return {
-        data: { ...prevState.data },
-        displayedData: { ...prevState.displayedData }
+        data: { ...prevState.data }
       };
     });
   };
@@ -434,7 +427,7 @@ export class CounterfactualList extends React.Component<
         <Stack horizontal={false}>
           <Stack.Item>
             <TextField
-              value={this.state.displayedData[column.key]?.toString()}
+              value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
               id={column.key}
               onChange={this.updateColValue}
