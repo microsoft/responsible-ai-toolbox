@@ -5,4 +5,7 @@ import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 
 const datasetShape =
   modelAssessmentDatasets.HousingClassificationModelDebugging;
-describeWhatIf(datasetShape, "HousingClassificationModelDebuggingNewModelOverviewExperience");
+describeWhatIf(
+  datasetShape,
+  "HousingClassificationModelDebuggingNewModelOverviewExperience"
+);

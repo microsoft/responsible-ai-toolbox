@@ -7,4 +7,7 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.HousingDecisionMaking;
-describeErrorAnalysis(datasetShape, "HousingDecisionMakingNewModelOverviewExperience");
+describeErrorAnalysis(
+  datasetShape,
+  "HousingDecisionMakingNewModelOverviewExperience"
+);

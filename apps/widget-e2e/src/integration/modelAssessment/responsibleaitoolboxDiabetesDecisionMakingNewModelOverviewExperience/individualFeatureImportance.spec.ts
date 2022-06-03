@@ -7,4 +7,7 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
-describeIndividualFeatureImportance(datasetShape, "DiabetesDecisionMakingNewModelOverviewExperience");
+describeIndividualFeatureImportance(
+  datasetShape,
+  "DiabetesDecisionMakingNewModelOverviewExperience"
+);

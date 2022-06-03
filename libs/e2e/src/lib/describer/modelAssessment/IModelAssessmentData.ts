@@ -56,14 +56,14 @@ export interface IModelStatisticsData {
 
 export interface IModelOverviewData {
   initialCohort: {
-    name: string,
-    sampleSize: string,
-    metrics: {[name: string]: string}
-  },
+    name: string;
+    sampleSize: string;
+    metrics: { [name: string]: string };
+  };
   featureCohortView: {
-    singleFeatureCohorts: number,
-    multiFeatureCohorts: number
-  }
+    singleFeatureCohorts: number;
+    multiFeatureCohorts: number;
+  };
 }
 
 export interface IDatasetExplorerData {

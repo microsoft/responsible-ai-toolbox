@@ -7,4 +7,7 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.MulticlassDnnModelDebugging;
-describeDatasetExplorer(datasetShape, "MulticlassDnnModelDebuggingNewModelOverviewExperience");
+describeDatasetExplorer(
+  datasetShape,
+  "MulticlassDnnModelDebuggingNewModelOverviewExperience"
+);

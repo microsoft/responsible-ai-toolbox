@@ -8,4 +8,7 @@ import {
 
 const datasetShape =
   modelAssessmentDatasets.HousingClassificationModelDebugging;
-describeDatasetExplorer(datasetShape, "HousingClassificationModelDebuggingNewModelOverviewExperience");
+describeDatasetExplorer(
+  datasetShape,
+  "HousingClassificationModelDebuggingNewModelOverviewExperience"
+);

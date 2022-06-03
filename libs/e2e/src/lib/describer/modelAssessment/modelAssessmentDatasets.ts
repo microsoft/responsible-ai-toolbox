@@ -461,7 +461,7 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
 };
 
 // create copy for newModelOverviewExperience to allow for additions and changes
-let modelAssessmentDatasetsNewModelOverviewExperience: {
+const modelAssessmentDatasetsNewModelOverviewExperience: {
   [name: string]: IModelAssessmentData;
 } = {};
 Object.keys(modelAssessmentDatasets).forEach((k: string) => {
@@ -470,23 +470,22 @@ Object.keys(modelAssessmentDatasets).forEach((k: string) => {
   ] = JSON.parse(JSON.stringify(modelAssessmentDatasets[k]));
 });
 
-modelAssessmentDatasetsNewModelOverviewExperience[
-  "DiabetesRegressionModelDebuggingNewModelOverviewExperience"
-].modelOverviewData = {
-  initialCohort: {
-    name: "All data",
-    sampleSize: "89",
-    metrics: {
-      meanAbsoluteError: "3 859.27",
-      meanSquaredError: "2 981.101",
-      meanPrediction: "154.102"
+modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
+  {
+    featureCohortView: {
+      multiFeatureCohorts: 9,
+      singleFeatureCohorts: 3
+    },
+    initialCohort: {
+      metrics: {
+        meanAbsoluteError: "3 859.27",
+        meanPrediction: "154.102",
+        meanSquaredError: "2 981.101"
+      },
+      name: "All data",
+      sampleSize: "89"
     }
-  },
-  featureCohortView: {
-    singleFeatureCohorts: 3,
-    multiFeatureCohorts: 9
-  }
-};
+  };
 
 const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;

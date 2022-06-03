@@ -3,4 +3,7 @@
 
 import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
-describeWhatIf(datasetShape, "DiabetesDecisionMakingNewModelOverviewExperience");
+describeWhatIf(
+  datasetShape,
+  "DiabetesDecisionMakingNewModelOverviewExperience"
+);

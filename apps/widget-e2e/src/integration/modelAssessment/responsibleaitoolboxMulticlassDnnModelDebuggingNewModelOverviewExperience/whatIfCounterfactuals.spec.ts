@@ -4,4 +4,7 @@
 import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.MulticlassDnnModelDebugging;
-describeWhatIf(datasetShape, "MulticlassDnnModelDebuggingNewModelOverviewExperience");
+describeWhatIf(
+  datasetShape,
+  "MulticlassDnnModelDebuggingNewModelOverviewExperience"
+);

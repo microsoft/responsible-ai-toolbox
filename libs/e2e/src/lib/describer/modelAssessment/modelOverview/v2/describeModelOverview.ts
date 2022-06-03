@@ -95,17 +95,17 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     .next()
     .should(
       "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics["meanAbsoluteError"]
+      datasetShape.modelOverviewData?.initialCohort.metrics.meanAbsoluteError
     )
     .next()
     .should(
       "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics["meanSquaredError"]
+      datasetShape.modelOverviewData?.initialCohort.metrics.meanSquaredError
     )
     .next()
     .should(
       "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics["meanPrediction"]
+      datasetShape.modelOverviewData?.initialCohort.metrics.meanPrediction
     );
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
@@ -129,9 +129,10 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "aria-label",
       `1. ${
         datasetShape.modelOverviewData?.initialCohort.name
-      }, ${datasetShape.modelOverviewData?.initialCohort.metrics[
-        "meanAbsoluteError"
-      ].replace(" ", ",")}.`
+      }, ${datasetShape.modelOverviewData?.initialCohort.metrics.meanAbsoluteError.replace(
+        " ",
+        ","
+      )}.`
     );
 }
 

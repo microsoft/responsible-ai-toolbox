@@ -8,4 +8,7 @@ import {
 
 const datasetShape =
   modelAssessmentDatasets.HousingClassificationModelDebugging;
-describeCausalAnalysis(datasetShape, "HousingClassificationModelDebuggingNewModelOverviewExperience");
+describeCausalAnalysis(
+  datasetShape,
+  "HousingClassificationModelDebuggingNewModelOverviewExperience"
+);

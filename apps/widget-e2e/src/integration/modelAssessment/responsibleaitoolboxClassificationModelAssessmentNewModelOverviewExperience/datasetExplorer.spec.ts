@@ -7,4 +7,7 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
-describeDatasetExplorer(datasetShape, "CensusClassificationModelDebuggingNewModelOverviewExperience");
+describeDatasetExplorer(
+  datasetShape,
+  "CensusClassificationModelDebuggingNewModelOverviewExperience"
+);

@@ -112,7 +112,7 @@ once.
 2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
-5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`. 
+5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
 
 cypress window will open locally - select test file to run the tests
 
@@ -153,7 +153,6 @@ Example with multiple flights `f1` and `f2`:
 Furthermore, when iterating on writing such tests it may not be necessary to
 regenerate the notebook(s) every single time. To avoid wasting time on this
 there's an option `--skipgen` to skip the notebook generation.
-
 
 #### Test UX and SDK changes
 

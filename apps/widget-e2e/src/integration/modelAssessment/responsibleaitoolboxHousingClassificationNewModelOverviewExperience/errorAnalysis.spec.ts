@@ -8,4 +8,7 @@ import {
 
 const datasetShape =
   modelAssessmentDatasets.HousingClassificationModelDebugging;
-describeErrorAnalysis(datasetShape, "HousingClassificationModelDebuggingNewModelOverviewExperience");
+describeErrorAnalysis(
+  datasetShape,
+  "HousingClassificationModelDebuggingNewModelOverviewExperience"
+);
