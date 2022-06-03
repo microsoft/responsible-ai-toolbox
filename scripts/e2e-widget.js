@@ -17,6 +17,9 @@ const fileNames = [
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging"
 ];
+// List all flight combinations for which to generate notebooks.
+// The empty list represents "no flights" and should always be present.
+// Combinations of multiple flights are possible via a comma-separated list.
 const flightCombinations = [[], ["newModelOverviewExperience"]];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
