@@ -49,7 +49,7 @@ export class ExistingPredictionLabels extends React.Component<IExistingPredictio
         let tempPredictedProb: number | undefined = undefined;
         if (
           this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
-            .treatAsCategorical
+            ?.treatAsCategorical
         ) {
           const categoricalValues =
             this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]

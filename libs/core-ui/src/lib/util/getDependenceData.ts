@@ -21,7 +21,7 @@ export function getDependenceData(
   if (
     chartProps.colorAxis &&
     (chartProps.colorAxis.options.bin ||
-      jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
+      jointData.metaDict[chartProps.colorAxis.property]?.treatAsCategorical)
   ) {
     cohort.sort(chartProps.colorAxis.property);
   }
@@ -43,7 +43,7 @@ export function getDependenceData(
       });
       rawX.forEach((val, index) => {
         // If categorical, show string value in tooltip
-        if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
           customData[index].X =
             jointData.metaDict[
               chartProps.xAxis.property

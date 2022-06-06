@@ -445,7 +445,7 @@ export class MultiICEPlot extends React.PureComponent<
     if (!summary || summary.index === undefined) {
       return undefined;
     }
-    if (summary.treatAsCategorical) {
+    if (summary?.treatAsCategorical) {
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
         return {
