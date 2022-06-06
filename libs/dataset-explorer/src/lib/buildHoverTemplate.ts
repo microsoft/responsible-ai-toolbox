@@ -44,7 +44,7 @@ export function buildHoverTemplate(
       hovertemplate += `${xName}: %{text}<br>`;
       if (
         chartProps.yAxis.property !== ColumnCategories.None &&
-        jointData.metaDict[chartProps.yAxis.property].treatAsCategorical
+        jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical
       ) {
         hovertemplate += `${yName}: %{customdata.Y}<br>`;
       }

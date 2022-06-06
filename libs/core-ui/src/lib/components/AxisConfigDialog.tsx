@@ -213,7 +213,7 @@ export class AxisConfigDialog extends React.PureComponent<
                       onChange={this.setAsCategorical}
                     />
                   )}
-                {selectedMeta.treatAsCategorical ? (
+                {selectedMeta?.treatAsCategorical ? (
                   <>
                     <Text variant={"small"}>
                       {`${localization.formatString(
@@ -320,7 +320,7 @@ export class AxisConfigDialog extends React.PureComponent<
   };
 
   private getMinValue(selectedMeta: IJointMeta): number | string {
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+    if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
       return 0;
     }
     if (Number.isInteger(selectedMeta.featureRange.min)) {
@@ -332,7 +332,7 @@ export class AxisConfigDialog extends React.PureComponent<
   }
 
   private getMaxValue(selectedMeta: IJointMeta): number | string {
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+    if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
       return 0;
     }
     if (Number.isInteger(selectedMeta.featureRange.max)) {
@@ -460,7 +460,7 @@ export class AxisConfigDialog extends React.PureComponent<
   private setDefaultStateForKey(property: string): void {
     const dither =
       this.props.canDither &&
-      this.props.jointDataset.metaDict[property].treatAsCategorical;
+      this.props.jointDataset.metaDict[property]?.treatAsCategorical;
     const binCount = this._getBinCountForProperty(property);
     this.setState({
       binCount,
@@ -516,7 +516,7 @@ export class AxisConfigDialog extends React.PureComponent<
   private _getBinCountForProperty(key: string): number | undefined {
     const selectedMeta = this.props.jointDataset.metaDict[key];
     let binCount = undefined;
-    if (this.props.canBin && !selectedMeta.treatAsCategorical) {
+    if (this.props.canBin && !selectedMeta?.treatAsCategorical) {
       binCount =
         selectedMeta.sortedCategoricalValues !== undefined
           ? selectedMeta.sortedCategoricalValues.length

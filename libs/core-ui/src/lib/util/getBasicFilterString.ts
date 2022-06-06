@@ -29,7 +29,7 @@ export function getBasicFilterString(
     }
     if (filter.method === FilterMethods.Equal) {
       method = "==";
-      if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
+      if (metaDict?.treatAsCategorical && metaDict.sortedCategoricalValues) {
         const catArg = (metaDict.sortedCategoricalValues as string[])[
           filter.arg[0]
         ];

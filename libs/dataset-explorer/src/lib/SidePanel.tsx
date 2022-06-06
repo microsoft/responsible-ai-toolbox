@@ -108,7 +108,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
         colorAxis &&
         (colorAxis.options.bin ||
           this.props.jointDataset.metaDict[colorAxis.property]
-            .treatAsCategorical)
+            ?.treatAsCategorical)
       ) {
         this.props.cohorts[this.props.selectedCohortIndex].sort(
           colorAxis.property
@@ -124,7 +124,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
       const colorAxis = this.props.chartProps.yAxis;
       if (
         this.props.jointDataset.metaDict[colorAxis.property]
-          .treatAsCategorical &&
+          ?.treatAsCategorical &&
         colorAxis.property !== ColumnCategories.None
       ) {
         this.props.cohorts[this.props.selectedCohortIndex].sort(
@@ -136,7 +136,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
           )
         );
         colorSeries = this.props.jointDataset.metaDict[colorAxis.property]
-          .treatAsCategorical
+          ?.treatAsCategorical
           ? includedIndexes.map(
               (category) =>
                 this.props.jointDataset.metaDict[colorAxis.property]

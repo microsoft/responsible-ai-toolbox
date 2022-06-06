@@ -91,7 +91,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
     const numericDelta =
-      selectedMeta.treatAsCategorical ||
+      selectedMeta?.treatAsCategorical ||
       selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
       !selectedMeta.featureRange
         ? 1
@@ -105,7 +105,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
       this.props.filterIndex !== this.props.filters.length;
     const styles = cohortEditorStyles();
     let minVal, maxVal;
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+    if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
       // Numerical values treated as categorical are stored with the values in the column,
       // true categorical values store indexes to the string values
       categoricalOptions = selectedMeta.sortedCategoricalValues?.map(
@@ -134,11 +134,11 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             <Checkbox
               key={this.props.openedFilter.column}
               label={localization.Interpret.CohortEditor.TreatAsCategorical}
-              checked={selectedMeta.treatAsCategorical}
+              checked={selectedMeta?.treatAsCategorical}
               onChange={this.props.setAsCategorical}
             />
           )}
-        {selectedMeta.treatAsCategorical ? (
+        {selectedMeta?.treatAsCategorical ? (
           <>
             <Text variant={"small"}>
               {`${localization.formatString(
