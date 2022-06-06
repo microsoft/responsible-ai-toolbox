@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   getCompositeFilterString,
@@ -23,7 +24,6 @@ import {
   MessageBar,
   MessageBarType
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";

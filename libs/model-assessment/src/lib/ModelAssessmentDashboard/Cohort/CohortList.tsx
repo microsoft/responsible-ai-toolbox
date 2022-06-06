@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   Cohort,
   CohortEditor,
@@ -22,7 +23,6 @@ import {
   SelectionMode,
   IconButton
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";

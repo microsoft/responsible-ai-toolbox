@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
@@ -10,7 +11,6 @@ import {
   Stack,
   Text
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

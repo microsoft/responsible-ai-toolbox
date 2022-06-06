@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -19,7 +20,6 @@ import {
   TooltipHost,
   Text
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

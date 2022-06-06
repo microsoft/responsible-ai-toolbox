@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   getCausalDisplayFeatureName,
@@ -20,7 +21,6 @@ import {
   SelectionMode,
   TooltipHost
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 export interface ICausalAggregateTableProps {

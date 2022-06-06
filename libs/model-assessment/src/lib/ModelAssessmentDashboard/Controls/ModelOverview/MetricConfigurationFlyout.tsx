@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
@@ -20,7 +21,6 @@ import {
   PanelType,
   IColumn
 } from "office-ui-fabric-react";
-import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { IMetricOption } from "./StatsTableUtils";

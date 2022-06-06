@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Checkbox } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
@@ -13,7 +14,6 @@ import {
   Stack,
   Text
 } from "office-ui-fabric-react";
-import { Checkbox } from "@fluentui/react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
