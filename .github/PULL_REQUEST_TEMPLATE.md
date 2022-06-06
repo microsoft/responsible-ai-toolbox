@@ -10,5 +10,5 @@
 <!--- Make sure to satisfy all the criteria listed below. -->
 
 - [ ] I have added screenshots above for all UI changes.
+- [ ] I have added e2e tests for all UI changes.
 - [ ] Documentation was updated if it was needed.
-- [ ] New tests were added or changes were manually verified.

@@ -9,7 +9,7 @@ export function getFilterBoundsArgs(
   metaDict: IJointMeta,
   filter: IFilter
 ): string {
-  if (metaDict.treatAsCategorical && metaDict.sortedCategoricalValues) {
+  if (metaDict?.treatAsCategorical && metaDict.sortedCategoricalValues) {
     return filter.arg
       .map((arg) => (metaDict.sortedCategoricalValues as string[])[arg])
       .join(", ");
