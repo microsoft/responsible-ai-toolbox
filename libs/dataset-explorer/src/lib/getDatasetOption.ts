@@ -25,7 +25,7 @@ export function getDatasetOption(
   if (
     yAxisProp &&
     (jointData.metaDict[yAxisProp].isCategorical ||
-      jointData.metaDict[yAxisProp].treatAsCategorical)
+      jointData.metaDict[yAxisProp]?.treatAsCategorical)
   ) {
     return getDatasetBarOption(jointData, plotlyProps, chartProps);
   }
