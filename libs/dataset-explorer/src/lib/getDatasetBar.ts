@@ -24,10 +24,11 @@ export function getDatasetBar(
     chartProps?.xAxis.property &&
     jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues
       ?.length;
+  const noneGroup = "none";
 
   if (customData && xData) {
     for (const [i, customDatum] of customData.entries()) {
-      const yValue = (customDatum as any).Y;
+      const yValue = (customDatum as any).Y ?? noneGroup;
       if (!groupedData[yValue]) {
         groupedData[yValue] = new Array(xDataTypeCount).fill(0);
       }
@@ -36,9 +37,9 @@ export function getDatasetBar(
   }
 
   if (chartProps?.yAxis.property) {
-    jointData.metaDict[
-      chartProps.yAxis.property
-    ].sortedCategoricalValues?.forEach((value) => {
+    const groups = jointData.metaDict[chartProps.yAxis.property]
+      .sortedCategoricalValues ?? [noneGroup];
+    groups.forEach((value) => {
       result.push({
         data: groupedData[value],
         name: value
