@@ -8,7 +8,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  Checkbox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -40,6 +39,7 @@ import {
   TooltipHost,
   TooltipOverflowMode
 } from "office-ui-fabric-react";
+import { Checkbox } from "@fluentui/react";
 import React from "react";
 
 import { TreeViewParameters } from "../TreeViewParameters/TreeViewParameters";

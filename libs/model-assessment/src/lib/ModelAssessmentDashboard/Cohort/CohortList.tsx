@@ -14,7 +14,6 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   IColumn,
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   Link,
@@ -23,6 +22,7 @@ import {
   SelectionMode,
   IconButton
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";

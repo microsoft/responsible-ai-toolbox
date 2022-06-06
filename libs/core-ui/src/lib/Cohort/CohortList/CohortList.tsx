@@ -4,13 +4,13 @@
 import { localization } from "@responsible-ai/localization";
 import {
   IColumn,
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   Link,
   Stack,
   Text
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

@@ -15,12 +15,12 @@ import {
   MessageBarType,
   Text,
   Selection,
-  CheckboxVisibility,
   SelectionMode,
   DetailsList,
   PanelType,
   IColumn
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { IMetricOption } from "./StatsTableUtils";

@@ -20,10 +20,10 @@ import {
   SpinButton,
   Selection,
   SelectionMode,
-  CheckboxVisibility,
   MessageBar,
   MessageBarType
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";

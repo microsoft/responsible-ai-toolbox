@@ -9,7 +9,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -20,6 +19,7 @@ import {
   TooltipHost,
   Text
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

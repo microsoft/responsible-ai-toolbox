@@ -7,10 +7,10 @@ import _ from "lodash";
 import {
   DefaultButton,
   PrimaryButton,
-  Checkbox,
   SpinButton,
   Text
 } from "office-ui-fabric-react";
+import { Checkbox } from "@fluentui/react";
 import React from "react";
 
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";

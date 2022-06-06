@@ -11,7 +11,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
 import {
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -21,6 +20,7 @@ import {
   SelectionMode,
   TooltipHost
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 export interface ICausalAggregateTableProps {

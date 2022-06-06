@@ -7,7 +7,6 @@ import _ from "lodash";
 import {
   Text,
   PrimaryButton,
-  Checkbox,
   ComboBox,
   IComboBox,
   IComboBoxOption,
@@ -18,6 +17,7 @@ import {
   IChoiceGroupOption,
   DefaultButton
 } from "office-ui-fabric-react";
+import { Checkbox } from "@fluentui/react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 

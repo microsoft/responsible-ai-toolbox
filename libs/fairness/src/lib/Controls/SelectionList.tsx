@@ -11,9 +11,9 @@ import {
   TooltipHost,
   TooltipOverflowMode,
   IObjectWithKey,
-  CheckboxVisibility,
   Text
 } from "office-ui-fabric-react";
+import { CheckboxVisibility } from "@fluentui/react";
 import React from "react";
 
 import { performanceOptions } from "./../util/PerformanceMetrics";

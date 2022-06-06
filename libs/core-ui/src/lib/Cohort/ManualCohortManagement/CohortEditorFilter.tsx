@@ -4,7 +4,6 @@
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
-  Checkbox,
   ComboBox,
   DefaultButton,
   IComboBox,
@@ -14,6 +13,7 @@ import {
   Stack,
   Text
 } from "office-ui-fabric-react";
+import { Checkbox } from "@fluentui/react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 
