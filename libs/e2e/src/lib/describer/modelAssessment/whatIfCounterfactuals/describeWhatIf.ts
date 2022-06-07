@@ -9,6 +9,7 @@ import {
 import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeAxisFlyouts } from "./describeAxisFlyouts";
+import { describeSubBarChart } from "./describeSubBarChart";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
 import { describeWhatIfCreate } from "./describeWhatIfCreate";
 
@@ -43,6 +44,12 @@ export function describeWhatIf(
       describeWhatIfCommonFunctionalities(datasetShape);
       describeAxisFlyouts(datasetShape);
       describeWhatIfCreate(datasetShape, name);
+    }
+    if (
+      !datasetShape.featureImportanceData?.noLocalImportance &&
+      !datasetShape.featureImportanceData?.noFeatureImportance
+    ) {
+      describeSubBarChart(datasetShape);
     }
   });
 }
