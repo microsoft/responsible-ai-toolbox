@@ -1,16 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Checkbox } from "@fluentui/react";
+import {
+  Checkbox,
+  IComboBoxOption,
+  IComboBox,
+  ComboBox
+} from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   Text,
   PrimaryButton,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   SpinButton,
   Panel,
   Stack,

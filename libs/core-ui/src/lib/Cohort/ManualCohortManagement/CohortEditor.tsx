@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -9,8 +10,6 @@ import {
   TextField,
   DefaultButton,
   PrimaryButton,
-  IComboBox,
-  IComboBoxOption,
   Stack,
   Panel,
   ChoiceGroup,

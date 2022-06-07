@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   IExplanationContext,
   ModelTypes,
@@ -18,13 +19,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  TextField
-} from "office-ui-fabric-react";
+import { IDropdownOption, TextField } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
 import React from "react";
 
@@ -315,7 +310,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     }
                     allowFreeform
                     autoComplete="on"
-                    options={this.state.rangeView.categoricalOptions}
+                    options={this.state.rangeView.categoricalOptions || []}
                     onChange={this.onCategoricalRangeChanged}
                     styles={FabricStyles.defaultDropdownStyle}
                   />
@@ -414,7 +409,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (this.props.invokeModel === undefined) {
       return;

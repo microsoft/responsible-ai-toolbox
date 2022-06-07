@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -30,7 +31,6 @@ import _, { Dictionary } from "lodash";
 import {
   getTheme,
   Text,
-  IComboBoxOption,
   DefaultButton,
   Dropdown,
   IDropdownOption

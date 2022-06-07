@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICounterfactualData,
@@ -12,15 +13,12 @@ import { localization } from "@responsible-ai/localization";
 import _, { toNumber } from "lodash";
 import {
   Callout,
-  ComboBox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   DetailsRowFields,
   IColumn,
-  IComboBox,
-  IComboBoxOption,
   IDetailsFooterProps,
   IDetailsRowFieldsProps,
   IDetailsRowProps,
