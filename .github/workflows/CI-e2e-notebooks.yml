@@ -17,11 +17,11 @@ jobs:
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         flights: ["noFlights", "newModelOverviewExperience"],
         notebook: # keep this list in sync with scripts/e2e-widget.js
-          - "responsibleaidashboard-census-classification-model-debugging",
-          - "responsibleaidashboard-diabetes-regression-model-debugging",
-          - "responsibleaidashboard-housing-classification-model-debugging",
-          - "responsibleaidashboard-diabetes-decision-making",
-          - "responsibleaidashboard-housing-decision-making",
+          - "responsibleaidashboard-census-classification-model-debugging"
+          - "responsibleaidashboard-diabetes-regression-model-debugging"
+          - "responsibleaidashboard-housing-classification-model-debugging"
+          - "responsibleaidashboard-diabetes-decision-making"
+          - "responsibleaidashboard-housing-decision-making"
           - "responsibleaidashboard-multiclass-dnn-model-debugging"
 
     runs-on: ${{ matrix.operatingSystem }}
