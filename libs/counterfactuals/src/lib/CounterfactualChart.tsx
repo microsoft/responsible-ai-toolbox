@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -27,9 +28,6 @@ import _, { Dictionary } from "lodash";
 import {
   getTheme,
   DefaultButton,
-  IComboBoxOption,
-  ComboBox,
-  IComboBox,
   PrimaryButton,
   Stack
 } from "office-ui-fabric-react";
