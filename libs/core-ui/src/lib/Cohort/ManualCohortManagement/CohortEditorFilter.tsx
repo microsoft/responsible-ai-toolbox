@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Checkbox } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
-  Checkbox,
   ComboBox,
   DefaultButton,
   IComboBox,
