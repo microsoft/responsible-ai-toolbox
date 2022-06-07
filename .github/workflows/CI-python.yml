@@ -2,9 +2,9 @@ name: CI Python
 
 on:
   push:
-    branches: [main]
+    branches: [main, postbuild]
   pull_request:
-    branches: [main]
+    branches: [main, postbuild]
 
 jobs:
   ci-python:
@@ -13,16 +13,16 @@ jobs:
         packageDirectory:
           ["rai_core_flask", "responsibleai", "erroranalysis", "raiutils"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
-        pythonVersion: [3.6, 3.7, 3.8, 3.9]
+        pythonVersion: ["3.6", "3.7", "3.8", "3.9"]
         exclude:
           - packageDirectory: "rai_core_flask"
             operatingSystem: macos-latest
-            pythonVersion: 3.9
+            pythonVersion: "3.9"
 
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.pythonVersion }}
         uses: actions/setup-python@v2
@@ -46,7 +46,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload requirements
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: requirements-dev.txt
           path: ${{ matrix.packageDirectory }}/requirements-dev.txt
@@ -58,7 +58,7 @@ jobs:
 
       - name: Install package
         run: |
-          pip install -v .
+          pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Run tests
@@ -67,23 +67,47 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload code coverage results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-code-coverage-results
           path: ${{ matrix.packageDirectory }}/htmlcov
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
-      - name: Upload coverage to Codecov
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
+        name: Upload to codecov
+        id: codecovupload1
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ matrix.packageDirectory }}
           env_vars: OS,PYTHON
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: ./${{ matrix.packageDirectory }}/coverage.xml
           flags: unittests
           name: codecov-umbrella
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
-        if: ${{ always() }}
+
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        name: Retry upload to codecov
+        id: codecovupload2
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - name: Set codecov status
+        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        shell: bash
+        run: |
+          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
+            echo fine
+          else
+            exit 1
+          fi

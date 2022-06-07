@@ -28,6 +28,7 @@ export function describeModelPerformanceStats(dataShape: IInterpretData): void {
         expectedMetrics = [
           "Accuracy",
           "Precision",
+          "Recall",
           "F1 score",
           "False positive rate",
           "False negative rate",

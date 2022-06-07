@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ComboBox, IComboBox, IComboBoxOption } from "@fluentui/react";
 import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
@@ -16,7 +17,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
 export interface IEbmProps {

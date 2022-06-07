@@ -3,6 +3,8 @@
 
 """Defines the Counterfactual Manager class."""
 import json
+import pickle
+import warnings
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
@@ -128,6 +130,7 @@ class CounterfactualConfig(BaseConfig):
 
     CONFIG_FILE_NAME = 'config.json'
     RESULT_FILE_NAME = 'result.json'
+    EXPLAINER_FILE_NAME = 'explainer.pkl'
 
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
@@ -146,6 +149,7 @@ class CounterfactualConfig(BaseConfig):
         self.counterfactual_obj = None
         self.has_computation_failed = False
         self.failure_reason = None
+        self.explainer = None
 
     def __eq__(self, other_cf_config):
         return (
@@ -320,6 +324,24 @@ class CounterfactualConfig(BaseConfig):
                        (CounterfactualConfig.IS_COMPUTED + '.json'))
         with open(result_path, 'r') as result_file:
             self.is_computed = json.load(result_file)
+
+    def save_explainer(self, explainer_directory_path):
+        file_path = (explainer_directory_path /
+                     CounterfactualConfig.EXPLAINER_FILE_NAME)
+        try:
+            with open(file_path, 'wb') as file_path:
+                pickle.dump(self.explainer, file_path)
+        except Exception:
+            pass
+
+    def load_explainer(self, explainer_directory_path):
+        file_path = (explainer_directory_path /
+                     CounterfactualConfig.EXPLAINER_FILE_NAME)
+        try:
+            with open(file_path, 'rb') as file_path:
+                self.explainer = pickle.load(file_path)
+        except Exception:
+            pass
 
 
 class CounterfactualManager(BaseManager):
@@ -516,7 +538,8 @@ class CounterfactualManager(BaseManager):
                     print("Current Status: Generating {0} counterfactuals"
                           " for {1} samples".format(
                               cf_config.total_CFs, len(self._test)))
-                    dice_explainer = self._create_diceml_explainer(
+
+                    cf_config.explainer = self._create_diceml_explainer(
                         method=cf_config.method,
                         continuous_features=cf_config.continuous_features)
 
@@ -524,7 +547,7 @@ class CounterfactualManager(BaseManager):
 
                     if not cf_config.feature_importance:
                         counterfactual_obj = \
-                            dice_explainer.generate_counterfactuals(
+                            cf_config.explainer.generate_counterfactuals(
                                 X_test, total_CFs=cf_config.total_CFs,
                                 desired_class=cf_config.desired_class,
                                 desired_range=cf_config.desired_range,
@@ -532,7 +555,7 @@ class CounterfactualManager(BaseManager):
                                 permitted_range=cf_config.permitted_range)
                     else:
                         counterfactual_obj = \
-                            dice_explainer.global_feature_importance(
+                            cf_config.explainer.global_feature_importance(
                                 X_test,
                                 total_CFs=cf_config.total_CFs,
                                 desired_class=cf_config.desired_class,
@@ -661,6 +684,10 @@ class CounterfactualManager(BaseManager):
                 directory_manager.create_data_directory()
             )
 
+            counterfactual_config.save_explainer(
+                directory_manager.create_generators_directory()
+            )
+
     @staticmethod
     def _load(path, rai_insights):
         """Load the CounterfactualManager from the given path.
@@ -701,6 +728,23 @@ class CounterfactualManager(BaseManager):
             counterfactual_config.load_result(
                 directory_manager.get_data_directory()
             )
+
+            counterfactual_config.load_explainer(
+                directory_manager.get_generators_directory()
+            )
+
+            if counterfactual_config.explainer is None:
+                explainer_load_err = (
+                    'ERROR-LOADING-COUNTERFACTUAL-EXPLAINER: '
+                    'There was an error loading the '
+                    'counterfactual explainer model. '
+                    'Retraining the counterfactual '
+                    'explainer.')
+                warnings.warn(explainer_load_err)
+                counterfactual_config.explainer = \
+                    inst._create_diceml_explainer(
+                        counterfactual_config.method,
+                        counterfactual_config.continuous_features)
 
             if counterfactual_config.counterfactual_obj is not None:
                 # Validate the serialized output against schema

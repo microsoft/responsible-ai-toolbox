@@ -244,7 +244,8 @@ class ErrorAnalysisManager(BaseManager):
                 filter_features, max_depth=max_depth,
                 min_child_samples=min_child_samples,
                 num_leaves=num_leaves,
-                compute_importances=True)
+                compute_importances=True,
+                compute_root_stats=True)
 
             # Validate the serialized output against schema
             schema = ErrorAnalysisManager._get_error_analysis_schema()
@@ -299,21 +300,21 @@ class ErrorAnalysisManager(BaseManager):
         :return: A array of ErrorAnalysisConfig.
         :rtype: List[ErrorAnalysisConfig]
         """
+        report_props = zip(self.get(), self.list()[Keys.REPORTS])
         return [
-            self._get_error_analysis(i) for i in self.list()["reports"]]
+            self._get_error_analysis(report,
+                                     props) for report, props in report_props]
 
-    def _get_error_analysis(self, report):
+    def _get_error_analysis(self, report, props):
         error_analysis = ErrorAnalysisData()
-        error_analysis.maxDepth = report[Keys.MAX_DEPTH]
-        error_analysis.numLeaves = report[Keys.NUM_LEAVES]
-        error_analysis.minChildSamples = report[Keys.MIN_CHILD_SAMPLES]
-        error_analysis.tree = self._analyzer.compute_error_tree(
-            self._feature_names, None, None, error_analysis.maxDepth,
-            error_analysis.numLeaves, error_analysis.minChildSamples)
-        error_analysis.matrix = self._analyzer.compute_matrix(
-            self._feature_names, None, None)
-        error_analysis.importances = self._analyzer.compute_importances()
+        error_analysis.maxDepth = props[Keys.MAX_DEPTH]
+        error_analysis.numLeaves = props[Keys.NUM_LEAVES]
+        error_analysis.minChildSamples = props[Keys.MIN_CHILD_SAMPLES]
+        error_analysis.tree = report.tree
+        error_analysis.matrix = report.matrix
+        error_analysis.importances = report.importances
         error_analysis.metric = metric_to_display_name[self._analyzer.metric]
+        error_analysis.root_stats = report.root_stats
         return error_analysis
 
     @property

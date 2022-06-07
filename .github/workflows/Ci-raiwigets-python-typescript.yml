@@ -2,9 +2,9 @@ name: CI RAIWidgets Python Typescript
 
 on:
   push:
-    branches: [main]
+    branches: [main, postbuild]
   pull_request:
-    branches: [main]
+    branches: [main, postbuild]
 
 jobs:
   ci-raiwidgets-python-typescript:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -31,7 +31,7 @@ jobs:
           python-version: ${{ matrix.pythonVersion }}
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 
@@ -45,8 +45,10 @@ jobs:
         run: yarn buildall
 
       - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Use Homebrew to install libomp on MacOS for lightgbm
-        run: brew install https://publictestdatasets.blob.core.windows.net/data/libomp-11.1.0.catalina.bottle.tar.gz
+        name: Install latest numpy from conda-forge for MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet -c conda-forge numpy
 
       - if: ${{ matrix.operatingSystem != 'macos-latest' }}
         name: Install pytorch on non-MacOS
@@ -60,6 +62,12 @@ jobs:
         run: |
           conda install --yes --quiet pytorch torchvision captum -c pytorch
 
+      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
+        name: Install latest lightgbm from conda-forge for MacOS
+        shell: bash -l {0}
+        run: |
+          conda install --yes --quiet lightgbm -c conda-forge
+
       - name: Setup tools
         shell: bash -l {0}
         run: |
@@ -71,7 +79,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pip install -r requirements-dev.txt
-          pip install .
+          pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Pip freeze
@@ -82,14 +90,15 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       - name: Upload requirements
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: requirements-dev.txt
           path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
 
-      - name: Run widget tests
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Run widget tests
+        id: raiwidgettests
         shell: bash -l {0}
-        if: ${{ matrix.operatingSystem != 'macos-latest' }}
         run: yarn e2e-widget
 
       - name: Run tests
@@ -98,31 +107,55 @@ jobs:
           pytest --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
-      - name: Upload code coverage results
-        uses: actions/upload-artifact@v2
+      # Only try to upload code cov if python tests were run
+      - if: ${{ (steps.raiwidgettests.outcome == 'success') }}
+        name: Upload code coverage results
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-code-coverage-results
           path: ${{ matrix.packageDirectory }}/htmlcov
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
 
-      - name: Upload coverage to Codecov
+      - if: ${{ (matrix.operatingSystem == 'windows-latest') && (matrix.pythonVersion == '3.8') }}
+        name: Upload to codecov
+        id: codecovupload1
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ${{ matrix.packageDirectory }}
           env_vars: OS,PYTHON
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           files: ./${{ matrix.packageDirectory }}/coverage.xml
           flags: unittests
           name: codecov-umbrella
-          path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
-        if: ${{ always() }}
 
-      - name: Upload e2e test screen shot
-        if: always()
-        uses: actions/upload-artifact@v2
+      - if: ${{ (steps.codecovupload1.outcome == 'failure') && (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        name: Retry upload to codecov
+        id: codecovupload2
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{ matrix.packageDirectory }}
+          env_vars: OS,PYTHON
+          fail_ci_if_error: false
+          files: ./${{ matrix.packageDirectory }}/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true
+
+      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
+        name: Upload e2e test screen shot
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-e2e-screen-shot
-          path: dist/cypress
+          path: ./dist/cypress
+
+      - name: Set codecov status
+        if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
+        shell: bash
+        run: |
+          if ${{ (steps.codecovupload1.outcome == 'success') || (steps.codecovupload2.outcome == 'success') }} ; then
+            echo fine
+          else
+            exit 1
+          fi

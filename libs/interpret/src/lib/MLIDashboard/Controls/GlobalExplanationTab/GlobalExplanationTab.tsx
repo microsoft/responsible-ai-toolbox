@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   Cohort,
   JointDataset,
@@ -19,9 +20,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   IDropdownOption,
   Dropdown,
   Text,
@@ -438,7 +436,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     // set to dependence plot initially, can be changed if other feature importances available
     const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
     const xIsDithered =
-      this.context.jointDataset.metaDict[xKey].treatAsCategorical;
+      this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
       JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
     const chartProps: IGenericChartProps = {

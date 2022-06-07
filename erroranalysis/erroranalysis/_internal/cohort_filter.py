@@ -4,12 +4,14 @@
 import numpy as np
 import pandas as pd
 
-from erroranalysis._internal.constants import (METHOD, PRED_Y, ROW_INDEX,
-                                               TRUE_Y, CohortFilterMethods,
-                                               ModelTask)
+from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
+                                               METHOD, OPERATION, PRED_Y,
+                                               ROW_INDEX, TRUE_Y,
+                                               CohortFilterMethods,
+                                               CohortFilterOps, ModelTask)
 from erroranalysis._internal.metrics import get_ordered_classes
+from erroranalysis._internal.utils import is_spark
 
-COLUMN = 'column'
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
 
@@ -31,12 +33,13 @@ def filter_from_cohort(analyzer, filters, composite_filters):
     true_y = analyzer.true_y
     categorical_features = analyzer.categorical_features
     categories = analyzer.categories
-    if not isinstance(df, pd.DataFrame):
-        df = pd.DataFrame(df, columns=feature_names)
-    else:
-        # Note: we make a non-deep copy of the input DataFrame since
-        # we will add columns below
-        df = df.copy()
+    if not is_spark(df):
+        if not isinstance(df, pd.DataFrame):
+            df = pd.DataFrame(df, columns=feature_names)
+        else:
+            # Note: we make a non-deep copy of the input DataFrame since
+            # we will add columns below
+            df = df.copy()
     add_filter_cols(analyzer, df, filters, true_y)
     df = apply_recursive_filter(df, filters, categorical_features, categories)
     df = apply_recursive_filter(df, composite_filters,
@@ -80,11 +83,15 @@ def add_filter_cols(analyzer, df, filters, true_y):
     """
     has_classification_outcome = filters_has_classification_outcome(analyzer,
                                                                     filters)
-    df[TRUE_Y] = true_y
+    if isinstance(true_y, str):
+        df.rename(columns={true_y: TRUE_Y})
+    else:
+        df[TRUE_Y] = true_y
     is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         df[PRED_Y] = analyzer.pred_y
-    df[ROW_INDEX] = np.arange(0, len(true_y))
+    if not is_spark(df):
+        df[ROW_INDEX] = np.arange(0, len(true_y))
     if has_classification_outcome:
         if PRED_Y in df:
             pred_y = df[PRED_Y]
@@ -168,7 +175,7 @@ def build_query(filters, categorical_features, categories):
     for filter in filters:
         if METHOD in filter:
             method = filter[METHOD]
-            arg0 = str(filter['arg'][0])
+            arg0 = str(filter[ARG][0])
             colname = filter[COLUMN]
             if method == CohortFilterMethods.METHOD_GREATER:
                 queries.append("`" + colname + "` > " + arg0)
@@ -179,7 +186,7 @@ def build_query(filters, categorical_features, categories):
             elif method == CohortFilterMethods.METHOD_GREATER_AND_EQUAL:
                 queries.append("`" + colname + "` >= " + arg0)
             elif method == CohortFilterMethods.METHOD_RANGE:
-                arg1 = str(filter['arg'][1])
+                arg1 = str(filter[ARG][1])
                 queries.append("`" + colname + "` >= " + arg0 +
                                ' & `' + colname + "` <= " + arg1)
             elif method == CohortFilterMethods.METHOD_INCLUDES or \
@@ -194,7 +201,7 @@ def build_query(filters, categorical_features, categories):
                     is_categorical = colname in categorical_features
                 if is_categorical:
                     cat_idx = categorical_features.index(colname)
-                    arg0i = filter['arg'][0]
+                    arg0i = filter[ARG][0]
                     arg_cat = categories[cat_idx][arg0i]
                     if isinstance(arg_cat, str):
                         queries.append("`{}` == '{}'".format(colname, arg_cat))
@@ -207,11 +214,11 @@ def build_query(filters, categorical_features, categories):
                     "Unsupported method type: {}".format(method))
         else:
             cqueries = []
-            for composite_filter in filter['compositeFilters']:
+            for composite_filter in filter[COMPOSITE_FILTERS]:
                 cqueries.append(build_query([composite_filter],
                                             categorical_features,
                                             categories))
-            if filter['operation'] == 'and':
+            if filter[OPERATION] == CohortFilterOps.AND:
                 queries.append('(' + ') & ('.join(cqueries) + ')')
             else:
                 queries.append('(' + ') | ('.join(cqueries) + ')')
@@ -245,7 +252,7 @@ def build_bounds_query(filter, colname, method,
     is_categorical = False
     if categorical_features:
         is_categorical = colname in categorical_features
-    for arg in filter['arg']:
+    for arg in filter[ARG]:
         if is_categorical:
             cat_idx = categorical_features.index(colname)
             if isinstance(categories[cat_idx][arg], str):

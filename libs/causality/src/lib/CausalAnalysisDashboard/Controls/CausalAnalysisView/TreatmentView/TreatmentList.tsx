@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -9,7 +10,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -17,7 +17,8 @@ import {
   IDetailsHeaderProps,
   IRenderFunction,
   SelectionMode,
-  TooltipHost
+  TooltipHost,
+  Text
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -35,7 +36,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
 
   public render(): React.ReactNode {
     if (!this.props.data) {
-      return <>No Data</>;
+      return <Text>{localization.CausalAnalysis.TreatmentPolicy.noData}</Text>;
     }
     const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [

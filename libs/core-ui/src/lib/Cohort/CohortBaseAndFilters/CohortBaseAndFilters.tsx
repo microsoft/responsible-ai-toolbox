@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import { IStackStyles, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
@@ -32,17 +33,31 @@ export class CohortBaseAndFilters extends React.Component<ICohortBaseAndFiltersP
       <div>
         <div className={classNames.section} />
         <div className={classNames.subsection}>
-          <div className={classNames.header}>Base cohort and filters</div>
+          <div className={classNames.header}>
+            {
+              localization.ErrorAnalysis.CohortBaseAndFilters
+                .globalCohortAndFilters
+            }
+          </div>
           <Stack horizontal>
             <Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Base cohort</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortBaseAndFilters.globalCohort}
+                </div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Error explorer</div>
+                <div className={classNames.tableData}>
+                  {
+                    localization.ErrorAnalysis.CohortBaseAndFilters
+                      .errorExplorer
+                  }
+                </div>
               </Stack>
               <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>Filters</div>
+                <div className={classNames.tableData}>
+                  {localization.ErrorAnalysis.CohortBaseAndFilters.filters}
+                </div>
               </Stack>
             </Stack>
             <Stack>

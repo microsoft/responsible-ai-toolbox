@@ -10,6 +10,10 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
       .get('#cohortEditPanel span:contains("No filters")')
       .should("exist");
   });
+  it("should have save and save and switch buttons disabled by default", () => {
+    cy.get('button:contains("Save")').should("be.disabled");
+    cy.get('button:contains("Save and switch")').should("be.disabled");
+  });
   it("should able to add filter", () => {
     cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
     cy.get('#cohortEditPanel [type="radio"]').first().check();
@@ -54,6 +58,17 @@ export function describeCreateCohort(dataShape: IInterpretData): void {
     cy.get('button:contains("Add filter")').click();
     cy.get('button:contains("Save and switch")').click();
     cy.get("#cohortEditPanel").should("exist");
+  });
+  it("should not allow creating empty cohort", () => {
+    cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");
+    cy.get('#cohortEditPanel [type="radio"]').first().check();
+    cy.get("#cohortEditPanel input[class^='ms-spinButton-input']")
+      .clear()
+      .type("0");
+    cy.get('button:contains("Add filter")').click();
+    cy.get('button:contains("Save and switch")').click();
+    cy.get(".emptyCohortDialog button").click();
+    cy.get("#removeFilterBtn-2").click();
   });
   it("should create New cohort", () => {
     cy.get("#cohortEditPanel input:eq(0)").clear().type("CohortCreateE2E");

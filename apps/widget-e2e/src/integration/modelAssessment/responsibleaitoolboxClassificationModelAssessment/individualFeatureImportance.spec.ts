@@ -1,6 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeIndividualFeatureImportance } from "../../../describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
+import {
+  describeIndividualFeatureImportance,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeIndividualFeatureImportance("ClassificationModelDebugging");
+const datasetShape = modelAssessmentDatasets.ClassificationModelDebugging;
+describeIndividualFeatureImportance(
+  datasetShape,
+  "ClassificationModelDebugging"
+);

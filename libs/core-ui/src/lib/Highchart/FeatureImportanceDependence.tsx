@@ -37,8 +37,8 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
     const classNames = dependencePlotStyles();
     if (this.props.chartProps === undefined) {
       return (
-        <div className={classNames.secondaryChartPlacolderBox}>
-          <div className={classNames.secondaryChartPlacolderSpacer}>
+        <div className={classNames.secondaryChartPlaceholderBox}>
+          <div className={classNames.secondaryChartPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
               {localization.Interpret.DependencePlot.placeholder}
             </Text>

@@ -65,7 +65,7 @@ export class FilterList extends React.Component<IFilterListProps> {
 
     if (
       selectedFilter.isCategorical ||
-      this.props.jointDataset.metaDict[filter.column].treatAsCategorical
+      this.props.jointDataset.metaDict[filter.column]?.treatAsCategorical
     ) {
       const selectedValues: string[] = [];
       const filterArgs = filter.arg;

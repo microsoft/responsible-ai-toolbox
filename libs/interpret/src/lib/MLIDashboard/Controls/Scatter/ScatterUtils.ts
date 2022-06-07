@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   PartialRequired2,
   IExplanationContext,
@@ -17,11 +18,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  IComboBoxOption,
-  DropdownMenuItemType,
-  IDropdownOption
-} from "office-ui-fabric-react";
+import { DropdownMenuItemType, IDropdownOption } from "office-ui-fabric-react";
 
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
@@ -613,7 +610,7 @@ export class ScatterUtils {
   }
 
   private static formatItemTextForAxis(
-    item: IDropdownOption,
+    item: IComboBoxOption,
     modelMetadata: IExplanationModelMetadata
   ): string {
     if (

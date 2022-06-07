@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   JointDataset,
   IExplanationModelMetadata,
@@ -10,13 +11,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import {
-  IComboBox,
-  IComboBoxOption,
-  ComboBox,
-  SpinButton,
-  Text
-} from "office-ui-fabric-react";
+import { SpinButton, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
@@ -121,7 +116,7 @@ export class MultiICEPlot extends React.PureComponent<
                 }
                 allowFreeform
                 autoComplete="on"
-                options={this.state.rangeView.categoricalOptions}
+                options={this.state.rangeView.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
                 styles={FabricStyles.defaultDropdownStyle}
                 calloutProps={FabricStyles.calloutProps}
@@ -445,7 +440,7 @@ export class MultiICEPlot extends React.PureComponent<
     if (!summary || summary.index === undefined) {
       return undefined;
     }
-    if (summary.treatAsCategorical) {
+    if (summary?.treatAsCategorical) {
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
         return {

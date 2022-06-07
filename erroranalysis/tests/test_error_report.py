@@ -51,7 +51,9 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
-    def test_error_report_housing_pandas(self):
+    @pytest.mark.parametrize('filter_features',
+                             [None, [], ['MedInc', 'HouseAge']])
+    def test_error_report_housing_pandas(self, filter_features):
         X_train, X_test, y_train, y_test, feature_names = \
             create_housing_data()
         X_train = create_dataframe(X_train, feature_names)
@@ -61,7 +63,8 @@ class TestErrorReport(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               filter_features=filter_features)
 
 
 def is_valid_uuid(id):
@@ -73,7 +76,8 @@ def is_valid_uuid(id):
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features, expect_user_warnings=False):
+                       categorical_features, expect_user_warnings=False,
+                       filter_features=None):
     if expect_user_warnings and pd.__version__[0] == '0':
         with pytest.warns(UserWarning,
                           match='which has issues with pandas version'):
@@ -84,7 +88,7 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-    report1 = model_analyzer.create_error_report(filter_features=None,
+    report1 = model_analyzer.create_error_report(filter_features,
                                                  max_depth=3,
                                                  num_leaves=None,
                                                  compute_importances=True)
@@ -107,6 +111,12 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert ea_deserialized.tree_features == report1.tree_features
     assert ea_deserialized.matrix_features == report1.matrix_features
     assert ea_deserialized.importances == report1.importances
+    assert ea_deserialized.root_stats == report1.root_stats
+
+    if not filter_features:
+        assert ea_deserialized.matrix is None
+    else:
+        assert ea_deserialized.matrix is not None
 
     # validate error report does not modify original dataset in ModelAnalyzer
     if isinstance(X_test, pd.DataFrame):
