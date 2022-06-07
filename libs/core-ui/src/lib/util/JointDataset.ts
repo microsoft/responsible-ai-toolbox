@@ -434,13 +434,7 @@ export class JointDataset {
           featureArray.map((val) => [val])
         );
       }
-      case ModelTypes.Binary: {
-        return JointDataset.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        ).map((featuresByClasses) =>
-          featuresByClasses.map((classArray) => classArray.slice(0, 1))
-        );
-      }
+      case ModelTypes.Binary:
       case ModelTypes.Multiclass:
       default: {
         return JointDataset.transposeLocalImportanceMatrix(
@@ -598,8 +592,7 @@ export class JointDataset {
       Number.MIN_SAFE_INTEGER
     );
     switch (this._modelMeta.modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
@@ -621,6 +614,7 @@ export class JointDataset {
         });
         break;
       }
+      case ModelTypes.Binary:
       case ModelTypes.Multiclass: {
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
