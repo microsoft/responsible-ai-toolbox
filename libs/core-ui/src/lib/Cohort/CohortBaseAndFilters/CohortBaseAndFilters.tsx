@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { IStackStyles, IStackTokens, Stack } from "office-ui-fabric-react";
+import { IStackStyles, IStackTokens, Stack } from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

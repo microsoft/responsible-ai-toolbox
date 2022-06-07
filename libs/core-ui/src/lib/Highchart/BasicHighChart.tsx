@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 import React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";

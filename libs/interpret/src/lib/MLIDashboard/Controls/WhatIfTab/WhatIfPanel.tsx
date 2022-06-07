@@ -1,17 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  Dropdown,
+  IDropdownOption
+} from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   JointDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  Dropdown,
   FocusZone,
   IconButton,
-  IDropdownOption,
   Label,
   PrimaryButton,
   SearchBox,

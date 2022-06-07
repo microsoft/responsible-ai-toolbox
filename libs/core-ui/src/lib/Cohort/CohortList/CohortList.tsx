@@ -10,7 +10,7 @@ import {
   Link,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

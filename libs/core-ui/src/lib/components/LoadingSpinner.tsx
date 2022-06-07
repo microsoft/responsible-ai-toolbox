@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Spinner, SpinnerSize } from "office-ui-fabric-react";
+import { Spinner, SpinnerSize } from "@fluentui/react";
 import React from "react";
 
 import { loadingSpinnerStyles } from "./LoadingSpinner.styles";

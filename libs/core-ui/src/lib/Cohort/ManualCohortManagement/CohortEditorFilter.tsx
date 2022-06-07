@@ -15,7 +15,7 @@ import {
   SpinButton,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
 import React from "react";
 

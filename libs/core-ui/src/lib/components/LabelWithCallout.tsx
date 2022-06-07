@@ -7,7 +7,7 @@ import {
   CommandBarButton,
   IconButton,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 import { v4 } from "uuid";
 

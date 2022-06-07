@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Text, Link, ITextProps, Icon } from "office-ui-fabric-react";
+import { Text, Link, ITextProps, Icon } from "@fluentui/react";
 import React from "react";
 
 export interface IExpandableTextProps extends ITextProps {

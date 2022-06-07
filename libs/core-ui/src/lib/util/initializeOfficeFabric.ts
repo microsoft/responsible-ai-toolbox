@@ -6,7 +6,7 @@ import {
   initializeIcons as fabricInit,
   ITheme,
   loadTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export const defaultTheme: ITheme = createTheme({
   palette: {

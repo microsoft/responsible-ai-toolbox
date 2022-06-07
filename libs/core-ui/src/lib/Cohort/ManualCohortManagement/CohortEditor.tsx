@@ -15,7 +15,7 @@ import {
   ChoiceGroup,
   IChoiceGroupOption,
   Link
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";

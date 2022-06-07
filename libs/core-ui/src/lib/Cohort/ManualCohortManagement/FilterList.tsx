@@ -3,11 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { roundDecimal } from "@responsible-ai/mlchartlib";
-import {
-  IconButton,
-  TooltipHost,
-  TooltipOverflowMode
-} from "office-ui-fabric-react";
+import { IconButton, TooltipHost, TooltipOverflowMode } from "@fluentui/react";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";

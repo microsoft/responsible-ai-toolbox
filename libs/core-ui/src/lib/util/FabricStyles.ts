@@ -10,7 +10,7 @@ import {
   IStyle,
   getTheme,
   mergeStyleSets
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IRGBColor {
   r: number;

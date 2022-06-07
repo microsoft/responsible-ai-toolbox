@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
+import { DefaultButton, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import {

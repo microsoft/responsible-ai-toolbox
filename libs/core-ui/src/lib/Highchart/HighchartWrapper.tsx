@@ -3,7 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 import _ from "lodash";
-import { getTheme, mergeStyles } from "office-ui-fabric-react";
+import { getTheme, mergeStyles } from "@fluentui/react";
 import * as React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";

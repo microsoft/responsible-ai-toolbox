@@ -10,7 +10,7 @@ import {
   IDropdownOption,
   Dropdown,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import { Transform } from "plotly.js";
 import React from "react";
 
