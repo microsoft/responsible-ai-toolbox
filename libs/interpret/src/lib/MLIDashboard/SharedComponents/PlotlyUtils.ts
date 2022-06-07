@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import { IExplanationModelMetadata } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { IDropdownOption } from "office-ui-fabric-react";
 
 export class PlotlyUtils {
   public static setColorProperty(
     plotlyProp: IPlotlyProperty,
-    item: IDropdownOption,
+    item: IComboBoxOption,
     _modelMetadata: IExplanationModelMetadata,
     colorBarLabel?: string
   ): void {

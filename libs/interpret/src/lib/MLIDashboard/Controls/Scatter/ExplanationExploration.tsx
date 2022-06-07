@@ -1,18 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import { ModelTypes, FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import {
-  Callout,
-  DefaultButton,
-  IconButton,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption
-} from "office-ui-fabric-react";
+import { Callout, DefaultButton, IconButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";

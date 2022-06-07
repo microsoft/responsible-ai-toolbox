@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBox, ComboBox, IComboBoxOption } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   ModelTypes,
@@ -18,8 +19,6 @@ import {
   IChoiceGroupOption,
   Slider,
   Text,
-  ComboBox,
-  IComboBox,
   DirectionalHint,
   Callout,
   Link,
@@ -434,7 +433,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -444,7 +443,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onICEClassSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
