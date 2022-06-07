@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  ci-raiwidgets-python-typescript:
+  ci-raiwidgets-pytest:
     env:
       node-version: 16.8
     strategy:
