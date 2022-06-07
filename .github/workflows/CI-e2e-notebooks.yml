@@ -15,7 +15,7 @@ jobs:
         packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
-        flights: ["noFlights", "newModelOverviewExperience"],
+        flights: ["noFlights", "newModelOverviewExperience"]
         notebook: # keep this list in sync with scripts/e2e-widget.js
           - "responsibleaidashboard-census-classification-model-debugging"
           - "responsibleaidashboard-diabetes-regression-model-debugging"
