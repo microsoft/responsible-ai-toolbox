@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -13,6 +12,7 @@ import {
   DialogFooter,
   Dropdown
 } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {

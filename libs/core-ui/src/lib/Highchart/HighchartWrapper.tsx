@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "@fluentui/react";
+import { ITheme, getTheme, mergeStyles } from "@fluentui/react";
 import _ from "lodash";
-import { getTheme, mergeStyles } from "@fluentui/react";
 import * as React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";

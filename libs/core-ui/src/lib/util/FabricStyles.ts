@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxStyles, ICalloutProps } from "@fluentui/react";
 import {
+  IComboBoxStyles,
+  ICalloutProps,
   IPivotStyles,
   FontWeights,
   mergeStyles,

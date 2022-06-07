@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
   getTheme,
   DefaultButton,
@@ -11,6 +8,9 @@ import {
   Dropdown,
   Text
 } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import { Transform } from "plotly.js";
 import React from "react";
 

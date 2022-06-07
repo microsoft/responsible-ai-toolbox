@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   ITextFieldStyles,
   PrimaryButton,
@@ -12,6 +11,7 @@ import {
   DialogFooter,
   TextField
 } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {

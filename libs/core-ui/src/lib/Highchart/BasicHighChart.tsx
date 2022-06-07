@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import _ from "lodash";
 import { getTheme } from "@fluentui/react";
+import _ from "lodash";
 import React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";
