@@ -69,9 +69,10 @@ export class ExplanationExploration extends React.PureComponent<
         dropdownOptions
       );
       const weightContext = this.props.dashboardContext.weightContext;
+      const modelType =
+        this.props.dashboardContext.explanationContext.modelMetadata.modelType;
       const includeWeightDropdown =
-        this.props.dashboardContext.explanationContext.modelMetadata
-          .modelType === ModelTypes.Multiclass;
+        modelType === ModelTypes.Multiclass || modelType === ModelTypes.Binary;
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)

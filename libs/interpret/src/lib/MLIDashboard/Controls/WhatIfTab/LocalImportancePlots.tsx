@@ -83,7 +83,11 @@ export class LocalImportancePlots extends React.Component<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    const modelType = this.props.metadata.modelType;
+    if (
+      modelType === ModelTypes.Multiclass ||
+      modelType === ModelTypes.Binary
+    ) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           key: option,
@@ -213,7 +217,8 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {this.props.metadata.modelType === ModelTypes.Multiclass && (
+                {(this.props.metadata.modelType === ModelTypes.Multiclass ||
+                  this.props.metadata.modelType === ModelTypes.Binary) && (
                   <div>
                     <div className={classNames.multiclassWeightLabel}>
                       <Text
