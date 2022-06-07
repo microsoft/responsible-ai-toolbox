@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Checkbox } from "@fluentui/react";
 import {
   ITableState,
   ModelAssessmentContext,
@@ -8,7 +9,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  Checkbox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import {
   DetailsList,
@@ -11,7 +12,6 @@ import {
   TooltipHost,
   TooltipOverflowMode,
   IObjectWithKey,
-  CheckboxVisibility,
   Text
 } from "office-ui-fabric-react";
 import React from "react";
