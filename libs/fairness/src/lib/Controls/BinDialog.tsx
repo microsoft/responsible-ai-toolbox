@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Checkbox } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import {
   DefaultButton,
   PrimaryButton,
-  Checkbox,
   SpinButton,
   Text
 } from "office-ui-fabric-react";
