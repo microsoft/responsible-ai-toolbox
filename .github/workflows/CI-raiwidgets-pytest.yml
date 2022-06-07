@@ -1,10 +1,10 @@
-name: CI RAIWidgets Python Typescript
+name: CI RAIWidgets pytest
 
 on:
   push:
-    branches: [main, postbuild]
+    branches: [main]
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
 
 jobs:
   ci-raiwidgets-python-typescript:
@@ -95,19 +95,13 @@ jobs:
           name: requirements-dev.txt
           path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Run widget tests
-        id: raiwidgettests
-        shell: bash -l {0}
-        run: yarn e2e-widget
-
       - name: Run tests
         shell: bash -l {0}
+        id: raiwidgettests
         run: |
           pytest --durations=10 --junitxml=junit/test-results.xml --cov=${{ matrix.packageDirectory }} --cov-report=xml --cov-report=html
         working-directory: ${{ matrix.packageDirectory }}
 
-      # Only try to upload code cov if python tests were run
       - if: ${{ (steps.raiwidgettests.outcome == 'success') }}
         name: Upload code coverage results
         uses: actions/upload-artifact@v3
@@ -142,13 +136,6 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           verbose: true
-
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Upload e2e test screen shot
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.packageDirectory }}-e2e-screen-shot
-          path: ./dist/cypress
 
       - name: Set codecov status
         if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}

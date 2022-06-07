@@ -9,6 +9,7 @@ const { exit } = require("process");
 const baseDir = path.join(__dirname, "../notebooks/responsibleaidashboard");
 const filePrefix = "responsibleaidashboard-";
 // Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
+// Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml
 const fileNames = [
   "responsibleaidashboard-census-classification-model-debugging",
   "responsibleaidashboard-diabetes-regression-model-debugging",
@@ -17,10 +18,6 @@ const fileNames = [
   "responsibleaidashboard-housing-decision-making",
   "responsibleaidashboard-multiclass-dnn-model-debugging"
 ];
-// List all flight combinations for which to generate notebooks.
-// The empty list represents "no flights" and should always be present.
-// Combinations of multiple flights are possible via a comma-separated list.
-const flightCombinations = [[], ["newModelOverviewExperience"]];
 const hostReg = /^ResponsibleAI started at (http:\/\/localhost:\d+)$/m;
 const timeout = 3600;
 
@@ -66,7 +63,6 @@ function addFlightsInFile(path, flights) {
   const dashboardConstructorCall = "ResponsibleAIDashboard(";
   while (startIndex < content.length) {
     startIndex = content.indexOf(dashboardConstructorCall, startIndex);
-    console.log(startIndex);
     if (startIndex === -1) {
       break;
     }
@@ -82,16 +78,12 @@ function addFlightsInFile(path, flights) {
     }
     content =
       content.slice(0, dashboardArgsIndex - 1) +
-      `, feature_flights="${flights.join("&")}")` +
+      `, feature_flights="${flights.split(",").join("&")}")` +
       content.slice(dashboardArgsIndex);
     startIndex = dashboardArgsIndex + 1;
   }
-  const newPath =
-    flights.length === 0
-      ? path
-      : path.slice(0, path.length - 3) + "-" + flights.join("-") + ".py";
-  console.log(`writing notebook with flights to ${newPath}`);
-  fs.writeFileSync(newPath, content, { encoding: "utf-8" });
+  console.log(`writing notebook with flights to ${path}`);
+  fs.writeFileSync(path, content, { encoding: "utf-8" });
 }
 
 function checkIfAllNotebooksHaveTests() {
@@ -109,32 +101,33 @@ function checkIfAllNotebooksHaveTests() {
   console.log(`All notebooks have tests.`);
 }
 
-function convertNotebooks() {
+function convertNotebooks(notebook, flights) {
   console.log("Converting notebooks");
-  for (var flights of flightCombinations) {
-    for (var fileName of fileNames) {
-      console.log(
-        `Converting notebook ${fileName} with ${
-          flights.length === 0 ? "no " : ""
-        }flights ${flights.toString()}\r\n`
-      );
-      const { status, stderr } = spawnSync(
-        "jupyter",
-        [
-          "nbconvert",
-          path.join(baseDir, `${fileName}.ipynb`),
-          "--to",
-          "script"
-        ],
-        {
-          stdio: "inherit"
-        }
-      );
-      if (flights.length > 0) {
-        addFlightsInFile(path.join(baseDir, `${fileName}.py`), flights);
-      }
-      console.log(`Converted notebook ${fileName}\r\n`);
+  for (var fileName of fileNames) {
+    if (notebook && fileName !== notebook) {
+      console.log(`Skipping ${fileName}. Looking for ${notebook} only.`);
+      continue;
     }
+    if (flights) {
+      // flights were passed
+      console.log(
+        `Converting notebook ${fileName} with flights ${flights.toString()}\r\n`
+      );
+    } else {
+      // no flights were passed
+      console.log(`Converting notebook ${fileName} with no flights.\r\n`);
+    }
+    const { status, stderr } = spawnSync(
+      "jupyter",
+      ["nbconvert", path.join(baseDir, `${fileName}.ipynb`), "--to", "script"],
+      {
+        stdio: "inherit"
+      }
+    );
+    if (flights) {
+      addFlightsInFile(path.join(baseDir, `${fileName}.py`), flights);
+    }
+    console.log(`Converted notebook ${fileName}\r\n`);
   }
 }
 /**
@@ -154,12 +147,11 @@ async function runNotebooks(selectedNotebook) {
     console.log(`    ${file}`);
   });
   if (selectedNotebook) {
-    console.log(`Should only run ${selectedNotebook}`);
-    files = files.filter((f) => f === selectedNotebook);
+    const nbFileName = `${selectedNotebook}.py`;
+    console.log(`Should only run ${nbFileName}`);
+    files = files.filter((f) => f === nbFileName);
     if (files.length === 0) {
-      console.log(
-        `Could not find any matching notebook for ${selectedNotebook}.`
-      );
+      console.log(`Could not find any matching notebook for ${nbFileName}.`);
       exit(1);
     }
   }
@@ -185,21 +177,30 @@ function writeCypressSettings(hosts) {
   );
 }
 
-function e2e(watch, selectedNotebook) {
+function e2e(watch, selectedNotebook, flights) {
   const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
   console.log("Running e2e");
   let notebookArgs = [];
   if (selectedNotebook) {
-    // remove prefix "responsibleaidashboard" and suffix ".py"
+    // remove prefix "responsibleaidashboard"
     // remove dashes and make camel case
     let notebookKey = selectedNotebook.substring(
       "responsibleaidashboard".length,
-      selectedNotebook.length - 3
+      selectedNotebook.length
     );
     notebookKey = notebookKey
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join("");
+    if (flights) {
+      // append flights (if any) with first letter capitalized
+      notebookKey =
+        notebookKey +
+        flights
+          .split(",")
+          .map((flight) => flight.charAt(0).toUpperCase() + flight.slice(1))
+          .join("");
+    }
     console.log(
       `Determined notebook key ${notebookKey} for notebook ${selectedNotebook}.`
     );
@@ -230,15 +231,19 @@ async function main() {
     .option("-w, --watch", "Watch mode")
     .option("--skipgen", "Skip notebook generation")
     .option("-n, --notebook [notebook]", "Run specific notebook")
+    .option(
+      "-f, --flights [flights]",
+      "Use flights separated by comma (no whitespace). Not specifying flights means that no flights are used."
+    )
     .parse(process.argv)
     .outputHelp();
   checkIfAllNotebooksHaveTests();
   if (commander.opts().skipgen === undefined || !commander.opts().skipgen) {
-    convertNotebooks();
+    convertNotebooks(commander.opts().notebook, commander.opts().flights);
   }
   const hosts = await runNotebooks(commander.opts().notebook);
   writeCypressSettings(hosts);
-  e2e(commander.opts().watch, commander.opts().notebook);
+  e2e(commander.opts().watch, commander.opts().notebook, commander.opts().flights);
   process.exit(0);
 }
 
