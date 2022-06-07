@@ -481,8 +481,7 @@ export class ExplanationDashboard extends React.Component<
       return undefined;
     }
     switch (modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         return localExplanations.map((featuresByClasses) => {
           return featuresByClasses.map((classArray) => {
@@ -491,6 +490,7 @@ export class ExplanationDashboard extends React.Component<
         });
       }
       case ModelTypes.Multiclass:
+      case ModelTypes.Binary:
       default: {
         return localExplanations.map((featuresByClasses, rowIndex) => {
           return featuresByClasses.map((classArray) => {
