@@ -32,15 +32,18 @@ class TestFeatureBalanceMeasures:
     def test_adult_data(self, adult_data, adult_data_feature_balance_measures):
         train_df, test_df, cols_of_interest, target_col = adult_data
         full_df = pd.concat([train_df, test_df])
-        actual = (
-            FeatureBalanceMeasures(
-                cols_of_interest=cols_of_interest, label_col=target_col
-            )
-            .measures(dataset=full_df)
-            .query(
-                "(ClassA == 'White' and ClassB == 'Other') or " +
-                "(ClassA == 'Male' and ClassB == 'Female')"
-            )
+        feat_measures = FeatureBalanceMeasures(
+            cols_of_interest=cols_of_interest, label_col=target_col
+        ).measures(dataset=full_df)
+        actual = pd.concat(
+            [
+                feat_measures.query(
+                    "(ClassA == 'White' and ClassB == 'Other')"
+                ),
+                feat_measures.query(
+                    "(ClassA == 'Male' and ClassB == 'Female')"
+                ),
+            ]
         )
         pd.testing.assert_frame_equal(
             actual.reset_index(drop=True),
