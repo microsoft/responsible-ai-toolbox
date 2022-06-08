@@ -83,7 +83,7 @@ The Responsible AI Toolbox’s strength lies in its customizability. It empowers
 - [Get started](https://github.com/microsoft/responsible-ai-widgets/blob/main/notebooks/responsibleaidashboard/getting-started.ipynb)
 
 Model Debugging Examples:
-- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
+- [Try the tool: model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-assessment.ipynb)
 - [Try the tool: model debugging of a housing price prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-housing-classification-model-debugging.ipynb)
 - [Try the tool: model debugging of a diabetes progression prediction model (regression)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-diabetes-regression-model-debugging.ipynb)
 

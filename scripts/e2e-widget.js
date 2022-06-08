@@ -11,7 +11,7 @@ const filePrefix = "responsibleaidashboard-";
 // Please add notebook name into 'fileNames' array only when you are adding e2e tests to that notebook.
 // Keep this list in sync with .github/workflows/CI-e2e-notebooks.yml
 const fileNames = [
-  "responsibleaidashboard-census-classification-model-debugging",
+  "responsibleaidashboard-census-classification-model-assessment",
   "responsibleaidashboard-diabetes-regression-model-debugging",
   "responsibleaidashboard-housing-classification-model-debugging",
   "responsibleaidashboard-diabetes-decision-making",
