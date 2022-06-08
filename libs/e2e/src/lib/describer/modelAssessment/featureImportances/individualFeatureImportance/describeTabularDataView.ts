@@ -29,8 +29,11 @@ export function describeTabularDataView(
           .should("match", regExForNumbersWithBrackets);
       });
 
+      it("should collapse 'Correct predictions' by default", () => {
+        cy.get(Locators.IFIExpandButton).should("be.visible");
+      });
+
       it("should have right number of incorrect prediction datapoints", () => {
-        cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
         cy.get(Locators.IFIPredictionSpan)
           .eq(1)
           .invoke("text")
