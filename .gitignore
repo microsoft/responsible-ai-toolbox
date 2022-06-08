@@ -68,6 +68,7 @@ apps/*-e2e/debug.log
 # notebook artifacts
 /notebooks/*.csv
 /notebooks/*.zip
+*.csv
 
 # docs
 docs/build/*
