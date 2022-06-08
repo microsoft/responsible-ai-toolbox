@@ -17,7 +17,7 @@ jobs:
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         flights: ["noFlights", "newModelOverviewExperience"]
         notebook: # keep this list in sync with scripts/e2e-widget.js
-          - "responsibleaidashboard-census-classification-model-debugging"
+          - "responsibleaidashboard-census-classification-model-assessment"
           - "responsibleaidashboard-diabetes-regression-model-debugging"
           - "responsibleaidashboard-housing-classification-model-debugging"
           - "responsibleaidashboard-diabetes-decision-making"

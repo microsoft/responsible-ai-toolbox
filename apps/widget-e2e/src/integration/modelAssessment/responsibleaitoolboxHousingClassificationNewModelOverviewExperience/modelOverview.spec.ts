@@ -3,11 +3,11 @@
 
 import {
   describeNewModelOverview,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.HousingClassificationModelDebugging;
+modelAssessmentDatasetsIncludingFlights.HousingClassificationModelDebuggingNewModelOverviewExperience;
 describeNewModelOverview(
   datasetShape,
   "HousingClassificationModelDebuggingNewModelOverviewExperience"

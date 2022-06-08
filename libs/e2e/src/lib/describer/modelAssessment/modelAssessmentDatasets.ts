@@ -470,22 +470,74 @@ Object.keys(modelAssessmentDatasets).forEach((k: string) => {
   ] = JSON.parse(JSON.stringify(modelAssessmentDatasets[k]));
 });
 
-
 modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAssessmentNewModelOverviewExperience.modelOverviewData =
   {
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
-    initialCohort: {
-      metrics: {
-        meanAbsoluteError: "3 859.27",
-        meanPrediction: "154.102",
-        meanSquaredError: "2 981.101"
+    initialCohorts: [
+      {
+        metrics: {
+          accuracy: "0.856",
+          falsePositiveRate: "0.077",
+          falseNegativeRate: "0.35",
+          selectionRate: "0.246"
+        },
+        name: "All data",
+        sampleSize: "500"
       },
-      name: "All data",
-      sampleSize: "89"
-    }
+      {
+        metrics: {
+          accuracy: "0.753",
+          falsePositiveRate: "0.195",
+          falseNegativeRate: "0.313",
+          selectionRate: "0.438"
+        },
+        name: "Cohort Age and Hours-Per-Week",
+        sampleSize: "146"
+      },
+      {
+        metrics: {
+          accuracy: "0.927",
+          falsePositiveRate: "0.019",
+          falseNegativeRate: "0.722",
+          selectionRate: "0.077"
+        },
+        name: "Cohort Marital-Status",
+        sampleSize: "233"
+      },
+      {
+        metrics: {
+          accuracy: "0.75",
+          falsePositiveRate: "0.071",
+          falseNegativeRate: "0.667",
+          selectionRate: "0.3"
+        },
+        name: "Cohort Index",
+        sampleSize: "20"
+      },
+      {
+        metrics: {
+          accuracy: "0.734",
+          falsePositiveRate: "1",
+          falseNegativeRate: "0",
+          selectionRate: "0.734"
+        },
+        name: "Cohort Predicted Y",
+        sampleSize: "109"
+      },
+      {
+        metrics: {
+          accuracy: "0.65",
+          falsePositiveRate: "N/A",
+          falseNegativeRate: "0.35",
+          selectionRate: "1"
+        },
+        name: "Cohort True Y",
+        sampleSize: "123"
+      }
+    ]
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
@@ -493,15 +545,17 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
-    initialCohort: {
-      metrics: {
-        meanAbsoluteError: "3 859.27",
-        meanPrediction: "154.102",
-        meanSquaredError: "2 981.101"
-      },
-      name: "All data",
-      sampleSize: "89"
-    }
+    initialCohorts: [
+      {
+        metrics: {
+          meanAbsoluteError: "3 859.27",
+          meanPrediction: "154.102",
+          meanSquaredError: "2 981.101"
+        },
+        name: "All data",
+        sampleSize: "89"
+      }
+    ]
   };
 
 const withType: {

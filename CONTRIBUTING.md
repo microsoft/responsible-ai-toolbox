@@ -141,14 +141,13 @@ Example: `-n responsibleaidashboard-diabetes-regression-model-debugging.py`
 Currently, only a single notebook can be specified.
 
 The notebooks can also be run with flights enabled. For that, simply add your
-preferred `flightCombinations` to `e2e-widget.js` and adjust the notebook name
-to include the flights.
+preferred flights with `-f`.
 
-Example with flight `f`:
-`-n responsibleaidashboard-diabetes-regression-model-debugging-f.py`
+Example with a single flight `flightName`:
+`-f flightName`
 
 Example with multiple flights `f1` and `f2`:
-`-n responsibleaidashboard-diabetes-regression-model-debugging-f1-f2.py`
+`-n f1,f2`
 
 Furthermore, when iterating on writing such tests it may not be necessary to
 regenerate the notebook(s) every single time. To avoid wasting time on this

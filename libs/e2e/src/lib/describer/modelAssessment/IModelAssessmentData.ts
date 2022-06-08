@@ -55,15 +55,17 @@ export interface IModelStatisticsData {
 }
 
 export interface IModelOverviewData {
-  initialCohort: {
-    name: string;
-    sampleSize: string;
-    metrics: { [name: string]: string };
-  };
+  initialCohorts: IExpectedCohortData[];
   featureCohortView: {
     singleFeatureCohorts: number;
     multiFeatureCohorts: number;
   };
+}
+
+interface IExpectedCohortData {
+  name: string;
+  sampleSize: string;
+  metrics: { [name: string]: string };
 }
 
 export interface IDatasetExplorerData {

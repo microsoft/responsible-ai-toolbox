@@ -75,38 +75,60 @@ function ensureAllModelOverviewBasicElementsArePresent() {
 function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData
 ) {
+  const data = datasetShape.modelOverviewData!;
   cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
-  cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("not.exist");
+  if (data.initialCohorts.length <= 1) {
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
+      "not.exist"
+    );
+  } else {
+    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+  }
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
-    datasetShape.modelOverviewData?.initialCohort.name
+    data.initialCohorts[0].name
   );
-  cy.get(Locators.ModelOverviewHeatmapCells)
-    .first()
-    .should(
-      "include.text",
-      datasetShape.modelOverviewData?.initialCohort.sampleSize
-    )
-    .next()
-    .should(
-      "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics.meanAbsoluteError
-    )
-    .next()
-    .should(
-      "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics.meanSquaredError
-    )
-    .next()
-    .should(
-      "include.text",
-      datasetShape.modelOverviewData?.initialCohort.metrics.meanPrediction
+  let heatmapCellOrder = [data.initialCohorts[0].sampleSize];
+  if (datasetShape.isRegression) {
+    heatmapCellOrder.push(
+      data.initialCohorts[0].metrics.meanAbsoluteError,
+      data.initialCohorts[0].metrics.meanSquaredError,
+      data.initialCohorts[0].metrics.meanPrediction
     );
+  } else {
+    heatmapCellOrder.push(
+      data.initialCohorts[0].metrics.accuracy,
+      data.initialCohorts[0].metrics.falsePositiveRate,
+      data.initialCohorts[0].metrics.falseNegativeRate,
+      data.initialCohorts[0].metrics.selectionRate
+    );
+  }
+
+  heatmapCellOrder.forEach((expectedCellContent, cellIndex) => {
+    let cell = cy.get(Locators.ModelOverviewHeatmapCells).first();
+    for (
+      var currentCellIndex = 0;
+      currentCellIndex < cellIndex;
+      currentCellIndex += 1
+    ) {
+      cell = cell.next();
+    }
+    cell.should("include.text", expectedCellContent);
+  });
+  // cy.get(Locators.ModelOverviewHeatmapCells)
+  //   .first()
+  //   .should("include.text", data.initialCohorts[0].sampleSize)
+  //   .next()
+  //   .should("include.text", data.initialCohorts[0].metrics.meanAbsoluteError)
+  //   .next()
+  //   .should("include.text", data.initialCohorts[0].metrics.meanSquaredError)
+  //   .next()
+  //   .should("include.text", data.initialCohorts[0].metrics.meanPrediction);
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
   ).should("not.exist");
@@ -114,26 +136,33 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
-  cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 1);
-  cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-    "not.exist"
-  );
-  cy.get(Locators.ModelOverviewMetricChart).should("exist");
-  cy.get(Locators.ModelOverviewMetricChartBars).should("have.length", 1);
-  // check aria-label of bar chart - aria-label uses comma as delimiter
-  // between digits for thousands instead of whitespace
-  cy.get(Locators.ModelOverviewMetricChartBars)
-    .first()
-    .should(
-      "have.attr",
-      "aria-label",
-      `1. ${
-        datasetShape.modelOverviewData?.initialCohort.name
-      }, ${datasetShape.modelOverviewData?.initialCohort.metrics.meanAbsoluteError.replace(
-        " ",
-        ","
-      )}.`
+
+  if (datasetShape.isRegression || datasetShape.isMulticlass) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 1);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
     );
+    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+    cy.get(Locators.ModelOverviewMetricChartBars).should("have.length", 1);
+    // check aria-label of bar chart - aria-label uses comma as delimiter
+    // between digits for thousands instead of whitespace
+    const displayedMetric = datasetShape.isRegression
+      ? data.initialCohorts[0].metrics.meanAbsoluteError
+      : data.initialCohorts[0].metrics.accuracy;
+    cy.get(Locators.ModelOverviewMetricChartBars)
+      .first()
+      .should(
+        "have.attr",
+        "aria-label",
+        `1. ${
+          datasetShape.modelOverviewData?.initialCohorts[0].name
+        }, ${displayedMetric.replace(" ", ",")}.`
+      );
+  } else {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
+    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
+  }
 }
 
 function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent() {
@@ -175,19 +204,29 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
-  cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 1);
-  cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-    "not.exist"
-  );
-  cy.get(Locators.ModelOverviewMetricChart).should("exist");
-  let expectedNumberOfCohorts =
-    datasetShape.modelOverviewData?.featureCohortView.singleFeatureCohorts;
-  if (selectedFeatures > 1) {
-    expectedNumberOfCohorts =
-      datasetShape.modelOverviewData?.featureCohortView.multiFeatureCohorts;
-  }
-  cy.get(Locators.ModelOverviewMetricChartBars).should(
+  const expectedNumberOfChartPivotItems =
+    datasetShape.isRegression || datasetShape.isMulticlass ? 1 : 2;
+  cy.get(Locators.ModelOverviewChartPivotItems).should(
     "have.length",
-    expectedNumberOfCohorts
+    expectedNumberOfChartPivotItems
   );
+  if (datasetShape.isRegression || datasetShape.isMulticlass) {
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
+    );
+    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+    let expectedNumberOfCohorts =
+      datasetShape.modelOverviewData?.featureCohortView.singleFeatureCohorts;
+    if (selectedFeatures > 1) {
+      expectedNumberOfCohorts =
+        datasetShape.modelOverviewData?.featureCohortView.multiFeatureCohorts;
+    }
+    cy.get(Locators.ModelOverviewMetricChartBars).should(
+      "have.length",
+      expectedNumberOfCohorts
+    );
+  } else {
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
+    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
+  }
 }
