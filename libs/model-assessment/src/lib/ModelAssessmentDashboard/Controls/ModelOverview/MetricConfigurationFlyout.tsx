@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
@@ -15,7 +16,6 @@ import {
   MessageBarType,
   Text,
   Selection,
-  CheckboxVisibility,
   SelectionMode,
   DetailsList,
   PanelType,

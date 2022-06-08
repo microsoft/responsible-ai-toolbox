@@ -82,7 +82,8 @@ export class SidePanel extends React.Component<
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
         />
-        {this.props.metadata.modelType === ModelTypes.Multiclass &&
+        {(this.props.metadata.modelType === ModelTypes.Multiclass ||
+          this.props.metadata.modelType === ModelTypes.Binary) &&
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
@@ -136,7 +137,10 @@ export class SidePanel extends React.Component<
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    if (
+      this.props.metadata.modelType === ModelTypes.Multiclass ||
+      this.props.metadata.modelType === ModelTypes.Binary
+    ) {
       return this.props.weightOptions.map((option) => {
         return {
           key: option,

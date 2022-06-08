@@ -1,13 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import {
   IconButton,
   DefaultButton,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   IDropdownOption,
   Callout
 } from "office-ui-fabric-react";

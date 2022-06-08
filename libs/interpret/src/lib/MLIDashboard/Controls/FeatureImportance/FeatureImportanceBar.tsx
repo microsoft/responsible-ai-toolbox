@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   ModelTypes,
   IGlobalExplanation,
@@ -10,9 +11,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   IDropdownOption,
   Slider,
   Callout,

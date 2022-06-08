@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox } from "@fluentui/react";
 import {
   FabricStyles,
   isTwoDimArray,
@@ -31,8 +32,6 @@ import _ from "lodash";
 import memoize from "memoize-one";
 import {
   PrimaryButton,
-  IComboBox,
-  IComboBoxOption,
   IDropdownOption,
   Pivot,
   PivotItem,
@@ -481,8 +480,7 @@ export class ExplanationDashboard extends React.Component<
       return undefined;
     }
     switch (modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         return localExplanations.map((featuresByClasses) => {
           return featuresByClasses.map((classArray) => {
@@ -491,6 +489,7 @@ export class ExplanationDashboard extends React.Component<
         });
       }
       case ModelTypes.Multiclass:
+      case ModelTypes.Binary:
       default: {
         return localExplanations.map((featuresByClasses, rowIndex) => {
           return featuresByClasses.map((classArray) => {

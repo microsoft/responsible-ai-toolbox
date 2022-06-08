@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   IFilter,
   ICompositeFilter,
@@ -13,9 +14,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   IStackTokens,
   ITheme,
   MessageBar,
