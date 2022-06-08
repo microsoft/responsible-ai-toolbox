@@ -160,7 +160,7 @@ class TestModelAnalysis(object):
         X_test[LABELS] = y_test
 
         manager_args = {
-            ManagerParams.DESIRED_RANGE: [5, 10],
+            ManagerParams.DESIRED_RANGE: [3, 5],
             ManagerParams.TREATMENT_FEATURES: ['AveRooms'],
             ManagerParams.MAX_CAT_EXPANSION: 12,
             ManagerParams.FEATURE_IMPORTANCE: True
