@@ -30,7 +30,7 @@ export function describeTabularDataView(
       });
 
       it("should collapse 'Correct predictions' by default", () => {
-        cy.get(Locators.IFIExpandButton).should("be.visible");
+        cy.get(Locators.IFICollapseButton).should("be.visible");
       });
 
       it("should have right number of incorrect prediction datapoints", () => {
@@ -58,6 +58,7 @@ export function describeTabularDataView(
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the row", () => {
+        cy.get(Locators.IFICollapseButton).first().click(); // expand correct predictions
         selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
