@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { SelectionContext } from "@responsible-ai/mlchartlib";
-import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { IDashboardContext } from "../../ExplanationDashboard";

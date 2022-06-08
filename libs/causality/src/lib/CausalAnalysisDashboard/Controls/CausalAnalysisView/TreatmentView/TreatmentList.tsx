@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -9,7 +10,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,

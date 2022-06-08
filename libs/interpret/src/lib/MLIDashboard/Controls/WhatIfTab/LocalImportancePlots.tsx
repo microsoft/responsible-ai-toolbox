@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBox, ComboBox, IComboBoxOption } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   ModelTypes,
@@ -18,8 +19,6 @@ import {
   IChoiceGroupOption,
   Slider,
   Text,
-  ComboBox,
-  IComboBox,
   DirectionalHint,
   Callout,
   Link,
@@ -84,7 +83,11 @@ export class LocalImportancePlots extends React.Component<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    const modelType = this.props.metadata.modelType;
+    if (
+      modelType === ModelTypes.Multiclass ||
+      modelType === ModelTypes.Binary
+    ) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           key: option,
@@ -214,7 +217,8 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {this.props.metadata.modelType === ModelTypes.Multiclass && (
+                {(this.props.metadata.modelType === ModelTypes.Multiclass ||
+                  this.props.metadata.modelType === ModelTypes.Binary) && (
                   <div>
                     <div className={classNames.multiclassWeightLabel}>
                       <Text
@@ -434,7 +438,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -444,7 +448,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onICEClassSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;

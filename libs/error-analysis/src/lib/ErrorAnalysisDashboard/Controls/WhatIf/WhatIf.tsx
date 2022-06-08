@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   JointDataset,
   ErrorCohort,
@@ -13,7 +14,6 @@ import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
-  IComboBoxOption,
   IDropdownOption,
   IFocusTrapZoneProps,
   Panel
