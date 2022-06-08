@@ -471,7 +471,7 @@ Object.keys(modelAssessmentDatasets).forEach((k: string) => {
 });
 
 
-modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
+modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAssessmentNewModelOverviewExperience.modelOverviewData =
   {
     featureCohortView: {
       multiFeatureCohorts: 9,

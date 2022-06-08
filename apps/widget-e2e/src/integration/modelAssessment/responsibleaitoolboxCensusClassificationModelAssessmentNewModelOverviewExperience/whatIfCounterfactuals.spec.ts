@@ -3,8 +3,8 @@
 
 import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
+const datasetShape = modelAssessmentDatasets.CensusClassificationModelAssessment;
 describeWhatIf(
   datasetShape,
-  "CensusClassificationModelDebuggingNewModelOverviewExperience"
+  "CensusClassificationModelAssessmentNewModelOverviewExperience"
 );
