@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
@@ -23,9 +24,6 @@ import {
   Text,
   Pivot,
   PivotItem,
-  IComboBox,
-  IComboBoxOption,
-  ComboBox,
   ActionButton,
   MessageBar,
   Toggle

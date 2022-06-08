@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBox, IComboBoxOption } from "office-ui-fabric-react";
+import { IComboBox, IComboBoxOption } from "@fluentui/react";
 import React from "react";
 
 export enum WeightVectors {

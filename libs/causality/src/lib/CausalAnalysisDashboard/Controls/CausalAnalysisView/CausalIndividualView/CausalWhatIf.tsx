@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   ColumnCategories,
   FabricStyles,
@@ -12,14 +13,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  Slider,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import { Slider, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { causalWhatIfStyles } from "./CausalWhatIf.styles";

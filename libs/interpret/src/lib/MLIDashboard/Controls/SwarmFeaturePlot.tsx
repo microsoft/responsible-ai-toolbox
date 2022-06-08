@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   JointDataset,
   Cohort,
@@ -15,10 +16,10 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
+import { PlotlyUtils } from "../SharedComponents/PlotlyUtils";
 
 export interface ISwarmFeaturePlotProps {
   topK: number;
