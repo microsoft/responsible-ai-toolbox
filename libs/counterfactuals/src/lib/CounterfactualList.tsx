@@ -384,7 +384,7 @@ export class CounterfactualList extends React.Component<
             <Text>{column.name}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Text>{predictedClass}</Text>
+            <Text className="predictedValue">{predictedClass}</Text>
           </Stack.Item>
         </Stack>
       );

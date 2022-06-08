@@ -63,6 +63,7 @@ export enum Locators {
   WhatIfSearchBarClearTextButton = "#CounterfactualPanel button[aria-label='Clear text']",
   WhatIfNameLabel = "#whatIfNameLabel",
   CreateYourOwnCounterfactualInputField = "#CounterfactualPanel div[role='gridcell'] input[type='text']",
+  CreateYourOwnCounterfactualPredictedValueField = "#CounterfactualPanel div[role='gridcell'] span[class^='predictedValue']",
   WhatIfScatterChartXAxis = "#IndividualFeatureContainer div[class^='ms-Stack horizontalAxisWithPadding']",
   WhatIfXAxisFeatureDropdownOccupationOption = "div.ms-ComboBox-optionsContainerWrapper button:contains('Probability : >50K')",
   WhatIfScatterChartXAxisLabelUpdated = "#IndividualFeatureContainer div[class^='ms-Stack horizontalAxisWithPadding'] button:contains('Probability : >50K')",

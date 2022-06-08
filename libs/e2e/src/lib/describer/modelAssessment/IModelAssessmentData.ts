@@ -126,12 +126,14 @@ export interface IWhatIfCounterfactualsData {
   searchBarQuery?: string;
   whatIfNameLabel?: string;
   whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualDecimalInput?: string;
   createYourOwnCounterfactualInputFieldUpdated?: string;
   yAxisValue?: string;
   yAxisNewValue?: string;
   checkForClassField?: boolean;
   classValue?: string;
   newClassValue?: string;
+  predictedValue?: string;
 }
 
 export enum RAINotebookNames {

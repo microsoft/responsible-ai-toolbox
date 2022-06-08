@@ -57,6 +57,31 @@ export function describeWhatIfCreate(
           );
       });
 
+      it("Should have 'Create your own counterfactual' section and should be able to input decimal point", () => {
+        cy.get(Locators.CreateYourOwnCounterfactualInputField)
+          .eq(3)
+          .clear()
+          .type(
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualDecimalInput || "18.5"
+          );
+        cy.get(Locators.CreateYourOwnCounterfactualInputField).eq(3).focus();
+        cy.focused()
+          .should("have.attr", "value")
+          .and(
+            "contain",
+            dataShape.whatIfCounterfactualsData
+              ?.createYourOwnCounterfactualDecimalInput || "18.5"
+          );
+      });
+
+      it("Should have 'Predicted value' section and it should not be editable", () => {
+        cy.get(Locators.CreateYourOwnCounterfactualPredictedValueField).should(
+          "have.text",
+          dataShape.whatIfCounterfactualsData?.predictedValue || "1"
+        );
+      });
+
       it("Should have what-if counterfactual name as 'Copy of row <index selected>' by default and should be editable", () => {
         cy.get(Locators.WhatIfNameLabel)
           .should("have.attr", "value")
