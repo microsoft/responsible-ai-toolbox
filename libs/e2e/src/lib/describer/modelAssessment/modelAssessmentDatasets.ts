@@ -126,6 +126,7 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
       cohortDropDownValues: [
         "All data",
@@ -536,6 +537,69 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
         },
         name: "Cohort True Y",
         sampleSize: "123"
+      }
+    ]
+  };
+modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModelOverviewExperience.modelOverviewData =
+  {
+    featureCohortView: {
+      multiFeatureCohorts: 9,
+      singleFeatureCohorts: 3
+    },
+    initialCohorts: [
+      {
+        metrics: {
+          meanAbsoluteError: "3 859.27",
+          meanPrediction: "154.102",
+          meanSquaredError: "2 981.101"
+        },
+        name: "All data",
+        sampleSize: "89"
+      },
+      {
+        metrics: {
+          meanAbsoluteError: "1 961.23",
+          meanPrediction: "196.629",
+          meanSquaredError: "4 014.697"
+        },
+        name: "Cohort Age and BMI",
+        sampleSize: "38"
+      },
+      {
+        metrics: {
+          meanAbsoluteError: "983.52",
+          meanPrediction: "142.495",
+          meanSquaredError: "3 829.201"
+        },
+        name: "Cohort Index",
+        sampleSize: "20"
+      },
+      {
+        metrics: {
+          meanAbsoluteError: "2 084.21",
+          meanPrediction: "115.086",
+          meanSquaredError: "2 416.75"
+        },
+        name: "Cohort Predicted Y",
+        sampleSize: "51"
+      },
+      {
+        metrics: {
+          meanAbsoluteError: "3 744.86",
+          meanPrediction: "155.306",
+          meanSquaredError: "2 972.126"
+        },
+        name: "Cohort True Y",
+        sampleSize: "87"
+      },
+      {
+        metrics: {
+          meanAbsoluteError: "3 597.63",
+          meanPrediction: "157.301",
+          meanSquaredError: "4 154.723"
+        },
+        name: "Cohort Regression Error",
+        sampleSize: "63"
       }
     ]
   };

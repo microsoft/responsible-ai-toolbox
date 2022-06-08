@@ -93,21 +93,32 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "include.text",
     data.initialCohorts[0].name
   );
-  let heatmapCellOrder = [data.initialCohorts[0].sampleSize];
+
+  let metricsOrder: string[] = [];
   if (datasetShape.isRegression) {
-    heatmapCellOrder.push(
-      data.initialCohorts[0].metrics.meanAbsoluteError,
-      data.initialCohorts[0].metrics.meanSquaredError,
-      data.initialCohorts[0].metrics.meanPrediction
+    metricsOrder.push(
+      "meanAbsoluteError",
+      "meanSquaredError",
+      "meanPrediction"
     );
   } else {
-    heatmapCellOrder.push(
-      data.initialCohorts[0].metrics.accuracy,
-      data.initialCohorts[0].metrics.falsePositiveRate,
-      data.initialCohorts[0].metrics.falseNegativeRate,
-      data.initialCohorts[0].metrics.selectionRate
+    metricsOrder.push(
+      "accuracy",
+      "falsePositiveRate",
+      "falseNegativeRate",
+      "selectionRate"
     );
   }
+
+  let heatmapCellOrder: string[] = [];
+  data.initialCohorts.forEach((cohortData) => {
+    heatmapCellOrder.push(cohortData.sampleSize);
+  });
+  metricsOrder.forEach((metricName) => {
+    data.initialCohorts.forEach((cohortData) => {
+      heatmapCellOrder.push(cohortData.metrics[metricName]);
+    });
+  });
 
   heatmapCellOrder.forEach((expectedCellContent, cellIndex) => {
     let cell = cy.get(Locators.ModelOverviewHeatmapCells).first();
@@ -120,15 +131,6 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     }
     cell.should("include.text", expectedCellContent);
   });
-  // cy.get(Locators.ModelOverviewHeatmapCells)
-  //   .first()
-  //   .should("include.text", data.initialCohorts[0].sampleSize)
-  //   .next()
-  //   .should("include.text", data.initialCohorts[0].metrics.meanAbsoluteError)
-  //   .next()
-  //   .should("include.text", data.initialCohorts[0].metrics.meanSquaredError)
-  //   .next()
-  //   .should("include.text", data.initialCohorts[0].metrics.meanPrediction);
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
   ).should("not.exist");
@@ -143,7 +145,10 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "not.exist"
     );
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    cy.get(Locators.ModelOverviewMetricChartBars).should("have.length", 1);
+    cy.get(Locators.ModelOverviewMetricChartBars).should(
+      "have.length",
+      data.initialCohorts.length
+    );
     // check aria-label of bar chart - aria-label uses comma as delimiter
     // between digits for thousands instead of whitespace
     const displayedMetric = datasetShape.isRegression
