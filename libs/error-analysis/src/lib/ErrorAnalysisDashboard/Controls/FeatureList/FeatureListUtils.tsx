@@ -3,7 +3,7 @@
 
 import { ITableState } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IColumn } from "office-ui-fabric-react";
+import { IColumn } from "@fluentui/react";
 
 export function updateItems(
   percents: number[],

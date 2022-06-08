@@ -14,7 +14,7 @@ import {
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+import { Position } from "@fluentui/react/lib/utilities/positioning";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";

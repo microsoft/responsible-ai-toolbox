@@ -26,7 +26,7 @@ import {
   Fabric,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";

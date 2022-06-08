@@ -108,6 +108,12 @@ export class CohortEditor extends React.PureComponent<
 
   public render(): React.ReactNode {
     const openedFilter = this.state.openedFilter;
+    console.log(
+      "!!render: ",
+      openedFilter,
+      !openedFilter,
+      this.state.selectedFilterCategory
+    );
     const styles = cohortEditorStyles();
     return (
       <>
@@ -341,6 +347,7 @@ export class CohortEditor extends React.PureComponent<
     _?: FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option?: IChoiceGroupOption | undefined
   ): void => {
+    console.log("!!onFilterCategoryChange: ", option);
     if (typeof option?.key === "string") {
       this.setState({
         filterIndex: this.state.filters.length,
@@ -371,10 +378,12 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private saveState = (index?: number): void => {
+    console.log("!!savState: ", index, this.state.openedFilter);
     if (!this.state.openedFilter || index === undefined) {
       return;
     }
     this.updateFilter(this.state.openedFilter, index);
+    console.log("!!savState selectedFilterCategory: ");
     this.setState({ selectedFilterCategory: undefined });
   };
 
@@ -516,6 +525,7 @@ export class CohortEditor extends React.PureComponent<
   }
 
   private updateFilter(filter: IFilter, index: number): void {
+    console.log("!!updateFilter: ", index, filter);
     const filters = [...this.state.filters];
     filters[index] = filter;
     this.setState({
@@ -525,6 +535,7 @@ export class CohortEditor extends React.PureComponent<
   }
 
   private cancelFilter = (): void => {
+    console.log("!!cancelfilter: ");
     this.setState({
       openedFilter: undefined,
       selectedFilterCategory: undefined
