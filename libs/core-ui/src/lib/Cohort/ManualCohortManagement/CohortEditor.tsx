@@ -10,10 +10,9 @@ import {
   PrimaryButton,
   Stack,
   Panel,
-  ChoiceGroup,
-  IChoiceGroupOption,
   Link
 } from "@fluentui/react";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";

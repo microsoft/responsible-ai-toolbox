@@ -11,10 +11,9 @@ import {
   SpinButton,
   Panel,
   Stack,
-  ChoiceGroup,
-  IChoiceGroupOption,
   DefaultButton
 } from "@fluentui/react";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
