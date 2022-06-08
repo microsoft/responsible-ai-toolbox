@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  Checkbox,
+  IComboBoxOption,
+  IComboBox,
+  ComboBox
+} from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
-  Checkbox,
-  ComboBox,
   DefaultButton,
-  IComboBox,
-  IComboBoxOption,
   PrimaryButton,
   SpinButton,
   Stack,
@@ -152,7 +154,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               label={localization.Interpret.Filters.categoricalIncludeValues}
               selectedKey={this.props.openedFilter.arg}
               onChange={this.props.setCategoricalValues}
-              options={categoricalOptions}
+              options={categoricalOptions || []}
               useComboBoxAsMenuWidth
               calloutProps={FabricStyles.calloutProps}
               styles={FabricStyles.limitedSizeMenuDropdown}

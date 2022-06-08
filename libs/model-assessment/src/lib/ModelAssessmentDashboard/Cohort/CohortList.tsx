@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CheckboxVisibility } from "@fluentui/react";
 import {
   Cohort,
   CohortEditor,
@@ -14,7 +15,6 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import {
   IColumn,
-  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   Link,

@@ -65,7 +65,7 @@ def create_rai_insights_object_regression():
 
     ri = RAIInsights(model, X_train, X_test, 'target', 'regression')
     ri.explainer.add()
-    ri.counterfactual.add(10, desired_range=[5, 10])
+    ri.counterfactual.add(10, desired_range=[3, 5])
     ri.error_analysis.add()
     ri.causal.add(treatment_features=['AveRooms'],
                   heterogeneity_features=None,

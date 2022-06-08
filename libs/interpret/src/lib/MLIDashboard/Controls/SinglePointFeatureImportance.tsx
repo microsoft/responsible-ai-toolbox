@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   IExplanationContext,
   ModelTypes,
@@ -10,13 +11,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IDropdownOption,
-  Slider,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption
-} from "office-ui-fabric-react";
+import { IDropdownOption, Slider } from "office-ui-fabric-react";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";
@@ -214,9 +209,10 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     // if (!this.props.explanationContext.testDataset.predictedY) {
     //     return result;
     // }
+    const modelType = this.props.explanationContext.modelMetadata.modelType;
     if (
-      this.props.explanationContext.modelMetadata.modelType !==
-      ModelTypes.Multiclass
+      modelType !== ModelTypes.Multiclass &&
+      modelType !== ModelTypes.Binary
     ) {
       result.push({
         key: FeatureKeys.AbsoluteLocal,
@@ -224,8 +220,8 @@ export class SinglePointFeatureImportance extends React.PureComponent<
       });
     }
     if (
-      this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.Multiclass
+      modelType === ModelTypes.Multiclass ||
+      modelType === ModelTypes.Binary
     ) {
       result.push(
         ...this.props.explanationContext.modelMetadata.classNames.map(
@@ -243,8 +239,9 @@ export class SinglePointFeatureImportance extends React.PureComponent<
     if (!this.props.explanationContext.testDataset.predictedY) {
       return FeatureKeys.AbsoluteGlobal;
     }
-    return this.props.explanationContext.modelMetadata.modelType ===
-      ModelTypes.Multiclass
+    const modelType = this.props.explanationContext.modelMetadata.modelType;
+    return modelType === ModelTypes.Multiclass ||
+      modelType === ModelTypes.Binary
       ? this.props.explanationContext.testDataset.predictedY[
           this.props.selectedRow
         ]
