@@ -3,7 +3,6 @@
 
 """Defines the Counterfactual Manager class."""
 import json
-import pickle
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional, Union
