@@ -16,7 +16,6 @@ export function describeSubLineChart(
   if (name) {
     describe("Sub line chart", () => {
       before(() => {
-        cy.get(Locators.IFICollapseButton).first().click(); // expand correct predictions
         selectRow("Index", "4");
 
         cy.get(Locators.ICEPlot).click();
