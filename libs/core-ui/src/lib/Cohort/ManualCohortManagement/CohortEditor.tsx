@@ -374,7 +374,6 @@ export class CohortEditor extends React.PureComponent<
       return;
     }
     this.updateFilter(this.state.openedFilter, index);
-    console.log("!!savState selectedFilterCategory: ");
     this.setState({ selectedFilterCategory: undefined });
   };
 
@@ -525,7 +524,6 @@ export class CohortEditor extends React.PureComponent<
   }
 
   private cancelFilter = (): void => {
-    console.log("!!cancelfilter: ");
     this.setState({
       openedFilter: undefined,
       selectedFilterCategory: undefined

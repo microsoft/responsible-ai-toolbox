@@ -15,7 +15,8 @@
           "highcharts/modules/heatmap",
           "highcharts/modules/pattern-fill",
           "highcharts/modules/gantt",
-          "@nrwl/cypress/plugins/preprocessor"
+          "@nrwl/cypress/plugins/preprocessor",
+          "@fluentui/react/lib/utilities/positioning"
         ]
       }
     ],
