@@ -2,6 +2,15 @@
 // Licensed under the MIT License.
 
 import {
+  getTheme,
+  IProcessedStyleSet,
+  mergeStyles,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   IFilter,
   FilterMethods,
   CohortSource,
@@ -28,15 +37,6 @@ import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import _ from "lodash";
-import {
-  getTheme,
-  IProcessedStyleSet,
-  mergeStyles,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "@fluentui/react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";

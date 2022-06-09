@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  WeightVectorOption,
-  ErrorCohort,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   IStackItemStyles,
   PrimaryButton,
   ChoiceGroup,
@@ -17,6 +10,13 @@ import {
   IChoiceGroupOptionProps,
   IChoiceGroupOption
 } from "@fluentui/react";
+import {
+  WeightVectorOption,
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisEnums";

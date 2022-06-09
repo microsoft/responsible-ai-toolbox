@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { lab as Lab } from "d3-color";
 import { getTheme } from "@fluentui/react";
+import { lab as Lab } from "d3-color";
 
 const theme = getTheme();
 

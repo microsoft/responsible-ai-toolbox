@@ -2,12 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  CohortInfo,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   CommandBarButton,
   IIconProps,
   Pivot,
@@ -15,6 +9,12 @@ import {
   Stack,
   Separator
 } from "@fluentui/react";
+import {
+  CohortInfo,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";

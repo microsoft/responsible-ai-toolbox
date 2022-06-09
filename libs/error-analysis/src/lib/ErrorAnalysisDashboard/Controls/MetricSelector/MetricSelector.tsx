@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Dropdown, IDropdownOption, IDropdownStyles } from "@fluentui/react";
 import {
   Metrics,
   ModelTypes,
@@ -8,7 +9,6 @@ import {
   defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Dropdown, IDropdownOption, IDropdownStyles } from "@fluentui/react";
 import React from "react";
 
 import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";

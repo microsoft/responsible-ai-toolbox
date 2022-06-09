@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IStackTokens, Stack, Text } from "@fluentui/react";
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IStackTokens, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { MetricUtils, MetricLocalizationType } from "../../../MetricUtils";

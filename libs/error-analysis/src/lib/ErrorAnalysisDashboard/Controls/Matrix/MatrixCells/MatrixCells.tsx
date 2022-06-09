@@ -2,14 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  IErrorAnalysisMatrix,
-  IErrorAnalysisMatrixNode,
-  Metrics
-} from "@responsible-ai/core-ui";
-import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
-import { scaleLinear as d3scaleLinear } from "d3-scale";
-import _ from "lodash";
-import {
   DirectionalHint,
   mergeStyles,
   IStyle,
@@ -18,6 +10,14 @@ import {
   TooltipDelay,
   TooltipHost
 } from "@fluentui/react";
+import {
+  IErrorAnalysisMatrix,
+  IErrorAnalysisMatrixNode,
+  Metrics
+} from "@responsible-ai/core-ui";
+import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
+import { scaleLinear as d3scaleLinear } from "d3-scale";
+import _ from "lodash";
 import React from "react";
 
 import { ColorPalette, isColorDark } from "../../../ColorPalette";

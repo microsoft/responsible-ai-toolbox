@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
