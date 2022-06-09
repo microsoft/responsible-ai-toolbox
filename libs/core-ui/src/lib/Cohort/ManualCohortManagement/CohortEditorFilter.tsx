@@ -5,18 +5,16 @@ import {
   Checkbox,
   IComboBoxOption,
   IComboBox,
-  ComboBox
-} from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
-import {
+  ComboBox,
   DefaultButton,
   PrimaryButton,
   SpinButton,
   Stack,
-  Text
-} from "office-ui-fabric-react";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+  Text,
+  Position
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";

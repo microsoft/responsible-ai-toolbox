@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   Callout as FabricCallout,
   CommandBarButton,
   IconButton,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 import { v4 } from "uuid";
 
