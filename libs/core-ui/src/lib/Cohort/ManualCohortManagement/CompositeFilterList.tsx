@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IconButton } from "office-ui-fabric-react";
+import { IconButton } from "@fluentui/react";
 import React from "react";
 
 import { JointDataset } from "../../util/JointDataset";

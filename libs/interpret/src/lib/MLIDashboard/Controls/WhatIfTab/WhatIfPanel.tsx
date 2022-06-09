@@ -1,24 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
-  IExplanationModelMetadata,
-  JointDataset
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
   Dropdown,
+  IDropdownOption,
   FocusZone,
   IconButton,
-  IDropdownOption,
   Label,
   PrimaryButton,
   SearchBox,
   Stack,
   Text,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";

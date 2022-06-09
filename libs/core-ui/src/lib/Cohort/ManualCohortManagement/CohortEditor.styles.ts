@@ -10,7 +10,7 @@ import {
   mergeStyleSets,
   ICalloutContentStyles,
   ITooltipHostStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface ICohortEditorStyles {
   wrapper: IStyle;

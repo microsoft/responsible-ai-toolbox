@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption } from "@fluentui/react";
+import { IComboBoxOption, IDropdownOption } from "@fluentui/react";
 import {
   JointDataset,
   ErrorCohort,
@@ -13,11 +13,7 @@ import {
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IDropdownOption,
-  IFocusTrapZoneProps,
-  Panel
-} from "office-ui-fabric-react";
+import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
 import React from "react";
 
 import { whatIfStyles } from "./WhatIf.styles";
