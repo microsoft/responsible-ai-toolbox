@@ -17,7 +17,7 @@ import {
   ITooltipProps,
   TooltipDelay,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { ColorPalette, isColorDark } from "../../../ColorPalette";

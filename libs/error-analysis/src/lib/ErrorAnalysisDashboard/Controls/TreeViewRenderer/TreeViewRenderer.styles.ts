@@ -9,7 +9,7 @@ import {
   IProcessedStyleSet,
   mergeStyles,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 import { ColorPalette } from "../../ColorPalette";
 

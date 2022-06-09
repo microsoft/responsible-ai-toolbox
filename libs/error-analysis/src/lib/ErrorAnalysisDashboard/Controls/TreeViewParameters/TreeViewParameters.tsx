@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Slider, Label } from "office-ui-fabric-react";
+import { Slider, Label } from "@fluentui/react";
 import React from "react";
 
 import { InfoCallout } from "../InfoCallout/InfoCallout";

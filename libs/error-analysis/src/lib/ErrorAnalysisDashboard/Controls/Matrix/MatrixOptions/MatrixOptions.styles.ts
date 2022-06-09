@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  mergeStyleSets,
-  IProcessedStyleSet,
-  IStyle
-} from "office-ui-fabric-react";
+import { mergeStyleSets, IProcessedStyleSet, IStyle } from "@fluentui/react";
 
 export interface IMatrixLegendStyles {
   sliderLabelStyle: IStyle;

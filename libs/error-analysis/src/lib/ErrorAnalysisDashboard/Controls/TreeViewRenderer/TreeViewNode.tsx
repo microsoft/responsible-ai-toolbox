@@ -3,7 +3,7 @@
 
 import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
-import { getTheme, IProcessedStyleSet } from "office-ui-fabric-react";
+import { getTheme, IProcessedStyleSet } from "@fluentui/react";
 import React from "react";
 
 import { isColorDark } from "../../ColorPalette";

@@ -46,9 +46,8 @@ import {
   MessageBarType,
   PivotItem,
   Pivot,
-  PivotLinkSize,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
@@ -542,7 +541,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <Pivot
                       selectedKey={this.state.activeGlobalTab}
                       onLinkClick={this.handleGlobalTabClick}
-                      linkSize={PivotLinkSize.normal}
+                      linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
                     >

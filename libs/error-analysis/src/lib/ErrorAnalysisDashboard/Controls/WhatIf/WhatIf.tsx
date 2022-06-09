@@ -13,7 +13,7 @@ import {
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
+import { IFocusTrapZoneProps, Panel } from "@fluentui/react";
 import React from "react";
 
 import { whatIfStyles } from "./WhatIf.styles";

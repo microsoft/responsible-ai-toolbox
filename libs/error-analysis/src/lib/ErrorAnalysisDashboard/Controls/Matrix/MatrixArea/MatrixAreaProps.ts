@@ -9,7 +9,7 @@ import {
   MetricCohortStats,
   IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme } from "@fluentui/react";
 
 export interface IMatrixAreaProps {
   theme?: ITheme;

@@ -8,11 +8,7 @@ import {
   defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Dropdown,
-  IDropdownOption,
-  IDropdownStyles
-} from "office-ui-fabric-react";
+import { Dropdown, IDropdownOption, IDropdownStyles } from "@fluentui/react";
 import React from "react";
 
 import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";

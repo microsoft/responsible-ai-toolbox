@@ -11,7 +11,7 @@ import {
   IStackTokens,
   PrimaryButton,
   Stack
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";

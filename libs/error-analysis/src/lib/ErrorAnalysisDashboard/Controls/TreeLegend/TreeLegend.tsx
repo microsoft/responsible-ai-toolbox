@@ -3,12 +3,7 @@
 
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  DefaultButton,
-  IStackTokens,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";

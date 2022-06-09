@@ -22,7 +22,7 @@ import {
 } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import _, { Dictionary } from "lodash";
-import { DefaultEffects, PivotItem, Stack, Text } from "office-ui-fabric-react";
+import { DefaultEffects, PivotItem, Stack, Text } from "@fluentui/react";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";

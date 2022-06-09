@@ -3,7 +3,7 @@
 
 import { Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 import React from "react";
 
 import { FilterProps } from "../../FilterProps";

@@ -9,13 +9,14 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
-  IChoiceGroupOption,
   IStackItemStyles,
   PrimaryButton,
   ChoiceGroup,
   Stack,
-  Text
-} from "office-ui-fabric-react";
+  Text,
+  IChoiceGroupOptionProps,
+  IChoiceGroupOption
+} from "@fluentui/react";
 import React from "react";
 
 import { PredictionTabKeys } from "../../ErrorAnalysisEnums";
@@ -368,7 +369,7 @@ export class InstanceView extends React.Component<
 
   private onRenderLabel =
     (type: SelectionType) =>
-    (p: IChoiceGroupOption | undefined): JSX.Element => {
+    (p: IChoiceGroupOptionProps | undefined): JSX.Element => {
       const classNames = InstanceViewStyles();
       let selectionText = "";
       switch (type) {

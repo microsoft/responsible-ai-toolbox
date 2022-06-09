@@ -3,7 +3,7 @@
 
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
+import { IStackTokens, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { MetricUtils, MetricLocalizationType } from "../../../MetricUtils";

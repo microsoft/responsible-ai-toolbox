@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { lab as Lab } from "d3-color";
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 
 const theme = getTheme();
 

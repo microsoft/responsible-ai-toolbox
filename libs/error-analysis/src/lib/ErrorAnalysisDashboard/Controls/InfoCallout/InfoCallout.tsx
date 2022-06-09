@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { FabricStyles } from "@responsible-ai/core-ui";
-import { Callout, IconButton } from "office-ui-fabric-react";
+import { Callout, IconButton } from "@fluentui/react";
 import React from "react";
 
 import { infoCalloutStyles } from "./InfoCallout.styles";

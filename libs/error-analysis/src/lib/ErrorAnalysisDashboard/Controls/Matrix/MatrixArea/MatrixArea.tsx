@@ -23,7 +23,7 @@ import {
   ScrollablePane,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { FeatureRowCategories } from "../FeatureRowCategories/FeatureRowCategories";

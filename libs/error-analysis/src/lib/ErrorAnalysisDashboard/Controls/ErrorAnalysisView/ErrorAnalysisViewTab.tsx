@@ -14,7 +14,7 @@ import {
   PivotItem,
   Stack,
   Separator
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
