@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Dialog, DialogType } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Dialog, DialogType } from "office-ui-fabric-react";
 import React from "react";
 
 export interface IEmptyCohortDialogProps {

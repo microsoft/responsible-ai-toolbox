@@ -7,7 +7,7 @@ import {
   DialogFooter,
   DialogType,
   PrimaryButton
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 export interface IConfirmationDialogProps {

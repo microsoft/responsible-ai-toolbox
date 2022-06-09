@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDropdownOption } from "office-ui-fabric-react";
+import { IDropdownOption } from "@fluentui/react";
 
 import { JointDataset } from "./JointDataset";
 

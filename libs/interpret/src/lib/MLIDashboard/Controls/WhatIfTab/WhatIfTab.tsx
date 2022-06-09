@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption } from "@fluentui/react";
+import { IComboBoxOption, IDropdownOption, Dropdown } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -28,13 +28,7 @@ import {
   IData
 } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import {
-  getTheme,
-  Text,
-  DefaultButton,
-  Dropdown,
-  IDropdownOption
-} from "office-ui-fabric-react";
+import { getTheme, Text, DefaultButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
