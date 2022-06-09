@@ -13,11 +13,11 @@ import {
   Stack,
   DefaultButton
 } from "@fluentui/react";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
+import { Position } from "@fluentui/react/lib/utilities/positioning";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { Position } from "@fluentui/react/lib/utilities/positioning";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";

@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IColumn } from "@fluentui/react";
 import { ITableState } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IColumn } from "@fluentui/react";
 
 export function updateItems(
   percents: number[],

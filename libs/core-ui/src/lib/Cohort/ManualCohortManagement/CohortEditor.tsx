@@ -12,10 +12,10 @@ import {
   Panel,
   Link
 } from "@fluentui/react";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
@@ -107,12 +107,6 @@ export class CohortEditor extends React.PureComponent<
 
   public render(): React.ReactNode {
     const openedFilter = this.state.openedFilter;
-    console.log(
-      "!!render: ",
-      openedFilter,
-      !openedFilter,
-      this.state.selectedFilterCategory
-    );
     const styles = cohortEditorStyles();
     return (
       <>
@@ -346,7 +340,6 @@ export class CohortEditor extends React.PureComponent<
     _?: FormEvent<HTMLElement | HTMLInputElement> | undefined,
     option?: IChoiceGroupOption | undefined
   ): void => {
-    console.log("!!onFilterCategoryChange: ", option);
     if (typeof option?.key === "string") {
       this.setState({
         filterIndex: this.state.filters.length,
@@ -377,7 +370,6 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private saveState = (index?: number): void => {
-    console.log("!!savState: ", index, this.state.openedFilter);
     if (!this.state.openedFilter || index === undefined) {
       return;
     }
@@ -524,7 +516,6 @@ export class CohortEditor extends React.PureComponent<
   }
 
   private updateFilter(filter: IFilter, index: number): void {
-    console.log("!!updateFilter: ", index, filter);
     const filters = [...this.state.filters];
     filters[index] = filter;
     this.setState({

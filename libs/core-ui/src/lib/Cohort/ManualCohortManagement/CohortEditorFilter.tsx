@@ -12,9 +12,9 @@ import {
   Stack,
   Text
 } from "@fluentui/react";
+import { Position } from "@fluentui/react/lib/utilities/positioning";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
-import { Position } from "@fluentui/react/lib/utilities/positioning";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";

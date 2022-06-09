@@ -2,15 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
-  ErrorCohort,
-  constructRows,
-  constructCols,
-  rowsFromCustomPoints,
-  ITableState
-} from "@responsible-ai/core-ui";
-import _ from "lodash";
-import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -26,6 +17,15 @@ import {
   IRenderFunction,
   SelectAllVisibility
 } from "@fluentui/react";
+import {
+  JointDataset,
+  ErrorCohort,
+  constructRows,
+  constructCols,
+  rowsFromCustomPoints,
+  ITableState
+} from "@responsible-ai/core-ui";
+import _ from "lodash";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";

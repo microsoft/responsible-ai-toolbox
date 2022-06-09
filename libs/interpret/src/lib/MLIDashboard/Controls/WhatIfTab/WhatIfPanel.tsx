@@ -6,14 +6,7 @@ import {
   IComboBox,
   ComboBox,
   Dropdown,
-  IDropdownOption
-} from "@fluentui/react";
-import {
-  IExplanationModelMetadata,
-  JointDataset
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
+  IDropdownOption,
   FocusZone,
   IconButton,
   Label,
@@ -22,7 +15,12 @@ import {
   Stack,
   Text,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";

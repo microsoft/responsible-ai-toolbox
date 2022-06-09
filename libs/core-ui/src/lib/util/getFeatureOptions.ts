@@ -27,7 +27,7 @@ export function getFeatureOptions(
               }
               return { key: index, text: optionText };
             })
-        : [];
+        : undefined;
       return {
         data: {
           categoricalOptions: options,
