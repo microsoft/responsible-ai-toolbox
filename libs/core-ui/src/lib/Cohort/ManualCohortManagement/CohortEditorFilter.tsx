@@ -10,9 +10,9 @@ import {
   PrimaryButton,
   SpinButton,
   Stack,
-  Text
+  Text,
+  Position
 } from "@fluentui/react";
-import { Position } from "@fluentui/react/lib/utilities/positioning";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";

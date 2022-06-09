@@ -11,9 +11,9 @@ import {
   SpinButton,
   Panel,
   Stack,
-  DefaultButton
+  DefaultButton,
+  Position
 } from "@fluentui/react";
-import { Position } from "@fluentui/react/lib/utilities/positioning";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
