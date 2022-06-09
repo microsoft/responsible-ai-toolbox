@@ -302,6 +302,7 @@ export class IndividualFeatureImportanceView extends React.Component<
           count: noIncorrectItem
             ? this.props.selectedCohort.cohort.filteredData.length
             : firstIncorrectItemIndex,
+          isCollapsed: true,
           key: "groupCorrect",
           level: 0,
           name: localization.ModelAssessment.FeatureImportances
