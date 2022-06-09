@@ -621,6 +621,29 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
       }
     ]
   };
+modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
+  {
+    featureCohortView: {
+      multiFeatureCohorts: 6,
+      singleFeatureCohorts: 3
+    },
+    initialCohorts: [
+      {
+        metrics: {
+          accuracy: "0.91",
+          falsePositiveRate: "0.087",
+          falseNegativeRate: "0.093",
+          selectionRate: "0.499"
+        },
+        name: "All data",
+        sampleSize: "730"
+      }
+    ]
+  };
+  modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
+  {
+    hasModelOverviewComponent: false
+  };
 
 const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;

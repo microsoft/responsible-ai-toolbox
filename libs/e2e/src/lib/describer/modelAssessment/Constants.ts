@@ -103,6 +103,7 @@ export enum Locators {
   CausalChartXAxisValues = '#causalAggregateView svg g[class*="highcharts-xaxis-labels"] text',
   CausalAggregateView = "#causalAggregateView",
   ModelOverviewHeader = "#ModelAssessmentDashboard #modelStatisticsHeader",
+  ModelOverview = "#ModelOverview",
   ModelOverviewDescription = "#ModelOverview #modelOverviewDescription",
   ModelOverviewMetricSelection = "#ModelOverview #modelOverviewMetricSelection",
   ModelOverviewFeatureSelection = "#ModelOverview #modelOverviewFeatureSelection",

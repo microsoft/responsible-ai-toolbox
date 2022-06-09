@@ -26,38 +26,47 @@ export function describeNewModelOverview(
         cy.visit(hostDetails.host);
       }
     });
-    it("should have 'Model overview' component in the initial state", () => {
-      ensureAllModelOverviewBasicElementsArePresent();
-      ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
-        datasetShape
-      );
-    });
 
-    it("should show 'Feature cohorts' view when selected", () => {
-      ensureAllModelOverviewBasicElementsArePresent();
-      cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
-      ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent();
-      multiSelectComboBox(
-        "#modelOverviewFeatureSelection",
-        datasetShape.featureNames![0],
-        true
-      );
-      ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-        datasetShape,
-        1
-      );
-    });
+    if (!datasetShape.modelOverviewData?.hasModelOverviewComponent) {
+      it("should not have 'Model overview' component", () => {
+        cy.get(Locators.ModelOverview).should("not.exist");
+      });
+    }
 
-    it("should show 'Feature cohorts' view with multiple features when selected", () => {
-      multiSelectComboBox(
-        "#modelOverviewFeatureSelection",
-        datasetShape.featureNames![2]
-      );
-      ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
-        datasetShape,
-        2
-      );
-    });
+    if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
+      it("should have 'Model overview' component in the initial state", () => {
+        ensureAllModelOverviewBasicElementsArePresent();
+        ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
+          datasetShape
+        );
+      });
+
+      it("should show 'Feature cohorts' view when selected", () => {
+        ensureAllModelOverviewBasicElementsArePresent();
+        cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
+        ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent();
+        multiSelectComboBox(
+          "#modelOverviewFeatureSelection",
+          datasetShape.featureNames![0],
+          true
+        );
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+          datasetShape,
+          1
+        );
+      });
+
+      it("should show 'Feature cohorts' view with multiple features when selected", () => {
+        multiSelectComboBox(
+          "#modelOverviewFeatureSelection",
+          datasetShape.featureNames![2]
+        );
+        ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
+          datasetShape,
+          2
+        );
+      });
+    }
   });
 }
 
@@ -76,11 +85,12 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData
 ) {
   const data = datasetShape.modelOverviewData!;
+  const initialCohorts = data.initialCohorts!;
   cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
-  if (data.initialCohorts.length <= 1) {
+  if (initialCohorts.length <= 1) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
       "not.exist"
     );
@@ -91,7 +101,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
-    data.initialCohorts[0].name
+    initialCohorts[0].name
   );
 
   let metricsOrder: string[] = [];
@@ -111,11 +121,11 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   }
 
   let heatmapCellOrder: string[] = [];
-  data.initialCohorts.forEach((cohortData) => {
+  initialCohorts.forEach((cohortData) => {
     heatmapCellOrder.push(cohortData.sampleSize);
   });
   metricsOrder.forEach((metricName) => {
-    data.initialCohorts.forEach((cohortData) => {
+    initialCohorts.forEach((cohortData) => {
       heatmapCellOrder.push(cohortData.metrics[metricName]);
     });
   });
@@ -147,21 +157,19 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
-      data.initialCohorts.length
+      initialCohorts.length
     );
     // check aria-label of bar chart - aria-label uses comma as delimiter
     // between digits for thousands instead of whitespace
     const displayedMetric = datasetShape.isRegression
-      ? data.initialCohorts[0].metrics.meanAbsoluteError
-      : data.initialCohorts[0].metrics.accuracy;
+      ? initialCohorts[0].metrics.meanAbsoluteError
+      : initialCohorts[0].metrics.accuracy;
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
       .should(
         "have.attr",
         "aria-label",
-        `1. ${
-          datasetShape.modelOverviewData?.initialCohorts[0].name
-        }, ${displayedMetric.replace(" ", ",")}.`
+        `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`
       );
   } else {
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
@@ -220,11 +228,11 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
       "not.exist"
     );
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    let expectedNumberOfCohorts =
-      datasetShape.modelOverviewData?.featureCohortView.singleFeatureCohorts;
+    const featureCohortView =
+      datasetShape.modelOverviewData!.featureCohortView!;
+    let expectedNumberOfCohorts = featureCohortView.singleFeatureCohorts;
     if (selectedFeatures > 1) {
-      expectedNumberOfCohorts =
-        datasetShape.modelOverviewData?.featureCohortView.multiFeatureCohorts;
+      expectedNumberOfCohorts = featureCohortView.multiFeatureCohorts;
     }
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
