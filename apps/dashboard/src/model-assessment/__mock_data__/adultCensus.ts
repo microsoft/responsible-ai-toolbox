@@ -9900,6 +9900,7 @@ export const adultCounterfactualData: ICounterfactualData = {
     ]
   ],
   desired_class: "opposite",
+  errorMessage: "Failed to generate a new counterfactual data point.",
   feature_names: [
     "age",
     "workclass",

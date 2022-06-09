@@ -233,6 +233,7 @@ export class CausalIndividualChart extends React.PureComponent<
   };
 
   private readonly setXOpen = (val: boolean): void => {
+    // each bind will create a new instance. separate it to setXOpen and
     if (val && this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
       return;

@@ -9,8 +9,12 @@
     "./.eslintrc.typescript.eslintrc",
     "./.eslintrc.unicorn.eslintrc"
   ],
-  "plugins": ["header", "sort-keys-fix"],
+  "plugins": ["header", "sort-keys-fix", "ban"],
   "rules": {
+    "ban/ban": [
+      "error",
+      { "name": "bind", "message": "Prefer use functionName2" }
+    ],
     "sort-keys-fix/sort-keys-fix": [
       "error",
       "asc",
@@ -28,6 +32,7 @@
       ],
       2
     ],
+    "no-alert": ["error"],
     "camelcase": [
       "error",
       {

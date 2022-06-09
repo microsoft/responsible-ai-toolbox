@@ -200,7 +200,7 @@ export class CohortBar extends React.Component<
           </Link>
         </Stack>
       </Stack>
-    );
+    ); // line 190-202 change to a component, pass in index and editCohort function
   };
 
   private renderDetails = (

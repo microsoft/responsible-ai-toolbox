@@ -246,6 +246,7 @@ export class InstanceView extends React.Component<
   }
 
   private handlePredictionTabClick(
+    // change to arrow function and remove bind(this)
     _?: React.FormEvent<HTMLElement | HTMLInputElement>,
     option?: IChoiceGroupOption
   ): void {

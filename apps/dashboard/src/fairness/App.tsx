@@ -27,7 +27,7 @@ export class App extends React.Component<IAppProps> {
     const dashboardProps: IFairnessProps = {
       ...this.props.dataset,
       locale: this.props.language,
-      requestMetrics: generateRandomMetrics.bind(this),
+      requestMetrics: generateRandomMetrics,
       stringParams: { contextualHelp: messages },
       supportedBinaryClassificationPerformanceKeys,
       supportedProbabilityPerformanceKeys,
