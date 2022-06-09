@@ -27,12 +27,6 @@ export function describeNewModelOverview(
       }
     });
 
-    if (!datasetShape.modelOverviewData?.hasModelOverviewComponent) {
-      it("should not have 'Model overview' component", () => {
-        cy.get(Locators.ModelOverview).should("not.exist");
-      });
-    }
-
     if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
       it("should have 'Model overview' component in the initial state", () => {
         ensureAllModelOverviewBasicElementsArePresent();
@@ -65,6 +59,10 @@ export function describeNewModelOverview(
           datasetShape,
           2
         );
+      });
+    } else {
+      it("should not have 'Model overview' component", () => {
+        cy.get(Locators.ModelOverview).should("not.exist");
       });
     }
   });
@@ -112,12 +110,14 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "meanPrediction"
     );
   } else {
-    metricsOrder.push(
-      "accuracy",
-      "falsePositiveRate",
-      "falseNegativeRate",
-      "selectionRate"
-    );
+    metricsOrder.push("accuracy");
+    if (!datasetShape.isMulticlass) {
+      metricsOrder.push(
+        "falsePositiveRate",
+        "falseNegativeRate",
+        "selectionRate"
+      );
+    }
   }
 
   let heatmapCellOrder: string[] = [];

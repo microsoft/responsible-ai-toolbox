@@ -473,6 +473,7 @@ Object.keys(modelAssessmentDatasets).forEach((k: string) => {
 
 modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAssessmentNewModelOverviewExperience.modelOverviewData =
   {
+    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
@@ -542,6 +543,7 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModelOverviewExperience.modelOverviewData =
   {
+    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
@@ -605,6 +607,7 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModel
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
+    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
@@ -623,6 +626,7 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
+    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 6,
       singleFeatureCohorts: 3
@@ -640,9 +644,26 @@ modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebu
       }
     ]
   };
-  modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
+modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
   {
     hasModelOverviewComponent: false
+  };
+modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNewModelOverviewExperience.modelOverviewData =
+  {
+    hasModelOverviewComponent: true,
+    featureCohortView: {
+      multiFeatureCohorts: 9,
+      singleFeatureCohorts: 3
+    },
+    initialCohorts: [
+      {
+        metrics: {
+          accuracy: "0.674"
+        },
+        name: "All data",
+        sampleSize: "89"
+      }
+    ]
   };
 
 const withType: {
