@@ -1,15 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CheckboxVisibility } from "@fluentui/react";
 import {
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  toScientific
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -20,6 +13,13 @@ import {
   TooltipHost,
   Text
 } from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  toScientific
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

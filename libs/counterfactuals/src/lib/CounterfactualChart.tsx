@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox , getTheme, DefaultButton, PrimaryButton, Stack } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  getTheme,
+  DefaultButton,
+  PrimaryButton,
+  Stack
+} from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,

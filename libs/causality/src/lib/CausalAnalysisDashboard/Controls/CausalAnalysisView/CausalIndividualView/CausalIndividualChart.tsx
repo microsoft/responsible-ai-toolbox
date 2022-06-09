@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  getTheme,
+  DefaultButton,
+  Stack
+} from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -20,7 +27,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import { getTheme, DefaultButton, Stack } from "@fluentui/react";
 import React from "react";
 
 import { causalIndividualChartStyles } from "./CausalIndividualChart.styles";

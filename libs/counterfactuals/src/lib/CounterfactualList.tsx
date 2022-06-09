@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox ,
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
   Callout,
   ConstrainMode,
   DetailsList,

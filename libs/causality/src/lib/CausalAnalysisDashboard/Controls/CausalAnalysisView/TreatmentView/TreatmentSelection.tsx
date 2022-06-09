@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Dropdown, IDropdownOption } from "@fluentui/react";
 import { ICausalPolicy } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Dropdown, IDropdownOption } from "@fluentui/react";
 import React, { FormEvent } from "react";
 
 import { TreatmentTableStyles } from "./TreatmentTable.styles";

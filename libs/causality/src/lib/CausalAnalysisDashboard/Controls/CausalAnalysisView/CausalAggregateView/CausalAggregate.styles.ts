@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 
 export interface ICausalAggregateStyles {
   callout: IStyle;
