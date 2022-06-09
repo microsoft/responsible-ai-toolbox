@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IconButton, Text } from "office-ui-fabric-react";
+import { IconButton, Text } from "@fluentui/react";
 import React from "react";
 
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
