@@ -7,7 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Label, SpinButton, Stack, Text } from "office-ui-fabric-react";
+import { Label, SpinButton, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { TreatmentList } from "./TreatmentList";

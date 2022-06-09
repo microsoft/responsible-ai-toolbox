@@ -13,7 +13,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Slider, Stack, Text } from "office-ui-fabric-react";
+import { Slider, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { causalWhatIfStyles } from "./CausalWhatIf.styles";

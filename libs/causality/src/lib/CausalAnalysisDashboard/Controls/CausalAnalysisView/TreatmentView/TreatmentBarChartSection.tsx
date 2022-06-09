@@ -9,7 +9,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { getTheme, Stack, Text } from "office-ui-fabric-react";
+import { getTheme, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { TreatmentTableStyles } from "./TreatmentTable.styles";

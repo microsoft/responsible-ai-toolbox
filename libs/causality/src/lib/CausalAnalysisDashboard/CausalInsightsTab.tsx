@@ -7,7 +7,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Pivot, PivotItem, Stack, MessageBar } from "office-ui-fabric-react";
+import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";

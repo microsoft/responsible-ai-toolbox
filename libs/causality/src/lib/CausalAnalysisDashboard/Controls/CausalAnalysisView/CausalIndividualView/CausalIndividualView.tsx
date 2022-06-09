@@ -10,7 +10,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Link, Stack, Text } from "office-ui-fabric-react";
+import { Link, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";

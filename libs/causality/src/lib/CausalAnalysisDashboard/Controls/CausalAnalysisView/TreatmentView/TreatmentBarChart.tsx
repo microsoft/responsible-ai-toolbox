@@ -13,7 +13,7 @@ import {
   IPlotlyProperty,
   PlotlyThemes
 } from "@responsible-ai/mlchartlib";
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 import React from "react";
 
 export interface ITreatmentBarChartProps {

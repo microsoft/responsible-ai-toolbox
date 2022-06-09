@@ -20,7 +20,7 @@ import {
   IRenderFunction,
   SelectionMode,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 export interface ICausalAggregateTableProps {

@@ -19,7 +19,7 @@ import {
   SelectionMode,
   TooltipHost,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

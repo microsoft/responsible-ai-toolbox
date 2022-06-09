@@ -2,11 +2,7 @@
 // Licensed under the MIT License.
 
 import { descriptionMaxWidth } from "@responsible-ai/core-ui";
-import {
-  IProcessedStyleSet,
-  IStyle,
-  mergeStyleSets
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
 
 export interface ITreatmentStyles {
   container: IStyle;

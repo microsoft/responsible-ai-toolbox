@@ -9,7 +9,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import _, { isEqual } from "lodash";
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 import React from "react";
 
 export interface ICausalAggregateChartProps {
