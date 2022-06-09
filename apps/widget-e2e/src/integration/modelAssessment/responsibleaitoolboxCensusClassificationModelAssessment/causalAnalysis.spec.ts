@@ -6,5 +6,6 @@ import {
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.CensusClassificationModelAssessment;
+const datasetShape =
+  modelAssessmentDatasets.CensusClassificationModelAssessment;
 describeCausalAnalysis(datasetShape, "CensusClassificationModelAssessment");

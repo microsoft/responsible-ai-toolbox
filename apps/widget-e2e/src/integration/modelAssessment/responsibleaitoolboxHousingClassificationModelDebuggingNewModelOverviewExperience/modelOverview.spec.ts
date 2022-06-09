@@ -7,7 +7,7 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-modelAssessmentDatasetsIncludingFlights.HousingClassificationModelDebuggingNewModelOverviewExperience;
+  modelAssessmentDatasetsIncludingFlights.HousingClassificationModelDebuggingNewModelOverviewExperience;
 describeNewModelOverview(
   datasetShape,
   "HousingClassificationModelDebuggingNewModelOverviewExperience"

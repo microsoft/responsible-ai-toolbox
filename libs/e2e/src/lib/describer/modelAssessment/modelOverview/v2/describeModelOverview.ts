@@ -102,7 +102,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     initialCohorts[0].name
   );
 
-  let metricsOrder: string[] = [];
+  const metricsOrder: string[] = [];
   if (datasetShape.isRegression) {
     metricsOrder.push(
       "meanAbsoluteError",
@@ -120,7 +120,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     }
   }
 
-  let heatmapCellOrder: string[] = [];
+  const heatmapCellOrder: string[] = [];
   initialCohorts.forEach((cohortData) => {
     heatmapCellOrder.push(cohortData.sampleSize);
   });
@@ -133,7 +133,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   heatmapCellOrder.forEach((expectedCellContent, cellIndex) => {
     let cell = cy.get(Locators.ModelOverviewHeatmapCells).first();
     for (
-      var currentCellIndex = 0;
+      let currentCellIndex = 0;
       currentCellIndex < cellIndex;
       currentCellIndex += 1
     ) {

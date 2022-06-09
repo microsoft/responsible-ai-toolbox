@@ -6,7 +6,8 @@ import {
   modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasetsIncludingFlights.CensusClassificationModelAssessmentNewModelOverviewExperience;
+const datasetShape =
+  modelAssessmentDatasetsIncludingFlights.CensusClassificationModelAssessmentNewModelOverviewExperience;
 describeNewModelOverview(
   datasetShape,
   "CensusClassificationModelAssessmentNewModelOverviewExperience"

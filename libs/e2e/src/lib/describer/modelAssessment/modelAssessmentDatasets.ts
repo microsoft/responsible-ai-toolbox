@@ -473,17 +473,17 @@ Object.keys(modelAssessmentDatasets).forEach((k: string) => {
 
 modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAssessmentNewModelOverviewExperience.modelOverviewData =
   {
-    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
+    hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {
           accuracy: "0.856",
-          falsePositiveRate: "0.077",
           falseNegativeRate: "0.35",
+          falsePositiveRate: "0.077",
           selectionRate: "0.246"
         },
         name: "All data",
@@ -492,8 +492,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
       {
         metrics: {
           accuracy: "0.753",
-          falsePositiveRate: "0.195",
           falseNegativeRate: "0.313",
+          falsePositiveRate: "0.195",
           selectionRate: "0.438"
         },
         name: "Cohort Age and Hours-Per-Week",
@@ -502,8 +502,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
       {
         metrics: {
           accuracy: "0.927",
-          falsePositiveRate: "0.019",
           falseNegativeRate: "0.722",
+          falsePositiveRate: "0.019",
           selectionRate: "0.077"
         },
         name: "Cohort Marital-Status",
@@ -512,8 +512,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
       {
         metrics: {
           accuracy: "0.75",
-          falsePositiveRate: "0.071",
           falseNegativeRate: "0.667",
+          falsePositiveRate: "0.071",
           selectionRate: "0.3"
         },
         name: "Cohort Index",
@@ -522,8 +522,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
       {
         metrics: {
           accuracy: "0.734",
-          falsePositiveRate: "1",
           falseNegativeRate: "0",
+          falsePositiveRate: "1",
           selectionRate: "0.734"
         },
         name: "Cohort Predicted Y",
@@ -532,8 +532,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
       {
         metrics: {
           accuracy: "0.65",
-          falsePositiveRate: "N/A",
           falseNegativeRate: "0.35",
+          falsePositiveRate: "N/A",
           selectionRate: "1"
         },
         name: "Cohort True Y",
@@ -543,11 +543,11 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelAsses
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModelOverviewExperience.modelOverviewData =
   {
-    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
+    hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {
@@ -607,11 +607,11 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModel
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
-    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
+    hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {
@@ -626,17 +626,17 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
-    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 6,
       singleFeatureCohorts: 3
     },
+    hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {
           accuracy: "0.91",
-          falsePositiveRate: "0.087",
           falseNegativeRate: "0.093",
+          falsePositiveRate: "0.087",
           selectionRate: "0.499"
         },
         name: "All data",
@@ -650,11 +650,11 @@ modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelO
   };
 modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
-    hasModelOverviewComponent: true,
     featureCohortView: {
       multiFeatureCohorts: 9,
       singleFeatureCohorts: 3
     },
+    hasModelOverviewComponent: true,
     initialCohorts: [
       {
         metrics: {

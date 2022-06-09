@@ -84,7 +84,7 @@ jobs:
         name: Run widget tests
         shell: bash -l {0}
         run: yarn e2e-widget -n ${{ matrix.notebook }} -f ${{ matrix.flights }}
-      
+
       - if: ${{ matrix.flights == 'noFlights' }}
         name: Run widget tests
         shell: bash -l {0}
