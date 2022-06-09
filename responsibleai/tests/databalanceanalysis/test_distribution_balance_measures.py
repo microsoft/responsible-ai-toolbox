@@ -6,41 +6,32 @@ import pandas as pd
 from responsibleai.databalanceanalysis import DistributionBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
+from .conftest import ETHNICITY, GENDER
 
 
 class TestDistributionBalanceMeasures:
     def test_feature_1_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_1,
-        expected_distribution_measures_feature_1,
+        self, synthetic_data, expected_distribution_measures_gender
     ):
         dist_measures = (
-            DistributionBalanceMeasures(
-                cols_of_interest=[synthetic_data_feature_1]
-            )
+            DistributionBalanceMeasures(cols_of_interest=[GENDER])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            dist_measures, expected_distribution_measures_feature_1
+            dist_measures, expected_distribution_measures_gender
         )
 
     def test_feature_2_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_2,
-        expected_distribution_measures_feature_2,
+        self, synthetic_data, expected_distribution_measures_ethnicity
     ):
         dist_measures = (
-            DistributionBalanceMeasures(
-                cols_of_interest=[synthetic_data_feature_2]
-            )
+            DistributionBalanceMeasures(cols_of_interest=[ETHNICITY])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            dist_measures, expected_distribution_measures_feature_2
+            dist_measures, expected_distribution_measures_ethnicity
         )
 
     def test_adult_data(

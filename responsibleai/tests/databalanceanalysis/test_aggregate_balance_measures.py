@@ -6,45 +6,32 @@ import pandas as pd
 from responsibleai.databalanceanalysis import AggregateBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
+from .conftest import ETHNICITY, GENDER
 
 
 class TestAggregateBalanceMeasures:
     def test_one_feature_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_1,
-        expected_aggregate_measures_feature_1,
+        self, synthetic_data, expected_aggregate_measures_gender
     ):
         agg_measures = (
-            AggregateBalanceMeasures(
-                cols_of_interest=[synthetic_data_feature_1]
-            )
+            AggregateBalanceMeasures(cols_of_interest=[GENDER])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            agg_measures, expected_aggregate_measures_feature_1
+            agg_measures, expected_aggregate_measures_gender
         )
 
     def test_both_features_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_1,
-        synthetic_data_feature_2,
-        expected_aggregate_measures_both_features,
+        self, synthetic_data, expected_aggregate_measures_gender_ethnicity
     ):
         agg_measures = (
-            AggregateBalanceMeasures(
-                cols_of_interest=[
-                    synthetic_data_feature_1,
-                    synthetic_data_feature_2,
-                ]
-            )
+            AggregateBalanceMeasures(cols_of_interest=[GENDER, ETHNICITY])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            agg_measures, expected_aggregate_measures_both_features
+            agg_measures, expected_aggregate_measures_gender_ethnicity
         )
 
     def test_adult_data(

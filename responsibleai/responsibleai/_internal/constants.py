@@ -9,6 +9,7 @@ class ManagerNames(object):
 
     CAUSAL = 'causal'
     COUNTERFACTUAL = 'counterfactual'
+    DATA_BALANCE = 'data_balance'
     ERROR_ANALYSIS = 'error_analysis'
     EXPLAINER = 'explainer'
 
@@ -58,6 +59,14 @@ class CausalManagerKeys(object):
     GLOBAL_EFFECTS_COMPUTED = 'global_effects_computed'
     LOCAL_EFFECTS_COMPUTED = 'local_effects_computed'
     POLICIES_COMPUTED = 'policies_computed'
+
+
+class DataBalanceManagerKeys(object):
+    """Provide constants for DataBalanceManager key properties."""
+    IS_ADDED = 'is_added'
+    COLS_OF_INTEREST = 'cols_of_interest'
+    TARGET_COLUMN = 'target_column'
+    POS_LABEL = 'pos_label'
 
 
 class SKLearn(object):
