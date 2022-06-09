@@ -187,10 +187,7 @@ async function main() {
   }
   const hosts = await runNotebooks(commander.opts().notebook);
   writeCypressSettings(hosts);
-  e2e(
-    commander.opts().watch,
-    commander.opts().notebook,
-  );
+  e2e(commander.opts().watch, commander.opts().notebook);
   process.exit(0);
 }
 
