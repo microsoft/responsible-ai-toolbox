@@ -328,8 +328,7 @@ class CounterfactualConfig(BaseConfig):
         file_path = (explainer_directory_path /
                      CounterfactualConfig.EXPLAINER_FILE_NAME)
         try:
-            with open(file_path, 'wb') as file_path:
-                pickle.dump(self.explainer, file_path)
+            self.explainer.serialize_explainer(file_path)
         except Exception:
             pass
 
@@ -337,8 +336,7 @@ class CounterfactualConfig(BaseConfig):
         file_path = (explainer_directory_path /
                      CounterfactualConfig.EXPLAINER_FILE_NAME)
         try:
-            with open(file_path, 'rb') as file_path:
-                self.explainer = pickle.load(file_path)
+            self.explainer.deserialize_explainer(file_path)
         except Exception:
             pass
 
