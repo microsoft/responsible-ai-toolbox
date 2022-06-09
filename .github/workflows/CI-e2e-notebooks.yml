@@ -15,7 +15,6 @@ jobs:
         packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
-        flights: ["noFlights", "newModelOverviewExperience"]
         notebook: # keep this list in sync with scripts/e2e-widget.js
           - "responsibleaidashboard-census-classification-model-assessment"
           - "responsibleaidashboard-diabetes-regression-model-debugging"
@@ -80,13 +79,7 @@ jobs:
           name: requirements-dev.txt
           path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
 
-      - if: ${{ matrix.flights != 'noFlights' }}
-        name: Run widget tests
-        shell: bash -l {0}
-        run: yarn e2e-widget -n ${{ matrix.notebook }} -f ${{ matrix.flights }}
-
-      - if: ${{ matrix.flights == 'noFlights' }}
-        name: Run widget tests
+      - name: Run widget tests
         shell: bash -l {0}
         run: yarn e2e-widget -n ${{ matrix.notebook }}
 
