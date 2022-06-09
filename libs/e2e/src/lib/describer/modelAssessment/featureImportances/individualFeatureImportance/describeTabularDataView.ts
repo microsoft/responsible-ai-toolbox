@@ -29,8 +29,11 @@ export function describeTabularDataView(
           .should("match", regExForNumbersWithBrackets);
       });
 
+      it("should collapse 'Correct predictions' by default", () => {
+        cy.get(Locators.IFICollapseButton).should("be.visible");
+      });
+
       it("should have right number of incorrect prediction datapoints", () => {
-        cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
         cy.get(Locators.IFIPredictionSpan)
           .eq(1)
           .invoke("text")
@@ -55,6 +58,9 @@ export function describeTabularDataView(
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the row", () => {
+        if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
+          cy.get(Locators.IFICollapseButton).first().click(); // expand correct predictions
+        }
         selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",

@@ -248,8 +248,8 @@ const modelAssessmentDatasets = {
     },
     featureImportanceData: {
       datapoint: 730,
-      dropdownRowName: "Row 4",
-      hasCorrectIncorrectDatapoints: false,
+      dropdownRowName: "Row 84",
+      hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "OverallQual",
       noDataset: false,
