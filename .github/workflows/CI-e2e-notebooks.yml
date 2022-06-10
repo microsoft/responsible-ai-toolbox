@@ -63,6 +63,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
+      
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
+        run: yarn install --frozen-lock-file
 
       - name: Download the UI build result
         uses: actions/download-artifact@v2
