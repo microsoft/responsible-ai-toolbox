@@ -6,11 +6,8 @@ import pytest
 
 from responsibleai.databalanceanalysis.constants import Constants
 from responsibleai.databalanceanalysis.data_balance_helper import (
-    AGGREGATE_BALANCE_MEASURES_KEY,
-    DISTRIBUTION_BALANCE_MEASURES_KEY,
-    FEATURE_BALANCE_MEASURES_KEY,
-    DataBalanceHelper,
-)
+    AGGREGATE_BALANCE_MEASURES_KEY, DISTRIBUTION_BALANCE_MEASURES_KEY,
+    FEATURE_BALANCE_MEASURES_KEY, DataBalanceHelper)
 
 
 class TestDataBalanceHelper:
