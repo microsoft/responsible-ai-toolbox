@@ -2,21 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  WeightVectorOption,
-  ErrorCohort,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  JointDataset,
-  ModelExplanationUtils,
-  FabricStyles,
-  constructRows,
-  constructCols,
-  ModelTypes,
-  LabelWithCallout
-} from "@responsible-ai/core-ui";
-import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
-import { localization } from "@responsible-ai/localization";
-import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -38,7 +23,22 @@ import {
   Text,
   IDetailsGroupDividerProps,
   Icon
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  WeightVectorOption,
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  JointDataset,
+  ModelExplanationUtils,
+  FabricStyles,
+  constructRows,
+  constructCols,
+  ModelTypes,
+  LabelWithCallout
+} from "@responsible-ai/core-ui";
+import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { individualFeatureImportanceViewStyles } from "./IndividualFeatureImportanceView.styles";

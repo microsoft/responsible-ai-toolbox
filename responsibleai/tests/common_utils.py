@@ -1,8 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
+
 import numpy as np
 import pandas as pd
+import pytest
 # Defines common utilities for responsibleai tests
 from dice_ml.utils import helpers
 from lightgbm import LGBMClassifier
@@ -178,3 +181,9 @@ def create_models_regression(X_train, y_train):
     rf_model = create_sklearn_random_forest_regressor(X_train, y_train)
 
     return [rf_model]
+
+
+def assert_series_and_dict_equal(left: pd.Series, right: dict):
+    left_json = left.to_json(orient="index")
+    left_dict = json.loads(left_json)
+    assert left_dict == pytest.approx(right)

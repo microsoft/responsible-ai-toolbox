@@ -1,21 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox } from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
+  IComboBoxOption,
+  IComboBox,
   Text,
   TextField,
   DefaultButton,
   PrimaryButton,
   Stack,
   Panel,
-  ChoiceGroup,
-  IChoiceGroupOption,
   Link
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
