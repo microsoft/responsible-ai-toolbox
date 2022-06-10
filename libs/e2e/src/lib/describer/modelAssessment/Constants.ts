@@ -58,7 +58,7 @@ export enum Locators {
   CreateWhatIfCounterfactualButton = "#IndividualFeatureContainer button:contains('Create what-if counterfactual')",
   WhatIfCreateCounterfactualSortButton = "#CounterfactualPanel button[class^='ms-Toggle']",
   WhatIfColumnHeaders = "#CounterfactualPanel div[role='columnheader'] span.ms-DetailsHeader-cellName",
-  WhatIfSearchBar = "#CounterfactualPanel div[role='searchbox']",
+  WhatIfSearchBar = "#CounterfactualPanel input[role='searchbox']",
   WhatIfCloseButton = "#CounterfactualPanel button[aria-label='Close']",
   WhatIfSearchBarClearTextButton = "#CounterfactualPanel button[aria-label='Clear text']",
   WhatIfNameLabel = "#whatIfNameLabel",
