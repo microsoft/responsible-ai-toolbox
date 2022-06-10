@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IProcessedStyleSet,
-  mergeStyleSets,
-  IStyle
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
 
 export interface IDependencePlotStyles {
   boldText: IStyle;
@@ -20,8 +16,8 @@ export interface IDependencePlotStyles {
   placeholderWrapper: IStyle;
   placeholder: IStyle;
   rotatedVerticalBox: IStyle;
-  secondaryChartPlacolderBox: IStyle;
-  secondaryChartPlacolderSpacer: IStyle;
+  secondaryChartPlaceholderBox: IStyle;
+  secondaryChartPlaceholderSpacer: IStyle;
   verticalAxis: IStyle;
 }
 
@@ -74,11 +70,11 @@ export const dependencePlotStyles: () => IProcessedStyleSet<IDependencePlotStyle
         transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
         width: "max-content"
       },
-      secondaryChartPlacolderBox: {
+      secondaryChartPlaceholderBox: {
         flex: 1,
         height: "400px"
       },
-      secondaryChartPlacolderSpacer: {
+      secondaryChartPlaceholderSpacer: {
         boxShadow: "0px 0px 6px rgba(0, 0, 0, 0.2)",
         margin: "25px auto 0 auto",
         padding: "23px",

@@ -2,6 +2,17 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IStackTokens,
+  ITheme,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   IFilter,
   ICompositeFilter,
   CohortSource,
@@ -12,17 +23,6 @@ import {
   IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IStackTokens,
-  ITheme,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricSelector } from "../../MetricSelector/MetricSelector";
@@ -124,6 +124,13 @@ export class MatrixFilter extends React.PureComponent<
               </Text>
             </MessageBar>
           )}
+          <MatrixLegend
+            selectedCohort={this.props.selectedCohort}
+            baseCohort={this.props.baseCohort}
+            max={this.state.matrixLegendState.maxMetricValue}
+            isErrorMetric={this.state.matrixLegendState.isErrorMetric}
+            disabledView={this.props.disabledView}
+          />
           <Stack horizontal tokens={stackTokens} horizontalAlign="start">
             <MetricSelector
               isEnabled={this.props.isEnabled && !featuresUnselected}
@@ -161,13 +168,6 @@ export class MatrixFilter extends React.PureComponent<
               />
             </Stack.Item>
           </Stack>
-          <MatrixLegend
-            selectedCohort={this.props.selectedCohort}
-            baseCohort={this.props.baseCohort}
-            max={this.state.matrixLegendState.maxMetricValue}
-            isErrorMetric={this.state.matrixLegendState.isErrorMetric}
-            disabledView={this.props.disabledView}
-          />
           {!this.props.disabledView && (
             <MatrixArea
               theme={this.props.theme}

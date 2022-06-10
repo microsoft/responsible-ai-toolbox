@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDropdownOption } from "office-ui-fabric-react";
+import { IDropdownOption } from "@fluentui/react";
 
 import { JointDataset } from "./JointDataset";
 
@@ -14,14 +14,19 @@ export function getFeatureOptions(
       const key = JointDataset.DataLabelRoot + index.toString();
       const meta = jointDataset.metaDict[key];
       const options = meta.isCategorical
-        ? meta.sortedCategoricalValues?.map(
-            (optionText: string | number, index: number) => {
+        ? meta.sortedCategoricalValues
+            ?.filter(
+              (optionText: string | number, _: number) =>
+                !!optionText &&
+                typeof optionText !== "boolean" &&
+                typeof optionText !== "number"
+            )
+            .map((optionText: string | number, index: number) => {
               if (typeof optionText !== "string") {
                 optionText = optionText.toString();
               }
               return { key: index, text: optionText };
-            }
-          )
+            })
         : undefined;
       return {
         data: {

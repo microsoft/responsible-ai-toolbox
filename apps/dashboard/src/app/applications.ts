@@ -28,6 +28,7 @@ import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
 import { ebmData } from "../interpret/__mock_data__/ebmData";
 import { ibmData } from "../interpret/__mock_data__/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data__/ibmDataInconsistent";
+import { ibmDataMissingValues } from "../interpret/__mock_data__/ibmDataMissingValues";
 import { ibmNoClass } from "../interpret/__mock_data__/ibmNoClass";
 import { irisData } from "../interpret/__mock_data__/irisData";
 import { irisDataNoLocal } from "../interpret/__mock_data__/irisDataNoLocal";
@@ -179,6 +180,7 @@ export const applications: IApplications = <const>{
       ebmData: { classDimension: 2, data: ebmData },
       ibmData: { classDimension: 2, data: ibmData },
       ibmDataInconsistent: { classDimension: 2, data: ibmDataInconsistent },
+      ibmDataMissingValues: { classDimension: 2, data: ibmDataMissingValues },
       ibmNoClass: { classDimension: 2, data: ibmNoClass },
       irisData: { classDimension: 3, data: irisData },
       irisDataNoLocal: { classDimension: 3, data: irisDataNoLocal },

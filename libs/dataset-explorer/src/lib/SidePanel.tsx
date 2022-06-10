@@ -17,8 +17,7 @@ import {
   DefaultButton,
   IChoiceGroupOption,
   Label,
-  Stack,
-  Text
+  Stack
 } from "office-ui-fabric-react";
 import React from "react";
 
@@ -72,23 +71,17 @@ export class SidePanel extends React.Component<ISidePanelProps> {
               }
             />
             <div className={classNames.legendAndText}>
-              <div className={classNames.legend}>
-                {colorSeries?.length ? (
-                  <InteractiveLegend
-                    items={colorSeries.map((name, i) => {
-                      return {
-                        activated: true,
-                        color: FabricStyles.fabricColorPalette[i],
-                        name
-                      };
-                    })}
-                  />
-                ) : (
-                  <Text variant={"xSmall"} className={classNames.smallItalic}>
-                    {localization.Interpret.DatasetExplorer.noColor}
-                  </Text>
-                )}
-              </div>
+              {colorSeries?.length && (
+                <InteractiveLegend
+                  items={colorSeries.map((name, i) => {
+                    return {
+                      activated: true,
+                      color: FabricStyles.fabricColorPalette[i],
+                      name
+                    };
+                  })}
+                />
+              )}
             </div>
           </Stack.Item>
         )}
@@ -115,7 +108,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
         colorAxis &&
         (colorAxis.options.bin ||
           this.props.jointDataset.metaDict[colorAxis.property]
-            .treatAsCategorical)
+            ?.treatAsCategorical)
       ) {
         this.props.cohorts[this.props.selectedCohortIndex].sort(
           colorAxis.property
@@ -131,7 +124,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
       const colorAxis = this.props.chartProps.yAxis;
       if (
         this.props.jointDataset.metaDict[colorAxis.property]
-          .treatAsCategorical &&
+          ?.treatAsCategorical &&
         colorAxis.property !== ColumnCategories.None
       ) {
         this.props.cohorts[this.props.selectedCohortIndex].sort(
@@ -143,7 +136,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
           )
         );
         colorSeries = this.props.jointDataset.metaDict[colorAxis.property]
-          .treatAsCategorical
+          ?.treatAsCategorical
           ? includedIndexes.map(
               (category) =>
                 this.props.jointDataset.metaDict[colorAxis.property]

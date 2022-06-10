@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   ICompositeFilter,
   IFilter,
@@ -9,7 +10,6 @@ import {
   MetricCohortStats,
   IErrorAnalysisTreeNode
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 
@@ -24,6 +24,7 @@ export interface ITreeViewRendererProps {
     abortSignal: AbortSignal
   ) => Promise<IErrorAnalysisTreeNode[]>;
   tree?: IErrorAnalysisTreeNode[];
+  onClearCohortSelectionClick: () => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],

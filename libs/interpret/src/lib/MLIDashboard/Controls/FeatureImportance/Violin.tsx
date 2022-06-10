@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   IExplanationContext,
   ModelTypes,
@@ -19,9 +20,6 @@ import {
   DefaultButton,
   IconButton,
   Callout,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
   IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
@@ -344,7 +342,7 @@ export class Violin extends React.PureComponent<
               className={violinStyles.pathSelector}
               selectedKey={this.props.config.displayMode}
               onChange={this.setChart}
-              options={this.props.chartTypeOptions}
+              options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
               styles={FabricStyles.smallDropdownStyle}

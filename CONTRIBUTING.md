@@ -163,3 +163,29 @@ There are several different ways to debug the dashboards:
 3. Alternatively, you can set objects as part of `window` to inspect them
    through the console at runtime (as opposed to having to specify what to
    print with `console.log` at compile time).
+
+### Flighting
+
+It is possible to create feature flights to use certain functionality under
+development before exposing it to all users immediately.
+To do so, go to
+`responsible-ai-toolbox\libs\model-assessment\src\lib\ModelAssessmentDashboard\FeatureFlights.ts`
+and add your flight.
+After that you can use it in Typescript code as follows:
+
+```typescript
+isFlightActive(flightName, this.context.featureFlights);
+```
+
+To pass the flight into the `ResponsibleAIDashboard`, simply add the keyword
+argument `feature_flights` and separate all the flights you wish to pass with
+ampersand (`&`), e.g., `feature_flights="flight1&flight2&flight3"`.
+
+In the dashboard test environment (using `yarn start`) you have a dropdown to
+select which flights should be active.
+
+### Code approvals
+
+Once you have made your code changes locally, committed them and verified them, you can send a pull request (in short form written as PR) to [responsible-ai-toolbox](https://github.com/microsoft/responsible-ai-toolbox). For more information on how to create a pull request, please see [Proposing changes to your work with pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests).
+
+The PR will need to be approved by at least one code reviewer. In addition, if any changes are made in the listed directories within the [code owners](https://github.com/microsoft/responsible-ai-toolbox/blob/main/CODEOWNERS) file, those owners will be required to approve the PR. You can tag those owners directly in the comments to ensure they are aware of the changes made. Only one code owner is required for an area, but if the PR makes changes in multiple areas at least one code reviewer will be required from each area, hence multiple code reviewers could be required. In general, it is better to make more smaller PRs than fewer larger PRs to make it easier to review the code. Please ensure all automated builds/tests pass on the PR.

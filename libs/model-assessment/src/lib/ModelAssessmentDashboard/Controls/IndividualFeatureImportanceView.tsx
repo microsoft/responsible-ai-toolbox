@@ -2,20 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  WeightVectorOption,
-  ErrorCohort,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  JointDataset,
-  ModelExplanationUtils,
-  FabricStyles,
-  constructRows,
-  constructCols,
-  ModelTypes
-} from "@responsible-ai/core-ui";
-import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
-import { localization } from "@responsible-ai/localization";
-import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -34,9 +20,28 @@ import {
   TooltipHost,
   IColumn,
   IGroup,
-  Text
-} from "office-ui-fabric-react";
+  Text,
+  IDetailsGroupDividerProps,
+  Icon
+} from "@fluentui/react";
+import {
+  WeightVectorOption,
+  ErrorCohort,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  JointDataset,
+  ModelExplanationUtils,
+  FabricStyles,
+  constructRows,
+  constructCols,
+  ModelTypes,
+  LabelWithCallout
+} from "@responsible-ai/core-ui";
+import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
+
+import { individualFeatureImportanceViewStyles } from "./IndividualFeatureImportanceView.styles";
 
 export interface IIndividualFeatureImportanceProps {
   features: string[];
@@ -59,6 +64,8 @@ export interface IIndividualFeatureImportanceTableState {
 export interface IIndividualFeatureImportanceState
   extends IIndividualFeatureImportanceTableState {
   featureImportances: IGlobalSeries[];
+  indexToUnselect?: number;
+  selectedIndices: number[];
   sortArray: number[];
   sortingSeriesIndex?: number;
 }
@@ -70,9 +77,22 @@ export class IndividualFeatureImportanceView extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private readonly maxSelectable = 5;
 
   private selection: Selection = new Selection({
     onSelectionChanged: (): void => {
+      const c = this.selection.getSelectedCount();
+      const indices = this.selection.getSelectedIndices();
+      if (c === this.maxSelectable) {
+        this.setState({ selectedIndices: indices });
+      }
+      if (c > this.maxSelectable) {
+        for (const index of indices) {
+          if (!this.state.selectedIndices.includes(index)) {
+            this.setState({ indexToUnselect: index });
+          }
+        }
+      }
       this.updateViewedFeatureImportances();
     }
   });
@@ -84,6 +104,8 @@ export class IndividualFeatureImportanceView extends React.Component<
 
     this.state = {
       featureImportances: [],
+      indexToUnselect: undefined,
+      selectedIndices: [],
       sortArray: [],
       ...tableState
     };
@@ -94,6 +116,10 @@ export class IndividualFeatureImportanceView extends React.Component<
   ): void {
     if (this.props.selectedCohort !== prevProps.selectedCohort) {
       this.setState(this.updateItems());
+    }
+    if (this.state.indexToUnselect) {
+      this.selection.toggleIndexSelected(this.state.indexToUnselect);
+      this.setState({ indexToUnselect: undefined });
     }
   }
 
@@ -132,15 +158,32 @@ export class IndividualFeatureImportanceView extends React.Component<
           text: meta.abbridgedLabel
         };
       });
+    const classNames = individualFeatureImportanceViewStyles();
 
     return (
       <Stack tokens={{ padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {localization.ModelAssessment.FeatureImportances.IndividualFeature}
           </Text>
         </Stack.Item>
-        <Stack.Item className="tabularDataView">
+        <Stack.Item className={classNames.selectionCounter}>
+          <LabelWithCallout
+            label={localization.formatString(
+              localization.ModelAssessment.FeatureImportances.SelectionCounter,
+              this.selection.count,
+              this.maxSelectable
+            )}
+            calloutTitle={undefined}
+            renderOnNewLayer
+            type="label"
+          >
+            <Text block>
+              {localization.ModelAssessment.FeatureImportances.SelectionLimit}
+            </Text>
+          </LabelWithCallout>
+        </Stack.Item>
+        <Stack.Item className={classNames.tabularDataView}>
           <div style={{ height: "500px", position: "relative" }}>
             <Fabric>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -155,10 +198,12 @@ export class IndividualFeatureImportanceView extends React.Component<
                     onRenderDetailsHeader={this.onRenderDetailsHeader}
                     selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
-                    ariaLabelForSelectAllCheckbox="Toggle selection for all items"
                     checkButtonAriaLabel="Row checkbox"
                     // checkButtonGroupAriaLabel="Group checkbox"
-                    groupProps={{ showEmptyGroups: true }}
+                    groupProps={{
+                      onRenderHeader: this._onRenderGroupHeader,
+                      showEmptyGroups: true
+                    }}
                     selectionMode={SelectionMode.multiple}
                     selection={this.selection}
                   />
@@ -257,6 +302,7 @@ export class IndividualFeatureImportanceView extends React.Component<
           count: noIncorrectItem
             ? this.props.selectedCohort.cohort.filteredData.length
             : firstIncorrectItemIndex,
+          isCollapsed: true,
           key: "groupCorrect",
           level: 0,
           name: localization.ModelAssessment.FeatureImportances
@@ -328,5 +374,33 @@ export class IndividualFeatureImportanceView extends React.Component<
         })}
       </div>
     );
+  };
+
+  private _onRenderGroupHeader = (props?: IDetailsGroupDividerProps) => {
+    const classNames = individualFeatureImportanceViewStyles();
+    const iconName = props?.group?.isCollapsed
+      ? "ChevronRightMed"
+      : "ChevronDownMed";
+    return (
+      <Stack className={classNames.header} horizontal>
+        <Icon
+          ariaLabel="expand collapse group"
+          className={classNames.chevronButton}
+          iconName={iconName}
+          onClick={this._onToggleCollapse(props)}
+        />
+        <span className={classNames.headerTitle}>{props?.group!.name}</span>
+        &nbsp;
+        <span className={classNames.headerCount}>
+          {`(${props?.group!.count})`}
+        </span>
+      </Stack>
+    );
+  };
+
+  private _onToggleCollapse = (props?: IDetailsGroupDividerProps) => {
+    return () => {
+      props!.onToggleCollapse!(props!.group!);
+    };
   };
 }

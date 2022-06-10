@@ -3,15 +3,15 @@
 
 import {
   IComboBoxStyles,
+  ICalloutProps,
   IPivotStyles,
   FontWeights,
-  ICalloutProps,
   mergeStyles,
   ITextFieldStyles,
   IStyle,
   getTheme,
   mergeStyleSets
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IRGBColor {
   r: number;

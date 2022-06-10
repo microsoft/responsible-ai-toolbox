@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, Stack, Label, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, Stack, Label, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
@@ -28,7 +28,9 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
           className={classNames.button}
           text={localization.ErrorAnalysis.CohortInfo.saveCohort}
           onClick={(): any => this.props.onSaveCohortClick()}
-          disabled={this.props.disabledView}
+          disabled={
+            this.props.disabledView || !this.props.currentCohort.isTemporary
+          }
         />
         <Stack>
           <Label>

@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, Cohort, FabricStyles } from "@responsible-ai/core-ui";
+import { IComboBoxOption } from "@fluentui/react";
+import {
+  JointDataset,
+  Cohort,
+  FabricStyles,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -10,11 +16,9 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { IExplanationModelMetadata } from "../IExplanationContext";
-import { LoadingSpinner } from "../SharedComponents";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
 
 export interface IGlobalViolinPlotProps {
   topK: number;

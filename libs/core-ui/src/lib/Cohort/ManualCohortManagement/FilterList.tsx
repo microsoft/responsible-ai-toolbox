@@ -1,13 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IconButton, TooltipHost, TooltipOverflowMode } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { roundDecimal } from "@responsible-ai/mlchartlib";
-import {
-  IconButton,
-  TooltipHost,
-  TooltipOverflowMode
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
@@ -65,7 +61,7 @@ export class FilterList extends React.Component<IFilterListProps> {
 
     if (
       selectedFilter.isCategorical ||
-      this.props.jointDataset.metaDict[filter.column].treatAsCategorical
+      this.props.jointDataset.metaDict[filter.column]?.treatAsCategorical
     ) {
       const selectedValues: string[] = [];
       const filterArgs = filter.arg;

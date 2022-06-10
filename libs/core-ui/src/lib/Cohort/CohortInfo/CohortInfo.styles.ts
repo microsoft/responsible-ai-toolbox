@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 
 export interface ICohortInfoStyles {
   button: IStyle;
@@ -19,7 +15,7 @@ export const cohortInfoStyles: () => IProcessedStyleSet<ICohortInfoStyles> =
         minWidth: "120px"
       },
       container: {
-        padding: "0 0 0 20px"
+        padding: "65px 0 0 20px"
       }
     });
   };

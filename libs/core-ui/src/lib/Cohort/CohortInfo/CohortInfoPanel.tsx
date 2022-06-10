@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IFocusTrapZoneProps, Panel } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";
@@ -12,7 +12,6 @@ import { CohortInfo } from "./CohortInfo";
 export interface ICohortInfoPanelProps {
   isOpen: boolean;
   currentCohort: ErrorCohort;
-  // hostId: string
   onDismiss: () => void;
   onSaveCohortClick: () => void;
 }
@@ -35,9 +34,9 @@ export class CohortInfoPanel extends React.PureComponent<ICohortInfoPanelProps> 
         onDismiss={this.props.onDismiss}
       >
         <CohortInfo
-          onSaveCohortClick={this.props.onSaveCohortClick}
           currentCohort={this.props.currentCohort}
           disabledView={false}
+          onSaveCohortClick={this.props.onSaveCohortClick}
         />
       </Panel>
     );

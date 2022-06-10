@@ -42,7 +42,7 @@ export function getFeatureImportanceBarOptions(
         return {
           HoverText: xOriginText[index],
           Name: series.name,
-          Yformatted: series.unsortedAggregateY[value].toLocaleString(
+          Yformatted: series.unsortedAggregateY[value]?.toLocaleString(
             undefined,
             {
               maximumFractionDigits: 3
@@ -74,6 +74,9 @@ export function getFeatureImportanceBarOptions(
   return {
     chart: {
       type: "column"
+    },
+    legend: {
+      enabled: true
     },
     plotOptions: {
       series: {

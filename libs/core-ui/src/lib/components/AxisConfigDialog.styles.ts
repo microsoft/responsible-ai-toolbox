@@ -9,9 +9,9 @@ import {
   IStyle,
   mergeStyleSets,
   ICalloutContentStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
-import { FabricStyles } from "../../FabricStyles";
+import { FabricStyles } from "../util/FabricStyles";
 
 export interface IAxisControlDialogStyles {
   wrapper: IStyle;

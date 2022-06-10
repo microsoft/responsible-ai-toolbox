@@ -27,7 +27,7 @@ jobs:
           echo "Only Test or Prod can be used."
           exit 1
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
@@ -35,7 +35,7 @@ jobs:
           python-version: 3.7
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 
@@ -142,19 +142,19 @@ jobs:
         run: yarn e2e-widget
 
       - name: Upload a raiwidgets build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.widgetDirectory }}
           path: ${{ env.widgetDirectory }}/dist/
 
       - name: Upload a responsibleai build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.raiDirectory }}
           path: ${{ env.raiDirectory }}/dist/
 
       - name: Upload a typescript build result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.typescriptBuildArtifactName }}
           path: ${{ env.typescriptBuildOutput }}
@@ -234,7 +234,7 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node-version }}
 

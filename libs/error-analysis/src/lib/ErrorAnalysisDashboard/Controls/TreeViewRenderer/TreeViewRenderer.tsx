@@ -2,6 +2,15 @@
 // Licensed under the MIT License.
 
 import {
+  getTheme,
+  IProcessedStyleSet,
+  mergeStyles,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   IFilter,
   FilterMethods,
   CohortSource,
@@ -27,15 +36,7 @@ import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
-import {
-  getTheme,
-  IProcessedStyleSet,
-  mergeStyles,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
+import _ from "lodash";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -123,6 +124,14 @@ export class TreeViewRenderer extends React.PureComponent<
           this.context.errorAnalysisData.metric !== this.state.metric))
     ) {
       this.fetchTreeNodes();
+    } else if (
+      this.props.selectedCohort.isTemporary === false &&
+      prevProps.selectedCohort.isTemporary === true &&
+      this.state.root !== undefined
+    ) {
+      // This is for the clear selection button
+      // We don't necessarily want to re-fetch all tree nodes in this case
+      this.selectNode(this.state.root, false);
     }
   }
 
@@ -253,12 +262,12 @@ export class TreeViewRenderer extends React.PureComponent<
     );
     const x = rootDescendants.map((d) => d.x);
     const y = rootDescendants.map((d) => d.y);
-    const minX = Math.min(Math.min(...x) - 40, pathMin);
+    const minX = Math.min((_.min(x) || 0) - 40, pathMin);
     //100:tooltip width
-    const maxX = Math.max(Math.max(...x) + 40 + 100, pathMax);
-    const minY = Math.min(...y) - 40;
+    const maxX = Math.max((_.max(x) || 0) + 40 + 100, pathMax);
+    const minY = (_.min(y) || 0) - 40;
     //40:tooltip height
-    const maxY = Math.max(...y) + 40 + 40;
+    const maxY = (_.max(y) || 0) + 40 + 40;
     const containerStyles = mergeStyles({
       transform: `translate(${-minX}px, ${-minY}px)`
     });
@@ -269,7 +278,7 @@ export class TreeViewRenderer extends React.PureComponent<
     const svgHeight = maxY - minY;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
-        <Stack.Item>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {this.props.getTreeNodes
               ? localization.ErrorAnalysis.TreeView.treeDescription
@@ -295,6 +304,9 @@ export class TreeViewRenderer extends React.PureComponent<
               isErrorMetric={this.state.isErrorMetric}
               isEnabled={this.props.getTreeNodes !== undefined}
               setMetric={this.setMetric}
+              onClearCohortSelectionClick={
+                this.props.onClearCohortSelectionClick
+              }
               disabledView={this.props.disabledView}
             />
             <svg
@@ -540,20 +552,21 @@ export class TreeViewRenderer extends React.PureComponent<
         treeNodes
       };
     };
-    this.setState(reloadDataFunc);
-    // Clear filters
-    const filters: IFilter[] = [];
-    let cohortStats: MetricCohortStats | undefined = undefined;
-    if (this.state.root) {
-      cohortStats = this.calculateCohortStats(this.state.root.data);
-    }
-    this.props.updateSelectedCohort(
-      filters,
-      [],
-      CohortSource.None,
-      0,
-      cohortStats
-    );
+    this.setState(reloadDataFunc, () => {
+      // Clear filters
+      const filters: IFilter[] = [];
+      let cohortStats: MetricCohortStats | undefined = undefined;
+      if (this.state.root) {
+        cohortStats = this.calculateCohortStats(this.state.root.data);
+      }
+      this.props.updateSelectedCohort(
+        filters,
+        [],
+        CohortSource.None,
+        0,
+        cohortStats
+      );
+    });
   }
 
   private getTextBB(
@@ -613,6 +626,13 @@ export class TreeViewRenderer extends React.PureComponent<
     if (this.props.disabledView) {
       return;
     }
+    this.selectNode(node, true);
+  };
+
+  private selectNode(
+    node: HierarchyPointNode<ITreeNode>,
+    createTemporaryCohort: boolean
+  ): void {
     const updateSelectedFunc = (
       state: Readonly<ITreeViewRendererState>
     ): ITreeViewRendererState => {
@@ -625,13 +645,11 @@ export class TreeViewRenderer extends React.PureComponent<
       // Get filters and update
       const filters = this.getFilters(node);
       const cohortStats = this.calculateCohortStats(node.data);
-      this.props.updateSelectedCohort(
-        filters,
-        [],
-        CohortSource.TreeMap,
-        0,
-        cohortStats
-      );
+
+      const source = createTemporaryCohort
+        ? CohortSource.TreeMap
+        : CohortSource.None;
+      this.props.updateSelectedCohort(filters, [], source, 0, cohortStats);
 
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
@@ -654,7 +672,7 @@ export class TreeViewRenderer extends React.PureComponent<
     };
 
     this.setState(updateSelectedFunc);
-  };
+  }
 
   private getNodeDetail(node: HierarchyPointNode<ITreeNode>): INodeDetail {
     const nodeDetail = {

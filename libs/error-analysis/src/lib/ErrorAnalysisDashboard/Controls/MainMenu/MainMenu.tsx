@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
   Dropdown,
@@ -15,7 +13,9 @@ import {
   Label,
   PrimaryButton,
   IButtonStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { ErrorCohort } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
@@ -173,7 +173,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
       iconProps: { iconName: "Save" },
       key: "saveCohort",
       onClick: (): any => this.props.onSaveCohortClick(),
-      text: localization.ErrorAnalysis.MainMenu.saveCohort
+      text: localization.ErrorAnalysis.MainMenu.newCohort
     });
     subMenuPropItems.push({
       iconProps: { iconName: "PageList" },

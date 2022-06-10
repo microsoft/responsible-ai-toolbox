@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Property } from "csstype";
 import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
   mergeStyles,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { Property } from "csstype";
 
 import { ColorPalette } from "../../ColorPalette";
 
@@ -16,6 +17,7 @@ export interface ITreeViewRendererStyles {
   clickedNodeDashed: IStyle;
   clickedNodeFull: IStyle;
   filledNodeText: IStyle;
+  infoWithText: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
   node: IStyle;
@@ -56,6 +58,7 @@ export const treeViewRendererStyles = (props?: {
         fill: ColorPalette.ErrorAnalysisLightText
       }
     ]),
+    infoWithText: { maxWidth: descriptionMaxWidth },
     legend: {
       pointerEvents: "none"
     },

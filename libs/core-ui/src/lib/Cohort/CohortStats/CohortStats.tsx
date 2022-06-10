@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IStackTokens, Stack } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorCohortStats } from "../CohortStats";

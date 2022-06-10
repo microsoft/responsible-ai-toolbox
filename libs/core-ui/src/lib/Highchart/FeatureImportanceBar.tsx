@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import _ from "lodash";
-import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";
@@ -112,7 +112,6 @@ export class FeatureImportanceBar extends React.Component<
           this.props.unsortedX,
           this.props.unsortedSeries,
           this.props.topK,
-          getTheme(),
           this.props.onFeatureSelection
         );
   }

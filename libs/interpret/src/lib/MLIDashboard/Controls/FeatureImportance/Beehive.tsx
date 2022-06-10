@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
   IExplanationContext,
   ModelTypes,
@@ -20,10 +21,6 @@ import {
   DefaultButton,
   IconButton,
   Callout,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
   Slider
 } from "office-ui-fabric-react";
 import Plotly from "plotly.js";
@@ -82,8 +79,8 @@ export class Beehive extends React.PureComponent<
         const featureArray =
           data.testDataset.dataset?.map((row: number[]) => row[featureIndex]) ||
           [];
-        const min = Math.min(...featureArray);
-        const max = Math.max(...featureArray);
+        const min = _.min(featureArray) || 0;
+        const max = _.max(featureArray) || 0;
         const range = max - min;
         return (value: string | number): number => {
           return range !== 0 && typeof value === "number"
@@ -277,7 +274,7 @@ export class Beehive extends React.PureComponent<
 
   private readonly _crossClassIconId = "cross-class-icon-id";
   private readonly _globalSortIconId = "global-sort-icon-id";
-  private colorOptions: IDropdownOption[];
+  private colorOptions: IComboBoxOption[];
   private rowCount: number;
 
   public constructor(props: IGlobalFeatureImportanceProps) {
@@ -471,7 +468,7 @@ export class Beehive extends React.PureComponent<
               className={beehiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.Beehive}
               onChange={this.setChart}
-              options={this.props.chartTypeOptions}
+              options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
               styles={FabricStyles.smallDropdownStyle}

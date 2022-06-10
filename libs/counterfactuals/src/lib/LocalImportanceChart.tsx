@@ -39,7 +39,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
       );
     }
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
+      <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"} id="LocalImportanceDescription">
             {localization.formatString(
@@ -80,6 +80,12 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
       },
       xAxis: {
         categories: x
+      },
+      yAxis: {
+        title: {
+          text: localization.Counterfactuals.WhatIf
+            .percentCounterfactualLocalImportance
+        }
       }
     };
   }

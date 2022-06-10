@@ -21,9 +21,9 @@ jobs:
         node-version: [12.x, 14.x, 16.8]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install yarn
@@ -32,19 +32,19 @@ jobs:
         run: yarn ci
       - name: Upload unit test code coverage
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: unit-test-coverage-${{ matrix.node-version }}
           path: coverage
       - name: Upload e2e test screen shot
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: e2e-screen-shot-${{ matrix.node-version }}
           path: dist/cypress
       - name: Upload yarn error
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: yarn-error.log-${{ matrix.node-version }}
           path: yarn-error.log

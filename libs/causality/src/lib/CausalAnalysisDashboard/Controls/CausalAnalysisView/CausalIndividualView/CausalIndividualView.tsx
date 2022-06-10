@@ -17,8 +17,8 @@ import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChar
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
-import { CausalIndividualStyles } from "./CausalIndividualStyles";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
@@ -44,7 +44,11 @@ export class CausalIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalIndividualStyles();
     return (
-      <Stack id="causalIndividualView" grow tokens={{ padding: "l1" }}>
+      <Stack
+        id="causalIndividualView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack.Item>
           <Text variant={"medium"} className={styles.description}>
             {localization.CausalAnalysis.IndividualView.description}

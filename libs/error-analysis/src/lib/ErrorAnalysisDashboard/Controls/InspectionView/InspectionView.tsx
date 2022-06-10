@@ -2,18 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  JointDataset,
-  WeightVectorOption,
-  ModelExplanationUtils,
-  IExplanationModelMetadata,
-  ErrorCohort,
-  FabricStyles,
-  constructRows,
-  constructCols
-} from "@responsible-ai/core-ui";
-import { LocalImportancePlots, IGlobalSeries } from "@responsible-ai/interpret";
-import { localization } from "@responsible-ai/localization";
-import {
   IColumn,
   IDropdownOption,
   ITheme,
@@ -26,7 +14,19 @@ import {
   Fabric,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  JointDataset,
+  WeightVectorOption,
+  ModelExplanationUtils,
+  IExplanationModelMetadata,
+  ErrorCohort,
+  FabricStyles,
+  constructRows,
+  constructCols
+} from "@responsible-ai/core-ui";
+import { LocalImportancePlots, IGlobalSeries } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";

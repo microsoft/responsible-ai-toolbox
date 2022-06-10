@@ -1,14 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IStackTokens, Label, Stack, Slider, Toggle } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import {
-  IStackTokens,
-  Label,
-  Stack,
-  Slider,
-  Toggle
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { InfoCallout } from "../../InfoCallout/InfoCallout";

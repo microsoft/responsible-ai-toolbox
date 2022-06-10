@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IMissingParametersPlaceholderStyles {
   missingParametersPlaceholder: IStyle;
@@ -23,6 +23,7 @@ export const missingParametersPlaceholderStyles: () => IProcessedStyleSet<IMissi
       },
       missingParametersPlaceholder: {
         height: "300px",
+        textAlign: "center",
         width: "100%"
       },
       missingParametersPlaceholderSpacer: {

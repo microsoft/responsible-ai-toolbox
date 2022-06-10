@@ -29,7 +29,7 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
       this.props.data.treatment_feature
     );
     return (
-      <Stack horizontal grow tokens={{ padding: "16px 8px" }}>
+      <Stack horizontal grow>
         <Stack.Item className={styles.treatmentBarContainer}>
           {this.props.data?.policy_gains ? (
             <BasicHighChart

@@ -2,6 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBox,
+  ComboBox,
+  IComboBoxOption,
+  IDropdownOption,
+  Dropdown
+} from "@fluentui/react";
+import {
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
@@ -18,15 +25,11 @@ import {
   IChoiceGroupOption,
   Slider,
   Text,
-  ComboBox,
-  IComboBox,
   DirectionalHint,
   Callout,
   Link,
   IconButton,
   CommandBarButton,
-  Dropdown,
-  IDropdownOption,
   Label,
   Toggle,
   Stack
@@ -84,7 +87,11 @@ export class LocalImportancePlots extends React.Component<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    const modelType = this.props.metadata.modelType;
+    if (
+      modelType === ModelTypes.Multiclass ||
+      modelType === ModelTypes.Binary
+    ) {
       this.weightOptions = this.props.weightOptions.map((option) => {
         return {
           key: option,
@@ -111,7 +118,10 @@ export class LocalImportancePlots extends React.Component<
       prevProps.sortingSeriesIndex !== this.props.sortingSeriesIndex
     ) {
       this.setState({
-        sortArray: this.props.sortArray,
+        sortArray: this.getSortedArray(
+          this.props.sortingSeriesIndex,
+          this.state.sortAbsolute
+        ),
         sortingSeriesIndex: this.props.sortingSeriesIndex
       });
     }
@@ -201,7 +211,7 @@ export class LocalImportancePlots extends React.Component<
                       onChange={this.setSortIndex}
                     />
                   </Stack.Item>
-                  <Stack.Item>
+                  <Stack.Item className={classNames.absoluteValueToggle}>
                     <Toggle
                       label={localization.Interpret.GlobalTab.absoluteValues}
                       inlineLabel
@@ -211,7 +221,8 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {this.props.metadata.modelType === ModelTypes.Multiclass && (
+                {(this.props.metadata.modelType === ModelTypes.Multiclass ||
+                  this.props.metadata.modelType === ModelTypes.Binary) && (
                   <div>
                     <div className={classNames.multiclassWeightLabel}>
                       <Text
@@ -399,7 +410,7 @@ export class LocalImportancePlots extends React.Component<
       }
     ];
     return (
-      <div id="subPlotContainer">
+      <div id="subPlotContainer" className={classNames.subPlotContainer}>
         {this.props.invokeModel ? (
           <div className={classNames.choiceBoxArea} id="subPlotChoice">
             <Text variant="medium" className={classNames.boldText}>
@@ -431,7 +442,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -441,7 +452,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onICEClassSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -501,21 +512,27 @@ export class LocalImportancePlots extends React.Component<
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      let sortArray: number[] = [];
-      if (this.state.sortingSeriesIndex !== undefined) {
-        sortArray = checked
-          ? ModelExplanationUtils.getAbsoluteSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse()
-          : ModelExplanationUtils.getSortIndices(
-              this.props.includedFeatureImportance[
-                this.state.sortingSeriesIndex
-              ].unsortedAggregateY
-            ).reverse();
-      }
+      const sortArray = this.getSortedArray(
+        this.state.sortingSeriesIndex,
+        checked
+      );
       this.setState({ sortAbsolute: checked, sortArray });
     }
+  };
+
+  private getSortedArray = (
+    sortIndex: number | undefined,
+    checked: boolean
+  ) => {
+    if (sortIndex !== undefined) {
+      return checked
+        ? ModelExplanationUtils.getAbsoluteSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse()
+        : ModelExplanationUtils.getSortIndices(
+            this.props.includedFeatureImportance[sortIndex].unsortedAggregateY
+          ).reverse();
+    }
+    return this.props.sortArray;
   };
 }

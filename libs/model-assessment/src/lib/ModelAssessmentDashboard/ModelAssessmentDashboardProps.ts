@@ -31,6 +31,7 @@ export interface IModelAssessmentDashboardProps
   extends IOfficeFabricProps,
     IModelAssessmentData {
   locale?: string;
+  featureFlights?: string[];
   stringParams?: IStringsParam;
   classDimension?: 1 | 2 | 3;
   requestPredictions?: (

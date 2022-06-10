@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -10,13 +11,7 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  TextField
-} from "office-ui-fabric-react";
+import { IDropdownOption, TextField } from "office-ui-fabric-react";
 import React from "react";
 
 import { binningControlStyles } from "./BinningControl.styles";
@@ -87,7 +82,7 @@ export class BinningControl extends React.PureComponent<
                 selectedKey={this.state.selectedOptionKeys}
                 allowFreeform
                 autoComplete="on"
-                options={this.state.categoricalOptions}
+                options={this.state.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
                 styles={FabricStyles.defaultDropdownStyle}
               />
@@ -125,7 +120,7 @@ export class BinningControl extends React.PureComponent<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "number") {
       this.setState(this.buildRangeView(item.key), () => {

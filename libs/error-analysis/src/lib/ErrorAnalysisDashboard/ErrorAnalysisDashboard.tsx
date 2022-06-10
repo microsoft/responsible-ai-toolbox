@@ -2,6 +2,20 @@
 // Licensed under the MIT License.
 
 import {
+  Customizer,
+  getId,
+  IPivotItemProps,
+  ISettings,
+  Layer,
+  LayerHost,
+  mergeStyleSets,
+  MessageBar,
+  MessageBarType,
+  PivotItem,
+  Pivot,
+  Text
+} from "@fluentui/react";
+import {
   Cohort,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
@@ -34,21 +48,6 @@ import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import {
-  Customizer,
-  getId,
-  IPivotItemProps,
-  ISettings,
-  Layer,
-  LayerHost,
-  mergeStyleSets,
-  MessageBar,
-  MessageBarType,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
@@ -249,13 +248,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     const globalProps = buildGlobalProperties(props.precomputedExplanations);
     // consider taking filters in as param arg for programmatic users
     let metricStats: MetricCohortStats | undefined = undefined;
-    if (props.rootStats) {
+    if (props.errorAnalysisData.root_stats) {
       metricStats = new MetricCohortStats(
-        props.rootStats.totalSize,
-        props.rootStats.totalSize,
-        props.rootStats.metricValue,
-        props.rootStats.metricName,
-        props.rootStats.errorCoverage
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.totalSize,
+        props.errorAnalysisData.root_stats.metricValue,
+        props.errorAnalysisData.root_stats.metricName,
+        props.errorAnalysisData.root_stats.errorCoverage
       );
     }
     const cohorts = [
@@ -517,6 +516,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     }
                     getTreeNodes={this.props.requestDebugML}
                     getMatrix={this.props.requestMatrix}
+                    onClearCohortSelectionClick={(): void =>
+                      this.clearCohortSelection()
+                    }
                     updateSelectedCohort={this.updateSelectedCohort.bind(this)}
                     disabledView={false}
                     features={this.props.features}
@@ -539,7 +541,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <Pivot
                       selectedKey={this.state.activeGlobalTab}
                       onLinkClick={this.handleGlobalTabClick}
-                      linkSize={PivotLinkSize.normal}
+                      linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
                     >
@@ -547,9 +549,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                         <PivotItem key={props.itemKey} {...props} />
                       ))}
                     </Pivot>
-                    {this.props.rootStats &&
+                    {this.props.errorAnalysisData.root_stats &&
                       this.state.jointDataset.datasetRowCount !==
-                        this.props.rootStats.totalSize && (
+                        this.props.errorAnalysisData.root_stats.totalSize && (
                         <MessageBar messageBarType={MessageBarType.warning}>
                           <Text>{localization.ErrorAnalysis.scaleWarning}</Text>
                         </MessageBar>
@@ -723,6 +725,17 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       selectedCohort
     });
   }
+
+  private clearCohortSelection = (): void => {
+    const cohorts = this.state.cohorts.filter(
+      (errorCohort) => !errorCohort.isTemporary
+    );
+    this.setState({
+      cohorts,
+      selectedCohort: this.state.baseCohort
+    });
+    this.context.selectedErrorCohort = this.state.baseCohort;
+  };
 
   private handleGlobalTabClick = (item: PivotItem | undefined): void => {
     if (item?.props.itemKey) {

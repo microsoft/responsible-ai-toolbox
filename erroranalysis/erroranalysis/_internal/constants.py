@@ -3,14 +3,18 @@
 
 from enum import Enum
 
-PRED_Y = 'pred_y'
-ROW_INDEX = 'Index'
-TRUE_Y = 'true_y'
+ARG = 'arg'
+COLUMN = 'column'
+COMPOSITE_FILTERS = 'compositeFilters'
 DIFF = 'diff'
-SPLIT_INDEX = 'split_index'
-SPLIT_FEATURE = 'split_feature'
 LEAF_INDEX = 'leaf_index'
 METHOD = 'method'
+OPERATION = 'operation'
+PRED_Y = 'pred_y'
+ROW_INDEX = 'Index'
+SPLIT_FEATURE = 'split_feature'
+SPLIT_INDEX = 'split_index'
+TRUE_Y = 'true_y'
 
 
 class CohortFilterMethods:
@@ -25,6 +29,14 @@ class CohortFilterMethods:
     METHOD_LESS_AND_EQUAL = 'less and equal'
     METHOD_GREATER_AND_EQUAL = 'greater and equal'
     METHOD_RANGE = 'in the range of'
+
+
+class CohortFilterOps:
+    """Cohort filter operations.
+    """
+
+    AND = 'and'
+    OR = 'or'
 
 
 class ModelTask(str, Enum):
@@ -78,6 +90,29 @@ class Metrics(str, Enum):
     MACRO_RECALL_SCORE = 'macro_recall_score'
     MICRO_RECALL_SCORE = 'micro_recall_score'
     ERROR_RATE = 'error_rate'
+
+
+class MetricKeys(str, Enum):
+    """Provide keys for properties related to metrics.
+    """
+    METRIC_NAME = 'metricName'
+    METRIC_VALUE = 'metricValue'
+
+
+class RootKeys(str, Enum):
+    """Provide keys for the root cohort.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
+    TOTAL_SIZE = 'totalSize'
+    ERROR_COVERAGE = 'errorCoverage'
+
+
+class TreeNode(str, Enum):
+    """Provide the tree node properties.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
 
 
 metric_to_display_name = {

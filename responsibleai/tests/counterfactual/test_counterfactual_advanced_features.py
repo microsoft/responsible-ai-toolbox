@@ -2,9 +2,13 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import os
+
 import pytest
 
 from responsibleai import RAIInsights
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 
 from ..common_utils import create_iris_data, create_lightgbm_classifier
 
@@ -105,3 +109,30 @@ class TestCounterfactualAdvancedFeatures(object):
         assert len(rai_insights_copy.counterfactual.get()) == 2
         cf_obj = rai_insights_copy.counterfactual.get()[0]
         assert cf_obj is not None
+
+        # Delete the dice-ml explainer directory so that the dice-ml
+        # explainer can be re-trained rather being loaded from the
+        # disc
+        counterfactual_path = save_dir / "counterfactual"
+        all_cf_dirs = DirectoryManager.list_sub_directories(
+            counterfactual_path)
+        for counterfactual_config_dir in all_cf_dirs:
+            directory_manager = DirectoryManager(
+                parent_directory_path=counterfactual_path,
+                sub_directory_name=counterfactual_config_dir)
+            explainer_pkl_path = \
+                directory_manager.get_generators_directory() / "explainer.pkl"
+            os.remove(explainer_pkl_path)
+
+        with pytest.warns(UserWarning,
+                          match='ERROR-LOADING-COUNTERFACTUAL-EXPLAINER: '
+                                'There was an error loading the '
+                                'counterfactual explainer model. '
+                                'Retraining the counterfactual '
+                                'explainer.'):
+            rai_insights_copy_new = RAIInsights.load(save_dir)
+        counterfactual_config_list = \
+            rai_insights_copy_new.counterfactual._counterfactual_config_list
+        assert len(counterfactual_config_list) == 2
+        assert counterfactual_config_list[0].explainer is not None
+        assert counterfactual_config_list[1].explainer is not None

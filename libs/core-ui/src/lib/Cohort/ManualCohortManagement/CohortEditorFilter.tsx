@@ -1,31 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import {
   Checkbox,
+  IComboBoxOption,
+  IComboBox,
   ComboBox,
   DefaultButton,
-  IComboBox,
-  IComboBoxOption,
   PrimaryButton,
   SpinButton,
   Stack,
-  Text
-} from "office-ui-fabric-react";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+  Text,
+  Position
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { FabricStyles } from "../../util/FabricStyles";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 
+import { cohortEditorStyles } from "./CohortEditor.styles";
+
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;
   jointDataset: JointDataset;
   filterIndex?: number;
   filters: IFilter[];
+  showInvalidMinMaxValueError: boolean;
+  showInvalidValueError: boolean;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -87,7 +91,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
     const numericDelta =
-      selectedMeta.treatAsCategorical ||
+      selectedMeta?.treatAsCategorical ||
       selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
       !selectedMeta.featureRange
         ? 1
@@ -99,9 +103,9 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
     const isEditingFilter =
       this.props.filterIndex !== this.props.filters.length;
-
+    const styles = cohortEditorStyles();
     let minVal, maxVal;
-    if (selectedMeta.treatAsCategorical || !selectedMeta.featureRange) {
+    if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
       // Numerical values treated as categorical are stored with the values in the column,
       // true categorical values store indexes to the string values
       categoricalOptions = selectedMeta.sortedCategoricalValues?.map(
@@ -130,11 +134,11 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             <Checkbox
               key={this.props.openedFilter.column}
               label={localization.Interpret.CohortEditor.TreatAsCategorical}
-              checked={selectedMeta.treatAsCategorical}
+              checked={selectedMeta?.treatAsCategorical}
               onChange={this.props.setAsCategorical}
             />
           )}
-        {selectedMeta.treatAsCategorical ? (
+        {selectedMeta?.treatAsCategorical ? (
           <>
             <Text variant={"small"}>
               {`${localization.formatString(
@@ -148,7 +152,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               label={localization.Interpret.Filters.categoricalIncludeValues}
               selectedKey={this.props.openedFilter.arg}
               onChange={this.props.setCategoricalValues}
-              options={categoricalOptions}
+              options={categoricalOptions || []}
               useComboBoxAsMenuWidth
               calloutProps={FabricStyles.calloutProps}
               styles={FabricStyles.limitedSizeMenuDropdown}
@@ -228,6 +232,17 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                       this.props.setNumericValue(0, selectedMeta, 1, value);
                     }}
                   />
+                  {this.props.showInvalidMinMaxValueError &&
+                    selectedMeta.featureRange && (
+                      <p className={styles.invalidValueError}>
+                        {localization.formatString(
+                          localization.Interpret.CohortEditor
+                            .minimumGreaterThanMaximum,
+                          selectedMeta.featureRange.min,
+                          selectedMeta.featureRange.max
+                        )}
+                      </p>
+                    )}
                 </>
               ) : (
                 <SpinButton
@@ -257,6 +272,15 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                   }}
                 />
               ))}
+            {this.props.showInvalidValueError && selectedMeta.featureRange && (
+              <p className={styles.invalidValueError}>
+                {localization.formatString(
+                  localization.Interpret.CohortEditor.invalidValueError,
+                  selectedMeta.featureRange.min,
+                  selectedMeta.featureRange.max
+                )}
+              </p>
+            )}
           </>
         )}
         <Stack horizontal tokens={{ childrenGap: "l1" }}>

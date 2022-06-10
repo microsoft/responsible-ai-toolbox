@@ -2,25 +2,25 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
-  JointDataset
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
+  IComboBoxOption,
+  IComboBox,
   ComboBox,
   Dropdown,
-  FocusZone,
-  IComboBox,
-  IComboBoxOption,
-  IconButton,
   IDropdownOption,
+  FocusZone,
+  IconButton,
   Label,
   PrimaryButton,
   SearchBox,
   Stack,
   Text,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";

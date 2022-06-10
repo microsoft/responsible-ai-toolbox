@@ -2,14 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  CohortSource,
-  IErrorAnalysisMatrixNode,
-  Metrics,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   Customizer,
   DefaultButton,
   getId,
@@ -23,7 +15,15 @@ import {
   ScrollablePane,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  CohortSource,
+  IErrorAnalysisMatrixNode,
+  Metrics,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { FeatureRowCategories } from "../FeatureRowCategories/FeatureRowCategories";
@@ -266,7 +266,7 @@ export class MatrixArea extends React.PureComponent<
       this.props.baseCohort,
       this.props.selectedFeature1,
       this.props.selectedFeature2,
-      this.context.errorAnalysisData!.metric,
+      this.context.errorAnalysisData?.metric,
       this.props.getMatrix,
       this.props.matrix
     );
