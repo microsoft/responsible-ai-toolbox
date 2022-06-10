@@ -282,7 +282,11 @@ export class IndividualFeatureImportanceView extends React.Component<
       this.props.modelType === ModelTypes.Regression
     ) {
       // don't use groups since there are no correct/incorrect buckets
-      this.props.selectedCohort.cohort.sort();
+      // sort individual feature importance by residual for regression prediction
+      this.props.selectedCohort.cohort.filteredData.forEach(
+        (item) => (item.Residual = Math.abs(item.PredictedY - item.TrueY))
+      );
+      this.props.selectedCohort.cohort.sort(JointDataset.Residual);
     } else {
       this.props.selectedCohort.cohort.sortByGroup(
         JointDataset.IndexLabel,
