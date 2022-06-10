@@ -10,7 +10,7 @@ jobs:
   ui-build:
     env:
       node-version: 16.8
-    
+
     runs-on: windows-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Typescript
         run: yarn buildall
-      
+
       - name: Upload the build result
         uses: actions/upload-artifact@v3
         with:
