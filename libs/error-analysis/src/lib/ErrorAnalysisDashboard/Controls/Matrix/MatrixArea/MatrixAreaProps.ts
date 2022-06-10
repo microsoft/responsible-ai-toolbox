@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   IFilter,
   ICompositeFilter,
@@ -9,7 +10,6 @@ import {
   MetricCohortStats,
   IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
 
 export interface IMatrixAreaProps {
   theme?: ITheme;
