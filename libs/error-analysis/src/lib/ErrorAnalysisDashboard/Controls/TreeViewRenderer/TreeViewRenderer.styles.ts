@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
-import { Property } from "csstype";
 import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
   mergeStyles,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { Property } from "csstype";
 
 import { ColorPalette } from "../../ColorPalette";
 

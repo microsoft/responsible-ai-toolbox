@@ -24,6 +24,41 @@ this file to understand what changed.
 - bug fixes
 - other
 
+## v0.19.0
+
+- educational materials
+  - add info about PR reviews to the contributing docs file by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1472
+  - Adding extra statement in PR template for e2e by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1461
+- new features
+  - ## Responsible AI Dashboard
+    - Model overview: improve placeholder, put confirm/cancel buttons at the bottom, and hide toggle when needed by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1433
+  - ## RAIInsights
+    - Add DataBalanceAnalysis module to ResponsibleAI package to be consumed by visualizations by @ms-kashyap in https://github.com/microsoft/responsible-ai-toolbox/pull/1473
+- bug fixes and tests
+  - ## Responsible AI Dashboard
+    - Fix locators logic for string features - data explorer component by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1441
+    - Fix cohort name conflict and not run few tests for AML by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1442
+    - Few e2e tests changes to accommodate AML static tests by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1445
+    - Fix locators logic for string features - data explorer and model statistics components by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1446
+    - Add more unittests RAI dashboard input class by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1448
+    - Update the way to get the length of elements obtained in e2e tests by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1450
+    - Fix dataset explorer plot with count not displaying by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1454
+    - Add toggle for switching classes in binary classification case by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1444
+    - [office-ui upgrade] Move checkbox to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1465
+    - [office-ui upgrade] Move combobox to fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1469
+    - [office-ui upgrade] Move components in core-ui packageto fluentui by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1471
+    - Fix TypeError: Cannot read properties of undefined (reading 'treatAsCategorical')" by @vinuthakaranth in https://github.com/microsoft/responsible-ai-toolbox/pull/1452
+    - Update predicted class value to uneditable text in counterfactual panel by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1458
+    - Collapse correct prediction by default for individual feature importance by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1474
+  - ## RAIInsights
+    - Update requirements.txt to pin dice-ml at 0.8 by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1470
+- ## other
+  - Add more utilities into raiutils by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1295
+  - Release raiutils v0.1.0 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1480
+  - Update responsibleai to raiutils 0.1.0, raiwidgets and responsibleai to erroranalysis 0.3.2 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1483
+  - Merge postbuild branch back into main by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1466
+  - Remove postbuild branch triggers by @romanlutz in https://github.com/microsoft/responsible-ai-toolbox/pull/1476
+
 ## v0.18.2
 
 - bug fixes and tests

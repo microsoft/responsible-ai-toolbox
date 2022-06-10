@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme,
   mergeStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 import { ColorPalette } from "../../ColorPalette";
 
