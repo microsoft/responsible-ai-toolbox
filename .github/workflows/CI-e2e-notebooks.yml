@@ -7,12 +7,40 @@ on:
     branches: [main]
 
 jobs:
-  ci-e2e-notebook:
+  ui-build:
     env:
       node-version: 16.8
+    
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Install yarn
+        run: npm install yarn -g
+
+      - name: Install yarn dependencies
+        run: yarn install --frozen-lock-file
+
+      - name: Build Typescript
+        run: yarn buildall
+      
+      - name: Upload the build result
+        uses: actions/upload-artifact@v3
+        with:
+          name: raiwidgets-js
+          path: raiwidgets/raiwidgets/widget
+
+  ci-e2e-notebook:
+    needs: ui-build
+
     strategy:
       matrix:
-        packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
         notebook: # keep this list in sync with scripts/e2e-widget.js
@@ -28,24 +56,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Download the UI build result
+        uses: actions/download-artifact@v2
+        with:
+          name: raiwidgets-js
+          path: raiwidgets/raiwidgets/widget
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           auto-update-conda: true
           python-version: ${{ matrix.pythonVersion }}
-
-      - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-
-      - name: Install yarn
-        run: npm install yarn -g
-
-      - name: Install yarn dependencies
-        run: yarn install --frozen-lock-file
-
-      - name: Build Typescript
-        run: yarn buildall
 
       - name: Install pytorch
         shell: bash -l {0}
@@ -64,20 +84,20 @@ jobs:
         run: |
           pip install -r requirements-dev.txt
           pip install -v -e .
-        working-directory: ${{ matrix.packageDirectory }}
+        working-directory: raiwidgets
 
       - name: Pip freeze
         shell: bash -l {0}
         run: |
           pip freeze > installed-requirements-dev.txt
           cat installed-requirements-dev.txt
-        working-directory: ${{ matrix.packageDirectory }}
+        working-directory: raiwidgets
 
       - name: Upload requirements
         uses: actions/upload-artifact@v3
         with:
           name: requirements-dev.txt
-          path: ${{ matrix.packageDirectory }}/installed-requirements-dev.txt
+          path: raiwidgets/installed-requirements-dev.txt
 
       - name: Run widget tests
         shell: bash -l {0}
@@ -86,5 +106,5 @@ jobs:
       - name: Upload e2e test screen shot
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.packageDirectory }}-e2e-screen-shot
+          name: raiwidgets-e2e-screen-shot
           path: ./dist/cypress
