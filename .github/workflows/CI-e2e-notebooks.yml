@@ -39,6 +39,9 @@ jobs:
   ci-e2e-notebook:
     needs: ui-build
 
+    env:
+      node-version: 16.8
+
     strategy:
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
@@ -55,6 +58,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
 
       - name: Download the UI build result
         uses: actions/download-artifact@v2
