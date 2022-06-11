@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Callout, IconButton } from "@fluentui/react";
 import { FabricStyles } from "@responsible-ai/core-ui";
-import { Callout, IconButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { infoCalloutStyles } from "./InfoCallout.styles";
