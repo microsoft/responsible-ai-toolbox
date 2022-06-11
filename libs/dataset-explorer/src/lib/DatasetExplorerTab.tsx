@@ -2,6 +2,15 @@
 // Licensed under the MIT License.
 
 import {
+  getTheme,
+  IDropdownOption,
+  Dropdown,
+  DefaultButton,
+  Text,
+  IChoiceGroupOption,
+  Stack
+} from "@fluentui/react";
+import {
   AxisConfigDialog,
   JointDataset,
   ColumnCategories,
@@ -17,15 +26,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  getTheme,
-  IDropdownOption,
-  Dropdown,
-  DefaultButton,
-  Text,
-  IChoiceGroupOption,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";

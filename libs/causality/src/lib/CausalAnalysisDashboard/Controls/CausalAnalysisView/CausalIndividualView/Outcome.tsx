@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Label, Spinner, Stack, Text } from "office-ui-fabric-react";
+import { Label, Spinner, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 interface IOutcomeProps {
