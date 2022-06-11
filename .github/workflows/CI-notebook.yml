@@ -2,9 +2,9 @@ name: CI Notebooks
 
 on:
   push:
-    branches: [main, postbuild]
+    branches: [main]
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
 
 jobs:
   ci-notebook:

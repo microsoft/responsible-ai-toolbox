@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxStyles, ICalloutProps } from "@fluentui/react";
 import {
+  IComboBoxStyles,
+  ICalloutProps,
   IPivotStyles,
   FontWeights,
   mergeStyles,
@@ -10,7 +11,7 @@ import {
   IStyle,
   getTheme,
   mergeStyleSets
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IRGBColor {
   r: number;

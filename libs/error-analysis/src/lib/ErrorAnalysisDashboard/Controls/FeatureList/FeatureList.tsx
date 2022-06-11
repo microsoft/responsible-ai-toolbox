@@ -1,23 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Checkbox } from "@fluentui/react";
 import {
-  ITableState,
-  ModelAssessmentContext,
-  defaultModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
-  ConstrainMode,
+  Checkbox,
+  IColumn,
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   DetailsRowFields,
+  ConstrainMode,
   getTheme,
   MarqueeSelection,
   PrimaryButton,
-  IColumn,
   IRenderFunction,
   IDetailsRowFieldsProps,
   IDetailsRowProps,
@@ -39,7 +33,13 @@ import {
   Text,
   TooltipHost,
   TooltipOverflowMode
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  ITableState,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { TreeViewParameters } from "../TreeViewParameters/TreeViewParameters";

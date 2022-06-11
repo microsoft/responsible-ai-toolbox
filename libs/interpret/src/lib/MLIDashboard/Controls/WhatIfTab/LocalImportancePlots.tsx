@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBox, ComboBox, IComboBoxOption } from "@fluentui/react";
+import {
+  IComboBox,
+  ComboBox,
+  IComboBoxOption,
+  IDropdownOption,
+  Dropdown
+} from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   ModelTypes,
@@ -24,8 +30,6 @@ import {
   Link,
   IconButton,
   CommandBarButton,
-  Dropdown,
-  IDropdownOption,
   Label,
   Toggle,
   Stack

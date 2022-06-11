@@ -1,7 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IStackTokens,
+  ITheme,
+  MessageBar,
+  MessageBarType,
+  Stack,
+  Text
+} from "@fluentui/react";
 import {
   IFilter,
   ICompositeFilter,
@@ -13,14 +23,6 @@ import {
   IErrorAnalysisMatrix
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  IStackTokens,
-  ITheme,
-  MessageBar,
-  MessageBarType,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricSelector } from "../../MetricSelector/MetricSelector";

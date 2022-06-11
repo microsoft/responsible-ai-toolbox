@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   IStackTokens,
   ITextFieldStyles,
@@ -13,7 +12,8 @@ import {
   DialogFooter,
   Stack,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
