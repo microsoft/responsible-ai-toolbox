@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import { JointDataset } from "@responsible-ai/core-ui";
-import { IDropdownOption } from "office-ui-fabric-react";
 
 export function getCategoricalOption(
   jointDataset: JointDataset,
