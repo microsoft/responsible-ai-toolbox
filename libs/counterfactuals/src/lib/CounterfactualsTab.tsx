@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Stack, Text } from "@fluentui/react";
 import {
   Cohort,
   defaultModelAssessmentContext,
@@ -11,7 +12,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { buildCounterfactualState } from "./buildCounterfactualState";

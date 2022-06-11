@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ICounterfactualData,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { WhatIfConstants } from "@responsible-ai/interpret";
-import { localization } from "@responsible-ai/localization";
-import {
   Panel,
   PanelType,
   Text,
@@ -24,7 +17,14 @@ import {
   ITooltipProps,
   MessageBar,
   MessageBarType
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ICounterfactualData,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { WhatIfConstants } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";

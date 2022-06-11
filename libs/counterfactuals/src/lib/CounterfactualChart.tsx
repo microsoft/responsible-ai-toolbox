@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  getTheme,
+  DefaultButton,
+  PrimaryButton,
+  Stack
+} from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -25,12 +33,6 @@ import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import {
-  getTheme,
-  DefaultButton,
-  PrimaryButton,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
