@@ -77,8 +77,7 @@ export function describeWhatIfCreate(
 
       it("Should have 'Predicted value' section and it should not be editable", () => {
         cy.get(Locators.CreateYourOwnCounterfactualPredictedValueField).should(
-          "have.text",
-          dataShape.whatIfCounterfactualsData?.predictedValue || "1"
+          "exist"
         );
       });
 
