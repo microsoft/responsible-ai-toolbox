@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Text, Stack, getTheme } from "@fluentui/react";
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Text, Stack, getTheme } from "@fluentui/react";
 import React from "react";
 
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";

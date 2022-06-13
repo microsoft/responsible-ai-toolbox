@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
   IconButton,
   DefaultButton,
   IDropdownOption,
   Callout
 } from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { IFairnessPickerPropsV2 } from "../FairnessWizard";

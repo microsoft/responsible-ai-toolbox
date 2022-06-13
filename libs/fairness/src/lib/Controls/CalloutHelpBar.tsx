@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Stack } from "@fluentui/react";
 import { IBounds } from "@responsible-ai/core-ui";
 import _ from "lodash";
-import { Stack } from "@fluentui/react";
 import React from "react";
 
 import { IErrorPickerProps } from "../FairnessWizard";
