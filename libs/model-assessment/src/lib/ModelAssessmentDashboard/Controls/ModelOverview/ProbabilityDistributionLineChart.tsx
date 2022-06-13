@@ -52,6 +52,12 @@ export class ProbabilityDistributionLineChart extends React.Component<
               }
             }
           },
+          legend: {
+            layout: "vertical",
+            align: "right",
+            verticalAlign: "middle",
+            enabled: true
+          },
           series: linePlotData.map((lineData, index) => {
             return {
               data: lineData.map((probBinCount) => probBinCount.binCount),
