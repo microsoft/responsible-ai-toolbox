@@ -2,6 +2,16 @@
 // Licensed under the MIT License.
 
 import {
+  IPivotItemProps,
+  PivotItem,
+  Pivot,
+  MessageBar,
+  MessageBarType,
+  Text,
+  Stack,
+  getTheme
+} from "@fluentui/react";
+import {
   WeightVectorOption,
   Cohort,
   ModelAssessmentContext,
@@ -13,17 +23,6 @@ import {
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IPivotItemProps,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  MessageBar,
-  MessageBarType,
-  Text,
-  Stack,
-  getTheme
-} from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -162,7 +161,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   <Pivot
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick}
-                    linkSize={PivotLinkSize.normal}
+                    linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
                   >
