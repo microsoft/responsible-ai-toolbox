@@ -14,7 +14,7 @@ import {
   MessageBar,
   MessageBarType,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { EmptyHeader } from "./Controls/EmptyHeader";

@@ -17,7 +17,7 @@ import {
   SpinnerSize,
   Stack,
   IDropdownOption
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import { Datum } from "plotly.js";
 import React from "react";
 

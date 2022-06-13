@@ -3,7 +3,7 @@
 
 import { IBounds } from "@responsible-ai/core-ui";
 import _ from "lodash";
-import { Stack } from "office-ui-fabric-react";
+import { Stack } from "@fluentui/react";
 import React from "react";
 
 import { IErrorPickerProps } from "../FairnessWizard";

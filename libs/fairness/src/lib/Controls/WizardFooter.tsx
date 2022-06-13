@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
+import { DefaultButton, PrimaryButton } from "@fluentui/react";
 import React from "react";
 
 import { WizardFooterStyles } from "./WizardFooter.styles";

@@ -17,7 +17,7 @@ import {
   DetailsListLayoutMode,
   StackItem,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { IBinnedResponse } from "./../util/IBinnedResponse";

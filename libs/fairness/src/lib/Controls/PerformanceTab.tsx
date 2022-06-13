@@ -3,7 +3,7 @@
 
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Text, Stack, getTheme } from "office-ui-fabric-react";
+import { Text, Stack, getTheme } from "@fluentui/react";
 import React from "react";
 
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";

@@ -8,7 +8,7 @@ import {
   DefaultButton,
   IDropdownOption,
   Callout
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";

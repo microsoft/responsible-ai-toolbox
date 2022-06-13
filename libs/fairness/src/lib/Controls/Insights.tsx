@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Icon, Stack, Text } from "office-ui-fabric-react";
+import { Icon, Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { IFairnessOption } from "./../util/FairnessMetrics";

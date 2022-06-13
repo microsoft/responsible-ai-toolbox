@@ -3,7 +3,7 @@
 
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
+import { Dropdown, IDropdownOption, Stack } from "@fluentui/react";
 import React from "react";
 
 import {

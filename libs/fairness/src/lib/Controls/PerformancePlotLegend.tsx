@@ -3,7 +3,7 @@
 
 import { localization } from "@responsible-ai/localization";
 import { chartColors } from "@responsible-ai/mlchartlib";
-import { Stack } from "office-ui-fabric-react";
+import { Stack } from "@fluentui/react";
 import React from "react";
 
 import { SharedStyles } from "../Shared.styles";

@@ -10,7 +10,7 @@ import {
   PrimaryButton,
   SpinButton,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";

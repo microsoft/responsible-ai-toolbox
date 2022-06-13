@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
+import { Stack, Text } from "@fluentui/react";
 import React from "react";
 
 import { DataSpecificationBladeStyles } from "./DataSpecificationBlade.styles";

@@ -9,7 +9,7 @@ import {
   IColumn,
   SelectionMode,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 export interface IOverallTableProps {
