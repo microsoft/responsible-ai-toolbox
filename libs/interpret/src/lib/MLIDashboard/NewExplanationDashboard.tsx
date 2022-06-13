@@ -2,6 +2,16 @@
 // Licensed under the MIT License.
 
 import {
+  IPivotItemProps,
+  PivotItem,
+  Pivot,
+  MessageBar,
+  MessageBarType,
+  Text,
+  Stack,
+  getTheme
+} from "@fluentui/react";
+import {
   WeightVectorOption,
   Cohort,
   ModelAssessmentContext,
@@ -13,16 +23,6 @@ import {
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IPivotItemProps,
-  PivotItem,
-  Pivot,
-  MessageBar,
-  MessageBarType,
-  Text,
-  Stack,
-  getTheme
-} from "@fluentui/react";
 import React from "react";
 
 import {

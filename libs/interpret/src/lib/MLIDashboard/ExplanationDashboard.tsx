@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  PrimaryButton,
+  IDropdownOption,
+  Pivot,
+  PivotItem,
+  IPivotItemProps
+} from "@fluentui/react";
 import {
   FabricStyles,
   isTwoDimArray,
@@ -30,13 +38,6 @@ import {
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  PrimaryButton,
-  IDropdownOption,
-  Pivot,
-  PivotItem,
-  IPivotItemProps
-} from "@fluentui/react";
 import React from "react";
 
 import { EbmExplanation } from "./Controls/EbmExplanation";

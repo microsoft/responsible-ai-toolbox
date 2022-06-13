@@ -6,21 +6,7 @@ import {
   ComboBox,
   IComboBoxOption,
   IDropdownOption,
-  Dropdown
-} from "@fluentui/react";
-import {
-  IExplanationModelMetadata,
-  ModelTypes,
-  WeightVectorOption,
-  JointDataset,
-  ModelExplanationUtils,
-  ChartTypes,
-  MissingParametersPlaceholder,
-  FabricStyles,
-  FeatureImportanceBar
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
+  Dropdown,
   ChoiceGroup,
   IChoiceGroupOption,
   Slider,
@@ -34,6 +20,18 @@ import {
   Toggle,
   Stack
 } from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  WeightVectorOption,
+  JointDataset,
+  ModelExplanationUtils,
+  ChartTypes,
+  MissingParametersPlaceholder,
+  FabricStyles,
+  FeatureImportanceBar
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

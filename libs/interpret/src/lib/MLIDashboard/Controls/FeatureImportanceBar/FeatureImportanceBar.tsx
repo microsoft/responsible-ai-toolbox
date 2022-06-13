@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Text } from "@fluentui/react";
 import {
   PartialRequired,
   JointDataset,
@@ -10,7 +11,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { getTheme, Text } from "@fluentui/react";
 import Plotly from "plotly.js";
 import React from "react";
 

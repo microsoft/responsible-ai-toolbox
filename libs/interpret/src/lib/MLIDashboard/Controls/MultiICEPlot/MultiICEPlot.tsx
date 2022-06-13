@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  SpinButton,
+  Text
+} from "@fluentui/react";
 import {
   JointDataset,
   IExplanationModelMetadata,
@@ -11,7 +17,6 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import { SpinButton, Text } from "@fluentui/react";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
