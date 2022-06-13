@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 
 export interface IDatasetExplorerTabStyles {
   boldText: IStyle;

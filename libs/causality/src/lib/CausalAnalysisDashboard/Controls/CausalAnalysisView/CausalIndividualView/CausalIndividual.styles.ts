@@ -1,12 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
 import { descriptionMaxWidth } from "@responsible-ai/core-ui";
-import {
-  IProcessedStyleSet,
-  IStyle,
-  mergeStyleSets
-} from "office-ui-fabric-react";
 
 export interface ICausalIndividualStyles {
   aggregateChart: IStyle;
