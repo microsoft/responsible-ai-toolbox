@@ -1,17 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
 import {
-  defaultModelAssessmentContext,
-  ICounterfactualData,
-  JointDataset,
-  MissingParametersPlaceholder,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import _, { toNumber } from "lodash";
-import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
   Callout,
   ConstrainMode,
   DetailsList,
@@ -28,7 +21,16 @@ import {
   Stack,
   Text,
   TextField
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ICounterfactualData,
+  JointDataset,
+  MissingParametersPlaceholder,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import _, { toNumber } from "lodash";
 import React from "react";
 
 import { getCategoricalOption } from "../util/getCategoricalOption";

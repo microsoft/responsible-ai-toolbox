@@ -6,7 +6,7 @@ import {
   mergeStyleSets,
   IStyle,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface ICounterfactualListStyle {
   dropdownLabel: IStyle;

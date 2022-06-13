@@ -2,6 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  ChoiceGroup,
+  DefaultButton,
+  IChoiceGroupOption,
+  Label,
+  Stack
+} from "@fluentui/react";
+import {
   ColumnCategories,
   JointDataset,
   Cohort,
@@ -12,13 +19,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  ChoiceGroup,
-  DefaultButton,
-  IChoiceGroupOption,
-  Label,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";

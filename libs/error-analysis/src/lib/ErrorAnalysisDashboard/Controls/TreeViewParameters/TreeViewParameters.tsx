@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Slider, Label } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Slider, Label } from "office-ui-fabric-react";
 import React from "react";
 
 import { InfoCallout } from "../InfoCallout/InfoCallout";

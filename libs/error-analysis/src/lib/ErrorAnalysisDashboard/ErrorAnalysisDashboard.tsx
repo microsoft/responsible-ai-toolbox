@@ -2,6 +2,20 @@
 // Licensed under the MIT License.
 
 import {
+  Customizer,
+  getId,
+  IPivotItemProps,
+  ISettings,
+  Layer,
+  LayerHost,
+  mergeStyleSets,
+  MessageBar,
+  MessageBarType,
+  PivotItem,
+  Pivot,
+  Text
+} from "@fluentui/react";
+import {
   Cohort,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
@@ -34,21 +48,6 @@ import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import {
-  Customizer,
-  getId,
-  IPivotItemProps,
-  ISettings,
-  Layer,
-  LayerHost,
-  mergeStyleSets,
-  MessageBar,
-  MessageBarType,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
@@ -542,7 +541,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <Pivot
                       selectedKey={this.state.activeGlobalTab}
                       onLinkClick={this.handleGlobalTabClick}
-                      linkSize={PivotLinkSize.normal}
+                      linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
                     >
