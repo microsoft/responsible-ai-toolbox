@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   BasicHighChart,
@@ -9,7 +10,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import _, { isEqual } from "lodash";
-import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 export interface ICausalAggregateChartProps {
