@@ -12,7 +12,6 @@ import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
 export interface IDatasetExplorerTabStyles {
   boldText: IStyle;
   callout: IStyle;
-  colorBox: IStyle;
   chartContainer: IStyle;
   chartEditorButton: IStyle;
   chartWithAxes: IStyle;
@@ -20,6 +19,8 @@ export interface IDatasetExplorerTabStyles {
   cohortDropdown: IStyle;
   cohortPickerWrapper: IStyle;
   cohortPickerLabel: IStyle;
+  colorBox: IStyle;
+  colorValue: IStyle;
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
   legendAndText: IStyle;
@@ -89,6 +90,9 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         height: "12px",
         margin: "11px 4px 11px 8px",
         width: "12px"
+      },
+      colorValue: {
+        padding: "12px 0px"
       },
       helperText: {
         paddingLeft: "15px",
