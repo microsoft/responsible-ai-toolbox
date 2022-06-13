@@ -45,18 +45,18 @@ export class ProbabilityDistributionLineChart extends React.Component<
           chart: {
             type: "line"
           },
+          legend: {
+            align: "right",
+            enabled: true,
+            layout: "vertical",
+            verticalAlign: "middle"
+          },
           plotOptions: {
             bar: {
               dataLabels: {
                 enabled: true
               }
             }
-          },
-          legend: {
-            layout: "vertical",
-            align: "right",
-            verticalAlign: "middle",
-            enabled: true
           },
           series: linePlotData.map((lineData, index) => {
             return {
