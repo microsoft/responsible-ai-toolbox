@@ -11,7 +11,7 @@ import {
   CommandBar,
   ICommandBarItemProps,
   IContextualMenuItem
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { applications, IApplications } from "./applications";

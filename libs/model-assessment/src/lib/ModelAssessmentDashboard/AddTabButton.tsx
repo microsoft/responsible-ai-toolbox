@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getRandomId } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import {
   Callout,
   Dropdown,
@@ -10,7 +8,9 @@ import {
   IDropdownOption,
   PrimaryButton,
   Stack
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { getRandomId } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { addTabButtonStyles } from "./AddTabButton.styles";
