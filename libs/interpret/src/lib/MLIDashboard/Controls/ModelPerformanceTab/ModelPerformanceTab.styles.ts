@@ -7,7 +7,7 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IModelPerformanceTabStyles {
   page: IStyle;

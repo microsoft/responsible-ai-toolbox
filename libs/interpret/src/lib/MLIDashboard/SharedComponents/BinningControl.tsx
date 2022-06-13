@@ -11,7 +11,7 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import { IDropdownOption, TextField } from "office-ui-fabric-react";
+import { IDropdownOption, TextField } from "@fluentui/react";
 import React from "react";
 
 import { binningControlStyles } from "./BinningControl.styles";

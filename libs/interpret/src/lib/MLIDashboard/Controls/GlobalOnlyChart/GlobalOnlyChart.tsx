@@ -12,7 +12,7 @@ import {
   FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Icon, Slider, Text } from "office-ui-fabric-react";
+import { Icon, Slider, Text } from "@fluentui/react";
 import React from "react";
 
 import { globalTabStyles } from "../GlobalExplanationTab/GlobalExplanationTab.styles";

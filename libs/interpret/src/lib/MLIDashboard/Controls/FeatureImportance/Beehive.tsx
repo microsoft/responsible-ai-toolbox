@@ -17,12 +17,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  DefaultButton,
-  IconButton,
-  Callout,
-  Slider
-} from "office-ui-fabric-react";
+import { DefaultButton, IconButton, Callout, Slider } from "@fluentui/react";
 import Plotly from "plotly.js";
 import React from "react";
 

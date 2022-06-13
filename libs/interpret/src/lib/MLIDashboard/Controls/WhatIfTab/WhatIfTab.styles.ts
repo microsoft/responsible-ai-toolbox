@@ -7,7 +7,7 @@ import {
   getTheme,
   mergeStyleSets,
   IStyle
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IWhatIfTabStyles {
   absoluteValueToggle: IStyle;

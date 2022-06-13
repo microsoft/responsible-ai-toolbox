@@ -6,7 +6,7 @@ import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
-import { TextField } from "office-ui-fabric-react";
+import { TextField } from "@fluentui/react";
 import React from "react";
 
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";

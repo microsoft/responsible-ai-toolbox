@@ -17,7 +17,7 @@ import {
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import { getTheme, Text } from "office-ui-fabric-react";
+import { getTheme, Text } from "@fluentui/react";
 import React from "react";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";

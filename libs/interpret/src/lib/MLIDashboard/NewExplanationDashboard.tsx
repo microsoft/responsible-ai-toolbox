@@ -17,13 +17,12 @@ import {
   IPivotItemProps,
   PivotItem,
   Pivot,
-  PivotLinkSize,
   MessageBar,
   MessageBarType,
   Text,
   Stack,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import {
@@ -162,7 +161,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                   <Pivot
                     selectedKey={this.state.activeGlobalTab}
                     onLinkClick={this.handleGlobalTabClick}
-                    linkSize={PivotLinkSize.normal}
+                    linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
                   >

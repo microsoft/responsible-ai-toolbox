@@ -11,7 +11,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { IDropdownOption, Slider } from "office-ui-fabric-react";
+import { IDropdownOption, Slider } from "@fluentui/react";
 import React from "react";
 
 import { HelpMessageDict } from "../Interfaces/IStringsParam";

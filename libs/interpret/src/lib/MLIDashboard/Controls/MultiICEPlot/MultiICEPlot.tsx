@@ -11,7 +11,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import { SpinButton, Text } from "office-ui-fabric-react";
+import { SpinButton, Text } from "@fluentui/react";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";

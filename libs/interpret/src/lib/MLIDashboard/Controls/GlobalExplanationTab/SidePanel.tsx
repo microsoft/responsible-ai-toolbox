@@ -18,7 +18,7 @@ import {
   IDropdownOption,
   Stack,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";

@@ -19,7 +19,7 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
-import { IDropdownOption, TextField } from "office-ui-fabric-react";
+import { IDropdownOption, TextField } from "@fluentui/react";
 import { Data } from "plotly.js";
 import React from "react";
 

@@ -16,7 +16,7 @@ import {
   Callout,
   DefaultButton,
   IconButton
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 import React from "react";
 
 import { BarChart } from "../../SharedComponents/BarChart";

@@ -6,7 +6,7 @@ import { ModelTypes, FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { Callout, DefaultButton, IconButton } from "office-ui-fabric-react";
+import { Callout, DefaultButton, IconButton } from "@fluentui/react";
 import React from "react";
 
 import { LoadingSpinner } from "../../SharedComponents/LoadingSpinner";

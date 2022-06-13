@@ -28,7 +28,7 @@ import {
   IData
 } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import { getTheme, Text, DefaultButton } from "office-ui-fabric-react";
+import { getTheme, Text, DefaultButton } from "@fluentui/react";
 import React from "react";
 
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

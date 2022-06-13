@@ -9,7 +9,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { Text } from "office-ui-fabric-react";
+import { Text } from "@fluentui/react";
 import React from "react";
 
 import { modelPerformanceTabStyles } from "./ModelPerformanceTab.styles";
