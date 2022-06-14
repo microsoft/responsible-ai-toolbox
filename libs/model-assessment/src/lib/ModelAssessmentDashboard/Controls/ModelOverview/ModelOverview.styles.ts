@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme,
   FontWeights
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewStyles {
   dropdown: IStyle;
