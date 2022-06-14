@@ -6,7 +6,19 @@ import {
   ComboBox,
   IComboBoxOption,
   IDropdownOption,
-  Dropdown
+  Dropdown,
+  ChoiceGroup,
+  IChoiceGroupOption,
+  Slider,
+  Text,
+  DirectionalHint,
+  Callout,
+  Link,
+  IconButton,
+  CommandBarButton,
+  Label,
+  Toggle,
+  Stack
 } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
@@ -20,20 +32,6 @@ import {
   FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  ChoiceGroup,
-  IChoiceGroupOption,
-  Slider,
-  Text,
-  DirectionalHint,
-  Callout,
-  Link,
-  IconButton,
-  CommandBarButton,
-  Label,
-  Toggle,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

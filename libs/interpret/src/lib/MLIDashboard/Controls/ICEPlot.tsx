@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IDropdownOption,
+  TextField
+} from "@fluentui/react";
 import {
   IExplanationContext,
   ModelTypes,
@@ -19,7 +25,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
 import memoize from "memoize-one";
-import { IDropdownOption, TextField } from "office-ui-fabric-react";
 import { Data } from "plotly.js";
 import React from "react";
 

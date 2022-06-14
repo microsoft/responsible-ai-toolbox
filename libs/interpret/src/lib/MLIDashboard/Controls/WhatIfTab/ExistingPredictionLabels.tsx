@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
-  ModelTypes,
-  JointDataset,
-  ModelExplanationUtils
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   DirectionalHint,
   IconButton,
   ITooltipProps,
   Text,
   TooltipDelay,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  JointDataset,
+  ModelExplanationUtils
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { WhatIfConstants } from "./WhatIfConstants";
