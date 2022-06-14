@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Pivot, PivotItem, Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   defaultModelAssessmentContext,
@@ -12,7 +13,6 @@ import {
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { Pivot, PivotItem, PivotLinkSize, Stack } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { featureImportanceTabStyles } from "./FeatureImportances.styles";
@@ -87,7 +87,7 @@ export class FeatureImportancesTab extends React.PureComponent<
                 });
               }
             }}
-            linkSize={PivotLinkSize.normal}
+            linkSize={"normal"}
             headersOnly
             className={classNames.tabs}
           >

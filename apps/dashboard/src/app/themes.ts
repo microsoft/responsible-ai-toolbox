@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createTheme } from "office-ui-fabric-react";
+import { createTheme } from "@fluentui/react";
 
 const darkTheme = createTheme({
   palette: {
