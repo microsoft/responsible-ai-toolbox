@@ -126,6 +126,7 @@ export interface IWhatIfCounterfactualsData {
   searchBarQuery?: string;
   whatIfNameLabel?: string;
   whatIfNameLabelUpdated?: string;
+  createYourOwnCounterfactualDecimalInput?: string;
   createYourOwnCounterfactualInputFieldUpdated?: string;
   yAxisValue?: string;
   yAxisNewValue?: string;

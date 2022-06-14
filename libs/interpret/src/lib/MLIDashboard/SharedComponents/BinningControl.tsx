@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IDropdownOption,
+  TextField
+} from "@fluentui/react";
 import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -11,7 +17,6 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import { IDropdownOption, TextField } from "office-ui-fabric-react";
 import React from "react";
 
 import { binningControlStyles } from "./BinningControl.styles";

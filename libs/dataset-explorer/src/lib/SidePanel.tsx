@@ -2,6 +2,13 @@
 // Licensed under the MIT License.
 
 import {
+  ChoiceGroup,
+  DefaultButton,
+  IChoiceGroupOption,
+  Label,
+  Stack
+} from "@fluentui/react";
+import {
   ColumnCategories,
   JointDataset,
   Cohort,
@@ -12,13 +19,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  ChoiceGroup,
-  DefaultButton,
-  IChoiceGroupOption,
-  Label,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
@@ -51,9 +51,18 @@ export class SidePanel extends React.Component<ISidePanelProps> {
     const colorSeries = this.buildColorLegend();
     return (
       <Stack>
+        <ChoiceGroup
+          id="ChartTypeSelection"
+          label={localization.Interpret.DatasetExplorer.chartType}
+          selectedKey={this.props.chartProps.chartType}
+          options={this.chartOptions}
+          onChange={this.props.onChartTypeChange}
+        />
         {this.props.chartProps.chartType === ChartTypes.Scatter && (
           <Stack.Item>
-            <Label>{localization.Interpret.DatasetExplorer.colorValue}</Label>
+            <Label className={classNames.colorValue}>
+              {localization.Interpret.DatasetExplorer.colorValue}
+            </Label>
             <DefaultButton
               id="SetColorButton"
               onClick={this.props.setColorOpen}
@@ -85,14 +94,6 @@ export class SidePanel extends React.Component<ISidePanelProps> {
             </div>
           </Stack.Item>
         )}
-
-        <ChoiceGroup
-          id="ChartTypeSelection"
-          label={localization.Interpret.DatasetExplorer.chartType}
-          selectedKey={this.props.chartProps.chartType}
-          options={this.chartOptions}
-          onChange={this.props.onChartTypeChange}
-        />
       </Stack>
     );
   }
