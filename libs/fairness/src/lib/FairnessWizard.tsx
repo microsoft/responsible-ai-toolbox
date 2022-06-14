@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
   Pivot,
   PivotItem,
@@ -14,7 +10,11 @@ import {
   MessageBar,
   MessageBarType,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import React from "react";
 
 import { EmptyHeader } from "./Controls/EmptyHeader";
