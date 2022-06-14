@@ -338,7 +338,9 @@ export class CounterfactualList extends React.Component<
       this.props.data?.feature_names_including_target.indexOf(id);
     this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
     this.setState((prevState) => {
-      prevState.data[id] = toNumber(newValue);
+      prevState.data[id] = newValue?.endsWith(".")
+        ? newValue
+        : toNumber(newValue);
       return { data: { ...prevState.data } };
     });
   };
@@ -382,7 +384,7 @@ export class CounterfactualList extends React.Component<
             <Text>{column.name}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Text>{predictedClass}</Text>
+            <Text className="predictedValue">{predictedClass}</Text>
           </Stack.Item>
         </Stack>
       );

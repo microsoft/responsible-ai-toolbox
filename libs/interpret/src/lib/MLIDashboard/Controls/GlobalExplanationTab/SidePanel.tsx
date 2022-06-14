@@ -2,6 +2,14 @@
 // Licensed under the MIT License.
 
 import {
+  ChoiceGroup,
+  Dropdown,
+  IChoiceGroupOption,
+  IDropdownOption,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   Cohort,
   IExplanationModelMetadata,
   ModelTypes,
@@ -11,14 +19,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import {
-  ChoiceGroup,
-  Dropdown,
-  IChoiceGroupOption,
-  IDropdownOption,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";

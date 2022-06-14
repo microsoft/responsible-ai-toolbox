@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox, ComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  TextField
+} from "@fluentui/react";
 import { FabricStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
-import { TextField } from "office-ui-fabric-react";
 import React from "react";
 
 import { featureEditingTileStyles } from "./FeatureEditingTile.styles";
