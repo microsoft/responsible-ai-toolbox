@@ -34,6 +34,20 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    exporting: {
+      buttons: {
+        contextButton: {
+          menuItems: [
+            "viewFullscreen",
+            "printChart",
+            "separator",
+            "downloadPNG",
+            "downloadJPEG",
+            "downloadPDF"
+          ]
+        }
+      }
+    },
     legend: {
       enabled: false
     },

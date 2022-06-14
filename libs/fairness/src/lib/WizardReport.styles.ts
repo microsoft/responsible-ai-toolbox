@@ -7,7 +7,7 @@ import {
   IStyle,
   mergeStyleSets,
   FontWeights
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IWizardReportStyles {
   spinner: IStyle;
