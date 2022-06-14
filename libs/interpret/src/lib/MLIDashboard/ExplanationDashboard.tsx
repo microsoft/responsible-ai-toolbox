@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBoxOption, IComboBox } from "@fluentui/react";
+import {
+  IComboBoxOption,
+  IComboBox,
+  PrimaryButton,
+  IDropdownOption,
+  Pivot,
+  PivotItem,
+  IPivotItemProps
+} from "@fluentui/react";
 import {
   FabricStyles,
   isTwoDimArray,
@@ -30,15 +38,6 @@ import {
 import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  PrimaryButton,
-  IDropdownOption,
-  Pivot,
-  PivotItem,
-  PivotLinkFormat,
-  PivotLinkSize,
-  IPivotItemProps
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { EbmExplanation } from "./Controls/EbmExplanation";
@@ -706,8 +705,8 @@ export class ExplanationDashboard extends React.Component<
                 ExplanationDashboard.globalTabKeys[this.state.activeGlobalTab]
               }
               onLinkClick={this.handleGlobalTabClick}
-              linkFormat={PivotLinkFormat.tabs}
-              linkSize={PivotLinkSize.normal}
+              linkFormat={"tabs"}
+              linkSize={"normal"}
               headersOnly
               styles={FabricStyles.verticalTabsStyle}
             >
@@ -818,8 +817,8 @@ export class ExplanationDashboard extends React.Component<
                       ]
                     }
                     onLinkClick={this.handleLocalTabClick}
-                    linkFormat={PivotLinkFormat.tabs}
-                    linkSize={PivotLinkSize.normal}
+                    linkFormat={"tabs"}
+                    linkSize={"normal"}
                     headersOnly
                     styles={FabricStyles.verticalTabsStyle}
                   >

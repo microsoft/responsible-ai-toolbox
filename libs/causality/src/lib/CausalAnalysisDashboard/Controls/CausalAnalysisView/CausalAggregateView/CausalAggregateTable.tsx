@@ -1,7 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CheckboxVisibility } from "@fluentui/react";
+import {
+  CheckboxVisibility,
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  IDetailsColumnRenderTooltipProps,
+  IDetailsHeaderProps,
+  IRenderFunction,
+  SelectionMode,
+  TooltipHost
+} from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   getCausalDisplayFeatureName,
@@ -11,16 +21,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  IDetailsColumnRenderTooltipProps,
-  IDetailsHeaderProps,
-  IRenderFunction,
-  SelectionMode,
-  TooltipHost
-} from "office-ui-fabric-react";
 import React from "react";
 
 export interface ICausalAggregateTableProps {

@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IProcessedStyleSet,
-  mergeStyleSets,
-  IStyle
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
 
 export interface ICausalIndividualChartStyles {
   legendAndText: IStyle;

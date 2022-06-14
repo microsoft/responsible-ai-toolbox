@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  IProcessedStyleSet,
-  mergeStyleSets
-} from "office-ui-fabric-react";
+import { IStyle, IProcessedStyleSet, mergeStyleSets } from "@fluentui/react";
 
 export interface IFeatureImportanceBarStyles {
   chartWithVertical: IStyle;

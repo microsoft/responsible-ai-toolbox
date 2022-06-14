@@ -8,7 +8,7 @@ import {
   mergeStyleSets,
   FontWeights,
   FontSizes
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IModelComparisonChartStyles {
   frame: IStyle;

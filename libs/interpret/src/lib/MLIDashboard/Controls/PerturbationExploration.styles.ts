@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 
 export interface IPerturbationExplorationStyles {
   flexWrapper: IStyle;
