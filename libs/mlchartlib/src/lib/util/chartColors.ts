@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme } from "office-ui-fabric-react";
+import { getTheme } from "@fluentui/react";
 
 const theme = getTheme();
 export const chartColors = [

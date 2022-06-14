@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  IModelAssessmentContext,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   CommandBar,
   CommandButton,
   ICommandBar,
@@ -17,7 +10,14 @@ import {
   IIconProps,
   Stack,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  IModelAssessmentContext,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ChangeGlobalCohort } from "../Cohort/ChangeGlobalCohort";
