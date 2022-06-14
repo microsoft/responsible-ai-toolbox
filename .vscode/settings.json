@@ -76,7 +76,6 @@
     "sdist",
     "shap",
     "sklearn",
-    "uifabric",
     "Unmount",
     "zstat"
   ],

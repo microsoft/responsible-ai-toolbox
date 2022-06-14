@@ -10,12 +10,13 @@ import {
   PrimaryButton,
   Stack,
   Panel,
-  Link
+  Link,
+  ChoiceGroup,
+  IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ChoiceGroup, IChoiceGroupOption } from "@fluentui/react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
