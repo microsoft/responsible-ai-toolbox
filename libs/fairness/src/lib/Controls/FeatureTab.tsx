@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import {
   ActionButton,
   FontWeights,
@@ -17,7 +15,9 @@ import {
   DetailsListLayoutMode,
   StackItem,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { IBinnedResponse } from "./../util/IBinnedResponse";
