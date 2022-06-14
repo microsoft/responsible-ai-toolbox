@@ -2,14 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  BasicHighChart,
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  ILabeledStatistic,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   getTheme,
   IDropdownOption,
   IChoiceGroupOption,
@@ -18,7 +10,15 @@ import {
   Panel,
   ChoiceGroup,
   PrimaryButton
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  BasicHighChart,
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  ILabeledStatistic,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
