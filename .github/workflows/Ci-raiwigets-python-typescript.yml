@@ -148,7 +148,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-e2e-screen-shot
-          path: ./dist/cypress
+          path: dist/cypress
 
       - name: Set codecov status
         if: ${{ (matrix.pythonVersion == '3.8') && (matrix.operatingSystem == 'windows-latest') }}
