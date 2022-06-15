@@ -66,7 +66,7 @@ jobs:
       - name: Install dependencies
         shell: bash -l {0}
         run: |
-          pip install -r requirements-dev.txt
+          pip install -r requirements-dev.txt --ignore-installed
           pip install -v -e .
         working-directory: ${{ matrix.packageDirectory }}
 
