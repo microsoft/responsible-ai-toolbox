@@ -10,12 +10,13 @@ import {
   PrimaryButton,
   Stack,
   Panel,
-  Link
+  Link,
+  ChoiceGroup,
+  IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import React, { FormEvent } from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
@@ -95,8 +96,10 @@ export class CohortEditor extends React.PureComponent<
       compositeFilters: this.props.compositeFilters || [],
       filterIndex: this.props.filterList?.length || 0,
       filters: this.props.filterList || [],
-      openedFilter: undefined,
-      selectedFilterCategory: undefined,
+      openedFilter: this.getFilterValue(
+        this.leftItems[0] && this.leftItems[0].key
+      ),
+      selectedFilterCategory: this.leftItems[0] && this.leftItems[0].key,
       showConfirmation: false,
       showEmptyCohortError: false,
       showInvalidMinMaxValueError: false,
@@ -500,6 +503,13 @@ export class CohortEditor extends React.PureComponent<
   };
 
   private setDefaultStateForKey(key: string): void {
+    const filter = this.getFilterValue(key);
+    this.setState({
+      openedFilter: filter
+    });
+  }
+
+  private getFilterValue(key: string): IFilter {
     const filter: IFilter = { column: key } as IFilter;
     const meta = this.props.jointDataset.metaDict[key];
     if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
@@ -509,9 +519,7 @@ export class CohortEditor extends React.PureComponent<
       filter.method = FilterMethods.LessThan;
       filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
     }
-    this.setState({
-      openedFilter: filter
-    });
+    return filter;
   }
 
   private updateFilter(filter: IFilter, index: number): void {

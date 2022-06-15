@@ -8,7 +8,8 @@ import {
   IDropdownOption,
   Pivot,
   PivotItem,
-  IPivotItemProps
+  IPivotItemProps,
+  initializeIcons
 } from "@fluentui/react";
 import {
   FabricStyles,
@@ -35,7 +36,6 @@ import {
   SelectionContext,
   ModelMetadata
 } from "@responsible-ai/mlchartlib";
-import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
 import React from "react";

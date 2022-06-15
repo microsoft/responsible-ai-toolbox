@@ -3,6 +3,7 @@
 
 import {
   Dropdown,
+  Text,
   ChoiceGroup,
   Stack,
   IDropdownOption,
@@ -181,6 +182,18 @@ export class ChartConfigurationFlyout extends React.Component<
         isFooterAtBottom
       >
         <Stack tokens={{ childrenGap: "10px" }}>
+          <Text variant="xLarge">
+            {
+              localization.ModelAssessment.ModelOverview.cohortSelection
+                .flyoutHeader
+            }
+          </Text>
+          <Text>
+            {
+              localization.ModelAssessment.ModelOverview.cohortSelection
+                .flyoutDescription
+            }
+          </Text>
           <ChoiceGroup
             options={choiceGroupOptions}
             onChange={this.onChoiceGroupChange}
