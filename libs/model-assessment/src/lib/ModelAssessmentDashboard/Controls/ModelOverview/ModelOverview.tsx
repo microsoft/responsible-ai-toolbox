@@ -252,7 +252,7 @@ export class ModelOverview extends React.Component<
               />
             </Pivot>
             {!this.state.datasetCohortViewIsVisible && (
-              <Text>
+              <Text className={classNames.descriptionText}>
                 {
                   localization.ModelAssessment.ModelOverview
                     .featureBasedViewDescription
@@ -360,7 +360,7 @@ export class ModelOverview extends React.Component<
                       this.context.baseErrorCohort.cohort.compositeFilters
                         .length >
                       0 && (
-                      <MessageBar>
+                      <MessageBar className={classNames.descriptionText}>
                         {localization.formatString(
                           localization.ModelAssessment.ModelOverview
                             .disaggregatedAnalysisBaseCohortWarning,
