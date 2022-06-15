@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Stack, Dropdown, IDropdownOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Dropdown, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import {

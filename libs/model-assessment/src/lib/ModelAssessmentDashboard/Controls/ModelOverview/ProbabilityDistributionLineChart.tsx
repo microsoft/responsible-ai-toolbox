@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IChoiceGroupOption } from "@fluentui/react";
 import {
   BasicHighChart,
   calculateLinePlotDataFromErrorCohort,
@@ -9,7 +10,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { getTheme, IChoiceGroupOption } from "office-ui-fabric-react";
 import React from "react";
 
 interface IProbabilityDistributionLineChartProps {
@@ -44,6 +44,12 @@ export class ProbabilityDistributionLineChart extends React.Component<
         configOverride={{
           chart: {
             type: "line"
+          },
+          legend: {
+            align: "right",
+            enabled: true,
+            layout: "vertical",
+            verticalAlign: "middle"
           },
           plotOptions: {
             bar: {

@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Checkbox } from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
-import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
+  Checkbox,
   DefaultButton,
   PrimaryButton,
   SpinButton,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import React from "react";
 
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
