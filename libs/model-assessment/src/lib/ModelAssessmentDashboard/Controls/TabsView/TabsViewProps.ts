@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import {
   ErrorCohort,
   CohortSource,
@@ -19,7 +20,6 @@ import {
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
-import { IDropdownOption } from "office-ui-fabric-react";
 
 import { IModelAssessmentDashboardTab } from "../../ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
