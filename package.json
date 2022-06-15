@@ -61,7 +61,6 @@
     "memoize-one": "^5.1.1",
     "minimist": "^1.2.6",
     "moment": "^2.24.0",
-    "office-ui-fabric-react": "^7.117.0",
     "plotly.js": "^1.48.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
