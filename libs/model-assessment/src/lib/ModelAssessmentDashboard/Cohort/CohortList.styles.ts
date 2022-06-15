@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  mergeStyleSets,
-  IStyle,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+import { mergeStyleSets, IStyle, IProcessedStyleSet } from "@fluentui/react";
 
 export interface ICohortListStyles {
   link: IStyle;
