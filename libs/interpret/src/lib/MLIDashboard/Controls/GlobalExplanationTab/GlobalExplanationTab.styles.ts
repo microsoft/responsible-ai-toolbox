@@ -1,12 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 import { descriptionMaxWidth } from "@responsible-ai/core-ui";
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
 
 export interface IGlobalTabStyles {
   chartCallout: IStyle;

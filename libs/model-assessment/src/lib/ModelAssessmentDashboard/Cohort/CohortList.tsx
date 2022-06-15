@@ -1,7 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CheckboxVisibility } from "@fluentui/react";
+import {
+  CheckboxVisibility,
+  IColumn,
+  DetailsList,
+  DetailsListLayoutMode,
+  Link,
+  Stack,
+  Text,
+  SelectionMode,
+  IconButton
+} from "@fluentui/react";
 import {
   Cohort,
   CohortEditor,
@@ -13,16 +23,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  IColumn,
-  DetailsList,
-  DetailsListLayoutMode,
-  Link,
-  Stack,
-  Text,
-  SelectionMode,
-  IconButton
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";

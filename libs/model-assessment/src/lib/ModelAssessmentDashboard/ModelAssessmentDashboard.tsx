@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IDropdownOption, loadTheme, Stack } from "@fluentui/react";
 import {
   CohortBasedComponent,
   ModelAssessmentContext,
@@ -12,12 +13,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  getTheme,
-  IDropdownOption,
-  loadTheme,
-  Stack
-} from "office-ui-fabric-react";
 import * as React from "react";
 
 import { getAvailableTabs } from "./AvailableTabs";

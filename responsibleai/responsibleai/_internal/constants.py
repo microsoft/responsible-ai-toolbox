@@ -69,16 +69,6 @@ class DataBalanceManagerKeys(object):
     POS_LABEL = 'pos_label'
 
 
-class SKLearn(object):
-    """Provide scikit-learn related constants."""
-
-    EXAMPLES = 'examples'
-    LABELS = 'labels'
-    PREDICT = 'predict'
-    PREDICTIONS = 'predictions'
-    PREDICT_PROBA = 'predict_proba'
-
-
 class ExplanationKeys(object):
 
     EBM_GLOBAL_EXPLANATION_KEY = 'ebm_global'
