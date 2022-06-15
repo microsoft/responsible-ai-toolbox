@@ -8,7 +8,6 @@
         "allow": [
           "core-js/stable",
           "regenerator-runtime/runtime.js",
-          "office-ui-fabric-react/lib/utilities/positioning",
           "highcharts/modules/accessibility",
           "highcharts/modules/exporting",
           "highcharts/highcharts-more",
