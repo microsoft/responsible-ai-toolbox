@@ -6,7 +6,7 @@ import {
   IStyle,
   getTheme,
   IProcessedStyleSet
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IAddTabButtonStyles {
   callout: IStyle;

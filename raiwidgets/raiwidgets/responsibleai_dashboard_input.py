@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+from raiutils.models import is_classifier
 from responsibleai import RAIInsights
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._internal.constants import ManagerNames
@@ -17,7 +18,6 @@ from .cohort import Cohort
 from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .interfaces import WidgetRequestResponseConstants
-from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -38,7 +38,7 @@ class ResponsibleAIDashboardInput:
         """
         self._analysis = analysis
         model = analysis.model
-        self._is_classifier = _is_classifier(model)
+        self._is_classifier = is_classifier(model)
         self.dashboard_input = analysis.get_data()
 
         self._validate_cohort_list(cohort_list)
