@@ -2,13 +2,8 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   Dropdown,
+  Text,
   ChoiceGroup,
   Stack,
   IDropdownOption,
@@ -16,7 +11,13 @@ import {
   PrimaryButton,
   DefaultButton,
   IChoiceGroupOption
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
@@ -181,6 +182,18 @@ export class ChartConfigurationFlyout extends React.Component<
         isFooterAtBottom
       >
         <Stack tokens={{ childrenGap: "10px" }}>
+          <Text variant="xLarge">
+            {
+              localization.ModelAssessment.ModelOverview.cohortSelection
+                .flyoutHeader
+            }
+          </Text>
+          <Text>
+            {
+              localization.ModelAssessment.ModelOverview.cohortSelection
+                .flyoutDescription
+            }
+          </Text>
           <ChoiceGroup
             options={choiceGroupOptions}
             onChange={this.onChoiceGroupChange}

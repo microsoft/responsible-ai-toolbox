@@ -2,13 +2,15 @@
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Tratamentos binários: ",
-      "binaryDescription": "Em média nesta amostra, ativar esta funcionalidade fará com que a probabilidade da classe/etiqueta 1 aumente X unidades.",
+      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
+      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
       "causalPoint": "Ponto de efeito causal",
       "confidenceLower": "Intervalo de confiança (inferior)",
       "confidenceUpper": "Intervalo de confiança (superior)",
       "confoundingFeature": "Uma funcionalidade de confusão está correlacionada com o tratamento e o resultado do interesse. O confundidor cria um caminho extra de correlação do tratamento para o resultado sobre o efeito causal direto. A menos que as funcionalidades de confusão sejam medidas e incluídas no modelo, estas correlações adicionais podem originar desvios nas estimativas do efeito causal. O desvio pode ser positivo ou negativo, dependendo das direções das correlações entre os confundidores omitidos, tratamentos e resultados.",
       "continuous": "Tratamentos contínuos: ",
-      "continuousDescription": "Em média nesta amostra, aumentar esta funcionalidade em 1 unidade fará com que a probabilidade da classe/etiqueta 1 aumente X unidades.",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
+      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
       "description": "A análise causal responde a perguntas de \"teste de hipóteses\" sobre como os resultados do mundo real teriam sido alterados em diferentes opções de política, como uma estratégia de preços diferente para um produto ou um tratamento alternativo para um paciente. Ao contrário das predições de modelos que identificam padrões de correlação importantes, estas ferramentas ajudam-no a identificar as funcionalidades causais mais importantes que afetam diretamente o seu resultado de interesse. Estes modelos identificam o efeito causal de uma funcionalidade (normalmente referido como um \"tratamento\"), mantendo outras características confusas constantes. Para obter os melhores resultados, certifique-se de que o conjuntos de dados completo contém todas as funcionalidades disponíveis que possam estar correlacionadas com o resultado como confundidoras.",
       "directAggregate": "Agregação virtual de efeito causal de cada tratamento com um intervalo de confiança de 95%",
       "here": "aqui",
@@ -54,7 +56,7 @@
       "TableDescription": "Esta tabela mostra uma política de tratamento recomendada que pode ser aplicada à amostra de dados atual ou a outras populações. A tabela fornece uma regra simples para segmentar observações em coortes de dados com base nas funcionalidades com maior impacto sobre se o indivíduo irá responder ao tratamento selecionado. A tabela também especifica o número de pontos de dados no exemplo de dados atual atribuído a cada segmento.",
       "alwaysTreat": "Tratar sempre “{0}”",
       "averageGainBinary": "Ganhos médios de definição do tratamento para o valor de linha base {0}{1}.",
-      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "averageGainContinuous": "Ganhos médios de políticas alternativas em relação a nenhum tratamento \"{0}\".",
       "header": "Estas ferramentas ajudam a criar políticas para futuras intervenções. Pode identificar as partes da sua experiência de exemplo com as maiores respostas a alterações nas características causais, ou tratamentos, e construir regras para definir as populações futuras que devem ser direcionadas para intervenções específicas.",
       "nSample": "n = {0}",
       "noData": "Sem dados"
@@ -80,6 +82,18 @@
       "rg": "{0} no intervalo de ({1})",
       "nrg": "{0} no intervalo de ({1})",
       "Unknown": "desconhecido"
+    },
+    "ShiftCohort": {
+      "title": "Switch Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -91,15 +105,19 @@
     "WhatIf": {
       "setValue": "Definir Valor",
       "sortFeatures": "Ordenar colunas de funcionalidades por importância da funcionalidade contrafactual",
-      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
-      "toggleToolTipHeader": "Ranked counterfactual features"
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "toggleToolTipBody": "Exemplos contrafactuais geram importâncias de característica local que indicam quais as características mais perturbadas para alcançar os cenários de classificação de classes desejados ou a gama desejada para cenários de regressão.",
+      "toggleToolTipHeader": "Funcionalidades contrafactuais classificadas",
+      "predictedClass": "Predicted class",
+      "predictedValue": "Predicted value"
     },
     "counterfactualEx": "Exemplo de Countrafactual {0}",
     "counterfactualName": "Nome contrafactual de Teste de hipóteses",
-    "createWhatIfCounterfactual": "Create what-if counterfactual",
-    "createCounterfactual": "Counterfactual",
+    "createWhatIfCounterfactual": "Criar contrafacto de teste de hipóteses",
+    "createCounterfactual": "Countrafactual",
     "createOwn": "Crie o seu próprio contrafactual:",
     "currentClass": "Classe atual",
+    "currentRange": "Current range",
     "decreaseByOne": "Diminuição de valor por 1",
     "desiredClass": "Classe pretendada para contrafactuais",
     "header": "Contrafactuais de teste de hipóteses",
@@ -111,8 +129,9 @@
     "localImportanceSelectData": "Selecione um ponto de dados para ver o gráfico de importância local",
     "noData": "Sem dados",
     "noFeatures": "Sem funcionalidades disponíveis",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "whatIfPanelHeader": "What-if counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "whatIfPanelHeader": "Contrafactos de Teste de hipóteses",
     "panelHeader": "Counterfactuals",
     "recommendedPolicy": "Ganho de política recomendado",
     "referenceDatapoint": "Ponto de dados de referência: Linha {0}",
@@ -129,8 +148,14 @@
       "cohort": "Grupo",
       "defaultLabel": "Todos os dados"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "Instâncias na coorte base",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "Informações Básicas",
       "cohortInformation": "Informação de grupo",
       "correct": "Correto",
@@ -150,18 +175,23 @@
     },
     "FeatureList": {
       "features": "Funcionalidades",
-      "importances": "Importância"
+      "importances": "Importância",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
-      "maximumDepth": "Maximum depth",
-      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
-      "maximumDepthTitle": "Additional information on maximum depth",
-      "numLeaves": "Number of leaves",
-      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
-      "numLeavesTitle": "Additional information on number of leaves",
-      "minDataInLeaf": "Minimum number of samples in one leaf",
-      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
-      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
+      "maximumDepth": "Profundidade máxima",
+      "maximumDepthInfoText": "A profundidade máxima da árvore de substitutos com base em erros",
+      "maximumDepthTitle": "Informações adicionais sobre a profundidade máxima",
+      "numLeaves": "Número de folhas",
+      "numLeavesInfoText": "O número de folhas da árvore de substitutos com base em erros",
+      "numLeavesTitle": "Informações adicionais sobre o número de folhas",
+      "minDataInLeaf": "Número mínimo de amostras numa folha",
+      "minDataInLeafInfoText": "O número mínimo de dados necessários para criar uma folha",
+      "minDataInLeafTitle": "Informações adicionais sobre o número mínimo de amostras numa folha"
+    },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
     },
     "FilterTooltip": {
       "correctNum": "Correto (#): ",
@@ -188,8 +218,8 @@
       "featureList": "Lista de funcionalidades",
       "fullscreen": "Ecrã completo",
       "heatMap": "Mapa térmico",
-      "saveCohort": "Guardar grupo",
-      "shiftCohort": "Deslocar grupo",
+      "newCohort": "New cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "Mapa de árvore",
       "whatIf": "Teste de hipóteses"
     },
@@ -199,8 +229,10 @@
       "move": "Mover",
       "saveAs": "Guardar como um novo grupo",
       "shift": "Deslocar",
-      "subText": "Quer reiniciar a sua exploração com um mapa diferente? Guarde-o como um novo grupo. Caso contrário, os filtros escolhidos serão perdidos.",
-      "title": "Deslocar o mapa"
+      "heatTitle": "Leave tree view?",
+      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
+      "treeTitle": "Leave heatmap view?",
+      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
     },
     "MatrixArea": {
       "clearAll": "Limpar tudo",
@@ -208,11 +240,11 @@
       "selectAll": "Selecionar tudo"
     },
     "MatrixFilter": {
-      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+      "disabledWarning": "O mapa térmico de erros está desativado, a menos que a coorte global seja trocada para representar \"Todos os dados\" devido ao mapa térmico ser gerado para o conjuntos de dados completo. Mude novamente para o conjuntos de dados completo para ver o mapa térmico do erro."
     },
     "MatrixSummary": {
       "heatMapDescription": "Com o mapa térmico, pode concentrar-se em filtros de funcionalidades interseccionais específicos e calcular taxas de erro desagregadas. Comece com duas funcionalidades de conjuntos de dados para comparar.",
-      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
+      "heatMapStaticDescription": "Com o mapa térmico, pode concentrar-se em filtros de funcionalidades interseccionais específicos e taxas de erros de computação desagregação. Tem de selecionar até duas funcionalidades para criar um mapa térmico através do SDK antes de ver o dashboard."
     },
     "MatrixOptions": {
       "quantileBinningLabel": "Discretização quantil",
@@ -225,9 +257,16 @@
       "binningThresholdTitle": "Informações adicionais sobre o limiar de discretização"
     },
     "Metrics": {
+      "accuracyScore": "Accuracy score",
+      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
+      "accuracyScoreShort": "Accuracy",
+      "accuracyScoreTitle": "Additional information on accuracy score",
       "errorRate": "Taxa de erro",
       "errorRateInfo": "A taxa de erro representa a percentagem de instâncias no nó para as quais o sistema falhou.",
       "errorRateTitle": "Informações adicionais sobre a taxa de erro",
+      "f1Score": "F1 score",
+      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
+      "f1ScoreTitle": "Additional information on F1 score",
       "meanAbsoluteError": "Erro absoluto médio",
       "meanAbsoluteErrorInfo": "O erro absoluto médio é a média da soma dos erros.",
       "meanAbsoluteErrorShort": "Erro absoluto médio",
@@ -236,37 +275,46 @@
       "meanSquaredErrorInfo": "O erro quadrático médio é a média dos quadrados dos erros.",
       "meanSquaredErrorShort": "Erro quadrático médio",
       "meanSquaredErrorTitle": "Informações adicionais sobre o Erro quadrático médio",
-      "precision": "Precision score",
-      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Additional information on precision",
-      "recall": "Recall score",
-      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
-      "recallShort": "Recall",
-      "recallTitle": "Additional information on recall",
-      "macroPrecision": "Macro averaged precision score",
-      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-      "macroPrecisionShort": "Macro precision",
-      "macroPrecisionTitle": "Additional information on macro averaged precision",
-      "microPrecision": "Micro averaged precision score",
-      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-      "microPrecisionShort": "Micro precision",
-      "microPrecisionTitle": "Additional information on micro averaged precision",
-      "macroRecall": "Macro averaged recall score",
-      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-      "macroRecallShort": "Macro recall",
-      "macroRecallTitle": "Additional information on macro averaged recall",
-      "microRecall": "Micro averaged recall score",
-      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-      "microRecallShort": "Micro recall",
-      "microRecallTitle": "Additional information on micro averaged recall",
+      "precision": "Pontuação de precisão",
+      "precisionInfo": "A precisão é a proporção de verdadeiros positivos sobre todos os positivos previstos.",
+      "precisionShort": "Precisão",
+      "precisionTitle": "Informações adicionais sobre precisão",
+      "recall": "Pontuação de revocação",
+      "recallInfo": "A revocação é a proporção de verdadeiros positivos em relação a todos os positivos reais.",
+      "recallShort": "Revocação",
+      "recallTitle": "Informações adicionais sobre a revocação",
+      "macroPrecision": "Classificação de precisão média da macro",
+      "macroPrecisionInfo": "A precisão média da macro é a proporção de verdadeiros positivos em relação a todos os positivos previstos calculados de forma independente por classe e média.",
+      "macroPrecisionShort": "Precisão de macros",
+      "macroPrecisionTitle": "Informações adicionais sobre a precisão média de macros",
+      "microPrecision": "Pontuação de precisão média micro",
+      "microPrecisionInfo": "A precisão média micro é a proporção de verdadeiros positivos em relação a todos os positivos previstos agregados para todas as classes.",
+      "microPrecisionShort": "Micro precisão",
+      "microPrecisionTitle": "Informações adicionais sobre precisão micro-média",
+      "macroRecall": "Média de macros de revocação",
+      "macroRecallInfo": "A média de revocação de macros é a proporção de verdadeiros positivos em relação a todos os positivos reais calculados de forma independente por classe e média.",
+      "macroRecallShort": "Revocação de macros",
+      "macroRecallTitle": "Informação adicional sobre a recuperação média de macros",
+      "microRecall": "Classificação de receção média micro",
+      "microRecallInfo": "A receção média micro é a proporção de verdadeiros positivos em relação a todos os positivos reais agregados para todas as classes.",
+      "microRecallShort": "Micro-revocação",
+      "microRecallTitle": "Informações adicionais sobre a receção média de micro dados",
+      "macroF1Score": "Macro averaged F1 score",
+      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+      "macroF1ScoreShort": "Macro F1 score",
+      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
+      "microF1Score": "Micro averaged F1 score",
+      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+      "microF1ScoreShort": "Micro F1 score",
+      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
       "metricName": "Nome da métrica",
       "metricValue": "Valor da métrica"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Selecionar métrica"
     },
     "Navigation": {
+      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
       "dataExplorer": "Explorador de dados",
       "errorExplorer": "Explorador de erro",
       "globalExplanation": "Explicação global",
@@ -280,13 +328,13 @@
       "move": "Mover",
       "save": "Guardar",
       "saveTitle": "Guardar como um novo grupo",
-      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
-      "defaultLabelCopy": "All data copy"
+      "subText": "Guarde a coorte atual nas definições de coorte. Pode revisitar a coorte guardada através das definições de coorte.",
+      "defaultLabelCopy": "Todas as cópias de dados"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
-      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "disabledWarning": "O treemap de erros está desativado, a menos que a coorte global seja mudada para representar \"Todos os dados\" devido ao treemap ser gerado para o conjuntos de dados completo. Mude novamente para o conjuntos de dados completo para ver o treemap de erros."
     },
     "WhatIfPanel": {
       "whatIfHeader": "Teste de hipóteses"
@@ -312,13 +360,13 @@
     "instanceView": "Vista de Instância",
     "localExplanationView": "Explicação local",
     "noFeature": "Sem funcionalidade",
-    "treeMapDescription": "Para reeducar o mapa de árvore, selecione e guarde as funcionalidades abaixo. As importâncias das funcionalidades foram calculadas através de informações mútuas com o erro nas etiquetas verdadeiras. Utilize-a como orientação para treinar o mapa de árvore.",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "Pontos de dados e teste de Hipóteses"
   },
   "Fairness": {
     "ValidationErrors": {
-      "missingPerformanceMetric": "No performance metric found.",
-      "missingFairnessMetric": "No fairness metric found."
+      "missingPerformanceMetric": "Não foram encontradas métricas de desempenho.",
+      "missingFairnessMetric": "Não foi encontrada nenhuma métrica de integridade."
     },
     "BinDialog": {
       "cancel": "Cancelar",
@@ -646,7 +694,8 @@
     },
     "Cohort": {
       "cohort": "Grupo",
-      "defaultLabel": "Todos os dados"
+      "defaultLabel": "Todos os dados",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "addCohort": "Novo grupo",
@@ -657,7 +706,7 @@
       "datasetCohorts": "Grupos do conjunto de dados",
       "details": "Detalhes",
       "duplicateCohort": "Duplicado",
-      "edit": "Edit",
+      "edit": "Editar",
       "editCohort": "Editar grupo",
       "features": "{0} funcionalidades",
       "filters": "{0} filtros",
@@ -676,14 +725,18 @@
       "cancelTitle": "Cancelar grupo",
       "cancelYes": "Sim",
       "cohortNameError": "Nome do grupo em falta",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "Nome do grupo do conjunto de dados",
       "cohortNamePlaceholder": "Dê um nome ao seu grupo",
-      "clearAllFilters": "Clear all filters",
-      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
+      "clearAllFilters": "Limpar todos os filtros",
+      "defaultFilterState": "Selecione um filtro para adicionar parâmetros ao seu grupo de conjunto de dados. Os filtros da coorte de visualização atual estão pré-preenchidos.",
       "delete": "Eliminar",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "Sem filtros",
       "placeholderName": "Grupo {0}",
       "save": "Guardar",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "Selecionar filtro"
     },
     "Columns": {
@@ -696,7 +749,9 @@
       "predictedProbabilities": "Probabilidades de predição",
       "regressionError": "Erro de regressão",
       "trueNegative": "Verdadeiro negativo",
-      "truePositive": "Verdadeiro positivo"
+      "truePositive": "Verdadeiro positivo",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "absoluteValInfo": "Média do valor absoluto: mostra a soma da importância da funcionalidade em todas as classes possíveis, divididas por número de classes",
@@ -712,7 +767,7 @@
       "aggregatePlots": "Diagramas agregados",
       "chartType": "Tipo de gráfico",
       "colorValue": "Valor da cor",
-      "helperText": "Crie coortes de conjuntos de dados para analisar estatísticas de conjuntos de dados juntamente com filtros como o resultado previsto, funcionalidades de conjuntos de dados e grupos de erros. Saiba mais sobre a sub-representação e a sobrerrepresentação no seu conjuntos de dados.",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Pontos de dados individuais",
       "missingParameters": "Este separador requer que um conjunto de dados de avaliação seja fornecido.",
       "noColor": "Nenhum"
@@ -788,7 +843,7 @@
       "helperText": "Explore as funcionalidades mais importantes de tipo top k que têm impacto nas predições gerais do modelo. Utilize o controlo de deslize para mostrar as importâncias descendentes da funcionalidade."
     },
     "GlobalTab": {
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "Importância da funcionalidade agregada",
       "collapsedHelperText": "Explore as funcionalidades mais importantes de tipo top k que têm impacto nas predições gerais do modelo.",
       "datapoint": "Datapoint",
@@ -801,7 +856,7 @@
       "helperText": "Explore as funcionalidades mais importantes de tipo top k que afetam as previsões gerais do seu modelo (também designadas por explicação global). Utilize o controlo de deslize para mostrar as importâncias das funcionalidades por ordem descendente. As importâncias das funcionalidades das coortes são apresentadas lado a lado e podem ser desativadas ao selecionar a coorte na legenda. Clique em qualquer uma das funcionalidades no gráfico para ver um gráfico de densidade abaixo da forma como os valores da funcionalidade selecionada afetam a predição.",
       "legendHelpText": "Ative e desative grupos no gráfico ao clicar nos itens da legenda.",
       "missingParameters": "Este separador requer que o parâmetro de importância da funcionalidade local seja fornecido.",
-      "sortBy": "Ordenar por",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "As {0} principais funcionalidades com base na importância",
       "viewDependencePlotFor": "Ver o gráfico de dependências para:",
       "weightOptions": "Ponderação de importância da classe"
@@ -840,13 +895,16 @@
     },
     "Statistics": {
       "accuracy": "Precisão: {0}",
-      "fnr": "Taxas de Falsos Negativos: {0}",
-      "fpr": "Taxas de Falsos Positivos: {0}",
+      "fnr": "False negative rate: {0}",
+      "fpr": "False positive rate: {0}",
       "meanPrediction": "Predição média {0}",
-      "mse": "MSE: {0}",
+      "mse": "Mean squared error: {0}",
       "precision": "Precisão: {0}",
-      "rSquared": "R ao quadrado: {0}",
-      "recall": "Revocação: {0}"
+      "rSquared": "R²: {0}",
+      "recall": "Revocação: {0}",
+      "selectionRate": "Selection rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "addFilters": "Adicionar filtros",
@@ -882,7 +940,7 @@
       "dataPointInfo": "Informações do ponto de dados",
       "deltaLabel": "Delta",
       "disclaimer": "Aviso: estas são explicações baseadas em muitas aproximações e não são a “causa” das predições. Sem uma robustez matemática rigorosa de inferência causal, não aconselhamos os utilizadores a tomarem decisões reais baseadas nesta ferramenta.",
-      "featureImportanceGetStartedText": "Selecione um ponto para ver a sua importância local",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "Forneça importâncias das funcionalidades locais para ver como cada funcionalidade afeta as predições individuais.",
       "featureImportancePlot": "Área de importância da funcionalidade",
       "featureValues": "Valores de funcionalidade",
@@ -970,18 +1028,19 @@
     },
     "Cohort": {
       "apply": "Aplicar",
+      "delete": "Delete",
       "cancel": "Cancelar",
       "cohortInfo": "Informações da coorte",
       "cohortList": "Lista de coortes",
-      "deleteCohort": "Deleting {0}?",
-      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "deleteCohort": "Eliminar {0}?",
+      "deleteConfirm": "Tem a certeza de que pretende eliminar esta coorte?",
       "selectCohort": "Selecionar uma coorte",
-      "shiftCohort": "Deslocar coorte",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "Selecione uma coorte na lista de coortes. Aplique a coorte ao dashboard."
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "Criar nova coorte",
+      "ShiftCohort": "Switch cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "Número de pontos de dados",
       "DefaultCohort": " (predefinição)",
       "Filters": "Número de filtros",
@@ -998,10 +1057,10 @@
       "ErrorAnalysis": "Análise de erros",
       "Fairness": "Integridade",
       "FeatureImportances": "Importâncias das funcionalidades",
-      "ModelStatistics": "Estatísticas do modelo"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
-      "Content": "Esta lista mostra o esquema do dashboard. Pode filtrar os dados com o componente de análise de erros, para ser visualizado nos componentes abaixo. Pode adicionar componentes, arrastar e largar os componentes para reordenar o fluxo ou eliminar componentes.",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "Componentes de dashboard",
       "DataPoints": "Número de pontos de dados",
       "DeleteDialog": {
@@ -1010,26 +1069,137 @@
         "Delete": "Eliminar",
         "Title": "Eliminar {0}?"
       },
-      "Title": "Navegação no dashboard"
+      "Title": "Dashboard configuration"
     },
     "FeatureImportances": {
       "CorrectPredictions": "Previsões corretas",
       "GlobalExplanation": "Importância da funcionalidade agregada",
       "IncorrectPredictions": "Previsões incorretas",
-      "IndividualFeature": "Selecione um ponto de dados ao clicar num ou em vários pontos de dados na tabela para ver os respetivos valores de importância da funcionalidade local (explicação local) e o gráfico de expectativas condicionais individuais (ICE) abaixo. Para conjuntos de dados com mais de 5.000 pontos de dados, a vista é uma subamostra aleatória para permitir uma exploração fácil.",
-      "LocalExplanation": "Importância individual da funcionalidade"
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "LocalExplanation": "Importância individual da funcionalidade",
+      "SelectionCounter": "{0}/{1} datapoints selected",
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "Navegação no dashboard",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "Informações da coorte",
       "cohortList": "Lista de coortes",
       "cohortSettings": "Definições do coorte",
       "createCohort": "Criar coorte",
-      "saveCohort": "Guardar coortes",
-      "shiftCohort": "Deslocar coorte"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "Estatísticas do modelo"
+    },
+    "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
+      "metricsDropdown": "Metric(s)",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Sample size",
+      "dataCohortsHeatmapHeader": "Cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigConfirm": "Confirm",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
+      "probabilityLineChartToggleLabel": "Use line chart",
+      "countAxisLabel": "Count",
+      "helpMeChooseFeaturesButton": "Help me choose features",
+      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "featureConfiguration": {
+        "flyoutHeader": "Choose your features",
+        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
+        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "featureColumnHeader": "Features",
+        "groupsColumnHeader": "Groups",
+        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
+        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
+        "continuousFeatureBinningLabel": "Change the number of bins",
+        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your metrics",
+        "flyoutSubHeader": "How would you like to measure your model's performance?",
+        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "visualDisplayToggleLabel": "Show heatmap",
+      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
     }
   }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { initializeIcons } from "office-ui-fabric-react";
+import { initializeIcons } from "@fluentui/react";
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, Route, RouteComponentProps } from "react-router-dom";

@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  CohortEditorFilterList,
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   IDropdownOption,
   PrimaryButton,
   DefaultButton,
@@ -17,7 +10,14 @@ import {
   DialogType,
   DialogFooter,
   Dropdown
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  CohortEditorFilterList,
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 export interface IShiftCohortProps {

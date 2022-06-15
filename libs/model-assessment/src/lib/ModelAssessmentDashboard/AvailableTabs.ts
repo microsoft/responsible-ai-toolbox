@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { IDropdownOption } from "office-ui-fabric-react";
 
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
