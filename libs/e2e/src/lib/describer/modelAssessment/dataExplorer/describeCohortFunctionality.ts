@@ -24,7 +24,6 @@ export function describeCohortFunctionality(
     });
     it("should not allow creating empty cohort", () => {
       cy.get(Locators.CreateNewCohortButton).click();
-      cy.get(Locators.CohortFilterSelection).first().check();
       cy.get(Locators.CohortDatasetValueInput).clear().type("0");
       cy.get(Locators.CohortAddFilterButton).click();
       cy.get(Locators.CohortSaveAndSwitchButton).click();
