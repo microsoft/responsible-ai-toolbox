@@ -108,8 +108,7 @@ jobs:
         working-directory: ${{ matrix.packageDirectory }}
 
       # Only try to upload code cov if python tests were run
-      - if: ${{ (steps.raiwidgettests.outcome == 'success') }}
-        name: Upload code coverage results
+      - name: Upload code coverage results
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-code-coverage-results
@@ -143,8 +142,8 @@ jobs:
           name: codecov-umbrella
           verbose: true
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Upload e2e test screen shot
+      - name: Upload e2e test screen shot
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.packageDirectory }}-e2e-screen-shot
