@@ -24,7 +24,7 @@ class DataBalanceHelper:
         df: pd.DataFrame, target_column: str, pos_label: Optional[str]
     ) -> pd.DataFrame:
         """
-        Prepare dataframe for data balance analysis.
+        Prepare DataFrame for data balance analysis.
 
         :param df: The dataframe to prepare.
         :type df: pd.DataFrame
