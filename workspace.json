@@ -36,6 +36,7 @@
             "entryFile": "libs/causality/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -104,6 +105,7 @@
             "entryFile": "libs/core-ui/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -172,6 +174,7 @@
             "entryFile": "libs/counterfactuals/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -367,6 +370,7 @@
             "entryFile": "libs/dataset-explorer/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -487,6 +491,7 @@
             "entryFile": "libs/error-analysis/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -555,6 +560,7 @@
             "entryFile": "libs/fairness/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -623,6 +629,7 @@
             "entryFile": "libs/interpret/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -727,6 +734,7 @@
             "entryFile": "libs/localization/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -795,6 +803,7 @@
             "entryFile": "libs/mlchartlib/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
@@ -863,6 +872,7 @@
             "entryFile": "libs/model-assessment/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
