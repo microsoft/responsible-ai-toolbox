@@ -6,7 +6,7 @@ import pandas as pd
 from responsibleai.databalanceanalysis import DistributionBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
-from .conftest import ETHNICITY, GENDER
+from .conftest import SYNTHETIC_DATA_ETHNICITY, SYNTHETIC_DATA_GENDER
 
 
 class TestDistributionBalanceMeasures:
@@ -14,7 +14,9 @@ class TestDistributionBalanceMeasures:
         self, synthetic_data, expected_distribution_measures_gender
     ):
         dist_measures = (
-            DistributionBalanceMeasures(cols_of_interest=[GENDER])
+            DistributionBalanceMeasures(
+                cols_of_interest=[SYNTHETIC_DATA_GENDER]
+            )
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
@@ -26,7 +28,9 @@ class TestDistributionBalanceMeasures:
         self, synthetic_data, expected_distribution_measures_ethnicity
     ):
         dist_measures = (
-            DistributionBalanceMeasures(cols_of_interest=[ETHNICITY])
+            DistributionBalanceMeasures(
+                cols_of_interest=[SYNTHETIC_DATA_ETHNICITY]
+            )
             .measures(dataset=synthetic_data)
             .iloc[0]
         )

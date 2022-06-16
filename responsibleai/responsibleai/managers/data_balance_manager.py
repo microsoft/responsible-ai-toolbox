@@ -112,7 +112,7 @@ class DataBalanceManager(BaseManager):
         if self._target_column not in self._df.columns:
             raise ValueError(
                 (
-                    f"The target_column `{self._target_column}` must be"
+                    f"The target_column '{self._target_column}' must be"
                     " present in the dataset."
                 )
             )

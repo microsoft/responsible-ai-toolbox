@@ -6,7 +6,7 @@ import pandas as pd
 from responsibleai.databalanceanalysis import AggregateBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
-from .conftest import ETHNICITY, GENDER
+from .conftest import SYNTHETIC_DATA_ETHNICITY, SYNTHETIC_DATA_GENDER
 
 
 class TestAggregateBalanceMeasures:
@@ -14,7 +14,7 @@ class TestAggregateBalanceMeasures:
         self, synthetic_data, expected_aggregate_measures_gender
     ):
         agg_measures = (
-            AggregateBalanceMeasures(cols_of_interest=[GENDER])
+            AggregateBalanceMeasures(cols_of_interest=[SYNTHETIC_DATA_GENDER])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
@@ -26,7 +26,12 @@ class TestAggregateBalanceMeasures:
         self, synthetic_data, expected_aggregate_measures_gender_ethnicity
     ):
         agg_measures = (
-            AggregateBalanceMeasures(cols_of_interest=[GENDER, ETHNICITY])
+            AggregateBalanceMeasures(
+                cols_of_interest=[
+                    SYNTHETIC_DATA_GENDER,
+                    SYNTHETIC_DATA_ETHNICITY,
+                ]
+            )
             .measures(dataset=synthetic_data)
             .iloc[0]
         )

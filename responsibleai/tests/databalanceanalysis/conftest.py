@@ -6,9 +6,10 @@ import pytest
 
 from ..common_utils import create_adult_income_dataset
 
+# Constants representing columns in the synthetic_data fixture
 SYNTHETIC_DATA_LABEL = "Label"
-GENDER = "Gender"
-ETHNICITY = "Ethnicity"
+SYNTHETIC_DATA_GENDER = "Gender"
+SYNTHETIC_DATA_ETHNICITY = "Ethnicity"
 
 
 @pytest.fixture(scope="session")
@@ -95,7 +96,11 @@ def synthetic_data():
     ]
     return pd.DataFrame(
         rows,
-        columns=[SYNTHETIC_DATA_LABEL, GENDER, ETHNICITY],
+        columns=[
+            SYNTHETIC_DATA_LABEL,
+            SYNTHETIC_DATA_GENDER,
+            SYNTHETIC_DATA_ETHNICITY,
+        ],
     )
 
 

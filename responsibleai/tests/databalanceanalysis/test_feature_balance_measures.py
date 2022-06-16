@@ -6,7 +6,7 @@ import pandas as pd
 from responsibleai.databalanceanalysis import FeatureBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
-from .conftest import GENDER, SYNTHETIC_DATA_LABEL
+from .conftest import SYNTHETIC_DATA_GENDER, SYNTHETIC_DATA_LABEL
 
 
 class TestFeatureBalanceMeasures:
@@ -15,7 +15,7 @@ class TestFeatureBalanceMeasures:
     ):
         feat_measures = (
             FeatureBalanceMeasures(
-                cols_of_interest=[GENDER],
+                cols_of_interest=[SYNTHETIC_DATA_GENDER],
                 label_col=SYNTHETIC_DATA_LABEL,
             )
             .measures(dataset=synthetic_data)
