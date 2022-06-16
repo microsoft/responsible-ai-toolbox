@@ -465,11 +465,8 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   }
 };
 
-
 const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;
 } = modelAssessmentDatasets;
 
-export {
-  withType as modelAssessmentDatasets,
-};
+export { withType as modelAssessmentDatasets };
