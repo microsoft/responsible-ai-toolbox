@@ -165,7 +165,7 @@ class DataBalanceManager(BaseManager):
         aggregate_balance_measures: pd.DataFrame,
     ):
         """
-        Take the data balance measure dataframes, transform them into
+        Take the data balance measure DataFrames, transform them into
         a dictionary, and set them as an instance variable.
 
         :param feature_balance_measures: Feature balance measures.
