@@ -101,6 +101,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error:"
+    },
     "RecommendedTreatment": "Recommended treatment",
     "WhatIf": {
       "setValue": "Set Value",
