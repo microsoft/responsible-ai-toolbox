@@ -221,7 +221,6 @@ export class ModelOverview extends React.Component<
       <Stack
         className={classNames.sectionStack}
         tokens={{ childrenGap: "10px" }}
-        id="ModelOverview"
       >
         {!this.props.showNewModelOverviewExperience && (
           <>
@@ -233,17 +232,10 @@ export class ModelOverview extends React.Component<
         )}
         {this.props.showNewModelOverviewExperience && (
           <Stack tokens={{ childrenGap: "10px" }}>
-            <Text
-              variant="medium"
-              className={classNames.descriptionText}
-              id="modelOverviewDescription"
-            >
+            <Text variant="medium" className={classNames.descriptionText}>
               {localization.ModelAssessment.ModelOverview.topLevelDescription}
             </Text>
-            <Pivot
-              onLinkClick={this.handleViewPivot}
-              id="modelOverviewCohortViewSelector"
-            >
+            <Pivot onLinkClick={this.handleViewPivot}>
               <PivotItem
                 headerText={
                   localization.ModelAssessment.ModelOverview
@@ -269,7 +261,6 @@ export class ModelOverview extends React.Component<
             )}
             <Stack horizontal tokens={{ childrenGap: "10px" }}>
               <ComboBox
-                id="modelOverviewMetricSelection"
                 placeholder={
                   localization.ModelAssessment.ModelOverview
                     .metricSelectionDropdownPlaceholder
@@ -300,7 +291,6 @@ export class ModelOverview extends React.Component<
             {!this.state.datasetCohortViewIsVisible && (
               <Stack horizontal tokens={{ childrenGap: "10px" }}>
                 <ComboBox
-                  id="modelOverviewFeatureSelection"
                   componentRef={this.featureComboBoxRef}
                   placeholder={
                     localization.ModelAssessment.ModelOverview
@@ -317,7 +307,6 @@ export class ModelOverview extends React.Component<
                   styles={FabricStyles.limitedSizeMenuDropdown}
                 />
                 <ActionButton
-                  id="modelOverviewFeatureConfigurationActionButton"
                   className={classNames.configurationActionButton}
                   onClick={() =>
                     this.setState({ featureConfigurationIsVisible: true })
@@ -334,7 +323,6 @@ export class ModelOverview extends React.Component<
             {(showHeatmapToggleInDatasetCohortView ||
               showHeatmapToggleInFeatureCohortView) && (
               <Toggle
-                id="modelOverviewHeatmapVisualDisplayToggle"
                 label={
                   localization.ModelAssessment.ModelOverview
                     .visualDisplayToggleLabel
@@ -361,10 +349,7 @@ export class ModelOverview extends React.Component<
                 )}
                 {this.state.selectedFeatures.length > 0 && (
                   <>
-                    <Text
-                      className={classNames.generalSemiBoldText}
-                      id="modelOverviewDisaggregatedAnalysisBaseCohortDisclaimer"
-                    >
+                    <Text className={classNames.generalSemiBoldText}>
                       {localization.formatString(
                         localization.ModelAssessment.ModelOverview
                           .disaggregatedAnalysisBaseCohortDislaimer,
@@ -375,10 +360,7 @@ export class ModelOverview extends React.Component<
                       this.context.baseErrorCohort.cohort.compositeFilters
                         .length >
                       0 && (
-                      <MessageBar
-                        id="modelOverviewDisaggregatedAnalysisBaseCohortWarning"
-                        className={classNames.descriptionText}
-                      >
+                      <MessageBar className={classNames.descriptionText}>
                         {localization.formatString(
                           localization.ModelAssessment.ModelOverview
                             .disaggregatedAnalysisBaseCohortWarning,
@@ -431,7 +413,7 @@ export class ModelOverview extends React.Component<
               selectableMetrics={selectableMetrics}
             />
             {someCohortSelected && (
-              <Pivot id="modelOverviewChartPivot">
+              <Pivot>
                 {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                   <PivotItem
                     headerText={

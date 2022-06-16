@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "../../../../../util/BarChart";
-import { BoxChart } from "../../../../../util/BoxChart";
-import { Locators } from "../../Constants";
-import { IModelAssessmentData } from "../../IModelAssessmentData";
+import { BarChart } from "../../../../util/BarChart";
+import { BoxChart } from "../../../../util/BoxChart";
+import { Locators } from "../Constants";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 export function describeModelPerformanceBoxChart(
   dataShape: IModelAssessmentData
