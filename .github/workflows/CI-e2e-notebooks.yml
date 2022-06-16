@@ -43,6 +43,7 @@ jobs:
       node-version: 16.8
 
     strategy:
+      fail-fast: false
       matrix:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
