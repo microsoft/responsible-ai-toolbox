@@ -35,7 +35,8 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       generalSemiBoldText: {
         color: theme.semanticColors.bodyText,
-        fontWeight: FontWeights.semibold
+        fontWeight: FontWeights.semibold,
+        maxWidth: descriptionMaxWidth
       },
       generalText: {
         color: theme.semanticColors.bodyText
