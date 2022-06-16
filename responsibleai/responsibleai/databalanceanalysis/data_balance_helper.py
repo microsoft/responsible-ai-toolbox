@@ -104,7 +104,7 @@ class DataBalanceHelper:
         df: pd.DataFrame,
     ) -> Dict[str, Dict[str, Any]]:
         """
-        Transform the feature balance measures df into a dictionary
+        Transform the feature balance measures DataFrame into a dictionary
         acceptable by the RAI dashboard.
 
         :param df: The feature balance measures df.
