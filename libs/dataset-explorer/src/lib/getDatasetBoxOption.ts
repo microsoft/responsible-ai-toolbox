@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -11,12 +12,13 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
   const outlier = plotlyProps.data.map(
     (d: any) => getBoxData(d.x, d.y).outlier
   );
+  const theme = getTheme();
   const boxGroupData: any = [];
   boxData.forEach((data: any) => {
     boxGroupData.push({
       color: data.color,
       data,
-      fillColor: "#b2d6f2",
+      fillColor: theme.semanticColors.inputPlaceholderBackgroundChecked,
       name: localization.ModelAssessment.ModelOverview.BoxPlot
         .boxPlotSeriesLabel
     });
