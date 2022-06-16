@@ -112,7 +112,7 @@ once.
 2. `cd responsible-ai-toolbox`
 3. `yarn install`
 4. `yarn build`
-5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`
+5. To execute tests run `yarn e2eall`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e --watch`.
 
 cypress window will open locally - select test file to run the tests
 
@@ -126,9 +126,30 @@ cypress window will open locally - select test file to run the tests
 6. `pip install -e raiwidgets` to install raiwidgets locally.
 7. `pip install jupyter`
 8. `cd notebooks\responsibleaidashboard`
-9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`.
 
-cypress window will open locally - select test file to run the tests
+Cypress window will open locally - select test file to run the tests.
+
+Since it may take a while to generate and execute all notebooks which makes
+the interactive `--watch` mode tedious, there's an option `-n` to specify
+individual notebooks. The argument is the notebook name without path.
+
+Example: `-n responsibleaidashboard-diabetes-regression-model-debugging`
+
+Currently, only a single notebook can be specified.
+
+The notebooks can also be run with flights enabled. For that, simply add your
+preferred flights with `-f`.
+
+Example with a single flight `flightName`:
+`-f flightName`
+
+Example with multiple flights `f1` and `f2`:
+`-n f1,f2`
+
+Furthermore, when iterating on writing such tests it may not be necessary to
+regenerate the notebook(s) every single time. To avoid wasting time on this
+there's an option `--skipgen` to skip the notebook generation.
 
 #### Test UX and SDK changes
 
