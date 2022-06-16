@@ -18,7 +18,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
-      fillColor: theme.semanticColors.inputPlaceholderBackgroundChecked,
+      fillColor: theme.semanticColors.inputBackgroundChecked,
       name: localization.ModelAssessment.ModelOverview.BoxPlot
         .boxPlotSeriesLabel
     });
