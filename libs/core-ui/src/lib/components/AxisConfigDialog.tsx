@@ -5,22 +5,20 @@ import {
   Checkbox,
   IComboBoxOption,
   IComboBox,
-  ComboBox
-} from "@fluentui/react";
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
-import {
+  ComboBox,
   Text,
   PrimaryButton,
   SpinButton,
   Panel,
   Stack,
+  DefaultButton,
+  Position,
   ChoiceGroup,
-  IChoiceGroupOption,
-  DefaultButton
-} from "office-ui-fabric-react";
-import { Position } from "office-ui-fabric-react/lib/utilities/positioning";
+  IChoiceGroupOption
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";

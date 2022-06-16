@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption, Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -8,7 +9,6 @@ import {
   generateMetrics,
   JointDataset
 } from "@responsible-ai/core-ui";
-import { IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";

@@ -1,7 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IComboBox, ComboBox, IComboBoxOption } from "@fluentui/react";
+import {
+  IComboBox,
+  ComboBox,
+  IComboBoxOption,
+  IDropdownOption,
+  Dropdown,
+  ChoiceGroup,
+  IChoiceGroupOption,
+  Slider,
+  Text,
+  DirectionalHint,
+  Callout,
+  Link,
+  IconButton,
+  CommandBarButton,
+  Label,
+  Toggle,
+  Stack
+} from "@fluentui/react";
 import {
   IExplanationModelMetadata,
   ModelTypes,
@@ -14,22 +32,6 @@ import {
   FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  ChoiceGroup,
-  IChoiceGroupOption,
-  Slider,
-  Text,
-  DirectionalHint,
-  Callout,
-  Link,
-  IconButton,
-  CommandBarButton,
-  Dropdown,
-  IDropdownOption,
-  Label,
-  Toggle,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";

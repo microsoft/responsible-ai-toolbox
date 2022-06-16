@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme } from "@fluentui/react";
 
 export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
   const colorTheme = {
@@ -34,6 +34,20 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    exporting: {
+      buttons: {
+        contextButton: {
+          menuItems: [
+            "viewFullscreen",
+            "printChart",
+            "separator",
+            "downloadPNG",
+            "downloadJPEG",
+            "downloadPDF"
+          ]
+        }
+      }
+    },
     legend: {
       enabled: false
     },

@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Pivot, PivotItem, Stack, MessageBar } from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";

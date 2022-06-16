@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  CommandBar,
+  ICommandBarItemProps,
+  IContextualMenuItem
+} from "@fluentui/react";
 import { Language } from "@responsible-ai/localization";
 import {
   featureFlights,
   featureFlightSeparator,
   parseFeatureFlights
 } from "@responsible-ai/model-assessment";
-import {
-  CommandBar,
-  ICommandBarItemProps,
-  IContextualMenuItem
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { applications, IApplications } from "./applications";

@@ -132,11 +132,9 @@ Cypress window will open locally - select test file to run the tests.
 
 Since it may take a while to generate and execute all notebooks which makes
 the interactive `--watch` mode tedious, there's an option `-n` to specify
-individual notebooks. The argument is the notebook name without path and with
-`.py` file extension (which is the result of the `.ipynb`-to-`.py`
-conversion).
+individual notebooks. The argument is the notebook name without path.
 
-Example: `-n responsibleaidashboard-diabetes-regression-model-debugging.py`
+Example: `-n responsibleaidashboard-diabetes-regression-model-debugging`
 
 Currently, only a single notebook can be specified.
 

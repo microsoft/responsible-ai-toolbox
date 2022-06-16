@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  JointDataset,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   DefaultButton,
   ChoiceGroup,
   IChoiceGroupOption,
@@ -17,7 +10,14 @@ import {
   Text,
   PrimaryButton,
   Toggle
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  JointDataset,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";

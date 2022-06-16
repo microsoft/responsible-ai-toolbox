@@ -9,7 +9,7 @@ import {
   IStyle,
   mergeStyleSets,
   ICalloutContentStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 import { FabricStyles } from "../util/FabricStyles";
 
