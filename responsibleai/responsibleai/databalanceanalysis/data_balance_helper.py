@@ -28,7 +28,7 @@ class DataBalanceHelper:
 
         :param df: The DataFrame to prepare.
         :type df: pd.DataFrame
-        :param target_column: The target column in the dataframe.
+        :param target_column: The target column in the DataFrame.
         :type target_column: str
         :param pos_label: The positive label of the target column.
         :type pos_label: Optional[str]
