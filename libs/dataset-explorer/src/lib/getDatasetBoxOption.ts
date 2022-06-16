@@ -16,6 +16,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       color: data.color,
       data,
+      fillColor: "#b2d6f2",
       name: localization.ModelAssessment.ModelOverview.BoxPlot
         .boxPlotSeriesLabel
     });
