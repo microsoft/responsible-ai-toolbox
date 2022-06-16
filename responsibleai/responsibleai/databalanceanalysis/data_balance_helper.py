@@ -32,7 +32,7 @@ class DataBalanceHelper:
         :type target_column: str
         :param pos_label: The positive label of the target column.
         :type pos_label: Optional[str]
-        :return: The prepared dataframe.
+        :return: The prepared DataFrame.
         :rtype: pd.DataFrame
         """
         try:
