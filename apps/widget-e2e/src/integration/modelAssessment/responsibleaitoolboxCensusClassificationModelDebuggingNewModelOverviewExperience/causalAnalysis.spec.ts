@@ -7,8 +7,8 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.CensusClassificationModelAssessment;
+  modelAssessmentDatasets.CensusClassificationModelDebugging;
 describeCausalAnalysis(
   datasetShape,
-  "CensusClassificationModelAssessmentNewModelOverviewExperience"
+  "CensusClassificationModelDebuggingNewModelOverviewExperience"
 );

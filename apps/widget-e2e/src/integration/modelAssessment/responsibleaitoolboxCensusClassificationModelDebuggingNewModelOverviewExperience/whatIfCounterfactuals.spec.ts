@@ -4,8 +4,8 @@
 import { describeWhatIf, modelAssessmentDatasets } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.CensusClassificationModelAssessment;
+  modelAssessmentDatasets.CensusClassificationModelDebugging;
 describeWhatIf(
   datasetShape,
-  "CensusClassificationModelAssessmentNewModelOverviewExperience"
+  "CensusClassificationModelDebuggingNewModelOverviewExperience"
 );

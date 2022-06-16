@@ -206,7 +206,7 @@ def test_erroranalysis_dashboard_housing():
 @pytest.mark.notebooks
 def test_responsibleaidashboard_census_classification_model_debugging():
     nb_path = RESPONSIBLEAIDASHBOARD
-    nb_name = "responsibleaidashboard-census-classification-model-assessment"
+    nb_name = "responsibleaidashboard-census-classification-model-debugging"
 
     test_values = {}
     assay_one_notebook(nb_path, nb_name, test_values)

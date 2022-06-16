@@ -7,8 +7,8 @@ import {
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasetsIncludingFlights.CensusClassificationModelAssessmentNewModelOverviewExperience;
+  modelAssessmentDatasetsIncludingFlights.CensusClassificationModelDebuggingNewModelOverviewExperience;
 describeNewModelOverview(
   datasetShape,
-  "CensusClassificationModelAssessmentNewModelOverviewExperience"
+  "CensusClassificationModelDebuggingNewModelOverviewExperience"
 );
