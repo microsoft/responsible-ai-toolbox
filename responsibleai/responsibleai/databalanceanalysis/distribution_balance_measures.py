@@ -268,7 +268,7 @@ class DistributionBalanceMeasures(BalanceMeasures):
         :param n: The number of outcomes.
         :type n: int
         :return: The reference distribution.
-        :rtype: np.array
+        :rtype: numpy.ndarray
         """
         uniform_val: float = 1.0 / n
         return np.ones(n) * uniform_val
