@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
+from responsibleai._interfaces import TaskType
 from responsibleai.databalanceanalysis.data_balance_helper import (
     AGGREGATE_BALANCE_MEASURES_KEY, DISTRIBUTION_BALANCE_MEASURES_KEY,
     FEATURE_BALANCE_MEASURES_KEY)
@@ -23,7 +24,10 @@ class TestDataBalanceManager:
         for train, test in combinations:
             combined = pd.concat([train, test])
             manager = DataBalanceManager(
-                train=train, test=test, target_column=target_col
+                train=train,
+                test=test,
+                target_column=target_col,
+                task_type=TaskType.CLASSIFICATION,
             )
             assert manager._target_column == target_col
             assert manager._train is train
@@ -34,8 +38,11 @@ class TestDataBalanceManager:
             )
 
     def test_init_with_invalid_input(self):
-        manager = DataBalanceManager(train=None, test=None, target_column=None)
+        manager = DataBalanceManager(
+            train=None, test=None, target_column=None, task_type=None
+        )
         assert manager._target_column is None
+        assert manager._task_type is None
         assert manager._train is None
         assert manager._test is None
         assert manager._df is None
@@ -49,7 +56,10 @@ class TestDataBalanceManager:
 
         with pytest.raises(ValueError):
             manager = DataBalanceManager(
-                train=train_df, test=test_df, target_column=target_col
+                train=train_df,
+                test=test_df,
+                target_column=target_col,
+                task_type=TaskType.CLASSIFICATION,
             )
             manager.add(cols_of_interest=cols_of_interest)
 
@@ -59,7 +69,10 @@ class TestDataBalanceManager:
         # train and test not specified
         with pytest.raises(ValueError):
             manager = DataBalanceManager(
-                train=None, test=None, target_column=target_col
+                train=None,
+                test=None,
+                target_column=target_col,
+                task_type=TaskType.CLASSIFICATION,
             )
             manager.add(cols_of_interest=cols_of_interest)
 
@@ -67,14 +80,30 @@ class TestDataBalanceManager:
         with pytest.raises(ValueError):
             # In adult data, age is a continuous feature so > 2 label values
             manager = DataBalanceManager(
-                train=train_df, test=test_df, target_column="age"
+                train=train_df,
+                test=test_df,
+                target_column="age",
+                task_type=TaskType.CLASSIFICATION,
+            )
+            manager.add(cols_of_interest=cols_of_interest)
+
+        # task_type is not classification
+        with pytest.raises(ValueError):
+            manager = DataBalanceManager(
+                train=train_df,
+                test=test_df,
+                target_column=target_col,
+                task_type=TaskType.REGRESSION,
             )
             manager.add(cols_of_interest=cols_of_interest)
 
     def test_validate_with_valid_input(self, adult_data):
         train_df, test_df, cols_of_interest, target_col = adult_data
         manager = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=TaskType.CLASSIFICATION,
         )
         manager._cols_of_interest = cols_of_interest
         manager._validate()  # should not raise any exceptions
@@ -85,16 +114,32 @@ class TestDataBalanceManager:
 
         with pytest.raises(ValueError):
             manager = DataBalanceManager(
-                train=train_df, test=test_df, target_column=target_col
+                train=train_df,
+                test=test_df,
+                target_column=target_col,
+                task_type=TaskType.CLASSIFICATION,
             )
             manager._validate()
 
     def test_validate_with_invalid_input_advanced(self, adult_data):
-        _, _, _, target_col = adult_data
+        train, test, _, target_col = adult_data
         # train and test not specified
         with pytest.raises(ValueError):
             manager = DataBalanceManager(
-                train=None, test=None, target_column=target_col
+                train=None,
+                test=None,
+                target_column=target_col,
+                task_type=TaskType.CLASSIFICATION,
+            )
+            manager._validate()
+
+        # task_type is not classification
+        with pytest.raises(ValueError):
+            manager = DataBalanceManager(
+                train=train,
+                test=test,
+                target_column=target_col,
+                task_type=TaskType.REGRESSION,
             )
             manager._validate()
 
@@ -119,7 +164,10 @@ class TestDataBalanceManager:
         assert test_df[target_col].unique().tolist() == [neg, pos]
 
         manager = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=TaskType.CLASSIFICATION,
         )
         manager.add(cols_of_interest=cols_of_interest, pos_label=pos)
         manager.compute()
@@ -134,7 +182,10 @@ class TestDataBalanceManager:
         train_df, test_df, cols_of_interest, target_col = adult_data
 
         manager = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=TaskType.CLASSIFICATION,
         )
         manager.add(cols_of_interest=cols_of_interest)
 
@@ -148,7 +199,9 @@ class TestDataBalanceManager:
         adult_data_distribution_balance_measures,
         adult_data_aggregate_balance_measures,
     ):
-        manager = DataBalanceManager(target_column=None, train=None, test=None)
+        manager = DataBalanceManager(
+            target_column=None, train=None, test=None, task_type=None
+        )
         assert manager._data_balance_measures is None
 
         manager._set_data_balance_measures(
@@ -166,8 +219,13 @@ class TestDataBalanceManager:
 
     def test_save_and_load_basic(self, tmpdir, adult_data):
         train_df, test_df, _, target_col = adult_data
+        task_type = TaskType.CLASSIFICATION
+
         saved = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=task_type,
         )
         assert saved._is_added is False
 
@@ -184,6 +242,7 @@ class TestDataBalanceManager:
         loaded = saved._load(save_dir, rai_insights)
 
         assert saved._target_column == loaded._target_column == target_col
+        assert saved._task_type == loaded._task_type == task_type
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
         assert saved._is_added is loaded._is_added is False
@@ -203,9 +262,13 @@ class TestDataBalanceManager:
 
     def test_save_and_load_with_add(self, tmpdir, adult_data):
         train_df, test_df, cols_of_interest, target_col = adult_data
+        task_type = TaskType.CLASSIFICATION
 
         saved = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=task_type,
         )
         saved.add(cols_of_interest=cols_of_interest)
 
@@ -222,6 +285,7 @@ class TestDataBalanceManager:
         loaded = saved._load(save_dir, rai_insights)
 
         assert saved._target_column == loaded._target_column == target_col
+        assert saved._task_type == loaded._task_type == task_type
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
         assert saved._is_added is loaded._is_added is True
@@ -239,9 +303,13 @@ class TestDataBalanceManager:
 
     def test_save_and_load_with_add_and_compute(self, tmpdir, adult_data):
         train_df, test_df, cols_of_interest, target_col = adult_data
+        task_type = TaskType.CLASSIFICATION
 
         saved = DataBalanceManager(
-            train=train_df, test=test_df, target_column=target_col
+            train=train_df,
+            test=test_df,
+            target_column=target_col,
+            task_type=task_type,
         )
         saved.add(cols_of_interest=cols_of_interest)
         saved.compute()
@@ -259,6 +327,7 @@ class TestDataBalanceManager:
         loaded = saved._load(save_dir, rai_insights)
 
         assert saved._target_column == loaded._target_column == target_col
+        assert saved._task_type == loaded._task_type == task_type
         assert_frame_equal(saved._train, loaded._train)
         assert_frame_equal(saved._test, loaded._test)
         assert saved._is_added is loaded._is_added is True

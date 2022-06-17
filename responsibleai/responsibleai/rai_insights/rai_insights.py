@@ -115,7 +115,8 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=self.categorical_features)
 
         self._data_balance_manager = DataBalanceManager(
-            train=self.train, test=self.test, target_column=self.target_column)
+            train=self.train, test=self.test, target_column=self.target_column,
+            task_type=self.task_type)
 
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,

@@ -64,6 +64,7 @@ class CausalManagerKeys(object):
 class DataBalanceManagerKeys(object):
     """Provide constants for DataBalanceManager key properties."""
     IS_ADDED = 'is_added'
+    TASK_TYPE = 'task_type'
     COLS_OF_INTEREST = 'cols_of_interest'
     TARGET_COLUMN = 'target_column'
     POS_LABEL = 'pos_label'

@@ -9,6 +9,7 @@ from typing import List, Optional
 
 import pandas as pd
 
+from responsibleai._interfaces import TaskType
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
@@ -32,7 +33,11 @@ class DataBalanceManager(BaseManager):
     """
 
     def __init__(
-        self, train: pd.DataFrame, test: pd.DataFrame, target_column: str
+        self,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        target_column: str,
+        task_type: str,
     ):
         """
         Creates a DataBalanceManager object.
@@ -47,6 +52,7 @@ class DataBalanceManager(BaseManager):
         self._train = train
         self._test = test
         self._target_column = target_column
+        self._task_type = task_type
         self._is_added = False
 
         self._df = None
@@ -117,12 +123,20 @@ class DataBalanceManager(BaseManager):
                 )
             )
 
-        if self._df[self._target_column].unique().size != 2:
+        if self._df[self._target_column].unique().size > 2:
             raise ValueError(
                 (
                     f"The target_column '{self._target_column}' must contain"
-                    " only a positive label and a negative label to compute"
-                    " data balance measures."
+                    " at most 2 unique values (a positive label and a"
+                    " negative label) to compute data balance measures."
+                )
+            )
+
+        if self._task_type != TaskType.CLASSIFICATION:
+            raise ValueError(
+                (
+                    f"The task_type '{self._task_type}' must be"
+                    " 'classification' to compute data balance measures."
                 )
             )
 
@@ -204,6 +218,7 @@ class DataBalanceManager(BaseManager):
         props = {
             ListProperties.MANAGER_TYPE: self.name,
             Keys.IS_ADDED: self._is_added,
+            Keys.TASK_TYPE: self._task_type,
             Keys.COLS_OF_INTEREST: self._cols_of_interest,
             Keys.TARGET_COLUMN: self._target_column,
             Keys.POS_LABEL: self._pos_label,
@@ -277,6 +292,7 @@ class DataBalanceManager(BaseManager):
 
         is_added = False
         cols_of_interest = None
+        task_type = rai_insights.task_type
         target_column = rai_insights.target_column
         pos_label = None
         df = pd.concat([rai_insights.train, rai_insights.test])
@@ -293,6 +309,7 @@ class DataBalanceManager(BaseManager):
             with open(config_dir / MANAGER_JSON, "r") as f:
                 manager_info = json.load(f)
                 is_added = manager_info[Keys.IS_ADDED]
+                task_type = manager_info[Keys.TASK_TYPE]
                 cols_of_interest = manager_info[Keys.COLS_OF_INTEREST]
                 target_column = manager_info[Keys.TARGET_COLUMN]
                 pos_label = manager_info[Keys.POS_LABEL]
@@ -309,6 +326,7 @@ class DataBalanceManager(BaseManager):
                     data_balance_measures = json.load(f)
 
         inst.__dict__["_is_added"] = is_added
+        inst.__dict__["_task_type"] = task_type
         inst.__dict__["_cols_of_interest"] = cols_of_interest
         inst.__dict__["_target_column"] = target_column
         inst.__dict__["_pos_label"] = pos_label
