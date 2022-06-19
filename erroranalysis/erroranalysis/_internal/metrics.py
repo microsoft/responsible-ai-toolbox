@@ -14,30 +14,95 @@ MACRO = 'macro'
 
 
 def micro_precision_score(y_true, y_pred):
+    """Compute micro precision score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Micro precision score.
+    :rtype: float
+    """
     return precision_score(y_true, y_pred, average=MICRO)
 
 
 def macro_precision_score(y_true, y_pred):
+    """Compute macro precision score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Macro precision score.
+    :rtype: float
+    """
     return precision_score(y_true, y_pred, average=MACRO)
 
 
 def micro_recall_score(y_true, y_pred):
+    """Compute micro recall score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Micro recall score.
+    :rtype: float
+    """
     return recall_score(y_true, y_pred, average=MICRO)
 
 
 def macro_recall_score(y_true, y_pred):
+    """Compute macro recall score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Macro recall score.
+    :rtype: float
+    """
     return recall_score(y_true, y_pred, average=MACRO)
 
 
 def micro_f1_score(y_true, y_pred):
+    """Compute micro f1 score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Micro f1 score.
+    :rtype: float
+    """
     return f1_score(y_true, y_pred, average=MICRO)
 
 
 def macro_f1_score(y_true, y_pred):
+    """Compute macro f1 score for multi-class classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Macro f1 score.
+    :rtype: float
+    """
     return f1_score(y_true, y_pred, average=MACRO)
 
 
 def get_ordered_classes(classes, true_y, pred_y):
+    """Get the ordered classes for the given true and predicted labels.
+
+    :param classes: List of classes.
+    :type classes: list
+    :param true_y: True labels.
+    :type true_y: numpy.ndarray
+    :param pred_y: Predicted labels.
+    :type pred_y: numpy.ndarray
+    :return: Ordered classes.
+    :rtype: list
+    """
     # If classes is none, or disagrees with labels from true and predicted
     # arrays, return the sorted set of labels.
     # Otherwise return classes as it provides the correct ordering and any
@@ -53,6 +118,16 @@ def get_ordered_classes(classes, true_y, pred_y):
 
 
 def is_multi_agg_metric(metric):
+    """Returns if the given metric is a multi-aggregation metric.
+
+    The metric will be a multi-aggregation metric if it is a precision,
+    recall, accuracy or f1 score metric.
+
+    :param metric: Metric to check.
+    :type metric: str
+    :return: True if metric is a multi-agg metric.
+    :rtype: bool
+    """
     return (metric in precision_metrics or
             metric in recall_metrics or
             metric == Metrics.ACCURACY_SCORE or

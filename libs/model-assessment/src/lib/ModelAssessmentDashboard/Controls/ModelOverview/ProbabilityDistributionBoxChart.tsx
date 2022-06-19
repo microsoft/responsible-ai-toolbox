@@ -70,7 +70,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<
           series: [
             {
               data: boxPlotData.map((boxData) => boxData as PointOptionsObject),
-              fillColor: "#b2d6f2",
+              fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
               type: "boxplot"
