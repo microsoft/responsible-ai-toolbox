@@ -4,7 +4,7 @@
 import { getTheme, IChoiceGroupOption } from "@fluentui/react";
 import {
   BasicHighChart,
-  calculateLinePlotDataFromErrorCohort,
+  calculateSplinePlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
   ModelAssessmentContext
@@ -12,16 +12,16 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-interface IProbabilityDistributionLineChartProps {
+interface IProbabilityDistributionSplineChartProps {
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
 }
 
-class IProbabilityDistributionLineChartState {}
+class IProbabilityDistributionSplineChartState {}
 
-export class ProbabilityDistributionLineChart extends React.Component<
-  IProbabilityDistributionLineChartProps,
-  IProbabilityDistributionLineChartState
+export class ProbabilityDistributionSplineChart extends React.Component<
+  IProbabilityDistributionSplineChartProps,
+  IProbabilityDistributionSplineChartState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
@@ -30,8 +30,8 @@ export class ProbabilityDistributionLineChart extends React.Component<
   public render(): React.ReactNode {
     const theme = getTheme();
 
-    const linePlotData = this.props.selectedCohorts.map((cohort) => {
-      return calculateLinePlotDataFromErrorCohort(
+    const splinePlotData = this.props.selectedCohorts.map((cohort) => {
+      return calculateSplinePlotDataFromErrorCohort(
         cohort,
         this.props.probabilityOption!.key.toString()
       )!; // TODO: handle undefined case
@@ -39,11 +39,11 @@ export class ProbabilityDistributionLineChart extends React.Component<
 
     return (
       <BasicHighChart
-        id={"ProbabilityDistributionLineChart"}
+        id={"ProbabilityDistributionSplineChart"}
         theme={theme}
         configOverride={{
           chart: {
-            type: "line"
+            type: "spline"
           },
           legend: {
             align: "right",
@@ -58,16 +58,20 @@ export class ProbabilityDistributionLineChart extends React.Component<
               }
             }
           },
-          series: linePlotData.map((lineData, index) => {
+          series: splinePlotData.map((splineData, index) => {
             return {
-              data: lineData.map((probBinCount) => probBinCount.binCount),
+              data: splineData.map(
+                (probBinCount: { binCount: any }) => probBinCount.binCount
+              ),
               name: this.props.selectedCohorts[index].cohort.name,
-              type: "line"
+              type: "spline"
             };
           }),
           xAxis: {
-            categories: linePlotData.map((lineData) =>
-              lineData.map((probBinCount) => probBinCount.binName)
+            categories: splinePlotData.map((splineData) =>
+              splineData.map(
+                (probBinCount: { binName: any }) => probBinCount.binName
+              )
             )[0],
             title: { text: this.props.probabilityOption!.text }
           },
