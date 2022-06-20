@@ -13,7 +13,7 @@ interface IInterpretProps {
 export class Interpret extends React.Component<IInterpretProps> {
   public render(): React.ReactNode {
     let requestMethod = undefined;
-    if (config.baseUrl !== undefined) {
+    if (config.baseUrl) {
       requestMethod = (request: any[]): Promise<any[]> => {
         return callFlaskService(request, "/predict");
       };
