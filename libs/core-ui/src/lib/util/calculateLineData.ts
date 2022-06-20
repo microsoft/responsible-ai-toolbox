@@ -8,7 +8,7 @@ export interface IProbabilityBinCount {
   binCount: number;
 }
 
-export function calculateLinePlotDataFromErrorCohort(
+export function calculateSplinePlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
   key: string
 ) {
