@@ -33,12 +33,10 @@ export function describeIndividualDatapoints(
 
         cy.get(Locators.DEPoints).each((point) => {
           cy.wrap(point).trigger("mouseover", { force: true });
-          cy.get("#DatasetExplorerChart")
-            .find(Locators.DEPointTooltip)
-            .then((tooltip) => {
-              cy.wrap(tooltip).should("contain", "Regression error");
-              cy.wrap(tooltip).should("not.have.value", "Regression error: -");
-            });
+          cy.find(Locators.DEPointTooltip).then((tooltip) => {
+            cy.wrap(tooltip).should("contain", "Regression error");
+            cy.wrap(tooltip).should("not.have.value", "Regression error: -");
+          });
         });
         axisSelection("Index");
         cy.get(Locators.DEAggregatePlots).click();

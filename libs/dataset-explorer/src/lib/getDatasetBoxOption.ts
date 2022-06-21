@@ -35,6 +35,9 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
       type: "boxplot"
     },
     series: boxGroupData,
+    tooltip: {
+      className: "datasetBoxPlot"
+    },
     xAxis: {
       categories: plotlyProps.layout?.xaxis?.ticktext
     },

@@ -86,7 +86,7 @@ export enum Locators {
   DEAggregatePlots = "#ChartTypeSelection label:contains('Aggregate plots')",
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick'] text",
   DEPoints = "#DatasetExplorerChart .highcharts-scatter-series > path.highcharts-point",
-  DEPointTooltip = ".highcharts-tooltip",
+  DEPointTooltip = ".datasetBoxPlot .highcharts-tooltip",
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
