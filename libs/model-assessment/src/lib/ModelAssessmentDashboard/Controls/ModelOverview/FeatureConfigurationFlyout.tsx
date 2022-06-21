@@ -188,23 +188,24 @@ export class FeatureConfigurationFlyout extends React.Component<
 
   private onRenderFooterContent = () => {
     const tooManyFeaturesSelected = this._selection.getSelectedCount() > 2;
-    const noChangesInSelectedFeatures =
       // check that feature selection has not changed
-      this.props.selectedFeatures.length ===
-        this.state.newlySelectedFeatures.length &&
-      this.props.selectedFeatures.every(
+      const featureSelectionChanged =
+      this.props.selectedFeatures.length !==
+        this.state.newlySelectedFeatures.length ||
+      this.props.selectedFeatures.some(
         (feature, featureIndex) =>
-          this.state.newlySelectedFeatures[featureIndex] === feature
-      ) &&
+          this.state.newlySelectedFeatures[featureIndex] !== feature
+      );
       // check that number of continuous feature bins for the selected features has not changed
-      this.state.newlySelectedFeatures.every((_, featureIndex) => {
+      const continuousFeatureBinningChanged =
+      this.state.newlySelectedFeatures.some((_, featureIndex) => {
         const newNumberOfBins =
           this.state.newNumberOfContinuousFeatureBins[featureIndex] ??
           defaultNumberOfContinuousFeatureBins;
         const prevNumberOfBins =
           this.props.numberOfContinuousFeatureBins[featureIndex] ??
           defaultNumberOfContinuousFeatureBins;
-        return newNumberOfBins === prevNumberOfBins;
+        return newNumberOfBins !== prevNumberOfBins;
       });
     return (
       <Stack tokens={{ childrenGap: "10px" }}>
@@ -220,7 +221,7 @@ export class FeatureConfigurationFlyout extends React.Component<
           <PrimaryButton
             onClick={this.onConfirm}
             text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
-            disabled={tooManyFeaturesSelected || noChangesInSelectedFeatures}
+            disabled={tooManyFeaturesSelected || (!featureSelectionChanged && !continuousFeatureBinningChanged)}
           />
           <DefaultButton
             onClick={this.props.onDismissFlyout}
