@@ -68,9 +68,10 @@ apps/*-e2e/debug.log
 # notebook artifacts
 /notebooks/*.csv
 /notebooks/*.zip
+*.csv
 
 # docs
 docs/build/*
 */.mypy_cache/*
 
-notebooks/responsibleaitoolbox-dashboard/*.py
+notebooks/responsibleaidashboard/*.py

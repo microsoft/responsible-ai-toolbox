@@ -5,8 +5,8 @@ import { IModelAssessmentData } from "./IModelAssessmentData";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
 
-const modelAssessmentDatasets = {
-  ClassificationModelDebugging: {
+const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
+  CensusClassificationModelDebugging: {
     causalAnalysisData: {
       hasCausalAnalysisComponent: false
     },
@@ -127,6 +127,7 @@ const modelAssessmentDatasets = {
       "age",
       "s6"
     ],
+    isRegression: true,
     modelStatisticsData: {
       cohortDropDownValues: [
         "All data",

@@ -22,7 +22,7 @@ import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
-import { ProbabilityDistributionLineChart } from "./ProbabilityDistributionLineChart";
+import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
@@ -34,7 +34,7 @@ interface IProbabilityDistributionChartState {
   probabilityOption?: IChoiceGroupOption;
   newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
-  showLineChart: boolean;
+  showSplineChart: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -47,7 +47,7 @@ export class ProbabilityDistributionChart extends React.Component<
 
   constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
+    this.state = { probabilityFlyoutIsVisible: false, showSplineChart: false };
   }
 
   public componentDidMount(): void {
@@ -96,13 +96,13 @@ export class ProbabilityDistributionChart extends React.Component<
             <Toggle
               label={
                 localization.ModelAssessment.ModelOverview
-                  .probabilityLineChartToggleLabel
+                  .probabilitySplineChartToggleLabel
               }
               inlineLabel
-              onChange={this.onLineChartToggleChange}
+              onChange={this.onSplineChartToggleChange}
             />
           </Stack.Item>
-          {this.state.showLineChart && (
+          {this.state.showSplineChart && (
             <DefaultButton
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
@@ -112,7 +112,7 @@ export class ProbabilityDistributionChart extends React.Component<
           )}
         </Stack>
         <Stack horizontal>
-          {!noCohortSelected && !this.state.showLineChart && (
+          {!noCohortSelected && !this.state.showSplineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
                 className={classNames.rotatedVerticalBox}
@@ -137,8 +137,8 @@ export class ProbabilityDistributionChart extends React.Component<
             )}
             {!noCohortSelected && (
               <Stack>
-                {this.state.showLineChart ? (
-                  <ProbabilityDistributionLineChart
+                {this.state.showSplineChart ? (
+                  <ProbabilityDistributionSplineChart
                     selectedCohorts={selectedCohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
@@ -150,7 +150,7 @@ export class ProbabilityDistributionChart extends React.Component<
                 )}
                 <Stack.Item
                   className={
-                    this.state.showLineChart
+                    this.state.showSplineChart
                       ? classNames.horizontalAxisNoExtraLeftPadding
                       : classNames.horizontalAxis
                   }
@@ -241,12 +241,12 @@ export class ProbabilityDistributionChart extends React.Component<
       });
   }
 
-  private onLineChartToggleChange = (
+  private onSplineChartToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      this.setState({ showLineChart: checked });
+      this.setState({ showSplineChart: checked });
     }
   };
 }

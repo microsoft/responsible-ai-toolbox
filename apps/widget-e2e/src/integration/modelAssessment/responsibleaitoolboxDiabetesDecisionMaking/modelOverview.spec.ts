@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import {
-  describeModelStatistics,
+  describeModelOverview,
   modelAssessmentDatasets
 } from "@responsible-ai/e2e";
 
 const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
-describeModelStatistics(datasetShape, "DiabetesDecisionMaking");
+describeModelOverview(datasetShape, "DiabetesDecisionMaking");
