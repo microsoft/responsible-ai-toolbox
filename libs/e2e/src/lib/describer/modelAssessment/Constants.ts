@@ -87,6 +87,7 @@ export enum Locators {
   DEYAxisPoints = "#DatasetExplorerChart g[class^='cartesianlayer'] g[class^='ytick'] text",
   DEPoints = "#DatasetExplorerChart .highcharts-scatter-series > path.highcharts-point",
   DEPointTooltip = ".datasetBoxPlot .highcharts-tooltip",
+  TooltipContainer = ".highcharts-tooltip-container",
   MSCRotatedVerticalBox = "#OverallMetricChart div[class*='rotatedVerticalBox']", // MSC- Model statistics chart
   MSCHorizontalAxis = "#OverallMetricChart div[class*='horizontalAxis']",
   CausalAnalysisHeader = "#ModelAssessmentDashboard #causalAnalysisHeader",
