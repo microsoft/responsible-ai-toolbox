@@ -194,7 +194,7 @@ export class FeatureConfigurationFlyout extends React.Component<
         this.state.newlySelectedFeatures.length &&
       this.props.selectedFeatures.every(
         (feature, featureIndex) =>
-          this.state.newlySelectedFeatures[featureIndex] == feature
+          this.state.newlySelectedFeatures[featureIndex] === feature
       ) &&
       // check that number of continuous feature bins for the selected features has not changed
       this.state.newlySelectedFeatures.every((_, featureIndex) => {
