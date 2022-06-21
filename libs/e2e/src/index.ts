@@ -6,6 +6,7 @@ export * from "./lib/describer/modelAssessment/causalAnalysis/describeCausalAnal
 export * from "./lib/describer/modelAssessment/dataExplorer/describeDatasetExplorer";
 export * from "./lib/describer/modelAssessment/errorAnalysis/describeErrorAnalysis";
 export * from "./lib/describer/modelAssessment/featureImportances/individualFeatureImportance/describeIndividualFeatureImportance";
-export * from "./lib/describer/modelAssessment/modelStatistics/describeModelStatistics";
+export * from "./lib/describer/modelAssessment/modelOverview/describeModelOverview";
 export * from "./lib/describer/modelAssessment/whatIfCounterfactuals/describeWhatIf";
 export * from "./lib/describer/modelAssessment/modelAssessmentDatasets";
+export * from "./lib/describer/modelAssessment/IModelAssessmentData";

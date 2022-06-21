@@ -11,9 +11,9 @@ import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 import { describeModelPerformanceBoxChart } from "./describeModelPerformanceBoxChart";
 import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideBar";
 
-const testName = "Model Statistics";
+const testName = "Model Overview v1";
 
-export function describeModelStatistics(
+export function describeModelOverview(
   datasetShape: IModelAssessmentData,
   name?: keyof typeof modelAssessmentDatasets
 ): void {
