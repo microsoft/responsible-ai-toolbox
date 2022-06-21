@@ -188,16 +188,16 @@ export class FeatureConfigurationFlyout extends React.Component<
 
   private onRenderFooterContent = () => {
     const tooManyFeaturesSelected = this._selection.getSelectedCount() > 2;
-      // check that feature selection has not changed
-      const featureSelectionChanged =
+    // check that feature selection has not changed
+    const featureSelectionChanged =
       this.props.selectedFeatures.length !==
         this.state.newlySelectedFeatures.length ||
       this.props.selectedFeatures.some(
         (feature, featureIndex) =>
           this.state.newlySelectedFeatures[featureIndex] !== feature
       );
-      // check that number of continuous feature bins for the selected features has not changed
-      const continuousFeatureBinningChanged =
+    // check that number of continuous feature bins for the selected features has not changed
+    const continuousFeatureBinningChanged =
       this.state.newlySelectedFeatures.some((_, featureIndex) => {
         const newNumberOfBins =
           this.state.newNumberOfContinuousFeatureBins[featureIndex] ??
@@ -221,7 +221,10 @@ export class FeatureConfigurationFlyout extends React.Component<
           <PrimaryButton
             onClick={this.onConfirm}
             text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
-            disabled={tooManyFeaturesSelected || (!featureSelectionChanged && !continuousFeatureBinningChanged)}
+            disabled={
+              tooManyFeaturesSelected ||
+              (!featureSelectionChanged && !continuousFeatureBinningChanged)
+            }
           />
           <DefaultButton
             onClick={this.props.onDismissFlyout}
