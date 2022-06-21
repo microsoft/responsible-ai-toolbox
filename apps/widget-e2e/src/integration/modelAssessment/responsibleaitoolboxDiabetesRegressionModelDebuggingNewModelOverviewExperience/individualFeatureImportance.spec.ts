@@ -3,10 +3,10 @@
 
 import {
   describeIndividualFeatureImportance,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 const datasetShape =
-  modelAssessmentDatasets.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
+  modelAssessmentDatasetsIncludingFlights.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
 describeIndividualFeatureImportance(
   datasetShape,
   "DiabetesRegressionModelDebuggingNewModelOverviewExperience"

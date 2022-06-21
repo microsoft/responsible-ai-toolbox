@@ -3,10 +3,11 @@
 
 import {
   describeIndividualFeatureImportance,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.MulticlassDnnModelDebugging;
+const datasetShape =
+  modelAssessmentDatasetsIncludingFlights.MulticlassDnnModelDebuggingNewModelOverviewExperience;
 describeIndividualFeatureImportance(
   datasetShape,
   "MulticlassDnnModelDebuggingNewModelOverviewExperience"

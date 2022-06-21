@@ -3,10 +3,10 @@
 
 import {
   describeDatasetExplorer,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 const datasetShape =
-  modelAssessmentDatasets.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
+  modelAssessmentDatasetsIncludingFlights.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
 describeDatasetExplorer(
   datasetShape,
   "DiabetesRegressionModelDebuggingNewModelOverviewExperience"

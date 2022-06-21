@@ -3,10 +3,11 @@
 
 import {
   describeErrorAnalysis,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.HousingDecisionMaking;
+const datasetShape =
+  modelAssessmentDatasetsIncludingFlights.HousingDecisionMakingNewModelOverviewExperience;
 describeErrorAnalysis(
   datasetShape,
   "HousingDecisionMakingNewModelOverviewExperience"

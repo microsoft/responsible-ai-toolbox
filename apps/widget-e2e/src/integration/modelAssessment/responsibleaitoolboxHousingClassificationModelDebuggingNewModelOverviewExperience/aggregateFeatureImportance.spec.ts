@@ -3,11 +3,11 @@
 
 import {
   describeAggregateFeatureImportance,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.HousingClassificationModelDebugging;
+  modelAssessmentDatasetsIncludingFlights.HousingClassificationModelDebuggingNewModelOverviewExperience;
 describeAggregateFeatureImportance(
   datasetShape,
   "HousingClassificationModelDebuggingNewModelOverviewExperience"

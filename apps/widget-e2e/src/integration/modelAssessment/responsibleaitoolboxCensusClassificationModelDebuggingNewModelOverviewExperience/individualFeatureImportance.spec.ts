@@ -3,10 +3,11 @@
 
 import {
   describeIndividualFeatureImportance,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
-const datasetShape = modelAssessmentDatasets.CensusClassificationModelDebugging;
+const datasetShape =
+  modelAssessmentDatasetsIncludingFlights.CensusClassificationModelDebuggingNewModelOverviewExperience;
 describeIndividualFeatureImportance(
   datasetShape,
   "CensusClassificationModelDebuggingNewModelOverviewExperience"

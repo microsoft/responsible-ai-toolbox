@@ -3,11 +3,11 @@
 
 import {
   describeCausalAnalysis,
-  modelAssessmentDatasets
+  modelAssessmentDatasetsIncludingFlights
 } from "@responsible-ai/e2e";
 
 const datasetShape =
-  modelAssessmentDatasets.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
+  modelAssessmentDatasetsIncludingFlights.DiabetesRegressionModelDebuggingNewModelOverviewExperience;
 describeCausalAnalysis(
   datasetShape,
   "DiabetesRegressionModelDebuggingNewModelOverviewExperience"
