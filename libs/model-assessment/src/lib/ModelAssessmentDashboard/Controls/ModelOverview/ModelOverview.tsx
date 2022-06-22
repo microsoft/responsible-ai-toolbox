@@ -85,7 +85,7 @@ export class ModelOverview extends React.Component<
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: false
+      showHeatmapColors: true
     };
   }
 
@@ -323,6 +323,7 @@ export class ModelOverview extends React.Component<
             {(showHeatmapToggleInDatasetCohortView ||
               showHeatmapToggleInFeatureCohortView) && (
               <Toggle
+                checked={this.state.showHeatmapColors}
                 label={
                   localization.ModelAssessment.ModelOverview
                     .visualDisplayToggleLabel
