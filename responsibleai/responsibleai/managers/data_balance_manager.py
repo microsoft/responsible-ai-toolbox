@@ -17,8 +17,8 @@ from responsibleai._tools.shared.state_directory_management import \
 from responsibleai.databalanceanalysis import (AggregateBalanceMeasures,
                                                DistributionBalanceMeasures,
                                                FeatureBalanceMeasures)
-from responsibleai.databalanceanalysis.data_balance_helper import \
-    DataBalanceHelper
+from responsibleai.databalanceanalysis.data_balance_utils import (
+    prepare_df, transform_measures_to_dict)
 from responsibleai.managers.base_manager import BaseManager
 
 DATA_JSON = "data.json"
@@ -149,7 +149,7 @@ class DataBalanceManager(BaseManager):
 
         self._validate()
 
-        self._df = DataBalanceHelper.prepare_df(
+        self._df = prepare_df(
             df=self._df,
             target_column=self._target_column,
             pos_label=self._pos_label,
@@ -189,12 +189,10 @@ class DataBalanceManager(BaseManager):
         :param aggregate_balance_measures: Aggregate balance measures.
         :type aggregate_balance_measures: pd.DataFrame
         """
-        self._data_balance_measures = (
-            DataBalanceHelper.transform_measures_to_dict(
-                feature_balance_measures=feature_balance_measures,
-                distribution_balance_measures=distribution_balance_measures,
-                aggregate_balance_measures=aggregate_balance_measures,
-            )
+        self._data_balance_measures = transform_measures_to_dict(
+            feature_balance_measures=feature_balance_measures,
+            distribution_balance_measures=distribution_balance_measures,
+            aggregate_balance_measures=aggregate_balance_measures,
         )
 
     def get(self):
