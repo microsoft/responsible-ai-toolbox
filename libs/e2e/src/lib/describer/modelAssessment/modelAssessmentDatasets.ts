@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import _ from "lodash";
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
@@ -468,11 +469,13 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
 // create copy for newModelOverviewExperience to allow for additions and changes
 const modelAssessmentDatasetsNewModelOverviewExperience: {
   [name: string]: IModelAssessmentData;
-} = {};
-Object.keys(modelAssessmentDatasets).forEach((k: string) => {
-  modelAssessmentDatasetsNewModelOverviewExperience[
-    `${k}NewModelOverviewExperience`
-  ] = JSON.parse(JSON.stringify(modelAssessmentDatasets[k]));
+} = _.map(modelAssessmentDatasets, (v: any, k: string) => {
+  const newKey = `${k}NewModelOverviewExperience`;
+  const entry = {};
+  entry[newKey] = JSON.parse(JSON.stringify(v));
+  return entry;
+}).reduce((a, b) => {
+  return { ...a, ...b };
 });
 
 modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
