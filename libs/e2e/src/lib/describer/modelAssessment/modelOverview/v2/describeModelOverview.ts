@@ -120,27 +120,25 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     }
   }
 
-  const heatmapCellOrder: string[] = [];
+  const heatmapCellContents: string[] = [];
   initialCohorts.forEach((cohortData) => {
-    heatmapCellOrder.push(cohortData.sampleSize);
+    heatmapCellContents.push(cohortData.sampleSize);
   });
   metricsOrder.forEach((metricName) => {
     initialCohorts.forEach((cohortData) => {
-      heatmapCellOrder.push(cohortData.metrics[metricName]);
+      heatmapCellContents.push(cohortData.metrics[metricName]);
     });
   });
 
-  heatmapCellOrder.forEach((expectedCellContent, cellIndex) => {
-    let cell = cy.get(Locators.ModelOverviewHeatmapCells).first();
-    for (
-      let currentCellIndex = 0;
-      currentCellIndex < cellIndex;
-      currentCellIndex += 1
-    ) {
-      cell = cell.next();
-    }
-    cell.should("include.text", expectedCellContent);
-  });
+  cy.get(Locators.ModelOverviewHeatmapCells)
+    .should("have.length", initialCohorts.length * (metricsOrder.length + 1))
+    .each(($cell) => {
+      // somehow the cell string is one invisible character longer, trim
+      expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
+        heatmapCellContents
+      );
+    });
+
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
   ).should("not.exist");

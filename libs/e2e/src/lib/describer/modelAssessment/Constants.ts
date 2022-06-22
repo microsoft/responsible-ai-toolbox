@@ -117,7 +117,7 @@ export enum Locators {
   ModelOverviewDatasetCohortStatsTable = "#ModelOverview #modelOverviewDatasetCohortStatsTable",
   ModelOverviewDisaggregatedAnalysisTable = "#ModelOverview #modelOverviewDisaggregatedAnalysisTable",
   ModelOverviewTableYAxisGrid = "#ModelOverview .highcharts-grid-axis > span",
-  ModelOverviewHeatmapCells = "#ModelOverview .highcharts-heatmap-series > .highcharts-data-label",
+  ModelOverviewHeatmapCells = "#ModelOverview .highcharts-heatmap-series > .highcharts-data-label > text > tspan",
   ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer = "#ModelOverview #modelOverviewDisaggregatedAnalysisBaseCohortDisclaimer",
   ModelOverviewDisaggregatedAnalysisBaseCohortWarning = "#ModelOverview #modelOverviewDisaggregatedAnalysisBaseCohortWarning",
   ModelOverviewChartPivot = "#ModelOverview #modelOverviewChartPivot",
