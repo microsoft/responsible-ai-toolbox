@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
+
 import { IModelAssessmentData } from "./IModelAssessmentData";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
