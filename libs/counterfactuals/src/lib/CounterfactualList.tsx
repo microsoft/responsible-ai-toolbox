@@ -415,6 +415,14 @@ export class CounterfactualList extends React.Component<
                   option
                 )
               }
+              styles={{
+                input:
+                  // comboBox input text should be bolded if the value has changed from original reference value
+                  this.state.data[column.key]?.toString() !==
+                  this.props.originalData[column.key]?.toString()
+                    ? styles.bottomRowText
+                    : undefined
+              }}
             />
           </Stack.Item>
         </Stack>
