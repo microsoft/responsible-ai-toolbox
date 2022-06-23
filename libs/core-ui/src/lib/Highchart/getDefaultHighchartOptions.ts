@@ -66,6 +66,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       text: undefined
     },
     tooltip: {
+      outside: true,
       shared: true
     },
     xAxis: {

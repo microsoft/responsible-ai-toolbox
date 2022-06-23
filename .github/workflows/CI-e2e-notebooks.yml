@@ -121,6 +121,7 @@ jobs:
         run: yarn e2e-widget -n ${{ matrix.notebook }} -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: raiwidgets-e2e-screen-shot
