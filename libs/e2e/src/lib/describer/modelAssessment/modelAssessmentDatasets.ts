@@ -470,14 +470,10 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
 // create copy for newModelOverviewExperience to allow for additions and changes
 const modelAssessmentDatasetsNewModelOverviewExperience: {
   [name: string]: IModelAssessmentData;
-} = _.map(modelAssessmentDatasets, (v: any, k: string) => {
-  const newKey = `${k}NewModelOverviewExperience`;
-  const entry = {};
-  entry[newKey] = JSON.parse(JSON.stringify(v));
-  return entry;
-}).reduce((a, b) => {
-  return { ...a, ...b };
-});
+} = _.chain(modelAssessmentDatasets)
+  .cloneDeep()
+  .mapKeys((_v, k: string) => `${k}NewModelOverviewExperience`)
+  .value();
 
 modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
