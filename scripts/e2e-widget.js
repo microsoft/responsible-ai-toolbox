@@ -124,6 +124,9 @@ function convertNotebooks(notebook, flights) {
         stdio: "inherit"
       }
     );
+    if (status) {
+      throw new Error(`Failed to convert notebook:\r\n\r\n${stderr}`);
+    }
     if (flights) {
       addFlightsInFile(path.join(baseDir, `${fileName}.py`), flights);
     }
