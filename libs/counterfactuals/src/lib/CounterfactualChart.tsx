@@ -561,7 +561,6 @@ export class CounterfactualChart extends React.PureComponent<
       { errorMessage: undefined, request: abortController },
       async () => {
         try {
-          this.setState({ errorMessage: "Mock error message" });
           const fetchedData = await promise;
           // returns predicted probabilities
           if (Array.isArray(fetchedData[0])) {
