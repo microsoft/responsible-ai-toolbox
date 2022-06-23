@@ -109,7 +109,7 @@ function convertNotebooks(notebook, flights) {
       continue;
     }
     if (flights) {
-      // flights were passed
+      // flights were passed (not just -f without flights arg)
       console.log(
         `Converting notebook ${fileName} with flights ${flights.toString()}\r\n`
       );
@@ -237,17 +237,20 @@ async function main() {
     )
     .parse(process.argv)
     .outputHelp();
-  checkIfAllNotebooksHaveTests();
-  if (commander.opts().skipgen === undefined || !commander.opts().skipgen) {
-    convertNotebooks(commander.opts().notebook, commander.opts().flights);
+  const skipgen = commander.opts().skipgen;
+  const notebook = commander.opts().notebook;
+  let flights = commander.opts().flights;
+  if (flights.toString() === "true") {
+    // -f passed without arguments
+    flights = undefined;
   }
-  const hosts = await runNotebooks(commander.opts().notebook);
+  checkIfAllNotebooksHaveTests();
+  if (skipgen === undefined || !skipgen) {
+    convertNotebooks(notebook, flights);
+  }
+  const hosts = await runNotebooks(notebook);
   writeCypressSettings(hosts);
-  e2e(
-    commander.opts().watch,
-    commander.opts().notebook,
-    commander.opts().flights
-  );
+  e2e(commander.opts().watch, notebook, flights);
   process.exit(0);
 }
 

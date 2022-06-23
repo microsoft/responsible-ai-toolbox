@@ -48,7 +48,7 @@ jobs:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
-        flights: ["noFlights", "newModelOverviewExperience"]
+        flights: ["", "newModelOverviewExperience"]
         notebook: # keep this list in sync with scripts/e2e-widget.js
           - "responsibleaidashboard-census-classification-model-debugging"
           - "responsibleaidashboard-diabetes-regression-model-debugging"
@@ -116,15 +116,9 @@ jobs:
           name: requirements-dev.txt
           path: raiwidgets/installed-requirements-dev.txt
 
-      - if: ${{ matrix.flights != 'noFlights' }}
-        name: Run widget tests
+      - name: Run widget tests
         shell: bash -l {0}
         run: yarn e2e-widget -n ${{ matrix.notebook }} -f ${{ matrix.flights }}
-
-      - if: ${{ matrix.flights == 'noFlights' }}
-        name: Run widget tests
-        shell: bash -l {0}
-        run: yarn e2e-widget -n ${{ matrix.notebook }}
 
       - name: Upload e2e test screen shot
         uses: actions/upload-artifact@v3
