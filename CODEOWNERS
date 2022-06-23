@@ -5,7 +5,7 @@
 /raiwidgets @imatiach-msft @xuke444 @romanlutz
 
 # Responsible AI SDK package
-/responsibleai @gaugup @imatiach-msft @riedgar-ms @xuke444 @kicha0
+/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0
 
 # workspace settings
 #/* @xuke444
@@ -20,13 +20,13 @@
 /libs/counterfactuals @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444
 
 #dataset-explorer ui
-/libs/dataset-explorer @romanlutz @xuke444
+/libs/dataset-explorer @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth
 
 #error-analysis ui
 /libs/error-analysis @romanlutz @imatiach-msft @xuke444
 
 #fairness ui
-/libs/fairness @romanlutz @riedgar-ms @xuke444
+/libs/fairness @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth
 
 #interpret ui
 /libs/interpret @romanlutz @gaugup @xuke444
@@ -35,7 +35,10 @@
 /libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444
 
 #model-assessment ui
-/libs/model-assessment @romanlutz @xuke444
+/libs/model-assessment @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth
+
+#e2e tests
+/libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft
 
 
 
