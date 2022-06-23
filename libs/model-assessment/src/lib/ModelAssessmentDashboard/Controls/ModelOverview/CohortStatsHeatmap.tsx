@@ -55,8 +55,14 @@ export class CohortStatsHeatmap extends React.Component<
       ? {}
       : { color: theme.semanticColors.bodyText };
 
+    // Choose a unique key because the heatmap colors need to refresh when
+    // the underlying data changes.
+    const key = `$${this.props.cohorts.map((errorCohort) =>
+      errorCohort.cohort.name.charAt(0)
+    )}${this.props.selectedMetrics.map((metricName) => metricName.charAt(0))}`;
     return (
       <HeatmapHighChart
+        key={key}
         configOverride={{
           chart: {
             height: this.props.cohorts.length * 40 + 120,
