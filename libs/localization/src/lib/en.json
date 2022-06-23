@@ -104,7 +104,7 @@
     "ErrorDialog": {
       "Close": "Close",
       "ErrorPrefix": "Error encountered: {0}",
-      "PythonError": "Python error:"
+      "PythonError": "Python error"
     },
     "RecommendedTreatment": "Recommended treatment",
     "WhatIf": {
