@@ -427,6 +427,12 @@ export class CounterfactualList extends React.Component<
             <TextField
               value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
+              inputClassName={
+                this.state.data[column.key]?.toString() !==
+                this.props.originalData[column.key]?.toString()
+                  ? styles.bottomRowText
+                  : undefined
+              }
               id={column.key}
               onChange={this.updateColValue}
             />
