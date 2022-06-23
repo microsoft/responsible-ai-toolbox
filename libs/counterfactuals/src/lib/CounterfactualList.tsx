@@ -391,6 +391,15 @@ export class CounterfactualList extends React.Component<
         </Stack>
       );
     }
+    let inputTextStyles;
+    if (column) {
+      // input text should be bolded if the value has changed from original reference value
+      inputTextStyles =
+        this.state.data[column.key]?.toString() !==
+        this.props.originalData[column.key]?.toString()
+          ? styles.bottomRowText
+          : undefined;
+    }
     if (column && dropdownOption?.data?.categoricalOptions) {
       return (
         <Stack horizontal={false} tokens={{ childrenGap: "s1" }}>
@@ -416,12 +425,7 @@ export class CounterfactualList extends React.Component<
                 )
               }
               styles={{
-                input:
-                  // comboBox input text should be bolded if the value has changed from original reference value
-                  this.state.data[column.key]?.toString() !==
-                  this.props.originalData[column.key]?.toString()
-                    ? styles.bottomRowText
-                    : undefined
+                input: inputTextStyles
               }}
             />
           </Stack.Item>
@@ -435,13 +439,7 @@ export class CounterfactualList extends React.Component<
             <TextField
               value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
-              inputClassName={
-                // input text should be bolded if the value has changed from original reference value
-                this.state.data[column.key]?.toString() !==
-                this.props.originalData[column.key]?.toString()
-                  ? styles.bottomRowText
-                  : undefined
-              }
+              inputClassName={inputTextStyles}
               id={column.key}
               onChange={this.updateColValue}
             />
