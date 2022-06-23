@@ -428,6 +428,7 @@ export class CounterfactualList extends React.Component<
               value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
               inputClassName={
+                // input text should be bolded if the value has changed from original reference value
                 this.state.data[column.key]?.toString() !==
                 this.props.originalData[column.key]?.toString()
                   ? styles.bottomRowText
