@@ -48,6 +48,7 @@ jobs:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
+        flights: ["", "newModelOverviewExperience"]
         notebook: # keep this list in sync with scripts/e2e-widget.js
           - "responsibleaidashboard-census-classification-model-debugging"
           - "responsibleaidashboard-diabetes-regression-model-debugging"
@@ -117,7 +118,7 @@ jobs:
 
       - name: Run widget tests
         shell: bash -l {0}
-        run: yarn e2e-widget -n ${{ matrix.notebook }}
+        run: yarn e2e-widget -n ${{ matrix.notebook }} -f ${{ matrix.flights }}
 
       - name: Upload e2e test screen shot
         if: always()
