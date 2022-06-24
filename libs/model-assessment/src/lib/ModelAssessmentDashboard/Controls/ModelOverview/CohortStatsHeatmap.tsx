@@ -20,6 +20,7 @@ interface ICohortStatsHeatmapProps {
   selectedMetrics: string[];
   items: PointOptionsObject[];
   showColors: boolean;
+  id: string;
 }
 
 class ICohortStatsHeatmapState {}
@@ -63,6 +64,7 @@ export class CohortStatsHeatmap extends React.Component<
     return (
       <HeatmapHighChart
         key={key}
+        id={this.props.id}
         configOverride={{
           chart: {
             height: this.props.cohorts.length * 40 + 120,
