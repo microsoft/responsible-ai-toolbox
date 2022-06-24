@@ -162,13 +162,15 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     const displayedMetric = datasetShape.isRegression
       ? initialCohorts[0].metrics.meanAbsoluteError
       : initialCohorts[0].metrics.accuracy;
+    const expectedAriaLabel = datasetShape.isRegression
+      ? `${initialCohorts[0].name}, ${displayedMetric.replace(
+          " ",
+          ","
+        )}. Mean absolute error.`
+      : `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`;
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
-      .should(
-        "have.attr",
-        "aria-label",
-        `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`
-      );
+      .should("have.attr", "aria-label", expectedAriaLabel);
   } else {
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
