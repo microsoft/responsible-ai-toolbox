@@ -167,6 +167,11 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           " ",
           ","
         )}. Mean absolute error.`
+      : datasetShape.isMulticlass
+      ? `${initialCohorts[0].name}, ${displayedMetric.replace(
+          " ",
+          ","
+        )}. Accuracy.`
       : `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`;
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
