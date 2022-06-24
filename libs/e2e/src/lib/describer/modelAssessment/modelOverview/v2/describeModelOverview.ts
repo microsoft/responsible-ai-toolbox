@@ -162,7 +162,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     const displayedMetric = datasetShape.isRegression
       ? initialCohorts[0].metrics.meanAbsoluteError
       : initialCohorts[0].metrics.accuracy;
-    let expectedAriaLabel =
+    const expectedAriaLabel =
       !datasetShape.isRegression && !datasetShape.isMulticlass
         ? `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`
         : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
