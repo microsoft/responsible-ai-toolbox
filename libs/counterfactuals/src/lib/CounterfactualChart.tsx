@@ -364,15 +364,14 @@ export class CounterfactualChart extends React.PureComponent<
             data={this.props.data}
           />
         </Stack.Item>
-        <Stack.Item>{this.renderErrorDialog()}</Stack.Item>
+        <Stack.Item>
+          {this.state.errorMessage && this.renderErrorDialog()}
+        </Stack.Item>
       </Stack>
     );
   }
 
   private readonly renderErrorDialog = (): React.ReactNode => {
-    if (!this.state.errorMessage) {
-      return undefined;
-    }
     return (
       <ErrorDialog
         title={localization.Counterfactuals.ErrorDialog.PythonError}
