@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -9,7 +10,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { wrapText } from "./StatsTableUtils";
@@ -20,6 +20,7 @@ interface ICohortStatsHeatmapProps {
   selectedMetrics: string[];
   items: PointOptionsObject[];
   showColors: boolean;
+  id: string;
 }
 
 class ICohortStatsHeatmapState {}
@@ -57,6 +58,7 @@ export class CohortStatsHeatmap extends React.Component<
 
     return (
       <HeatmapHighChart
+        id={this.props.id}
         configOverride={{
           chart: {
             height: this.props.cohorts.length * 40 + 120,

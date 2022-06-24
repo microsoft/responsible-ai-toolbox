@@ -238,7 +238,7 @@ class BaseAnalyzer(ABC):
                        num_bins=BIN_THRESHOLD):
         """Computes the matrix filter (aka heatmap) json.
 
-        :param features: One or two features to compute the heatmap.
+        :param features: One or two feature names to compute the heatmap.
         :type features: list
         :param filters: The filters to apply to the dataset.
         :type filters: list[str]
@@ -269,7 +269,7 @@ class BaseAnalyzer(ABC):
                            min_child_samples=None):
         """Computes the tree view json.
 
-        :param features: The selected features to train the
+        :param features: The selected feature names to train the
             surrogate model on.
         :type features: list[str]
         :param filters: The filters to apply to the dataset.

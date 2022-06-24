@@ -28,7 +28,7 @@ export class ModelAssessment extends React.Component {
       | "requestImportances"
       | "requestCausalWhatIf"
     > = {};
-    if (config.baseUrl !== undefined) {
+    if (config.baseUrl) {
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
       };

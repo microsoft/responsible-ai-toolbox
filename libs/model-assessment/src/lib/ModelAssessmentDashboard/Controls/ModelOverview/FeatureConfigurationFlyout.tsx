@@ -1,14 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CheckboxVisibility } from "@fluentui/react";
 import {
-  defaultModelAssessmentContext,
-  getCompositeFilterString,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
+  CheckboxVisibility,
   Stack,
   Panel,
   PrimaryButton,
@@ -23,7 +17,13 @@ import {
   SelectionMode,
   MessageBar,
   MessageBarType
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  getCompositeFilterString,
+  ModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
@@ -79,7 +79,9 @@ export class FeatureConfigurationFlyout extends React.Component<
     this.state = {
       items: [],
       newlySelectedFeatures: this.props.selectedFeatures,
-      newNumberOfContinuousFeatureBins: this.props.numberOfContinuousFeatureBins
+      newNumberOfContinuousFeatureBins: {
+        ...this.props.numberOfContinuousFeatureBins
+      }
     };
     this.updateSelection();
   }
@@ -98,7 +100,12 @@ export class FeatureConfigurationFlyout extends React.Component<
     // At other times we can't update with props since they may be outdated compared to the state.
     if (this.props.isOpen && !prevProps.isOpen) {
       this.setState(
-        { newlySelectedFeatures: this.props.selectedFeatures },
+        {
+          newlySelectedFeatures: this.props.selectedFeatures,
+          newNumberOfContinuousFeatureBins: {
+            ...this.props.numberOfContinuousFeatureBins
+          }
+        },
         () => {
           this.updateSelection();
         }
@@ -181,6 +188,25 @@ export class FeatureConfigurationFlyout extends React.Component<
 
   private onRenderFooterContent = () => {
     const tooManyFeaturesSelected = this._selection.getSelectedCount() > 2;
+    // check that feature selection has not changed
+    const featureSelectionChanged =
+      this.props.selectedFeatures.length !==
+        this.state.newlySelectedFeatures.length ||
+      this.props.selectedFeatures.some(
+        (feature, featureIndex) =>
+          this.state.newlySelectedFeatures[featureIndex] !== feature
+      );
+    // check that number of continuous feature bins for the selected features has not changed
+    const continuousFeatureBinningChanged =
+      this.state.newlySelectedFeatures.some((_, featureIndex) => {
+        const newNumberOfBins =
+          this.state.newNumberOfContinuousFeatureBins[featureIndex] ??
+          defaultNumberOfContinuousFeatureBins;
+        const prevNumberOfBins =
+          this.props.numberOfContinuousFeatureBins[featureIndex] ??
+          defaultNumberOfContinuousFeatureBins;
+        return newNumberOfBins !== prevNumberOfBins;
+      });
     return (
       <Stack tokens={{ childrenGap: "10px" }}>
         {tooManyFeaturesSelected && (
@@ -195,7 +221,10 @@ export class FeatureConfigurationFlyout extends React.Component<
           <PrimaryButton
             onClick={this.onConfirm}
             text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
-            disabled={tooManyFeaturesSelected}
+            disabled={
+              tooManyFeaturesSelected ||
+              (!featureSelectionChanged && !continuousFeatureBinningChanged)
+            }
           />
           <DefaultButton
             onClick={this.props.onDismissFlyout}

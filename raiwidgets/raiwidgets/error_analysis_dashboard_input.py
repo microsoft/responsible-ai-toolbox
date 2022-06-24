@@ -10,6 +10,8 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
                                                metric_to_display_name)
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
+from erroranalysis._internal.utils import is_spark
+from raiutils.models import is_classifier
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
@@ -20,7 +22,6 @@ from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
-from .utils import _is_classifier
 
 FEATURE_NAMES = ExplanationDashboardInterface.FEATURE_NAMES
 ENABLE_PREDICT = ErrorAnalysisDashboardInterface.ENABLE_PREDICT
@@ -120,6 +121,129 @@ class ErrorAnalysisDashboardInput:
         :type sample_dataset: pd.DataFrame or numpy.ndarray or list[][]
         """
         self._model = model
+        self._categorical_features = categorical_features
+        self._string_ind_data = None
+        self._categories = []
+        self._categorical_indexes = []
+        self._is_classifier = is_classifier(model)
+        self._dataframeColumns = None
+        self.dashboard_input = {}
+
+        model_available = model is not None
+
+        if model_available and pred_y is not None:
+            raise ValueError(
+                'Only model or pred_y can be specified, not both')
+
+        self.dashboard_input[ENABLE_PREDICT] = model_available
+
+        self.dashboard_input[
+            ExplanationDashboardInterface.IS_CLASSIFIER
+        ] = self._is_classifier
+
+        is_pyspark = is_spark(dataset)
+        if is_pyspark:
+            self.setup_pyspark(model, dataset, true_y, classes,
+                               features, categorical_features, true_y_dataset,
+                               pred_y, pred_y_dataset, model_task, metric,
+                               max_depth, num_leaves, min_child_samples,
+                               sample_dataset, model_available)
+        else:
+            self.setup_local(explanation, model, dataset, true_y, classes,
+                             features, categorical_features, true_y_dataset,
+                             pred_y, pred_y_dataset, model_task, metric,
+                             max_depth, num_leaves, min_child_samples,
+                             sample_dataset, model_available)
+        data = self.get_error_analysis_data(max_depth,
+                                            num_leaves,
+                                            min_child_samples,
+                                            self._error_analyzer.metric,
+                                            is_pyspark)
+        self.dashboard_input[
+            ExplanationDashboardInterface.ERROR_ANALYSIS_DATA
+        ] = data
+
+    def setup_pyspark(self, model, dataset, true_y, classes,
+                      features, categorical_features, true_y_dataset,
+                      pred_y, pred_y_dataset, model_task, metric,
+                      max_depth, num_leaves, min_child_samples,
+                      sample_dataset, model_available):
+        self._error_analyzer = ModelAnalyzer(model,
+                                             dataset,
+                                             true_y,
+                                             features,
+                                             categorical_features,
+                                             model_task,
+                                             metric,
+                                             classes)
+        sample = dataset.to_spark().limit(100)
+        scored_sample = model.transform(sample)
+        pd_sample = scored_sample.toPandas()
+        predicted_y = pd_sample["prediction"]
+        predicted_y = self.predicted_y_to_list(predicted_y)
+        true_y = pd_sample[true_y]
+        pd_sample = pd_sample[features]
+        list_dataset = _convert_to_list(pd_sample)
+        self.setup_visualization_input(classes, predicted_y,
+                                       list_dataset, true_y, features)
+
+    def setup_visualization_input(self, classes, predicted_y,
+                                  list_dataset, true_y, features):
+        if classes is not None:
+            classes = _convert_to_list(classes)
+            self.dashboard_input[
+                ExplanationDashboardInterface.CLASS_NAMES
+            ] = classes
+            class_to_index = {k: v for v, k in enumerate(classes)}
+
+        if predicted_y is not None:
+            # If classes specified, convert predicted_y to
+            # numeric representation
+            if classes is not None and predicted_y[0] in class_to_index:
+                for i in range(len(predicted_y)):
+                    predicted_y[i] = class_to_index[predicted_y[i]]
+            self.dashboard_input[
+                ExplanationDashboardInterface.PREDICTED_Y
+            ] = predicted_y
+
+        row_length = 0
+        feature_length = None
+
+        if list_dataset is not None:
+            row_length, feature_length = np.shape(list_dataset)
+            if feature_length > 1000:
+                raise ValueError("Exceeds maximum number of features for"
+                                 " visualization (1000). Please regenerate the"
+                                 " explanation using fewer features or"
+                                 " initialize the dashboard without passing a"
+                                 " dataset.")
+            self.dashboard_input[
+                ExplanationDashboardInterface.TRAINING_DATA
+            ] = serialize_json_safe(list_dataset)
+
+        if true_y is not None and len(true_y) == row_length:
+            list_true_y = _convert_to_list(true_y)
+            # If classes specified, convert true_y to numeric representation
+            if classes is not None and list_true_y[0] in class_to_index:
+                for i in range(len(list_true_y)):
+                    list_true_y[i] = class_to_index[list_true_y[i]]
+            self.dashboard_input[
+                ExplanationDashboardInterface.TRUE_Y
+            ] = list_true_y
+
+        if features is not None:
+            features = _convert_to_list(features)
+            if feature_length is not None and len(features) != feature_length:
+                raise ValueError("Feature vector length mismatch:"
+                                 " feature names length differs"
+                                 " from local explanations dimension")
+            self.dashboard_input[FEATURE_NAMES] = features
+
+    def setup_local(self, explanation, model, dataset, true_y, classes,
+                    features, categorical_features, true_y_dataset,
+                    pred_y, pred_y_dataset, model_task, metric, max_depth,
+                    num_leaves, min_child_samples, sample_dataset,
+                    model_available):
         full_dataset = dataset
         if true_y_dataset is None:
             full_true_y = true_y
@@ -129,15 +253,7 @@ class ErrorAnalysisDashboardInput:
             full_pred_y = pred_y
         else:
             full_pred_y = pred_y_dataset
-        self._categorical_features = categorical_features
-        self._string_ind_data = None
-        self._categories = []
-        self._categorical_indexes = []
-        self._is_classifier = _is_classifier(model)
-        self._dataframeColumns = None
-        self.dashboard_input = {}
         has_explanation = explanation is not None
-        feature_length = None
         probability_y = None
 
         if has_explanation:
@@ -157,13 +273,6 @@ class ErrorAnalysisDashboardInput:
         elif sample_dataset is not None:
             dataset = sample_dataset
 
-        if classes is not None:
-            classes = _convert_to_list(classes)
-            self.dashboard_input[
-                ExplanationDashboardInterface.CLASS_NAMES
-            ] = classes
-            class_to_index = {k: v for v, k in enumerate(classes)}
-
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
             self._dfdtypes = dataset.dtypes
@@ -179,62 +288,15 @@ class ErrorAnalysisDashboardInput:
             if features is None and hasattr(explanation, 'features'):
                 features = explanation.features
 
-        model_available = model is not None
-
-        if model_available and pred_y is not None:
-            raise ValueError(
-                'Only model or pred_y can be specified, not both')
-
-        self.dashboard_input[ENABLE_PREDICT] = model_available
-
         if model_available:
             predicted_y = self.compute_predicted_y(model, dataset)
         else:
             predicted_y = self.predicted_y_to_list(pred_y)
 
-        if predicted_y is not None:
-            # If classes specified, convert predicted_y to
-            # numeric representation
-            if classes is not None and predicted_y[0] in class_to_index:
-                for i in range(len(predicted_y)):
-                    predicted_y[i] = class_to_index[predicted_y[i]]
-            self.dashboard_input[
-                ExplanationDashboardInterface.PREDICTED_Y
-            ] = predicted_y
-        row_length = 0
-        if list_dataset is not None:
-            row_length, feature_length = np.shape(list_dataset)
-            if feature_length > 1000:
-                raise ValueError("Exceeds maximum number of features for"
-                                 " visualization (1000). Please regenerate the"
-                                 " explanation using fewer features or"
-                                 " initialize the dashboard without passing a"
-                                 " dataset.")
-            self.dashboard_input[
-                ExplanationDashboardInterface.TRAINING_DATA
-            ] = serialize_json_safe(list_dataset)
-            self.dashboard_input[
-                ExplanationDashboardInterface.IS_CLASSIFIER
-            ] = self._is_classifier
+        self.setup_visualization_input(classes, predicted_y,
+                                       list_dataset, true_y, features)
 
-        if true_y is not None and len(true_y) == row_length:
-            list_true_y = _convert_to_list(true_y)
-            # If classes specified, convert true_y to numeric representation
-            if classes is not None and list_true_y[0] in class_to_index:
-                for i in range(len(list_true_y)):
-                    list_true_y[i] = class_to_index[list_true_y[i]]
-            self.dashboard_input[
-                ExplanationDashboardInterface.TRUE_Y
-            ] = list_true_y
-
-        if features is not None:
-            features = _convert_to_list(features)
-            if feature_length is not None and len(features) != feature_length:
-                raise ValueError("Feature vector length mismatch:"
-                                 " feature names length differs"
-                                 " from local explanations dimension")
-            self.dashboard_input[FEATURE_NAMES] = features
-        if model_available and _is_classifier(model) and \
+        if model_available and is_classifier(model) and \
                 dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
@@ -305,22 +367,28 @@ class ErrorAnalysisDashboardInput:
                 ErrorAnalysisDashboardInterface.METHOD
             ] = method
 
-        data = self.get_error_analysis_data(max_depth,
-                                            num_leaves,
-                                            min_child_samples,
-                                            metric)
-        self.dashboard_input[
-            ExplanationDashboardInterface.ERROR_ANALYSIS_DATA
-        ] = data
-
     def get_error_analysis_data(self, max_depth, num_leaves,
-                                min_child_samples, metric):
+                                min_child_samples, metric,
+                                is_pyspark):
         data = ErrorAnalysisData()
         data.maxDepth = max_depth
         data.numLeaves = num_leaves
         data.minChildSamples = min_child_samples
         data.metric = metric_to_display_name[metric]
-        data.root_stats = self._error_analyzer.compute_root_stats()
+        if not is_pyspark:
+            data.root_stats = self._error_analyzer.compute_root_stats()
+        else:
+            features = self.dashboard_input[FEATURE_NAMES]
+            filters = []
+            composite_filters = []
+            self._error_analyzer.update_metric(metric)
+            tree = self._error_analyzer.compute_error_tree(
+                features, filters, composite_filters,
+                max_depth=max_depth,
+                num_leaves=num_leaves,
+                min_child_samples=min_child_samples)
+            data.tree = tree
+            data.tree_features = features
         return data
 
     def compute_predicted_y(self, model, dataset):

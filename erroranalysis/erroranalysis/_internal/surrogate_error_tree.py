@@ -126,6 +126,45 @@ def compute_error_tree(analyzer,
         create one leaf.
     :return: The tree representation as a list of nodes.
     :rtype: list[dict[str, str]]
+
+    :Example:
+
+    An example of running compute_error_tree with a
+    filter and a composite filter:
+
+    >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
+    >>> from erroranalysis._internal.surrogate_error_tree import (
+    ...     compute_error_tree)
+    >>> from erroranalysis._internal.constants import ModelTask
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.model_selection import train_test_split
+    >>> from sklearn import svm
+    >>> breast_cancer_data = load_breast_cancer()
+    >>> feature_names = breast_cancer_data.feature_names
+    >>> X_train, X_test, y_train, y_test = train_test_split(
+    ...     breast_cancer_data.data, breast_cancer_data.target,
+    ...     test_size=0.2, random_state=0)
+    >>> categorical_features = []
+    >>> clf = svm.SVC(gamma=0.001, C=100., probability=True,
+    ...               random_state=777)
+    >>> model = clf.fit(X_train, y_train)
+    >>> model_task = ModelTask.CLASSIFICATION
+    >>> analyzer = ModelAnalyzer(model, X_test, y_test, feature_names,
+    ...                          categorical_features, model_task=model_task)
+    >>> filters = [{'arg': [23.85], 'column': 'mean radius',
+    ...             'method': 'less and equal'}]
+    >>> composite_filters = [{'compositeFilters':
+    ...                      [{'compositeFilters':
+    ...                       [{'arg': [13.45, 22.27],
+    ...                         'column': 'mean radius',
+    ...                         'method': 'in the range of'},
+    ...                        {'arg': [10.88, 24.46],
+    ...                         'column': 'mean texture',
+    ...                         'method': 'in the range of'}],
+    ...                        'operation': 'and'}],
+    ...                      'operation': 'or'}]
+    >>> tree = compute_error_tree(analyzer, ['mean radius', 'mean texture'],
+    ...                           filters, composite_filters)
     """
     # Fit a surrogate model on errors
     if max_depth is None:
@@ -174,11 +213,11 @@ def compute_error_tree(analyzer,
 def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
                                 indexes, dataset_sub_names, max_depth,
                                 num_leaves, min_child_samples):
-    """Get surrogate booster for local pandas dataframe.
+    """Get surrogate booster for local pandas DataFrame.
 
     Creates the surrogate model trained on errors and returns the booster.
 
-    :param filtered_df: The filtered dataframe.
+    :param filtered_df: The filtered DataFrame.
     :type filtered_df: pandas.DataFrame
     :param analyzer: The error analyzer containing the categorical
         features and categories for the full dataset.
@@ -259,11 +298,11 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
 
 def get_surrogate_booster_pyspark(filtered_df, analyzer, max_depth,
                                   num_leaves, min_child_samples):
-    """Get surrogate booster for pyspark dataframe.
+    """Get surrogate booster for pyspark DataFrame.
 
     Creates the surrogate model trained on errors and returns the booster.
 
-    :param filtered_df: The filtered dataframe.
+    :param filtered_df: The filtered DataFrame.
     :type filtered_df: pyspark.sql.DataFrame
     :param analyzer: The error analyzer containing the categorical
         features and categories for the full dataset.
@@ -479,16 +518,16 @@ def traverse(df,
     else:
         nodeid = 0
 
-    # reduce dataframe to just features split on at each step for perf
+    # reduce DataFrame to just features split on at each step for perf
     if not is_spark(df):
         df = filter_to_used_features(df, tree)
 
-    # write current node to a dictionary that can be saved as json
+    # write current node to a dictionary that can be saved as JSON
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
                             feature_names, metric, parent, side,
                             classes)
 
-    # write children to a dictionary that can be saved as json
+    # write children to a dictionary that can be saved as JSON
     if LEAF_VALUE not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
@@ -504,13 +543,13 @@ def traverse(df,
 
 
 def filter_to_used_features(df, tree):
-    """Filters the dataframe to only include features used in the tree.
+    """Filters the DataFrame to only include features used in the tree.
 
-    :param df: The dataframe to filter.
+    :param df: The DataFrame to filter.
     :type df: pandas.DataFrame
     :param tree: The tree to get the features from.
     :type tree: dict
-    :return: The filtered dataframe.
+    :return: The filtered DataFrame.
     :rtype: pandas.DataFrame
     """
     features = tree[CACHED_SUBTREE_FEATURES]
@@ -607,6 +646,34 @@ def create_categorical_query(method, arg, p_node_name, p_node_query,
 def node_to_dict(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
                  side=TreeSide.UNKNOWN, classes=None):
+    """Converts a node and children to a dictionary that can be saved as JSON.
+
+    This is a method that is called on the current node and then its children
+    recursively to construct the dictionary representation.
+
+    :param df: The DataFrame to use for the current node.
+    :type df: pandas.DataFrame
+    :param tree: The tree to use for the current node.
+    :type tree: dict
+    :param nodeid: The id of the current node.
+    :type nodeid: int
+    :param categories: The list of categories for the current node.
+    :type categories: list[tuple]
+    :param json: The JSON to write the node to.
+    :type json: dict
+    :param feature_names: The set of feature names.
+    :type feature_names: set[str]
+    :param metric: The metric to use for the current node.
+    :type metric: str
+    :param parent: The parent node.
+    :type parent: dict
+    :param side: The side of the current node from the parent, if known.
+    :type side: TreeSide
+    :param classes: The list of classes.
+    :type classes: list[str]
+    :return: The JSON with the node and all children added.
+    :rtype: dict
+    """
     p_node_name = None
     condition = None
     arg = None
@@ -681,13 +748,13 @@ def node_to_dict(df, tree, nodeid, categories, json,
 
 
 def compute_metrics_pyspark(df, metric, total):
-    """Compute the metric value for a given pyspark dataframe.
+    """Compute the metric value for a given pyspark DataFrame.
 
-    :param df: The dataframe to compute the metric on.
+    :param df: The DataFrame to compute the metric on.
     :type df: pyspark.sql.DataFrame
     :param metric: The metric to compute.
     :type metric: str
-    :param total: The total number of rows in the dataframe.
+    :param total: The total number of rows in the DataFrame.
     :type total: int
     :return: The metric value and success/error counts.
     :rtype: tuple(float, int, int)
@@ -701,13 +768,13 @@ def compute_metrics_pyspark(df, metric, total):
 
 
 def compute_metrics_local(df, metric, total, classes):
-    """Compute the metric value for a given local pandas dataframe.
+    """Compute the metric value for a given local pandas DataFrame.
 
-    :param df: The dataframe to compute the metric on.
+    :param df: The DataFrame to compute the metric on.
     :type df: pandas.DataFrame
     :param metric: The metric to compute.
     :type metric: str
-    :param total: The total number of rows in the dataframe.
+    :param total: The total number of rows in the DataFrame.
     :type total: int
     :return: The metric value and success/error counts.
     :rtype: tuple(float, int, int)
@@ -764,7 +831,7 @@ def create_empty_node(metric):
 def get_json_node(arg, condition, error, nodeid, method, node_name,
                   parentid, p_node_name, total, success, metric_name,
                   metric_value, is_error_metric):
-    """Get the json node for the tree.
+    """Get the JSON node for the tree.
 
     :param arg: The arg for the node.
     :type arg: str
@@ -792,7 +859,7 @@ def get_json_node(arg, condition, error, nodeid, method, node_name,
     :type metric_value: float
     :param is_error_metric: Whether the metric is an error metric.
     :type is_error_metric: bool
-    :return: The json node.
+    :return: The JSON node.
     :rtype: dict
     """
     return {

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Icon, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Icon, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { IFairnessOption } from "./../util/FairnessMetrics";
