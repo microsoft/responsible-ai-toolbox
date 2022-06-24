@@ -384,10 +384,21 @@ export class CounterfactualList extends React.Component<
             <Text>{column.name}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Text className="predictedValue">{predictedClass}</Text>
+            <Text className={`predictedValue ${styles.bottomRowText}`}>
+              {predictedClass}
+            </Text>
           </Stack.Item>
         </Stack>
       );
+    }
+    let inputTextStyles;
+    if (column) {
+      // input text should be bolded if the value has changed from original reference value
+      inputTextStyles =
+        this.state.data[column.key]?.toString() !==
+        this.props.originalData[column.key]?.toString()
+          ? styles.bottomRowText
+          : undefined;
     }
     if (column && dropdownOption?.data?.categoricalOptions) {
       return (
@@ -413,6 +424,9 @@ export class CounterfactualList extends React.Component<
                   option
                 )
               }
+              styles={{
+                input: inputTextStyles
+              }}
             />
           </Stack.Item>
         </Stack>
@@ -425,6 +439,7 @@ export class CounterfactualList extends React.Component<
             <TextField
               value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
+              inputClassName={inputTextStyles}
               id={column.key}
               onChange={this.updateColValue}
             />

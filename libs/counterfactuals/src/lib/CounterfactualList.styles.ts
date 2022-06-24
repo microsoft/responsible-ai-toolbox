@@ -9,16 +9,20 @@ import {
 } from "@fluentui/react";
 
 export interface ICounterfactualListStyle {
+  bottomRowText: IStyle;
   dropdownLabel: IStyle;
-  originalCell: IStyle;
   editCell: IStyle;
   highlightRow: IStyle;
+  originalCell: IStyle;
 }
 
 export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualListStyle> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<ICounterfactualListStyle>({
+      bottomRowText: {
+        fontWeight: "bold"
+      },
       dropdownLabel: {
         color: theme.palette.black,
         fontSize: "14px",
