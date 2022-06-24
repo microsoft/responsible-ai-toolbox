@@ -60,6 +60,10 @@ interface IModelOverviewState {
   featureConfigurationIsVisible: boolean;
   metricConfigurationIsVisible: boolean;
   showHeatmapColors: boolean;
+  // The max cohort ID is needed to detect newly created cohorts.
+  // That way, we can distinguish between newly created cohorts
+  // and deliberately ignored cohorts for the chart section.
+  maxCohortId: number;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -81,6 +85,7 @@ export class ModelOverview extends React.Component<
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
       featureConfigurationIsVisible: false,
+      maxCohortId: 0,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
@@ -111,13 +116,31 @@ export class ModelOverview extends React.Component<
       ];
     }
     this.setState({
-      selectedDatasetCohorts: this.context.errorCohorts.map(
-        (_cohort, index) => {
-          return index;
-        }
-      ),
+      maxCohortId: this.getMaxCohortId(),
+      selectedDatasetCohorts: this.context.errorCohorts.map((errorCohort) => {
+        return errorCohort.cohort.getCohortID();
+      }),
       selectedMetrics: defaultSelectedMetrics
     });
+  }
+
+  public componentDidUpdate() {
+    const maxCohortId = this.getMaxCohortId();
+    if (maxCohortId > this.state.maxCohortId) {
+      // A cohort has a higher ID than the previously recorded
+      // maximum which indicates that new cohorts were created.
+      const newCohorts = this.context.errorCohorts
+        .filter(
+          (errorCohort) =>
+            errorCohort.cohort.getCohortID() > this.state.maxCohortId
+        )
+        .map((errorCohort) => errorCohort.cohort.getCohortID());
+      this.setState({
+        maxCohortId,
+        selectedDatasetCohorts:
+          this.state.selectedDatasetCohorts?.concat(newCohorts)
+      });
+    }
   }
 
   public render(): React.ReactNode {
@@ -627,4 +650,12 @@ export class ModelOverview extends React.Component<
       }
     }
   };
+
+  private getMaxCohortId() {
+    return Math.max(
+      ...this.context.errorCohorts.map((errorCohort) =>
+        errorCohort.cohort.getCohortID()
+      )
+    );
+  }
 }

@@ -69,8 +69,10 @@ export class ProbabilityDistributionChart extends React.Component<
       return;
     }
 
-    const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
-      return this.props.selectedCohorts.includes(index);
+    const selectedCohorts = this.props.cohorts.filter((errorCohort) => {
+      return this.props.selectedCohorts.includes(
+        errorCohort.cohort.getCohortID()
+      );
     });
 
     const probabilityOptions = this.getProbabilityOptions();

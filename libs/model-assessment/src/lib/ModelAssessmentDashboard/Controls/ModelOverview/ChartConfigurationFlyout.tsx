@@ -148,9 +148,9 @@ export class ChartConfigurationFlyout extends React.Component<
       this.setState({
         ...this.state,
         datasetCohortViewIsNewlySelected: datasetCohortViewIsSelected,
-        newlySelectedFeatureBasedCohorts,
         newlySelectedDatasetCohorts:
-          this.state.newlySelectedDatasetCohorts.concat(newCohorts)
+          this.state.newlySelectedDatasetCohorts.concat(newCohorts),
+        newlySelectedFeatureBasedCohorts
       });
     }
   }
