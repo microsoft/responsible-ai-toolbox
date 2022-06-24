@@ -162,17 +162,12 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     const displayedMetric = datasetShape.isRegression
       ? initialCohorts[0].metrics.meanAbsoluteError
       : initialCohorts[0].metrics.accuracy;
-    const expectedAriaLabel = datasetShape.isRegression
-      ? `${initialCohorts[0].name}, ${displayedMetric.replace(
-          " ",
-          ","
-        )}. Mean absolute error.`
-      : datasetShape.isMulticlass
-      ? `${initialCohorts[0].name}, ${displayedMetric.replace(
-          " ",
-          ","
-        )}. Accuracy.`
-      : `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`;
+    let expectedAriaLabel =
+      !datasetShape.isRegression && !datasetShape.isMulticlass
+        ? `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`
+        : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
+            datasetShape.isRegression ? "Mean absolute error" : "Accuracy"
+          }.`;
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
       .should("have.attr", "aria-label", expectedAriaLabel);
