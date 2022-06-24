@@ -61,7 +61,9 @@ export class ChartConfigurationFlyout extends React.Component<
       datasetCohortViewIsNewlySelected: this.props.datasetCohortViewIsSelected,
       newlySelectedDatasetCohorts:
         this.props.selectedDatasetCohorts ??
-        this.props.datasetCohorts.map((_, index) => index),
+        this.props.datasetCohorts.map((errorCohort) =>
+          errorCohort.cohort.getCohortID()
+        ),
       newlySelectedFeatureBasedCohorts:
         this.props.selectedFeatureBasedCohorts ??
         this.props.featureBasedCohorts.map((_, index) => index)
@@ -69,6 +71,28 @@ export class ChartConfigurationFlyout extends React.Component<
   }
 
   public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps) {
+    // update dataset cohorts if any new ones were created
+    const prevMaxCohortID = Math.max(
+      ...prevProps.datasetCohorts.map((errorCohort) =>
+        errorCohort.cohort.getCohortID()
+      )
+    );
+    const currMaxCohortID = Math.max(
+      ...this.props.datasetCohorts.map((errorCohort) =>
+        errorCohort.cohort.getCohortID()
+      )
+    );
+    let newCohorts: number[] = [];
+    if (currMaxCohortID > prevMaxCohortID) {
+      // A cohort has a higher ID than the previously recorded
+      // maximum which indicates that new cohorts were created.
+      newCohorts = this.props.datasetCohorts
+        .filter(
+          (errorCohort) => errorCohort.cohort.getCohortID() > prevMaxCohortID
+        )
+        .map((errorCohort) => errorCohort.cohort.getCohortID());
+    }
+
     // reset feature-based cohort selection if the underlying feature-based cohorts changed
     let newlySelectedFeatureBasedCohorts =
       this.state.newlySelectedFeatureBasedCohorts;
@@ -107,20 +131,28 @@ export class ChartConfigurationFlyout extends React.Component<
     }
 
     // update state only if there are changes
-    if (
+    const viewChanged =
       this.state.datasetCohortViewIsNewlySelected !==
-        datasetCohortViewIsSelected ||
+      datasetCohortViewIsSelected;
+    const featureBasedCohortSelectionChanged =
       this.state.newlySelectedFeatureBasedCohorts.length !==
         newlySelectedFeatureBasedCohorts.length ||
       this.state.newlySelectedFeatureBasedCohorts.some(
         (num, index) => num !== newlySelectedFeatureBasedCohorts[index]
-      )
-    )
+      );
+    if (
+      viewChanged ||
+      featureBasedCohortSelectionChanged ||
+      newCohorts.length > 0
+    ) {
       this.setState({
         ...this.state,
         datasetCohortViewIsNewlySelected: datasetCohortViewIsSelected,
-        newlySelectedFeatureBasedCohorts
+        newlySelectedFeatureBasedCohorts,
+        newlySelectedDatasetCohorts:
+          this.state.newlySelectedDatasetCohorts.concat(newCohorts)
       });
+    }
   }
 
   public render(): React.ReactNode {
@@ -130,9 +162,7 @@ export class ChartConfigurationFlyout extends React.Component<
       key: selectAllOptionKey,
       text: localization.ModelAssessment.ModelOverview.selectAllCohortsOption
     };
-    const datasetCohortOptions = this.getIndexAndNames(
-      this.props.datasetCohorts
-    );
+    const datasetCohortOptions = this.getIdAndNames(this.props.datasetCohorts);
     const featureBasedCohortOptions = this.getIndexAndNames(
       this.props.featureBasedCohorts
     );
@@ -309,7 +339,9 @@ export class ChartConfigurationFlyout extends React.Component<
       this.setState({
         newlySelectedDatasetCohorts: this.makeChartCohortOptionSelectionChange(
           this.state.newlySelectedDatasetCohorts,
-          this.props.datasetCohorts.map((_cohort, index) => index),
+          this.props.datasetCohorts.map((errorCohort) =>
+            errorCohort.cohort.getCohortID()
+          ),
           item
         )
       });
@@ -361,6 +393,15 @@ export class ChartConfigurationFlyout extends React.Component<
   private getIndexAndNames(errorCohorts: ErrorCohort[]) {
     return errorCohorts.map((cohort, index) => {
       return { key: index.toString(), text: cohort.cohort.name };
+    });
+  }
+
+  private getIdAndNames(errorCohorts: ErrorCohort[]) {
+    return errorCohorts.map((errorCohort) => {
+      return {
+        key: errorCohort.cohort.getCohortID().toString(),
+        text: errorCohort.cohort.name
+      };
     });
   }
 }
