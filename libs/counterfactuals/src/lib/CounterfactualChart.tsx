@@ -27,7 +27,8 @@ import {
   rowErrorSize,
   InteractiveLegend,
   ICounterfactualData,
-  BasicHighChart
+  BasicHighChart,
+  ErrorDialog
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -61,6 +62,7 @@ export interface ICounterfactualChartState {
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
   originalData?: { [key: string]: string | number };
+  errorMessage?: string;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -362,9 +364,30 @@ export class CounterfactualChart extends React.PureComponent<
             data={this.props.data}
           />
         </Stack.Item>
+        <Stack.Item>
+          {this.state.errorMessage && this.renderErrorDialog()}
+        </Stack.Item>
       </Stack>
     );
   }
+
+  private readonly renderErrorDialog = (): React.ReactNode => {
+    return (
+      <ErrorDialog
+        title={localization.Counterfactuals.ErrorDialog.PythonError}
+        subText={localization.formatString(
+          localization.Counterfactuals.ErrorDialog.ErrorPrefix,
+          this.state.errorMessage
+        )}
+        cancelButtonText={localization.Counterfactuals.ErrorDialog.Close}
+        onClose={this.onClose}
+      />
+    );
+  };
+
+  private readonly onClose = (): void => {
+    this.setState({ errorMessage: undefined });
+  };
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -533,48 +556,46 @@ export class CounterfactualChart extends React.PureComponent<
     fetchingReference[JointDataset.PredictedYLabel] = undefined;
     const promise = this.props.invokeModel([rawData], abortController.signal);
 
-    this.setState({ request: abortController }, async () => {
-      try {
-        const fetchedData = await promise;
-        // returns predicted probabilities
-        if (Array.isArray(fetchedData[0])) {
-          const predictionVector = fetchedData[0];
-          let predictedClass = 0;
-          let maxProb = Number.MIN_SAFE_INTEGER;
-          for (const [i, element] of predictionVector.entries()) {
-            fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
-              element;
-            if (element > maxProb) {
-              predictedClass = i;
-              maxProb = element;
+    this.setState(
+      { errorMessage: undefined, request: abortController },
+      async () => {
+        try {
+          const fetchedData = await promise;
+          // returns predicted probabilities
+          if (Array.isArray(fetchedData[0])) {
+            const predictionVector = fetchedData[0];
+            let predictedClass = 0;
+            let maxProb = Number.MIN_SAFE_INTEGER;
+            for (const [i, element] of predictionVector.entries()) {
+              fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
+                element;
+              if (element > maxProb) {
+                predictedClass = i;
+                maxProb = element;
+              }
             }
+            fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
+          } else {
+            // prediction is a scalar, no probabilities
+            fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
           }
-          fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
-        } else {
-          // prediction is a scalar, no probabilities
-          fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
-        }
-        if (this.context.jointDataset.hasTrueY) {
-          JointDataset.setErrorMetrics(
-            fetchingReference,
-            this.context.modelMetadata.modelType
-          );
-        }
-        this.setState({ request: undefined });
-      } catch (error) {
-        if (error.name === "AbortError") {
-          return;
-        }
-        if (error.name === "PythonError") {
-          alert(
-            localization.formatString(
-              localization.Interpret.IcePlot.errorPrefix,
-              error.message
-            )
-          );
+          if (this.context.jointDataset.hasTrueY) {
+            JointDataset.setErrorMetrics(
+              fetchingReference,
+              this.context.modelMetadata.modelType
+            );
+          }
+          this.setState({ request: undefined });
+        } catch (error) {
+          if (error.name === "AbortError") {
+            return;
+          }
+          if (error.name === "PythonError") {
+            this.setState({ errorMessage: error.message });
+          }
         }
       }
-    });
+    );
   }
 
   private generatePlotlyProps(
