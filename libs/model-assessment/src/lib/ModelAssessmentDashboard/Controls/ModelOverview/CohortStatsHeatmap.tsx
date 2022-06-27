@@ -23,7 +23,9 @@ interface ICohortStatsHeatmapProps {
   id: string;
 }
 
-class ICohortStatsHeatmapState {}
+interface ICohortStatsHeatmapState {
+  key: number;
+}
 
 export class CohortStatsHeatmap extends React.Component<
   ICohortStatsHeatmapProps,
@@ -32,6 +34,30 @@ export class CohortStatsHeatmap extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+
+  public constructor(props: ICohortStatsHeatmapProps) {
+    super(props);
+    this.state = { key: 0 };
+  }
+
+  public componentDidUpdate(prevProps: ICohortStatsHeatmapProps) {
+    const cohortsChanged =
+      prevProps.cohorts.length !== this.props.cohorts.length ||
+      prevProps.cohorts.some(
+        (errorCohort, cohortIndex) =>
+          this.props.cohorts[cohortIndex].cohort.getCohortID() !==
+          errorCohort.cohort.getCohortID()
+      );
+    const metricsChanged =
+      prevProps.selectedMetrics.length !== this.props.selectedMetrics.length ||
+      prevProps.selectedMetrics.some(
+        (metric, metricIndex) =>
+          metric !== this.props.selectedMetrics[metricIndex]
+      );
+    if (cohortsChanged || metricsChanged) {
+      this.setState({ key: this.state.key + 1 });
+    }
+  }
 
   public render(): React.ReactNode {
     const columns: string[] = [
@@ -56,14 +82,9 @@ export class CohortStatsHeatmap extends React.Component<
       ? {}
       : { color: theme.semanticColors.bodyText };
 
-    // Choose a unique key because the heatmap colors need to refresh when
-    // the underlying data changes.
-    const key = `$${this.props.cohorts.map((errorCohort) =>
-      errorCohort.cohort.name.charAt(0)
-    )}${this.props.selectedMetrics.map((metricName) => metricName.charAt(0))}`;
     return (
       <HeatmapHighChart
-        key={key}
+        key={`heatmap${this.state.key}`}
         id={this.props.id}
         configOverride={{
           chart: {
