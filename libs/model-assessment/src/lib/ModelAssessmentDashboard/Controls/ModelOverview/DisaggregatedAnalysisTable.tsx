@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption, Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
@@ -8,7 +9,6 @@ import {
   generateMetrics,
   JointDataset
 } from "@responsible-ai/core-ui";
-import { IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
@@ -54,8 +54,9 @@ export class DisaggregatedAnalysisTable extends React.Component<
       return React.Fragment;
     }
     return (
-      <Stack>
+      <Stack id="modelOverviewDisaggregatedAnalysisTable">
         <CohortStatsHeatmap
+          id={"modelOverviewDisaggregatedCohortsTable"}
           items={cohortStatsInfo.items}
           cohorts={this.props.featureBasedCohorts}
           selectableMetrics={this.props.selectableMetrics}

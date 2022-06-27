@@ -12,12 +12,13 @@ import {
   Panel,
   Stack,
   DefaultButton,
-  Position
+  Position,
+  ChoiceGroup,
+  IChoiceGroupOption
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";

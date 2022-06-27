@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   generateMetrics,
   JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import { IDropdownOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
@@ -47,13 +47,17 @@ export class DatasetCohortStatsTable extends React.Component<
       this.props.showHeatmapColors
     ).items;
 
+    const showColors =
+      this.props.showHeatmapColors && this.context.errorCohorts.length > 1;
+
     return (
       <CohortStatsHeatmap
+        id={"modelOverviewDatasetCohortStatsTable"}
         items={items}
         cohorts={this.context.errorCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}
-        showColors={this.props.showHeatmapColors}
+        showColors={showColors}
       />
     );
   }
