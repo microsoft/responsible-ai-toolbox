@@ -232,7 +232,7 @@ export class CounterfactualChart extends React.PureComponent<
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
                   onAccept={this.onYSet}
-                  onCancel={this.setYOpen.bind(this, false)}
+                  onCancel={this.setYClose}
                 />
               )}
               {this.state.xDialogOpen && (
@@ -256,7 +256,7 @@ export class CounterfactualChart extends React.PureComponent<
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
                   onAccept={this.onXSet}
-                  onCancel={this.setXOpen.bind(this, false)}
+                  onCancel={this.setXClose}
                 />
               )}
               <Stack horizontal={false}>
@@ -265,7 +265,7 @@ export class CounterfactualChart extends React.PureComponent<
                     <Stack.Item className={classNames.verticalAxis}>
                       <div className={classNames.rotatedVerticalBox}>
                         <DefaultButton
-                          onClick={this.setYOpen.bind(this, true)}
+                          onClick={this.setYOpen}
                           text={
                             this.context.jointDataset.metaDict[
                               this.state.chartProps.yAxis.property
@@ -294,7 +294,7 @@ export class CounterfactualChart extends React.PureComponent<
                 <Stack className={classNames.horizontalAxisWithPadding}>
                   <div className={classNames.horizontalAxis}>
                     <DefaultButton
-                      onClick={this.setXOpen.bind(this, true)}
+                      onClick={this.setXOpen}
                       text={
                         this.context.jointDataset.metaDict[
                           this.state.chartProps.xAxis.property
@@ -447,19 +447,27 @@ export class CounterfactualChart extends React.PureComponent<
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
-  private readonly setXOpen = (val: boolean): void => {
-    if (val && this.state.xDialogOpen === false) {
+  private readonly setXOpen = (): void => {
+    if (this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
       return;
     }
     this.setState({ xDialogOpen: false });
   };
 
-  private readonly setYOpen = (val: boolean): void => {
-    if (val && this.state.yDialogOpen === false) {
+  private readonly setXClose = (): void => {
+    this.setState({ xDialogOpen: false });
+  };
+
+  private readonly setYOpen = (): void => {
+    if (this.state.yDialogOpen === false) {
       this.setState({ yDialogOpen: true });
       return;
     }
+    this.setState({ yDialogOpen: false });
+  };
+
+  private readonly setYClose = (): void => {
     this.setState({ yDialogOpen: false });
   };
 
