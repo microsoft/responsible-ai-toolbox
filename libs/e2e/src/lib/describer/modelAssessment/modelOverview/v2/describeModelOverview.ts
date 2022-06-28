@@ -95,7 +95,8 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
-  if (initialCohorts.length <= 1) {
+  const numberOfCohorts = initialCohorts.length + (includeNewCohort ? 1 : 0);
+  if (numberOfCohorts <= 1) {
     cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
       "not.exist"
     );
@@ -128,7 +129,9 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   }
 
   const heatmapCellContents: string[] = [];
-  const cohorts = initialCohorts.concat(includeNewCohort ? [data.newCohort!] : [])
+  const cohorts = initialCohorts.concat(
+    includeNewCohort ? [data.newCohort!] : []
+  );
   cohorts.forEach((cohortData) => {
     heatmapCellContents.push(cohortData.sampleSize);
   });

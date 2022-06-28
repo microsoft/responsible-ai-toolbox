@@ -621,8 +621,8 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModel
     newCohort: {
       metrics: {
         meanAbsoluteError: "3 858.02",
-          meanPrediction: "153.958",
-          meanSquaredError: "3 014.96"
+        meanPrediction: "153.958",
+        meanSquaredError: "3 014.96"
       },
       name: "CohortCreateE2E-diabetes",
       sampleSize: "88"
@@ -648,12 +648,12 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
     ],
     newCohort: {
       metrics: {
-        meanAbsoluteError: "3 597.63",
-          meanPrediction: "157.301",
-          meanSquaredError: "4 154.723"
+        meanAbsoluteError: "3 858.02",
+        meanPrediction: "153.958",
+        meanSquaredError: "3 014.96"
       },
       name: "CohortCreateE2E-diabetes",
-      sampleSize: "499"
+      sampleSize: "88"
     }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
@@ -677,13 +677,13 @@ modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebu
     ],
     newCohort: {
       metrics: {
-        accuracy: "0.858",
-        falseNegativeRate: "0.344",
-        falsePositiveRate: "0.077",
-        selectionRate: "0.244"
+        accuracy: "0.911",
+        falseNegativeRate: "0.093",
+        falsePositiveRate: "0.085",
+        selectionRate: "0.499"
       },
       name: "CohortCreateE2E-housing",
-      sampleSize: "499"
+      sampleSize: "729"
     }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
@@ -708,10 +708,10 @@ modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNew
     ],
     newCohort: {
       metrics: {
-        accuracy: "0.858"
+        accuracy: "0.67"
       },
       name: "CohortCreateE2E-multiclass-dnn",
-      sampleSize: "499"
+      sampleSize: "88"
     }
   };
 
