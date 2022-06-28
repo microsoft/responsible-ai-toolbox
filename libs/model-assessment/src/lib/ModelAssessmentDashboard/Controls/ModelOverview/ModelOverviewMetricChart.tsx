@@ -28,7 +28,6 @@ interface IModelOverviewMetricChartProps {
   cohorts: ErrorCohort[];
   cohortStats: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
-  selectedCohorts: number[];
 }
 
 interface IModelOverviewMetricChartState {
@@ -60,19 +59,15 @@ export class ModelOverviewMetricChart extends React.Component<
 
     const classNames = modelOverviewChartStyles();
 
-    const cohorts = this.props.cohorts.filter((_cohort, index) => {
-      return this.props.selectedCohorts.includes(index);
+    const selectedCohortNames = this.props.cohorts.map(
+      (cohort) => cohort.cohort.name
+    );
+    const selectedCohortStats = this.props.cohortStats.map((labeledStats) => {
+      const stat = labeledStats.find(
+        (stat) => stat.key === this.state.selectedMetric
+      );
+      return stat ? Number(stat.stat.toFixed(3)) : Number.NaN;
     });
-
-    const selectedCohortNames = cohorts.map((cohort) => cohort.cohort.name);
-    const selectedCohortStats = this.props.cohortStats
-      .filter((_, index) => this.props.selectedCohorts.includes(index))
-      .map((labeledStats) => {
-        const stat = labeledStats.find(
-          (stat) => stat.key === this.state.selectedMetric
-        );
-        return stat ? Number(stat.stat.toFixed(3)) : Number.NaN;
-      });
 
     return (
       <>
