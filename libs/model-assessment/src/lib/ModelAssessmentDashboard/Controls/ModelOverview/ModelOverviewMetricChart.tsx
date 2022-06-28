@@ -176,7 +176,7 @@ export class ModelOverviewMetricChart extends React.Component<
               selectedMetric: this.state.newlySelectedMetric
             });
           }}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
           onClick={() => {

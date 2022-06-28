@@ -211,7 +211,7 @@ export class ProbabilityDistributionChart extends React.Component<
                 probabilityOption: this.state.newlySelectedProbabilityOption
               });
           }}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
           onClick={() => {

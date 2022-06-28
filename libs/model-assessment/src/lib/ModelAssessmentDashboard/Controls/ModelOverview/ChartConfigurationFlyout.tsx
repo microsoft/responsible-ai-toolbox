@@ -281,7 +281,7 @@ export class ChartConfigurationFlyout extends React.Component<
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
           onClick={this.onConfirm}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
           disabled={this.noCohortIsSelected()}
         />
         <DefaultButton
