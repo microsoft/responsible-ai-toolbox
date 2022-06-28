@@ -221,14 +221,26 @@ export class ModelOverview extends React.Component<
         this.state.selectedDatasetCohorts !== undefined &&
         this.state.selectedDatasetCohorts.length > 0;
       selectedChartCohorts = this.state.selectedDatasetCohorts ?? [];
-      labeledStatistics = datasetCohortLabeledStatistics;
+      // only keep selected stats and cohorts based on cohort ID
+      labeledStatistics = datasetCohortLabeledStatistics.filter((_, i) =>
+        selectedChartCohorts.includes(chartCohorts[i].cohort.getCohortID())
+      );
+      chartCohorts = chartCohorts.filter((errorCohort) =>
+        selectedChartCohorts.includes(errorCohort.cohort.getCohortID())
+      );
     } else {
       chartCohorts = featureBasedCohorts;
       someCohortSelected =
         this.state.selectedFeatureBasedCohorts !== undefined &&
         this.state.selectedFeatureBasedCohorts.length > 0;
       selectedChartCohorts = this.state.selectedFeatureBasedCohorts ?? [];
-      labeledStatistics = featureBasedCohortLabeledStatistics;
+      // only keep selected stats and cohorts based on cohort index
+      labeledStatistics = featureBasedCohortLabeledStatistics.filter((_, i) =>
+        selectedChartCohorts.includes(i)
+      );
+      chartCohorts = chartCohorts.filter((_, i) =>
+        selectedChartCohorts.includes(i)
+      );
     }
 
     // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
@@ -466,7 +478,6 @@ export class ModelOverview extends React.Component<
                     <ProbabilityDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
                       cohorts={chartCohorts}
-                      selectedCohorts={selectedChartCohorts}
                     />
                   </PivotItem>
                 )}
@@ -481,7 +492,6 @@ export class ModelOverview extends React.Component<
                     selectableMetrics={selectableMetrics}
                     cohorts={chartCohorts}
                     cohortStats={labeledStatistics}
-                    selectedCohorts={selectedChartCohorts}
                   />
                 </PivotItem>
               </Pivot>

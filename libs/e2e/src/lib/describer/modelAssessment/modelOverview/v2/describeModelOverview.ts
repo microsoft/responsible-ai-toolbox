@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { createCohort } from "libs/e2e/src/util/createCohort";
 import { multiSelectComboBox } from "../../../../../util/comboBox";
 import { Locators } from "../../Constants";
 import {
@@ -31,7 +32,8 @@ export function describeNewModelOverview(
       it("should have 'Model overview' component in the initial state", () => {
         ensureAllModelOverviewBasicElementsArePresent();
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
-          datasetShape
+          datasetShape,
+          false
         );
       });
 
@@ -60,6 +62,10 @@ export function describeNewModelOverview(
           2
         );
       });
+
+      it("should show new cohorts in charts", () => {
+        ensureNewCohortsShowUpInCharts(datasetShape);
+      });
     } else {
       it("should not have 'Model overview' component", () => {
         cy.get(Locators.ModelOverview).should("not.exist");
@@ -80,7 +86,8 @@ function ensureAllModelOverviewBasicElementsArePresent() {
 }
 
 function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
-  datasetShape: IModelAssessmentData
+  datasetShape: IModelAssessmentData,
+  includeNewCohort: boolean
 ) {
   const data = datasetShape.modelOverviewData!;
   const initialCohorts = data.initialCohorts!;
@@ -121,17 +128,18 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   }
 
   const heatmapCellContents: string[] = [];
-  initialCohorts.forEach((cohortData) => {
+  const cohorts = initialCohorts.concat(includeNewCohort ? [data.newCohort!] : [])
+  cohorts.forEach((cohortData) => {
     heatmapCellContents.push(cohortData.sampleSize);
   });
   metricsOrder.forEach((metricName) => {
-    initialCohorts.forEach((cohortData) => {
+    cohorts.forEach((cohortData) => {
       heatmapCellContents.push(cohortData.metrics[metricName]);
     });
   });
 
   cy.get(Locators.ModelOverviewHeatmapCells)
-    .should("have.length", initialCohorts.length * (metricsOrder.length + 1))
+    .should("have.length", cohorts.length * (metricsOrder.length + 1))
     .each(($cell) => {
       // somehow the cell string is one invisible character longer, trim
       expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
@@ -155,7 +163,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
-      initialCohorts.length
+      cohorts.length
     );
     // check aria-label of bar chart - aria-label uses comma as delimiter
     // between digits for thousands instead of whitespace
@@ -242,4 +250,17 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
   }
+}
+
+function ensureNewCohortsShowUpInCharts(datasetShape: IModelAssessmentData) {
+  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
+  ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
+    datasetShape,
+    false
+  );
+  createCohort(datasetShape.modelOverviewData?.newCohort?.name);
+  ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
+    datasetShape,
+    true
+  );
 }

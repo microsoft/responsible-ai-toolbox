@@ -26,7 +26,6 @@ import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSpl
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
-  selectedCohorts: number[];
   onChooseCohorts: () => void;
 }
 
@@ -69,12 +68,6 @@ export class ProbabilityDistributionChart extends React.Component<
       return;
     }
 
-    const selectedCohorts = this.props.cohorts.filter((errorCohort) => {
-      return this.props.selectedCohorts.includes(
-        errorCohort.cohort.getCohortID()
-      );
-    });
-
     const probabilityOptions = this.getProbabilityOptions();
 
     if (probabilityOptions.length === 0) {
@@ -86,7 +79,7 @@ export class ProbabilityDistributionChart extends React.Component<
       return React.Fragment;
     }
 
-    const noCohortSelected = this.props.selectedCohorts.length === 0;
+    const noCohortSelected = this.props.cohorts.length === 0;
 
     return (
       <Stack
@@ -147,12 +140,12 @@ export class ProbabilityDistributionChart extends React.Component<
               <Stack>
                 {this.state.showSplineChart ? (
                   <ProbabilityDistributionSplineChart
-                    selectedCohorts={selectedCohorts}
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 ) : (
                   <ProbabilityDistributionBoxChart
-                    selectedCohorts={selectedCohorts}
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 )}
