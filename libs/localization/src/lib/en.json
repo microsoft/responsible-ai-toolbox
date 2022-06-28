@@ -715,12 +715,12 @@
       "_selectClass.comment": "label for dropdown listing all classes",
       "_selectFeature.comment": "dropdown label to select feature (column) for charting",
       "_selectFilter.comment": "label on dropdown to pick value for charting",
+      "apply": "Apply",
       "binLabel": "Apply binning to data",
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
       "numOfBins": "Number of bins",
-      "select": "Select",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
       "selectFilter": "Select your axis value"

@@ -151,7 +151,7 @@ export class AxisConfigDialog extends React.PureComponent<
         onDismiss={this.props.onCancel}
         isOpen
         onRenderFooter={this.renderFooter}
-        isFooterAtBottom={false}
+        isFooterAtBottom
         isLightDismiss
       >
         <Stack tokens={{ childrenGap: "l1" }}>
@@ -310,7 +310,7 @@ export class AxisConfigDialog extends React.PureComponent<
     return (
       <Stack horizontal tokens={{ childrenGap: "l1", padding: "l1" }}>
         <PrimaryButton onClick={this.saveState}>
-          {localization.Interpret.AxisConfigDialog.select}
+          {localization.Interpret.AxisConfigDialog.apply}
         </PrimaryButton>
         <DefaultButton onClick={this.props.onCancel}>
           {localization.Interpret.CohortEditor.cancel}
