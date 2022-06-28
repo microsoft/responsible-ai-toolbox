@@ -25,7 +25,8 @@ import {
   FabricStyles,
   InteractiveLegend,
   rowErrorSize,
-  getFeatureOptions
+  getFeatureOptions,
+  ErrorDialog
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -70,6 +71,7 @@ export interface IWhatIfTabState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
+  errorMessage?: string;
 }
 
 export class WhatIfTab extends React.PureComponent<
@@ -555,10 +557,29 @@ export class WhatIfTab extends React.PureComponent<
               sortingSeriesIndex={this.state.sortingSeriesIndex}
             />
           </div>
+          {this.state.errorMessage && this.renderErrorDialog()}
         </div>
       </div>
     );
   }
+
+  private readonly renderErrorDialog = (): React.ReactNode => {
+    return (
+      <ErrorDialog
+        title={localization.Interpret.IcePlot.pythonError}
+        subText={localization.formatString(
+          localization.Interpret.IcePlot.errorPrefix,
+          this.state.errorMessage
+        )}
+        cancelButtonText={localization.Interpret.IcePlot.close}
+        onClose={this.onClose}
+      />
+    );
+  };
+
+  private readonly onClose = (): void => {
+    this.setState({ errorMessage: undefined });
+  };
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -925,12 +946,7 @@ export class WhatIfTab extends React.PureComponent<
           return;
         }
         if (error.name === "PythonError") {
-          alert(
-            localization.formatString(
-              localization.Interpret.IcePlot.errorPrefix,
-              error.message
-            )
-          );
+          this.setState({ errorMessage: error.message });
         }
       }
     });

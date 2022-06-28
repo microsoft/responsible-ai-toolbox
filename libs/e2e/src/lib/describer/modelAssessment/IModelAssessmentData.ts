@@ -57,6 +57,7 @@ export interface IModelStatisticsData {
 export interface IModelOverviewData {
   hasModelOverviewComponent?: boolean;
   initialCohorts?: IExpectedCohortData[];
+  newCohort?: IExpectedCohortData;
   featureCohortView?: {
     singleFeatureCohorts: number;
     multiFeatureCohorts: number;
