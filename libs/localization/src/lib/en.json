@@ -101,6 +101,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Recommended treatment",
     "WhatIf": {
       "setValue": "Set Value",
@@ -1024,6 +1029,7 @@
       "_stepInputLabel.comment": "number of samples to include between minimum and maximum (integer)",
       "_submitPrompt.comment": "prompt to user giving instructions to enter a numeric range",
       "_topLevelErrorMessage.comment": "error message for any parameter issue",
+      "close": "Close",
       "errorPrefix": "Error encountered: {0}",
       "featurePickerLabel": "Feature:",
       "integerError": "Must be an integer",
@@ -1036,6 +1042,7 @@
       "prediction": "Prediction",
       "predictionLabel": "Prediction: {0}",
       "probabilityLabel": "Probability: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Steps:",
       "submitPrompt": "Submit a range to view an ICE plot",
       "topLevelErrorMessage": "Error in parameter"
