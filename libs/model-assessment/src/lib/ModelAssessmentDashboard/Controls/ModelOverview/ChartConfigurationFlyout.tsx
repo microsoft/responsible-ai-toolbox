@@ -72,16 +72,8 @@ export class ChartConfigurationFlyout extends React.Component<
 
   public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps) {
     // update dataset cohorts if any new ones were created
-    const prevMaxCohortID = Math.max(
-      ...prevProps.datasetCohorts.map((errorCohort) =>
-        errorCohort.cohort.getCohortID()
-      )
-    );
-    const currMaxCohortID = Math.max(
-      ...this.props.datasetCohorts.map((errorCohort) =>
-        errorCohort.cohort.getCohortID()
-      )
-    );
+    const prevMaxCohortID = this.getMaxCohortId(prevProps.datasetCohorts);
+    const currMaxCohortID = this.getMaxCohortId(this.props.datasetCohorts);
     let newCohorts: number[] = [];
     if (currMaxCohortID > prevMaxCohortID) {
       // A cohort has a higher ID than the previously recorded
@@ -403,5 +395,11 @@ export class ChartConfigurationFlyout extends React.Component<
         text: errorCohort.cohort.name
       };
     });
+  }
+
+  private getMaxCohortId(cohorts: ErrorCohort[]) {
+    return Math.max(
+      ...cohorts.map((errorCohort) => errorCohort.cohort.getCohortID())
+    );
   }
 }
