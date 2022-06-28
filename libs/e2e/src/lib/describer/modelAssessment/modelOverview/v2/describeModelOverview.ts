@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createCohort } from "libs/e2e/src/util/createCohort";
 import { multiSelectComboBox } from "../../../../../util/comboBox";
+import { createCohort } from "../../../../../util/createCohort";
 import { Locators } from "../../Constants";
 import {
   IModelAssessmentData,
