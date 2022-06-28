@@ -326,19 +326,18 @@ export class FeatureList extends React.Component<
 
   private readonly renderPanelFooter = () => {
     // Remove apply button in static view
-    if (!this.props.isEnabled) {
-      return null;
-    }
     return (
-      <Stack.Item key="applyButtonKey" align="start">
-        <PrimaryButton
-          text={localization.ErrorAnalysis.FeatureList.Apply}
-          onClick={this.applyClick}
-          allowDisabledFocus
-          disabled={!this.state.enableApplyButton}
-          checked={false}
-        />
-      </Stack.Item>
+      this.props.isEnabled && (
+        <Stack.Item key="applyButtonKey" align="start">
+          <PrimaryButton
+            text={localization.ErrorAnalysis.FeatureList.Apply}
+            onClick={this.applyClick}
+            allowDisabledFocus
+            disabled={!this.state.enableApplyButton}
+            checked={false}
+          />
+        </Stack.Item>
+      )
     );
   };
 
