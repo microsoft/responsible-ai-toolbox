@@ -330,7 +330,7 @@ export class FeatureList extends React.Component<
       this.props.isEnabled && (
         <Stack.Item key="applyButtonKey" align="start">
           <PrimaryButton
-            text={localization.ErrorAnalysis.FeatureList.Apply}
+            text={localization.ErrorAnalysis.FeatureList.apply}
             onClick={this.applyClick}
             allowDisabledFocus
             disabled={!this.state.enableApplyButton}

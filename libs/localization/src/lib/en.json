@@ -84,6 +84,8 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -180,7 +182,7 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort."
     },
     "FeatureList": {
-      "Apply": "Apply",
+      "apply": "Apply",
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
