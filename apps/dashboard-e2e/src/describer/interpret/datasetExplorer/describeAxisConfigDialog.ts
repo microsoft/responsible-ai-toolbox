@@ -42,7 +42,7 @@ export function describeAxisConfigDialog(
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
               cy.get("#AxisConfigPanel")
                 .find("button")
-                .contains("Select")
+                .contains("Apply")
                 .click();
               cy.get(
                 '#DatasetExplorerChart div[class*="rotatedVerticalBox"] button:eq(0)'
@@ -58,7 +58,7 @@ export function describeAxisConfigDialog(
             .click()
             .get("#AxisConfigPanel")
             .find("button")
-            .contains("Select")
+            .contains("Apply")
             .click();
         });
       }
@@ -97,7 +97,7 @@ export function describeAxisConfigDialog(
               cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
               cy.get("#AxisConfigPanel")
                 .find("button")
-                .contains("Select")
+                .contains("Apply")
                 .click();
               cy.get(
                 '#DatasetExplorerChart div[class*="horizontalAxis"] button:eq(0)'
@@ -111,7 +111,7 @@ export function describeAxisConfigDialog(
             .click()
             .get("#AxisConfigPanel")
             .find("button")
-            .contains("Select")
+            .contains("Apply")
             .click();
         });
       }

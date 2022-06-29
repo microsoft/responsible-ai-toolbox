@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export enum Locators {
-  SelectButton = "button:contains('Select')",
+  ApplyButton = "button:contains('Apply')",
   CancelButton = "button:contains('Cancel')",
   YesButton = "button:contains('Yes')",
   SaveAsNewCohortButton = "button:contains('Save as a new cohort')",
@@ -42,8 +42,8 @@ export enum Locators {
   WICDatapointDropbox = "#IndividualFeatureContainer div[class^='ms-Stack legendAndText'] div[class^='ms-ComboBox-container']",
   WICLocalImportanceDescription = "#LocalImportanceDescription",
   WhatIfScatterChartYAxis = "#IndividualFeatureContainer div[class^='rotatedVerticalBox']",
+  WhatIfScatterChartFlyoutApply = "#AxisConfigPanel button:contains('Apply')",
   WhatIfScatterChartFlyoutCancel = "#AxisConfigPanel button:contains('Cancel')",
-  WhatIfScatterChartFlyoutSelect = "#AxisConfigPanel button:contains('Select')",
   WhatIfScatterChartSelectFeatureCaretButton = "#AxisConfigPanel i[data-icon-name='ChevronDown']",
   WhatIfAxisPanel = "#AxisConfigPanel",
   AxisFeatureDropdown = "#AxisConfigPanel div.ms-ComboBox-container",

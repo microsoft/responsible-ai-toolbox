@@ -164,6 +164,8 @@ export class FeatureList extends React.Component<
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        onRenderFooterContent={this.renderPanelFooter}
+        isFooterAtBottom
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
@@ -246,18 +248,6 @@ export class FeatureList extends React.Component<
                 isEnabled={this.props.isEnabled}
               />
             </Stack.Item>
-            {this.props.isEnabled && (
-              // Remove apply button in static view
-              <Stack.Item key="applyButtonKey" align="start">
-                <PrimaryButton
-                  text="Apply"
-                  onClick={this.applyClick}
-                  allowDisabledFocus
-                  disabled={!this.state.enableApplyButton}
-                  checked={false}
-                />
-              </Stack.Item>
-            )}
           </Stack>
         </div>
       </Panel>
@@ -333,6 +323,24 @@ export class FeatureList extends React.Component<
     }
     return <span />;
   }
+
+  private readonly renderPanelFooter = () => {
+    // Remove apply button in static view
+    if (!this.props.isEnabled) {
+      return <span />;
+    }
+    return (
+      <Stack.Item key="applyButtonKey" align="start">
+        <PrimaryButton
+          text={localization.ErrorAnalysis.FeatureList.apply}
+          onClick={this.applyClick}
+          allowDisabledFocus
+          disabled={!this.state.enableApplyButton}
+          checked={false}
+        />
+      </Stack.Item>
+    );
+  };
 
   private updateSelection(): void {
     this._selection.setItems(this.state.tableState.rows);

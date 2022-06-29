@@ -84,6 +84,8 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -180,6 +182,7 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -719,12 +722,12 @@
       "_selectClass.comment": "label for dropdown listing all classes",
       "_selectFeature.comment": "dropdown label to select feature (column) for charting",
       "_selectFilter.comment": "label on dropdown to pick value for charting",
+      "apply": "Apply",
       "binLabel": "Apply binning to data",
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
       "numOfBins": "Number of bins",
-      "select": "Select",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
       "selectFilter": "Select your axis value"
@@ -1415,7 +1418,7 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",

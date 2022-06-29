@@ -36,7 +36,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
         cy.get(
           `${Locators.AxisFeatureDropdownOptionGeneral} button:contains('${dataShape.whatIfCounterfactualsData?.yAxisNewValue}')`
         ).click();
-        cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
+        cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
         cy.get(
           `${Locators.WhatIfScatterChartYAxis} button:contains('${dataShape.whatIfCounterfactualsData?.yAxisNewValue}')`
         ).should("exist");
@@ -45,7 +45,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
       it("should be able to select axis value", () => {
         cy.get(Locators.WhatIfScatterChartYAxis).click();
         cy.get(Locators.WhatIfYAxisAxisValueNewValue).click();
-        cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
+        cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
         cy.get(Locators.WhatIfScatterChartYAxisLabelUpdated2).should("exist");
       });
     });
@@ -79,7 +79,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
           cy.get(
             `${Locators.AxisFeatureDropdownOptionGeneral} button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`
           ).click();
-          cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
+          cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
           cy.get(
             `${Locators.WhatIfScatterChartXAxisLabelUpdatedGeneral}  button:contains('${dataShape.whatIfCounterfactualsData?.newClassValue}')`
           ).should("exist");
@@ -89,7 +89,7 @@ export function describeAxisFlyouts(dataShape: IModelAssessmentData): void {
       it("should be able to select axis value", () => {
         cy.get(Locators.WhatIfScatterChartXAxis).click();
         cy.get(Locators.WhatIfXAxisAxisValueNewValue).click();
-        cy.get(Locators.WhatIfScatterChartFlyoutSelect).click();
+        cy.get(Locators.WhatIfScatterChartFlyoutApply).click();
         cy.get(Locators.WhatIfScatterChartXAxisLabelUpdated2).should("exist");
       });
     });
