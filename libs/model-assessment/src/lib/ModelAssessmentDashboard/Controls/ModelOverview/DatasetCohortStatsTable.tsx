@@ -47,13 +47,17 @@ export class DatasetCohortStatsTable extends React.Component<
       this.props.showHeatmapColors
     ).items;
 
+    const showColors =
+      this.props.showHeatmapColors && this.context.errorCohorts.length > 1;
+
     return (
       <CohortStatsHeatmap
+        id={"modelOverviewDatasetCohortStatsTable"}
         items={items}
         cohorts={this.context.errorCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}
-        showColors={this.props.showHeatmapColors}
+        showColors={showColors}
       />
     );
   }

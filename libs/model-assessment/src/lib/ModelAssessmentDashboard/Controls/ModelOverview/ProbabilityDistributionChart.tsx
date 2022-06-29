@@ -22,11 +22,10 @@ import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
-import { ProbabilityDistributionLineChart } from "./ProbabilityDistributionLineChart";
+import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
-  selectedCohorts: number[];
   onChooseCohorts: () => void;
 }
 
@@ -34,7 +33,7 @@ interface IProbabilityDistributionChartState {
   probabilityOption?: IChoiceGroupOption;
   newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
-  showLineChart: boolean;
+  showSplineChart: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -47,7 +46,7 @@ export class ProbabilityDistributionChart extends React.Component<
 
   constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showLineChart: false };
+    this.state = { probabilityFlyoutIsVisible: false, showSplineChart: false };
   }
 
   public componentDidMount(): void {
@@ -69,10 +68,6 @@ export class ProbabilityDistributionChart extends React.Component<
       return;
     }
 
-    const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
-      return this.props.selectedCohorts.includes(index);
-    });
-
     const probabilityOptions = this.getProbabilityOptions();
 
     if (probabilityOptions.length === 0) {
@@ -84,26 +79,31 @@ export class ProbabilityDistributionChart extends React.Component<
       return React.Fragment;
     }
 
-    const noCohortSelected = this.props.selectedCohorts.length === 0;
+    const noCohortSelected = this.props.cohorts.length === 0;
 
     return (
-      <Stack tokens={{ childrenGap: "10px" }}>
+      <Stack
+        tokens={{ childrenGap: "10px" }}
+        id="modelOverviewProbabilityDistributionChart"
+      >
         <Stack
           horizontal
           tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}
         >
           <Stack.Item className={classNames.chartToggle}>
             <Toggle
+              id="modelOverviewProbabilityDistributionChartToggle"
               label={
                 localization.ModelAssessment.ModelOverview
-                  .probabilityLineChartToggleLabel
+                  .probabilitySplineChartToggleLabel
               }
               inlineLabel
-              onChange={this.onLineChartToggleChange}
+              onChange={this.onSplineChartToggleChange}
             />
           </Stack.Item>
-          {this.state.showLineChart && (
+          {this.state.showSplineChart && (
             <DefaultButton
+              id="modelOverviewProbabilityDistributionLineChartCohortSelectionButton"
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -112,9 +112,10 @@ export class ProbabilityDistributionChart extends React.Component<
           )}
         </Stack>
         <Stack horizontal>
-          {!noCohortSelected && !this.state.showLineChart && (
+          {!noCohortSelected && !this.state.showSplineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
+                id="modelOverviewProbabilityDistributionBoxChartCohortSelectionButton"
                 className={classNames.rotatedVerticalBox}
                 text={
                   localization.ModelAssessment.ModelOverview
@@ -137,25 +138,26 @@ export class ProbabilityDistributionChart extends React.Component<
             )}
             {!noCohortSelected && (
               <Stack>
-                {this.state.showLineChart ? (
-                  <ProbabilityDistributionLineChart
-                    selectedCohorts={selectedCohorts}
+                {this.state.showSplineChart ? (
+                  <ProbabilityDistributionSplineChart
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 ) : (
                   <ProbabilityDistributionBoxChart
-                    selectedCohorts={selectedCohorts}
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 )}
                 <Stack.Item
                   className={
-                    this.state.showLineChart
+                    this.state.showSplineChart
                       ? classNames.horizontalAxisNoExtraLeftPadding
                       : classNames.horizontalAxis
                   }
                 >
                   <DefaultButton
+                    id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
                     text={
                       localization.ModelAssessment.ModelOverview
                         .probabilityLabelSelectionButton
@@ -172,6 +174,7 @@ export class ProbabilityDistributionChart extends React.Component<
           </Stack.Item>
         </Stack>
         <Panel
+          id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"
           isOpen={this.state.probabilityFlyoutIsVisible}
           closeButtonAriaLabel="Close"
           onDismiss={() => {
@@ -208,7 +211,7 @@ export class ProbabilityDistributionChart extends React.Component<
                 probabilityOption: this.state.newlySelectedProbabilityOption
               });
           }}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
           onClick={() => {
@@ -241,12 +244,12 @@ export class ProbabilityDistributionChart extends React.Component<
       });
   }
 
-  private onLineChartToggleChange = (
+  private onSplineChartToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      this.setState({ showLineChart: checked });
+      this.setState({ showSplineChart: checked });
     }
   };
 }
