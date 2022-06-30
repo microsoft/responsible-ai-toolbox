@@ -246,9 +246,9 @@ def build_bounds_query(filter, colname, method,
     """
     bounds = []
     if method == CohortFilterMethods.METHOD_EXCLUDES:
-        operator = " != "
+        operator = " not equal to "
     else:
-        operator = " == "
+        operator = " equal to "
     is_categorical = False
     if categorical_features:
         is_categorical = colname in categorical_features

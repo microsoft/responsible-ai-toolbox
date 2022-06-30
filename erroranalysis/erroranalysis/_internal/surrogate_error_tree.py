@@ -618,9 +618,9 @@ def create_categorical_query(method, arg, p_node_name, p_node_query,
     :rtype: tuple(str, str)
     """
     if method == CohortFilterMethods.METHOD_INCLUDES:
-        operation = "=="
+        operation = "equal to"
     else:
-        operation = "!="
+        operation = "not equal to"
     categorical_values = categories[0]
     categorical_indexes = categories[1]
     thresholds = []
