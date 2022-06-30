@@ -697,8 +697,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
             if parent_decision_type == '<=':
                 method = "less and equal"
                 arg = float(parent_threshold)
-                condition = "{} <= {:.2f}".format(p_node_name,
-                                                  parent_threshold)
+                condition = "{} less than or equal to {:.2f}".format(
+                    p_node_name, parent_threshold)
                 df = df[df[p_node_name_val] <= parent_threshold]
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_INCLUDES
@@ -714,8 +714,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
             if parent_decision_type == '<=':
                 method = "greater"
                 arg = float(parent_threshold)
-                condition = "{} > {:.2f}".format(p_node_name,
-                                                 parent_threshold)
+                condition = "{} greater than {:.2f}".format(
+                    p_node_name, parent_threshold)
                 df = df[df[p_node_name_val] > parent_threshold]
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_EXCLUDES
