@@ -47,9 +47,9 @@
       "BarTextBinary": "第一個長條指出若已套用上述建議的全域處理原則，平均的相對增益。報告的增益報告了使用之處理方式的數字變化。第二個長條則表示將每個人的處理方式改為二元處理方式後的相對增益 (或損失)。",
       "BarTextContinuous": "第一個長條指出若已套用上述建議的全域處理方式原則，平均的相對增益。報告的增益反映了將樣本中一般處理方式大小的處理方式特徵增加/減少 10%。第二個長條則表示持續將處理方式增加/減少 10% 的相對增益 (或損失)。",
       "Description": "這些工具可協助建立未來介入的原則。您可以識別您樣本的哪些部分會體驗到因果關係驅動 (例如治療) 的最大回應，或構造規則以定義哪些未來人口將具有最大的治療效果。",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "建議的處理 = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "設定處理特徵",
       "Size": "樣本大小的可解譯建議全域處理原則 (n) = {0}",
       "Table": "此資料表可透過取得資料列來讀取，然後取得該特定資料列的資料行。",
@@ -71,12 +71,12 @@
       "Title": "沒有資料"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} 在集合 ({1}) 中",
       "nin": "{0} 不在集合 ({1}) 中",
       "rg": "{0} 介於範圍 ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "未知"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "CI 較低",
     "EffectOfTreatment": "建議的效果",
     "EffectUpperBound": "CI 較高",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "建議的處理",
     "WhatIf": {
       "setValue": "設定值",
@@ -174,6 +181,7 @@
       "subText": "了解所選的世代。編輯其世代名稱。刪除此世代。"
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "特徵",
       "importances": "重要性",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -661,12 +669,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "視為類別",
+      "apply": "Apply",
       "binLabel": "對資料套用量化",
       "countHelperText": "包含點數的長條圖",
       "ditherLabel": "應該遞色",
       "groupByCohort": "依世代分組",
       "numOfBins": "量化數目",
-      "select": "選取",
       "selectClass": "選取類別",
       "selectFeature": "選取特徵",
       "selectFilter": "選取您的軸值"
@@ -813,14 +821,14 @@
       "violinText": "小提琴"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " 排除 {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " 包含 {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} 和其他 {1} 個"
     },
     "Filters": {
@@ -862,6 +870,7 @@
       "weightOptions": "類別重要度權數"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "發生的錯誤: {0}",
       "featurePickerLabel": "特徵:",
       "integerError": "必須為整數",
@@ -874,6 +883,7 @@
       "prediction": "預測",
       "predictionLabel": "預測: {0}",
       "probabilityLabel": "機率: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "步驟:",
       "submitPrompt": "提交範圍以檢視 ICE 繪圖",
       "topLevelErrorMessage": "參數有誤"
@@ -1167,14 +1177,14 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1196,6 +1206,10 @@
         "noMetricsSelectedWarning": "Please select at least one metric.",
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "visualDisplayToggleLabel": "Show heatmap",

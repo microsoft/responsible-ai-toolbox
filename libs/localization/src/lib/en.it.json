@@ -47,9 +47,9 @@
       "BarTextBinary": "La prima barra indica un guadagno relativo medio se sono stati applicati i criteri di trattamento globale consigliati descritti in precedenza. I guadagni riportati segnalano la modifica numerica nel trattamento usato. La seconda barra indica i guadagni relativi (o le perdite) derivanti dal trattamento di tutti attivando i trattamenti binari.",
       "BarTextContinuous": "La prima barra indica un guadagno relativo medio se i criteri di trattamento globale consigliati, descritti in precedenza sono stati applicati. I guadagni segnalati riflettono l'aumento/diminuzione della funzionalità di trattamento del 10% delle dimensioni tipiche del trattamento nel campione. La seconda barra indica i guadagni relativi (o le perdite) derivanti dall'aumento/diminuzione dei trattamenti continui del 10%.",
       "Description": "Questi strumenti consentono di creare criteri per gli interventi futuri. È possibile identificare le parti dell'esperienza di esempio relative alle più grandi risposte a un driver causale (ad esempio il trattamento) o a regole per definire quali popolazioni future avranno i più grandi effetti di trattamento.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Trattamento consigliato = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Impostare la funzionalità di trattamento",
       "Size": "Criterio di trattamento globale consigliato da interpretare per le dimensioni del campione (n) = {0}",
       "Table": "È possibile leggere la tabella prendendo una riga e quindi prendendo una colonna di quella specifica riga.",
@@ -71,12 +71,12 @@
       "Title": "Dati non disponibili"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} nel set di ({1})",
       "nin": "{0} non nel set di ({1})",
       "rg": "{0} nell'intervallo di ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "Sconosciuto"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effetto della raccomandazione",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Trattamento consigliato",
     "WhatIf": {
       "setValue": "Imposta valore",
@@ -174,6 +181,7 @@
       "subText": "Informazioni sulla coorte selezionata. Modificarne il nome. Eliminare la coorte."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Funzionalità",
       "importances": "Priorità",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -661,12 +669,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Gestire per categorie",
+      "apply": "Apply",
       "binLabel": "Raggruppare i dati in binning",
       "countHelperText": "Un istogramma del numero di punti",
       "ditherLabel": "Applica il dithering",
       "groupByCohort": "Gruppo per coorte",
       "numOfBins": "Numero di bin",
-      "select": "Selezionare",
       "selectClass": "Selezionare classe",
       "selectFeature": "Selezionare caratteristica",
       "selectFilter": "Selezionare il valore dell'asse"
@@ -813,14 +821,14 @@
       "violinText": "Violino"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " esclude {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " include {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} e {1} altre"
     },
     "Filters": {
@@ -862,6 +870,7 @@
       "weightOptions": "Pesi di importanza della classe"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "Errore riscontrato: {0}",
       "featurePickerLabel": "Aggiornamento delle funzionalità:",
       "integerError": "Deve essere un numero intero",
@@ -874,6 +883,7 @@
       "prediction": "Stima",
       "predictionLabel": "Previsione: {0}",
       "probabilityLabel": "Probabilità: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Numero di esempi:",
       "submitPrompt": "Inviare un intervallo per visualizzare un tracciato ICE",
       "topLevelErrorMessage": "Errore nel parametro"
@@ -1167,14 +1177,14 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1196,6 +1206,10 @@
         "noMetricsSelectedWarning": "Please select at least one metric.",
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "visualDisplayToggleLabel": "Show heatmap",

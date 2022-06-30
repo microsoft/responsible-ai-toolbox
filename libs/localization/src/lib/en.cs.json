@@ -47,9 +47,9 @@
       "BarTextBinary": "První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Nahlášené zisky hlásí číselnou změnu v léčby, které jsme použili. Druhý pruh označuje relativní zisky (nebo ztráty) při zacházeli se všemi tím, že zapnete binární léčby.",
       "BarTextContinuous": "První pruh označuje průměrné relativní nárůsty, pokud byla použita doporučená globální testovací zásada popsaná výše. Hlášené nárůsty odrážejí zvýšení nebo snížení příznaku léčby o 10 % typické velikosti léčiva ve vzorku. Druhý pruh označuje relativní nárůsty (nebo ztráty) z rostoucího nebo sestupného průběžného zpracování o 10 %.",
       "Description": "Tyto nástroje pomáhají vytvářet zásady pro budoucí intervence. Můžete identifikovat, u kterých částí vašeho vzorového prostředí dochází k největší odezvě na příčinnou jednotku (ošetření) nebo vytvořit pravidla na definování budoucích populací, které budou mít největší efekt na ošetření.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Doporučené ošetření = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Nastavit funkci ošetření",
       "Size": "Doporučená interpretovatelná zásada globálního ošetření u vzorové velikosti (n) = {0}",
       "Table": "Tabulka se dá přečíst, když se zaměříte na libovolný řádek a pak na sloupec u vybraného řádku.",
@@ -71,12 +71,12 @@
       "Title": "Žádná data"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} v sadě ({1})",
       "nin": "{0} není v sadě ({1})",
       "rg": "{0} v rozsahu ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "neznámé"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "Dolní interval spolehlivosti",
     "EffectOfTreatment": "Vliv doporučení",
     "EffectUpperBound": "Horní interval spolehlivosti",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Doporučené ošetření",
     "WhatIf": {
       "setValue": "Nastavit hodnotu",
@@ -174,6 +181,7 @@
       "subText": "Zjistit více o vybrané kohortě. Upravit název kohorty. Smazat tuto kohortu."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Atributy",
       "importances": "Významné prvky",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -661,12 +669,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Považovat za kategorické",
+      "apply": "Apply",
       "binLabel": "Aplikovat binování na data",
       "countHelperText": "Histogram počtu bodů",
       "ditherLabel": "Použít dithering",
       "groupByCohort": "Seskupit podle kohorty",
       "numOfBins": "Počet binování",
-      "select": "Vybrat",
       "selectClass": "Vybrat třídu",
       "selectFeature": "Vyberte atribut",
       "selectFilter": "Vyberte hodnotu osy"
@@ -813,14 +821,14 @@
       "violinText": "Houslový"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " nezahrnuje {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " zahrnuje {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} a {1} další"
     },
     "Filters": {
@@ -862,6 +870,7 @@
       "weightOptions": "Váhy důležitosti tříd"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "Došlo k chybě: {0}",
       "featurePickerLabel": "Atribut:",
       "integerError": "Vyžaduje se celé číslo",
@@ -874,6 +883,7 @@
       "prediction": "Predikce",
       "predictionLabel": "Predikce: {0}",
       "probabilityLabel": "Pravděpodobnost: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Kroky:",
       "submitPrompt": "Pokud si chcete zobrazit diagram ICE, zadejte rozsah.",
       "topLevelErrorMessage": "Chyba v parametru"
@@ -1167,14 +1177,14 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1196,6 +1206,10 @@
         "noMetricsSelectedWarning": "Please select at least one metric.",
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "visualDisplayToggleLabel": "Show heatmap",

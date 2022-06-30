@@ -47,9 +47,9 @@
       "BarTextBinary": "最初のバーは、上記の推奨グローバル処理ポリシーを適用した場合の平均相対ゲインを示しています。報告されたゲインは、使用した処理の数値の変化を反映したものです。2 番目のバーは、バイナリー処理を有効にすることによる、全員の相対的なゲイン (またはロス) を示します。",
       "BarTextContinuous": "最初のバーは、上記の推奨グローバル処理ポリシーを適用した場合の平均相対ゲインを示しています。報告されたゲインは、サンプルにおける通常の処理サイズの 10％ までの処理の特徴量の増減を反映したものです。2 つ目のバーは、連続した処理を 10％ まで増加または減少させた場合の相対的なゲイン (またはロス) を示します。",
       "Description": "これらのツールは、将来に介入するときのポリシーを構築するのに役立ちます。サンプルのどの部分が員がドライバーに対する最大の反応を得ているかを特定したり、ルールを構築してどの母集団が最も大きな治療を効果を得られるかを定義したりすることができます。",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "推奨される治療 = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "治療特徴の設定",
       "Size": "サンプル サイズの解釈可能な推奨グローバル治療ポリシー (n) = {0}",
       "Table": "テーブルは、行を取得し、その特定の行の列を取得することで読み取ることができます。",
@@ -71,12 +71,12 @@
       "Title": "データなし"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} が ({1}) のセットにある",
       "nin": "{0} が ({1}) のセットにない",
       "rg": "{0} の次の範囲 ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "不明"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "推奨の効果",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "推奨される治療",
     "WhatIf": {
       "setValue": "値の設定",
@@ -174,6 +181,7 @@
       "subText": "選択したコーホートの詳細を確認します。そのコーホート名を編集します。このコーホートを削除します。"
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "特徴量",
       "importances": "重要度",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -661,12 +669,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "カテゴリ別として扱う",
+      "apply": "Apply",
       "binLabel": "データにビン分割を適用する",
       "countHelperText": "ポイント数のヒストグラム",
       "ditherLabel": "ディザーが必要",
       "groupByCohort": "コーホートでグループ化",
       "numOfBins": "ビンの数",
-      "select": "選択",
       "selectClass": "クラスを選択",
       "selectFeature": "特徴量を選択",
       "selectFilter": "軸の値を選択"
@@ -813,14 +821,14 @@
       "violinText": "バイオリン"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " {0} を除外する ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " {0} を含む ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} と他 {1} 個"
     },
     "Filters": {
@@ -862,6 +870,7 @@
       "weightOptions": "クラスの重要度の重み"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "エラーが発生しました: {0}",
       "featurePickerLabel": "特徴量:",
       "integerError": "整数にする必要があります",
@@ -874,6 +883,7 @@
       "prediction": "予測",
       "predictionLabel": "予測: {0}",
       "probabilityLabel": "確率 : {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "手順:",
       "submitPrompt": "ICE プロットを表示する範囲を送信してください",
       "topLevelErrorMessage": "パラメーターのエラー"
@@ -1167,14 +1177,14 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1196,6 +1206,10 @@
         "noMetricsSelectedWarning": "Please select at least one metric.",
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "visualDisplayToggleLabel": "Show heatmap",

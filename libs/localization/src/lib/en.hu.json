@@ -47,9 +47,9 @@
       "BarTextBinary": "Az első sáv átlagos relatív nyereséget jelez, ha a fent leírt ajánlott globális kezelési szabályzatot alkalmazták. A jelentett nyereséget tartalmazó jelentés a felhasznált kezelés numerikus változását jelenti. A második sáv a bináris kezelések bekapcsolásával kapcsolatos relatív nyereséget (vagy veszteséget) jelzi, azzal, hogy mindenkit kezelnek.",
       "BarTextContinuous": "Az első sáv átlagos relatív nyereséget jelez, ha a fent leírt ajánlott globális kezelési szabályzatot alkalmazták. A jelentett nyereség a minta tipikus kezelési méretének 10%-val tükrözi a kezelési funkció növekedését/csökkentését. A második sáv a relatív nyereséget (vagy veszteséget) jelöli a 10%-al növekvő/csökkenő folyamatos kezelésből.",
       "Description": "Ezek az eszközök segítenek a jövőbeli beavatkozásokra vonatkozó szabályok kialakításában. Azonosíthatja, hogy a minta mely részei reagálnak a legnagyobb mértékben egy ok-okozati tényezőre (pl. kezelésre), vagy szabályokat alkothat annak meghatározására, hogy a jövőben mely adathalmazoknak lesznek a legnagyobb kezelési hatásai.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Ajánlott kezelés = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Kezelési funkció beállítása",
       "Size": "Értelmezhető globális kezelési szabályzat a mintamérethez (n) = {0}",
       "Table": "A táblázat olvasható úgy, hogy vesz egy sort, majd az adott sor egyik oszlopát.",
@@ -71,12 +71,12 @@
       "Title": "Nincs adat"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} szerepel a(z) ({1}) halmazban",
       "nin": "{0} nem szerepel a(z) ({1}) halmazban",
       "rg": "{0} a következő tartományban: ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "ismeretlen"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "CI_alsó",
     "EffectOfTreatment": "Az ajánlás hatása",
     "EffectUpperBound": "CI_felső",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Ajánlott kezelés",
     "WhatIf": {
       "setValue": "Érték megadása",
@@ -174,6 +181,7 @@
       "subText": "Megtekintheti a kijelölt kohorszra vonatkozó tudnivalókat, szerkesztheti a kohorsz nevét, illetve törölheti ezt a kohorszt."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Jellemzők",
       "importances": "Fontosságok",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -661,12 +669,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "Kezelés kategorikusként",
+      "apply": "Apply",
       "binLabel": "Kvantálás alkalmazása az adatokra",
       "countHelperText": "A pontok számának hisztogramja",
       "ditherLabel": "Simítandó",
       "groupByCohort": "Csoportosítás kohorsz alapján",
       "numOfBins": "Dobozok száma",
-      "select": "Kiválasztás",
       "selectClass": "Osztály kijelölése",
       "selectFeature": "Jellemző kiválasztása",
       "selectFilter": "A tengelyérték kiválasztása"
@@ -813,14 +821,14 @@
       "violinText": "Violin"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " kizárja a következőt: {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " Tartalmazza a következőt: {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} és további {1}"
     },
     "Filters": {
@@ -862,6 +870,7 @@
       "weightOptions": "Osztály fontossági súlyozása"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "Hiba történt: {0}",
       "featurePickerLabel": "Jellemző:",
       "integerError": "Egész számnak kell lennie",
@@ -874,6 +883,7 @@
       "prediction": "Előrejelzés",
       "predictionLabel": "Előrejelzés: {0}",
       "probabilityLabel": "Valószínűség: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Lépések:",
       "submitPrompt": "Adja meg az ICE-ábrán megtekinteni kívánt tartományt",
       "topLevelErrorMessage": "Hiba a paraméterben"
@@ -1167,14 +1177,14 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1196,6 +1206,10 @@
         "noMetricsSelectedWarning": "Please select at least one metric.",
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "visualDisplayToggleLabel": "Show heatmap",
