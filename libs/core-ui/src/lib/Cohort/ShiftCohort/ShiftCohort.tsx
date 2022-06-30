@@ -121,8 +121,14 @@ export class ShiftCohort extends React.Component<
           temporaryCohort={this.state.savedCohorts[this.state.selectedCohort]}
         />
         <DialogFooter>
-          <PrimaryButton onClick={this.onApplyClick} text="Apply" />
-          <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+          <PrimaryButton
+            onClick={this.onApplyClick}
+            text={localization.Core.ShiftCohort.apply}
+          />
+          <DefaultButton
+            onClick={this.props.onDismiss}
+            text={localization.Core.ShiftCohort.cancel}
+          />
         </DialogFooter>
       </Dialog>
     );

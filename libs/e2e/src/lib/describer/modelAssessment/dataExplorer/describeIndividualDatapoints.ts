@@ -85,6 +85,6 @@ export function axisSelection(label: string): void {
     .click()
     .get("#AxisConfigPanel")
     .find("button")
-    .contains("Select")
+    .contains("Apply")
     .click();
 }
