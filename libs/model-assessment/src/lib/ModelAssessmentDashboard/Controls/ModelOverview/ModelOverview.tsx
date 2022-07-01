@@ -482,7 +482,8 @@ export class ModelOverview extends React.Component<
                     />
                   </PivotItem>
                 )}
-                {this.context.modelMetadata.modelType === ModelTypes.Regression && (
+                {this.context.modelMetadata.modelType ===
+                  ModelTypes.Regression && (
                   <PivotItem
                     headerText={
                       localization.ModelAssessment.ModelOverview
