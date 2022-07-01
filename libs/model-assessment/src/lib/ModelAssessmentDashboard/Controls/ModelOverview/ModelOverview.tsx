@@ -42,6 +42,7 @@ import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
+import { RegressionDistributionChart } from "./RegressionDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -476,6 +477,19 @@ export class ModelOverview extends React.Component<
                     }
                   >
                     <ProbabilityDistributionChart
+                      onChooseCohorts={this.onChooseCohorts}
+                      cohorts={chartCohorts}
+                    />
+                  </PivotItem>
+                )}
+                {this.context.modelMetadata.modelType === ModelTypes.Regression && (
+                  <PivotItem
+                    headerText={
+                      localization.ModelAssessment.ModelOverview
+                        .regressionDistributionPivotItem
+                    }
+                  >
+                    <RegressionDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
                       cohorts={chartCohorts}
                     />
