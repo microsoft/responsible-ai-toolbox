@@ -179,32 +179,16 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     item?: IContextualMenuItem
   ): boolean {
-    if (item?.data) {
-      // item.checked means it was checked before the click
-      if (item.checked) {
-        if (this.props.featureFlights.includes(item.data)) {
-          // need to remove flight
-          const previousFlights = parseFeatureFlights(
-            this.props.featureFlights
-          );
-          const newFlights = previousFlights.filter(
-            (flight) => flight !== item.data
-          );
-          this.props.onSettingChanged(
-            field,
-            newFlights.join(featureFlightSeparator)
-          );
-        }
-      } else if (!this.props.featureFlights.includes(item.data)) {
-        // need to add flight
-        const flights = parseFeatureFlights(this.props.featureFlights);
-        flights.push(item.data);
-        this.props.onSettingChanged(
-          field,
-          flights.join(featureFlightSeparator)
-        );
-      }
+    if (!item?.data) return true;
+
+    let flights = parseFeatureFlights(this.props.featureFlights);
+    // item.checked means it was checked before the click
+    if (item.checked) {
+      flights = flights.filter((flight) => flight !== item.data);
+    } else {
+      flights.push(item.data);
     }
+    this.props.onSettingChanged(field, flights.join(featureFlightSeparator));
     return true;
   }
 }

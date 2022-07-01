@@ -26,9 +26,7 @@ interface IAppState extends Required<IAppSetting> {
 
 export class App extends React.Component<IAppSetting, IAppState> {
   public static route = generateRoute(routeKey);
-  public static routeWithoutFlights = generateRoute(
-    routeKey.filter((p) => p !== "featureFlights")
-  );
+
   public constructor(props: IAppSetting) {
     super(props);
     this.state = this.getState({ ...this.props, iteration: 0 });
@@ -129,13 +127,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
             />
           )}
         </div>
-        <Redirect
-          to={generatePath(
-            this.state.featureFlights ? App.route : App.routeWithoutFlights,
-            this.state
-          )}
-          push
-        />
+        <Redirect to={generatePath(App.route, this.state)} push />
       </>
     );
   }
