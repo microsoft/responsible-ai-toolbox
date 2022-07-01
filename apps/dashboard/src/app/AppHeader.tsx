@@ -15,7 +15,7 @@ import {
 import React from "react";
 
 import { applications, IApplications } from "./applications";
-import { IAppSetting, noFlights } from "./IAppSetting";
+import { IAppSetting } from "./IAppSetting";
 import { themes } from "./themes";
 
 export interface IAppHeaderProps extends Required<IAppSetting> {
@@ -105,11 +105,7 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
             featureFlights,
             this.onFeatureFlightSelect,
             true,
-            parseFeatureFlights(
-              this.props.featureFlights === noFlights
-                ? ""
-                : this.props.featureFlights
-            )
+            parseFeatureFlights(this.props.featureFlights)
           )
         },
         text: `Feature flights - ${this.props.featureFlights}`
@@ -196,21 +192,16 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
           );
           this.props.onSettingChanged(
             field,
-            newFlights.length === 0
-              ? noFlights
-              : newFlights.join(featureFlightSeparator)
+            newFlights.join(featureFlightSeparator)
           );
         }
       } else if (!this.props.featureFlights.includes(item.data)) {
         // need to add flight
+        const flights = parseFeatureFlights(this.props.featureFlights);
+        flights.push(item.data);
         this.props.onSettingChanged(
           field,
-          this.props.featureFlights === noFlights
-            ? item.data
-            : this.props.featureFlights.concat(
-                featureFlightSeparator,
-                item.data
-              )
+          flights.join(featureFlightSeparator)
         );
       }
     }

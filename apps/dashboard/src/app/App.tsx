@@ -16,7 +16,7 @@ import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
 import { applications, IApplications, applicationKeys } from "./applications";
-import { IAppSetting, noFlights, routeKey } from "./IAppSetting";
+import { IAppSetting, routeKey } from "./IAppSetting";
 import { themes } from "./themes";
 
 interface IAppState extends Required<IAppSetting> {
@@ -26,6 +26,9 @@ interface IAppState extends Required<IAppSetting> {
 
 export class App extends React.Component<IAppSetting, IAppState> {
   public static route = generateRoute(routeKey);
+  public static routeWithoutFlights = generateRoute(
+    routeKey.filter((p) => p !== "featureFlights")
+  );
   public constructor(props: IAppSetting) {
     super(props);
     this.state = this.getState({ ...this.props, iteration: 0 });
@@ -122,15 +125,17 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
-              featureFlights={
-                this.state.featureFlights === noFlights
-                  ? []
-                  : parseFeatureFlights(this.state.featureFlights)
-              }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
             />
           )}
         </div>
-        <Redirect to={generatePath(App.route, this.state)} push />
+        <Redirect
+          to={generatePath(
+            this.state.featureFlights ? App.route : App.routeWithoutFlights,
+            this.state
+          )}
+          push
+        />
       </>
     );
   }
@@ -149,14 +154,14 @@ export class App extends React.Component<IAppSetting, IAppState> {
       props.application as keyof IApplications
     );
     const application: keyof IApplications =
-      idx < 0 ? "interpret" : applicationKeys[idx];
+      idx < 0 ? "modelAssessment" : applicationKeys[idx];
     return {
       application,
       dataset:
         !props.dataset || !applications[application].datasets[props.dataset]
           ? Object.keys(applications[application].datasets)[0]
           : props.dataset,
-      featureFlights: props.featureFlights ?? noFlights,
+      featureFlights: props.featureFlights ?? "",
       iteration: props.iteration + 1,
       language:
         !props.language || !Language[props.language]
