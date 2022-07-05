@@ -114,8 +114,13 @@ export function generateCohortsStatsTable(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat && !Number.isNaN(labeledStat.stat)) {
+          let colorValue = (labeledStat.stat - metricMin) / metricMinMaxDiff;
+          if (metricMin === metricMax) {
+            // only 1 unique value in the set, set color to 0
+            colorValue = 0;
+          }
           items.push({
-            colorValue: (labeledStat.stat - metricMin) / metricMinMaxDiff,
+            colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
             y: cohortIndex

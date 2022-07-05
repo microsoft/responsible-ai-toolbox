@@ -543,7 +543,17 @@ modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelDebug
         name: "Cohort True Y",
         sampleSize: "123"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        accuracy: "0.858",
+        falseNegativeRate: "0.344",
+        falsePositiveRate: "0.077",
+        selectionRate: "0.244"
+      },
+      name: "CohortCreateE2E-census",
+      sampleSize: "499"
+    }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModelOverviewExperience.modelOverviewData =
   {
@@ -607,7 +617,16 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModel
         name: "Cohort Regression Error",
         sampleSize: "63"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        meanAbsoluteError: "3 858.02",
+        meanPrediction: "153.958",
+        meanSquaredError: "3 014.96"
+      },
+      name: "CohortCreateE2E-diabetes",
+      sampleSize: "88"
+    }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
@@ -626,7 +645,16 @@ modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggi
         name: "All data",
         sampleSize: "89"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        meanAbsoluteError: "3 858.02",
+        meanPrediction: "153.958",
+        meanSquaredError: "3 014.96"
+      },
+      name: "CohortCreateE2E-diabetes",
+      sampleSize: "88"
+    }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
   {
@@ -646,7 +674,17 @@ modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebu
         name: "All data",
         sampleSize: "730"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        accuracy: "0.911",
+        falseNegativeRate: "0.093",
+        falsePositiveRate: "0.085",
+        selectionRate: "0.499"
+      },
+      name: "CohortCreateE2E-housing",
+      sampleSize: "729"
+    }
   };
 modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
   {
@@ -667,7 +705,14 @@ modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNew
         name: "All data",
         sampleSize: "89"
       }
-    ]
+    ],
+    newCohort: {
+      metrics: {
+        accuracy: "0.67"
+      },
+      name: "CohortCreateE2E-multiclass-dnn",
+      sampleSize: "88"
+    }
   };
 
 const withType: {

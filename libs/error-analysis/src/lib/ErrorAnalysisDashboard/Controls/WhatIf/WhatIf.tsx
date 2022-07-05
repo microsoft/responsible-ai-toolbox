@@ -13,7 +13,8 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FabricStyles,
-  getFeatureOptions
+  getFeatureOptions,
+  ErrorDialog
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, WhatIfPanel } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -38,6 +39,7 @@ export interface IWhatIfState {
   featuresOption: IDropdownOption[];
   selectedWhatIfRootIndex: number;
   editingDataCustomIndex?: number;
+  errorMessage?: string;
   request?: AbortController;
 }
 
@@ -88,47 +90,68 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
   public render(): React.ReactNode {
     const classNames = whatIfStyles();
     return (
-      <Panel
-        headerText={localization.ErrorAnalysis.WhatIfPanel.whatIfHeader}
-        isOpen={this.props.isOpen}
-        focusTrapZoneProps={focusTrapZoneProps}
-        // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
-        closeButtonAriaLabel="Close"
-        isBlocking={false}
-        onDismiss={this.props.onDismiss}
-      >
-        <div className={classNames.divider} />
-        <div className={classNames.section}>
-          <div className={classNames.subsection}>
-            <WhatIfPanel
-              dismissPanel={this.props.onDismiss}
-              filterFeatures={this.filterFeatures}
-              filteredFeatureList={this.state.filteredFeatureList}
-              isPanelOpen={this.props.isOpen}
-              isInPanel
-              jointDataset={this.context.jointDataset}
-              metadata={this.context.modelMetadata}
-              openPanel={(): void => {
-                // do nothing
-              }}
-              rowOptions={this.rowOptions}
-              saveAsPoint={this.saveAsPoint}
-              savePoint={this.savePoint}
-              selectedWhatIfRootIndex={this.state.selectedWhatIfRootIndex}
-              setCustomRowProperty={this.setCustomRowProperty}
-              setCustomRowPropertyDropdown={this.setCustomRowPropertyDropdown}
-              setSelectedIndex={this.setSelectedIndex}
-              stringifiedValues={this.stringifiedValues}
-              temporaryPoint={this.temporaryPoint}
-              validationErrors={this.validationErrors}
-              editingDataCustomIndex={this.state.editingDataCustomIndex}
-              invokeModel={this.props.invokeModel}
-            />
+      <>
+        <Panel
+          headerText={localization.ErrorAnalysis.WhatIfPanel.whatIfHeader}
+          isOpen={this.props.isOpen}
+          focusTrapZoneProps={focusTrapZoneProps}
+          // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
+          closeButtonAriaLabel="Close"
+          isBlocking={false}
+          onDismiss={this.props.onDismiss}
+        >
+          <div className={classNames.divider} />
+          <div className={classNames.section}>
+            <div className={classNames.subsection}>
+              <WhatIfPanel
+                dismissPanel={this.props.onDismiss}
+                filterFeatures={this.filterFeatures}
+                filteredFeatureList={this.state.filteredFeatureList}
+                isPanelOpen={this.props.isOpen}
+                isInPanel
+                jointDataset={this.context.jointDataset}
+                metadata={this.context.modelMetadata}
+                openPanel={(): void => {
+                  // do nothing
+                }}
+                rowOptions={this.rowOptions}
+                saveAsPoint={this.saveAsPoint}
+                savePoint={this.savePoint}
+                selectedWhatIfRootIndex={this.state.selectedWhatIfRootIndex}
+                setCustomRowProperty={this.setCustomRowProperty}
+                setCustomRowPropertyDropdown={this.setCustomRowPropertyDropdown}
+                setSelectedIndex={this.setSelectedIndex}
+                stringifiedValues={this.stringifiedValues}
+                temporaryPoint={this.temporaryPoint}
+                validationErrors={this.validationErrors}
+                editingDataCustomIndex={this.state.editingDataCustomIndex}
+                invokeModel={this.props.invokeModel}
+              />
+            </div>
           </div>
-        </div>
-      </Panel>
+        </Panel>
+        {this.state.errorMessage && this.renderErrorDialog()}
+      </>
     );
   }
+
+  private readonly renderErrorDialog = (): React.ReactNode => {
+    return (
+      <ErrorDialog
+        title={localization.Interpret.IcePlot.pythonError}
+        subText={localization.formatString(
+          localization.Interpret.IcePlot.errorPrefix,
+          this.state.errorMessage
+        )}
+        cancelButtonText={localization.Interpret.IcePlot.close}
+        onClose={this.onClose}
+      />
+    );
+  };
+
+  private readonly onClose = (): void => {
+    this.setState({ errorMessage: undefined });
+  };
 
   private filterFeatures = (
     _event?: React.ChangeEvent<HTMLInputElement>,
@@ -339,12 +362,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
           return;
         }
         if (error.name === "PythonError") {
-          alert(
-            localization.formatString(
-              localization.Interpret.IcePlot.errorPrefix,
-              error.message
-            )
-          );
+          this.setState({ errorMessage: error.message });
         }
       }
     });

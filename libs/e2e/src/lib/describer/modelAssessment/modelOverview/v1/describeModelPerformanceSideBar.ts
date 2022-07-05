@@ -39,7 +39,7 @@ export function describeModelPerformanceSideBar(
         }
       });
 
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.yAxisNewValue || "age"
       );
@@ -56,7 +56,7 @@ export function describeModelPerformanceSideBar(
           `${Locators.DECChoiceFieldGroup}  label:contains(${dataShape.modelStatisticsData?.defaultYAxis})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.defaultYAxis || "Cohort"
       );
@@ -76,7 +76,7 @@ export function describeModelPerformanceSideBar(
           `${Locators.DECChoiceFieldGroup} label:contains(${dataShape.modelStatisticsData?.yAxisNewPanelValue})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.yAxisNewValue || "age"
       );
@@ -92,7 +92,7 @@ export function describeModelPerformanceSideBar(
           `${Locators.DECChoiceFieldGroup} label:contains(${dataShape.modelStatisticsData?.defaultYAxis})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.defaultYAxis || "Cohort"
       );
