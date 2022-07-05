@@ -8,9 +8,7 @@ export interface IDataBalanceMeasures {
 }
 
 export interface IAggregateBalanceMeasures {
-  AtkinsonIndex: number;
-  TheilLIndex: number;
-  TheilTIndex: number;
+  [key: string]: number;
 }
 
 export interface IDistributionBalanceMeasures {
@@ -18,14 +16,7 @@ export interface IDistributionBalanceMeasures {
 }
 
 export interface IDistributionBalanceMeasure {
-  ChiSquarePValue: number;
-  ChiSquareStat: number;
-  InfiniteNormDist: number;
-  JensenShannonDist: number;
-  KLDivergence: number;
-  TotalVarianceDist: number;
-  WassersteinDist: number;
-  CrossEntropy: number;
+  [key: string]: number;
 }
 
 export interface IFeatureBalanceMeasures {
@@ -33,14 +24,7 @@ export interface IFeatureBalanceMeasures {
 }
 
 export interface IFeatureBalanceMeasure {
+  [key: string]: number | string;
   ClassA: string;
   ClassB: string;
-  StatisticalParity: number;
-  PointwiseMutualInfo: number;
-  SorensonDiceCoeff: number;
-  JaccardIndex: number;
-  KendallRankCorrelation: number;
-  LogLikelihoodRatio: number;
-  TTest: number;
-  TTestPValue: number;
 }
