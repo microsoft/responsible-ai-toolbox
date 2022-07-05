@@ -156,7 +156,8 @@ class RAIInsights(RAIBaseInsights):
         represents a binary classification task and contains valid values.
         """
 
-        if self._classes is not None and len(self._classes) <= 2:
+        if len(self.categorical_features) > 0 and \
+                self._classes is not None and len(self._classes) <= 2:
             if all(c in [0, 1] for c in self._classes):
                 self.data_balance.add(
                     cols_of_interest=self.categorical_features)
