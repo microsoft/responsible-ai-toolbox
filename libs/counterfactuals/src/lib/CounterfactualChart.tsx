@@ -101,7 +101,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.fetchData = _.debounce(this.fetchData, 400);
 
     this.setState({
       chartProps: this.generateDefaultChartAxes()
