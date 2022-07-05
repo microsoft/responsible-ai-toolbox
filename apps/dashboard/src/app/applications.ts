@@ -272,7 +272,16 @@ export const applications: IApplications = <const>{
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
-      } as IModelAssessmentDataSet
+      } as IModelAssessmentDataSet,
+      visionData: {
+        causalAnalysisData: undefined,
+        classDimension: 2,
+        cohortData: undefined,
+        counterfactualData: undefined,
+        dataset: adultCensusWithFairnessDataset,
+        errorAnalysisData: undefined,
+        modelExplanationData: [adultCensusWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet,
     },
     versions: { "1": 1, "2:Static-View": 2 }
   }

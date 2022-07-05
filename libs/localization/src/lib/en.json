@@ -1119,6 +1119,23 @@
       "groupPredicted": "Predicted Y",
       "groupTrue": "True Y"
     },
+    "VisionDatasetExplorer": {
+      "columnOne": "Title",
+      "columnTwo": "Index",
+      "columnThree": "True Y",
+      "columnFour": "Predicted Y",
+      "columnFive": "Other metadata",
+      "filter": "Filter",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
+      "pageSize": "Page size: ",
+      "settings": "Settings",
+      "tabOptionFirst": "Image explorer view",
+      "tabOptionSecond": "Table view",
+      "tabOptionThird": "Data characteristics",
+      "thumbnailSize": "Thumbnail size",
+      "titleBarError": "Error instances",
+      "titleBarSuccess": "Success instances"
+    },
     "WhatIf": {
       "_defaultCustomRootName.comment": "default prefix for a hypothetical point made by copying another point",
       "_filterFeaturePlaceholder.comment": "placeholder in search box for searching for features by name",

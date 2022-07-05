@@ -6,12 +6,12 @@ import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
-  ModelAssessmentDashboard,
   IModelAssessmentDashboardProps,
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
+import { VisionModelAssessmentDashboard } from "../../../../libs/model-assessment/src/lib/ModelAssessmentDashboard/VisionModelAssessmentDashboard"
 import {
   generateJsonMatrix,
   createJsonImportancesGenerator,
@@ -125,7 +125,9 @@ export class App extends React.Component<IAppProps> {
       };
     }
 
-    return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    //return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    return <VisionModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+
   }
 
   private readonly requestCausalWhatIf = async (
