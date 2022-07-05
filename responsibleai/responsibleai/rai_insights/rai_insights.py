@@ -99,6 +99,8 @@ class RAIInsights(RAIBaseInsights):
             model, train, test, target_column, task_type,
             serializer)
 
+        self._try_add_data_balance()
+
     def _initialize_managers(self):
         """Initializes the managers.
 
@@ -147,6 +149,23 @@ class RAIInsights(RAIBaseInsights):
                 return classes
         else:
             return None
+
+    def _try_add_data_balance(self):
+        """
+        Add data balance measures to be computed later if the target column
+        represents a binary classification task and contains valid values.
+        """
+
+        if self._classes is not None and len(self._classes) <= 2:
+            if all(c in [0, 1] for c in self._classes):
+                self.data_balance.add(
+                    cols_of_interest=self.categorical_features)
+            else:
+                warnings.warn(
+                    f'The target column contains {self._classes} and seems '
+                    'to represent a binary classification task. If this is '
+                    'the case, map these values to {0, 1} so that data '
+                    'balance measures can be automatically computed.')
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
