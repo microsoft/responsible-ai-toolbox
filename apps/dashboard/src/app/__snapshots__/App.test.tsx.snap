@@ -15928,7 +15928,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
   </div>
   <Redirect
     push={true}
-    to="/modelAssessment/adultCensusIncomeData/1%20-%20light/en/1"
+    to="/modelAssessment/adultCensusIncomeData/1%20-%20light/en/1/"
   />
 </Fragment>
 `;
