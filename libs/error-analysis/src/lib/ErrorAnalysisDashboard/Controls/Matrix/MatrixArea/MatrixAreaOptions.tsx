@@ -15,8 +15,6 @@ interface IMatrixAreaOptionsProps {
   disableClearAll: boolean;
   disableSelectAll: boolean;
   isEnabled: boolean;
-  matrixLength: number;
-  matrixRowLength: number;
   numBins: number;
   quantileBinning: boolean;
   clearAll(): void;

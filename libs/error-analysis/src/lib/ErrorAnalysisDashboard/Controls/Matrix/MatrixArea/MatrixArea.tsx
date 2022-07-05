@@ -152,7 +152,6 @@ export class MatrixArea extends React.PureComponent<
       }
     ]);
     const matrixLength = this.state.jsonMatrix.matrix.length;
-    const matrixRowLength = this.state.jsonMatrix.matrix[0].length;
     // Extract categories
     const [category1Values] = extractCategories(
       this.state.jsonMatrix.category1
@@ -166,8 +165,6 @@ export class MatrixArea extends React.PureComponent<
           disableClearAll={this.state.disableClearAll}
           disableSelectAll={this.state.disableSelectAll}
           isEnabled={this.props.isEnabled}
-          matrixLength={matrixLength}
-          matrixRowLength={matrixRowLength}
           numBins={this.state.numBins}
           quantileBinning={this.state.quantileBinning}
           clearAll={this.clearAll}
