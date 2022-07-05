@@ -6,8 +6,7 @@
 import numpy as np
 from flask import jsonify, request
 
-from responsibleai._input_processing import (_convert_to_list,
-                                             _convert_to_string_list_dict)
+from raiutils.data_processing import convert_to_list, convert_to_string_list_dict
 
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule
@@ -57,15 +56,15 @@ class FairnessDashboard(Dashboard):
         if sensitive_features is None or y_true is None or y_pred is None:
             raise ValueError("Required parameters not provided")
 
-        model_dict = _convert_to_string_list_dict("Model {0}",
-                                                  y_pred,
-                                                  y_true)
-        sf_dict = _convert_to_string_list_dict("Sensitive Feature {0}",
-                                               sensitive_features,
-                                               y_true)
+        model_dict = convert_to_string_list_dict("Model {0}",
+                                                 y_pred,
+                                                 y_true)
+        sf_dict = convert_to_string_list_dict("Sensitive Feature {0}",
+                                              sensitive_features,
+                                              y_true)
 
         # Make sure that things are as the TS layer expects
-        self._y_true = _convert_to_list(y_true)
+        self._y_true = convert_to_list(y_true)
         self._y_pred = list(model_dict.values())
         # Note transpose in the following
         dataset = (np.array(list(sf_dict.values())).T).tolist()

@@ -20,7 +20,7 @@ from interpret_community.mimic.models.linear_model import \
     LinearExplainableModel
 from scipy.sparse import issparse
 
-from responsibleai._input_processing import _convert_to_list
+from raiutils.data_processing import convert_to_list
 from responsibleai._interfaces import (EBMGlobalExplanation, FeatureImportance,
                                        ModelExplanationData,
                                        PrecomputedExplanations)
@@ -211,13 +211,13 @@ class ExplainerManager(BaseManager):
         if local_explanation is not None:
             try:
                 local_feature_importance = FeatureImportance()
-                local_feature_importance.scores = _convert_to_list(
+                local_feature_importance.scores = convert_to_list(
                     local_explanation["scores"])
                 if np.shape(local_feature_importance.scores)[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_feature_importance.intercept = _convert_to_list(
+                local_feature_importance.intercept = convert_to_list(
                     local_explanation["intercept"])
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -252,11 +252,11 @@ class ExplainerManager(BaseManager):
         if global_explanation is not None:
             try:
                 global_feature_importance = FeatureImportance()
-                global_feature_importance.scores = _convert_to_list(
+                global_feature_importance.scores = convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
                     global_feature_importance.intercept\
-                        = _convert_to_list(
+                        = convert_to_list(
                             global_explanation["intercept"])
                 interpretation.precomputedExplanations.globalFeatureImportance\
                     = global_explanation

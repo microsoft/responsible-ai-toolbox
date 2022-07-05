@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from raiutils.models import SKLearn, is_classifier
-from responsibleai._input_processing import _convert_to_list
+from raiutils.data_processing import convert_to_list
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
@@ -404,7 +404,7 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
         dashboard_dataset.categorical_features = self.categorical_features
-        dashboard_dataset.class_names = _convert_to_list(
+        dashboard_dataset.class_names = convert_to_list(
             self._classes)
 
         predicted_y = None
@@ -416,7 +416,7 @@ class RAIInsights(RAIBaseInsights):
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
         try:
-            list_dataset = _convert_to_list(dataset)
+            list_dataset = convert_to_list(dataset)
         except Exception as ex:
             raise ValueError(
                 "Unsupported dataset type") from ex
@@ -428,7 +428,7 @@ class RAIInsights(RAIBaseInsights):
                 "dataset type"
                 raise ValueError(msg) from ex
             try:
-                predicted_y = _convert_to_list(predicted_y)
+                predicted_y = convert_to_list(predicted_y)
             except Exception as ex:
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
@@ -461,12 +461,12 @@ class RAIInsights(RAIBaseInsights):
                dashboard_dataset.class_names is not None):
                 true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
-            dashboard_dataset.true_y = _convert_to_list(true_y)
+            dashboard_dataset.true_y = convert_to_list(true_y)
 
         features = dataset.columns
 
         if features is not None:
-            features = _convert_to_list(features)
+            features = convert_to_list(features)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -480,7 +480,7 @@ class RAIInsights(RAIBaseInsights):
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex
             try:
-                probability_y = _convert_to_list(probability_y)
+                probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex
@@ -523,7 +523,7 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         top_dir = Path(path)
-        classes = _convert_to_list(self._classes)
+        classes = convert_to_list(self._classes)
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
