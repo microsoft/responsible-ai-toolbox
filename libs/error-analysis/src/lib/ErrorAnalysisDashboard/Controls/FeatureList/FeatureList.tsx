@@ -19,7 +19,6 @@ import {
   ISearchBoxStyles,
   ISettings,
   IStackTokens,
-  ITheme,
   Customizer,
   getId,
   Layer,
@@ -154,7 +153,6 @@ export class FeatureList extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const theme = getTheme();
     return (
       <Panel
         headerText="Feature List"
@@ -209,10 +207,7 @@ export class FeatureList extends React.Component<
                       setKey="set"
                       layoutMode={DetailsListLayoutMode.fixedColumns}
                       constrainMode={ConstrainMode.unconstrained}
-                      onRenderItemColumn={this.renderItemColumn.bind(
-                        this,
-                        theme
-                      )}
+                      onRenderItemColumn={this.renderItemColumn}
                       selectionPreservedOnEmptyClick
                       ariaLabelForSelectionColumn="Toggle selection"
                       ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -275,11 +270,11 @@ export class FeatureList extends React.Component<
   };
 
   private renderItemColumn(
-    theme: ITheme,
     item: any,
     index?: number,
     column?: IColumn
   ): React.ReactNode {
+    const theme = getTheme();
     if (column && index !== undefined) {
       const fieldContent = item[column.fieldName as keyof any] as string;
 
