@@ -27,6 +27,8 @@ ROOT_STATS = 'root_stats'
 def json_converter(obj):
     """Helper function to convert ErrorReport object to a dictionary.
 
+    Some dummy comment.
+
     :param obj: Object to convert to a dictionary which can be saved as json.
     :type obj: object
     :return: The converted dictionary which can be saved as json.
