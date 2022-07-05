@@ -6,7 +6,8 @@
 import numpy as np
 from flask import jsonify, request
 
-from raiutils.data_processing import convert_to_list, convert_to_string_list_dict
+from raiutils.data_processing import (convert_to_list,
+                                      convert_to_string_list_dict)
 
 from .dashboard import Dashboard
 from .fairness_metric_calculation import FairnessMetricModule

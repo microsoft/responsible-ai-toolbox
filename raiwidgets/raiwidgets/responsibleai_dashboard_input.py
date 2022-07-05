@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
-from raiutils.models import is_classifier
 from raiutils.data_processing import convert_to_list
+from raiutils.models import is_classifier
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException

@@ -11,8 +11,8 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.utils import is_spark
-from raiutils.models import is_classifier
 from raiutils.data_processing import convert_to_list
+from raiutils.models import is_classifier
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
 

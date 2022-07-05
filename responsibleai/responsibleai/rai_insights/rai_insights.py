@@ -12,8 +12,8 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
-from raiutils.models import SKLearn, is_classifier
 from raiutils.data_processing import convert_to_list
+from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
