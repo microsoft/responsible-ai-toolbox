@@ -729,7 +729,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
     metric_name = metric_to_display_name[metric]
     is_error_metric = metric in error_metrics
     if SPLIT_FEATURE in tree:
-        node_name = feature_names[tree[SPLIT_FEATURE]]
+        node_name = str(feature_names[tree[SPLIT_FEATURE]])
     else:
         node_name = None
     json.append(get_json_node(arg, condition, error, nodeid, method,
