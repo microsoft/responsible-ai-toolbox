@@ -11,8 +11,8 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.utils import is_spark
+from raiutils.data_processing import convert_to_list
 from raiutils.models import is_classifier
-from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
 from responsibleai.serialization_utilities import serialize_json_safe
 
@@ -183,14 +183,14 @@ class ErrorAnalysisDashboardInput:
         predicted_y = self.predicted_y_to_list(predicted_y)
         true_y = pd_sample[true_y]
         pd_sample = pd_sample[features]
-        list_dataset = _convert_to_list(pd_sample)
+        list_dataset = convert_to_list(pd_sample)
         self.setup_visualization_input(classes, predicted_y,
                                        list_dataset, true_y, features)
 
     def setup_visualization_input(self, classes, predicted_y,
                                   list_dataset, true_y, features):
         if classes is not None:
-            classes = _convert_to_list(classes)
+            classes = convert_to_list(classes)
             self.dashboard_input[
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
@@ -222,7 +222,7 @@ class ErrorAnalysisDashboardInput:
             ] = serialize_json_safe(list_dataset)
 
         if true_y is not None and len(true_y) == row_length:
-            list_true_y = _convert_to_list(true_y)
+            list_true_y = convert_to_list(true_y)
             # If classes specified, convert true_y to numeric representation
             if classes is not None and list_true_y[0] in class_to_index:
                 for i in range(len(list_true_y)):
@@ -232,7 +232,7 @@ class ErrorAnalysisDashboardInput:
             ] = list_true_y
 
         if features is not None:
-            features = _convert_to_list(features)
+            features = convert_to_list(features)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -277,7 +277,7 @@ class ErrorAnalysisDashboardInput:
             self._dataframeColumns = dataset.columns
             self._dfdtypes = dataset.dtypes
         try:
-            list_dataset = _convert_to_list(dataset)
+            list_dataset = convert_to_list(dataset)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
@@ -306,7 +306,7 @@ class ErrorAnalysisDashboardInput:
                                  " for given dataset type,"
                                  " inner error: {}".format(ex_str))
             try:
-                probability_y = _convert_to_list(probability_y)
+                probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -407,7 +407,7 @@ class ErrorAnalysisDashboardInput:
 
     def predicted_y_to_list(self, predicted_y):
         try:
-            predicted_y = _convert_to_list(predicted_y)
+            predicted_y = convert_to_list(predicted_y)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
@@ -447,13 +447,13 @@ class ErrorAnalysisDashboardInput:
 
         if local_explanation is not None:
             try:
-                local_explanation["scores"] = _convert_to_list(
+                local_explanation["scores"] = convert_to_list(
                     local_explanation["scores"])
                 if np.shape(local_explanation["scores"])[-1] > 1000:
                     raise ValueError("Exceeds maximum number of features for "
                                      "visualization (1000). Please regenerate"
                                      " the explanation using fewer features.")
-                local_explanation["intercept"] = _convert_to_list(
+                local_explanation["intercept"] = convert_to_list(
                     local_explanation["intercept"])
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -490,10 +490,10 @@ class ErrorAnalysisDashboardInput:
                                      "local explanations dimension")
         if local_explanation is None and global_explanation is not None:
             try:
-                global_explanation["scores"] = _convert_to_list(
+                global_explanation["scores"] = convert_to_list(
                     global_explanation["scores"])
                 if 'intercept' in global_explanation:
-                    global_explanation["intercept"] = _convert_to_list(
+                    global_explanation["intercept"] = convert_to_list(
                         global_explanation["intercept"])
                 self.dashboard_input[
                     ExplanationDashboardInterface.GLOBAL_EXPLANATION
@@ -583,10 +583,10 @@ class ErrorAnalysisDashboardInput:
                 data = data.astype(dict(self._dfdtypes))
             if (self._is_classifier):
                 model_pred_proba = self._model.predict_proba(data)
-                prediction = _convert_to_list(model_pred_proba)
+                prediction = convert_to_list(model_pred_proba)
             else:
                 model_predict = self._model.predict(data)
-                prediction = _convert_to_list(model_predict)
+                prediction = convert_to_list(model_predict)
             return {
                 WidgetRequestResponseConstants.DATA: prediction
             }
