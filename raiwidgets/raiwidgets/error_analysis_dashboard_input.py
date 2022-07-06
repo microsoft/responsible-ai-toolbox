@@ -11,10 +11,10 @@ from erroranalysis._internal.constants import (Metrics, display_name_to_metric,
 from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
                                                     PredictionsAnalyzer)
 from erroranalysis._internal.utils import is_spark
+from raiutils.data_processing import serialize_json_safe
 from raiutils.models import is_classifier
 from responsibleai._input_processing import _convert_to_list
 from responsibleai._interfaces import ErrorAnalysisData
-from responsibleai.serialization_utilities import serialize_json_safe
 
 from .constants import ModelTask
 from .error_analysis_constants import (ErrorAnalysisDashboardInterface,
