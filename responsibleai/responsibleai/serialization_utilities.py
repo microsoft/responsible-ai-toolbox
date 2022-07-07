@@ -17,8 +17,8 @@ def serialize_json_safe(o: Any):
     :return: Serialized object.
     """
     warnings.warn(
-        "FUNCTION-DEPRECATION-WARNING: The function serialize_json_safe will be "
-        "deprecated in responsibleai. "
+        "FUNCTION-DEPRECATION-WARNING: The function serialize_json_safe "
+        "will be deprecated in responsibleai. "
         "Please import this function from raiutils.data_processing instead.",
         DeprecationWarning)
 
