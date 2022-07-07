@@ -15,6 +15,7 @@ _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
 _LIST_NONSCALAR = "Lists must be of scalar types"
 _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
+
 def convert_to_list(array, custom_err_msg=None):
     """Convert an array to a list.
 
@@ -39,6 +40,7 @@ def convert_to_list(array, custom_err_msg=None):
     if isinstance(array, np.ndarray) or isinstance(array, pd.Index):
         return array.tolist()
     return array
+
 
 def convert_to_string_list_dict(
         base_name_format: str,
