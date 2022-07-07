@@ -15,6 +15,13 @@ _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
 _LIST_NONSCALAR = "Lists must be of scalar types"
 _TOO_MANY_DIMS = "Array must have at most two dimensions"
 
+class FeatureRanges:
+    column_name: str
+    range_type: str
+    unique_values: List[str]
+    min_value: float
+    max_value: float
+
 
 def convert_to_list(array, custom_err_msg=None):
     """Convert an array to a list.
@@ -40,6 +47,26 @@ def convert_to_list(array, custom_err_msg=None):
     if isinstance(array, np.ndarray) or isinstance(array, pd.Index):
         return array.tolist()
     return array
+
+
+def _get_feature_ranges(testData, categorical_features):
+    result = []
+    for col in list(testData.columns):
+        res_object: FeatureRanges = {}
+        if (col in categorical_features):
+            unique_value = testData[col].unique()
+            res_object["column_name"] = col
+            res_object["range_type"] = "categorical"
+            res_object["unique_values"] = unique_value.tolist()
+        else:
+            min_value = float(testData[col].min())
+            max_value = float(testData[col].max())
+            res_object["column_name"] = col
+            res_object["range_type"] = "integer"
+            res_object["min_value"] = min_value
+            res_object["max_value"] = max_value
+        result.append(res_object)
+    return result
 
 
 def convert_to_string_list_dict(
