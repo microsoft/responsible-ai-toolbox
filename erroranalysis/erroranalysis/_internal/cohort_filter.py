@@ -178,17 +178,20 @@ def build_query(filters, categorical_features, categories):
             arg0 = str(filter[ARG][0])
             colname = filter[COLUMN]
             if method == CohortFilterMethods.METHOD_GREATER:
-                queries.append("`" + colname + "` > " + arg0)
+                queries.append("`" + colname + "` greater than " + arg0)
             elif method == CohortFilterMethods.METHOD_LESS:
-                queries.append("`" + colname + "` < " + arg0)
+                queries.append("`" + colname + "` less than " + arg0)
             elif method == CohortFilterMethods.METHOD_LESS_AND_EQUAL:
-                queries.append("`" + colname + "` <= " + arg0)
+                queries.append("`" + colname + "` less than or equal to " +
+                               arg0)
             elif method == CohortFilterMethods.METHOD_GREATER_AND_EQUAL:
-                queries.append("`" + colname + "` >= " + arg0)
+                queries.append("`" + colname + "` greater than or equal to " +
+                               arg0)
             elif method == CohortFilterMethods.METHOD_RANGE:
                 arg1 = str(filter[ARG][1])
-                queries.append("`" + colname + "` >= " + arg0 +
-                               ' & `' + colname + "` <= " + arg1)
+                queries.append("`" + colname + "` greater than or equal to " +
+                               arg0 + ' & `' + colname +
+                               "` less than or equal to " + arg1)
             elif method == CohortFilterMethods.METHOD_INCLUDES or \
                     method == CohortFilterMethods.METHOD_EXCLUDES:
                 query = build_bounds_query(filter, colname, method,
@@ -204,11 +207,13 @@ def build_query(filters, categorical_features, categories):
                     arg0i = filter[ARG][0]
                     arg_cat = categories[cat_idx][arg0i]
                     if isinstance(arg_cat, str):
-                        queries.append("`{}` == '{}'".format(colname, arg_cat))
+                        queries.append("`{}` equal to '{}'".format(colname,
+                                       arg_cat))
                     else:
-                        queries.append("`{}` == {}".format(colname, arg_cat))
+                        queries.append("`{}` equal to {}".format(colname,
+                                       arg_cat))
                 else:
-                    queries.append("`" + colname + "` == " + arg0)
+                    queries.append("`" + colname + "` equal to " + arg0)
             else:
                 raise ValueError(
                     "Unsupported method type: {}".format(method))
@@ -246,9 +251,9 @@ def build_bounds_query(filter, colname, method,
     """
     bounds = []
     if method == CohortFilterMethods.METHOD_EXCLUDES:
-        operator = " != "
+        operator = " not equal to "
     else:
-        operator = " == "
+        operator = " equal to "
     is_categorical = False
     if categorical_features:
         is_categorical = colname in categorical_features

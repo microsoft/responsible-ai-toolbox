@@ -26,7 +26,7 @@ export const dummyTreeAdultCensusIncomeData: IErrorAnalysisTreeNode[] = [
   {
     arg: [1],
     badFeaturesRowCount: 0,
-    condition: "marital-status !=  Married-civ-spouse",
+    condition: "marital-status not equal to Married-civ-spouse",
     error: 1,
     id: 1,
     isErrorMetric: true,
@@ -45,7 +45,7 @@ export const dummyTreeAdultCensusIncomeData: IErrorAnalysisTreeNode[] = [
   {
     arg: [1],
     badFeaturesRowCount: 0,
-    condition: "marital-status ==  Married-civ-spouse",
+    condition: "marital-status equal to  Married-civ-spouse",
     error: 17,
     id: 2,
     isErrorMetric: true,
