@@ -124,6 +124,7 @@ class CausalPolicy:
     policy_gains: CausalPolicyGains
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
+
 class CausalConfig:
     treatment_features: List[str]
 
