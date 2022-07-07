@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import issparse
 from sklearn.utils import check_consistent_length
+from responsibleai._interfaces import FeatureRanges
 
 _DF_COLUMN_BAD_NAME = "DataFrame column names must be strings."\
     " Name '{0}' is of type {1}"
@@ -32,6 +33,25 @@ def _convert_to_list(array, custom_err_msg=None):
     if isinstance(array, pd.Index):
         return array.tolist()
     return array
+
+def _get_feature_ranges(testData, categorical_features):
+    result = []
+    for col in list(testData.columns):
+        res_object: FeatureRanges = {}
+        if (col in categorical_features):
+            unique_value = testData[col].unique()
+            res_object["column_name"] = col
+            res_object["range_type"] = "categorical"
+            res_object["unique_values"] = unique_value.tolist()
+        else:
+            min_value = float(testData[col].min())
+            max_value = float(testData[col].max())
+            res_object["column_name"] = col
+            res_object["range_type"] = "integer"
+            res_object["min_value"] = min_value
+            res_object["max_value"] = max_value
+        result.append(res_object)
+    return result
 
 
 def _convert_to_string_list_dict(

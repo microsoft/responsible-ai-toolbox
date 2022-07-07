@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from raiutils.models import SKLearn, is_classifier
-from responsibleai._input_processing import _convert_to_list
+from responsibleai._input_processing import _convert_to_list, _get_feature_ranges
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
@@ -29,6 +29,8 @@ _TRAIN = 'train'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
+_COLUMNS = 'columns'
+_FEATURERANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
@@ -524,11 +526,15 @@ class RAIInsights(RAIBaseInsights):
         """
         top_dir = Path(path)
         classes = _convert_to_list(self._classes)
+        feature_ranges = _get_feature_ranges(self.test, self.categorical_features)
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
-            _CLASSES: classes
+            _CLASSES: classes,
+            _COLUMNS: list(self.test.columns),
+            _FEATURERANGES: feature_ranges
+
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)

@@ -124,6 +124,12 @@ class CausalPolicy:
     policy_gains: CausalPolicyGains
     policy_tree: Union[CausalPolicyTreeInternal, CausalPolicyTreeLeaf]
 
+class FeatureRanges:
+    column_name: str
+    range_type: str
+    unique_values: List[str]
+    min_value: float
+    max_value: float
 
 class CausalConfig:
     treatment_features: List[str]
