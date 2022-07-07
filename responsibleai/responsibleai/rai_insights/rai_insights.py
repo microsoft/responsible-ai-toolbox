@@ -12,7 +12,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
-from raiutils.data_processing import convert_to_list, _get_feature_ranges
+from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
@@ -37,6 +37,11 @@ _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
+_COLUMN_NAME = 'column_name'
+_RANGE_TYPE = 'range_type'
+_UNIQUE_VALUES = 'unique_values'
+_MIN_VALUE ='min_value'
+_MAX_VALUE = 'max_value'
 
 
 class RAIInsights(RAIBaseInsights):
@@ -526,7 +531,7 @@ class RAIInsights(RAIBaseInsights):
         """
         top_dir = Path(path)
         classes = convert_to_list(self._classes)
-        feature_ranges = _get_feature_ranges(self.test, self.categorical_features)
+        feature_ranges = self._get_feature_ranges()
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
@@ -538,6 +543,25 @@ class RAIInsights(RAIBaseInsights):
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
+    
+    def _get_feature_ranges(self):
+        result = []
+        for col in list(self.test.columns):
+            res_object = {}
+            if (col in self.categorical_features):
+                unique_value = self.test[col].unique()
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "categorical"
+                res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            else:
+                min_value = float(self.test[col].min())
+                max_value = float(self.test[col].max())
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "integer"
+                res_object[_MIN_VALUE] = min_value
+                res_object[_MAX_VALUE] = max_value
+            result.append(res_object)
+        return result
 
     @staticmethod
     def _load_metadata(inst, path):
