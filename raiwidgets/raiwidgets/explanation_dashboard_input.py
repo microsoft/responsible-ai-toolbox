@@ -6,9 +6,8 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from raiutils.data_processing import convert_to_list
+from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from responsibleai.serialization_utilities import serialize_json_safe
 
 from .constants import ErrorMessages
 from .error_handling import _format_exception
