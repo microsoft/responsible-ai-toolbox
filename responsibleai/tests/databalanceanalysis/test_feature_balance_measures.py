@@ -17,6 +17,7 @@ class TestFeatureBalanceMeasures:
             FeatureBalanceMeasures(
                 cols_of_interest=[SYNTHETIC_DATA_GENDER],
                 label_col=SYNTHETIC_DATA_LABEL,
+                pos_label=1,
             )
             .measures(dataset=synthetic_data)
             .query("ClassA == 'Male' and ClassB == 'Female'")
@@ -27,10 +28,14 @@ class TestFeatureBalanceMeasures:
         )
 
     def test_adult_data(self, adult_data, adult_data_feature_balance_measures):
-        train_df, test_df, cols_of_interest, target_col = adult_data
+        train_df, test_df, cols_of_interest, target_col, classes = adult_data
         full_df = pd.concat([train_df, test_df])
+        pos_label = "1"
+
         feat_measures = FeatureBalanceMeasures(
-            cols_of_interest=cols_of_interest, label_col=target_col
+            cols_of_interest=cols_of_interest,
+            label_col=target_col,
+            pos_label=pos_label,
         ).measures(dataset=full_df)
         actual = pd.concat(
             [
@@ -44,5 +49,7 @@ class TestFeatureBalanceMeasures:
         )
         pd.testing.assert_frame_equal(
             actual.reset_index(drop=True),
-            adult_data_feature_balance_measures.reset_index(drop=True),
+            adult_data_feature_balance_measures[pos_label].reset_index(
+                drop=True
+            ),
         )

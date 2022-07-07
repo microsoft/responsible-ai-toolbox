@@ -41,7 +41,7 @@ class TestDistributionBalanceMeasures:
     def test_adult_data(
         self, adult_data, adult_data_distribution_balance_measures
     ):
-        train_df, test_df, _, _ = adult_data
+        train_df, test_df, _, _, _ = adult_data
         full_df = pd.concat([train_df, test_df])
         actual = DistributionBalanceMeasures(
             cols_of_interest=["race", "gender"]

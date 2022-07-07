@@ -118,7 +118,7 @@ class RAIInsights(RAIBaseInsights):
 
         self._data_balance_manager = DataBalanceManager(
             train=self.train, test=self.test, target_column=self.target_column,
-            task_type=self.task_type)
+            classes=self._classes, task_type=self.task_type)
 
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
@@ -152,21 +152,14 @@ class RAIInsights(RAIBaseInsights):
 
     def _try_add_data_balance(self):
         """
-        Add data balance measures to be computed later if the target column
-        represents a binary classification task and contains valid values.
+        Add data balance measures to be computed on categorical features
+        if it is a classification task.
         """
-
-        if len(self.categorical_features) > 0 and \
-                self._classes is not None and len(self._classes) <= 2:
-            if all(c in [0, 1] for c in self._classes):
-                self.data_balance.add(
-                    cols_of_interest=self.categorical_features)
-            else:
-                warnings.warn(
-                    f'The target column contains {self._classes} and seems '
-                    'to represent a binary classification task. If this is '
-                    'the case, map these values to {0, 1} so that data '
-                    'balance measures can be automatically computed.')
+        if self.task_type == ModelTask.CLASSIFICATION and \
+                len(self.categorical_features) > 0 and \
+                self._classes is not None:
+            self._data_balance_manager.add(
+                cols_of_interest=self.categorical_features)
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
@@ -397,14 +390,6 @@ class RAIInsights(RAIBaseInsights):
         return self._counterfactual_manager
 
     @property
-    def data_balance(self) -> DataBalanceManager:
-        """Get the data balance manager.
-        :return: The data balance manager.
-        :rtype: DataBalanceManager
-        """
-        return self._data_balance_manager
-
-    @property
     def error_analysis(self) -> ErrorAnalysisManager:
         """Get the error analysis manager.
         :return: The error analysis manager.
@@ -440,7 +425,8 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = _convert_to_list(
             self._classes)
-        dashboard_dataset.data_balance_measures = self.data_balance.get_data()
+        dashboard_dataset.data_balance_measures = \
+            self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None

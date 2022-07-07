@@ -67,7 +67,7 @@ class DataBalanceManagerKeys(object):
     TASK_TYPE = 'task_type'
     COLS_OF_INTEREST = 'cols_of_interest'
     TARGET_COLUMN = 'target_column'
-    POS_LABEL = 'pos_label'
+    CLASSES = 'classes'
 
 
 class ExplanationKeys(object):

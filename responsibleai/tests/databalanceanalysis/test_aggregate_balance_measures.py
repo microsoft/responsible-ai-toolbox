@@ -42,7 +42,7 @@ class TestAggregateBalanceMeasures:
     def test_adult_data(
         self, adult_data, adult_data_aggregate_balance_measures
     ):
-        train_df, test_df, _, _ = adult_data
+        train_df, test_df, _, _, _ = adult_data
         full_df = pd.concat([train_df, test_df])
         actual = AggregateBalanceMeasures(
             cols_of_interest=["race", "gender"]

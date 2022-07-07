@@ -22,31 +22,36 @@ def adult_data():
         categorical_features,
         _,
         target_col,
-        _,
+        classes,
     ) = create_adult_income_dataset()
     data_train[target_col] = y_train
     data_test[target_col] = y_test
     cols_of_interest = categorical_features
-    return data_train, data_test, cols_of_interest, target_col
+    return data_train, data_test, cols_of_interest, target_col, classes
 
 
 @pytest.fixture(scope="session")
 def adult_data_feature_balance_measures():
-    return pd.DataFrame(
-        {
-            "ClassA": {"0": "White", "1": "Male"},
-            "ClassB": {"0": "Other", "1": "Female"},
-            "FeatureName": {"0": "race", "1": "gender"},
-            "StatisticalParity": {"0": 0.0982367846, "1": 0.1977193125},
-            "PointwiseMutualInfo": {"0": 0.4906283898, "1": 1.0465727536},
-            "SorensonDiceCoeff": {"0": 0.1394139444, "1": 0.1622153797},
-            "JaccardIndex": {"0": 0.1846417746, "1": 0.2230209651},
-            "KendallRankCorrelation": {"0": -4.6080688829, "1": -0.8738917288},
-            "LogLikelihoodRatio": {"0": 2.264674102, "1": 1.7462342396},
-            "TTest": {"0": -1.0210127581, "1": -0.3685341442},
-            "TTestPValue": {"0": 0.2466906059, "1": 0.3876079751},
-        }
-    )
+    return {
+        "1": pd.DataFrame(
+            {
+                "ClassA": {"0": "White", "1": "Male"},
+                "ClassB": {"0": "Other", "1": "Female"},
+                "FeatureName": {"0": "race", "1": "gender"},
+                "StatisticalParity": {"0": 0.0982367846, "1": 0.1977193125},
+                "PointwiseMutualInfo": {"0": 0.4906283898, "1": 1.0465727536},
+                "SorensonDiceCoeff": {"0": 0.1394139444, "1": 0.1622153797},
+                "JaccardIndex": {"0": 0.1846417746, "1": 0.2230209651},
+                "KendallRankCorrelation": {
+                    "0": -4.6080688829,
+                    "1": -0.8738917288,
+                },
+                "LogLikelihoodRatio": {"0": 2.264674102, "1": 1.7462342396},
+                "TTest": {"0": -1.0210127581, "1": -0.3685341442},
+                "TTestPValue": {"0": 0.2466906059, "1": 0.3876079751},
+            }
+        )
+    }
 
 
 @pytest.fixture(scope="session")

@@ -5,20 +5,26 @@
 
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List
 
+import numpy as np
 import pandas as pd
 
 from responsibleai._interfaces import TaskType
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
-from responsibleai._tools.shared.state_directory_management import \
-    DirectoryManager
-from responsibleai.databalanceanalysis import (AggregateBalanceMeasures,
-                                               DistributionBalanceMeasures,
-                                               FeatureBalanceMeasures)
+from responsibleai._tools.shared.state_directory_management import (
+    DirectoryManager,
+)
+from responsibleai.databalanceanalysis import (
+    AggregateBalanceMeasures,
+    DistributionBalanceMeasures,
+    FeatureBalanceMeasures,
+)
 from responsibleai.databalanceanalysis.data_balance_utils import (
-    prepare_df, transform_measures_to_dict)
+    prepare_df,
+    transform_measures_to_dict,
+)
 from responsibleai.managers.base_manager import BaseManager
 
 DATA_JSON = "data.json"
@@ -37,7 +43,8 @@ class DataBalanceManager(BaseManager):
         train: pd.DataFrame,
         test: pd.DataFrame,
         target_column: str,
-        task_type: str,
+        classes: np.ndarray,
+        task_type: TaskType,
     ):
         """
         Creates a DataBalanceManager object.
@@ -48,10 +55,18 @@ class DataBalanceManager(BaseManager):
         :type test: pd.DataFrame
         :param target_column: The name of the target column.
         :type target_column: str
+        :param classes: The classes of the target column.
+        :type classes: np.ndarray
+        :param task_type: The task type of the data.
+        :type task_type: TaskType
         """
         self._train = train
         self._test = test
         self._target_column = target_column
+        # Eagerly convert numpy array to list of strs for serialization
+        self._classes = (
+            list(map(str, classes)) if classes is not None else None
+        )
         self._task_type = task_type
         self._is_added = False
 
@@ -61,26 +76,19 @@ class DataBalanceManager(BaseManager):
 
         # Populated in add()
         self._cols_of_interest = None
-        self._pos_label = None
 
         # Populated in compute()
         self._data_balance_measures = None
 
-    def add(
-        self, cols_of_interest: List[str], pos_label: Optional[str] = None
-    ):
+    def add(self, cols_of_interest: List[str]):
         """
         Add data balance measures to be computed later.
 
         :param cols_of_interest: The names of the columns to be used
             for computing data balance measures.
         :type cols_of_interest: List[str]
-        :param pos_label: If the target column does not consist of 0 and 1,
-            the label value that denotes a positive label.
-        :type pos_label: Optional[str]
         """
         self._cols_of_interest = cols_of_interest
-        self._pos_label = pos_label
 
         # Let user see exceptions early in add() before calling compute()
         self._validate()
@@ -99,19 +107,11 @@ class DataBalanceManager(BaseManager):
                 )
             )
 
-        if not self._cols_of_interest or not self._target_column:
+        if not self._target_column:
             raise ValueError(
                 (
-                    "Both `cols_of_interest` and `target_column` must be"
-                    " provided to compute data balance measures."
-                )
-            )
-
-        if not all(col in self._df.columns for col in self._cols_of_interest):
-            raise ValueError(
-                (
-                    "All columns in `cols_of_interest` must be present in"
-                    " the dataset."
+                    "The `target_column` must be provided to compute"
+                    " data balance measures."
                 )
             )
 
@@ -123,12 +123,11 @@ class DataBalanceManager(BaseManager):
                 )
             )
 
-        if self._df[self._target_column].unique().size > 2:
+        if not self._classes:
             raise ValueError(
                 (
-                    f"The target_column '{self._target_column}' must contain"
-                    " at most 2 unique values (a positive label and a"
-                    " negative label) to compute data balance measures."
+                    f"The target_column '{self._target_column}' must have"
+                    " at least one value."
                 )
             )
 
@@ -137,6 +136,22 @@ class DataBalanceManager(BaseManager):
                 (
                     f"The task_type '{self._task_type}' must be"
                     " 'classification' to compute data balance measures."
+                )
+            )
+
+        if not self._cols_of_interest:
+            raise ValueError(
+                (
+                    "The `cols_of_interest` must be provided to compute"
+                    " data balance measures."
+                )
+            )
+
+        if not all(col in self._df.columns for col in self._cols_of_interest):
+            raise ValueError(
+                (
+                    "All columns in `cols_of_interest` must be present in"
+                    " the dataset."
                 )
             )
 
@@ -149,16 +164,16 @@ class DataBalanceManager(BaseManager):
 
         self._validate()
 
-        self._df = prepare_df(
-            df=self._df,
-            target_column=self._target_column,
-            pos_label=self._pos_label,
-        )
+        self._df = prepare_df(df=self._df)
 
-        feature_balance_measures = FeatureBalanceMeasures(
-            cols_of_interest=self._cols_of_interest,
-            label_col=self._target_column,
-        ).measures(dataset=self._df)
+        feature_balance_measures = {}
+        for pos_label in self._classes:
+            feature_balance_measures[pos_label] = FeatureBalanceMeasures(
+                cols_of_interest=self._cols_of_interest,
+                label_col=self._target_column,
+                pos_label=pos_label,
+            ).measures(dataset=self._df)
+
         distribution_balance_measures = DistributionBalanceMeasures(
             cols_of_interest=self._cols_of_interest
         ).measures(dataset=self._df)
@@ -174,7 +189,7 @@ class DataBalanceManager(BaseManager):
 
     def _set_data_balance_measures(
         self,
-        feature_balance_measures: pd.DataFrame,
+        feature_balance_measures: Dict[str, pd.DataFrame],
         distribution_balance_measures: pd.DataFrame,
         aggregate_balance_measures: pd.DataFrame,
     ):
@@ -183,7 +198,7 @@ class DataBalanceManager(BaseManager):
         a dictionary, and set them as an instance variable.
 
         :param feature_balance_measures: Feature balance measures.
-        :type feature_balance_measures: pd.DataFrame
+        :type feature_balance_measures: Dict[str, pd.DataFrame]
         :param distribution_balance_measures: Distribution balance measures.
         :type distribution_balance_measures: pd.DataFrame
         :param aggregate_balance_measures: Aggregate balance measures.
@@ -219,7 +234,7 @@ class DataBalanceManager(BaseManager):
             Keys.TASK_TYPE: self._task_type,
             Keys.COLS_OF_INTEREST: self._cols_of_interest,
             Keys.TARGET_COLUMN: self._target_column,
-            Keys.POS_LABEL: self._pos_label,
+            Keys.CLASSES: self._classes,
         }
 
         return props
@@ -292,7 +307,11 @@ class DataBalanceManager(BaseManager):
         cols_of_interest = None
         task_type = rai_insights.task_type
         target_column = rai_insights.target_column
-        pos_label = None
+        classes = (
+            list(map(str, rai_insights._classes))
+            if rai_insights._classes is not None
+            else []
+        )
         df = pd.concat([rai_insights.train, rai_insights.test])
         data_balance_measures = None
 
@@ -310,7 +329,7 @@ class DataBalanceManager(BaseManager):
                 task_type = manager_info[Keys.TASK_TYPE]
                 cols_of_interest = manager_info[Keys.COLS_OF_INTEREST]
                 target_column = manager_info[Keys.TARGET_COLUMN]
-                pos_label = manager_info[Keys.POS_LABEL]
+                classes = manager_info[Keys.CLASSES]
 
             # Load from data json
             data_path = dir_manager.get_data_directory() / DATA_JSON
@@ -327,7 +346,7 @@ class DataBalanceManager(BaseManager):
         inst.__dict__["_task_type"] = task_type
         inst.__dict__["_cols_of_interest"] = cols_of_interest
         inst.__dict__["_target_column"] = target_column
-        inst.__dict__["_pos_label"] = pos_label
+        inst.__dict__["_classes"] = classes
         inst.__dict__["_df"] = df
         inst.__dict__["_data_balance_measures"] = data_balance_measures
 

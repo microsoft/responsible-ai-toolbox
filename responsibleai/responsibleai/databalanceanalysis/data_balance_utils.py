@@ -2,8 +2,9 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
+import numpy as np
 import pandas as pd
 
 from responsibleai.databalanceanalysis.constants import Constants
@@ -13,38 +14,18 @@ DISTRIBUTION_BALANCE_MEASURES_KEY = "DistributionBalanceMeasures"
 AGGREGATE_BALANCE_MEASURES_KEY = "AggregateBalanceMeasures"
 
 
-def prepare_df(
-    df: pd.DataFrame, target_column: str, pos_label: Optional[str]
-) -> pd.DataFrame:
+def prepare_df(df: pd.DataFrame) -> pd.DataFrame:
     """
     Prepare DataFrame for data balance analysis.
 
     :param df: The DataFrame to prepare.
     :type df: pd.DataFrame
-    :param target_column: The target column in the DataFrame.
-    :type target_column: str
-    :param pos_label: The positive label of the target column.
-    :type pos_label: Optional[str]
     :return: The prepared DataFrame.
     :rtype: pd.DataFrame
     """
     try:
         # Deepcopy the df otherwise the original df will mutate
         df = df.copy(deep=True)
-
-        # If the positive label is specified, transform the target column
-        # to {0, 1} because Data Balance Analysis only supports binary
-        # classification for now.
-        if pos_label is not None:
-            if pos_label not in df[target_column].unique():
-                raise ValueError(
-                    f"Positive label '{pos_label}' not found in "
-                    f"target column '{target_column}'"
-                )
-
-            df[target_column] = df[target_column].apply(
-                lambda x: 1 if x == pos_label else 0
-            )
     except Exception as e:
         raise ValueError(f"Failed to prepare df due to {e!r}")
 
@@ -52,7 +33,7 @@ def prepare_df(
 
 
 def transform_measures_to_dict(
-    feature_balance_measures: pd.DataFrame,
+    feature_balance_measures: Dict[str, pd.DataFrame],
     distribution_balance_measures: pd.DataFrame,
     aggregate_balance_measures: pd.DataFrame,
 ) -> Dict[str, Any]:
@@ -62,7 +43,7 @@ def transform_measures_to_dict(
     fail to be transformed, a valid dict will still be returned.
 
     :param feature_balance_measures: Feature balance measures.
-    :type feature_balance_measures: pd.DataFrame
+    :type feature_balance_measures: Dict[str, pd.DataFrame]
     :param distribution_balance_measures: Distribution balance measures.
     :type distribution_balance_measures: pd.DataFrame
     :param aggregate_balance_measures: Aggregate balance measures.
@@ -72,7 +53,7 @@ def transform_measures_to_dict(
     """
     feat_measures_dict: Dict[
         str, Dict[str, Any]
-    ] = transform_feature_balance_measures(df=feature_balance_measures)
+    ] = transform_feature_balance_measures(dfs=feature_balance_measures)
     dist_measures_dict: Dict[
         str, Dict[str, float]
     ] = transform_distribution_balance_measures(
@@ -90,36 +71,45 @@ def transform_measures_to_dict(
 
 
 def transform_feature_balance_measures(
-    df: pd.DataFrame,
+    dfs: Dict[str, pd.DataFrame]
 ) -> Dict[str, Dict[str, Any]]:
     """
-    Transform the feature balance measures DataFrame into a dictionary
-    acceptable by the RAI dashboard.
+    Transform the dict of <positive label, feature balance measures DataFrame>
+    pairs into a dictionary acceptable by the RAI dashboard.
 
-    :param df: The feature balance measures DataFrame.
-    :type df: pd.DataFrame
+    :param dfs: A dict of <positive label, measure DataFrame> pairs.
+    :type dfs: Dict[str, pd.DataFrame]
     :return: A dictionary of feature balance measures.
     :rtype: Dict[str, Dict[str, Any]]
     """
-    measures: Dict[str, Dict[str, Any]] = {}
+    all_measures: Dict[str, Dict[str, Any]] = {}
+
     try:
-        rows: List[Any] = df.reset_index(drop=True).to_dict(orient="records")
+        for pos_label, df in dfs.items():
+            measures: Dict[str, Dict[str, Any]] = {}
+            rows: List[Any] = (
+                df.replace({np.nan: None})
+                .reset_index(drop=True)
+                .to_dict(orient="records")
+            )
 
-        # Transform { "FeatureName": "Col1", "MeasureA": 0.5, ... } to
-        # { "Col1": { "BalanceMeasure": 0.5, ... } }
-        # which allows us to treat FeatureNames as the keys of the dict
-        for row in rows:
-            feature_name: str = row.pop(Constants.FEATURE_NAME.value)
+            # Transform { "FeatureName": "Col1", "MeasureA": 0.5, ... } to
+            # { "Col1": { "MeasureA": 0.5, ... } }
+            # which allows us to treat FeatureNames as the keys of the dict
+            for row in rows:
+                feature_name: str = row.pop(Constants.FEATURE_NAME.value)
 
-            if feature_name not in measures:
-                measures[feature_name] = []
+                if feature_name not in measures:
+                    measures[feature_name] = []
 
-            measures[feature_name].append(row)
+                measures[feature_name].append(row)
+
+            all_measures[pos_label] = measures
     except Exception as e:
         # Warning instead of error so that other measures can be computed
         warnings.warn(f"Failed to transform feature measures due to {e!r}.")
 
-    return measures
+    return all_measures
 
 
 def transform_distribution_balance_measures(

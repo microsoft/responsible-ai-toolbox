@@ -110,7 +110,9 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                     feature_importance=False
                 )
             elif manager_type == ManagerNames.DATA_BALANCE:
-                rai_2.data_balance.add(cols_of_interest=categorical_features)
+                rai_2._data_balance_manager.add(
+                    cols_of_interest=categorical_features
+                )
             elif manager_type == ManagerNames.ERROR_ANALYSIS:
                 rai_2.error_analysis.add()
             elif manager_type == ManagerNames.EXPLAINER:
@@ -236,7 +238,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 feature_importance=False
             )
         elif manager_type == ManagerNames.DATA_BALANCE:
-            rai_insights.data_balance.add(
+            rai_insights._data_balance_manager.add(
                 cols_of_interest=categorical_features
             )
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
