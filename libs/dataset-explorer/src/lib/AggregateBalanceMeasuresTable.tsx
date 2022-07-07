@@ -6,19 +6,15 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
-  Link,
   SelectionMode,
-  Stack,
-  Text
+  Stack
 } from "@fluentui/react";
 import {
-  IAggregateBalanceMeasures,
-  LabelWithCallout
+  HeaderWithInfo,
+  IAggregateBalanceMeasures
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-
-import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 
 export interface IAggregateBalanceMeasuresProps {
   aggregateBalanceMeasures: IAggregateBalanceMeasures;
@@ -31,7 +27,6 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
       return;
     }
 
-    const styles = dataBalanceTabStyles();
     const measuresLocalization =
       localization.ModelAssessment.DataBalance.AggregateBalanceMeasures;
 
@@ -86,35 +81,15 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
 
     return (
       <Stack tokens={{ childrenGap: "l1" }}>
-        {/* Renders the title and info hover-over */}
-        <Stack.Item>
-          <Stack horizontal>
-            <Stack.Item>
-              <Text variant="large" className={styles.boldText}>
-                {measuresLocalization.Name}
-              </Text>
-            </Stack.Item>
+        <HeaderWithInfo
+          title={measuresLocalization.Name}
+          calloutTitle={measuresLocalization.Callout.Title}
+          calloutDescription={measuresLocalization.Callout.Description}
+          // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+          calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures"
+          calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+        />
 
-            <Stack.Item className={styles.callout}>
-              <LabelWithCallout
-                label=""
-                calloutTitle={measuresLocalization.Callout.Title}
-                type="button"
-              >
-                <Text block>{measuresLocalization.Callout.Description}</Text>
-                <Link
-                  // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-                  href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures"
-                  target="_blank"
-                >
-                  {localization.ModelAssessment.DataBalance.LearnMore}
-                </Link>
-              </LabelWithCallout>
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
-
-        {/* Renders a table of aggregate balance measures */}
         <Stack.Item>
           <DetailsList
             items={items}

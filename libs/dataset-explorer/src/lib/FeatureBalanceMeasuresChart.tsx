@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dropdown, IDropdownOption, Link, Stack, Text } from "@fluentui/react";
+import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
 import {
+  HeaderWithInfo,
   HeatmapHighChart,
-  IFeatureBalanceMeasures,
-  LabelWithCallout
+  IFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -63,33 +63,14 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
     return (
       <Stack tokens={{ childrenGap: "l1" }}>
-        {/* Renders the title and info hover-over */}
-        <Stack.Item>
-          <Stack horizontal>
-            <Stack.Item>
-              <Text variant="large" className={styles.boldText}>
-                {measuresLocalization.Name}
-              </Text>
-            </Stack.Item>
-
-            <Stack.Item className={styles.callout}>
-              <LabelWithCallout
-                label=""
-                calloutTitle={measuresLocalization.Callout.Title}
-                type="button"
-              >
-                <Text block>{measuresLocalization.Callout.Description}</Text>
-                <Link
-                  // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-                  href="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
-                  target="_blank"
-                >
-                  {localization.ModelAssessment.DataBalance.LearnMore}
-                </Link>
-              </LabelWithCallout>
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
+        <HeaderWithInfo
+          title={measuresLocalization.Name}
+          calloutTitle={measuresLocalization.Callout.Title}
+          calloutDescription={measuresLocalization.Callout.Description}
+          // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+          calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
+          calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+        />
 
         {/* Renders the the two dropdowns, their respective headings, and the description */}
         <Stack.Item>

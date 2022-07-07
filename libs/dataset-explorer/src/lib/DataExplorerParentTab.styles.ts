@@ -10,6 +10,7 @@ import {
 
 export interface IDataExplorerParentTabStyles {
   container: IStyle;
+  pivotLabelWrapper: IStyle;
 }
 
 export const dataExplorerParentTabStyles: () => IProcessedStyleSet<IDataExplorerParentTabStyles> =
@@ -18,6 +19,12 @@ export const dataExplorerParentTabStyles: () => IProcessedStyleSet<IDataExplorer
     return mergeStyleSets<IDataExplorerParentTabStyles>({
       container: {
         color: theme.semanticColors.bodyText
+      },
+      pivotLabelWrapper: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "start",
+        padding: "0px 30px 15px"
       }
     });
   };

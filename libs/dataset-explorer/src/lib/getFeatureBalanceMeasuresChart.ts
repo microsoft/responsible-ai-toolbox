@@ -127,10 +127,16 @@ export function getFeatureBalanceMeasuresChart(
         measureName !== undefined &&
         measureName in row
       ) {
-        // If a measure value is found for ClassB vs. ClassA, flip its value
-        // since every feature balance measure gap is symmetric
-        const measureValue = row[measureName] * (foundFlipped ? -1 : 1);
-        items.push([rowIndex, colIndex, measureValue]);
+        const measureValue = row[measureName];
+        if (typeof measureValue === "number") {
+          // If a measure value is found for ClassB vs. ClassA, flip its value
+          // since every feature balance measure gap is symmetric
+          items.push([
+            rowIndex,
+            colIndex,
+            measureValue * (foundFlipped ? -1 : 1)
+          ]);
+        }
       }
     });
   });
