@@ -19,10 +19,6 @@ export interface ICounterfactualPanelNameTextFieldProps {
 }
 
 export class CounterfactualPanelNameTextField extends React.Component<ICounterfactualPanelNameTextFieldProps> {
-  public constructor(props: ICounterfactualPanelNameTextFieldProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const classes = counterfactualPanelStyles();
     return (
