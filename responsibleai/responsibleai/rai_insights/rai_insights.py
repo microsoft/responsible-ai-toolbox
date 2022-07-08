@@ -99,7 +99,8 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
-        self._feature_columns =  test.drop(columns=[target_column]).columns.tolist()
+        self._feature_columns = \
+            test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
             test=test, categorical_features=categorical_features,
             feature_columns=self._feature_columns)
@@ -600,7 +601,6 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-
 
     @staticmethod
     def load(path):
