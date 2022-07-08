@@ -348,8 +348,9 @@ export class CounterfactualChart extends React.PureComponent<
                           rowIndex + WhatIfConstants.MAX_SELECTION + 1
                         ],
                       name: row[WhatIfConstants.namePath],
-                      onClick: this.toggleCustomActivation.bind(this, rowIndex),
-                      onDelete: this.removeCustomPoint.bind(this, rowIndex)
+                      index: rowIndex,
+                      onClick: this.toggleCustomActivation,
+                      onDelete: this.removeCustomPoint
                     };
                   })}
                 />
@@ -808,13 +809,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
   };
 
-  private toggleCustomActivation(index: number): void {
+  private toggleCustomActivation = (index: number): void => {
     const customPointIsActive = [...this.state.customPointIsActive];
     customPointIsActive[index] = !customPointIsActive[index];
     this.setState({ customPointIsActive });
-  }
+  };
 
-  private removeCustomPoint(index: number): void {
+  private removeCustomPoint = (index: number): void => {
     this.setState((prevState) => {
       const customPoints = [...prevState.customPoints];
       customPoints.splice(index, 1);
@@ -822,7 +823,7 @@ export class CounterfactualChart extends React.PureComponent<
       customPointIsActive.splice(index, 1);
       return { customPointIsActive, customPoints };
     });
-  }
+  };
 
   private saveAsPoint = (): void => {
     const customPoints = [...this.state.customPoints];

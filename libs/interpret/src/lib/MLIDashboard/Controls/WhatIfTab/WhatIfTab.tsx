@@ -480,12 +480,10 @@ export class WhatIfTab extends React.PureComponent<
                         return {
                           activated: this.state.pointIsActive[rowIndex],
                           color: FabricStyles.fabricColorPalette[rowIndex],
+                          index: rowIndex,
                           name: row.name,
-                          onClick: this.toggleActivation.bind(this, rowIndex),
-                          onDelete: this.toggleSelectionOfPoint.bind(
-                            this,
-                            row.id
-                          )
+                          onClick: this.toggleActivation,
+                          onDelete: this.toggleSelectionOfPoint
                         };
                       }
                     )}
@@ -519,16 +517,11 @@ export class WhatIfTab extends React.PureComponent<
                           FabricStyles.fabricColorPalette[
                             rowIndex + WhatIfConstants.MAX_SELECTION + 1
                           ],
+                        index: rowIndex,
                         name: row[WhatIfConstants.namePath],
-                        onClick: this.toggleCustomActivation.bind(
-                          this,
-                          rowIndex
-                        ),
-                        onDelete: this.removeCustomPoint.bind(this, rowIndex),
-                        onEdit: this.setTemporaryPointToCustomPoint.bind(
-                          this,
-                          rowIndex
-                        )
+                        onClick: this.toggleCustomActivation,
+                        onDelete: this.removeCustomPoint,
+                        onEdit: this.setTemporaryPointToCustomPoint
                       };
                     })}
                   />
@@ -649,7 +642,7 @@ export class WhatIfTab extends React.PureComponent<
     });
   }
 
-  private setTemporaryPointToCustomPoint(index: number): void {
+  private setTemporaryPointToCustomPoint = (index: number): void => {
     this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
@@ -660,9 +653,9 @@ export class WhatIfTab extends React.PureComponent<
       selectedWhatIfRootIndex: this.temporaryPoint[JointDataset.IndexLabel]
     });
     this.openPanel();
-  }
+  };
 
-  private removeCustomPoint(index: number): void {
+  private removeCustomPoint = (index: number): void => {
     this.setState((prevState) => {
       const customPoints = [...prevState.customPoints];
       customPoints.splice(index, 1);
@@ -670,7 +663,7 @@ export class WhatIfTab extends React.PureComponent<
       customPointIsActive.splice(index, 1);
       return { customPointIsActive, customPoints };
     });
-  }
+  };
 
   private setCustomRowProperty = (
     key: string | number,
@@ -779,17 +772,17 @@ export class WhatIfTab extends React.PureComponent<
     });
   }
 
-  private toggleActivation(index: number): void {
+  private toggleActivation = (index: number): void => {
     const pointIsActive = [...this.state.pointIsActive];
     pointIsActive[index] = !pointIsActive[index];
     this.setState({ pointIsActive });
-  }
+  };
 
-  private toggleCustomActivation(index: number): void {
+  private toggleCustomActivation = (index: number): void => {
     const customPointIsActive = [...this.state.customPointIsActive];
     customPointIsActive[index] = !customPointIsActive[index];
     this.setState({ customPointIsActive });
-  }
+  };
 
   private dismissPanel = (): void => {
     this.setState({ isPanelOpen: false });
@@ -869,7 +862,7 @@ export class WhatIfTab extends React.PureComponent<
     }
   };
 
-  private toggleSelectionOfPoint(index?: number): void {
+  private toggleSelectionOfPoint = (index?: number): void => {
     if (index === undefined) {
       return;
     }
@@ -894,7 +887,7 @@ export class WhatIfTab extends React.PureComponent<
       selectedPointsIndexes: newSelections,
       showSelectionWarning: false
     });
-  }
+  };
 
   // fetch prediction for temporary point
   private fetchData(fetchingReference: { [key: string]: any }): void {
