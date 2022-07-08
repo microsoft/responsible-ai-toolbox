@@ -26,7 +26,6 @@ import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSpl
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
-  selectedCohorts: number[];
   onChooseCohorts: () => void;
 }
 
@@ -69,10 +68,6 @@ export class ProbabilityDistributionChart extends React.Component<
       return;
     }
 
-    const selectedCohorts = this.props.cohorts.filter((_cohort, index) => {
-      return this.props.selectedCohorts.includes(index);
-    });
-
     const probabilityOptions = this.getProbabilityOptions();
 
     if (probabilityOptions.length === 0) {
@@ -84,16 +79,20 @@ export class ProbabilityDistributionChart extends React.Component<
       return React.Fragment;
     }
 
-    const noCohortSelected = this.props.selectedCohorts.length === 0;
+    const noCohortSelected = this.props.cohorts.length === 0;
 
     return (
-      <Stack tokens={{ childrenGap: "10px" }}>
+      <Stack
+        tokens={{ childrenGap: "10px" }}
+        id="modelOverviewProbabilityDistributionChart"
+      >
         <Stack
           horizontal
           tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}
         >
           <Stack.Item className={classNames.chartToggle}>
             <Toggle
+              id="modelOverviewProbabilityDistributionChartToggle"
               label={
                 localization.ModelAssessment.ModelOverview
                   .probabilitySplineChartToggleLabel
@@ -104,6 +103,7 @@ export class ProbabilityDistributionChart extends React.Component<
           </Stack.Item>
           {this.state.showSplineChart && (
             <DefaultButton
+              id="modelOverviewProbabilityDistributionLineChartCohortSelectionButton"
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -115,6 +115,7 @@ export class ProbabilityDistributionChart extends React.Component<
           {!noCohortSelected && !this.state.showSplineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
+                id="modelOverviewProbabilityDistributionBoxChartCohortSelectionButton"
                 className={classNames.rotatedVerticalBox}
                 text={
                   localization.ModelAssessment.ModelOverview
@@ -139,12 +140,12 @@ export class ProbabilityDistributionChart extends React.Component<
               <Stack>
                 {this.state.showSplineChart ? (
                   <ProbabilityDistributionSplineChart
-                    selectedCohorts={selectedCohorts}
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 ) : (
                   <ProbabilityDistributionBoxChart
-                    selectedCohorts={selectedCohorts}
+                    selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
                   />
                 )}
@@ -156,6 +157,7 @@ export class ProbabilityDistributionChart extends React.Component<
                   }
                 >
                   <DefaultButton
+                    id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
                     text={
                       localization.ModelAssessment.ModelOverview
                         .probabilityLabelSelectionButton
@@ -172,6 +174,7 @@ export class ProbabilityDistributionChart extends React.Component<
           </Stack.Item>
         </Stack>
         <Panel
+          id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"
           isOpen={this.state.probabilityFlyoutIsVisible}
           closeButtonAriaLabel="Close"
           onDismiss={() => {
@@ -208,7 +211,7 @@ export class ProbabilityDistributionChart extends React.Component<
                 probabilityOption: this.state.newlySelectedProbabilityOption
               });
           }}
-          text={localization.ModelAssessment.ModelOverview.chartConfigConfirm}
+          text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
           onClick={() => {

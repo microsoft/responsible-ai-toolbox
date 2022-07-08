@@ -84,6 +84,7 @@ export class FairnessMetricTable extends React.Component<
 
     return (
       <HeatmapHighChart
+        id={"modelOverviewFairnessMetricTable"}
         configOverride={{
           chart: {
             height: 200,
