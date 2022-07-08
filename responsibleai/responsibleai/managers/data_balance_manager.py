@@ -13,18 +13,13 @@ import pandas as pd
 from responsibleai._interfaces import TaskType
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
-from responsibleai._tools.shared.state_directory_management import (
-    DirectoryManager,
-)
-from responsibleai.databalanceanalysis import (
-    AggregateBalanceMeasures,
-    DistributionBalanceMeasures,
-    FeatureBalanceMeasures,
-)
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
+from responsibleai.databalanceanalysis import (AggregateBalanceMeasures,
+                                               DistributionBalanceMeasures,
+                                               FeatureBalanceMeasures)
 from responsibleai.databalanceanalysis.data_balance_utils import (
-    prepare_df,
-    transform_measures_to_dict,
-)
+    prepare_df, transform_measures_to_dict)
 from responsibleai.managers.base_manager import BaseManager
 
 DATA_JSON = "data.json"
