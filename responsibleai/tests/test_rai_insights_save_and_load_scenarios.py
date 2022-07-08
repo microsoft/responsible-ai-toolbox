@@ -138,7 +138,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
         # The exception is the Explainer, which always creates a file
         # in its subdirectory
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -280,9 +281,12 @@ def validate_rai_insights(
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
-    assert feature_range_keys.sort() == \
-        list(rai_insights._feature_ranges[0].keys()).sort()
-    assert rai_insights._feature_columns == (feature_columns or [])
+    if feature_range_keys is not None:
+        assert feature_range_keys.sort() == \
+            list(rai_insights._feature_ranges[0].keys()).sort()
+    if feature_columns is not None:
+        assert rai_insights._feature_columns == (feature_columns or [])
+    assert target_column not in rai_insights._feature_columns
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()
