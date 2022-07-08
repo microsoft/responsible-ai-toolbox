@@ -53,7 +53,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             # Validate, but this isn't the main check
             validate_rai_insights(
                 rai_2, X_train, X_test,
-                LABELS, ModelTask.CLASSIFICATION, None)
+                LABELS, ModelTask.CLASSIFICATION, None, None, None)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -68,7 +68,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                                               ManagerNames.COUNTERFACTUAL])
     def test_rai_insights_save_load_add_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -120,7 +121,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features)
+                categorical_features=categorical_features,feature_range_keys=feature_range_keys, columns=columns)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -201,7 +202,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                                               ManagerNames.COUNTERFACTUAL])
     def test_rai_insights_add_save_load_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -253,7 +255,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features)
+                categorical_features=categorical_features, feature_range_keys=feature_range_keys, columns=columns)
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
@@ -265,14 +267,17 @@ def validate_rai_insights(
     test_data,
     target_column,
     task_type,
-    categorical_features
+    categorical_features,
+    feature_range_keys,
+    columns
 ):
-
     pd.testing.assert_frame_equal(rai_insights.train, train_data)
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
+    assert feature_range_keys.sort() == list(rai_insights._feature_ranges[0].keys()).sort()
+    assert rai_insights._columns == (columns or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

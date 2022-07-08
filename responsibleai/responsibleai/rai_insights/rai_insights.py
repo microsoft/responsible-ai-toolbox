@@ -99,6 +99,8 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
+        self._columns = list(test.columns)
+        self._feature_ranges = RAIInsights._get_feature_ranges(test=test,categorical_features=categorical_features)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
@@ -531,31 +533,32 @@ class RAIInsights(RAIBaseInsights):
         """
         top_dir = Path(path)
         classes = convert_to_list(self._classes)
-        feature_ranges = self._get_feature_ranges()
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
             _CLASSES: classes,
-            _COLUMNS: list(self.test.columns),
-            _FEATURERANGES: feature_ranges
+            _COLUMNS: self._columns,
+            _FEATURERANGES: self._feature_ranges
 
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
-    
-    def _get_feature_ranges(self):
+
+    @staticmethod
+    def _get_feature_ranges(test, categorical_features):
+        """Get feature ranges like min, max and unique values for all columns"""
         result = []
-        for col in list(self.test.columns):
+        for col in list(test.columns):
             res_object = {}
-            if (col in self.categorical_features):
-                unique_value = self.test[col].unique()
+            if (col in categorical_features):
+                unique_value = test[col].unique()
                 res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
             else:
-                min_value = float(self.test[col].min())
-                max_value = float(self.test[col].max())
+                min_value = float(test[col].min())
+                max_value = float(test[col].max())
                 res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
@@ -591,6 +594,9 @@ class RAIInsights(RAIBaseInsights):
             target_column=meta[_TARGET_COLUMN],
             classes=classes
         )
+
+        inst.__dict__['_' + _FEATURERANGES] =  meta[_FEATURERANGES]
+        inst.__dict__['_' + _COLUMNS] = meta[_COLUMNS]
 
     @staticmethod
     def load(path):
