@@ -6,7 +6,7 @@ import React from "react";
 
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
-export interface IInteractiveLegendProps {
+interface IInteractiveLegendProps {
   index: number;
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;

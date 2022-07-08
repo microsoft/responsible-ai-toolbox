@@ -6,7 +6,7 @@ import React from "react";
 
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
-export interface IInteractiveLegendProps {
+interface IInteractiveLegendProps {
   activated: boolean;
   color: string;
   index: number;
