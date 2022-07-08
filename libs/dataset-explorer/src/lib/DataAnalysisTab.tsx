@@ -5,26 +5,22 @@ import { Pivot, PivotItem } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceTab";
-import { dataExplorerParentTabStyles } from "./DataExplorerParentTab.styles";
 import { DatasetExplorerTab } from "./DatasetExplorerTab";
 
-interface IDataExplorerParentTabProps {
+interface IDataAnalysisTabProps {
   showDataBalanceExperience: boolean;
 }
 
-enum DataExplorerParentTabOptions {
+enum DataAnalysisTabOptions {
   DatasetExplorer = "DatasetExplorer",
   DataBalance = "DataBalance"
 }
 
-export class DataExplorerParentTab extends React.Component<IDataExplorerParentTabProps> {
+export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
   public render(): React.ReactNode {
-    const styles = dataExplorerParentTabStyles();
-
-    if (!this.props.showDataBalanceExperience) {
-      return <DatasetExplorerTab />;
-    }
+    const styles = dataAnalysisTabStyles();
 
     return (
       <Pivot
@@ -32,18 +28,20 @@ export class DataExplorerParentTab extends React.Component<IDataExplorerParentTa
         styles={{ root: styles.pivotLabelWrapper }}
       >
         <PivotItem
-          itemKey={DataExplorerParentTabOptions.DatasetExplorer}
+          itemKey={DataAnalysisTabOptions.DatasetExplorer}
           headerText={localization.ModelAssessment.ComponentNames.DataExplorer}
         >
           <DatasetExplorerTab />
         </PivotItem>
 
-        <PivotItem
-          itemKey={DataExplorerParentTabOptions.DataBalance}
-          headerText={localization.ModelAssessment.ComponentNames.DataBalance}
-        >
-          <DataBalanceTab />
-        </PivotItem>
+        {this.props.showDataBalanceExperience ? (
+          <PivotItem
+            itemKey={DataAnalysisTabOptions.DataBalance}
+            headerText={localization.ModelAssessment.ComponentNames.DataBalance}
+          >
+            <DataBalanceTab />
+          </PivotItem>
+        ) : undefined}
       </Pivot>
     );
   }

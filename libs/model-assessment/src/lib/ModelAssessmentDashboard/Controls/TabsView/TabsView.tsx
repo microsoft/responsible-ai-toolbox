@@ -12,7 +12,7 @@ import {
   IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
-import { DataExplorerParentTab } from "@responsible-ai/dataset-explorer";
+import { DataAnalysisTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
@@ -190,14 +190,14 @@ export class TabsView extends React.PureComponent<
                   />
                 </>
               )}
-              {t.key === GlobalTabKeys.DataExplorerTab && (
+              {t.key === GlobalTabKeys.DataAnalysisTab && (
                 <>
                   <div className={classNames.sectionHeader}>
-                    <Text variant={"xxLarge"} id="dataExplorerHeader">
-                      {localization.ModelAssessment.ComponentNames.DataExplorer}
+                    <Text variant={"xxLarge"} id="dataAnalysisHeader">
+                      {localization.ModelAssessment.ComponentNames.DataAnalysis}
                     </Text>
                   </div>
-                  <DataExplorerParentTab
+                  <DataAnalysisTab
                     showDataBalanceExperience={isFlightActive(
                       dataBalanceExperienceFlight,
                       this.context.featureFlights

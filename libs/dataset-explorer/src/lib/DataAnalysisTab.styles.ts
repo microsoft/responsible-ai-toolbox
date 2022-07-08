@@ -8,15 +8,15 @@ import {
   getTheme
 } from "@fluentui/react";
 
-export interface IDataExplorerParentTabStyles {
+export interface IDataAnalysisTabStyles {
   container: IStyle;
   pivotLabelWrapper: IStyle;
 }
 
-export const dataExplorerParentTabStyles: () => IProcessedStyleSet<IDataExplorerParentTabStyles> =
+export const dataAnalysisTabStyles: () => IProcessedStyleSet<IDataAnalysisTabStyles> =
   () => {
     const theme = getTheme();
-    return mergeStyleSets<IDataExplorerParentTabStyles>({
+    return mergeStyleSets<IDataAnalysisTabStyles>({
       container: {
         color: theme.semanticColors.bodyText
       },

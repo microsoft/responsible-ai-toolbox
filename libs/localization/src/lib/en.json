@@ -1294,8 +1294,9 @@
     "ComponentNames": {
       "CausalAnalysis": "Causal analysis",
       "Counterfactuals": "Counterfactuals",
-      "DataExplorer": "Data explorer",
+      "DataAnalysis": "Data analysis",
       "DataBalance": "Data balance",
+      "DataExplorer": "Data explorer",
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
@@ -1333,11 +1334,11 @@
             "Name": "Theil Index (T)"
           }
         },
-        "Name": "Aggregate Balance Measures",
+        "Name": "Aggregate balance measures",
         "Table": {
           "Description": "Description",
-          "FeatureName": "Feature Name",
-          "FeatureValue": "Feature Value"
+          "FeatureName": "Feature name",
+          "FeatureValue": "Feature value"
         }
       },
       "DistributionBalanceMeasures": {
@@ -1347,8 +1348,8 @@
         },
         "Chart": {
           "Axes": {
-            "DistributionMeasure": "Distribution Measure",
-            "MeasureValue": "Measure Value"
+            "DistributionMeasure": "Distribution measure",
+            "MeasureValue": "Measure value"
           },
           "Title1": "Comparing",
           "Title2": "with the Uniform Distribution"
@@ -1387,7 +1388,7 @@
             "Name": "Wasserstein Distance"
           }
         },
-        "Name": "Distribution Balance Measures"
+        "Name": "Distribution balance measures"
       },
       "FeatureBalanceMeasures": {
         "Callout": {
@@ -1408,7 +1409,7 @@
         "Description1": "Showing",
         "Description2": "gaps on all classes of",
         "FeaturePicker": "Feature",
-        "LabelPicker": "Positive Label",
+        "LabelPicker": "Positive label",
         "MeasurePicker": "Measure",
         "Measures": {
           "JaccardIndex": {
@@ -1444,7 +1445,7 @@
             "Name": "t-test p-value"
           }
         },
-        "Name": "Feature Balance Measures"
+        "Name": "Feature balance measures"
       },
       "LearnMore": "Learn more",
       "MeasuresNotComputed": "This tab requires the dataset to contain already computed data balance measures."

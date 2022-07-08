@@ -2,4 +2,4 @@
 // Licensed under the MIT License.
 
 export * from "./lib/DatasetExplorerTab";
-export * from "./lib/DataExplorerParentTab";
+export * from "./lib/DataAnalysisTab";
