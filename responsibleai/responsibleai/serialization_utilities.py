@@ -3,6 +3,7 @@
 
 import datetime
 import json
+import warnings
 from typing import Any
 
 import numpy as np
@@ -15,6 +16,12 @@ def serialize_json_safe(o: Any):
     :param o: Object to make JSON safe.
     :return: Serialized object.
     """
+    warnings.warn(
+        "FUNCTION-DEPRECATION-WARNING: The function serialize_json_safe "
+        "will be deprecated in responsibleai. "
+        "Please import this function from raiutils.data_processing instead.",
+        DeprecationWarning)
+
     if type(o) in {bool, int, float, str, type(None)}:
         if isinstance(o, float):
             if np.isinf(o) or np.isnan(o):
