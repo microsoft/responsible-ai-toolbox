@@ -30,7 +30,7 @@ _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
 _COLUMNS = 'columns'
-_FEATURERANGES = 'feature_ranges'
+_FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
@@ -539,7 +539,7 @@ class RAIInsights(RAIBaseInsights):
             _CATEGORICAL_FEATURES: self.categorical_features,
             _CLASSES: classes,
             _COLUMNS: self._columns,
-            _FEATURERANGES: self._feature_ranges
+            _FEATURE_RANGES: self._feature_ranges
 
         }
         with open(top_dir / _META_JSON, 'w') as file:
@@ -595,7 +595,7 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
 
-        inst.__dict__['_' + _FEATURERANGES] =  meta[_FEATURERANGES]
+        inst.__dict__['_' + _FEATURE_RANGES] =  meta[_FEATURE_RANGES]
         inst.__dict__['_' + _COLUMNS] = meta[_COLUMNS]
 
     @staticmethod
