@@ -4,6 +4,8 @@
 import json
 import uuid
 
+from raiutils.data_processing import serialize_json_safe
+
 _ErrorReportVersion1 = '1.0'
 _ErrorReportVersion2 = '2.0'
 _ErrorReportVersion3 = '3.0'
@@ -35,10 +37,7 @@ def json_converter(obj):
     if isinstance(obj, ErrorReport):
         rdict = obj.__dict__
         return rdict
-    try:
-        return obj.to_json()
-    except AttributeError:
-        return obj.__dict__
+    return serialize_json_safe(obj)
 
 
 def as_error_report(error_dict):

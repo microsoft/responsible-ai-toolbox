@@ -243,7 +243,7 @@ async function main() {
   const skipgen = commander.opts().skipgen;
   const notebook = commander.opts().notebook;
   let flights = commander.opts().flights;
-  if (flights.toString() === "true") {
+  if (flights?.toString() === "true") {
     // -f passed without arguments
     flights = undefined;
   }

@@ -55,9 +55,10 @@ export class TreeViewParameters extends React.Component<
         <Slider
           max={10}
           min={1}
+          step={1}
           value={this.props.maxDepth}
           showValue
-          onChanged={this.onMaxDepthSliderChanged}
+          onChange={this.onMaxDepthSliderChanged}
           disabled={!this.props.isEnabled}
         />
         <Label
@@ -76,9 +77,10 @@ export class TreeViewParameters extends React.Component<
         <Slider
           max={100}
           min={1}
+          step={1}
           value={this.props.numLeaves}
           showValue
-          onChanged={this.onNumLeavesSliderChanged}
+          onChange={this.onNumLeavesSliderChanged}
           disabled={!this.props.isEnabled}
         />
         <Label
@@ -100,33 +102,25 @@ export class TreeViewParameters extends React.Component<
         <Slider
           max={100}
           min={1}
+          step={1}
           value={this.props.minChildSamples}
           showValue
-          onChanged={this.onMinChildSamplesSliderChanged}
+          onChange={this.onMinChildSamplesSliderChanged}
           disabled={!this.props.isEnabled}
         />
       </div>
     );
   }
 
-  private onMaxDepthSliderChanged = (
-    _: MouseEvent | TouchEvent | KeyboardEvent,
-    value: number
-  ): void => {
+  private onMaxDepthSliderChanged = (value: number): void => {
     this.props.updateMaxDepth(value);
   };
 
-  private onNumLeavesSliderChanged = (
-    _: MouseEvent | TouchEvent | KeyboardEvent,
-    value: number
-  ): void => {
+  private onNumLeavesSliderChanged = (value: number): void => {
     this.props.updateNumLeaves(value);
   };
 
-  private onMinChildSamplesSliderChanged = (
-    _: MouseEvent | TouchEvent | KeyboardEvent,
-    value: number
-  ): void => {
+  private onMinChildSamplesSliderChanged = (value: number): void => {
     this.props.updateMinChildSamples(value);
   };
 }

@@ -8,9 +8,9 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+from raiutils.data_processing import convert_to_list
 from raiutils.models import is_classifier
 from responsibleai import RAIInsights
-from responsibleai._input_processing import _convert_to_list
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -101,10 +101,10 @@ class ResponsibleAIDashboardInput:
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
             if (self._is_classifier):
-                prediction = _convert_to_list(
+                prediction = convert_to_list(
                     self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
             else:
-                prediction = _convert_to_list(
+                prediction = convert_to_list(
                     self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
