@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BarChart } from "../../../../util/BarChart";
-import { BoxChart } from "../../../../util/BoxChart";
-import { Locators } from "../Constants";
-import { IModelAssessmentData } from "../IModelAssessmentData";
+import { BarChart } from "../../../../../util/BarChart";
+import { BoxChart } from "../../../../../util/BoxChart";
+import { Locators } from "../../Constants";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 export function describeModelPerformanceBoxChart(
   dataShape: IModelAssessmentData
@@ -48,7 +48,7 @@ export function describeModelPerformanceBoxChart(
           `${Locators.DECChoiceFieldGroup} label:contains(${dataShape.modelStatisticsData?.yAxisNewPanelValue})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.yAxisNewValue || "age"
       );
@@ -59,7 +59,7 @@ export function describeModelPerformanceBoxChart(
           `${Locators.DECChoiceFieldGroup}  label:contains(${dataShape.modelStatisticsData?.defaultYAxis})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCRotatedVerticalBox}`).contains(
         dataShape.modelStatisticsData?.defaultYAxis || "Cohort"
       );
@@ -71,7 +71,7 @@ export function describeModelPerformanceBoxChart(
         .invoke("text")
         .then((text1) => {
           cy.get(`#AxisConfigPanel label:contains(${text1})`).click();
-          cy.get(Locators.SelectButton).click();
+          cy.get(Locators.ApplyButton).click();
           cy.get(`${Locators.MSCHorizontalAxis} button:eq(0)`).contains(text1);
         });
       cy.get(`${Locators.MSCHorizontalAxis} button`)
@@ -80,7 +80,7 @@ export function describeModelPerformanceBoxChart(
           `${Locators.DECChoiceFieldGroup} label:contains(${dataShape.modelStatisticsData?.defaultXAxisPanelValue})`
         )
         .click();
-      cy.get(Locators.SelectButton).click();
+      cy.get(Locators.ApplyButton).click();
       cy.get(`${Locators.MSCHorizontalAxis}`).contains(
         dataShape.modelStatisticsData?.xAxisNewValue || ""
       );

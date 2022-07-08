@@ -25,8 +25,6 @@ from erroranalysis._internal.utils import is_spark
 
 # imports required for pyspark support
 try:
-    import glob
-
     import pyspark.sql.functions as F
     from synapse.ml.lightgbm import LightGBMClassifier, LightGBMRegressor
 except ImportError:
@@ -332,15 +330,9 @@ def get_surrogate_booster_pyspark(filtered_df, analyzer, max_depth,
         diff_data = diff_data.drop(PREDICTION)
     model = create_surrogate_model_pyspark(analyzer, diff_data, max_depth,
                                            num_leaves, min_child_samples)
-    # TODO: update lightgbm in pyspark to get around file requirement
-    model_path = "./models/lgbmclassifier.model"
-    model.saveNativeModel(model_path)
-    model_file = glob.glob(model_path + '/*.txt')[0]
-    with open(model_file) as f:
-        contents = f.read()
+    model_str = model.getNativeModel()
     booster_args = {'objective': analyzer.model_task}
-
-    lgbm_booster = Booster(params=booster_args, model_str=contents)
+    lgbm_booster = Booster(params=booster_args, model_str=model_str)
     return lgbm_booster, diff_data.to_koalas()
 
 
@@ -737,7 +729,7 @@ def node_to_dict(df, tree, nodeid, categories, json,
     metric_name = metric_to_display_name[metric]
     is_error_metric = metric in error_metrics
     if SPLIT_FEATURE in tree:
-        node_name = feature_names[tree[SPLIT_FEATURE]]
+        node_name = str(feature_names[tree[SPLIT_FEATURE]])
     else:
         node_name = None
     json.append(get_json_node(arg, condition, error, nodeid, method,
