@@ -4,7 +4,6 @@
 import warnings
 from typing import Any, Dict, List
 
-import numpy as np
 import pandas as pd
 
 from responsibleai.databalanceanalysis.constants import Constants
@@ -87,10 +86,8 @@ def transform_feature_balance_measures(
     try:
         for pos_label, df in dfs.items():
             measures: Dict[str, Dict[str, Any]] = {}
-            rows: List[Any] = (
-                df.replace({np.nan: None})
-                .reset_index(drop=True)
-                .to_dict(orient="records")
+            rows: List[Any] = df.reset_index(drop=True).to_dict(
+                orient="records"
             )
 
             # Transform { "FeatureName": "Col1", "MeasureA": 0.5, ... } to
