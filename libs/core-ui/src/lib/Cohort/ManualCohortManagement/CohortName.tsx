@@ -17,11 +17,8 @@ export interface ICohortNameProps {
 export class CohortName extends React.Component<ICohortNameProps> {
   public constructor(props: ICohortNameProps) {
     super(props);
-    this.state = {
-      editingCohortIndex: undefined,
-      showEditPanel: false
-    };
   }
+
   public render(): React.ReactNode {
     return (
       <Stack>
