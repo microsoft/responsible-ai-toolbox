@@ -269,11 +269,11 @@ export class FeatureList extends React.Component<
     );
   };
 
-  private renderItemColumn(
+  private renderItemColumn = (
     item: any,
     index?: number,
     column?: IColumn
-  ): React.ReactNode {
+  ): React.ReactNode => {
     const theme = getTheme();
     if (column && index !== undefined) {
       const fieldContent = item[column.fieldName as keyof any] as string;
@@ -317,7 +317,7 @@ export class FeatureList extends React.Component<
       }
     }
     return <span />;
-  }
+  };
 
   private readonly renderPanelFooter = () => {
     // Remove apply button in static view
