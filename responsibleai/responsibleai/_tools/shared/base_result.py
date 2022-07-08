@@ -9,10 +9,10 @@ from typing import Any, Generic, List, TypeVar, Union
 
 import jsonschema
 
+from raiutils.data_processing import serialize_json_safe
 from responsibleai._internal.constants import SerializationAttributes
 from responsibleai._tools.shared.attribute_serialization import (
     load_attributes, save_attributes)
-from responsibleai.serialization_utilities import serialize_json_safe
 
 TResult = TypeVar('TResult')  # Type for subclasses of BaseResult
 
