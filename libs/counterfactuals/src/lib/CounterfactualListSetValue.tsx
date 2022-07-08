@@ -12,10 +12,6 @@ export interface ICounterfactualListSetValueProps {
 }
 
 export class CounterfactualListSetValue extends React.Component<ICounterfactualListSetValueProps> {
-  public constructor(props: ICounterfactualListSetValueProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     return (
       <Link onClick={this.onSelect}>

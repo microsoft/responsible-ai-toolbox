@@ -15,10 +15,6 @@ export interface ICohortNameProps {
 }
 
 export class CohortName extends React.Component<ICohortNameProps> {
-  public constructor(props: ICohortNameProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     return (
       <Stack>

@@ -347,8 +347,8 @@ export class CounterfactualChart extends React.PureComponent<
                         FabricStyles.fabricColorPalette[
                           rowIndex + WhatIfConstants.MAX_SELECTION + 1
                         ],
-                      name: row[WhatIfConstants.namePath],
                       index: rowIndex,
+                      name: row[WhatIfConstants.namePath],
                       onClick: this.toggleCustomActivation,
                       onDelete: this.removeCustomPoint
                     };
