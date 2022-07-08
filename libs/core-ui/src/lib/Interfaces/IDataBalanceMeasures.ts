@@ -4,27 +4,31 @@
 export interface IDataBalanceMeasures {
   AggregateBalanceMeasures?: IAggregateBalanceMeasures;
   DistributionBalanceMeasures?: IDistributionBalanceMeasures;
-  FeatureBalanceMeasures?: IFeatureBalanceMeasures;
+  FeatureBalanceMeasures?: ITargetColumnFeatureBalanceMeasures;
 }
 
 export interface IAggregateBalanceMeasures {
-  [key: string]: number;
+  [measure: string]: number;
 }
 
 export interface IDistributionBalanceMeasures {
-  [key: string]: IDistributionBalanceMeasure;
+  [feature: string]: IDistributionBalanceMeasure;
 }
 
 export interface IDistributionBalanceMeasure {
-  [key: string]: number;
+  [measure: string]: number;
+}
+
+export interface ITargetColumnFeatureBalanceMeasures {
+  [label: string]: IFeatureBalanceMeasures;
 }
 
 export interface IFeatureBalanceMeasures {
-  [key: string]: IFeatureBalanceMeasure[];
+  [feature: string]: IFeatureBalanceMeasure[];
 }
 
 export interface IFeatureBalanceMeasure {
-  [key: string]: number | string;
+  [measure: string]: number | string;
   ClassA: string;
   ClassB: string;
 }
