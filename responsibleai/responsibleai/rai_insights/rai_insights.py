@@ -29,7 +29,7 @@ _TRAIN = 'train'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
-_COLUMNS = 'columns'
+_FEATURE_COLUMNS = 'feature_columns'
 _FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
@@ -99,9 +99,10 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
-        self._columns = list(test.columns)
+        self._feature_columns =  test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test, categorical_features=categorical_features)
+            test=test, categorical_features=categorical_features,
+            feature_columns=self._feature_columns)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
@@ -539,7 +540,7 @@ class RAIInsights(RAIBaseInsights):
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
             _CLASSES: classes,
-            _COLUMNS: self._columns,
+            _FEATURE_COLUMNS: self._feature_columns,
             _FEATURE_RANGES: self._feature_ranges
 
         }
@@ -547,11 +548,11 @@ class RAIInsights(RAIBaseInsights):
             json.dump(meta, file)
 
     @staticmethod
-    def _get_feature_ranges(test, categorical_features):
+    def _get_feature_ranges(test, categorical_features, feature_columns):
         """Get feature ranges like min, max and unique values
         for all columns"""
         result = []
-        for col in list(test.columns):
+        for col in feature_columns:
             res_object = {}
             if (col in categorical_features):
                 unique_value = test[col].unique()
@@ -597,8 +598,9 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
 
+        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        inst.__dict__['_' + _COLUMNS] = meta[_COLUMNS]
+
 
     @staticmethod
     def load(path):

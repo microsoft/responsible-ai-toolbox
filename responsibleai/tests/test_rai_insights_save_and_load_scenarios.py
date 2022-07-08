@@ -69,7 +69,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
     def test_rai_insights_save_load_add_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            columns, feature_range_keys = \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -123,7 +123,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 target_name, ModelTask.CLASSIFICATION,
                 categorical_features=categorical_features,
                 feature_range_keys=feature_range_keys,
-                columns=columns)
+                feature_columns=feature_columns)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -205,7 +205,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
     def test_rai_insights_add_save_load_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
             continuous_features, target_name, classes, \
-            columns, feature_range_keys = \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -259,7 +259,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 target_name, ModelTask.CLASSIFICATION,
                 categorical_features=categorical_features,
                 feature_range_keys=feature_range_keys,
-                columns=columns)
+                feature_columns=feature_columns)
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
@@ -273,7 +273,7 @@ def validate_rai_insights(
     task_type,
     categorical_features,
     feature_range_keys,
-    columns
+    feature_columns
 ):
     pd.testing.assert_frame_equal(rai_insights.train, train_data)
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
@@ -282,7 +282,7 @@ def validate_rai_insights(
     assert rai_insights.categorical_features == (categorical_features or [])
     assert feature_range_keys.sort() == \
         list(rai_insights._feature_ranges[0].keys()).sort()
-    assert rai_insights._columns == (columns or [])
+    assert rai_insights._feature_columns == (feature_columns or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

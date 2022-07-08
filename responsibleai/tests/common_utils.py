@@ -134,7 +134,7 @@ def create_adult_income_dataset():
     target_name = 'income'
     target = dataset[target_name]
     classes = list(np.unique(target))
-    columns = list(dataset.columns)
+    feature_columns = dataset.drop(columns=[target_name]).columns.tolist()
     feature_range_keys = ['column_name', 'range_type', 'unique_values']
     categorical_features = list(set(dataset.columns) -
                                 set(continuous_features) -
@@ -144,7 +144,7 @@ def create_adult_income_dataset():
         dataset, target,
         test_size=5000, random_state=7, stratify=target)
     return data_train, data_test, y_train, y_test, categorical_features, \
-        continuous_features, target_name, classes, columns, feature_range_keys
+        continuous_features, target_name, classes, feature_columns, feature_range_keys
 
 
 def create_complex_classification_pipeline(
