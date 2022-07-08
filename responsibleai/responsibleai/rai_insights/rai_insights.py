@@ -100,8 +100,8 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
         self._columns = list(test.columns)
-        self._feature_ranges = RAIInsights._get_feature_ranges(test=test,
-            categorical_features=categorical_features)
+        self._feature_ranges = RAIInsights._get_feature_ranges(
+            test=test, categorical_features=categorical_features)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
