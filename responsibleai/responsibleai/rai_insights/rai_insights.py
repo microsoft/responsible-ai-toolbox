@@ -40,7 +40,7 @@ _PREDICT_PROBA = 'predict_proba'
 _COLUMN_NAME = 'column_name'
 _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
-_MIN_VALUE ='min_value'
+_MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
 
@@ -100,7 +100,8 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
         self._columns = list(test.columns)
-        self._feature_ranges = RAIInsights._get_feature_ranges(test=test,categorical_features=categorical_features)
+        self._feature_ranges = RAIInsights._get_feature_ranges(test=test,
+            categorical_features=categorical_features)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
@@ -547,7 +548,8 @@ class RAIInsights(RAIBaseInsights):
 
     @staticmethod
     def _get_feature_ranges(test, categorical_features):
-        """Get feature ranges like min, max and unique values for all columns"""
+        """Get feature ranges like min, max and unique values
+        for all columns"""
         result = []
         for col in list(test.columns):
             res_object = {}
@@ -595,7 +597,7 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
 
-        inst.__dict__['_' + _FEATURE_RANGES] =  meta[_FEATURE_RANGES]
+        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
         inst.__dict__['_' + _COLUMNS] = meta[_COLUMNS]
 
     @staticmethod

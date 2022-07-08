@@ -121,7 +121,9 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features,feature_range_keys=feature_range_keys, columns=columns)
+                categorical_features=categorical_features,
+                feature_range_keys=feature_range_keys,
+                columns=columns)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -255,7 +257,9 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features, feature_range_keys=feature_range_keys, columns=columns)
+                categorical_features=categorical_features,
+                feature_range_keys=feature_range_keys,
+                columns=columns)
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
@@ -276,7 +280,8 @@ def validate_rai_insights(
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
-    assert feature_range_keys.sort() == list(rai_insights._feature_ranges[0].keys()).sort()
+    assert feature_range_keys.sort() == \
+        list(rai_insights._feature_ranges[0].keys()).sort()
     assert rai_insights._columns == (columns or [])
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
