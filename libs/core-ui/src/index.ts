@@ -55,6 +55,7 @@ export * from "./lib/components/OverallMetricChart";
 export * from "./lib/components/AxisConfigDialog";
 export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/ExpandableText";
+export * from "./lib/components/HeaderWithInfo";
 export * from "./lib/components/InteractiveLegend";
 export * from "./lib/components/MissingParametersPlaceholder";
 export * from "./lib/components/LabelWithCallout";

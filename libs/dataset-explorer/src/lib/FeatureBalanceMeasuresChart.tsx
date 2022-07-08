@@ -5,7 +5,7 @@ import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
 import {
   HeaderWithInfo,
   HeatmapHighChart,
-  IFeatureBalanceMeasures
+  ITargetColumnFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -18,10 +18,11 @@ import {
 } from "./getFeatureBalanceMeasuresChart";
 
 export interface IFeatureBalanceMeasuresProps {
-  featureBalanceMeasures: IFeatureBalanceMeasures;
+  featureBalanceMeasures: ITargetColumnFeatureBalanceMeasures;
 }
 
 export interface IFeatureBalanceMeasuresState {
+  selectedLabelIndex: number;
   selectedFeatureIndex: number;
   selectedMeasureIndex: number;
 }
@@ -35,6 +36,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
     this.state = {
       selectedFeatureIndex: 0,
+      selectedLabelIndex: 0,
       selectedMeasureIndex: 0
     };
   }
@@ -49,7 +51,18 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     const measuresLocalization =
       localization.ModelAssessment.DataBalance.FeatureBalanceMeasures;
 
-    const featureOptions = _.uniq(Object.keys(featureBalanceMeasures)).map(
+    const labelOptions = _.uniq(Object.keys(featureBalanceMeasures)).map(
+      (label, index) => ({ key: index, text: label } as IDropdownOption)
+    );
+    const selectedLabel = labelOptions[this.state.selectedLabelIndex].text;
+
+    if (!(selectedLabel in featureBalanceMeasures)) {
+      return;
+    }
+
+    const featureOptions = _.uniq(
+      Object.keys(featureBalanceMeasures[selectedLabel])
+    ).map(
       (feature, index) => ({ key: index, text: feature } as IDropdownOption)
     );
     const selectedFeature =
@@ -72,9 +85,40 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
           calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
         />
 
-        {/* Renders the the two dropdowns, their respective headings, and the description */}
+        {/* Renders the the three dropdowns, their respective headings, and the description */}
         <Stack.Item>
           <Stack horizontal tokens={{ childrenGap: "s1" }}>
+            {/* Renders the Positive Label dropdown and its heading */}
+            <Stack.Item>
+              <Stack tokens={{ childrenGap: "s1" }}>
+                <Stack.Item>
+                  <Text variant="mediumPlus" className={styles.boldText}>
+                    {measuresLocalization.LabelPicker}
+                  </Text>
+                </Stack.Item>
+                <Stack.Item>
+                  <Dropdown
+                    styles={{
+                      callout: {
+                        selectors: {
+                          ".ms-Button-flexContainer": {
+                            width: "100%"
+                          }
+                        }
+                      },
+                      dropdown: {
+                        width: 150
+                      }
+                    }}
+                    id="labelDropdown"
+                    options={labelOptions}
+                    selectedKey={this.state.selectedLabelIndex}
+                    onChange={this.setSelectedLabel}
+                  />
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+
             {/* Renders the Feature dropdown and its heading */}
             <Stack.Item>
               <Stack tokens={{ childrenGap: "s1" }}>
@@ -184,6 +228,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
           <HeatmapHighChart
             configOverride={getFeatureBalanceMeasuresChart(
               featureBalanceMeasures,
+              selectedLabel,
               selectedFeature,
               selectedMeasure
             )}
@@ -192,6 +237,15 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
       </Stack>
     );
   }
+
+  private setSelectedLabel = (
+    _: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption
+  ): void => {
+    if (item?.key !== undefined) {
+      this.setState({ selectedLabelIndex: item.key as number });
+    }
+  };
 
   private setSelectedFeature = (
     _: React.FormEvent<HTMLDivElement>,

@@ -4,9 +4,9 @@
 import { getTheme } from "@fluentui/react";
 import {
   IHighchartsConfig,
-  IFeatureBalanceMeasures,
   nameof,
-  IFeatureBalanceMeasure
+  IFeatureBalanceMeasure,
+  ITargetColumnFeatureBalanceMeasures
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { ColorAxisOptions } from "highcharts";
@@ -87,18 +87,22 @@ export const FeatureBalanceMeasuresMap = new Map<
 ]);
 
 export function getFeatureBalanceMeasuresChart(
-  featureBalanceMeasures: IFeatureBalanceMeasures,
+  targetColFeatureBalanceMeasures: ITargetColumnFeatureBalanceMeasures,
+  selectedLabel: string,
   selectedFeature: string,
   selectedMeasure: string
 ): IHighchartsConfig {
   const measureInfo = FeatureBalanceMeasuresMap.get(selectedMeasure);
   if (
-    featureBalanceMeasures === undefined ||
-    Object.keys(featureBalanceMeasures).length === 0 ||
+    targetColFeatureBalanceMeasures === undefined ||
+    Object.keys(targetColFeatureBalanceMeasures).length === 0 ||
+    !(selectedLabel in targetColFeatureBalanceMeasures) ||
     measureInfo === undefined
   ) {
     return {};
   }
+
+  const featureBalanceMeasures = targetColFeatureBalanceMeasures[selectedLabel];
 
   const chartLocalization =
     localization.ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart;
