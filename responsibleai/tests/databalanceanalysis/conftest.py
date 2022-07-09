@@ -20,6 +20,8 @@ def adult_data():
         _,
         target_col,
         _,
+        _,
+        _,
     ) = create_adult_income_dataset()
     train_df = copy.deepcopy(data_train)
     test_df = copy.deepcopy(data_test)

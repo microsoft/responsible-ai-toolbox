@@ -15,7 +15,7 @@ from ..common_utils import create_adult_income_dataset, create_housing_data
 @pytest.fixture(scope='session')
 def adult_data():
     X_train_df, X_test_df, y_train, y_test,\
-        _, _, target_name, _ = create_adult_income_dataset()
+        _, _, target_name, _, _, _ = create_adult_income_dataset()
     train_df = copy.deepcopy(X_train_df)
     test_df = copy.deepcopy(X_test_df)
     train_df[target_name] = y_train
