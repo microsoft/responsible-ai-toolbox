@@ -549,7 +549,7 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   // fetch prediction for temporary point
-  private fetchData(fetchingReference: { [key: string]: any }): void {
+  private fetchData = (fetchingReference: { [key: string]: any }): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -605,7 +605,7 @@ export class CounterfactualChart extends React.PureComponent<
         }
       }
     );
-  }
+  };
 
   private generatePlotlyProps(
     jointData: JointDataset,
