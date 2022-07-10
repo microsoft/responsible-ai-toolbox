@@ -110,7 +110,8 @@ class TestModelAnalysis(object):
     def test_model_analysis_binary_mixed_types(self, manager_type):
 
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
