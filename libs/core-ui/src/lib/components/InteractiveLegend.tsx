@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IconButton, Text } from "@fluentui/react";
+import { Text } from "@fluentui/react";
 import React from "react";
 
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
+import { InteractiveLegendClickButton } from "./InteractiveLegendClickButton";
+import { InteractiveLegendEditAndDeleteButton } from "./InteractiveLegendEditAndDeleteButton";
 
 export enum SortingState {
   Ascending = "ascending",
@@ -16,12 +18,13 @@ export interface ILegendItem {
   disabled?: boolean;
   disabledMessage?: string;
   activated: boolean;
+  index: number;
   sortingState?: SortingState;
   color: string;
   name: string;
-  onClick?: () => void;
-  onDelete?: () => void;
-  onEdit?: () => void;
+  onClick?: (index: number) => void;
+  onDelete?: (index: number) => void;
+  onEdit?: (index: number) => void;
 }
 
 export interface IInteractiveLegendProps {
@@ -53,20 +56,11 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
           <Text nowrap variant={"medium"} className={this.classes.label}>
             {item.name}
           </Text>
-          {item.onEdit !== undefined && (
-            <IconButton
-              className={this.classes.editButton}
-              iconProps={{ iconName: "Edit" }}
-              onClick={item.onEdit}
-            />
-          )}
-          {item.onDelete !== undefined && (
-            <IconButton
-              className={this.classes.deleteButton}
-              iconProps={{ iconName: "Clear" }}
-              onClick={item.onDelete}
-            />
-          )}
+          <InteractiveLegendEditAndDeleteButton
+            index={item.index}
+            onDelete={item.onDelete}
+            onEdit={item.onEdit}
+          />
         </div>
       );
     }
@@ -74,40 +68,18 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
       item.activated === false ? this.classes.inactiveItem : this.classes.item;
     return (
       <div className={rootClass} key={index}>
-        <div
-          className={this.classes.clickTarget}
+        <InteractiveLegendClickButton
+          activated={item.activated}
+          color={item.color}
+          index={index}
+          name={item.name}
           onClick={item.onClick}
-          onKeyUp={undefined}
-          role="checkbox"
-          aria-checked={item.activated}
-          tabIndex={index}
-        >
-          <div
-            className={
-              item.activated === false
-                ? this.classes.inactiveColorBox
-                : this.classes.colorBox
-            }
-            style={{ backgroundColor: item.color }}
-          />
-          <Text nowrap variant={"medium"} className={this.classes.label}>
-            {item.name}
-          </Text>
-        </div>
-        {item.onEdit !== undefined && (
-          <IconButton
-            className={this.classes.editButton}
-            iconProps={{ iconName: "Edit", style: { fontSize: "10px" } }}
-            onClick={item.onEdit}
-          />
-        )}
-        {item.onDelete !== undefined && (
-          <IconButton
-            className={this.classes.deleteButton}
-            iconProps={{ iconName: "Clear", style: { fontSize: "10px" } }}
-            onClick={item.onDelete}
-          />
-        )}
+        />
+        <InteractiveLegendEditAndDeleteButton
+          index={item.index}
+          onDelete={item.onDelete}
+          onEdit={item.onEdit}
+        />
       </div>
     );
   }
