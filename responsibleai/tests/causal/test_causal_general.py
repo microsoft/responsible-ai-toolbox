@@ -12,7 +12,8 @@ def test_causal_classification_scikitlearn_issue():
     # This test gets stuck on SciKit-Learn v1.1.0
     # See PR #1429
     data_train, data_test, _, _, categorical_features, \
-        _, target_name, classes = create_adult_income_dataset()
+        _, target_name, classes, _, _ = \
+        create_adult_income_dataset()
 
     rai_i = RAIInsights(
         model=None,
