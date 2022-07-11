@@ -4,7 +4,6 @@
 import {
   DetailsList,
   IColumn,
-  Link,
   Panel,
   SelectionMode,
   Stack,
@@ -20,6 +19,7 @@ import { Cohort } from "../Cohort";
 
 import { CohortEditor } from "./CohortEditor";
 import { CohortList } from "./CohortList";
+import { CohortName } from "./CohortName";
 
 export interface ICohortBarProps {
   cohorts: Cohort[];
@@ -187,19 +187,12 @@ export class CohortBar extends React.Component<
       return <span />;
     }
     return (
-      <Stack>
-        <Text>{cohort.name}</Text>
-        <Stack horizontal tokens={{ childrenGap: "s1" }}>
-          {index && (
-            <Link onClick={this.editCohort.bind(this, index)}>
-              {localization.Interpret.CohortBanner.editCohort}
-            </Link>
-          )}
-          <Link onClick={this.cloneAndEditCohort.bind(this, index)}>
-            {localization.Interpret.CohortBanner.duplicateCohort}
-          </Link>
-        </Stack>
-      </Stack>
+      <CohortName
+        cohort={cohort}
+        index={index}
+        cloneAndEditCohort={this.cloneAndEditCohort}
+        editCohort={this.editCohort}
+      />
     );
   };
 

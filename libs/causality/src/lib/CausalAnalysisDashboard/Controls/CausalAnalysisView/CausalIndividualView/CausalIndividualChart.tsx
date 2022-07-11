@@ -195,7 +195,7 @@ export class CausalIndividualChart extends React.PureComponent<
         </Stack.Item>
         <Stack className={classNames.legendAndText}>
           <ComboBox
-            label={localization.CausalAnalysis.IndividualView.datapointIndex}
+            label={localization.CausalAnalysis.IndividualView.selectedDatapoint}
             onChange={this.selectPointFromDropdown}
             options={this.getDataOptions()}
             selectedKey={this.state.selectedIndex}

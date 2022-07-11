@@ -30,12 +30,19 @@ _TRAIN = 'train'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
+_FEATURE_COLUMNS = 'feature_columns'
+_FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
+_COLUMN_NAME = 'column_name'
+_RANGE_TYPE = 'range_type'
+_UNIQUE_VALUES = 'unique_values'
+_MIN_VALUE = 'min_value'
+_MAX_VALUE = 'max_value'
 
 
 class RAIInsights(RAIBaseInsights):
@@ -93,6 +100,11 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
+        self._feature_columns = \
+            test.drop(columns=[target_column]).columns.tolist()
+        self._feature_ranges = RAIInsights._get_feature_ranges(
+            test=test, categorical_features=categorical_features,
+            feature_columns=self._feature_columns)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
@@ -549,10 +561,35 @@ class RAIInsights(RAIBaseInsights):
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
-            _CLASSES: classes
+            _CLASSES: classes,
+            _FEATURE_COLUMNS: self._feature_columns,
+            _FEATURE_RANGES: self._feature_ranges
+
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
+
+    @staticmethod
+    def _get_feature_ranges(test, categorical_features, feature_columns):
+        """Get feature ranges like min, max and unique values
+        for all columns"""
+        result = []
+        for col in feature_columns:
+            res_object = {}
+            if (col in categorical_features):
+                unique_value = test[col].unique()
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "categorical"
+                res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            else:
+                min_value = float(test[col].min())
+                max_value = float(test[col].max())
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "integer"
+                res_object[_MIN_VALUE] = min_value
+                res_object[_MAX_VALUE] = max_value
+            result.append(res_object)
+        return result
 
     @staticmethod
     def _load_metadata(inst, path):
@@ -582,6 +619,9 @@ class RAIInsights(RAIBaseInsights):
             target_column=meta[_TARGET_COLUMN],
             classes=classes
         )
+
+        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
+        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
 
     @staticmethod
     def load(path):
