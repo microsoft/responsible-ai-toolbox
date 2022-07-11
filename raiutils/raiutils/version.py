@@ -3,6 +3,6 @@
 
 name = 'raiutils'
 _major = '0'
-_minor = '1'
+_minor = '2'
 _patch = '0'
 version = '{}.{}.{}'.format(_major, _minor, _patch)
