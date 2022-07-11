@@ -23,11 +23,12 @@ def adult_data():
         _,
         target_col,
         classes,
+        _,
+        _,
     ) = create_adult_income_dataset()
     data_train[target_col] = y_train
     data_test[target_col] = y_test
-    cols_of_interest = categorical_features
-    return data_train, data_test, cols_of_interest, target_col, classes
+    return data_train, data_test, categorical_features, target_col, classes
 
 
 @pytest.fixture(scope="session")

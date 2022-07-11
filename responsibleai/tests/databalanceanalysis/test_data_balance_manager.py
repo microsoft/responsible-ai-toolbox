@@ -71,7 +71,7 @@ class TestDataBalanceManager:
             manager.add(cols_of_interest=cols_of_interest)
 
     def test_add_errors_on_invalid_input_advanced(self, adult_data):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
 
         # train and test not specified
         with pytest.raises(ValueError):
@@ -82,7 +82,7 @@ class TestDataBalanceManager:
                 classes=classes,
                 task_type=TaskType.CLASSIFICATION,
             )
-            manager.add(cols_of_interest=cols_of_interest)
+            manager.add(cols_of_interest=categorical_cols)
 
         # task_type is not classification
         with pytest.raises(ValueError):
@@ -93,10 +93,10 @@ class TestDataBalanceManager:
                 classes=classes,
                 task_type=TaskType.REGRESSION,
             )
-            manager.add(cols_of_interest=cols_of_interest)
+            manager.add(cols_of_interest=categorical_cols)
 
     def test_validate_with_valid_input(self, adult_data):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
         manager = DataBalanceManager(
             train=train_df,
             test=test_df,
@@ -104,7 +104,7 @@ class TestDataBalanceManager:
             classes=classes,
             task_type=TaskType.CLASSIFICATION,
         )
-        manager._cols_of_interest = cols_of_interest
+        manager._cols_of_interest = categorical_cols
         manager._validate()  # should not raise any exceptions
 
     @pytest.mark.parametrize("target_col", [None, ""])
@@ -162,7 +162,7 @@ class TestDataBalanceManager:
     def test_compute_transforms_and_sets_data_balance_measures(
         self, adult_data
     ):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
 
         manager = DataBalanceManager(
             train=train_df,
@@ -171,7 +171,7 @@ class TestDataBalanceManager:
             classes=classes,
             task_type=TaskType.CLASSIFICATION,
         )
-        manager.add(cols_of_interest=cols_of_interest)
+        manager.add(cols_of_interest=categorical_cols)
 
         assert manager._data_balance_measures is None
         manager.compute()
@@ -206,7 +206,7 @@ class TestDataBalanceManager:
         assert AGGREGATE_BALANCE_MEASURES_KEY in d
 
     def test_save_and_load_basic(self, tmpdir, adult_data):
-        train_df, test_df, _, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
         task_type = TaskType.CLASSIFICATION
 
         saved = DataBalanceManager(
@@ -227,6 +227,7 @@ class TestDataBalanceManager:
             test=test_df,
             target_column=target_col,
             task_type="classification",
+            categorical_features=categorical_cols,
         )
         loaded = saved._load(save_dir, rai_insights)
 
@@ -251,7 +252,7 @@ class TestDataBalanceManager:
         assert loaded._data_balance_measures is None
 
     def test_save_and_load_with_add(self, tmpdir, adult_data):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
         task_type = TaskType.CLASSIFICATION
 
         saved = DataBalanceManager(
@@ -261,7 +262,7 @@ class TestDataBalanceManager:
             classes=classes,
             task_type=task_type,
         )
-        saved.add(cols_of_interest=cols_of_interest)
+        saved.add(cols_of_interest=categorical_cols)
 
         save_dir = tmpdir.mkdir("save-dir")
         saved._save(save_dir)
@@ -272,6 +273,7 @@ class TestDataBalanceManager:
             test=test_df,
             target_column=target_col,
             task_type="classification",
+            categorical_features=categorical_cols,
         )
         loaded = saved._load(save_dir, rai_insights)
 
@@ -293,7 +295,7 @@ class TestDataBalanceManager:
         )
 
     def test_save_and_load_with_add_and_compute(self, tmpdir, adult_data):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
         task_type = TaskType.CLASSIFICATION
 
         saved = DataBalanceManager(
@@ -303,7 +305,7 @@ class TestDataBalanceManager:
             classes=classes,
             task_type=task_type,
         )
-        saved.add(cols_of_interest=cols_of_interest)
+        saved.add(cols_of_interest=categorical_cols)
         saved.compute()
 
         save_dir = tmpdir.mkdir("save-dir")
@@ -315,6 +317,7 @@ class TestDataBalanceManager:
             test=test_df,
             target_column=target_col,
             task_type="classification",
+            categorical_features=categorical_cols,
         )
         loaded = saved._load(save_dir, rai_insights)
 

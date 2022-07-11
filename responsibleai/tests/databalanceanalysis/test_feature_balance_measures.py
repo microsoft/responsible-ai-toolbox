@@ -28,12 +28,12 @@ class TestFeatureBalanceMeasures:
         )
 
     def test_adult_data(self, adult_data, adult_data_feature_balance_measures):
-        train_df, test_df, cols_of_interest, target_col, classes = adult_data
+        train_df, test_df, categorical_cols, target_col, classes = adult_data
         full_df = pd.concat([train_df, test_df])
         pos_label = "1"
 
         feat_measures = FeatureBalanceMeasures(
-            cols_of_interest=cols_of_interest,
+            cols_of_interest=categorical_cols,
             label_col=target_col,
             pos_label=pos_label,
         ).measures(dataset=full_df)
