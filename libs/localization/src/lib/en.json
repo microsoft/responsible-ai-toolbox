@@ -1260,6 +1260,25 @@
     "selectPoint": "Select a point to see its local explanation",
     "summaryImportance": "Summary importance"
   },
+  "InterpretText": {
+    "Dashboard": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
+  },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Add",
