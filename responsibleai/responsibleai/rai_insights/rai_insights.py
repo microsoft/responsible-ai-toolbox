@@ -19,6 +19,7 @@ from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
@@ -110,6 +111,8 @@ class RAIInsights(RAIBaseInsights):
             model, train, test, target_column, task_type,
             serializer)
 
+        self._try_add_data_balance()
+
     def _initialize_managers(self):
         """Initializes the managers.
 
@@ -125,6 +128,10 @@ class RAIInsights(RAIBaseInsights):
             target_column=self.target_column, task_type=self.task_type,
             categorical_features=self.categorical_features)
 
+        self._data_balance_manager = DataBalanceManager(
+            train=self.train, test=self.test, target_column=self.target_column,
+            classes=self._classes, task_type=self.task_type)
+
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
             self._classes,
@@ -138,6 +145,7 @@ class RAIInsights(RAIBaseInsights):
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
+                          self._data_balance_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
 
@@ -153,6 +161,17 @@ class RAIInsights(RAIBaseInsights):
                 return classes
         else:
             return None
+
+    def _try_add_data_balance(self):
+        """
+        Add data balance measures to be computed on categorical features
+        if it is a classification task.
+        """
+        if self.task_type == ModelTask.CLASSIFICATION and \
+                len(self.categorical_features) > 0 and \
+                self._classes is not None:
+            self._data_balance_manager.add(
+                cols_of_interest=self.categorical_features)
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
@@ -418,6 +437,8 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
+        dashboard_dataset.data_balance_measures = \
+            self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None
@@ -618,6 +639,7 @@ class RAIInsights(RAIBaseInsights):
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
             ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
             ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
             ManagerNames.EXPLAINER: ExplainerManager,
         }
