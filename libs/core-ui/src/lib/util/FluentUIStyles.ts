@@ -10,8 +10,25 @@ import {
   ITextFieldStyles,
   IStyle,
   getTheme,
-  mergeStyleSets
+  mergeStyleSets,
+  ITheme
 } from "@fluentui/react";
+
+export interface IColorNames {
+  black: string;
+  blueMid: string;
+  magentaDark: string;
+  magentaLight: string;
+  neutral: string;
+  orangeLighter: string;
+  primary: string;
+  primaryLight: string;
+  purple: string;
+  purpleLight: string;
+  red: string;
+  redDark: string;
+  teal: string;
+}
 
 export interface IRGBColor {
   r: number;
@@ -19,7 +36,7 @@ export interface IRGBColor {
   b: number;
 }
 
-export class FabricStyles {
+export class FluentUIStyles {
   public static limitedSizeMenuDropdown: Partial<IComboBoxStyles> = {
     callout: {
       maxHeight: "256px",
@@ -40,7 +57,7 @@ export class FabricStyles {
         width: "100%"
       }
     },
-    FabricStyles.limitedSizeMenuDropdown
+    FluentUIStyles.limitedSizeMenuDropdown
   );
 
   public static smallDropdownStyle: Partial<IComboBoxStyles> = mergeStyleSets<
@@ -69,7 +86,7 @@ export class FabricStyles {
         minWidth: "150px"
       }
     },
-    FabricStyles.limitedSizeMenuDropdown
+    FluentUIStyles.limitedSizeMenuDropdown
   );
 
   public static calloutWrapper: IStyle = {
@@ -111,7 +128,7 @@ export class FabricStyles {
         maxHeight: "400px"
       },
       container: mergeStyles([
-        FabricStyles.calloutContainer,
+        FluentUIStyles.calloutContainer,
         {
           position: "fixed"
         }
@@ -125,57 +142,32 @@ export class FabricStyles {
     padding: "0 0 5px 5px"
   };
 
-  public static plotlyColorPalette: IRGBColor[] = [
-    { b: 180, g: 119, r: 31 }, // muted blue
-    { b: 14, g: 127, r: 255 }, // safety orange
-    { b: 44, g: 160, r: 44 }, // cooked asparagus green
-    { b: 40, g: 39, r: 214 }, // brick red
-    { b: 189, g: 103, r: 148 }, // muted purple
-    { b: 75, g: 86, r: 140 }, // chestnut brown
-    { b: 194, g: 119, r: 227 }, // raspberry yogurt pink
-    { b: 127, g: 127, r: 127 }, // middle gray
-    { b: 34, g: 189, r: 188 }, // curry yellow-green
-    { b: 207, g: 190, r: 23 } // blue-teal
+  public static orderedColorNames: string[] = [
+    "primary",
+    "orangeLighter",
+    "magentaDark",
+    "teal",
+    "purpleLight",
+    "neutral",
+    "redDark",
+    "purple",
+    "magentaLight",
+    "black",
+    "red",
+    "blueMid",
+    "primaryLight"
   ];
 
-  public static plotlyColorHexPalette: string[] = [
-    "#1f77b4", // muted blue
-    "#ff7f0e", // safety orange
-    "#2ca02c", // cooked asparagus green
-    "#d62728", // brick red
-    "#9467bd", // muted purple
-    "#8c564b", // chestnut brown
-    "#e377c2", // raspberry yogurt pink
-    "#7f7f7f", // middle gray
-    "#bcbd22", // curry yellow-green
-    "#17becf" // blue-teal
-  ];
+  public static fluentUIColorPalette: string[] =
+    FluentUIStyles.getFlunetUIPalette(getTheme());
 
-  // public static fabricColorPalette: string[] = [
-  //     "#0078d4",
-  //     "#00188f",
-  //     "#00A2ad",
-  //     "#4b003f",
-  //     "#917edb",
-  //     "#001d3f",
-  //     "#e3008c",
-  //     "#022f22",
-  //     "#ef6950",
-  //     "#502006"
-  // ];
+  public static plotlyColorHexPalette: string[] =
+    FluentUIStyles.getFlunetUIPalette(getTheme());
 
-  public static fabricColorPalette: string[] = [
-    "#1f77b4", // muted blue
-    "#ff7f0e", // safety orange
-    "#2ca02c", // cooked asparagus green
-    "#d62728", // brick red
-    "#9467bd", // muted purple
-    "#8c564b", // chestnut brown
-    "#e377c2", // raspberry yogurt pink
-    "#7f7f7f", // middle gray
-    "#bcbd22", // curry yellow-green
-    "#17becf" // blue-teal
-  ];
+  public static plotlyColorPalette: IRGBColor[] =
+    FluentUIStyles.plotlyColorHexPalette.map((hex) =>
+      FluentUIStyles.hex2rgb(hex)
+    );
 
   public static fabricColorInactiveSeries = "#949494";
 
@@ -239,4 +231,57 @@ export class FabricStyles {
       display: "inline-flex"
     }
   };
+
+  public static hex2rgb(hex: string): IRGBColor {
+    const bigint = Number.parseInt(hex, 16);
+    const rv = (bigint >> 16) & 255;
+    const gv = (bigint >> 8) & 255;
+    const bv = bigint & 255;
+
+    return { b: bv, g: gv, r: rv };
+  }
+
+  public static getFlunetUIPalette(theme: ITheme): string[] {
+    const colorsMap = FluentUIStyles.getColorsMap(theme);
+    return FluentUIStyles.orderedColorNames.map(
+      (colorName) =>
+        colorsMap.get(colorName as keyof IColorNames) ??
+        FluentUIStyles.fluentUIColorPalette[0]
+    );
+  }
+
+  public static getColorsMap(theme: ITheme): Map<keyof IColorNames, string> {
+    const {
+      black,
+      blueMid,
+      magentaDark,
+      magentaLight,
+      neutralSecondaryAlt,
+      orangeLighter,
+      purple,
+      purpleLight,
+      red,
+      redDark,
+      teal,
+      themeLight,
+      themePrimary
+    } = theme.palette;
+
+    const nameToColor = new Map<keyof IColorNames, string>([
+      ["black", black],
+      ["blueMid", blueMid],
+      ["magentaDark", magentaDark],
+      ["magentaLight", magentaLight],
+      ["neutral", neutralSecondaryAlt],
+      ["orangeLighter", orangeLighter],
+      ["primary", themePrimary],
+      ["primaryLight", themeLight],
+      ["purple", purple],
+      ["purpleLight", purpleLight],
+      ["red", red],
+      ["redDark", redDark],
+      ["teal", teal]
+    ]);
+    return nameToColor;
+  }
 }

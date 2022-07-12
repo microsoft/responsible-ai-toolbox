@@ -31,7 +31,7 @@ import {
   ModelAssessmentContext,
   JointDataset,
   ModelExplanationUtils,
-  FabricStyles,
+  FluentUIStyles,
   constructRows,
   constructCols,
   ModelTypes,
@@ -131,7 +131,7 @@ export class IndividualFeatureImportanceView extends React.Component<
       (item) => item.unsortedFeatureValues as any[]
     );
     const testableDatapointColors = this.state.featureImportances.map(
-      (item) => FabricStyles.fabricColorPalette[item.colorIndex]
+      (item) => FluentUIStyles.fluentUIColorPalette[item.colorIndex]
     );
     const testableDatapointNames = this.state.featureImportances.map(
       (item) => item.name

@@ -12,7 +12,7 @@ import {
   initializeIcons
 } from "@fluentui/react";
 import {
-  FabricStyles,
+  FluentUIStyles,
   isTwoDimArray,
   IExplanationContext,
   IExplanationGenerators,
@@ -708,7 +708,7 @@ export class ExplanationDashboard extends React.Component<
               linkFormat={"tabs"}
               linkSize={"normal"}
               headersOnly
-              styles={FabricStyles.verticalTabsStyle}
+              styles={FluentUIStyles.verticalTabsStyle}
             >
               {this.pivotItems.map((props) => (
                 <PivotItem key={props.itemKey} {...props} />
@@ -820,7 +820,7 @@ export class ExplanationDashboard extends React.Component<
                     linkFormat={"tabs"}
                     linkSize={"normal"}
                     headersOnly
-                    styles={FabricStyles.verticalTabsStyle}
+                    styles={FluentUIStyles.verticalTabsStyle}
                   >
                     <PivotItem
                       headerText={localization.Interpret.localFeatureImportance}

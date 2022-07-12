@@ -8,7 +8,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { NeutralColors, SharedColors } from "@fluentui/theme";
+import { getPrimaryChartColor } from "@responsible-ai/core-ui";
 
 export interface ITextHighlightingStyles {
   normal: IStyle;
@@ -26,7 +26,7 @@ export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingS
       boldunderline: mergeStyles([
         normal,
         {
-          color: SharedColors.blue10,
+          color: getPrimaryChartColor(theme),
           fontSize: theme.fonts.large.fontSize,
           padding: 0,
           textDecorationLine: "underline"
@@ -35,8 +35,8 @@ export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingS
       highlighted: mergeStyles([
         normal,
         {
-          backgroundColor: SharedColors.blue10,
-          color: NeutralColors.white
+          backgroundColor: getPrimaryChartColor(theme),
+          color: theme.semanticColors.bodyBackground
         }
       ]),
       normal

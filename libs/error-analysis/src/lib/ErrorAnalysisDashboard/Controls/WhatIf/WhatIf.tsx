@@ -12,7 +12,7 @@ import {
   ErrorCohort,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   getFeatureOptions,
   ErrorDialog
 } from "@responsible-ai/core-ui";
@@ -266,7 +266,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       index
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -294,7 +294,7 @@ export class WhatIf extends React.Component<IWhatIfProps, IWhatIfState> {
       indexes[0]
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.props.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {

@@ -11,7 +11,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 import { v4 } from "uuid";
 
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
 
@@ -68,7 +68,7 @@ export class LabelWithCallout extends React.Component<
             setInitialFocus
             onDismiss={this.toggleCallout}
             role="alertdialog"
-            styles={{ container: FabricStyles.calloutContainer }}
+            styles={{ container: FluentUIStyles.calloutContainer }}
           >
             <div className={classNames.calloutWrapper}>
               <div className={classNames.calloutHeader}>

@@ -28,7 +28,7 @@ import {
   ModelExplanationUtils,
   ChartTypes,
   MissingParametersPlaceholder,
-  FabricStyles,
+  FluentUIStyles,
   FeatureImportanceBar
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -251,7 +251,7 @@ export class LocalImportancePlots extends React.Component<
                         onDismiss={this.toggleCrossClassInfo}
                         directionalHint={DirectionalHint.leftCenter}
                         role="alertdialog"
-                        styles={{ container: FabricStyles.calloutContainer }}
+                        styles={{ container: FluentUIStyles.calloutContainer }}
                       >
                         <div className={classNames.calloutWrapper}>
                           <div className={classNames.calloutHeader}>
@@ -325,7 +325,7 @@ export class LocalImportancePlots extends React.Component<
                 setInitialFocus
                 onDismiss={this.toggleICETooltip}
                 role="alertdialog"
-                styles={{ container: FabricStyles.calloutContainer }}
+                styles={{ container: FluentUIStyles.calloutContainer }}
               >
                 <div className={classNames.calloutWrapper}>
                   <div className={classNames.calloutHeader}>
@@ -374,8 +374,8 @@ export class LocalImportancePlots extends React.Component<
                 ariaLabel="feature picker"
                 selectedKey={this.state.selectedFeatureKey}
                 useComboBoxAsMenuWidth
-                calloutProps={FabricStyles.calloutProps}
-                styles={FabricStyles.limitedSizeMenuDropdown}
+                calloutProps={FluentUIStyles.calloutProps}
+                styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
               {this.props.metadata.modelType === ModelTypes.Multiclass && (
                 <ComboBox
@@ -387,8 +387,8 @@ export class LocalImportancePlots extends React.Component<
                   ariaLabel="class picker"
                   selectedKey={this.state.selectedICEClass}
                   useComboBoxAsMenuWidth
-                  calloutProps={FabricStyles.calloutProps}
-                  styles={FabricStyles.limitedSizeMenuDropdown}
+                  calloutProps={FluentUIStyles.calloutProps}
+                  styles={FluentUIStyles.limitedSizeMenuDropdown}
                 />
               )}
             </div>
