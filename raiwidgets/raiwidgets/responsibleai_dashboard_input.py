@@ -211,3 +211,24 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
+
+    def causal_global_effects(self, post_data):
+        try:
+            id, data = post_data
+            data = pd.DataFrame(
+                data, columns=self.dashboard_input.dataset.feature_names)
+
+            global_effects = self._analysis.causal._cohort_effects(id, data)
+            return {
+                WidgetRequestResponseConstants.data: global_effects
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global causal effects for cohort,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }

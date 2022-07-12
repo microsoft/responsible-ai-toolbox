@@ -66,6 +66,13 @@ class ResponsibleAIDashboard(Dashboard):
 
         self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
 
+        def causal_global_effects():
+            data = request.get_json(force=True)
+            return jsonify(self.input.causal_global_effects(data))
+
+        self.add_url_rule(causal_global_effects, '/causal_global_effects',
+                          methods=["POST"])
+
         def importances():
             return jsonify(self.input.importances())
 

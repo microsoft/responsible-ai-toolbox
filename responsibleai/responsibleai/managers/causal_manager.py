@@ -269,6 +269,14 @@ class CausalManager(BaseManager):
         return result._whatif(X, X_feature_new, feature_name,
                               y, alpha=alpha).to_dict(orient="records")
 
+    def _cohort_effects(self, id, X_test):
+        """Get global causal effects for cohort data."""
+        filtered = [r for r in self.get() if r.id == id]
+        if len(filtered) == 0:
+            raise ValueError(f"Failed to find causal result with ID: {id}")
+        result = filtered[0]
+        return result._cohort_effects(X_test).to_dict(orient="records")
+
     def compute(self):
         """Computes the causal effects by running the causal
            configuration."""
