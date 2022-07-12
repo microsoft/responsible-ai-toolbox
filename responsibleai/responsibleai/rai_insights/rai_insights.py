@@ -19,6 +19,7 @@ from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
@@ -29,12 +30,19 @@ _TRAIN = 'train'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
+_FEATURE_COLUMNS = 'feature_columns'
+_FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
+_COLUMN_NAME = 'column_name'
+_RANGE_TYPE = 'range_type'
+_UNIQUE_VALUES = 'unique_values'
+_MIN_VALUE = 'min_value'
+_MAX_VALUE = 'max_value'
 
 
 class RAIInsights(RAIBaseInsights):
@@ -92,11 +100,18 @@ class RAIInsights(RAIBaseInsights):
             target_column=target_column,
             classes=classes
         )
+        self._feature_columns = \
+            test.drop(columns=[target_column]).columns.tolist()
+        self._feature_ranges = RAIInsights._get_feature_ranges(
+            test=test, categorical_features=categorical_features,
+            feature_columns=self._feature_columns)
         self.categorical_features = categorical_features
 
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type,
             serializer)
+
+        self._try_add_data_balance()
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -113,6 +128,10 @@ class RAIInsights(RAIBaseInsights):
             target_column=self.target_column, task_type=self.task_type,
             categorical_features=self.categorical_features)
 
+        self._data_balance_manager = DataBalanceManager(
+            train=self.train, test=self.test, target_column=self.target_column,
+            classes=self._classes, task_type=self.task_type)
+
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
             self._classes,
@@ -126,6 +145,7 @@ class RAIInsights(RAIBaseInsights):
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
+                          self._data_balance_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
 
@@ -141,6 +161,17 @@ class RAIInsights(RAIBaseInsights):
                 return classes
         else:
             return None
+
+    def _try_add_data_balance(self):
+        """
+        Add data balance measures to be computed on categorical features
+        if it is a classification task.
+        """
+        if self.task_type == ModelTask.CLASSIFICATION and \
+                len(self.categorical_features) > 0 and \
+                self._classes is not None:
+            self._data_balance_manager.add(
+                cols_of_interest=self.categorical_features)
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
@@ -406,6 +437,8 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
+        dashboard_dataset.data_balance_measures = \
+            self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None
@@ -528,10 +561,35 @@ class RAIInsights(RAIBaseInsights):
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
-            _CLASSES: classes
+            _CLASSES: classes,
+            _FEATURE_COLUMNS: self._feature_columns,
+            _FEATURE_RANGES: self._feature_ranges
+
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
+
+    @staticmethod
+    def _get_feature_ranges(test, categorical_features, feature_columns):
+        """Get feature ranges like min, max and unique values
+        for all columns"""
+        result = []
+        for col in feature_columns:
+            res_object = {}
+            if (col in categorical_features):
+                unique_value = test[col].unique()
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "categorical"
+                res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            else:
+                min_value = float(test[col].min())
+                max_value = float(test[col].max())
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "integer"
+                res_object[_MIN_VALUE] = min_value
+                res_object[_MAX_VALUE] = max_value
+            result.append(res_object)
+        return result
 
     @staticmethod
     def _load_metadata(inst, path):
@@ -562,6 +620,9 @@ class RAIInsights(RAIBaseInsights):
             classes=classes
         )
 
+        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
+        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
+
     @staticmethod
     def load(path):
         """Load the RAIInsights from the given path.
@@ -578,6 +639,7 @@ class RAIInsights(RAIBaseInsights):
         manager_map = {
             ManagerNames.CAUSAL: CausalManager,
             ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
             ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
             ManagerNames.EXPLAINER: ExplainerManager,
         }
