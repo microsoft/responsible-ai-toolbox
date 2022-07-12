@@ -11,6 +11,7 @@ import { Redirect, generatePath } from "react-router-dom";
 
 import { App as ErrorAnalysis } from "../error-analysis/App";
 import { App as Fairness } from "../fairness/App";
+import { App as InterpretText } from "../interpret-text/App";
 import { App as Interpret } from "../interpret/App";
 import { App as ModelAssessment } from "../model-assessment/App";
 
@@ -62,6 +63,22 @@ export class App extends React.Component<IAppSetting, IAppState> {
                 applications[this.state.application].datasets[
                   this.state.dataset
                 ].classDimension
+              }
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
+              }
+            />
+          )}
+          {this.state.application === "interpretText" && (
+            <InterpretText
+              dataset={
+                applications[this.state.application].datasets[
+                  this.state.dataset
+                ].data
               }
               theme={themes[this.state.theme]}
               language={Language[this.state.language]}
