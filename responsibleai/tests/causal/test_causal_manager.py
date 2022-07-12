@@ -27,6 +27,30 @@ class TestCausalManager:
         assert len(result.config.treatment_features) == 1
         assert result.config.treatment_features[0] == 'AveRooms'
 
+    def test_causal_manager_cohort_effects(self, housing_data):
+        train_df, test_df, target_feature = housing_data
+
+        manager = CausalManager(train_df, test_df, target_feature,
+                                ModelTask.REGRESSION, None)
+        manager.add(['AveRooms'])
+        manager.compute()
+
+        id = manager.get()[0].id
+        X_test = test_df.drop(target_feature, axis=1)
+        global_effect_X_test = manager._cohort_effects(id, X_test)
+
+        assert len(global_effect_X_test) == 1
+        EFFECTS_ATTRIBUTES = [
+            'point',
+            'stderr',
+            'zstat',
+            'ci_lower',
+            'ci_upper',
+            'p_value',
+        ]
+        for effect in global_effect_X_test:
+            assert all(attr in effect for attr in EFFECTS_ATTRIBUTES)
+
     def test_causal_save_and_load(self, housing_data, tmpdir):
         train_df, test_df, target_feature = housing_data
 
