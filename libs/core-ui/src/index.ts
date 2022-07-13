@@ -53,6 +53,7 @@ export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryMessage";
 export * from "./lib/components/OverallMetricChart";
 export * from "./lib/components/AxisConfigDialog";
+export * from "./lib/components/AxisConfigDialogSpinButton";
 export * from "./lib/components/ConfirmationDialog";
 export * from "./lib/components/ErrorDialog";
 export * from "./lib/components/ExpandableText";
