@@ -122,13 +122,17 @@ export class CohortStatsHeatmap extends React.Component<
                 return undefined;
               }
 
+              const cohortNameBold = `<b>${
+                this.series.yAxis.categories[this.point.y]
+              }</b>`;
+
               if (this.point.x === 0) {
                 // Count column
                 return wrapText(
                   localization.formatString(
                     localization.ModelAssessment.ModelOverview
                       .tableCountTooltip,
-                    this.series.yAxis.categories[this.point.y],
+                    cohortNameBold,
                     pointValue
                   ),
                   40,
@@ -141,7 +145,7 @@ export class CohortStatsHeatmap extends React.Component<
                   localization.ModelAssessment.ModelOverview.tableMetricTooltip,
                   // make metric name lower case in sentence
                   this.series.xAxis.categories[this.point.x].toLowerCase(),
-                  this.series.yAxis.categories[this.point.y],
+                  cohortNameBold,
                   pointValue === null
                     ? localization.ModelAssessment.ModelOverview.nA
                     : pointValue
