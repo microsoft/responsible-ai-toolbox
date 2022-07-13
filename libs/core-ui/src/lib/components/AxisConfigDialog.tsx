@@ -257,11 +257,14 @@ export class AxisConfigDialog extends React.PureComponent<
                       this.state.selectedColumn.options.bin) &&
                       this.state.binCount !== undefined && (
                         <AxisConfigDialogSpinButton
-                          binCountValue={this.state.binCount.toString()}
+                          label={
+                            localization.Interpret.AxisConfigDialog.numOfBins
+                          }
                           max={AxisConfigDialog.MAX_HIST_COLS}
                           min={AxisConfigDialog.MIN_HIST_COLS}
                           selectedMeta={selectedMeta}
                           setNumericValue={this.setNumericValue}
+                          value={this.state.binCount.toString()}
                         />
                       )}
                     {!(
@@ -413,10 +416,8 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly setNumericValue = (
     delta: number,
-    _column: IJointMeta,
     stringVal: string
   ): string | void => {
-    console.log("okok value:", stringVal);
     if (delta === 0) {
       const number = +stringVal;
       if (

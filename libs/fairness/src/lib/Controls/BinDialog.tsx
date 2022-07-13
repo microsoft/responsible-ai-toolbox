@@ -1,22 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Checkbox,
-  DefaultButton,
-  PrimaryButton,
-  SpinButton,
-  Text
-} from "@fluentui/react";
+import { Checkbox, DefaultButton, PrimaryButton, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
+import { AxisConfigDialogSpinButton } from "libs/core-ui/src/lib/components/AxisConfigDialogSpinButtion";
 import _ from "lodash";
 import React from "react";
 
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 
-import { BinDialogStyles } from "./BinDialog.styles";
+import { BinDialogStyles, SpinButtonStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {
   range: INumericRange;
@@ -57,27 +52,13 @@ export class BinDialog extends React.PureComponent<
             )}
             {this.state.rangeType !== RangeTypes.Categorical && (
               <div className={styles.binCounter}>
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "108px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "98px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Fairness.BinDialog.numberOfBins}
-                  min={BinDialog.minBins}
                   max={BinDialog.maxBins}
+                  min={BinDialog.minBins}
+                  styles={SpinButtonStyles}
                   value={this.state.array.length.toString()}
-                  onIncrement={this.setBinCount.bind(this, 1)}
-                  onDecrement={this.setBinCount.bind(this, -1)}
-                  onValidate={this.setBinCount.bind(this, 0)}
+                  setNumericValue={this.setBinCount}
                 />
               </div>
             )}
