@@ -22,6 +22,7 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { CohortNameColumn } from "libs/core-ui/src/lib/Cohort/CohortList/CohortNameColumn";
 import _ from "lodash";
 import React from "react";
 
@@ -143,12 +144,12 @@ export class CohortList extends React.Component<
                 <Stack.Item>
                   <Stack horizontal tokens={{ childrenGap: "10px" }}>
                     <Stack.Item>
-                      <Link
-                        onClick={this.onEditCohortClick.bind(this, item.key)}
+                      <CohortNameColumn
                         disabled={this.isActiveCohort(item.key)}
-                      >
-                        {localization.Interpret.CohortBanner.edit}
-                      </Link>
+                        fieldContent={localization.Interpret.CohortBanner.edit}
+                        name={item.key}
+                        onEditCohortClick={this.onEditCohortClick}
+                      />
                     </Stack.Item>
                     <Stack.Item>
                       <Link
@@ -243,13 +244,13 @@ export class CohortList extends React.Component<
     });
   }
 
-  private onEditCohortClick(index: number): void {
+  private onEditCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     const cohort = index >= 0 && index < all.length && all[index];
     if (cohort) {
       this.setState({ currentEditCohort: cohort });
     }
-  }
+  };
 
   private isActiveCohort(index: number): boolean {
     const all = this.getAllCohort();
