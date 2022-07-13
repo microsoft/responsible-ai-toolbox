@@ -246,7 +246,9 @@ class FeatureBalanceMeasures(BalanceMeasures):
         ): get_ttest_pvalue,
     }
 
-    def __init__(self, cols_of_interest: List[str], label_col: str) -> None:
+    def __init__(
+        self, cols_of_interest: List[str], label_col: str, pos_label: str
+    ) -> None:
         """
         Construct a FeatureBalanceMeasures class for calculating
         feature balance measures on a dataset.
@@ -256,9 +258,12 @@ class FeatureBalanceMeasures(BalanceMeasures):
         :type cols_of_interest: List[str]
         :param label_col: The name of the label column.
         :type label_col: str
+        :param pos_label: The label value that denotes a positive label.
+        :type pos_label: str
         """
         super().__init__(cols_of_interest=cols_of_interest)
         self.label_col = label_col
+        self.pos_label = pos_label
 
     def measures(self, dataset: pd.DataFrame) -> pd.DataFrame:
         """
@@ -290,7 +295,10 @@ class FeatureBalanceMeasures(BalanceMeasures):
         """
         feature_balance_measures = [
             FeatureBalanceMeasures._get_measure_gaps_for_col(
-                df=dataset, col_of_interest=col, label_col=self.label_col
+                df=dataset,
+                col_of_interest=col,
+                label_col=self.label_col,
+                pos_label=self.pos_label,
             )
             for col in self.cols_of_interest
         ]
@@ -298,7 +306,7 @@ class FeatureBalanceMeasures(BalanceMeasures):
 
     @staticmethod
     def _get_measure_gaps_for_col(
-        df: pd.DataFrame, col_of_interest: str, label_col: str
+        df: pd.DataFrame, col_of_interest: str, label_col: str, pos_label: str
     ) -> pd.DataFrame:
         """
         For the column of interest, computes "gaps" between two classes
@@ -314,6 +322,8 @@ class FeatureBalanceMeasures(BalanceMeasures):
         :type col_of_interest: str
         :param label_col: The name of the label column.
         :type label_col: str
+        :param pos_label: The label value that denotes a positive label.
+        :type pos_label: str
         :return: A dataframe that contains four columns.
         :rtype: pd.DataFrame
         """
@@ -330,7 +340,10 @@ class FeatureBalanceMeasures(BalanceMeasures):
         gap_df[Constants.FEATURE_NAME.value] = col_of_interest
 
         metrics_df = FeatureBalanceMeasures._get_individual_measures(
-            df=df, col_of_interest=col_of_interest, label_col=label_col
+            df=df,
+            col_of_interest=col_of_interest,
+            label_col=label_col,
+            pos_label=pos_label,
         )
 
         for measure in FeatureBalanceMeasures.FEATURE_METRICS.keys():
@@ -355,10 +368,7 @@ class FeatureBalanceMeasures(BalanceMeasures):
 
     @staticmethod
     def _get_individual_measures(
-        df: pd.DataFrame,
-        col_of_interest: str,
-        label_col: str,
-        label_pos_val: any = 1,
+        df: pd.DataFrame, col_of_interest: str, label_col: str, pos_label: str
     ):
         """
         For the column of interest, computes the individual feature balance
@@ -373,9 +383,8 @@ class FeatureBalanceMeasures(BalanceMeasures):
         :type col_of_interest: str
         :param label_col: The name of the label column.
         :type label_col: str
-        :param label_pos_val: The value of the label column that indicates
-            a positive label.
-        :type label_pos_val: any
+        :param pos_label: The label value that denotes a positive label.
+        :type pos_label: str
         :return: A dataframe that contains individual feature balance measures.
         :rtype: pd.DataFrame
         """
@@ -387,14 +396,18 @@ class FeatureBalanceMeasures(BalanceMeasures):
             .rename(FeatureBalanceMeasures.PROB_FEATURE) / num_rows
         )
         p_pos_feature_col = (
-            df[df[label_col] == label_pos_val][col_of_interest]
+            df[
+                df[label_col].astype("str") == str(pos_label)
+            ][col_of_interest]
             .value_counts()
             .rename(FeatureBalanceMeasures.PROB_POS_FEATURE) / num_rows
         ).fillna(0)
 
         new_df = pd.concat([p_feature_col, p_pos_feature_col], axis=1)
         new_df[FeatureBalanceMeasures.PROB_POSITIVE] = (
-            df[df[label_col] == label_pos_val].shape[0] / num_rows
+            df[
+                df[label_col].astype("str") == str(pos_label)
+            ].shape[0] / num_rows
         )
 
         for measure, func in FeatureBalanceMeasures.FEATURE_METRICS.items():

@@ -101,7 +101,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.fetchData = _.debounce(this.fetchData, 400);
 
     this.setState({
       chartProps: this.generateDefaultChartAxes()
@@ -347,9 +347,10 @@ export class CounterfactualChart extends React.PureComponent<
                         FabricStyles.fabricColorPalette[
                           rowIndex + WhatIfConstants.MAX_SELECTION + 1
                         ],
+                      index: rowIndex,
                       name: row[WhatIfConstants.namePath],
-                      onClick: this.toggleCustomActivation.bind(this, rowIndex),
-                      onDelete: this.removeCustomPoint.bind(this, rowIndex)
+                      onClick: this.toggleCustomActivation,
+                      onDelete: this.removeCustomPoint
                     };
                   })}
                 />
@@ -548,7 +549,7 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   // fetch prediction for temporary point
-  private fetchData(fetchingReference: { [key: string]: any }): void {
+  private fetchData = (fetchingReference: { [key: string]: any }): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -604,7 +605,7 @@ export class CounterfactualChart extends React.PureComponent<
         }
       }
     );
-  }
+  };
 
   private generatePlotlyProps(
     jointData: JointDataset,
@@ -808,13 +809,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
   };
 
-  private toggleCustomActivation(index: number): void {
+  private toggleCustomActivation = (index: number): void => {
     const customPointIsActive = [...this.state.customPointIsActive];
     customPointIsActive[index] = !customPointIsActive[index];
     this.setState({ customPointIsActive });
-  }
+  };
 
-  private removeCustomPoint(index: number): void {
+  private removeCustomPoint = (index: number): void => {
     this.setState((prevState) => {
       const customPoints = [...prevState.customPoints];
       customPoints.splice(index, 1);
@@ -822,7 +823,7 @@ export class CounterfactualChart extends React.PureComponent<
       customPointIsActive.splice(index, 1);
       return { customPointIsActive, customPoints };
     });
-  }
+  };
 
   private saveAsPoint = (): void => {
     const customPoints = [...this.state.customPoints];

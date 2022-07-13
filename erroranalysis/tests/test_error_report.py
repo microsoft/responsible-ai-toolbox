@@ -30,6 +30,18 @@ class TestErrorReport(object):
                                categorical_features,
                                expect_user_warnings=alter_feature_names)
 
+    def test_error_report_iris_numpy_int64_features(self):
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+        # Test with numpy feature indexes instead of string feature names
+        feature_names = range(0, X_train.shape[1])
+        feature_names = [np.int64(i) for i in feature_names]
+        models = create_models_classification(X_train, y_train)
+
+        for model in models:
+            categorical_features = []
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features)
+
     def test_error_report_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_cancer_data()

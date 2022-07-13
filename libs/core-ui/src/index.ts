@@ -76,6 +76,7 @@ export * from "./lib/Interfaces/IPreBuiltFilter";
 export * from "./lib/Interfaces/ICohort";
 export * from "./lib/Interfaces/IPreBuiltCohort";
 export * from "./lib/Interfaces/IErrorAnalysisData";
+export * from "./lib/Interfaces/TextExplanationInterfaces";
 export * from "./lib/Highchart/BasicHighChart";
 export * from "./lib/Highchart/FeatureImportanceDependence";
 export * from "./lib/Highchart/FeatureImportanceBar";
