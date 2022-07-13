@@ -3,10 +3,10 @@
 
 """Defines the Counterfactual Manager class."""
 import json
+import uuid
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional, Union
-import uuid
 
 import dice_ml
 import jsonschema
