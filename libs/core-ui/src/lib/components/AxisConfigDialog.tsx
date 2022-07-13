@@ -262,7 +262,6 @@ export class AxisConfigDialog extends React.PureComponent<
                           }
                           max={AxisConfigDialog.MAX_HIST_COLS}
                           min={AxisConfigDialog.MIN_HIST_COLS}
-                          selectedMeta={selectedMeta}
                           setNumericValue={this.setNumericValue}
                           value={this.state.binCount.toString()}
                         />
