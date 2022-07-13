@@ -8,11 +8,9 @@ import {
   ComboBox,
   Text,
   PrimaryButton,
-  SpinButton,
   Panel,
   Stack,
   DefaultButton,
-  Position,
   ChoiceGroup,
   IChoiceGroupOption
 } from "@fluentui/react";
@@ -28,6 +26,7 @@ import {
   IJointMeta,
   JointDataset
 } from "../util/JointDataset";
+import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButtion";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;
@@ -257,29 +256,12 @@ export class AxisConfigDialog extends React.PureComponent<
                     {(this.props.mustBin ||
                       this.state.selectedColumn.options.bin) &&
                       this.state.binCount !== undefined && (
-                        <SpinButton
-                          labelPosition={Position.top}
-                          label={
-                            localization.Interpret.AxisConfigDialog.numOfBins
-                          }
-                          min={AxisConfigDialog.MIN_HIST_COLS}
+                        <AxisConfigDialogSpinButton
+                          binCountValue={this.state.binCount.toString()}
                           max={AxisConfigDialog.MAX_HIST_COLS}
-                          value={this.state.binCount.toString()}
-                          onIncrement={this.setNumericValue.bind(
-                            this,
-                            1,
-                            selectedMeta
-                          )}
-                          onDecrement={this.setNumericValue.bind(
-                            this,
-                            -1,
-                            selectedMeta
-                          )}
-                          onValidate={this.setNumericValue.bind(
-                            this,
-                            0,
-                            selectedMeta
-                          )}
+                          min={AxisConfigDialog.MIN_HIST_COLS}
+                          selectedMeta={selectedMeta}
+                          setNumericValue={this.setNumericValue}
                         />
                       )}
                     {!(
@@ -434,6 +416,7 @@ export class AxisConfigDialog extends React.PureComponent<
     _column: IJointMeta,
     stringVal: string
   ): string | void => {
+    console.log("okok value:", stringVal);
     if (delta === 0) {
       const number = +stringVal;
       if (
