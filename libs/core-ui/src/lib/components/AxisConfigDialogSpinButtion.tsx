@@ -8,7 +8,6 @@ import {
   ISpinButtonStyleProps,
   ISpinButtonStyles
 } from "@fluentui/react";
-import { IJointMeta } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 
@@ -16,7 +15,6 @@ export interface IAxisConfigSpinButtonProps {
   label: string;
   min?: number;
   max?: number;
-  selectedMeta?: IJointMeta;
   styles?: IStyleFunctionOrObject<ISpinButtonStyleProps, ISpinButtonStyles>;
   value?: string;
   setNumericValue: (delta: number, stringVal: string) => string | void;
