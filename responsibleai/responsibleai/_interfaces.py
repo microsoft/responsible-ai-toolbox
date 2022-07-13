@@ -140,6 +140,7 @@ class CausalData:
 
 
 class CounterfactualData:
+    id: str
     cfs_list: List[List[List[Union[float, str]]]]
     feature_names: List[str]
     feature_names_including_target: List[str]
