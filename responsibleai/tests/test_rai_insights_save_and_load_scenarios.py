@@ -44,6 +44,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             rai_insights.save(save_1)
             assert len(os.listdir(save_1 / ManagerNames.CAUSAL)) == 0
             assert len(os.listdir(save_1 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_1 / ManagerNames.DATA_BALANCE)) == 0
             assert len(os.listdir(save_1 / ManagerNames.ERROR_ANALYSIS)) == 0
             assert len(os.listdir(save_1 / ManagerNames.EXPLAINER)) == 0
 
@@ -53,22 +54,25 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             # Validate, but this isn't the main check
             validate_rai_insights(
                 rai_2, X_train, X_test,
-                LABELS, ModelTask.CLASSIFICATION, None)
+                LABELS, ModelTask.CLASSIFICATION, None, None, None)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
             assert len(os.listdir(save_2 / ManagerNames.CAUSAL)) == 0
             assert len(os.listdir(save_2 / ManagerNames.COUNTERFACTUAL)) == 0
+            assert len(os.listdir(save_2 / ManagerNames.DATA_BALANCE)) == 0
             assert len(os.listdir(save_2 / ManagerNames.ERROR_ANALYSIS)) == 0
             assert len(os.listdir(save_2 / ManagerNames.EXPLAINER)) == 0
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
-                                              ManagerNames.COUNTERFACTUAL])
+                                              ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.DATA_BALANCE])
     def test_rai_insights_save_load_add_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -106,6 +110,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                     desired_class='opposite',
                     feature_importance=False
                 )
+            elif manager_type == ManagerNames.DATA_BALANCE:
+                rai_2._data_balance_manager.add(
+                    cols_of_interest=categorical_features
+                )
             elif manager_type == ManagerNames.ERROR_ANALYSIS:
                 rai_2.error_analysis.add()
             elif manager_type == ManagerNames.EXPLAINER:
@@ -120,7 +128,9 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features)
+                categorical_features=categorical_features,
+                feature_range_keys=feature_range_keys,
+                feature_columns=feature_columns)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -135,7 +145,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
         # The exception is the Explainer, which always creates a file
         # in its subdirectory
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -198,10 +209,12 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.EXPLAINER,
-                                              ManagerNames.COUNTERFACTUAL])
+                                              ManagerNames.COUNTERFACTUAL,
+                                              ManagerNames.DATA_BALANCE])
     def test_rai_insights_add_save_load_save(self, manager_type):
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -229,6 +242,10 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 desired_class='opposite',
                 feature_importance=False
             )
+        elif manager_type == ManagerNames.DATA_BALANCE:
+            rai_insights._data_balance_manager.add(
+                cols_of_interest=categorical_features
+            )
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             rai_insights.error_analysis.add()
         elif manager_type == ManagerNames.EXPLAINER:
@@ -253,7 +270,9 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             validate_rai_insights(
                 rai_2, data_train, data_test,
                 target_name, ModelTask.CLASSIFICATION,
-                categorical_features=categorical_features)
+                categorical_features=categorical_features,
+                feature_range_keys=feature_range_keys,
+                feature_columns=feature_columns)
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
@@ -265,14 +284,21 @@ def validate_rai_insights(
     test_data,
     target_column,
     task_type,
-    categorical_features
+    categorical_features,
+    feature_range_keys,
+    feature_columns
 ):
-
     pd.testing.assert_frame_equal(rai_insights.train, train_data)
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
+    if feature_range_keys is not None:
+        assert feature_range_keys.sort() == \
+            list(rai_insights._feature_ranges[0].keys()).sort()
+    if feature_columns is not None:
+        assert rai_insights._feature_columns == (feature_columns or [])
+    assert target_column not in rai_insights._feature_columns
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()

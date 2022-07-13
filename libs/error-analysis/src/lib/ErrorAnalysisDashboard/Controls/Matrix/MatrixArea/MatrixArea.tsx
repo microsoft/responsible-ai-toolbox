@@ -3,7 +3,6 @@
 
 import {
   Customizer,
-  DefaultButton,
   getId,
   mergeStyles,
   ISettings,
@@ -33,9 +32,9 @@ import {
   IMatrixAreaState
 } from "../MatrixFilterState";
 import { MatrixFooter } from "../MatrixFooter/MatrixFooter";
-import { MatrixOptions } from "../MatrixOptions/MatrixOptions";
 
 import { matrixAreaStyles } from "./MatrixArea.styles";
+import { MatrixAreaOptions } from "./MatrixAreaOptions";
 import { IMatrixAreaProps } from "./MatrixAreaProps";
 import {
   createCompositeFilterFromCells,
@@ -153,7 +152,6 @@ export class MatrixArea extends React.PureComponent<
       }
     ]);
     const matrixLength = this.state.jsonMatrix.matrix.length;
-    const matrixRowLength = this.state.jsonMatrix.matrix[0].length;
     // Extract categories
     const [category1Values] = extractCategories(
       this.state.jsonMatrix.category1
@@ -163,25 +161,17 @@ export class MatrixArea extends React.PureComponent<
     );
     return (
       <Stack>
-        <Stack horizontal tokens={stackTokens} verticalAlign="center">
-          <DefaultButton
-            text={localization.ErrorAnalysis.MatrixArea.clearAll}
-            onClick={this.clearAll.bind(this, matrixLength, matrixRowLength)}
-            disabled={this.state.disableClearAll}
-          />
-          <DefaultButton
-            text={localization.ErrorAnalysis.MatrixArea.selectAll}
-            onClick={this.selectAll.bind(this, matrixLength, matrixRowLength)}
-            disabled={this.state.disableSelectAll}
-          />
-          <MatrixOptions
-            quantileBinning={this.state.quantileBinning}
-            binningThreshold={this.state.numBins}
-            updateQuantileBinning={this.updateQuantileBinning.bind(this)}
-            updateNumBins={this.updateNumBins.bind(this)}
-            isEnabled={this.props.isEnabled}
-          />
-        </Stack>
+        <MatrixAreaOptions
+          disableClearAll={this.state.disableClearAll}
+          disableSelectAll={this.state.disableSelectAll}
+          isEnabled={this.props.isEnabled}
+          numBins={this.state.numBins}
+          quantileBinning={this.state.quantileBinning}
+          clearAll={this.clearAll}
+          selectAll={this.selectAll}
+          updateNumBins={this.updateNumBins}
+          updateQuantileBinning={this.updateQuantileBinning}
+        />
         <Customizer
           settings={(currentSettings): ISettings => ({
             ...currentSettings,
@@ -328,8 +318,13 @@ export class MatrixArea extends React.PureComponent<
     );
   };
 
-  private selectAll(matrixLength: number, rowLength: number): void {
-    const size = matrixLength * rowLength;
+  private selectAll = (): void => {
+    if (!this.state.jsonMatrix) {
+      return;
+    }
+    const matrixLength = this.state.jsonMatrix.matrix.length;
+    const matrixRowLength = this.state.jsonMatrix.matrix[0].length;
+    const size = matrixLength * matrixRowLength;
     const selectedCells = new Array<boolean>(size);
     for (let i = 0; i < size; i++) {
       selectedCells[i] = true;
@@ -340,10 +335,15 @@ export class MatrixArea extends React.PureComponent<
       selectedCells
     });
     this.updateStateFromSelectedCells(selectedCells);
-  }
+  };
 
-  private clearAll(matrixLength: number, rowLength: number): void {
-    const size = matrixLength * rowLength;
+  private clearAll = (): void => {
+    if (!this.state.jsonMatrix) {
+      return;
+    }
+    const matrixLength = this.state.jsonMatrix.matrix.length;
+    const matrixRowLength = this.state.jsonMatrix.matrix[0].length;
+    const size = matrixLength * matrixRowLength;
     const selectedCells = new Array<boolean>(size);
     this.setState({
       disableClearAll: true,
@@ -351,7 +351,7 @@ export class MatrixArea extends React.PureComponent<
       selectedCells
     });
     this.updateStateFromSelectedCells(selectedCells);
-  }
+  };
 
   private selectedCellHandler(
     i: number,
@@ -412,15 +412,15 @@ export class MatrixArea extends React.PureComponent<
     );
   }
 
-  private updateNumBins(numBins: number): void {
+  private updateNumBins = (numBins: number): void => {
     this.setState({ numBins }, () => {
       this.reloadData();
     });
-  }
+  };
 
-  private updateQuantileBinning(quantileBinning: boolean): void {
+  private updateQuantileBinning = (quantileBinning: boolean): void => {
     this.setState({ quantileBinning }, () => {
       this.reloadData();
     });
-  }
+  };
 }

@@ -21,7 +21,7 @@
       "currentOutcome": "Current outcome",
       "currentTreatment": "Current treatment value",
       "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
+      "selectedDatapoint": "Selected datapoint",
       "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
       "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "index": "Datapoint index",
@@ -1259,6 +1259,25 @@
     "predictedClass": "Predicted class",
     "selectPoint": "Select a point to see its local explanation",
     "summaryImportance": "Summary importance"
+  },
+  "InterpretText": {
+    "Dashboard": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
   },
   "ModelAssessment": {
     "AddingTab": {

@@ -7,7 +7,6 @@ import {
   Text,
   Stack,
   PrimaryButton,
-  TextField,
   SearchBox,
   Toggle,
   TooltipHost,
@@ -29,6 +28,7 @@ import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
 import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
+import { CounterfactualPanelNameTextField } from "./CounterfactualPanelNameTextField";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -191,18 +191,11 @@ export class CounterfactualPanel extends React.Component<
     return (
       <Stack horizontal tokens={{ childrenGap: "l1" }}>
         <Stack.Item align="end" grow={1}>
-          <TextField
-            id="whatIfNameLabel"
-            label={localization.Counterfactuals.counterfactualName}
+          <CounterfactualPanelNameTextField
             value={this.props.temporaryPoint?.[
               WhatIfConstants.namePath
             ]?.toString()}
-            onChange={this.setCustomRowProperty.bind(
-              this,
-              WhatIfConstants.namePath,
-              true
-            )}
-            className={classes.counterfactualName}
+            setCustomRowProperty={this.setCustomRowProperty}
           />
         </Stack.Item>
         <Stack.Item align="end" grow={5}>
