@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { Checkbox, DefaultButton, PrimaryButton, Text } from "@fluentui/react";
+import { AxisConfigDialogSpinButton } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
-import { AxisConfigDialogSpinButton } from "libs/core-ui/src/lib/components/AxisConfigDialogSpinButtion";
 import _ from "lodash";
 import React from "react";
 

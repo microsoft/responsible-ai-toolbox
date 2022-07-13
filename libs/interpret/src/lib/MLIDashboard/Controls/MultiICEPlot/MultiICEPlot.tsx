@@ -3,6 +3,7 @@
 
 import { IComboBoxOption, IComboBox, ComboBox, Text } from "@fluentui/react";
 import {
+  AxisConfigDialogSpinButton,
   JointDataset,
   IExplanationModelMetadata,
   FabricStyles,
@@ -10,7 +11,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
-import { AxisConfigDialogSpinButton } from "libs/core-ui/src/lib/components/AxisConfigDialogSpinButtion";
 import _, { toNumber } from "lodash";
 import React from "react";
 

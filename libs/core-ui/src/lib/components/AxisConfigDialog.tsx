@@ -26,7 +26,7 @@ import {
   IJointMeta,
   JointDataset
 } from "../util/JointDataset";
-import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButtion";
+import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;
