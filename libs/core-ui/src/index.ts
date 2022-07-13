@@ -13,6 +13,7 @@ export * from "./lib/Cohort/CohortInfo/CohortInfo";
 export * from "./lib/Cohort/CohortInfo/CohortInfoPanel";
 export * from "./lib/Cohort/CohortInfoSection/CohortInfoSection";
 export * from "./lib/Cohort/CohortList/CohortListPanel";
+export * from "./lib/Cohort/CohortList/CohortNameColumn";
 export * from "./lib/Cohort/EditCohort/EditCohort";
 export * from "./lib/Cohort/ManualCohortManagement/CohortBar";
 export * from "./lib/Cohort/ManualCohortManagement/CohortEditor";

@@ -15,6 +15,7 @@ import {
 import {
   Cohort,
   CohortEditor,
+  CohortNameColumn,
   defaultModelAssessmentContext,
   ErrorCohort,
   getCohortFilterCount,
@@ -22,7 +23,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { CohortNameColumn } from "libs/core-ui/src/lib/Cohort/CohortList/CohortNameColumn";
 import _ from "lodash";
 import React from "react";
 
