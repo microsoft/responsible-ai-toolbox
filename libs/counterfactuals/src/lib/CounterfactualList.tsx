@@ -16,7 +16,6 @@ import {
   IDetailsRowFieldsProps,
   IDetailsRowProps,
   IRenderFunction,
-  Link,
   SelectionMode,
   Stack,
   Text,
@@ -37,6 +36,7 @@ import { getCategoricalOption } from "../util/getCategoricalOption";
 import { getFilterFeatures } from "../util/getFilterFeatures";
 
 import { counterfactualListStyle } from "./CounterfactualList.styles";
+import { CounterfactualListSetValue } from "./CounterfactualListSetValue";
 import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 
@@ -166,7 +166,7 @@ export class CounterfactualList extends React.Component<
     return items;
   }
 
-  private onSelect(idx: number): void {
+  private onSelect = (idx: number): void => {
     const items = this.getItems();
     const data = _.cloneDeep(items[idx]);
     Object.keys(data).forEach((k) => {
@@ -191,7 +191,7 @@ export class CounterfactualList extends React.Component<
       this.props.selectedIndex
     );
     this.setState({ data });
-  }
+  };
 
   private renderName = (
     item?: Record<string, string | number>,
@@ -247,9 +247,7 @@ export class CounterfactualList extends React.Component<
       <Stack>
         <Text>{item.row}</Text>
         {this.context.requestPredictions && (
-          <Link onClick={this.onSelect.bind(this, index)}>
-            {localization.Counterfactuals.WhatIf.setValue}
-          </Link>
+          <CounterfactualListSetValue index={index} onSelect={this.onSelect} />
         )}
       </Stack>
     );
@@ -384,10 +382,21 @@ export class CounterfactualList extends React.Component<
             <Text>{column.name}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Text className="predictedValue">{predictedClass}</Text>
+            <Text className={`predictedValue ${styles.bottomRowText}`}>
+              {predictedClass}
+            </Text>
           </Stack.Item>
         </Stack>
       );
+    }
+    let inputTextStyles;
+    if (column) {
+      // input text should be bolded if the value has changed from original reference value
+      inputTextStyles =
+        this.state.data[column.key]?.toString() !==
+        this.props.originalData[column.key]?.toString()
+          ? styles.bottomRowText
+          : undefined;
     }
     if (column && dropdownOption?.data?.categoricalOptions) {
       return (
@@ -413,6 +422,9 @@ export class CounterfactualList extends React.Component<
                   option
                 )
               }
+              styles={{
+                input: inputTextStyles
+              }}
             />
           </Stack.Item>
         </Stack>
@@ -425,6 +437,7 @@ export class CounterfactualList extends React.Component<
             <TextField
               value={this.state.data[column.key]?.toString()}
               label={column.name || column.key}
+              inputClassName={inputTextStyles}
               id={column.key}
               onChange={this.updateColValue}
             />

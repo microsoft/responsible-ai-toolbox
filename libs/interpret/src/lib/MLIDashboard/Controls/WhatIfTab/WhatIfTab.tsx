@@ -25,7 +25,8 @@ import {
   FabricStyles,
   InteractiveLegend,
   rowErrorSize,
-  getFeatureOptions
+  getFeatureOptions,
+  ErrorDialog
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -70,6 +71,7 @@ export interface IWhatIfTabState {
   customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
+  errorMessage?: string;
 }
 
 export class WhatIfTab extends React.PureComponent<
@@ -377,7 +379,7 @@ export class WhatIfTab extends React.PureComponent<
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
                     onAccept={this.onYSet}
-                    onCancel={this.setYOpen.bind(this, false)}
+                    onCancel={this.setYClose}
                   />
                 )}
                 {this.state.xDialogOpen && (
@@ -403,14 +405,14 @@ export class WhatIfTab extends React.PureComponent<
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
                     onAccept={this.onXSet}
-                    onCancel={this.setXOpen.bind(this, false)}
+                    onCancel={this.setXClose}
                   />
                 )}
                 <div className={classNames.chartWithVertical}>
                   <div className={classNames.verticalAxis}>
                     <div className={classNames.rotatedVerticalBox}>
                       <DefaultButton
-                        onClick={this.setYOpen.bind(this, true)}
+                        onClick={this.setYOpen}
                         text={
                           this.context.jointDataset.metaDict[
                             this.state.chartProps.yAxis.property
@@ -442,7 +444,7 @@ export class WhatIfTab extends React.PureComponent<
                   <div className={classNames.horizontalAxis}>
                     <div>
                       <DefaultButton
-                        onClick={this.setXOpen.bind(this, true)}
+                        onClick={this.setXOpen}
                         text={
                           this.context.jointDataset.metaDict[
                             this.state.chartProps.xAxis.property
@@ -478,12 +480,10 @@ export class WhatIfTab extends React.PureComponent<
                         return {
                           activated: this.state.pointIsActive[rowIndex],
                           color: FabricStyles.fabricColorPalette[rowIndex],
+                          index: rowIndex,
                           name: row.name,
-                          onClick: this.toggleActivation.bind(this, rowIndex),
-                          onDelete: this.toggleSelectionOfPoint.bind(
-                            this,
-                            row.id
-                          )
+                          onClick: this.toggleActivation,
+                          onDelete: this.toggleSelectionOfPoint
                         };
                       }
                     )}
@@ -517,16 +517,11 @@ export class WhatIfTab extends React.PureComponent<
                           FabricStyles.fabricColorPalette[
                             rowIndex + WhatIfConstants.MAX_SELECTION + 1
                           ],
+                        index: rowIndex,
                         name: row[WhatIfConstants.namePath],
-                        onClick: this.toggleCustomActivation.bind(
-                          this,
-                          rowIndex
-                        ),
-                        onDelete: this.removeCustomPoint.bind(this, rowIndex),
-                        onEdit: this.setTemporaryPointToCustomPoint.bind(
-                          this,
-                          rowIndex
-                        )
+                        onClick: this.toggleCustomActivation,
+                        onDelete: this.removeCustomPoint,
+                        onEdit: this.setTemporaryPointToCustomPoint
                       };
                     })}
                   />
@@ -555,10 +550,29 @@ export class WhatIfTab extends React.PureComponent<
               sortingSeriesIndex={this.state.sortingSeriesIndex}
             />
           </div>
+          {this.state.errorMessage && this.renderErrorDialog()}
         </div>
       </div>
     );
   }
+
+  private readonly renderErrorDialog = (): React.ReactNode => {
+    return (
+      <ErrorDialog
+        title={localization.Interpret.IcePlot.pythonError}
+        subText={localization.formatString(
+          localization.Interpret.IcePlot.errorPrefix,
+          this.state.errorMessage
+        )}
+        cancelButtonText={localization.Interpret.IcePlot.close}
+        onClose={this.onClose}
+      />
+    );
+  };
+
+  private readonly onClose = (): void => {
+    this.setState({ errorMessage: undefined });
+  };
 
   private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
@@ -628,7 +642,7 @@ export class WhatIfTab extends React.PureComponent<
     });
   }
 
-  private setTemporaryPointToCustomPoint(index: number): void {
+  private setTemporaryPointToCustomPoint = (index: number): void => {
     this.temporaryPoint = _.cloneDeep(this.state.customPoints[index]);
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.stringifiedValues[key] = this.temporaryPoint?.[key]?.toString();
@@ -639,9 +653,9 @@ export class WhatIfTab extends React.PureComponent<
       selectedWhatIfRootIndex: this.temporaryPoint[JointDataset.IndexLabel]
     });
     this.openPanel();
-  }
+  };
 
-  private removeCustomPoint(index: number): void {
+  private removeCustomPoint = (index: number): void => {
     this.setState((prevState) => {
       const customPoints = [...prevState.customPoints];
       customPoints.splice(index, 1);
@@ -649,7 +663,7 @@ export class WhatIfTab extends React.PureComponent<
       customPointIsActive.splice(index, 1);
       return { customPointIsActive, customPoints };
     });
-  }
+  };
 
   private setCustomRowProperty = (
     key: string | number,
@@ -758,17 +772,17 @@ export class WhatIfTab extends React.PureComponent<
     });
   }
 
-  private toggleActivation(index: number): void {
+  private toggleActivation = (index: number): void => {
     const pointIsActive = [...this.state.pointIsActive];
     pointIsActive[index] = !pointIsActive[index];
     this.setState({ pointIsActive });
-  }
+  };
 
-  private toggleCustomActivation(index: number): void {
+  private toggleCustomActivation = (index: number): void => {
     const customPointIsActive = [...this.state.customPointIsActive];
     customPointIsActive[index] = !customPointIsActive[index];
     this.setState({ customPointIsActive });
-  }
+  };
 
   private dismissPanel = (): void => {
     this.setState({ isPanelOpen: false });
@@ -812,19 +826,27 @@ export class WhatIfTab extends React.PureComponent<
     this.setState({ filteredFeatureList });
   };
 
-  private readonly setXOpen = (val: boolean): void => {
-    if (val && this.state.xDialogOpen === false) {
+  private readonly setXOpen = (): void => {
+    if (this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
       return;
     }
     this.setState({ xDialogOpen: false });
   };
 
-  private readonly setYOpen = (val: boolean): void => {
-    if (val && this.state.yDialogOpen === false) {
+  private readonly setXClose = (): void => {
+    this.setState({ xDialogOpen: false });
+  };
+
+  private readonly setYOpen = (): void => {
+    if (this.state.yDialogOpen === false) {
       this.setState({ yDialogOpen: true });
       return;
     }
+    this.setState({ yDialogOpen: false });
+  };
+
+  private readonly setYClose = (): void => {
     this.setState({ yDialogOpen: false });
   };
 
@@ -840,7 +862,7 @@ export class WhatIfTab extends React.PureComponent<
     }
   };
 
-  private toggleSelectionOfPoint(index?: number): void {
+  private toggleSelectionOfPoint = (index?: number): void => {
     if (index === undefined) {
       return;
     }
@@ -865,7 +887,7 @@ export class WhatIfTab extends React.PureComponent<
       selectedPointsIndexes: newSelections,
       showSelectionWarning: false
     });
-  }
+  };
 
   // fetch prediction for temporary point
   private fetchData(fetchingReference: { [key: string]: any }): void {
@@ -917,12 +939,7 @@ export class WhatIfTab extends React.PureComponent<
           return;
         }
         if (error.name === "PythonError") {
-          alert(
-            localization.formatString(
-              localization.Interpret.IcePlot.errorPrefix,
-              error.message
-            )
-          );
+          this.setState({ errorMessage: error.message });
         }
       }
     });

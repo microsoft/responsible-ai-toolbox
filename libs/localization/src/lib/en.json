@@ -21,7 +21,7 @@
       "currentOutcome": "Current outcome",
       "currentTreatment": "Current treatment value",
       "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
+      "selectedDatapoint": "Selected datapoint",
       "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
       "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "index": "Datapoint index",
@@ -47,9 +47,9 @@
       "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
       "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
       "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Recommended treatment = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Set treatment feature",
       "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
       "Table": "The table can be read by taking a row and then taking a column of that specific row.",
@@ -71,12 +71,12 @@
       "Title": "No data"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} in the set of ({1})",
       "nin": "{0} not in the set of ({1})",
       "rg": "{0} in the range of ({1})",
@@ -84,6 +84,8 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +103,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Recommended treatment",
     "WhatIf": {
       "setValue": "Set Value",
@@ -175,6 +182,7 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort."
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
@@ -714,12 +722,12 @@
       "_selectClass.comment": "label for dropdown listing all classes",
       "_selectFeature.comment": "dropdown label to select feature (column) for charting",
       "_selectFilter.comment": "label on dropdown to pick value for charting",
+      "apply": "Apply",
       "binLabel": "Apply binning to data",
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
       "numOfBins": "Number of bins",
-      "select": "Select",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
       "selectFilter": "Select your axis value"
@@ -939,14 +947,14 @@
     "FilterOperations": {
       "_includes.comment": "tooltip label for a filter with included values",
       "_overflowFilterArgs.comment": "first placeholder is the first one or two items in a long list, the second placeholder is the count of remaining items",
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " excludes {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " includes {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} and {1} others"
     },
     "Filters": {
@@ -1023,6 +1031,7 @@
       "_stepInputLabel.comment": "number of samples to include between minimum and maximum (integer)",
       "_submitPrompt.comment": "prompt to user giving instructions to enter a numeric range",
       "_topLevelErrorMessage.comment": "error message for any parameter issue",
+      "close": "Close",
       "errorPrefix": "Error encountered: {0}",
       "featurePickerLabel": "Feature:",
       "integerError": "Must be an integer",
@@ -1035,6 +1044,7 @@
       "prediction": "Prediction",
       "predictionLabel": "Prediction: {0}",
       "probabilityLabel": "Probability: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Steps:",
       "submitPrompt": "Submit a range to view an ICE plot",
       "topLevelErrorMessage": "Error in parameter"
@@ -1249,6 +1259,25 @@
     "predictedClass": "Predicted class",
     "selectPoint": "Select a point to see its local explanation",
     "summaryImportance": "Summary importance"
+  },
+  "InterpretText": {
+    "Dashboard": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
   },
   "ModelAssessment": {
     "AddingTab": {
@@ -1546,7 +1575,7 @@
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",

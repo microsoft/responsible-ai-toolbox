@@ -86,6 +86,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
                     return {
                       activated: true,
                       color: FabricStyles.fabricColorPalette[i],
+                      index: i,
                       name
                     };
                   })}

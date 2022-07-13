@@ -20,9 +20,12 @@ interface ICohortStatsHeatmapProps {
   selectedMetrics: string[];
   items: PointOptionsObject[];
   showColors: boolean;
+  id: string;
 }
 
-class ICohortStatsHeatmapState {}
+interface ICohortStatsHeatmapState {
+  key: number;
+}
 
 export class CohortStatsHeatmap extends React.Component<
   ICohortStatsHeatmapProps,
@@ -31,6 +34,30 @@ export class CohortStatsHeatmap extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+
+  public constructor(props: ICohortStatsHeatmapProps) {
+    super(props);
+    this.state = { key: 0 };
+  }
+
+  public componentDidUpdate(prevProps: ICohortStatsHeatmapProps) {
+    const cohortsChanged =
+      prevProps.cohorts.length !== this.props.cohorts.length ||
+      prevProps.cohorts.some(
+        (errorCohort, cohortIndex) =>
+          this.props.cohorts[cohortIndex].cohort.getCohortID() !==
+          errorCohort.cohort.getCohortID()
+      );
+    const metricsChanged =
+      prevProps.selectedMetrics.length !== this.props.selectedMetrics.length ||
+      prevProps.selectedMetrics.some(
+        (metric, metricIndex) =>
+          metric !== this.props.selectedMetrics[metricIndex]
+      );
+    if (cohortsChanged || metricsChanged) {
+      this.setState({ key: this.state.key + 1 });
+    }
+  }
 
   public render(): React.ReactNode {
     const columns: string[] = [
@@ -57,6 +84,8 @@ export class CohortStatsHeatmap extends React.Component<
 
     return (
       <HeatmapHighChart
+        key={`heatmap${this.state.key}`}
+        id={this.props.id}
         configOverride={{
           chart: {
             height: this.props.cohorts.length * 40 + 120,
@@ -93,13 +122,17 @@ export class CohortStatsHeatmap extends React.Component<
                 return undefined;
               }
 
+              const cohortNameBold = `<b>${
+                this.series.yAxis.categories[this.point.y]
+              }</b>`;
+
               if (this.point.x === 0) {
                 // Count column
                 return wrapText(
                   localization.formatString(
                     localization.ModelAssessment.ModelOverview
                       .tableCountTooltip,
-                    this.series.yAxis.categories[this.point.y],
+                    cohortNameBold,
                     pointValue
                   ),
                   40,
@@ -112,7 +145,7 @@ export class CohortStatsHeatmap extends React.Component<
                   localization.ModelAssessment.ModelOverview.tableMetricTooltip,
                   // make metric name lower case in sentence
                   this.series.xAxis.categories[this.point.x].toLowerCase(),
-                  this.series.yAxis.categories[this.point.y],
+                  cohortNameBold,
                   pointValue === null
                     ? localization.ModelAssessment.ModelOverview.nA
                     : pointValue

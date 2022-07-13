@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Locators } from "../Constants";
+import { Locators } from "../../Constants";
 import {
   IModelAssessmentData,
   RAINotebookNames
-} from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+} from "../../IModelAssessmentData";
+import { modelAssessmentDatasetsIncludingFlights } from "../../modelAssessmentDatasets";
 
 import { describeModelPerformanceBoxChart } from "./describeModelPerformanceBoxChart";
 import { describeModelPerformanceSideBar } from "./describeModelPerformanceSideBar";
@@ -15,7 +15,7 @@ const testName = "Model Overview v1";
 
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasetsIncludingFlights
 ): void {
   describe(testName, () => {
     before(() => {

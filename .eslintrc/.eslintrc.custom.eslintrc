@@ -48,6 +48,7 @@
           "cohort_filter_list",
           "comparison_value",
           "control_treatment",
+          "data_balance_measures",
           "demographic_parity_difference",
           "demographic_parity_ratio",
           "desired_class",
