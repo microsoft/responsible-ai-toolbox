@@ -14,8 +14,8 @@ import React from "react";
 
 export interface IAxisConfigSpinButtonProps {
   label: string;
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
   selectedMeta?: IJointMeta;
   styles?: IStyleFunctionOrObject<ISpinButtonStyleProps, ISpinButtonStyles>;
   value?: string;
