@@ -3,6 +3,7 @@
 
 """Defines the Counterfactual Manager class."""
 import json
+import uuid
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional, Union
@@ -116,6 +117,7 @@ class CounterfactualConfig(BaseConfig):
     METHOD = 'method'
     CONTINUOUS_FEATURES = 'continuous_features'
     TOTAL_CFS = 'total_CFs'
+    ID = 'id'
     DESIRED_RANGE = 'desired_range'
     DESIRED_CLASS = 'desired_class'
     PERMITTED_RANGE = 'permitted_range'
@@ -134,11 +136,16 @@ class CounterfactualConfig(BaseConfig):
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
                  desired_range=None, permitted_range=None,
-                 features_to_vary=None, feature_importance=False):
+                 features_to_vary=None, feature_importance=False,
+                 id=None):
         super(CounterfactualConfig, self).__init__()
         self.method = method
         self.continuous_features = continuous_features
         self.total_CFs = total_CFs
+        if id is None:
+            self.id = str(uuid.uuid4())
+        else:
+            self.id = id
         self.desired_range = desired_range
         self.desired_class = desired_class
         self.permitted_range = permitted_range
@@ -177,6 +184,7 @@ class CounterfactualConfig(BaseConfig):
             CounterfactualConfig.METHOD: self.method,
             CounterfactualConfig.CONTINUOUS_FEATURES: self.continuous_features,
             CounterfactualConfig.TOTAL_CFS: self.total_CFs,
+            CounterfactualConfig.ID: self.id,
             CounterfactualConfig.DESIRED_RANGE: self.desired_range,
             CounterfactualConfig.DESIRED_CLASS: self.desired_class,
             CounterfactualConfig.PERMITTED_RANGE: self.permitted_range,
@@ -210,7 +218,8 @@ class CounterfactualConfig(BaseConfig):
             features_to_vary=cf_config[
                 CounterfactualConfig.FEATURES_TO_VARY],
             feature_importance=cf_config[
-                CounterfactualConfig.FEATURE_IMPORTANCE])
+                CounterfactualConfig.FEATURE_IMPORTANCE],
+            id=cf_config[CounterfactualConfig.ID])
 
         return counterfactual_config
 
@@ -627,12 +636,18 @@ class CounterfactualManager(BaseManager):
         :return: A array of CounterfactualData.
         :rtype: List[CounterfactualData]
         """
-        return [
-            self._get_counterfactual(i) for i in self.get()]
+        serialized_counterfactual_data_list = []
+        for counterfactual_config in self._counterfactual_config_list:
+            serialized_counterfactual_data_list.append(
+                self._get_counterfactual(counterfactual_config))
 
-    def _get_counterfactual(self, counterfactual):
+        return serialized_counterfactual_data_list
+
+    def _get_counterfactual(self, counterfactual_config):
         cfdata = CounterfactualData()
-        json_data = json.loads(counterfactual.to_json())
+
+        json_data = json.loads(
+            counterfactual_config.counterfactual_obj.to_json())
         cfdata.cfs_list = json_data["cfs_list"]
         cfdata.feature_names = json_data["feature_names"]
         cfdata.feature_names_including_target = json_data[
@@ -642,6 +657,7 @@ class CounterfactualManager(BaseManager):
         cfdata.model_type = json_data["model_type"]
         cfdata.desired_class = json_data["desired_class"]
         cfdata.desired_range = json_data["desired_range"]
+        cfdata.id = counterfactual_config.id
         return cfdata
 
     @property
