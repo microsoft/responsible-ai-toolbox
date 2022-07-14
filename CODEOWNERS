@@ -23,7 +23,7 @@
 /libs/dataset-explorer @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
 
 #error-analysis ui
-/libs/error-analysis @romanlutz @imatiach-msft @xuke444
+/libs/error-analysis @romanlutz @imatiach-msft @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
 
 #fairness ui
 /libs/fairness @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
