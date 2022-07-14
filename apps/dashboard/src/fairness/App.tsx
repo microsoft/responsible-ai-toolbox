@@ -2,13 +2,18 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { IFairnessData } from "@responsible-ai/core-ui";
+import {
+  IBounds,
+  IFairnessData,
+  IMetricRequest,
+  IMetricResponse
+} from "@responsible-ai/core-ui";
 import { FairnessWizard, IFairnessProps } from "@responsible-ai/fairness";
 import { Language } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import {
-  generateRandomMetrics,
   messages,
   supportedBinaryClassificationPerformanceKeys,
   supportedProbabilityPerformanceKeys,
@@ -27,7 +32,7 @@ export class App extends React.Component<IAppProps> {
     const dashboardProps: IFairnessProps = {
       ...this.props.dataset,
       locale: this.props.language,
-      requestMetrics: generateRandomMetrics.bind(this),
+      requestMetrics: this.generateRandomMetrics,
       stringParams: { contextualHelp: messages },
       supportedBinaryClassificationPerformanceKeys,
       supportedProbabilityPerformanceKeys,
@@ -36,4 +41,43 @@ export class App extends React.Component<IAppProps> {
     };
     return <FairnessWizard {...dashboardProps} />;
   }
+
+  private generateRandomMetrics = (
+    request: IMetricRequest,
+    abortSignal?: AbortSignal
+  ): Promise<IMetricResponse> => {
+    const binSize = _.max(request.binVector) || 0;
+    const bins: number[] = new Array(binSize + 1)
+      .fill(0)
+      .map(() => Math.random() / 3 + 0.33);
+    const binBounds: IBounds[] = bins.map((bin) => {
+      return {
+        lower: bin - Math.pow(Math.random() / 3, 2),
+        upper: bin + Math.pow(Math.random() / 3, 2)
+      };
+    });
+    const global: number = Math.random() / 3 + 0.33;
+    const bounds: IBounds = {
+      lower: global - Math.pow(Math.random() / 3, 2),
+      upper: global + Math.pow(Math.random() / 3, 2)
+    };
+
+    const promise = new Promise<IMetricResponse>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        resolve({
+          binBounds,
+          bins,
+          bounds,
+          global
+        });
+      }, 300);
+      if (abortSignal) {
+        abortSignal.addEventListener("abort", () => {
+          clearTimeout(timeout);
+          reject(new DOMException("Aborted", "AbortError"));
+        });
+      }
+    });
+    return promise;
+  };
 }
