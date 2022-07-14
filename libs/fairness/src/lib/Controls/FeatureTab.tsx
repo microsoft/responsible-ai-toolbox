@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  ActionButton,
   FontWeights,
   Modal,
   Stack,
@@ -23,6 +22,7 @@ import React from "react";
 import { IBinnedResponse } from "./../util/IBinnedResponse";
 import { BinDialog } from "./BinDialog";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
+import { FeatureTabActionButton } from "./FeatureTabActionButton";
 import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 import { IWizardTabProps } from "./IWizardTabProps";
 import { WizardFooter } from "./WizardFooter";
@@ -214,14 +214,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         )}
         {!this.props.dashboardContext.modelMetadata.featureIsCategorical?.[
           index
-        ] && (
-          <ActionButton
-            iconProps={{ iconName: "Edit" }}
-            onClick={this.editBins.bind(this, index)}
-          >
-            {localization.Fairness.Feature.editBinning}
-          </ActionButton>
-        )}
+        ] && <FeatureTabActionButton index={index} onClick={this.editBins} />}
       </>
     );
   };
