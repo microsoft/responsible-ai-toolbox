@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from dice_ml import Dice
 from dice_ml.counterfactual_explanations import CounterfactualExplanations
+from dice_ml.explainer_interfaces.explainer_base import ExplainerBase
 
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
@@ -344,7 +345,7 @@ class CounterfactualConfig(BaseConfig):
         file_path = (explainer_directory_path /
                      CounterfactualConfig.EXPLAINER_FILE_NAME)
         try:
-            self.explainer.deserialize_explainer(file_path)
+            self.explainer = ExplainerBase.deserialize_explainer(file_path)
         except Exception:
             pass
 
