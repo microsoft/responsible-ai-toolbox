@@ -34,7 +34,6 @@ export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExpla
         borderColor: NeutralColors.gray80,
         borderRadius: "1px",
         borderStyle: "groove",
-        fontWeight: "lighter",
         lineHeight: "32px",
         maxHeight: "200px",
         minWidth: "400px",
