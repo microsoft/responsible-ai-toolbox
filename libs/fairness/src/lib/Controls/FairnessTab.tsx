@@ -14,6 +14,8 @@ import { WizardFooter } from "./WizardFooter";
 
 export interface IFairnessTabProps extends IWizardTabProps {
   fairnessPickerProps: IFairnessPickerPropsV2;
+  nextTabKey: string;
+  previousTabKey: string;
 }
 
 export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
@@ -63,8 +65,9 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
           )}
         />
         <WizardFooter
-          onNext={this.props.onNext}
-          onPrevious={this.props.onPrevious}
+          nextTabKey={this.props.nextTabKey}
+          previousTabKey={this.props.previousTabKey}
+          onSetTab={this.props.onSetTab}
         />
       </Stack>
     );

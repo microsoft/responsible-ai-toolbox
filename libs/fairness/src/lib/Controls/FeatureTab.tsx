@@ -29,6 +29,7 @@ import { WizardFooter } from "./WizardFooter";
 
 export interface IFeatureTabProps extends IWizardTabProps {
   featureBins: IBinnedResponse[];
+  nextTabKey: string;
   selectedFeatureIndex: number;
   selectedFeatureChange: (value: number) => void;
   saveBin: (bin: IBinnedResponse) => void;
@@ -140,7 +141,10 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             layoutMode={DetailsListLayoutMode.justified}
           />
         </StackItem>
-        <WizardFooter onNext={this.props.onNext} />
+        <WizardFooter
+          nextTabKey={this.props.nextTabKey}
+          onSetTab={this.props.onSetTab}
+        />
       </Stack>
     );
   }
