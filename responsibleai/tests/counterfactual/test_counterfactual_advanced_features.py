@@ -119,10 +119,12 @@ class TestCounterfactualAdvancedFeatures(object):
         cf_obj_2 = rai_insights_copy.counterfactual.get()[1]
         assert cf_obj_2 is not None
 
-        assert counterfactual_config_list_before_save[0].id == \
-            counterfactual_config_list_after_save[0].id
-        assert counterfactual_config_list_before_save[1].id == \
-            counterfactual_config_list_after_save[1].id
+        assert counterfactual_config_list_before_save[0].id in \
+            [counterfactual_config_list_after_save[0].id,
+             counterfactual_config_list_after_save[1].id]
+        assert counterfactual_config_list_before_save[1].id in \
+            [counterfactual_config_list_after_save[0].id,
+             counterfactual_config_list_after_save[1].id]
 
         # Delete the dice-ml explainer directory so that the dice-ml
         # explainer can be re-trained rather being loaded from the
