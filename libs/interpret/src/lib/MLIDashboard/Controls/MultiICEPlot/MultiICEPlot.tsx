@@ -56,7 +56,7 @@ export class MultiICEPlot extends React.PureComponent<
       yAxes: []
     };
 
-    this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
+    this.debounceFetchData = _.debounce(this.fetchData, 500);
   }
 
   public componentDidMount(): void {
@@ -340,7 +340,7 @@ export class MultiICEPlot extends React.PureComponent<
     return selectedKeys;
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -386,7 +386,7 @@ export class MultiICEPlot extends React.PureComponent<
         }
       }
     });
-  }
+  };
 
   private buildDataSpans(
     row: Array<string | number>,

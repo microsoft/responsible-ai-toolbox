@@ -68,14 +68,14 @@ export class MapShift extends React.Component<IMapShiftProps> {
           >
             <Stack.Item align="start">
               <DefaultButton
-                onClick={this.props.onSave.bind(this)}
+                onClick={this.onSave}
                 text={localization.ErrorAnalysis.MapShift.saveAs}
               />
             </Stack.Item>
             <Stack.Item align="end">
               <Stack horizontal tokens={stackTokens}>
                 <PrimaryButton
-                  onClick={this.shift.bind(this)}
+                  onClick={this.shift}
                   text={localization.ErrorAnalysis.MapShift.shift}
                 />
                 <DefaultButton
@@ -90,8 +90,12 @@ export class MapShift extends React.Component<IMapShiftProps> {
     );
   }
 
-  private shift(): void {
+  private shift = (): void => {
     this.props.onDismiss();
     this.props.onShift();
-  }
+  };
+
+  private onSave = (): void => {
+    this.props.onSave();
+  };
 }

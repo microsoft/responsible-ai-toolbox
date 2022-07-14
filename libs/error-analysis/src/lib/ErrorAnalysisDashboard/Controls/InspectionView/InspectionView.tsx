@@ -186,7 +186,7 @@ export class InspectionView extends React.PureComponent<
                     columns={this._columns}
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.justified}
-                    onRenderItemColumn={this.renderItemColumn.bind(this)}
+                    onRenderItemColumn={this.renderItemColumn}
                     selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -228,11 +228,11 @@ export class InspectionView extends React.PureComponent<
     );
   }
 
-  private renderItemColumn(
+  private renderItemColumn = (
     item: any,
     index?: number,
     column?: IColumn
-  ): React.ReactNode {
+  ): React.ReactNode => {
     if (column && index !== undefined) {
       const fieldContent = item[column.fieldName as keyof any] as string;
 
@@ -254,7 +254,7 @@ export class InspectionView extends React.PureComponent<
       }
     }
     return <span />;
-  }
+  };
 
   private updateViewedFeatureImportances(
     includedIndexes: number[]

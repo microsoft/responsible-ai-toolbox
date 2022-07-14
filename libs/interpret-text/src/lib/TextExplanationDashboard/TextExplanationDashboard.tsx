@@ -66,7 +66,6 @@ export class TextExplanationDashboard extends React.PureComponent<
         Utils.countNonzeros(this.props.dataSummary.localExplanations) / 2
       )
     };
-    this.changeRadioButton = this.changeRadioButton.bind(this);
   }
 
   public render() {
