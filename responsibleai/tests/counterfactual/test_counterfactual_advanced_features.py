@@ -98,17 +98,33 @@ class TestCounterfactualAdvancedFeatures(object):
             permitted_range={feature_names[0]: [2.0, 5.0]})
         rai_insights.counterfactual.compute()
 
+        counterfactual_config_list_before_save = \
+            rai_insights.counterfactual._counterfactual_config_list
+        assert len(counterfactual_config_list_before_save) == 2
         assert len(rai_insights.counterfactual.get()) == 2
-        cf_obj = rai_insights.counterfactual.get()[0]
-        assert cf_obj is not None
+        cf_obj_1 = rai_insights.counterfactual.get()[0]
+        assert cf_obj_1 is not None
+        cf_obj_2 = rai_insights.counterfactual.get()[1]
+        assert cf_obj_2 is not None
 
         save_dir = tmpdir.mkdir('save-dir')
         rai_insights.save(save_dir)
         rai_insights_copy = RAIInsights.load(save_dir)
 
+        counterfactual_config_list_after_save = \
+            rai_insights_copy.counterfactual._counterfactual_config_list
         assert len(rai_insights_copy.counterfactual.get()) == 2
-        cf_obj = rai_insights_copy.counterfactual.get()[0]
-        assert cf_obj is not None
+        cf_obj_1 = rai_insights_copy.counterfactual.get()[0]
+        assert cf_obj_1 is not None
+        cf_obj_2 = rai_insights_copy.counterfactual.get()[1]
+        assert cf_obj_2 is not None
+
+        assert counterfactual_config_list_before_save[0].id in \
+            [counterfactual_config_list_after_save[0].id,
+             counterfactual_config_list_after_save[1].id]
+        assert counterfactual_config_list_before_save[1].id in \
+            [counterfactual_config_list_after_save[0].id,
+             counterfactual_config_list_after_save[1].id]
 
         # Delete the dice-ml explainer directory so that the dice-ml
         # explainer can be re-trained rather being loaded from the
@@ -136,3 +152,37 @@ class TestCounterfactualAdvancedFeatures(object):
         assert len(counterfactual_config_list) == 2
         assert counterfactual_config_list[0].explainer is not None
         assert counterfactual_config_list[1].explainer is not None
+
+    def test_counterfactual_manager_get_data(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_data()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train['target'] = y_train
+        X_test['target'] = y_test
+
+        rai_insights = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test.iloc[0:10],
+            target_column='target',
+            task_type='classification')
+
+        rai_insights.counterfactual.add(
+            total_CFs=10, desired_class=2,
+            features_to_vary=[feature_names[0]],
+            permitted_range={feature_names[0]: [2.0, 5.0]})
+        rai_insights.counterfactual.compute()
+
+        serialized_data = rai_insights.counterfactual.get_data()
+        assert serialized_data is not None
+        assert len(serialized_data) == 1
+        assert hasattr(serialized_data[0], 'id')
+        assert hasattr(serialized_data[0], 'cfs_list')
+        assert hasattr(serialized_data[0], 'desired_class')
+        assert hasattr(serialized_data[0], 'desired_range')
+        assert hasattr(serialized_data[0], 'feature_names')
+        assert hasattr(serialized_data[0], 'feature_names_including_target')
+        assert hasattr(serialized_data[0], 'local_importance')
+        assert hasattr(serialized_data[0], 'summary_importance')
+        assert hasattr(serialized_data[0], 'model_type')
