@@ -568,6 +568,46 @@ class CounterfactualManager(BaseManager):
                     cf_config.failure_reason = str(e)
                     raise e
 
+    def request_counterfactual(self, index: int, data: Any):
+        """Return the counterfactuals for a given point."""
+        if not isinstance(data, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(data)))
+
+        if data.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'counterfactual generation.')
+
+        # TODO: Index should change to id based lookup
+        if index >= len(self._counterfactual_config_list):
+            raise UserConfigValidationException(
+                'Index {0} is out of bounds.'.format(index))
+
+        cf_config = self._counterfactual_config_list[index]
+
+        if not cf_config.feature_importance:
+            counterfactual_obj = \
+                cf_config.explainer.generate_counterfactuals(
+                    data, total_CFs=cf_config.total_CFs,
+                    desired_class=cf_config.desired_class,
+                    desired_range=cf_config.desired_range,
+                    features_to_vary=cf_config.features_to_vary,
+                    permitted_range=cf_config.permitted_range)
+        else:
+            counterfactual_obj = \
+                cf_config.explainer.local_feature_importance(
+                    data,
+                    total_CFs=cf_config.total_CFs,
+                    desired_class=cf_config.desired_class,
+                    desired_range=cf_config.desired_range,
+                    features_to_vary=cf_config.features_to_vary,
+                    permitted_range=cf_config.permitted_range)
+
+        json_data = json.loads(counterfactual_obj.to_json())
+        return json_data
+
     def get(self, failed_to_compute=False):
         """Return the computed counterfactual examples objects or failure reason.
 
