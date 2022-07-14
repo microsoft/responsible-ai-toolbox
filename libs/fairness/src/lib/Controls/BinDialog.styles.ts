@@ -95,17 +95,3 @@ export const BinDialogStyles: () => IProcessedStyleSet<IBinDialogStyles> =
       }
     });
   };
-
-export const SpinButtonStyles = {
-  labelWrapper: { alignSelf: "center" },
-  root: {
-    display: "inline-flex",
-    float: "right",
-    selectors: {
-      "> div": {
-        maxWidth: "108px"
-      }
-    }
-  },
-  spinButtonWrapper: { maxWidth: "98px" }
-};

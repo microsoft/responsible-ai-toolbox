@@ -4,10 +4,11 @@
 import { IComboBoxOption, IComboBox, ComboBox, Text } from "@fluentui/react";
 import {
   AxisConfigDialogSpinButton,
-  JointDataset,
-  IExplanationModelMetadata,
+  BasicHighChart,
   FabricStyles,
-  BasicHighChart
+  IExplanationModelMetadata,
+  JointDataset,
+  SpinButtonStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -18,7 +19,7 @@ import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
 import { getIceChartOption } from "../../utils/getIceChartOption";
 import { IRangeView } from "../ICEPlot";
 
-import { multiIcePlotStyles, SpinButtonStyles } from "./MultiICEPlot.styles";
+import { multiIcePlotStyles } from "./MultiICEPlot.styles";
 
 export interface IMultiICEPlotProps {
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;

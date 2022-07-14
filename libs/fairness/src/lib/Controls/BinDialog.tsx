@@ -2,7 +2,10 @@
 // Licensed under the MIT License.
 
 import { Checkbox, DefaultButton, PrimaryButton, Text } from "@fluentui/react";
-import { AxisConfigDialogSpinButton } from "@responsible-ai/core-ui";
+import {
+  AxisConfigDialogSpinButton,
+  SpinButtonStyles
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -11,7 +14,7 @@ import React from "react";
 import { BinnedResponseBuilder } from "../util/BinnedResponseBuilder";
 import { IBinnedResponse } from "../util/IBinnedResponse";
 
-import { BinDialogStyles, SpinButtonStyles } from "./BinDialog.styles";
+import { BinDialogStyles } from "./BinDialog.styles";
 
 export interface IBinDialogProps {
   range: INumericRange;

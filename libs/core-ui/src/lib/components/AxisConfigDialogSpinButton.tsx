@@ -20,6 +20,20 @@ export interface IAxisConfigSpinButtonProps {
   setNumericValue: (delta: number, stringVal: string) => string | void;
 }
 
+export const SpinButtonStyles = {
+  labelWrapper: { alignSelf: "center" },
+  root: {
+    display: "inline-flex",
+    float: "right",
+    selectors: {
+      "> div": {
+        maxWidth: "78px"
+      }
+    }
+  },
+  spinButtonWrapper: { maxWidth: "68px" }
+};
+
 export class AxisConfigDialogSpinButton extends React.PureComponent<IAxisConfigSpinButtonProps> {
   public render(): React.ReactNode {
     return (
