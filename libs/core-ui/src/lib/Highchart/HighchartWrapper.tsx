@@ -61,8 +61,8 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
     const className = mergeStyles(
       {
         height: mergedOptions?.chart?.height || undefined,
-        width: mergedOptions?.chart?.width || undefined,
-        minHeight: custom?.minHeight || undefined
+        minHeight: custom?.minHeight || undefined,
+        width: mergedOptions?.chart?.width || undefined
       },
       this.props.className
     );
