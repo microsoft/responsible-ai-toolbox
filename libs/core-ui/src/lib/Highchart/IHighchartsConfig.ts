@@ -29,6 +29,11 @@ export interface IHighchartsCustomConfig {
   transparentBackground?: boolean;
 
   /**
+   * An explicit minimum height for the chart.
+   */
+  minHeight?: number | string | null;
+
+  /**
    * Gets called when parent component is rerendered and chart is updated
    *
    * @param chart Chart reference

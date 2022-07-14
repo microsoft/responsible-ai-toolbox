@@ -87,6 +87,9 @@ export class CohortStatsHeatmap extends React.Component<
         key={`heatmap${this.state.key}`}
         id={this.props.id}
         configOverride={{
+          custom: {
+            minHeight: 190
+          },
           chart: {
             height: this.props.cohorts.length * 40 + 120,
             type: "heatmap"
