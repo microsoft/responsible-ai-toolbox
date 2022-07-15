@@ -8,11 +8,9 @@ import {
   ComboBox,
   Text,
   PrimaryButton,
-  SpinButton,
   Panel,
   Stack,
   DefaultButton,
-  Position,
   ChoiceGroup,
   IChoiceGroupOption
 } from "@fluentui/react";
@@ -28,6 +26,8 @@ import {
   IJointMeta,
   JointDataset
 } from "../util/JointDataset";
+
+import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
 
 export interface IAxisConfigProps {
   jointDataset: JointDataset;
@@ -257,29 +257,14 @@ export class AxisConfigDialog extends React.PureComponent<
                     {(this.props.mustBin ||
                       this.state.selectedColumn.options.bin) &&
                       this.state.binCount !== undefined && (
-                        <SpinButton
-                          labelPosition={Position.top}
+                        <AxisConfigDialogSpinButton
                           label={
                             localization.Interpret.AxisConfigDialog.numOfBins
                           }
-                          min={AxisConfigDialog.MIN_HIST_COLS}
                           max={AxisConfigDialog.MAX_HIST_COLS}
+                          min={AxisConfigDialog.MIN_HIST_COLS}
+                          setNumericValue={this.setNumericValue}
                           value={this.state.binCount.toString()}
-                          onIncrement={this.setNumericValue.bind(
-                            this,
-                            1,
-                            selectedMeta
-                          )}
-                          onDecrement={this.setNumericValue.bind(
-                            this,
-                            -1,
-                            selectedMeta
-                          )}
-                          onValidate={this.setNumericValue.bind(
-                            this,
-                            0,
-                            selectedMeta
-                          )}
                         />
                       )}
                     {!(
@@ -431,7 +416,6 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly setNumericValue = (
     delta: number,
-    _column: IJointMeta,
     stringVal: string
   ): string | void => {
     if (delta === 0) {
