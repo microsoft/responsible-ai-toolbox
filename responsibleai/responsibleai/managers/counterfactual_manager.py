@@ -578,7 +578,18 @@ class CounterfactualManager(BaseManager):
                     raise e
 
     def request_counterfactual(self, query_id: str, data: Any):
-        """Return the counterfactuals for a given point."""
+        """Return the counterfactuals for a given point.
+
+        :param query_id: The query id for the finding the
+                         counterfactual config.
+        :type query_id: str
+        :param data: The data point for which the counterfactuals
+                     need to be generated.
+        :type data: Any
+        :return: The serialized version counterfactuals for the
+                 given data point.
+        :rtype: Dict
+        """
         if not isinstance(data, pd.DataFrame):
             raise UserConfigValidationException(
                 'Data is of type {0} but it must be '
@@ -617,6 +628,12 @@ class CounterfactualManager(BaseManager):
                     desired_range=query_cf_config.desired_range,
                     features_to_vary=query_cf_config.features_to_vary,
                     permitted_range=query_cf_config.permitted_range)
+
+        # Validate the serialized output against schema
+        schema = CounterfactualManager._get_counterfactual_schema(
+            version=counterfactual_obj.metadata['version'])
+        jsonschema.validate(
+            json.loads(counterfactual_obj.to_json()), schema)
 
         json_data = json.loads(counterfactual_obj.to_json())
         return json_data
