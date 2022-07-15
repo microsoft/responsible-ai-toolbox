@@ -6,7 +6,6 @@ import {
   IColumn,
   DetailsList,
   DetailsListLayoutMode,
-  Link,
   Stack,
   Text,
   SelectionMode,
@@ -148,18 +147,17 @@ export class CohortList extends React.Component<
                         disabled={this.isActiveCohort(item.key)}
                         fieldContent={localization.Interpret.CohortBanner.edit}
                         name={item.key}
-                        onEditCohortClick={this.onEditCohortClick}
+                        onClick={this.onEditCohortClick}
                       />
                     </Stack.Item>
                     <Stack.Item>
-                      <Link
-                        onClick={this.onDuplicateCohortClick.bind(
-                          this,
-                          item.key
-                        )}
-                      >
-                        {localization.Interpret.CohortBanner.duplicateCohort}
-                      </Link>
+                      <CohortNameColumn
+                        fieldContent={
+                          localization.Interpret.CohortBanner.duplicateCohort
+                        }
+                        name={item.key}
+                        onClick={this.onDuplicateCohortClick}
+                      />
                     </Stack.Item>
                   </Stack>
                 </Stack.Item>
@@ -217,7 +215,7 @@ export class CohortList extends React.Component<
     );
   }
 
-  private onDuplicateCohortClick(index: number): void {
+  private onDuplicateCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     if (index >= 0 && index < all.length) {
       const originCohort = all[index];
@@ -236,7 +234,7 @@ export class CohortList extends React.Component<
       );
       this.context.addCohort(newCohort);
     }
-  }
+  };
 
   private existsCohort(cohorts: ErrorCohort[], name: string): boolean {
     return cohorts.some((errorCohort) => {
