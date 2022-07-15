@@ -77,8 +77,7 @@ export class GlobalViolinPlot extends React.PureComponent<
       });
       plotlyProps.data = dataArray;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {

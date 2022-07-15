@@ -136,8 +136,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private featuresOption: IDropdownOption[];
