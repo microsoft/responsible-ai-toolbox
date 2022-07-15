@@ -8,8 +8,7 @@ import {
   DetailsListLayoutMode,
   Stack,
   Text,
-  SelectionMode,
-  IconButton
+  SelectionMode
 } from "@fluentui/react";
 import {
   Cohort,
@@ -27,6 +26,7 @@ import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";
 import { cohortListStyles } from "./CohortList.styles";
+import { CohortListDeleteButton } from "./CohortListDeleteButton";
 
 export interface ICohortListProps {
   onEditCohortClick?: (editedCohort: ErrorCohort) => void;
@@ -180,10 +180,10 @@ export class CohortList extends React.Component<
                   </Stack>
                 </Stack.Item>
                 <Stack.Item>
-                  <IconButton
-                    iconProps={{ iconName: "Trash" }}
+                  <CohortListDeleteButton
                     disabled={this.isActiveCohort(item.key)}
-                    onClick={this.onDeleteCohortClick.bind(this, item.key)}
+                    key={item.key}
+                    onDeleteCohortClick={this.onDeleteCohortClick}
                   />
                 </Stack.Item>
               </Stack>
@@ -263,13 +263,13 @@ export class CohortList extends React.Component<
     return false;
   }
 
-  private onDeleteCohortClick(index: number): void {
+  private onDeleteCohortClick = (index: number): void => {
     const all = this.getAllCohort();
     this.setState({
       currentDeleteCohortName: all[index].cohort.name,
       currentDeleteIndex: index
     });
-  }
+  };
 
   private onDismissDelete = () => {
     this.setState({ currentDeleteIndex: undefined });
