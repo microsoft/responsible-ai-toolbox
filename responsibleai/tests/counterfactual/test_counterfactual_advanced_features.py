@@ -155,7 +155,7 @@ class TestCounterfactualAdvancedFeatures(object):
         assert counterfactual_config_list[1].explainer is not None
 
     @pytest.mark.parametrize('feature_importance', [True, False])
-    def test_counterfactual_manager_request_counterfactual(
+    def test_counterfactual_manager_request_counterfactuals(
             self, feature_importance):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_data()
@@ -187,7 +187,7 @@ class TestCounterfactualAdvancedFeatures(object):
         query_id = \
             rai_insights.counterfactual._counterfactual_config_list[0].id
         counterfactual_obj_serialized = \
-            rai_insights.counterfactual.request_counterfactual(
+            rai_insights.counterfactual.request_counterfactuals(
                 query_id, test_instance)
 
         assert counterfactual_obj_serialized['test_data'] is not None
@@ -213,7 +213,7 @@ class TestCounterfactualAdvancedFeatures(object):
             UserConfigValidationException,
                 match='Only one row of data is allowed for '
                       'counterfactual generation.'):
-            rai_insights.counterfactual.request_counterfactual(
+            rai_insights.counterfactual.request_counterfactuals(
                 query_id, test_instance)
 
         test_instance = X_test.iloc[0:1].drop('target', axis=1)
@@ -222,7 +222,7 @@ class TestCounterfactualAdvancedFeatures(object):
             UserConfigValidationException,
                 match='No counterfactual config found for id {0}.'.format(
                     incorrect_query_id)):
-            rai_insights.counterfactual.request_counterfactual(
+            rai_insights.counterfactual.request_counterfactuals(
                 incorrect_query_id, test_instance)
 
         test_instance = X_test.iloc[0:1].drop('target', axis=1).values
@@ -232,7 +232,7 @@ class TestCounterfactualAdvancedFeatures(object):
             UserConfigValidationException,
                 match='Data is of type <class \'numpy.ndarray\'>'
                       ' but it must be a pandas DataFrame.'):
-            rai_insights.counterfactual.request_counterfactual(
+            rai_insights.counterfactual.request_counterfactuals(
                 query_id, test_instance)
 
     def test_counterfactual_manager_get_data(self):

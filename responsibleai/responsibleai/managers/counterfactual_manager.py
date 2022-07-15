@@ -577,7 +577,7 @@ class CounterfactualManager(BaseManager):
                     cf_config.failure_reason = str(e)
                     raise e
 
-    def request_counterfactual(self, query_id: str, data: Any):
+    def request_counterfactuals(self, query_id: str, data: Any):
         """Return the counterfactuals for a given point.
 
         :param query_id: The query id for the finding the
