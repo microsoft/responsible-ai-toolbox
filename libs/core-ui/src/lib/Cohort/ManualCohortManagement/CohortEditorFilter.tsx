@@ -18,7 +18,7 @@ import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { FabricStyles } from "../../util/FabricStyles";
+import { FluentUIStyles } from "../../util/FluentUIStyles";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
@@ -121,12 +121,12 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
       <Stack tokens={{ childrenGap: "l1" }}>
         {isDataColumn && (
           <ComboBox
-            styles={FabricStyles.limitedSizeMenuDropdown}
+            styles={FluentUIStyles.limitedSizeMenuDropdown}
             options={this.dataArray}
             onChange={this.props.setSelectedProperty}
             label={localization.Interpret.CohortEditor.selectFilter}
             selectedKey={this.props.openedFilter.column}
-            calloutProps={FabricStyles.calloutProps}
+            calloutProps={FluentUIStyles.calloutProps}
           />
         )}
         {selectedMeta.featureRange &&
@@ -154,8 +154,8 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               onChange={this.props.setCategoricalValues}
               options={categoricalOptions || []}
               useComboBoxAsMenuWidth
-              calloutProps={FabricStyles.calloutProps}
-              styles={FabricStyles.limitedSizeMenuDropdown}
+              calloutProps={FluentUIStyles.calloutProps}
+              styles={FluentUIStyles.limitedSizeMenuDropdown}
             />
           </>
         ) : (
@@ -175,7 +175,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               onChange={this.props.setComparison}
               options={this.comparisonOptions}
               useComboBoxAsMenuWidth
-              calloutProps={FabricStyles.calloutProps}
+              calloutProps={FluentUIStyles.calloutProps}
             />
             {selectedMeta.featureRange &&
               (this.props.openedFilter.method === FilterMethods.InTheRangeOf ? (

@@ -20,9 +20,10 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   rowErrorSize,
-  BasicHighChart
+  BasicHighChart,
+  getPrimaryChartColor
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
@@ -201,7 +202,7 @@ export class CausalIndividualChart extends React.PureComponent<
             selectedKey={this.state.selectedIndex}
             ariaLabel={"datapoint picker"}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            styles={FluentUIStyles.smallDropdownStyle}
           />
           <CausalWhatIf selectedIndex={this.state.selectedIndex} />
         </Stack>
@@ -217,7 +218,9 @@ export class CausalIndividualChart extends React.PureComponent<
         index
       );
     this.temporaryPoint[CausalIndividualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
+      FluentUIStyles.fluentUIColorPalette[
+        CausalIndividualConstants.MAX_SELECTION
+      ];
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -292,6 +295,7 @@ export class CausalIndividualChart extends React.PureComponent<
     const plotlyProps = _.cloneDeep(
       CausalIndividualConstants.basePlotlyProperties
     );
+    const theme = getTheme();
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
@@ -299,9 +303,9 @@ export class CausalIndividualChart extends React.PureComponent<
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
         if (rowIndex !== this.state.selectedIndex) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[0];
+        return getPrimaryChartColor(theme);
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -324,7 +328,7 @@ export class CausalIndividualChart extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               CausalIndividualConstants.MAX_SELECTION + 1
             ],
           width: 2

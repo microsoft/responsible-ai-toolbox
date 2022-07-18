@@ -85,9 +85,11 @@ export class TextExplanationDashboard extends React.PureComponent<
             />
           </Stack.Item>
           <Stack.Item align="center">
-            {`${this.state.topK.toString()} ${
-              localization.InterpretText.Dashboard.importantWords
-            }`}
+            <Text variant={"large"}>
+              {`${this.state.topK.toString()} ${
+                localization.InterpretText.Dashboard.importantWords
+              }`}
+            </Text>
           </Stack.Item>
         </Stack>
         <Stack tokens={componentStackTokens} horizontal>
