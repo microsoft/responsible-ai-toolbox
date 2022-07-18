@@ -22,7 +22,7 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   LabelWithCallout,
   FeatureImportanceDependence,
   FeatureImportanceBar
@@ -303,7 +303,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                       }
                       selectedKey={this.state.dependenceProps?.xAxis.property}
                       onChange={this.onXSet}
-                      calloutProps={FabricStyles.calloutProps}
+                      calloutProps={FluentUIStyles.calloutProps}
                     />
                   )}
                   {cohortOptions && (

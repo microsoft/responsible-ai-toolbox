@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
-  FabricStyles,
+  getPrimaryChartColor,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
@@ -48,8 +49,7 @@ export function getGroupedData(
   groupedData.forEach((d: any, index: number) => {
     result.push({
       color:
-        styles?.[index].value.marker?.color ||
-        FabricStyles.fabricColorPalette[0],
+        styles?.[index].value.marker?.color || getPrimaryChartColor(getTheme()),
       data: d
     });
   });
