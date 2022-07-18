@@ -1,15 +1,19 @@
 {
   "extends": ["../../.eslintrc"],
-  "plugins": [ "ban"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "ban/ban": [
-        "error",
-        { "name": "bind", "message": "Prefer use arrow function" }
-      ]}
+        "no-restricted-syntax": [
+          "error",
+          {
+            "message": "Please don't use bind. Prefer use arrow function.",
+            "selector":
+              "MemberExpression > Identifier[name='bind']"
+          }
+        ]
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
