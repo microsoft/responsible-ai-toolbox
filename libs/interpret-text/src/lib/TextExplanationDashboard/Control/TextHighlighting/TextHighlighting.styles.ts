@@ -5,7 +5,8 @@ import {
   IStyle,
   mergeStyles,
   mergeStyleSets,
-  IProcessedStyleSet
+  IProcessedStyleSet,
+  getTheme
 } from "@fluentui/react";
 import { NeutralColors, SharedColors } from "@fluentui/theme";
 
@@ -17,16 +18,17 @@ export interface ITextHighlightingStyles {
 
 export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingStyles> =
   () => {
+    const theme = getTheme();
     const normal = {
-      fontFamily: "Segoe UI",
-      fontSize: "1.5em"
+      color: theme.semanticColors.bodyText
     };
     return mergeStyleSets<ITextHighlightingStyles>({
       boldunderline: mergeStyles([
         normal,
         {
           color: SharedColors.blue10,
-          fontWeight: "bold",
+          fontSize: theme.fonts.large.fontSize,
+          padding: 0,
           textDecorationLine: "underline"
         }
       ]),
@@ -34,8 +36,7 @@ export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingS
         normal,
         {
           backgroundColor: SharedColors.blue10,
-          color: NeutralColors.white,
-          fontweight: "400px"
+          color: NeutralColors.white
         }
       ]),
       normal
