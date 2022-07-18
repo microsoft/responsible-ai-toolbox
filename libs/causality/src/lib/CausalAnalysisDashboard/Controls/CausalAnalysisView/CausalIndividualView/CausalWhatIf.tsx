@@ -11,7 +11,7 @@ import {
 } from "@fluentui/react";
 import {
   ColumnCategories,
-  FabricStyles,
+  FluentUIStyles,
   ICausalWhatIfData,
   JointDataset,
   ModelAssessmentContext,
@@ -79,7 +79,7 @@ export class CausalWhatIf extends React.Component<
           options={treatmentOptions}
           ariaLabel={"treatment picker"}
           useComboBoxAsMenuWidth
-          styles={FabricStyles.smallDropdownStyle}
+          styles={FluentUIStyles.smallDropdownStyle}
           selectedKey={this.state.treatmentFeature}
           onChange={this.setTreatmentFeature}
         />

@@ -1,15 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { NeutralColors, SharedColors } from "@fluentui/theme";
-import { IHighchartsConfig } from "@responsible-ai/core-ui";
+import { ITheme } from "@fluentui/react";
+import {
+  IHighchartsConfig,
+  getPrimaryChartColor,
+  getPrimaryBackgroundChartColor
+} from "@responsible-ai/core-ui";
 import { SeriesOptionsType } from "highcharts";
 
 import { Utils } from "../../CommonUtils";
 import { IChartProps } from "../../Interfaces/IChartProps";
 
 export function getTokenImportancesChartOptions(
-  props: IChartProps
+  props: IChartProps,
+  theme: ITheme
 ): IHighchartsConfig {
   const importances = props.localExplanations;
   const k = props.topK!;
@@ -48,8 +53,11 @@ export function getTokenImportancesChartOptions(
   const data: any[] = [];
   x.forEach((p, index) => {
     const temp = {
-      borderColor: SharedColors.blue10,
-      color: (p || 0) >= 0 ? SharedColors.blue10 : NeutralColors.white,
+      borderColor: getPrimaryChartColor(theme),
+      color:
+        (p || 0) >= 0
+          ? getPrimaryChartColor(theme)
+          : getPrimaryBackgroundChartColor(theme),
       x: index,
       y: p
     };

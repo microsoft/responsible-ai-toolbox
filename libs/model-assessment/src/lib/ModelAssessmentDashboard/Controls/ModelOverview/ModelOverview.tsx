@@ -24,7 +24,7 @@ import {
   generateMetrics,
   ModelTypes,
   classificationTask,
-  FabricStyles,
+  FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
   ILabeledStatistic
@@ -317,7 +317,7 @@ export class ModelOverview extends React.Component<
                 onChange={this.onMetricSelectionChange}
                 multiSelect
                 className={classNames.dropdown}
-                styles={FabricStyles.limitedSizeMenuDropdown}
+                styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
               <ActionButton
                 className={classNames.configurationActionButton}
@@ -349,7 +349,7 @@ export class ModelOverview extends React.Component<
                   onChange={this.onFeatureSelectionChange}
                   multiSelect
                   className={classNames.dropdown}
-                  styles={FabricStyles.limitedSizeMenuDropdown}
+                  styles={FluentUIStyles.limitedSizeMenuDropdown}
                 />
                 <ActionButton
                   id="modelOverviewFeatureConfigurationActionButton"
