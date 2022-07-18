@@ -1,10 +1,15 @@
 {
   "extends": ["../../.eslintrc"],
+  "plugins": [ "ban"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "ban/ban": [
+        "error",
+        { "name": "bind", "message": "Prefer use arrow function" }
+      ]}
     },
     {
       "files": ["*.ts", "*.tsx"],
