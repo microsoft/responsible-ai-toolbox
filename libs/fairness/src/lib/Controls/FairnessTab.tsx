@@ -56,10 +56,7 @@ export class FairnessTab extends React.PureComponent<IFairnessTabProps> {
                 key: fairness.key,
                 metric: fairness.fairnessMetric,
                 name: fairness.title,
-                onSelect: this.props.fairnessPickerProps.onFairnessChange.bind(
-                  this,
-                  fairness.key
-                )
+                onSelect: this.props.fairnessPickerProps.onFairnessChange
               };
             }
           )}

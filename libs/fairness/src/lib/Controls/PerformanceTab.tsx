@@ -69,11 +69,7 @@ export class PerformanceTab extends React.PureComponent<IPerformancePickingTabPr
                 key: performance.key,
                 metric: performance.key,
                 name: performance.title,
-                onSelect:
-                  this.props.performancePickerProps.onPerformanceChange.bind(
-                    this,
-                    performance.key
-                  )
+                onSelect: this.props.performancePickerProps.onPerformanceChange
               };
             }
           )}
