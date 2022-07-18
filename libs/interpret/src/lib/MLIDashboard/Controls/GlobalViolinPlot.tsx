@@ -5,7 +5,7 @@ import { IComboBoxOption } from "@fluentui/react";
 import {
   JointDataset,
   Cohort,
-  FabricStyles,
+  FluentUIStyles,
   IExplanationModelMetadata
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -72,7 +72,7 @@ export class GlobalViolinPlot extends React.PureComponent<
         const data = { ...baseData };
         data.x = new Array(featureImportance.length).fill(xIndex);
         data.y = featureImportance;
-        data.line = { color: FabricStyles.plotlyColorPalette[0] } as any;
+        data.line = { color: FluentUIStyles.plotlyColorPalette[0] } as any;
         dataArray.push(data);
       });
       plotlyProps.data = dataArray;

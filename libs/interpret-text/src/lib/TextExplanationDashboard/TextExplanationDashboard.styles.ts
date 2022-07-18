@@ -1,8 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
-import { NeutralColors, SharedColors } from "@fluentui/theme";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "@fluentui/react";
+import {
+  getPrimaryBackgroundChartColor,
+  getPrimaryChartColor
+} from "@responsible-ai/core-ui";
 
 export interface ITextExplanationDashboardStyles {
   chartRight: IStyle;
@@ -14,27 +22,27 @@ export interface ITextExplanationDashboardStyles {
 
 export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExplanationDashboardStyles> =
   () => {
+    const theme = getTheme();
     return mergeStyleSets<ITextExplanationDashboardStyles>({
       chartRight: {
         maxWidth: "230px",
         minWidth: "230px"
       },
       legend: {
-        color: NeutralColors.gray80
+        color: theme.semanticColors.disabledText
       },
       negFeatureImportance: {
-        color: SharedColors.blue10,
+        color: getPrimaryChartColor(theme),
         textDecorationLine: "underline"
       },
       posFeatureImportance: {
-        backgroundColor: SharedColors.blue10,
-        color: NeutralColors.white
+        backgroundColor: getPrimaryChartColor(theme),
+        color: getPrimaryBackgroundChartColor(theme)
       },
       textHighlighting: {
-        borderColor: NeutralColors.gray80,
+        borderColor: theme.semanticColors.variantBorder,
         borderRadius: "1px",
         borderStyle: "groove",
-        fontWeight: "lighter",
         lineHeight: "32px",
         maxHeight: "200px",
         minWidth: "400px",

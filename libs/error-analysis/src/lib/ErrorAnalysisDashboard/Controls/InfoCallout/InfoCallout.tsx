@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Callout, IconButton } from "@fluentui/react";
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { infoCalloutStyles } from "./InfoCallout.styles";
@@ -51,7 +51,7 @@ export class InfoCallout extends React.Component<
             setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
-            styles={{ container: FabricStyles.calloutContainer }}
+            styles={{ container: FluentUIStyles.calloutContainer }}
           >
             <div className={classNames.calloutInfo}>
               <span>{this.props.infoText}</span>

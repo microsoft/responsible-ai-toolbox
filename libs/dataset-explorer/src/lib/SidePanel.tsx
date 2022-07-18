@@ -14,7 +14,7 @@ import {
   Cohort,
   ChartTypes,
   IGenericChartProps,
-  FabricStyles,
+  FluentUIStyles,
   InteractiveLegend
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -85,7 +85,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
                   items={colorSeries.map((name, i) => {
                     return {
                       activated: true,
-                      color: FabricStyles.fabricColorPalette[i],
+                      color: FluentUIStyles.fluentUIColorPalette[i],
                       index: i,
                       name
                     };

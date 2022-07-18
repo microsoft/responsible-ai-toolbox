@@ -15,7 +15,7 @@ import {
   IExplanationContext,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -142,8 +142,8 @@ export class Violin extends React.PureComponent<
             singleSeries.offsetgroup = className;
             singleSeries.line = {
               color:
-                FabricStyles.plotlyColorPalette[
-                  classIndex % FabricStyles.plotlyColorPalette.length
+                FluentUIStyles.plotlyColorPalette[
+                  classIndex % FluentUIStyles.plotlyColorPalette.length
                 ]
             };
             if (classIndex >= Violin.maxDefaultSeries) {
@@ -344,7 +344,7 @@ export class Violin extends React.PureComponent<
               options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType !== ModelTypes.Regression &&
@@ -357,7 +357,7 @@ export class Violin extends React.PureComponent<
                   options={this.groupByOptions}
                   ariaLabel={"chart type picker"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               )}
             <div className={violinStyles.sliderControl}>
@@ -415,7 +415,7 @@ export class Violin extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}

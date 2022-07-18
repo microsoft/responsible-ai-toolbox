@@ -20,8 +20,9 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "../Context/ModelAssessmentContext";
+import { getPrimaryChartColor } from "../Highchart/ChartColors";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 import {
   ChartTypes,
   IGenericChartProps,
@@ -384,23 +385,23 @@ function generatePlotlyProps(
       },
       showlegend: false,
       xaxis: {
-        color: FabricStyles.chartAxisColor,
+        color: FluentUIStyles.chartAxisColor,
         gridcolor: "#e5e5e5",
         mirror: true,
         showgrid: true,
         showline: true,
         side: "bottom",
         tickfont: {
-          family: FabricStyles.fontFamilies,
+          family: FluentUIStyles.fontFamilies,
           size: 11
         }
       },
       yaxis: {
         automargin: true,
-        color: FabricStyles.chartAxisColor,
+        color: FluentUIStyles.chartAxisColor,
         showline: true,
         tickfont: {
-          family: FabricStyles.fontFamilies,
+          family: FluentUIStyles.fontFamilies,
           size: 11
         }
       }
@@ -458,7 +459,7 @@ function generatePlotlyProps(
       plotlyProps.data[0].x = rawX;
       plotlyProps.data[0].y = rawY;
       plotlyProps.data[0].marker = {
-        color: FabricStyles.fabricColorPalette[0]
+        color: getPrimaryChartColor(getTheme())
       };
       _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
       _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
@@ -485,7 +486,7 @@ function generatePlotlyProps(
           target: index,
           value: {
             marker: {
-              color: FabricStyles.fabricColorPalette[index]
+              color: FluentUIStyles.fluentUIColorPalette[index]
             },
             name: label
           }

@@ -5,7 +5,7 @@ import { IComboBoxOption, IComboBox, ComboBox, Text } from "@fluentui/react";
 import {
   AxisConfigDialogSpinButton,
   BasicHighChart,
-  FabricStyles,
+  FluentUIStyles,
   IExplanationModelMetadata,
   JointDataset,
   SpinButtonStyles
@@ -119,8 +119,8 @@ export class MultiICEPlot extends React.PureComponent<
                 autoComplete="on"
                 options={this.state.rangeView.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
-                styles={FabricStyles.defaultDropdownStyle}
-                calloutProps={FabricStyles.calloutProps}
+                styles={FluentUIStyles.defaultDropdownStyle}
+                calloutProps={FluentUIStyles.calloutProps}
               />
             )}
             {this.state.rangeView.type !== RangeTypes.Categorical && (

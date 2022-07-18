@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { getTheme } from "@fluentui/react";
-import { FabricStyles, getBoxData } from "@responsible-ai/core-ui";
+import { getBoxData, getPrimaryChartColor } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -27,7 +27,7 @@ export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
     boxGroupData.push({
       data,
       marker: {
-        fillColor: FabricStyles.fabricColorPalette[0]
+        fillColor: getPrimaryChartColor(theme)
       },
       name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
       type: "scatter"

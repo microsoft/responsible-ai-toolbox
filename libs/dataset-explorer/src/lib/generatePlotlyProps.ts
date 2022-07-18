@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
-  FabricStyles,
+  FluentUIStyles,
   ColumnCategories,
+  getPrimaryChartColor,
   JointDataset,
   Cohort,
   ChartTypes,
@@ -90,7 +92,7 @@ export function generatePlotlyProps(
               target: index,
               value: {
                 marker: {
-                  color: FabricStyles.fabricColorPalette[index]
+                  color: FluentUIStyles.fluentUIColorPalette[index]
                 },
                 name: label
               }
@@ -136,7 +138,7 @@ export function generatePlotlyProps(
         plotlyProps.data[0].x = rawX;
         plotlyProps.data[0].y = cohort.unwrap(chartProps.yAxis.property, false);
         plotlyProps.data[0].marker = {
-          color: FabricStyles.fabricColorPalette[0]
+          color: getPrimaryChartColor(getTheme())
         };
         _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
         _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
@@ -167,7 +169,7 @@ export function generatePlotlyProps(
             target: index,
             value: {
               marker: {
-                color: FabricStyles.fabricColorPalette[index]
+                color: FluentUIStyles.fluentUIColorPalette[index]
               },
               name: label
             }
