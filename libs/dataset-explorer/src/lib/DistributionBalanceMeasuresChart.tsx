@@ -64,15 +64,18 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
       localization.ModelAssessment.DataBalance.DistributionBalanceMeasures;
 
     return (
-      <Stack tokens={{ childrenGap: "l1" }}>
-        <HeaderWithInfo
-          title={measuresLocalization.Name}
-          calloutTitle={measuresLocalization.Callout.Title}
-          calloutDescription={measuresLocalization.Callout.Description}
-          // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-          calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures"
-          calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
-        />
+      <Stack tokens={{ childrenGap: "l1" }} id="distributionBalanceMeasures">
+        <Stack.Item>
+          <HeaderWithInfo
+            title={measuresLocalization.Name}
+            calloutTitle={measuresLocalization.Callout.Title}
+            calloutDescription={measuresLocalization.Callout.Description}
+            // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+            calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures"
+            calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+            id="distributionBalanceMeasuresHeader"
+          />
+        </Stack.Item>
 
         <Stack.Item>
           <BasicHighChart

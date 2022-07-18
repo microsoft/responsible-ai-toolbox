@@ -13,6 +13,7 @@ export interface IHeaderWithInfoProps {
   calloutDescription: string;
   calloutLink: string;
   calloutLinkText: string;
+  id?: string;
 }
 
 export class HeaderWithInfo extends React.Component<IHeaderWithInfoProps> {
@@ -20,28 +21,26 @@ export class HeaderWithInfo extends React.Component<IHeaderWithInfoProps> {
     const styles = headerWithInfoStyles();
 
     return (
-      <Stack.Item>
-        <Stack horizontal>
-          <Stack.Item>
-            <Text variant="large" className={styles.boldText}>
-              {this.props.title}
-            </Text>
-          </Stack.Item>
+      <Stack horizontal id={this.props.id}>
+        <Stack.Item>
+          <Text variant="large" className={styles.boldText}>
+            {this.props.title}
+          </Text>
+        </Stack.Item>
 
-          <Stack.Item className={styles.callout}>
-            <LabelWithCallout
-              label=""
-              calloutTitle={this.props.calloutTitle}
-              type="button"
-            >
-              <Text block>{this.props.calloutDescription}</Text>
-              <Link href={this.props.calloutLink} target="_blank">
-                {this.props.calloutLinkText}
-              </Link>
-            </LabelWithCallout>
-          </Stack.Item>
-        </Stack>
-      </Stack.Item>
+        <Stack.Item className={styles.callout}>
+          <LabelWithCallout
+            label=""
+            calloutTitle={this.props.calloutTitle}
+            type="button"
+          >
+            <Text block>{this.props.calloutDescription}</Text>
+            <Link href={this.props.calloutLink} target="_blank">
+              {this.props.calloutLinkText}
+            </Link>
+          </LabelWithCallout>
+        </Stack.Item>
+      </Stack>
     );
   }
 }

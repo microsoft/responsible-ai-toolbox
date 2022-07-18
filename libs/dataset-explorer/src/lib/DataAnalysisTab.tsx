@@ -26,6 +26,7 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
       <Pivot
         className={styles.container}
         styles={{ root: styles.pivotLabelWrapper }}
+        id="dataAnalysisPivot"
       >
         <PivotItem
           itemKey={DataAnalysisTabOptions.DatasetExplorer}

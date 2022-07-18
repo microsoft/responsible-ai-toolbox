@@ -132,7 +132,7 @@ export function getFeatureBalanceMeasuresChart(
         measureName in row
       ) {
         const measureValue = row[measureName];
-        if (typeof measureValue === "number") {
+        if (typeof measureValue === "number" && !Number.isNaN(measureValue)) {
           // If a measure value is found for ClassB vs. ClassA, flip its value
           // since every feature balance measure gap is symmetric
           items.push([

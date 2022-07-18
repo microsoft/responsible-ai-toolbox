@@ -75,15 +75,18 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
       measureOptions[this.state.selectedMeasureIndex].text;
 
     return (
-      <Stack tokens={{ childrenGap: "l1" }}>
-        <HeaderWithInfo
-          title={measuresLocalization.Name}
-          calloutTitle={measuresLocalization.Callout.Title}
-          calloutDescription={measuresLocalization.Callout.Description}
-          // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-          calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
-          calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
-        />
+      <Stack tokens={{ childrenGap: "l1" }} id="featureBalanceMeasures">
+        <Stack.Item>
+          <HeaderWithInfo
+            title={measuresLocalization.Name}
+            calloutTitle={measuresLocalization.Callout.Title}
+            calloutDescription={measuresLocalization.Callout.Description}
+            // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+            calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
+            calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+            id="featureBalanceMeasuresHeader"
+          />
+        </Stack.Item>
 
         {/* Renders the the three dropdowns, their respective headings, and the description */}
         <Stack.Item>
@@ -191,7 +194,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                 <Stack.Item>
                   <Text>
                     {/* Because <Text> does not support bolding single words, split it into multiple <Text>s
-                        Format is: "Showing <measure> gaps on all classes of <feature>" */}
+                        Format is: "Showing <measure> gaps on all classes of <feature> for label <label>" */}
                     <Text variant="mediumPlus">
                       {measuresLocalization.Description1}
                     </Text>
@@ -202,7 +205,13 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                       {measuresLocalization.Description2}
                     </Text>
                     <Text variant="mediumPlus" className={styles.boldText}>
-                      {` ${selectedFeature}`}
+                      {` ${selectedFeature} `}
+                    </Text>
+                    <Text variant="mediumPlus">
+                      {measuresLocalization.Description3}
+                    </Text>
+                    <Text variant="mediumPlus" className={styles.boldText}>
+                      {` ${selectedLabel}`}
                     </Text>
                   </Text>
                 </Stack.Item>

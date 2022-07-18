@@ -1437,6 +1437,7 @@
         },
         "Description1": "Showing",
         "Description2": "gaps on all classes of",
+        "Description3": "for label",
         "FeaturePicker": "Feature",
         "LabelPicker": "Positive label",
         "MeasurePicker": "Measure",
@@ -1477,7 +1478,7 @@
         "Name": "Feature balance measures"
       },
       "LearnMore": "Learn more",
-      "MeasuresNotComputed": "This tab requires the dataset to contain already computed data balance measures."
+      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
     },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
