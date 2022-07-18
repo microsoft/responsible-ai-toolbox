@@ -39,24 +39,24 @@ export interface IWhatIfPanelProps {
   isPanelOpen: boolean;
   isInPanel: boolean;
   filteredFeatureList: IDropdownOption[];
-  openPanel(): void;
-  dismissPanel(): void;
-  invokeModel?(data: any[], abortSignal: AbortSignal): Promise<any[]>;
-  setSelectedIndex(_event: React.FormEvent, item?: IDropdownOption): void;
   setCustomRowProperty: (
     key: string | number,
     isString: boolean,
     newValue?: string
   ) => void;
-  filterFeatures(
-    _event?: React.ChangeEvent<HTMLInputElement>,
-    newValue?: string
-  ): void;
   setCustomRowPropertyDropdown: (
     key: string | number,
     option?: IComboBoxOption,
     value?: string
   ) => void;
+  openPanel(): void;
+  dismissPanel(): void;
+  invokeModel?(data: any[], abortSignal: AbortSignal): Promise<any[]>;
+  setSelectedIndex(_event: React.FormEvent, item?: IDropdownOption): void;
+  filterFeatures(
+    _event?: React.ChangeEvent<HTMLInputElement>,
+    newValue?: string
+  ): void;
   savePoint(): void;
   saveAsPoint(): void;
 }
@@ -131,7 +131,7 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                     <WhatIfPanelTextField
                       disabled={inputDisabled}
                       id="whatIfNameLabel"
-                      isString={true}
+                      isString
                       key={WhatIfConstants.namePath}
                       label={localization.Interpret.WhatIfTab.whatIfNameLabel}
                       styles={{ fieldGroup: { width: 200 } }}
