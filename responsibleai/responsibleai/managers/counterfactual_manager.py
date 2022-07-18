@@ -577,6 +577,66 @@ class CounterfactualManager(BaseManager):
                     cf_config.failure_reason = str(e)
                     raise e
 
+    def request_counterfactuals(self, query_id: str, data: Any):
+        """Return the counterfactuals for a given point.
+
+        :param query_id: The query id for finding the
+                         counterfactual config.
+        :type query_id: str
+        :param data: The data point for which the counterfactuals
+                     need to be generated.
+        :type data: Any
+        :return: An object of type CounterfactualData with
+                 counterfactuals for the given data point.
+        :rtype: CounterfactualData
+        """
+        if not isinstance(data, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(data)))
+
+        if data.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'counterfactual generation.')
+
+        query_cf_config = None
+        for cf_config in self._counterfactual_config_list:
+            if cf_config.id == query_id:
+                query_cf_config = cf_config
+                break
+
+        if query_cf_config is None:
+            raise UserConfigValidationException(
+                'No counterfactual config found for id {0}.'.format(
+                    query_id))
+
+        if not query_cf_config.feature_importance:
+            counterfactual_obj = \
+                query_cf_config.explainer.generate_counterfactuals(
+                    data, total_CFs=query_cf_config.total_CFs,
+                    desired_class=query_cf_config.desired_class,
+                    desired_range=query_cf_config.desired_range,
+                    features_to_vary=query_cf_config.features_to_vary,
+                    permitted_range=query_cf_config.permitted_range)
+        else:
+            counterfactual_obj = \
+                query_cf_config.explainer.local_feature_importance(
+                    data,
+                    total_CFs=query_cf_config.total_CFs,
+                    desired_class=query_cf_config.desired_class,
+                    desired_range=query_cf_config.desired_range,
+                    features_to_vary=query_cf_config.features_to_vary,
+                    permitted_range=query_cf_config.permitted_range)
+
+        # Validate the serialized output against schema
+        schema = CounterfactualManager._get_counterfactual_schema(
+            version=counterfactual_obj.metadata['version'])
+        jsonschema.validate(
+            json.loads(counterfactual_obj.to_json()), schema)
+
+        return self._get_counterfactual(query_cf_config, counterfactual_obj)
+
     def get(self, failed_to_compute=False):
         """Return the computed counterfactual examples objects or failure reason.
 
@@ -643,11 +703,16 @@ class CounterfactualManager(BaseManager):
 
         return serialized_counterfactual_data_list
 
-    def _get_counterfactual(self, counterfactual_config):
+    def _get_counterfactual(self, counterfactual_config,
+                            counterfactual_object=None):
         cfdata = CounterfactualData()
 
-        json_data = json.loads(
-            counterfactual_config.counterfactual_obj.to_json())
+        if counterfactual_object is None:
+            json_data = json.loads(
+                counterfactual_config.counterfactual_obj.to_json())
+        else:
+            json_data = json.loads(counterfactual_object.to_json())
+
         cfdata.cfs_list = json_data["cfs_list"]
         cfdata.feature_names = json_data["feature_names"]
         cfdata.feature_names_including_target = json_data[
