@@ -9,8 +9,7 @@
           "error",
           {
             "message": "Please don't use bind. Prefer use arrow function.",
-            "selector":
-              "MemberExpression > Identifier[name='bind']"
+            "selector": "MemberExpression > Identifier[name='bind']"
           }
         ]
       }
