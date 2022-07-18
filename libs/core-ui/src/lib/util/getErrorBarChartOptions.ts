@@ -4,21 +4,21 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
+import { getPrimaryChartColor } from "../Highchart/ChartColors";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
 
-import { FabricStyles } from "./FabricStyles";
 import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export function getErrorBarChartOptions(
   data: ICausalAnalysisSingleData[],
-  theme?: ITheme
+  theme: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
-    axisColor: theme?.palette.neutralPrimary,
-    axisGridColor: theme?.palette.neutralLight,
-    backgroundColor: theme?.palette.white,
-    fontColor: theme?.semanticColors.bodyText
+    axisColor: theme.palette.neutralPrimary,
+    axisGridColor: theme.palette.neutralLight,
+    backgroundColor: theme.palette.white,
+    fontColor: theme.semanticColors.bodyText
   };
   return {
     chart: {
@@ -27,7 +27,7 @@ export function getErrorBarChartOptions(
     },
     series: [
       {
-        color: FabricStyles.fabricColorPalette[0],
+        color: getPrimaryChartColor(theme),
         data: data.map((d) => d.point),
         showInLegend: false,
         tooltip: {
@@ -36,7 +36,7 @@ export function getErrorBarChartOptions(
         type: "spline"
       },
       {
-        color: FabricStyles.fabricColorPalette[0],
+        color: getPrimaryChartColor(theme),
         data: data.map((d) => [d.ci_lower, d.ci_upper]),
         tooltip: {
           pointFormat:

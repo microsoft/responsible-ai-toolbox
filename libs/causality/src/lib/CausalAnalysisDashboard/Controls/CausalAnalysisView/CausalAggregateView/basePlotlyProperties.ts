@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export const basePlotlyProperties: IPlotlyProperty = {
@@ -23,17 +23,17 @@ export const basePlotlyProperties: IPlotlyProperty = {
     showlegend: false,
     xaxis: {
       automargin: true,
-      color: FabricStyles.chartAxisColor,
+      color: FluentUIStyles.chartAxisColor,
       mirror: true,
       tickfont: {
-        family: FabricStyles.fontFamilies,
+        family: FluentUIStyles.fontFamilies,
         size: 11
       },
       zeroline: true
     },
     yaxis: {
       automargin: true,
-      color: FabricStyles.chartAxisColor,
+      color: FluentUIStyles.chartAxisColor,
       gridcolor: "#e5e5e5",
       showgrid: true,
       tickfont: {

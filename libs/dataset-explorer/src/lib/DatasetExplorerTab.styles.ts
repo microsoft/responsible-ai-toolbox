@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FluentUIStyles } from "@responsible-ai/core-ui";
 
 export interface IDatasetExplorerTabStyles {
   boldText: IStyle;
@@ -57,7 +57,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "90%"
       },
       chartEditorButton: [
-        FabricStyles.chartEditorButton,
+        FluentUIStyles.chartEditorButton,
         {
           position: "absolute",
           right: "10px",
@@ -151,7 +151,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       sidePanel: {
         width: "15%"
       },
-      smallItalic: [FabricStyles.placeholderItalic],
+      smallItalic: [FluentUIStyles.placeholderItalic],
       verticalAxis: {
         height: "auto",
         position: "relative",
