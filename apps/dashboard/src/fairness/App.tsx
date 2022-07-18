@@ -52,14 +52,14 @@ export class App extends React.Component<IAppProps> {
       .map(() => Math.random() / 3 + 0.33);
     const binBounds: IBounds[] = bins.map((bin) => {
       return {
-        lower: bin - Math.pow(Math.random() / 3, 2),
-        upper: bin + Math.pow(Math.random() / 3, 2)
+        lower: this.getBound(bin, true),
+        upper: this.getBound(bin, false)
       };
     });
     const global: number = Math.random() / 3 + 0.33;
     const bounds: IBounds = {
-      lower: global - Math.pow(Math.random() / 3, 2),
-      upper: global + Math.pow(Math.random() / 3, 2)
+      lower: this.getBound(global, true),
+      upper: this.getBound(global, false)
     };
 
     const promise = new Promise<IMetricResponse>((resolve, reject) => {
@@ -79,5 +79,11 @@ export class App extends React.Component<IAppProps> {
       }
     });
     return promise;
+  };
+
+  private getBound = (data: number, getLowerBound: boolean): number => {
+    return getLowerBound
+      ? data - Math.pow(Math.random() / 3, 2)
+      : data + Math.pow(Math.random() / 3, 2);
   };
 }
