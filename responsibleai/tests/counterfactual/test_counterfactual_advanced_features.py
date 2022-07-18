@@ -7,6 +7,7 @@ import os
 import pytest
 
 from responsibleai import RAIInsights
+from responsibleai._interfaces import CounterfactualData
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
@@ -186,25 +187,11 @@ class TestCounterfactualAdvancedFeatures(object):
         test_instance = X_test.iloc[0:1].drop('target', axis=1)
         query_id = \
             rai_insights.counterfactual._counterfactual_config_list[0].id
-        counterfactual_obj_serialized = \
+        counterfactual_data = \
             rai_insights.counterfactual.request_counterfactuals(
                 query_id, test_instance)
 
-        assert counterfactual_obj_serialized['test_data'] is not None
-        assert counterfactual_obj_serialized['cfs_list'] is not None
-        if feature_importance:
-            assert counterfactual_obj_serialized[
-                'local_importance'] is not None
-        else:
-            assert counterfactual_obj_serialized[
-                'local_importance'] is None
-        assert counterfactual_obj_serialized['summary_importance'] is None
-        assert counterfactual_obj_serialized['feature_names'] is not None
-        assert counterfactual_obj_serialized[
-            'feature_names_including_target'] is not None
-        assert counterfactual_obj_serialized['model_type'] is not None
-        assert counterfactual_obj_serialized['desired_class'] is not None
-        assert counterfactual_obj_serialized['desired_range'] is None
+        self._verify_counterfactual_data([counterfactual_data])
 
         test_instance = X_test.iloc[0:2].drop('target', axis=1)
         query_id = \
@@ -235,6 +222,21 @@ class TestCounterfactualAdvancedFeatures(object):
             rai_insights.counterfactual.request_counterfactuals(
                 query_id, test_instance)
 
+    def _verify_counterfactual_data(self, counterfactual_data_list):
+        assert counterfactual_data_list is not None
+        assert len(counterfactual_data_list) == 1
+        assert isinstance(counterfactual_data_list[0], CounterfactualData)
+        assert hasattr(counterfactual_data_list[0], 'id')
+        assert hasattr(counterfactual_data_list[0], 'cfs_list')
+        assert hasattr(counterfactual_data_list[0], 'desired_class')
+        assert hasattr(counterfactual_data_list[0], 'desired_range')
+        assert hasattr(counterfactual_data_list[0], 'feature_names')
+        assert hasattr(
+            counterfactual_data_list[0], 'feature_names_including_target')
+        assert hasattr(counterfactual_data_list[0], 'local_importance')
+        assert hasattr(counterfactual_data_list[0], 'summary_importance')
+        assert hasattr(counterfactual_data_list[0], 'model_type')
+
     def test_counterfactual_manager_get_data(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_iris_data()
@@ -256,15 +258,5 @@ class TestCounterfactualAdvancedFeatures(object):
             permitted_range={feature_names[0]: [2.0, 5.0]})
         rai_insights.counterfactual.compute()
 
-        serialized_data = rai_insights.counterfactual.get_data()
-        assert serialized_data is not None
-        assert len(serialized_data) == 1
-        assert hasattr(serialized_data[0], 'id')
-        assert hasattr(serialized_data[0], 'cfs_list')
-        assert hasattr(serialized_data[0], 'desired_class')
-        assert hasattr(serialized_data[0], 'desired_range')
-        assert hasattr(serialized_data[0], 'feature_names')
-        assert hasattr(serialized_data[0], 'feature_names_including_target')
-        assert hasattr(serialized_data[0], 'local_importance')
-        assert hasattr(serialized_data[0], 'summary_importance')
-        assert hasattr(serialized_data[0], 'model_type')
+        counterfactual_data = rai_insights.counterfactual.get_data()
+        self._verify_counterfactual_data(counterfactual_data)

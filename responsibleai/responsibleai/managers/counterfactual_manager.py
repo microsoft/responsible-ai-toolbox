@@ -580,15 +580,15 @@ class CounterfactualManager(BaseManager):
     def request_counterfactuals(self, query_id: str, data: Any):
         """Return the counterfactuals for a given point.
 
-        :param query_id: The query id for the finding the
+        :param query_id: The query id for finding the
                          counterfactual config.
         :type query_id: str
         :param data: The data point for which the counterfactuals
                      need to be generated.
         :type data: Any
-        :return: The serialized version counterfactuals for the
-                 given data point.
-        :rtype: Dict
+        :return: An object of type CounterfactualData with
+                 counterfactuals for the given data point.
+        :rtype: CounterfactualData
         """
         if not isinstance(data, pd.DataFrame):
             raise UserConfigValidationException(
@@ -635,8 +635,7 @@ class CounterfactualManager(BaseManager):
         jsonschema.validate(
             json.loads(counterfactual_obj.to_json()), schema)
 
-        json_data = json.loads(counterfactual_obj.to_json())
-        return json_data
+        return self._get_counterfactual(query_cf_config, counterfactual_obj)
 
     def get(self, failed_to_compute=False):
         """Return the computed counterfactual examples objects or failure reason.
@@ -704,11 +703,16 @@ class CounterfactualManager(BaseManager):
 
         return serialized_counterfactual_data_list
 
-    def _get_counterfactual(self, counterfactual_config):
+    def _get_counterfactual(self, counterfactual_config,
+                            counterfactual_object=None):
         cfdata = CounterfactualData()
 
-        json_data = json.loads(
-            counterfactual_config.counterfactual_obj.to_json())
+        if counterfactual_object is None:
+            json_data = json.loads(
+                counterfactual_config.counterfactual_obj.to_json())
+        else:
+            json_data = json.loads(counterfactual_object.to_json())
+
         cfdata.cfs_list = json_data["cfs_list"]
         cfdata.feature_names = json_data["feature_names"]
         cfdata.feature_names_including_target = json_data[
