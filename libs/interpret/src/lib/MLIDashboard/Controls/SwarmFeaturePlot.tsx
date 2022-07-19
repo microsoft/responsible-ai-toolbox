@@ -115,8 +115,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       plotlyProps.data[0].x = x;
       plotlyProps.data[0].y = y;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {

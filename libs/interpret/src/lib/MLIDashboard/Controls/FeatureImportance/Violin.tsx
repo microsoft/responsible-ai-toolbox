@@ -92,8 +92,7 @@ export class Violin extends React.PureComponent<
       }
       plotlyProps.data = computedSeries;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildViolinPlotlyProps: (
@@ -169,8 +168,7 @@ export class Violin extends React.PureComponent<
         plotlyProps.layout.showlegend = false;
       }
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static getClassesArray: (
@@ -189,8 +187,7 @@ export class Violin extends React.PureComponent<
         default:
           return new Array(data.localExplanation?.values.length).fill(0);
       }
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static violinPlotlyProps: IPlotlyProperty = {

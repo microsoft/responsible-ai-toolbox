@@ -151,7 +151,7 @@ export class InstanceView extends React.Component<
             <Stack.Item align="start">
               <ChoiceGroup
                 selectedKey={this.props.activePredictionTab}
-                onChange={this.handlePredictionTabClick.bind(this)}
+                onChange={this.handlePredictionTabClick}
                 styles={{
                   flexContainer: classNames.choiceGroupContainerStyle
                 }}
@@ -161,7 +161,7 @@ export class InstanceView extends React.Component<
             <Stack.Item align="end" styles={inspectButtonStyles}>
               <PrimaryButton
                 text={localization.ErrorAnalysis.InstanceView.inspect}
-                onClick={this.inspect.bind(this)}
+                onClick={this.inspect}
                 allowDisabledFocus
                 disabled={false}
                 checked={false}
@@ -180,7 +180,7 @@ export class InstanceView extends React.Component<
               selectedIndexes={
                 this.state.selectionDetails.selectedCorrectDatasetIndexes
               }
-              setSelectedIndexes={this.setCorrectSelectedIndexes.bind(this)}
+              setSelectedIndexes={this.setCorrectSelectedIndexes}
               selectedCohort={this.props.selectedCohort}
               setWhatIfDatapoint={this.props.setWhatIfDatapoint}
             />
@@ -197,7 +197,7 @@ export class InstanceView extends React.Component<
               selectedIndexes={
                 this.state.selectionDetails.selectedIncorrectDatasetIndexes
               }
-              setSelectedIndexes={this.setIncorrectSelectedIndexes.bind(this)}
+              setSelectedIndexes={this.setIncorrectSelectedIndexes}
               selectedCohort={this.props.selectedCohort}
               setWhatIfDatapoint={this.props.setWhatIfDatapoint}
             />
@@ -211,7 +211,7 @@ export class InstanceView extends React.Component<
               jointDataset={this.context.jointDataset}
               messages={this.props.messages}
               dataView={DataViewKeys.SelectedInstances}
-              setSelectedIndexes={this.updateAllSelectedIndexes.bind(this)}
+              setSelectedIndexes={this.updateAllSelectedIndexes}
               selectedIndexes={this.state.selectionDetails.selectedAllIndexes}
               allSelectedIndexes={
                 this.state.selectionDetails.selectedAllIndexes
@@ -246,10 +246,10 @@ export class InstanceView extends React.Component<
     );
   }
 
-  private handlePredictionTabClick(
+  private handlePredictionTabClick = (
     _?: React.FormEvent<HTMLElement | HTMLInputElement>,
     option?: IChoiceGroupOption
-  ): void {
+  ): void => {
     if (option) {
       const predictionTabClickFunc = (
         state: Readonly<IInstanceViewState>,
@@ -283,13 +283,13 @@ export class InstanceView extends React.Component<
       };
       this.setState(predictionTabClickFunc);
     }
-  }
+  };
 
-  private inspect(): void {
+  private inspect = (): void => {
     this.props.setActivePredictionTab(PredictionTabKeys.InspectionTab);
-  }
+  };
 
-  private setCorrectSelectedIndexes(indexes: number[]): void {
+  private setCorrectSelectedIndexes = (indexes: number[]): void => {
     const reloadDataFunc = (
       state: Readonly<IInstanceViewState>
     ): IInstanceViewState => {
@@ -312,9 +312,9 @@ export class InstanceView extends React.Component<
       };
     };
     this.setState(reloadDataFunc);
-  }
+  };
 
-  private setIncorrectSelectedIndexes(indexes: number[]): void {
+  private setIncorrectSelectedIndexes = (indexes: number[]): void => {
     const reloadDataFunc = (
       state: Readonly<IInstanceViewState>
     ): IInstanceViewState => {
@@ -337,9 +337,9 @@ export class InstanceView extends React.Component<
       };
     };
     this.setState(reloadDataFunc);
-  }
+  };
 
-  private updateAllSelectedIndexes(indexes: number[]): void {
+  private updateAllSelectedIndexes = (indexes: number[]): void => {
     const reloadDataFunc = (
       state: Readonly<IInstanceViewState>
     ): IInstanceViewState => {
@@ -365,7 +365,7 @@ export class InstanceView extends React.Component<
       };
     };
     this.setState(reloadDataFunc);
-  }
+  };
 
   private onRenderLabel =
     (type: SelectionType) =>
