@@ -139,7 +139,7 @@ jobs:
 
       - name: Run widget tests
         shell: bash -l {0}
-        run: yarn e2e-widget
+        run: yarn e2e-widget -f ${{ matrix.flights }}
 
       - name: Upload a raiwidgets build result
         uses: actions/upload-artifact@v3
@@ -165,6 +165,7 @@ jobs:
     strategy:
       matrix:
         package: [responsibleai, raiwidgets]
+        flights: ["", "newModelOverviewExperience"]
 
     steps:
       - uses: conda-incubator/setup-miniconda@v2
