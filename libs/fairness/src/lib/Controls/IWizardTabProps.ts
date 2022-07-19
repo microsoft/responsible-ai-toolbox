@@ -5,6 +5,5 @@ import { IFairnessContext } from "../util/IFairnessContext";
 
 export interface IWizardTabProps {
   dashboardContext: IFairnessContext;
-  onNext: () => void;
-  onPrevious?: () => void;
+  onSetTab: (key: string) => void;
 }

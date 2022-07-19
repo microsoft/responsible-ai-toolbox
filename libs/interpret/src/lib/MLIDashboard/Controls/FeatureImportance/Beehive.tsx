@@ -207,8 +207,7 @@ export class Beehive extends React.PureComponent<
           prev.push(...curr);
           return prev;
         }, []);
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildPlotlyProps: (
@@ -270,8 +269,7 @@ export class Beehive extends React.PureComponent<
         rows
       );
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private readonly _crossClassIconId = "cross-class-icon-id";
