@@ -41,6 +41,7 @@ In order to achieve these capabilities, the dashboard integrates together ideas 
 
 - <b>Causal Analysis</b> powered by [EconML](https://github.com/microsoft/EconML), which focuses on answering What If-style questions to apply data-driven decision-making – how would revenue be affected if a corporation pursues a new pricing strategy? Would a new medication improve a patient’s condition, all else equal?
 
+- <b>Data Balance</b> powered by [Responsible AI](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/databalance-README.md), which helps users gain an overall understanding of their data, identify features receiving the positive outcome more than others, and visualize feature distributions.
 
 Responsible AI dashboard is designed to achieve the following goals:
 
@@ -68,13 +69,14 @@ The Responsible AI Toolbox’s strength lies in its customizability. It empowers
  
 | Responsible AI Dashboard Flow| Use Case  |
 |--|--|
-| Model Overview -> Error Analysis -> Data Explorer| To identify model erros and diagnose them by understanding the underlying data distribution
+| Model Overview -> Error Analysis -> Data Explorer | To identify model errors and diagnose them by understanding the underlying data distribution
 | Model Overview -> Error Analysis -> Counterfactuals Analysis and What-If | To diagnose errors in individual instances with counterfactual analysis (minimum change to lead to a different model prediction)
-| Model Overview -> Data Explorer | To understand the root cause of errors and fairness issues introduced via data imbalances or lack of representation of a particular data cohort
+| Model Overview -> Data Explorer -> Data Balance | To understand the root cause of errors and fairness issues introduced via data imbalances or lack of representation of a particular data cohort
  | Model Overview -> Interpretability | To diagnose model errors through understanding how the model has made its predictions
  | Data Explorer -> Causal Inference | To distinguish between correlations and causations in the data or decide the best treatments to apply to see a positive outcome
   | Interpretability -> Causal Inference | To learn whether the factors that model has used for decision making has any causal effect on the real-world outcome.
  | Data Explorer -> Counterfactuals Analysis and What-If | To address customer questions about what they can do next time to get a different outcome from an AI.
+  | Data Explorer -> Data Balance | To gain an overall understanding of the data, identify features receiving the positive outcome more than others, and visualize feature distributions
 
 
 ### Useful Links
