@@ -172,7 +172,7 @@ jobs:
     strategy:
       matrix:
         package: [responsibleai, raiwidgets]
-        flights: ["", "newModelOverviewExperience"]
+        flights: ["", "newModelOverviewExperience", "dataBalanceExperience"]
 
     steps:
       - uses: conda-incubator/setup-miniconda@v2
