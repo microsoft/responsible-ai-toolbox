@@ -127,7 +127,7 @@ export class WhatIfTab extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.fetchData = _.debounce(this.fetchData, 400);
 
     const featuresOption = getFeatureOptions(this.context.jointDataset);
 
@@ -891,7 +891,7 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   // fetch prediction for temporary point
-  private fetchData(fetchingReference: { [key: string]: any }): void {
+  private fetchData = (fetchingReference: { [key: string]: any }): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -944,7 +944,7 @@ export class WhatIfTab extends React.PureComponent<
         }
       }
     });
-  }
+  };
 
   private generatePlotlyProps(
     jointData: JointDataset,
