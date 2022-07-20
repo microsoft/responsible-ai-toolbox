@@ -171,6 +171,7 @@ export class MatrixArea extends React.PureComponent<
           selectAll={this.selectAll}
           updateNumBins={this.updateNumBins}
           updateQuantileBinning={this.updateQuantileBinning}
+          telemetryHook={this.props.telemetryHook}
         />
         <Customizer
           settings={(currentSettings): ISettings => ({

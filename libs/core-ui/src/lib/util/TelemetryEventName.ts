@@ -9,6 +9,7 @@ export enum TelemetryEventName {
   ErrorAnalysisTreeMapSaveAsNewCohortClick = "ErrorAnalysisTreeMapSaveAsNewCohortClick",
   ErrorAnalysisTreeMapCohortSaved = "ErrorAnalysisTreeMapCohortSaved",
   ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
+  ErrorAnalysisHeatMapQuantileBinningClick = "ErrorAnalysisHeatMapQuantileBinningClick",
   ErrorAnalysisNewMetricSelected = "ErrorAnalysisNewMetricSelected",
   // Main menu
   MainMenuCohortSettingsClick = "MainMenuCohortSettingsClick",

@@ -185,6 +185,7 @@ export class MatrixFilter extends React.PureComponent<
               updateMatrixLegendState={this.updateMatrixLegendState}
               isEnabled={this.props.isEnabled}
               metric={this.context.errorAnalysisData!.metric}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
         </Stack>
