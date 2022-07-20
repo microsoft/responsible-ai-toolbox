@@ -367,8 +367,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       >
         <div className={classNames.page}>
           <Navigation
-            updateViewState={this.updateViewState.bind(this)}
-            updatePredictionTabState={this.updatePredictionTabState.bind(this)}
+            updateViewState={this.updateViewState}
+            updatePredictionTabState={this.updatePredictionTabState}
             viewType={this.state.viewType}
             activeGlobalTab={this.state.activeGlobalTab}
             activePredictionTab={this.state.predictionTab}
@@ -376,7 +376,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             closeMessageBar={this.closeMessageBar}
           />
           <MainMenu
-            viewExplanation={this.viewExplanation.bind(this)}
+            viewExplanation={this.viewExplanation}
             onInfoPanelClick={(): void =>
               this.setState({ openInfoPanel: true })
             }
@@ -519,7 +519,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     onClearCohortSelectionClick={(): void =>
                       this.clearCohortSelection()
                     }
-                    updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    updateSelectedCohort={this.updateSelectedCohort}
                     disabledView={false}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}
@@ -677,13 +677,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
   };
 
-  private updateSelectedCohort(
+  private updateSelectedCohort = (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: MetricCohortStats | undefined
-  ): void {
+  ): void => {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
       filters,
@@ -724,7 +724,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       cohorts,
       selectedCohort
     });
-  }
+  };
 
   private clearCohortSelection = (): void => {
     const cohorts = this.state.cohorts.filter(
@@ -750,25 +750,27 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     }
   };
 
-  private viewExplanation(): void {
+  private viewExplanation = (): void => {
     this.setState({
       openFeatureList: false,
       viewType: ViewTypeKeys.ExplanationView
     });
-  }
+  };
 
-  private updateViewState(viewType: ViewTypeKeys): void {
+  private updateViewState = (viewType: ViewTypeKeys): void => {
     if (viewType !== ViewTypeKeys.ExplanationView) {
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({ openWhatIf: false, predictionTab, viewType });
     } else {
       this.setState({ viewType });
     }
-  }
+  };
 
-  private updatePredictionTabState(predictionTab: PredictionTabKeys): void {
+  private updatePredictionTabState = (
+    predictionTab: PredictionTabKeys
+  ): void => {
     this.setState({ predictionTab });
-  }
+  };
 
   private closeMessageBar = (): void => {
     this.setState({ showMessageBar: false });

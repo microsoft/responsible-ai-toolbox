@@ -146,7 +146,7 @@ export class CohortList extends React.Component<
               <CohortNameColumn
                 fieldContent={fieldContent}
                 name={item.name}
-                onEditCohortClick={this.onEditCohortClick}
+                onClick={this.onEditCohortClick}
               />
             );
           }

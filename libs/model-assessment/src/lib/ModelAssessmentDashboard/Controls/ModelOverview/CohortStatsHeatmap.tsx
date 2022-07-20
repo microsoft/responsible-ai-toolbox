@@ -97,6 +97,9 @@ export class CohortStatsHeatmap extends React.Component<
             min: 0,
             minColor
           },
+          custom: {
+            minHeight: 190
+          },
           legend: {
             enabled: false
           },
