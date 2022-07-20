@@ -74,6 +74,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             baseCohort={this.props.baseCohort}
             showCohortName={this.props.showCohortName}
             disabledView={this.props.disabledView}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.props.errorAnalysisOption === ErrorAnalysisOptions.HeatMap && (

@@ -9,7 +9,9 @@ import {
   CohortSource,
   Cohort,
   SaveCohort,
-  defaultTheme
+  defaultTheme,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -227,6 +229,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisAddCohortClick
+    });
   };
 
   private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {

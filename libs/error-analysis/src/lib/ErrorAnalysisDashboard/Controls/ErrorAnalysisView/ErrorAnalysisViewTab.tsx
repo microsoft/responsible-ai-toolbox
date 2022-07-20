@@ -119,6 +119,7 @@ export class ErrorAnalysisViewTab extends React.Component<
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
             showCohortName={this.props.showCohortName}
+            telemetryHook={this.props.telemetryHook}
           />
           <FeatureList
             isOpen={this.state.openFeatureList}
@@ -165,5 +166,9 @@ export class ErrorAnalysisViewTab extends React.Component<
 
   private readonly handleFeatureListClick = (): void => {
     this.setState((prev) => ({ openFeatureList: !prev.openFeatureList }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisFeatureListClick
+    });
   };
 }

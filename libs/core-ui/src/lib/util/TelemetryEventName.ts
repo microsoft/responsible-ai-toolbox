@@ -4,6 +4,10 @@
 export enum TelemetryEventName {
   // Error analysis
   ErrorAnalysisTreeMapTabClick = "ErrorAnalysisTreeMapTabClick",
-  ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick"
+  ErrorAnalysisTreeMapMetricUpdated = "ErrorAnalysisTreeMapMetricUpdated",
+  ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
+  ErrorAnalysisFeatureListClick = "ErrorAnalysisFeatureListClick",
+  // Cohort
+  ErrorAnalysisAddCohortClick = "ErrorAnalysisAddCohortClick"
   // Counterfactual
 }
