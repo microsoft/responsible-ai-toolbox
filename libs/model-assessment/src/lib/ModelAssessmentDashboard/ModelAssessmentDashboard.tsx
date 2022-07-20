@@ -140,6 +140,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapSaveAsNewCohortClick
+    });
   };
 
   private addTab = (index: number, tab: GlobalTabKeys): void => {
@@ -186,6 +190,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts,
       selectedCohort: this.state.baseCohort
     });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapClearSelection
+    });
   };
 
   private onSaveCohort = (
@@ -204,6 +212,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? savedCohort : preState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapCohortSaved
+    });
   };
 
   private addCohort = (

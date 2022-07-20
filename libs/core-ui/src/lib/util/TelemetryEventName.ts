@@ -5,6 +5,9 @@ export enum TelemetryEventName {
   // Error analysis
   ErrorAnalysisTreeMapTabClick = "ErrorAnalysisTreeMapTabClick",
   ErrorAnalysisTreeMapMetricUpdated = "ErrorAnalysisTreeMapMetricUpdated",
+  ErrorAnalysisTreeMapClearSelection = "ErrorAnalysisTreeMapClearSelection",
+  ErrorAnalysisTreeMapSaveAsNewCohortClick = "ErrorAnalysisTreeMapSaveAsNewCohortClick",
+  ErrorAnalysisTreeMapCohortSaved = "ErrorAnalysisTreeMapCohortSaved",
   ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
   ErrorAnalysisFeatureListClick = "ErrorAnalysisFeatureListClick",
   // Main menu
