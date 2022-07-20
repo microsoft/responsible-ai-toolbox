@@ -110,6 +110,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
               stringParams={this.props.stringParams}
+              telemetryHook={this.props.telemetryHook}
               updateSelectedCohort={this.updateSelectedCohort}
               setSaveCohortVisible={this.setSaveCohortVisible}
               setSelectedCohort={this.setSelectedCohort}

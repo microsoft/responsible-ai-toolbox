@@ -10,7 +10,8 @@ import {
   MetricCohortStats,
   ModelAssessmentContext,
   IErrorAnalysisTreeNode,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -37,6 +38,7 @@ export interface IErrorAnalysisViewProps {
   matrixFeatures?: string[];
   errorAnalysisOption: ErrorAnalysisOptions;
   onClearCohortSelectionClick: () => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],

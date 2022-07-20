@@ -12,7 +12,9 @@ import {
 import {
   CohortInfo,
   defaultModelAssessmentContext,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -152,6 +154,13 @@ export class ErrorAnalysisViewTab extends React.Component<
       this.setState({ openFeatureList: false });
     }
     this.props.handleErrorDetectorChanged(item);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type:
+        item?.props.itemKey === ErrorAnalysisOptions.HeatMap
+          ? TelemetryEventName.ErrorAnalysisHeatMapTabClick
+          : TelemetryEventName.ErrorAnalysisTreeMapTabClick
+    });
   };
 
   private readonly handleFeatureListClick = (): void => {

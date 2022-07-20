@@ -168,6 +168,7 @@ export class TabsView extends React.PureComponent<
                         this.handleErrorDetectorChanged
                       }
                       selectedKey={this.state.errorAnalysisOption}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
