@@ -168,7 +168,7 @@ export class ErrorAnalysisViewTab extends React.Component<
     this.setState((prev) => ({ openFeatureList: !prev.openFeatureList }));
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
-      type: TelemetryEventName.ErrorAnalysisFeatureListClick
+      type: TelemetryEventName.ErrorAnalysisTreeMapFeatureListClick
     });
   };
 }

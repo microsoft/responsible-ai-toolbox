@@ -89,6 +89,7 @@ export class ErrorAnalysisView extends React.Component<IErrorAnalysisViewProps> 
             baseCohort={this.props.baseCohort}
             isEnabled={matrixViewIsEnabled}
             disabledView={this.props.disabledView}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
       </>

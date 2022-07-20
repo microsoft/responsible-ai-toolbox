@@ -4,12 +4,12 @@
 export enum TelemetryEventName {
   // Error analysis
   ErrorAnalysisTreeMapTabClick = "ErrorAnalysisTreeMapTabClick",
-  ErrorAnalysisTreeMapMetricUpdated = "ErrorAnalysisTreeMapMetricUpdated",
+  ErrorAnalysisTreeMapFeatureListClick = "ErrorAnalysisTreeMapFeatureListClick",
   ErrorAnalysisTreeMapClearSelection = "ErrorAnalysisTreeMapClearSelection",
   ErrorAnalysisTreeMapSaveAsNewCohortClick = "ErrorAnalysisTreeMapSaveAsNewCohortClick",
   ErrorAnalysisTreeMapCohortSaved = "ErrorAnalysisTreeMapCohortSaved",
   ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
-  ErrorAnalysisFeatureListClick = "ErrorAnalysisFeatureListClick",
+  ErrorAnalysisNewMetricSelected = "ErrorAnalysisNewMetricSelected",
   // Main menu
   MainMenuCohortSettingsClick = "MainMenuCohortSettingsClick",
   MainMenuDashboardConfigurationClick = "MainMenuDashboardConfigurationClick",

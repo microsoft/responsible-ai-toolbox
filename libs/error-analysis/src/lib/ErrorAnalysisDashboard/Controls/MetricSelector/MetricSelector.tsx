@@ -81,7 +81,7 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
       this.props.setMetric(item.key.toString());
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,
-        type: TelemetryEventName.ErrorAnalysisTreeMapMetricUpdated
+        type: TelemetryEventName.ErrorAnalysisNewMetricSelected
       });
     }
   };
