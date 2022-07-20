@@ -7,7 +7,12 @@ export enum TelemetryEventName {
   ErrorAnalysisTreeMapMetricUpdated = "ErrorAnalysisTreeMapMetricUpdated",
   ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
   ErrorAnalysisFeatureListClick = "ErrorAnalysisFeatureListClick",
+  // Main menu
+  MainMenuCohortSettingsClick = "MainMenuCohortSettingsClick",
+  MainMenuDashboardConfigurationClick = "MainMenuDashboardConfigurationClick",
+  MainMenuSwitchCohortClick = "MainMenuSwitchCohortClick",
+  MainMenuNewCohortClick = "MainMenuNewCohortClick",
   // Cohort
-  ErrorAnalysisAddCohortClick = "ErrorAnalysisAddCohortClick"
+  NewCohortAdded = "NewCohortAdded"
   // Counterfactual
 }

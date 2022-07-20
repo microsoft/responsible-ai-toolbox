@@ -92,6 +92,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
+            telemetryHook={this.props.telemetryHook}
           />
           <Stack.Item className={classNames.mainContent}>
             <TabsView
@@ -231,7 +232,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }));
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
-      type: TelemetryEventName.ErrorAnalysisAddCohortClick
+      type: TelemetryEventName.NewCohortAdded
     });
   };
 
