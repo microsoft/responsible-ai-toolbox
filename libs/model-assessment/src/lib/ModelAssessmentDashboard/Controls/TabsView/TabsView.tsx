@@ -198,7 +198,9 @@ export class TabsView extends React.PureComponent<
                       {localization.ModelAssessment.ComponentNames.DataExplorer}
                     </Text>
                   </div>
-                  <DatasetExplorerTab />
+                  <DatasetExplorerTab
+                    telemetryHook={this.props.telemetryHook}
+                  />
                 </>
               )}
               {t.key === GlobalTabKeys.FeatureImportancesTab &&
