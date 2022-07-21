@@ -39,6 +39,10 @@ import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 import {
+  emotion,
+  emotionModelExplanationData
+} from "../model-assessment-text/__mock_data__/emotion";
+import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
@@ -125,7 +129,8 @@ export const applicationKeys = <const>[
   "interpretText",
   "fairness",
   "errorAnalysis",
-  "modelAssessment"
+  "modelAssessment",
+  "modelAssessmentText"
 ];
 
 export type IApplications = {
@@ -136,6 +141,8 @@ export type IApplications = {
   interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
 };
 
 export const applications: IApplications = <const>{
@@ -272,6 +279,16 @@ export const applications: IApplications = <const>{
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentText: {
+    datasets: {
+      emotion: {
+        classDimension: 3,
+        dataset: emotion,
+        modelExplanationData: [emotionModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }
