@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Stack, Text } from "@fluentui/react";
+import { getTheme, Stack, Text } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
-  FabricStyles,
+  getPrimaryChartColor,
   ICounterfactualData,
   MissingParametersPlaceholder,
   ModelAssessmentContext
@@ -65,7 +65,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     const y = sortedData.map((d) => d.value);
     const seriesData = [
       {
-        color: FabricStyles.fabricColorPalette[0],
+        color: getPrimaryChartColor(getTheme()),
         data: y,
         name: ""
       }

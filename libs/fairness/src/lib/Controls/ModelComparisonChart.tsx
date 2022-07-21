@@ -48,7 +48,6 @@ export interface IModelComparisonProps {
   errorPickerProps: IErrorPickerProps;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
-  onEditConfigs: () => void;
   onChartClick?: (data?: any) => void;
 }
 

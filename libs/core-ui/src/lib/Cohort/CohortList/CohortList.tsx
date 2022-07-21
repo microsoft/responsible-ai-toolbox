@@ -6,7 +6,6 @@ import {
   IColumn,
   DetailsList,
   DetailsListLayoutMode,
-  Link,
   Stack,
   Text
 } from "@fluentui/react";
@@ -16,6 +15,7 @@ import React from "react";
 import { ErrorCohort } from "../ErrorCohort";
 
 import { cohortListStyles } from "./CohortList.styles";
+import { CohortNameColumn } from "./CohortNameColumn";
 
 export interface ICohortListProps {
   errorCohorts: ErrorCohort[];
@@ -143,9 +143,11 @@ export class CohortList extends React.Component<
             item.name !== localization.ErrorAnalysis.Cohort.defaultLabel
           ) {
             return (
-              <Link onClick={this.onEditCohortClick.bind(this, item.name)}>
-                {fieldContent}
-              </Link>
+              <CohortNameColumn
+                fieldContent={fieldContent}
+                name={item.name}
+                onClick={this.onEditCohortClick}
+              />
             );
           }
           return <span>{fieldContent}</span>;
@@ -166,14 +168,14 @@ export class CohortList extends React.Component<
     return React.Fragment;
   };
 
-  private onEditCohortClick(name: string): void {
+  private onEditCohortClick = (name: string): void => {
     const cohort = this.props.errorCohorts.find(
       (errorCohort) => errorCohort.cohort.name === name
     );
     if (cohort && this.props.onEditCohortClick) {
       this.props.onEditCohortClick(cohort);
     }
-  }
+  };
 
   private getCohortListItems(): ICohortListItem[] {
     const allItems = this.props.errorCohorts

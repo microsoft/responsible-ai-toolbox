@@ -23,7 +23,7 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   rowErrorSize,
   InteractiveLegend,
   ICounterfactualData,
@@ -101,7 +101,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.fetchData = _.debounce(this.fetchData, 400);
 
     this.setState({
       chartProps: this.generateDefaultChartAxes()
@@ -322,7 +322,7 @@ export class CounterfactualChart extends React.PureComponent<
                 selectedKey={`${this.state.selectedPointsIndexes[0]}`}
                 ariaLabel={"datapoint picker"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
               <div className={classNames.legendLabel}>
                 <b>{`${this.getTargetDescription()}: `}</b>
@@ -344,12 +344,13 @@ export class CounterfactualChart extends React.PureComponent<
                     return {
                       activated: this.state.customPointIsActive[rowIndex],
                       color:
-                        FabricStyles.fabricColorPalette[
+                        FluentUIStyles.fluentUIColorPalette[
                           rowIndex + WhatIfConstants.MAX_SELECTION + 1
                         ],
+                      index: rowIndex,
                       name: row[WhatIfConstants.namePath],
-                      onClick: this.toggleCustomActivation.bind(this, rowIndex),
-                      onDelete: this.removeCustomPoint.bind(this, rowIndex)
+                      onClick: this.toggleCustomActivation,
+                      onDelete: this.removeCustomPoint
                     };
                   })}
                 />
@@ -423,7 +424,7 @@ export class CounterfactualChart extends React.PureComponent<
       index
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -444,7 +445,7 @@ export class CounterfactualChart extends React.PureComponent<
       indexes[0]
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -548,7 +549,7 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   // fetch prediction for temporary point
-  private fetchData(fetchingReference: { [key: string]: any }): void {
+  private fetchData = (fetchingReference: { [key: string]: any }): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -604,7 +605,7 @@ export class CounterfactualChart extends React.PureComponent<
         }
       }
     );
-  }
+  };
 
   private generatePlotlyProps(
     jointData: JointDataset,
@@ -621,9 +622,9 @@ export class CounterfactualChart extends React.PureComponent<
         const selectionIndex =
           this.state.selectedPointsIndexes.indexOf(rowIndex);
         if (selectionIndex === -1) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[selectionIndex];
+        return FluentUIStyles.fluentUIColorPalette[selectionIndex];
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -635,7 +636,7 @@ export class CounterfactualChart extends React.PureComponent<
       marker: {
         color: this.state.customPoints.map(
           (_, i) =>
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + i
             ]
         ),
@@ -652,7 +653,7 @@ export class CounterfactualChart extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + this.state.customPoints.length
             ],
           width: 2
@@ -808,13 +809,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
   };
 
-  private toggleCustomActivation(index: number): void {
+  private toggleCustomActivation = (index: number): void => {
     const customPointIsActive = [...this.state.customPointIsActive];
     customPointIsActive[index] = !customPointIsActive[index];
     this.setState({ customPointIsActive });
-  }
+  };
 
-  private removeCustomPoint(index: number): void {
+  private removeCustomPoint = (index: number): void => {
     this.setState((prevState) => {
       const customPoints = [...prevState.customPoints];
       customPoints.splice(index, 1);
@@ -822,7 +823,7 @@ export class CounterfactualChart extends React.PureComponent<
       customPointIsActive.splice(index, 1);
       return { customPointIsActive, customPoints };
     });
-  }
+  };
 
   private saveAsPoint = (): void => {
     const customPoints = [...this.state.customPoints];

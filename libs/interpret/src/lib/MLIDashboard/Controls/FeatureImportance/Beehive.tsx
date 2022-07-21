@@ -14,7 +14,7 @@ import {
   IExplanationContext,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -207,8 +207,7 @@ export class Beehive extends React.PureComponent<
           prev.push(...curr);
           return prev;
         }, []);
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildPlotlyProps: (
@@ -270,8 +269,7 @@ export class Beehive extends React.PureComponent<
         rows
       );
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private readonly _crossClassIconId = "cross-class-icon-id";
@@ -473,7 +471,7 @@ export class Beehive extends React.PureComponent<
               options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
             {this.colorOptions.length > 1 && (
               <ComboBox
@@ -484,7 +482,7 @@ export class Beehive extends React.PureComponent<
                 options={this.colorOptions}
                 ariaLabel={"color picker"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
             )}
             <div className={beehiveStyles.sliderControl}>
@@ -544,7 +542,7 @@ export class Beehive extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}

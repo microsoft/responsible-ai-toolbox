@@ -6,51 +6,43 @@ import pandas as pd
 from responsibleai.databalanceanalysis import AggregateBalanceMeasures
 
 from ..common_utils import assert_series_and_dict_equal
+from .conftest import SYNTHETIC_DATA_ETHNICITY, SYNTHETIC_DATA_GENDER
 
 
 class TestAggregateBalanceMeasures:
     def test_one_feature_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_1,
-        expected_aggregate_measures_feature_1,
+        self, synthetic_data, expected_aggregate_measures_gender
     ):
         agg_measures = (
-            AggregateBalanceMeasures(
-                cols_of_interest=[synthetic_data_feature_1]
-            )
+            AggregateBalanceMeasures(cols_of_interest=[SYNTHETIC_DATA_GENDER])
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            agg_measures, expected_aggregate_measures_feature_1
+            agg_measures, expected_aggregate_measures_gender
         )
 
     def test_both_features_synthetic_data(
-        self,
-        synthetic_data,
-        synthetic_data_feature_1,
-        synthetic_data_feature_2,
-        expected_aggregate_measures_both_features,
+        self, synthetic_data, expected_aggregate_measures_gender_ethnicity
     ):
         agg_measures = (
             AggregateBalanceMeasures(
                 cols_of_interest=[
-                    synthetic_data_feature_1,
-                    synthetic_data_feature_2,
+                    SYNTHETIC_DATA_GENDER,
+                    SYNTHETIC_DATA_ETHNICITY,
                 ]
             )
             .measures(dataset=synthetic_data)
             .iloc[0]
         )
         assert_series_and_dict_equal(
-            agg_measures, expected_aggregate_measures_both_features
+            agg_measures, expected_aggregate_measures_gender_ethnicity
         )
 
     def test_adult_data(
         self, adult_data, adult_data_aggregate_balance_measures
     ):
-        train_df, test_df, _, _ = adult_data
+        train_df, test_df, _, _, _ = adult_data
         full_df = pd.concat([train_df, test_df])
         actual = AggregateBalanceMeasures(
             cols_of_interest=["race", "gender"]

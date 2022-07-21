@@ -3,8 +3,9 @@
 
 import {
   IExplanationDashboardData,
+  IFairnessData,
   ISerializedExplanationData,
-  IFairnessData
+  ITextExplanationDashboardData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -18,6 +19,7 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
+import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -36,6 +38,10 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
+import {
+  emotion,
+  emotionModelExplanationData
+} from "../model-assessment-text/__mock_data__/emotion";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -77,6 +83,10 @@ export interface IInterpretDataSet {
   classDimension?: 1 | 2 | 3;
 }
 
+export interface IInterpretTextDataSet {
+  data: ITextExplanationDashboardData;
+}
+
 export interface IFairnessDataSet {
   data: IFairnessData;
 }
@@ -98,6 +108,10 @@ export interface IInterpretSetting {
   versions: { [key: string]: 1 | 2 };
 }
 
+export interface IInterpretTextSetting {
+  versions: { [key: string]: 1 };
+}
+
 export interface IFairnessSetting {
   versions: { [key: string]: 2 };
 }
@@ -112,9 +126,11 @@ export interface IModelAssessmentSetting {
 
 export const applicationKeys = <const>[
   "interpret",
+  "interpretText",
   "fairness",
   "errorAnalysis",
-  "modelAssessment"
+  "modelAssessment",
+  "modelAssessmentText"
 ];
 
 export type IApplications = {
@@ -122,8 +138,11 @@ export type IApplications = {
 } & {
   fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
+  interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
 };
 
 export const applications: IApplications = <const>{
@@ -191,6 +210,12 @@ export const applications: IApplications = <const>{
     },
     versions: { "Version-1": 1, "Version-2": 2 }
   },
+  interpretText: {
+    datasets: {
+      newsgroupBinaryData: { data: newsgroupBinaryData }
+    },
+    versions: { "Version-1": 1 }
+  },
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
@@ -254,6 +279,16 @@ export const applications: IApplications = <const>{
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentText: {
+    datasets: {
+      emotion: {
+        classDimension: 3,
+        dataset: emotion,
+        modelExplanationData: [emotionModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

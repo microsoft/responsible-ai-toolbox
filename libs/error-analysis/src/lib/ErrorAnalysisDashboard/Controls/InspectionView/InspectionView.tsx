@@ -21,7 +21,7 @@ import {
   ModelExplanationUtils,
   IExplanationModelMetadata,
   ErrorCohort,
-  FabricStyles,
+  FluentUIStyles,
   constructRows,
   constructCols
 } from "@responsible-ai/core-ui";
@@ -102,7 +102,7 @@ export class InspectionView extends React.PureComponent<
       this.props.inspectedIndexes.length
     );
     const colors = this.props.inspectedIndexes.map(
-      (_rowIndex, colorIndex) => FabricStyles.fabricColorPalette[colorIndex]
+      (_rowIndex, colorIndex) => FluentUIStyles.fluentUIColorPalette[colorIndex]
     );
     this._rows = constructRows(
       cohortData,
@@ -164,7 +164,7 @@ export class InspectionView extends React.PureComponent<
       (item) => item.unsortedFeatureValues as any[]
     );
     const testableDatapointColors = this.state.includedFeatureImportance.map(
-      (item) => FabricStyles.fabricColorPalette[item.colorIndex]
+      (item) => FluentUIStyles.fluentUIColorPalette[item.colorIndex]
     );
     const testableDatapointNames = this.state.includedFeatureImportance.map(
       (item) => item.name
@@ -186,7 +186,7 @@ export class InspectionView extends React.PureComponent<
                     columns={this._columns}
                     setKey="set"
                     layoutMode={DetailsListLayoutMode.justified}
-                    onRenderItemColumn={this.renderItemColumn.bind(this)}
+                    onRenderItemColumn={this.renderItemColumn}
                     selectionPreservedOnEmptyClick
                     ariaLabelForSelectionColumn="Toggle selection"
                     ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -228,11 +228,11 @@ export class InspectionView extends React.PureComponent<
     );
   }
 
-  private renderItemColumn(
+  private renderItemColumn = (
     item: any,
     index?: number,
     column?: IColumn
-  ): React.ReactNode {
+  ): React.ReactNode => {
     if (column && index !== undefined) {
       const fieldContent = item[column.fieldName as keyof any] as string;
 
@@ -254,7 +254,7 @@ export class InspectionView extends React.PureComponent<
       }
     }
     return <span />;
-  }
+  };
 
   private updateViewedFeatureImportances(
     includedIndexes: number[]

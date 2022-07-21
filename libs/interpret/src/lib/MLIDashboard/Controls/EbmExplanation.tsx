@@ -6,7 +6,7 @@ import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
   IFeatureValueExplanation,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -71,8 +71,8 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       return coordinates.scores
         .map((scores, classIndex) => {
           const color =
-            FabricStyles.plotlyColorPalette[
-              classIndex % FabricStyles.plotlyColorPalette.length
+            FluentUIStyles.plotlyColorPalette[
+              classIndex % FluentUIStyles.plotlyColorPalette.length
             ];
           const lowerBounds: IData = {
             line: {
@@ -178,8 +178,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
   private featureOptions: IComboBoxOption[];
 
@@ -231,7 +230,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             options={this.featureOptions}
             ariaLabel={"feature picker"}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            styles={FluentUIStyles.smallDropdownStyle}
           />
         </div>
         <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} />

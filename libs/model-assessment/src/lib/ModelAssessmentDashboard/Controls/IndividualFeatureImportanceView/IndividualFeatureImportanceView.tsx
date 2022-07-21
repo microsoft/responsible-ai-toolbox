@@ -8,7 +8,6 @@ import {
   Fabric,
   IDetailsColumnRenderTooltipProps,
   IDetailsHeaderProps,
-  IDropdownOption,
   IRenderFunction,
   MarqueeSelection,
   ScrollablePane,
@@ -18,57 +17,31 @@ import {
   SelectionMode,
   Stack,
   TooltipHost,
-  IColumn,
   IGroup,
   Text,
   IDetailsGroupDividerProps,
   Icon
 } from "@fluentui/react";
 import {
-  WeightVectorOption,
-  ErrorCohort,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   JointDataset,
-  ModelExplanationUtils,
-  FabricStyles,
   constructRows,
   constructCols,
   ModelTypes,
   LabelWithCallout
 } from "@responsible-ai/core-ui";
-import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { IIndividualFeatureImportanceProps } from "./IndividualFeatureImportanceProps";
+import {
+  IIndividualFeatureImportanceTableState,
+  IIndividualFeatureImportanceState
+} from "./IndividualFeatureImportanceState";
 import { individualFeatureImportanceViewStyles } from "./IndividualFeatureImportanceView.styles";
-
-export interface IIndividualFeatureImportanceProps {
-  features: string[];
-  jointDataset: JointDataset;
-  invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
-  selectedWeightVector: WeightVectorOption;
-  weightOptions: WeightVectorOption[];
-  weightLabels: any;
-  onWeightChange: (option: WeightVectorOption) => void;
-  selectedCohort: ErrorCohort;
-  modelType?: ModelTypes;
-}
-
-export interface IIndividualFeatureImportanceTableState {
-  rows: any[];
-  columns: IColumn[];
-  groups?: IGroup[];
-}
-
-export interface IIndividualFeatureImportanceState
-  extends IIndividualFeatureImportanceTableState {
-  featureImportances: IGlobalSeries[];
-  indexToUnselect?: number;
-  selectedIndices: number[];
-  sortArray: number[];
-  sortingSeriesIndex?: number;
-}
+import { TabularLocalImportancePlots } from "./TabularLocalImportancePlots";
+import { TextLocalImportancePlots } from "./TextLocalImportancePlots";
 
 export class IndividualFeatureImportanceView extends React.Component<
   IIndividualFeatureImportanceProps,
@@ -93,7 +66,7 @@ export class IndividualFeatureImportanceView extends React.Component<
           }
         }
       }
-      this.updateViewedFeatureImportances();
+      this.setState({ allSelectedItems: this.selection.getSelection() });
     }
   });
 
@@ -103,10 +76,9 @@ export class IndividualFeatureImportanceView extends React.Component<
     const tableState = this.updateItems();
 
     this.state = {
-      featureImportances: [],
+      allSelectedItems: [],
       indexToUnselect: undefined,
       selectedIndices: [],
-      sortArray: [],
       ...tableState
     };
   }
@@ -127,37 +99,9 @@ export class IndividualFeatureImportanceView extends React.Component<
     if (this.state.rows === undefined || this.state.columns === undefined) {
       return React.Fragment;
     }
-    const testableDatapoints = this.state.featureImportances.map(
-      (item) => item.unsortedFeatureValues as any[]
-    );
-    const testableDatapointColors = this.state.featureImportances.map(
-      (item) => FabricStyles.fabricColorPalette[item.colorIndex]
-    );
-    const testableDatapointNames = this.state.featureImportances.map(
-      (item) => item.name
-    );
-
-    const featuresOption: IDropdownOption[] = new Array(
-      this.context.jointDataset.datasetFeatureCount
-    )
-      .fill(0)
-      .map((_, index) => {
-        const key = JointDataset.DataLabelRoot + index.toString();
-        const meta = this.context.jointDataset.metaDict[key];
-        const options = meta.isCategorical
-          ? meta.sortedCategoricalValues?.map((optionText, index) => {
-              return { key: index, text: optionText };
-            })
-          : undefined;
-        return {
-          data: {
-            categoricalOptions: options,
-            fullLabel: meta.label.toLowerCase()
-          },
-          key,
-          text: meta.abbridgedLabel
-        };
-      });
+    const hasTextImportances =
+      !!this.context.modelExplanationData?.precomputedExplanations
+        ?.textFeatureImportance;
     const classNames = individualFeatureImportanceViewStyles();
 
     return (
@@ -212,65 +156,28 @@ export class IndividualFeatureImportanceView extends React.Component<
             </Fabric>
           </div>
         </Stack.Item>
-        <LocalImportancePlots
-          includedFeatureImportance={this.state.featureImportances}
-          jointDataset={this.context.jointDataset}
-          metadata={this.context.modelMetadata}
-          selectedWeightVector={this.props.selectedWeightVector}
-          weightOptions={this.props.weightOptions}
-          weightLabels={this.props.weightLabels}
-          testableDatapoints={testableDatapoints}
-          testableDatapointColors={testableDatapointColors}
-          testableDatapointNames={testableDatapointNames}
-          featuresOption={featuresOption}
-          sortArray={this.state.sortArray}
-          sortingSeriesIndex={this.state.sortingSeriesIndex}
-          invokeModel={this.props.invokeModel}
-          onWeightChange={this.props.onWeightChange}
-        />
+        {!hasTextImportances && (
+          <TabularLocalImportancePlots
+            features={this.context.modelMetadata.featureNames}
+            jointDataset={this.context.jointDataset}
+            invokeModel={this.props.invokeModel}
+            selectedWeightVector={this.props.selectedWeightVector}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            onWeightChange={this.props.onWeightChange}
+            selectedCohort={this.context.selectedErrorCohort}
+            modelType={this.props.modelType}
+            selectedItems={this.state.allSelectedItems}
+          />
+        )}
+        {hasTextImportances && (
+          <TextLocalImportancePlots
+            jointDataset={this.context.jointDataset}
+            selectedItems={this.state.allSelectedItems}
+          />
+        )}
       </Stack>
     );
-  }
-
-  private updateViewedFeatureImportances(): void {
-    const allSelectedItems = this.selection.getSelection();
-    const featureImportances = allSelectedItems.map(
-      (row, colorIndex): IGlobalSeries => {
-        const rowDict = this.props.jointDataset.getRow(row[0]);
-        return {
-          colorIndex,
-          id: rowDict[JointDataset.IndexLabel],
-          name: localization.formatString(
-            localization.Interpret.WhatIfTab.rowLabel,
-            rowDict[JointDataset.IndexLabel].toString()
-          ),
-          unsortedAggregateY: JointDataset.localExplanationSlice(
-            rowDict,
-            this.props.jointDataset.localExplanationFeatureCount
-          ) as number[],
-          unsortedFeatureValues: JointDataset.datasetSlice(
-            rowDict,
-            this.props.jointDataset.metaDict,
-            this.props.jointDataset.datasetFeatureCount
-          )
-        };
-      }
-    );
-    let sortArray: number[] = [];
-    let sortingSeriesIndex: number | undefined;
-    if (featureImportances.length !== 0) {
-      sortingSeriesIndex = 0;
-      sortArray = ModelExplanationUtils.getSortIndices(
-        featureImportances[0].unsortedAggregateY
-      ).reverse();
-    } else {
-      sortingSeriesIndex = undefined;
-    }
-    this.setState({
-      featureImportances,
-      sortArray,
-      sortingSeriesIndex
-    });
   }
 
   private updateItems(): IIndividualFeatureImportanceTableState {
