@@ -25,6 +25,8 @@ export enum TelemetryEventName {
   ModelOverviewMetricsConfigurationClick = "ModelOverviewMetricsConfigurationClick",
   ModelOverviewFeatureConfigurationClick = "ModelOverviewFeatureConfigurationClick",
   ModelOverviewMetricsSelectionUpdated = "ModelOverviewMetricsSelectionUpdated",
+  ModelOverviewShowHeatmapToggleUpdated = "ModelOverviewShowHeatmapToggleUpdated",
+  ModelOverviewSplineChartToggleUpdated = "ModelOverviewSplineChartToggleUpdated",
   // Dataset explorer
   DatasetExplorerNewCohortSelected = "DatasetExplorerNewCohortSelected",
   DatasetExplorerNewChartTypeSelected = "DatasetExplorerNewChartTypeSelected"

@@ -478,6 +478,7 @@ export class ModelOverview extends React.Component<
                     <ProbabilityDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
                       cohorts={chartCohorts}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </PivotItem>
                 )}
@@ -530,6 +531,9 @@ export class ModelOverview extends React.Component<
   ) => {
     if (checked !== undefined) {
       this.setState({ showHeatmapColors: checked });
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewShowHeatmapToggleUpdated
+      );
     }
   };
 
