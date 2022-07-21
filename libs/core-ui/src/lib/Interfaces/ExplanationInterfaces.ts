@@ -49,8 +49,14 @@ export interface IPrecomputedExplanations {
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
   globalFeatureImportance?: IGlobalFeatureImportance;
+  textFeatureImportance?: ITextFeatureImportance[];
   ebmGlobalExplanation?: IEBMGlobalExplanation;
   customVis?: string;
+}
+
+export interface ITextFeatureImportance {
+  text: string[];
+  localExplanations: number[];
 }
 
 export interface IEBMGlobalExplanation {

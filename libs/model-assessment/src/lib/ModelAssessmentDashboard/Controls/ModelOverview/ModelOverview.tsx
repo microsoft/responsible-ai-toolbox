@@ -27,7 +27,10 @@ import {
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
-  ILabeledStatistic
+  ILabeledStatistic,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -46,6 +49,7 @@ import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   showNewModelOverviewExperience: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IModelOverviewState {
@@ -651,12 +655,18 @@ export class ModelOverview extends React.Component<
           datasetCohortChartIsVisible: true,
           datasetCohortViewIsVisible: true
         });
+        this.logButtonClick(
+          TelemetryEventName.ModelOverviewDatasetCohortsTabClick
+        );
       }
       if (item.props.itemKey === disaggregatedAnalysisPivotKey) {
         this.setState({
           datasetCohortChartIsVisible: false,
           datasetCohortViewIsVisible: false
         });
+        this.logButtonClick(
+          TelemetryEventName.ModelOverviewFeatureCohortsTabClick
+        );
       }
     }
   };
@@ -668,4 +678,11 @@ export class ModelOverview extends React.Component<
       )
     );
   }
+
+  private logButtonClick = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
+  };
 }

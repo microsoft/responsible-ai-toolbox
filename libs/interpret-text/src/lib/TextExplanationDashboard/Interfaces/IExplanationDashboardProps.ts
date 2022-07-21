@@ -7,6 +7,7 @@ export interface ITextExplanationDashboardProps {
    */
   dataSummary: IDatasetSummary;
 }
+
 export interface IDatasetSummary {
   /*
    * information about the document given

@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IExplanationDashboardData,
-  ITelemetryMessage
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
 import { IStringsParam } from "./IStringsParam";
@@ -30,7 +30,7 @@ export interface IExplanationDashboardProps
   dashboardType?: "ModelPerformance";
   locale?: string;
   stringParams?: IStringsParam;
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
