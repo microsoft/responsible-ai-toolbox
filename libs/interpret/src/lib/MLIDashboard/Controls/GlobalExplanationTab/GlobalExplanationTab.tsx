@@ -27,7 +27,8 @@ import {
   FeatureImportanceDependence,
   FeatureImportanceBar,
   ITelemetryEvent,
-  TelemetryEventName
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -291,7 +292,6 @@ export class GlobalExplanationTab extends React.PureComponent<
                       }
                       jointDataset={this.context.jointDataset}
                       metadata={this.context.modelMetadata}
-                      onChange={this.onDependenceChange}
                       selectedWeight={this.props.selectedWeightVector}
                       selectedWeightLabel={
                         this.props.weightLabels[this.props.selectedWeightVector]
@@ -437,6 +437,10 @@ export class GlobalExplanationTab extends React.PureComponent<
     for (let i = 0; i < this.state.seriesIsActive.length; i++) {
       if (!this.state.seriesIsActive[i]) continue;
       if (cohortIndex-- === 0) {
+        this.props.telemetryHook?.({
+          level: TelemetryLevels.ButtonClick,
+          type: TelemetryEventName.AggregateFeatureImportanceNewDependenceSelected
+        });
         this.handleFeatureSelection(i, featureIndex);
         return;
       }
@@ -480,11 +484,5 @@ export class GlobalExplanationTab extends React.PureComponent<
         block: "end"
       });
     }, 0.5);
-  };
-
-  private readonly onDependenceChange = (
-    chartProps: IGenericChartProps | undefined
-  ): void => {
-    this.setState({ dependenceProps: chartProps });
   };
 }

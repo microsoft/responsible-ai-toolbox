@@ -29,7 +29,6 @@ export interface IFeatureImportanceDependenceProps {
   metadata: IExplanationModelMetadata;
   selectedWeight: WeightVectorOption;
   selectedWeightLabel: string;
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
