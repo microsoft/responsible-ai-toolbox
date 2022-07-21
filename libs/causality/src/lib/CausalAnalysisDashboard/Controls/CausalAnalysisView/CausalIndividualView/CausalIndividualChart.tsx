@@ -23,7 +23,8 @@ import {
   FluentUIStyles,
   rowErrorSize,
   BasicHighChart,
-  getPrimaryChartColor
+  getPrimaryChartColor,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
@@ -37,6 +38,7 @@ import { getIndividualChartOptions } from "./getIndividualChartOptions";
 
 export interface ICausalIndividualChartProps {
   onDataClick: (data: number | undefined) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICausalIndividualChartState {
@@ -119,6 +121,7 @@ export class CausalIndividualChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -141,6 +144,7 @@ export class CausalIndividualChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           <Stack horizontal={false}>

@@ -6,6 +6,7 @@ import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
+  ITelemetryEvent,
   LabelWithCallout,
   MissingParametersPlaceholder,
   ModelAssessmentContext
@@ -22,6 +23,7 @@ import { CausalIndividualChart } from "./CausalIndividualChart";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ICausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
@@ -55,7 +57,10 @@ export class CausalIndividualView extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item className={styles.individualChart}>
-          <CausalIndividualChart onDataClick={this.handleOnClick} />
+          <CausalIndividualChart
+            onDataClick={this.handleOnClick}
+            telemetryHook={this.props.telemetryHook}
+          />
         </Stack.Item>
         <Stack.Item className={styles.header}>
           <Stack horizontal={false}>

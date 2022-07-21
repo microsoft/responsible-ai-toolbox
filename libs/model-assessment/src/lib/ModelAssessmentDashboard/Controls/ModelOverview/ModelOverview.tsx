@@ -267,7 +267,7 @@ export class ModelOverview extends React.Component<
             <Text variant="medium" className={classNames.descriptionText}>
               {localization.Interpret.ModelPerformance.helperText}
             </Text>
-            <OverallMetricChart />
+            <OverallMetricChart telemetryHook={this.props.telemetryHook} />
           </>
         )}
         {this.props.showNewModelOverviewExperience && (

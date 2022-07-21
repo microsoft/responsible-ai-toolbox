@@ -173,6 +173,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -195,6 +196,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
@@ -211,6 +213,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={false}
               onAccept={this.onColorSet}
               onCancel={this.setColorClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
         </Stack.Item>

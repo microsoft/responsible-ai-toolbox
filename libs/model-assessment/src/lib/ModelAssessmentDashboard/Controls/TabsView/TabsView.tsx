@@ -241,6 +241,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -258,6 +259,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}

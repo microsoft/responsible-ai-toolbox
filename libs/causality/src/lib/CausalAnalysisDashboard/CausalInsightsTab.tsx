@@ -5,6 +5,7 @@ import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  ITelemetryEvent,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -16,6 +17,7 @@ import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysis
 
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface ICausalInsightsTabState {
@@ -70,6 +72,7 @@ export class CausalInsightsTab extends React.PureComponent<
           <CausalAnalysisView
             viewOption={this.state.viewOption}
             data={this.props.data}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>

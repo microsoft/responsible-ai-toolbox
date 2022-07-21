@@ -28,7 +28,8 @@ import {
   InteractiveLegend,
   ICounterfactualData,
   BasicHighChart,
-  ErrorDialog
+  ErrorDialog,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -47,6 +48,7 @@ export interface ICounterfactualChartProps {
   weightLabels: any;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -235,6 +237,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onYSet}
                   onCancel={this.setYClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.xDialogOpen && (
@@ -259,6 +262,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onXSet}
                   onCancel={this.setXClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               <Stack horizontal={false}>

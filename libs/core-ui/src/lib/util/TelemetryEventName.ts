@@ -18,6 +18,8 @@ export enum TelemetryEventName {
   MainMenuNewCohortClick = "MainMenuNewCohortClick",
   // Cohort
   NewCohortAdded = "NewCohortAdded",
+  // Core
+  NewAxisConfigSelected = "NewAxisConfigSelected",
   // Counterfactual
   // Model overview
   ModelOverviewDatasetCohortsTabClick = "ModelOverviewDatasetCohortsTabClick",

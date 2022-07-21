@@ -6,6 +6,7 @@ import {
   Cohort,
   defaultModelAssessmentContext,
   ICounterfactualData,
+  ITelemetryEvent,
   ModelAssessmentContext,
   ModelTypes,
   WeightVectorOption
@@ -20,6 +21,7 @@ import { counterfactualsTabStyles } from "./CounterfactualsTab.styles";
 
 export interface ICounterfactualsTabProps {
   data: ICounterfactualData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 export interface ICounterfactualsTabState {
   cohorts: Cohort[];
@@ -61,6 +63,7 @@ export class CounterfactualsTab extends React.PureComponent<
             weightOptions={this.state.weightVectorOptions}
             weightLabels={this.state.weightVectorLabels}
             onWeightChange={this.onWeightVectorChange}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>
