@@ -16,7 +16,7 @@ import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { featureImportanceTabStyles } from "./FeatureImportances.styles";
-import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView";
+import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
   selectedWeightVector: WeightVectorOption;
