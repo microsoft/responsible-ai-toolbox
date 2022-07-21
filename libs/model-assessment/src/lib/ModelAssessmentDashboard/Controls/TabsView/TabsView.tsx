@@ -187,6 +187,7 @@ export class TabsView extends React.PureComponent<
                       newModelOverviewExperienceFlight,
                       this.context.featureFlights
                     )}
+                    telemetryHook={this.props.telemetryHook}
                   />
                 </>
               )}

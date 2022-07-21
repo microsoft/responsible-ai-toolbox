@@ -17,6 +17,9 @@ export enum TelemetryEventName {
   MainMenuSwitchCohortClick = "MainMenuSwitchCohortClick",
   MainMenuNewCohortClick = "MainMenuNewCohortClick",
   // Cohort
-  NewCohortAdded = "NewCohortAdded"
+  NewCohortAdded = "NewCohortAdded",
   // Counterfactual
+  // Model overview
+  ModelOverviewDatasetCohortsTabClick = "ModelOverviewDatasetCohortsTabClick",
+  ModelOverviewFeatureCohortsTabClick = "ModelOverviewFeatureCohortsTabClick"
 }
