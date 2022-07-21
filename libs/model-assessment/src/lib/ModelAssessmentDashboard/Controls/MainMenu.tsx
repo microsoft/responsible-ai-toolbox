@@ -15,7 +15,10 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
-  ModelAssessmentContext
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -30,6 +33,7 @@ import { mainMenuStyles } from "./MainMenu.styles";
 
 export interface IMainMenuProps {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
+  telemetryHook?: (message: ITelemetryEvent) => void;
   removeTab(index: number): void;
 }
 interface IMainMenuState {
@@ -183,23 +187,46 @@ export class MainMenu extends React.PureComponent<
     );
   };
 
-  private toggleCohortSettingsPanel = (): void =>
+  private toggleCohortSettingsPanel = (): void => {
+    if (!this.state.cohortSettingsPanelVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuCohortSettingsClick);
+    }
     this.setState((prev) => ({
       cohortSettingsPanelVisible: !prev.cohortSettingsPanelVisible
     }));
+  };
 
-  private toggleDashboardSettings = (): void =>
+  private toggleDashboardSettings = (): void => {
+    if (!this.state.dashboardSettingsVisible) {
+      this.logButtonClick(
+        TelemetryEventName.MainMenuDashboardConfigurationClick
+      );
+    }
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));
+  };
+
   private toggleChangeCohortVisibility = () => {
+    if (!this.state.changeCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
+    }
     this.setState((prev) => ({
       changeCohortVisible: !prev.changeCohortVisible
     }));
   };
   private toggleCreateCohortVisibility = () => {
+    if (!this.state.createCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
+    }
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));
+  };
+  private logButtonClick = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
   };
 }

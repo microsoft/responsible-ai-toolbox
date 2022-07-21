@@ -20,7 +20,8 @@ import {
   ErrorCohort,
   MetricCohortStats,
   ModelAssessmentContext,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -56,6 +57,7 @@ export interface IMatrixFilterProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   isEnabled: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: "l1" };
@@ -135,6 +137,7 @@ export class MatrixFilter extends React.PureComponent<
             <MetricSelector
               isEnabled={this.props.isEnabled && !featuresUnselected}
               setMetric={this.setMetric}
+              telemetryHook={this.props.telemetryHook}
             />
             <Stack.Item key="feature1key">
               <ComboBox
@@ -182,6 +185,7 @@ export class MatrixFilter extends React.PureComponent<
               updateMatrixLegendState={this.updateMatrixLegendState}
               isEnabled={this.props.isEnabled}
               metric={this.context.errorAnalysisData!.metric}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
         </Stack>
