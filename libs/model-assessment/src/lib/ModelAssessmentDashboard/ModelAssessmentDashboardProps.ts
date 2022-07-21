@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
   ICausalAnalysisData,
@@ -65,7 +65,7 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<ICausalWhatIfData[]>;
   localUrl?: string;
 
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;
