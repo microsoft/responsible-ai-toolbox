@@ -570,6 +570,9 @@ export class ModelOverview extends React.Component<
           selectedMetrics
         });
       }
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
     }
   };
 

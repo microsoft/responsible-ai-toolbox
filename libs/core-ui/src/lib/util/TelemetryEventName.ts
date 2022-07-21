@@ -23,5 +23,6 @@ export enum TelemetryEventName {
   ModelOverviewDatasetCohortsTabClick = "ModelOverviewDatasetCohortsTabClick",
   ModelOverviewFeatureCohortsTabClick = "ModelOverviewFeatureCohortsTabClick",
   ModelOverviewMetricsConfigurationClick = "ModelOverviewMetricsConfigurationClick",
-  ModelOverviewFeatureConfigurationClick = "ModelOverviewFeatureConfigurationClick"
+  ModelOverviewFeatureConfigurationClick = "ModelOverviewFeatureConfigurationClick",
+  ModelOverviewMetricsSelectionUpdated = "ModelOverviewMetricsSelectionUpdated"
 }
