@@ -9,7 +9,8 @@ import {
   ITelemetryEvent,
   LabelWithCallout,
   MissingParametersPlaceholder,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -74,6 +75,10 @@ export class CausalIndividualView extends React.PureComponent<
                 label={localization.CausalAnalysis.MainMenu.why}
                 calloutTitle={causalCalloutDictionary.confounding.title}
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick
+                }
               >
                 <Text block>
                   {causalCalloutDictionary.confounding.description}

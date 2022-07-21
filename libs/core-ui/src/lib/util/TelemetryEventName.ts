@@ -2,6 +2,15 @@
 // Licensed under the MIT License.
 
 export enum TelemetryEventName {
+  // Core
+  NewAxisConfigSelected = "NewAxisConfigSelected",
+  // Cohort
+  NewCohortAdded = "NewCohortAdded",
+  // Main menu
+  MainMenuCohortSettingsClick = "MainMenuCohortSettingsClick",
+  MainMenuDashboardConfigurationClick = "MainMenuDashboardConfigurationClick",
+  MainMenuSwitchCohortClick = "MainMenuSwitchCohortClick",
+  MainMenuNewCohortClick = "MainMenuNewCohortClick",
   // Error analysis
   ErrorAnalysisTreeMapTabClick = "ErrorAnalysisTreeMapTabClick",
   ErrorAnalysisTreeMapFeatureListClick = "ErrorAnalysisTreeMapFeatureListClick",
@@ -11,16 +20,6 @@ export enum TelemetryEventName {
   ErrorAnalysisHeatMapTabClick = "ErrorAnalysisHeatMapTabClick",
   ErrorAnalysisHeatMapQuantileBinningClick = "ErrorAnalysisHeatMapQuantileBinningClick",
   ErrorAnalysisNewMetricSelected = "ErrorAnalysisNewMetricSelected",
-  // Main menu
-  MainMenuCohortSettingsClick = "MainMenuCohortSettingsClick",
-  MainMenuDashboardConfigurationClick = "MainMenuDashboardConfigurationClick",
-  MainMenuSwitchCohortClick = "MainMenuSwitchCohortClick",
-  MainMenuNewCohortClick = "MainMenuNewCohortClick",
-  // Cohort
-  NewCohortAdded = "NewCohortAdded",
-  // Core
-  NewAxisConfigSelected = "NewAxisConfigSelected",
-  // Counterfactual
   // Model overview
   ModelOverviewDatasetCohortsTabClick = "ModelOverviewDatasetCohortsTabClick",
   ModelOverviewFeatureCohortsTabClick = "ModelOverviewFeatureCohortsTabClick",
@@ -31,5 +30,15 @@ export enum TelemetryEventName {
   ModelOverviewSplineChartToggleUpdated = "ModelOverviewSplineChartToggleUpdated",
   // Dataset explorer
   DatasetExplorerNewCohortSelected = "DatasetExplorerNewCohortSelected",
-  DatasetExplorerNewChartTypeSelected = "DatasetExplorerNewChartTypeSelected"
+  DatasetExplorerNewChartTypeSelected = "DatasetExplorerNewChartTypeSelected",
+  // Feature importances
+  AggregateFeatureImportanceTabClick = "AggregateFeatureImportanceTabClick",
+  IndividualFeatureImportanceTabClick = "IndividualFeatureImportanceTabClick",
+  FeatureImportancesWhatDoValuesMeanCalloutClick = "FeatureImportancesWhatDoValuesMeanCalloutClick",
+  FeatureImportancesCrossClassWeightsCalloutClick = "FeatureImportancesCrossClassWeightsCalloutClick",
+  FeatureImportancesHowToReadChartCalloutClick = "FeatureImportancesHowToReadChartCalloutClick",
+  // Counterfactual
+  // Causal analysis
+  AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick = "AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick",
+  IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick"
 }

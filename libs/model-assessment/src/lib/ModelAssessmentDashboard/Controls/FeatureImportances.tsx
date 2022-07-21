@@ -8,7 +8,10 @@ import {
   IModelAssessmentContext,
   ModelAssessmentContext,
   IModelExplanationData,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -29,6 +32,7 @@ interface IFeatureImportancesProps {
   modelExplanationData?: IModelExplanationData[];
   modelMetadata: IExplanationModelMetadata;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IFeatureImportancesState {
@@ -73,20 +77,7 @@ export class FeatureImportancesTab extends React.PureComponent<
         <Stack.Item>
           <Pivot
             selectedKey={this.state.activeFeatureImportancesOption}
-            onLinkClick={(item: PivotItem | undefined): void => {
-              if (
-                item &&
-                item.props.itemKey &&
-                Object.values(FeatureImportancesTabOptions).includes(
-                  item.props.itemKey as FeatureImportancesTabOptions
-                )
-              ) {
-                this.setState({
-                  activeFeatureImportancesOption: item.props
-                    .itemKey as FeatureImportancesTabOptions
-                });
-              }
-            }}
+            onLinkClick={this.onPivotLinkClick}
             linkSize={"normal"}
             headersOnly
             className={classNames.tabs}
@@ -119,6 +110,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             explanationMethod={
               this.props.modelExplanationData?.[0].explanationMethod
             }
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.state.activeFeatureImportancesOption ===
@@ -138,4 +130,26 @@ export class FeatureImportancesTab extends React.PureComponent<
       </Stack>
     );
   }
+
+  private onPivotLinkClick = (item: PivotItem | undefined): void => {
+    if (
+      item &&
+      item.props.itemKey &&
+      Object.values(FeatureImportancesTabOptions).includes(
+        item.props.itemKey as FeatureImportancesTabOptions
+      )
+    ) {
+      this.setState({
+        activeFeatureImportancesOption: item.props
+          .itemKey as FeatureImportancesTabOptions
+      });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type:
+          item.props.itemKey === FeatureImportancesTabOptions.GlobalExplanation
+            ? TelemetryEventName.AggregateFeatureImportanceTabClick
+            : TelemetryEventName.IndividualFeatureImportanceTabClick
+      });
+    }
+  };
 }

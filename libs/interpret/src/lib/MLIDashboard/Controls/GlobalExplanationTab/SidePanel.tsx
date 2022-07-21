@@ -15,7 +15,9 @@ import {
   ModelTypes,
   WeightVectorOption,
   ChartTypes,
-  LabelWithCallout
+  LabelWithCallout,
+  ITelemetryEvent,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -34,6 +36,7 @@ export interface ISidePanelProps {
   sortingSeriesIndex: number;
   cohorts: Cohort[];
   chartType: ChartTypes;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange(option: WeightVectorOption): void;
   setSortIndex(option: number): void;
   toggleActivation(index: number): void;
@@ -91,6 +94,10 @@ export class SidePanel extends React.Component<
                   localization.Interpret.CrossClass.crossClassWeights
                 }
                 label={localization.Interpret.GlobalTab.weightOptions}
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
+                }
               >
                 <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
                 <ul>

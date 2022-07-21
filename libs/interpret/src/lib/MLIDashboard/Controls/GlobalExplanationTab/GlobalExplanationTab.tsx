@@ -25,7 +25,9 @@ import {
   FluentUIStyles,
   LabelWithCallout,
   FeatureImportanceDependence,
-  FeatureImportanceBar
+  FeatureImportanceBar,
+  ITelemetryEvent,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -51,8 +53,9 @@ export interface IGlobalExplanationTabProps {
   weightOptions: WeightVectorOption[];
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
-  onWeightChange: (option: WeightVectorOption) => void;
   initialCohortIndex?: number;
+  onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IGlobalExplanationTabState {
@@ -188,6 +191,10 @@ export class GlobalExplanationTab extends React.PureComponent<
               }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
+              calloutEventName={
+                TelemetryEventName.FeatureImportancesWhatDoValuesMeanCalloutClick
+              }
+              telemetryHook={this.props.telemetryHook}
             >
               <Text block>{this.explainerCalloutInfo.description}</Text>
               {this.explainerCalloutInfo.linkUrl && (
@@ -237,6 +244,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 weightOptions={this.props.weightOptions}
                 onChartTypeChange={this.onChartTypeChange}
                 chartType={this.state.chartType}
+                telemetryHook={this.props.telemetryHook}
               />
             </Stack.Item>
           </Stack>
@@ -257,6 +265,10 @@ export class GlobalExplanationTab extends React.PureComponent<
                   localization.Interpret.GlobalTab.dependencePlotTitle
                 }
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
+                }
               >
                 <Text>
                   {localization.Interpret.GlobalTab.dependencePlotHelperText}

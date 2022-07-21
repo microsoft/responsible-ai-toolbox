@@ -222,6 +222,7 @@ export class TabsView extends React.PureComponent<
                       weightVectorLabels={this.state.weightVectorLabels}
                       requestPredictions={this.props.requestPredictions}
                       onWeightVectorChange={this.onWeightVectorChange}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
