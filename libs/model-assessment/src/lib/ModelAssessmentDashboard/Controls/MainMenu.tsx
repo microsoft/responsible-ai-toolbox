@@ -189,7 +189,7 @@ export class MainMenu extends React.PureComponent<
 
   private toggleCohortSettingsPanel = (): void => {
     if (!this.state.cohortSettingsPanelVisible) {
-      this.onButtonClick(TelemetryEventName.MainMenuCohortSettingsClick);
+      this.logButtonClick(TelemetryEventName.MainMenuCohortSettingsClick);
     }
     this.setState((prev) => ({
       cohortSettingsPanelVisible: !prev.cohortSettingsPanelVisible
@@ -198,7 +198,7 @@ export class MainMenu extends React.PureComponent<
 
   private toggleDashboardSettings = (): void => {
     if (!this.state.dashboardSettingsVisible) {
-      this.onButtonClick(
+      this.logButtonClick(
         TelemetryEventName.MainMenuDashboardConfigurationClick
       );
     }
@@ -209,7 +209,7 @@ export class MainMenu extends React.PureComponent<
 
   private toggleChangeCohortVisibility = () => {
     if (!this.state.changeCohortVisible) {
-      this.onButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
+      this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
     }
     this.setState((prev) => ({
       changeCohortVisible: !prev.changeCohortVisible
@@ -217,13 +217,13 @@ export class MainMenu extends React.PureComponent<
   };
   private toggleCreateCohortVisibility = () => {
     if (!this.state.createCohortVisible) {
-      this.onButtonClick(TelemetryEventName.MainMenuNewCohortClick);
+      this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
     }
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));
   };
-  private onButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName) => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

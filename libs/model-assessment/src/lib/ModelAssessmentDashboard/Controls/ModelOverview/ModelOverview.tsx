@@ -655,7 +655,7 @@ export class ModelOverview extends React.Component<
           datasetCohortChartIsVisible: true,
           datasetCohortViewIsVisible: true
         });
-        this.onButtonClick(
+        this.logButtonClick(
           TelemetryEventName.ModelOverviewDatasetCohortsTabClick
         );
       }
@@ -664,7 +664,7 @@ export class ModelOverview extends React.Component<
           datasetCohortChartIsVisible: false,
           datasetCohortViewIsVisible: false
         });
-        this.onButtonClick(
+        this.logButtonClick(
           TelemetryEventName.ModelOverviewFeatureCohortsTabClick
         );
       }
@@ -679,7 +679,7 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private onButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName) => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName
