@@ -21,5 +21,7 @@ export enum TelemetryEventName {
   // Counterfactual
   // Model overview
   ModelOverviewDatasetCohortsTabClick = "ModelOverviewDatasetCohortsTabClick",
-  ModelOverviewFeatureCohortsTabClick = "ModelOverviewFeatureCohortsTabClick"
+  ModelOverviewFeatureCohortsTabClick = "ModelOverviewFeatureCohortsTabClick",
+  ModelOverviewMetricsConfigurationClick = "ModelOverviewMetricsConfigurationClick",
+  ModelOverviewFeatureConfigurationClick = "ModelOverviewFeatureConfigurationClick"
 }

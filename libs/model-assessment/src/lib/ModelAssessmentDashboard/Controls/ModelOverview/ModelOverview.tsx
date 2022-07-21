@@ -325,9 +325,7 @@ export class ModelOverview extends React.Component<
               />
               <ActionButton
                 className={classNames.configurationActionButton}
-                onClick={() =>
-                  this.setState({ metricConfigurationIsVisible: true })
-                }
+                onClick={this.onClickMetricsConfiguration}
                 iconProps={{ iconName: "ColumnOptions" }}
               >
                 {
@@ -358,9 +356,7 @@ export class ModelOverview extends React.Component<
                 <ActionButton
                   id="modelOverviewFeatureConfigurationActionButton"
                   className={classNames.configurationActionButton}
-                  onClick={() =>
-                    this.setState({ featureConfigurationIsVisible: true })
-                  }
+                  onClick={this.onClickFeatureConfiguration}
                   iconProps={{ iconName: "ColumnOptions" }}
                 >
                   {
@@ -505,6 +501,20 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onClickMetricsConfiguration = () => {
+    this.setState({ metricConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsConfigurationClick
+    );
+  };
+
+  private onClickFeatureConfiguration = () => {
+    this.setState({ featureConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewFeatureConfigurationClick
+    );
+  };
 
   private onDismissChartConfigurationFlyout = () => {
     this.setState({ chartConfigurationIsVisible: false });
