@@ -174,6 +174,7 @@ export class IndividualFeatureImportanceView extends React.Component<
             selectedCohort={this.context.selectedErrorCohort}
             modelType={this.props.modelType}
             selectedItems={this.state.allSelectedItems}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {hasTextImportances && (
