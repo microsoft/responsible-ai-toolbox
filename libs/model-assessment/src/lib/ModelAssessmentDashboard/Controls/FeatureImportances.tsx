@@ -125,6 +125,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             onWeightChange={this.props.onWeightVectorChange}
             selectedCohort={this.context.selectedErrorCohort}
             modelType={this.props.modelMetadata.modelType}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
       </Stack>

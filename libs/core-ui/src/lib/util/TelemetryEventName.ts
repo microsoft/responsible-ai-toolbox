@@ -35,6 +35,7 @@ export enum TelemetryEventName {
   AggregateFeatureImportanceTabClick = "AggregateFeatureImportanceTabClick",
   IndividualFeatureImportanceTabClick = "IndividualFeatureImportanceTabClick",
   AggregateFeatureImportanceNewDependenceSelected = "AggregateFeatureImportanceNewDependenceSelected",
+  IndividualFeatureImportanceSelectedDatapointsUpdated = "IndividualFeatureImportanceSelectedDatapointsUpdated",
   FeatureImportancesWhatDoValuesMeanCalloutClick = "FeatureImportancesWhatDoValuesMeanCalloutClick",
   FeatureImportancesCrossClassWeightsCalloutClick = "FeatureImportancesCrossClassWeightsCalloutClick",
   FeatureImportancesHowToReadChartCalloutClick = "FeatureImportancesHowToReadChartCalloutClick",
