@@ -24,6 +24,7 @@ import {
 import {
   defaultModelAssessmentContext,
   ICounterfactualData,
+  ITelemetryEvent,
   JointDataset,
   MissingParametersPlaceholder,
   ModelAssessmentContext
@@ -47,6 +48,7 @@ export interface ICounterfactualListProps {
   filterText?: string;
   temporaryPoint: Record<string, string | number> | undefined;
   sortFeatures: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   setCustomRowProperty(
     key: string | number,
     isString: boolean,
@@ -247,7 +249,11 @@ export class CounterfactualList extends React.Component<
       <Stack>
         <Text>{item.row}</Text>
         {this.context.requestPredictions && (
-          <CounterfactualListSetValue index={index} onSelect={this.onSelect} />
+          <CounterfactualListSetValue
+            index={index}
+            onSelect={this.onSelect}
+            telemetryHook={this.props.telemetryHook}
+          />
         )}
       </Stack>
     );
