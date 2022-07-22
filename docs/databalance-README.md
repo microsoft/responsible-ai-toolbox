@@ -34,9 +34,22 @@ Within the [Responsible AI Dashboard](https://github.com/microsoft/responsible-a
 - The task type is `classification`.
 - A non-empty list of categorical features is specified.
 
+**Note: Data balance measures are currently being flighted. This means that to visualize them, you must specify `feature_flights="dataBalanceExperience"` in the `ResponsibleAIDashboard` constructor.**
+
 Data balance measures are automatically added for the following examples:
 
 - [Model debugging of a census income prediction model (classification)](https://github.com/microsoft/responsible-ai-toolbox/tree/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb)
+
+For each example, do the following:
+
+```python
+# Replace this
+ResponsibleAIDashboard(rai_insights, cohort_list=cohort_list)
+
+# with this
+ResponsibleAIDashboard(rai_insights, cohort_list=cohort_list,
+                       feature_flights="dataBalanceExperience")
+```
 
 ## Usage
 
