@@ -24,7 +24,9 @@ import {
   rowErrorSize,
   BasicHighChart,
   getPrimaryChartColor,
-  ITelemetryEvent
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
@@ -273,6 +275,10 @@ export class CausalIndividualChart extends React.PureComponent<
     const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromChart
+    });
   };
 
   private selectPointFromDropdown = (
@@ -283,6 +289,10 @@ export class CausalIndividualChart extends React.PureComponent<
       const index = item.key;
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
+      });
     }
   };
 

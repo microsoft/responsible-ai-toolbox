@@ -6,7 +6,9 @@ import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ITelemetryEvent,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -87,6 +89,23 @@ export class CausalInsightsTab extends React.PureComponent<
       this.setState({
         viewOption: item.props.itemKey
       });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: this.getTelemetryEventName(item.props.itemKey)
+      });
+    }
+  };
+
+  private getTelemetryEventName = (itemKey: string) => {
+    switch (itemKey) {
+      case CausalAnalysisOptions.Aggregate:
+        return TelemetryEventName.AggregateCausalTabClick;
+      case CausalAnalysisOptions.Individual:
+        return TelemetryEventName.IndividualCausalTabClick;
+      case CausalAnalysisOptions.Treatment:
+        return TelemetryEventName.CasualTreatmentPolicyTabClick;
+      default:
+        return TelemetryEventName.AggregateCausalTabClick;
     }
   };
 }

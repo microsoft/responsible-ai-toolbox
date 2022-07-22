@@ -48,6 +48,12 @@ export enum TelemetryEventName {
   CounterfactualSaveAsNewDatapointClick = "CounterfactualSaveAsNewDatapointClick",
   CounterfactualListSetValueClick = "CounterfactualListSetValueClick",
   // Causal analysis
+  AggregateCausalTabClick = "AggregateCausalTabClick",
   AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick = "AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick",
-  IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick"
+  IndividualCausalTabClick = "IndividualCausalTabClick",
+  IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick",
+  IndividualCausalSelectedDatapointUpdatedFromChart = "IndividualCausalSelectedDatapointUpdatedFromChart",
+  IndividualCausalSelectedDatapointUpdatedFromDropdown = "IndividualCausalSelectedDatapointUpdatedFromDropdown",
+  CasualTreatmentPolicyTabClick = "CasualTreatmentPolicyTabClick",
+  CasualTreatmentPolicyNewTreatmentFeatureSelected = "CasualTreatmentPolicyNewTreatmentFeatureSelected"
 }
