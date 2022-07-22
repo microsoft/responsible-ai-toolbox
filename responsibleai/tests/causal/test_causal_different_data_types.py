@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pytest
-
 from responsibleai import RAIInsights
 
 
@@ -28,7 +26,6 @@ class TestCausalWithDifferentDataTypes:
 
         rai_i.compute()
 
-    @pytest.mark.skip(reason="This test fails due to bug in Econml")
     def test_causal_with_categorical_types(self, get_adult_shap_dataset):
         data_train, data_test, treatment_features, \
             heterogeneity_features, cat_cols, \
@@ -52,5 +49,4 @@ class TestCausalWithDifferentDataTypes:
             heterogeneity_features=heterogeneity_features
         )
 
-        # This one fails
         rai_i.compute()
