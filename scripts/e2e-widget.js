@@ -182,7 +182,7 @@ function writeCypressSettings(hosts) {
 
 function e2e(watch, selectedNotebook, flights) {
   const nxPath = path.join(__dirname, "../node_modules/@nrwl/cli/bin/nx.js");
-  console.log("Running e2e");
+  console.log(`Running e2e for notebook ${selectedNotebook}`);
   let notebookArgs = [];
   if (selectedNotebook) {
     // remove prefix "responsibleaidashboard"
@@ -243,9 +243,11 @@ async function main() {
   const skipgen = commander.opts().skipgen;
   const notebook = commander.opts().notebook;
   let flights = commander.opts().flights;
+  console.log("Checking flights: " + flights);
   if (flights?.toString() === "true") {
     // -f passed without arguments
     flights = undefined;
+    console.log("setting flights to undefined!!!");
   }
   checkIfAllNotebooksHaveTests();
   if (skipgen === undefined || !skipgen) {
@@ -253,7 +255,15 @@ async function main() {
   }
   const hosts = await runNotebooks(notebook);
   writeCypressSettings(hosts);
-  e2e(commander.opts().watch, notebook, flights);
+  for (var fileName of fileNames) {
+    if (notebook && fileName !== notebook) {
+      console.log(
+        `Skipping e2e for ${fileName}. Looking for ${notebook} only.`
+      );
+      continue;
+    }
+    e2e(commander.opts().watch, fileName, flights);
+  }
   process.exit(0);
 }
 
