@@ -10,7 +10,8 @@ import {
   JointDataset,
   ModelExplanationUtils,
   FluentUIStyles,
-  ModelTypes
+  ModelTypes,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries, LocalImportancePlots } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -27,6 +28,7 @@ export interface ITabularLocalImportancePlotsProps {
   selectedCohort: ErrorCohort;
   modelType?: ModelTypes;
   selectedItems: IObjectWithKey[];
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface IViewedFeatureImportances {
@@ -90,6 +92,7 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
         sortingSeriesIndex={sortingSeriesIndex}
         invokeModel={this.props.invokeModel}
         onWeightChange={this.props.onWeightChange}
+        telemetryHook={this.props.telemetryHook}
       />
     );
   }
