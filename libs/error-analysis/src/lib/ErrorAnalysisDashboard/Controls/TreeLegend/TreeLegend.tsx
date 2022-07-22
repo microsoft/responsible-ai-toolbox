@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
-import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
+import { ErrorCohort, ITelemetryEvent, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -27,6 +27,7 @@ export interface ITreeLegendProps {
   selectedCohort: ErrorCohort;
   setMetric: (metric: string) => void;
   showCohortName: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
@@ -51,6 +52,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
             <MetricSelector
               isEnabled={this.props.isEnabled}
               setMetric={this.props.setMetric}
+              telemetryHook={this.props.telemetryHook}
             />
             <DefaultButton
               className={classNames.button}

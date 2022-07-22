@@ -8,7 +8,8 @@ import {
   CohortSource,
   ErrorCohort,
   MetricCohortStats,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
 export interface IMatrixAreaProps {
@@ -33,4 +34,5 @@ export interface IMatrixAreaProps {
   baseCohort: ErrorCohort;
   updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
   metric: string;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }

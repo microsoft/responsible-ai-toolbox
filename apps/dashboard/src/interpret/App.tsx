@@ -4,7 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import {
   IExplanationDashboardData,
-  ITelemetryMessage
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import {
   NewExplanationDashboard,
@@ -42,7 +42,7 @@ export class App extends React.Component<IAppProps> {
         ? undefined
         : this.requestPredictions,
       stringParams: { contextualHelp: this.messages },
-      telemetryHook: (er: ITelemetryMessage): void => {
+      telemetryHook: (er: ITelemetryEvent): void => {
         console.error(er.message);
       },
       theme: this.props.theme
