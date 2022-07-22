@@ -9,13 +9,17 @@ export function describeAggregateBalanceMeasures(
 ): void {
   describe("Aggregate balance measures", () => {
     if (!dataShape.dataBalanceData?.aggregateBalanceMeasuresComputed) {
-      it("Should not render aggregate balance measures", () => {
-        cy.get(Locators.AggregateBalanceMeasures).should("not.exist");
+      it("should render no measures computed message", () => {
+        cy.get(
+          `${Locators.AggregateBalanceMeasures} #MissingParameterPlaceHolder`
+        ).contains(
+          "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights."
+        );
       });
       return;
     }
 
-    it("Should have a header with clickable info button", () => {
+    it("should have a header with clickable info button", () => {
       cy.get(Locators.AggregateBalanceMeasuresHeader).contains(
         "Aggregate balance measures"
       );
@@ -24,7 +28,7 @@ export function describeAggregateBalanceMeasures(
       );
     });
 
-    it("Should have a table with 3 cols (name, value, desc) and 3 rows (each measure)", () => {
+    it("should have a table with 3 cols (name, value, desc) and 3 rows (each measure)", () => {
       cy.get(Locators.AggregateBalanceMeasuresTable).should("exist");
       cy.get(Locators.AggregateBalanceMeasuresTableColumns).should(
         "have.length",

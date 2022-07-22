@@ -32,10 +32,12 @@ export function describeDataBalance(
       cy.get(Locators.DataAnalysisPivot).should("exist");
       cy.get(Locators.DataBalancePivotItem).click();
     });
+
+    const dataBalanceData = datasetShape.dataBalanceData;
     if (
-      !datasetShape.dataBalanceData?.aggregateBalanceMeasuresComputed &&
-      !datasetShape.dataBalanceData?.distributionBalanceMeasuresComputed &&
-      !datasetShape.dataBalanceData?.featureBalanceMeasuresComputed
+      dataBalanceData?.aggregateBalanceMeasuresComputed &&
+      dataBalanceData?.distributionBalanceMeasuresComputed &&
+      dataBalanceData?.featureBalanceMeasuresComputed
     ) {
       it("should render no measures computed message", () => {
         cy.get("#MissingParameterPlaceHolder").contains(

@@ -6,7 +6,8 @@ import {
   BasicHighChart,
   HeaderWithInfo,
   IDistributionBalanceMeasures,
-  IHighchartsConfig
+  IHighchartsConfig,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -20,7 +21,7 @@ import React from "react";
 import { DistributionBalanceMeasuresMap } from "./getDistributionBalanceMeasuresChart";
 
 export interface IDistributionBalanceMeasuresProps {
-  distributionBalanceMeasures: IDistributionBalanceMeasures;
+  distributionBalanceMeasures?: IDistributionBalanceMeasures;
 }
 
 export interface IDistributionBalanceMeasuresState {
@@ -34,6 +35,8 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
   IDistributionBalanceMeasuresProps,
   IDistributionBalanceMeasuresState
 > {
+  static readonly INFO_ICON = "&#9432;";
+
   public constructor(props: IDistributionBalanceMeasuresProps) {
     super(props);
 
@@ -56,26 +59,36 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const distributionBalanceMeasures = this.props.distributionBalanceMeasures;
-    if (!distributionBalanceMeasures) {
-      return;
-    }
 
     const measuresLocalization =
       localization.ModelAssessment.DataBalance.DistributionBalanceMeasures;
 
+    const headerWithInfo = (
+      <HeaderWithInfo
+        title={measuresLocalization.Name}
+        calloutTitle={measuresLocalization.Callout.Title}
+        calloutDescription={measuresLocalization.Callout.Description}
+        // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+        calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures"
+        calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+        id="distributionBalanceMeasuresHeader"
+      />
+    );
+
+    if (!distributionBalanceMeasures) {
+      return (
+        <>
+          {headerWithInfo}
+          <MissingParametersPlaceholder>
+            {measuresLocalization.MeasuresNotComputed}
+          </MissingParametersPlaceholder>
+        </>
+      );
+    }
+
     return (
       <Stack tokens={{ childrenGap: "l1" }} id="distributionBalanceMeasures">
-        <Stack.Item>
-          <HeaderWithInfo
-            title={measuresLocalization.Name}
-            calloutTitle={measuresLocalization.Callout.Title}
-            calloutDescription={measuresLocalization.Callout.Description}
-            // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-            calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures"
-            calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
-            id="distributionBalanceMeasuresHeader"
-          />
-        </Stack.Item>
+        <Stack.Item>{headerWithInfo}</Stack.Item>
 
         <Stack.Item>
           <BasicHighChart
@@ -96,7 +109,7 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
     visibleMeasures: string[]
   ): IHighchartsConfig {
     if (
-      distributionBalanceMeasures === undefined ||
+      !distributionBalanceMeasures ||
       Object.keys(distributionBalanceMeasures).length === 0
     ) {
       return {};
@@ -105,15 +118,14 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
     const chartLocalization =
       localization.ModelAssessment.DataBalance.DistributionBalanceMeasures
         .Chart;
-    const infoIcon = "&#9432;";
 
     const features = Object.keys(distributionBalanceMeasures);
 
     // Since each measure has its own range of values, it can be its own subplot and
     // therefore it has its own series, x-axis, and y-axis.
-    const multipleSeries: SeriesOptionsType[] = [],
-      xAxes: XAxisOptions[] = [],
-      yAxes: YAxisOptions[] = [];
+    const multipleSeries: SeriesOptionsType[] = [];
+    const xAxes: XAxisOptions[] = [];
+    const yAxes: YAxisOptions[] = [];
 
     // Calculate the width of each subplot and the padding between each subplot
     const width = 100 / visibleMeasures.length;
@@ -152,7 +164,7 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
           showEmpty: false,
           title: {
             // If user hovers over the title, they are presented with the measure description.
-            text: `<div title="${measureInfo.Description}">${measureName} ${infoIcon}</div>`,
+            text: `<div title="${measureInfo.Description}">${measureName} ${DistributionBalanceMeasuresChart.INFO_ICON}</div>`,
             useHTML: true
           },
           width: isVisible ? `${width - padding}%` : "0%"
@@ -210,13 +222,15 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
     e: SeriesLegendItemClickEventObject,
     visibleMeasures: string[]
   ): void {
+    const measure = e.target.name;
+
     // If the clicked-on chart was a visible measure, that means user clicked to hide it,
     // so remove it from visible measures.
-    if (visibleMeasures.includes(e.target.name)) {
-      visibleMeasures.splice(visibleMeasures.indexOf(e.target.name), 1);
+    if (visibleMeasures.includes(measure)) {
+      visibleMeasures.splice(visibleMeasures.indexOf(measure), 1);
     } else {
       // Otherwise, the user clicked to show the chart so add it to visible measures.
-      visibleMeasures.push(e.target.name);
+      visibleMeasures.push(measure);
     }
 
     // Re-renders the chart with the new visible measures.

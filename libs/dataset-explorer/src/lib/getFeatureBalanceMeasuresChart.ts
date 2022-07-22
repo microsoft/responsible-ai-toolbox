@@ -94,10 +94,10 @@ export function getFeatureBalanceMeasuresChart(
 ): IHighchartsConfig {
   const measureInfo = FeatureBalanceMeasuresMap.get(selectedMeasure);
   if (
-    targetColFeatureBalanceMeasures === undefined ||
+    !targetColFeatureBalanceMeasures ||
     Object.keys(targetColFeatureBalanceMeasures).length === 0 ||
     !(selectedLabel in targetColFeatureBalanceMeasures) ||
-    measureInfo === undefined
+    !measureInfo
   ) {
     return {};
   }

@@ -1363,6 +1363,7 @@
             "Name": "Theil Index (T)"
           }
         },
+        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
         "Name": "Aggregate balance measures",
         "Table": {
           "Description": "Description",
@@ -1389,7 +1390,7 @@
             "Name": "Chi-Square P-Value"
           },
           "ChiSquareStatistic": {
-            "Description": "The chi-square test tests the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
+            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
             "Name": "Chi-Square (χ2) Statistic"
           },
           "CrossEntropy": {
@@ -1417,6 +1418,7 @@
             "Name": "Wasserstein Distance"
           }
         },
+        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
         "Name": "Distribution balance measures"
       },
       "FeatureBalanceMeasures": {
@@ -1475,6 +1477,7 @@
             "Name": "t-test p-value"
           }
         },
+        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
         "Name": "Feature balance measures"
       },
       "LearnMore": "Learn more",

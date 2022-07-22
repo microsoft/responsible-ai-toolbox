@@ -1,24 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
+import { Dropdown, IDropdownOption, Label, Stack, Text } from "@fluentui/react";
 import {
   HeaderWithInfo,
   HeatmapHighChart,
-  ITargetColumnFeatureBalanceMeasures
+  ITargetColumnFeatureBalanceMeasures,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
+import { FeatureBalanceMeasuresDescription } from "./FeatureBalanceMeasuresDescription";
 import {
   FeatureBalanceMeasuresMap,
   getFeatureBalanceMeasuresChart
 } from "./getFeatureBalanceMeasuresChart";
 
 export interface IFeatureBalanceMeasuresProps {
-  featureBalanceMeasures: ITargetColumnFeatureBalanceMeasures;
+  featureBalanceMeasures?: ITargetColumnFeatureBalanceMeasures;
 }
 
 export interface IFeatureBalanceMeasuresState {
@@ -43,13 +44,32 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const featureBalanceMeasures = this.props.featureBalanceMeasures;
-    if (!featureBalanceMeasures) {
-      return;
-    }
 
-    const styles = dataBalanceTabStyles();
     const measuresLocalization =
       localization.ModelAssessment.DataBalance.FeatureBalanceMeasures;
+
+    const headerWithInfo = (
+      <HeaderWithInfo
+        title={measuresLocalization.Name}
+        calloutTitle={measuresLocalization.Callout.Title}
+        calloutDescription={measuresLocalization.Callout.Description}
+        // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
+        calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
+        calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
+        id="featureBalanceMeasuresHeader"
+      />
+    );
+
+    if (!featureBalanceMeasures) {
+      return (
+        <>
+          {headerWithInfo}
+          <MissingParametersPlaceholder>
+            {measuresLocalization.MeasuresNotComputed}
+          </MissingParametersPlaceholder>
+        </>
+      );
+    }
 
     const labelOptions = _.uniq(Object.keys(featureBalanceMeasures)).map(
       (label, index) => ({ key: index, text: label } as IDropdownOption)
@@ -76,17 +96,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
     return (
       <Stack tokens={{ childrenGap: "l1" }} id="featureBalanceMeasures">
-        <Stack.Item>
-          <HeaderWithInfo
-            title={measuresLocalization.Name}
-            calloutTitle={measuresLocalization.Callout.Title}
-            calloutDescription={measuresLocalization.Callout.Description}
-            // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-            calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#feature-balance-measures"
-            calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
-            id="featureBalanceMeasuresHeader"
-          />
-        </Stack.Item>
+        <Stack.Item>{headerWithInfo}</Stack.Item>
 
         {/* Renders the the three dropdowns, their respective headings, and the description */}
         <Stack.Item>
@@ -95,24 +105,11 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
             <Stack.Item>
               <Stack tokens={{ childrenGap: "s1" }}>
                 <Stack.Item>
-                  <Text variant="mediumPlus" className={styles.boldText}>
-                    {measuresLocalization.LabelPicker}
-                  </Text>
+                  <Label>{measuresLocalization.LabelPicker}</Label>
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{
-                      callout: {
-                        selectors: {
-                          ".ms-Button-flexContainer": {
-                            width: "100%"
-                          }
-                        }
-                      },
-                      dropdown: {
-                        width: 150
-                      }
-                    }}
+                    styles={{ dropdown: { width: 150 } }}
                     id="labelDropdown"
                     options={labelOptions}
                     selectedKey={this.state.selectedLabelIndex}
@@ -126,24 +123,11 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
             <Stack.Item>
               <Stack tokens={{ childrenGap: "s1" }}>
                 <Stack.Item>
-                  <Text variant="mediumPlus" className={styles.boldText}>
-                    {measuresLocalization.FeaturePicker}
-                  </Text>
+                  <Label>{measuresLocalization.FeaturePicker}</Label>
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{
-                      callout: {
-                        selectors: {
-                          ".ms-Button-flexContainer": {
-                            width: "100%"
-                          }
-                        }
-                      },
-                      dropdown: {
-                        width: 150
-                      }
-                    }}
+                    styles={{ dropdown: { width: 150 } }}
                     id="featureDropdown"
                     options={featureOptions}
                     selectedKey={this.state.selectedFeatureIndex}
@@ -157,24 +141,11 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
             <Stack.Item>
               <Stack tokens={{ childrenGap: "s1" }}>
                 <Stack.Item>
-                  <Text variant="mediumPlus" className={styles.boldText}>
-                    {measuresLocalization.MeasurePicker}
-                  </Text>
+                  <Label>{measuresLocalization.MeasurePicker}</Label>
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{
-                      callout: {
-                        selectors: {
-                          ".ms-Button-flexContainer": {
-                            width: "100%"
-                          }
-                        }
-                      },
-                      dropdown: {
-                        width: 200
-                      }
-                    }}
+                    styles={{ dropdown: { width: 200 } }}
                     id="measureDropdown"
                     options={measureOptions}
                     selectedKey={this.state.selectedMeasureIndex}
@@ -186,34 +157,17 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
             {/* Renders the description of what user chose from dropdowns */}
             <Stack.Item>
-              <Stack tokens={{ childrenGap: "s1" }}>
+              <Stack tokens={{ childrenGap: "l1" }}>
                 <Stack.Item>
                   {/* Empty placeholder so that description lines up with dropdowns */}
                   <br />
                 </Stack.Item>
                 <Stack.Item>
-                  <Text>
-                    {/* Because <Text> does not support bolding single words, split it into multiple <Text>s
-                        Format is: "Showing <measure> gaps on all classes of <feature> for label <label>" */}
-                    <Text variant="mediumPlus">
-                      {measuresLocalization.Description1}
-                    </Text>
-                    <Text variant="mediumPlus" className={styles.boldText}>
-                      {` ${selectedMeasure} `}
-                    </Text>
-                    <Text variant="mediumPlus">
-                      {measuresLocalization.Description2}
-                    </Text>
-                    <Text variant="mediumPlus" className={styles.boldText}>
-                      {` ${selectedFeature} `}
-                    </Text>
-                    <Text variant="mediumPlus">
-                      {measuresLocalization.Description3}
-                    </Text>
-                    <Text variant="mediumPlus" className={styles.boldText}>
-                      {` ${selectedLabel}`}
-                    </Text>
-                  </Text>
+                  <FeatureBalanceMeasuresDescription
+                    selectedMeasure={selectedMeasure}
+                    selectedFeature={selectedFeature}
+                    selectedLabel={selectedLabel}
+                  />
                 </Stack.Item>
               </Stack>
             </Stack.Item>
@@ -222,13 +176,9 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
         {/* Renders the description of the chosen measure */}
         <Stack.Item>
-          {/* Since measure name is bolded, the <Text>s are separate and form "<measureName> <measureDesc>" */}
-          <Text variant="medium" className={styles.infoWithText}>
-            <Text className={styles.boldText}>{selectedMeasure}</Text>
-            <Text> </Text>
-            <Text>
-              {FeatureBalanceMeasuresMap.get(selectedMeasure)?.Description}
-            </Text>
+          <Text style={{ fontWeight: 600 }}>{selectedMeasure} </Text>
+          <Text>
+            {FeatureBalanceMeasuresMap.get(selectedMeasure)?.Description}
           </Text>
         </Stack.Item>
 
@@ -251,7 +201,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key) {
       this.setState({ selectedLabelIndex: item.key as number });
     }
   };
@@ -260,7 +210,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key) {
       this.setState({ selectedFeatureIndex: item.key as number });
     }
   };
@@ -269,7 +219,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key !== undefined) {
+    if (item?.key) {
       this.setState({ selectedMeasureIndex: item.key as number });
     }
   };

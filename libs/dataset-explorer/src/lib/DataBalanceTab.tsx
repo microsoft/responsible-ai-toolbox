@@ -46,33 +46,25 @@ export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
     return (
       <Stack grow tokens={{ childrenGap: "l1" }} className={styles.page}>
         <Stack.Item>
-          {dataBalanceMeasures.FeatureBalanceMeasures && (
-            <FeatureBalanceMeasuresChart
-              featureBalanceMeasures={
-                dataBalanceMeasures.FeatureBalanceMeasures
-              }
-            />
-          )}
+          <FeatureBalanceMeasuresChart
+            featureBalanceMeasures={dataBalanceMeasures.FeatureBalanceMeasures}
+          />
         </Stack.Item>
 
         <Stack.Item>
-          {dataBalanceMeasures.DistributionBalanceMeasures && (
-            <DistributionBalanceMeasuresChart
-              distributionBalanceMeasures={
-                dataBalanceMeasures.DistributionBalanceMeasures
-              }
-            />
-          )}
+          <DistributionBalanceMeasuresChart
+            distributionBalanceMeasures={
+              dataBalanceMeasures.DistributionBalanceMeasures
+            }
+          />
         </Stack.Item>
 
         <Stack.Item>
-          {dataBalanceMeasures.AggregateBalanceMeasures && (
-            <AggregateBalanceMeasuresTable
-              aggregateBalanceMeasures={
-                dataBalanceMeasures.AggregateBalanceMeasures
-              }
-            />
-          )}
+          <AggregateBalanceMeasuresTable
+            aggregateBalanceMeasures={
+              dataBalanceMeasures.AggregateBalanceMeasures
+            }
+          />
         </Stack.Item>
       </Stack>
     );
