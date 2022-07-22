@@ -35,9 +35,9 @@ export function describeDataBalance(
 
     const dataBalanceData = datasetShape.dataBalanceData;
     if (
-      dataBalanceData?.aggregateBalanceMeasuresComputed &&
-      dataBalanceData?.distributionBalanceMeasuresComputed &&
-      dataBalanceData?.featureBalanceMeasuresComputed
+      !dataBalanceData?.aggregateBalanceMeasuresComputed &&
+      !dataBalanceData?.distributionBalanceMeasuresComputed &&
+      !dataBalanceData?.featureBalanceMeasuresComputed
     ) {
       it("should render no measures computed message", () => {
         cy.get("#MissingParameterPlaceHolder").contains(
