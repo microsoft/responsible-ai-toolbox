@@ -29,7 +29,9 @@ import {
   ICounterfactualData,
   BasicHighChart,
   ErrorDialog,
-  ITelemetryEvent
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -219,6 +221,7 @@ export class CounterfactualChart extends React.PureComponent<
                   temporaryPoint={this.temporaryPoint}
                   isPanelOpen={this.state.isPanelOpen}
                   data={this.context.counterfactualData}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.yDialogOpen && (
@@ -503,6 +506,9 @@ export class CounterfactualChart extends React.PureComponent<
     const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
   };
 
   private getOriginalData(
@@ -810,6 +816,9 @@ export class CounterfactualChart extends React.PureComponent<
       const index = Number.parseInt(item.key);
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
+      );
     }
   };
 
@@ -910,8 +919,20 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
   private togglePanel = (): void => {
+    if (!this.state.isPanelOpen) {
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualCreateWhatIfCounterfactualClick
+      );
+    }
     this.setState((preState) => {
       return { isPanelOpen: !preState.isPanelOpen };
+    });
+  };
+
+  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
     });
   };
 }

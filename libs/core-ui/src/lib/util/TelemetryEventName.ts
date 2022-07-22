@@ -42,6 +42,11 @@ export enum TelemetryEventName {
   FeatureImportancesCrossClassWeightsCalloutClick = "FeatureImportancesCrossClassWeightsCalloutClick",
   FeatureImportancesHowToReadChartCalloutClick = "FeatureImportancesHowToReadChartCalloutClick",
   // Counterfactual
+  CounterfactualNewDatapointSelectedFromChart = "CounterfactualNewDatapointSelectedFromChart",
+  CounterfactualNewDatapointSelectedFromDropdown = "CounterfactualNewDatapointSelectedFromDropdown",
+  CounterfactualCreateWhatIfCounterfactualClick = "CounterfactualCreateWhatIfCounterfactualClick",
+  CounterfactualSaveAsNewDatapointClick = "CounterfactualSaveAsNewDatapointClick",
+  CounterfactualListSetValueClick = "CounterfactualListSetValueClick",
   // Causal analysis
   AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick = "AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick",
   IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick"
