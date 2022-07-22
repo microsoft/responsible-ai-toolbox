@@ -226,7 +226,7 @@ export interface IMetricOption extends IDropdownOption {
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression",
+  taskType: "classification" | "regression" | "text_classification",
   isMulticlass: boolean
 ) {
   const selectableMetrics: IMetricOption[] = [];

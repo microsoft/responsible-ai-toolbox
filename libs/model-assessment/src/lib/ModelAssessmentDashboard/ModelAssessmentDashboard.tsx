@@ -9,7 +9,9 @@ import {
   CohortSource,
   Cohort,
   SaveCohort,
-  defaultTheme
+  defaultTheme,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -90,6 +92,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
+            telemetryHook={this.props.telemetryHook}
           />
           <Stack.Item className={classNames.mainContent}>
             <TabsView
@@ -110,6 +113,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
               stringParams={this.props.stringParams}
+              telemetryHook={this.props.telemetryHook}
               updateSelectedCohort={this.updateSelectedCohort}
               setSaveCohortVisible={this.setSaveCohortVisible}
               setSelectedCohort={this.setSelectedCohort}
@@ -136,6 +140,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapSaveAsNewCohortClick
+    });
   };
 
   private addTab = (index: number, tab: GlobalTabKeys): void => {
@@ -182,6 +190,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts,
       selectedCohort: this.state.baseCohort
     });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapClearSelection
+    });
   };
 
   private onSaveCohort = (
@@ -200,6 +212,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? savedCohort : preState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapCohortSaved
+    });
   };
 
   private addCohort = (
@@ -226,6 +242,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.NewCohortAdded
+    });
   };
 
   private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {

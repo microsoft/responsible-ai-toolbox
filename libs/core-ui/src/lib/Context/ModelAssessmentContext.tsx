@@ -15,7 +15,7 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
-import { ITelemetryMessage } from "../util/ITelemetryMessage";
+import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 
 export interface IModelAssessmentContext {
@@ -35,7 +35,7 @@ export interface IModelAssessmentContext {
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
 
-  telemetryHook: (message: ITelemetryMessage) => void;
+  telemetryHook: (message: ITelemetryEvent) => void;
   requestCausalWhatIf?: (
     id: string,
     features: unknown[],
