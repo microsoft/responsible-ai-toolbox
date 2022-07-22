@@ -4,7 +4,7 @@
 import { IDataBalanceMeasures } from "./IDataBalanceMeasures";
 
 export interface IDataset {
-  task_type: "classification" | "regression";
+  task_type: "classification" | "regression" | "text_classification";
   true_y: number[];
   predicted_y?: number[];
   probability_y?: number[][];
