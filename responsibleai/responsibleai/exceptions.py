@@ -29,7 +29,7 @@ class DuplicateManagerConfigException(UserErrorException):
     :param exception_message: A message describing the error.
     :type exception_message: str
     """
-    _error_code = 'Duplicate RAI configuration detected.'
+    _error_code = 'Duplicate RAI configuration detected'
 
 
 class UserConfigValidationException(UserErrorException):

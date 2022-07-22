@@ -13,34 +13,40 @@ TEST_MESSAGE = "Test message"
 
 
 class TestExceptions:
+    def _verify_exception_hierarchy(
+            self, exception, parent_exception,
+            error_code, exception_message):
+        assert exception._error_code == error_code
+        assert str(exception) == exception_message
+        assert isinstance(exception, type(parent_exception))
+
     def test_user_exceptions(self):
         ucve = UserConfigValidationException(TEST_MESSAGE)
-        assert ucve._error_code == 'Invalid config'
-        assert str(ucve) == TEST_MESSAGE
-        assert isinstance(ucve, UserErrorException)
+        self._verify_exception_hierarchy(
+            ucve, UserErrorException(), 'Invalid config', TEST_MESSAGE)
 
         de = DuplicateManagerConfigException(TEST_MESSAGE)
-        assert de._error_code == 'Duplicate RAI configuration detected.'
-        assert str(de) == TEST_MESSAGE
-        assert isinstance(de, UserErrorException)
+        self._verify_exception_hierarchy(
+            de, UserErrorException(),
+            'Duplicate RAI configuration detected', TEST_MESSAGE)
 
         uee = UserErrorException(TEST_MESSAGE)
-        assert uee._error_code == 'User Error'
-        assert str(uee) == TEST_MESSAGE
-        assert isinstance(uee, UserErrorException)
+        self._verify_exception_hierarchy(
+            uee, UserErrorException(),
+            'User Error', TEST_MESSAGE)
 
     def test_system_exceptions(self):
         cerm = ConfigAndResultMismatchException(TEST_MESSAGE)
-        assert cerm._error_code == 'Config and result mismatch'
-        assert str(cerm) == TEST_MESSAGE
-        assert isinstance(cerm, SystemErrorException)
+        self._verify_exception_hierarchy(
+            cerm, SystemErrorException(),
+            'Config and result mismatch', TEST_MESSAGE)
 
-        se = SchemaErrorException(TEST_MESSAGE)
-        assert se._error_code == 'Schema Error'
-        assert str(se) == TEST_MESSAGE
-        assert isinstance(se, SystemErrorException)
+        see = SchemaErrorException(TEST_MESSAGE)
+        self._verify_exception_hierarchy(
+            see, SystemErrorException(),
+            'Schema Error', TEST_MESSAGE)
 
         se = SystemErrorException(TEST_MESSAGE)
-        assert se._error_code == 'System Error'
-        assert str(se) == TEST_MESSAGE
-        assert isinstance(se, SystemErrorException)
+        self._verify_exception_hierarchy(
+            se, SystemErrorException(),
+            'System Error', TEST_MESSAGE)
