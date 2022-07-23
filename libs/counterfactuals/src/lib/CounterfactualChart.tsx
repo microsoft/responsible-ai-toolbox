@@ -28,7 +28,10 @@ import {
   InteractiveLegend,
   ICounterfactualData,
   BasicHighChart,
-  ErrorDialog
+  ErrorDialog,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -47,6 +50,7 @@ export interface ICounterfactualChartProps {
   weightLabels: any;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -217,6 +221,7 @@ export class CounterfactualChart extends React.PureComponent<
                   temporaryPoint={this.temporaryPoint}
                   isPanelOpen={this.state.isPanelOpen}
                   data={this.context.counterfactualData}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.yDialogOpen && (
@@ -235,6 +240,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onYSet}
                   onCancel={this.setYClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.xDialogOpen && (
@@ -259,6 +265,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onXSet}
                   onCancel={this.setXClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               <Stack horizontal={false}>
@@ -499,6 +506,9 @@ export class CounterfactualChart extends React.PureComponent<
     const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
   };
 
   private getOriginalData(
@@ -806,6 +816,9 @@ export class CounterfactualChart extends React.PureComponent<
       const index = Number.parseInt(item.key);
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
+      );
     }
   };
 
@@ -906,8 +919,20 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
   private togglePanel = (): void => {
+    if (!this.state.isPanelOpen) {
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualCreateWhatIfCounterfactualClick
+      );
+    }
     this.setState((preState) => {
       return { isPanelOpen: !preState.isPanelOpen };
+    });
+  };
+
+  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
     });
   };
 }

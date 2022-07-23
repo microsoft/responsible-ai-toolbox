@@ -4,6 +4,7 @@
 import { Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ITelemetryEvent,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -16,7 +17,9 @@ import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 import { DistributionBalanceMeasuresChart } from "./DistributionBalanceMeasuresChart";
 import { FeatureBalanceMeasuresChart } from "./FeatureBalanceMeasuresChart";
 
-export class IDataBalanceTabProps {}
+export class IDataBalanceTabProps {
+  telemetryHook?: (message: ITelemetryEvent) => void;
+}
 
 export class DataBalanceTab extends React.Component<IDataBalanceTabProps> {
   public static contextType = ModelAssessmentContext;

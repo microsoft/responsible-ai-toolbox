@@ -29,7 +29,10 @@ import {
   ChartTypes,
   MissingParametersPlaceholder,
   FluentUIStyles,
-  FeatureImportanceBar
+  FeatureImportanceBar,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -55,6 +58,7 @@ export interface ILocalImportancePlotsProps {
   sortingSeriesIndex: number | undefined;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ILocalImportancePlotsState {
@@ -495,6 +499,13 @@ export class LocalImportancePlots extends React.Component<
       return;
     }
     this.setState({ secondaryChartChoice: item.key });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type:
+        item.key === WhatIfConstants.featureImportanceKey
+          ? TelemetryEventName.IndividualFeatureImportanceFeatureImportancePlotClick
+          : TelemetryEventName.IndividualFeatureImportanceICEPlotClick
+    });
   };
 
   private toggleCrossClassInfo = (): void => {

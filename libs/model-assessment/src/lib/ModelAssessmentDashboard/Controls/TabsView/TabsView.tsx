@@ -200,6 +200,7 @@ export class TabsView extends React.PureComponent<
                     </Text>
                   </div>
                   <DataAnalysisTab
+                    telemetryHook={this.props.telemetryHook}
                     showDataBalanceExperience={isFlightActive(
                       dataBalanceExperienceFlight,
                       this.context.featureFlights
@@ -226,6 +227,7 @@ export class TabsView extends React.PureComponent<
                       weightVectorLabels={this.state.weightVectorLabels}
                       requestPredictions={this.props.requestPredictions}
                       onWeightVectorChange={this.onWeightVectorChange}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -245,6 +247,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -262,6 +265,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
