@@ -68,7 +68,6 @@ class CausalResult(BaseResult['CausalResult']):
 
         causal_data.id = self.id
         causal_data.version = self.version
-
         causal_data.config = self._get_config_object(self.config)
 
         causal_data.global_effects = self.global_effects\
@@ -86,9 +85,97 @@ class CausalResult(BaseResult['CausalResult']):
         return self.causal_analysis.whatif(
             X, X_feature_new, feature_name, y, alpha=alpha)
 
-    def _cohort_effects(self, X_test, alpha=0.01, keep_all_levels=False):
-        return self.causal_analysis.cohort_causal_effect(
-            X_test, alpha=alpha, keep_all_levels=keep_all_levels)
+    def _global_cohort_effects(self, X_test):
+        causal_data = CausalData()
+
+        causal_data.id = self.id
+        causal_data.version = self.version
+        causal_data.config = self._get_config_object(self.config)
+        causal_data.global_effects = \
+            self.causal_analysis.cohort_causal_effect(
+                X_test, alpha=self.config.alpha,
+                keep_all_levels=True).to_dict(
+                    orient="records")
+        return causal_data
+
+    def _local_instance_effects(self, X_test):
+        causal_data = CausalData()
+
+        causal_data.id = self.id
+        causal_data.version = self.version
+        causal_data.config = self._get_config_object(self.config)
+
+        local_effects = self.causal_analysis.local_causal_effect(
+            X_test, alpha=self.config.alpha,
+            keep_all_levels=True)
+
+        local_dicts = local_effects.groupby('sample').apply(
+            lambda x: x.reset_index().to_dict(
+                orient='records')).values
+        causal_data.local_effects = [list(v) for v in local_dicts]
+
+        return causal_data
+
+    def _global_cohort_policy(self, X_test):
+        causal_data = CausalData()
+
+        causal_data.id = self.id
+        causal_data.version = self.version
+        causal_data.config = self._get_config_object(self.config)
+
+        causal_config = self.config
+        if isinstance(causal_config.treatment_cost, int) and \
+                causal_config.treatment_cost == 0:
+            revised_treatment_cost = [0] * len(
+                causal_config.treatment_features)
+        else:
+            revised_treatment_cost = causal_config.treatment_cost
+
+        policies = []
+        for i in range(len(causal_config.treatment_features)):
+            policy = self._create_policy(
+                X_test,
+                causal_config.treatment_features[i],
+                revised_treatment_cost[i],
+                causal_config.alpha, causal_config.max_tree_depth,
+                causal_config.min_tree_leaf_samples)
+            policies.append(policy)
+        causal_data.policies = [self._get_policy_object(p) for p in
+                                policies]
+        return causal_data
+
+    def _create_policy(
+        self,
+        X_test,
+        treatment_feature,
+        treatment_cost,
+        alpha,
+        max_tree_depth,
+        min_tree_leaf_samples,
+    ):
+        local_policies = self.causal_analysis.individualized_policy(
+            X_test, treatment_feature,
+            treatment_costs=treatment_cost,
+            alpha=alpha)
+
+        tree = self.causal_analysis._policy_tree_output(
+            X_test, treatment_feature,
+            treatment_costs=treatment_cost,
+            max_depth=max_tree_depth,
+            min_samples_leaf=min_tree_leaf_samples,
+            alpha=alpha)
+
+        return {
+            ResultAttributes.TREATMENT_FEATURE: treatment_feature,
+            ResultAttributes.CONTROL_TREATMENT: tree.control_name,
+            ResultAttributes.LOCAL_POLICIES: local_policies,
+            ResultAttributes.POLICY_GAINS: {
+                ResultAttributes.RECOMMENDED_POLICY_GAINS:
+                    tree.policy_value,
+                ResultAttributes.TREATMENT_GAINS: tree.always_treat,
+            },
+            ResultAttributes.POLICY_TREE: tree.tree_dictionary
+        }
 
     def _get_config_object(self, config):
         config_object = CausalConfigInterface()
