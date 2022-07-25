@@ -14,8 +14,11 @@ import {
 import {
   defaultModelAssessmentContext,
   ErrorCohort,
+  ITelemetryEvent,
   JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -27,6 +30,7 @@ import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSpl
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
   onChooseCohorts: () => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IProbabilityDistributionChartState {
@@ -250,6 +254,10 @@ export class ProbabilityDistributionChart extends React.Component<
   ) => {
     if (checked !== undefined) {
       this.setState({ showSplineChart: checked });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.ModelOverviewSplineChartToggleUpdated
+      });
     }
   };
 }

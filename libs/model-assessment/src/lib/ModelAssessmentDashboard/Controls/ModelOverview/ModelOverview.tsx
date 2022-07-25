@@ -267,7 +267,7 @@ export class ModelOverview extends React.Component<
             <Text variant="medium" className={classNames.descriptionText}>
               {localization.Interpret.ModelPerformance.helperText}
             </Text>
-            <OverallMetricChart />
+            <OverallMetricChart telemetryHook={this.props.telemetryHook} />
           </>
         )}
         {this.props.showNewModelOverviewExperience && (
@@ -325,9 +325,7 @@ export class ModelOverview extends React.Component<
               />
               <ActionButton
                 className={classNames.configurationActionButton}
-                onClick={() =>
-                  this.setState({ metricConfigurationIsVisible: true })
-                }
+                onClick={this.onClickMetricsConfiguration}
                 iconProps={{ iconName: "ColumnOptions" }}
               >
                 {
@@ -358,9 +356,7 @@ export class ModelOverview extends React.Component<
                 <ActionButton
                   id="modelOverviewFeatureConfigurationActionButton"
                   className={classNames.configurationActionButton}
-                  onClick={() =>
-                    this.setState({ featureConfigurationIsVisible: true })
-                  }
+                  onClick={this.onClickFeatureConfiguration}
                   iconProps={{ iconName: "ColumnOptions" }}
                 >
                   {
@@ -482,6 +478,7 @@ export class ModelOverview extends React.Component<
                     <ProbabilityDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
                       cohorts={chartCohorts}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </PivotItem>
                 )}
@@ -506,6 +503,20 @@ export class ModelOverview extends React.Component<
     );
   }
 
+  private onClickMetricsConfiguration = () => {
+    this.setState({ metricConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsConfigurationClick
+    );
+  };
+
+  private onClickFeatureConfiguration = () => {
+    this.setState({ featureConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewFeatureConfigurationClick
+    );
+  };
+
   private onDismissChartConfigurationFlyout = () => {
     this.setState({ chartConfigurationIsVisible: false });
   };
@@ -520,6 +531,9 @@ export class ModelOverview extends React.Component<
   ) => {
     if (checked !== undefined) {
       this.setState({ showHeatmapColors: checked });
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewShowHeatmapToggleUpdated
+      );
     }
   };
 
@@ -560,6 +574,9 @@ export class ModelOverview extends React.Component<
           selectedMetrics
         });
       }
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
     }
   };
 
