@@ -13,6 +13,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: false
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: true,
+      distributionBalanceMeasuresComputed: true,
+      featureBalanceMeasuresComputed: true
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "40",
       colorValueButton: "Predicted Y",
@@ -103,6 +108,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: true
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: false,
+      distributionBalanceMeasuresComputed: false,
+      featureBalanceMeasuresComputed: false
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "0.05",
       colorValueButton: "Predicted Y",
@@ -169,6 +179,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: false
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: false,
+      distributionBalanceMeasuresComputed: false,
+      featureBalanceMeasuresComputed: false
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "0.05",
       colorValueButton: "Predicted Y",
@@ -236,6 +251,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: false
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: false,
+      distributionBalanceMeasuresComputed: false,
+      featureBalanceMeasuresComputed: false
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "150",
       colorValueButton: "Predicted Y",
@@ -343,6 +363,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: true
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: false,
+      distributionBalanceMeasuresComputed: false,
+      featureBalanceMeasuresComputed: false
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "100",
       colorValueButton: "Index",
@@ -410,6 +435,11 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
       hasCausalAnalysisComponent: false
     },
     cohortDefaultName: "All data",
+    dataBalanceData: {
+      aggregateBalanceMeasuresComputed: false,
+      distributionBalanceMeasuresComputed: false,
+      featureBalanceMeasuresComputed: false
+    },
     datasetExplorerData: {
       cohortDatasetNewValue: "14.5",
       colorValueButton: "Predicted Y",
@@ -715,17 +745,28 @@ modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNew
     }
   };
 
+const modelAssessmentDatasetsDataBalanceExperience: {
+  [name: string]: IModelAssessmentData;
+} = _.chain(modelAssessmentDatasets)
+  .cloneDeep()
+  .mapKeys((_v, k: string) => `${k}DataBalanceExperience`)
+  .value();
+
 const withType: {
   [key in keyof typeof modelAssessmentDatasets]: IModelAssessmentData;
 } = modelAssessmentDatasets;
 
 const allDatasets = {
   ...modelAssessmentDatasets,
-  ...modelAssessmentDatasetsNewModelOverviewExperience
+  ...modelAssessmentDatasetsNewModelOverviewExperience,
+  ...modelAssessmentDatasetsDataBalanceExperience
 };
 const allWithType: {
   [key in keyof typeof allDatasets]: IModelAssessmentData;
-} = modelAssessmentDatasetsNewModelOverviewExperience;
+} = Object.assign(
+  modelAssessmentDatasetsNewModelOverviewExperience,
+  modelAssessmentDatasetsDataBalanceExperience
+);
 
 export {
   withType as modelAssessmentDatasets,

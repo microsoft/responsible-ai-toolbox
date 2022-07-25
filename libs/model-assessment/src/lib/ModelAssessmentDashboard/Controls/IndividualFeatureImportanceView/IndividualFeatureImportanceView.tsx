@@ -29,7 +29,9 @@ import {
   constructRows,
   constructCols,
   ModelTypes,
-  LabelWithCallout
+  LabelWithCallout,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -67,6 +69,10 @@ export class IndividualFeatureImportanceView extends React.Component<
         }
       }
       this.setState({ allSelectedItems: this.selection.getSelection() });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.IndividualFeatureImportanceSelectedDatapointsUpdated
+      });
     }
   });
 
@@ -168,6 +174,7 @@ export class IndividualFeatureImportanceView extends React.Component<
             selectedCohort={this.context.selectedErrorCohort}
             modelType={this.props.modelType}
             selectedItems={this.state.allSelectedItems}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {hasTextImportances && (

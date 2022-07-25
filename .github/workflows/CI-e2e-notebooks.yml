@@ -48,7 +48,7 @@ jobs:
         # TODO: add macos
         operatingSystem: [ubuntu-latest, windows-latest]
         pythonVersion: [3.6, 3.7, 3.8, 3.9]
-        flights: ["", "newModelOverviewExperience"]
+        flights: ["", "newModelOverviewExperience", "dataBalanceExperience"]
         notebookGroup: ["nb_group_1", "nb_group_2"]
 
     runs-on: ${{ matrix.operatingSystem }}

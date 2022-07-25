@@ -22,7 +22,10 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   rowErrorSize,
-  BasicHighChart
+  BasicHighChart,
+  TelemetryLevels,
+  TelemetryEventName,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -33,7 +36,9 @@ import { generatePlotlyProps } from "./generatePlotlyProps";
 import { getDatasetOption } from "./getDatasetOption";
 import { SidePanel } from "./SidePanel";
 
-export class IDatasetExplorerTabProps {}
+export class IDatasetExplorerTabProps {
+  telemetryHook?: (message: ITelemetryEvent) => void;
+}
 
 export interface IDatasetExplorerTabState {
   xDialogOpen: boolean;
@@ -168,6 +173,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -190,6 +196,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.colorDialogOpen && this.state.chartProps.colorAxis && (
@@ -206,6 +213,7 @@ export class DatasetExplorerTab extends React.Component<
               canDither={false}
               onAccept={this.onColorSet}
               onCancel={this.setColorClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
         </Stack.Item>
@@ -292,6 +300,7 @@ export class DatasetExplorerTab extends React.Component<
   ): void => {
     if (item?.key !== undefined) {
       this.setState({ selectedCohortIndex: item.key as number });
+      this.logButtonClick(TelemetryEventName.DatasetExplorerNewCohortSelected);
     }
   };
 
@@ -308,6 +317,14 @@ export class DatasetExplorerTab extends React.Component<
       newProps.yAxis = this.generateDefaultYAxis();
     }
     this.setState({ chartProps: newProps });
+    this.logButtonClick(TelemetryEventName.DatasetExplorerNewChartTypeSelected);
+  };
+
+  private logButtonClick = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
   };
 
   private readonly setXOpen = (): void => {
