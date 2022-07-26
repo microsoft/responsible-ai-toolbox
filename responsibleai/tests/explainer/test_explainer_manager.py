@@ -3,10 +3,10 @@
 
 import pytest
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
-
-from responsibleai.rai_insights import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.rai_insights import RAIInsights
+
+from ..common_utils import create_iris_data, create_lightgbm_classifier
 
 
 class TestExplainerManager:
