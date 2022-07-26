@@ -1,9 +1,10 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.metrics import (accuracy_score, f1_score, mean_absolute_error,
-                             mean_squared_error, median_absolute_error,
-                             precision_score, r2_score, recall_score)
+from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
+                             mean_absolute_error, mean_squared_error,
+                             median_absolute_error, precision_score, r2_score,
+                             recall_score)
 
 from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
                                                precision_metrics,
@@ -11,6 +12,48 @@ from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
 
 MICRO = 'micro'
 MACRO = 'macro'
+
+
+def false_negative_rate(y_true, y_pred):
+    """Compute the false negative rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: False negative rate.
+    :rtype: float
+    """
+    tp, _, fn, _ = confusion_matrix(y_true, y_pred).ravel()
+    return fn / (fn + tp)
+
+
+def false_positive_rate(y_true, y_pred):
+    """Compute the false positive rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: False positive rate.
+    :rtype: float
+    """
+    _, fp, _, tn = confusion_matrix(y_true, y_pred).ravel()
+    return fp / (fp + tn)
+
+
+def selection_rate(y_true, y_pred):
+    """Compute the selection rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Selection rate.
+    :rtype: float
+    """
+    tp, fp, fn, tn = confusion_matrix(y_true, y_pred).ravel()
+    return (fn + tp) / (tp + fp + fn + tn)
 
 
 def micro_precision_score(y_true, y_pred):
@@ -148,7 +191,10 @@ metric_to_func = {
     Metrics.MACRO_PRECISION_SCORE: macro_precision_score,
     Metrics.RECALL_SCORE: recall_score,
     Metrics.MICRO_RECALL_SCORE: micro_recall_score,
-    Metrics.MACRO_RECALL_SCORE: macro_recall_score
+    Metrics.MACRO_RECALL_SCORE: macro_recall_score,
+    Metrics.FALSE_POSITIVE_RATE: false_positive_rate,
+    Metrics.FALSE_NEGATIVE_RATE: false_negative_rate,
+    Metrics.SELECTION_RATE: selection_rate
 }
 
 metric_to_task = {
@@ -164,5 +210,8 @@ metric_to_task = {
     Metrics.MICRO_PRECISION_SCORE: ModelTask.CLASSIFICATION,
     Metrics.MICRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
     Metrics.MACRO_PRECISION_SCORE: ModelTask.CLASSIFICATION,
-    Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION
+    Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
+    Metrics.FALSE_NEGATIVE_RATE: ModelTask.CLASSIFICATION,
+    Metrics.FALSE_POSITIVE_RATE: ModelTask.CLASSIFICATION,
+    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION
 }
