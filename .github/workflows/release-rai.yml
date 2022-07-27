@@ -227,6 +227,7 @@ jobs:
             counterfactuals,
             fairness,
             interpret,
+            interpret-text,
             localization,
             error-analysis,
             model-assessment
