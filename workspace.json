@@ -703,6 +703,46 @@
         }
       }
     },
+    "interpret-vision": {
+      "root": "libs/interpret-vision",
+      "sourceRoot": "libs/interpret-vision/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/interpret-vision",
+            "tsConfig": "libs/interpret-vision/tsconfig.lib.json",
+            "project": "libs/interpret-vision/package.json",
+            "entryFile": "libs/interpret-vision/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/interpret-vision/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/interpret-vision/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/interpret-vision"],
+          "options": {
+            "jestConfig": "libs/interpret-vision/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "localization": {
       "root": "libs/localization",
       "sourceRoot": "libs/localization/src",
