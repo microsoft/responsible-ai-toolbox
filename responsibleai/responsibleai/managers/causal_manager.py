@@ -260,7 +260,7 @@ class CausalManager(BaseManager):
                    causal config.
         :type id: str
         :param X_test: The data for which the global causal effects
-                       need to be generated.
+                       needs to be generated.
         :type X_test: Any
         :return: An object of type CausalData with
                  causal effects.
@@ -280,7 +280,7 @@ class CausalManager(BaseManager):
                    causal config.
         :type id: str
         :param X_test: The data for which the local causal effects
-                       need to be generated for a given point.
+                       needs to be generated for a given point.
         :type X_test: Any
         :return: An object of type CausalData with
                  causal effects for a given point.
@@ -311,12 +311,11 @@ class CausalManager(BaseManager):
                    causal config.
         :type id: str
         :param X_test: The data for which the causal policy
-                       need to be generated.
+                       needs to be generated.
         :type X_test: Any
         :return: An object of type CausalData with
                  causal effects.
         :rtype: CausalData
-
         """
         filtered = [r for r in self.get() if r.id == id]
         if len(filtered) == 0:

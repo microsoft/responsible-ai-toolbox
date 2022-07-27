@@ -63,12 +63,22 @@ class CausalResult(BaseResult['CausalResult']):
             self.local_effects is not None or \
             self.policies is not None
 
-    def _get_dashboard_object(self):
+    def _create_causal_data_object(self):
+        """Create a causal data object.
+
+        :return: An object of type CausalData.
+        :rtype: CausalData
+        """
         causal_data = CausalData()
 
         causal_data.id = self.id
         causal_data.version = self.version
         causal_data.config = self._get_config_object(self.config)
+
+        return causal_data
+
+    def _get_dashboard_object(self):
+        causal_data = self._create_causal_data_object()
 
         causal_data.global_effects = self.global_effects\
             .reset_index().to_dict(orient='records')
@@ -86,11 +96,16 @@ class CausalResult(BaseResult['CausalResult']):
             X, X_feature_new, feature_name, y, alpha=alpha)
 
     def _global_cohort_effects(self, X_test):
-        causal_data = CausalData()
+        """Get global causal effects for cohort data.
 
-        causal_data.id = self.id
-        causal_data.version = self.version
-        causal_data.config = self._get_config_object(self.config)
+        :param X_test: The data for which the causal policy
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
         causal_data.global_effects = \
             self.causal_analysis.cohort_causal_effect(
                 X_test, alpha=self.config.alpha,
@@ -99,11 +114,16 @@ class CausalResult(BaseResult['CausalResult']):
         return causal_data
 
     def _local_instance_effects(self, X_test):
-        causal_data = CausalData()
+        """Get local causal effects for a given data point.
 
-        causal_data.id = self.id
-        causal_data.version = self.version
-        causal_data.config = self._get_config_object(self.config)
+        :param X_test: The data for which the local causal effects
+                       needs to be generated for a given point.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects for a given point.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
 
         local_effects = self.causal_analysis.local_causal_effect(
             X_test, alpha=self.config.alpha,
@@ -117,11 +137,16 @@ class CausalResult(BaseResult['CausalResult']):
         return causal_data
 
     def _global_cohort_policy(self, X_test):
-        causal_data = CausalData()
+        """Get global causal policy for cohort data.
 
-        causal_data.id = self.id
-        causal_data.version = self.version
-        causal_data.config = self._get_config_object(self.config)
+        :param X_test: The data for which the causal policy
+                       needs to be generated.
+        :type X_test: Any
+        :return: An object of type CausalData with
+                 causal effects.
+        :rtype: CausalData
+        """
+        causal_data = self._create_causal_data_object()
 
         causal_config = self.config
         if isinstance(causal_config.treatment_cost, int) and \

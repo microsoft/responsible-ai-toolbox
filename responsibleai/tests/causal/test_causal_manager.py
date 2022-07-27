@@ -107,6 +107,12 @@ class TestCausalManager:
                         skip_cat_limit_checks=True,
                         upper_bound_on_cat_expansion=50)
 
+    def verify_common_causal_data_attributes(self, causal_data):
+        assert isinstance(causal_data, CausalData)
+        assert hasattr(causal_data, 'id')
+        assert hasattr(causal_data, 'version')
+        assert hasattr(causal_data, 'config')
+
     def test_causal_manager_global_cohort_effects(self, housing_data):
         train_df, test_df, target_feature = housing_data
 
@@ -119,10 +125,7 @@ class TestCausalManager:
         X_test = test_df.drop(target_feature, axis=1)
         causal_data = manager.request_global_cohort_effects(id, X_test)
 
-        assert isinstance(causal_data, CausalData)
-        assert hasattr(causal_data, 'id')
-        assert hasattr(causal_data, 'version')
-        assert hasattr(causal_data, 'config')
+        self.verify_common_causal_data_attributes(causal_data)
         assert hasattr(causal_data, 'global_effects')
         EFFECTS_ATTRIBUTES = [
             'point',
@@ -156,10 +159,7 @@ class TestCausalManager:
         X_test = test_df.head(5).drop(target_feature, axis=1)
         causal_data = manager.request_global_cohort_policy(id, X_test)
 
-        assert isinstance(causal_data, CausalData)
-        assert hasattr(causal_data, 'id')
-        assert hasattr(causal_data, 'version')
-        assert hasattr(causal_data, 'config')
+        self.verify_common_causal_data_attributes(causal_data)
         assert hasattr(causal_data, 'policies')
         assert len(causal_data.policies[0].local_policies) == X_test.shape[0]
         assert causal_data.policies[0].treatment_feature == "AveRooms"
@@ -185,10 +185,7 @@ class TestCausalManager:
         X_test = test_df.head(1).drop(target_feature, axis=1)
         causal_data = manager.request_local_instance_effects(id, X_test)
 
-        assert isinstance(causal_data, CausalData)
-        assert hasattr(causal_data, 'id')
-        assert hasattr(causal_data, 'version')
-        assert hasattr(causal_data, 'config')
+        self.verify_common_causal_data_attributes(causal_data)
         assert hasattr(causal_data, 'local_effects')
         EFFECTS_ATTRIBUTES = [
             'sample',
