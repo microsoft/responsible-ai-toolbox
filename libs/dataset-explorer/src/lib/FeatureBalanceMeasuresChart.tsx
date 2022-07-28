@@ -206,8 +206,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedLabelIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedLabelIndex: item.key });
     }
   };
 
@@ -215,8 +215,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedFeatureIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedFeatureIndex: item.key });
     }
   };
 
@@ -224,8 +224,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedMeasureIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedMeasureIndex: item.key });
     }
   };
 }
