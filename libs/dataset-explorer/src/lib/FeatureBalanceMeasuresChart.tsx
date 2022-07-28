@@ -179,9 +179,9 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
         {/* Renders the description of the chosen measure */}
         <Stack.Item>
-          {/* The description is a paragraph with the format "<measure name bolded> <measure desc>".
-              Because the measure desc wraps to a new line, Label cannot be used for the measure name. */}
-          <Text style={{ fontWeight: 600 }}>{selectedMeasure} </Text>
+          {/* The description is a paragraph with the format "<bolded measure name> <measure desc>". Because the
+          measure desc is long and usually wraps to a new line, a Stack containing Label and Text cannot be used. */}
+          <Text className={styles.boldText}>{selectedMeasure} </Text>
           <Text>
             {FeatureBalanceMeasuresMap.get(selectedMeasure)?.Description}
           </Text>
