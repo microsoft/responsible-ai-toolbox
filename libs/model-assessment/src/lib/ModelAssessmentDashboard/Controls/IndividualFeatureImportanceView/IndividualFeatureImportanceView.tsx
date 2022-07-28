@@ -181,6 +181,10 @@ export class IndividualFeatureImportanceView extends React.Component<
           <TextLocalImportancePlots
             jointDataset={this.context.jointDataset}
             selectedItems={this.state.allSelectedItems}
+            selectedWeightVector={this.props.selectedWeightVector}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            onWeightChange={this.props.onWeightChange}
           />
         )}
       </Stack>
