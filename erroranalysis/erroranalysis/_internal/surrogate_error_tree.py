@@ -691,8 +691,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                filter_by_threshold(df, p_node_name_val,
-                                    parent_threshold, side)
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_INCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -709,8 +709,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                filter_by_threshold(df, p_node_name_val,
-                                    parent_threshold, side)
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_EXCLUDES
                 arg = create_categorical_arg(parent_threshold)
