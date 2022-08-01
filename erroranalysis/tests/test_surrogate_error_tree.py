@@ -32,6 +32,8 @@ PARENTID = 'parentId'
 ERROR = 'error'
 ID = 'id'
 STRING_INDEX = 'string_index'
+INTERNAL_COUNT = 'internal_count'
+LEAF_COUNT = 'leaf_count'
 
 
 class TestSurrogateErrorTree(object):
@@ -161,7 +163,8 @@ class TestSurrogateErrorTree(object):
         for entry in tree:
             tree_dict[entry['id']] = entry
         validate_traversed_tree(tree_structure, tree_dict,
-                                max_split_index, feature_names)
+                                max_split_index, feature_names,
+                                filtered_indexed_df)
 
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.MACRO_PRECISION_SCORE,
@@ -284,7 +287,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,
-                            feature_names, parent_id=None):
+                            feature_names, df,
+                            parent_id=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -299,6 +303,10 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
     else:
         node_name = None
     assert tree_dict[nodeid]['nodeName'] == node_name
+    if INTERNAL_COUNT in tree:
+        assert tree[INTERNAL_COUNT] == tree_dict[nodeid][SIZE]
+    else:
+        assert tree[LEAF_COUNT] == tree_dict[nodeid][SIZE]
 
     # validate children
     if 'leaf_value' not in tree:
@@ -308,11 +316,13 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
         validate_traversed_tree(right_child,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
 
 

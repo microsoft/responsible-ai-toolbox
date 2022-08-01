@@ -10,7 +10,10 @@ import {
 import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 
 export interface IDataBalanceTabStyles {
+  boldText: IStyle;
   callout: IStyle;
+  dropdownLongWidth: IStyle;
+  dropdownMedWidth: IStyle;
   infoWithText: IStyle;
   page: IStyle;
 }
@@ -19,8 +22,17 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
   () => {
     const theme = getTheme();
     return mergeStyleSets<IDataBalanceTabStyles>({
+      boldText: {
+        fontWeight: 600
+      },
       callout: {
         margin: "-18px 0 0 0"
+      },
+      dropdownLongWidth: {
+        dropdown: { width: 200 }
+      },
+      dropdownMedWidth: {
+        dropdown: { width: 150 }
       },
       infoWithText: {
         maxWidth: descriptionMaxWidth,
