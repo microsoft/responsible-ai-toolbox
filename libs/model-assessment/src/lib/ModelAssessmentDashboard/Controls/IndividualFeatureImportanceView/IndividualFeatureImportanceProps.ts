@@ -5,7 +5,8 @@ import {
   WeightVectorOption,
   ErrorCohort,
   JointDataset,
-  ModelTypes
+  ModelTypes,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
 export interface IIndividualFeatureImportanceProps {
@@ -18,4 +19,5 @@ export interface IIndividualFeatureImportanceProps {
   onWeightChange: (option: WeightVectorOption) => void;
   selectedCohort: ErrorCohort;
   modelType?: ModelTypes;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }

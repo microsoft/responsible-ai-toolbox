@@ -5,8 +5,10 @@ import { Link, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  ITelemetryEvent,
   LabelWithCallout,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -19,6 +21,7 @@ import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class CausalAggregateView extends React.PureComponent<ICausalAggregateViewProps> {
@@ -52,6 +55,10 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
               label={localization.CausalAnalysis.MainMenu.why}
               calloutTitle={causalCalloutDictionary.confounding.title}
               type="button"
+              telemetryHook={this.props.telemetryHook}
+              calloutEventName={
+                TelemetryEventName.AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick
+              }
             >
               <Text block>
                 {causalCalloutDictionary.confounding.description}

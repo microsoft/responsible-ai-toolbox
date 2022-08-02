@@ -6,7 +6,31 @@ from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 
 
-class TestResponsibleAIDashboardInputClassification:
+class CheckResponsibleAIDashboardInputTestResult:
+    def check_success_criteria(self, flask_server_prediction_output):
+        assert flask_server_prediction_output is not None
+        assert WidgetRequestResponseConstants.data in \
+            flask_server_prediction_output
+        assert WidgetRequestResponseConstants.error not in \
+            flask_server_prediction_output
+
+    def check_failure_criteria(self, flask_server_prediction_output,
+                               expected_error_message):
+        assert WidgetRequestResponseConstants.data in \
+            flask_server_prediction_output
+        assert len(
+            flask_server_prediction_output[
+                WidgetRequestResponseConstants.data]) == 0
+        assert WidgetRequestResponseConstants.error in \
+            flask_server_prediction_output
+        assert expected_error_message in \
+            flask_server_prediction_output[
+                WidgetRequestResponseConstants.error]
+
+
+class TestResponsibleAIDashboardInputClassification(
+    CheckResponsibleAIDashboardInputTestResult
+):
     def test_rai_dashboard_input_adult_on_predict_success(
             self, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
@@ -20,10 +44,8 @@ class TestResponsibleAIDashboardInputClassification:
         knn_prediction = knn.predict_proba(test_pred_data)
 
         assert knn_prediction is not None
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
         assert (flask_server_prediction_output['data'] == knn_prediction).all()
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_on_predict_failure(
             self, create_rai_insights_object_classification):
@@ -35,15 +57,9 @@ class TestResponsibleAIDashboardInputClassification:
         flask_server_prediction_output = dashboard_input.on_predict(
             test_pred_data)
 
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.error in \
-            flask_server_prediction_output
-        assert "Model threw exception while predicting..." in \
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.error]
-        assert len(
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.data]) == 0
+        self.check_failure_criteria(
+            flask_server_prediction_output,
+            "Model threw exception while predicting...")
 
     def test_rai_dashboard_input_adult_importances_success(
             self, create_rai_insights_object_classification):
@@ -51,11 +67,7 @@ class TestResponsibleAIDashboardInputClassification:
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.importances()
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
-        assert WidgetRequestResponseConstants.error not in \
-            flask_server_prediction_output
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_matrix_success(
             self, create_rai_insights_object_classification):
@@ -71,11 +83,7 @@ class TestResponsibleAIDashboardInputClassification:
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.matrix(post_data)
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
-        assert WidgetRequestResponseConstants.error not in \
-            flask_server_prediction_output
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_matrix_failure(
             self, create_rai_insights_object_classification):
@@ -91,15 +99,9 @@ class TestResponsibleAIDashboardInputClassification:
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.matrix(post_data)
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.error in \
-            flask_server_prediction_output
-        assert "Failed to generate json matrix representation," in \
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.error]
-        assert len(
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.data]) == 0
+        self.check_failure_criteria(
+            flask_server_prediction_output,
+            "Failed to generate json matrix representation,")
 
     def test_rai_dashboard_input_adult_debug_ml_success(
             self, create_rai_insights_object_classification):
@@ -117,11 +119,7 @@ class TestResponsibleAIDashboardInputClassification:
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.debug_ml(post_data)
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
-        assert WidgetRequestResponseConstants.error not in \
-            flask_server_prediction_output
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_debug_ml_failure(
             self, create_rai_insights_object_classification):
@@ -148,9 +146,14 @@ class TestResponsibleAIDashboardInputClassification:
         assert len(
             flask_server_prediction_output[
                 WidgetRequestResponseConstants.data]) == 0
+        self.check_failure_criteria(
+            flask_server_prediction_output,
+            "Failed to generate json tree representation,")
 
 
-class TestResponsibleAIDashboardInputRegression:
+class TestResponsibleAIDashboardInputRegression(
+    CheckResponsibleAIDashboardInputTestResult
+):
     def test_rai_dashboard_input_housing_on_predict_success(
             self, create_rai_insights_object_regression):
         ri = create_rai_insights_object_regression
@@ -164,10 +167,8 @@ class TestResponsibleAIDashboardInputRegression:
         rf_prediction = rf.predict(test_pred_data)
 
         assert rf_prediction is not None
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
         assert (flask_server_prediction_output['data'] == rf_prediction).all()
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_housing_causal_whatif_success(
             self, create_rai_insights_object_regression):
@@ -186,11 +187,7 @@ class TestResponsibleAIDashboardInputRegression:
                      current_outcome)
         flask_server_prediction_output = dashboard_input.causal_whatif(
             post_data)
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
-        assert WidgetRequestResponseConstants.error not in \
-            flask_server_prediction_output
+        self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_housing_causal_whatif_failure(
             self, create_rai_insights_object_regression):
@@ -209,14 +206,25 @@ class TestResponsibleAIDashboardInputRegression:
                      current_outcome)
         flask_server_prediction_output = dashboard_input.causal_whatif(
             post_data)
-        assert flask_server_prediction_output is not None
-        assert WidgetRequestResponseConstants.data in \
-            flask_server_prediction_output
-        assert len(
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.data]) == 0
-        assert WidgetRequestResponseConstants.error in \
-            flask_server_prediction_output
-        assert "Failed to generate causal what-if," in \
-            flask_server_prediction_output[
-                WidgetRequestResponseConstants.error]
+        self.check_failure_criteria(flask_server_prediction_output,
+                                    "Failed to generate causal what-if,")
+
+
+class TestResponsibleAIDashboardInputMultiClassClassification(
+    CheckResponsibleAIDashboardInputTestResult
+):
+    def test_rai_dashboard_input_iris_on_predict_success(
+            self, create_rai_insights_object_multiclass_classification):
+        ri = create_rai_insights_object_multiclass_classification
+        rf = ri.model
+        test_data = ri.test
+
+        dashboard_input = ResponsibleAIDashboardInput(ri)
+        test_pred_data = test_data.head(1).drop("target", axis=1).values
+        flask_server_prediction_output = dashboard_input.on_predict(
+            test_pred_data)
+        rf_prediction = rf.predict_proba(test_pred_data)
+
+        assert rf_prediction is not None
+        assert (flask_server_prediction_output['data'] == rf_prediction).all()
+        self.check_success_criteria(flask_server_prediction_output)

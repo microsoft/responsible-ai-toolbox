@@ -29,8 +29,8 @@ export function getAvailableTabs(
     });
   }
   availableTabs.push({
-    key: GlobalTabKeys.DataExplorerTab,
-    text: localization.ModelAssessment.ComponentNames.DataExplorer
+    key: GlobalTabKeys.DataAnalysisTab,
+    text: localization.ModelAssessment.ComponentNames.DataAnalysis
   });
 
   if (props.modelExplanationData && props.modelExplanationData.length > 0) {

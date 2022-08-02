@@ -21,11 +21,13 @@ import React from "react";
 
 import { cohortKey } from "../cohortKey";
 import { ISelectorConfig } from "../util/IGenericChartProps";
+import { ITelemetryEvent, TelemetryLevels } from "../util/ITelemetryEvent";
 import {
   ColumnCategories,
   IJointMeta,
   JointDataset
 } from "../util/JointDataset";
+import { TelemetryEventName } from "../util/TelemetryEventName";
 
 import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
 
@@ -38,6 +40,7 @@ export interface IAxisConfigProps {
   canDither: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface IAxisConfigState {
@@ -398,6 +401,10 @@ export class AxisConfigDialog extends React.PureComponent<
       );
     }
     this.props.onAccept(this.state.selectedColumn);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.NewAxisConfigSelected
+    });
   };
 
   private readonly ditherChecked = (

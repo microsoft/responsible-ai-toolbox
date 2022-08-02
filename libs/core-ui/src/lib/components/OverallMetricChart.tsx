@@ -28,6 +28,7 @@ import {
   IGenericChartProps,
   ISelectorConfig
 } from "../util/IGenericChartProps";
+import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { ColumnCategories, JointDataset } from "../util/JointDataset";
 import { ILabeledStatistic, generateMetrics } from "../util/StatisticsUtils";
 
@@ -42,8 +43,9 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
-// this is a class only because we can't create an empty interface
-class IOverallMetricChartProps {}
+class IOverallMetricChartProps {
+  telemetryHook?: (message: ITelemetryEvent) => void;
+}
 
 export class OverallMetricChart extends React.PureComponent<
   IOverallMetricChartProps,
@@ -131,6 +133,7 @@ export class OverallMetricChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -143,6 +146,7 @@ export class OverallMetricChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           <div className={classNames.chartWithVertical}>

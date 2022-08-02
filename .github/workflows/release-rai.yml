@@ -181,7 +181,7 @@ jobs:
 
       - name: Publish responsibleai package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -190,7 +190,7 @@ jobs:
 
       - name: Publish responsibleai package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -198,7 +198,7 @@ jobs:
 
       - name: Publish raiwidgets package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
@@ -207,7 +207,7 @@ jobs:
 
       - name: Publish raiwidgets package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
@@ -227,6 +227,7 @@ jobs:
             counterfactuals,
             fairness,
             interpret,
+            interpret-text,
             localization,
             error-analysis,
             model-assessment
