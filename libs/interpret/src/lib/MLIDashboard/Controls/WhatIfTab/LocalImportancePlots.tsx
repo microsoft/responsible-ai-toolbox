@@ -11,10 +11,8 @@ import {
   IChoiceGroupOption,
   Slider,
   Text,
-  DirectionalHint,
   Callout,
   Link,
-  IconButton,
   CommandBarButton,
   Label,
   Toggle,
@@ -37,6 +35,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { ClassImportanceWeights } from "../ClassImportanceWeights/ClassImportanceWeights";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 
@@ -69,7 +68,6 @@ export interface ILocalImportancePlotsState {
   secondaryChartChoice: string;
   selectedFeatureKey: string;
   selectedICEClass: number;
-  crossClassInfoVisible: boolean;
   iceTooltipVisible: boolean;
 }
 
@@ -77,7 +75,6 @@ export class LocalImportancePlots extends React.Component<
   ILocalImportancePlotsProps,
   ILocalImportancePlotsState
 > {
-  private weightOptions: IDropdownOption[] | undefined;
   private classOptions: IDropdownOption[] = this.props.metadata.classNames.map(
     (name, index) => {
       return { key: index, text: name };
@@ -89,20 +86,7 @@ export class LocalImportancePlots extends React.Component<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    const modelType = this.props.metadata.modelType;
-    if (
-      modelType === ModelTypes.Multiclass ||
-      modelType === ModelTypes.Binary
-    ) {
-      this.weightOptions = this.props.weightOptions.map((option) => {
-        return {
-          key: option,
-          text: this.props.weightLabels[option]
-        };
-      });
-    }
     this.state = {
-      crossClassInfoVisible: false,
       iceTooltipVisible: false,
       secondaryChartChoice: WhatIfConstants.featureImportanceKey,
       selectedFeatureKey: `${JointDataset.DataLabelRoot}0`,
@@ -226,72 +210,12 @@ export class LocalImportancePlots extends React.Component<
                 {(this.props.metadata.modelType === ModelTypes.Multiclass ||
                   this.props.metadata.modelType === ModelTypes.Binary) && (
                   <div>
-                    <div className={classNames.multiclassWeightLabel}>
-                      <Text
-                        variant={"medium"}
-                        className={classNames.multiclassWeightLabelText}
-                      >
-                        {localization.Interpret.GlobalTab.weightOptions}
-                      </Text>
-                      <IconButton
-                        id={"cross-class-weight-info"}
-                        iconProps={{ iconName: "Info" }}
-                        title={localization.Interpret.CrossClass.info}
-                        onClick={this.toggleCrossClassInfo}
-                      />
-                    </div>
-                    {this.weightOptions && (
-                      <Dropdown
-                        options={this.weightOptions}
-                        selectedKey={this.props.selectedWeightVector}
-                        onChange={this.setWeightOption}
-                      />
-                    )}
-                    {this.state.crossClassInfoVisible && (
-                      <Callout
-                        doNotLayer
-                        target={"#cross-class-weight-info"}
-                        setInitialFocus
-                        onDismiss={this.toggleCrossClassInfo}
-                        directionalHint={DirectionalHint.leftCenter}
-                        role="alertdialog"
-                        styles={{ container: FluentUIStyles.calloutContainer }}
-                      >
-                        <div className={classNames.calloutWrapper}>
-                          <div className={classNames.calloutHeader}>
-                            <Text className={classNames.calloutTitle}>
-                              {
-                                localization.Interpret.CrossClass
-                                  .crossClassWeights
-                              }
-                            </Text>
-                          </div>
-                          <div className={classNames.calloutInner}>
-                            <Text>
-                              {localization.Interpret.CrossClass.overviewInfo}
-                            </Text>
-                            <ul>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .absoluteValInfo
-                                  }
-                                </Text>
-                              </li>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .enumeratedClassInfo
-                                  }
-                                </Text>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </Callout>
-                    )}
+                    <ClassImportanceWeights
+                      onWeightChange={this.props.onWeightChange}
+                      selectedWeightVector={this.props.selectedWeightVector}
+                      weightOptions={this.props.weightOptions}
+                      weightLabels={this.props.weightLabels}
+                    />
                   </div>
                 )}
               </div>
@@ -480,17 +404,6 @@ export class LocalImportancePlots extends React.Component<
     this.setState({ sortArray, sortingSeriesIndex: newIndex });
   };
 
-  private setWeightOption = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    const newIndex = item.key as WeightVectorOption;
-    this.props.onWeightChange(newIndex);
-  };
-
   private setSecondaryChart = (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
@@ -506,10 +419,6 @@ export class LocalImportancePlots extends React.Component<
           ? TelemetryEventName.IndividualFeatureImportanceFeatureImportancePlotClick
           : TelemetryEventName.IndividualFeatureImportanceICEPlotClick
     });
-  };
-
-  private toggleCrossClassInfo = (): void => {
-    this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
   };
 
   private toggleICETooltip = (): void => {

@@ -42,9 +42,15 @@ class FeatureImportance:
     featureNames: List[str]
 
 
+class TextFeatureImportance:
+    localExplanations: List
+    text: List[str]
+
+
 class PrecomputedExplanations:
     localFeatureImportance: FeatureImportance
     globalFeatureImportance: FeatureImportance
+    textFeatureImportance: List[TextFeatureImportance]
     ebmGlobalExplanation: EBMGlobalExplanation
     customVis: str
 
