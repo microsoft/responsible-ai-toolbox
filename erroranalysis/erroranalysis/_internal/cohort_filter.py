@@ -19,7 +19,7 @@ CLASSIFICATION_OUTCOME = 'Classification outcome'
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,
-                       original_data_columns=False):
+                       include_original_columns_only=False):
     """Filters the dataset on the analyzer based on the specified filters.
 
     :param analyzer: The error analyzer.
@@ -29,9 +29,9 @@ def filter_from_cohort(analyzer, filters, composite_filters,
     :param composite_filters: The composite filters.
     :type composite_filters: list[dict]
     :return: The filtered dataset converted to a pandas DataFrame.
-    :param original_data_columns: Whether to just include the original
-                                  data columns.
-    :type original_data_columns: bool
+    :param include_original_columns_only: Whether to just include
+                                          the original data columns.
+    :type include_original_columns_only: bool
     :rtype: pandas.DataFrame
     """
     filter_data_with_cohort = FilterDataWithCohortFilters(
@@ -47,7 +47,7 @@ def filter_from_cohort(analyzer, filters, composite_filters,
     return filter_data_with_cohort.filter_data_from_cohort(
         filters=filters,
         composite_filters=composite_filters,
-        original_data_columns=original_data_columns)
+        include_original_columns_only=include_original_columns_only)
 
 
 class FilterDataWithCohortFilters:
@@ -92,7 +92,7 @@ class FilterDataWithCohortFilters:
         self.classes = classes
 
     def filter_data_from_cohort(self, filters, composite_filters,
-                                original_data_columns=False):
+                                include_original_columns_only=False):
         """Filters the dataset on the model based on the specified filters.
 
         :param filters: The filters.
@@ -100,9 +100,9 @@ class FilterDataWithCohortFilters:
         :param composite_filters: The composite filters.
         :type composite_filters: list[dict]
         :return: The filtered dataset converted to a pandas DataFrame.
-        :param original_data_columns: Whether to just include the original
-                                      data columns.
-        :type original_data_columns: bool
+        :param include_original_columns_only: Whether to just include
+                                              the original data columns.
+        :type include_original_columns_only: bool
         :rtype: pandas.DataFrame
         """
         df = self.dataset
@@ -119,7 +119,7 @@ class FilterDataWithCohortFilters:
         df = self._apply_recursive_filter(
             df, composite_filters, self.categorical_features, self.categories)
         df = self._post_process_df(
-            df, original_data_columns=original_data_columns)
+            df, include_original_columns_only=include_original_columns_only)
         return df
 
     def _filters_has_classification_outcome(self, filters):
@@ -215,21 +215,21 @@ class FilterDataWithCohortFilters:
                 self._compute_classification_outcome_data(
                     self.true_y, pred_y, classes)
 
-    def _post_process_df(self, df, original_data_columns=False):
+    def _post_process_df(self, df, include_original_columns_only=False):
         """Removes any special columns from dataset added prior to filtering.
 
         :param df: The filtered dataset, converted to a pandas DataFrame.
         :type: pandas.DataFrame
-        :param original_data_columns: Whether to just include the original
-                                    data columns.
-        :type original_data_columns: bool
+        :param include_original_columns_only: Whether to just include
+                                              the original data columns.
+        :type include_original_columns_only: bool
         :return: The post-processed pandas DataFrame, with special columns
                  removed.
         :rtype: pandas.DataFrame
         """
         if CLASSIFICATION_OUTCOME in list(df.columns):
             df = df.drop(columns=CLASSIFICATION_OUTCOME)
-        if original_data_columns:
+        if include_original_columns_only:
             if PRED_Y in list(df.columns):
                 df = df.drop(columns=PRED_Y)
             if ROW_INDEX in list(df.columns):
