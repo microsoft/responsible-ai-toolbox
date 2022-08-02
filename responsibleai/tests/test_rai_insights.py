@@ -342,6 +342,22 @@ def validate_rai_insights(
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
+    if categorical_features is not None:
+        assert len(rai_insights.categorical_features) == \
+            len(categorical_features)
+        assert len(rai_insights._categories) == len(categorical_features)
+        assert len(rai_insights._categorical_indexes) == \
+            len(categorical_features)
+        assert len(rai_insights._category_dictionary) == \
+            len(categorical_features)
+        assert isinstance(rai_insights._string_ind_data, np.ndarray)
+    else:
+        assert len(rai_insights.categorical_features) == 0
+        assert len(rai_insights._categories) == 0
+        assert len(rai_insights._categorical_indexes) == 0
+        assert len(rai_insights._category_dictionary) == 0
+        assert isinstance(rai_insights._string_ind_data, list)
+
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()
