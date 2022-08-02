@@ -3,7 +3,7 @@
 
 export interface ITextExplanationDashboardData {
   classNames: string[];
-  localExplanations: number[];
+  localExplanations: number[][];
   prediction: number[];
   text: string[];
 }
