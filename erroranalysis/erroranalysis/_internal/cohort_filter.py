@@ -101,27 +101,43 @@ def add_filter_cols(analyzer, df, filters, true_y):
                                                              ROW_INDEX]))
         classes = get_ordered_classes(analyzer.classes, true_y, pred_y)
         # calculate classification outcome and add to df
-        classification_outcome = []
-        if not isinstance(pred_y, np.ndarray):
-            pred_y = np.array(pred_y)
-        if not isinstance(true_y, np.ndarray):
-            true_y = np.array(true_y)
-        for i in range(len(true_y)):
-            if true_y[i] == pred_y[i]:
-                if true_y[i] == classes[0]:
-                    # True negative == 0
-                    classification_outcome.append(3)
-                else:
-                    # True positive == 3
-                    classification_outcome.append(3)
+        df[CLASSIFICATION_OUTCOME] = compute_classification_outcome_data(
+            true_y, pred_y, classes)
+
+
+def compute_classification_outcome_data(true_y, pred_y, classes):
+    """Creates the classification outcome data.
+
+    :param true_y: The true labels.
+    :type true_y: list or numpy.ndarray
+    :param pred_y: The predicted labels.
+    :type pred_y: list or numpy.ndarray
+    :param classes: The classes.
+    :type classes: list
+    :return: The classification outcome data.
+    :rtype: list
+    """
+    classification_outcome = []
+    if not isinstance(pred_y, np.ndarray):
+        pred_y = np.array(pred_y)
+    if not isinstance(true_y, np.ndarray):
+        true_y = np.array(true_y)
+    for i in range(len(true_y)):
+        if true_y[i] == pred_y[i]:
+            if true_y[i] == classes[0]:
+                # True positive == 0
+                classification_outcome.append(0)
             else:
-                if true_y[i] == classes[0]:
-                    # False negative == 2
-                    classification_outcome.append(2)
-                else:
-                    # False positive == 1
-                    classification_outcome.append(1)
-        df[CLASSIFICATION_OUTCOME] = classification_outcome
+                # True negative == 3
+                classification_outcome.append(3)
+        else:
+            if true_y[i] == classes[0]:
+                # False negative == 2
+                classification_outcome.append(2)
+            else:
+                # False positive == 1
+                classification_outcome.append(1)
+    return classification_outcome
 
 
 def post_process_df(df):
