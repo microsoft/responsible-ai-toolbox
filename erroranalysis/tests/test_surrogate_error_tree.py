@@ -10,8 +10,9 @@ from common_utils import (create_adult_census_data,
                           create_cancer_data, create_diabetes_data,
                           create_iris_data, create_kneighbors_classifier,
                           create_models_classification,
+                          create_simple_titanic_data,
                           create_sklearn_random_forest_regressor,
-                          replicate_dataset)
+                          create_titanic_pipeline, replicate_dataset)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
@@ -19,7 +20,8 @@ from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                OPERATION, PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               CohortFilterOps, Metrics)
+                                               CohortFilterOps, Metrics,
+                                               ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.surrogate_error_tree import (
     TreeSide, cache_subtree_features, create_surrogate_model,
@@ -29,6 +31,9 @@ SIZE = 'size'
 PARENTID = 'parentId'
 ERROR = 'error'
 ID = 'id'
+STRING_INDEX = 'string_index'
+INTERNAL_COUNT = 'internal_count'
+LEAF_COUNT = 'leaf_count'
 
 
 class TestSurrogateErrorTree(object):
@@ -158,7 +163,8 @@ class TestSurrogateErrorTree(object):
         for entry in tree:
             tree_dict[entry['id']] = entry
         validate_traversed_tree(tree_structure, tree_dict,
-                                max_split_index, feature_names)
+                                max_split_index, feature_names,
+                                filtered_indexed_df)
 
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.MACRO_PRECISION_SCORE,
@@ -220,6 +226,25 @@ class TestSurrogateErrorTree(object):
         run_error_analyzer(model, X_test, y_test, feature_names,
                            composite_filters=composite_filters)
 
+    def test_invalid_comparison_titanic(self):
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
+        tree_features = [STRING_INDEX]
+        feature_names = categorical + numeric + tree_features
+        # Create a bad dummy string categorical feature
+        X_train = add_string_index_col(X_train)
+        X_test = add_string_index_col(X_test)
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        tree_features = tree_features + numeric
+        with pytest.raises(TypeError) as ve:
+            run_error_analyzer(clf, X_test, y_test, feature_names,
+                               categorical_features,
+                               tree_features,
+                               model_task=ModelTask.CLASSIFICATION)
+        assert ('Column string_index of type string is incorrectly treated '
+                'as numeric with threshold value') in str(ve.value)
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        categorical_features=None, tree_features=None,
@@ -262,7 +287,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,
-                            feature_names, parent_id=None):
+                            feature_names, df,
+                            parent_id=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -277,6 +303,10 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
     else:
         node_name = None
     assert tree_dict[nodeid]['nodeName'] == node_name
+    if INTERNAL_COUNT in tree:
+        assert tree[INTERNAL_COUNT] == tree_dict[nodeid][SIZE]
+    else:
+        assert tree[LEAF_COUNT] == tree_dict[nodeid][SIZE]
 
     # validate children
     if 'leaf_value' not in tree:
@@ -286,9 +316,23 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
         validate_traversed_tree(right_child,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
+
+
+def add_string_index_col(dataset):
+    """Add an index column of type string instead of numeric to the dataset.
+
+    :param dataset: Dataset to add the index column of type string to.
+    :type dataset: pandas.DataFrame
+    """
+    dataset = dataset.reset_index()
+    dataset[STRING_INDEX] = dataset['index'].astype('string')
+    dataset.drop(columns=['index'], inplace=True)
+    return dataset

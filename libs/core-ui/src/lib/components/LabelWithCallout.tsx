@@ -58,7 +58,7 @@ export class LabelWithCallout extends React.Component<
               {this.props.label}
             </Text>
             <IconButton
-              id={"cross-class-weight-info"}
+              id={"label-callout-info"}
               iconProps={{ iconName: "Info" }}
               title={localization.Interpret.calloutTitle}
               onClick={this.toggleCallout}

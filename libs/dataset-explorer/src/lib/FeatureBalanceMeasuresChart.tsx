@@ -12,6 +12,7 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
+import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 import { FeatureBalanceMeasuresDescription } from "./FeatureBalanceMeasuresDescription";
 import {
   FeatureBalanceMeasuresMap,
@@ -71,6 +72,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
       );
     }
 
+    const styles = dataBalanceTabStyles();
+
     const labelOptions = _.uniq(Object.keys(featureBalanceMeasures)).map(
       (label, index) => ({ key: index, text: label } as IDropdownOption)
     );
@@ -109,7 +112,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{ dropdown: { width: 150 } }}
+                    className={styles.dropdownMedWidth}
                     id="labelDropdown"
                     options={labelOptions}
                     selectedKey={this.state.selectedLabelIndex}
@@ -127,7 +130,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{ dropdown: { width: 150 } }}
+                    className={styles.dropdownMedWidth}
                     id="featureDropdown"
                     options={featureOptions}
                     selectedKey={this.state.selectedFeatureIndex}
@@ -145,7 +148,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
                 </Stack.Item>
                 <Stack.Item>
                   <Dropdown
-                    styles={{ dropdown: { width: 200 } }}
+                    className={styles.dropdownLongWidth}
                     id="measureDropdown"
                     options={measureOptions}
                     selectedKey={this.state.selectedMeasureIndex}
@@ -176,7 +179,9 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
 
         {/* Renders the description of the chosen measure */}
         <Stack.Item>
-          <Text style={{ fontWeight: 600 }}>{selectedMeasure} </Text>
+          {/* The description is a paragraph with the format "<bolded measure name> <measure desc>". Because the
+          measure desc is long and usually wraps to a new line, a Stack containing Label and Text cannot be used. */}
+          <Text className={styles.boldText}>{selectedMeasure} </Text>
           <Text>
             {FeatureBalanceMeasuresMap.get(selectedMeasure)?.Description}
           </Text>
@@ -201,8 +206,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedLabelIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedLabelIndex: item.key });
     }
   };
 
@@ -210,8 +215,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedFeatureIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedFeatureIndex: item.key });
     }
   };
 
@@ -219,8 +224,8 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
     _: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption
   ): void => {
-    if (item?.key) {
-      this.setState({ selectedMeasureIndex: item.key as number });
+    if (typeof item?.key === "number") {
+      this.setState({ selectedMeasureIndex: item.key });
     }
   };
 }
