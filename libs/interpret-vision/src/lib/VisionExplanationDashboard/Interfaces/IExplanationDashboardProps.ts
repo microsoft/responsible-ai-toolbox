@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface ITextExplanationDashboardProps {
+export interface IVisionExplanationDashboardProps {
   /*
-   * The interface design for the dashboard
+   * the interface design for the dashboard
    */
   dataSummary: IDatasetSummary;
 }
@@ -12,8 +12,8 @@ export interface IDatasetSummary {
   /*
    * information about the document given
    */
-  text: string[];
+  images: string[];
   classNames?: string[];
-  localExplanations: number[][];
+  localExplanations: number[];
   prediction?: number[];
 }
