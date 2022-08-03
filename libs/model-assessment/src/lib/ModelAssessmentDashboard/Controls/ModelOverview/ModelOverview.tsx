@@ -94,9 +94,9 @@ export class ModelOverview extends React.Component<
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
+      selectedMetric: "",
       selectedMetrics: [],
-      showHeatmapColors: true,
-      selectedMetric: ""
+      showHeatmapColors: true
     };
   }
 
