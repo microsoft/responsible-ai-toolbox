@@ -68,6 +68,7 @@ interface IModelOverviewState {
   // That way, we can distinguish between newly created cohorts
   // and deliberately ignored cohorts for the chart section.
   maxCohortId: number;
+  selectedMetric: string;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -93,6 +94,7 @@ export class ModelOverview extends React.Component<
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
+      selectedMetric: "",
       selectedMetrics: [],
       showHeatmapColors: true
     };
@@ -490,9 +492,11 @@ export class ModelOverview extends React.Component<
                 >
                   <ModelOverviewMetricChart
                     onChooseCohorts={this.onChooseCohorts}
+                    onApplyMetric={this.onApplyMetric}
                     selectableMetrics={selectableMetrics}
                     cohorts={chartCohorts}
                     cohortStats={labeledStatistics}
+                    selectedMetric={this.state.selectedMetric}
                   />
                 </PivotItem>
               </Pivot>
@@ -539,6 +543,10 @@ export class ModelOverview extends React.Component<
 
   private onChooseCohorts = () =>
     this.setState({ chartConfigurationIsVisible: true });
+
+  private onApplyMetric = (metric: string) => {
+    this.setState({ selectedMetric: metric });
+  };
 
   private updateCohortSelection = (
     selectedDatasetCohorts: number[],

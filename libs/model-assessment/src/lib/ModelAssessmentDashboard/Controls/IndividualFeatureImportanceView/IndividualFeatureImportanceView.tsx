@@ -154,7 +154,11 @@ export class IndividualFeatureImportanceView extends React.Component<
                       onRenderHeader: this._onRenderGroupHeader,
                       showEmptyGroups: true
                     }}
-                    selectionMode={SelectionMode.multiple}
+                    selectionMode={
+                      hasTextImportances
+                        ? SelectionMode.single
+                        : SelectionMode.multiple
+                    }
                     selection={this.selection}
                   />
                 </MarqueeSelection>
@@ -181,6 +185,10 @@ export class IndividualFeatureImportanceView extends React.Component<
           <TextLocalImportancePlots
             jointDataset={this.context.jointDataset}
             selectedItems={this.state.allSelectedItems}
+            selectedWeightVector={this.props.selectedWeightVector}
+            weightOptions={this.props.weightOptions}
+            weightLabels={this.props.weightLabels}
+            onWeightChange={this.props.onWeightChange}
           />
         )}
       </Stack>

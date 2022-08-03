@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface ITextExplanationDashboardData {
+export interface IVisionExplanationDashboardData {
   classNames: string[];
-  localExplanations: number[][];
+  localExplanations: number[];
   prediction: number[];
-  text: string[];
+  images: string[];
 }
