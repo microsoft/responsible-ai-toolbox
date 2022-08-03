@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IFeatureConfigurationRow } from "./FeatureConfigurationFlyout";
 import { shortFeatureGroups } from "./FeaturesUtils";
 
@@ -5,7 +8,7 @@ describe("FeaturesUtils", () => {
   it("should show top 10 groups with Other for the rest", () => {
     const items: IFeatureConfigurationRow[] = [
       {
-        key: "0",
+        continuousFeatureBinningEnabled: false,
         featureName: "education",
         featureRemark: "This feature has 12 unique values.",
         groups: [
@@ -22,12 +25,12 @@ describe("FeaturesUtils", () => {
           "occupation in Fishing",
           "occupation in Tech"
         ],
-        continuousFeatureBinningEnabled: false
+        key: "0"
       }
     ];
     const expectedItems: IFeatureConfigurationRow[] = [
       {
-        key: "0",
+        continuousFeatureBinningEnabled: false,
         featureName: "education",
         featureRemark: "This feature has 12 unique values.",
         groups: [
@@ -43,7 +46,7 @@ describe("FeaturesUtils", () => {
           "occupation in Farming",
           "Other"
         ],
-        continuousFeatureBinningEnabled: false
+        key: "0"
       }
     ];
     expect(shortFeatureGroups(items)).toEqual(expectedItems);
@@ -52,7 +55,7 @@ describe("FeaturesUtils", () => {
   it("should show full list of groups when groups number is less or equal than 10", () => {
     const items: IFeatureConfigurationRow[] = [
       {
-        key: "0",
+        continuousFeatureBinningEnabled: false,
         featureName: "education",
         featureRemark: "This feature has 10 unique values.",
         groups: [
@@ -67,7 +70,7 @@ describe("FeaturesUtils", () => {
           "occupation in Sales",
           "occupation in Farming"
         ],
-        continuousFeatureBinningEnabled: false
+        key: "0"
       }
     ];
     expect(shortFeatureGroups(items)).toEqual(items);
