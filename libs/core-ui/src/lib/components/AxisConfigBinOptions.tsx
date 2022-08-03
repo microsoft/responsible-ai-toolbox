@@ -18,15 +18,15 @@ import {
 } from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigBinOptionsProps {
-  jointDataset: JointDataset;
-  selectedColumn: ISelectorConfig;
   canBin: boolean;
-  defaultBinCount: number;
-  mustBin: boolean;
   canDither: boolean;
+  defaultBinCount: number;
+  jointDataset: JointDataset;
   maxHistCols: number;
   minHistCols: number;
+  mustBin: boolean;
   selectedBinCount?: number;
+  selectedColumn: ISelectorConfig;
   onBinCountUpdated: (binCount?: number) => void;
   onSelectedColumnUpdated: (selectedColumn: ISelectorConfig) => void;
 }

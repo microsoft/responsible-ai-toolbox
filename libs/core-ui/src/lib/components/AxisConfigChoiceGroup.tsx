@@ -85,7 +85,7 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     );
   }
 
-  private setDefaultStateForKey(property: string): void {
+  private setDefaultStateForKey = (property: string): void => {
     const dither =
       this.props.canDither &&
       this.props.jointDataset.metaDict[property]?.treatAsCategorical;
@@ -101,7 +101,7 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
       },
       property
     });
-  }
+  };
 
   private readonly filterGroupChanged = (
     _ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
