@@ -68,8 +68,7 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
         title={measuresLocalization.Name}
         calloutTitle={measuresLocalization.Callout.Title}
         calloutDescription={measuresLocalization.Callout.Description}
-        // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-        calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#distribution-balance-measures"
+        calloutLink="https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/databalance-README.md#distribution-balance-measures"
         calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
         id="distributionBalanceMeasuresHeader"
       />
