@@ -25,13 +25,14 @@ import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IModelOverviewMetricChartProps {
   onChooseCohorts: () => void;
+  onApplyMetric: (metric: string) => void;
   cohorts: ErrorCohort[];
   cohortStats: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
+  selectedMetric: string;
 }
 
 interface IModelOverviewMetricChartState {
-  selectedMetric: string;
   newlySelectedMetric: string;
   metricSelectionFlyoutIsVisible: boolean;
 }
@@ -49,9 +50,11 @@ export class ModelOverviewMetricChart extends React.Component<
     const firstMetric = this.props.selectableMetrics[0].key.toString();
     this.state = {
       metricSelectionFlyoutIsVisible: false,
-      newlySelectedMetric: firstMetric,
-      selectedMetric: firstMetric
+      newlySelectedMetric: firstMetric
     };
+    if (this.props.selectedMetric.length === 0) {
+      this.props.onApplyMetric(firstMetric);
+    }
   }
 
   public render(): React.ReactNode {
@@ -64,7 +67,7 @@ export class ModelOverviewMetricChart extends React.Component<
     );
     const selectedCohortStats = this.props.cohortStats.map((labeledStats) => {
       const stat = labeledStats.find(
-        (stat) => stat.key === this.state.selectedMetric
+        (stat) => stat.key === this.props.selectedMetric
       );
       return stat ? Number(stat.stat.toFixed(3)) : Number.NaN;
     });
@@ -104,7 +107,7 @@ export class ModelOverviewMetricChart extends React.Component<
                       data: selectedCohortStats,
                       name: this.props.selectableMetrics.find(
                         (metricOption) =>
-                          metricOption.key === this.state.selectedMetric
+                          metricOption.key === this.props.selectedMetric
                       )?.text,
                       type: "bar"
                     }
@@ -114,7 +117,7 @@ export class ModelOverviewMetricChart extends React.Component<
                   },
                   yAxis: {
                     title: this.props.selectableMetrics.find(
-                      (option) => option.key === this.state.selectedMetric
+                      (option) => option.key === this.props.selectedMetric
                     )
                   }
                 }}
@@ -172,9 +175,9 @@ export class ModelOverviewMetricChart extends React.Component<
         <PrimaryButton
           onClick={() => {
             this.setState({
-              metricSelectionFlyoutIsVisible: false,
-              selectedMetric: this.state.newlySelectedMetric
+              metricSelectionFlyoutIsVisible: false
             });
+            this.props.onApplyMetric(this.state.newlySelectedMetric);
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
