@@ -1594,7 +1594,7 @@
       "cohortSelectionButton": "Choose cohorts",
       "probabilityLabelSelectionButton": "Choose label",
       "selectAllCohortsOption": "Select all",
-      "otherCohortName": "Other",
+      "other": "Other",
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",

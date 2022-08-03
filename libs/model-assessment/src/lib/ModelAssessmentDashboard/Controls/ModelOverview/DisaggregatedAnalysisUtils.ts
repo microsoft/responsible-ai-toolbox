@@ -112,7 +112,7 @@ export function generateOverlappingFeatureBasedCohorts(
     } as ICompositeFilter;
     const mergedOtherCohort = new ErrorCohort(
       new Cohort(
-        localization.ModelAssessment.ModelOverview.otherCohortName,
+        localization.ModelAssessment.ModelOverview.other,
         jointDataset,
         [],
         [mergedCompositeFilter]
