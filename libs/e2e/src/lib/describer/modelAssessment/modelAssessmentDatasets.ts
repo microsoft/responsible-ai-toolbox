@@ -36,7 +36,8 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
     },
     featureImportanceData: {
       datapoint: 500,
-      dropdownRowName: "Row 34",
+      dropdownRowName: "Row 4",
+      rowToSelect: "4",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "workclass",
@@ -274,7 +275,8 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
     },
     featureImportanceData: {
       datapoint: 730,
-      dropdownRowName: "Row 84",
+      dropdownRowName: "Row 4",
+      rowToSelect: "4",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "OverallQual",
