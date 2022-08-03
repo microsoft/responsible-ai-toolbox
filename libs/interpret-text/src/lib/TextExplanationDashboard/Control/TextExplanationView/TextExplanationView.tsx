@@ -24,17 +24,18 @@ import { textExplanationDashboardStyles } from "./TextExplanationView.styles";
 
 export interface ITextExplanationViewState {
   /*
-   * holds the state of the dashboard
+   * Holds the state of the dashboard
    */
   maxK: number;
   topK: number;
   radio: string;
   importances: number[];
+  text: string[];
 }
 
 const options: IChoiceGroupOption[] = [
   /*
-   * creates the choices for the radio button
+   * Creates the choices for the radio button
    */
   { key: RadioKeys.All, text: localization.InterpretText.Dashboard.allButton },
   { key: RadioKeys.Pos, text: localization.InterpretText.Dashboard.posButton },
@@ -57,7 +58,7 @@ export class TextExplanationView extends React.PureComponent<
 > {
   constructor(props: ITextExplanationViewProps) {
     /*
-     * initializes the text view with its state
+     * Initializes the text view with its state
      */
     super(props);
     const weightVector = this.props.selectedWeightVector;
@@ -69,8 +70,19 @@ export class TextExplanationView extends React.PureComponent<
       importances,
       maxK: Math.min(15, Math.ceil(Utils.countNonzeros(importances))),
       radio: RadioKeys.All,
+      text: this.props.dataSummary.text,
       topK: Math.ceil(Utils.countNonzeros(importances) / 2)
     };
+  }
+
+  public componentDidUpdate(prevProps: ITextExplanationViewProps): void {
+    if (
+      this.props.dataSummary.text !== prevProps.dataSummary.text ||
+      this.props.dataSummary.localExplanations !==
+        prevProps.dataSummary.localExplanations
+    ) {
+      this.updateImportances(this.props.selectedWeightVector);
+    }
   }
 
   public render() {
@@ -85,7 +97,7 @@ export class TextExplanationView extends React.PureComponent<
               step={1}
               defaultValue={this.state.topK}
               showValue={false}
-              onChange={(value) => this.setTopK(value)}
+              onChange={this.setTopK}
             />
           </Stack.Item>
           <Stack.Item align="center">
@@ -99,7 +111,7 @@ export class TextExplanationView extends React.PureComponent<
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item grow disableShrink>
             <BarChart
-              text={this.props.dataSummary.text}
+              text={this.state.text}
               localExplanations={this.state.importances}
               topK={this.state.topK}
               radio={this.state.radio}
@@ -148,7 +160,7 @@ export class TextExplanationView extends React.PureComponent<
             className={classNames.textHighlighting}
           >
             <TextHighlighting
-              text={this.props.dataSummary.text}
+              text={this.state.text}
               localExplanations={this.state.importances}
               topK={this.state.topK}
               radio={this.state.radio}
@@ -199,13 +211,17 @@ export class TextExplanationView extends React.PureComponent<
   }
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
+    this.updateImportances(weightOption);
+    this.props.onWeightChange(weightOption);
+  };
+
+  private updateImportances(weightOption: WeightVectorOption): void {
     const importances = this.computeImportancesForWeightVector(
       this.props.dataSummary.localExplanations,
       weightOption
     );
-    this.setState({ importances });
-    this.props.onWeightChange(weightOption);
-  };
+    this.setState({ importances, text: this.props.dataSummary.text });
+  }
 
   private computeImportancesForWeightVector(
     importances: number[][],
@@ -226,19 +242,19 @@ export class TextExplanationView extends React.PureComponent<
     );
   }
 
-  private setTopK(newNumber: number): void {
+  private setTopK = (newNumber: number): void => {
     /*
-     * changes the state of K
+     * Changes the state of K
      */
     this.setState({ topK: newNumber });
-  }
+  };
 
   private changeRadioButton = (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
   ): void => {
     /*
-     * changes the state of the radio button
+     * Changes the state of the radio button
      */
     if (item?.key !== undefined) {
       this.setState({ radio: item.key });

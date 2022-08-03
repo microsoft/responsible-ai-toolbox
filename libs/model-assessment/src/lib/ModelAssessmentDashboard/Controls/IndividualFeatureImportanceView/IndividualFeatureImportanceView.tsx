@@ -154,7 +154,11 @@ export class IndividualFeatureImportanceView extends React.Component<
                       onRenderHeader: this._onRenderGroupHeader,
                       showEmptyGroups: true
                     }}
-                    selectionMode={SelectionMode.multiple}
+                    selectionMode={
+                      hasTextImportances
+                        ? SelectionMode.single
+                        : SelectionMode.multiple
+                    }
                     selection={this.selection}
                   />
                 </MarqueeSelection>
