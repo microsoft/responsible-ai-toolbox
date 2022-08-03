@@ -33,8 +33,7 @@ export class AggregateBalanceMeasuresTable extends React.PureComponent<IAggregat
         title={measuresLocalization.Name}
         calloutTitle={measuresLocalization.Callout.Title}
         calloutDescription={measuresLocalization.Callout.Description}
-        // TODO: Replace link with https://responsibleaitoolbox.ai/ link once docs are published there
-        calloutLink="https://microsoft.github.io/SynapseML/docs/features/responsible_ai/Data%20Balance%20Analysis/#aggregate-balance-measures"
+        calloutLink="https://github.com/microsoft/responsible-ai-toolbox/blob/main/docs/databalance-README.md#aggregate-balance-measures"
         calloutLinkText={localization.ModelAssessment.DataBalance.LearnMore}
         id="aggregateBalanceMeasuresHeader"
       />
