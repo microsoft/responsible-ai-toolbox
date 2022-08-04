@@ -1,6 +1,6 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*", "Null.tsx"],
+  "ignorePatterns": ["!**/*", "Null.tsx", "JointDataset.ts"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
