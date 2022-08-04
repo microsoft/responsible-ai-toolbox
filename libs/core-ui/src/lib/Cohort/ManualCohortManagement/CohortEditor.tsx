@@ -70,6 +70,7 @@ export class CohortEditor extends React.PureComponent<
         >
           <CohortEditorPanelContent
             {...this.props}
+            cohortName={this.state.cohortName}
             compositeFilters={this.state.compositeFilters}
             filters={this.state.filters}
             onCohortNameUpdated={this.onCohortNameUpdated}

@@ -24,7 +24,7 @@ import { CohortEditorFilterList } from "./CohortEditorFilterList";
 import { CohortEditorFilterSection } from "./CohortEditorFilterSection";
 
 export interface ICohortEditorPanelContentProps {
-  cohortName: string;
+  cohortName?: string;
   compositeFilters: ICompositeFilter[];
   disableEditName?: boolean;
   existingCohortNames?: string[];
