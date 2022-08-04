@@ -15,6 +15,7 @@ import {
 
 export const bostonData: IDataset = {
   categorical_features: ["CHAS"],
+  feature_metadata: undefined,
   feature_names: [
     "CRIM",
     "ZN",
