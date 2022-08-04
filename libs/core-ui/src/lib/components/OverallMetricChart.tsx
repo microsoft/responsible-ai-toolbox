@@ -25,7 +25,7 @@ import {
   ISelectorConfig
 } from "../util/IGenericChartProps";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
-import { ColumnCategories } from "../util/JointDataset";
+import { ColumnCategories } from "../util/JointDatasetUtils";
 
 import { AxisConfigDialog } from "./AxisConfigDialog";
 import { MissingParametersPlaceholder } from "./MissingParametersPlaceholder";
