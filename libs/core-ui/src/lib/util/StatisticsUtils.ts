@@ -5,11 +5,11 @@ import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 
+import { JointDataset } from "./JointDataset";
 import {
   ClassificationEnum,
-  JointDataset,
   MulticlassClassificationEnum
-} from "./JointDataset";
+} from "./JointDatasetUtils";
 
 export interface ILabeledStatistic {
   key: string;

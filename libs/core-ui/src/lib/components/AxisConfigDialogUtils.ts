@@ -1,11 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ColumnCategories,
-  IJointMeta,
-  JointDataset
-} from "../util/JointDataset";
+import { JointDataset } from "../util/JointDataset";
+import { ColumnCategories, IJointMeta } from "../util/JointDatasetUtils";
 
 export function getMinValue(selectedMeta: IJointMeta): number | string {
   if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
