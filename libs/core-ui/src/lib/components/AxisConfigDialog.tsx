@@ -20,7 +20,8 @@ import React from "react";
 import { cohortKey } from "../cohortKey";
 import { ISelectorConfig } from "../util/IGenericChartProps";
 import { ITelemetryEvent, TelemetryLevels } from "../util/ITelemetryEvent";
-import { ColumnCategories, JointDataset } from "../util/JointDataset";
+import { JointDataset } from "../util/JointDataset";
+import { ColumnCategories } from "../util/JointDatasetUtils";
 import { TelemetryEventName } from "../util/TelemetryEventName";
 
 import { AxisConfigBinOptions } from "./AxisConfigBinOptions";
