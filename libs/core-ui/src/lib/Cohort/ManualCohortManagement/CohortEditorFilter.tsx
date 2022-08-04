@@ -19,7 +19,8 @@ import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { FluentUIStyles } from "../../util/FluentUIStyles";
-import { IJointMeta, JointDataset } from "../../util/JointDataset";
+import { JointDataset } from "../../util/JointDataset";
+import { IJointMeta } from "../../util/JointDatasetUtils";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { comparisonOptions } from "./CohortEditorFilterUtils";

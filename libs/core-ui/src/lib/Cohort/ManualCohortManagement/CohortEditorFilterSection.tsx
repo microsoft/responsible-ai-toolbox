@@ -8,7 +8,8 @@ import _ from "lodash";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
-import { IJointMeta, JointDataset } from "../../util/JointDataset";
+import { JointDataset } from "../../util/JointDataset";
+import { IJointMeta } from "../../util/JointDatasetUtils";
 
 import { CohortEditorFilter } from "./CohortEditorFilter";
 
@@ -23,7 +24,6 @@ export interface ICohortEditorFilterSectionProps {
 }
 
 export interface ICohortEditorFilterSectionState {
-  selectedFilterCategory?: string;
   showInvalidMinMaxValueError: boolean;
   showInvalidValueError: boolean;
 }
