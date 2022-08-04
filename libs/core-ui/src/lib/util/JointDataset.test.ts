@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, IFeatureMetaData } from "@responsible-ai/core-ui";
+import { JointDataset } from "./JointDataset";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-
+import { IFeatureMetaData } from "../Interfaces/IMetaData";
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
