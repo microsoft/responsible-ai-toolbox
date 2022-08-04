@@ -11,10 +11,6 @@ import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
 import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "../Interfaces/ExplanationInterfaces";
-import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
@@ -23,51 +19,12 @@ import {
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
 
-export interface IJointDatasetArgs {
-  dataset?: any[][];
-  predictedY?: number[];
-  predictedProbabilities?: number[][];
-  trueY?: number[];
-  localExplanations?:
-    | IMultiClassLocalFeatureImportance
-    | ISingleClassLocalFeatureImportance;
-  metadata: IExplanationModelMetadata;
-}
-
-export enum ColumnCategories {
-  Outcome = "outcome",
-  Dataset = "dataset",
-  Index = "index",
-  Explanation = "explanation",
-  Cohort = "cohort",
-  None = "none"
-}
-
-export enum ClassificationEnum {
-  TrueNegative = 0,
-  FalsePositive = 1,
-  FalseNegative = 2,
-  TruePositive = 3
-}
-
-export enum MulticlassClassificationEnum {
-  Correct = 0,
-  Misclassified = 1
-}
-
-// The object that will store user-facing strings and associated metadata
-// It stores the categorical labels for any numeric bins
-export interface IJointMeta {
-  label: string;
-  abbridgedLabel: string;
-  isCategorical: boolean;
-  // used to allow user to treat integers as categorical (but switch back as convenient...)
-  treatAsCategorical?: boolean;
-  sortedCategoricalValues?: string[];
-  featureRange?: INumericRange;
-  category: ColumnCategories;
-  index?: number;
-}
+import {
+  ColumnCategories,
+  IJointDatasetArgs,
+  IJointMeta,
+  MulticlassClassificationEnum
+} from "./JointDatasetUtils";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to

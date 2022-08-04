@@ -36,13 +36,14 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
     },
     featureImportanceData: {
       datapoint: 500,
-      dropdownRowName: "Row 34",
+      dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "workclass",
       noDataset: false,
       noFeatureImportance: false,
       noLocalImportance: false,
+      rowToSelect: "4",
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
     },
@@ -274,13 +275,14 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
     },
     featureImportanceData: {
       datapoint: 730,
-      dropdownRowName: "Row 84",
+      dropdownRowName: "Row 4",
       hasCorrectIncorrectDatapoints: true,
       hasFeatureImportanceComponent: true,
       newFeatureDropdownValue: "OverallQual",
       noDataset: false,
       noFeatureImportance: false,
       noLocalImportance: false,
+      rowToSelect: "4",
       topFeaturesCurrentValue: "4",
       topFeaturesText: "Top 4 features by their importance"
     },
