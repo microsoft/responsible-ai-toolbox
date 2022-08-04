@@ -8,7 +8,8 @@ import React from "react";
 
 import { cohortKey } from "../cohortKey";
 import { ISelectorConfig } from "../util/IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../util/JointDataset";
+import { JointDataset } from "../util/JointDataset";
+import { ColumnCategories } from "../util/JointDatasetUtils";
 
 import { getBinCountForProperty } from "./AxisConfigDialogUtils";
 

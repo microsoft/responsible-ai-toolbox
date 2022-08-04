@@ -26,6 +26,7 @@ export * from "./lib/util/buildInitialContext";
 export * from "./lib/util/DatasetUtils";
 export * from "./lib/util/FluentUIStyles";
 export * from "./lib/util/JointDataset";
+export * from "./lib/util/JointDatasetUtils";
 export * from "./lib/util/generateRoute";
 export * from "./lib/util/getRandomId";
 export * from "./lib/util/getCohortFilterCount";
