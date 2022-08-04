@@ -171,7 +171,10 @@ export class CounterfactualPanel extends React.Component<
                   directionalHint={DirectionalHint.rightTopEdge}
                   className={classes.tooltipHostDisplay}
                 >
-                  <IconButton iconProps={{ iconName: "info" }} />
+                  <IconButton
+                    iconProps={{ iconName: "info" }}
+                    ariaLabel={localization.Common.tooltipButton}
+                  />
                 </TooltipHost>
               </Stack.Item>
             </Stack>
