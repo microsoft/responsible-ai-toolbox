@@ -9,7 +9,6 @@ from responsibleai.exceptions import UserConfigValidationException
 
 class FeatureMetadata:
     def __init__(self, identity_feature_name: Optional[str] = None,
-                 sensitive_features: Optional[List[str]] = None,
                  datetime_features: Optional[List[str]] = None,
                  categorical_features: Optional[List[str]] = None,
                  dropped_features: Optional[List[str]] = None):
@@ -19,9 +18,6 @@ class FeatureMetadata:
                                       uniquely identify a row or instance
                                       in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param sensitive_features: List of sensitive features in the
-                                   user input dataset.
-        :type sensitive_features: Optional[List[str]]
         :param datetime_features: List of datetime features in the
                                   user input dataset.
         :type datetime_features: Optional[List[str]]
@@ -33,12 +29,9 @@ class FeatureMetadata:
         :type dropped_features: Optional[List[str]]
         """
         self.identity_feature_name = identity_feature_name
-        self.sensitive_features = sensitive_features
         self.datetime_features = datetime_features
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
-        if self.sensitive_features is not None:
-            warnings.warn('sensitive_features are not in use currently.')
         if self.datetime_features is not None:
             warnings.warn('datetime_features are not in use currently.')
         if self.categorical_features is not None:
@@ -70,7 +63,6 @@ class FeatureMetadata:
         """
         return {
             'identity_feature_name': self.identity_feature_name,
-            'sensitive_features': self.sensitive_features,
             'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
             'dropped_features': self.dropped_features
@@ -87,8 +79,6 @@ class FeatureMetadata:
         """
         return self.identity_feature_name == \
             other_feature_metadata.identity_feature_name and \
-            self.sensitive_features == \
-            other_feature_metadata.sensitive_features and \
             self.datetime_features == \
             other_feature_metadata.datetime_features and \
             self.categorical_features == \
