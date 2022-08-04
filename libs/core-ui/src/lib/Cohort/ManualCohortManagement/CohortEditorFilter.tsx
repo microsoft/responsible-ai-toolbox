@@ -22,6 +22,7 @@ import { FluentUIStyles } from "../../util/FluentUIStyles";
 import { IJointMeta, JointDataset } from "../../util/JointDataset";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
+import { comparisonOptions } from "./CohortEditorFilterUtils";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;
@@ -61,32 +62,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
         text: this.props.jointDataset.metaDict[key].abbridgedLabel
       };
     });
-  private comparisonOptions: IComboBoxOption[] = [
-    {
-      key: FilterMethods.Equal,
-      text: localization.Interpret.Filters.equalComparison
-    },
-    {
-      key: FilterMethods.GreaterThan,
-      text: localization.Interpret.Filters.greaterThanComparison
-    },
-    {
-      key: FilterMethods.GreaterThanEqualTo,
-      text: localization.Interpret.Filters.greaterThanEqualToComparison
-    },
-    {
-      key: FilterMethods.LessThan,
-      text: localization.Interpret.Filters.lessThanComparison
-    },
-    {
-      key: FilterMethods.LessThanEqualTo,
-      text: localization.Interpret.Filters.lessThanEqualToComparison
-    },
-    {
-      key: FilterMethods.InTheRangeOf,
-      text: localization.Interpret.Filters.inTheRangeOf
-    }
-  ];
+  private comparisonOptions: IComboBoxOption[] = comparisonOptions;
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
