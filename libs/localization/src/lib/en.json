@@ -1019,7 +1019,7 @@
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
       "weightOptions": "Class importance weights",
-      "weightOptionsDropdown": "Class importance weights drop down"
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
       "_errorPrefix.comment": "prefix in front of external error",
