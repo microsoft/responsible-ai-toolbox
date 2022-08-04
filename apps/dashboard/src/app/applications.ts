@@ -5,7 +5,8 @@ import {
   IExplanationDashboardData,
   IFairnessData,
   ISerializedExplanationData,
-  ITextExplanationDashboardData
+  ITextExplanationDashboardData,
+  IVisionExplanationDashboardData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -20,6 +21,7 @@ import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
+import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -87,6 +89,10 @@ export interface IInterpretTextDataSet {
   data: ITextExplanationDashboardData;
 }
 
+export interface IInterpretVisionDataSet {
+  data: IVisionExplanationDashboardData;
+}
+
 export interface IFairnessDataSet {
   data: IFairnessData;
 }
@@ -112,6 +118,10 @@ export interface IInterpretTextSetting {
   versions: { [key: string]: 1 };
 }
 
+export interface IInterpretVisionSetting {
+  versions: { [key: string]: 1 };
+}
+
 export interface IFairnessSetting {
   versions: { [key: string]: 2 };
 }
@@ -127,6 +137,7 @@ export interface IModelAssessmentSetting {
 export const applicationKeys = <const>[
   "interpret",
   "interpretText",
+  "interpretVision",
   "fairness",
   "errorAnalysis",
   "modelAssessment",
@@ -139,6 +150,7 @@ export type IApplications = {
   fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
+  interpretVision: IInterpretVisionSetting & IDataSet<IInterpretVisionDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
@@ -213,6 +225,12 @@ export const applications: IApplications = <const>{
   interpretText: {
     datasets: {
       newsgroupBinaryData: { data: newsgroupBinaryData }
+    },
+    versions: { "Version-1": 1 }
+  },
+  interpretVision: {
+    datasets: {
+      visionData: { data: visionData }
     },
     versions: { "Version-1": 1 }
   },

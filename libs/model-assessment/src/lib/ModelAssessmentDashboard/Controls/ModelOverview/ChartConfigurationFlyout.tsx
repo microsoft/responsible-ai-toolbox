@@ -96,18 +96,7 @@ export class ChartConfigurationFlyout extends React.Component<
           errorCohort.cohort.name !==
           this.props.featureBasedCohorts[index].cohort.name
       );
-    const selectedFeatureBasedCohortsChanged =
-      (prevProps.selectedFeatureBasedCohorts === undefined &&
-        this.props.selectedFeatureBasedCohorts !== undefined) ||
-      (prevProps.selectedFeatureBasedCohorts &&
-        this.props.selectedFeatureBasedCohorts &&
-        (this.props.selectedFeatureBasedCohorts.length !==
-          prevProps.selectedFeatureBasedCohorts.length ||
-          prevProps.selectedFeatureBasedCohorts.some(
-            (num, index) =>
-              num !== this.props.selectedFeatureBasedCohorts?.[index]
-          )));
-    if (featureBasedCohortsChanged || selectedFeatureBasedCohortsChanged) {
+    if (featureBasedCohortsChanged) {
       newlySelectedFeatureBasedCohorts = this.props.featureBasedCohorts.map(
         (_, index) => index
       );

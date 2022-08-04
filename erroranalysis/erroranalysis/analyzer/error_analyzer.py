@@ -7,10 +7,8 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
-from sklearn.preprocessing import OrdinalEncoder
 
 from erroranalysis._internal.constants import (MatrixParams, Metrics,
                                                ModelTask, RootKeys,
@@ -18,6 +16,7 @@ from erroranalysis._internal.constants import (MatrixParams, Metrics,
 from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
 from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
 from erroranalysis._internal.utils import generate_random_unique_indexes
@@ -94,20 +93,12 @@ class BaseAnalyzer(ABC):
                 metric = Metrics.MEAN_SQUARED_ERROR
         self._metric = metric
         if self._categorical_features:
-            self._categorical_indexes = [feature_names.index(feature)
-                                         for feature
-                                         in self._categorical_features]
-            ordinal_enc = OrdinalEncoder()
-            ct = ColumnTransformer([('ord', ordinal_enc,
-                                     self._categorical_indexes)],
-                                   remainder='drop')
-            self._string_ind_data = ct.fit_transform(self._dataset)
-            transformer_categories = ct.transformers_[0][1].categories_
-            for category_arr, category_index in zip(transformer_categories,
-                                                    self._categorical_indexes):
-                category_values = category_arr.tolist()
-                self._categories.append(category_values)
-                self._category_dictionary[category_index] = category_values
+            self._categories, self._categorical_indexes, \
+                self._category_dictionary, self._string_ind_data = \
+                process_categoricals(
+                    all_feature_names=self._feature_names,
+                    categorical_features=self._categorical_features,
+                    dataset=self._dataset)
         check_pandas_version(self.feature_names)
 
     @property
