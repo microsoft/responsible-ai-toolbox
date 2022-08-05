@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { calculateBoxPlotData, getPercentile } from "@responsible-ai/core-ui";
+import { calculateBoxPlotData, getPercentile } from "./calculateBoxData";
 
 describe("calculateBoxPlot", () => {
   it.each`
