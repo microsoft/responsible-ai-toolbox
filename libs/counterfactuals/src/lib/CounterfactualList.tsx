@@ -5,7 +5,6 @@ import {
   IComboBoxOption,
   IComboBox,
   ComboBox,
-  Callout,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -37,9 +36,7 @@ import { getCategoricalOption } from "../util/getCategoricalOption";
 import { getFilterFeatures } from "../util/getFilterFeatures";
 
 import { counterfactualListStyle } from "./CounterfactualList.styles";
-import { CounterfactualListSetValue } from "./CounterfactualListSetValue";
-import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
-import { CustomPredictionLabels } from "./CustomPredictionLabels";
+import { CounterfactualListColumnName } from "./CounterfactualListColumnName";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
@@ -199,63 +196,18 @@ export class CounterfactualList extends React.Component<
     item?: Record<string, string | number>,
     index?: number | undefined
   ) => {
-    //footer
-    if (index === -1) {
-      const classNames = counterfactualPanelStyles();
-      return (
-        <Stack>
-          <Stack.Item>
-            <TextField
-              value={this.state.data[nameColumnKey]?.toString()}
-              label={localization.Counterfactuals.createOwn}
-              id={nameColumnKey}
-              disabled
-              onChange={this.updateColValue}
-            />
-          </Stack.Item>
-          {this.context.requestPredictions && (
-            <Stack.Item className={classNames.predictedLink}>
-              <div
-                id={"predictionLink"}
-                className={classNames.predictedLink}
-                onMouseOver={this.toggleCallout}
-                onFocus={this.toggleCallout}
-                onMouseOut={this.toggleCallout}
-                onBlur={this.toggleCallout}
-              >
-                {localization.Counterfactuals.seePrediction}
-              </div>
-              {this.state.showCallout && (
-                <Callout
-                  target={"#predictionLink"}
-                  onDismiss={this.toggleCallout}
-                  setInitialFocus
-                >
-                  <CustomPredictionLabels
-                    jointDataset={this.context.jointDataset}
-                    metadata={this.context.modelMetadata}
-                    selectedWhatIfRootIndex={this.props.selectedIndex}
-                    temporaryPoint={this.props.temporaryPoint}
-                  />
-                </Callout>
-              )}
-            </Stack.Item>
-          )}
-        </Stack>
-      );
-    }
-    if (index === undefined || !item?.row) return React.Fragment;
     return (
-      <Stack>
-        <Text>{item.row}</Text>
-        {this.context.requestPredictions && (
-          <CounterfactualListSetValue
-            index={index}
-            onSelect={this.onSelect}
-            telemetryHook={this.props.telemetryHook}
-          />
-        )}
-      </Stack>
+      <CounterfactualListColumnName
+        {...this.props}
+        data={this.state.data}
+        index={index}
+        item={item}
+        nameColumnKey={nameColumnKey}
+        showCallout={this.state.showCallout}
+        onSelect={this.onSelect}
+        toggleCallout={this.toggleCallout}
+        updateColValue={this.updateColValue}
+      />
     );
   };
 
