@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset } from "./JointDataset";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-import { IFeatureMetaData } from "../Interfaces/IMetaData";
+
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   IExplanationModelMetadata
 } from "../Interfaces/ExplanationInterfaces";
+import { IFeatureMetaData } from "../Interfaces/IMetaData";
+
+import { JointDataset } from "./JointDataset";
 
 function getJointDatasetRegression(addFeatureMetaData: boolean): JointDataset {
   const features = [
