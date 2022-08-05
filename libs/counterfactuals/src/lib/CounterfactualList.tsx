@@ -33,7 +33,8 @@ import _, { toNumber } from "lodash";
 import React from "react";
 
 import { getCategoricalOption } from "../util/getCategoricalOption";
-import { getFilterFeatures } from "../util/getFilterFeatures";
+import { getColumns } from "../util/getColumns";
+import { getTargetFeatureName } from "../util/getTargetFeatureName";
 
 import { counterfactualListStyle } from "./CounterfactualList.styles";
 import { CounterfactualListColumnName } from "./CounterfactualListColumnName";
@@ -86,7 +87,14 @@ export class CounterfactualList extends React.Component<
 
   public render(): React.ReactNode {
     const items = this.getItems();
-    const columns = this.getColumns();
+    const columns = getColumns(
+      this.props.data,
+      this.props.selectedIndex,
+      this.props.sortFeatures,
+      this.props.filterText,
+      nameColumnKey,
+      this.renderName
+    );
 
     if (columns.length === 0) {
       return (
@@ -108,18 +116,6 @@ export class CounterfactualList extends React.Component<
         onRenderDetailsFooter={this.onRenderDetailsFooter}
       />
     );
-  }
-
-  private getTargetFeatureName(): string | undefined {
-    return this.props.data?.feature_names_including_target[
-      this.props.data?.feature_names_including_target.length - 1
-    ];
-  }
-  private getTargetPrefix(): string {
-    if (this.props.data?.desired_range !== undefined) {
-      return localization.Counterfactuals.WhatIf.predictedValue;
-    }
-    return localization.Counterfactuals.WhatIf.predictedClass;
   }
 
   private renderRow: IRenderFunction<IDetailsRowProps> = (
@@ -211,54 +207,6 @@ export class CounterfactualList extends React.Component<
     );
   };
 
-  private getColumns(): IColumn[] {
-    const columns: IColumn[] = [];
-    const targetFeature = this.getTargetFeatureName();
-    const featureNames = getFilterFeatures(
-      this.props.data,
-      this.props.selectedIndex,
-      this.props.sortFeatures,
-      this.props.filterText
-    );
-    if (!featureNames || featureNames.length === 0) {
-      return columns;
-    }
-    columns.push(
-      {
-        fieldName: nameColumnKey,
-        isResizable: true,
-        key: nameColumnKey,
-        minWidth: 200,
-        name: "",
-        onRender: this.renderName
-      },
-      {
-        fieldName: targetFeature,
-        isResizable: true,
-        key: targetFeature || "",
-        minWidth: 175,
-        name: targetFeature || ""
-      }
-    );
-    featureNames
-      .filter((f) => f !== targetFeature)
-      .forEach((f) =>
-        columns.push({
-          fieldName: f,
-          isResizable: true,
-          key: f,
-          minWidth: 175,
-          name: f
-        })
-      );
-    for (const column of columns) {
-      if (targetFeature !== undefined && column.fieldName === targetFeature) {
-        column.name = `${this.getTargetPrefix()} (${column.fieldName})`;
-      }
-    }
-    return columns;
-  }
-
   private updateComboBoxColValue = (
     key: string | number,
     options: IComboBoxOption[],
@@ -329,7 +277,7 @@ export class CounterfactualList extends React.Component<
       column?.key
     );
     const styles = counterfactualListStyle();
-    const targetFeature = this.getTargetFeatureName();
+    const targetFeature = getTargetFeatureName(this.props.data);
     if (column && targetFeature && column.fieldName === targetFeature) {
       const predictedClass = this.context.jointDataset.hasPredictedY
         ? this.props.temporaryPoint?.[JointDataset.PredictedYLabel]
