@@ -35,9 +35,11 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import React from "react";
+
+import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
+import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
@@ -108,7 +110,7 @@ export class CounterfactualChart extends React.PureComponent<
     this.fetchData = _.debounce(this.fetchData, 400);
 
     this.setState({
-      chartProps: this.generateDefaultChartAxes()
+      chartProps: generateDefaultChartAxes(this.context.jointDataset)
     });
   }
 
@@ -185,10 +187,13 @@ export class CounterfactualChart extends React.PureComponent<
     if (this.state.chartProps === undefined) {
       return <div />;
     }
-    const plotlyProps = this.generatePlotlyProps(
+    const plotlyProps = generatePlotlyProps(
       this.context.jointDataset,
       this.state.chartProps,
-      this.context.selectedErrorCohort.cohort
+      this.context.selectedErrorCohort.cohort,
+      this.context.jointDataset,
+      this.state.selectedPointsIndexes,
+      this.state.customPoints
     );
     const cohortLength =
       this.context.selectedErrorCohort.cohort.filteredData.length;
@@ -616,197 +621,6 @@ export class CounterfactualChart extends React.PureComponent<
       }
     );
   };
-
-  private generatePlotlyProps(
-    jointData: JointDataset,
-    chartProps: IGenericChartProps,
-    cohort: Cohort
-  ): IPlotlyProperty {
-    const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
-    plotlyProps.data[0].hoverinfo = "all";
-    const indexes = cohort.unwrap(JointDataset.IndexLabel);
-    plotlyProps.data[0].type = chartProps.chartType;
-    plotlyProps.data[0].mode = PlotlyMode.Markers;
-    plotlyProps.data[0].marker = {
-      color: indexes.map((rowIndex) => {
-        const selectionIndex =
-          this.state.selectedPointsIndexes.indexOf(rowIndex);
-        if (selectionIndex === -1) {
-          return FluentUIStyles.fabricColorInactiveSeries;
-        }
-        return FluentUIStyles.fluentUIColorPalette[selectionIndex];
-      }) as any,
-      size: 8,
-      symbol: indexes.map((i) =>
-        this.state.selectedPointsIndexes.includes(i) ? "square" : "circle"
-      ) as any
-    };
-
-    plotlyProps.data[1] = {
-      marker: {
-        color: this.state.customPoints.map(
-          (_, i) =>
-            FluentUIStyles.fluentUIColorPalette[
-              WhatIfConstants.MAX_SELECTION + 1 + i
-            ]
-        ),
-        size: 12,
-        symbol: "star"
-      },
-      mode: PlotlyMode.Markers,
-      type: "scatter"
-    };
-
-    plotlyProps.data[2] = {
-      hoverinfo: "text",
-      marker: {
-        color: "rgba(0,0,0,0)",
-        line: {
-          color:
-            FluentUIStyles.fluentUIColorPalette[
-              WhatIfConstants.MAX_SELECTION + 1 + this.state.customPoints.length
-            ],
-          width: 2
-        },
-        opacity: 0.5,
-        size: 12,
-        symbol: "star"
-      },
-      mode: PlotlyMode.Markers,
-      text: "Editable What-If point",
-      type: "scatter"
-    };
-
-    if (chartProps.xAxis) {
-      if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
-        const xLabels =
-          jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
-        const xLabelIndexes = xLabels?.map((_, index) => index);
-        _.set(plotlyProps, "layout.xaxis.ticktext", xLabels);
-        _.set(plotlyProps, "layout.xaxis.tickvals", xLabelIndexes);
-      }
-    }
-    if (chartProps.yAxis) {
-      if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
-        const yLabels =
-          jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
-        const yLabelIndexes = yLabels?.map((_, index) => index);
-        _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
-        _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
-      }
-    }
-
-    this.generateDataTrace(
-      cohort.filteredData,
-      chartProps,
-      plotlyProps.data[0]
-    );
-    this.generateDataTrace(
-      this.state.customPoints,
-      chartProps,
-      plotlyProps.data[1]
-    );
-    return plotlyProps;
-  }
-
-  private generateDataTrace(
-    dictionary: Array<{ [key: string]: number }>,
-    chartProps: IGenericChartProps,
-    trace: IData
-  ): void {
-    const customdata = JointDataset.unwrap(
-      dictionary,
-      JointDataset.IndexLabel
-    ).map((val) => {
-      const dict: Dictionary<any> = {};
-      dict[JointDataset.IndexLabel] = val;
-      return dict;
-    });
-    dictionary.forEach((val, index) => {
-      customdata[index].Name = val.Name ? val.Name : val.Index;
-    });
-    let hovertemplate = `{point.customdata.Name}<br>`;
-    if (chartProps.xAxis) {
-      const metaX =
-        this.context.jointDataset.metaDict[chartProps.xAxis.property];
-      const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
-
-      rawX.forEach((val, index) => {
-        if (metaX?.treatAsCategorical) {
-          customdata[index].X = metaX.sortedCategoricalValues?.[val];
-        } else {
-          customdata[index].X = (val as number).toLocaleString(undefined, {
-            maximumSignificantDigits: 5
-          });
-        }
-      });
-      if (chartProps.xAxis.options.dither) {
-        const dither = JointDataset.unwrap(
-          dictionary,
-          JointDataset.DitherLabel
-        );
-        trace.x = dither.map((ditherVal, index) => {
-          return rawX[index] + ditherVal;
-        });
-      } else {
-        trace.x = rawX;
-      }
-    }
-    if (chartProps.yAxis) {
-      const metaY =
-        this.context.jointDataset.metaDict[chartProps.yAxis.property];
-      const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
-      rawY.forEach((val, index) => {
-        if (metaY?.treatAsCategorical) {
-          customdata[index].Y = metaY.sortedCategoricalValues?.[val];
-        } else {
-          customdata[index].Y = (val as number).toLocaleString(undefined, {
-            maximumSignificantDigits: 5
-          });
-        }
-      });
-      if (chartProps.yAxis.options.dither) {
-        const dither = JointDataset.unwrap(
-          dictionary,
-          JointDataset.DitherLabel2
-        );
-        trace.y = dither.map((ditherVal, index) => {
-          return rawY[index] + ditherVal;
-        });
-      } else {
-        trace.y = rawY;
-      }
-    }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
-    hovertemplate += "<extra></extra>";
-    trace.customdata = customdata as any;
-    trace.hovertemplate = hovertemplate;
-  }
-
-  private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    const yKey = `${JointDataset.DataLabelRoot}0`;
-    const yIsDithered =
-      this.context.jointDataset.metaDict[yKey]?.treatAsCategorical;
-    const chartProps: IGenericChartProps = {
-      chartType: ChartTypes.Scatter,
-      xAxis: {
-        options: {},
-        property: this.context.jointDataset.hasPredictedProbabilities
-          ? `${JointDataset.ProbabilityYRoot}0`
-          : JointDataset.IndexLabel
-      },
-      yAxis: {
-        options: {
-          bin: false,
-          dither: yIsDithered
-        },
-        property: yKey
-      }
-    };
-    return chartProps;
-  }
 
   private selectPointFromDropdown = (
     _event: React.FormEvent<IComboBox>,
