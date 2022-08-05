@@ -36,7 +36,6 @@ export class CounterfactualListColumnName extends React.Component<ICounterfactua
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
-    //footer
     if (this.props.index === -1) {
       const classNames = counterfactualPanelStyles();
       return (
