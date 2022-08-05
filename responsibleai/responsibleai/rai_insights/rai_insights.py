@@ -12,6 +12,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
+from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
@@ -429,6 +430,37 @@ class RAIInsights(RAIBaseInsights):
         :rtype: ExplainerManager
         """
         return self._explainer_manager
+
+    def get_filtered_test_data(self, filters, composite_filters,
+                               include_original_columns_only=False):
+        """Get the filtered test data based on cohort filters.
+
+        :param filters: The filters to apply.
+        :type filters: list[Filter]
+        :param composite_filters: The composite filters to apply.
+        :type composite_filters: list[CompositeFilter]
+        :param include_original_columns_only: Whether to return the original
+                                              data columns.
+        :type include_original_columns_only: bool
+        :return: The filtered test data.
+        :rtype: pandas.DataFrame
+        """
+        pred_y = self.model.predict(
+            self.test.drop(columns=[self.target_column]))
+        filter_data_with_cohort = FilterDataWithCohortFilters(
+            model=self.model,
+            dataset=self.test.drop(columns=[self.target_column]),
+            features=self.test.drop(columns=[self.target_column]).columns,
+            categorical_features=self.categorical_features,
+            categories=self._categories,
+            true_y=self.test[self.target_column],
+            pred_y=pred_y,
+            model_task=self.task_type)
+
+        return filter_data_with_cohort.filter_data_from_cohort(
+            filters=filters,
+            composite_filters=composite_filters,
+            include_original_columns_only=include_original_columns_only)
 
     def get_data(self):
         """Get all data as RAIInsightsData object

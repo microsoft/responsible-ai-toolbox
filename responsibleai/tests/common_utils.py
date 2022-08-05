@@ -14,10 +14,12 @@ from sklearn.compose import ColumnTransformer
 from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
                               load_iris, make_classification)
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
+                                   StandardScaler)
 from xgboost import XGBClassifier
 
 
@@ -85,6 +87,58 @@ def create_iris_data():
     y_test = np.array(y_test_list)
 
     return X_train, X_test, y_train, y_test, feature_names, classes
+
+
+def create_simple_titanic_data():
+    titanic_url = ('https://raw.githubusercontent.com/amueller/'
+                   'scipy-2017-sklearn/091d371/notebooks/'
+                   'datasets/titanic3.csv')
+    data = pd.read_csv(titanic_url)
+    # fill missing values
+    data = data.fillna(method="ffill")
+    data = data.fillna(method="bfill")
+    num_features = ['age', 'fare']
+    cat_features = ['embarked', 'sex', 'pclass']
+
+    y = data['survived'].values
+    X = data[cat_features + num_features]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42)
+    return X_train, X_test, y_train, y_test, num_features, cat_features
+
+
+def create_titanic_pipeline(X_train, y_train):
+    def conv(X):
+        if isinstance(X, pd.Series):
+            return X.values
+        return X
+
+    many_to_one_transformer = \
+        FunctionTransformer(lambda x: conv(x.sum(axis=1)).reshape(-1, 1))
+    many_to_many_transformer = \
+        FunctionTransformer(lambda x: np.hstack(
+            (conv(np.prod(x, axis=1)).reshape(-1, 1),
+                conv(np.prod(x, axis=1)**2).reshape(-1, 1))
+        ))
+    transformations = ColumnTransformer([
+        ("age_fare_1", Pipeline(steps=[
+            ('imputer', SimpleImputer(strategy='median')),
+            ('scaler', StandardScaler())
+        ]), ["age", "fare"]),
+        ("age_fare_2", many_to_one_transformer, ["age", "fare"]),
+        ("age_fare_3", many_to_many_transformer, ["age", "fare"]),
+        ("embarked", Pipeline(steps=[
+            ("imputer",
+                SimpleImputer(strategy='constant', fill_value='missing')),
+            ("encoder", OneHotEncoder(sparse=False))]), ["embarked"]),
+        ("sex_pclass", OneHotEncoder(sparse=False), ["sex", "pclass"])
+    ])
+    clf = Pipeline(steps=[('preprocessor', transformations),
+                          ('classifier',
+                           LogisticRegression(solver='lbfgs'))])
+    clf.fit(X_train, y_train)
+    return clf
 
 
 def create_cancer_data():
