@@ -4,7 +4,6 @@
 import {
   IComboBoxOption,
   IComboBox,
-  ComboBox,
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
@@ -15,16 +14,12 @@ import {
   IDetailsRowFieldsProps,
   IDetailsRowProps,
   IRenderFunction,
-  SelectionMode,
-  Stack,
-  Text,
-  TextField
+  SelectionMode
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICounterfactualData,
   ITelemetryEvent,
-  JointDataset,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -34,10 +29,10 @@ import React from "react";
 
 import { getCategoricalOption } from "../util/getCategoricalOption";
 import { getColumns } from "../util/getColumns";
-import { getTargetFeatureName } from "../util/getTargetFeatureName";
 
 import { counterfactualListStyle } from "./CounterfactualList.styles";
 import { CounterfactualListColumnName } from "./CounterfactualListColumnName";
+import { CounterfactualListDetailsFooter } from "./CounterfactualListDetailsFooter";
 
 export interface ICounterfactualListProps {
   selectedIndex: number;
@@ -267,111 +262,17 @@ export class CounterfactualList extends React.Component<
     return <div className={itemClass}>{fieldContent}</div>;
   };
 
-  private renderDetailsFooterItemColumn = (
-    _item: Record<string, string | number>,
-    _index?: number,
-    column?: IColumn
-  ): React.ReactNode | undefined => {
-    const dropdownOption = getCategoricalOption(
-      this.context.jointDataset,
-      column?.key
-    );
-    const styles = counterfactualListStyle();
-    const targetFeature = getTargetFeatureName(this.props.data);
-    if (column && targetFeature && column.fieldName === targetFeature) {
-      const predictedClass = this.context.jointDataset.hasPredictedY
-        ? this.props.temporaryPoint?.[JointDataset.PredictedYLabel]
-        : undefined;
-      return (
-        <Stack horizontal={false} tokens={{ childrenGap: "s1" }}>
-          <Stack.Item className={styles.dropdownLabel}>
-            <Text>{column.name}</Text>
-          </Stack.Item>
-          <Stack.Item>
-            <Text className={`predictedValue ${styles.bottomRowText}`}>
-              {predictedClass}
-            </Text>
-          </Stack.Item>
-        </Stack>
-      );
-    }
-    let inputTextStyles;
-    if (column) {
-      // input text should be bolded if the value has changed from original reference value
-      inputTextStyles =
-        this.state.data[column.key]?.toString() !==
-        this.props.originalData[column.key]?.toString()
-          ? styles.bottomRowText
-          : undefined;
-    }
-    if (column && dropdownOption?.data?.categoricalOptions) {
-      return (
-        <Stack horizontal={false} tokens={{ childrenGap: "s1" }}>
-          <Stack.Item className={styles.dropdownLabel}>
-            <Text>{column.key}</Text>
-          </Stack.Item>
-          <Stack.Item>
-            <ComboBox
-              key={`${column.key}`}
-              autoComplete={"on"}
-              allowFreeform
-              selectedKey={`${this.state.data[column.key]}`}
-              options={dropdownOption.data.categoricalOptions}
-              onChange={(
-                _event: React.FormEvent<IComboBox>,
-                option?: IComboBoxOption
-              ) =>
-                this.updateComboBoxColValue(
-                  column.key,
-                  dropdownOption.data.categoricalOptions,
-                  _event,
-                  option
-                )
-              }
-              styles={{
-                input: inputTextStyles
-              }}
-            />
-          </Stack.Item>
-        </Stack>
-      );
-    }
-    if (column) {
-      return (
-        <Stack horizontal={false}>
-          <Stack.Item>
-            <TextField
-              value={this.state.data[column.key]?.toString()}
-              label={column.name || column.key}
-              inputClassName={inputTextStyles}
-              id={column.key}
-              onChange={this.updateColValue}
-            />
-          </Stack.Item>
-        </Stack>
-      );
-    }
-    return undefined;
-  };
-
   private onRenderDetailsFooter = (
     detailsFooterProps?: IDetailsFooterProps
   ): JSX.Element => {
-    if (detailsFooterProps && this.context.requestPredictions) {
-      const classNames = counterfactualListStyle();
-      return (
-        <DetailsRow
-          styles={{ root: classNames.highlightRow }}
-          {...detailsFooterProps}
-          columns={detailsFooterProps.columns}
-          item={this.state.data}
-          itemIndex={-1}
-          groupNestingDepth={detailsFooterProps.groupNestingDepth}
-          selectionMode={SelectionMode.none}
-          onRenderItemColumn={this.renderDetailsFooterItemColumn}
-        />
-      );
-    }
-    return <div />;
+    return (
+      <CounterfactualListDetailsFooter
+        {...this.props}
+        detailsFooterProps={detailsFooterProps}
+        itemColumnData={this.state.data}
+        updateColValue={this.updateColValue}
+        updateComboBoxColValue={this.updateComboBoxColValue}
+      />
+    );
   };
 }
