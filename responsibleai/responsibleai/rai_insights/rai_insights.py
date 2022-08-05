@@ -28,6 +28,7 @@ from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _PREDICTIONS = 'predictions'
 _TRAIN = 'train'
+_TEST = 'test'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
@@ -117,7 +118,7 @@ class RAIInsights(RAIBaseInsights):
             process_categoricals(
                 all_feature_names=self._feature_columns,
                 categorical_features=self.categorical_features,
-                dataset=train.drop(columns=[target_column]))
+                dataset=test.drop(columns=[target_column]))
 
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type,
@@ -642,7 +643,7 @@ class RAIInsights(RAIBaseInsights):
             process_categoricals(
                 all_feature_names=inst.__dict__['_' + _FEATURE_COLUMNS],
                 categorical_features=inst.__dict__[_CATEGORICAL_FEATURES],
-                dataset=inst.__dict__[_TRAIN].drop(columns=[
+                dataset=inst.__dict__[_TEST].drop(columns=[
                     inst.__dict__[_TARGET_COLUMN]]))
 
     @staticmethod
