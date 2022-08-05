@@ -12,6 +12,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
+from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
@@ -27,12 +28,17 @@ from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _PREDICTIONS = 'predictions'
 _TRAIN = 'train'
+_TEST = 'test'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
 _FEATURE_COLUMNS = 'feature_columns'
 _FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
+_CATEGORIES = 'categories'
+_CATEGORY_DICTIONARY = 'category_dictionary'
+_CATEGORICAL_INDEXES = 'categorical_indexes'
+_STRING_IND_DATA = 'string_ind_data'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
@@ -105,7 +111,14 @@ class RAIInsights(RAIBaseInsights):
         self._feature_ranges = RAIInsights._get_feature_ranges(
             test=test, categorical_features=categorical_features,
             feature_columns=self._feature_columns)
+
         self.categorical_features = categorical_features
+        self._categories, self._categorical_indexes, \
+            self._category_dictionary, self._string_ind_data = \
+            process_categoricals(
+                all_feature_names=self._feature_columns,
+                categorical_features=self.categorical_features,
+                dataset=test.drop(columns=[target_column]))
 
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type,
@@ -622,6 +635,16 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
+
+        inst.__dict__['_' + _CATEGORIES], \
+            inst.__dict__['_' + _CATEGORICAL_INDEXES], \
+            inst.__dict__['_' + _CATEGORY_DICTIONARY], \
+            inst.__dict__['_' + _STRING_IND_DATA] = \
+            process_categoricals(
+                all_feature_names=inst.__dict__['_' + _FEATURE_COLUMNS],
+                categorical_features=inst.__dict__[_CATEGORICAL_FEATURES],
+                dataset=inst.__dict__[_TEST].drop(columns=[
+                    inst.__dict__[_TARGET_COLUMN]]))
 
     @staticmethod
     def load(path):
