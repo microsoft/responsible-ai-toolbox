@@ -7,17 +7,10 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import {
-  getPrimaryBackgroundChartColor,
-  getPrimaryChartColor
-} from "@responsible-ai/core-ui";
 
 export interface ITextExplanationDashboardStyles {
   chartRight: IStyle;
   textHighlighting: IStyle;
-  legend: IStyle;
-  posFeatureImportance: IStyle;
-  negFeatureImportance: IStyle;
 }
 
 export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExplanationDashboardStyles> =
@@ -27,17 +20,6 @@ export const textExplanationDashboardStyles: () => IProcessedStyleSet<ITextExpla
       chartRight: {
         maxWidth: "230px",
         minWidth: "230px"
-      },
-      legend: {
-        color: theme.semanticColors.disabledText
-      },
-      negFeatureImportance: {
-        color: getPrimaryChartColor(theme),
-        textDecorationLine: "underline"
-      },
-      posFeatureImportance: {
-        backgroundColor: getPrimaryChartColor(theme),
-        color: getPrimaryBackgroundChartColor(theme)
       },
       textHighlighting: {
         borderColor: theme.semanticColors.variantBorder,
