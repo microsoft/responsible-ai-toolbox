@@ -32,6 +32,7 @@ import React from "react";
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { generatePlotlyProps } from "../util/generatePlotlyProps";
 import { getCurrentLabel } from "../util/getCurrentLabel";
+import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
@@ -123,27 +124,9 @@ export class CounterfactualChart extends React.PureComponent<
     const weightVectorsAreEqual =
       this.props.selectedWeightVector === prevProps.selectedWeightVector;
     if (!selectionsAreEqual || !weightVectorsAreEqual) {
-      this.selectedFeatureImportance = this.state.selectedPointsIndexes.map(
-        (rowIndex, colorIndex) => {
-          const row = this.context.jointDataset.getRow(rowIndex);
-          return {
-            colorIndex,
-            id: rowIndex,
-            name: localization.formatString(
-              localization.Interpret.WhatIfTab.rowLabel,
-              rowIndex.toString()
-            ),
-            unsortedAggregateY: JointDataset.localExplanationSlice(
-              row,
-              this.context.jointDataset.localExplanationFeatureCount
-            ) as number[],
-            unsortedFeatureValues: JointDataset.datasetSlice(
-              row,
-              this.context.jointDataset.metaDict,
-              this.context.jointDataset.localExplanationFeatureCount
-            )
-          };
-        }
+      this.selectedFeatureImportance = getSelectedFeatureImportance(
+        this.state.selectedPointsIndexes,
+        this.context.jointDataset
       );
       if (
         this.state.sortingSeriesIndex === undefined ||
