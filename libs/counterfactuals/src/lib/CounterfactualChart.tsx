@@ -1,15 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IComboBoxOption,
-  IComboBox,
-  ComboBox,
-  getTheme,
-  DefaultButton,
-  PrimaryButton,
-  Stack
-} from "@fluentui/react";
+import { getTheme, DefaultButton, Stack } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -25,7 +17,6 @@ import {
   ModelAssessmentContext,
   FluentUIStyles,
   rowErrorSize,
-  InteractiveLegend,
   ICounterfactualData,
   BasicHighChart,
   ErrorDialog,
@@ -40,8 +31,10 @@ import React from "react";
 
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { generatePlotlyProps } from "../util/generatePlotlyProps";
+import { getCurrentLabel } from "../util/getCurrentLabel";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
+import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 import { LocalImportanceChart } from "./LocalImportanceChart";
@@ -191,7 +184,6 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.jointDataset,
       this.state.chartProps,
       this.context.selectedErrorCohort.cohort,
-      this.context.jointDataset,
       this.state.selectedPointsIndexes,
       this.state.customPoints
     );
@@ -324,56 +316,29 @@ export class CounterfactualChart extends React.PureComponent<
                 </Stack>
               </Stack>
             </Stack.Item>
-            <Stack className={classNames.legendAndText}>
-              <ComboBox
-                id={"CounterfactualSelectedDatapoint"}
-                className={classNames.legendLabel}
-                label={localization.Counterfactuals.selectedDatapoint}
-                onChange={this.selectPointFromDropdown}
-                options={this.getDataOptions()}
-                selectedKey={`${this.state.selectedPointsIndexes[0]}`}
-                ariaLabel={"datapoint picker"}
-                useComboBoxAsMenuWidth
-                styles={FluentUIStyles.smallDropdownStyle}
-              />
-              <div className={classNames.legendLabel}>
-                <b>{`${this.getTargetDescription()}: `}</b>
-                {this.getCurrentLabel()}
-              </div>
-              <PrimaryButton
-                className={classNames.legendLabel}
-                onClick={this.togglePanel}
-                disabled={this.disableCounterfactualPanel()}
-                text={
-                  this.context.requestPredictions
-                    ? localization.Counterfactuals.createWhatIfCounterfactual
-                    : localization.Counterfactuals.createCounterfactual
-                }
-              />
-              {this.state.customPoints.length > 0 && (
-                <InteractiveLegend
-                  items={this.state.customPoints.map((row, rowIndex) => {
-                    return {
-                      activated: this.state.customPointIsActive[rowIndex],
-                      color:
-                        FluentUIStyles.fluentUIColorPalette[
-                          rowIndex + WhatIfConstants.MAX_SELECTION + 1
-                        ],
-                      index: rowIndex,
-                      name: row[WhatIfConstants.namePath],
-                      onClick: this.toggleCustomActivation,
-                      onDelete: this.removeCustomPoint
-                    };
-                  })}
-                />
-              )}
-            </Stack>
+            <CounterfactualChartLegend
+              {...this.props}
+              customPointIsActive={this.state.customPointIsActive}
+              customPoints={this.state.customPoints}
+              selectedPointsIndexes={this.state.selectedPointsIndexes}
+              removeCustomPoint={this.removeCustomPoint}
+              setTemporaryPointToCopyOfDatasetPoint={
+                this.setTemporaryPointToCopyOfDatasetPoint
+              }
+              toggleCustomActivation={this.toggleCustomActivation}
+              togglePanel={this.togglePanel}
+              toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+            />
           </Stack>
         </Stack.Item>
         <Stack.Item className={classNames.lowerChartContainer}>
           <LocalImportanceChart
             rowNumber={this.state.selectedPointsIndexes[0]}
-            currentClass={this.getCurrentLabel()}
+            currentClass={getCurrentLabel(
+              this.context.dataset.task_type,
+              this.props.data.desired_range,
+              this.props.data.desired_class
+            )}
             data={this.props.data}
           />
         </Stack.Item>
@@ -410,26 +375,11 @@ export class CounterfactualChart extends React.PureComponent<
     return [];
   }
 
-  private getCurrentLabel(): string {
-    if (this.context.dataset.task_type === "regression") {
-      return `[${this.props.data.desired_range}]`;
-    }
-
-    return this.props.data.desired_class || "";
-  }
-
-  private getTargetDescription(): string {
-    if (this.context.dataset.task_type === "regression") {
-      return localization.Counterfactuals.currentRange;
-    }
-    return localization.Counterfactuals.currentClass;
-  }
-
   private buildRowOptions(cohortIndex: number): void {
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
 
-  private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
+  private setTemporaryPointToCopyOfDatasetPoint = (index: number): void => {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
     this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
       localization.Interpret.WhatIf.defaultCustomRootName,
@@ -442,7 +392,7 @@ export class CounterfactualChart extends React.PureComponent<
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
     });
-  }
+  };
 
   private createCopyOfFirstRow(): void {
     const indexes = this.getDefaultSelectedPointIndexes(
@@ -540,7 +490,7 @@ export class CounterfactualChart extends React.PureComponent<
     return data;
   }
 
-  private toggleSelectionOfPoint(index?: number): void {
+  private toggleSelectionOfPoint = (index?: number): void => {
     if (index === undefined) {
       return;
     }
@@ -561,7 +511,7 @@ export class CounterfactualChart extends React.PureComponent<
       pointIsActive,
       selectedPointsIndexes: newSelections
     });
-  }
+  };
 
   // fetch prediction for temporary point
   private fetchData = (fetchingReference: { [key: string]: any }): void => {
@@ -620,20 +570,6 @@ export class CounterfactualChart extends React.PureComponent<
         }
       }
     );
-  };
-
-  private selectPointFromDropdown = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (typeof item?.key === "string") {
-      const index = Number.parseInt(item.key);
-      this.setTemporaryPointToCopyOfDatasetPoint(index);
-      this.toggleSelectionOfPoint(index);
-      this.logTelemetryEvent(
-        TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
-      );
-    }
   };
 
   private toggleCustomActivation = (index: number): void => {
@@ -713,25 +649,6 @@ export class CounterfactualChart extends React.PureComponent<
     this.fetchData(editingData);
   };
 
-  private disableCounterfactualPanel = (): boolean => {
-    return (
-      this.state.selectedPointsIndexes[0] === undefined ||
-      !this.props.data.cfs_list[this.state.selectedPointsIndexes[0]]
-    );
-  };
-
-  private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.selectedErrorCohort.cohort.unwrap(
-      JointDataset.IndexLabel
-    );
-    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
-    return indexes.map((index) => {
-      return {
-        key: `${index}`,
-        text: `Index ${index}`
-      };
-    });
-  }
   private togglePanel = (): void => {
     if (!this.state.isPanelOpen) {
       this.logTelemetryEvent(

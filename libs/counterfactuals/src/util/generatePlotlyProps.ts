@@ -16,7 +16,6 @@ export function generatePlotlyProps(
   jointData: JointDataset,
   chartProps: IGenericChartProps,
   cohort: Cohort,
-  jointDataset: JointDataset,
   selectedPointsIndexes: number[],
   customPoints: Array<{
     [key: string]: any;
@@ -99,14 +98,9 @@ export function generatePlotlyProps(
     cohort.filteredData,
     chartProps,
     plotlyProps.data[0],
-    jointDataset
+    jointData
   );
-  generateDataTrace(
-    customPoints,
-    chartProps,
-    plotlyProps.data[1],
-    jointDataset
-  );
+  generateDataTrace(customPoints, chartProps, plotlyProps.data[1], jointData);
   return plotlyProps;
 }
 
