@@ -1,4 +1,8 @@
 {
+  "Common": {
+    "close": "Close",
+    "tooltipButton": "Tooltip button"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binary treatments: ",
@@ -882,7 +886,8 @@
       "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "noColor": "None"
+      "noColor": "None",
+      "datasetCohortDropdown": "Dataset cohort dropdown"
     },
     "DependencePlot": {
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
@@ -1013,7 +1018,8 @@
       "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
-      "weightOptions": "Class importance weights"
+      "weightOptions": "Class importance weights",
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
       "_errorPrefix.comment": "prefix in front of external error",
@@ -1261,19 +1267,21 @@
     "summaryImportance": "Summary importance"
   },
   "InterpretText": {
-    "Dashboard": {
+    "View": {
       "interpretibilityDashboard": "Interpretability Dashboard",
       "importantWords": "Most Important Words",
       "topFeatureList": "Top feature list analysis",
       "allButton": "ALL FEATURES",
       "negButton": "NEGATIVE FEATURES",
       "posButton": "POSITIVE FEATURES",
-      "featureLegend": "TEXT FEATURE LEGEND",
-      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
-      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE",
       "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
       "label": "Label",
       "colon": ": "
+    },
+    "Legend": {
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
     },
     "BarChart": {
       "featureImportance": "FEATURE IMPORTANCE"
