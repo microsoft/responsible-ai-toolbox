@@ -95,6 +95,10 @@ class RAIInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         categorical_features = categorical_features or []
         self._validate_rai_insights_input_parameters(
