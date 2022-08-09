@@ -26,7 +26,18 @@ export interface IVisionExplanationDashboardState {
   imageDim: number;
   pageSize: number;
   panelOpen: boolean;
+  selectedItem: IListItem | undefined;
   selectedKey: string;
+}
+
+export interface IListItem {
+  title: string;
+  subtitle?: string;
+  image: string;
+  trueY?: number;
+  predictedY?: number;
+  index?: number;
+  other?: number;
 }
 
 enum VisionDatasetExplorerTabOptions {
@@ -57,6 +68,7 @@ export class VisionExplanationDashboard extends React.Component<
       imageDim: 200,
       pageSize: 10,
       panelOpen: false,
+      selectedItem: undefined,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
     };
   }
@@ -218,7 +230,7 @@ export class VisionExplanationDashboard extends React.Component<
                   <ImageList
                     data={this.props.dataSummary}
                     imageDim={this.state.imageDim}
-                    openPanel={this.onButtonClick}
+                    selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
               </Stack>
@@ -233,7 +245,7 @@ export class VisionExplanationDashboard extends React.Component<
                   <ImageList
                     data={this.props.dataSummary}
                     imageDim={this.state.imageDim}
-                    openPanel={this.onButtonClick}
+                    selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
               </Stack>
@@ -246,7 +258,7 @@ export class VisionExplanationDashboard extends React.Component<
             <TableList
               data={this.props.dataSummary}
               imageDim={this.state.imageDim}
-              openPanel={this.onButtonClick}
+              selectItem={this.onItemSelect}
               pageSize={this.state.pageSize}
             />
           </Stack>
@@ -255,16 +267,20 @@ export class VisionExplanationDashboard extends React.Component<
           <Flyout
             data={this.props.dataSummary}
             isOpen={this.state.panelOpen}
-            item={{ image: "hi", title: "hi" }}
-            callback={this.onButtonClick}
+            item={this.state.selectedItem}
+            callback={this.onPanelClose}
           />
         </Stack.Item>
       </Stack>
     );
   }
 
-  private onButtonClick = () => {
+  private onPanelClose = () => {
     this.setState({ panelOpen: !this.state.panelOpen });
+  };
+
+  private onItemSelect = (item: IListItem): void => {
+    this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
   };
 
   /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 

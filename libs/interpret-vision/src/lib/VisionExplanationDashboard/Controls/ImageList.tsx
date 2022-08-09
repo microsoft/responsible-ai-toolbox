@@ -19,7 +19,7 @@ import { imageListStyles } from "./ImageList.styles";
 export interface IImageListProps {
   data: IDatasetSummary;
   imageDim: number;
-  openPanel: () => void;
+  selectItem: (item: IListItem) => void;
 }
 
 export interface IImageListState {
@@ -29,6 +29,8 @@ export interface IImageListState {
 export interface IListItem {
   title: string;
   image: string;
+  predictedY?: number;
+  trueY?: number;
 }
 
 export class ImageList extends React.Component<
@@ -80,8 +82,8 @@ export class ImageList extends React.Component<
       <div
         data-is-focusable
         className={classNames.tile}
-        onClick={this.props.openPanel}
-        onKeyPress={this.props.openPanel}
+        onClick={this.callbackWrapper(item)}
+        onKeyPress={this.callbackWrapper(item)}
         role="button"
         tabIndex={0}
       >
@@ -95,6 +97,15 @@ export class ImageList extends React.Component<
         />
       </div>
     );
+  };
+
+  private callbackWrapper = (item?: IListItem | undefined) => () => {
+    if (!item) {
+      return;
+    }
+    item.predictedY = 0;
+    item.trueY = 0;
+    this.props.selectItem(item);
   };
 
   private getPageSpecification = (

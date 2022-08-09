@@ -1,63 +1,64 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet,
-  FontSizes
-} from "@fluentui/react";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 
 export interface IFlyoutStyles {
-  line: IStyle;
-  list: IStyle;
-  tile: IStyle;
-  sizer: IStyle;
-  padder: IStyle;
-  label: IStyle;
+  errorIcon: IStyle;
+  featureListContainer: IStyle;
+  iconContainer: IStyle;
   image: IStyle;
+  imageContainer: IStyle;
+  title: IStyle;
+  label: IStyle;
+  line: IStyle;
+  mainContainer: IStyle;
+  successIcon: IStyle;
 }
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
   return mergeStyleSets<IFlyoutStyles>({
+    errorIcon: {
+      color: "#C50F1F",
+      fontSize: "large",
+      fontWeight: "600"
+    },
+    featureListContainer: {
+      height: 300,
+      overflow: "auto"
+    },
+    iconContainer: {
+      position: "relative",
+      top: "2px"
+    },
     image: {
-      left: 0,
-      position: "absolute",
-      top: 0,
-      width: "100%"
+      marginBottom: "20px"
+    },
+    imageContainer: {
+      maxHeight: "250px",
+      maxWidth: "250px"
     },
     label: {
-      color: "black",
-      fontSize: FontSizes.small,
-      justifySelf: "center",
-      paddingBottom: "100%",
-      width: "100%"
+      bottom: 20,
+      position: "relative",
+      textAlign: "start"
     },
     line: {
-      borderTop: "1px solid #EDEBE9"
+      borderBottom: "1px solid #EDEBE9",
+      paddingBottom: "10px",
+      width: "100%"
     },
-    list: {
-      fontSize: 0,
-      overflow: "scroll",
-      position: "relative"
+    mainContainer: {
+      height: "100%",
+      overflow: "hidden"
     },
-    padder: {
-      bottom: 2,
-      left: 2,
-      position: "absolute",
-      right: 2,
-      top: 2
+    successIcon: {
+      color: "#6BB700",
+      fontSize: "large",
+      fontWeight: "600"
     },
-    sizer: {
-      paddingBottom: "100%"
-    },
-    tile: {
-      float: "left",
-      marginTop: "0.5%",
-      paddingLeft: "1%",
-      paddingRight: "1%",
-      position: "relative",
-      textAlign: "center"
+    title: {
+      fontWeight: "600"
     }
   });
 };

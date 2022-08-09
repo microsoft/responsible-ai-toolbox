@@ -1,7 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Image, Panel, PanelType, FocusZone, Stack } from "@fluentui/react";
+import {
+  Icon,
+  Image,
+  ImageFit,
+  List,
+  Panel,
+  PanelType,
+  FocusZone,
+  Stack,
+  Text
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
@@ -27,31 +38,131 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public render(): React.ReactNode {
     const classNames = flyoutStyles();
 
+    const item = this.props.item;
+
+    const list = [];
+
+    for (let i = 0; i < 30; i++) {
+      list.push({ title: "Feature 1", value: "value" });
+    }
+
     return (
       <FocusZone>
         <Panel
-          headerText="Selected instance"
+          headerText={localization.InterpretVision.Dashboard.panelTitle}
           isOpen={this.props.isOpen}
           closeButtonAriaLabel="Close"
           onDismiss={this.props.callback}
           isLightDismiss
           type={PanelType.custom}
           customWidth="700px"
+          className={classNames.mainContainer}
         >
           <Stack tokens={{ childrenGap: "l1" }}>
             <Stack.Item>
               <div className={classNames.line} />
             </Stack.Item>
-            <Stack.Item style={{ overflow: "hidden" }}>
+            <Stack.Item>
+              <Stack
+                horizontal
+                tokens={{ childrenGap: "l1" }}
+                horizontalAlign="space-around"
+                verticalAlign="center"
+              >
+                <Stack.Item>
+                  <Stack
+                    horizontal
+                    tokens={{ childrenGap: "s1" }}
+                    horizontalAlign="center"
+                    verticalAlign="center"
+                  >
+                    <Stack.Item className={classNames.iconContainer}>
+                      <Icon
+                        iconName={
+                          item?.predictedY !== item?.trueY
+                            ? "Cancel"
+                            : "Checkmark"
+                        }
+                        className={
+                          item?.predictedY !== item?.trueY
+                            ? classNames.errorIcon
+                            : classNames.successIcon
+                        }
+                      />
+                    </Stack.Item>
+                    <Stack.Item>
+                      <Text variant="large" className={classNames.title}>
+                        {item?.predictedY !== item?.trueY
+                          ? localization.InterpretVision.Dashboard.titleBarError
+                          : localization.InterpretVision.Dashboard
+                              .titleBarSuccess}
+                      </Text>
+                    </Stack.Item>
+                  </Stack>
+                </Stack.Item>
+                <Stack.Item className={classNames.imageContainer}>
+                  <Image
+                    src={item?.image}
+                    className={classNames.image}
+                    imageFit={ImageFit.contain}
+                  />
+                  <Text variant="large" className={classNames.label}>
+                    {item?.title}
+                  </Text>
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+            <Stack.Item>
+              <div className={classNames.line} />
+            </Stack.Item>
+            <Stack.Item>
+              <Text variant="large" className={classNames.title}>
+                {localization.InterpretVision.Dashboard.panelExplanation}
+              </Text>
+            </Stack.Item>
+            <Stack.Item>
               <Image
                 src={`data:image/jpg;base64,${this.props.data.localExplanations[0]}`}
                 width="800px"
                 style={{ position: "relative", right: 85 }}
               />
             </Stack.Item>
+            <Stack.Item>
+              <div className={classNames.line} />
+            </Stack.Item>
+            <Stack.Item>
+              <Text variant="large" className={classNames.title}>
+                {localization.InterpretVision.Dashboard.panelInformation}
+              </Text>
+            </Stack.Item>
+            <Stack.Item className={classNames.featureListContainer}>
+              <List items={list} onRenderCell={this.onRenderCell} />
+            </Stack.Item>
           </Stack>
         </Panel>
       </FocusZone>
     );
   }
+
+  private onRenderCell = (
+    item?: { title: string; value: string } | undefined
+  ) => {
+    return (
+      <Stack.Item>
+        <Stack
+          horizontal
+          tokens={{ childrenGap: "l2" }}
+          verticalAlign="center"
+          style={{ marginBottom: "20px" }}
+        >
+          <Stack.Item>
+            <Text variant="large">{item?.title}</Text>
+          </Stack.Item>
+          <Stack.Item>
+            <Text variant="large">{item?.value}</Text>
+          </Stack.Item>
+        </Stack>
+      </Stack.Item>
+    );
+  };
 }

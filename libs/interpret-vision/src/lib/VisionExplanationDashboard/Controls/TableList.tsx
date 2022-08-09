@@ -22,7 +22,7 @@ export interface ITableListProps {
   data: IDatasetSummary;
   imageDim: number;
   pageSize: number;
-  openPanel: () => void;
+  selectItem: (item: IListItem) => void;
 }
 
 export interface ITableListState {
@@ -33,12 +33,12 @@ export interface ITableListState {
 
 export interface IListItem {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   image: string;
-  trueY: number;
-  predictedY: number;
-  index: number;
-  other: number;
+  trueY?: number;
+  predictedY?: number;
+  index?: number;
+  other?: number;
 }
 
 export class TableList extends React.Component<
@@ -193,7 +193,11 @@ export class TableList extends React.Component<
 
     return (
       <div data-is-focusable>
-        <Stack horizontal tokens={{ childrenGap: "s1" }}>
+        <Stack
+          horizontal
+          tokens={{ childrenGap: "s1" }}
+          onClick={this.callbackWrapper(item)}
+        >
           {image && (
             <Stack.Item>
               <Image
@@ -221,5 +225,14 @@ export class TableList extends React.Component<
         </Stack>
       </div>
     );
+  };
+
+  private callbackWrapper = (item?: IListItem | undefined) => () => {
+    if (!item) {
+      return;
+    }
+    item.predictedY = 0;
+    item.trueY = 0;
+    this.props.selectItem(item);
   };
 }
