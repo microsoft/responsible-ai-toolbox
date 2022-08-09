@@ -16,9 +16,7 @@ import {
   rowErrorSize,
   ICounterfactualData,
   ErrorDialog,
-  ITelemetryEvent,
-  TelemetryLevels,
-  TelemetryEventName
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -27,12 +25,10 @@ import React from "react";
 
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCurrentLabel } from "../util/getCurrentLabel";
-import { getOriginalData } from "../util/getOriginalData";
 import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
 
-import { CounterfactualChart } from "./CounterfactualChart";
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
-import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
+import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
 import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualComponentProps {
   data: ICounterfactualData;
@@ -46,15 +42,11 @@ export interface ICounterfactualComponentProps {
 
 export interface ICounterfactualComponentState {
   chartProps?: IGenericChartProps;
-  isPanelOpen: boolean;
-  customPoints: Array<{ [key: string]: any }>;
+  customPointLength: number;
   request?: AbortController;
   selectedPointsIndexes: number[];
-  pointIsActive: boolean[];
-  customPointIsActive: boolean[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
-  originalData?: { [key: string]: string | number };
   errorMessage?: string;
 }
 
@@ -74,11 +66,7 @@ export class CounterfactualComponent extends React.PureComponent<
     super(props);
 
     this.state = {
-      customPointIsActive: [],
-      customPoints: [],
-      isPanelOpen: false,
-      originalData: undefined,
-      pointIsActive: [],
+      customPointLength: 0,
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
@@ -167,41 +155,20 @@ export class CounterfactualComponent extends React.PureComponent<
 
     return (
       <Stack horizontal={false}>
-        <Stack.Item>
-          <Stack horizontal id={"IndividualFeatureContainer"}>
-            <CounterfactualChart
-              chartProps={this.state.chartProps}
-              customPoints={this.state.customPoints}
-              isPanelOpen={this.state.isPanelOpen}
-              originalData={this.state.originalData}
-              selectedPointsIndexes={this.state.selectedPointsIndexes}
-              temporaryPoint={this.temporaryPoint}
-              onChartPropsUpdated={this.onChartPropsUpdated}
-              saveAsPoint={this.saveAsPoint}
-              setCustomRowProperty={this.setCustomRowProperty}
-              setCustomRowPropertyComboBox={this.setCustomRowPropertyComboBox}
-              setTemporaryPointToCopyOfDatasetPoint={
-                this.setTemporaryPointToCopyOfDatasetPoint
-              }
-              telemetryHook={this.props.telemetryHook}
-              togglePanel={this.togglePanel}
-              toggleSelectionOfPoint={this.toggleSelectionOfPoint}
-            />
-            <CounterfactualChartLegend
-              {...this.props}
-              customPointIsActive={this.state.customPointIsActive}
-              customPoints={this.state.customPoints}
-              selectedPointsIndexes={this.state.selectedPointsIndexes}
-              removeCustomPoint={this.removeCustomPoint}
-              setTemporaryPointToCopyOfDatasetPoint={
-                this.setTemporaryPointToCopyOfDatasetPoint
-              }
-              toggleCustomActivation={this.toggleCustomActivation}
-              togglePanel={this.togglePanel}
-              toggleSelectionOfPoint={this.toggleSelectionOfPoint}
-            />
-          </Stack>
-        </Stack.Item>
+        <CounterfactualChartWithLegend
+          {...this.props}
+          chartProps={this.state.chartProps}
+          selectedPointsIndexes={this.state.selectedPointsIndexes}
+          temporaryPoint={this.temporaryPoint}
+          onChartPropsUpdated={this.onChartPropsUpdated}
+          onCustomPointLengthUpdated={this.onCustomPointLengthUpdated}
+          onSelectedPointsIndexesUpdated={this.onSelectedPointsIndexesUpdated}
+          setCustomRowProperty={this.setCustomRowProperty}
+          setCustomRowPropertyComboBox={this.setCustomRowPropertyComboBox}
+          setTemporaryPointToCopyOfDatasetPoint={
+            this.setTemporaryPointToCopyOfDatasetPoint
+          }
+        />
         <Stack.Item className={classNames.lowerChartContainer}>
           <LocalImportanceChart
             rowNumber={this.state.selectedPointsIndexes[0]}
@@ -258,7 +225,7 @@ export class CounterfactualComponent extends React.PureComponent<
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
       FluentUIStyles.fluentUIColorPalette[
-        WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
+        WhatIfConstants.MAX_SELECTION + this.state.customPointLength
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
@@ -279,7 +246,7 @@ export class CounterfactualComponent extends React.PureComponent<
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
       FluentUIStyles.fluentUIColorPalette[
-        WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
+        WhatIfConstants.MAX_SELECTION + this.state.customPointLength
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
@@ -288,33 +255,6 @@ export class CounterfactualComponent extends React.PureComponent<
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
     this.setState({ chartProps: newProps });
-  };
-
-  private toggleSelectionOfPoint = (index?: number): void => {
-    if (index === undefined) {
-      return;
-    }
-    const indexOf = this.state.selectedPointsIndexes.indexOf(index);
-    let newSelections = [...this.state.selectedPointsIndexes];
-    let pointIsActive = [...this.state.pointIsActive];
-    let originalData;
-    if (indexOf === -1) {
-      newSelections = [index];
-      pointIsActive = [true];
-      originalData = getOriginalData(
-        index,
-        this.context.jointDataset,
-        this.context.dataset
-      );
-    } else {
-      newSelections.splice(indexOf, 1);
-      pointIsActive.splice(indexOf, 1);
-    }
-    this.setState({
-      originalData,
-      pointIsActive,
-      selectedPointsIndexes: newSelections
-    });
   };
 
   // fetch prediction for temporary point
@@ -376,34 +316,12 @@ export class CounterfactualComponent extends React.PureComponent<
     );
   };
 
-  private toggleCustomActivation = (index: number): void => {
-    const customPointIsActive = [...this.state.customPointIsActive];
-    customPointIsActive[index] = !customPointIsActive[index];
-    this.setState({ customPointIsActive });
+  private onSelectedPointsIndexesUpdated = (newSelection: number[]) => {
+    this.setState({ selectedPointsIndexes: newSelection });
   };
 
-  private removeCustomPoint = (index: number): void => {
-    this.setState((prevState) => {
-      const customPoints = [...prevState.customPoints];
-      customPoints.splice(index, 1);
-      const customPointIsActive = [...prevState.customPointIsActive];
-      customPointIsActive.splice(index, 1);
-      return { customPointIsActive, customPoints };
-    });
-  };
-
-  private saveAsPoint = (): void => {
-    const customPoints = [...this.state.customPoints];
-    const customPointIsActive = [...this.state.customPointIsActive];
-    if (this.temporaryPoint) {
-      customPoints.push(this.temporaryPoint);
-    }
-    customPointIsActive.push(true);
-    this.temporaryPoint = _.cloneDeep(this.temporaryPoint);
-    this.setState({
-      customPointIsActive,
-      customPoints
-    });
+  private onCustomPointLengthUpdated = (customPointLength: number) => {
+    this.setState({ customPointLength });
   };
 
   private setCustomRowProperty = (
@@ -451,23 +369,5 @@ export class CounterfactualComponent extends React.PureComponent<
 
     this.forceUpdate();
     this.fetchData(editingData);
-  };
-
-  private togglePanel = (): void => {
-    if (!this.state.isPanelOpen) {
-      this.logTelemetryEvent(
-        TelemetryEventName.CounterfactualCreateWhatIfCounterfactualClick
-      );
-    }
-    this.setState((preState) => {
-      return { isPanelOpen: !preState.isPanelOpen };
-    });
-  };
-
-  private logTelemetryEvent = (eventName: TelemetryEventName) => {
-    this.props.telemetryHook?.({
-      level: TelemetryLevels.ButtonClick,
-      type: eventName
-    });
   };
 }
