@@ -6,6 +6,7 @@ import {
   ErrorCohort,
   CohortSource,
   IModelExplanationData,
+  IVisionModelExplanationData,
   IDataset,
   IErrorAnalysisData,
   ICausalAnalysisData,
@@ -32,6 +33,7 @@ export interface ITabsViewProps {
   causalAnalysisData?: ICausalAnalysisData[];
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
+  visionModelExplanationData?: IVisionModelExplanationData;
   cohortData?: IPreBuiltCohort[];
   cohorts: ErrorCohort[];
   jointDataset: JointDataset;
@@ -40,6 +42,7 @@ export interface ITabsViewProps {
   selectedCohort: ErrorCohort;
   dataset: IDataset;
   onClearCohortSelectionClick: () => void;
+  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal

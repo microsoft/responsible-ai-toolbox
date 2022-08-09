@@ -2,14 +2,18 @@
 # Licensed under the MIT License.
 import gender_guesser.detector as gender
 import pkg_resources
+from negspacy.negation import Negex  # noqa: F401
+
+from raiutils.dataset import fetch_dataset
+
+POSITIVE_NEGATIVE_FILE = 'positive-negative.csv'
 
 resource_package = __name__
-positive_negative_words_path = '/'.join(('data', 'positive-negative.csv'))
+nlp_url = 'https://publictestdatasets.blob.core.windows.net/nlp/'
+fetch_dataset(nlp_url + POSITIVE_NEGATIVE_FILE, POSITIVE_NEGATIVE_FILE)
 male_words_path = '/'.join(('data', 'male-words.txt'))
 female_words_path = '/'.join(('data', 'female-words.txt'))
 neutral_words_path = '/'.join(('data', 'neutral-words.txt'))
-positive_negative_words_data = pkg_resources.resource_string(
-    resource_package, positive_negative_words_path).decode("utf-8")
 male_words_data = pkg_resources.resource_string(
     resource_package, male_words_path).decode("utf-8")
 female_words_data = pkg_resources.resource_string(
@@ -17,9 +21,9 @@ female_words_data = pkg_resources.resource_string(
 neutral_words_data = pkg_resources.resource_string(
     resource_package, neutral_words_path).decode("utf-8")
 
-# positive_negative_file = open("data/positive-negative.csv", "r")
-positive_negative_raw = positive_negative_words_data
-# positive_negative_file.close()
+with open(POSITIVE_NEGATIVE_FILE, 'r', encoding='utf8') as pnf:
+    positive_negative_raw = pnf.read()
+
 positive_negative_lines = positive_negative_raw.split("\n")
 
 positive_words = set()
