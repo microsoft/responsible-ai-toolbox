@@ -11,20 +11,20 @@ import {
   FocusZone,
   Stack,
   Text,
+  Spinner,
   Separator
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
-
 import { flyoutStyles } from "./Flyout.styles";
-import { IListItem } from "./ImageList";
 
 export interface IFlyoutProps {
-  data: IDatasetSummary;
+  explanation: string;
   isOpen: boolean;
-  item: IListItem | undefined;
+  item: IVisionListItem | undefined;
+  loadingExplanation: boolean;
   callback: () => void;
 }
 
@@ -33,8 +33,13 @@ const stackTokens = {
 };
 
 export class Flyout extends React.Component<IFlyoutProps> {
+  public constructor(props: IFlyoutProps) {
+    super(props);
+    this.state = {};
+  }
+
   public render(): React.ReactNode {
-    const { data, isOpen, item, callback } = this.props;
+    const { isOpen, item, callback } = this.props;
 
     const classNames = flyoutStyles();
 
@@ -58,7 +63,7 @@ export class Flyout extends React.Component<IFlyoutProps> {
         >
           <Stack tokens={stackTokens}>
             <Stack.Item>
-              <Separator styles={{ root: { width: "100%" } }} />
+              <Separator className={classNames.separator} />
             </Stack.Item>
             <Stack.Item>
               <Stack
@@ -100,12 +105,12 @@ export class Flyout extends React.Component<IFlyoutProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageContainer}>
                   <Image
-                    src={item?.image}
+                    src={`data:image/jpg;base64,${item?.image}`}
                     className={classNames.image}
                     imageFit={ImageFit.contain}
                   />
                   <Text variant="large" className={classNames.label}>
-                    {item?.title}
+                    {item?.predictedY}
                   </Text>
                 </Stack.Item>
               </Stack>
@@ -118,13 +123,21 @@ export class Flyout extends React.Component<IFlyoutProps> {
                 {localization.InterpretVision.Dashboard.panelExplanation}
               </Text>
             </Stack.Item>
-            <Stack.Item>
-              <Image
-                src={`data:image/jpg;base64,${data.localExplanations[0]}`}
-                width="800px"
-                className={classNames.explanation}
-              />
-            </Stack.Item>
+            {!this.props.loadingExplanation ? (
+              <Stack.Item>
+                <Image
+                  src={`data:image/jpg;base64,${this.props.explanation}`}
+                  width="800px"
+                  style={{ position: "relative", right: 85 }}
+                />
+              </Stack.Item>
+            ) : (
+              <Stack.Item>
+                <Spinner
+                  label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
+                />
+              </Stack.Item>
+            )}
             <Stack.Item>
               <Separator className={classNames.separator} />
             </Stack.Item>

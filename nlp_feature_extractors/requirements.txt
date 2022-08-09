@@ -6,3 +6,4 @@ protobuf==3.17.3
 sentencepiece==0.1.96
 spacy==3.0.3
 tqdm==4.49.0
+raiutils>=0.2.0
