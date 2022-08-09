@@ -210,18 +210,7 @@ export class CounterfactualComponent extends React.PureComponent<
     if (indexes.length === 0) {
       return undefined;
     }
-    this.temporaryPoint = this.context.jointDataset.getRow(indexes[0]);
-    this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
-      localization.Interpret.WhatIf.defaultCustomRootName,
-      indexes[0]
-    );
-    this.temporaryPoint[WhatIfConstants.colorPath] =
-      FluentUIStyles.fluentUIColorPalette[
-        WhatIfConstants.MAX_SELECTION + this.state.customPointLength
-      ];
-    Object.keys(this.temporaryPoint).forEach((key) => {
-      this.validationErrors[key] = undefined;
-    });
+    this.setTemporaryPointToCopyOfDatasetPoint(indexes[0]);
   }
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
