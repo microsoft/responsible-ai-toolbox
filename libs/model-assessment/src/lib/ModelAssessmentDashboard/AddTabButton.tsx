@@ -48,6 +48,7 @@ export class AddTabButton extends React.Component<
             iconProps={{ iconName: "CircleAdditionSolid" }}
             onClick={this.toggleIsCalloutVisible}
             className={style.button}
+            ariaLabel={localization.ModelAssessment.AddingTab.CalloutTitle}
           />
           {this.state.isCalloutVisible && (
             <Callout
