@@ -158,6 +158,9 @@ export class DatasetExplorerTab extends React.Component<
                 options={cohortOptions}
                 selectedKey={this.state.selectedCohortIndex}
                 onChange={this.setSelectedCohort}
+                ariaLabel={
+                  localization.Interpret.DatasetExplorer.datasetCohortDropdown
+                }
               />
             )}
           </Stack>

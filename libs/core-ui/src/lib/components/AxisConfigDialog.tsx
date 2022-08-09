@@ -113,6 +113,7 @@ export class AxisConfigDialog extends React.PureComponent<
         onRenderFooter={this.renderFooter}
         isFooterAtBottom
         isLightDismiss
+        closeButtonAriaLabel={localization.Common.close}
       >
         <Stack tokens={{ childrenGap: "l1" }}>
           <Stack.Item>
