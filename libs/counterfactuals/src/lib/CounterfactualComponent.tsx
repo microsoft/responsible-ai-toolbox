@@ -23,6 +23,7 @@ import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
+import { getPredictedProbabilities } from "../util/getPredictedProbabilities";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
@@ -219,18 +220,10 @@ export class CounterfactualComponent extends React.PureComponent<
           const fetchedData = await promise;
           // returns predicted probabilities
           if (Array.isArray(fetchedData[0])) {
-            const predictionVector = fetchedData[0];
-            let predictedClass = 0;
-            let maxProb = Number.MIN_SAFE_INTEGER;
-            for (const [i, element] of predictionVector.entries()) {
-              fetchingReference[JointDataset.ProbabilityYRoot + i.toString()] =
-                element;
-              if (element > maxProb) {
-                predictedClass = i;
-                maxProb = element;
-              }
-            }
-            fetchingReference[JointDataset.PredictedYLabel] = predictedClass;
+            fetchingReference = getPredictedProbabilities(
+              fetchingReference,
+              fetchedData
+            );
           } else {
             // prediction is a scalar, no probabilities
             fetchingReference[JointDataset.PredictedYLabel] = fetchedData[0];
