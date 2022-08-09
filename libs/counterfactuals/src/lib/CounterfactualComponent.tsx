@@ -22,6 +22,7 @@ import React from "react";
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
+import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
@@ -205,14 +206,12 @@ export class CounterfactualComponent extends React.PureComponent<
       this.state.request.abort();
     }
     const abortController = new AbortController();
-    const rawData = JointDataset.datasetSlice(
+    const promise = getFetchPredictionPromise(
       fetchingReference,
-      this.context.jointDataset.metaDict,
-      this.context.jointDataset.datasetFeatureCount
+      this.context.jointDataset,
+      this.props.invokeModel
     );
     fetchingReference[JointDataset.PredictedYLabel] = undefined;
-    const promise = this.props.invokeModel([rawData], abortController.signal);
-
     this.setState(
       { errorMessage: undefined, request: abortController },
       async () => {
@@ -297,7 +296,6 @@ export class CounterfactualComponent extends React.PureComponent<
       // User selected/de-selected an existing option
       editingData[key] = index;
     }
-
     this.forceUpdate();
     this.fetchData(editingData);
   };
