@@ -14,7 +14,6 @@ import {
   FluentUIStyles,
   rowErrorSize,
   ICounterfactualData,
-  ErrorDialog,
   ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
@@ -27,6 +26,7 @@ import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointI
 import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
+import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
 import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
   data: ICounterfactualData;
@@ -170,26 +170,15 @@ export class CounterfactualComponent extends React.PureComponent<
           data={this.props.data}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
         />
-        <Stack.Item>
-          {this.state.errorMessage && this.renderErrorDialog()}
-        </Stack.Item>
+        {this.state.errorMessage && (
+          <CounterfactualErrorDialog
+            errorMessage={this.state.errorMessage}
+            onClose={this.onClose}
+          />
+        )}
       </Stack>
     );
   }
-
-  private readonly renderErrorDialog = (): React.ReactNode => {
-    return (
-      <ErrorDialog
-        title={localization.Counterfactuals.ErrorDialog.PythonError}
-        subText={localization.formatString(
-          localization.Counterfactuals.ErrorDialog.ErrorPrefix,
-          this.state.errorMessage
-        )}
-        cancelButtonText={localization.Counterfactuals.ErrorDialog.Close}
-        onClose={this.onClose}
-      />
-    );
-  };
 
   private readonly onClose = (): void => {
     this.setState({ errorMessage: undefined });
@@ -237,6 +226,14 @@ export class CounterfactualComponent extends React.PureComponent<
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
     this.setState({ chartProps: newProps });
+  };
+
+  private onSelectedPointsIndexesUpdated = (newSelection: number[]) => {
+    this.setState({ selectedPointsIndexes: newSelection });
+  };
+
+  private onCustomPointLengthUpdated = (customPointLength: number) => {
+    this.setState({ customPointLength });
   };
 
   // fetch prediction for temporary point
@@ -296,14 +293,6 @@ export class CounterfactualComponent extends React.PureComponent<
         }
       }
     );
-  };
-
-  private onSelectedPointsIndexesUpdated = (newSelection: number[]) => {
-    this.setState({ selectedPointsIndexes: newSelection });
-  };
-
-  private onCustomPointLengthUpdated = (customPointLength: number) => {
-    this.setState({ customPointLength });
   };
 
   private setCustomRowProperty = (
