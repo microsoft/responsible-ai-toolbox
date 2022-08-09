@@ -2132,6 +2132,12 @@ export const adultCensusWithFairnessDataset: IDataset = {
       }
     }
   },
+  feature_metadata: {
+    categorical_features: ["c1", "c2"],
+    datetime_features: ["d1", "d2"],
+    dropped_features: ["d3", "d4"],
+    identity_feature_name: "fnlwgt"
+  },
   feature_names: [
     "age",
     "workclass",

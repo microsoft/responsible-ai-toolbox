@@ -19,6 +19,7 @@ from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
@@ -34,6 +35,7 @@ _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
 _CLASSES = 'classes'
 _FEATURE_COLUMNS = 'feature_columns'
+_FEATURE_METADATA = 'feature_metadata'
 _FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
 _CATEGORIES = 'categories'
@@ -64,7 +66,8 @@ class RAIInsights(RAIBaseInsights):
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
-                 maximum_rows_for_test: int = 5000):
+                 maximum_rows_for_test: int = 5000,
+                 feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -92,6 +95,10 @@ class RAIInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         categorical_features = categorical_features or []
         self._validate_rai_insights_input_parameters(
@@ -112,6 +119,7 @@ class RAIInsights(RAIBaseInsights):
         self._feature_ranges = RAIInsights._get_feature_ranges(
             test=test, categorical_features=categorical_features,
             feature_columns=self._feature_columns)
+        self._feature_metadata = feature_metadata
 
         self.categorical_features = categorical_features
         self._categories, self._categorical_indexes, \
@@ -192,7 +200,8 @@ class RAIInsights(RAIBaseInsights):
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
             serializer,
-            maximum_rows_for_test: int):
+            maximum_rows_for_test: int,
+            feature_metadata: Optional[FeatureMetadata] = None):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -378,6 +387,15 @@ class RAIInsights(RAIBaseInsights):
                 "Expecting pandas DataFrame for train and test."
             )
 
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got {0}".format(
+                        type(feature_metadata)))
+
+            feature_metadata.validate_feature_metadata_with_user_features(
+                list(train.columns))
+
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
         """
@@ -482,6 +500,13 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
+
+        if self._feature_metadata is not None:
+            dashboard_dataset.feature_metadata = \
+                self._feature_metadata.to_dict()
+        else:
+            dashboard_dataset.feature_metadata = None
+
         dashboard_dataset.data_balance_measures = \
             self._data_balance_manager.get_data()
 
@@ -602,14 +627,17 @@ class RAIInsights(RAIBaseInsights):
         """
         top_dir = Path(path)
         classes = convert_to_list(self._classes)
+        feature_metadata_dict = None
+        if self._feature_metadata is not None:
+            feature_metadata_dict = self._feature_metadata.to_dict()
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
             _CLASSES: classes,
             _FEATURE_COLUMNS: self._feature_columns,
-            _FEATURE_RANGES: self._feature_ranges
-
+            _FEATURE_RANGES: self._feature_ranges,
+            _FEATURE_METADATA: feature_metadata_dict
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
@@ -667,6 +695,18 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
+        if meta[_FEATURE_METADATA] is None:
+            inst.__dict__['_' + _FEATURE_METADATA] = None
+        else:
+            inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
+                identity_feature_name=meta[_FEATURE_METADATA][
+                    'identity_feature_name'],
+                datetime_features=meta[_FEATURE_METADATA][
+                    'datetime_features'],
+                categorical_features=meta[_FEATURE_METADATA][
+                    'categorical_features'],
+                dropped_features=meta[_FEATURE_METADATA][
+                    'dropped_features'],)
 
         inst.__dict__['_' + _CATEGORIES], \
             inst.__dict__['_' + _CATEGORICAL_INDEXES], \
