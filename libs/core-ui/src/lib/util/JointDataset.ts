@@ -23,7 +23,8 @@ import {
   ColumnCategories,
   IJointDatasetArgs,
   IJointMeta,
-  MulticlassClassificationEnum
+  MulticlassClassificationEnum,
+  IDatasetMeta
 } from "./JointDatasetUtils";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
@@ -48,6 +49,7 @@ export class JointDataset {
   public static readonly ReducedLocalImportanceSortIndexRoot =
     "LocalImportanceSortIndex";
 
+  public datasetMetaData: IDatasetMeta | undefined;
   public rawLocalImportance: number[][][] | undefined;
   public metaDict: { [key: string]: IJointMeta } = {};
 
@@ -76,6 +78,11 @@ export class JointDataset {
 
   public constructor(args: IJointDatasetArgs) {
     this._modelMeta = args.metadata;
+
+    if (args.featureMetaData !== undefined) {
+      this.datasetMetaData = { featureMetaData: args.featureMetaData };
+    }
+
     if (args.dataset && args.dataset.length > 0) {
       this.initializeDataDictIfNeeded(args.dataset);
       this.datasetRowCount = args.dataset.length;
