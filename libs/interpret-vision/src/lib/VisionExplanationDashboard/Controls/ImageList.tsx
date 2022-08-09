@@ -7,7 +7,6 @@ import {
   List,
   Image,
   ImageFit,
-<<<<<<< HEAD
   IRectangle,
   IPageSpecification
 } from "@fluentui/react";
@@ -19,25 +18,12 @@ import { imageListStyles } from "./ImageList.styles";
 
 export interface IImageListProps {
   data: IDatasetSummary;
-=======
-  IRectangle
-} from "@fluentui/react";
-import React from "react";
-
-import { imageListStyles } from "./ImageList.styles";
-
-export interface IImageListProps {
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
   imageDim: number;
   openPanel: () => void;
 }
 
 export interface IImageListState {
-<<<<<<< HEAD
   images: IListItem[];
-=======
-  columnCount: number;
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
 }
 
 export interface IListItem {
@@ -45,11 +31,6 @@ export interface IListItem {
   image: string;
 }
 
-<<<<<<< HEAD
-=======
-const RowsPerPage = 3;
-
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
 export class ImageList extends React.Component<
   IImageListProps,
   IImageListState
@@ -58,7 +39,6 @@ export class ImageList extends React.Component<
     super(props);
 
     this.state = {
-<<<<<<< HEAD
       images: []
     };
   }
@@ -89,33 +69,6 @@ export class ImageList extends React.Component<
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageSpecification={this.getPageSpecification}
-=======
-      columnCount: 1
-    };
-  }
-
-  public render(): React.ReactNode {
-    const classNames = imageListStyles();
-
-    const items: IListItem[] = [];
-
-    for (let i = 0; i < 20; i++) {
-      items.push({
-        image:
-          "https://1.bp.blogspot.com/-uhSQ0kz07ZI/UjCVa4_ru9I/AAAAAAAAYZI/g7RsfGH81LA/s1600/Duckling+Wallpapers+%25286%2529.jpg",
-        title: `label ${(i + 1).toString()}`
-      });
-    }
-
-    return (
-      <FocusZone>
-        <List
-          items={items}
-          onRenderCell={this.onRenderCell}
-          className={classNames.list}
-          getPageHeight={this.getPageHeight}
-          getItemCountForPage={this.getItemCountForPage}
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
         />
       </FocusZone>
     );
@@ -144,7 +97,6 @@ export class ImageList extends React.Component<
     );
   };
 
-<<<<<<< HEAD
   private getPageSpecification = (
     itemIndex?: number | undefined,
     visibleRect?: IRectangle | undefined
@@ -160,26 +112,5 @@ export class ImageList extends React.Component<
     ret.itemCount = 3 * (visibleRect.width / (this.props.imageDim + 20 + 20));
 
     return ret;
-=======
-  private getPageHeight = () => {
-    return this.props.imageDim * RowsPerPage;
-  };
-
-  private getItemCountForPage = (
-    itemIndex?: number | undefined,
-    surfaceRect?: IRectangle | undefined
-  ) => {
-    if (!surfaceRect || !itemIndex) {
-      return 0;
-    }
-
-    if (itemIndex === 0) {
-      this.setState({
-        columnCount: Math.ceil(surfaceRect.width / this.props.imageDim)
-      });
-    }
-
-    return this.state.columnCount * RowsPerPage;
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
   };
 }

@@ -15,23 +15,16 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-<<<<<<< HEAD
 import { Flyout } from "./Controls/Flyout";
 import { ImageList } from "./Controls/ImageList";
 import { TableList } from "./Controls/TableList";
-=======
-import { ImageList } from "./Controls/ImageList";
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
 import { TitleBar } from "./Controls/TitleBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 
 export interface IVisionExplanationDashboardState {
   imageDim: number;
-<<<<<<< HEAD
   pageSize: number;
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
   panelOpen: boolean;
   selectedKey: string;
 }
@@ -47,15 +40,12 @@ export enum TitleBarOptions {
   Success
 }
 
-<<<<<<< HEAD
 const PageSizeOptions: IDropdownOption[] = [
   { key: "s", text: "10" },
   { key: "m", text: "25" },
   { key: "l", text: "50" },
   { key: "xl", text: "100" }
 ];
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
@@ -65,10 +55,7 @@ export class VisionExplanationDashboard extends React.Component<
 
     this.state = {
       imageDim: 200,
-<<<<<<< HEAD
       pageSize: 10,
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
       panelOpen: false,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
     };
@@ -182,16 +169,11 @@ export class VisionExplanationDashboard extends React.Component<
                 min={20}
                 className={classNames.slider}
                 label={localization.InterpretVision.Dashboard.thumbnailSize}
-<<<<<<< HEAD
                 defaultValue={50}
-=======
-                defaultValue={40}
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
                 showValue={false}
                 onChange={this.onSliderChange}
               />
             </Stack.Item>
-<<<<<<< HEAD
             {this.state.selectedKey ===
               VisionDatasetExplorerTabOptions.TableView && (
               <Stack.Item>
@@ -215,8 +197,6 @@ export class VisionExplanationDashboard extends React.Component<
                 </Stack>
               </Stack.Item>
             )}
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
           </Stack>
         </Stack.Item>
         {this.state.selectedKey ===
@@ -225,16 +205,7 @@ export class VisionExplanationDashboard extends React.Component<
             <Stack
               horizontal
               tokens={{ childrenGap: "l1" }}
-<<<<<<< HEAD
               className={classNames.mainImageContainer}
-=======
-              /* Height calculated as approximately three times the image height so as to create three rows, 
-              with extra space added for the image labels */
-              style={{
-                height:
-                  this.state.imageDim * 3 + Math.floor(this.state.imageDim / 2)
-              }}
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
             >
               <Stack
                 className={classNames.halfContainer}
@@ -245,10 +216,7 @@ export class VisionExplanationDashboard extends React.Component<
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-<<<<<<< HEAD
                     data={this.props.dataSummary}
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
                     imageDim={this.state.imageDim}
                     openPanel={this.onButtonClick}
                   />
@@ -263,10 +231,7 @@ export class VisionExplanationDashboard extends React.Component<
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-<<<<<<< HEAD
                     data={this.props.dataSummary}
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
                     imageDim={this.state.imageDim}
                     openPanel={this.onButtonClick}
                   />
@@ -275,11 +240,11 @@ export class VisionExplanationDashboard extends React.Component<
             </Stack>
           </Stack>
         )}
-<<<<<<< HEAD
         {this.state.selectedKey ===
           VisionDatasetExplorerTabOptions.TableView && (
           <Stack className={classNames.mainContainer}>
             <TableList
+              data={this.props.dataSummary}
               imageDim={this.state.imageDim}
               openPanel={this.onButtonClick}
               pageSize={this.state.pageSize}
@@ -294,8 +259,6 @@ export class VisionExplanationDashboard extends React.Component<
             callback={this.onButtonClick}
           />
         </Stack.Item>
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
       </Stack>
     );
   }
@@ -319,7 +282,6 @@ export class VisionExplanationDashboard extends React.Component<
     }
   };
 
-<<<<<<< HEAD
   private onPageSizeSelect = (
     event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
@@ -330,8 +292,6 @@ export class VisionExplanationDashboard extends React.Component<
     }
   };
 
-=======
->>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
   private handleLinkClick = (item?: PivotItem) => {
     if (item) {
       this.setState({ selectedKey: item.props.itemKey! });

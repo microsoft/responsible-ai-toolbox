@@ -16,7 +16,10 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
+
 export interface ITableListProps {
+  data: IDatasetSummary;
   imageDim: number;
   pageSize: number;
   openPanel: () => void;
@@ -55,18 +58,17 @@ export class TableList extends React.Component<
   public componentDidMount(): void {
     const items: IListItem[] = [];
 
-    for (let i = 0; i < 50; i++) {
+    this.props.data.images.forEach((image, index) => {
       items.push({
-        image:
-          "https://1.bp.blogspot.com/-uhSQ0kz07ZI/UjCVa4_ru9I/AAAAAAAAYZI/g7RsfGH81LA/s1600/Duckling+Wallpapers+%25286%2529.jpg",
-        index: i + 1,
+        image,
+        index: index + 1,
         other: 0,
         predictedY: 1,
         subtitle: "subtitle",
-        title: `label ${(i + 1).toString()}`,
+        title: `label ${(index + 1).toString()}`,
         trueY: 0
       });
-    }
+    });
 
     const groups: IGroup[] = [
       {
