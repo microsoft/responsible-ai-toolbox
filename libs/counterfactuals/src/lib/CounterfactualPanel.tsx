@@ -20,7 +20,10 @@ import {
 import {
   defaultModelAssessmentContext,
   ICounterfactualData,
-  ModelAssessmentContext
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -36,6 +39,7 @@ export interface ICounterfactualPanelProps {
   isPanelOpen: boolean;
   temporaryPoint: { [key: string]: string | number } | undefined;
   originalData: { [key: string]: string | number };
+  telemetryHook?: (message: ITelemetryEvent) => void;
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -96,6 +100,7 @@ export class CounterfactualPanel extends React.Component<
                 this.props.setCustomRowPropertyComboBox
               }
               sortFeatures={this.state.sortFeatures}
+              telemetryHook={this.props.telemetryHook}
             />
           </Stack.Item>
         </Stack>
@@ -166,7 +171,10 @@ export class CounterfactualPanel extends React.Component<
                   directionalHint={DirectionalHint.rightTopEdge}
                   className={classes.tooltipHostDisplay}
                 >
-                  <IconButton iconProps={{ iconName: "info" }} />
+                  <IconButton
+                    iconProps={{ iconName: "info" }}
+                    ariaLabel={localization.Common.tooltipButton}
+                  />
                 </TooltipHost>
               </Stack.Item>
             </Stack>
@@ -231,6 +239,10 @@ export class CounterfactualPanel extends React.Component<
   private handleSavePoint = () => {
     this.props.saveAsPoint();
     this.onClosePanel();
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.CounterfactualSaveAsNewDatapointClick
+    });
   };
   private setCustomRowProperty = (
     key: string | number,

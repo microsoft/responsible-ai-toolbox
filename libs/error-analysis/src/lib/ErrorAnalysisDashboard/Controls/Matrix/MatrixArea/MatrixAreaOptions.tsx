@@ -4,6 +4,7 @@
 import { DefaultButton, IStackTokens, Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  ITelemetryEvent,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -17,6 +18,7 @@ interface IMatrixAreaOptionsProps {
   isEnabled: boolean;
   numBins: number;
   quantileBinning: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   clearAll(): void;
   selectAll(): void;
   updateNumBins(numBins: number): void;
@@ -49,6 +51,7 @@ export class MatrixAreaOptions extends React.PureComponent<IMatrixAreaOptionsPro
           updateQuantileBinning={this.props.updateQuantileBinning}
           updateNumBins={this.props.updateNumBins}
           isEnabled={this.props.isEnabled}
+          telemetryHook={this.props.telemetryHook}
         />
       </Stack>
     );

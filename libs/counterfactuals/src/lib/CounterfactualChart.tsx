@@ -23,12 +23,15 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   rowErrorSize,
   InteractiveLegend,
   ICounterfactualData,
   BasicHighChart,
-  ErrorDialog
+  ErrorDialog,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -47,6 +50,7 @@ export interface ICounterfactualChartProps {
   weightLabels: any;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -217,6 +221,7 @@ export class CounterfactualChart extends React.PureComponent<
                   temporaryPoint={this.temporaryPoint}
                   isPanelOpen={this.state.isPanelOpen}
                   data={this.context.counterfactualData}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.yDialogOpen && (
@@ -235,6 +240,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onYSet}
                   onCancel={this.setYClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               {this.state.xDialogOpen && (
@@ -259,6 +265,7 @@ export class CounterfactualChart extends React.PureComponent<
                   }
                   onAccept={this.onXSet}
                   onCancel={this.setXClose}
+                  telemetryHook={this.props.telemetryHook}
                 />
               )}
               <Stack horizontal={false}>
@@ -322,7 +329,7 @@ export class CounterfactualChart extends React.PureComponent<
                 selectedKey={`${this.state.selectedPointsIndexes[0]}`}
                 ariaLabel={"datapoint picker"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
               <div className={classNames.legendLabel}>
                 <b>{`${this.getTargetDescription()}: `}</b>
@@ -344,7 +351,7 @@ export class CounterfactualChart extends React.PureComponent<
                     return {
                       activated: this.state.customPointIsActive[rowIndex],
                       color:
-                        FabricStyles.fabricColorPalette[
+                        FluentUIStyles.fluentUIColorPalette[
                           rowIndex + WhatIfConstants.MAX_SELECTION + 1
                         ],
                       index: rowIndex,
@@ -424,7 +431,7 @@ export class CounterfactualChart extends React.PureComponent<
       index
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -445,7 +452,7 @@ export class CounterfactualChart extends React.PureComponent<
       indexes[0]
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -499,6 +506,9 @@ export class CounterfactualChart extends React.PureComponent<
     const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
   };
 
   private getOriginalData(
@@ -622,9 +632,9 @@ export class CounterfactualChart extends React.PureComponent<
         const selectionIndex =
           this.state.selectedPointsIndexes.indexOf(rowIndex);
         if (selectionIndex === -1) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[selectionIndex];
+        return FluentUIStyles.fluentUIColorPalette[selectionIndex];
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -636,7 +646,7 @@ export class CounterfactualChart extends React.PureComponent<
       marker: {
         color: this.state.customPoints.map(
           (_, i) =>
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + i
             ]
         ),
@@ -653,7 +663,7 @@ export class CounterfactualChart extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + this.state.customPoints.length
             ],
           width: 2
@@ -806,6 +816,9 @@ export class CounterfactualChart extends React.PureComponent<
       const index = Number.parseInt(item.key);
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
+      );
     }
   };
 
@@ -906,8 +919,20 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
   private togglePanel = (): void => {
+    if (!this.state.isPanelOpen) {
+      this.logTelemetryEvent(
+        TelemetryEventName.CounterfactualCreateWhatIfCounterfactualClick
+      );
+    }
     this.setState((preState) => {
       return { isPanelOpen: !preState.isPanelOpen };
+    });
+  };
+
+  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
     });
   };
 }

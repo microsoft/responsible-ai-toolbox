@@ -20,9 +20,13 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   rowErrorSize,
-  BasicHighChart
+  BasicHighChart,
+  getPrimaryChartColor,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
@@ -36,6 +40,7 @@ import { getIndividualChartOptions } from "./getIndividualChartOptions";
 
 export interface ICausalIndividualChartProps {
   onDataClick: (data: number | undefined) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICausalIndividualChartState {
@@ -118,6 +123,7 @@ export class CausalIndividualChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -140,6 +146,7 @@ export class CausalIndividualChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           <Stack horizontal={false}>
@@ -201,7 +208,7 @@ export class CausalIndividualChart extends React.PureComponent<
             selectedKey={this.state.selectedIndex}
             ariaLabel={"datapoint picker"}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            styles={FluentUIStyles.smallDropdownStyle}
           />
           <CausalWhatIf selectedIndex={this.state.selectedIndex} />
         </Stack>
@@ -217,7 +224,9 @@ export class CausalIndividualChart extends React.PureComponent<
         index
       );
     this.temporaryPoint[CausalIndividualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
+      FluentUIStyles.fluentUIColorPalette[
+        CausalIndividualConstants.MAX_SELECTION
+      ];
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -266,6 +275,10 @@ export class CausalIndividualChart extends React.PureComponent<
     const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromChart
+    });
   };
 
   private selectPointFromDropdown = (
@@ -276,6 +289,10 @@ export class CausalIndividualChart extends React.PureComponent<
       const index = item.key;
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
+      });
     }
   };
 
@@ -292,6 +309,7 @@ export class CausalIndividualChart extends React.PureComponent<
     const plotlyProps = _.cloneDeep(
       CausalIndividualConstants.basePlotlyProperties
     );
+    const theme = getTheme();
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
@@ -299,9 +317,9 @@ export class CausalIndividualChart extends React.PureComponent<
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
         if (rowIndex !== this.state.selectedIndex) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[0];
+        return getPrimaryChartColor(theme);
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -324,7 +342,7 @@ export class CausalIndividualChart extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               CausalIndividualConstants.MAX_SELECTION + 1
             ],
           width: 2

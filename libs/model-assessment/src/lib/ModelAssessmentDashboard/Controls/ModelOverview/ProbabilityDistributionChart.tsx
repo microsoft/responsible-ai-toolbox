@@ -14,8 +14,11 @@ import {
 import {
   defaultModelAssessmentContext,
   ErrorCohort,
+  ITelemetryEvent,
   JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -26,14 +29,16 @@ import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSpl
 
 interface IProbabilityDistributionChartProps {
   cohorts: ErrorCohort[];
+  showSplineChart: boolean;
   onChooseCohorts: () => void;
+  onToggleChange: (checked: boolean) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IProbabilityDistributionChartState {
   probabilityOption?: IChoiceGroupOption;
   newlySelectedProbabilityOption?: IChoiceGroupOption;
   probabilityFlyoutIsVisible: boolean;
-  showSplineChart: boolean;
 }
 
 export class ProbabilityDistributionChart extends React.Component<
@@ -46,7 +51,7 @@ export class ProbabilityDistributionChart extends React.Component<
 
   constructor(props: IProbabilityDistributionChartProps) {
     super(props);
-    this.state = { probabilityFlyoutIsVisible: false, showSplineChart: false };
+    this.state = { probabilityFlyoutIsVisible: false };
   }
 
   public componentDidMount(): void {
@@ -99,9 +104,10 @@ export class ProbabilityDistributionChart extends React.Component<
               }
               inlineLabel
               onChange={this.onSplineChartToggleChange}
+              checked={this.props.showSplineChart}
             />
           </Stack.Item>
-          {this.state.showSplineChart && (
+          {this.props.showSplineChart && (
             <DefaultButton
               id="modelOverviewProbabilityDistributionLineChartCohortSelectionButton"
               text={
@@ -112,7 +118,7 @@ export class ProbabilityDistributionChart extends React.Component<
           )}
         </Stack>
         <Stack horizontal>
-          {!noCohortSelected && !this.state.showSplineChart && (
+          {!noCohortSelected && !this.props.showSplineChart && (
             <Stack.Item className={classNames.verticalAxis}>
               <DefaultButton
                 id="modelOverviewProbabilityDistributionBoxChartCohortSelectionButton"
@@ -138,7 +144,7 @@ export class ProbabilityDistributionChart extends React.Component<
             )}
             {!noCohortSelected && (
               <Stack>
-                {this.state.showSplineChart ? (
+                {this.props.showSplineChart ? (
                   <ProbabilityDistributionSplineChart
                     selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
@@ -151,7 +157,7 @@ export class ProbabilityDistributionChart extends React.Component<
                 )}
                 <Stack.Item
                   className={
-                    this.state.showSplineChart
+                    this.props.showSplineChart
                       ? classNames.horizontalAxisNoExtraLeftPadding
                       : classNames.horizontalAxis
                   }
@@ -249,7 +255,11 @@ export class ProbabilityDistributionChart extends React.Component<
     checked?: boolean | undefined
   ) => {
     if (checked !== undefined) {
-      this.setState({ showSplineChart: checked });
+      this.props.onToggleChange(checked);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.ModelOverviewSplineChartToggleUpdated
+      });
     }
   };
 }

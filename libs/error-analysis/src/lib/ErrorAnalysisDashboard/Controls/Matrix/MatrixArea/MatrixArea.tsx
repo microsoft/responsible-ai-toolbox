@@ -171,6 +171,7 @@ export class MatrixArea extends React.PureComponent<
           selectAll={this.selectAll}
           updateNumBins={this.updateNumBins}
           updateQuantileBinning={this.updateQuantileBinning}
+          telemetryHook={this.props.telemetryHook}
         />
         <Customizer
           settings={(currentSettings): ISettings => ({
@@ -216,9 +217,7 @@ export class MatrixArea extends React.PureComponent<
                         selectedCells={this.state.selectedCells}
                         category1Values={category1Values}
                         sameFeatureSelected={sameFeatureSelected}
-                        selectedCellHandler={this.selectedCellHandler.bind(
-                          this
-                        )}
+                        selectedCellHandler={this.selectedCellHandler}
                       />
                       <MatrixFooter
                         jsonMatrix={this.state.jsonMatrix}
@@ -353,12 +352,12 @@ export class MatrixArea extends React.PureComponent<
     this.updateStateFromSelectedCells(selectedCells);
   };
 
-  private selectedCellHandler(
+  private selectedCellHandler = (
     i: number,
     j: number,
     matrixLength: number,
     rowLength: number
-  ): void {
+  ): void => {
     let selectedCells = this.state.selectedCells;
     if (selectedCells === undefined) {
       selectedCells = new Array<boolean>(matrixLength * rowLength);
@@ -383,7 +382,7 @@ export class MatrixArea extends React.PureComponent<
       selectedCells
     });
     this.updateStateFromSelectedCells(selectedCells);
-  }
+  };
 
   private updateStateFromSelectedCells(selectedCells: boolean[]): void {
     if (!this.state.jsonMatrix) {

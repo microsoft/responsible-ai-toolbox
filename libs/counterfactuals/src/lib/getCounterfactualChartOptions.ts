@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
@@ -19,7 +19,7 @@ export function getCounterfactualChartOptions(
           fillColor:
             seriesIndex === 0
               ? series?.marker?.color?.[index]
-              : FabricStyles.fabricColorPalette[
+              : FluentUIStyles.fluentUIColorPalette[
                   WhatIfConstants.MAX_SELECTION + 1 + index
                 ],
           lineColor:

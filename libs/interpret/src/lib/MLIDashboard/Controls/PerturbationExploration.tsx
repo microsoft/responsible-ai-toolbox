@@ -47,7 +47,7 @@ export class PerturbationExploration extends React.Component<
       perturbedDictionary: {}
     };
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 500);
+    this.fetchData = _.debounce(this.fetchData, 500);
   }
 
   public componentDidUpdate(prevProps: IPerturbationExplorationProps): void {
@@ -207,7 +207,7 @@ export class PerturbationExploration extends React.Component<
     });
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (
       !this.props.explanationContext.testDataset.dataset ||
       !this.props.invokeModel
@@ -275,5 +275,5 @@ export class PerturbationExploration extends React.Component<
         }
       }
     });
-  }
+  };
 }

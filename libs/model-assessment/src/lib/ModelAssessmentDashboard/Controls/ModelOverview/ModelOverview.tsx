@@ -24,10 +24,13 @@ import {
   generateMetrics,
   ModelTypes,
   classificationTask,
-  FabricStyles,
+  FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
-  ILabeledStatistic
+  ILabeledStatistic,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -46,6 +49,7 @@ import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
   showNewModelOverviewExperience: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IModelOverviewState {
@@ -64,6 +68,8 @@ interface IModelOverviewState {
   // That way, we can distinguish between newly created cohorts
   // and deliberately ignored cohorts for the chart section.
   maxCohortId: number;
+  selectedMetric: string;
+  showSplineChart: boolean;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -89,8 +95,10 @@ export class ModelOverview extends React.Component<
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
+      selectedMetric: "",
       selectedMetrics: [],
-      showHeatmapColors: true
+      showHeatmapColors: true,
+      showSplineChart: false
     };
   }
 
@@ -263,7 +271,7 @@ export class ModelOverview extends React.Component<
             <Text variant="medium" className={classNames.descriptionText}>
               {localization.Interpret.ModelPerformance.helperText}
             </Text>
-            <OverallMetricChart />
+            <OverallMetricChart telemetryHook={this.props.telemetryHook} />
           </>
         )}
         {this.props.showNewModelOverviewExperience && (
@@ -317,13 +325,11 @@ export class ModelOverview extends React.Component<
                 onChange={this.onMetricSelectionChange}
                 multiSelect
                 className={classNames.dropdown}
-                styles={FabricStyles.limitedSizeMenuDropdown}
+                styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
               <ActionButton
                 className={classNames.configurationActionButton}
-                onClick={() =>
-                  this.setState({ metricConfigurationIsVisible: true })
-                }
+                onClick={this.onClickMetricsConfiguration}
                 iconProps={{ iconName: "ColumnOptions" }}
               >
                 {
@@ -349,14 +355,12 @@ export class ModelOverview extends React.Component<
                   onChange={this.onFeatureSelectionChange}
                   multiSelect
                   className={classNames.dropdown}
-                  styles={FabricStyles.limitedSizeMenuDropdown}
+                  styles={FluentUIStyles.limitedSizeMenuDropdown}
                 />
                 <ActionButton
                   id="modelOverviewFeatureConfigurationActionButton"
                   className={classNames.configurationActionButton}
-                  onClick={() =>
-                    this.setState({ featureConfigurationIsVisible: true })
-                  }
+                  onClick={this.onClickFeatureConfiguration}
                   iconProps={{ iconName: "ColumnOptions" }}
                 >
                   {
@@ -478,6 +482,9 @@ export class ModelOverview extends React.Component<
                     <ProbabilityDistributionChart
                       onChooseCohorts={this.onChooseCohorts}
                       cohorts={chartCohorts}
+                      telemetryHook={this.props.telemetryHook}
+                      onToggleChange={this.onSplineToggleChange}
+                      showSplineChart={this.state.showSplineChart}
                     />
                   </PivotItem>
                 )}
@@ -489,9 +496,11 @@ export class ModelOverview extends React.Component<
                 >
                   <ModelOverviewMetricChart
                     onChooseCohorts={this.onChooseCohorts}
+                    onApplyMetric={this.onApplyMetric}
                     selectableMetrics={selectableMetrics}
                     cohorts={chartCohorts}
                     cohortStats={labeledStatistics}
+                    selectedMetric={this.state.selectedMetric}
                   />
                 </PivotItem>
               </Pivot>
@@ -501,6 +510,24 @@ export class ModelOverview extends React.Component<
       </Stack>
     );
   }
+
+  private onSplineToggleChange = (checked: boolean) => {
+    this.setState({ showSplineChart: checked });
+  };
+
+  private onClickMetricsConfiguration = () => {
+    this.setState({ metricConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewMetricsConfigurationClick
+    );
+  };
+
+  private onClickFeatureConfiguration = () => {
+    this.setState({ featureConfigurationIsVisible: true });
+    this.logButtonClick(
+      TelemetryEventName.ModelOverviewFeatureConfigurationClick
+    );
+  };
 
   private onDismissChartConfigurationFlyout = () => {
     this.setState({ chartConfigurationIsVisible: false });
@@ -516,11 +543,18 @@ export class ModelOverview extends React.Component<
   ) => {
     if (checked !== undefined) {
       this.setState({ showHeatmapColors: checked });
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewShowHeatmapToggleUpdated
+      );
     }
   };
 
   private onChooseCohorts = () =>
     this.setState({ chartConfigurationIsVisible: true });
+
+  private onApplyMetric = (metric: string) => {
+    this.setState({ selectedMetric: metric });
+  };
 
   private updateCohortSelection = (
     selectedDatasetCohorts: number[],
@@ -556,6 +590,9 @@ export class ModelOverview extends React.Component<
           selectedMetrics
         });
       }
+      this.logButtonClick(
+        TelemetryEventName.ModelOverviewMetricsSelectionUpdated
+      );
     }
   };
 
@@ -651,12 +688,18 @@ export class ModelOverview extends React.Component<
           datasetCohortChartIsVisible: true,
           datasetCohortViewIsVisible: true
         });
+        this.logButtonClick(
+          TelemetryEventName.ModelOverviewDatasetCohortsTabClick
+        );
       }
       if (item.props.itemKey === disaggregatedAnalysisPivotKey) {
         this.setState({
           datasetCohortChartIsVisible: false,
           datasetCohortViewIsVisible: false
         });
+        this.logButtonClick(
+          TelemetryEventName.ModelOverviewFeatureCohortsTabClick
+        );
       }
     }
   };
@@ -668,4 +711,11 @@ export class ModelOverview extends React.Component<
       )
     );
   }
+
+  private logButtonClick = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
+  };
 }

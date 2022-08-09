@@ -22,10 +22,13 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   LabelWithCallout,
   FeatureImportanceDependence,
-  FeatureImportanceBar
+  FeatureImportanceBar,
+  ITelemetryEvent,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -51,8 +54,9 @@ export interface IGlobalExplanationTabProps {
   weightOptions: WeightVectorOption[];
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
-  onWeightChange: (option: WeightVectorOption) => void;
   initialCohortIndex?: number;
+  onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IGlobalExplanationTabState {
@@ -188,6 +192,10 @@ export class GlobalExplanationTab extends React.PureComponent<
               }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
+              calloutEventName={
+                TelemetryEventName.FeatureImportancesWhatDoValuesMeanCalloutClick
+              }
+              telemetryHook={this.props.telemetryHook}
             >
               <Text block>{this.explainerCalloutInfo.description}</Text>
               {this.explainerCalloutInfo.linkUrl && (
@@ -237,6 +245,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 weightOptions={this.props.weightOptions}
                 onChartTypeChange={this.onChartTypeChange}
                 chartType={this.state.chartType}
+                telemetryHook={this.props.telemetryHook}
               />
             </Stack.Item>
           </Stack>
@@ -257,6 +266,10 @@ export class GlobalExplanationTab extends React.PureComponent<
                   localization.Interpret.GlobalTab.dependencePlotTitle
                 }
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
+                }
               >
                 <Text>
                   {localization.Interpret.GlobalTab.dependencePlotHelperText}
@@ -279,7 +292,6 @@ export class GlobalExplanationTab extends React.PureComponent<
                       }
                       jointDataset={this.context.jointDataset}
                       metadata={this.context.modelMetadata}
-                      onChange={this.onDependenceChange}
                       selectedWeight={this.props.selectedWeightVector}
                       selectedWeightLabel={
                         this.props.weightLabels[this.props.selectedWeightVector]
@@ -303,7 +315,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                       }
                       selectedKey={this.state.dependenceProps?.xAxis.property}
                       onChange={this.onXSet}
-                      calloutProps={FabricStyles.calloutProps}
+                      calloutProps={FluentUIStyles.calloutProps}
                     />
                   )}
                   {cohortOptions && (
@@ -425,6 +437,10 @@ export class GlobalExplanationTab extends React.PureComponent<
     for (let i = 0; i < this.state.seriesIsActive.length; i++) {
       if (!this.state.seriesIsActive[i]) continue;
       if (cohortIndex-- === 0) {
+        this.props.telemetryHook?.({
+          level: TelemetryLevels.ButtonClick,
+          type: TelemetryEventName.AggregateFeatureImportanceNewDependenceSelected
+        });
         this.handleFeatureSelection(i, featureIndex);
         return;
       }
@@ -468,11 +484,5 @@ export class GlobalExplanationTab extends React.PureComponent<
         block: "end"
       });
     }, 0.5);
-  };
-
-  private readonly onDependenceChange = (
-    chartProps: IGenericChartProps | undefined
-  ): void => {
-    this.setState({ dependenceProps: chartProps });
   };
 }

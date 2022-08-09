@@ -691,7 +691,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                df = df[df[p_node_name_val] <= parent_threshold]
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_INCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -708,7 +709,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                df = df[df[p_node_name_val] > parent_threshold]
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_EXCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -737,6 +739,38 @@ def node_to_dict(df, tree, nodeid, categories, json,
                               total, success, metric_name,
                               metric_value, is_error_metric))
     return json, df
+
+
+def filter_by_threshold(df, p_node_name_val, parent_threshold, side):
+    """Filters the DataFrame by the threshold of the parent node.
+
+    :param df: The DataFrame to filter.
+    :type df: pandas.DataFrame
+    :param p_node_name_val: The name of the parent node.
+    :type p_node_name_val: str
+    :param parent_threshold: The threshold of the parent node.
+    :type parent_threshold: float
+    :param side: The side of the parent node.
+    :type side: TreeSide
+    :return: The filtered DataFrame.
+    :rtype: pandas.DataFrame
+    """
+    try:
+        if side == TreeSide.LEFT_CHILD:
+            df = df[df[p_node_name_val] <= parent_threshold]
+        else:
+            df = df[df[p_node_name_val] > parent_threshold]
+        return df
+    except TypeError as e:
+        has_vals = df[p_node_name_val].shape[0] > 0
+        if has_vals and isinstance(df[p_node_name_val][0], str):
+            err = ("Column {0} of type string is incorrectly treated "
+                   "as numeric with threshold value {1}. "
+                   "Please make sure it is marked as categorical instead.")
+            err = err.format(p_node_name_val, parent_threshold)
+            raise TypeError(err, e)
+        else:
+            raise e
 
 
 def compute_metrics_pyspark(df, metric, total):

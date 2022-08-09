@@ -7,7 +7,7 @@ import {
   mergeStyleSets,
   IStyle
 } from "@fluentui/react";
-import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, FluentUIStyles } from "@responsible-ai/core-ui";
 
 export interface IWhatIfTabStyles {
   absoluteValueToggle: IStyle;
@@ -100,16 +100,16 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         whiteSpace: "nowrap",
         width: "100%"
       },
-      calloutHeader: [FabricStyles.calloutHeader],
-      calloutInner: [FabricStyles.calloutInner],
+      calloutHeader: [FluentUIStyles.calloutHeader],
+      calloutInner: [FluentUIStyles.calloutInner],
       calloutLink: [
         theme.fonts.medium,
         {
           color: theme.semanticColors.bodyText
         }
       ],
-      calloutTitle: [FabricStyles.calloutTitle],
-      calloutWrapper: [FabricStyles.calloutWrapper],
+      calloutTitle: [FluentUIStyles.calloutTitle],
+      calloutWrapper: [FluentUIStyles.calloutWrapper],
       chartsArea: {
         flex: 1
       },

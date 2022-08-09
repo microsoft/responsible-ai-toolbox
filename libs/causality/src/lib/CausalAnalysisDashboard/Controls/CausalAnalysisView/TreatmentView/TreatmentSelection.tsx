@@ -2,7 +2,12 @@
 // Licensed under the MIT License.
 
 import { Dropdown, IDropdownOption } from "@fluentui/react";
-import { ICausalPolicy } from "@responsible-ai/core-ui";
+import {
+  ICausalPolicy,
+  ITelemetryEvent,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React, { FormEvent } from "react";
 
@@ -11,6 +16,7 @@ import { TreatmentTableStyles } from "./TreatmentTable.styles";
 export interface ITreatmentSelectionProps {
   data?: ICausalPolicy[];
   onSelect: (index: number) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface ITreatmentSelectionState {
@@ -51,6 +57,10 @@ export class TreatmentSelection extends React.Component<
   ): void => {
     if (index !== undefined) {
       this.props.onSelect(index);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.CasualTreatmentPolicyNewTreatmentFeatureSelected
+      });
     }
   };
 }

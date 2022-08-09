@@ -12,7 +12,7 @@ import {
   IExplanationContext,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -136,8 +136,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private featuresOption: IDropdownOption[];
@@ -178,7 +177,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       requestedRange: undefined,
       requestFeatureIndex: undefined
     };
-    this.fetchData = _.debounce(this.fetchData.bind(this), 500);
+    this.fetchData = _.debounce(this.fetchData, 500);
   }
 
   private static buildTextArray(
@@ -302,7 +301,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     : undefined
                 }
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
             {this.state.rangeView !== undefined && (
@@ -317,28 +316,28 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
                     autoComplete="on"
                     options={this.state.rangeView.categoricalOptions || []}
                     onChange={this.onCategoricalRangeChanged}
-                    styles={FabricStyles.defaultDropdownStyle}
+                    styles={FluentUIStyles.defaultDropdownStyle}
                   />
                 )}
                 {this.state.rangeView.type !== RangeTypes.Categorical && (
                   <div className={iCEPlotStyles.parameterSet}>
                     <TextField
                       label={localization.Interpret.IcePlot.minimumInputLabel}
-                      styles={FabricStyles.textFieldStyle}
+                      styles={FluentUIStyles.textFieldStyle}
                       value={this.state.rangeView.min?.toString()}
                       onChange={this.onMinRangeChanged}
                       errorMessage={this.state.rangeView.minErrorMessage}
                     />
                     <TextField
                       label={localization.Interpret.IcePlot.maximumInputLabel}
-                      styles={FabricStyles.textFieldStyle}
+                      styles={FluentUIStyles.textFieldStyle}
                       value={this.state.rangeView.max?.toString()}
                       onChange={this.onMaxRangeChanged}
                       errorMessage={this.state.rangeView.maxErrorMessage}
                     />
                     <TextField
                       label={localization.Interpret.IcePlot.stepInputLabel}
-                      styles={FabricStyles.textFieldStyle}
+                      styles={FluentUIStyles.textFieldStyle}
                       value={this.state.rangeView.steps?.toString()}
                       onChange={this.onStepsRangeChanged}
                       errorMessage={this.state.rangeView.stepsErrorMessage}
@@ -550,7 +549,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     return selectedKeys;
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (this.state.abortController !== undefined) {
       this.state.abortController.abort();
     }
@@ -591,7 +590,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
       }
     );
-  }
+  };
 
   private buildRange(): Array<number | string> {
     if (

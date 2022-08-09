@@ -308,6 +308,7 @@ export class TreeViewRenderer extends React.PureComponent<
                 this.props.onClearCohortSelectionClick
               }
               disabledView={this.props.disabledView}
+              telemetryHook={this.props.telemetryHook}
             />
             <svg
               ref={svgOuterFrame}

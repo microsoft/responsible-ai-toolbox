@@ -12,7 +12,7 @@ import {
   ModelTypes
 } from "../Interfaces/IExplanationContext";
 import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 import { getDependenceData } from "../util/getDependenceData";
 import { getDependencyChartOptions } from "../util/getDependencyChartOptions";
 import { IGenericChartProps } from "../util/IGenericChartProps";
@@ -29,7 +29,6 @@ export interface IFeatureImportanceDependenceProps {
   metadata: IExplanationModelMetadata;
   selectedWeight: WeightVectorOption;
   selectedWeightLabel: string;
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
@@ -78,7 +77,7 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
-                  FabricStyles.fabricColorPalette[this.props.cohortIndex],
+                  FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
               />

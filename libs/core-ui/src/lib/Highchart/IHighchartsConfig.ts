@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IChartColorNames } from "./getHighchartsTheme";
+import { IColorNames } from "../util/FluentUIStyles";
 
 export interface IHighchartsCustomConfig {
   /**
    * Max color name for color axis. Min is white.
    */
-  colorAxisMaxColor?: keyof IChartColorNames;
+  colorAxisMaxColor?: keyof IColorNames;
 
   /**
    * Disables chart update and rerenders chart when parent component
@@ -27,6 +27,11 @@ export interface IHighchartsCustomConfig {
    * chart background color same as theme background color
    */
   transparentBackground?: boolean;
+
+  /**
+   * An explicit minimum height for the chart.
+   */
+  minHeight?: number | string | null;
 
   /**
    * Gets called when parent component is rerendered and chart is updated
@@ -54,9 +59,7 @@ export interface IHighchartsCustomConfig {
    * @param colors Currently sorted colors
    * @returns New sorted colors
    */
-  onSortColors?(
-    colors: Array<keyof IChartColorNames>
-  ): Array<keyof IChartColorNames>;
+  onSortColors?(colors: Array<keyof IColorNames>): Array<keyof IColorNames>;
 }
 
 export interface IHighchartsConfig extends Highcharts.Options {
