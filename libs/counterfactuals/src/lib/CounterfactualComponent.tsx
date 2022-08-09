@@ -11,17 +11,17 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FluentUIStyles,
   rowErrorSize,
   ICounterfactualData,
   ITelemetryEvent
 } from "@responsible-ai/core-ui";
-import { WhatIfConstants, IGlobalSeries } from "@responsible-ai/interpret";
+import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
+import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
 
@@ -189,15 +189,11 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   private setTemporaryPointToCopyOfDatasetPoint = (index: number): void => {
-    this.temporaryPoint = this.context.jointDataset.getRow(index);
-    this.temporaryPoint[WhatIfConstants.namePath] = localization.formatString(
-      localization.Interpret.WhatIf.defaultCustomRootName,
-      index
+    this.temporaryPoint = getCopyOfDatasetPoint(
+      index,
+      this.context.jointDataset,
+      this.state.customPointLength
     );
-    this.temporaryPoint[WhatIfConstants.colorPath] =
-      FluentUIStyles.fluentUIColorPalette[
-        WhatIfConstants.MAX_SELECTION + this.state.customPointLength
-      ];
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
     });
