@@ -5,11 +5,11 @@ import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 
+import { JointDataset } from "./JointDataset";
 import {
   ClassificationEnum,
-  JointDataset,
   MulticlassClassificationEnum
-} from "./JointDataset";
+} from "./JointDatasetUtils";
 
 export interface ILabeledStatistic {
   key: string;
@@ -69,12 +69,6 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
       key: BinaryClassificationMetrics.Recall,
       label: localization.Interpret.Statistics.recall,
       stat: truePosCount / (truePosCount + falseNegCount)
-    },
-    {
-      key: BinaryClassificationMetrics.F1Score,
-      label: localization.Interpret.Statistics.f1Score,
-      stat:
-        truePosCount / (truePosCount + 0.5 * (falsePosCount + falseNegCount))
     },
     {
       key: BinaryClassificationMetrics.F1Score,

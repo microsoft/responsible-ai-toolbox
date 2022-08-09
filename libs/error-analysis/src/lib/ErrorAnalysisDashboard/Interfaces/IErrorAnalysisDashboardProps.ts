@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IExplanationDashboardData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IErrorAnalysisMatrix,
   IErrorAnalysisData
 } from "@responsible-ai/core-ui";
@@ -51,6 +51,6 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   errorAnalysisData: IErrorAnalysisData;
 }

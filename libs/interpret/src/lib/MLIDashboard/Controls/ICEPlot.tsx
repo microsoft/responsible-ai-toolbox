@@ -136,8 +136,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private featuresOption: IDropdownOption[];
@@ -178,7 +177,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
       requestedRange: undefined,
       requestFeatureIndex: undefined
     };
-    this.fetchData = _.debounce(this.fetchData.bind(this), 500);
+    this.fetchData = _.debounce(this.fetchData, 500);
   }
 
   private static buildTextArray(
@@ -550,7 +549,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
     return selectedKeys;
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (this.state.abortController !== undefined) {
       this.state.abortController.abort();
     }
@@ -591,7 +590,7 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
         }
       }
     );
-  }
+  };
 
   private buildRange(): Array<number | string> {
     if (

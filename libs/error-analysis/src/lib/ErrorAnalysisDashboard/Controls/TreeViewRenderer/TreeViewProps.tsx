@@ -8,7 +8,8 @@ import {
   CohortSource,
   ErrorCohort,
   MetricCohortStats,
-  IErrorAnalysisTreeNode
+  IErrorAnalysisTreeNode,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
@@ -35,4 +36,5 @@ export interface ITreeViewRendererProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   showCohortName: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }

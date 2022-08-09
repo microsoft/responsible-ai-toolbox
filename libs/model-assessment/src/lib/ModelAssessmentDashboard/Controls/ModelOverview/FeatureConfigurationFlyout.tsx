@@ -28,6 +28,7 @@ import React from "react";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { generateFeatureBasedFilters } from "./DisaggregatedAnalysisUtils";
+import { shortFeatureGroups } from "./FeaturesUtils";
 
 interface IFeatureConfigurationFlyoutProps {
   isOpen: boolean;
@@ -46,7 +47,7 @@ interface IFeatureConfigurationFlyoutState {
   items: IFeatureConfigurationRow[];
 }
 
-interface IFeatureConfigurationRow {
+export interface IFeatureConfigurationRow {
   key: string;
   featureName: string;
   featureRemark: string;
@@ -131,6 +132,7 @@ export class FeatureConfigurationFlyout extends React.Component<
         onRender: this.renderGroups
       }
     ];
+    const items = shortFeatureGroups(this.state.items);
 
     return (
       <Panel
@@ -161,7 +163,7 @@ export class FeatureConfigurationFlyout extends React.Component<
             }
           </Text>
           <DetailsList
-            items={this.state.items}
+            items={items}
             columns={columns}
             selectionMode={SelectionMode.multiple}
             selection={this._selection}

@@ -299,13 +299,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
   };
 
-  // private readonly onEditConfigs = (): void => {
-  //   if (this.props.modelCount > 1) {
-  //     this.props.onChartClick(undefined);
-  //   }
-  //   this.props.onEditConfigs();
-  // };
-
   private readonly updateChartKey = (chartKey: string): void => {
     this.setState({ chartKey });
   };

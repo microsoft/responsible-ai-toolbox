@@ -116,12 +116,18 @@ class ExplainerManager(BaseManager):
         if is_sparse and many_cols:
             self._surrogate_model = LinearExplainableModel
 
-    def compute(self):
-        """Creates an explanation by running the explainer on the model."""
-        if not self._is_added:
-            return
-        if self._is_run:
-            return
+    def _compute_explanations(self, local: bool, data: Any):
+        """Compute explanations using MimicWrapper.
+
+        :param local: True if local explanations are requested
+                and False otherwise.
+        :type local: bool
+        :param data: The data point(s) for which the explanations
+                     need to be generated.
+        :type data: Any
+        :return: The computed explanations.
+        :rtype: Any
+        """
         if self._classes is not None:
             model_task = ModelTask.Classification
         else:
@@ -135,7 +141,18 @@ class ExplainerManager(BaseManager):
             model_task=model_task,
             classes=self._classes,
             categorical_features=self._categorical_features)
-        self._explanation = explainer.explain_global(self._evaluation_examples)
+        return explainer.explain_global(data, include_local=local)
+
+    def compute(self):
+        """Creates an explanation by running the explainer on the model."""
+        if not self._is_added:
+            return
+        if self._is_run:
+            return
+        self._explanation = self._compute_explanations(
+            local=True,
+            data=self._evaluation_examples
+        )
         self._is_run = True
 
     def get(self):
@@ -179,9 +196,39 @@ class ExplainerManager(BaseManager):
         :rtype: List[ModelExplanationData]
         """
         return [
-            self._get_interpret(i) for i in self.get()]
+            self._get_interpret(
+                i, self._evaluation_examples) for i in self.get()]
 
-    def _get_interpret(self, explanation):
+    def request_explanations(self, local: bool, data: Any):
+        """Return the explanations for a given point(s) .
+
+        :param local: True if local explanations are requested
+                      and False otherwise.
+        :type local: bool
+        :param data: The data point(s) for which the explanations
+                     need to be generated.
+        :type data: Any
+        :return: The explanations for the given data point(s)
+                 according to the interface specified by
+                 ModelExplanationData.
+        :rtype: ModelExplanationData
+        """
+        if not isinstance(data, pd.DataFrame):
+            raise UserConfigValidationException(
+                'Data is of type {0} but it must be '
+                'a pandas DataFrame.'.format(type(data)))
+
+        if local and data.shape[0] > 1:
+            raise UserConfigValidationException(
+                'Only one row of data is allowed for '
+                'local explanation generation.')
+
+        explanations = self._compute_explanations(
+            local=local,
+            data=data)
+        return self._get_interpret(explanations, data)
+
+    def _get_interpret(self, explanation, evaluation_examples=None):
         interpretation = ModelExplanationData()
 
         # List of explanations, key of explanation type is "explanation_type"
@@ -229,10 +276,10 @@ class ExplainerManager(BaseManager):
             except Exception as ex:
                 raise ValueError(
                     "Unsupported local explanation type") from ex
-            if self._evaluation_examples is not None:
 
-                _feature_length = self._evaluation_examples.shape[1]
-                _row_length = self._evaluation_examples.shape[0]
+            if evaluation_examples is not None:
+                _feature_length = evaluation_examples.shape[1]
+                _row_length = evaluation_examples.shape[0]
                 local_dim = np.shape(local_feature_importance.scores)
                 if len(local_dim) != 2 and len(local_dim) != 3:
                     raise ValueError(

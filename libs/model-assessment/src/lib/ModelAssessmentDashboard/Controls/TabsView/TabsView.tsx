@@ -12,7 +12,7 @@ import {
   IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
-import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
+import { DataAnalysisTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
@@ -28,7 +28,8 @@ import * as React from "react";
 import { AddTabButton } from "../../AddTabButton";
 import {
   isFlightActive,
-  newModelOverviewExperienceFlight
+  newModelOverviewExperienceFlight,
+  dataBalanceExperienceFlight
 } from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
 import { FeatureImportancesTab } from "../FeatureImportances";
@@ -168,6 +169,7 @@ export class TabsView extends React.PureComponent<
                         this.handleErrorDetectorChanged
                       }
                       selectedKey={this.state.errorAnalysisOption}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -186,17 +188,24 @@ export class TabsView extends React.PureComponent<
                       newModelOverviewExperienceFlight,
                       this.context.featureFlights
                     )}
+                    telemetryHook={this.props.telemetryHook}
                   />
                 </>
               )}
-              {t.key === GlobalTabKeys.DataExplorerTab && (
+              {t.key === GlobalTabKeys.DataAnalysisTab && (
                 <>
                   <div className={classNames.sectionHeader}>
-                    <Text variant={"xxLarge"} id="dataExplorerHeader">
-                      {localization.ModelAssessment.ComponentNames.DataExplorer}
+                    <Text variant={"xxLarge"} id="dataAnalysisHeader">
+                      {localization.ModelAssessment.ComponentNames.DataAnalysis}
                     </Text>
                   </div>
-                  <DatasetExplorerTab />
+                  <DataAnalysisTab
+                    telemetryHook={this.props.telemetryHook}
+                    showDataBalanceExperience={isFlightActive(
+                      dataBalanceExperienceFlight,
+                      this.context.featureFlights
+                    )}
+                  />
                 </>
               )}
               {t.key === GlobalTabKeys.FeatureImportancesTab &&
@@ -218,6 +227,7 @@ export class TabsView extends React.PureComponent<
                       weightVectorLabels={this.state.weightVectorLabels}
                       requestPredictions={this.props.requestPredictions}
                       onWeightVectorChange={this.onWeightVectorChange}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -237,6 +247,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}
@@ -254,6 +265,7 @@ export class TabsView extends React.PureComponent<
                     </div>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
+                      telemetryHook={this.props.telemetryHook}
                     />
                   </>
                 )}

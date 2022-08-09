@@ -178,8 +178,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
   private featureOptions: IComboBoxOption[];
 
