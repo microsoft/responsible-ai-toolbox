@@ -24,10 +24,7 @@ export const titleBarStyles: () => IProcessedStyleSet<ITitleBarStyles> = () => {
       fontSize: "large",
       fontWeight: "600"
     },
-    iconContainer: {
-      position: "relative",
-      top: "2px"
-    },
+    iconContainer: {},
     successIcon: {
       color: theme.semanticColors.successIcon,
       fontSize: "large",
