@@ -5,7 +5,6 @@ import { Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   JointDataset,
-  ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
   MissingParametersPlaceholder,
@@ -23,7 +22,7 @@ import React from "react";
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
-import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
+import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
 import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
@@ -55,14 +54,12 @@ export class CounterfactualComponent extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
 
   public constructor(props: ICounterfactualComponentProps) {
     super(props);
-
     this.state = {
       customPointLength: 0,
       request: undefined,
@@ -75,9 +72,7 @@ export class CounterfactualComponent extends React.PureComponent<
   public componentDidMount(): void {
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
-
     this.fetchData = _.debounce(this.fetchData, 400);
-
     this.setState({
       chartProps: generateDefaultChartAxes(this.context.jointDataset)
     });
@@ -90,39 +85,19 @@ export class CounterfactualComponent extends React.PureComponent<
     if (!this.state) {
       return;
     }
-    let sortingSeriesIndex = this.state.sortingSeriesIndex;
-    let sortArray = this.state.sortArray;
-    const selectionsAreEqual = _.isEqual(
-      this.state.selectedPointsIndexes,
-      prevState.selectedPointsIndexes
-    );
     const weightVectorsAreEqual =
       this.props.selectedWeightVector === prevProps.selectedWeightVector;
-    if (!selectionsAreEqual || !weightVectorsAreEqual) {
-      this.selectedFeatureImportance = getSelectedFeatureImportance(
+    const [sortArray, sortingSeriesIndex, selectedFeatureImportance] =
+      getSortArrayAndIndex(
+        this.state.sortArray,
         this.state.selectedPointsIndexes,
-        this.context.jointDataset
+        prevState.selectedPointsIndexes,
+        weightVectorsAreEqual,
+        this.selectedFeatureImportance,
+        this.context.jointDataset,
+        this.state.sortingSeriesIndex
       );
-      if (
-        this.state.sortingSeriesIndex === undefined ||
-        !this.state.selectedPointsIndexes.includes(
-          this.state.sortingSeriesIndex
-        )
-      ) {
-        if (this.state.selectedPointsIndexes.length !== 0) {
-          sortingSeriesIndex = 0;
-          sortArray = ModelExplanationUtils.getSortIndices(
-            this.selectedFeatureImportance[0].unsortedAggregateY
-          ).reverse();
-        } else {
-          sortingSeriesIndex = undefined;
-        }
-      } else if (!weightVectorsAreEqual) {
-        sortArray = ModelExplanationUtils.getSortIndices(
-          this.selectedFeatureImportance[0].unsortedAggregateY
-        ).reverse();
-      }
-    }
+    this.selectedFeatureImportance = selectedFeatureImportance;
     this.setState({ sortArray, sortingSeriesIndex });
   }
 
