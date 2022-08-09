@@ -5,7 +5,6 @@ import { Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   JointDataset,
-  Cohort,
   ModelExplanationUtils,
   ChartTypes,
   IGenericChartProps,
@@ -24,12 +23,11 @@ import _ from "lodash";
 import React from "react";
 
 import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
-import { getCurrentLabel } from "../util/getCurrentLabel";
+import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getSelectedFeatureImportance } from "../util/getSelectedFeatureImportance";
 
-import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
-import { LocalImportanceChart } from "./LocalImportanceChart";
+import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
   data: ICounterfactualData;
   selectedWeightVector: WeightVectorOption;
@@ -129,7 +127,6 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    const classNames = counterfactualChartStyles();
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
@@ -169,17 +166,10 @@ export class CounterfactualComponent extends React.PureComponent<
             this.setTemporaryPointToCopyOfDatasetPoint
           }
         />
-        <Stack.Item className={classNames.lowerChartContainer}>
-          <LocalImportanceChart
-            rowNumber={this.state.selectedPointsIndexes[0]}
-            currentClass={getCurrentLabel(
-              this.context.dataset.task_type,
-              this.props.data.desired_range,
-              this.props.data.desired_class
-            )}
-            data={this.props.data}
-          />
-        </Stack.Item>
+        <CounterfactualLocalImportanceChart
+          data={this.props.data}
+          selectedPointsIndexes={this.state.selectedPointsIndexes}
+        />
         <Stack.Item>
           {this.state.errorMessage && this.renderErrorDialog()}
         </Stack.Item>
@@ -205,14 +195,6 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({ errorMessage: undefined });
   };
 
-  private getDefaultSelectedPointIndexes(cohort: Cohort): number[] {
-    const indexes = cohort.unwrap(JointDataset.IndexLabel);
-    if (indexes.length > 0) {
-      return [indexes[0]];
-    }
-    return [];
-  }
-
   private buildRowOptions(cohortIndex: number): void {
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
@@ -233,7 +215,7 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private createCopyOfFirstRow(): void {
-    const indexes = this.getDefaultSelectedPointIndexes(
+    const indexes = getDefaultSelectedPointIndexes(
       this.context.selectedErrorCohort.cohort
     );
     if (indexes.length === 0) {
