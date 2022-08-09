@@ -3,6 +3,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 from common_utils import (create_iris_data, create_simple_titanic_data,
                           create_sklearn_svm_classifier,
                           create_titanic_pipeline)
@@ -182,19 +183,26 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
-    def test_cohort_filter_classification_outcome(self):
+    @pytest.mark.parametrize('arg, outcome', [([1, 2], False), ([0, 3], True)])
+    def test_cohort_filter_classification_outcome(self, arg, outcome):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
         feature_names = categorical + numeric
         clf = create_titanic_pipeline(X_train, y_train)
         categorical_features = categorical
         # the indexes 1, 2 correspond to false positives and false negatives
-        filters = [{'arg': [1, 2],
+        # the indexes 0, 3 correspond to true positives and true negatives
+        filters = [{'arg': arg,
                     'column': CLASSIFICATION_OUTCOME,
                     'method': 'includes'}]
         pred_y = clf.predict(X_test)
         validation_data = create_validation_data(X_test, y_test, pred_y)
-        validation_filter = validation_data[PRED_Y] != validation_data[TRUE_Y]
+        if not outcome:
+            validation_filter = validation_data[PRED_Y] != validation_data[
+                TRUE_Y]
+        else:
+            validation_filter = validation_data[PRED_Y] == validation_data[
+                TRUE_Y]
         validation_data = validation_data.loc[validation_filter]
         validation_data = validation_data.drop(columns=PRED_Y)
         model_task = ModelTask.CLASSIFICATION

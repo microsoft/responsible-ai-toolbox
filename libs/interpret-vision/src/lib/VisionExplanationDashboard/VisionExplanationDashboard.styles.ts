@@ -11,7 +11,10 @@ export interface IDatasetExplorerTab {
   filterButton: IStyle;
   toolBarContainer: IStyle;
   mainContainer: IStyle;
+<<<<<<< HEAD
   mainImageContainer: IStyle;
+=======
+>>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
   halfContainer: IStyle;
   imageListContainer: IStyle;
   slider: IStyle;
@@ -50,9 +53,12 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
         justifyContent: "space-between",
         width: "100%"
       },
+<<<<<<< HEAD
       mainImageContainer: {
         height: "650px"
       },
+=======
+>>>>>>> 46e04a056f03bc313b9772a6b29c79a92f937530
       searchBox: {
         width: "300px"
       },
