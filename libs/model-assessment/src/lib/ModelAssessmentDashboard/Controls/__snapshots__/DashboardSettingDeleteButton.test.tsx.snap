@@ -3,6 +3,7 @@
 exports[`DashboardSettingDeleteButton should render successfully 1`] = `
 <Fragment>
   <CustomizedIconButton
+    ariaLabel="Delete"
     iconProps={
       Object {
         "iconName": "Delete",
