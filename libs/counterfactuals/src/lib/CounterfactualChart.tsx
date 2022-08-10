@@ -788,19 +788,19 @@ export class CounterfactualChart extends React.PureComponent<
         this.context.jointDataset.datasetMetaData.featureMetaData
           ?.identity_feature_name;
 
-      const jointDatasetFeatureName = this.context.jointDataset.getJointDatasetFeatureName(
-        identityFeatureName);
+      const jointDatasetFeatureName =
+        this.context.jointDataset.getJointDatasetFeatureName(
+          identityFeatureName
+        );
 
-      if (
-        jointDatasetFeatureName !== undefined
-      ) {
+      if (jointDatasetFeatureName !== undefined) {
         const metaIdentityFeature =
           this.context.jointDataset.metaDict[jointDatasetFeatureName];
         const rawIdentityFeature = JointDataset.unwrap(
           dictionary,
           jointDatasetFeatureName
         );
-        hovertemplate += localization.Common.identityFeature + `(${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+        hovertemplate += `${localization.Common.identityFeature}(${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
         rawIdentityFeature.forEach((val, index) => {
           if (metaIdentityFeature?.treatAsCategorical) {
             customdata[index].ID =

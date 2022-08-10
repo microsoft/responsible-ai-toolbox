@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
+
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
@@ -147,15 +148,18 @@ describe("Test JointDataset with and without feature metadata", () => {
   });
   it("should return the JointDataset internal feature name", () => {
     expect(
-      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS")).toEqual("Data2");
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS")
+    ).toEqual("Data2");
   });
   it("should return undefined as the JointDataset internal feature name", () => {
     expect(
-      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS1")).toEqual(undefined);
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS1")
+    ).toEqual(undefined);
   });
   it("should return undefined as the JointDataset internal feature name", () => {
     expect(
-      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName(undefined)).toEqual(undefined);
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName(undefined)
+    ).toEqual(undefined);
   });
   it("should not set the dataset metadata within JointDataset", () => {
     expect(mockJointDatasetWithoutFeatureMetaData).toBeInstanceOf(JointDataset);
