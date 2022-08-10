@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
-
 import {
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
@@ -85,7 +84,7 @@ function getJointDatasetRegression(addFeatureMetaData: boolean): JointDataset {
     categorical_features: ["c1", "c2"],
     datetime_features: ["d1", "d2"],
     dropped_features: ["d3", "d4"],
-    identity_feature_name: "fnlwgt"
+    identity_feature_name: "INDUS"
   } as IFeatureMetaData;
 
   if (addFeatureMetaData) {
@@ -144,7 +143,19 @@ describe("Test JointDataset with and without feature metadata", () => {
     expect(
       mockJointDatasetWithFeatureMetaData.datasetMetaData.featureMetaData
         .identity_feature_name
-    ).toEqual("fnlwgt");
+    ).toEqual("INDUS");
+  });
+  it("should return the JointDataset internal feature name", () => {
+    expect(
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS")).toEqual("Data2");
+  });
+  it("should return undefined as the JointDataset internal feature name", () => {
+    expect(
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS1")).toEqual(undefined);
+  });
+  it("should return undefined as the JointDataset internal feature name", () => {
+    expect(
+      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName(undefined)).toEqual(undefined);
   });
   it("should not set the dataset metadata within JointDataset", () => {
     expect(mockJointDatasetWithoutFeatureMetaData).toBeInstanceOf(JointDataset);
