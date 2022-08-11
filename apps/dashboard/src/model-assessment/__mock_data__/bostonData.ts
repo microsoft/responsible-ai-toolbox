@@ -10,7 +10,8 @@ import {
   ComparisonTypes,
   Metrics,
   IPreBuiltCohort,
-  FilterMethods
+  FilterMethods,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 
 export const bostonData: IDataset = {
@@ -384,7 +385,7 @@ export const bostonData: IDataset = {
     21.11304462, 12.19896119, 23.38628499, 14.15409042, 18.47186274,
     24.80959563, 19.98808205
   ],
-  task_type: "regression",
+  task_type: DatasetTaskType.Regression,
   true_y: [
     22.6, 50, 23, 8.3, 21.2, 19.9, 20.6, 18.7, 16.1, 18.6, 8.8, 17.2, 14.9,
     10.5, 50, 29, 23, 33.3, 29.4, 21, 23.8, 19.1, 20.4, 29.1, 19.3, 23.1, 19.6,

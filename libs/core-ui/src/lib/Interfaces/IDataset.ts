@@ -4,8 +4,14 @@
 import { IDataBalanceMeasures } from "./IDataBalanceMeasures";
 import { IFeatureMetaData } from "./IMetaData";
 
+export enum DatasetTaskType {
+  Regression = "regression",
+  Classification = "classification",
+  TextClassification = "text_classification"
+}
+
 export interface IDataset {
-  task_type: "classification" | "regression" | "text_classification";
+  task_type: DatasetTaskType;
   true_y: number[];
   predicted_y?: number[];
   probability_y?: number[][];
@@ -24,6 +30,3 @@ export interface IDatasetSummary {
   classNames?: string[];
   categoricalMap?: { [key: number]: string[] };
 }
-
-export const classificationTask = "classification";
-export const regressionTask = "regression";

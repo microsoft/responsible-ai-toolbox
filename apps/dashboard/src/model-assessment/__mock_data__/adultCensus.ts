@@ -10,7 +10,8 @@ import {
   ComparisonTypes,
   Metrics,
   FilterMethods,
-  IPreBuiltCohort
+  IPreBuiltCohort,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 
 export const adultCensusWithFairnessDataset: IDataset = {
@@ -2979,7 +2980,7 @@ export const adultCensusWithFairnessDataset: IDataset = {
     [0.6804143936790036, 0.3195856063209964]
   ],
   target_column: "income",
-  task_type: "classification",
+  task_type: DatasetTaskType.Classification,
   true_y: [
     1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
     0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1
