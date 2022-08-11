@@ -17,7 +17,8 @@ import {
   ICounterfactualData,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -103,7 +104,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   }
 
   private getTargetDescription(): string {
-    if (this.context.dataset.task_type === "regression") {
+    if (this.context.dataset.task_type === DatasetTaskType.Regression) {
       return localization.Counterfactuals.currentRange;
     }
     return localization.Counterfactuals.currentClass;

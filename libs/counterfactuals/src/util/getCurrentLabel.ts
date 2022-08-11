@@ -1,12 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DatasetTaskType } from "@responsible-ai/core-ui";
+
 export function getCurrentLabel(
-  taskType: "classification" | "regression" | "text_classification",
+  taskType: DatasetTaskType,
   desiredRange?: [number, number],
   desiredClass?: string
 ): string {
-  if (taskType === "regression") {
+  if (taskType === DatasetTaskType.Regression) {
     return `[${desiredRange}]`;
   }
 

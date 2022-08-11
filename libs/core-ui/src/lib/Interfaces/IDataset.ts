@@ -3,8 +3,14 @@
 
 import { IDataBalanceMeasures } from "./IDataBalanceMeasures";
 
+export enum DatasetTaskType {
+  Regression = "regression",
+  Classification = "classification",
+  TextClassification = "text_classification"
+}
+
 export interface IDataset {
-  task_type: "classification" | "regression" | "text_classification";
+  task_type: DatasetTaskType;
   true_y: number[];
   predicted_y?: number[];
   probability_y?: number[][];
