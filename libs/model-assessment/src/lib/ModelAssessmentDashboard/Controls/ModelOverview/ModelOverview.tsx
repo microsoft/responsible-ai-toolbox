@@ -23,14 +23,14 @@ import {
   JointDataset,
   generateMetrics,
   ModelTypes,
-  classificationTask,
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
   ILabeledStatistic,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -104,7 +104,7 @@ export class ModelOverview extends React.Component<
 
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
-    if (this.context.dataset.task_type === classificationTask) {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
       if (this.context.jointDataset.getModelType() === ModelTypes.Binary) {
         defaultSelectedMetrics = [
           BinaryClassificationMetrics.Accuracy,
