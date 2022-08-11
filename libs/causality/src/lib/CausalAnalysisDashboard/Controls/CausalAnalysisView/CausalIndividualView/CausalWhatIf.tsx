@@ -16,7 +16,8 @@ import {
   JointDataset,
   ModelAssessmentContext,
   NoData,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -59,7 +60,7 @@ export class CausalWhatIf extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (this.context.dataset.task_type !== "regression") {
+    if (this.context.dataset.task_type !== DatasetTaskType.Regression) {
       return React.Fragment;
     }
     if (!this.context.causalAnalysisData?.config) {
