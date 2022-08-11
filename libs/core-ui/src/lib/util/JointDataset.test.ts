@@ -156,11 +156,6 @@ describe("Test JointDataset with and without feature metadata", () => {
       mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName("INDUS1")
     ).toEqual(undefined);
   });
-  it("should return undefined as the JointDataset internal feature name", () => {
-    expect(
-      mockJointDatasetWithFeatureMetaData.getJointDatasetFeatureName(undefined)
-    ).toEqual(undefined);
-  });
   it("should not set the dataset metadata within JointDataset", () => {
     expect(mockJointDatasetWithoutFeatureMetaData).toBeInstanceOf(JointDataset);
     expect(
