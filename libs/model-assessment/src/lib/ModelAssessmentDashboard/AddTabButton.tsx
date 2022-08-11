@@ -57,6 +57,7 @@ export class AddTabButton extends React.Component<
               role="status"
               aria-live="assertive"
               className={style.callout}
+              setInitialFocus={true}
             >
               <Stack tokens={{ childrenGap: "l1" }}>
                 {localization.ModelAssessment.AddingTab.CalloutContent}
