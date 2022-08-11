@@ -133,7 +133,7 @@ export class CounterfactualComponent extends React.PureComponent<
           {...this.props}
           chartProps={this.state.chartProps}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
-          temporaryPoint={this.temporaryPoint}
+          temporaryPoint={_.cloneDeep(this.temporaryPoint)}
           onChartPropsUpdated={this.onChartPropsUpdated}
           onCustomPointLengthUpdated={this.onCustomPointLengthUpdated}
           onSelectedPointsIndexesUpdated={this.onSelectedPointsIndexesUpdated}
