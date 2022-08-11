@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDataBalanceMeasures } from "./IDataBalanceMeasures";
+import { IFeatureMetaData } from "./IMetaData";
 
 export enum DatasetTaskType {
   Regression = "regression",
@@ -20,6 +21,7 @@ export interface IDataset {
   class_names?: string[];
   target_column?: string;
   data_balance_measures?: IDataBalanceMeasures;
+  feature_metadata?: IFeatureMetaData;
 }
 
 // TODO Remove DatasetSummary when possible
