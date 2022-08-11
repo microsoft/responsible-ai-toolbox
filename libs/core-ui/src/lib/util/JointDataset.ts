@@ -646,7 +646,8 @@ export class JointDataset {
   }
 
   public getJointDatasetFeatureName(
-    userFeatureName: string): string | undefined {
+    userFeatureName: string
+  ): string | undefined {
     // Return the joint dataset feature name for the given user feature name.
     let jointDatasetFeatureName = undefined;
     let isUserFeatureNameFound = false;

@@ -167,18 +167,13 @@ function generateDataTrace(
       trace.y = rawY;
     }
   }
-  if (
-    jointDataset.datasetMetaData?.featureMetaData !== undefined
-  ) {
+  if (jointDataset.datasetMetaData?.featureMetaData !== undefined) {
     const identityFeatureName =
-      jointDataset.datasetMetaData.featureMetaData
-        ?.identity_feature_name;
+      jointDataset.datasetMetaData.featureMetaData?.identity_feature_name;
 
     if (identityFeatureName !== undefined) {
       const jointDatasetFeatureName =
-        jointDataset.getJointDatasetFeatureName(
-          identityFeatureName
-        );
+        jointDataset.getJointDatasetFeatureName(identityFeatureName);
 
       if (jointDatasetFeatureName !== undefined) {
         const metaIdentityFeature =
