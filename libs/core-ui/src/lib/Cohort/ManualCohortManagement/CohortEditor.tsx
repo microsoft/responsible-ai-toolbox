@@ -54,7 +54,6 @@ export class CohortEditor extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    console.log("okok state:", this.state);
     return (
       <>
         <Panel
