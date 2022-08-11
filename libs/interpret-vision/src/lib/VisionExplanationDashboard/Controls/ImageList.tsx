@@ -6,7 +6,6 @@ import {
   FocusZone,
   List,
   Image,
-  ImageFit,
   IRectangle,
   IPageSpecification
 } from "@fluentui/react";
@@ -90,10 +89,8 @@ export class ImageList extends React.Component<
         <Text className={classNames.label}>{item?.title}</Text>
         <Image
           alt={item?.title}
-          width={this.props.imageDim}
-          height={this.props.imageDim}
-          imageFit={ImageFit.contain}
           src={item?.image}
+          style={{ height: "auto", width: this.props.imageDim }}
         />
       </div>
     );

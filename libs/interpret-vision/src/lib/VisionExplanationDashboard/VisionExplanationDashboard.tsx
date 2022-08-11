@@ -15,6 +15,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { DataCharacteristics } from "./Controls/DataCharacteristics";
 import { Flyout } from "./Controls/Flyout";
 import { ImageList } from "./Controls/ImageList";
 import { TableList } from "./Controls/TableList";
@@ -24,6 +25,7 @@ import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.s
 
 export interface IVisionExplanationDashboardState {
   imageDim: number;
+  numRows: number;
   pageSize: number;
   panelOpen: boolean;
   selectedItem: IListItem | undefined;
@@ -57,6 +59,15 @@ const PageSizeOptions: IDropdownOption[] = [
   { key: "l", text: "50" },
   { key: "xl", text: "100" }
 ];
+
+const NumRowsOptions: IDropdownOption[] = [
+  { key: "1", text: "1" },
+  { key: "2", text: "2" },
+  { key: "3", text: "3" },
+  { key: "4", text: "4" },
+  { key: "5", text: "5" }
+];
+
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
@@ -66,6 +77,7 @@ export class VisionExplanationDashboard extends React.Component<
 
     this.state = {
       imageDim: 200,
+      numRows: 3,
       pageSize: 10,
       panelOpen: false,
       selectedItem: undefined,
@@ -85,6 +97,9 @@ export class VisionExplanationDashboard extends React.Component<
         grow
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
+        <Stack.Item>
+          <Text variant="xLargePlus">Data explorer</Text>
+        </Stack.Item>
         <Stack.Item>
           <Stack horizontal horizontalAlign="space-between" verticalAlign="end">
             <Stack.Item>
@@ -184,10 +199,14 @@ export class VisionExplanationDashboard extends React.Component<
                 defaultValue={50}
                 showValue={false}
                 onChange={this.onSliderChange}
+                disabled={
+                  this.state.selectedKey ===
+                  VisionDatasetExplorerTabOptions.DataCharacteristics
+                }
               />
             </Stack.Item>
-            {this.state.selectedKey ===
-              VisionDatasetExplorerTabOptions.TableView && (
+            {this.state.selectedKey !==
+              VisionDatasetExplorerTabOptions.ImageExplorerView && (
               <Stack.Item>
                 <Stack
                   horizontal
@@ -196,15 +215,27 @@ export class VisionExplanationDashboard extends React.Component<
                 >
                   <Stack.Item>
                     <Text>
-                      {localization.InterpretVision.Dashboard.pageSize}
+                      {this.state.selectedKey ===
+                      VisionDatasetExplorerTabOptions.TableView
+                        ? localization.InterpretVision.Dashboard.pageSize
+                        : localization.InterpretVision.Dashboard.rows}
                     </Text>
                   </Stack.Item>
                   <Stack.Item>
-                    <Dropdown
-                      defaultSelectedKey="s"
-                      options={PageSizeOptions}
-                      onChange={this.onPageSizeSelect}
-                    />
+                    {this.state.selectedKey ===
+                    VisionDatasetExplorerTabOptions.TableView ? (
+                      <Dropdown
+                        defaultSelectedKey="s"
+                        options={PageSizeOptions}
+                        onChange={this.onPageSizeSelect}
+                      />
+                    ) : (
+                      <Dropdown
+                        defaultSelectedKey="3"
+                        options={NumRowsOptions}
+                        onChange={this.onNumRowsSelect}
+                      />
+                    )}
                   </Stack.Item>
                 </Stack>
               </Stack.Item>
@@ -263,6 +294,22 @@ export class VisionExplanationDashboard extends React.Component<
             />
           </Stack>
         )}
+        {this.state.selectedKey ===
+          VisionDatasetExplorerTabOptions.DataCharacteristics && (
+          <Stack
+            className={classNames.mainContainer}
+            tokens={{ childrenGap: "l1" }}
+          >
+            <Stack.Item style={{ width: "100%" }}>
+              <DataCharacteristics
+                data={this.props.dataSummary}
+                imageDim={this.state.imageDim}
+                numRows={this.state.numRows}
+                selectItem={this.onItemSelect}
+              />
+            </Stack.Item>
+          </Stack>
+        )}
         <Stack.Item>
           <Flyout
             data={this.props.dataSummary}
@@ -298,6 +345,16 @@ export class VisionExplanationDashboard extends React.Component<
     }
   };
 
+  private onNumRowsSelect = (
+    event: React.FormEvent<HTMLDivElement>,
+    item: IDropdownOption | undefined
+  ): void => {
+    this.setState({ numRows: Number(item?.text) });
+    if (event) {
+      return;
+    }
+  };
+
   private onPageSizeSelect = (
     event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
@@ -315,8 +372,12 @@ export class VisionExplanationDashboard extends React.Component<
         item.props.itemKey === VisionDatasetExplorerTabOptions.ImageExplorerView
       ) {
         this.setState({ imageDim: 200 });
-      } else {
+      } else if (
+        item.props.itemKey === VisionDatasetExplorerTabOptions.TableView
+      ) {
         this.setState({ imageDim: 50 });
+      } else {
+        this.setState({ imageDim: 100 });
       }
     }
   };
