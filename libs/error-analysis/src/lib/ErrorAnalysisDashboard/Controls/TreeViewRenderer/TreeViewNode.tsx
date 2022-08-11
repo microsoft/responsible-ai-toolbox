@@ -85,16 +85,16 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               stroke: this.props.node.data.nodeState.onSelectedPath
                 ? theme.semanticColors.link
                 : this.props.node.data.errorColor,
-              strokeWidth: this.props.node.data.nodeState.onSelectedPath
-                ? node.data.nodeState.isSelectedLeaf
-                  ? 6
-                  : 3
-                : 1.5,
               strokeDasharray: this.props.node.data.nodeState.onSelectedPath
                 ? node.data.nodeState.isSelectedLeaf
                   ? ""
                   : "6, 6"
-                : ""
+                : "",
+              strokeWidth: this.props.node.data.nodeState.onSelectedPath
+                ? node.data.nodeState.isSelectedLeaf
+                  ? 6
+                  : 3
+                : 1.5
             }}
             fill={`url(#${gradientFillId})`}
           />
