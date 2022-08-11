@@ -32,7 +32,7 @@ def process_categoricals(all_feature_names: List[str],
     categories = []
     categorical_indexes = []
     category_dictionary = {}
-    string_ind_data = []
+    string_ind_data = numpy.array([])
 
     if categorical_features:
         categorical_indexes = [all_feature_names.index(feature)
