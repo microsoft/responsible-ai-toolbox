@@ -8,6 +8,7 @@ import {
   ISingleClassLocalFeatureImportance
 } from "../Interfaces/ExplanationInterfaces";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import { IFeatureMetaData } from "../Interfaces/IMetaData";
 
 export interface IJointDatasetArgs {
   dataset?: any[][];
@@ -18,6 +19,7 @@ export interface IJointDatasetArgs {
     | IMultiClassLocalFeatureImportance
     | ISingleClassLocalFeatureImportance;
   metadata: IExplanationModelMetadata;
+  featureMetaData?: IFeatureMetaData;
 }
 
 export enum ColumnCategories {
@@ -53,4 +55,8 @@ export interface IJointMeta {
   featureRange?: INumericRange;
   category: ColumnCategories;
   index?: number;
+}
+
+export interface IDatasetMeta {
+  featureMetaData?: IFeatureMetaData;
 }

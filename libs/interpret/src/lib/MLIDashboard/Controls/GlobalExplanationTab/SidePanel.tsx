@@ -118,6 +118,9 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                ariaLabel={
+                  localization.Interpret.GlobalTab.weightOptionsDropdown
+                }
               />
             </div>
           )}

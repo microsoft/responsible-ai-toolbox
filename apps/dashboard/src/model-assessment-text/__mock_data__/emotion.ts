@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IDataset, IModelExplanationData } from "@responsible-ai/core-ui";
+import {
+  DatasetTaskType,
+  IDataset,
+  IModelExplanationData
+} from "@responsible-ai/core-ui";
 
 export const emotion: IDataset = {
   categorical_features: [],
@@ -70,7 +74,7 @@ export const emotion: IDataset = {
     ]
   ],
   target_column: "emotion",
-  task_type: "text_classification",
+  task_type: DatasetTaskType.TextClassification,
   true_y: [0, 0, 3, 2, 3, 0, 5, 4, 1, 2]
 };
 

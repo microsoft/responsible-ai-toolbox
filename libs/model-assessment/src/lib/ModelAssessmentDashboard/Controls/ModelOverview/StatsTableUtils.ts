@@ -4,7 +4,7 @@
 import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   BinaryClassificationMetrics,
-  classificationTask,
+  DatasetTaskType,
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
@@ -226,11 +226,11 @@ export interface IMetricOption extends IDropdownOption {
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression" | "text_classification",
+  taskType: DatasetTaskType,
   isMulticlass: boolean
 ) {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === classificationTask) {
+  if (taskType === DatasetTaskType.Classification) {
     if (isMulticlass) {
       selectableMetrics.push({
         description:

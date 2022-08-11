@@ -11,6 +11,7 @@ import pytest
 
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames
+from responsibleai.feature_metadata import FeatureMetadata
 
 from .common_utils import (create_adult_income_dataset,
                            create_binary_classification_dataset,
@@ -54,7 +55,7 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             # Validate, but this isn't the main check
             validate_rai_insights(
                 rai_2, X_train, X_test,
-                LABELS, ModelTask.CLASSIFICATION, None, None, None)
+                LABELS, ModelTask.CLASSIFICATION)
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -87,7 +88,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             model, data_train, data_test,
             target_name,
             categorical_features=categorical_features,
-            task_type=ModelTask.CLASSIFICATION)
+            task_type=ModelTask.CLASSIFICATION,
+            feature_metadata=FeatureMetadata(identity_feature_name="age"))
 
         with TemporaryDirectory() as tmpdir:
             save_1 = Path(tmpdir) / "first_save"
@@ -130,7 +132,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 target_name, ModelTask.CLASSIFICATION,
                 categorical_features=categorical_features,
                 feature_range_keys=feature_range_keys,
-                feature_columns=feature_columns)
+                feature_columns=feature_columns,
+                feature_metadata=FeatureMetadata(identity_feature_name="age"))
 
             # Save again (this is where Issue #1046 manifested)
             rai_2.save(save_2)
@@ -229,7 +232,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             model, data_train, data_test,
             target_name,
             categorical_features=categorical_features,
-            task_type=ModelTask.CLASSIFICATION)
+            task_type=ModelTask.CLASSIFICATION,
+            feature_metadata=FeatureMetadata(identity_feature_name="age"))
 
         # Call a single manager
         if manager_type == ManagerNames.CAUSAL:
@@ -272,7 +276,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
                 target_name, ModelTask.CLASSIFICATION,
                 categorical_features=categorical_features,
                 feature_range_keys=feature_range_keys,
-                feature_columns=feature_columns)
+                feature_columns=feature_columns,
+                feature_metadata=FeatureMetadata(identity_feature_name="age"))
 
             # Save again (this is where Issue #1081 manifested)
             rai_2.save(save_2)
@@ -284,9 +289,10 @@ def validate_rai_insights(
     test_data,
     target_column,
     task_type,
-    categorical_features,
-    feature_range_keys,
-    feature_columns
+    categorical_features=None,
+    feature_range_keys=None,
+    feature_columns=None,
+    feature_metadata=None
 ):
     pd.testing.assert_frame_equal(rai_insights.train, train_data)
     pd.testing.assert_frame_equal(rai_insights.test, test_data)
@@ -298,6 +304,8 @@ def validate_rai_insights(
             list(rai_insights._feature_ranges[0].keys()).sort()
     if feature_columns is not None:
         assert rai_insights._feature_columns == (feature_columns or [])
+    if feature_metadata is not None:
+        assert rai_insights._feature_metadata == feature_metadata
     assert target_column not in rai_insights._feature_columns
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
