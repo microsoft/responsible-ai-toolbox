@@ -198,6 +198,7 @@ jobs:
             fairness,
             interpret,
             interpret-text,
+            interpret-vision,
             localization,
             error-analysis,
             model-assessment,
