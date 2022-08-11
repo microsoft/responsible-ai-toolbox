@@ -14,7 +14,8 @@ import {
   buildIndexedNames,
   getClassLength,
   getModelType,
-  MetricCohortStats
+  MetricCohortStats,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -124,7 +125,9 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(
-    props.dataset.task_type === "regression" ? "regressor" : "classifier",
+    props.dataset.task_type === DatasetTaskType.Regression
+      ? "regressor"
+      : "classifier",
     props.modelExplanationData?.[0]?.precomputedExplanations,
     props.dataset.probability_y
   );

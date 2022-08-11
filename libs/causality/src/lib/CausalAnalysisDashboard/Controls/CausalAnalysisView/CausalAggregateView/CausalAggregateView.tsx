@@ -3,6 +3,7 @@
 
 import { Link, Stack, Text } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ITelemetryEvent,
@@ -114,7 +115,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   }
 
   private getContinuousDescription(): string {
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
       let positiveClass = "1";
       if (this.context.dataset.class_names !== undefined) {
         positiveClass = this.context.dataset.class_names[1];
@@ -130,7 +131,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   }
 
   private getBinaryDescription(): string {
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
       let positiveClass = "1";
       if (this.context.dataset.class_names !== undefined) {
         positiveClass = this.context.dataset.class_names[1];
