@@ -177,7 +177,8 @@ def create_housing_data():
     # Split data into train and test
     x_train, x_test, y_train, y_test = train_test_split(housing.data,
                                                         housing.target,
-                                                        test_size=0.2,
+                                                        train_size=500,
+                                                        test_size=50,
                                                         random_state=7)
     return x_train, x_test, y_train, y_test, housing.feature_names
 
@@ -195,8 +196,8 @@ def create_adult_income_dataset():
                                 set([target_name]))
     # Split data into train and test
     data_train, data_test, y_train, y_test = train_test_split(
-        dataset, target,
-        test_size=5000, random_state=7, stratify=target)
+        dataset, target, train_size=500,
+        test_size=50, random_state=7, stratify=target)
     return data_train, data_test, y_train, y_test, categorical_features, \
         continuous_features, target_name, classes, \
         feature_columns, feature_range_keys
