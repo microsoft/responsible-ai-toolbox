@@ -85,6 +85,14 @@ export class VisionExplanationDashboard extends React.Component<
     };
   }
 
+  public componentDidMount() {
+    if (this.props.requestExp) {
+      this.props.requestExp(0, new AbortController().signal).then((result) => {
+        console.log(result);
+      });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const dropdownOptions: Array<IDropdownOption<unknown>> = [

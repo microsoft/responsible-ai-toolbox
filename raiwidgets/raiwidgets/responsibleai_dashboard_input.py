@@ -211,3 +211,21 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
+            
+    def get_exp(self, index):
+        print(index)
+        try:
+            exp = self._analysis.explainer.compute_single_explanation(index)
+            return {
+                WidgetRequestResponseConstants.data: exp
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate image explanation,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }

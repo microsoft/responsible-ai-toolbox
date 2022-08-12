@@ -10,7 +10,6 @@ from responsibleai import RAIInsights
 from .dashboard import Dashboard
 from .responsibleai_dashboard_input import ResponsibleAIDashboardInput
 
-
 class ResponsibleAIDashboard(Dashboard):
     """The dashboard class, wraps the dashboard component.
 
@@ -35,7 +34,7 @@ class ResponsibleAIDashboard(Dashboard):
             analysis, cohort_list=cohort_list)
 
         super(ResponsibleAIDashboard, self).__init__(
-            dashboard_type="ResponsibleAI",
+            dashboard_type="Vision",
             model_data=self.input.dashboard_input,
             public_ip=public_ip,
             port=port,
@@ -70,3 +69,9 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.importances())
 
         self.add_url_rule(importances, '/importances', methods=["POST"])
+
+        def get_exp():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_exp(data))
+        
+        self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
