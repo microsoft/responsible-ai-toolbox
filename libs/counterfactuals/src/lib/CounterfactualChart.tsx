@@ -239,7 +239,6 @@ export class CounterfactualChart extends React.PureComponent<
       TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
     );
   };
-
   private logTelemetryEvent = (eventName: TelemetryEventName) => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,

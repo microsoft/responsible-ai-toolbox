@@ -1,7 +1,8 @@
 {
   "Common": {
     "close": "Close",
-    "tooltipButton": "Tooltip button"
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature"
   },
   "CausalAnalysis": {
     "AggregateView": {
