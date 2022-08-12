@@ -345,7 +345,7 @@ class TestCausalDashboardData:
         manager = CausalManager(train_df, test_df, target_feature,
                                 ModelTask.REGRESSION, categoricals)
 
-        result = manager.add(['HouseAge_CAT', 'Population_CAT'],
+        result = manager.add(['HouseAge_CAT', 'AveRooms_CAT'],
                              random_state=42)
         manager.compute()
         result = manager.get()[0]
