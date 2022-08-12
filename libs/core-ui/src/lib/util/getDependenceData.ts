@@ -15,6 +15,7 @@ export function getDependenceData(
   jointData: JointDataset,
   cohort: Cohort
 ): IDependenceData[] {
+  console.log(jointData);
   if (!chartProps) {
     return [];
   }
@@ -35,6 +36,8 @@ export function getDependenceData(
   });
   if (chartProps.xAxis) {
     const rawX = cohort.unwrap(chartProps.xAxis.property);
+    console.log(rawX);
+    console.log(chartProps.xAxis.property);
     const xLabel = jointData.metaDict[chartProps.xAxis.property].label;
     if (chartProps.xAxis.options.dither) {
       const dithered = cohort.unwrap(JointDataset.DitherLabel);
@@ -68,6 +71,37 @@ export function getDependenceData(
         ? `${customData[index].template}${yLabel}: ${customData[index].Yformatted}<br>`
         : `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
+  }
+  if (
+    jointData.datasetMetaData?.featureMetaData !== undefined
+  ) {
+    const identityFeatureName =
+      jointData.datasetMetaData.featureMetaData
+        ?.identity_feature_name;
+    console.log(identityFeatureName);
+    if (identityFeatureName !== undefined) {
+      let jointDatasetFeatureName =
+        jointData.getJointDatasetFeatureName(
+          identityFeatureName
+        );
+      if (jointDatasetFeatureName !== undefined) {
+        let rawIdentityFeatureData = cohort.unwrap(jointDatasetFeatureName);
+        console.log(rawIdentityFeatureData);
+
+        rawIdentityFeatureData.forEach((val, index) => {
+            // If categorical, show string value in tooltip
+            if (jointData.metaDict[jointDatasetFeatureName]?.treatAsCategorical) {
+              customData[index].ID =
+                jointData.metaDict[
+                  jointDatasetFeatureName
+                ].sortedCategoricalValues?.[val];
+            } else {
+              customData[index].ID = val;
+            }
+            customData[index].template = `${localization.Common.identityFeature}: ${customData[index].ID}<br>`;
+          });
+      }
+    }
   }
   const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
   indecies.forEach((absoluteIndex, i) => {
