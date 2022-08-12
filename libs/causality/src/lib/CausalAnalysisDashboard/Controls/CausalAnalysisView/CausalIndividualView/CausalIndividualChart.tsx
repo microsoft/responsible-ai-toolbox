@@ -458,6 +458,33 @@ export class CausalIndividualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
+    if (this.context.jointDataset.datasetMetaData?.featureMetaData !== undefined) {
+      const identityFeatureName = this.context.jointDataset.datasetMetaData.featureMetaData?.identity_feature_name;
+
+      if (identityFeatureName !== undefined) {
+        const jointDatasetFeatureName =
+        this.context.jointDataset.getJointDatasetFeatureName(identityFeatureName);
+
+        if (jointDatasetFeatureName !== undefined) {
+          const metaIdentityFeature = this.context.jointDataset.metaDict[jointDatasetFeatureName];
+          const rawIdentityFeature = JointDataset.unwrap(
+            dictionary,
+            jointDatasetFeatureName
+          );
+          hovertemplate += `${localization.Common.identityFeature}(${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+          rawIdentityFeature.forEach((val, index) => {
+            if (metaIdentityFeature?.treatAsCategorical) {
+              customdata[index].ID =
+                metaIdentityFeature.sortedCategoricalValues?.[val];
+            } else {
+              customdata[index].ID = (val as number).toLocaleString(undefined, {
+                maximumSignificantDigits: 5
+              });
+            }
+          });
+        }
+      }
+    }
     hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
