@@ -170,23 +170,10 @@ function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): [IFilter | undefined, string | undefined] {
-  let jointDatasetFeatureName = undefined;
-  let userDatasetFeatureName = undefined;
-  for (jointDatasetFeatureName in jointDataset.metaDict) {
-    if (
-      jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel ===
-      preBuiltCohortFilter.column
-    ) {
-      userDatasetFeatureName =
-        jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
-      break;
-    }
-  }
+  let jointDatasetFeatureName = jointDataset.getJointDatasetFeatureName(
+    preBuiltCohortFilter.column);
 
-  if (
-    jointDatasetFeatureName === undefined ||
-    userDatasetFeatureName === undefined
-  ) {
+  if (jointDatasetFeatureName === undefined) {
     return [undefined, localization.Core.PreBuiltCohort.featureNameNotFound];
   }
 
