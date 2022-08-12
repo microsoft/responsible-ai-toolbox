@@ -39,6 +39,14 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     } ${nodeFilterProps.errorCoverage.toFixed(
       2
     )} ${nodeFilterProps.metricValue.toFixed(2)}`; // TODO: waiting for PM input
+    let strokeWidth = 1.5;
+    if (this.props.node.data.nodeState.onSelectedPath) {
+      if (node.data.nodeState.isSelectedLeaf) {
+        strokeWidth = 6;
+      } else {
+        strokeWidth = 3;
+      }
+    }
     return (
       <>
         <g
@@ -85,16 +93,12 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               stroke: this.props.node.data.nodeState.onSelectedPath
                 ? theme.semanticColors.link
                 : this.props.node.data.errorColor,
-              strokeDasharray: this.props.node.data.nodeState.onSelectedPath
-                ? node.data.nodeState.isSelectedLeaf
-                  ? ""
-                  : "6, 6"
-                : "",
-              strokeWidth: this.props.node.data.nodeState.onSelectedPath
-                ? node.data.nodeState.isSelectedLeaf
-                  ? 6
-                  : 3
-                : 1.5
+              strokeDasharray:
+                this.props.node.data.nodeState.onSelectedPath &&
+                !node.data.nodeState.isSelectedLeaf
+                  ? "6, 6"
+                  : "",
+              strokeWidth
             }}
             fill={`url(#${gradientFillId})`}
           />
