@@ -49,6 +49,7 @@ export function buildInitialModelAssessmentContext(
   }
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
+    featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
