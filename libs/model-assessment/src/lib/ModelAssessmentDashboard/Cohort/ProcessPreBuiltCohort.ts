@@ -170,10 +170,11 @@ function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): [IFilter | undefined, string | undefined] {
-  let jointDatasetFeatureName = jointDataset.getJointDatasetFeatureName(
-    preBuiltCohortFilter.column);
+  const jointDatasetFeatureName = jointDataset.getJointDatasetFeatureName(
+    preBuiltCohortFilter.column
+  );
 
-  if (jointDatasetFeatureName === undefined) {
+  if (!jointDatasetFeatureName) {
     return [undefined, localization.Core.PreBuiltCohort.featureNameNotFound];
   }
 
