@@ -10,7 +10,8 @@ import {
   PanelType,
   FocusZone,
   Stack,
-  Text
+  Text,
+  Separator
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -27,18 +28,15 @@ export interface IFlyoutProps {
   callback: () => void;
 }
 
-export class IFlyoutState {}
+const stackTokens = {
+  childrenGap: "l1"
+};
 
-export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
-  public constructor(props: IFlyoutProps) {
-    super(props);
-    this.state = {};
-  }
-
+export class Flyout extends React.Component<IFlyoutProps> {
   public render(): React.ReactNode {
-    const classNames = flyoutStyles();
+    const { data, isOpen, item, callback } = this.props;
 
-    const item = this.props.item;
+    const classNames = flyoutStyles();
 
     const list = [];
 
@@ -50,22 +48,22 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       <FocusZone>
         <Panel
           headerText={localization.InterpretVision.Dashboard.panelTitle}
-          isOpen={this.props.isOpen}
+          isOpen={isOpen}
           closeButtonAriaLabel="Close"
-          onDismiss={this.props.callback}
+          onDismiss={callback}
           isLightDismiss
           type={PanelType.custom}
           customWidth="700px"
           className={classNames.mainContainer}
         >
-          <Stack tokens={{ childrenGap: "l1" }}>
+          <Stack tokens={stackTokens}>
             <Stack.Item>
-              <div className={classNames.line} />
+              <Separator styles={{ root: { width: "100%" } }} />
             </Stack.Item>
             <Stack.Item>
               <Stack
                 horizontal
-                tokens={{ childrenGap: "l1" }}
+                tokens={stackTokens}
                 horizontalAlign="space-around"
                 verticalAlign="center"
               >
@@ -113,7 +111,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               </Stack>
             </Stack.Item>
             <Stack.Item>
-              <div className={classNames.line} />
+              <Separator className={classNames.separator} />
             </Stack.Item>
             <Stack.Item>
               <Text variant="large" className={classNames.title}>
@@ -122,13 +120,13 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             </Stack.Item>
             <Stack.Item>
               <Image
-                src={`data:image/jpg;base64,${this.props.data.localExplanations[0]}`}
+                src={`data:image/jpg;base64,${data.localExplanations[0]}`}
                 width="800px"
-                style={{ position: "relative", right: 85 }}
+                className={classNames.explanation}
               />
             </Stack.Item>
             <Stack.Item>
-              <div className={classNames.line} />
+              <Separator className={classNames.separator} />
             </Stack.Item>
             <Stack.Item>
               <Text variant="large" className={classNames.title}>
@@ -147,13 +145,15 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   private onRenderCell = (
     item?: { title: string; value: string } | undefined
   ) => {
+    const classNames = flyoutStyles();
+
     return (
       <Stack.Item>
         <Stack
           horizontal
           tokens={{ childrenGap: "l2" }}
           verticalAlign="center"
-          style={{ marginBottom: "20px" }}
+          className={classNames.cell}
         >
           <Stack.Item>
             <Text variant="large">{item?.title}</Text>

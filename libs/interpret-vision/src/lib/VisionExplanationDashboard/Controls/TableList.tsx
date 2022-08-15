@@ -41,6 +41,33 @@ export interface IListItem {
   other?: number;
 }
 
+const MaxWidth = 400;
+const MinWidth = 200;
+const BorderRadius = 4;
+const NumColumns = 5;
+const ColumnNames = [
+  {
+    fieldName: "title",
+    title: localization.InterpretVision.Dashboard.columnOne
+  },
+  {
+    fieldName: "index",
+    title: localization.InterpretVision.Dashboard.columnTwo
+  },
+  {
+    fieldName: "trueY",
+    title: localization.InterpretVision.Dashboard.columnThree
+  },
+  {
+    fieldName: "predictedY",
+    title: localization.InterpretVision.Dashboard.columnFour
+  },
+  {
+    fieldName: "other",
+    title: localization.InterpretVision.Dashboard.columnFive
+  }
+];
+
 export class TableList extends React.Component<
   ITableListProps,
   ITableListState
@@ -87,48 +114,17 @@ export class TableList extends React.Component<
       }
     ];
 
-    const columns: IColumn[] = [
-      {
-        fieldName: "title",
+    const columns: IColumn[] = [];
+    for (let i = 0; i < NumColumns; i++) {
+      columns.push({
+        fieldName: ColumnNames[i].fieldName,
         isResizable: true,
-        key: "title",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnOne
-      },
-      {
-        fieldName: "index",
-        isResizable: true,
-        key: "index",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnTwo
-      },
-      {
-        fieldName: "trueY",
-        isResizable: true,
-        key: "truey",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnThree
-      },
-      {
-        fieldName: "predictedY",
-        isResizable: true,
-        key: "predictedy",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFour
-      },
-      {
-        fieldName: "other",
-        isResizable: true,
-        key: "other",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFive
-      }
-    ];
+        key: ColumnNames[i].fieldName.toLowerCase(),
+        maxWidth: MaxWidth,
+        minWidth: MinWidth,
+        name: ColumnNames[i].title
+      });
+    }
 
     this.setState({ columns, groups, items });
   }
@@ -165,7 +161,7 @@ export class TableList extends React.Component<
 
   private onRenderColumn = (
     item: IListItem | undefined,
-    index: number | undefined,
+    _index: number | undefined,
     column?: IColumn | undefined
   ) => {
     const value =
@@ -174,7 +170,7 @@ export class TableList extends React.Component<
         : "";
 
     const image =
-      item && column && column.fieldName === "title"
+      item && column && column.fieldName === ColumnNames[0].fieldName
         ? item["image" as keyof IListItem]
         : "";
 
@@ -182,48 +178,42 @@ export class TableList extends React.Component<
       return <div />;
     }
 
-    if (index) {
-      index = index + 1;
-    }
-
     const subtitle =
-      item && column && column.fieldName === "title"
+      item && column && column.fieldName === ColumnNames[0].fieldName
         ? item["subtitle" as keyof IListItem]
         : "";
 
     return (
-      <div data-is-focusable>
-        <Stack
-          horizontal
-          tokens={{ childrenGap: "s1" }}
-          onClick={this.callbackWrapper(item)}
-        >
-          {image && (
-            <Stack.Item>
-              <Image
-                src={image}
-                style={{
-                  borderRadius: 4,
-                  height: "auto",
-                  width: this.props.imageDim
-                }}
-              />
-            </Stack.Item>
-          )}
+      <Stack
+        horizontal
+        tokens={{ childrenGap: "s1" }}
+        onClick={this.callbackWrapper(item)}
+      >
+        {image && (
           <Stack.Item>
-            <Stack>
-              <Stack.Item>
-                <Text>{value}</Text>
-              </Stack.Item>
-              {subtitle && (
-                <Stack.Item>
-                  <Text>{subtitle}</Text>
-                </Stack.Item>
-              )}
-            </Stack>
+            <Image
+              src={image}
+              style={{
+                borderRadius: BorderRadius,
+                height: "auto",
+                width: this.props.imageDim
+              }}
+            />
           </Stack.Item>
-        </Stack>
-      </div>
+        )}
+        <Stack.Item>
+          <Stack>
+            <Stack.Item>
+              <Text>{value}</Text>
+            </Stack.Item>
+            {subtitle && (
+              <Stack.Item>
+                <Text>{subtitle}</Text>
+              </Stack.Item>
+            )}
+          </Stack>
+        </Stack.Item>
+      </Stack>
     );
   };
 

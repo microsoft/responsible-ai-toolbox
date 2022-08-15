@@ -10,7 +10,8 @@ import {
   PivotItem,
   SearchBox,
   Slider,
-  CommandBarButton
+  CommandBarButton,
+  Separator
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -66,7 +67,7 @@ export class VisionExplanationDashboard extends React.Component<
 
     this.state = {
       imageDim: 200,
-      pageSize: 10,
+      pageSize: Number(PageSizeOptions[0].text),
       panelOpen: false,
       selectedItem: undefined,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
@@ -125,7 +126,7 @@ export class VisionExplanationDashboard extends React.Component<
           </Stack>
         </Stack.Item>
         <Stack.Item>
-          <div className={classNames.line} />
+          <Separator styles={{ root: { width: "100%" } }} />
         </Stack.Item>
         <Stack.Item>
           <Stack>
@@ -299,13 +300,10 @@ export class VisionExplanationDashboard extends React.Component<
   };
 
   private onPageSizeSelect = (
-    event: React.FormEvent<HTMLDivElement>,
+    _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
   ): void => {
     this.setState({ pageSize: Number(item?.text) });
-    if (event) {
-      return;
-    }
   };
 
   private handleLinkClick = (item?: PivotItem) => {

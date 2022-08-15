@@ -1,27 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "@fluentui/react";
 
 export interface IFlyoutStyles {
+  cell: IStyle;
   errorIcon: IStyle;
+  explanation: IStyle;
   featureListContainer: IStyle;
   iconContainer: IStyle;
   image: IStyle;
   imageContainer: IStyle;
-  title: IStyle;
   label: IStyle;
-  line: IStyle;
   mainContainer: IStyle;
+  separator: IStyle;
   successIcon: IStyle;
+  title: IStyle;
 }
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
+  const theme = getTheme();
   return mergeStyleSets<IFlyoutStyles>({
+    cell: {
+      marginBottom: "20px"
+    },
     errorIcon: {
-      color: "#C50F1F",
+      color: theme.semanticColors.errorIcon,
       fontSize: "large",
       fontWeight: "600"
+    },
+    explanation: {
+      position: "relative",
+      right: 85
     },
     featureListContainer: {
       height: 300,
@@ -43,17 +58,17 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       position: "relative",
       textAlign: "start"
     },
-    line: {
-      borderBottom: "1px solid #EDEBE9",
-      paddingBottom: "10px",
-      width: "100%"
-    },
     mainContainer: {
       height: "100%",
       overflow: "hidden"
     },
+    separator: {
+      root: {
+        width: "100&"
+      }
+    },
     successIcon: {
-      color: "#6BB700",
+      color: theme.semanticColors.successIcon,
       fontSize: "large",
       fontWeight: "600"
     },

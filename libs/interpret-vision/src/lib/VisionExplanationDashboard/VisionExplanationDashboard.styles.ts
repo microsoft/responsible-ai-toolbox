@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "@fluentui/react";
 export interface IDatasetExplorerTab {
   cohortDropdown: IStyle;
   cohortPickerLabel: IStyle;
   cohortPickerLabelWrapper: IStyle;
-  line: IStyle;
   searchBox: IStyle;
   filterButton: IStyle;
   toolBarContainer: IStyle;
@@ -20,6 +24,7 @@ export interface IDatasetExplorerTab {
 
 export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDatasetExplorerTab> =
   () => {
+    const theme = getTheme();
     return mergeStyleSets<IDatasetExplorerTab>({
       cohortDropdown: {
         width: "300px"
@@ -38,12 +43,9 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
         width: "50%"
       },
       imageListContainer: {
-        border: "1px solid #D2D4D6",
+        border: `1px solid ${theme.semanticColors.disabledBorder}`,
         height: "100%",
         overflow: "scroll"
-      },
-      line: {
-        borderTop: "1px solid #EDEBE9"
       },
       mainContainer: {
         alignItems: "center",
