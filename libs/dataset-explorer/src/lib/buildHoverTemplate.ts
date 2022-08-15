@@ -13,6 +13,7 @@ export function buildHoverTemplate(
   jointData: JointDataset,
   chartProps: IGenericChartProps
 ): string {
+  console.log(jointData);
   let hovertemplate = "";
   const xName = jointData.metaDict[chartProps.xAxis.property].label;
   const yName = jointData.metaDict[chartProps.yAxis.property].label;
@@ -30,6 +31,19 @@ export function buildHoverTemplate(
           hovertemplate += `${yName}: %{customdata.Y}<br>`;
         } else {
           hovertemplate += `${yName}: %{y}<br>`;
+        }
+      }
+      if (jointData.datasetMetaData?.featureMetaData) {
+        const identityFeatureName =
+          jointData.datasetMetaData.featureMetaData?.identity_feature_name;
+    
+        if (identityFeatureName) {
+          const jointDatasetFeatureName =
+            jointData.getJointDatasetFeatureName(identityFeatureName);
+    
+          if (jointDatasetFeatureName) {
+            hovertemplate += `${localization.Common.identityFeature} (${identityFeatureName}): %{customdata.ID}<br>`;
+          }
         }
       }
       if (chartProps.colorAxis) {
