@@ -7,6 +7,7 @@ import {
   getPrimaryChartColor,
   getPrimaryBackgroundChartColor
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
 
 import { Utils } from "../../CommonUtils";
@@ -88,6 +89,11 @@ export function getTokenImportancesChartOptions(
     series,
     xAxis: {
       categories: ylabel
+    },
+    yAxis: {
+      title: {
+        text: localization.Interpret.featureImportance
+      }
     }
   };
 }
