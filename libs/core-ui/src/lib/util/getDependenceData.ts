@@ -71,29 +71,28 @@ export function getDependenceData(
   }
   if (jointData.datasetMetaData?.featureMetaData) {
     const identityFeatureName =
-      jointData.datasetMetaData.featureMetaData
-        ?.identity_feature_name;
+      jointData.datasetMetaData.featureMetaData?.identity_feature_name;
 
     if (identityFeatureName) {
       const jointDatasetFeatureName =
-        jointData.getJointDatasetFeatureName(
-          identityFeatureName
-        );
+        jointData.getJointDatasetFeatureName(identityFeatureName);
 
       if (jointDatasetFeatureName) {
         const rawIdentityFeatureData = cohort.unwrap(jointDatasetFeatureName);
         rawIdentityFeatureData.forEach((val, index) => {
-            // If categorical, show string value in tooltip
-            if (jointData.metaDict[jointDatasetFeatureName]?.treatAsCategorical) {
-              customData[index].ID =
-                jointData.metaDict[
-                  jointDatasetFeatureName
-                ].sortedCategoricalValues?.[val];
-            } else {
-              customData[index].ID = val;
-            }
-            customData[index].template += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData[index].ID}<br>`;
-          });
+          // If categorical, show string value in tooltip
+          if (jointData.metaDict[jointDatasetFeatureName]?.treatAsCategorical) {
+            customData[index].ID =
+              jointData.metaDict[
+                jointDatasetFeatureName
+              ].sortedCategoricalValues?.[val];
+          } else {
+            customData[index].ID = val;
+          }
+          customData[
+            index
+          ].template += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData[index].ID}<br>`;
+        });
       }
     }
   }
