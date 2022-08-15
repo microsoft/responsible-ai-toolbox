@@ -25,7 +25,12 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
     const k = this.props.topK;
     const sortedList = Utils.sortedTopK(importances, k!, this.props.radio!);
     return (
-      <Stack horizontal horizontalAlign="start" tokens={textStackTokens}>
+      <Stack
+        id="TextHighlighting"
+        horizontal
+        horizontalAlign="start"
+        tokens={textStackTokens}
+      >
         {text.map((word, wordIndex) => {
           let styleType = classNames.normal;
           const score = importances[wordIndex];
