@@ -123,7 +123,7 @@ export class TextExplanationView extends React.PureComponent<
                     )}
                 </Text>
               </Stack.Item>
-              <Stack.Item>
+              <Stack.Item id="TextTopKSlider">
                 <Slider
                   min={1}
                   max={this.state.maxK}

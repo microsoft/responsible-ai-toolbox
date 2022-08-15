@@ -45,7 +45,7 @@ export class ClassImportanceWeights extends React.Component<
   public render(): React.ReactNode {
     const classNames = classImportanceWeightsStyles();
     return (
-      <div>
+      <div id="ClassImportanceWeights">
         <div className={classNames.multiclassWeightLabel}>
           <Text
             variant={"medium"}
