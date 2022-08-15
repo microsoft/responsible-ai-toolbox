@@ -92,7 +92,7 @@ export function getDependenceData(
             } else {
               customData[index].ID = val;
             }
-            customData[index].template += `${localization.Common.identityFeature}(${identityFeatureName}): ${customData[index].ID}<br>`;
+            customData[index].template += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData[index].ID}<br>`;
           });
       }
     }
