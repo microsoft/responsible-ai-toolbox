@@ -458,7 +458,10 @@ export class CausalIndividualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    if (this.context.jointDataset.datasetMetaData?.featureMetaData?.identity_feature_name) {
+    if (
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.identity_feature_name
+    ) {
       const identityFeatureName =
         this.context.jointDataset.datasetMetaData?.featureMetaData
           ?.identity_feature_name;
