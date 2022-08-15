@@ -2,30 +2,29 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
-  JointDataset
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
-  ComboBox,
-  Dropdown,
-  FocusZone,
-  IComboBox,
   IComboBoxOption,
-  IconButton,
+  Dropdown,
   IDropdownOption,
+  FocusZone,
+  IconButton,
   Label,
   PrimaryButton,
   SearchBox,
   Stack,
-  Text,
-  TextField
-} from "office-ui-fabric-react";
+  Text
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CustomPredictionLabels } from "./CustomPredictionLabels";
 import { ExistingPredictionLabels } from "./ExistingPredictionLabels";
 import { WhatIfConstants } from "./WhatIfConstants";
+import { WhatIfPanelComboBox } from "./WhatIfPanelComboBox";
+import { WhatIfPanelTextField } from "./WhatIfPanelTextField";
 import { whatIfTabStyles } from "./WhatIfTab.styles";
 
 export interface IWhatIfPanelProps {
@@ -40,23 +39,23 @@ export interface IWhatIfPanelProps {
   isPanelOpen: boolean;
   isInPanel: boolean;
   filteredFeatureList: IDropdownOption[];
+  setCustomRowProperty: (
+    key: string | number,
+    isString: boolean,
+    newValue?: string
+  ) => void;
+  setCustomRowPropertyDropdown: (
+    key: string | number,
+    option?: IComboBoxOption,
+    value?: string
+  ) => void;
   openPanel(): void;
   dismissPanel(): void;
   invokeModel?(data: any[], abortSignal: AbortSignal): Promise<any[]>;
   setSelectedIndex(_event: React.FormEvent, item?: IDropdownOption): void;
-  setCustomRowProperty(
-    key: string | number,
-    isString: boolean,
-    newValue?: string
-  ): void;
   filterFeatures(
     _event?: React.ChangeEvent<HTMLInputElement>,
     newValue?: string
-  ): void;
-  setCustomRowPropertyDropdown(
-    key: string | number,
-    option?: IComboBoxOption,
-    value?: string
   ): void;
   savePoint(): void;
   saveAsPoint(): void;
@@ -129,19 +128,17 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                 />
                 {this.props.invokeModel && (
                   <>
-                    <TextField
+                    <WhatIfPanelTextField
+                      disabled={inputDisabled}
                       id="whatIfNameLabel"
+                      isString
+                      key={WhatIfConstants.namePath}
                       label={localization.Interpret.WhatIfTab.whatIfNameLabel}
+                      styles={{ fieldGroup: { width: 200 } }}
                       value={
                         this.props.temporaryPoint?.[WhatIfConstants.namePath]
                       }
-                      onChange={this.setCustomRowProperty.bind(
-                        this,
-                        WhatIfConstants.namePath,
-                        true
-                      )}
-                      styles={{ fieldGroup: { width: 200 } }}
-                      disabled={inputDisabled}
+                      onChange={this.props.setCustomRowProperty}
                     />
                     <CustomPredictionLabels
                       jointDataset={this.props.jointDataset}
@@ -166,35 +163,29 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
                   const metaInfo = this.props.jointDataset.metaDict[item.key];
                   if (item.data && item.data.categoricalOptions) {
                     return (
-                      <ComboBox
+                      <WhatIfPanelComboBox
                         key={item.key}
                         label={metaInfo.abbridgedLabel}
                         autoComplete={"on"}
                         allowFreeform
                         selectedKey={this.props.temporaryPoint?.[item.key]}
                         options={item.data.categoricalOptions}
-                        onChange={this.setCustomRowPropertyDropdown.bind(
-                          this,
-                          item.key
-                        )}
+                        onChange={this.props.setCustomRowPropertyDropdown}
                         disabled={inputDisabled}
                         id="WhatIfFeatureComboBox"
                       />
                     );
                   }
                   return (
-                    <TextField
+                    <WhatIfPanelTextField
+                      disabled={inputDisabled}
+                      errorMessage={this.props.validationErrors[item.key]}
+                      id="WhatIfFeatureTextField"
+                      isString={false}
                       key={item.key}
                       label={metaInfo.abbridgedLabel}
                       value={this.props.stringifiedValues[item.key]}
-                      onChange={this.setCustomRowProperty.bind(
-                        this,
-                        item.key,
-                        false
-                      )}
-                      errorMessage={this.props.validationErrors[item.key]}
-                      disabled={inputDisabled}
-                      id="WhatIfFeatureTextField"
+                      onChange={this.props.setCustomRowProperty}
                     />
                   );
                 })}
@@ -232,21 +223,4 @@ export class WhatIfPanel extends React.Component<IWhatIfPanelProps> {
       </Stack>
     );
   }
-  private setCustomRowProperty = (
-    key: string | number,
-    isString: boolean,
-    _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    newValue?: string
-  ): void => {
-    this.props.setCustomRowProperty(key, isString, newValue);
-  };
-  private setCustomRowPropertyDropdown = (
-    key: string | number,
-    _event: React.FormEvent<IComboBox>,
-    option?: IComboBoxOption,
-    _index?: number,
-    value?: string
-  ): void => {
-    this.props.setCustomRowPropertyDropdown(key, option, value);
-  };
 }

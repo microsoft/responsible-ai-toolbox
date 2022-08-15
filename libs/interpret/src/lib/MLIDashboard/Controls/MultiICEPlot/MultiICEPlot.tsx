@@ -1,34 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption, IComboBox, ComboBox, Text } from "@fluentui/react";
 import {
-  isTwoDimArray,
-  ModelTypes,
-  JointDataset,
+  AxisConfigDialogSpinButton,
+  BasicHighChart,
+  FluentUIStyles,
   IExplanationModelMetadata,
-  ModelExplanationUtils,
-  FabricStyles
+  JointDataset,
+  SpinButtonStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  IPlotlyProperty,
-  RangeTypes,
-  AccessibleChart,
-  PlotlyMode
-} from "@responsible-ai/mlchartlib";
-import _, { toNumber, map } from "lodash";
-import {
-  IComboBox,
-  IComboBoxOption,
-  ComboBox,
-  SpinButton,
-  Text,
-  getTheme
-} from "office-ui-fabric-react";
-import { Data } from "plotly.js";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _, { toNumber } from "lodash";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
+import { getIceChartOption } from "../../utils/getIceChartOption";
 import { IRangeView } from "../ICEPlot";
 
 import { multiIcePlotStyles } from "./MultiICEPlot.styles";
@@ -68,102 +56,7 @@ export class MultiICEPlot extends React.PureComponent<
       yAxes: []
     };
 
-    this.debounceFetchData = _.debounce(this.fetchData.bind(this), 500);
-  }
-  private static buildYAxis(
-    metadata: IExplanationModelMetadata,
-    selectedClass: number
-  ): string {
-    if (metadata.modelType === ModelTypes.Regression) {
-      return localization.Interpret.IcePlot.prediction;
-    }
-    return `${
-      localization.Interpret.IcePlot.predictedProbability
-    }<br>${localization.formatString(
-      localization.Interpret.WhatIfTab.classLabel,
-      metadata.classNames[selectedClass]
-    )}`;
-  }
-  private static buildPlotlyProps(
-    metadata: IExplanationModelMetadata,
-    featureName: string,
-    selectedClass: number,
-    colors: string[],
-    rowNames: string[],
-    rangeType?: RangeTypes,
-    xData?: Array<number | string>,
-    yData?: number[][] | number[][][]
-  ): IPlotlyProperty | undefined {
-    if (
-      yData === undefined ||
-      xData === undefined ||
-      yData.length === 0 ||
-      yData.some((row: number[] | number[][]) => row === undefined)
-    ) {
-      return undefined;
-    }
-    const data: Data[] = map<number[] | number[][]>(
-      yData,
-      (singleRow: number[] | number[][], rowIndex: number) => {
-        const transposedY: number[][] = isTwoDimArray(singleRow)
-          ? ModelExplanationUtils.transpose2DArray(singleRow)
-          : [singleRow];
-        const predictionLabel =
-          metadata.modelType === ModelTypes.Regression
-            ? localization.Interpret.IcePlot.prediction
-            : `${localization.Interpret.IcePlot.predictedProbability}: ${metadata.classNames[selectedClass]}`;
-        const hovertemplate = `%{customdata.Name}<br>${featureName}: %{x}<br>${predictionLabel}: %{customdata.Yformatted}<br><extra></extra>`;
-        return {
-          customdata: transposedY[selectedClass].map((predY) => {
-            return {
-              Name: rowNames[rowIndex],
-              Yformatted: predY.toLocaleString(undefined, {
-                maximumFractionDigits: 3
-              })
-            };
-          }),
-          hoverinfo: "all",
-          hovertemplate,
-          marker: {
-            color: colors[rowIndex]
-          },
-          mode:
-            rangeType === RangeTypes.Categorical
-              ? PlotlyMode.Markers
-              : PlotlyMode.LinesMarkers,
-          name: rowNames[rowIndex],
-          type: "scatter",
-          x: xData,
-          y: transposedY[selectedClass]
-        };
-      }
-    ) as any;
-    return {
-      config: { displaylogo: false, displayModeBar: false, responsive: true },
-      data,
-      layout: {
-        autosize: true,
-        dragmode: false,
-        font: {
-          size: 10
-        },
-        hovermode: "closest",
-        margin: {
-          b: 30,
-          r: 10,
-          t: 10
-        },
-        showlegend: false,
-        xaxis: {
-          automargin: true,
-          title: featureName
-        },
-        yaxis: {
-          automargin: true,
-          title: MultiICEPlot.buildYAxis(metadata, selectedClass)
-        }
-      }
-    };
+    this.debounceFetchData = _.debounce(this.fetchData, 500);
   }
 
   public componentDidMount(): void {
@@ -195,18 +88,18 @@ export class MultiICEPlot extends React.PureComponent<
     const hasOutgoingRequest = this.state.abortControllers.some(
       (x) => x !== undefined
     );
-    const plotlyProps = this.state.rangeView
-      ? MultiICEPlot.buildPlotlyProps(
-          this.props.metadata,
-          this.props.jointDataset.metaDict[this.props.feature].label,
-          this.props.selectedClass,
-          this.props.colors,
-          this.props.rowNames,
-          this.state.rangeView.type,
-          this.state.xAxisArray,
-          this.state.yAxes
-        )
-      : undefined;
+    const iceChartOption =
+      this.state.rangeView &&
+      getIceChartOption(
+        this.props.metadata,
+        this.props.jointDataset.metaDict[this.props.feature].label,
+        this.props.selectedClass,
+        this.props.colors,
+        this.props.rowNames,
+        this.state.rangeView.type,
+        this.state.xAxisArray,
+        this.state.yAxes
+      );
     const hasError =
       this.state.rangeView !== undefined &&
       (this.state.rangeView.maxErrorMessage !== undefined ||
@@ -224,73 +117,31 @@ export class MultiICEPlot extends React.PureComponent<
                 }
                 allowFreeform
                 autoComplete="on"
-                options={this.state.rangeView.categoricalOptions}
+                options={this.state.rangeView.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
-                styles={FabricStyles.defaultDropdownStyle}
-                calloutProps={FabricStyles.calloutProps}
+                styles={FluentUIStyles.defaultDropdownStyle}
+                calloutProps={FluentUIStyles.calloutProps}
               />
             )}
             {this.state.rangeView.type !== RangeTypes.Categorical && (
               <div className={classNames.parameterList}>
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.minLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.min?.toString()}
-                  onIncrement={this.onMinRangeChanged.bind(this, 1)}
-                  onDecrement={this.onMinRangeChanged.bind(this, -1)}
-                  onValidate={this.onMinRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onMinRangeChanged}
                 />
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.maxLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.max?.toString()}
-                  onIncrement={this.onMaxRangeChanged.bind(this, 1)}
-                  onDecrement={this.onMaxRangeChanged.bind(this, -1)}
-                  onValidate={this.onMaxRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onMaxRangeChanged}
                 />
-                <SpinButton
-                  styles={{
-                    labelWrapper: { alignSelf: "center" },
-                    root: {
-                      display: "inline-flex",
-                      float: "right",
-                      selectors: {
-                        "> div": {
-                          maxWidth: "78px"
-                        }
-                      }
-                    },
-                    spinButtonWrapper: { maxWidth: "68px" }
-                  }}
+                <AxisConfigDialogSpinButton
                   label={localization.Interpret.WhatIfTab.stepsLabel}
+                  styles={SpinButtonStyles}
                   value={this.state.rangeView.steps?.toString()}
-                  onIncrement={this.onStepsRangeChanged.bind(this, 1)}
-                  onDecrement={this.onStepsRangeChanged.bind(this, -1)}
-                  onValidate={this.onStepsRangeChanged.bind(this, 0)}
+                  setNumericValue={this.onStepsRangeChanged}
                 />
               </div>
             )}
@@ -306,7 +157,7 @@ export class MultiICEPlot extends React.PureComponent<
             <Text>{this.state.errorMessage}</Text>
           </div>
         )}
-        {plotlyProps === undefined && !hasOutgoingRequest && (
+        {!iceChartOption && !hasOutgoingRequest && (
           <div className={classNames.placeholder}>
             <Text>{localization.Interpret.IcePlot.submitPrompt}</Text>
           </div>
@@ -316,9 +167,9 @@ export class MultiICEPlot extends React.PureComponent<
             <Text>{localization.Interpret.IcePlot.topLevelErrorMessage}</Text>
           </div>
         )}
-        {plotlyProps !== undefined && !hasOutgoingRequest && !hasError && (
+        {iceChartOption && !hasOutgoingRequest && !hasError && (
           <div className={classNames.chartWrapper}>
-            <AccessibleChart plotlyProps={plotlyProps} theme={getTheme()} />
+            <BasicHighChart configOverride={iceChartOption} />
           </div>
         )}
       </div>
@@ -333,7 +184,10 @@ export class MultiICEPlot extends React.PureComponent<
     });
   }
 
-  private onMinRangeChanged(delta: number, stringVal: string): string | void {
+  private onMinRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -366,9 +220,12 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
-  private onMaxRangeChanged(delta: number, stringVal: string): string | void {
+  private onMaxRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -401,9 +258,12 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
-  private onStepsRangeChanged(delta: number, stringVal: string): string | void {
+  private onStepsRangeChanged = (
+    delta: number,
+    stringVal: string
+  ): string | void => {
     const rangeView = _.cloneDeep(this.state.rangeView);
     if (!rangeView) {
       return;
@@ -432,7 +292,7 @@ export class MultiICEPlot extends React.PureComponent<
         this.debounceFetchData();
       }
     );
-  }
+  };
 
   private onCategoricalRangeChanged = (
     _event: React.FormEvent<IComboBox>,
@@ -480,7 +340,7 @@ export class MultiICEPlot extends React.PureComponent<
     return selectedKeys;
   };
 
-  private fetchData(): void {
+  private fetchData = (): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -526,7 +386,7 @@ export class MultiICEPlot extends React.PureComponent<
         }
       }
     });
-  }
+  };
 
   private buildDataSpans(
     row: Array<string | number>,
@@ -548,7 +408,7 @@ export class MultiICEPlot extends React.PureComponent<
     if (!summary || summary.index === undefined) {
       return undefined;
     }
-    if (summary.treatAsCategorical) {
+    if (summary?.treatAsCategorical) {
       // Columns that are passed in as categorical strings should be strings when passed to predict
       if (summary.isCategorical) {
         return {

@@ -2,7 +2,17 @@
 // Licensed under the MIT License.
 
 import {
-  FabricStyles,
+  IComboBoxOption,
+  IComboBox,
+  PrimaryButton,
+  IDropdownOption,
+  Pivot,
+  PivotItem,
+  IPivotItemProps,
+  initializeIcons
+} from "@fluentui/react";
+import {
+  FluentUIStyles,
   isTwoDimArray,
   IExplanationContext,
   IExplanationGenerators,
@@ -26,20 +36,8 @@ import {
   SelectionContext,
   ModelMetadata
 } from "@responsible-ai/mlchartlib";
-import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  PrimaryButton,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  Pivot,
-  PivotItem,
-  PivotLinkFormat,
-  PivotLinkSize,
-  IPivotItemProps
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { EbmExplanation } from "./Controls/EbmExplanation";
@@ -107,27 +105,6 @@ export class ExplanationDashboard extends React.Component<
     "perturbationExploration",
     "ICE"
   ];
-
-  private static transposeLocalImportanceMatrix: (
-    input: number[][][]
-  ) => number[][][] = memoize((input: number[][][]): number[][][] => {
-    const numClasses = input.length;
-    const numRows = input[0].length;
-    const numFeatures = input[0][0].length;
-    const result: number[][][] = new Array(numRows)
-      .fill(0)
-      .map(() =>
-        new Array(numFeatures).fill(0).map(() => new Array(numClasses).fill(0))
-      );
-    input.forEach((rowByFeature, classIndex) => {
-      rowByFeature.forEach((featureArray, rowIndex) => {
-        featureArray.forEach((value, featureIndex) => {
-          result[rowIndex][featureIndex][classIndex] = value;
-        });
-      });
-    });
-    return result;
-  });
 
   private static buildWeightDropdownOptions: (
     explanationContext: IExplanationContext
@@ -345,7 +322,7 @@ export class ExplanationDashboard extends React.Component<
       const weighting = props.predictedY
         ? WeightVectors.Predicted
         : WeightVectors.AbsAvg;
-      const localFeatureMatrix = ExplanationDashboard.buildLocalFeatureMatrix(
+      const localFeatureMatrix = JointDataset.buildLocalFeatureMatrix(
         props.precomputedExplanations.localFeatureImportance.scores,
         modelMetadata.modelType
       );
@@ -492,32 +469,6 @@ export class ExplanationDashboard extends React.Component<
     }
   }
 
-  private static buildLocalFeatureMatrix(
-    localExplanationRaw: number[][] | number[][][],
-    modelType: ModelTypes
-  ): number[][][] {
-    switch (modelType) {
-      case ModelTypes.Regression: {
-        return (localExplanationRaw as number[][]).map((featureArray) =>
-          featureArray.map((val) => [val])
-        );
-      }
-      case ModelTypes.Binary: {
-        return ExplanationDashboard.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        ).map((featuresByClasses) =>
-          featuresByClasses.map((classArray) => classArray.slice(0, 1))
-        );
-      }
-      case ModelTypes.Multiclass:
-      default: {
-        return ExplanationDashboard.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        );
-      }
-    }
-  }
-
   private static buildLocalFlattenMatrix(
     localExplanations: number[][][] | undefined,
     modelType: ModelTypes,
@@ -528,8 +479,7 @@ export class ExplanationDashboard extends React.Component<
       return undefined;
     }
     switch (modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         return localExplanations.map((featuresByClasses) => {
           return featuresByClasses.map((classArray) => {
@@ -538,6 +488,7 @@ export class ExplanationDashboard extends React.Component<
         });
       }
       case ModelTypes.Multiclass:
+      case ModelTypes.Binary:
       default: {
         return localExplanations.map((featuresByClasses, rowIndex) => {
           return featuresByClasses.map((classArray) => {
@@ -754,10 +705,10 @@ export class ExplanationDashboard extends React.Component<
                 ExplanationDashboard.globalTabKeys[this.state.activeGlobalTab]
               }
               onLinkClick={this.handleGlobalTabClick}
-              linkFormat={PivotLinkFormat.tabs}
-              linkSize={PivotLinkSize.normal}
+              linkFormat={"tabs"}
+              linkSize={"normal"}
               headersOnly
-              styles={FabricStyles.verticalTabsStyle}
+              styles={FluentUIStyles.verticalTabsStyle}
             >
               {this.pivotItems.map((props) => (
                 <PivotItem key={props.itemKey} {...props} />
@@ -866,10 +817,10 @@ export class ExplanationDashboard extends React.Component<
                       ]
                     }
                     onLinkClick={this.handleLocalTabClick}
-                    linkFormat={PivotLinkFormat.tabs}
-                    linkSize={PivotLinkSize.normal}
+                    linkFormat={"tabs"}
+                    linkSize={"normal"}
                     headersOnly
-                    styles={FabricStyles.verticalTabsStyle}
+                    styles={FluentUIStyles.verticalTabsStyle}
                   >
                     <PivotItem
                       headerText={localization.Interpret.localFeatureImportance}
@@ -999,11 +950,10 @@ export class ExplanationDashboard extends React.Component<
           this.setState((prevState) => {
             const weighting =
               prevState.dashboardContext.weightContext.selectedKey;
-            const localFeatureMatrix =
-              ExplanationDashboard.buildLocalFeatureMatrix(
-                result,
-                modelMetadata.modelType
-              );
+            const localFeatureMatrix = JointDataset.buildLocalFeatureMatrix(
+              result,
+              modelMetadata.modelType
+            );
             const flattenedFeatureMatrix =
               ExplanationDashboard.buildLocalFlattenMatrix(
                 localFeatureMatrix,

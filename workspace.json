@@ -36,12 +36,12 @@
             "entryFile": "libs/causality/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -105,12 +105,12 @@
             "entryFile": "libs/core-ui/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -174,12 +174,12 @@
             "entryFile": "libs/counterfactuals/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -370,12 +370,12 @@
             "entryFile": "libs/dataset-explorer/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -401,6 +401,58 @@
             "passWithNoTests": true
           },
           "outputs": ["coverage/libs/dataset-explorer"]
+        }
+      }
+    },
+    "e2e": {
+      "root": "libs/e2e",
+      "sourceRoot": "libs/e2e/src",
+      "projectType": "library",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "libs/e2e/cypress.json",
+            "tsConfig": "libs/e2e/tsconfig.e2e.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "widget:serve:production"
+            }
+          }
+        },
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/e2e",
+            "tsConfig": "libs/e2e/tsconfig.lib.json",
+            "project": "libs/e2e/package.json",
+            "entryFile": "libs/e2e/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/e2e/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/e2e/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/e2e"],
+          "options": {
+            "jestConfig": "libs/e2e/jest.config.js",
+            "passWithNoTests": true
+          }
         }
       }
     },
@@ -439,12 +491,12 @@
             "entryFile": "libs/error-analysis/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -508,12 +560,12 @@
             "entryFile": "libs/fairness/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -577,12 +629,12 @@
             "entryFile": "libs/interpret/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -651,6 +703,46 @@
         }
       }
     },
+    "interpret-vision": {
+      "root": "libs/interpret-vision",
+      "sourceRoot": "libs/interpret-vision/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/interpret-vision",
+            "tsConfig": "libs/interpret-vision/tsconfig.lib.json",
+            "project": "libs/interpret-vision/package.json",
+            "entryFile": "libs/interpret-vision/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/interpret-vision/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/interpret-vision/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/interpret-vision"],
+          "options": {
+            "jestConfig": "libs/interpret-vision/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "localization": {
       "root": "libs/localization",
       "sourceRoot": "libs/localization/src",
@@ -682,12 +774,12 @@
             "entryFile": "libs/localization/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -751,12 +843,12 @@
             "entryFile": "libs/mlchartlib/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",
@@ -820,12 +912,12 @@
             "entryFile": "libs/model-assessment/src/index.ts",
             "external": [
               "@fluentui/react",
+              "highcharts",
               "jmespath",
               "localized-strings",
               "lodash",
               "memoize-one",
               "moment",
-              "office-ui-fabric-react",
               "plotly.js",
               "react-plotly.js",
               "react",

@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import {
-  ActionButton,
   FontWeights,
   Modal,
   Stack,
@@ -17,18 +14,22 @@ import {
   DetailsListLayoutMode,
   StackItem,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { INumericRange, RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
 
 import { IBinnedResponse } from "./../util/IBinnedResponse";
 import { BinDialog } from "./BinDialog";
 import { DataSpecificationBlade } from "./DataSpecificationBlade";
+import { FeatureTabActionButton } from "./FeatureTabActionButton";
 import { FeatureTabSubGroup } from "./FeatureTabSubGroup";
 import { IWizardTabProps } from "./IWizardTabProps";
 import { WizardFooter } from "./WizardFooter";
 
 export interface IFeatureTabProps extends IWizardTabProps {
   featureBins: IBinnedResponse[];
+  nextTabKey: string;
   selectedFeatureIndex: number;
   selectedFeatureChange: (value: number) => void;
   saveBin: (bin: IBinnedResponse) => void;
@@ -140,7 +141,10 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
             layoutMode={DetailsListLayoutMode.justified}
           />
         </StackItem>
-        <WizardFooter onNext={this.props.onNext} />
+        <WizardFooter
+          nextTabKey={this.props.nextTabKey}
+          onSetTab={this.props.onSetTab}
+        />
       </Stack>
     );
   }
@@ -210,14 +214,7 @@ export class FeatureTab extends React.PureComponent<IFeatureTabProps, IState> {
         )}
         {!this.props.dashboardContext.modelMetadata.featureIsCategorical?.[
           index
-        ] && (
-          <ActionButton
-            iconProps={{ iconName: "Edit" }}
-            onClick={this.editBins.bind(this, index)}
-          >
-            {localization.Fairness.Feature.editBinning}
-          </ActionButton>
-        )}
+        ] && <FeatureTabActionButton index={index} onClick={this.editBins} />}
       </>
     );
   };

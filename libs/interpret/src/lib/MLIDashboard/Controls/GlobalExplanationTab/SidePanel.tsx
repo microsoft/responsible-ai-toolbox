@@ -2,26 +2,25 @@
 // Licensed under the MIT License.
 
 import {
+  ChoiceGroup,
+  Dropdown,
+  IChoiceGroupOption,
+  IDropdownOption,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   Cohort,
   IExplanationModelMetadata,
   ModelTypes,
   WeightVectorOption,
   ChartTypes,
-  FabricStyles,
-  InteractiveLegend,
-  LabelWithCallout
+  LabelWithCallout,
+  ITelemetryEvent,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import {
-  ChoiceGroup,
-  Dropdown,
-  IChoiceGroupOption,
-  IDropdownOption,
-  Label,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
@@ -37,6 +36,7 @@ export interface ISidePanelProps {
   sortingSeriesIndex: number;
   cohorts: Cohort[];
   chartType: ChartTypes;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange(option: WeightVectorOption): void;
   setSortIndex(option: number): void;
   toggleActivation(index: number): void;
@@ -69,20 +69,6 @@ export class SidePanel extends React.Component<
     const classNames = globalTabStyles();
     return (
       <Stack className={classNames.legendAndSort}>
-        <Label>{localization.Interpret.GlobalTab.datasetCohorts}</Label>
-        <Text variant={"small"}>
-          {localization.Interpret.GlobalTab.legendHelpText}
-        </Text>
-        <InteractiveLegend
-          items={this.props.cohortSeries.map((row, rowIndex) => {
-            return {
-              activated: this.props.seriesIsActive[rowIndex],
-              color: FabricStyles.fabricColorPalette[row.colorIndex],
-              name: row.name,
-              onClick: (): void => this.props.toggleActivation(rowIndex)
-            };
-          })}
-        />
         <Dropdown
           label={localization.Interpret.GlobalTab.sortBy}
           selectedKey={this.props.sortingSeriesIndex}
@@ -99,7 +85,8 @@ export class SidePanel extends React.Component<
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
         />
-        {this.props.metadata.modelType === ModelTypes.Multiclass &&
+        {(this.props.metadata.modelType === ModelTypes.Multiclass ||
+          this.props.metadata.modelType === ModelTypes.Binary) &&
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
@@ -107,6 +94,10 @@ export class SidePanel extends React.Component<
                   localization.Interpret.CrossClass.crossClassWeights
                 }
                 label={localization.Interpret.GlobalTab.weightOptions}
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
+                }
               >
                 <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
                 <ul>
@@ -127,6 +118,9 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                ariaLabel={
+                  localization.Interpret.GlobalTab.weightOptionsDropdown
+                }
               />
             </div>
           )}
@@ -153,7 +147,10 @@ export class SidePanel extends React.Component<
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    if (
+      this.props.metadata.modelType === ModelTypes.Multiclass ||
+      this.props.metadata.modelType === ModelTypes.Binary
+    ) {
       return this.props.weightOptions.map((option) => {
         return {
           key: option,

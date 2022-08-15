@@ -1,10 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
   Pivot,
   PivotItem,
@@ -14,7 +10,11 @@ import {
   MessageBar,
   MessageBarType,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { defaultTheme, PredictionTypes } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import React from "react";
 
 import { EmptyHeader } from "./Controls/EmptyHeader";
@@ -264,7 +264,10 @@ export class FairnessWizard extends React.PureComponent<
         <EmptyHeader />
         {this.state.activeTabKey === introTabKey && (
           <StackItem grow={2}>
-            <IntroTab onNext={this.setTab.bind(this, featureBinTabKey)} />
+            <IntroTab
+              featureBinTabKey={featureBinTabKey}
+              onNext={this.setTab}
+            />
           </StackItem>
         )}
         {(this.state.activeTabKey === featureBinTabKey ||
@@ -288,10 +291,11 @@ export class FairnessWizard extends React.PureComponent<
               >
                 <FeatureTab
                   dashboardContext={this.state.dashboardContext}
+                  nextTabKey={performanceTabKey}
                   selectedFeatureChange={this.setBinIndex}
                   selectedFeatureIndex={this.state.selectedBinIndex}
                   featureBins={this.state.featureBins.filter((x) => !!x)}
-                  onNext={this.setTab.bind(this, performanceTabKey)}
+                  onSetTab={this.setTab}
                   saveBin={this.saveBin}
                 />
               </PivotItem>
@@ -302,12 +306,12 @@ export class FairnessWizard extends React.PureComponent<
               >
                 <PerformanceTab
                   dashboardContext={this.state.dashboardContext}
-                  performancePickerProps={performancePickerProps}
-                  onNext={this.setTab.bind(
-                    this,
+                  nextTabKey={
                     flights.skipFairness ? reportTabKey : fairnessTabKey
-                  )}
-                  onPrevious={this.setTab.bind(this, featureBinTabKey)}
+                  }
+                  performancePickerProps={performancePickerProps}
+                  previousTabKey={featureBinTabKey}
+                  onSetTab={this.setTab}
                 />
               </PivotItem>
               {flights.skipFairness === false && (
@@ -319,8 +323,9 @@ export class FairnessWizard extends React.PureComponent<
                   <FairnessTab
                     dashboardContext={this.state.dashboardContext}
                     fairnessPickerProps={fairnessPickerProps}
-                    onNext={this.setTab.bind(this, reportTabKey)}
-                    onPrevious={this.setTab.bind(this, performanceTabKey)}
+                    nextTabKey={reportTabKey}
+                    previousTabKey={performanceTabKey}
+                    onSetTab={this.setTab}
                   />
                 </PivotItem>
               )}
@@ -341,7 +346,6 @@ export class FairnessWizard extends React.PureComponent<
               featureBinPickerProps={featureBinPickerProps}
               selectedModelIndex={this.state.selectedModelId}
               onHideIntro={this.hideIntro}
-              onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}
         {this.state.activeTabKey === reportTabKey &&
@@ -357,7 +361,6 @@ export class FairnessWizard extends React.PureComponent<
               errorPickerProps={errorPickerProps}
               featureBinPickerProps={featureBinPickerProps}
               onHideIntro={this.hideIntro}
-              onEditConfigs={this.setTab.bind(this, featureBinTabKey)}
             />
           )}
       </Stack>

@@ -110,7 +110,8 @@ class TestModelAnalysis(object):
     def test_model_analysis_binary_mixed_types(self, manager_type):
 
         data_train, data_test, y_train, y_test, categorical_features, \
-            continuous_features, target_name, classes = \
+            continuous_features, target_name, classes, \
+            feature_columns, feature_range_keys = \
             create_adult_income_dataset()
         X_train = data_train.drop([target_name], axis=1)
 
@@ -160,7 +161,7 @@ class TestModelAnalysis(object):
         X_test[LABELS] = y_test
 
         manager_args = {
-            ManagerParams.DESIRED_RANGE: [5, 10],
+            ManagerParams.DESIRED_RANGE: [3, 5],
             ManagerParams.TREATMENT_FEATURES: ['AveRooms'],
             ManagerParams.MAX_CAT_EXPANSION: 12,
             ManagerParams.FEATURE_IMPORTANCE: True
@@ -289,7 +290,7 @@ def validate_state_directory(path, manager_type):
         elif manager_type == ManagerNames.COUNTERFACTUAL:
             assert config_path.exists()
             assert data_path.exists()
-            assert not generators_path.exists()
+            assert generators_path.exists()
         elif manager_type == ManagerNames.ERROR_ANALYSIS:
             assert config_path.exists()
             assert data_path.exists()

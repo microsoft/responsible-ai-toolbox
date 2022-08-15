@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ComboBox, IComboBox, IComboBoxOption } from "@fluentui/react";
 import {
   IExplanationContext,
   IMultiClassBoundedCoordinates,
   IFeatureValueExplanation,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -16,7 +17,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
 export interface IEbmProps {
@@ -71,8 +71,8 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
       return coordinates.scores
         .map((scores, classIndex) => {
           const color =
-            FabricStyles.plotlyColorPalette[
-              classIndex % FabricStyles.plotlyColorPalette.length
+            FluentUIStyles.plotlyColorPalette[
+              classIndex % FluentUIStyles.plotlyColorPalette.length
             ];
           const lowerBounds: IData = {
             line: {
@@ -178,8 +178,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
           }
         } as any
       };
-    },
-    _.isEqual.bind(window)
+    }
   );
   private featureOptions: IComboBoxOption[];
 
@@ -231,7 +230,7 @@ export class EbmExplanation extends React.PureComponent<IEbmProps, IEbmState> {
             options={this.featureOptions}
             ariaLabel={"feature picker"}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            styles={FluentUIStyles.smallDropdownStyle}
           />
         </div>
         <AccessibleChart plotlyProps={plotlyProps} theme={this.props.theme} />

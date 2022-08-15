@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "@fluentui/react";
+import { ITheme, getTheme, mergeStyles } from "@fluentui/react";
 import _ from "lodash";
-import { getTheme, mergeStyles } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";
 import { getHighchartsTheme } from "./getHighchartsTheme";
 import { HighchartReact } from "./HighchartReact";
-import { HighchartsModuleNames, IHighchartsConfig } from "./HighchartTypes";
+import { HighchartsModuleNames } from "./HighchartTypes";
+import { IHighchartsConfig } from "./IHighchartsConfig";
 
 export interface IHighchartWrapperProps {
   chartOptions?: IHighchartsConfig;
@@ -61,6 +61,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
     const className = mergeStyles(
       {
         height: mergedOptions?.chart?.height || undefined,
+        minHeight: custom?.minHeight || undefined,
         width: mergedOptions?.chart?.width || undefined
       },
       this.props.className

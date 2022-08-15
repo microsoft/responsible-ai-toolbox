@@ -1,10 +1,10 @@
 numpy>=1.17.2
 pandas>=0.25.1
 scipy>=1.4.1
-rai-core-flask==0.2.5
+rai-core-flask==0.4.0
 itsdangerous==2.0.1
-jinja2==2.11.3
 scikit-learn>=0.22.1
 lightgbm>=2.0.11
-erroranalysis>=0.1.30
+erroranalysis>=0.3.8
 fairlearn>=0.7.0
+raiutils>=0.2.0

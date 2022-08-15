@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
+import { DefaultButton, IStackTokens, Stack, Text } from "@fluentui/react";
+import { ErrorCohort, ITelemetryEvent, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ColorPalette } from "../../ColorPalette";
@@ -16,20 +16,23 @@ import { INodeDetail } from "../TreeViewRenderer/TreeViewState";
 import { treeLegendStyles } from "./TreeLegend.styles";
 
 export interface ITreeLegendProps {
-  selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
-  nodeDetail: INodeDetail;
-  minPct: number;
-  max: number;
-  showCohortName: boolean;
+  disabledView: boolean;
   isErrorMetric: boolean;
   isEnabled: boolean;
+  minPct: number;
+  max: number;
+  nodeDetail: INodeDetail;
+  onClearCohortSelectionClick: () => void;
+  selectedCohort: ErrorCohort;
   setMetric: (metric: string) => void;
-  disabledView: boolean;
+  showCohortName: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 5 };
 const cellTokens: IStackTokens = { padding: 10 };
+const innerStackTokens: IStackTokens = { childrenGap: 15 };
 
 export class TreeLegend extends React.Component<ITreeLegendProps> {
   private readonly _metricIconId = "metricIconId";
@@ -45,10 +48,22 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               Cohort: {this.props.baseCohort.cohort.name}
             </Text>
           )}
-          <MetricSelector
-            isEnabled={this.props.isEnabled}
-            setMetric={this.props.setMetric}
-          />
+          <Stack tokens={innerStackTokens}>
+            <MetricSelector
+              isEnabled={this.props.isEnabled}
+              setMetric={this.props.setMetric}
+              telemetryHook={this.props.telemetryHook}
+            />
+            <DefaultButton
+              className={classNames.button}
+              text={localization.ErrorAnalysis.TreeLegend.clearSelection}
+              onClick={(): any => this.props.onClearCohortSelectionClick()}
+              disabled={
+                this.props.disabledView ||
+                this.props.selectedCohort.isTemporary === false
+              }
+            />
+          </Stack>
           <Stack>
             <Stack horizontal>
               <div className={classNames.metricBarBlack} />

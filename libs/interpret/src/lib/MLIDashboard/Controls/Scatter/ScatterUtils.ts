@@ -2,6 +2,11 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  DropdownMenuItemType,
+  IDropdownOption
+} from "@fluentui/react";
+import {
   PartialRequired2,
   IExplanationContext,
   IExplanationModelMetadata,
@@ -17,11 +22,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  IComboBoxOption,
-  DropdownMenuItemType,
-  IDropdownOption
-} from "office-ui-fabric-react";
 
 import { IDashboardContext } from "../../ExplanationDashboard";
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
@@ -62,8 +62,7 @@ export class ScatterUtils {
           return prev;
         }, []);
       return result as any;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   public static buildOptions: (
@@ -251,8 +250,7 @@ export class ScatterUtils {
           return result;
         }
       );
-    },
-    _.isEqual.bind(window)
+    }
   );
   private static baseScatterProperties: IPlotlyProperty = {
     config: { displaylogo: false, displayModeBar: false, responsive: true },
@@ -613,7 +611,7 @@ export class ScatterUtils {
   }
 
   private static formatItemTextForAxis(
-    item: IDropdownOption,
+    item: IComboBoxOption,
     modelMetadata: IExplanationModelMetadata
   ): string {
     if (

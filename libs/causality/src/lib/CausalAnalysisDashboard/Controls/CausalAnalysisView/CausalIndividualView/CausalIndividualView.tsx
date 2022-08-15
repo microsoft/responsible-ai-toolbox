@@ -1,27 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Link, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
+  ITelemetryEvent,
   LabelWithCallout,
   MissingParametersPlaceholder,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
-import { CausalIndividualStyles } from "./CausalIndividualStyles";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ICausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
@@ -44,19 +47,26 @@ export class CausalIndividualView extends React.PureComponent<
   public render(): React.ReactNode {
     const styles = CausalIndividualStyles();
     return (
-      <Stack id="causalIndividualView" grow tokens={{ padding: "16px 8px" }}>
+      <Stack
+        id="causalIndividualView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack.Item>
-          <Text variant={"medium"} className={styles.label}>
+          <Text variant={"medium"} className={styles.description}>
             {localization.CausalAnalysis.IndividualView.description}
           </Text>
         </Stack.Item>
-        <Stack.Item>
-          <CausalIndividualChart onDataClick={this.handleOnClick} />
+        <Stack.Item className={styles.individualChart}>
+          <CausalIndividualChart
+            onDataClick={this.handleOnClick}
+            telemetryHook={this.props.telemetryHook}
+          />
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item className={styles.header}>
           <Stack horizontal={false}>
             <Stack.Item>
-              <Text variant={"medium"} className={styles.header}>
+              <Text variant={"medium"}>
                 {localization.CausalAnalysis.IndividualView.directIndividual}
               </Text>
             </Stack.Item>
@@ -65,6 +75,10 @@ export class CausalIndividualView extends React.PureComponent<
                 label={localization.CausalAnalysis.MainMenu.why}
                 calloutTitle={causalCalloutDictionary.confounding.title}
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick
+                }
               >
                 <Text block>
                   {causalCalloutDictionary.confounding.description}
@@ -77,7 +91,6 @@ export class CausalIndividualView extends React.PureComponent<
                 </Link>
               </LabelWithCallout>
             </Stack.Item>
-            {/* <CausalCallout /> */}
           </Stack>
         </Stack.Item>
         <Stack.Item className={styles.individualTable}>

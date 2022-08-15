@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   IFilter,
   ICompositeFilter,
   CohortSource,
   ErrorCohort,
   MetricCohortStats,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
 
 export interface IMatrixAreaProps {
   theme?: ITheme;
@@ -33,4 +34,5 @@ export interface IMatrixAreaProps {
   baseCohort: ErrorCohort;
   updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
   metric: string;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }

@@ -40,6 +40,9 @@
     "dataset-explorer": {
       "tags": []
     },
+    "e2e": {
+      "tags": []
+    },
     "error-analysis": {
       "tags": []
     },
@@ -50,6 +53,9 @@
       "tags": []
     },
     "interpret-text": {
+      "tags": []
+    },
+    "interpret-vision": {
       "tags": []
     },
     "localization": {

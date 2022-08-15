@@ -3,7 +3,7 @@
 
 import { ITheme } from "@fluentui/react";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
 export interface IDependenceData {
   x: number;
@@ -28,6 +28,9 @@ export function getDependencyChartOptions(
       type: "scatter",
       zoomType: "xy"
     },
+    custom: {
+      disableUpdate: true
+    },
     plotOptions: {
       scatter: {
         marker: {
@@ -49,6 +52,7 @@ export function getDependencyChartOptions(
         color: pointColor,
         data,
         name: "",
+        turboThreshold: 0,
         type: "scatter"
       }
     ],

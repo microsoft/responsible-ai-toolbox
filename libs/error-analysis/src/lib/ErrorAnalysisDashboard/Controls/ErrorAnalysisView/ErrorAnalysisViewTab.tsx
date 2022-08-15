@@ -2,20 +2,21 @@
 // Licensed under the MIT License.
 
 import {
-  CohortInfo,
-  defaultModelAssessmentContext,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   CommandBarButton,
   IIconProps,
-  Text,
   Pivot,
   PivotItem,
   Stack,
   Separator
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  CohortInfo,
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ErrorAnalysisOptions } from "../../ErrorAnalysisEnums";
@@ -39,6 +40,7 @@ export interface IErrorAnalysisViewTabProps extends IErrorAnalysisViewProps {
   ) => void;
   selectFeatures: (features: string[]) => void;
   importances: number[];
+  onClearCohortSelectionClick: () => void;
   onSaveCohortClick: () => void;
   selectedKey: ErrorAnalysisOptions;
 }
@@ -69,13 +71,10 @@ export class ErrorAnalysisViewTab extends React.Component<
       <Stack horizontal>
         <Stack
           grow
-          tokens={{ padding: "16px 24px" }}
+          tokens={{ padding: "l1" }}
           className={classNames.errorAnalysis}
         >
-          <Text variant={"xxLarge"} id="errorAnalysisHeader">
-            {localization.ErrorAnalysis.MainMenu.errorAnalysisLabel}
-          </Text>
-          <Stack horizontal>
+          <Stack horizontal className={classNames.errorAnalysisWrapper}>
             <Stack.Item>
               <Pivot
                 onLinkClick={this.handleTabClick}
@@ -115,10 +114,12 @@ export class ErrorAnalysisViewTab extends React.Component<
             matrix={this.props.matrix}
             matrixFeatures={this.props.matrixFeatures}
             errorAnalysisOption={this.props.errorAnalysisOption}
+            onClearCohortSelectionClick={this.props.onClearCohortSelectionClick}
             updateSelectedCohort={this.props.updateSelectedCohort}
             selectedCohort={this.props.selectedCohort}
             baseCohort={this.props.baseCohort}
             showCohortName={this.props.showCohortName}
+            telemetryHook={this.props.telemetryHook}
           />
           <FeatureList
             isOpen={this.state.openFeatureList}
@@ -130,18 +131,14 @@ export class ErrorAnalysisViewTab extends React.Component<
             selectedFeatures={this.props.features}
           />
         </Stack>
-        <Stack tokens={{ padding: "100px 0 0 0" }}>
+        <Stack tokens={{ padding: "l1" }}>
           <Separator vertical styles={{ root: { height: "100%" } }} />
         </Stack>
-        <Stack
-          className={classNames.cohortInfo}
-          tokens={{ padding: "100px 80px 0 0" }}
-        >
+        <Stack className={classNames.cohortInfo} tokens={{ padding: "l1" }}>
           <CohortInfo
             currentCohort={this.context.selectedErrorCohort}
-            onSaveCohortClick={this.props.onSaveCohortClick}
-            includeDividers={false}
             disabledView={this.props.disabledView}
+            onSaveCohortClick={this.props.onSaveCohortClick}
           />
         </Stack>
       </Stack>
@@ -158,9 +155,20 @@ export class ErrorAnalysisViewTab extends React.Component<
       this.setState({ openFeatureList: false });
     }
     this.props.handleErrorDetectorChanged(item);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type:
+        item?.props.itemKey === ErrorAnalysisOptions.HeatMap
+          ? TelemetryEventName.ErrorAnalysisHeatMapTabClick
+          : TelemetryEventName.ErrorAnalysisTreeMapTabClick
+    });
   };
 
   private readonly handleFeatureListClick = (): void => {
     this.setState((prev) => ({ openFeatureList: !prev.openFeatureList }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapFeatureListClick
+    });
   };
 }

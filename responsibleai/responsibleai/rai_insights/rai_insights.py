@@ -12,50 +12,62 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
-from responsibleai._input_processing import _convert_to_list
+from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
+from erroranalysis._internal.process_categoricals import process_categoricals
+from raiutils.data_processing import convert_to_list
+from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import ManagerNames, Metadata, SKLearn
+from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
+from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
 from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
-from responsibleai.utils import _is_classifier
+from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
-_DATA = 'data'
 _PREDICTIONS = 'predictions'
-_DTYPES = 'dtypes'
 _TRAIN = 'train'
 _TEST = 'test'
 _TARGET_COLUMN = 'target_column'
 _TASK_TYPE = 'task_type'
-_MODEL = Metadata.MODEL
-_MODEL_PKL = _MODEL + '.pkl'
-_SERIALIZER = 'serializer'
 _CLASSES = 'classes'
-_MANAGERS = 'managers'
+_FEATURE_COLUMNS = 'feature_columns'
+_FEATURE_METADATA = 'feature_metadata'
+_FEATURE_RANGES = 'feature_ranges'
 _CATEGORICAL_FEATURES = 'categorical_features'
+_CATEGORIES = 'categories'
+_CATEGORY_DICTIONARY = 'category_dictionary'
+_CATEGORICAL_INDEXES = 'categorical_indexes'
+_STRING_IND_DATA = 'string_ind_data'
 _META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
+_COLUMN_NAME = 'column_name'
+_RANGE_TYPE = 'range_type'
+_UNIQUE_VALUES = 'unique_values'
+_MIN_VALUE = 'min_value'
+_MAX_VALUE = 'max_value'
 
 
-class RAIInsights(object):
+class RAIInsights(RAIBaseInsights):
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
     """
 
-    def __init__(self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
-                 target_column: str, task_type: str,
+    def __init__(self, model: Optional[Any], train: pd.DataFrame,
+                 test: pd.DataFrame, target_column: str, task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
-                 maximum_rows_for_test: int = 5000):
+                 maximum_rows_for_test: int = 5000,
+                 feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -83,50 +95,79 @@ class RAIInsights(object):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         categorical_features = categorical_features or []
-        self._validate_model_analysis_input_parameters(
+        self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
             categorical_features=categorical_features,
             classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test)
-        self.model = model
-        self.train = train
-        self.test = test
-        self.target_column = target_column
-        self.task_type = task_type
-        self.categorical_features = categorical_features
-        self._serializer = serializer
         self._classes = RAIInsights._get_classes(
-            task_type=self.task_type,
-            train=self.train,
-            target_column=self.target_column,
+            task_type=task_type,
+            train=train,
+            target_column=target_column,
             classes=classes
         )
+        self._feature_columns = \
+            test.drop(columns=[target_column]).columns.tolist()
+        self._feature_ranges = RAIInsights._get_feature_ranges(
+            test=test, categorical_features=categorical_features,
+            feature_columns=self._feature_columns)
+        self._feature_metadata = feature_metadata
 
+        self.categorical_features = categorical_features
+        self._categories, self._categorical_indexes, \
+            self._category_dictionary, self._string_ind_data = \
+            process_categoricals(
+                all_feature_names=self._feature_columns,
+                categorical_features=self.categorical_features,
+                dataset=test.drop(columns=[target_column]))
+
+        super(RAIInsights, self).__init__(
+            model, train, test, target_column, task_type,
+            serializer)
+
+        self._try_add_data_balance()
+
+    def _initialize_managers(self):
+        """Initializes the managers.
+
+        Initialized the causal, counterfactual, error analysis
+        and explainer managers.
+        """
         self._causal_manager = CausalManager(
-            train, test, target_column, task_type, categorical_features)
+            self.train, self.test, self.target_column,
+            self.task_type, self.categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type,
-            categorical_features=categorical_features)
+            model=self.model, train=self.train, test=self.test,
+            target_column=self.target_column, task_type=self.task_type,
+            categorical_features=self.categorical_features)
+
+        self._data_balance_manager = DataBalanceManager(
+            train=self.train, test=self.test, target_column=self.target_column,
+            classes=self._classes, task_type=self.task_type)
 
         self._error_analysis_manager = ErrorAnalysisManager(
-            model, test, target_column,
+            self.model, self.test, self.target_column,
             self._classes,
-            categorical_features)
+            self.categorical_features)
 
         self._explainer_manager = ExplainerManager(
-            model, train, test,
-            target_column,
+            self.model, self.train, self.test,
+            self.target_column,
             self._classes,
-            categorical_features=categorical_features)
+            categorical_features=self.categorical_features)
 
         self._managers = [self._causal_manager,
                           self._counterfactual_manager,
+                          self._data_balance_manager,
                           self._error_analysis_manager,
                           self._explainer_manager]
 
@@ -143,12 +184,24 @@ class RAIInsights(object):
         else:
             return None
 
-    def _validate_model_analysis_input_parameters(
+    def _try_add_data_balance(self):
+        """
+        Add data balance measures to be computed on categorical features
+        if it is a classification task.
+        """
+        if self.task_type == ModelTask.CLASSIFICATION and \
+                len(self.categorical_features) > 0 and \
+                self._classes is not None:
+            self._data_balance_manager.add(
+                cols_of_interest=self.categorical_features)
+
+    def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str, task_type: str,
             categorical_features: List[str], classes: np.ndarray,
             serializer,
-            maximum_rows_for_test: int):
+            maximum_rows_for_test: int,
+            feature_metadata: Optional[FeatureMetadata] = None):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -192,6 +245,10 @@ class RAIInsights(object):
                 'INVALID-MODEL-WARNING: No valid model is supplied. '
                 'The explanations, error analysis and counterfactuals '
                 'may not work')
+            if serializer is not None:
+                raise UserConfigValidationException(
+                    'No valid model is specified but model '
+                    'serializer provided.')
 
         if serializer is not None:
             if not hasattr(serializer, 'save'):
@@ -320,8 +377,8 @@ class RAIInsights(object):
 
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
-                        warnings.warn(
-                            'INVALID-TASK-TYPE-WARNING: The regression model'
+                        raise UserConfigValidationException(
+                            'The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
         else:
@@ -329,6 +386,15 @@ class RAIInsights(object):
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
             )
+
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got {0}".format(
+                        type(feature_metadata)))
+
+            feature_metadata.validate_feature_metadata_with_user_features(
+                list(train.columns))
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -383,31 +449,36 @@ class RAIInsights(object):
         """
         return self._explainer_manager
 
-    def compute(self):
-        """Calls compute on each of the managers."""
-        for manager in self._managers:
-            manager.compute()
+    def get_filtered_test_data(self, filters, composite_filters,
+                               include_original_columns_only=False):
+        """Get the filtered test data based on cohort filters.
 
-    def list(self):
-        """List information about each of the managers.
-        :return: Information about each of the managers.
-        :rtype: dict
+        :param filters: The filters to apply.
+        :type filters: list[Filter]
+        :param composite_filters: The composite filters to apply.
+        :type composite_filters: list[CompositeFilter]
+        :param include_original_columns_only: Whether to return the original
+                                              data columns.
+        :type include_original_columns_only: bool
+        :return: The filtered test data.
+        :rtype: pandas.DataFrame
         """
-        configs = {}
-        for manager in self._managers:
-            configs[manager.name] = manager.list()
-        return configs
+        pred_y = self.model.predict(
+            self.test.drop(columns=[self.target_column]))
+        filter_data_with_cohort = FilterDataWithCohortFilters(
+            model=self.model,
+            dataset=self.test.drop(columns=[self.target_column]),
+            features=self.test.drop(columns=[self.target_column]).columns,
+            categorical_features=self.categorical_features,
+            categories=self._categories,
+            true_y=self.test[self.target_column],
+            pred_y=pred_y,
+            model_task=self.task_type)
 
-    def get(self):
-        """List information about each of the managers.
-
-        :return: Information about each of the managers.
-        :rtype: dict
-        """
-        configs = {}
-        for manager in self._managers:
-            configs[manager.name] = manager.get()
-        return configs
+        return filter_data_with_cohort.filter_data_from_cohort(
+            filters=filters,
+            composite_filters=composite_filters,
+            include_original_columns_only=include_original_columns_only)
 
     def get_data(self):
         """Get all data as RAIInsightsData object
@@ -427,8 +498,17 @@ class RAIInsights(object):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
         dashboard_dataset.categorical_features = self.categorical_features
-        dashboard_dataset.class_names = _convert_to_list(
+        dashboard_dataset.class_names = convert_to_list(
             self._classes)
+
+        if self._feature_metadata is not None:
+            dashboard_dataset.feature_metadata = \
+                self._feature_metadata.to_dict()
+        else:
+            dashboard_dataset.feature_metadata = None
+
+        dashboard_dataset.data_balance_measures = \
+            self._data_balance_manager.get_data()
 
         predicted_y = None
         feature_length = None
@@ -439,7 +519,7 @@ class RAIInsights(object):
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
         try:
-            list_dataset = _convert_to_list(dataset)
+            list_dataset = convert_to_list(dataset)
         except Exception as ex:
             raise ValueError(
                 "Unsupported dataset type") from ex
@@ -451,7 +531,7 @@ class RAIInsights(object):
                 "dataset type"
                 raise ValueError(msg) from ex
             try:
-                predicted_y = _convert_to_list(predicted_y)
+                predicted_y = convert_to_list(predicted_y)
             except Exception as ex:
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
@@ -484,42 +564,32 @@ class RAIInsights(object):
                dashboard_dataset.class_names is not None):
                 true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
-            dashboard_dataset.true_y = _convert_to_list(true_y)
+            dashboard_dataset.true_y = convert_to_list(true_y)
 
         features = dataset.columns
 
         if features is not None:
-            features = _convert_to_list(features)
+            features = convert_to_list(features)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if _is_classifier(self.model) and dataset is not None:
+        if is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex
             try:
-                probability_y = _convert_to_list(probability_y)
+                probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
                     "Model predict_proba output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
-
-    def _write_to_file(self, file_path, content):
-        """Save the string content to the given file path.
-        :param file_path: The file path to save the content to.
-        :type file_path: str
-        :param content: The string content to save.
-        :type content: str
-        """
-        with open(file_path, 'w') as file:
-            file.write(content)
 
     def _save_predictions(self, path):
         """Save the predict() and predict_proba() output.
@@ -548,29 +618,6 @@ class RAIInsights(object):
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(predict_proba_output.tolist()))
 
-    def _save_data(self, path):
-        """Save the copy of raw data (train and test sets) and
-           their related metadata.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        data_directory = Path(path) / _DATA
-        data_directory.mkdir(parents=True, exist_ok=True)
-        dtypes = self.train.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory /
-                            (_TRAIN + _DTYPES + _JSON_EXTENSION),
-                            json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
-                            self.train.to_json(orient='split'))
-
-        dtypes = self.test.dtypes.astype(str).to_dict()
-        self._write_to_file(data_directory /
-                            (_TEST + _DTYPES + _JSON_EXTENSION),
-                            json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
-                            self.test.to_json(orient='split'))
-
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
            task type and the classes (if any).
@@ -579,85 +626,43 @@ class RAIInsights(object):
         :type path: str
         """
         top_dir = Path(path)
-        classes = _convert_to_list(self._classes)
+        classes = convert_to_list(self._classes)
+        feature_metadata_dict = None
+        if self._feature_metadata is not None:
+            feature_metadata_dict = self._feature_metadata.to_dict()
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
             _CATEGORICAL_FEATURES: self.categorical_features,
-            _CLASSES: classes
+            _CLASSES: classes,
+            _FEATURE_COLUMNS: self._feature_columns,
+            _FEATURE_RANGES: self._feature_ranges,
+            _FEATURE_METADATA: feature_metadata_dict
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
 
-    def _save_model(self, path):
-        """Save the model and the serializer (if any).
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        top_dir = Path(path)
-        if self._serializer is not None:
-            # save the model
-            self._serializer.save(self.model, top_dir)
-            # save the serializer
-            with open(top_dir / _SERIALIZER, 'wb') as file:
-                pickle.dump(self._serializer, file)
-        else:
-            if self.model is not None:
-                has_setstate = hasattr(self.model, '__setstate__')
-                has_getstate = hasattr(self.model, '__getstate__')
-                if not (has_setstate and has_getstate):
-                    raise ValueError(
-                        "Model must be picklable or a custom serializer must"
-                        " be specified")
-            with open(top_dir / _MODEL_PKL, 'wb') as file:
-                pickle.dump(self.model, file)
-
-    def _save_managers(self, path):
-        """Save the state of individual managers.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        top_dir = Path(path)
-        # save each of the individual managers
-        for manager in self._managers:
-            manager._save(top_dir / manager.name)
-
-    def save(self, path):
-        """Save the RAIInsights to the given path.
-
-        :param path: The directory path to save the RAIInsights to.
-        :type path: str
-        """
-        self._save_managers(path)
-        self._save_data(path)
-        self._save_metadata(path)
-        self._save_model(path)
-        self._save_predictions(path)
-
     @staticmethod
-    def _load_data(inst, path):
-        """Load the raw data (train and test sets).
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to data location.
-        :type path: str
-        """
-        data_directory = Path(path) / _DATA
-        with open(data_directory /
-                  (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
-            types = json.load(file)
-        with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
-            train = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TRAIN] = train
-        with open(data_directory /
-                  (_TEST + _DTYPES + _JSON_EXTENSION), 'r') as file:
-            types = json.load(file)
-        with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
-            test = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TEST] = test
+    def _get_feature_ranges(test, categorical_features, feature_columns):
+        """Get feature ranges like min, max and unique values
+        for all columns"""
+        result = []
+        for col in feature_columns:
+            res_object = {}
+            if (col in categorical_features):
+                unique_value = test[col].unique()
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "categorical"
+                res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            else:
+                min_value = float(test[col].min())
+                max_value = float(test[col].max())
+                res_object[_COLUMN_NAME] = col
+                res_object[_RANGE_TYPE] = "integer"
+                res_object[_MIN_VALUE] = min_value
+                res_object[_MAX_VALUE] = max_value
+            result.append(res_object)
+        return result
 
     @staticmethod
     def _load_metadata(inst, path):
@@ -688,60 +693,30 @@ class RAIInsights(object):
             classes=classes
         )
 
-    @staticmethod
-    def _load_model(inst, path):
-        """Load the model.
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to model location.
-        :type path: str
-        """
-        top_dir = Path(path)
-        serializer_path = top_dir / _SERIALIZER
-        if serializer_path.exists():
-            with open(serializer_path, 'rb') as file:
-                serializer = pickle.load(file)
-            inst.__dict__['_' + _SERIALIZER] = serializer
-            inst.__dict__[_MODEL] = serializer.load(top_dir)
+        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
+        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
+        if meta[_FEATURE_METADATA] is None:
+            inst.__dict__['_' + _FEATURE_METADATA] = None
         else:
-            inst.__dict__['_' + _SERIALIZER] = None
-            try:
-                with open(top_dir / _MODEL_PKL, 'rb') as file:
-                    inst.__dict__[_MODEL] = pickle.load(file)
-            except Exception:
-                warnings.warn(
-                    'ERROR-LOADING-USER-MODEL: '
-                    'There was an error loading the user model. '
-                    'Some of RAI dashboard features may not work.')
-                inst.__dict__[_MODEL] = None
+            inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
+                identity_feature_name=meta[_FEATURE_METADATA][
+                    'identity_feature_name'],
+                datetime_features=meta[_FEATURE_METADATA][
+                    'datetime_features'],
+                categorical_features=meta[_FEATURE_METADATA][
+                    'categorical_features'],
+                dropped_features=meta[_FEATURE_METADATA][
+                    'dropped_features'],)
 
-    @staticmethod
-    def _load_managers(inst, path):
-        """Load the model.
-
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
-        :param path: The directory path to manager location.
-        :type path: str
-        """
-        top_dir = Path(path)
-        # load each of the individual managers
-        manager_map = {
-            ManagerNames.CAUSAL: CausalManager,
-            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
-            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
-            ManagerNames.EXPLAINER: ExplainerManager,
-        }
-        managers = []
-        for manager_name, manager_class in manager_map.items():
-            full_name = f'_{manager_name}_manager'
-            manager_dir = top_dir / manager_name
-            manager = manager_class._load(manager_dir, inst)
-            inst.__dict__[full_name] = manager
-            managers.append(manager)
-
-        inst.__dict__['_' + _MANAGERS] = managers
+        inst.__dict__['_' + _CATEGORIES], \
+            inst.__dict__['_' + _CATEGORICAL_INDEXES], \
+            inst.__dict__['_' + _CATEGORY_DICTIONARY], \
+            inst.__dict__['_' + _STRING_IND_DATA] = \
+            process_categoricals(
+                all_feature_names=inst.__dict__['_' + _FEATURE_COLUMNS],
+                categorical_features=inst.__dict__[_CATEGORICAL_FEATURES],
+                dataset=inst.__dict__[_TEST].drop(columns=[
+                    inst.__dict__[_TARGET_COLUMN]]))
 
     @staticmethod
     def load(path):
@@ -756,10 +731,16 @@ class RAIInsights(object):
         # function, similar to pickle
         inst = RAIInsights.__new__(RAIInsights)
 
+        manager_map = {
+            ManagerNames.CAUSAL: CausalManager,
+            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            ManagerNames.DATA_BALANCE: DataBalanceManager,
+            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
+            ManagerNames.EXPLAINER: ExplainerManager,
+        }
+
         # load current state
-        RAIInsights._load_data(inst, path)
-        RAIInsights._load_metadata(inst, path)
-        RAIInsights._load_model(inst, path)
-        RAIInsights._load_managers(inst, path)
+        RAIBaseInsights._load(path, inst, manager_map,
+                              RAIInsights._load_metadata)
 
         return inst

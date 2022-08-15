@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  mergeStyleSets,
-  IStyle,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+import { mergeStyleSets, IStyle, IProcessedStyleSet } from "@fluentui/react";
 
 export interface ICohortListStyles {
   link: IStyle;
@@ -14,7 +10,7 @@ export interface ICohortListStyles {
 export const cohortListStyles = (): IProcessedStyleSet<ICohortListStyles> => {
   return mergeStyleSets<ICohortListStyles>({
     link: {
-      fontSize: "12px"
+      fontSize: "14px"
     }
   });
 };

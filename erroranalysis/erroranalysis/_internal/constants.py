@@ -3,14 +3,18 @@
 
 from enum import Enum
 
-PRED_Y = 'pred_y'
-ROW_INDEX = 'Index'
-TRUE_Y = 'true_y'
+ARG = 'arg'
+COLUMN = 'column'
+COMPOSITE_FILTERS = 'compositeFilters'
 DIFF = 'diff'
-SPLIT_INDEX = 'split_index'
-SPLIT_FEATURE = 'split_feature'
 LEAF_INDEX = 'leaf_index'
 METHOD = 'method'
+OPERATION = 'operation'
+PRED_Y = 'pred_y'
+ROW_INDEX = 'Index'
+SPLIT_FEATURE = 'split_feature'
+SPLIT_INDEX = 'split_index'
+TRUE_Y = 'true_y'
 
 
 class CohortFilterMethods:
@@ -25,6 +29,14 @@ class CohortFilterMethods:
     METHOD_LESS_AND_EQUAL = 'less and equal'
     METHOD_GREATER_AND_EQUAL = 'greater and equal'
     METHOD_RANGE = 'in the range of'
+
+
+class CohortFilterOps:
+    """Cohort filter operations.
+    """
+
+    AND = 'and'
+    OR = 'or'
 
 
 class ModelTask(str, Enum):
@@ -56,8 +68,9 @@ class Metrics(str, Enum):
     'mean_squared_error', 'median_absolute_error',
     and 'r2_score'.  The binary classification
     metrics are 'f1_score', 'precision_score',
-    'recall_score', 'accuracy_score' and
-    'error_rate'. The multiclass classification
+    'recall_score', 'accuracy_score', 'error_rate',
+    'false negative rate', 'false positive rate' and
+    'selection rate'. The multiclass classification
     metrics are 'macro_precision_score',
     'micro_precision_score', 'macro_recall_score',
     'micro_recall_score', 'f1_score',
@@ -78,6 +91,32 @@ class Metrics(str, Enum):
     MACRO_RECALL_SCORE = 'macro_recall_score'
     MICRO_RECALL_SCORE = 'micro_recall_score'
     ERROR_RATE = 'error_rate'
+    FALSE_POSITIVE_RATE = 'false_positive_rate'
+    FALSE_NEGATIVE_RATE = 'false_negative_rate'
+    SELECTION_RATE = 'selection_rate'
+
+
+class MetricKeys(str, Enum):
+    """Provide keys for properties related to metrics.
+    """
+    METRIC_NAME = 'metricName'
+    METRIC_VALUE = 'metricValue'
+
+
+class RootKeys(str, Enum):
+    """Provide keys for the root cohort.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
+    TOTAL_SIZE = 'totalSize'
+    ERROR_COVERAGE = 'errorCoverage'
+
+
+class TreeNode(str, Enum):
+    """Provide the tree node properties.
+    """
+    METRIC_NAME = MetricKeys.METRIC_NAME.value
+    METRIC_VALUE = MetricKeys.METRIC_VALUE.value
 
 
 metric_to_display_name = {
@@ -95,7 +134,10 @@ metric_to_display_name = {
     Metrics.RECALL_SCORE: 'Recall score',
     Metrics.MACRO_RECALL_SCORE: 'Macro recall score',
     Metrics.MICRO_RECALL_SCORE: 'Micro recall score',
-    Metrics.ERROR_RATE: 'Error rate'
+    Metrics.ERROR_RATE: 'Error rate',
+    Metrics.FALSE_POSITIVE_RATE: 'False positive rate',
+    Metrics.FALSE_NEGATIVE_RATE: 'False negative rate',
+    Metrics.SELECTION_RATE: 'Selection rate'
 }
 
 
@@ -121,3 +163,29 @@ recall_metrics = {Metrics.RECALL_SCORE,
 f1_metrics = {Metrics.F1_SCORE,
               Metrics.MACRO_F1_SCORE,
               Metrics.MICRO_F1_SCORE}
+
+
+binary_classification_metrics = [
+    Metrics.ACCURACY_SCORE,
+    Metrics.F1_SCORE, Metrics.PRECISION_SCORE,
+    Metrics.RECALL_SCORE, Metrics.ERROR_RATE,
+    Metrics.FALSE_POSITIVE_RATE,
+    Metrics.FALSE_NEGATIVE_RATE,
+    Metrics.SELECTION_RATE]
+
+
+regression_metrics = [
+    Metrics.MEAN_ABSOLUTE_ERROR,
+    Metrics.MEAN_SQUARED_ERROR,
+    Metrics.MEDIAN_ABSOLUTE_ERROR,
+    Metrics.R2_SCORE]
+
+
+multiclass_classification_metrics = [
+    Metrics.MACRO_PRECISION_SCORE,
+    Metrics.MICRO_PRECISION_SCORE,
+    Metrics.MACRO_RECALL_SCORE,
+    Metrics.MICRO_RECALL_SCORE,
+    Metrics.F1_SCORE,
+    Metrics.ACCURACY_SCORE,
+    Metrics.ERROR_RATE]

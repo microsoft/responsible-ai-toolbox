@@ -1,14 +1,24 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "Null.tsx", "JointDataset.ts"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "no-restricted-syntax": [
+          "error",
+          {
+            "message": "Please don't use bind. Prefer use arrow function.",
+            "selector": "MemberExpression > Identifier[name='bind']"
+          }
+        ]
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {
+        "max-lines": "error"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

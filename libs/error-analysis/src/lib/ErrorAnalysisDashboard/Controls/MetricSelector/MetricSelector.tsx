@@ -1,18 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Dropdown, IDropdownOption, IDropdownStyles } from "@fluentui/react";
 import {
   Metrics,
   ModelTypes,
   ModelAssessmentContext,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Dropdown,
-  IDropdownOption,
-  IDropdownStyles
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";
@@ -20,6 +19,7 @@ import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";
 export interface IMetricSelectorProps {
   isEnabled: boolean;
   setMetric: (metric: string) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class MetricSelector extends React.Component<IMetricSelectorProps> {
@@ -79,6 +79,10 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
   ): void => {
     if (item) {
       this.props.setMetric(item.key.toString());
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.ErrorAnalysisNewMetricSelected
+      });
     }
   };
 }

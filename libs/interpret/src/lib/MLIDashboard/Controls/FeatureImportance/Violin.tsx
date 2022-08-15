@@ -2,10 +2,20 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  DefaultButton,
+  IconButton,
+  Callout,
+  IDropdownOption,
+  Slider
+} from "@fluentui/react";
+import {
   IExplanationContext,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -15,16 +25,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  DefaultButton,
-  IconButton,
-  Callout,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  Slider
-} from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -92,8 +92,7 @@ export class Violin extends React.PureComponent<
       }
       plotlyProps.data = computedSeries;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildViolinPlotlyProps: (
@@ -143,8 +142,8 @@ export class Violin extends React.PureComponent<
             singleSeries.offsetgroup = className;
             singleSeries.line = {
               color:
-                FabricStyles.plotlyColorPalette[
-                  classIndex % FabricStyles.plotlyColorPalette.length
+                FluentUIStyles.plotlyColorPalette[
+                  classIndex % FluentUIStyles.plotlyColorPalette.length
                 ]
             };
             if (classIndex >= Violin.maxDefaultSeries) {
@@ -169,8 +168,7 @@ export class Violin extends React.PureComponent<
         plotlyProps.layout.showlegend = false;
       }
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static getClassesArray: (
@@ -189,8 +187,7 @@ export class Violin extends React.PureComponent<
         default:
           return new Array(data.localExplanation?.values.length).fill(0);
       }
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static violinPlotlyProps: IPlotlyProperty = {
@@ -344,10 +341,10 @@ export class Violin extends React.PureComponent<
               className={violinStyles.pathSelector}
               selectedKey={this.props.config.displayMode}
               onChange={this.setChart}
-              options={this.props.chartTypeOptions}
+              options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
             {this.props.dashboardContext.explanationContext.modelMetadata
               .modelType !== ModelTypes.Regression &&
@@ -360,7 +357,7 @@ export class Violin extends React.PureComponent<
                   options={this.groupByOptions}
                   ariaLabel={"chart type picker"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               )}
             <div className={violinStyles.sliderControl}>
@@ -418,7 +415,7 @@ export class Violin extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}

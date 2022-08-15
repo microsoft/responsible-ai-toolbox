@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 
 import {
-  IExplanationModelMetadata,
-  ModelTypes,
-  JointDataset,
-  ModelExplanationUtils
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   DirectionalHint,
   IconButton,
   ITooltipProps,
   Text,
   TooltipDelay,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IExplanationModelMetadata,
+  ModelTypes,
+  JointDataset,
+  ModelExplanationUtils
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { WhatIfConstants } from "./WhatIfConstants";
@@ -49,7 +49,7 @@ export class ExistingPredictionLabels extends React.Component<IExistingPredictio
         let tempPredictedProb: number | undefined = undefined;
         if (
           this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]
-            .treatAsCategorical
+            ?.treatAsCategorical
         ) {
           const categoricalValues =
             this.props.jointDataset.metaDict[JointDataset.PredictedYLabel]

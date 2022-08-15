@@ -30,6 +30,18 @@ class TestErrorReport(object):
                                categorical_features,
                                expect_user_warnings=alter_feature_names)
 
+    def test_error_report_iris_numpy_int64_features(self):
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+        # Test with numpy feature indexes instead of string feature names
+        feature_names = range(0, X_train.shape[1])
+        feature_names = [np.int64(i) for i in feature_names]
+        models = create_models_classification(X_train, y_train)
+
+        for model in models:
+            categorical_features = []
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features)
+
     def test_error_report_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
             create_cancer_data()
@@ -51,7 +63,9 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features)
 
-    def test_error_report_housing_pandas(self):
+    @pytest.mark.parametrize('filter_features',
+                             [None, [], ['MedInc', 'HouseAge']])
+    def test_error_report_housing_pandas(self, filter_features):
         X_train, X_test, y_train, y_test, feature_names = \
             create_housing_data()
         X_train = create_dataframe(X_train, feature_names)
@@ -61,7 +75,8 @@ class TestErrorReport(object):
         for model in models:
             categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               categorical_features,
+                               filter_features=filter_features)
 
 
 def is_valid_uuid(id):
@@ -73,7 +88,8 @@ def is_valid_uuid(id):
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features, expect_user_warnings=False):
+                       categorical_features, expect_user_warnings=False,
+                       filter_features=None):
     if expect_user_warnings and pd.__version__[0] == '0':
         with pytest.warns(UserWarning,
                           match='which has issues with pandas version'):
@@ -84,7 +100,7 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
                                        feature_names,
                                        categorical_features)
-    report1 = model_analyzer.create_error_report(filter_features=None,
+    report1 = model_analyzer.create_error_report(filter_features,
                                                  max_depth=3,
                                                  num_leaves=None,
                                                  compute_importances=True)
@@ -107,6 +123,12 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert ea_deserialized.tree_features == report1.tree_features
     assert ea_deserialized.matrix_features == report1.matrix_features
     assert ea_deserialized.importances == report1.importances
+    assert ea_deserialized.root_stats == report1.root_stats
+
+    if not filter_features:
+        assert ea_deserialized.matrix is None
+    else:
+        assert ea_deserialized.matrix is not None
 
     # validate error report does not modify original dataset in ModelAnalyzer
     if isinstance(X_test, pd.DataFrame):

@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -12,7 +12,7 @@ import {
   ModelTypes
 } from "../Interfaces/IExplanationContext";
 import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 import { getDependenceData } from "../util/getDependenceData";
 import { getDependencyChartOptions } from "../util/getDependencyChartOptions";
 import { IGenericChartProps } from "../util/IGenericChartProps";
@@ -29,7 +29,6 @@ export interface IFeatureImportanceDependenceProps {
   metadata: IExplanationModelMetadata;
   selectedWeight: WeightVectorOption;
   selectedWeightLabel: string;
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
@@ -37,8 +36,8 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
     const classNames = dependencePlotStyles();
     if (this.props.chartProps === undefined) {
       return (
-        <div className={classNames.secondaryChartPlacolderBox}>
-          <div className={classNames.secondaryChartPlacolderSpacer}>
+        <div className={classNames.secondaryChartPlaceholderBox}>
+          <div className={classNames.secondaryChartPlaceholderSpacer}>
             <Text variant="large" className={classNames.faintText}>
               {localization.Interpret.DependencePlot.placeholder}
             </Text>
@@ -56,18 +55,18 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
             ].label
           } : ${this.props.selectedWeightLabel}`;
     return (
-      <div className={classNames.DependencePlot}>
-        <div className={classNames.chartWithAxes}>
-          <div className={classNames.chartWithVertical}>
-            <div className={classNames.verticalAxis}>
+      <Stack horizontal={false} className={classNames.DependencePlot}>
+        <Stack.Item className={classNames.chartWithVertical}>
+          <Stack horizontal className={classNames.chartWithVertical}>
+            <Stack.Item className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
-                <Text variant={"medium"} block>
+                <Text variant={"medium"} block className={classNames.boldText}>
                   {localization.Interpret.DependencePlot.featureImportanceOf}
                 </Text>
                 <Text variant={"medium"}>{yAxisLabel}</Text>
               </div>
-            </div>
-            <div className={classNames.chart}>
+            </Stack.Item>
+            <Stack.Item className={classNames.chart}>
               <BasicHighChart
                 configOverride={getDependencyChartOptions(
                   getDependenceData(
@@ -78,26 +77,26 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
-                  FabricStyles.fabricColorPalette[this.props.cohortIndex],
+                  FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
               />
-            </div>
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
+        <Stack.Item className={classNames.horizontalAxisWithPadding}>
+          <div className={classNames.paddingDiv} />
+          <div className={classNames.horizontalAxis}>
+            <Text variant={"medium"}>
+              {
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.xAxis.property
+                ].label
+              }
+            </Text>
           </div>
-          <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <Text variant={"medium"}>
-                {
-                  this.props.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].label
-                }
-              </Text>
-            </div>
-          </div>
-        </div>
-      </div>
+        </Stack.Item>
+      </Stack>
     );
   }
 }

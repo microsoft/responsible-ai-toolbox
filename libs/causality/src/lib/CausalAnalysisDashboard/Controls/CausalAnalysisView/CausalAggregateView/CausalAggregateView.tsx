@@ -1,24 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Link, Stack, Text } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  ITelemetryEvent,
   LabelWithCallout,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Link, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
+import { CausalAggregateStyles } from "./CausalAggregate.styles";
 import { CausalAggregateChart } from "./CausalAggregateChart";
-import { CausalAggregateStyles } from "./CausalAggregateStyles";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class CausalAggregateView extends React.PureComponent<ICausalAggregateViewProps> {
@@ -29,8 +33,13 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
     this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
+
     return (
-      <Stack id="causalAggregateView" grow tokens={{ padding: "16px 8px" }}>
+      <Stack
+        id="causalAggregateView"
+        grow
+        tokens={{ childrenGap: "l1", padding: "8px" }}
+      >
         <Stack horizontal={false}>
           <Stack.Item>
             <Text variant={"medium"} className={styles.label}>
@@ -47,6 +56,10 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
               label={localization.CausalAnalysis.MainMenu.why}
               calloutTitle={causalCalloutDictionary.confounding.title}
               type="button"
+              telemetryHook={this.props.telemetryHook}
+              calloutEventName={
+                TelemetryEventName.AggregateCausalWhyIncludeConfoundingFeaturesCalloutClick
+              }
             >
               <Text block>
                 {causalCalloutDictionary.confounding.description}
@@ -60,15 +73,74 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
             </LabelWithCallout>
           </Stack.Item>
         </Stack>
-        <Stack>
-          <Stack.Item className={styles.table}>
-            <CausalAggregateTable data={this.props.data.global_effects} />
+        <Stack horizontal verticalFill className={styles.container}>
+          <Stack.Item grow className={styles.leftPane}>
+            <Stack horizontal={false}>
+              <Stack.Item>
+                <CausalAggregateTable data={this.props.data.global_effects} />
+              </Stack.Item>
+              <Stack.Item>
+                <CausalAggregateChart data={this.props.data.global_effects} />
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
-          <Stack.Item>
-            <CausalAggregateChart data={this.props.data.global_effects} />
+          <Stack.Item grow className={styles.rightPane}>
+            <Stack horizontal={false}>
+              <Stack.Item className={styles.label}>
+                <Text variant={"xLarge"} className={styles.header}>
+                  {localization.CausalAnalysis.AggregateView.continuous}
+                </Text>
+                {this.getContinuousDescription()}
+              </Stack.Item>
+              <Stack.Item className={styles.label}>
+                <Text variant={"xLarge"} className={styles.header}>
+                  {localization.CausalAnalysis.AggregateView.binary}
+                </Text>
+                {this.getBinaryDescription()}
+              </Stack.Item>
+              <Stack.Item className={styles.lasso}>
+                {localization.CausalAnalysis.AggregateView.lasso}{" "}
+                <Link
+                  href="https://econml.azurewebsites.net/spec/estimation/dml.html"
+                  target="_blank"
+                >
+                  {localization.CausalAnalysis.AggregateView.here}
+                </Link>
+              </Stack.Item>
+            </Stack>
           </Stack.Item>
         </Stack>
       </Stack>
     );
+  }
+
+  private getContinuousDescription(): string {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
+      let positiveClass = "1";
+      if (this.context.dataset.class_names !== undefined) {
+        positiveClass = this.context.dataset.class_names[1];
+      }
+
+      return localization.formatString(
+        localization.CausalAnalysis.AggregateView.continuousDescription,
+        positiveClass
+      );
+    }
+    return localization.CausalAnalysis.AggregateView
+      .continuousRegressionDescription;
+  }
+
+  private getBinaryDescription(): string {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
+      let positiveClass = "1";
+      if (this.context.dataset.class_names !== undefined) {
+        positiveClass = this.context.dataset.class_names[1];
+      }
+      return localization.formatString(
+        localization.CausalAnalysis.AggregateView.binaryDescription,
+        positiveClass
+      );
+    }
+    return localization.CausalAnalysis.AggregateView.regressionDescription;
   }
 }

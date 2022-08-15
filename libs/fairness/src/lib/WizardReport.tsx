@@ -2,14 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  IMetricResponse,
-  PredictionTypes,
-  IFairnessResponse,
-  IBounds
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { Dictionary } from "lodash";
-import {
   IDropdownOption,
   Stack,
   ActionButton,
@@ -18,7 +10,15 @@ import {
   MessageBar,
   MessageBarType,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  IMetricResponse,
+  PredictionTypes,
+  IFairnessResponse,
+  IBounds
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 import React from "react";
 
 import { DropdownBar } from "./Controls/DropdownBar";
@@ -298,13 +298,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
       this.props.onChartClick();
     }
   };
-
-  // private readonly onEditConfigs = (): void => {
-  //   if (this.props.modelCount > 1) {
-  //     this.props.onChartClick(undefined);
-  //   }
-  //   this.props.onEditConfigs();
-  // };
 
   private readonly updateChartKey = (chartKey: string): void => {
     this.setState({ chartKey });

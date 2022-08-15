@@ -2,19 +2,29 @@
 # Licensed under the MIT License.
 
 import time
+from enum import Enum
 
+import pandas as pd
 import pytest
 from common_utils import (create_adult_census_data,
                           create_binary_classification_dataset,
+                          create_cancer_data, create_diabetes_data,
                           create_iris_data, create_kneighbors_classifier,
                           create_models_classification,
+                          create_simple_titanic_data,
                           create_sklearn_random_forest_regressor,
-                          replicate_dataset)
+                          create_titanic_pipeline, replicate_dataset)
 
-from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, PRED_Y,
+from erroranalysis._internal.cohort_filter import filter_from_cohort
+from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
+                                               DIFF, LEAF_INDEX, METHOD,
+                                               OPERATION, PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
-                                               TRUE_Y, Metrics)
-from erroranalysis._internal.error_analyzer import ModelAnalyzer
+                                               TRUE_Y, CohortFilterMethods,
+                                               CohortFilterOps, Metrics,
+                                               ModelTask)
+from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
+                                                    PredictionsAnalyzer)
 from erroranalysis._internal.surrogate_error_tree import (
     TreeSide, cache_subtree_features, create_surrogate_model,
     get_categorical_info, get_max_split_index, traverse)
@@ -23,28 +33,40 @@ SIZE = 'size'
 PARENTID = 'parentId'
 ERROR = 'error'
 ID = 'id'
+STRING_INDEX = 'string_index'
+INTERNAL_COUNT = 'internal_count'
+LEAF_COUNT = 'leaf_count'
+
+
+class AnalyzerType(Enum):
+    """Enum for the type of error analyzer to use."""
+    MODEL = "Model"
+    PREDICTIONS = "Predictions"
 
 
 class TestSurrogateErrorTree(object):
 
-    def test_surrogate_error_tree_iris(self):
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_surrogate_error_tree_iris(self, analyzer_type):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
         models = create_models_classification(X_train, y_train)
 
         for model in models:
-            categorical_features = []
             run_error_analyzer(model, X_test, y_test, feature_names,
-                               categorical_features)
+                               analyzer_type)
 
-    def test_surrogate_error_tree_int_categorical(self):
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_surrogate_error_tree_int_categorical(self, analyzer_type):
         X_train, X_test, y_train, y_test, categorical_features = \
             create_adult_census_data()
 
         model = create_kneighbors_classifier(X_train, y_train)
 
         run_error_analyzer(model, X_test, y_test, list(X_train.columns),
-                           categorical_features)
+                           analyzer_type, categorical_features)
 
     def test_large_data_surrogate_error_tree(self):
         # validate tree trains quickly for large data
@@ -57,8 +79,7 @@ class TestSurrogateErrorTree(object):
         t0 = time.time()
         categorical_features = []
         model_analyzer = ModelAnalyzer(model, X_test, y_test,
-                                       feature_names,
-                                       categorical_features)
+                                       feature_names, categorical_features)
         max_depth = 3
         num_leaves = 31
         min_child_samples = 20
@@ -155,8 +176,11 @@ class TestSurrogateErrorTree(object):
         for entry in tree:
             tree_dict[entry['id']] = entry
         validate_traversed_tree(tree_structure, tree_dict,
-                                max_split_index, feature_names)
+                                max_split_index, feature_names,
+                                filtered_indexed_df)
 
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
     @pytest.mark.parametrize('metric', [Metrics.ERROR_RATE,
                                         Metrics.MACRO_PRECISION_SCORE,
                                         Metrics.MICRO_PRECISION_SCORE,
@@ -169,36 +193,117 @@ class TestSurrogateErrorTree(object):
     @pytest.mark.parametrize('max_depth', [3, 4])
     @pytest.mark.parametrize('num_leaves', [5, 10, 31])
     def test_parameters(self, metric, min_child_samples,
-                        max_depth, num_leaves):
+                        max_depth, num_leaves, analyzer_type):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
         model = create_kneighbors_classifier(X_train, y_train)
-        categorical_features = []
         run_error_analyzer(model, X_test, y_test, feature_names,
-                           categorical_features,
-                           max_depth=max_depth,
+                           analyzer_type, max_depth=max_depth,
                            num_leaves=num_leaves,
                            min_child_samples=min_child_samples,
                            metric=metric)
 
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_empty_cohort_cancer_classification(self, analyzer_type):
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_cancer_data()
+
+        model = create_kneighbors_classifier(X_train, y_train)
+
+        composite_filters = [{COMPOSITE_FILTERS:
+                             [{COMPOSITE_FILTERS:
+                              [{ARG: [20.45, 22.27],
+                                COLUMN: 'mean radius',
+                                METHOD: CohortFilterMethods.METHOD_RANGE},
+                               {ARG: [10.88, 14.46],
+                                COLUMN: 'mean texture',
+                                METHOD: CohortFilterMethods.METHOD_RANGE}],
+                               OPERATION: CohortFilterOps.AND}],
+                             OPERATION: CohortFilterOps.OR}]
+        run_error_analyzer(model, X_test, y_test, feature_names,
+                           analyzer_type, composite_filters=composite_filters)
+
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_empty_cohort_diabetes_regression(self, analyzer_type):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_diabetes_data()
+
+        model = create_kneighbors_classifier(X_train, y_train)
+
+        composite_filters = [{COMPOSITE_FILTERS:
+                             [{COMPOSITE_FILTERS:
+                              [{ARG: [0.06],
+                                COLUMN: 's1',
+                                METHOD: CohortFilterMethods.METHOD_GREATER},
+                               {ARG: [-0.01],
+                                COLUMN: 's2',
+                                METHOD: CohortFilterMethods.METHOD_LESS}],
+                               OPERATION: CohortFilterOps.AND}],
+                             OPERATION: CohortFilterOps.OR}]
+        run_error_analyzer(model, X_test, y_test, feature_names,
+                           analyzer_type, composite_filters=composite_filters)
+
+    @pytest.mark.parametrize('analyzer_type', [AnalyzerType.MODEL,
+                                               AnalyzerType.PREDICTIONS])
+    def test_invalid_comparison_titanic(self, analyzer_type):
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
+        tree_features = [STRING_INDEX]
+        feature_names = categorical + numeric + tree_features
+        # Create a bad dummy string categorical feature
+        X_train = add_string_index_col(X_train)
+        X_test = add_string_index_col(X_test)
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        tree_features = tree_features + numeric
+        with pytest.raises(TypeError) as ve:
+            run_error_analyzer(clf, X_test, y_test, feature_names,
+                               analyzer_type, categorical_features,
+                               tree_features,
+                               model_task=ModelTask.CLASSIFICATION)
+        assert ('Column string_index of type string is incorrectly treated '
+                'as numeric with threshold value') in str(ve.value)
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
-                       categorical_features, tree_features=None,
+                       analyzer_type, categorical_features=None,
+                       tree_features=None,
                        max_depth=3, num_leaves=31,
                        min_child_samples=20,
-                       metric=None):
-    error_analyzer = ModelAnalyzer(model, X_test, y_test,
-                                   feature_names,
-                                   categorical_features,
-                                   metric=metric)
+                       filters=None,
+                       composite_filters=None,
+                       metric=None, model_task=None):
+    if analyzer_type == AnalyzerType.MODEL:
+        error_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features,
+                                       metric=metric,
+                                       model_task=model_task)
+    else:
+        pred_y = model.predict(X_test)
+        error_analyzer = PredictionsAnalyzer(pred_y, X_test, y_test,
+                                             feature_names,
+                                             categorical_features,
+                                             metric=metric,
+                                             model_task=model_task)
     if tree_features is None:
         tree_features = feature_names
-    filters = None
-    composite_filters = None
     tree = error_analyzer.compute_error_tree(
         tree_features, filters, composite_filters,
         max_depth=max_depth, num_leaves=num_leaves,
         min_child_samples=min_child_samples)
+    validation_data = X_test
+    if filters is not None or composite_filters is not None:
+        validation_data = filter_from_cohort(error_analyzer,
+                                             filters,
+                                             composite_filters)
+        y_test = validation_data[TRUE_Y]
+        validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
+        if not isinstance(X_test, pd.DataFrame):
+            validation_data = validation_data.values
+    validation_data_len = len(validation_data)
     assert tree is not None
     assert len(tree) > 0
     assert ERROR in tree[0]
@@ -206,13 +311,14 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
     assert PARENTID in tree[0]
     assert tree[0][PARENTID] is None
     assert SIZE in tree[0]
-    assert tree[0][SIZE] == len(X_test)
+    assert tree[0][SIZE] == validation_data_len
     for node in tree:
-        assert node[SIZE] >= min_child_samples
+        assert node[SIZE] >= min(min_child_samples, validation_data_len)
 
 
 def validate_traversed_tree(tree, tree_dict, max_split_index,
-                            feature_names, parent_id=None):
+                            feature_names, df,
+                            parent_id=None):
     if SPLIT_INDEX in tree:
         nodeid = tree[SPLIT_INDEX]
     elif LEAF_INDEX in tree:
@@ -227,6 +333,10 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
     else:
         node_name = None
     assert tree_dict[nodeid]['nodeName'] == node_name
+    if INTERNAL_COUNT in tree:
+        assert tree[INTERNAL_COUNT] == tree_dict[nodeid][SIZE]
+    else:
+        assert tree[LEAF_COUNT] == tree_dict[nodeid][SIZE]
 
     # validate children
     if 'leaf_value' not in tree:
@@ -236,9 +346,23 @@ def validate_traversed_tree(tree, tree_dict, max_split_index,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
         validate_traversed_tree(right_child,
                                 tree_dict,
                                 max_split_index,
                                 feature_names,
+                                df,
                                 nodeid)
+
+
+def add_string_index_col(dataset):
+    """Add an index column of type string instead of numeric to the dataset.
+
+    :param dataset: Dataset to add the index column of type string to.
+    :type dataset: pandas.DataFrame
+    """
+    dataset = dataset.reset_index()
+    dataset[STRING_INDEX] = dataset['index'].astype('string')
+    dataset.drop(columns=['index'], inplace=True)
+    return dataset

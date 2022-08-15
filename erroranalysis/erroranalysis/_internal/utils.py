@@ -5,6 +5,13 @@ import random
 
 import numpy as np
 
+try:
+    import pyspark.pandas as ps
+    spark_available = True
+except ImportError:
+    spark_available = False
+    pass
+
 
 def generate_random_unique_indexes(count, nnz):
     """Utility to generate a list of random unique indexes in memory.
@@ -30,3 +37,17 @@ def generate_random_unique_indexes(count, nnz):
             current += 1
         i += 1
     return indexes
+
+
+def is_spark(df):
+    """Utility to check if a dataframe is a spark dataframe.
+
+    :param df: The dataframe to check.
+    :type df: pyspark.sql.dataframe.DataFrame or pandas.DataFrame
+    :return: True if the dataframe is a spark dataframe, False otherwise.
+    :rtype: bool
+    """
+    try:
+        return spark_available and isinstance(df, ps.frame.DataFrame)
+    except Exception:
+        return False

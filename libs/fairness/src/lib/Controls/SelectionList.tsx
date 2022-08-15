@@ -1,19 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
+  CheckboxVisibility,
   DetailsList,
   FontWeights,
   IGroup,
+  IObjectWithKey,
   Selection,
   SelectionMode,
   TooltipHost,
   TooltipOverflowMode,
-  IObjectWithKey,
-  CheckboxVisibility,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { performanceOptions } from "./../util/PerformanceMetrics";
@@ -22,7 +22,7 @@ export interface ISelectionItemProps extends IObjectWithKey {
   name: string;
   metric: string;
   description?: string;
-  onSelect: () => void;
+  onSelect: (newKey: string) => void;
   key: string;
 }
 
@@ -39,7 +39,9 @@ export class SelectionList extends React.Component<ISelectionListProps> {
         const selectedItems = this._selection.getSelection();
         if (selectedItems.length > 0) {
           // There cannot be more than one selected item.
-          (selectedItems[0] as ISelectionItemProps).onSelect();
+          (selectedItems[0] as ISelectionItemProps).onSelect(
+            (selectedItems[0] as ISelectionItemProps).key
+          );
         }
       }
     }

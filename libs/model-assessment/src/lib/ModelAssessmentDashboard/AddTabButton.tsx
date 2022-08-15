@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getRandomId } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import {
   Callout,
   Dropdown,
@@ -10,7 +8,9 @@ import {
   IDropdownOption,
   PrimaryButton,
   Stack
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { getRandomId } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { addTabButtonStyles } from "./AddTabButton.styles";
@@ -48,6 +48,7 @@ export class AddTabButton extends React.Component<
             iconProps={{ iconName: "CircleAdditionSolid" }}
             onClick={this.toggleIsCalloutVisible}
             className={style.button}
+            ariaLabel={localization.ModelAssessment.AddingTab.CalloutTitle}
           />
           {this.state.isCalloutVisible && (
             <Callout
@@ -56,6 +57,7 @@ export class AddTabButton extends React.Component<
               role="status"
               aria-live="assertive"
               className={style.callout}
+              setInitialFocus
             >
               <Stack tokens={{ childrenGap: "l1" }}>
                 {localization.ModelAssessment.AddingTab.CalloutContent}

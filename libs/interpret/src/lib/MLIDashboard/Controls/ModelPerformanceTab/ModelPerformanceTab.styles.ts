@@ -6,7 +6,8 @@ import {
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 
 export interface IModelPerformanceTabStyles {
   page: IStyle;
@@ -21,6 +22,7 @@ export const modelPerformanceTabStyles: () => IProcessedStyleSet<IModelPerforman
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "row",
+        maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
         width: "100%"
       },

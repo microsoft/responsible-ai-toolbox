@@ -110,7 +110,7 @@ export class Cohort {
     if (
       applyBin &&
       !this.jointDataset.metaDict[key].isCategorical &&
-      !this.jointDataset.metaDict[key].treatAsCategorical
+      !this.jointDataset.metaDict[key]?.treatAsCategorical
     ) {
       let binVector = this.jointDataset.binDict[key];
       if (binVector === undefined) {

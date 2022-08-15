@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IProcessedStyleSet } from "@fluentui/react";
 import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
-import { getTheme, IProcessedStyleSet } from "office-ui-fabric-react";
 import React from "react";
 
 import { isColorDark } from "../../ColorPalette";
@@ -33,13 +33,31 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     const classNames = treeViewRendererStyles();
     const gradientFillId = getRandomId();
     const theme = getTheme();
+    const nodeFilterProps = node.data.filterProps;
+    const ariaLabel = `${nodeFilterProps.numCorrect} ${
+      nodeFilterProps.numIncorrect
+    } ${nodeFilterProps.errorCoverage.toFixed(
+      2
+    )} ${nodeFilterProps.metricValue.toFixed(2)}`; // TODO: waiting for PM input
+    let strokeWidth = 1.5;
+    if (this.props.node.data.nodeState.onSelectedPath) {
+      if (node.data.nodeState.isSelectedLeaf) {
+        strokeWidth = 6;
+      } else {
+        strokeWidth = 3;
+      }
+    }
     return (
       <>
         <g
+          onFocus={this.onSelect}
           style={node.data.nodeState.style}
           onClick={this.onSelect}
           pointerEvents="all"
           ref={this.ref}
+          tabIndex={0}
+          aria-label={ariaLabel}
+          className={classNames.treeNodeOutline}
         >
           <linearGradient id={gradientFillId} x1="0.5" y1="1" x2="0.5" y2="0">
             <stop
@@ -75,20 +93,15 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               stroke: this.props.node.data.nodeState.onSelectedPath
                 ? theme.semanticColors.link
                 : this.props.node.data.errorColor,
-              strokeWidth: this.props.node.data.nodeState.onSelectedPath ? 3 : 2
+              strokeDasharray:
+                this.props.node.data.nodeState.onSelectedPath &&
+                !node.data.nodeState.isSelectedLeaf
+                  ? "6, 6"
+                  : "",
+              strokeWidth
             }}
             fill={`url(#${gradientFillId})`}
           />
-          {node.data.nodeState.onSelectedPath && (
-            <circle
-              r={node.data.r * 1.4}
-              className={
-                node.data.nodeState.isSelectedLeaf
-                  ? classNames.clickedNodeFull
-                  : classNames.clickedNodeDashed
-              }
-            />
-          )}
           <text
             textAnchor="middle"
             className={this.getNodeClassName(

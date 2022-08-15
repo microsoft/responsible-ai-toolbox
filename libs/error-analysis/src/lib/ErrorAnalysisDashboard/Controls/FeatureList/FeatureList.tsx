@@ -2,22 +2,16 @@
 // Licensed under the MIT License.
 
 import {
-  ITableState,
-  ModelAssessmentContext,
-  defaultModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   Checkbox,
-  ConstrainMode,
+  IColumn,
   DetailsList,
   DetailsListLayoutMode,
   DetailsRow,
   DetailsRowFields,
+  ConstrainMode,
   getTheme,
   MarqueeSelection,
   PrimaryButton,
-  IColumn,
   IRenderFunction,
   IDetailsRowFieldsProps,
   IDetailsRowProps,
@@ -25,7 +19,6 @@ import {
   ISearchBoxStyles,
   ISettings,
   IStackTokens,
-  ITheme,
   Customizer,
   getId,
   Layer,
@@ -39,7 +32,13 @@ import {
   Text,
   TooltipHost,
   TooltipOverflowMode
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  ITableState,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { TreeViewParameters } from "../TreeViewParameters/TreeViewParameters";
@@ -154,7 +153,6 @@ export class FeatureList extends React.Component<
   }
 
   public render(): React.ReactNode {
-    const theme = getTheme();
     return (
       <Panel
         headerText="Feature List"
@@ -164,6 +162,8 @@ export class FeatureList extends React.Component<
         closeButtonAriaLabel="Close"
         isBlocking={false}
         onDismiss={this.props.onDismiss}
+        onRenderFooterContent={this.renderPanelFooter}
+        isFooterAtBottom
       >
         <div className="featuresSelector">
           <Stack tokens={checkboxStackTokens} verticalAlign="space-around">
@@ -207,10 +207,7 @@ export class FeatureList extends React.Component<
                       setKey="set"
                       layoutMode={DetailsListLayoutMode.fixedColumns}
                       constrainMode={ConstrainMode.unconstrained}
-                      onRenderItemColumn={this.renderItemColumn.bind(
-                        this,
-                        theme
-                      )}
+                      onRenderItemColumn={this.renderItemColumn}
                       selectionPreservedOnEmptyClick
                       ariaLabelForSelectionColumn="Toggle selection"
                       ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -246,18 +243,6 @@ export class FeatureList extends React.Component<
                 isEnabled={this.props.isEnabled}
               />
             </Stack.Item>
-            {this.props.isEnabled && (
-              // Remove apply button in static view
-              <Stack.Item key="applyButtonKey" align="start">
-                <PrimaryButton
-                  text="Apply"
-                  onClick={this.applyClick}
-                  allowDisabledFocus
-                  disabled={!this.state.enableApplyButton}
-                  checked={false}
-                />
-              </Stack.Item>
-            )}
           </Stack>
         </div>
       </Panel>
@@ -284,12 +269,12 @@ export class FeatureList extends React.Component<
     );
   };
 
-  private renderItemColumn(
-    theme: ITheme,
+  private renderItemColumn = (
     item: any,
     index?: number,
     column?: IColumn
-  ): React.ReactNode {
+  ): React.ReactNode => {
+    const theme = getTheme();
     if (column && index !== undefined) {
       const fieldContent = item[column.fieldName as keyof any] as string;
 
@@ -332,7 +317,25 @@ export class FeatureList extends React.Component<
       }
     }
     return <span />;
-  }
+  };
+
+  private readonly renderPanelFooter = () => {
+    // Remove apply button in static view
+    if (!this.props.isEnabled) {
+      return <span />;
+    }
+    return (
+      <Stack.Item key="applyButtonKey" align="start">
+        <PrimaryButton
+          text={localization.ErrorAnalysis.FeatureList.apply}
+          onClick={this.applyClick}
+          allowDisabledFocus
+          disabled={!this.state.enableApplyButton}
+          checked={false}
+        />
+      </Stack.Item>
+    );
+  };
 
   private updateSelection(): void {
     this._selection.setItems(this.state.tableState.rows);

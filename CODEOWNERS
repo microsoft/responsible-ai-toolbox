@@ -2,7 +2,50 @@
 /erroranalysis @gaugup @imatiach-msft
 
 # Responsible AI widgets package
-/raiwidgets @imatiach-msft @xuke444 @zhb000 @vinuthakaranth @RubyZ10 @tongyu-microsoft @romanlutz
+/raiwidgets @imatiach-msft @xuke444 @romanlutz
 
 # Responsible AI SDK package
-/responsibleai @gaugup @imatiach-msft @riedgar-ms @xuke444 @kicha0
+/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0
+
+# workspace settings
+#/* @xuke444
+
+# App
+/apps @xuke444 @vinuthakaranth @romanlutz
+
+#causal ui
+/libs/causality @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10
+
+#counterfactuals ui
+/libs/counterfactuals @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10
+
+#dataset-explorer ui
+/libs/dataset-explorer @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
+
+#error-analysis ui
+/libs/error-analysis @romanlutz @imatiach-msft @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
+
+#fairness ui
+/libs/fairness @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
+
+#interpret ui
+/libs/interpret @romanlutz @gaugup @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
+
+#interpret-text ui
+/libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth
+
+#interpret-vision ui
+/libs/interpret-vision @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth
+
+#model-assessment ui
+/libs/model-assessment @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
+
+#e2e tests
+/libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft @RubyZ10
+
+
+
+
+
+
+

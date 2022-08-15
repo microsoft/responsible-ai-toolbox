@@ -5,7 +5,11 @@ import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 
-import { ClassificationEnum, JointDataset } from "./JointDataset";
+import { JointDataset } from "./JointDataset";
+import {
+  ClassificationEnum,
+  MulticlassClassificationEnum
+} from "./JointDatasetUtils";
 
 export interface ILabeledStatistic {
   key: string;
@@ -28,6 +32,10 @@ export enum RegressionMetrics {
   MeanAbsoluteError = "meanAbsoluteError",
   MeanPrediction = "meanPrediction",
   RSquared = "rSquared"
+}
+
+export enum MulticlassClassificationMetrics {
+  Accuracy = "accuracy"
 }
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
@@ -136,6 +144,22 @@ const generateRegressionStats: (
   ];
 };
 
+const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
+  outcomes: number[]
+): ILabeledStatistic[] => {
+  const correctCount = outcomes.filter(
+    (x) => x === MulticlassClassificationEnum.Correct
+  ).length;
+  const total = outcomes.length;
+  return [
+    {
+      key: MulticlassClassificationMetrics.Accuracy,
+      label: localization.Interpret.Statistics.accuracy,
+      stat: correctCount / total
+    }
+  ];
+};
+
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
@@ -145,13 +169,6 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes
 ): ILabeledStatistic[][] => {
-  if (modelType === ModelTypes.Binary) {
-    const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
-    return selectionIndexes.map((selectionArray) => {
-      const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-      return generateBinaryStats(outcomeSubset);
-    });
-  }
   if (modelType === ModelTypes.Regression) {
     const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
     const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
@@ -163,5 +180,13 @@ export const generateMetrics: (
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
     });
   }
-  return [];
+  const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
+  return selectionIndexes.map((selectionArray) => {
+    const outcomeSubset = selectionArray.map((i) => outcomes[i]);
+    if (modelType === ModelTypes.Binary) {
+      return generateBinaryStats(outcomeSubset);
+    }
+    // modelType === ModelTypes.Multiclass
+    return generateMulticlassStats(outcomeSubset);
+  });
 };

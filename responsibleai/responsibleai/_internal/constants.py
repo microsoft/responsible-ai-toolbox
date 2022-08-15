@@ -9,6 +9,7 @@ class ManagerNames(object):
 
     CAUSAL = 'causal'
     COUNTERFACTUAL = 'counterfactual'
+    DATA_BALANCE = 'data_balance'
     ERROR_ANALYSIS = 'error_analysis'
     EXPLAINER = 'explainer'
 
@@ -39,11 +40,11 @@ class ExplainerManagerKeys(object):
 
 class ErrorAnalysisManagerKeys(object):
     """Provide constants for ErrorAnalysisManager key properties."""
+    FILTER_FEATURES = 'filter_features'
     IS_COMPUTED = 'is_computed'
     MAX_DEPTH = 'max_depth'
-    NUM_LEAVES = 'num_leaves'
     MIN_CHILD_SAMPLES = 'min_child_samples'
-    FILTER_FEATURES = 'filter_features'
+    NUM_LEAVES = 'num_leaves'
     REPORTS = 'reports'
 
 
@@ -60,14 +61,13 @@ class CausalManagerKeys(object):
     POLICIES_COMPUTED = 'policies_computed'
 
 
-class SKLearn(object):
-    """Provide scikit-learn related constants."""
-
-    EXAMPLES = 'examples'
-    LABELS = 'labels'
-    PREDICT = 'predict'
-    PREDICTIONS = 'predictions'
-    PREDICT_PROBA = 'predict_proba'
+class DataBalanceManagerKeys(object):
+    """Provide constants for DataBalanceManager key properties."""
+    IS_ADDED = 'is_added'
+    TASK_TYPE = 'task_type'
+    COLS_OF_INTEREST = 'cols_of_interest'
+    TARGET_COLUMN = 'target_column'
+    CLASSES = 'classes'
 
 
 class ExplanationKeys(object):

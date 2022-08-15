@@ -8,15 +8,15 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
+from raiutils.data_processing import convert_to_list
+from raiutils.models import is_classifier
+from raiwidgets.cohort import Cohort
+from raiwidgets.constants import ErrorMessages
+from raiwidgets.error_handling import _format_exception
+from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
-from responsibleai._input_processing import _convert_to_list
+from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
-
-from ._cohort import Cohort
-from .constants import ErrorMessages
-from .error_handling import _format_exception
-from .interfaces import WidgetRequestResponseConstants
-from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -37,16 +37,19 @@ class ResponsibleAIDashboardInput:
         """
         self._analysis = analysis
         model = analysis.model
-        self._is_classifier = _is_classifier(model)
+        self._is_classifier = is_classifier(model)
         self.dashboard_input = analysis.get_data()
 
         self._validate_cohort_list(cohort_list)
-        # Add cohort_list to dashboard_input
-        self.dashboard_input.cohortData = cohort_list
+        if cohort_list is not None:
+            # Add cohort_list to dashboard_input
+            self.dashboard_input.cohortData = cohort_list
+        else:
+            self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
-        self._row_length = len(self.dashboard_input.dataset.features)
-        self._error_analyzer = analysis.error_analysis._analyzer
+        if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
+            self._error_analyzer = analysis.error_analysis._analyzer
 
     def _validate_cohort_list(self, cohort_list=None):
         if cohort_list is None:
@@ -97,10 +100,10 @@ class ResponsibleAIDashboardInput:
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
             if (self._is_classifier):
-                prediction = _convert_to_list(
+                prediction = convert_to_list(
                     self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
             else:
-                prediction = _convert_to_list(
+                prediction = convert_to_list(
                     self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
@@ -204,6 +207,60 @@ class ResponsibleAIDashboardInput:
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate causal what-if,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_global_causal_effects(self, post_data):
+        try:
+            id = post_data[0]
+            filters = post_data[1]
+            composite_filters = post_data[2]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            global_effects = \
+                self._analysis.causal.request_global_cohort_effects(
+                    id, filtered_data_df)
+            return {
+                WidgetRequestResponseConstants.data: global_effects
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global causal effects for cohort,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_global_causal_policy(self, post_data):
+        try:
+            id = post_data[0]
+            filters = post_data[1]
+            composite_filters = post_data[2]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            global_policy = \
+                self._analysis.causal.request_global_cohort_policy(
+                    id, filtered_data_df)
+            return {
+                WidgetRequestResponseConstants.data: global_policy
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global causal policy for cohort,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
