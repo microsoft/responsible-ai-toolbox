@@ -67,6 +67,13 @@ class ModelExplanationData:
     precomputedExplanations: PrecomputedExplanations
 
 
+class VisionExplanationData:
+    classNames: List[str]
+    images: List[str]
+    predictedY: List[str]
+    trueY: List[str]
+
+
 class ErrorAnalysisData:
     maxDepth: int
     numLeaves: int

@@ -122,7 +122,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             </Stack.Item>
             <Stack.Item>
               <Image
-                src={`data:image/jpg;base64,${this.props.data.localExplanations[0]}`}
+                src={`data:image/jpg;base64,${this.props.data.images[0]}`}
                 width="800px"
                 style={{ position: "relative", right: 85 }}
               />

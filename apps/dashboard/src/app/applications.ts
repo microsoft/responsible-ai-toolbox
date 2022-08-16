@@ -45,6 +45,10 @@ import {
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
 import {
+  visionModelAssessmentData,
+  visionModelExplanationData
+} from "../model-assessment-vision/__mock_data__/visionModelAssessmentData";
+import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
@@ -141,7 +145,8 @@ export const applicationKeys = <const>[
   "fairness",
   "errorAnalysis",
   "modelAssessment",
-  "modelAssessmentText"
+  "modelAssessmentText",
+  "modelAssessmentVision"
 ];
 
 export type IApplications = {
@@ -154,6 +159,8 @@ export type IApplications = {
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentVision: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
 };
 
@@ -307,6 +314,16 @@ export const applications: IApplications = <const>{
         classDimension: 3,
         dataset: emotion,
         modelExplanationData: [emotionModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentVision: {
+    datasets: {
+      visionData: {
+        classDimension: 3,
+        dataset: visionModelAssessmentData,
+        modelExplanationData: [visionModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

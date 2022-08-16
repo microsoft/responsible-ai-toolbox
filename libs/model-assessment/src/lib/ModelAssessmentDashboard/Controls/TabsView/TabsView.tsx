@@ -21,6 +21,7 @@ import {
   MatrixFilter,
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
+import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
 import _, { Dictionary } from "lodash";
 import * as React from "react";
@@ -266,6 +267,20 @@ export class TabsView extends React.PureComponent<
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
                       telemetryHook={this.props.telemetryHook}
+                    />
+                  </>
+                )}
+              {t.key === GlobalTabKeys.VisionTab &&
+                this.props.visionModelExplanationData && (
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"}>
+                        {localization.ModelAssessment.ComponentNames.VisionTab}
+                      </Text>
+                    </div>
+                    <VisionTab
+                      dataSummary={this.props.visionModelExplanationData}
+                      requestExp={this.props.requestExp}
                     />
                   </>
                 )}

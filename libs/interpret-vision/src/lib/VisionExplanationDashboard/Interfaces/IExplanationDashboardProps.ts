@@ -13,8 +13,12 @@ export interface IDatasetSummary {
   /*
    * information about the document given
    */
-  images: string[];
+  modelClass?: ModelClass;
   classNames?: string[];
-  localExplanations: string[];
-  prediction?: number[];
+  images: string[];
+  predictedY?: string[];
+  probabilityY?: number[][];
+  trueY?: string[];
 }
+
+export type ModelClass = "Tree" | "EBM" | "blackbox";

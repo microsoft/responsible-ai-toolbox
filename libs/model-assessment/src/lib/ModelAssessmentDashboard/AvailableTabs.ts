@@ -54,5 +54,12 @@ export function getAvailableTabs(
     });
   }
 
+  if (props.visionModelExplanationData) {
+    availableTabs.push({
+      key: GlobalTabKeys.VisionTab,
+      text: localization.ModelAssessment.ComponentNames.VisionTab
+    });
+  }
+
   return availableTabs;
 }

@@ -6,7 +6,7 @@ import os
 import setuptools
 
 # Version will be read from version.py
-version = ''
+version = '0.18.1'
 name = 'responsibleai'
 # Fetch Version
 with open(os.path.join(name, '__version__.py')) as f:
