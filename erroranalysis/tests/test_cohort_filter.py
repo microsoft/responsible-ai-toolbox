@@ -169,7 +169,8 @@ class TestCohortFilter(object):
                            feature_names,
                            categorical_features,
                            model_task,
-                           filters=filters)
+                           filters=filters,
+                           is_empty_validation_data=(not correct_prediction))
 
     def test_cohort_filter_includes(self):
         X_train, X_test, y_train, y_test, numeric, categorical = \
@@ -297,7 +298,8 @@ def run_error_analyzer(validation_data,
                        categorical_features,
                        model_task,
                        filters=None,
-                       composite_filters=None):
+                       composite_filters=None,
+                       is_empty_validation_data=False):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
@@ -309,5 +311,8 @@ def run_error_analyzer(validation_data,
                                        composite_filters)
 
     # validate there is some data selected for each of the filters
-    assert validation_data.shape[0] >= 0
+    if is_empty_validation_data:
+        assert validation_data.shape[0] == 0
+    else:
+        assert validation_data.shape[0] > 0
     assert validation_data.equals(filtered_data)
