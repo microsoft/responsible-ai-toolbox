@@ -182,7 +182,7 @@ function generateDataTrace(
           dictionary,
           jointDatasetFeatureName
         );
-        hovertemplate += `${localization.Common.identityFeature}(${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+        hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
         rawIdentityFeature.forEach((val, index) => {
           if (metaIdentityFeature?.treatAsCategorical) {
             customdata[index].ID =

@@ -5,3 +5,4 @@ export * from "./lib/TextExplanationDashboard/Control/TextExplanationView/TextEx
 export * from "./lib/TextExplanationDashboard/Interfaces/IExplanationDashboardProps";
 export * from "./lib/TextExplanationDashboard/Interfaces/IExplanationViewProps";
 export * from "./lib/TextExplanationDashboard/TextExplanationDashboard";
+export * from "./lib/TextExplanationDashboard/CommonUtils";
