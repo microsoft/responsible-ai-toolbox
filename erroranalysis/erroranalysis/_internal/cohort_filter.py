@@ -34,14 +34,23 @@ def filter_from_cohort(analyzer, filters, composite_filters,
     :type include_original_columns_only: bool
     :rtype: pandas.DataFrame
     """
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    model = None
+    pred_y = None
+
+    if is_model_analyzer:
+        model = analyzer.model
+    else:
+        pred_y = analyzer.pred_y
+
     filter_data_with_cohort = FilterDataWithCohortFilters(
-        model=analyzer.model,
+        model=model,
         dataset=analyzer.dataset,
         features=analyzer.feature_names,
         categorical_features=analyzer.categorical_features,
         categories=analyzer.categories,
         true_y=analyzer.true_y,
-        pred_y=analyzer.pred_y,
+        pred_y=pred_y,
         model_task=analyzer.model_task)
 
     return filter_data_with_cohort.filter_data_from_cohort(

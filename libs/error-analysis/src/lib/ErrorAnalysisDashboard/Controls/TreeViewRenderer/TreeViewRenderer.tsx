@@ -356,16 +356,17 @@ export class TreeViewRenderer extends React.PureComponent<
                         y={linkLabel.bbY}
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
-                        fill="white"
-                        stroke={ColorPalette.LinkLabelOutline}
-                        strokeWidth="1px"
-                        rx="10"
-                        ry="10"
+                        fill={theme.semanticColors.bodyBackground}
+                        stroke={theme.semanticColors.link}
+                        strokeWidth="3px"
+                        rx="15"
+                        ry="15"
                         pointerEvents="none"
                       />
                       <text
                         className={classNames.linkLabel}
                         pointerEvents="none"
+                        fontFamily="Segoe UI Semibold"
                       >
                         {linkLabel.text}
                       </text>
