@@ -43,9 +43,5 @@
 #e2e tests
 /libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft @RubyZ10
 
-
-
-
-
-
-
+#core ui
+/libs/core-ui @imatiach-msft @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @romanlutz
