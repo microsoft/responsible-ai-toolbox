@@ -1,15 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IExplanationDashboardData,
-  IFairnessData,
-  ISerializedExplanationData,
-  ITextExplanationDashboardData,
-  IVisionExplanationDashboardData
-} from "@responsible-ai/core-ui";
-import { IModelAssessmentData } from "@responsible-ai/model-assessment";
-
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
@@ -20,6 +11,7 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
+import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
@@ -80,59 +72,21 @@ import {
   wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
-export interface IInterpretDataSet {
-  data: IExplanationDashboardData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IInterpretTextDataSet {
-  data: ITextExplanationDashboardData;
-}
-
-export interface IInterpretVisionDataSet {
-  data: IVisionExplanationDashboardData;
-}
-
-export interface IFairnessDataSet {
-  data: IFairnessData;
-}
-
-export interface IErrorAnalysisDataSet {
-  data: IExplanationDashboardData | ISerializedExplanationData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IModelAssessmentDataSet extends IModelAssessmentData {
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IDataSet<TDataSet> {
-  datasets: { [key: string]: TDataSet };
-}
-
-export interface IInterpretSetting {
-  versions: { [key: string]: 1 | 2 };
-}
-
-export interface IInterpretTextSetting {
-  versions: { [key: string]: 1 };
-}
-
-export interface IInterpretVisionSetting {
-  versions: { [key: string]: 1 };
-}
-
-export interface IFairnessSetting {
-  versions: { [key: string]: 2 };
-}
-
-export interface IErrorAnalysisSetting {
-  versions: { [key: string]: 1 | 2 | 3 };
-}
-
-export interface IModelAssessmentSetting {
-  versions: { [key: string]: 1 | 2 };
-}
+import {
+  IFairnessSetting,
+  IDataSet,
+  IFairnessDataSet,
+  IInterpretSetting,
+  IInterpretDataSet,
+  IInterpretTextSetting,
+  IInterpretTextDataSet,
+  IInterpretVisionSetting,
+  IInterpretVisionDataSet,
+  IErrorAnalysisSetting,
+  IErrorAnalysisDataSet,
+  IModelAssessmentSetting,
+  IModelAssessmentDataSet
+} from "./applicationInterfaces";
 
 export const applicationKeys = <const>[
   "interpret",
@@ -224,6 +178,7 @@ export const applications: IApplications = <const>{
   },
   interpretText: {
     datasets: {
+      emotionLongDoc: { data: emotionLongDoc },
       newsgroupBinaryData: { data: newsgroupBinaryData }
     },
     versions: { "Version-1": 1 }
