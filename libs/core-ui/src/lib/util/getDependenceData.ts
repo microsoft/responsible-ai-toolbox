@@ -96,8 +96,8 @@ export function getDependenceData(
       }
     }
   }
-  const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
-  indecies.forEach((absoluteIndex, i) => {
+  const indices = cohort.unwrap(JointDataset.IndexLabel, false);
+  indices.forEach((absoluteIndex, i) => {
     customData[i].AbsoluteIndex = absoluteIndex;
     customData[
       i
