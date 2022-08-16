@@ -16,6 +16,7 @@ from erroranalysis._internal.utils import is_spark
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
+REGRESSION_ERROR = 'Error'
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,
@@ -141,13 +142,33 @@ class FilterDataWithCohortFilters:
         """
         model_task = self.model_task
         # For classification task, check if classification
-        # outcome included in filters, and if it is then
+        # outcome is included in filters, and if it is then
         # compute the necessary column data on the fly
         if model_task == ModelTask.CLASSIFICATION and filters:
             for filter in filters:
                 if COLUMN in filter:
                     column = filter[COLUMN]
                     if column == CLASSIFICATION_OUTCOME:
+                        return True
+        return False
+
+    def _filters_has_regression_error(self, filters):
+        """Checks if regression error is specified as a filter.
+
+        :param filters: The filters.
+        :type filters: list[dict]
+        :return: True if regression filter is specified in the filters.
+        :rtype: bool
+        """
+        model_task = self.model_task
+        # For regression task, check if regression error
+        # is included in filters, and if it is then
+        # compute the necessary column data on the fly
+        if model_task == ModelTask.REGRESSION and filters:
+            for filter in filters:
+                if COLUMN in filter:
+                    column = filter[COLUMN]
+                    if column == REGRESSION_ERROR:
                         return True
         return False
 
@@ -188,6 +209,27 @@ class FilterDataWithCohortFilters:
                     classification_outcome.append(1)
         return classification_outcome
 
+    def _compute_regression_error_data(self, true_y, pred_y):
+        """Creates the regression error data.
+
+        :param true_y: The true labels.
+        :type true_y: list or numpy.ndarray
+        :param pred_y: The predicted labels.
+        :type pred_y: list or numpy.ndarray
+        :return: The regression error data.
+        :rtype: list
+        """
+        regression_error = []
+        if not isinstance(pred_y, np.ndarray):
+            pred_y = np.array(pred_y)
+
+        if not isinstance(true_y, np.ndarray):
+            true_y = np.array(true_y)
+
+        for i in range(len(true_y)):
+            regression_error.append(abs(true_y[i] - pred_y[i]))
+        return regression_error
+
     def _add_filter_cols(self, df, filters):
         """Adds special columns to the dataset for filtering and postprocessing.
 
@@ -198,6 +240,7 @@ class FilterDataWithCohortFilters:
         """
         has_classification_outcome = self._filters_has_classification_outcome(
             filters)
+        has_regression_error = self._filters_has_regression_error(filters)
 
         if isinstance(self.true_y, str):
             df.rename(columns={self.true_y: TRUE_Y})
@@ -223,6 +266,16 @@ class FilterDataWithCohortFilters:
             df[CLASSIFICATION_OUTCOME] = \
                 self._compute_classification_outcome_data(
                     self.true_y, pred_y, classes)
+        elif has_regression_error:
+            if PRED_Y in df:
+                pred_y = df[PRED_Y]
+            else:
+                # calculate directly via prediction on model
+                pred_y = self.model.predict(
+                    df.drop(columns=[TRUE_Y, ROW_INDEX]))
+            # calculate regression error and add to df
+            df[REGRESSION_ERROR] = \
+                self._compute_regression_error_data(self.true_y, pred_y)
 
     def _post_process_df(self, df, include_original_columns_only=False):
         """Removes any special columns from dataset added prior to filtering.
@@ -238,6 +291,8 @@ class FilterDataWithCohortFilters:
         """
         if CLASSIFICATION_OUTCOME in list(df.columns):
             df = df.drop(columns=CLASSIFICATION_OUTCOME)
+        if REGRESSION_ERROR in list(df.columns):
+            df = df.drop(columns=REGRESSION_ERROR)
         if include_original_columns_only:
             if PRED_Y in list(df.columns):
                 df = df.drop(columns=PRED_Y)
