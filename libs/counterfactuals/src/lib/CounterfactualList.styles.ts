@@ -32,7 +32,7 @@ export const counterfactualListStyle: () => IProcessedStyleSet<ICounterfactualLi
         }
       },
       editCell: {
-        color: theme.palette.green,
+        color: theme.semanticColors.bodyText,
         fontWeight: "bold"
       },
       highlightRow: {
