@@ -1,6 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import {
+  getTheme,
+  Text,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  IDropdownOption
+} from "@fluentui/react";
 import { IBounds } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -10,14 +18,6 @@ import {
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import {
-  getTheme,
-  Text,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  IDropdownOption
-} from "office-ui-fabric-react";
 import { Datum } from "plotly.js";
 import React from "react";
 
@@ -48,7 +48,6 @@ export interface IModelComparisonProps {
   errorPickerProps: IErrorPickerProps;
   featureBinPickerProps: IFeatureBinPickerPropsV2;
   onHideIntro: () => void;
-  onEditConfigs: () => void;
   onChartClick?: (data?: any) => void;
 }
 

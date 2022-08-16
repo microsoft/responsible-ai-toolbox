@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IExplanationDashboardData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IErrorAnalysisMatrix,
   IErrorAnalysisData
 } from "@responsible-ai/core-ui";
@@ -25,13 +25,6 @@ import { IStringsParam } from "./IStringsParam";
  * @property {Array<number | string>} [predictedY] - model outputs for sample dataset. Dim(rows)
  * @property {number[][] | number[]} [probabilityY] - model probabilities for output values. Dim(rows) x [Dim(classes)]
  */
-
-export interface IRootStats {
-  metricName: string;
-  metricValue: number;
-  totalSize: number;
-  errorCoverage: number;
-}
 
 export interface IErrorAnalysisDashboardProps
   extends IExplanationDashboardData,
@@ -58,7 +51,6 @@ export interface IErrorAnalysisDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any[]>;
   localUrl: string;
-  rootStats?: IRootStats;
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   errorAnalysisData: IErrorAnalysisData;
 }

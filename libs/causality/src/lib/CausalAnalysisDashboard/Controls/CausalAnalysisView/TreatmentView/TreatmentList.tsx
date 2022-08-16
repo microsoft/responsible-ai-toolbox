@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  toScientific
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import {
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
@@ -17,8 +10,16 @@ import {
   IDetailsHeaderProps,
   IRenderFunction,
   SelectionMode,
-  TooltipHost
-} from "office-ui-fabric-react";
+  TooltipHost,
+  Text
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  toScientific
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";
@@ -35,7 +36,7 @@ export class TreatmentList extends React.Component<ITreatmentListProps> {
 
   public render(): React.ReactNode {
     if (!this.props.data) {
-      return <>No Data</>;
+      return <Text>{localization.CausalAnalysis.TreatmentPolicy.noData}</Text>;
     }
     const styles = TreatmentStyles();
     const defaultColumns: IColumn[] = [

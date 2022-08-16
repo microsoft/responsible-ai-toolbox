@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "office-ui-fabric-react";
+import { ITheme } from "@fluentui/react";
 
 export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
   const colorTheme = {
@@ -34,6 +34,9 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       zoomType: "xy"
     },
     credits: undefined,
+    legend: {
+      enabled: false
+    },
     plotOptions: {
       area: {
         marker: {
@@ -63,6 +66,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       text: undefined
     },
     tooltip: {
+      outside: true,
       shared: true
     },
     xAxis: {

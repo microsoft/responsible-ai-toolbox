@@ -1,19 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Pivot, PivotItem, Stack, MessageBar } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
-  ModelAssessmentContext
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Text,
-  Pivot,
-  PivotItem,
-  Stack,
-  MessageBar
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { CausalAnalysisOptions } from "./CausalAnalysisEnums";
@@ -22,6 +19,7 @@ import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysis
 
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface ICausalInsightsTabState {
@@ -45,22 +43,17 @@ export class CausalInsightsTab extends React.PureComponent<
     return (
       <Stack
         grow
-        className={classNames.container}
         id="causalInsightsTab"
-        tokens={{ padding: "16px 24px" }}
+        tokens={{ padding: "l1" }}
+        className={classNames.container}
       >
-        <Stack.Item>
-          <Text variant={"xxLarge"} id="causalAnalysisHeader">
-            {localization.ModelAssessment.ComponentNames.CausalAnalysis}
-          </Text>
-        </Stack.Item>
         <Stack.Item>
           <MessageBar>
             {localization.CausalAnalysis.MainMenu.cohortInfo}
           </MessageBar>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack horizontal tokens={{ childrenGap: "s1" }}>
             <Pivot onLinkClick={this.onViewTypeChange}>
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}
@@ -81,6 +74,7 @@ export class CausalInsightsTab extends React.PureComponent<
           <CausalAnalysisView
             viewOption={this.state.viewOption}
             data={this.props.data}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>
@@ -95,6 +89,23 @@ export class CausalInsightsTab extends React.PureComponent<
       this.setState({
         viewOption: item.props.itemKey
       });
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: this.getTelemetryEventName(item.props.itemKey)
+      });
+    }
+  };
+
+  private getTelemetryEventName = (itemKey: string) => {
+    switch (itemKey) {
+      case CausalAnalysisOptions.Aggregate:
+        return TelemetryEventName.AggregateCausalTabClick;
+      case CausalAnalysisOptions.Individual:
+        return TelemetryEventName.IndividualCausalTabClick;
+      case CausalAnalysisOptions.Treatment:
+        return TelemetryEventName.CasualTreatmentPolicyTabClick;
+      default:
+        return TelemetryEventName.AggregateCausalTabClick;
     }
   };
 }

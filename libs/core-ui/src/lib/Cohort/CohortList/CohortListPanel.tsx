@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFocusTrapZoneProps, Panel } from "office-ui-fabric-react";
+import { IFocusTrapZoneProps, Panel } from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

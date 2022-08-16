@@ -6,7 +6,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
-from lightgbm import LGBMClassifier, LGBMRegressor
+from lightgbm import Booster, LGBMClassifier, LGBMRegressor
 from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              median_absolute_error, r2_score)
 
@@ -15,12 +15,20 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                PRED_Y, ROW_INDEX,
                                                SPLIT_FEATURE, SPLIT_INDEX,
                                                TRUE_Y, CohortFilterMethods,
-                                               Metrics, ModelTask,
+                                               Metrics, ModelTask, TreeNode,
                                                error_metrics, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
+from erroranalysis._internal.utils import is_spark
+
+# imports required for pyspark support
+try:
+    import pyspark.sql.functions as F
+    from synapse.ml.lightgbm import LightGBMClassifier, LightGBMRegressor
+except ImportError:
+    pass
 
 MODEL = 'model'
 DEFAULT_MAX_DEPTH = 3
@@ -28,6 +36,9 @@ DEFAULT_NUM_LEAVES = 31
 DEFAULT_MIN_CHILD_SAMPLES = 20
 CACHED_SUBTREE_FEATURES = 'cache_subtree_features'
 LEAF_VALUE = 'leaf_value'
+PREDICTION = 'prediction'
+RAW_PREDICTION = 'rawPrediction'
+PROBABILITY = 'probability'
 
 
 class TreeSide(str, Enum):
@@ -113,6 +124,45 @@ def compute_error_tree(analyzer,
         create one leaf.
     :return: The tree representation as a list of nodes.
     :rtype: list[dict[str, str]]
+
+    :Example:
+
+    An example of running compute_error_tree with a
+    filter and a composite filter:
+
+    >>> from erroranalysis._internal.error_analyzer import ModelAnalyzer
+    >>> from erroranalysis._internal.surrogate_error_tree import (
+    ...     compute_error_tree)
+    >>> from erroranalysis._internal.constants import ModelTask
+    >>> from sklearn.datasets import load_breast_cancer
+    >>> from sklearn.model_selection import train_test_split
+    >>> from sklearn import svm
+    >>> breast_cancer_data = load_breast_cancer()
+    >>> feature_names = breast_cancer_data.feature_names
+    >>> X_train, X_test, y_train, y_test = train_test_split(
+    ...     breast_cancer_data.data, breast_cancer_data.target,
+    ...     test_size=0.2, random_state=0)
+    >>> categorical_features = []
+    >>> clf = svm.SVC(gamma=0.001, C=100., probability=True,
+    ...               random_state=777)
+    >>> model = clf.fit(X_train, y_train)
+    >>> model_task = ModelTask.CLASSIFICATION
+    >>> analyzer = ModelAnalyzer(model, X_test, y_test, feature_names,
+    ...                          categorical_features, model_task=model_task)
+    >>> filters = [{'arg': [23.85], 'column': 'mean radius',
+    ...             'method': 'less and equal'}]
+    >>> composite_filters = [{'compositeFilters':
+    ...                      [{'compositeFilters':
+    ...                       [{'arg': [13.45, 22.27],
+    ...                         'column': 'mean radius',
+    ...                         'method': 'in the range of'},
+    ...                        {'arg': [10.88, 24.46],
+    ...                         'column': 'mean texture',
+    ...                         'method': 'in the range of'}],
+    ...                        'operation': 'and'}],
+    ...                      'operation': 'or'}]
+    >>> tree = compute_error_tree(analyzer, ['mean radius', 'mean texture'],
+    ...                           filters, composite_filters)
     """
     # Fit a surrogate model on errors
     if max_depth is None:
@@ -124,10 +174,76 @@ def compute_error_tree(analyzer,
     filtered_df = filter_from_cohort(analyzer,
                                      filters,
                                      composite_filters)
+    if filtered_df.shape[0] == 0:
+        return create_empty_node(analyzer.metric)
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    indexes = []
+    for feature in features:
+        indexes.append(analyzer.feature_names.index(feature))
+    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
+    dataset_sub_names = list(dataset_sub_names)
+    if not is_spark(filtered_df):
+        booster, filtered_indexed_df, cat_info = get_surrogate_booster_local(
+            filtered_df, analyzer, is_model_analyzer, indexes,
+            dataset_sub_names, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed, categories_reindexed = cat_info
+    else:
+        booster, filtered_indexed_df = get_surrogate_booster_pyspark(
+            filtered_df, analyzer, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed = []
+        categories_reindexed = []
+    dumped_model = booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
+    max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
+    tree = traverse(filtered_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
+    return tree
+
+
+def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
+                                indexes, dataset_sub_names, max_depth,
+                                num_leaves, min_child_samples):
+    """Get surrogate booster for local pandas DataFrame.
+
+    Creates the surrogate model trained on errors and returns the booster.
+
+    :param filtered_df: The filtered DataFrame.
+    :type filtered_df: pandas.DataFrame
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param is_model_analyzer: Whether the analyzer is a model analyzer.
+    :type is_model_analyzer: bool
+    :param indexes: The indexes of the features to train the surrogate model
+        on.
+    :type indexes: list[int]
+    :param dataset_sub_names: The names of the features to train the
+        surrogate model on.
+    :type dataset_sub_names: list[str]
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The extracted booster from the surrogate model and the
+        scored dataset.
+    :rtype: (Booster, pandas.DataFrame, (list[str], list[int]))
+    """
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
-    is_model_analyzer = hasattr(analyzer, MODEL)
     if not is_model_analyzer:
         pred_y = filtered_df[PRED_Y]
         dropped_cols.append(PRED_Y)
@@ -149,9 +265,6 @@ def compute_error_tree(analyzer,
         pred_y = np.array(pred_y)
     if not isinstance(true_y, np.ndarray):
         true_y = np.array(true_y)
-    indexes = []
-    for feature in features:
-        indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
 
@@ -160,8 +273,6 @@ def compute_error_tree(analyzer,
         for idx, c_i in enumerate(analyzer.categorical_indexes):
             input_data[:, c_i] = analyzer.string_indexed_data[row_index, idx]
     dataset_sub_features = input_data[:, indexes]
-    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
-    dataset_sub_names = list(dataset_sub_names)
 
     categorical_info = get_categorical_info(analyzer,
                                             dataset_sub_names)
@@ -180,20 +291,91 @@ def compute_error_tree(analyzer,
     filtered_indexed_df[DIFF] = diff
     filtered_indexed_df[TRUE_Y] = true_y
     filtered_indexed_df[PRED_Y] = pred_y
-    dumped_model = surrogate._Booster.dump_model()
-    tree_structure = dumped_model["tree_info"][0]['tree_structure']
-    max_split_index = get_max_split_index(tree_structure) + 1
-    cache_subtree_features(tree_structure, dataset_sub_names)
-    tree = traverse(filtered_indexed_df,
-                    tree_structure,
-                    max_split_index,
-                    (categories_reindexed,
-                     cat_ind_reindexed),
-                    [],
-                    dataset_sub_names,
-                    metric=analyzer.metric,
-                    classes=analyzer.classes)
-    return tree
+    return surrogate._Booster, filtered_indexed_df, categorical_info
+
+
+def get_surrogate_booster_pyspark(filtered_df, analyzer, max_depth,
+                                  num_leaves, min_child_samples):
+    """Get surrogate booster for pyspark DataFrame.
+
+    Creates the surrogate model trained on errors and returns the booster.
+
+    :param filtered_df: The filtered DataFrame.
+    :type filtered_df: pyspark.sql.DataFrame
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The extracted booster from the surrogate model and the
+        scored dataset.
+    :rtype: (Booster, pyspark.sql.DataFrame)
+    """
+    # compute the pred_y column
+    scored_data = analyzer.model.transform(filtered_df.to_spark())
+    diff_data = scored_data.withColumn(
+        DIFF,
+        F.when(F.col(analyzer.true_y) != F.col(PREDICTION),
+               1).otherwise(0))
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        diff_data = diff_data.drop(PREDICTION, RAW_PREDICTION, PROBABILITY)
+    else:
+        diff_data = diff_data.drop(PREDICTION)
+    model = create_surrogate_model_pyspark(analyzer, diff_data, max_depth,
+                                           num_leaves, min_child_samples)
+    model_str = model.getNativeModel()
+    booster_args = {'objective': analyzer.model_task}
+    lgbm_booster = Booster(params=booster_args, model_str=model_str)
+    return lgbm_booster, diff_data.to_koalas()
+
+
+def create_surrogate_model_pyspark(analyzer,
+                                   dataset,
+                                   max_depth,
+                                   num_leaves,
+                                   min_child_samples):
+    """Creates and fits the surrogate lightgbm model.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param dataset: The subset of features to train the
+        surrogate model on.
+    :type dataset: numpy.ndarray or pandas.DataFrame
+    :param diff: The difference between the true and predicted labels column.
+    :type diff: numpy.ndarray
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :type min_child_samples: int
+    :return: The trained surrogate model.
+    :rtype: LightGBMClassifier or LightGBMRegressor
+    """
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        surrogate = LightGBMClassifier(numIterations=1,
+                                       maxDepth=max_depth,
+                                       numLeaves=num_leaves,
+                                       minDataInLeaf=min_child_samples,
+                                       labelCol=DIFF)
+    else:
+        surrogate = LightGBMRegressor(numIterations=1,
+                                      maxDepth=max_depth,
+                                      numLeaves=num_leaves,
+                                      minDataInLeaf=min_child_samples,
+                                      labelCol=DIFF)
+    return surrogate.fit(dataset)
 
 
 def create_surrogate_model(analyzer,
@@ -328,15 +510,16 @@ def traverse(df,
     else:
         nodeid = 0
 
-    # reduce dataframe to just features split on at each step for perf
-    df = filter_to_used_features(df, tree)
+    # reduce DataFrame to just features split on at each step for perf
+    if not is_spark(df):
+        df = filter_to_used_features(df, tree)
 
-    # write current node to a dictionary that can be saved as json
+    # write current node to a dictionary that can be saved as JSON
     dict, df = node_to_dict(df, tree, nodeid, categories, dict,
                             feature_names, metric, parent, side,
                             classes)
 
-    # write children to a dictionary that can be saved as json
+    # write children to a dictionary that can be saved as JSON
     if LEAF_VALUE not in tree:
         left_child = tree[TreeSide.LEFT_CHILD]
         right_child = tree[TreeSide.RIGHT_CHILD]
@@ -352,13 +535,13 @@ def traverse(df,
 
 
 def filter_to_used_features(df, tree):
-    """Filters the dataframe to only include features used in the tree.
+    """Filters the DataFrame to only include features used in the tree.
 
-    :param df: The dataframe to filter.
+    :param df: The DataFrame to filter.
     :type df: pandas.DataFrame
     :param tree: The tree to get the features from.
     :type tree: dict
-    :return: The filtered dataframe.
+    :return: The filtered DataFrame.
     :rtype: pandas.DataFrame
     """
     features = tree[CACHED_SUBTREE_FEATURES]
@@ -455,6 +638,34 @@ def create_categorical_query(method, arg, p_node_name, p_node_query,
 def node_to_dict(df, tree, nodeid, categories, json,
                  feature_names, metric, parent=None,
                  side=TreeSide.UNKNOWN, classes=None):
+    """Converts a node and children to a dictionary that can be saved as JSON.
+
+    This is a method that is called on the current node and then its children
+    recursively to construct the dictionary representation.
+
+    :param df: The DataFrame to use for the current node.
+    :type df: pandas.DataFrame
+    :param tree: The tree to use for the current node.
+    :type tree: dict
+    :param nodeid: The id of the current node.
+    :type nodeid: int
+    :param categories: The list of categories for the current node.
+    :type categories: list[tuple]
+    :param json: The JSON to write the node to.
+    :type json: dict
+    :param feature_names: The set of feature names.
+    :type feature_names: set[str]
+    :param metric: The metric to use for the current node.
+    :type metric: str
+    :param parent: The parent node.
+    :type parent: dict
+    :param side: The side of the current node from the parent, if known.
+    :type side: TreeSide
+    :param classes: The list of classes.
+    :type classes: list[str]
+    :return: The JSON with the node and all children added.
+    :rtype: dict
+    """
     p_node_name = None
     condition = None
     arg = None
@@ -480,7 +691,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} <= {:.2f}".format(p_node_name,
                                                   parent_threshold)
-                df = df[df[p_node_name_val] <= parent_threshold]
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_INCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -497,7 +709,8 @@ def node_to_dict(df, tree, nodeid, categories, json,
                 arg = float(parent_threshold)
                 condition = "{} > {:.2f}".format(p_node_name,
                                                  parent_threshold)
-                df = df[df[p_node_name_val] > parent_threshold]
+                df = filter_by_threshold(df, p_node_name_val,
+                                         parent_threshold, side)
             elif parent_decision_type == '==':
                 method = CohortFilterMethods.METHOD_EXCLUDES
                 arg = create_categorical_arg(parent_threshold)
@@ -508,12 +721,94 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                                             parent,
                                                             categories)
                 df = df.query(query)
-    success = 0
     total = df.shape[0]
-    if df.shape[0] == 0 and metric != Metrics.ERROR_RATE:
+    if is_spark(df):
+        metric_value, success, error = compute_metrics_pyspark(
+            df, metric, total)
+    else:
+        metric_value, success, error = compute_metrics_local(
+            df, metric, total, classes)
+    metric_name = metric_to_display_name[metric]
+    is_error_metric = metric in error_metrics
+    if SPLIT_FEATURE in tree:
+        node_name = str(feature_names[tree[SPLIT_FEATURE]])
+    else:
+        node_name = None
+    json.append(get_json_node(arg, condition, error, nodeid, method,
+                              node_name, parentid, p_node_name,
+                              total, success, metric_name,
+                              metric_value, is_error_metric))
+    return json, df
+
+
+def filter_by_threshold(df, p_node_name_val, parent_threshold, side):
+    """Filters the DataFrame by the threshold of the parent node.
+
+    :param df: The DataFrame to filter.
+    :type df: pandas.DataFrame
+    :param p_node_name_val: The name of the parent node.
+    :type p_node_name_val: str
+    :param parent_threshold: The threshold of the parent node.
+    :type parent_threshold: float
+    :param side: The side of the parent node.
+    :type side: TreeSide
+    :return: The filtered DataFrame.
+    :rtype: pandas.DataFrame
+    """
+    try:
+        if side == TreeSide.LEFT_CHILD:
+            df = df[df[p_node_name_val] <= parent_threshold]
+        else:
+            df = df[df[p_node_name_val] > parent_threshold]
+        return df
+    except TypeError as e:
+        has_vals = df[p_node_name_val].shape[0] > 0
+        if has_vals and isinstance(df[p_node_name_val][0], str):
+            err = ("Column {0} of type string is incorrectly treated "
+                   "as numeric with threshold value {1}. "
+                   "Please make sure it is marked as categorical instead.")
+            err = err.format(p_node_name_val, parent_threshold)
+            raise TypeError(err, e)
+        else:
+            raise e
+
+
+def compute_metrics_pyspark(df, metric, total):
+    """Compute the metric value for a given pyspark DataFrame.
+
+    :param df: The DataFrame to compute the metric on.
+    :type df: pyspark.sql.DataFrame
+    :param metric: The metric to compute.
+    :type metric: str
+    :param total: The total number of rows in the DataFrame.
+    :type total: int
+    :return: The metric value and success/error counts.
+    :rtype: tuple(float, int, int)
+    """
+    if metric != Metrics.ERROR_RATE:
+        raise ValueError(
+            "Only Error Rate metric currently supported for pyspark case")
+    else:
+        classes = None
+        return compute_metrics_local(df, metric, total, classes)
+
+
+def compute_metrics_local(df, metric, total, classes):
+    """Compute the metric value for a given local pandas DataFrame.
+
+    :param df: The DataFrame to compute the metric on.
+    :type df: pandas.DataFrame
+    :param metric: The metric to compute.
+    :type metric: str
+    :param total: The total number of rows in the DataFrame.
+    :type total: int
+    :return: The metric value and success/error counts.
+    :rtype: tuple(float, int, int)
+    """
+    success = 0
+    if metric != Metrics.ERROR_RATE and df.shape[0] == 0:
         metric_value = 0
         error = 0
-        success = 0
     elif metric == Metrics.MEAN_ABSOLUTE_ERROR:
         pred_y, true_y, error = get_regression_metric_data(df)
         metric_value = mean_absolute_error(true_y, pred_y)
@@ -536,19 +831,64 @@ def node_to_dict(df, tree, nodeid, categories, json,
                                             pred_y, metric)
         success = total - error
     else:
-        error = df[DIFF].values.sum()
+        error = int(df[DIFF].sum())
         if total == 0:
             metric_value = 0
         else:
             metric_value = error / total
         success = total - error
+    return metric_value, success, error
+
+
+def create_empty_node(metric):
+    """Create an empty node for the tree.
+
+    :param metric: The metric to use for the node.
+    :type metric: str
+    :return: The empty node.
+    :rtype: dict
+    """
     metric_name = metric_to_display_name[metric]
     is_error_metric = metric in error_metrics
-    if SPLIT_FEATURE in tree:
-        node_name = feature_names[tree[SPLIT_FEATURE]]
-    else:
-        node_name = None
-    json.append({
+    return [get_json_node(None, None, 0, 0, None, None, None,
+                          None, 0, 0, metric_name, 0, is_error_metric)]
+
+
+def get_json_node(arg, condition, error, nodeid, method, node_name,
+                  parentid, p_node_name, total, success, metric_name,
+                  metric_value, is_error_metric):
+    """Get the JSON node for the tree.
+
+    :param arg: The arg for the node.
+    :type arg: str
+    :param condition: The condition for the node.
+    :type condition: str
+    :param error: The error for the node.
+    :type error: int
+    :param nodeid: The node id for the node.
+    :type nodeid: int
+    :param method: The method for the node.
+    :type method: str
+    :param node_name: The node name for the node.
+    :type node_name: str
+    :param parentid: The parent id for the node.
+    :type parentid: int
+    :param p_node_name: The parent node name for the node.
+    :type p_node_name: str
+    :param total: The total number of instances in the node.
+    :type total: int
+    :param success: The total number of success instances for the node.
+    :type success: int
+    :param metric_name: The metric name for the node.
+    :type metric_name: str
+    :param metric_value: The metric value for the node.
+    :type metric_value: float
+    :param is_error_metric: Whether the metric is an error metric.
+    :type is_error_metric: bool
+    :return: The JSON node.
+    :rtype: dict
+    """
+    return {
         "arg": arg,
         "badFeaturesRowCount": 0,  # Note: remove this eventually
         "condition": condition,
@@ -563,11 +903,10 @@ def node_to_dict(df, tree, nodeid, categories, json,
         "size": float(total),
         "sourceRowKeyHash": "hashkey",  # Note: remove this eventually
         "success": float(success),  # Note: remove this eventually
-        "metricName": metric_name,
-        "metricValue": float(metric_value),
+        TreeNode.METRIC_NAME: metric_name,
+        TreeNode.METRIC_VALUE: float(metric_value),
         "isErrorMetric": is_error_metric
-    })
-    return json, df
+    }
 
 
 def get_regression_metric_data(df):

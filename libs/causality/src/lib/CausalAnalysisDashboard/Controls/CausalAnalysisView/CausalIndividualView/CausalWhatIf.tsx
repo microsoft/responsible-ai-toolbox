@@ -2,24 +2,25 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  Slider,
+  Stack,
+  Text
+} from "@fluentui/react";
+import {
   ColumnCategories,
-  FabricStyles,
+  FluentUIStyles,
   ICausalWhatIfData,
   JointDataset,
   ModelAssessmentContext,
   NoData,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  Slider,
-  Stack,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { causalWhatIfStyles } from "./CausalWhatIf.styles";
@@ -59,7 +60,7 @@ export class CausalWhatIf extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (this.context.dataset.task_type !== "regression") {
+    if (this.context.dataset.task_type !== DatasetTaskType.Regression) {
       return React.Fragment;
     }
     if (!this.context.causalAnalysisData?.config) {
@@ -79,7 +80,7 @@ export class CausalWhatIf extends React.Component<
           options={treatmentOptions}
           ariaLabel={"treatment picker"}
           useComboBoxAsMenuWidth
-          styles={FabricStyles.smallDropdownStyle}
+          styles={FluentUIStyles.smallDropdownStyle}
           selectedKey={this.state.treatmentFeature}
           onChange={this.setTreatmentFeature}
         />
@@ -101,6 +102,7 @@ export class CausalWhatIf extends React.Component<
                 value={this.state.newTreatmentValue}
                 onChange={this.onTreatmentValueChange}
                 valueFormat={this.showNewTreatmentRawValue}
+                disabled={!this.context.requestCausalWhatIf}
               />
               <Text variant="small" className={classNames.treatmentValue}>
                 {localization.formatString(
@@ -122,16 +124,18 @@ export class CausalWhatIf extends React.Component<
                     value={this.state.currentOutcome}
                   />
                 </Stack.Item>
-                <Stack.Item className={classNames.newOutcome}>
-                  <Outcome
-                    label={
-                      localization.CausalAnalysis.IndividualView.newOutcome
-                    }
-                    value={this.state.newOutcome?.point_estimate}
-                    lower={this.state.newOutcome?.ci_lower}
-                    upper={this.state.newOutcome?.ci_upper}
-                  />
-                </Stack.Item>
+                {this.context.requestCausalWhatIf !== undefined && (
+                  <Stack.Item className={classNames.newOutcome}>
+                    <Outcome
+                      label={
+                        localization.CausalAnalysis.IndividualView.newOutcome
+                      }
+                      value={this.state.newOutcome?.point_estimate}
+                      lower={this.state.newOutcome?.ci_lower}
+                      upper={this.state.newOutcome?.ci_upper}
+                    />
+                  </Stack.Item>
+                )}
               </Stack>
             </Stack.Item>
           </Stack>
@@ -232,7 +236,7 @@ export class CausalWhatIf extends React.Component<
       return v;
     }
     if (
-      (meta.isCategorical || meta.treatAsCategorical) &&
+      (meta.isCategorical || meta?.treatAsCategorical) &&
       meta.sortedCategoricalValues
     ) {
       return meta.sortedCategoricalValues[v];

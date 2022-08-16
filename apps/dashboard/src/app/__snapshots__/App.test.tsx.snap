@@ -5,6 +5,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
   <AppHeader
     application="interpret"
     dataset="automlMimicAdult"
+    featureFlights="none"
     iteration={1}
     language="en"
     onSettingChanged={[Function]}
@@ -418,7 +419,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
             "buttonTextHovered": "#201f1e",
             "buttonTextPressed": "#201f1e",
             "cardShadow": "0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108)",
-            "cardShadowHovered": "0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108)",
+            "cardShadowHovered": "0 0 1px #a19f9d",
             "cardStandoutBackground": "#ffffff",
             "defaultStateBackground": "#faf9f8",
             "disabledBackground": "#f3f2f1",
@@ -505,7 +506,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
   </div>
   <Redirect
     push={true}
-    to="/interpret/automlMimicAdult/1%20-%20light/en/Version-1"
+    to="/interpret/automlMimicAdult/1%20-%20light/en/Version-1/none"
   />
 </Fragment>
 `;

@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IProcessedStyleSet,
-  IStyle,
-  mergeStyleSets
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
 
 export interface IFairnessWizardStyles {
   frame: IStyle;

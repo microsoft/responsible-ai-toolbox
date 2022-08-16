@@ -1,12 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IBounds,
-  IMetricRequest,
-  IMetricResponse
-} from "@responsible-ai/core-ui";
-
 export const supportedBinaryClassificationPerformanceKeys = [
   "accuracy_score",
   "balanced_accuracy_score",
@@ -60,42 +54,3 @@ export const messages = {
     return Promise.resolve(json.data);
   });
 }*/
-
-export function generateRandomMetrics(
-  request: IMetricRequest,
-  abortSignal?: AbortSignal
-): Promise<IMetricResponse> {
-  const binSize = Math.max(...request.binVector);
-  const bins: number[] = new Array(binSize + 1)
-    .fill(0)
-    .map(() => Math.random() / 3 + 0.33);
-  const binBounds: IBounds[] = bins.map((bin) => {
-    return {
-      lower: bin - Math.pow(Math.random() / 3, 2),
-      upper: bin + Math.pow(Math.random() / 3, 2)
-    };
-  });
-  const global: number = Math.random() / 3 + 0.33;
-  const bounds: IBounds = {
-    lower: global - Math.pow(Math.random() / 3, 2),
-    upper: global + Math.pow(Math.random() / 3, 2)
-  };
-
-  const promise = new Promise<IMetricResponse>((resolve, reject) => {
-    const timeout = setTimeout(() => {
-      resolve({
-        binBounds,
-        bins,
-        bounds,
-        global
-      });
-    }, 300);
-    if (abortSignal) {
-      abortSignal.addEventListener("abort", () => {
-        clearTimeout(timeout);
-        reject(new DOMException("Aborted", "AbortError"));
-      });
-    }
-  });
-  return promise;
-}

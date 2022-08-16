@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 import shap
 import sklearn
-from sklearn.datasets import fetch_california_housing
+from sklearn.datasets import fetch_california_housing, load_iris
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
@@ -65,11 +65,36 @@ def create_rai_insights_object_regression():
 
     ri = RAIInsights(model, X_train, X_test, 'target', 'regression')
     ri.explainer.add()
-    ri.counterfactual.add(10, desired_range=[5, 10])
+    ri.counterfactual.add(10, desired_range=[3, 5])
     ri.error_analysis.add()
     ri.causal.add(treatment_features=['AveRooms'],
                   heterogeneity_features=None,
                   upper_bound_on_cat_expansion=42,
                   skip_cat_limit_checks=True)
+    ri.compute()
+    return ri
+
+
+@pytest.fixture(scope='session')
+def create_rai_insights_object_multiclass_classification():
+    # Import Iris dataset
+    iris = load_iris()
+    # Split data into train and test
+    X_train, X_test, y_train, y_test = train_test_split(
+        iris.data, iris.target, test_size=0.2, random_state=0)
+    feature_names = [name.replace(' (cm)', '') for name in iris.feature_names]
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
+
+    knn = sklearn.neighbors.KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+
+    X_train['target'] = y_train
+    X_test['target'] = y_test
+
+    ri = RAIInsights(knn, X_train, X_test, 'target', 'classification')
+    ri.explainer.add()
+    ri.counterfactual.add(10, desired_class=2)
+    ri.error_analysis.add()
     ri.compute()
     return ri

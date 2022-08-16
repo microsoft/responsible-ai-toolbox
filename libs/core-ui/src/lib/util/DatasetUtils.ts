@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IColumn } from "office-ui-fabric-react";
+import { ColumnActionsMode, IColumn } from "@fluentui/react";
 
 import { JointDataset } from "../util/JointDataset";
 
@@ -79,6 +79,7 @@ export function constructCols(
 ): IColumn[] {
   const columns: IColumn[] = [];
   columns.push({
+    columnActionsMode: ColumnActionsMode.disabled,
     fieldName: "0",
     isResizable: true,
     key: "column0",
@@ -89,6 +90,7 @@ export function constructCols(
   let index = 1;
   if (hasColors) {
     columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,
       isResizable: true,
       key: "color",
@@ -100,6 +102,7 @@ export function constructCols(
   }
   if (!isCustomPointsView && jointDataset.hasTrueY) {
     columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,
       isResizable: true,
       key: `column${index}`,
@@ -111,6 +114,7 @@ export function constructCols(
   }
   if (!isCustomPointsView && jointDataset.hasPredictedY) {
     columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,
       isResizable: true,
       key: `column${index}`,
@@ -122,6 +126,7 @@ export function constructCols(
   }
   for (let i = 0; i < viewedCols; i++) {
     columns.push({
+      columnActionsMode: ColumnActionsMode.disabled,
       fieldName: `${index}`,
       isResizable: true,
       key: `column${index}`,

@@ -1,20 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import {
+  BasicHighChart,
   defaultModelAssessmentContext,
+  getPrimaryChartColor,
   ICounterfactualData,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IData,
-  IPlotlyProperty,
-  PlotlyThemes
-} from "@responsible-ai/mlchartlib";
-import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 export interface ILocalImportanceChartProps {
@@ -42,12 +38,8 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         </MissingParametersPlaceholder>
       );
     }
-    const plotlyProps = this.buildPlotlyProps();
-    const themedProps = this.props.theme
-      ? PlotlyThemes.applyTheme(plotlyProps, this.props.theme)
-      : plotlyProps;
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "16px 24px" }}>
+      <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item>
           <Text variant={"medium"} id="LocalImportanceDescription">
             {localization.formatString(
@@ -59,53 +51,43 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         </Stack.Item>
         <Stack.Item>
           <div id={"WhatIfFeatureImportanceBar"}>
-            <AccessibleChart
-              plotlyProps={{
-                config: themedProps.config,
-                data: themedProps.data,
-                layout: themedProps.layout
-              }}
-              theme={getTheme()}
+            <BasicHighChart
+              configOverride={this.getLocalImportanceBarOptions()}
             />
           </div>
         </Stack.Item>
       </Stack>
     );
   }
-  private buildPlotlyProps(): IPlotlyProperty {
+  private getLocalImportanceBarOptions(): any {
     const sortedData = this.getSortedData();
-    const plotlyProps: IPlotlyProperty = {
-      config: {
-        displaylogo: false,
-        displayModeBar: false,
-        responsive: true
+    const x = sortedData.map((d) => d.label);
+    const y = sortedData.map((d) => d.value);
+    const seriesData = [
+      {
+        color: getPrimaryChartColor(getTheme()),
+        data: y,
+        name: ""
+      }
+    ];
+    return {
+      chart: {
+        type: "column"
       },
-      data: [],
-      layout: {
-        autosize: true,
-        dragmode: false,
-        font: {
-          size: 10
-        },
-        hovermode: "closest",
-        xaxis: {
-          automargin: true
-        },
-        yaxis: {
-          automargin: true,
-          title:
-            localization.Counterfactuals.WhatIf
-              .percentCounterfactualLocalImportance
+      series: seriesData,
+      title: {
+        text: ""
+      },
+      xAxis: {
+        categories: x
+      },
+      yAxis: {
+        title: {
+          text: localization.Counterfactuals.WhatIf
+            .percentCounterfactualLocalImportance
         }
       }
     };
-    const trace = {
-      type: "bar",
-      x: sortedData.map((d) => d.label),
-      y: sortedData.map((d) => d.value)
-    } as IData;
-    plotlyProps.data = [trace];
-    return plotlyProps;
   }
   private getSortedData(): ILocalImportanceData[] {
     const data: ILocalImportanceData[] = [];

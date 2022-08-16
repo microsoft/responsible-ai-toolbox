@@ -1,24 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   Callout as FabricCallout,
   CommandBarButton,
   IconButton,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 import { v4 } from "uuid";
 
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
+import { ITelemetryEvent, TelemetryLevels } from "../util/ITelemetryEvent";
+import { TelemetryEventName } from "../util/TelemetryEventName";
 
 import { labelWithCalloutStyles } from "./LabelWithCallout.styles";
 
 export interface ILabelWithCalloutProps {
   label: string;
   calloutTitle: string | undefined;
+  calloutEventName?: TelemetryEventName;
+  renderOnNewLayer?: boolean;
   type?: "label" | "button";
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ILabelWithCalloutState {
   showCallout: boolean;
@@ -53,7 +58,7 @@ export class LabelWithCallout extends React.Component<
               {this.props.label}
             </Text>
             <IconButton
-              id={"cross-class-weight-info"}
+              id={"label-callout-info"}
               iconProps={{ iconName: "Info" }}
               title={localization.Interpret.calloutTitle}
               onClick={this.toggleCallout}
@@ -62,12 +67,12 @@ export class LabelWithCallout extends React.Component<
         )}
         {this.state.showCallout && (
           <FabricCallout
-            doNotLayer
+            doNotLayer={!this.props.renderOnNewLayer}
             target={`#${id}`}
             setInitialFocus
             onDismiss={this.toggleCallout}
             role="alertdialog"
-            styles={{ container: FabricStyles.calloutContainer }}
+            styles={{ container: FluentUIStyles.calloutContainer }}
           >
             <div className={classNames.calloutWrapper}>
               <div className={classNames.calloutHeader}>
@@ -86,6 +91,12 @@ export class LabelWithCallout extends React.Component<
   }
 
   private toggleCallout = (): void => {
+    if (!this.state.showCallout) {
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: this.props.calloutEventName
+      });
+    }
     this.setState({ showCallout: !this.state.showCallout });
   };
 }

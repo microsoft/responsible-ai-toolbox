@@ -2,6 +2,17 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IDropdownOption,
+  Dropdown,
+  Text,
+  Link,
+  Slider,
+  Stack
+} from "@fluentui/react";
+import {
   Cohort,
   JointDataset,
   WeightVectorOption,
@@ -11,26 +22,19 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   LabelWithCallout,
-  FeatureImportanceDependence
+  FeatureImportanceDependence,
+  FeatureImportanceBar,
+  ITelemetryEvent,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  Dropdown,
-  Text,
-  Link,
-  Slider
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { explainerCalloutDictionary } from "../ExplainerCallouts/explainerCalloutDictionary";
-import { FeatureImportanceBar } from "../FeatureImportanceBar/FeatureImportanceBar";
 import { GlobalOnlyChart } from "../GlobalOnlyChart/GlobalOnlyChart";
 
 import { globalTabStyles } from "./GlobalExplanationTab.styles";
@@ -50,8 +54,9 @@ export interface IGlobalExplanationTabProps {
   weightOptions: WeightVectorOption[];
   weightLabels: Dictionary<string>;
   explanationMethod?: string;
-  onWeightChange: (option: WeightVectorOption) => void;
   initialCohortIndex?: number;
+  onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 interface IGlobalExplanationTabState {
@@ -154,32 +159,32 @@ export class GlobalExplanationTab extends React.PureComponent<
     }
 
     return (
-      <div className={classNames.page}>
-        <div className={classNames.infoWithText}>
+      <Stack horizontal={false} className={classNames.page}>
+        <Stack.Item className={classNames.infoWithText}>
           <Text variant="medium">
             {localization.Interpret.GlobalTab.helperText}
           </Text>
-        </div>
-        <div
-          className={classNames.globalChartControls}
-          id="TopKSliderContainer"
-        >
-          <Slider
-            label={localization.formatString(
-              localization.Interpret.GlobalTab.topAtoB,
-              this.state.topK
-            )}
-            className={classNames.startingK}
-            ariaLabel={localization.Interpret.AggregateImportance.topKFeatures}
-            max={this.context.jointDataset.localExplanationFeatureCount}
-            min={1}
-            step={1}
-            value={this.state.topK}
-            onChange={this.setTopK}
-            showValue={false}
-          />
-        </div>
-        <div className={classNames.rightJustifiedContainer}>
+        </Stack.Item>
+        <Stack.Item className={classNames.topK}>
+          <div id="TopKSliderContainer">
+            <Slider
+              label={localization.formatString(
+                localization.Interpret.GlobalTab.topAtoB,
+                this.state.topK
+              )}
+              ariaLabel={
+                localization.Interpret.AggregateImportance.topKFeatures
+              }
+              max={this.context.jointDataset.localExplanationFeatureCount}
+              min={1}
+              step={1}
+              value={this.state.topK}
+              onChange={this.setTopK}
+              showValue={false}
+            />
+          </div>
+        </Stack.Item>
+        <Stack.Item className={classNames.chartCallout}>
           {this.explainerCalloutInfo && (
             <LabelWithCallout
               label={
@@ -187,6 +192,10 @@ export class GlobalExplanationTab extends React.PureComponent<
               }
               calloutTitle={this.explainerCalloutInfo.title}
               type="button"
+              calloutEventName={
+                TelemetryEventName.FeatureImportancesWhatDoValuesMeanCalloutClick
+              }
+              telemetryHook={this.props.telemetryHook}
             >
               <Text block>{this.explainerCalloutInfo.description}</Text>
               {this.explainerCalloutInfo.linkUrl && (
@@ -196,112 +205,135 @@ export class GlobalExplanationTab extends React.PureComponent<
               )}
             </LabelWithCallout>
           )}
-        </div>
-        <div className={classNames.globalChartWithLegend}>
-          <FeatureImportanceBar
-            jointDataset={this.context.jointDataset}
-            yAxisLabels={[
-              localization.Interpret.GlobalTab.aggregateFeatureImportance
-            ]}
-            sortArray={this.state.sortArray}
-            chartType={this.state.chartType}
-            unsortedX={this.context.modelMetadata.featureNamesAbridged}
-            originX={this.context.modelMetadata.featureNames}
-            unsortedSeries={this.getActiveCohortSeries(
-              this.state.seriesIsActive
-            )}
-            topK={this.state.topK}
-            onFeatureSelection={this.onFeatureSelection}
-            selectedFeatureIndex={this.state.selectedFeatureIndex}
-          />
-          <SidePanel
-            cohortSeries={this.state.cohortSeries}
-            cohorts={this.props.cohorts}
-            metadata={this.context.modelMetadata}
-            onWeightChange={this.props.onWeightChange}
-            selectedWeightVector={this.props.selectedWeightVector}
-            seriesIsActive={this.state.seriesIsActive}
-            setSortIndex={this.setSortIndex}
-            sortingSeriesIndex={this.state.sortingSeriesIndex}
-            toggleActivation={this.toggleActivation}
-            weightLabels={this.props.weightLabels}
-            weightOptions={this.props.weightOptions}
-            onChartTypeChange={this.onChartTypeChange}
-            chartType={this.state.chartType}
-          />
-        </div>
+        </Stack.Item>
+        <Stack.Item>
+          <Stack
+            horizontal
+            id="featureImportanceChartContainer"
+            className={classNames.chartContainer}
+          >
+            <Stack.Item className={classNames.chartLeftPart}>
+              <FeatureImportanceBar
+                jointDataset={this.context.jointDataset}
+                yAxisLabels={[
+                  localization.Interpret.GlobalTab.aggregateFeatureImportance
+                ]}
+                sortArray={this.state.sortArray}
+                chartType={this.state.chartType}
+                unsortedX={this.context.modelMetadata.featureNamesAbridged}
+                originX={this.context.modelMetadata.featureNames}
+                unsortedSeries={this.getActiveCohortSeries(
+                  this.state.seriesIsActive
+                )}
+                topK={this.state.topK}
+                onFeatureSelection={this.onFeatureSelection}
+                selectedFeatureIndex={this.state.selectedFeatureIndex}
+              />
+            </Stack.Item>
+            <Stack.Item className={classNames.chartRightPart}>
+              <SidePanel
+                cohortSeries={this.state.cohortSeries}
+                cohorts={this.props.cohorts}
+                metadata={this.context.modelMetadata}
+                onWeightChange={this.props.onWeightChange}
+                selectedWeightVector={this.props.selectedWeightVector}
+                seriesIsActive={this.state.seriesIsActive}
+                setSortIndex={this.setSortIndex}
+                sortingSeriesIndex={this.state.sortingSeriesIndex}
+                toggleActivation={this.toggleActivation}
+                weightLabels={this.props.weightLabels}
+                weightOptions={this.props.weightOptions}
+                onChartTypeChange={this.onChartTypeChange}
+                chartType={this.state.chartType}
+                telemetryHook={this.props.telemetryHook}
+              />
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
         {!this.context.jointDataset.hasDataset && (
-          <MissingParametersPlaceholder>
-            {localization.Interpret.GlobalTab.datasetRequired}
-          </MissingParametersPlaceholder>
+          <Stack.Item>
+            <MissingParametersPlaceholder>
+              {localization.Interpret.GlobalTab.datasetRequired}
+            </MissingParametersPlaceholder>
+          </Stack.Item>
         )}
         {this.context.jointDataset.hasDataset && (
-          <div>
-            <div className={classNames.rightJustifiedContainer}>
+          <>
+            <Stack.Item className={classNames.chartCallout}>
               <LabelWithCallout
                 label={localization.Interpret.Charts.howToRead}
                 calloutTitle={
                   localization.Interpret.GlobalTab.dependencePlotTitle
                 }
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
+                }
               >
                 <Text>
                   {localization.Interpret.GlobalTab.dependencePlotHelperText}
                 </Text>
               </LabelWithCallout>
-            </div>
-            <div
-              id="DependencePlot"
-              className={classNames.secondaryChartAndLegend}
-              ref={this.depPlot}
-            >
-              <FeatureImportanceDependence
-                chartProps={this.state.dependenceProps}
-                cohortIndex={this.state.selectedCohortIndex}
-                cohort={this.props.cohorts[this.state.selectedCohortIndex]}
-                jointDataset={this.context.jointDataset}
-                metadata={this.context.modelMetadata}
-                onChange={this.onDependenceChange}
-                selectedWeight={this.props.selectedWeightVector}
-                selectedWeightLabel={
-                  this.props.weightLabels[this.props.selectedWeightVector]
-                }
-              />
-              <div className={classNames.legendAndSort}>
-                {featureOptions && (
-                  <ComboBox
-                    id="DependencePlotFeatureSelection"
-                    label={
-                      localization.Interpret.GlobalTab.viewDependencePlotFor
-                    }
-                    options={featureOptions}
-                    allowFreeform={false}
-                    autoComplete="on"
-                    placeholder={
-                      localization.Interpret.GlobalTab
-                        .dependencePlotFeatureSelectPlaceholder
-                    }
-                    selectedKey={this.state.dependenceProps?.xAxis.property}
-                    onChange={this.onXSet}
-                    calloutProps={FabricStyles.calloutProps}
-                    styles={FabricStyles.defaultDropdownStyle}
-                  />
-                )}
-                {cohortOptions && (
-                  <Dropdown
-                    label={
-                      localization.Interpret.GlobalTab.datasetCohortSelector
-                    }
-                    options={cohortOptions}
-                    selectedKey={this.state.selectedCohortIndex}
-                    onChange={this.setSelectedCohort}
-                  />
-                )}
-              </div>
-            </div>
-          </div>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack horizontal className={classNames.chartContainer}>
+                <Stack.Item className={classNames.chartLeftPart}>
+                  <div
+                    id="DependencePlot"
+                    className={classNames.secondaryChartAndLegend}
+                    ref={this.depPlot}
+                  >
+                    <FeatureImportanceDependence
+                      chartProps={this.state.dependenceProps}
+                      cohortIndex={this.state.selectedCohortIndex}
+                      cohort={
+                        this.props.cohorts[this.state.selectedCohortIndex]
+                      }
+                      jointDataset={this.context.jointDataset}
+                      metadata={this.context.modelMetadata}
+                      selectedWeight={this.props.selectedWeightVector}
+                      selectedWeightLabel={
+                        this.props.weightLabels[this.props.selectedWeightVector]
+                      }
+                    />
+                  </div>
+                </Stack.Item>
+                <Stack.Item className={classNames.legendAndSort}>
+                  {featureOptions && (
+                    <ComboBox
+                      id="DependencePlotFeatureSelection"
+                      label={
+                        localization.Interpret.GlobalTab.viewDependencePlotFor
+                      }
+                      options={featureOptions}
+                      allowFreeform={false}
+                      autoComplete="on"
+                      placeholder={
+                        localization.Interpret.GlobalTab
+                          .dependencePlotFeatureSelectPlaceholder
+                      }
+                      selectedKey={this.state.dependenceProps?.xAxis.property}
+                      onChange={this.onXSet}
+                      calloutProps={FluentUIStyles.calloutProps}
+                    />
+                  )}
+                  {cohortOptions && (
+                    <Dropdown
+                      label={
+                        localization.Interpret.GlobalTab.datasetCohortSelector
+                      }
+                      options={cohortOptions}
+                      selectedKey={this.state.selectedCohortIndex}
+                      onChange={this.setSelectedCohort}
+                    />
+                  )}
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+          </>
         )}
-      </div>
+      </Stack>
     );
   }
 
@@ -405,6 +437,10 @@ export class GlobalExplanationTab extends React.PureComponent<
     for (let i = 0; i < this.state.seriesIsActive.length; i++) {
       if (!this.state.seriesIsActive[i]) continue;
       if (cohortIndex-- === 0) {
+        this.props.telemetryHook?.({
+          level: TelemetryLevels.ButtonClick,
+          type: TelemetryEventName.AggregateFeatureImportanceNewDependenceSelected
+        });
         this.handleFeatureSelection(i, featureIndex);
         return;
       }
@@ -418,7 +454,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     // set to dependence plot initially, can be changed if other feature importances available
     const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
     const xIsDithered =
-      this.context.jointDataset.metaDict[xKey].treatAsCategorical;
+      this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
       JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
     const chartProps: IGenericChartProps = {
@@ -448,11 +484,5 @@ export class GlobalExplanationTab extends React.PureComponent<
         block: "end"
       });
     }, 0.5);
-  };
-
-  private readonly onDependenceChange = (
-    chartProps: IGenericChartProps | undefined
-  ): void => {
-    this.setState({ dependenceProps: chartProps });
   };
 }

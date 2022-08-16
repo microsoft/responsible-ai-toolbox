@@ -2,10 +2,19 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  DefaultButton,
+  IconButton,
+  Callout,
+  Slider
+} from "@fluentui/react";
+import {
   IExplanationContext,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -16,16 +25,6 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  DefaultButton,
-  IconButton,
-  Callout,
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  Slider
-} from "office-ui-fabric-react";
 import Plotly from "plotly.js";
 import React from "react";
 
@@ -82,8 +81,8 @@ export class Beehive extends React.PureComponent<
         const featureArray =
           data.testDataset.dataset?.map((row: number[]) => row[featureIndex]) ||
           [];
-        const min = Math.min(...featureArray);
-        const max = Math.max(...featureArray);
+        const min = _.min(featureArray) || 0;
+        const max = _.max(featureArray) || 0;
         const range = max - min;
         return (value: string | number): number => {
           return range !== 0 && typeof value === "number"
@@ -208,8 +207,7 @@ export class Beehive extends React.PureComponent<
           prev.push(...curr);
           return prev;
         }, []);
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildPlotlyProps: (
@@ -271,13 +269,12 @@ export class Beehive extends React.PureComponent<
         rows
       );
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private readonly _crossClassIconId = "cross-class-icon-id";
   private readonly _globalSortIconId = "global-sort-icon-id";
-  private colorOptions: IDropdownOption[];
+  private colorOptions: IComboBoxOption[];
   private rowCount: number;
 
   public constructor(props: IGlobalFeatureImportanceProps) {
@@ -471,10 +468,10 @@ export class Beehive extends React.PureComponent<
               className={beehiveStyles.pathSelector}
               selectedKey={FeatureImportanceModes.Beehive}
               onChange={this.setChart}
-              options={this.props.chartTypeOptions}
+              options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
             {this.colorOptions.length > 1 && (
               <ComboBox
@@ -485,7 +482,7 @@ export class Beehive extends React.PureComponent<
                 options={this.colorOptions}
                 ariaLabel={"color picker"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
             )}
             <div className={beehiveStyles.sliderControl}>
@@ -545,7 +542,7 @@ export class Beehive extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}

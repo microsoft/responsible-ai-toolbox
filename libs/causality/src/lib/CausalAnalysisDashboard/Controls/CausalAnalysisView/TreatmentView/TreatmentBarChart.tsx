@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalPolicyGains,
@@ -13,7 +14,6 @@ import {
   IPlotlyProperty,
   PlotlyThemes
 } from "@responsible-ai/mlchartlib";
-import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 export interface ITreatmentBarChartProps {

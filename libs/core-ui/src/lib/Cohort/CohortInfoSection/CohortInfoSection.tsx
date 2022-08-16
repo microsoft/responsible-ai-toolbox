@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -40,7 +40,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
       localization.ModelAssessment.CohortInformation.Filters
     } = ${currentCohort.cohort.filters.length.toString()}`;
     return (
-      <Stack grow tokens={{ childrenGap: 10, padding: "16px 24px" }}>
+      <Stack grow tokens={{ padding: "l1" }}>
         <Text variant={"xLarge"}>{cohortInfoTitle}</Text>
         <Stack>
           <Text>{datapointsCountString}</Text>
@@ -48,15 +48,11 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
         </Stack>
         <Stack horizontal tokens={{ childrenGap: 25 }}>
           <DefaultButton
-            text={
-              localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
-            }
+            text={localization.ModelAssessment.CohortInformation.ShiftCohort}
             onClick={this.props.toggleShiftCohortVisibility}
           />
           <DefaultButton
-            text={
-              localization.ModelAssessment.CohortInformation.CreateNewCohort
-            }
+            text={localization.ModelAssessment.CohortInformation.NewCohort}
             onClick={this.props.toggleCreateCohortVisibility}
           />
         </Stack>

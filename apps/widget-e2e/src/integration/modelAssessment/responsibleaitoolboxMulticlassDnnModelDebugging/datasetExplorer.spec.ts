@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeDatasetExplorer } from "../../../describer/modelAssessment/dataExplorer/describeDatasetExplorer";
+import {
+  describeDatasetExplorer,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeDatasetExplorer("MulticlassDnnModelDebugging");
+const datasetShape = modelAssessmentDatasets.MulticlassDnnModelDebugging;
+describeDatasetExplorer(datasetShape, "MulticlassDnnModelDebugging");

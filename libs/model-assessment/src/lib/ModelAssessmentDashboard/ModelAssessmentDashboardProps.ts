@@ -4,14 +4,15 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
   ICausalAnalysisData,
   ICounterfactualData,
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -23,12 +24,14 @@ export interface IModelAssessmentData {
   causalAnalysisData?: ICausalAnalysisData[];
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
+  cohortData?: IPreBuiltCohort[];
 }
 
 export interface IModelAssessmentDashboardProps
   extends IOfficeFabricProps,
     IModelAssessmentData {
   locale?: string;
+  featureFlights?: string[];
   stringParams?: IStringsParam;
   classDimension?: 1 | 2 | 3;
   requestPredictions?: (
@@ -62,7 +65,7 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<ICausalWhatIfData[]>;
   localUrl?: string;
 
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;

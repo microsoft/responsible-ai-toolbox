@@ -12,7 +12,7 @@ import { modelData } from "./modelData";
 export class Fairness extends React.Component {
   public render(): React.ReactNode {
     let requestMethod = undefined;
-    if (config.baseUrl !== undefined) {
+    if (config.baseUrl) {
       requestMethod = async (
         data: IMetricRequest
       ): Promise<IMetricResponse> => {

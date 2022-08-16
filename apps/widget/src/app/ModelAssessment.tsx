@@ -8,7 +8,8 @@ import {
 import {
   ModelAssessmentDashboard,
   IModelAssessmentData,
-  IModelAssessmentDashboardProps
+  IModelAssessmentDashboardProps,
+  parseFeatureFlights
 } from "@responsible-ai/model-assessment";
 import React from "react";
 
@@ -27,7 +28,7 @@ export class ModelAssessment extends React.Component {
       | "requestImportances"
       | "requestCausalWhatIf"
     > = {};
-    if (config.baseUrl !== undefined) {
+    if (config.baseUrl) {
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
       };
@@ -65,6 +66,7 @@ export class ModelAssessment extends React.Component {
         localUrl={config.baseUrl}
         locale={config.locale}
         theme={undefined}
+        featureFlights={parseFeatureFlights(config.featureFlights)}
       />
     );
   }

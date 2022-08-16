@@ -2,6 +2,14 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  getTheme,
+  DefaultButton,
+  Stack
+} from "@fluentui/react";
+import {
   AxisConfigDialog,
   ColumnCategories,
   JointDataset,
@@ -12,33 +20,27 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
-  rowErrorSize
+  FluentUIStyles,
+  rowErrorSize,
+  BasicHighChart,
+  getPrimaryChartColor,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  AccessibleChart,
-  IPlotlyProperty,
-  PlotlyMode,
-  IData
-} from "@responsible-ai/mlchartlib";
+import { IPlotlyProperty, PlotlyMode, IData } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import {
-  getTheme,
-  DefaultButton,
-  ComboBox,
-  Stack,
-  IComboBoxOption,
-  IComboBox
-} from "office-ui-fabric-react";
 import React from "react";
 
-import { causalIndividualChartStyles } from "./CausalIndividualChartStyles";
+import { causalIndividualChartStyles } from "./CausalIndividualChart.styles";
 import { CausalIndividualConstants } from "./CausalIndividualConstants";
 import { CausalWhatIf } from "./CausalWhatIf";
+import { getIndividualChartOptions } from "./getIndividualChartOptions";
 
 export interface ICausalIndividualChartProps {
   onDataClick: (data: number | undefined) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ICausalIndividualChartState {
@@ -86,19 +88,27 @@ export class CausalIndividualChart extends React.PureComponent<
     if (this.state.chartProps === undefined) {
       return <div />;
     }
-    const plotlyProps = this.generatePlotlyProps(
-      this.context.jointDataset,
-      this.state.chartProps,
-      this.context.selectedErrorCohort.cohort
-    );
     const cohortLength =
       this.context.selectedErrorCohort.cohort.filteredData.length;
     const canRenderChart =
       cohortLength < rowErrorSize ||
       this.state.chartProps.chartType !== ChartTypes.Scatter;
+    if (!canRenderChart) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ValidationErrors.datasizeError}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    const plotlyProps = this.generatePlotlyProps(
+      this.context.jointDataset,
+      this.state.chartProps,
+      this.context.selectedErrorCohort.cohort
+    );
     return (
-      <div className={classNames.topArea} id={"CausalIndividualContainer"}>
-        <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
+      <Stack horizontal id={this.chartAndConfigsId}>
+        <Stack.Item className={classNames.chartWithAxes}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
               jointDataset={this.context.jointDataset}
@@ -112,7 +122,8 @@ export class CausalIndividualChart extends React.PureComponent<
               mustBin={false}
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
-              onCancel={this.setYOpen.bind(this, false)}
+              onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -134,72 +145,74 @@ export class CausalIndividualChart extends React.PureComponent<
               }
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
-              onCancel={this.setXOpen.bind(this, false)}
+              onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
-          <div className={classNames.chartWithVertical}>
-            <div className={classNames.verticalAxis}>
-              <div className={classNames.rotatedVerticalBox}>
+          <Stack horizontal={false}>
+            <Stack.Item className={classNames.chartWithVertical}>
+              <Stack horizontal>
+                <Stack.Item className={classNames.verticalAxis}>
+                  <div className={classNames.rotatedVerticalBox}>
+                    <DefaultButton
+                      onClick={this.setYOpen}
+                      text={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.yAxis.property
+                        ].abbridgedLabel
+                      }
+                      title={
+                        this.context.jointDataset.metaDict[
+                          this.state.chartProps.yAxis.property
+                        ].label
+                      }
+                    />
+                  </div>
+                </Stack.Item>
+                <Stack.Item className={classNames.individualChartContainer}>
+                  <BasicHighChart
+                    configOverride={getIndividualChartOptions(
+                      plotlyProps,
+                      this.selectPointFromChart
+                    )}
+                    theme={getTheme()}
+                    id="CausalAggregateChart"
+                  />
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
+            <Stack className={classNames.horizontalAxisWithPadding}>
+              <div className={classNames.horizontalAxis}>
                 <DefaultButton
-                  onClick={this.setYOpen.bind(this, true)}
+                  onClick={this.setXOpen}
                   text={
                     this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
+                      this.state.chartProps.xAxis.property
                     ].abbridgedLabel
                   }
                   title={
                     this.context.jointDataset.metaDict[
-                      this.state.chartProps.yAxis.property
+                      this.state.chartProps.xAxis.property
                     ].label
                   }
                 />
               </div>
-            </div>
-            {!canRenderChart && (
-              <MissingParametersPlaceholder>
-                {localization.Interpret.ValidationErrors.datasizeError}
-              </MissingParametersPlaceholder>
-            )}
-            {canRenderChart && (
-              <AccessibleChart
-                plotlyProps={plotlyProps}
-                theme={getTheme()}
-                onClickHandler={this.selectPointFromChart}
-              />
-            )}
-          </div>
-          <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <DefaultButton
-                onClick={this.setXOpen.bind(this, true)}
-                text={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.context.jointDataset.metaDict[
-                    this.state.chartProps.xAxis.property
-                  ].label
-                }
-              />
-            </div>
-          </div>
-        </div>
-        <Stack horizontal={false} gap={15} className={classNames.legendAndText}>
+            </Stack>
+          </Stack>
+        </Stack.Item>
+        <Stack className={classNames.legendAndText}>
           <ComboBox
-            label={localization.CausalAnalysis.IndividualView.datapointIndex}
+            label={localization.CausalAnalysis.IndividualView.selectedDatapoint}
             onChange={this.selectPointFromDropdown}
             options={this.getDataOptions()}
             selectedKey={this.state.selectedIndex}
             ariaLabel={"datapoint picker"}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.smallDropdownStyle}
+            styles={FluentUIStyles.smallDropdownStyle}
           />
           <CausalWhatIf selectedIndex={this.state.selectedIndex} />
         </Stack>
-      </div>
+      </Stack>
     );
   }
 
@@ -211,7 +224,9 @@ export class CausalIndividualChart extends React.PureComponent<
         index
       );
     this.temporaryPoint[CausalIndividualConstants.colorPath] =
-      FabricStyles.fabricColorPalette[CausalIndividualConstants.MAX_SELECTION];
+      FluentUIStyles.fluentUIColorPalette[
+        CausalIndividualConstants.MAX_SELECTION
+      ];
   }
 
   private onXSet = (value: ISelectorConfig): void => {
@@ -232,27 +247,38 @@ export class CausalIndividualChart extends React.PureComponent<
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
 
-  private readonly setXOpen = (val: boolean): void => {
-    if (val && this.state.xDialogOpen === false) {
+  private readonly setXOpen = (): void => {
+    if (this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
       return;
     }
     this.setState({ xDialogOpen: false });
   };
 
-  private readonly setYOpen = (val: boolean): void => {
-    if (val && this.state.yDialogOpen === false) {
+  private readonly setXClose = (): void => {
+    this.setState({ xDialogOpen: false });
+  };
+
+  private readonly setYOpen = (): void => {
+    if (this.state.yDialogOpen === false) {
       this.setState({ yDialogOpen: true });
       return;
     }
     this.setState({ yDialogOpen: false });
   };
 
+  private readonly setYClose = (): void => {
+    this.setState({ yDialogOpen: false });
+  };
+
   private selectPointFromChart = (data: any): void => {
-    const trace = data.points[0];
-    const index = trace.customdata[JointDataset.IndexLabel];
+    const index = data.customdata[JointDataset.IndexLabel];
     this.setTemporaryPointToCopyOfDatasetPoint(index);
     this.toggleSelectionOfPoint(index);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromChart
+    });
   };
 
   private selectPointFromDropdown = (
@@ -263,6 +289,10 @@ export class CausalIndividualChart extends React.PureComponent<
       const index = item.key;
       this.setTemporaryPointToCopyOfDatasetPoint(index);
       this.toggleSelectionOfPoint(index);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type: TelemetryEventName.IndividualCausalSelectedDatapointUpdatedFromDropdown
+      });
     }
   };
 
@@ -279,6 +309,7 @@ export class CausalIndividualChart extends React.PureComponent<
     const plotlyProps = _.cloneDeep(
       CausalIndividualConstants.basePlotlyProperties
     );
+    const theme = getTheme();
     plotlyProps.data[0].hoverinfo = "all";
     const indexes = cohort.unwrap(JointDataset.IndexLabel);
     plotlyProps.data[0].type = chartProps.chartType;
@@ -286,9 +317,9 @@ export class CausalIndividualChart extends React.PureComponent<
     plotlyProps.data[0].marker = {
       color: indexes.map((rowIndex) => {
         if (rowIndex !== this.state.selectedIndex) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[0];
+        return getPrimaryChartColor(theme);
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -311,7 +342,7 @@ export class CausalIndividualChart extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               CausalIndividualConstants.MAX_SELECTION + 1
             ],
           width: 2
@@ -326,7 +357,7 @@ export class CausalIndividualChart extends React.PureComponent<
     };
 
     if (chartProps.xAxis) {
-      if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
         const xLabels =
           jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
         const xLabelIndexes = xLabels?.map((_, index) => index);
@@ -335,7 +366,7 @@ export class CausalIndividualChart extends React.PureComponent<
       }
     }
     if (chartProps.yAxis) {
-      if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
         const yLabels =
           jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
         const yLabelIndexes = yLabels?.map((_, index) => index);
@@ -378,10 +409,10 @@ export class CausalIndividualChart extends React.PureComponent<
       const metaX =
         this.context.jointDataset.metaDict[chartProps.xAxis.property];
       const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-      hovertemplate += `${metaX.label}: %{customdata.X}<br>`;
+      hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
       rawX.forEach((val, index) => {
-        if (metaX.treatAsCategorical) {
+        if (metaX?.treatAsCategorical) {
           customdata[index].X = metaX.sortedCategoricalValues?.[val];
         } else {
           customdata[index].X = (val as number).toLocaleString(undefined, {
@@ -405,9 +436,9 @@ export class CausalIndividualChart extends React.PureComponent<
       const metaY =
         this.context.jointDataset.metaDict[chartProps.yAxis.property];
       const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-      hovertemplate += `${metaY.label}: %{customdata.Y}<br>`;
+      hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
       rawY.forEach((val, index) => {
-        if (metaY.treatAsCategorical) {
+        if (metaY?.treatAsCategorical) {
           customdata[index].Y = metaY.sortedCategoricalValues?.[val];
         } else {
           customdata[index].Y = (val as number).toLocaleString(undefined, {
@@ -427,7 +458,40 @@ export class CausalIndividualChart extends React.PureComponent<
         trace.y = rawY;
       }
     }
-    hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.Index}<br>`;
+    if (
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.identity_feature_name
+    ) {
+      const identityFeatureName =
+        this.context.jointDataset.datasetMetaData?.featureMetaData
+          ?.identity_feature_name;
+
+      const jointDatasetFeatureName =
+        this.context.jointDataset.getJointDatasetFeatureName(
+          identityFeatureName
+        );
+
+      if (jointDatasetFeatureName) {
+        const metaIdentityFeature =
+          this.context.jointDataset.metaDict[jointDatasetFeatureName];
+        const rawIdentityFeature = JointDataset.unwrap(
+          dictionary,
+          jointDatasetFeatureName
+        );
+        hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+        rawIdentityFeature.forEach((val, index) => {
+          if (metaIdentityFeature?.treatAsCategorical) {
+            customdata[index].ID =
+              metaIdentityFeature.sortedCategoricalValues?.[val];
+          } else {
+            customdata[index].ID = (val as number).toLocaleString(undefined, {
+              maximumSignificantDigits: 5
+            });
+          }
+        });
+      }
+    }
+    hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
     hovertemplate += "<extra></extra>";
     trace.customdata = customdata as any;
     trace.hovertemplate = hovertemplate;
@@ -436,7 +500,7 @@ export class CausalIndividualChart extends React.PureComponent<
   private generateDefaultChartAxes(): IGenericChartProps | undefined {
     const yKey = `${JointDataset.DataLabelRoot}0`;
     const yIsDithered =
-      this.context.jointDataset.metaDict[yKey].treatAsCategorical;
+      this.context.jointDataset.metaDict[yKey]?.treatAsCategorical;
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {

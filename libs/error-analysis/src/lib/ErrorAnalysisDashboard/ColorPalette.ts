@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import { lab as Lab } from "d3-color";
-import { getTheme } from "office-ui-fabric-react";
 
 const theme = getTheme();
 

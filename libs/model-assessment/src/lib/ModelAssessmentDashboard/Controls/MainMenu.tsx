@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ErrorCohort,
-  IModelAssessmentContext,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import {
   CommandBar,
   CommandButton,
   ICommandBar,
@@ -17,7 +10,17 @@ import {
   IIconProps,
   Stack,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ErrorCohort,
+  IModelAssessmentContext,
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ChangeGlobalCohort } from "../Cohort/ChangeGlobalCohort";
@@ -30,6 +33,7 @@ import { mainMenuStyles } from "./MainMenu.styles";
 
 export interface IMainMenuProps {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
+  telemetryHook?: (message: ITelemetryEvent) => void;
   removeTab(index: number): void;
 }
 interface IMainMenuState {
@@ -95,7 +99,7 @@ export class MainMenu extends React.PureComponent<
         },
         key: "changeCohort",
         onClick: this.toggleChangeCohortVisibility,
-        text: localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
+        text: localization.ModelAssessment.CohortInformation.ShiftCohort
       },
       {
         iconProps: {
@@ -103,7 +107,7 @@ export class MainMenu extends React.PureComponent<
         },
         key: "addCohort",
         onClick: this.toggleCreateCohortVisibility,
-        text: localization.ModelAssessment.CohortInformation.CreateNewCohort
+        text: localization.ModelAssessment.CohortInformation.NewCohort
       }
     ];
     return (
@@ -172,30 +176,57 @@ export class MainMenu extends React.PureComponent<
 
     return (
       <TooltipHost content={this.getCohortStats()}>
-        <CommandButton className={classNames.mainMenuItem}>
+        <CommandButton
+          className={classNames.mainMenuItem}
+          // cursor should not change when hovering because we don't want users to think that something will happen if they click
+          styles={{ rootHovered: { cursor: "default" } }}
+        >
           {cohortInfoTitle}
         </CommandButton>
       </TooltipHost>
     );
   };
 
-  private toggleCohortSettingsPanel = (): void =>
+  private toggleCohortSettingsPanel = (): void => {
+    if (!this.state.cohortSettingsPanelVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuCohortSettingsClick);
+    }
     this.setState((prev) => ({
       cohortSettingsPanelVisible: !prev.cohortSettingsPanelVisible
     }));
+  };
 
-  private toggleDashboardSettings = (): void =>
+  private toggleDashboardSettings = (): void => {
+    if (!this.state.dashboardSettingsVisible) {
+      this.logButtonClick(
+        TelemetryEventName.MainMenuDashboardConfigurationClick
+      );
+    }
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));
+  };
+
   private toggleChangeCohortVisibility = () => {
+    if (!this.state.changeCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
+    }
     this.setState((prev) => ({
       changeCohortVisible: !prev.changeCohortVisible
     }));
   };
   private toggleCreateCohortVisibility = () => {
+    if (!this.state.createCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
+    }
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));
+  };
+  private logButtonClick = (eventName: TelemetryEventName) => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
   };
 }

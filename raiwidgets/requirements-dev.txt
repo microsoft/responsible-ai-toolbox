@@ -1,19 +1,18 @@
 # Requirements for raiwidgets development
 
-pytest==5.0.1
-mock==4.0.1
+pytest==7.0.1
 pytest-cov
-pytest-mock==3.1.1
-requests==2.24.0
+pytest-mock==3.6.1
+requests==2.25.1
 
 requirements-parser==0.2.0
 
 wheel
 
-# Required for interpret-community 0.18.0
-lightgbm==2.3.0
-
 fairlearn==0.6.0
+
+# Jupyter dependency that fails with python 3.6
+pywinpty==2.0.2; python_version <= '3.6' and sys_platform == 'win32'
 
 # Required for notebook tests
 nbformat
@@ -22,9 +21,9 @@ scrapbook
 jupyter
 nbval
 
-docutils<0.18
-sphinx==3.1.1
-sphinx-gallery==0.8.1
-pydata-sphinx-theme==0.3.0
+docutils<=0.19
+sphinx==5.0.2
+sphinx-gallery==0.10.0
+pydata-sphinx-theme==0.7.2
 
 ../responsibleai/.

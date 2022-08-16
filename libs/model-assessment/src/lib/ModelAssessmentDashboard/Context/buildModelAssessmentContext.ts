@@ -6,21 +6,23 @@ import {
   ISingleClassLocalFeatureImportance,
   JointDataset,
   Cohort,
-  WeightVectors,
-  ModelTypes,
+  CohortSource,
   IExplanationModelMetadata,
   isThreeDimArray,
   ErrorCohort,
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
-  getModelType
+  getModelType,
+  MetricCohortStats,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 
 import { getAvailableTabs } from "../AvailableTabs";
+import { processPreBuiltCohort } from "../Cohort/ProcessPreBuiltCohort";
 import { IModelAssessmentDashboardProps } from "../ModelAssessmentDashboardProps";
 import {
   IModelAssessmentDashboardState,
@@ -48,6 +50,7 @@ export function buildInitialModelAssessmentContext(
   }
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
+    featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
@@ -57,31 +60,34 @@ export function buildInitialModelAssessmentContext(
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations
   );
-  // consider taking filters in as param arg for programmatic users
-  const cohorts = [
-    new ErrorCohort(
-      new Cohort(
-        localization.ErrorAnalysis.Cohort.defaultLabel,
-        jointDataset,
-        []
-      ),
-      jointDataset
-    )
-  ];
-  const weightVectorLabels = {
-    [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
-  };
-  const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
-    weightVectorOptions.push(WeightVectors.AbsAvg);
-  }
-  modelMetadata.classNames.forEach((name, index) => {
-    weightVectorLabels[index] = localization.formatString(
-      localization.Interpret.WhatIfTab.classLabel,
-      name
+
+  let metricStats: MetricCohortStats | undefined = undefined;
+  if (props.errorAnalysisData?.[0]?.root_stats) {
+    const rootStats = props.errorAnalysisData?.[0]?.root_stats;
+    metricStats = new MetricCohortStats(
+      rootStats.totalSize,
+      rootStats.totalSize,
+      rootStats.metricValue,
+      rootStats.metricName,
+      rootStats.errorCoverage
     );
-    weightVectorOptions.push(index);
-  });
+  }
+  const defaultErrorCohort = new ErrorCohort(
+    new Cohort(
+      localization.ErrorAnalysis.Cohort.defaultLabel,
+      jointDataset,
+      []
+    ),
+    jointDataset,
+    0,
+    CohortSource.None,
+    false,
+    metricStats
+  );
+  let errorCohortList: ErrorCohort[] = [defaultErrorCohort];
+  const [preBuiltErrorCohortList] = processPreBuiltCohort(props, jointDataset);
+  errorCohortList = errorCohortList.concat(preBuiltErrorCohortList);
+  const cohorts = errorCohortList;
 
   // only include tabs for which we have the required data
   const activeGlobalTabs: IModelAssessmentDashboardTab[] = getAvailableTabs(
@@ -94,7 +100,6 @@ export function buildInitialModelAssessmentContext(
       name: item.text as string
     };
   });
-  const importances = props.errorAnalysisData?.[0]?.importances ?? [];
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
@@ -105,26 +110,15 @@ export function buildInitialModelAssessmentContext(
     errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
     globalImportance: globalProps.globalImportance,
     globalImportanceIntercept: globalProps.globalImportanceIntercept,
-    importances,
     isGlobalImportanceDerivedFromLocal:
       globalProps.isGlobalImportanceDerivedFromLocal,
     jointDataset,
-    mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
-    mapShiftVisible: false,
     modelChartConfig: undefined,
     modelMetadata,
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
-    selectedFeatures: props.dataset.feature_names,
-    selectedWeightVector:
-      modelMetadata.modelType === ModelTypes.Multiclass
-        ? WeightVectors.AbsAvg
-        : 0,
     selectedWhatIfIndex: undefined,
-    sortVector: undefined,
-    weightVectorLabels,
-    weightVectorOptions,
-    whatIfChartConfig: undefined
+    sortVector: undefined
   };
 }
 
@@ -132,7 +126,9 @@ function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
   const modelType = getModelType(
-    props.dataset.task_type === "regression" ? "regressor" : "classifier",
+    props.dataset.task_type === DatasetTaskType.Regression
+      ? "regressor"
+      : "classifier",
     props.modelExplanationData?.[0]?.precomputedExplanations,
     props.dataset.probability_y
   );

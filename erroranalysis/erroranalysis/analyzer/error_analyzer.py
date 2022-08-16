@@ -7,14 +7,16 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
-from sklearn.preprocessing import OrdinalEncoder
 
-from erroranalysis._internal.constants import MatrixParams, Metrics, ModelTask
+from erroranalysis._internal.constants import (MatrixParams, Metrics,
+                                               ModelTask, RootKeys,
+                                               metric_to_display_name)
 from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
+from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
 from erroranalysis._internal.utils import generate_random_unique_indexes
@@ -23,6 +25,7 @@ from erroranalysis.report import ErrorReport
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 IMPORTANCES_THRESHOLD = 50000
+ROOT_COVERAGE = 100
 
 
 class BaseAnalyzer(ABC):
@@ -90,20 +93,12 @@ class BaseAnalyzer(ABC):
                 metric = Metrics.MEAN_SQUARED_ERROR
         self._metric = metric
         if self._categorical_features:
-            self._categorical_indexes = [feature_names.index(feature)
-                                         for feature
-                                         in self._categorical_features]
-            ordinal_enc = OrdinalEncoder()
-            ct = ColumnTransformer([('ord', ordinal_enc,
-                                     self._categorical_indexes)],
-                                   remainder='drop')
-            self._string_ind_data = ct.fit_transform(self._dataset)
-            transformer_categories = ct.transformers_[0][1].categories_
-            for category_arr, category_index in zip(transformer_categories,
-                                                    self._categorical_indexes):
-                category_values = category_arr.tolist()
-                self._categories.append(category_values)
-                self._category_dictionary[category_index] = category_values
+            self._categories, self._categorical_indexes, \
+                self._category_dictionary, self._string_ind_data = \
+                process_categoricals(
+                    all_feature_names=self._feature_names,
+                    categorical_features=self._categorical_features,
+                    dataset=self._dataset)
         check_pandas_version(self.feature_names)
 
     @property
@@ -234,7 +229,7 @@ class BaseAnalyzer(ABC):
                        num_bins=BIN_THRESHOLD):
         """Computes the matrix filter (aka heatmap) json.
 
-        :param features: One or two features to compute the heatmap.
+        :param features: One or two feature names to compute the heatmap.
         :type features: list
         :param filters: The filters to apply to the dataset.
         :type filters: list[str]
@@ -265,7 +260,7 @@ class BaseAnalyzer(ABC):
                            min_child_samples=None):
         """Computes the tree view json.
 
-        :param features: The selected features to train the
+        :param features: The selected feature names to train the
             surrogate model on.
         :type features: list[str]
         :param filters: The filters to apply to the dataset.
@@ -298,7 +293,8 @@ class BaseAnalyzer(ABC):
                             max_depth=None,
                             num_leaves=None,
                             min_child_samples=None,
-                            compute_importances=False):
+                            compute_importances=False,
+                            compute_root_stats=False):
         """Creates the error analysis ErrorReport.
 
         The ErrorReport contains the importances, heatmap and tree view json.
@@ -316,6 +312,9 @@ class BaseAnalyzer(ABC):
         :type min_child_samples: int
         :param compute_importances: If true, computes and adds the
             correlation of features and the error to the ErrorReport.
+        :type compute_importances: bool
+        :param compute_root_stats: If true, computes and adds the root stats.
+        :type compute_root_stats: bool
         :return: The computed error analysis ErrorReport.
         :rtype: dict
         """
@@ -326,17 +325,21 @@ class BaseAnalyzer(ABC):
                                        num_leaves=num_leaves,
                                        min_child_samples=min_child_samples)
         matrix = None
-        if filter_features is not None:
+        if filter_features:
             matrix = self.compute_matrix(filter_features,
                                          None,
                                          None)
         importances = None
         if compute_importances:
             importances = self.compute_importances()
+        root_stats = None
+        if compute_root_stats:
+            root_stats = self.compute_root_stats()
         return ErrorReport(tree, matrix,
                            tree_features=self.feature_names,
                            matrix_features=filter_features,
-                           importances=importances)
+                           importances=importances,
+                           root_stats=root_stats)
 
     def compute_importances(self):
         """Compute the importances or correlation between features and error.
@@ -374,6 +377,32 @@ class BaseAnalyzer(ABC):
             return mutual_info_classif(input_data, diff).tolist()
         else:
             return mutual_info_regression(input_data, diff).tolist()
+
+    def compute_root_stats(self):
+        """Compute the root all data statistics.
+
+        :return: The computed root statistics.
+        :rtype: dict
+        """
+        if self.metric != Metrics.ERROR_RATE:
+            metric_func = metric_to_func[self.metric]
+            metric_value = metric_func(self.pred_y, self.true_y)
+        else:
+            total = len(self.true_y)
+            if total == 0:
+                metric_value = 0
+            else:
+                diff = self.get_diff()
+                error = sum(diff)
+                metric_value = (error / total) * 100
+        metric_name = metric_to_display_name[self.metric]
+        root_stats = {
+            RootKeys.METRIC_NAME: metric_name,
+            RootKeys.METRIC_VALUE: metric_value,
+            RootKeys.TOTAL_SIZE: len(self.true_y),
+            RootKeys.ERROR_COVERAGE: ROOT_COVERAGE
+        }
+        return root_stats
 
     def update_metric(self, metric):
         """Update the metric used by the error analyzer.
@@ -418,6 +447,15 @@ class BaseAnalyzer(ABC):
         :return: The difference between the predictions
             and true y labels.
         :rtype: numpy.ndarray
+        """
+        pass
+
+    @abstractmethod
+    def pred_y(self):
+        """Abstract method to get the predicted y labels.
+
+        :return: The predicted y labels.
+        :rtype: numpy.ndarray or list[] or pandas.Series
         """
         pass
 
@@ -523,6 +561,17 @@ class ModelAnalyzer(BaseAnalyzer):
             return self.model.predict(self.dataset) != self.true_y
         else:
             return self.model.predict(self.dataset) - self.true_y
+
+    @property
+    def pred_y(self):
+        """Get the computed predicted y values.
+
+        Note for ModelAnalyzer these are computed on the fly.
+
+        :return: The computed predicted y values.
+        :rtype: numpy.ndarray or list[] or pandas.Series
+        """
+        return self.model.predict(self.dataset)
 
 
 class PredictionsAnalyzer(BaseAnalyzer):

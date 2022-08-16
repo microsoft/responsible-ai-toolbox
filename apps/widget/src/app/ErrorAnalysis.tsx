@@ -15,7 +15,7 @@ export class ErrorAnalysis extends React.Component {
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
     let requestImportancesMethod = undefined;
-    if (config.baseUrl !== undefined) {
+    if (config.baseUrl) {
       if (modelData.enablePredict) {
         requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
           return callFlaskService(data, "/predict");
@@ -58,7 +58,6 @@ export class ErrorAnalysis extends React.Component {
         localUrl={config.baseUrl}
         locale={config.locale}
         features={modelData.featureNames}
-        rootStats={modelData.rootStats}
         errorAnalysisData={modelData.errorAnalysisData}
       />
     );

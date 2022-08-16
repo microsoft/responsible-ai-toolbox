@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
+import { IStackTokens, Label, Stack, Slider, Toggle } from "@fluentui/react";
 import {
-  IStackTokens,
-  Label,
-  Stack,
-  Slider,
-  Toggle
-} from "office-ui-fabric-react";
+  ITelemetryEvent,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { InfoCallout } from "../../InfoCallout/InfoCallout";
@@ -21,6 +20,7 @@ export interface IMatrixOptionsProps {
   isEnabled: boolean;
   updateQuantileBinning: (quantileBinning: boolean) => void;
   updateNumBins: (numBins: number) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 const stackTokens: IStackTokens = { childrenGap: "l1" };
@@ -93,6 +93,10 @@ export class MatrixOptions extends React.Component<IMatrixOptionsProps> {
     if (checked !== undefined) {
       this.props.updateQuantileBinning(checked);
     }
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisHeatMapQuantileBinningClick
+    });
   };
 
   private onBinsSliderChanged = (

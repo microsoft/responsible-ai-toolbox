@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   IDropdownStyles,
   IDropdownOption,
@@ -12,7 +11,8 @@ import {
   DialogType,
   DialogFooter,
   Dropdown
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
@@ -121,8 +121,14 @@ export class ShiftCohort extends React.Component<
           temporaryCohort={this.state.savedCohorts[this.state.selectedCohort]}
         />
         <DialogFooter>
-          <PrimaryButton onClick={this.onApplyClick} text="Apply" />
-          <DefaultButton onClick={this.props.onDismiss} text="Cancel" />
+          <PrimaryButton
+            onClick={this.onApplyClick}
+            text={localization.Core.ShiftCohort.apply}
+          />
+          <DefaultButton
+            onClick={this.props.onDismiss}
+            text={localization.Core.ShiftCohort.cancel}
+          />
         </DialogFooter>
       </Dialog>
     );

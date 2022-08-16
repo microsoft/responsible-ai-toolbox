@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Label, SpinButton, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalPolicy,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Label, SpinButton, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentList } from "./TreatmentList";
@@ -39,12 +39,12 @@ export class TreatmentListSection extends React.Component<
   public render(): React.ReactNode {
     const styles = TreatmentTableStyles();
     return (
-      <Stack horizontal={false} grow tokens={{ padding: "l1" }}>
+      <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item>
           <Label>{localization.Counterfactuals.individualTreatment}</Label>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "l1" }}>
+          <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
             <Stack.Item className={styles.detailsList}>
               <Stack horizontal>
                 <Stack.Item className={styles.spinButtonText}>

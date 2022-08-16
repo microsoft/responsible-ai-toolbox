@@ -1,6 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { describeAggregateFeatureImportance } from "../../../describer/modelAssessment/featureImportances/aggregateFeatureImportance/describeAggregateFeatureImportance";
+import {
+  describeAggregateFeatureImportance,
+  modelAssessmentDatasets
+} from "@responsible-ai/e2e";
 
-describeAggregateFeatureImportance("DiabetesDecisionMaking");
+const datasetShape = modelAssessmentDatasets.DiabetesDecisionMaking;
+describeAggregateFeatureImportance(datasetShape, "DiabetesDecisionMaking");

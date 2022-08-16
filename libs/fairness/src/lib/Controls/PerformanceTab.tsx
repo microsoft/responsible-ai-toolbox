@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Text, Stack, getTheme } from "@fluentui/react";
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Text, Stack, getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { IPerformancePickerPropsV2 } from "../FairnessWizard";
@@ -14,7 +14,9 @@ import { SelectionList } from "./SelectionList";
 import { WizardFooter } from "./WizardFooter";
 
 export interface IPerformancePickingTabProps extends IWizardTabProps {
+  nextTabKey: string;
   performancePickerProps: IPerformancePickerPropsV2;
+  previousTabKey: string;
 }
 
 export class PerformanceTab extends React.PureComponent<IPerformancePickingTabProps> {
@@ -67,18 +69,15 @@ export class PerformanceTab extends React.PureComponent<IPerformancePickingTabPr
                 key: performance.key,
                 metric: performance.key,
                 name: performance.title,
-                onSelect:
-                  this.props.performancePickerProps.onPerformanceChange.bind(
-                    this,
-                    performance.key
-                  )
+                onSelect: this.props.performancePickerProps.onPerformanceChange
               };
             }
           )}
         />
         <WizardFooter
-          onNext={this.props.onNext}
-          onPrevious={this.props.onPrevious}
+          nextTabKey={this.props.nextTabKey}
+          previousTabKey={this.props.previousTabKey}
+          onSetTab={this.props.onSetTab}
         />
       </Stack>
     );

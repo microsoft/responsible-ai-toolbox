@@ -6,7 +6,7 @@ import {
   IProcessedStyleSet,
   IStyle,
   mergeStyleSets
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IWizardFooterStyles {
   frame: IStyle;

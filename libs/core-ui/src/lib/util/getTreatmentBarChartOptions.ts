@@ -4,13 +4,14 @@
 import { ITheme } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 
-import { IHighchartsConfig } from "../Highchart/HighchartTypes";
+import { getPrimaryChartColor } from "../Highchart/ChartColors";
+import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 import { ICausalPolicyGains } from "../Interfaces/ICausalAnalysisData";
 
 export function getTreatmentBarChartOptions(
   data: ICausalPolicyGains,
   title: string,
-  theme?: ITheme
+  theme: ITheme
 ): IHighchartsConfig {
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
@@ -38,7 +39,7 @@ export function getTreatmentBarChartOptions(
     },
     series: [
       {
-        color: colorTheme.axisColor,
+        color: getPrimaryChartColor(theme),
         data: xData,
         dataLabels: {
           color: colorTheme.fontColor
@@ -52,12 +53,6 @@ export function getTreatmentBarChartOptions(
     },
     xAxis: {
       categories: yData
-    },
-    yAxis: {
-      min: 0,
-      title: {
-        align: "high"
-      }
     }
   };
 }

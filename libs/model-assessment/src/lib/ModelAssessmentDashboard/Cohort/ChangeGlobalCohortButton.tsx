@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChangeGlobalCohort } from "./ChangeGlobalCohort";
@@ -30,9 +30,7 @@ export class ChangeGlobalCohortButton extends React.Component<
     return (
       <>
         <DefaultButton
-          text={
-            localization.ModelAssessment.CohortInformation.SwitchGlobalCohort
-          }
+          text={localization.ModelAssessment.CohortInformation.ShiftCohort}
           onClick={this.toggleShiftCohortVisibility}
         />
         <ChangeGlobalCohort

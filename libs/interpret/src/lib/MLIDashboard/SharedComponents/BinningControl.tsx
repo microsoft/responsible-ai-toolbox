@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import {
+  IComboBoxOption,
+  IComboBox,
+  ComboBox,
+  IDropdownOption,
+  TextField
+} from "@fluentui/react";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   ICategoricalRange,
@@ -10,13 +17,6 @@ import {
   RangeTypes
 } from "@responsible-ai/mlchartlib";
 import _, { toNumber } from "lodash";
-import {
-  ComboBox,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  TextField
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { binningControlStyles } from "./BinningControl.styles";
@@ -76,7 +76,7 @@ export class BinningControl extends React.PureComponent<
             ariaLabel="feature picker"
             selectedKey={this.state ? this.state.featureIndex : undefined}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.defaultDropdownStyle}
+            styles={FluentUIStyles.defaultDropdownStyle}
           />
         </div>
         {!!this.state && (
@@ -87,30 +87,30 @@ export class BinningControl extends React.PureComponent<
                 selectedKey={this.state.selectedOptionKeys}
                 allowFreeform
                 autoComplete="on"
-                options={this.state.categoricalOptions}
+                options={this.state.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             )}
             {this.state.type !== RangeTypes.Categorical && (
               <div className={binningControlStyles.featurePicker}>
                 <TextField
                   label={localization.Interpret.IcePlot.minimumInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.min}
                   onChange={this.onMinRangeChanged}
                   errorMessage={this.state.minErrorMessage}
                 />
                 <TextField
                   label={localization.Interpret.IcePlot.maximumInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.max}
                   onChange={this.onMaxRangeChanged}
                   errorMessage={this.state.maxErrorMessage}
                 />
                 <TextField
                   label={localization.Interpret.IcePlot.stepInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.steps}
                   onChange={this.onStepsRangeChanged}
                   errorMessage={this.state.stepsErrorMessage}
@@ -125,7 +125,7 @@ export class BinningControl extends React.PureComponent<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "number") {
       this.setState(this.buildRangeView(item.key), () => {

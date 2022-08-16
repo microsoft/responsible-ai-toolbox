@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DefaultButton, Stack, Label, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { DefaultButton, IStackTokens, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
@@ -15,131 +15,86 @@ import { cohortInfoStyles } from "./CohortInfo.styles";
 export interface ICohortInfoProps {
   currentCohort: ErrorCohort;
   onSaveCohortClick: () => void;
-  includeDividers: boolean;
   disabledView: boolean;
 }
-
-const alignmentStackTokens: IStackTokens = {
-  childrenGap: 5,
-  padding: 2
-};
 
 export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
   public render(): React.ReactNode {
     const classNames = cohortInfoStyles();
 
     return (
-      <Stack className={classNames.container}>
-        {this.props.includeDividers && <div className={classNames.divider} />}
-        <div className={classNames.section}>
-          <DefaultButton
-            className={classNames.button}
-            text={localization.ErrorAnalysis.CohortInfo.saveCohort}
-            onClick={(): any => this.props.onSaveCohortClick()}
-            disabled={this.props.disabledView}
-          />
-          <div className={classNames.section} />
-          <div>
-            <div className={classNames.header}>
-              {localization.ErrorAnalysis.CohortInfo.basicInformation}
-            </div>
-            {this.props.currentCohort.cohort.name !==
-              localization.ErrorAnalysis.Cohort.defaultLabel && (
-              <div>{this.props.currentCohort.cohort.name}</div>
-            )}
-            <div>
-              {localization.ErrorAnalysis.Cohort.defaultLabel} (
-              {getCohortFilterCount(this.props.currentCohort.cohort)}{" "}
-              {localization.ErrorAnalysis.CohortInfo.filters})
-            </div>
-          </div>
-        </div>
-        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
-        <div className={classNames.section}>
-          <div>
-            <div>
-              {localization.ErrorAnalysis.CohortInfo.baseCohortInstances}
-            </div>
-            <Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>
-                  {localization.ErrorAnalysis.CohortInfo.total}
-                </div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.cohortStats.totalAll}
-                </div>
-              </Stack>
-              {this.props.currentCohort.cohortStats instanceof
-                ErrorCohortStats && (
-                <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>
-                    {localization.ErrorAnalysis.CohortInfo.correct}
-                  </div>
-                  <div className={classNames.tableData}>
-                    {this.props.currentCohort.cohortStats.totalCorrect}
-                  </div>
-                </Stack>
-              )}
-              {this.props.currentCohort.cohortStats instanceof
-                ErrorCohortStats && (
-                <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>
-                    {localization.ErrorAnalysis.CohortInfo.incorrect}
-                  </div>
-                  <div className={classNames.tableData}>
-                    {this.props.currentCohort.cohortStats.totalIncorrect}
-                  </div>
-                </Stack>
-              )}
-            </Stack>
-          </div>
-        </div>
-        <div className={classNames.section}>
-          <div>
-            <div>
-              {localization.ErrorAnalysis.CohortInfo.selectedCohortInstances}
-            </div>
-            <Stack>
-              <Stack horizontal tokens={alignmentStackTokens}>
-                <div className={classNames.tableData}>
-                  {localization.ErrorAnalysis.CohortInfo.total}
-                </div>
-                <div className={classNames.tableData}>
-                  {this.props.currentCohort.cohortStats.totalCohort}
-                </div>
-              </Stack>
-              {this.props.currentCohort.cohortStats instanceof
-                ErrorCohortStats && (
-                <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>
-                    {localization.ErrorAnalysis.CohortInfo.correct}
-                  </div>
-                  <div className={classNames.tableData}>
-                    {this.props.currentCohort.cohortStats.totalCohortCorrect}
-                  </div>
-                </Stack>
-              )}
-              {this.props.currentCohort.cohortStats instanceof
-                ErrorCohortStats && (
-                <Stack horizontal tokens={alignmentStackTokens}>
-                  <div className={classNames.tableData}>
-                    {localization.ErrorAnalysis.CohortInfo.incorrect}
-                  </div>
-                  <div className={classNames.tableData}>
-                    {this.props.currentCohort.cohortStats.totalCohortIncorrect}
-                  </div>
-                </Stack>
-              )}
-            </Stack>
-          </div>
-        </div>
-        {this.props.includeDividers && <div className={classNames.divider} />}{" "}
-        <div className={classNames.section}>
-          <div className={classNames.header}>
-            {localization.ErrorAnalysis.CohortInfo.predictionPath}
-          </div>
+      <Stack className={classNames.container} tokens={{ childrenGap: "20px" }}>
+        <DefaultButton
+          className={classNames.button}
+          text={localization.ErrorAnalysis.CohortInfo.saveCohort}
+          onClick={(): any => this.props.onSaveCohortClick()}
+          disabled={
+            this.props.disabledView || !this.props.currentCohort.isTemporary
+          }
+        />
+        <Stack>
+          <Label>
+            {localization.ErrorAnalysis.CohortInfo.basicInformation}
+          </Label>
+          {this.props.currentCohort.cohort.name !==
+            localization.ErrorAnalysis.Cohort.defaultLabel && (
+            <Text>{this.props.currentCohort.cohort.name}</Text>
+          )}
+          <Text>
+            {localization.ErrorAnalysis.Cohort.defaultLabel} (
+            {getCohortFilterCount(this.props.currentCohort.cohort)}{" "}
+            {localization.ErrorAnalysis.CohortInfo.filters})
+          </Text>
+        </Stack>
+
+        <Stack>
+          <Label>
+            {localization.ErrorAnalysis.CohortInfo.baseCohortInstances}
+          </Label>
+          <Text>
+            {localization.ErrorAnalysis.CohortInfo.total}{" "}
+            {this.props.currentCohort.cohortStats.totalAll}
+          </Text>
+          {this.props.currentCohort.cohortStats instanceof ErrorCohortStats && (
+            <Text>
+              {localization.ErrorAnalysis.CohortInfo.correct}{" "}
+              {this.props.currentCohort.cohortStats.totalCorrect}
+            </Text>
+          )}
+          {this.props.currentCohort.cohortStats instanceof ErrorCohortStats && (
+            <Text>
+              {localization.ErrorAnalysis.CohortInfo.incorrect}{" "}
+              {this.props.currentCohort.cohortStats.totalIncorrect}
+            </Text>
+          )}
+        </Stack>
+
+        <Stack>
+          <Label>
+            {localization.ErrorAnalysis.CohortInfo.selectedCohortInstances}
+          </Label>
+          <Text>
+            {localization.ErrorAnalysis.CohortInfo.total}{" "}
+            {this.props.currentCohort.cohortStats.totalCohort}
+          </Text>
+          {this.props.currentCohort.cohortStats instanceof ErrorCohortStats && (
+            <Text>
+              {localization.ErrorAnalysis.CohortInfo.correct}{" "}
+              {this.props.currentCohort.cohortStats.totalCohortCorrect}
+            </Text>
+          )}
+          {this.props.currentCohort.cohortStats instanceof ErrorCohortStats && (
+            <Text>
+              {localization.ErrorAnalysis.CohortInfo.incorrect}{" "}
+              {this.props.currentCohort.cohortStats.totalCohortIncorrect}
+            </Text>
+          )}
+        </Stack>
+
+        <Stack>
+          <Label>{localization.ErrorAnalysis.CohortInfo.predictionPath}</Label>
           <PredictionPath temporaryCohort={this.props.currentCohort} />
-        </div>
+        </Stack>
       </Stack>
     );
   }

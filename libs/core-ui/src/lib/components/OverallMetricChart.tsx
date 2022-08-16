@@ -1,38 +1,40 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import {
   getTheme,
   DefaultButton,
   IDropdownOption,
   Dropdown,
   Text
-} from "office-ui-fabric-react";
-import { Transform } from "plotly.js";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
+import { AccessibleChart } from "@responsible-ai/mlchartlib";
+import _ from "lodash";
 import React from "react";
 
-import { Cohort } from "../Cohort/Cohort";
 import { cohortKey } from "../cohortKey";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "../Context/ModelAssessmentContext";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
-import { FabricStyles } from "../util/FabricStyles";
 import {
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig
 } from "../util/IGenericChartProps";
-import { ColumnCategories, JointDataset } from "../util/JointDataset";
-import { ILabeledStatistic, generateMetrics } from "../util/StatisticsUtils";
+import { ITelemetryEvent } from "../util/ITelemetryEvent";
+import { ColumnCategories } from "../util/JointDatasetUtils";
 
 import { AxisConfigDialog } from "./AxisConfigDialog";
 import { MissingParametersPlaceholder } from "./MissingParametersPlaceholder";
 import { overallMetricChartStyles } from "./OverallMetricChart.styles";
+import {
+  generateDefaultChartAxes,
+  generateMetricsList,
+  generatePlotlyProps
+} from "./OverallMetricChartUtils";
 
 interface IOverallMetricChartState {
   xDialogOpen: boolean;
@@ -41,10 +43,12 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
-class OverallMetricChartProps {}
+class IOverallMetricChartProps {
+  telemetryHook?: (message: ITelemetryEvent) => void;
+}
 
 export class OverallMetricChart extends React.PureComponent<
-  OverallMetricChartProps,
+  IOverallMetricChartProps,
   IOverallMetricChartState
 > {
   public static contextType = ModelAssessmentContext;
@@ -53,7 +57,7 @@ export class OverallMetricChart extends React.PureComponent<
 
   private readonly chartAndConfigsId = "OverallMetricChart";
 
-  public constructor(props: OverallMetricChartProps) {
+  public constructor(props: IOverallMetricChartProps) {
     super(props);
     this.state = {
       chartProps: undefined,
@@ -64,7 +68,7 @@ export class OverallMetricChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    this.setState({ chartProps: this.generateDefaultChartAxes() });
+    this.setState({ chartProps: generateDefaultChartAxes(this.context) });
   }
 
   public render(): React.ReactNode {
@@ -85,7 +89,12 @@ export class OverallMetricChart extends React.PureComponent<
       this.context.errorCohorts.map((errorCohort) => errorCohort.cohort),
       this.state.selectedCohortIndex
     );
-    const metricsList = this.generateMetrics().reverse();
+    const metricsList = generateMetricsList(
+      this.context,
+      this.state.selectedCohortIndex,
+      this.state.chartProps.yAxis.property,
+      this.state.chartProps
+    ).reverse();
     const height = `${Math.max(400, 160 * metricsList.length)}px`;
     const cohortOptions =
       this.state.chartProps.yAxis.property !== cohortKey
@@ -128,7 +137,8 @@ export class OverallMetricChart extends React.PureComponent<
               }
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
-              onCancel={this.setYOpen.bind(this, false)}
+              onCancel={this.setYClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
@@ -140,7 +150,8 @@ export class OverallMetricChart extends React.PureComponent<
               mustBin={false}
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
-              onCancel={this.setXOpen.bind(this, false)}
+              onCancel={this.setXClose}
+              telemetryHook={this.props.telemetryHook}
             />
           )}
           <div className={classNames.chartWithVertical}>
@@ -148,7 +159,7 @@ export class OverallMetricChart extends React.PureComponent<
               <div className={classNames.rotatedVerticalBox}>
                 <div>
                   <DefaultButton
-                    onClick={this.setYOpen.bind(this, true)}
+                    onClick={this.setYOpen}
                     text={
                       this.context.jointDataset.metaDict[
                         this.state.chartProps.yAxis.property
@@ -208,7 +219,7 @@ export class OverallMetricChart extends React.PureComponent<
             <div className={classNames.horizontalAxis}>
               <div>
                 <DefaultButton
-                  onClick={this.setXOpen.bind(this, true)}
+                  onClick={this.setXOpen}
                   text={
                     this.context.jointDataset.metaDict[
                       this.state.chartProps.xAxis.property
@@ -237,19 +248,27 @@ export class OverallMetricChart extends React.PureComponent<
     }
   };
 
-  private readonly setXOpen = (val: boolean): void => {
-    if (val && this.state.xDialogOpen === false) {
+  private readonly setXOpen = (): void => {
+    if (this.state.xDialogOpen === false) {
       this.setState({ xDialogOpen: true });
       return;
     }
     this.setState({ xDialogOpen: false });
   };
 
-  private readonly setYOpen = (val: boolean): void => {
-    if (val && this.state.yDialogOpen === false) {
+  private readonly setXClose = (): void => {
+    this.setState({ xDialogOpen: false });
+  };
+
+  private readonly setYOpen = (): void => {
+    if (this.state.yDialogOpen === false) {
       this.setState({ yDialogOpen: true });
       return;
     }
+    this.setState({ yDialogOpen: false });
+  };
+
+  private readonly setYClose = (): void => {
     this.setState({ yDialogOpen: false });
   };
 
@@ -260,7 +279,7 @@ export class OverallMetricChart extends React.PureComponent<
     }
     newProps.xAxis = value;
     newProps.chartType = this.context.jointDataset.metaDict[value.property]
-      .treatAsCategorical
+      ?.treatAsCategorical
       ? ChartTypes.Histogram
       : ChartTypes.Box;
 
@@ -276,231 +295,4 @@ export class OverallMetricChart extends React.PureComponent<
 
     this.setState({ chartProps: newProps, yDialogOpen: false });
   };
-
-  private generateDefaultChartAxes(): IGenericChartProps | undefined {
-    if (!this.context.jointDataset.hasPredictedY) {
-      return undefined;
-    }
-    let bestModelMetricKey: string;
-    if (
-      this.context.modelMetadata.modelType === ModelTypes.Binary &&
-      this.context.jointDataset.hasPredictedProbabilities
-    ) {
-      bestModelMetricKey = `${JointDataset.ProbabilityYRoot}0`;
-    } else if (this.context.modelMetadata.modelType === ModelTypes.Regression) {
-      if (
-        this.context.jointDataset.hasPredictedY &&
-        this.context.jointDataset.hasTrueY
-      ) {
-        bestModelMetricKey = JointDataset.RegressionError;
-      } else {
-        bestModelMetricKey = JointDataset.PredictedYLabel;
-      }
-    } else {
-      bestModelMetricKey = JointDataset.PredictedYLabel;
-    } // not handling multiclass at this time
-
-    const chartProps: IGenericChartProps = {
-      chartType: this.context.jointDataset.metaDict[bestModelMetricKey]
-        .isCategorical
-        ? ChartTypes.Histogram
-        : ChartTypes.Box,
-      xAxis: {
-        options: {
-          bin: false
-        },
-        property: bestModelMetricKey
-      },
-      yAxis: {
-        options: {},
-        property: cohortKey
-      }
-    };
-    return chartProps;
-  }
-
-  private generateMetrics(): ILabeledStatistic[][] {
-    if (!this.state.chartProps) {
-      return [];
-    }
-    if (this.state.chartProps.yAxis.property === cohortKey) {
-      const indexes = this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      );
-      return generateMetrics(
-        this.context.jointDataset,
-        indexes,
-        this.context.modelMetadata.modelType
-      );
-    }
-    const cohort =
-      this.context.errorCohorts[this.state.selectedCohortIndex].cohort;
-    const yValues = cohort.unwrap(this.state.chartProps.yAxis.property, true);
-    const indexArray = cohort.unwrap(JointDataset.IndexLabel);
-    const sortedCategoricalValues =
-      this.context.jointDataset.metaDict[this.state.chartProps.yAxis.property]
-        .sortedCategoricalValues;
-    const indexes = sortedCategoricalValues?.map((_, labelIndex) => {
-      return indexArray.filter((_, index) => {
-        return yValues[index] === labelIndex;
-      });
-    });
-    return generateMetrics(
-      this.context.jointDataset,
-      indexes || [],
-      this.context.modelMetadata.modelType
-    );
-  }
-}
-
-function generatePlotlyProps(
-  jointData: JointDataset,
-  chartProps: IGenericChartProps,
-  cohorts: Cohort[],
-  selectedCohortIndex: number
-): IPlotlyProperty {
-  // In this view, y will always be categorical (including a binned numeric variable), and could be
-  // iterations over the cohorts. We can set y and the y labels before the rest of the char properties.
-  const plotlyProps: IPlotlyProperty = {
-    config: { displaylogo: false, displayModeBar: false, responsive: true },
-    data: [{}],
-    layout: {
-      autosize: true,
-      dragmode: false,
-      hovermode: "closest",
-      margin: {
-        b: 20,
-        l: 10,
-        t: 25
-      },
-      showlegend: false,
-      xaxis: {
-        color: FabricStyles.chartAxisColor,
-        gridcolor: "#e5e5e5",
-        mirror: true,
-        showgrid: true,
-        showline: true,
-        side: "bottom",
-        tickfont: {
-          family: FabricStyles.fontFamilies,
-          size: 11
-        }
-      },
-      yaxis: {
-        automargin: true,
-        color: FabricStyles.chartAxisColor,
-        showline: true,
-        tickfont: {
-          family: FabricStyles.fontFamilies,
-          size: 11
-        }
-      }
-    } as any
-  };
-  let rawX: number[];
-  let rawY: number[];
-  let yLabels: string[] | undefined;
-  let yLabelIndexes: number[] | undefined;
-  const yMeta = jointData.metaDict[chartProps.yAxis.property];
-  const yAxisName = yMeta.label;
-  if (chartProps.yAxis.property === cohortKey) {
-    rawX = [];
-    rawY = [];
-    yLabels = [];
-    yLabelIndexes = [];
-    cohorts.forEach((cohort, cohortIndex) => {
-      const cohortXs = cohort.unwrap(
-        chartProps.xAxis.property,
-        chartProps.chartType === ChartTypes.Histogram
-      );
-      const cohortY = new Array(cohortXs.length).fill(cohortIndex);
-      rawX.push(...cohortXs);
-      rawY.push(...cohortY);
-      yLabels?.push(cohort.name);
-      yLabelIndexes?.push(cohortIndex);
-    });
-  } else {
-    const cohort = cohorts[selectedCohortIndex];
-    rawY = cohort.unwrap(chartProps.yAxis.property, true);
-    rawX = cohort.unwrap(
-      chartProps.xAxis.property,
-      chartProps.chartType === ChartTypes.Histogram
-    );
-    yLabels = yMeta.sortedCategoricalValues;
-    yLabelIndexes = yLabels?.map((_, index) => index);
-  }
-
-  // The bounding box for the labels on y axis are too small, add some white space as buffer
-  yLabels = yLabels?.map((val) => {
-    const len = val.length;
-    let result = " ";
-    for (let i = 0; i < len; i += 5) {
-      result += " ";
-    }
-    return result + val;
-  });
-  plotlyProps.data[0].hoverinfo = "all";
-  plotlyProps.data[0].orientation = "h";
-  switch (chartProps.chartType) {
-    case ChartTypes.Box: {
-      // Uncomment to turn off tooltips on box plots
-      // plotlyProps.layout.hovermode = false;
-      plotlyProps.data[0].type = "box" as any;
-      plotlyProps.data[0].x = rawX;
-      plotlyProps.data[0].y = rawY;
-      plotlyProps.data[0].marker = {
-        color: FabricStyles.fabricColorPalette[0]
-      };
-      _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
-      _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
-      break;
-    }
-    case ChartTypes.Histogram: {
-      // for now, treat all bar charts as histograms, the issue with plotly implemented histogram is
-      // it tries to bin the data passed to it(we'd like to apply the user specified bins.)
-      // We also use the selected Y property as the series prop, since all histograms will just be a count.
-      plotlyProps.data[0].type = "bar";
-      const x = new Array(rawY.length).fill(1);
-      plotlyProps.data[0].text = rawY.map((index) => yLabels?.[index] || "");
-      plotlyProps.data[0].hoverinfo = "all";
-      plotlyProps.data[0].hovertemplate = ` ${yAxisName}:%{y}<br> ${localization.Interpret.Charts.count}: %{x}<br>`;
-      plotlyProps.data[0].y = rawY;
-      plotlyProps.data[0].x = x;
-      plotlyProps.data[0].marker = {};
-      _.set(plotlyProps, "layout.yaxis.ticktext", yLabels);
-      _.set(plotlyProps, "layout.yaxis.tickvals", yLabelIndexes);
-      const styles = jointData.metaDict[
-        chartProps.xAxis.property
-      ].sortedCategoricalValues?.map((label, index) => {
-        return {
-          target: index,
-          value: {
-            marker: {
-              color: FabricStyles.fabricColorPalette[index]
-            },
-            name: label
-          }
-        };
-      });
-      const transforms: Array<Partial<Transform>> = [
-        {
-          aggregations: [{ func: "sum", target: "x" }],
-          groups: rawY,
-          type: "aggregate"
-        },
-        {
-          groups: rawX,
-          styles,
-          type: "groupby"
-        }
-      ];
-      if (plotlyProps.layout) {
-        plotlyProps.layout.showlegend = true;
-      }
-      plotlyProps.data[0].transforms = transforms;
-      break;
-    }
-    default:
-  }
-  return plotlyProps;
 }

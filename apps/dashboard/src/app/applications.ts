@@ -3,8 +3,10 @@
 
 import {
   IExplanationDashboardData,
+  IFairnessData,
   ISerializedExplanationData,
-  IFairnessData
+  ITextExplanationDashboardData,
+  IVisionExplanationDashboardData
 } from "@responsible-ai/core-ui";
 import { IModelAssessmentData } from "@responsible-ai/model-assessment";
 
@@ -18,6 +20,8 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
+import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
+import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -28,6 +32,7 @@ import { breastCancerData } from "../interpret/__mock_data__/breastCancerData";
 import { ebmData } from "../interpret/__mock_data__/ebmData";
 import { ibmData } from "../interpret/__mock_data__/ibmData";
 import { ibmDataInconsistent } from "../interpret/__mock_data__/ibmDataInconsistent";
+import { ibmDataMissingValues } from "../interpret/__mock_data__/ibmDataMissingValues";
 import { ibmNoClass } from "../interpret/__mock_data__/ibmNoClass";
 import { irisData } from "../interpret/__mock_data__/irisData";
 import { irisDataNoLocal } from "../interpret/__mock_data__/irisDataNoLocal";
@@ -36,28 +41,56 @@ import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 import {
+  emotion,
+  emotionModelExplanationData
+} from "../model-assessment-text/__mock_data__/emotion";
+import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
   adultCensusCausalAnalysisData,
   adultCensusCausalErrorAnalysisData,
-  adultCounterfactualData
+  adultCounterfactualData,
+  adultCohortDataContinuous,
+  adultCohortDataIndex,
+  adultCohortDataCategorical,
+  adultCohortDataClassificationOutcome,
+  adultCohortDataPredictedY,
+  adultCohortDataTrueY
 } from "../model-assessment/__mock_data__/adultCensus";
 import {
   bostonCensusCausalAnalysisData,
   bostonCounterfactualData,
   bostonData as bostonDataMAD,
   bostonErrorAnalysisData,
-  bostonWithFairnessModelExplanationData
+  bostonWithFairnessModelExplanationData,
+  bostonCohortDataContinuous,
+  bostonCohortDataCategorical,
+  bostonCohortDataIndex,
+  bostonCohortDataPredictedY,
+  bostonCohortDataRegressionError,
+  bostonCohortDataTrueY
 } from "../model-assessment/__mock_data__/bostonData";
 import {
   wineData as wineDataMAD,
   wineErrorAnalysisData,
-  wineWithFairnessModelExplanationData
+  wineWithFairnessModelExplanationData,
+  wineCohortDataContinuous,
+  wineCohortDataPredictedY,
+  wineCohortDataTrueY,
+  wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
 export interface IInterpretDataSet {
   data: IExplanationDashboardData;
   classDimension?: 1 | 2 | 3;
+}
+
+export interface IInterpretTextDataSet {
+  data: ITextExplanationDashboardData;
+}
+
+export interface IInterpretVisionDataSet {
+  data: IVisionExplanationDashboardData;
 }
 
 export interface IFairnessDataSet {
@@ -81,6 +114,14 @@ export interface IInterpretSetting {
   versions: { [key: string]: 1 | 2 };
 }
 
+export interface IInterpretTextSetting {
+  versions: { [key: string]: 1 };
+}
+
+export interface IInterpretVisionSetting {
+  versions: { [key: string]: 1 };
+}
+
 export interface IFairnessSetting {
   versions: { [key: string]: 2 };
 }
@@ -95,9 +136,12 @@ export interface IModelAssessmentSetting {
 
 export const applicationKeys = <const>[
   "interpret",
+  "interpretText",
+  "interpretVision",
   "fairness",
   "errorAnalysis",
-  "modelAssessment"
+  "modelAssessment",
+  "modelAssessmentText"
 ];
 
 export type IApplications = {
@@ -105,8 +149,12 @@ export type IApplications = {
 } & {
   fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
+  interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
+  interpretVision: IInterpretVisionSetting & IDataSet<IInterpretVisionDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
 };
 
 export const applications: IApplications = <const>{
@@ -163,6 +211,7 @@ export const applications: IApplications = <const>{
       ebmData: { classDimension: 2, data: ebmData },
       ibmData: { classDimension: 2, data: ibmData },
       ibmDataInconsistent: { classDimension: 2, data: ibmDataInconsistent },
+      ibmDataMissingValues: { classDimension: 2, data: ibmDataMissingValues },
       ibmNoClass: { classDimension: 2, data: ibmNoClass },
       irisData: { classDimension: 3, data: irisData },
       irisDataNoLocal: { classDimension: 3, data: irisDataNoLocal },
@@ -173,11 +222,31 @@ export const applications: IApplications = <const>{
     },
     versions: { "Version-1": 1, "Version-2": 2 }
   },
+  interpretText: {
+    datasets: {
+      newsgroupBinaryData: { data: newsgroupBinaryData }
+    },
+    versions: { "Version-1": 1 }
+  },
+  interpretVision: {
+    datasets: {
+      visionData: { data: visionData }
+    },
+    versions: { "Version-1": 1 }
+  },
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
         causalAnalysisData: [adultCensusCausalAnalysisData],
         classDimension: 2,
+        cohortData: [
+          adultCohortDataContinuous,
+          adultCohortDataIndex,
+          adultCohortDataCategorical,
+          adultCohortDataTrueY,
+          adultCohortDataPredictedY,
+          adultCohortDataClassificationOutcome
+        ],
         counterfactualData: [adultCounterfactualData],
         dataset: adultCensusWithFairnessDataset,
         errorAnalysisData: [adultCensusCausalErrorAnalysisData],
@@ -204,6 +273,14 @@ export const applications: IApplications = <const>{
       bostonData: {
         causalAnalysisData: [bostonCensusCausalAnalysisData],
         classDimension: 1,
+        cohortData: [
+          bostonCohortDataTrueY,
+          bostonCohortDataCategorical,
+          bostonCohortDataContinuous,
+          bostonCohortDataIndex,
+          bostonCohortDataRegressionError,
+          bostonCohortDataPredictedY
+        ],
         counterfactualData: [bostonCounterfactualData],
         dataset: bostonDataMAD,
         errorAnalysisData: [bostonErrorAnalysisData],
@@ -211,9 +288,25 @@ export const applications: IApplications = <const>{
       } as IModelAssessmentDataSet,
       wineData: {
         classDimension: 3,
+        cohortData: [
+          wineCohortDataIndex,
+          wineCohortDataPredictedY,
+          wineCohortDataTrueY,
+          wineCohortDataContinuous
+        ],
         dataset: wineDataMAD,
         errorAnalysisData: [wineErrorAnalysisData],
         modelExplanationData: [wineWithFairnessModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentText: {
+    datasets: {
+      emotion: {
+        classDimension: 3,
+        dataset: emotion,
+        modelExplanationData: [emotionModelExplanationData]
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

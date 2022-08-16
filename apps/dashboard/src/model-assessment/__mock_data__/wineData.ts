@@ -5,11 +5,15 @@ import {
   IDataset,
   IErrorAnalysisData,
   IModelExplanationData,
-  Metrics
+  Metrics,
+  IPreBuiltCohort,
+  FilterMethods,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 
 export const wineData: IDataset = {
   categorical_features: [],
+  feature_metadata: undefined,
   feature_names: [
     "alcohol",
     "malic_acid",
@@ -282,7 +286,7 @@ export const wineData: IDataset = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 2
   ],
-  task_type: "classification",
+  task_type: DatasetTaskType.Classification,
   true_y: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3761,4 +3765,64 @@ export const wineErrorAnalysisData: IErrorAnalysisData = {
   metric: Metrics.AccuracyScore,
   minChildSamples: 20,
   numLeaves: 11
+};
+
+export const wineCohortDataContinuous: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [12.09],
+      column: "alcohol",
+      method: FilterMethods.LessThan
+    },
+    {
+      arg: [2.5],
+      column: "ash",
+      method: FilterMethods.GreaterThan
+    }
+  ],
+  name: "Cohort Continuous"
+};
+
+export const wineCohortDataCategorical: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [80, 81, 82],
+      column: "magnesium",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Categorical"
+};
+
+export const wineCohortDataIndex: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: [54],
+      column: "Index",
+      method: FilterMethods.LessThan
+    }
+  ],
+  name: "Cohort Index"
+};
+
+export const wineCohortDataPredictedY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["Class 0", "Class 1", "Class 2"],
+      column: "Predicted Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort Predicted Y"
+};
+
+export const wineCohortDataTrueY: IPreBuiltCohort = {
+  cohort_filter_list: [
+    {
+      arg: ["Class 0", "Class 1", "Class 2"],
+      column: "True Y",
+      method: FilterMethods.Includes
+    }
+  ],
+  name: "Cohort True Y"
 };
