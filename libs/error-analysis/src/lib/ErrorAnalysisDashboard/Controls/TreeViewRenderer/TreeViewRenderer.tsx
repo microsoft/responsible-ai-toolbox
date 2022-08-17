@@ -33,6 +33,8 @@ import {
   HierarchyPointNode
 } from "d3-hierarchy";
 import { select } from "d3-selection";
+import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
+import { scaleLinear as d3scaleLinear } from "d3-scale";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import _ from "lodash";
 import React from "react";
@@ -53,7 +55,6 @@ import {
   ITreeNode,
   ITreeViewRendererState
 } from "./TreeViewState";
-import { nodeColor } from "./TreeViewUtils";
 
 // Importing this solely to set the selectedPanelId. This component is NOT a statefulContainer
 // import StatefulContainer from '../../ap/mixins/statefulContainer.js'
@@ -69,6 +70,7 @@ export interface ISVGDatum {
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
 const disabledColor = ColorPalette.DisabledColor;
+const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -452,6 +454,28 @@ export class TreeViewRenderer extends React.PureComponent<
         : requestTreeNodes[0].metricValue;
 
       const isErrorMetric = requestTreeNodes[0].isErrorMetric;
+      const min: number = rootLocalMetric;
+      const max: number = Math.max(
+        ...requestTreeNodes.map((node) => {
+          if (node.size === 0) {
+            return 0;
+          }
+          if (node.metricName !== Metrics.ErrorRate) {
+            return node.metricValue;
+          }
+          return node.error / node.size;
+        })
+      );
+
+      const minColor = ColorPalette.white;
+      const maxColor = isErrorMetric
+        ? ColorPalette.ErrorColor100
+        : ColorPalette.MetricColor100;
+
+      const colorgrad = d3scaleLinear<Property.Color>()
+        .domain([min, max])
+        .interpolate(d3interpolateHcl)
+        .range([minColor, maxColor]);
 
       // From the retrieved request, calculate additional properties
       // that won't change during UI updates
@@ -466,8 +490,11 @@ export class TreeViewRenderer extends React.PureComponent<
         const calcMaskShift = globalErrorPerc * 52;
         const filterProps = this.calculateFilterProps(node, rootErrorSize);
 
-        let heatmapStyle: Property.Color;
-        heatmapStyle = nodeColor(isErrorMetric, errorPerc);
+        let heatmapStyle: Property.Color = errorAvgColor;
+
+        if (errorPerc > rootLocalMetric * errorRatioThreshold) {
+          heatmapStyle = colorgrad(errorPerc) || errorAvgColor;
+        }
 
         if (this.props.disabledView) {
           heatmapStyle = disabledColor;

@@ -5,8 +5,8 @@ import { getTheme } from "@fluentui/react";
 import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
 import React from "react";
-import { ColorPalette } from "../../ColorPalette";
 
+import { ColorPalette } from "../../ColorPalette";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { treeViewRendererStyles } from "./TreeViewRenderer.styles";
@@ -107,7 +107,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
             style={{ fill: ColorPalette.white }}
             rx={10}
             ry={10}
-          ></rect>
+          />
           <text textAnchor="middle" className={classNames.nodeText}>
             {this.getNodeText(node)}
           </text>
