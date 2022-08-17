@@ -71,6 +71,30 @@ export function buildCustomData(
         }
       });
     }
+    if (jointData.datasetMetaData?.featureMetaData?.identity_feature_name) {
+      const identityFeatureName =
+        jointData.datasetMetaData.featureMetaData?.identity_feature_name;
+
+      const jointDatasetFeatureName =
+        jointData.getJointDatasetFeatureName(identityFeatureName);
+
+      if (jointDatasetFeatureName) {
+        const rawIdentityFeatureData = cohort.unwrap(jointDatasetFeatureName);
+        rawIdentityFeatureData.forEach((val, index) => {
+          // If categorical, show string value in tooltip
+          if (jointData.metaDict[jointDatasetFeatureName]?.treatAsCategorical) {
+            customdata[index].ID =
+              jointData.metaDict[
+                jointDatasetFeatureName
+              ].sortedCategoricalValues?.[val];
+          } else {
+            customdata[index].ID = (val as number).toLocaleString(undefined, {
+              maximumFractionDigits: 3
+            });
+          }
+        });
+      }
+    }
     const indices = cohort.unwrap(JointDataset.IndexLabel, false);
     indices.forEach((absoluteIndex, i) => {
       customdata[i].AbsoluteIndex = absoluteIndex;
