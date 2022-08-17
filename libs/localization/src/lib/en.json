@@ -1290,7 +1290,7 @@
   "InterpretVision": {
     "Dashboard": {
       "allData": "All Data",
-      "columnOne": "Title",
+      "columnOne": "Image",
       "columnTwo": "Index",
       "columnThree": "True Y",
       "columnFour": "Predicted Y",

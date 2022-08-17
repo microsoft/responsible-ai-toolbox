@@ -16,9 +16,9 @@ export interface IDatasetSummary {
   modelClass?: ModelClass;
   classNames?: string[];
   images: string[];
-  predictedY?: string[];
+  predictedY: string[];
   probabilityY?: number[][];
-  trueY?: string[];
+  trueY: string[];
 }
 
-export type ModelClass = "Tree" | "EBM" | "blackbox";
+type ModelClass = "Tree" | "EBM" | "blackbox";

@@ -3,8 +3,6 @@
 
 import { IVisionExplanationDashboardData } from "@responsible-ai/core-ui";
 
-import { explanation } from "./explanation";
-
 export const visionData: IVisionExplanationDashboardData = {
   classNames: ["Water Tower", "not Water Tower"],
   images: [
@@ -39,6 +37,68 @@ export const visionData: IVisionExplanationDashboardData = {
     "https://raw.githubusercontent.com/slundberg/shap/master/data/imagenet50/sim_n03029197_6381.jpg",
     "https://raw.githubusercontent.com/slundberg/shap/master/data/imagenet50/sim_n03029197_6381.jpg"
   ],
-  localExplanations: [explanation],
-  prediction: [0, 1]
+  predictedY: [
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower",
+    "not Water Tower"
+  ],
+  trueY: [
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower",
+    "Water Tower"
+  ]
 };

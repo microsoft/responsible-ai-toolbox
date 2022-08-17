@@ -4,7 +4,14 @@
 export interface IVisionModelExplanationData {
   classNames?: string[];
   images: string[];
-  predictedY?: string[];
+  predictedY: string[];
   probabilityY?: number[][];
-  trueY?: string[];
+  trueY: string[];
+}
+
+export interface IVisionListItem {
+  image: string;
+  predictedY: string;
+  trueY: string;
+  index?: number;
 }

@@ -13,32 +13,22 @@ import {
   Text,
   Stack
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
-
 export interface ITableListProps {
-  data: IDatasetSummary;
+  errorInstances: IVisionListItem[];
+  successInstances: IVisionListItem[];
   imageDim: number;
   pageSize: number;
-  selectItem: (item: IListItem) => void;
+  selectItem: (item: IVisionListItem) => void;
 }
 
 export interface ITableListState {
-  items: IListItem[];
+  items: IVisionListItem[];
   groups: IGroup[];
   columns: IColumn[];
-}
-
-export interface IListItem {
-  title: string;
-  subtitle?: string;
-  image: string;
-  trueY?: number;
-  predictedY?: number;
-  index?: number;
-  other?: number;
 }
 
 export class TableList extends React.Component<
@@ -56,42 +46,33 @@ export class TableList extends React.Component<
   }
 
   public componentDidMount(): void {
-    const items: IListItem[] = [];
+    const items: IVisionListItem[] = [];
 
-    this.props.data.images.forEach((image, index) => {
-      items.push({
-        image,
-        index: index + 1,
-        other: 0,
-        predictedY: 1,
-        subtitle: "subtitle",
-        title: `label ${(index + 1).toString()}`,
-        trueY: 0
-      });
-    });
+    items.concat(...this.props.successInstances);
+    items.concat(...this.props.errorInstances);
 
     const groups: IGroup[] = [
       {
-        count: this.props.pageSize,
+        count: this.props.successInstances.length,
         key: "success",
         level: 0,
         name: localization.InterpretVision.Dashboard.titleBarSuccess,
         startIndex: 0
       },
       {
-        count: this.props.pageSize,
+        count: this.props.errorInstances.length,
         key: "error",
         level: 0,
         name: localization.InterpretVision.Dashboard.titleBarError,
-        startIndex: this.props.pageSize
+        startIndex: this.props.successInstances.length
       }
     ];
 
     const columns: IColumn[] = [
       {
-        fieldName: "title",
+        fieldName: "image",
         isResizable: true,
-        key: "title",
+        key: "image",
         maxWidth: 400,
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnOne
@@ -164,32 +145,26 @@ export class TableList extends React.Component<
   };
 
   private onRenderColumn = (
-    item: IListItem | undefined,
+    item: IVisionListItem | undefined,
     index: number | undefined,
     column?: IColumn | undefined
   ) => {
     const value =
       item && column && column.fieldName
-        ? item[column.fieldName as keyof IListItem]
+        ? item[column.fieldName as keyof IVisionListItem]
         : "";
 
     const image =
-      item && column && column.fieldName === "title"
-        ? item["image" as keyof IListItem]
+      item && column && column.fieldName === "image"
+        ? item["image" as keyof IVisionListItem]
         : "";
 
     if (typeof image === "number") {
       return <div />;
     }
-
     if (index) {
       index = index + 1;
     }
-
-    const subtitle =
-      item && column && column.fieldName === "title"
-        ? item["subtitle" as keyof IListItem]
-        : "";
 
     return (
       <div data-is-focusable>
@@ -198,10 +173,10 @@ export class TableList extends React.Component<
           tokens={{ childrenGap: "s1" }}
           onClick={this.callbackWrapper(item)}
         >
-          {image && (
+          {image ? (
             <Stack.Item>
               <Image
-                src={image}
+                src={`data:image/jpg;base64,${image}`}
                 style={{
                   borderRadius: 4,
                   height: "auto",
@@ -209,30 +184,20 @@ export class TableList extends React.Component<
                 }}
               />
             </Stack.Item>
+          ) : (
+            <Stack.Item>
+              <Text>{value}</Text>
+            </Stack.Item>
           )}
-          <Stack.Item>
-            <Stack>
-              <Stack.Item>
-                <Text>{value}</Text>
-              </Stack.Item>
-              {subtitle && (
-                <Stack.Item>
-                  <Text>{subtitle}</Text>
-                </Stack.Item>
-              )}
-            </Stack>
-          </Stack.Item>
         </Stack>
       </div>
     );
   };
 
-  private callbackWrapper = (item?: IListItem | undefined) => () => {
+  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
     if (!item) {
       return;
     }
-    item.predictedY = 0;
-    item.trueY = 0;
     this.props.selectItem(item);
   };
 }

@@ -12,18 +12,16 @@ import {
   Stack,
   Text
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
-
 import { flyoutStyles } from "./Flyout.styles";
-import { IListItem } from "./ImageList";
 
 export interface IFlyoutProps {
-  data: IDatasetSummary;
+  explanation: string;
   isOpen: boolean;
-  item: IListItem | undefined;
+  item: IVisionListItem | undefined;
   callback: () => void;
 }
 
@@ -102,12 +100,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageContainer}>
                   <Image
-                    src={item?.image}
+                    src={`data:image/jpg;base64,${item?.image}`}
                     className={classNames.image}
                     imageFit={ImageFit.contain}
                   />
                   <Text variant="large" className={classNames.label}>
-                    {item?.title}
+                    {item?.predictedY}
                   </Text>
                 </Stack.Item>
               </Stack>
@@ -122,7 +120,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
             </Stack.Item>
             <Stack.Item>
               <Image
-                src={`data:image/jpg;base64,${this.props.data.images[0]}`}
+                src={`data:image/jpg;base64,${this.props.explanation}`}
                 width="800px"
                 style={{ position: "relative", right: 85 }}
               />

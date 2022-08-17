@@ -9,28 +9,18 @@ import {
   IRectangle,
   IPageSpecification
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
-
-import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
 
 import { imageListStyles } from "./ImageList.styles";
 
 export interface IImageListProps {
-  data: IDatasetSummary;
+  data: IVisionListItem[];
   imageDim: number;
-  selectItem: (item: IListItem) => void;
+  selectItem: (item: IVisionListItem) => void;
 }
 
-export interface IImageListState {
-  images: IListItem[];
-}
-
-export interface IListItem {
-  title: string;
-  image: string;
-  predictedY?: number;
-  trueY?: number;
-}
+export class IImageListState {}
 
 export class ImageList extends React.Component<
   IImageListProps,
@@ -39,25 +29,7 @@ export class ImageList extends React.Component<
   public constructor(props: IImageListProps) {
     super(props);
 
-    this.state = {
-      images: []
-    };
-  }
-
-  public componentDidMount() {
-    if (!this.props.data.classNames) {
-      return;
-    }
-    const label: string = this.props.data.classNames[0];
-    const images: IListItem[] = [];
-    this.props.data.images.forEach((item) => {
-      images.push({
-        image: item,
-        title: label
-      });
-    });
-
-    this.setState({ images });
+    this.state = {};
   }
 
   public render(): React.ReactNode {
@@ -66,7 +38,7 @@ export class ImageList extends React.Component<
     return (
       <FocusZone>
         <List
-          items={this.state.images}
+          items={this.props.data}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageSpecification={this.getPageSpecification}
@@ -75,7 +47,7 @@ export class ImageList extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IListItem | undefined) => {
+  private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = imageListStyles();
     return (
       <div
@@ -86,22 +58,20 @@ export class ImageList extends React.Component<
         role="button"
         tabIndex={0}
       >
-        <Text className={classNames.label}>{item?.title}</Text>
+        <Text className={classNames.label}>{item?.predictedY}</Text>
         <Image
-          alt={item?.title}
-          src={item?.image}
+          alt={item?.predictedY}
+          src={`data:image/jpg;base64,${item?.image}`}
           style={{ height: "auto", width: this.props.imageDim }}
         />
       </div>
     );
   };
 
-  private callbackWrapper = (item?: IListItem | undefined) => () => {
+  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
     if (!item) {
       return;
     }
-    item.predictedY = 0;
-    item.trueY = 0;
     this.props.selectItem(item);
   };
 

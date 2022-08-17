@@ -13,23 +13,21 @@ import {
   IRectangle,
   Icon
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-
-import { IDatasetSummary } from "../Interfaces/IExplanationDashboardProps";
-import { IListItem } from "../VisionExplanationDashboard";
 
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 
 export interface IDataCharacteristicsProps {
-  data: IDatasetSummary;
+  data: IVisionListItem[];
   imageDim: number;
   numRows: number;
-  selectItem(item: IListItem): void;
+  selectItem(item: IVisionListItem): void;
 }
 
 export interface IDataCharacteristicsState {
-  items: Map<number, IListItem[]>;
+  items: Map<string, IVisionListItem[]>;
   labels: string[];
   labelVisibilities: Map<string, boolean>;
 }
@@ -49,18 +47,7 @@ export class DataCharacteristics extends React.Component<
   }
 
   public componentDidMount(): void {
-    const examples: IListItem[] = [];
-
-    this.props.data.images.forEach((image, index) => {
-      const rand = Math.random();
-      const predictedY: number = Math.floor(index % 6);
-      examples.push({
-        image,
-        predictedY,
-        title: `image ${index.toString()}`,
-        trueY: rand < 0.2 ? predictedY + 1 : predictedY
-      });
-    });
+    const examples: IVisionListItem[] = this.props.data;
 
     const items = this.state.items;
     const labels: string[] = [];
@@ -71,9 +58,9 @@ export class DataCharacteristics extends React.Component<
       if (!label || !items) {
         return;
       }
-      if (!labels.includes(label.toString())) {
-        labels.push(label.toString());
-        visibilities.set(label.toString(), true);
+      if (!labels.includes(label)) {
+        labels.push(label);
+        visibilities.set(label, true);
       }
       if (items.has(label)) {
         const arr = items.get(label);
@@ -83,7 +70,7 @@ export class DataCharacteristics extends React.Component<
         arr.push(example);
         items.set(label, arr);
       } else {
-        const arr: IListItem[] = [];
+        const arr: IVisionListItem[] = [];
         arr.push(example);
         items.set(label, arr);
       }
@@ -267,7 +254,7 @@ export class DataCharacteristics extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IListItem | undefined) => {
+  private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = dataCharacteristicsStyles();
 
     if (!item) {
@@ -284,11 +271,11 @@ export class DataCharacteristics extends React.Component<
         tabIndex={0}
       >
         <Image
-          alt={item?.title}
+          alt={item?.predictedY}
           width={this.props.imageDim}
           height={this.props.imageDim}
           imageFit={ImageFit.cover}
-          src={item?.image}
+          src={`data:image/jpg;base64,${item?.image}`}
         />
         <div
           className={
@@ -302,7 +289,7 @@ export class DataCharacteristics extends React.Component<
     );
   };
 
-  private callbackWrapper = (item: IListItem) => () => {
+  private callbackWrapper = (item: IVisionListItem) => () => {
     this.props.selectItem(item);
   };
 

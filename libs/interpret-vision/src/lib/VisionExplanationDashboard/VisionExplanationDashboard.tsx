@@ -12,6 +12,7 @@ import {
   Slider,
   CommandBarButton
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -23,23 +24,17 @@ import { TitleBar } from "./Controls/TitleBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 
+//TODO: cache explanations
 export interface IVisionExplanationDashboardState {
+  currentExplanation: string;
+  errorInstances: IVisionListItem[];
+  successInstances: IVisionListItem[];
   imageDim: number;
   numRows: number;
   pageSize: number;
   panelOpen: boolean;
-  selectedItem: IListItem | undefined;
+  selectedItem: IVisionListItem | undefined;
   selectedKey: string;
-}
-
-export interface IListItem {
-  title: string;
-  subtitle?: string;
-  image: string;
-  trueY?: number;
-  predictedY?: number;
-  index?: number;
-  other?: number;
 }
 
 enum VisionDatasetExplorerTabOptions {
@@ -76,21 +71,20 @@ export class VisionExplanationDashboard extends React.Component<
     super(props);
 
     this.state = {
+      currentExplanation: "",
+      errorInstances: [],
       imageDim: 200,
       numRows: 3,
       pageSize: 10,
       panelOpen: false,
       selectedItem: undefined,
-      selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
+      selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView,
+      successInstances: []
     };
   }
 
   public componentDidMount() {
-    if (this.props.requestExp) {
-      this.props.requestExp(0, new AbortController().signal).then((result) => {
-        console.log(result);
-      });
-    }
+    this.preprocessData();
   }
 
   public render(): React.ReactNode {
@@ -105,9 +99,6 @@ export class VisionExplanationDashboard extends React.Component<
         grow
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
-        <Stack.Item>
-          <Text variant="xLargePlus">Data explorer</Text>
-        </Stack.Item>
         <Stack.Item>
           <Stack horizontal horizontalAlign="space-between" verticalAlign="end">
             <Stack.Item>
@@ -263,11 +254,14 @@ export class VisionExplanationDashboard extends React.Component<
                 tokens={{ childrenGap: "l1" }}
               >
                 <Stack.Item>
-                  <TitleBar type={TitleBarOptions.Error} />
+                  <TitleBar
+                    count={this.state.errorInstances.length}
+                    type={TitleBarOptions.Error}
+                  />
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.dataSummary}
+                    data={this.state.errorInstances}
                     imageDim={this.state.imageDim}
                     selectItem={this.onItemSelect}
                   />
@@ -278,11 +272,14 @@ export class VisionExplanationDashboard extends React.Component<
                 tokens={{ childrenGap: "l1" }}
               >
                 <Stack.Item>
-                  <TitleBar type={TitleBarOptions.Success} />
+                  <TitleBar
+                    count={this.state.successInstances.length}
+                    type={TitleBarOptions.Success}
+                  />
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.dataSummary}
+                    data={this.state.successInstances}
                     imageDim={this.state.imageDim}
                     selectItem={this.onItemSelect}
                   />
@@ -295,7 +292,8 @@ export class VisionExplanationDashboard extends React.Component<
           VisionDatasetExplorerTabOptions.TableView && (
           <Stack className={classNames.mainContainer}>
             <TableList
-              data={this.props.dataSummary}
+              errorInstances={this.state.errorInstances}
+              successInstances={this.state.successInstances}
               imageDim={this.state.imageDim}
               selectItem={this.onItemSelect}
               pageSize={this.state.pageSize}
@@ -310,7 +308,9 @@ export class VisionExplanationDashboard extends React.Component<
           >
             <Stack.Item style={{ width: "100%" }}>
               <DataCharacteristics
-                data={this.props.dataSummary}
+                data={this.state.errorInstances.concat(
+                  ...this.state.successInstances
+                )}
                 imageDim={this.state.imageDim}
                 numRows={this.state.numRows}
                 selectItem={this.onItemSelect}
@@ -320,7 +320,7 @@ export class VisionExplanationDashboard extends React.Component<
         )}
         <Stack.Item>
           <Flyout
-            data={this.props.dataSummary}
+            explanation={this.state.currentExplanation}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             callback={this.onPanelClose}
@@ -330,12 +330,42 @@ export class VisionExplanationDashboard extends React.Component<
     );
   }
 
+  private preprocessData() {
+    const dataSummary = this.props.dataSummary;
+    const errorInstances: IVisionListItem[] = this.state.errorInstances;
+    const successInstances: IVisionListItem[] = this.state.successInstances;
+
+    dataSummary.images.forEach((image, index) => {
+      const item: IVisionListItem = {
+        image,
+        index,
+        predictedY: dataSummary.predictedY[index],
+        trueY: dataSummary.trueY[index]
+      };
+      item.predictedY === item.trueY
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    });
+
+    this.setState({ errorInstances, successInstances });
+  }
+
   private onPanelClose = () => {
     this.setState({ panelOpen: !this.state.panelOpen });
   };
 
-  private onItemSelect = (item: IListItem): void => {
+  private onItemSelect = (item: IVisionListItem): void => {
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
+
+    const index = item.index ? item.index : 0;
+
+    if (this.props.requestExp) {
+      this.props
+        .requestExp(index, new AbortController().signal)
+        .then((result) => {
+          this.setState({ currentExplanation: result.toString() });
+        });
+    }
   };
 
   /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 
