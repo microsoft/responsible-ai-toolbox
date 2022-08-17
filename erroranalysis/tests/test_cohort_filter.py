@@ -4,7 +4,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_iris_data, create_simple_titanic_data,
+from common_utils import (create_diabetes_data, create_iris_data,
+                          create_simple_titanic_data,
+                          create_sklearn_random_forest_regressor,
                           create_sklearn_svm_classifier,
                           create_titanic_pipeline)
 
@@ -17,6 +19,7 @@ TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
+REGRESSION_ERROR = 'Error'
 
 
 class TestCohortFilter(object):
@@ -261,7 +264,38 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
-        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters)
+
+    def test_cohort_filter_regression_error(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_diabetes_data()
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+
+        # filter on regression error, which can be done from the
+        # RAI dashboard
+        filters = [{'arg': [40],
+                    'column': REGRESSION_ERROR,
+                    'method': 'less and equal'}]
+
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        pred_y = model.predict(X_test)
+
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        validation_filter = abs(validation_data[PRED_Y] - validation_data[
+            TRUE_Y]) <= 40.0
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+
+        model_task = ModelTask.REGRESSION
+        categorical_features = []
         run_error_analyzer(validation_data,
                            model,
                            X_test,
