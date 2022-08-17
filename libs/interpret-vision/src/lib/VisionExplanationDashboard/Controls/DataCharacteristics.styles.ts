@@ -12,6 +12,7 @@ export interface IDataCharacteristicsStyles {
   list: IStyle;
   tile: IStyle;
   label: IStyle;
+  labelsContainer: IStyle;
   image: IStyle;
   mainContainer: IStyle;
   successIndicator: IStyle;
@@ -38,6 +39,10 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
         fontSize: FontSizes.small,
         justifySelf: "center",
         paddingBottom: "100%",
+        width: "100%"
+      },
+      labelsContainer: {
+        overflow: "auto",
         width: "100%"
       },
       list: {

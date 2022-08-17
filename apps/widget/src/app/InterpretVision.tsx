@@ -21,7 +21,12 @@ export class InterpretVision extends React.Component<IInterpretProps> {
 
     return (
       <VisionExplanationDashboard
-        dataSummary={{ images: [] }}
+        dataSummary={{
+          classNames: [""],
+          images: [""],
+          predictedY: [""],
+          trueY: [""]
+        }}
         requestExp={requestMethod}
       />
     );

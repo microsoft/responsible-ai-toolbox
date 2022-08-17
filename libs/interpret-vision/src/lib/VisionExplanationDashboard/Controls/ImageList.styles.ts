@@ -13,6 +13,8 @@ export interface IDatasetExplorerTabStyles {
   tile: IStyle;
   label: IStyle;
   image: IStyle;
+  imageFrame: IStyle;
+  imageSizer: IStyle;
 }
 
 export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
@@ -24,11 +26,26 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
         top: 0,
         width: "100%"
       },
+      imageFrame: {
+        bottom: 2,
+        left: 2,
+        position: "absolute",
+        right: 2,
+        top: 2
+      },
+      imageSizer: {
+        paddingBottom: "105%",
+        textAlign: "center"
+      },
       label: {
+        bottom: 10,
+        boxSizing: "border-box",
         color: "black",
         fontSize: FontSizes.small,
+        fontWeight: "600",
         justifySelf: "center",
-        paddingBottom: 10,
+        left: 0,
+        position: "absolute",
         width: "100%"
       },
       list: {
@@ -37,9 +54,6 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
       },
       tile: {
         float: "left",
-        marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
         position: "relative",
         textAlign: "center"
       }

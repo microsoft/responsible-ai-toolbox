@@ -6,8 +6,10 @@ import {
   FocusZone,
   List,
   Image,
+  ImageFit,
+  IImageProps,
   IRectangle,
-  IPageSpecification
+  Stack
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
@@ -20,16 +22,35 @@ export interface IImageListProps {
   selectItem: (item: IVisionListItem) => void;
 }
 
-export class IImageListState {}
+export interface IImageListState {
+  data: IVisionListItem[];
+}
+
+const imageProps: Partial<IImageProps> = {
+  imageFit: ImageFit.centerContain
+};
+
+const RowsPerPage = 3;
+const ImagePadding = 10;
 
 export class ImageList extends React.Component<
   IImageListProps,
   IImageListState
 > {
+  columnCount: number;
+  rowHeight: number;
   public constructor(props: IImageListProps) {
     super(props);
+    this.columnCount = 0;
+    this.rowHeight = 0;
+    this.state = {
+      data: []
+    };
+  }
 
-    this.state = {};
+  public componentDidMount() {
+    const data = this.props.data;
+    this.setState({ data });
   }
 
   public render(): React.ReactNode {
@@ -38,10 +59,11 @@ export class ImageList extends React.Component<
     return (
       <FocusZone>
         <List
-          items={this.props.data}
+          items={this.state.data}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
-          getPageSpecification={this.getPageSpecification}
+          getPageHeight={this.getPageHeight}
+          getItemCountForPage={this.getItemCountForPage}
         />
       </FocusZone>
     );
@@ -49,22 +71,36 @@ export class ImageList extends React.Component<
 
   private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = imageListStyles();
+
     return (
-      <div
-        data-is-focusable
+      <Stack
+        tokens={{ childrenGap: "s1" }}
         className={classNames.tile}
-        onClick={this.callbackWrapper(item)}
-        onKeyPress={this.callbackWrapper(item)}
-        role="button"
-        tabIndex={0}
+        style={{ width: `${100 / this.columnCount}%` }}
       >
-        <Text className={classNames.label}>{item?.predictedY}</Text>
-        <Image
-          alt={item?.predictedY}
-          src={`data:image/jpg;base64,${item?.image}`}
-          style={{ height: "auto", width: this.props.imageDim }}
-        />
-      </div>
+        <Stack.Item className={classNames.imageSizer}>
+          <Stack.Item
+            className={classNames.imageFrame}
+            style={{ height: this.props.imageDim, width: this.props.imageDim }}
+          >
+            <Image
+              {...imageProps}
+              alt={item?.predictedY}
+              src={`data:image/jpg;base64,${item?.image}`}
+              height={this.props.imageDim}
+              width={this.props.imageDim}
+              onClick={this.callbackWrapper(item)}
+              style={{
+                left: this.props.imageDim / 2 + ImagePadding / 2,
+                position: "relative"
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <Text className={classNames.label}>{item?.predictedY}</Text>
+          </Stack.Item>
+        </Stack.Item>
+      </Stack>
     );
   };
 
@@ -75,20 +111,23 @@ export class ImageList extends React.Component<
     this.props.selectItem(item);
   };
 
-  private getPageSpecification = (
+  private getPageHeight = () => {
+    return this.rowHeight * RowsPerPage;
+  };
+
+  private getItemCountForPage = (
     itemIndex?: number | undefined,
     visibleRect?: IRectangle | undefined
-  ) => {
-    const ret: IPageSpecification = {};
-    if (!visibleRect || !itemIndex) {
-      return ret;
+  ): number => {
+    if (!visibleRect) {
+      return this.columnCount * RowsPerPage;
     }
-    /* Height of each tile is calculated as rowsPerPage * (defaultImageDim + textPadder + textHeight) */
-    ret.height = 750;
-
-    /* Item count is calculated as rowsPerPage * (rectangle width / (imageDim + padder + padder)) */
-    ret.itemCount = 3 * (visibleRect.width / (this.props.imageDim + 20 + 20));
-
-    return ret;
+    if (itemIndex === 0) {
+      this.columnCount = Math.ceil(
+        visibleRect.width / (this.props.imageDim + 2 * ImagePadding)
+      );
+      this.rowHeight = Math.floor(visibleRect.width / this.columnCount);
+    }
+    return this.columnCount * RowsPerPage;
   };
 }

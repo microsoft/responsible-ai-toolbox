@@ -99,7 +99,7 @@ export class DataCharacteristics extends React.Component<
               horizontalAlign="space-between"
               verticalAlign="center"
             >
-              <Stack.Item>
+              <Stack.Item className={classNames.labelsContainer}>
                 <Stack horizontal tokens={{ childrenGap: "s1" }}>
                   <Stack.Item>
                     <Stack horizontal>
@@ -107,7 +107,7 @@ export class DataCharacteristics extends React.Component<
                         <Stack.Item key={label}>
                           {this.state.labelVisibilities.get(label) && (
                             <DefaultButton
-                              text={`label ${label}`}
+                              text={label}
                               iconProps={{ iconName: "Cancel" }}
                               onClick={() => {
                                 const visibilities =
@@ -188,7 +188,7 @@ export class DataCharacteristics extends React.Component<
                         verticalAlign="center"
                       >
                         <Stack.Item>
-                          <Text variant="xLarge">Label {label}</Text>
+                          <Text variant="xLarge">{label}</Text>
                         </Stack.Item>
                         <Stack.Item>
                           <Text variant="medium">
@@ -297,8 +297,7 @@ export class DataCharacteristics extends React.Component<
     itemIndex?: number,
     visibleRect?: IRectangle
   ): IPageSpecification => {
-    console.log(itemIndex, visibleRect);
-    if (!visibleRect) {
+    if (!visibleRect || !itemIndex) {
       return { height: 0, itemCount: 0 };
     }
     return {
