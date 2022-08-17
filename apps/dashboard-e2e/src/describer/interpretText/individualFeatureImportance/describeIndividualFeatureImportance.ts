@@ -1,10 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getDefaultTopKWords } from "../../../util/getDefaultTopKWords";
 import { interpretTextDatasets } from "../interpretTextDatasets";
 
 import { describeBarChart } from "./describeBarChart";
+import { describeClassImportanceWeightsDropdown } from "./describeClassImportanceWeightsDropdown";
 import { describeLegend } from "./describeLegend";
+import { describeSlider } from "./describeSlider";
 import { describeTextHighlighting } from "./describeTextHighlighting";
 
 const testName = "Individual feature importance";
@@ -19,6 +22,8 @@ export function describeIndividualFeatureImportance(
     });
     describeLegend();
     describeTextHighlighting(datasetShape);
-    describeBarChart(datasetShape);
+    describeBarChart(getDefaultTopKWords(datasetShape.localExplanations));
+    describeClassImportanceWeightsDropdown(datasetShape);
+    describeSlider(datasetShape);
   });
 }
