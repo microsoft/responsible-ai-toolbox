@@ -157,7 +157,8 @@ class FilterDataWithCohortFilters:
 
         :param filters: The filters.
         :type filters: list[dict]
-        :return: True if regression filter is specified in the filters.
+        :return: True if regression error filter is specified in
+                 the filters.
         :rtype: bool
         """
         model_task = self.model_task
@@ -172,9 +173,10 @@ class FilterDataWithCohortFilters:
                         return True
         return False
 
-    def _compute_classification_outcome_data(self, true_y, pred_y,
-                                             classes):
-        """Creates the classification outcome data.
+    def _compute_binary_classification_outcome_data(self, true_y, pred_y,
+                                                    classes):
+        """Creates the classification outcome data for binary
+        classification scenario.
 
         :param true_y: The true labels.
         :type true_y: list or numpy.ndarray
@@ -209,8 +211,38 @@ class FilterDataWithCohortFilters:
                     classification_outcome.append(1)
         return classification_outcome
 
+    def _compute_multiclass_classification_outcome_data(
+            self, true_y, pred_y):
+        """Creates the classification outcome data for multiclass
+        classification scenario.
+
+        :param true_y: The true labels.
+        :type true_y: list or numpy.ndarray
+        :param pred_y: The predicted labels.
+        :type pred_y: list or numpy.ndarray
+        :return: The classification outcome data.
+        :rtype: list
+        """
+        classification_outcome = []
+        if not isinstance(pred_y, np.ndarray):
+            pred_y = np.array(pred_y)
+
+        if not isinstance(true_y, np.ndarray):
+            true_y = np.array(true_y)
+
+        for i in range(len(true_y)):
+            if true_y[i] == pred_y[i]:
+                # Correct prediction == 0
+                classification_outcome.append(0)
+            else:
+                # Incorrect prediction == 1
+                classification_outcome.append(1)
+
+        return classification_outcome
+
     def _compute_regression_error_data(self, true_y, pred_y):
-        """Creates the regression error data.
+        """Computes the per instance absolute difference
+        between the true and predicted values.
 
         :param true_y: The true labels.
         :type true_y: list or numpy.ndarray
@@ -262,10 +294,16 @@ class FilterDataWithCohortFilters:
 
             classes = get_ordered_classes(
                 self.classes, self.true_y, pred_y)
+
             # calculate classification outcome and add to df
-            df[CLASSIFICATION_OUTCOME] = \
-                self._compute_classification_outcome_data(
-                    self.true_y, pred_y, classes)
+            if len(classes) == 2:
+                df[CLASSIFICATION_OUTCOME] = \
+                    self._compute_binary_classification_outcome_data(
+                        self.true_y, pred_y, classes)
+            else:
+                df[CLASSIFICATION_OUTCOME] = \
+                    self._compute_multiclass_classification_outcome_data(
+                        self.true_y, pred_y)
         elif has_regression_error:
             if PRED_Y in df:
                 pred_y = df[PRED_Y]
@@ -274,8 +312,8 @@ class FilterDataWithCohortFilters:
                 pred_y = self.model.predict(
                     df.drop(columns=[TRUE_Y, ROW_INDEX]))
             # calculate regression error and add to df
-            df[REGRESSION_ERROR] = \
-                self._compute_regression_error_data(self.true_y, pred_y)
+            df[REGRESSION_ERROR] = self._compute_regression_error_data(
+                self.true_y, pred_y)
 
     def _post_process_df(self, df, include_original_columns_only=False):
         """Removes any special columns from dataset added prior to filtering.

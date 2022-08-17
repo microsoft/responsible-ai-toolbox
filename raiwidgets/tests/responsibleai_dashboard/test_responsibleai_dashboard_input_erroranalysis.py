@@ -3,6 +3,7 @@
 
 from common_utils import CheckResponsibleAIDashboardInputTestResult
 
+from raiwidgets.interfaces import WidgetRequestResponseConstants
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 
@@ -25,6 +26,18 @@ class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.matrix(post_data)
 
+        self.check_success_criteria(flask_server_prediction_output)
+
+        empty_features = [None, None]
+        post_data = [empty_features, filters, composite_filters,
+                     quantile_binning, num_bins, metric]
+
+        dashboard_input = ResponsibleAIDashboardInput(ri)
+        flask_server_prediction_output = dashboard_input.matrix(post_data)
+
+        assert len(
+            flask_server_prediction_output[
+                WidgetRequestResponseConstants.data]) == 0
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_matrix_failure(
