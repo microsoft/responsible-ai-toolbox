@@ -32,9 +32,9 @@ import {
   tree as d3tree,
   HierarchyPointNode
 } from "d3-hierarchy";
-import { select } from "d3-selection";
 import { interpolateHcl as d3interpolateHcl } from "d3-interpolate";
 import { scaleLinear as d3scaleLinear } from "d3-scale";
+import { select } from "d3-selection";
 import { linkVertical as d3linkVertical } from "d3-shape";
 import _ from "lodash";
 import React from "react";
