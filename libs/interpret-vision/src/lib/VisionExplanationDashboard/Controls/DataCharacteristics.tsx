@@ -8,10 +8,7 @@ import {
   List,
   DefaultButton,
   Image,
-  ImageFit,
-  IPageSpecification,
-  IRectangle,
-  Icon
+  IRectangle
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -36,9 +33,12 @@ export class DataCharacteristics extends React.Component<
   IDataCharacteristicsProps,
   IDataCharacteristicsState
 > {
+  columnCount: number;
+  rowHeight: number;
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
-
+    this.columnCount = 0;
+    this.rowHeight = 0;
     this.state = {
       items: new Map(),
       labels: [],
@@ -192,7 +192,7 @@ export class DataCharacteristics extends React.Component<
                         </Stack.Item>
                         <Stack.Item>
                           <Text variant="medium">
-                            {list.length}/580 examples
+                            {list.length}/{this.props.data.length} examples
                           </Text>
                         </Stack.Item>
                         <Stack.Item>
@@ -202,7 +202,8 @@ export class DataCharacteristics extends React.Component<
                                 style={{
                                   backgroundColor: "#5E9EFF",
                                   height: 10,
-                                  width: 100 * (list.length / 580)
+                                  width:
+                                    100 * (list.length / this.props.data.length)
                                 }}
                               />
                             </Stack.Item>
@@ -211,7 +212,9 @@ export class DataCharacteristics extends React.Component<
                                 style={{
                                   backgroundColor: "#D9D9D9",
                                   height: 10,
-                                  width: 100 - 100 * (list.length / 580)
+                                  width:
+                                    100 -
+                                    100 * (list.length / this.props.data.length)
                                 }}
                               />
                             </Stack.Item>
@@ -221,13 +224,11 @@ export class DataCharacteristics extends React.Component<
                     </Stack.Item>
                   )}
                   {this.state.labelVisibilities.get(label.toString()) && (
-                    <Stack
-                      horizontal
-                      horizontalAlign="center"
-                      verticalAlign="center"
-                    >
+                    <Stack horizontal verticalAlign="center">
                       <Stack.Item
                         style={{
+                          flexDirection: "row",
+                          marginRight: 18,
                           width: "100%"
                         }}
                       >
@@ -235,13 +236,9 @@ export class DataCharacteristics extends React.Component<
                         <List
                           items={list}
                           onRenderCell={this.onRenderCell}
-                          getPageSpecification={this.getPageSpecification}
+                          getPageHeight={this.getPageHeight}
+                          getItemCountForPage={this.getItemCountForPage}
                         />
-                      </Stack.Item>
-                      <Stack.Item
-                        style={{ bottom: 5, position: "relative", right: 50 }}
-                      >
-                        <Icon iconName="DoubleChevronRight12" />
                       </Stack.Item>
                     </Stack>
                   )}
@@ -262,22 +259,24 @@ export class DataCharacteristics extends React.Component<
     }
 
     return (
-      <div
-        data-is-focusable
+      <Stack
         className={classNames.tile}
-        onClick={this.callbackWrapper(item)}
-        onKeyPress={this.callbackWrapper(item)}
-        role="button"
-        tabIndex={0}
+        style={{ width: `${100 / this.columnCount}%` }}
       >
-        <Image
-          alt={item?.predictedY}
-          width={this.props.imageDim}
-          height={this.props.imageDim}
-          imageFit={ImageFit.cover}
-          src={`data:image/jpg;base64,${item?.image}`}
-        />
-        <div
+        <Stack.Item
+          style={{ height: this.props.imageDim, width: this.props.imageDim }}
+        >
+          <Image
+            alt={item?.predictedY}
+            src={`data:image/jpg;base64,${item?.image}`}
+            onClick={this.callbackWrapper(item)}
+            style={{
+              height: "auto",
+              width: this.props.imageDim
+            }}
+          />
+        </Stack.Item>
+        <Stack.Item
           className={
             item.predictedY === item.trueY
               ? classNames.successIndicator
@@ -285,7 +284,7 @@ export class DataCharacteristics extends React.Component<
           }
           style={{ marginBottom: 20, width: this.props.imageDim }}
         />
-      </div>
+      </Stack>
     );
   };
 
@@ -293,17 +292,22 @@ export class DataCharacteristics extends React.Component<
     this.props.selectItem(item);
   };
 
-  private getPageSpecification = (
-    itemIndex?: number,
-    visibleRect?: IRectangle
-  ): IPageSpecification => {
-    if (!visibleRect || !itemIndex) {
-      return { height: 0, itemCount: 0 };
+  private getPageHeight = () => {
+    return this.rowHeight;
+  };
+
+  private getItemCountForPage = (
+    itemIndex?: number | undefined,
+    visibleRect?: IRectangle | undefined
+  ): number => {
+    if (!visibleRect) {
+      return this.columnCount;
     }
-    return {
-      height: this.props.imageDim + 20,
-      itemCount: (visibleRect.width - 100) / (this.props.imageDim + 20)
-    };
+    if (itemIndex === 0) {
+      this.columnCount = Math.ceil(visibleRect.width / this.props.imageDim) - 1;
+      this.rowHeight = Math.floor(visibleRect.width / this.columnCount);
+    }
+    return this.columnCount;
   };
 
   private showAll = () => {

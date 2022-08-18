@@ -46,10 +46,10 @@ export class TableList extends React.Component<
   }
 
   public componentDidMount(): void {
-    const items: IVisionListItem[] = [];
+    let items: IVisionListItem[] = [];
 
-    items.concat(...this.props.successInstances);
-    items.concat(...this.props.errorInstances);
+    items = items.concat(this.props.successInstances);
+    items = items.concat(this.props.errorInstances);
 
     const groups: IGroup[] = [
       {
@@ -110,7 +110,6 @@ export class TableList extends React.Component<
         name: localization.InterpretVision.Dashboard.columnFive
       }
     ];
-
     this.setState({ columns, groups, items });
   }
 

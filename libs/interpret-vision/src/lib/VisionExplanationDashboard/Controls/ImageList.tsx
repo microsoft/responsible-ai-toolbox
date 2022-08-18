@@ -6,8 +6,6 @@ import {
   FocusZone,
   List,
   Image,
-  ImageFit,
-  IImageProps,
   IRectangle,
   Stack
 } from "@fluentui/react";
@@ -26,10 +24,6 @@ export interface IImageListState {
   data: IVisionListItem[];
 }
 
-const imageProps: Partial<IImageProps> = {
-  imageFit: ImageFit.contain
-};
-
 const RowsPerPage = 3;
 const ImagePadding = 10;
 
@@ -43,7 +37,6 @@ export class ImageList extends React.Component<
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
-    console.log(imageProps);
     this.state = {
       data: []
     };
@@ -86,7 +79,6 @@ export class ImageList extends React.Component<
             style={{ height: this.props.imageDim, width: this.props.imageDim }}
           >
             <Image
-              //{...imageProps}
               alt={item?.predictedY}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}

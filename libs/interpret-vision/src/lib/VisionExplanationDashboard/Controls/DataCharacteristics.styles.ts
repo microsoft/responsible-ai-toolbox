@@ -14,6 +14,8 @@ export interface IDataCharacteristicsStyles {
   label: IStyle;
   labelsContainer: IStyle;
   image: IStyle;
+  imageFrame: IStyle;
+  imageSizer: IStyle;
   mainContainer: IStyle;
   successIndicator: IStyle;
   errorIndicator: IStyle;
@@ -30,6 +32,18 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
       },
       image: {
         width: "100%"
+      },
+      imageFrame: {
+        bottom: 2,
+        left: 2,
+        marginBottom: 5,
+        position: "absolute",
+        right: 2,
+        top: 5
+      },
+      imageSizer: {
+        paddingBottom: "100%",
+        textAlign: "center"
       },
       instanceContainer: {
         marginLeft: 10
