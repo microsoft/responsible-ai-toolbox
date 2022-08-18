@@ -8,14 +8,13 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
+from tests.common_utils import (create_binary_classification_dataset,
+                                create_cancer_data, create_housing_data,
+                                create_iris_data, create_lightgbm_classifier,
+                                create_sklearn_random_forest_regressor)
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
-
-from .common_utils import (create_binary_classification_dataset,
-                           create_cancer_data, create_housing_data,
-                           create_iris_data, create_lightgbm_classifier,
-                           create_sklearn_random_forest_regressor)
 
 TARGET = 'target'
 
@@ -410,6 +409,27 @@ class TestRAIInsightsValidations:
                 serializer={})
         assert 'No valid model is specified but model serializer provided.' \
             in str(ucve.value)
+
+    def test_feature_metadata(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+        from responsibleai.feature_metadata import FeatureMetadata
+        feature_metadata = FeatureMetadata(identity_feature_name='id')
+
+        err_msg = ('The given identity feature name id, is not present'
+                   ' in user features.')
+        with pytest.raises(UserConfigValidationException, match=err_msg):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                feature_metadata=feature_metadata)
 
 
 class TestCausalUserConfigValidations:
