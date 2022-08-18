@@ -27,7 +27,7 @@ export interface IImageListState {
 }
 
 const imageProps: Partial<IImageProps> = {
-  imageFit: ImageFit.centerContain
+  imageFit: ImageFit.contain
 };
 
 const RowsPerPage = 3;
@@ -43,6 +43,7 @@ export class ImageList extends React.Component<
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
+    console.log(imageProps);
     this.state = {
       data: []
     };
@@ -59,6 +60,7 @@ export class ImageList extends React.Component<
     return (
       <FocusZone>
         <List
+          key={this.props.imageDim}
           items={this.state.data}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
@@ -84,20 +86,23 @@ export class ImageList extends React.Component<
             style={{ height: this.props.imageDim, width: this.props.imageDim }}
           >
             <Image
-              {...imageProps}
+              //{...imageProps}
               alt={item?.predictedY}
               src={`data:image/jpg;base64,${item?.image}`}
-              height={this.props.imageDim}
-              width={this.props.imageDim}
               onClick={this.callbackWrapper(item)}
               style={{
-                left: this.props.imageDim / 2 + ImagePadding / 2,
-                position: "relative"
+                height: "auto",
+                width: this.props.imageDim
               }}
             />
           </Stack.Item>
           <Stack.Item>
-            <Text className={classNames.label}>{item?.predictedY}</Text>
+            <Text
+              className={classNames.label}
+              style={{ width: this.props.imageDim - 3 }}
+            >
+              {item?.predictedY}
+            </Text>
           </Stack.Item>
         </Stack.Item>
       </Stack>

@@ -29,24 +29,26 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
       imageFrame: {
         bottom: 2,
         left: 2,
+        marginBottom: 5,
         position: "absolute",
         right: 2,
-        top: 2
+        top: 5
       },
       imageSizer: {
-        paddingBottom: "105%",
+        paddingBottom: "100%",
         textAlign: "center"
       },
       label: {
-        bottom: 10,
+        background: "rgba(0,0,0,0.3)",
         boxSizing: "border-box",
-        color: "black",
+        color: "white",
         fontSize: FontSizes.small,
         fontWeight: "600",
         justifySelf: "center",
-        left: 0,
+        left: 5,
+        padding: 10,
         position: "absolute",
-        width: "100%"
+        top: 5
       },
       list: {
         fontSize: 0,
