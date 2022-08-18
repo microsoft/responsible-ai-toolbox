@@ -272,11 +272,14 @@ export class DataCharacteristics extends React.Component<
             onClick={this.callbackWrapper(item)}
             style={{
               height: "auto",
+              left: 0,
+              position: "relative",
+              top: 0,
               width: this.props.imageDim
             }}
           />
         </Stack.Item>
-        <Stack.Item
+        <div
           className={
             item.predictedY === item.trueY
               ? classNames.successIndicator

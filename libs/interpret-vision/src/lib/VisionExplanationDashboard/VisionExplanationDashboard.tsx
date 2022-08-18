@@ -30,6 +30,7 @@ export interface IVisionExplanationDashboardState {
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
+  loadingExplanation: boolean;
   numRows: number;
   pageSize: number;
   panelOpen: boolean;
@@ -67,13 +68,17 @@ export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
 > {
+  computedExplanations: Map<number, string>;
+
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
 
+    this.computedExplanations = new Map();
     this.state = {
       currentExplanation: "",
       errorInstances: [],
       imageDim: 200,
+      loadingExplanation: false,
       numRows: 3,
       pageSize: 10,
       panelOpen: false,
@@ -323,6 +328,7 @@ export class VisionExplanationDashboard extends React.Component<
             explanation={this.state.currentExplanation}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
+            loadingExplanation={this.state.loadingExplanation}
             callback={this.onPanelClose}
           />
         </Stack.Item>
@@ -351,19 +357,37 @@ export class VisionExplanationDashboard extends React.Component<
   }
 
   private onPanelClose = () => {
-    this.setState({ panelOpen: !this.state.panelOpen });
+    this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
   };
 
   private onItemSelect = (item: IVisionListItem): void => {
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
 
-    const index = item.index ? item.index : 0;
+    const index = item.index;
+
+    if (!index) {
+      console.log("invalid index");
+      return;
+    }
+
+    const computedExplanation = this.computedExplanations.get(index);
+
+    if (computedExplanation) {
+      this.setState({ currentExplanation: computedExplanation });
+      return;
+    }
 
     if (this.props.requestExp) {
+      this.setState({ loadingExplanation: true });
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
-          this.setState({ currentExplanation: result.toString() });
+          const explanation = result.toString();
+          this.computedExplanations.set(index, explanation);
+          this.setState({
+            currentExplanation: explanation,
+            loadingExplanation: false
+          });
         });
     }
   };

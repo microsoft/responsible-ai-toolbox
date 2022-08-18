@@ -1296,6 +1296,7 @@
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
       "filter": "Filter",
+      "loading": "Computing explanation...",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
       "panelTitle": "Selected Instance",

@@ -10,7 +10,8 @@ import {
   PanelType,
   FocusZone,
   Stack,
-  Text
+  Text,
+  Spinner
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -22,6 +23,7 @@ export interface IFlyoutProps {
   explanation: string;
   isOpen: boolean;
   item: IVisionListItem | undefined;
+  loadingExplanation: boolean;
   callback: () => void;
 }
 
@@ -118,13 +120,21 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
                 {localization.InterpretVision.Dashboard.panelExplanation}
               </Text>
             </Stack.Item>
-            <Stack.Item>
-              <Image
-                src={`data:image/jpg;base64,${this.props.explanation}`}
-                width="800px"
-                style={{ position: "relative", right: 85 }}
-              />
-            </Stack.Item>
+            {!this.props.loadingExplanation ? (
+              <Stack.Item>
+                <Image
+                  src={`data:image/jpg;base64,${this.props.explanation}`}
+                  width="800px"
+                  style={{ position: "relative", right: 85 }}
+                />
+              </Stack.Item>
+            ) : (
+              <Stack.Item>
+                <Spinner
+                  label={localization.InterpretVision.Dashboard.loading}
+                />
+              </Stack.Item>
+            )}
             <Stack.Item>
               <div className={classNames.line} />
             </Stack.Item>
