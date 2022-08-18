@@ -28,7 +28,6 @@ import * as React from "react";
 import { AddTabButton } from "../../AddTabButton";
 import {
   isFlightActive,
-  newModelOverviewExperienceFlight,
   dataBalanceExperienceFlight
 } from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
@@ -183,13 +182,7 @@ export class TabsView extends React.PureComponent<
                       }
                     </Text>
                   </h3>
-                  <ModelOverview
-                    showNewModelOverviewExperience={isFlightActive(
-                      newModelOverviewExperienceFlight,
-                      this.context.featureFlights
-                    )}
-                    telemetryHook={this.props.telemetryHook}
-                  />
+                  <ModelOverview telemetryHook={this.props.telemetryHook} />
                 </>
               )}
               {t.key === GlobalTabKeys.DataAnalysisTab && (

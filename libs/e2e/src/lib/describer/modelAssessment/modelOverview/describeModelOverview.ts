@@ -1,46 +1,56 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { multiSelectComboBox } from "../../../../../util/comboBox";
-import { createCohort } from "../../../../../util/createCohort";
-import { Locators } from "../../Constants";
+import { multiSelectComboBox } from "../../../../util/comboBox";
+import { createCohort } from "../../../../util/createCohort";
+import { Locators } from "../Constants";
 import {
   IModelAssessmentData,
   RAINotebookNames
-} from "../../IModelAssessmentData";
-import { modelAssessmentDatasetsIncludingFlights } from "../../modelAssessmentDatasets";
+} from "../IModelAssessmentData";
+import { modelAssessmentDatasetsIncludingFlights } from "../modelAssessmentDatasets";
 
 const testName = "Model Overview v2";
 
-export function describeNewModelOverview(
+export function describeModelOverview(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasetsIncludingFlights
+  name?: keyof typeof modelAssessmentDatasetsIncludingFlights,
+  isNotebookTest = true
 ): void {
   describe(testName, () => {
-    before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
-    });
+    if (isNotebookTest) {
+      before(() => {
+        if (name) {
+          const hosts = Cypress.env().hosts;
+          const hostDetails = hosts.find((obj: { file: string }) => {
+            return obj.file === RAINotebookNames[name];
+          });
+          cy.task("log", hostDetails.host);
+          cy.visit(hostDetails.host);
+        }
+      });
+    } else {
+      before(() => {
+        cy.visit(`#/modelAssessment/${name}/light/english/Version-2`);
+      });
+    }
 
     if (datasetShape.modelOverviewData?.hasModelOverviewComponent) {
       it("should have 'Model overview' component in the initial state", () => {
         ensureAllModelOverviewBasicElementsArePresent();
         ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
           datasetShape,
-          false
+          false,
+          isNotebookTest
         );
       });
 
       it("should show 'Feature cohorts' view when selected", () => {
         ensureAllModelOverviewBasicElementsArePresent();
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
-        ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent();
+        ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
+          isNotebookTest
+        );
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
           datasetShape.featureNames![0],
@@ -64,7 +74,7 @@ export function describeNewModelOverview(
       });
 
       it("should show new cohorts in charts", () => {
-        ensureNewCohortsShowUpInCharts(datasetShape);
+        ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
       });
     } else {
       it("should not have 'Model overview' component", () => {
@@ -87,7 +97,8 @@ function ensureAllModelOverviewBasicElementsArePresent() {
 
 function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
-  includeNewCohort: boolean
+  includeNewCohort: boolean,
+  isNotebookTest: boolean
 ) {
   const data = datasetShape.modelOverviewData!;
   const initialCohorts = data.initialCohorts!;
@@ -95,13 +106,15 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
-  const numberOfCohorts = initialCohorts.length + (includeNewCohort ? 1 : 0);
-  if (numberOfCohorts <= 1) {
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
-      "not.exist"
-    );
-  } else {
-    cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+  if (isNotebookTest) {
+    const numberOfCohorts = initialCohorts.length + (includeNewCohort ? 1 : 0);
+    if (numberOfCohorts <= 1) {
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
+        "not.exist"
+      );
+    } else {
+      cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should("exist");
+    }
   }
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
@@ -141,14 +154,16 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     });
   });
 
-  cy.get(Locators.ModelOverviewHeatmapCells)
-    .should("have.length", cohorts.length * (metricsOrder.length + 1))
-    .each(($cell) => {
-      // somehow the cell string is one invisible character longer, trim
-      expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
-        heatmapCellContents
-      );
-    });
+  if (isNotebookTest) {
+    cy.get(Locators.ModelOverviewHeatmapCells)
+      .should("have.length", cohorts.length * (metricsOrder.length + 1))
+      .each(($cell) => {
+        // somehow the cell string is one invisible character longer, trim
+        expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
+          heatmapCellContents
+        );
+      });
+  }
 
   cy.get(
     Locators.ModelOverviewDisaggregatedAnalysisBaseCohortDisclaimer
@@ -164,24 +179,29 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
       "not.exist"
     );
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    cy.get(Locators.ModelOverviewMetricChartBars).should(
-      "have.length",
-      cohorts.length
-    );
-    // check aria-label of bar chart - aria-label uses comma as delimiter
-    // between digits for thousands instead of whitespace
-    const displayedMetric = datasetShape.isRegression
-      ? initialCohorts[0].metrics.meanAbsoluteError
-      : initialCohorts[0].metrics.accuracy;
-    const expectedAriaLabel =
-      !datasetShape.isRegression && !datasetShape.isMulticlass
-        ? `1. ${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}.`
-        : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
-            datasetShape.isRegression ? "Mean absolute error" : "Accuracy"
-          }.`;
-    cy.get(Locators.ModelOverviewMetricChartBars)
-      .first()
-      .should("have.attr", "aria-label", expectedAriaLabel);
+    if (isNotebookTest) {
+      cy.get(Locators.ModelOverviewMetricChartBars).should(
+        "have.length",
+        cohorts.length
+      );
+      // check aria-label of bar chart - aria-label uses comma as delimiter
+      // between digits for thousands instead of whitespace
+      const displayedMetric = datasetShape.isRegression
+        ? initialCohorts[0].metrics.meanAbsoluteError
+        : initialCohorts[0].metrics.accuracy;
+      const expectedAriaLabel =
+        !datasetShape.isRegression && !datasetShape.isMulticlass
+          ? `1. ${initialCohorts[0].name}, ${displayedMetric.replace(
+              " ",
+              ","
+            )}.`
+          : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
+              datasetShape.isRegression ? "Mean absolute error" : "Accuracy"
+            }.`;
+      cy.get(Locators.ModelOverviewMetricChartBars)
+        .first()
+        .should("have.attr", "aria-label", expectedAriaLabel);
+    }
   } else {
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
@@ -189,7 +209,9 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   }
 }
 
-function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent() {
+function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
+  isNotebookTest: boolean
+) {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
@@ -210,10 +232,12 @@ function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent() {
     "not.exist"
   );
   cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
-  cy.get(Locators.MissingParameterPlaceholder).should(
-    "include.text",
-    "Select features to generate the feature-based analysis."
-  );
+  if (isNotebookTest) {
+    cy.get(Locators.MissingParameterPlaceholder).should(
+      "include.text",
+      "Select features to generate the feature-based analysis."
+    );
+  }
 }
 
 function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
@@ -255,15 +279,20 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
   }
 }
 
-function ensureNewCohortsShowUpInCharts(datasetShape: IModelAssessmentData) {
+function ensureNewCohortsShowUpInCharts(
+  datasetShape: IModelAssessmentData,
+  isNotebookTest: boolean
+) {
   cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,
-    false
+    false,
+    isNotebookTest
   );
   createCohort(datasetShape.modelOverviewData?.newCohort?.name);
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,
-    true
+    true,
+    isNotebookTest
   );
 }
