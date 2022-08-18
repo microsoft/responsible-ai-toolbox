@@ -3,8 +3,10 @@
 
 export enum Locators {
   ClassImportanceWeights = "#ClassImportanceWeights",
+  TextChoiceGroup = "#TextChoiceGroup",
   TextFeatureLegend = "#TextFeatureLegend",
   TextHighlighting = "#TextHighlighting",
   TextExplanationChart = "#TextExplanationChart",
-  TextTopKSlider = "#TextTopKSlider"
+  TextTopKSlider = "#TextTopKSlider",
+  TextWordsDropdown = `#ClassImportanceWeights div.ms-Dropdown-container`
 }

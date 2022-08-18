@@ -2,10 +2,7 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../../../util/Constants";
-import {
-  selectDropdownWithKeys,
-  getDropdownValue
-} from "../../../util/dropdown";
+import { selectDropdown, getDropdownValue } from "../../../util/dropdown";
 import { getDefaultTopKWords } from "../../../util/getDefaultTopKWords";
 import { validateBarChart } from "../../../util/validateBarChart";
 import { IInterpretTextData } from "../IInterpretTextData";
@@ -25,10 +22,10 @@ export function describeClassImportanceWeightsDropdown(
       );
     });
     it("should be selectable for different classes", () => {
-      selectDropdownWithKeys(Locators.ClassImportanceWeights).then(() => {
+      selectDropdown(Locators.TextWordsDropdown, "Class: spam").then(() => {
         validateTextBarChart(getDefaultTopKWords(dataShape.localExplanations));
       });
-      selectDropdownWithKeys(Locators.ClassImportanceWeights).then(() => {
+      selectDropdown(Locators.TextWordsDropdown, "Class: not spam").then(() => {
         validateTextBarChart(getDefaultTopKWords(dataShape.localExplanations));
       });
     });

@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSpan } from "./getSpan";
-
-export function selectDropdown(selector: string, item: string | number): void {
-  cy.get(`${selector}`).click();
-  getSpan(item.toString()).click();
-}
-
-export function selectDropdownWithKeys(
-  selector: string
+export function selectDropdown(
+  selector: string,
+  item: string | number
 ): Cypress.Chainable<JQuery<HTMLElement>> {
-  return cy.get(`${selector} .ms-Dropdown-title`).type("{downarrow}{enter}");
+  cy.get(selector).eq(0).click();
+  return cy
+    .get(".ms-Callout")
+    .should("be.visible")
+    .get(".ms-Dropdown-optionText")
+    .contains(item)
+    .click();
 }
 
 export function getDropdownValue(selector: string): string | undefined {

@@ -7,6 +7,7 @@ import { interpretTextDatasets } from "../interpretTextDatasets";
 import { describeBarChart } from "./describeBarChart";
 import { describeClassImportanceWeightsDropdown } from "./describeClassImportanceWeightsDropdown";
 import { describeLegend } from "./describeLegend";
+import { describeRadioButtonFeatureWeightsSelector } from "./describeRadioButtonFeatureWeightsSelector";
 import { describeSlider } from "./describeSlider";
 import { describeTextHighlighting } from "./describeTextHighlighting";
 
@@ -25,5 +26,6 @@ export function describeIndividualFeatureImportance(
     describeBarChart(getDefaultTopKWords(datasetShape.localExplanations));
     describeClassImportanceWeightsDropdown(datasetShape);
     describeSlider(datasetShape);
+    describeRadioButtonFeatureWeightsSelector();
   });
 }
