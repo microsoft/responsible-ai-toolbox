@@ -20,6 +20,11 @@ export class ColorPalette {
   public static ErrorAnalysisDarkBlackText = "rgba(0,0,0,0.8)";
   public static ErrorAnalysisDarkGreyText = "#555";
   public static DisabledColor = theme.palette.neutralSecondary;
+  public static NodeFilledColor = "#F3F2F1";
+  public static NodeOutlineColor = "#B3B0AD";
+  public static ErrorColor100 = "#791818";
+  public static white = "#FFFFFF";
+  public static MetricColor100 = "#0B5A08";
 }
 
 export function isColorDark(colorStr: string | undefined): boolean {
