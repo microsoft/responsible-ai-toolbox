@@ -420,7 +420,7 @@ class TestRAIInsightsValidations:
         from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(identity_feature_name='id')
 
-        err_msg = ('The given identity feature name id, is not present'
+        err_msg = ('The given identity feature name id is not present'
                    ' in user features.')
         with pytest.raises(UserConfigValidationException, match=err_msg):
             RAIInsights(

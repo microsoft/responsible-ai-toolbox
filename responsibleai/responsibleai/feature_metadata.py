@@ -51,7 +51,7 @@ class FeatureMetadata:
         if self.identity_feature_name is not None:
             if self.identity_feature_name not in user_features:
                 raise UserConfigValidationException(
-                    'The given identity feature name {0}, is not present'
+                    'The given identity feature name {0} is not present'
                     ' in user features.'.format(
                         self.identity_feature_name))
 
