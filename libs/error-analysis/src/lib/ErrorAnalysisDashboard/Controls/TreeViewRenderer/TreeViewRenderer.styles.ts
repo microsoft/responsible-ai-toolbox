@@ -5,16 +5,12 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  mergeStyles,
   getTheme
 } from "@fluentui/react";
 import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import { Property } from "csstype";
 
-import { ColorPalette } from "../../ColorPalette";
-
 export interface ITreeViewRendererStyles {
-  filledNodeText: IStyle;
   infoWithText: IStyle;
   legend: IStyle;
   linkLabel: IStyle;
@@ -33,19 +29,7 @@ export const treeViewRendererStyles = (props?: {
   fill?: Property.Color;
 }): IProcessedStyleSet<ITreeViewRendererStyles> => {
   const theme = getTheme();
-  const nodeTextStyle = {
-    fontSize: "10px",
-    fontWeight: "bolder",
-    pointerEvents: "none",
-    transform: "translate(0px, 0px)"
-  };
   return mergeStyleSets<ITreeViewRendererStyles>({
-    filledNodeText: mergeStyles([
-      nodeTextStyle,
-      {
-        fill: ColorPalette.ErrorAnalysisLightText
-      }
-    ]),
     infoWithText: { maxWidth: descriptionMaxWidth },
     legend: {
       pointerEvents: "none"
@@ -66,12 +50,11 @@ export const treeViewRendererStyles = (props?: {
       stroke: props?.fill,
       strokeWidth: 2
     },
-    nodeText: mergeStyles([
-      nodeTextStyle,
-      {
-        fill: ColorPalette.ErrorAnalysisDarkGreyText
-      }
-    ]),
+    nodeText: {
+      fontSize: "10px",
+      fontWeight: "bold",
+      pointerEvents: "none"
+    },
     nopointer: {
       pointerEvents: "none"
     },
