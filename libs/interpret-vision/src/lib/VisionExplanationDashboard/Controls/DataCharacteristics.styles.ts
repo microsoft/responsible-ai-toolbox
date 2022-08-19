@@ -13,6 +13,7 @@ export interface IDataCharacteristicsStyles {
   tile: IStyle;
   label: IStyle;
   labelsContainer: IStyle;
+  iconContainer: IStyle;
   image: IStyle;
   mainContainer: IStyle;
   successIndicator: IStyle;
@@ -27,6 +28,11 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
         border: "2px solid #D13A5F",
         boxSizing: "border-box",
         height: 10
+      },
+      iconContainer: {
+        marginRight: 30,
+        position: "relative",
+        top: -5
       },
       image: {
         width: "100%"

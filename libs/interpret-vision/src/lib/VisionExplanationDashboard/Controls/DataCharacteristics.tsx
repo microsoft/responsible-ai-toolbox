@@ -8,7 +8,8 @@ import {
   List,
   DefaultButton,
   Image,
-  IRectangle
+  IRectangle,
+  Icon
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -27,6 +28,7 @@ export interface IDataCharacteristicsState {
   items: Map<string, IVisionListItem[]>;
   labels: string[];
   labelVisibilities: Map<string, boolean>;
+  renderStartIndex: number[];
 }
 
 export class DataCharacteristics extends React.Component<
@@ -42,7 +44,8 @@ export class DataCharacteristics extends React.Component<
     this.state = {
       items: new Map(),
       labels: [],
-      labelVisibilities: new Map()
+      labelVisibilities: new Map(),
+      renderStartIndex: []
     };
   }
 
@@ -76,7 +79,18 @@ export class DataCharacteristics extends React.Component<
       }
     });
 
-    this.setState({ items, labels, labelVisibilities: visibilities });
+    const renderStartIndex = this.state.renderStartIndex;
+
+    labels.forEach(() => {
+      renderStartIndex.push(0);
+    });
+
+    this.setState({
+      items,
+      labels,
+      labelVisibilities: visibilities,
+      renderStartIndex
+    });
   }
 
   public render(): React.ReactNode {
@@ -168,7 +182,7 @@ export class DataCharacteristics extends React.Component<
             className={classNames.mainContainer}
             style={{ height: this.props.numRows * this.props.imageDim * 1.8 }}
           >
-            {keys.map((label) => {
+            {keys.map((label, index) => {
               const list = items.get(label);
               if (!list) {
                 return <div />;
@@ -227,8 +241,8 @@ export class DataCharacteristics extends React.Component<
                     <Stack horizontal verticalAlign="center">
                       <Stack.Item
                         style={{
-                          flexDirection: "row",
-                          marginRight: 18,
+                          height: this.props.imageDim + 10 + 20, //Image + Success/Error label + margin
+                          overflow: "hidden",
                           width: "100%"
                         }}
                       >
@@ -238,7 +252,14 @@ export class DataCharacteristics extends React.Component<
                           onRenderCell={this.onRenderCell}
                           getPageHeight={this.getPageHeight}
                           getItemCountForPage={this.getItemCountForPage}
+                          startIndex={this.state.renderStartIndex[index]}
                         />
+                      </Stack.Item>
+                      <Stack.Item
+                        className={classNames.iconContainer}
+                        onClick={this.loadNextItems(index)}
+                      >
+                        <Icon iconName="DoubleChevronRight12" />
                       </Stack.Item>
                     </Stack>
                   )}
@@ -259,10 +280,7 @@ export class DataCharacteristics extends React.Component<
     }
 
     return (
-      <Stack
-        className={classNames.tile}
-        style={{ width: `${100 / this.columnCount}%` }}
-      >
+      <Stack className={classNames.tile}>
         <Stack.Item
           style={{ height: this.props.imageDim, width: this.props.imageDim }}
         >
@@ -289,6 +307,12 @@ export class DataCharacteristics extends React.Component<
         />
       </Stack>
     );
+  };
+
+  private loadNextItems = (index: number) => () => {
+    const renderStartIndex = this.state.renderStartIndex;
+    renderStartIndex[index] += this.columnCount;
+    this.setState({ renderStartIndex });
   };
 
   private callbackWrapper = (item: IVisionListItem) => () => {

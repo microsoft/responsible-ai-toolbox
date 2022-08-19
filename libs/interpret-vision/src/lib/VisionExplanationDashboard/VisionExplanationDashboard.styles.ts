@@ -40,7 +40,7 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       imageListContainer: {
         border: "1px solid #D2D4D6",
         height: "100%",
-        overflow: "scroll"
+        overflow: "auto"
       },
       line: {
         borderTop: "1px solid #EDEBE9"

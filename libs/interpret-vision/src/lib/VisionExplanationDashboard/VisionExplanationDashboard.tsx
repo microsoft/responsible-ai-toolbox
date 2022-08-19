@@ -24,7 +24,6 @@ import { TitleBar } from "./Controls/TitleBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 
-//TODO: cache explanations
 export interface IVisionExplanationDashboardState {
   currentExplanation: string;
   errorInstances: IVisionListItem[];
@@ -365,15 +364,12 @@ export class VisionExplanationDashboard extends React.Component<
 
     const index = item.index;
 
-    if (!index) {
-      console.log("invalid index");
-      return;
-    }
-
     const computedExplanation = this.computedExplanations.get(index);
-
     if (computedExplanation) {
-      this.setState({ currentExplanation: computedExplanation });
+      this.setState({
+        currentExplanation: computedExplanation,
+        loadingExplanation: false
+      });
       return;
     }
 

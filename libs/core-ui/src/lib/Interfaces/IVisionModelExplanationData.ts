@@ -13,5 +13,5 @@ export interface IVisionListItem {
   image: string;
   predictedY: string;
   trueY: string;
-  index?: number;
+  index: number;
 }
