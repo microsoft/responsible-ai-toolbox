@@ -107,7 +107,8 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=categorical_features,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test)
+            maximum_rows_for_test=maximum_rows_for_test,
+            feature_metadata=feature_metadata)
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
@@ -135,6 +136,40 @@ class RAIInsights(RAIBaseInsights):
 
         self._try_add_data_balance()
 
+    def get_train_data(self):
+        """Returns the training dataset after dropping
+        features if such a list is configured.
+
+        :return: The training dataset after dropping features.
+        :rtype: pandas.DataFrame
+        """
+        if self._feature_metadata is None:
+            return self.train
+        else:
+            if self._feature_metadata.dropped_features is None:
+                return self.train
+            else:
+                return self.train.drop(
+                    columns=self._feature_metadata.dropped_features,
+                    axis=1)
+
+    def get_test_data(self):
+        """Returns the test dataset after dropping
+        features if such a list is configured.
+
+        :return: The test dataset after dropping features.
+        :rtype: pandas.DataFrame
+        """
+        if self._feature_metadata is None:
+            return self.test
+        else:
+            if self._feature_metadata.dropped_features is None:
+                return self.test
+            else:
+                return self.test.drop(
+                    columns=self._feature_metadata.dropped_features,
+                    axis=1)
+
     def _initialize_managers(self):
         """Initializes the managers.
 
@@ -142,11 +177,12 @@ class RAIInsights(RAIBaseInsights):
         and explainer managers.
         """
         self._causal_manager = CausalManager(
-            self.train, self.test, self.target_column,
+            self.get_train_data(), self.get_test_data(), self.target_column,
             self.task_type, self.categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=self.model, train=self.train, test=self.test,
+            model=self.model, train=self.get_train_data(),
+            test=self.get_test_data(),
             target_column=self.target_column, task_type=self.task_type,
             categorical_features=self.categorical_features)
 
@@ -155,12 +191,12 @@ class RAIInsights(RAIBaseInsights):
             classes=self._classes, task_type=self.task_type)
 
         self._error_analysis_manager = ErrorAnalysisManager(
-            self.model, self.test, self.target_column,
+            self.model, self.get_test_data(), self.target_column,
             self._classes,
             self.categorical_features)
 
         self._explainer_manager = ExplainerManager(
-            self.model, self.train, self.test,
+            self.model, self.get_test_data(), self.get_test_data(),
             self.target_column,
             self._classes,
             categorical_features=self.categorical_features)
@@ -339,11 +375,30 @@ class RAIInsights(RAIBaseInsights):
                         'The train labels and distinct values in '
                         'target (test data) do not match')
 
+            if feature_metadata is not None:
+                if not isinstance(feature_metadata, FeatureMetadata):
+                    raise UserConfigValidationException(
+                        "Expecting type FeatureMetadata but got {0}".format(
+                            type(feature_metadata)))
+
+                feature_metadata.validate_feature_metadata_with_user_features(
+                    list(train.columns))
+
             if model is not None:
                 # Pick one row from train and test data
-                small_train_data = train.iloc[0:1].drop(
+                if feature_metadata is not None:
+                    if feature_metadata.dropped_features is not None:
+                        small_train_data = train[0:1].drop(
+                            feature_metadata.dropped_features, axis=1)
+                        small_test_data = test[0:1].drop(
+                            feature_metadata.dropped_features, axis=1)
+                else:
+                    small_train_data = train[0:1]
+                    small_test_data = test[0:1]
+    
+                small_train_data = small_train_data.iloc[0:1].drop(
                     [target_column], axis=1)
-                small_test_data = test.iloc[0:1].drop(
+                small_test_data = small_test_data.iloc[0:1].drop(
                     [target_column], axis=1)
 
                 small_train_features_before = list(small_train_data.columns)
@@ -386,15 +441,6 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
             )
-
-        if feature_metadata is not None:
-            if not isinstance(feature_metadata, FeatureMetadata):
-                raise UserConfigValidationException(
-                    "Expecting type FeatureMetadata but got {0}".format(
-                        type(feature_metadata)))
-
-            feature_metadata.validate_feature_metadata_with_user_features(
-                list(train.columns))
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -525,7 +571,12 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
             try:
-                predicted_y = self.model.predict(dataset)
+                predict_dataset = dataset
+                if self._feature_metadata is not None:
+                    if self._feature_metadata.dropped_features is not None:
+                       predict_dataset = predict_dataset.drop(
+                            self._feature_metadata.dropped_features, axis=1) 
+                predicted_y = self.model.predict(predict_dataset)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
                 "dataset type"
@@ -578,7 +629,12 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.target_column = self.target_column
         if is_classifier(self.model) and dataset is not None:
             try:
-                probability_y = self.model.predict_proba(dataset)
+                predict_dataset = dataset
+                if self._feature_metadata is not None:
+                    if self._feature_metadata.dropped_features is not None:
+                       predict_dataset = predict_dataset.drop(
+                            self._feature_metadata.dropped_features, axis=1) 
+                probability_y = self.model.predict_proba(predict_dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex
@@ -606,6 +662,13 @@ class RAIInsights(RAIBaseInsights):
         test_without_target_column = self.test.drop(
             [self.target_column], axis=1)
 
+        if self._feature_metadata is not None:
+            if self._feature_metadata.dropped_features is not None:
+                test_without_target_column = test_without_target_column.drop(
+                    columns=self._feature_metadata.dropped_features,
+                    axis=1
+                )
+ 
         predict_output = self.model.predict(test_without_target_column)
         self._write_to_file(
             prediction_output_path / (_PREDICT + _JSON_EXTENSION),
