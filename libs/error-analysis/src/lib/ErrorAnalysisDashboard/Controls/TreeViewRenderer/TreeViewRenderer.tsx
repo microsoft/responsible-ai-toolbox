@@ -69,8 +69,8 @@ export interface ISVGDatum {
 }
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
-const errorAvgColor = ColorPalette.ErrorAvgColor;
 const disabledColor = ColorPalette.DisabledColor;
+const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -467,12 +467,10 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = isErrorMetric
-        ? ColorPalette.MinErrorColor
-        : ColorPalette.MinMetricColor;
+      const minColor = ColorPalette.white;
       const maxColor = isErrorMetric
-        ? ColorPalette.MaxErrorColor
-        : ColorPalette.MaxMetricColor;
+        ? ColorPalette.ErrorColor100
+        : ColorPalette.MetricColor100;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
