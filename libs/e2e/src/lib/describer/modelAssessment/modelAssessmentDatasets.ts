@@ -499,196 +499,185 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   }
 };
 
-// create copy for newModelOverviewExperience to allow for additions and changes
-const modelAssessmentDatasetsNewModelOverviewExperience: {
-  [name: string]: IModelAssessmentData;
-} = _.chain(modelAssessmentDatasets)
-  .cloneDeep()
-  .mapKeys((_v, k: string) => `${k}NewModelOverviewExperience`)
-  .value();
-
-modelAssessmentDatasetsNewModelOverviewExperience.CensusClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
-  {
-    featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3
-    },
-    hasModelOverviewComponent: true,
-    initialCohorts: [
-      {
-        metrics: {
-          accuracy: "0.856",
-          falseNegativeRate: "0.35",
-          falsePositiveRate: "0.077",
-          selectionRate: "0.246"
-        },
-        name: "All data",
-        sampleSize: "500"
-      },
-      {
-        metrics: {
-          accuracy: "0.753",
-          falseNegativeRate: "0.313",
-          falsePositiveRate: "0.195",
-          selectionRate: "0.438"
-        },
-        name: "Cohort Age and Hours-Per-Week",
-        sampleSize: "146"
-      },
-      {
-        metrics: {
-          accuracy: "0.927",
-          falseNegativeRate: "0.722",
-          falsePositiveRate: "0.019",
-          selectionRate: "0.077"
-        },
-        name: "Cohort Marital-Status",
-        sampleSize: "233"
-      },
-      {
-        metrics: {
-          accuracy: "0.75",
-          falseNegativeRate: "0.667",
-          falsePositiveRate: "0.071",
-          selectionRate: "0.3"
-        },
-        name: "Cohort Index",
-        sampleSize: "20"
-      },
-      {
-        metrics: {
-          accuracy: "0.734",
-          falseNegativeRate: "0",
-          falsePositiveRate: "1",
-          selectionRate: "0.734"
-        },
-        name: "Cohort Predicted Y",
-        sampleSize: "109"
-      },
-      {
-        metrics: {
-          accuracy: "0.65",
-          falseNegativeRate: "0.35",
-          falsePositiveRate: "N/A",
-          selectionRate: "1"
-        },
-        name: "Cohort True Y",
-        sampleSize: "123"
-      }
-    ],
-    newCohort: {
+modelAssessmentDatasets.CensusClassificationModelDebugging.modelOverviewData = {
+  featureCohortView: {
+    multiFeatureCohorts: 9,
+    singleFeatureCohorts: 3
+  },
+  hasModelOverviewComponent: true,
+  initialCohorts: [
+    {
       metrics: {
-        accuracy: "0.858",
-        falseNegativeRate: "0.344",
+        accuracy: "0.856",
+        falseNegativeRate: "0.35",
         falsePositiveRate: "0.077",
-        selectionRate: "0.244"
+        selectionRate: "0.246"
       },
-      name: "CohortCreateE2E-census",
-      sampleSize: "499"
-    }
-  };
-modelAssessmentDatasetsNewModelOverviewExperience.DiabetesDecisionMakingNewModelOverviewExperience.modelOverviewData =
-  {
-    featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3
+      name: "All data",
+      sampleSize: "500"
     },
-    hasModelOverviewComponent: true,
-    initialCohorts: [
-      {
-        metrics: {
-          meanAbsoluteError: "3 859.27",
-          meanPrediction: "154.102",
-          meanSquaredError: "2 981.101"
-        },
-        name: "All data",
-        sampleSize: "89"
-      },
-      {
-        metrics: {
-          meanAbsoluteError: "1 961.23",
-          meanPrediction: "196.629",
-          meanSquaredError: "4 014.697"
-        },
-        name: "Cohort Age and BMI",
-        sampleSize: "38"
-      },
-      {
-        metrics: {
-          meanAbsoluteError: "983.52",
-          meanPrediction: "142.495",
-          meanSquaredError: "3 829.201"
-        },
-        name: "Cohort Index",
-        sampleSize: "20"
-      },
-      {
-        metrics: {
-          meanAbsoluteError: "2 084.21",
-          meanPrediction: "115.086",
-          meanSquaredError: "2 416.75"
-        },
-        name: "Cohort Predicted Y",
-        sampleSize: "51"
-      },
-      {
-        metrics: {
-          meanAbsoluteError: "3 744.86",
-          meanPrediction: "155.306",
-          meanSquaredError: "2 972.126"
-        },
-        name: "Cohort True Y",
-        sampleSize: "87"
-      },
-      {
-        metrics: {
-          meanAbsoluteError: "3 597.63",
-          meanPrediction: "157.301",
-          meanSquaredError: "4 154.723"
-        },
-        name: "Cohort Regression Error",
-        sampleSize: "63"
-      }
-    ],
-    newCohort: {
+    {
       metrics: {
-        meanAbsoluteError: "3 858.02",
-        meanPrediction: "153.958",
-        meanSquaredError: "3 014.96"
+        accuracy: "0.753",
+        falseNegativeRate: "0.313",
+        falsePositiveRate: "0.195",
+        selectionRate: "0.438"
       },
-      name: "CohortCreateE2E-diabetes",
-      sampleSize: "88"
-    }
-  };
-modelAssessmentDatasetsNewModelOverviewExperience.DiabetesRegressionModelDebuggingNewModelOverviewExperience.modelOverviewData =
-  {
-    featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3
+      name: "Cohort Age and Hours-Per-Week",
+      sampleSize: "146"
     },
-    hasModelOverviewComponent: true,
-    initialCohorts: [
-      {
-        metrics: {
-          meanAbsoluteError: "3 859.27",
-          meanPrediction: "154.102",
-          meanSquaredError: "2 981.101"
-        },
-        name: "All data",
-        sampleSize: "89"
-      }
-    ],
-    newCohort: {
+    {
       metrics: {
-        meanAbsoluteError: "3 858.02",
-        meanPrediction: "153.958",
-        meanSquaredError: "3 014.96"
+        accuracy: "0.927",
+        falseNegativeRate: "0.722",
+        falsePositiveRate: "0.019",
+        selectionRate: "0.077"
       },
-      name: "CohortCreateE2E-diabetes",
-      sampleSize: "88"
+      name: "Cohort Marital-Status",
+      sampleSize: "233"
+    },
+    {
+      metrics: {
+        accuracy: "0.75",
+        falseNegativeRate: "0.667",
+        falsePositiveRate: "0.071",
+        selectionRate: "0.3"
+      },
+      name: "Cohort Index",
+      sampleSize: "20"
+    },
+    {
+      metrics: {
+        accuracy: "0.734",
+        falseNegativeRate: "0",
+        falsePositiveRate: "1",
+        selectionRate: "0.734"
+      },
+      name: "Cohort Predicted Y",
+      sampleSize: "109"
+    },
+    {
+      metrics: {
+        accuracy: "0.65",
+        falseNegativeRate: "0.35",
+        falsePositiveRate: "N/A",
+        selectionRate: "1"
+      },
+      name: "Cohort True Y",
+      sampleSize: "123"
     }
-  };
-modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebuggingNewModelOverviewExperience.modelOverviewData =
+  ],
+  newCohort: {
+    metrics: {
+      accuracy: "0.858",
+      falseNegativeRate: "0.344",
+      falsePositiveRate: "0.077",
+      selectionRate: "0.244"
+    },
+    name: "CohortCreateE2E-census",
+    sampleSize: "499"
+  }
+};
+modelAssessmentDatasets.DiabetesDecisionMaking.modelOverviewData = {
+  featureCohortView: {
+    multiFeatureCohorts: 9,
+    singleFeatureCohorts: 3
+  },
+  hasModelOverviewComponent: true,
+  initialCohorts: [
+    {
+      metrics: {
+        meanAbsoluteError: "3 859.27",
+        meanPrediction: "154.102",
+        meanSquaredError: "2 981.101"
+      },
+      name: "All data",
+      sampleSize: "89"
+    },
+    {
+      metrics: {
+        meanAbsoluteError: "1 961.23",
+        meanPrediction: "196.629",
+        meanSquaredError: "4 014.697"
+      },
+      name: "Cohort Age and BMI",
+      sampleSize: "38"
+    },
+    {
+      metrics: {
+        meanAbsoluteError: "983.52",
+        meanPrediction: "142.495",
+        meanSquaredError: "3 829.201"
+      },
+      name: "Cohort Index",
+      sampleSize: "20"
+    },
+    {
+      metrics: {
+        meanAbsoluteError: "2 084.21",
+        meanPrediction: "115.086",
+        meanSquaredError: "2 416.75"
+      },
+      name: "Cohort Predicted Y",
+      sampleSize: "51"
+    },
+    {
+      metrics: {
+        meanAbsoluteError: "3 744.86",
+        meanPrediction: "155.306",
+        meanSquaredError: "2 972.126"
+      },
+      name: "Cohort True Y",
+      sampleSize: "87"
+    },
+    {
+      metrics: {
+        meanAbsoluteError: "3 597.63",
+        meanPrediction: "157.301",
+        meanSquaredError: "4 154.723"
+      },
+      name: "Cohort Regression Error",
+      sampleSize: "63"
+    }
+  ],
+  newCohort: {
+    metrics: {
+      meanAbsoluteError: "3 858.02",
+      meanPrediction: "153.958",
+      meanSquaredError: "3 014.96"
+    },
+    name: "CohortCreateE2E-diabetes",
+    sampleSize: "88"
+  }
+};
+modelAssessmentDatasets.DiabetesRegressionModelDebugging.modelOverviewData = {
+  featureCohortView: {
+    multiFeatureCohorts: 9,
+    singleFeatureCohorts: 3
+  },
+  hasModelOverviewComponent: true,
+  initialCohorts: [
+    {
+      metrics: {
+        meanAbsoluteError: "3 859.27",
+        meanPrediction: "154.102",
+        meanSquaredError: "2 981.101"
+      },
+      name: "All data",
+      sampleSize: "89"
+    }
+  ],
+  newCohort: {
+    metrics: {
+      meanAbsoluteError: "3 858.02",
+      meanPrediction: "153.958",
+      meanSquaredError: "3 014.96"
+    },
+    name: "CohortCreateE2E-diabetes",
+    sampleSize: "88"
+  }
+};
+modelAssessmentDatasets.HousingClassificationModelDebugging.modelOverviewData =
   {
     featureCohortView: {
       multiFeatureCohorts: 6,
@@ -718,34 +707,32 @@ modelAssessmentDatasetsNewModelOverviewExperience.HousingClassificationModelDebu
       sampleSize: "729"
     }
   };
-modelAssessmentDatasetsNewModelOverviewExperience.HousingDecisionMakingNewModelOverviewExperience.modelOverviewData =
-  {
-    hasModelOverviewComponent: false
-  };
-modelAssessmentDatasetsNewModelOverviewExperience.MulticlassDnnModelDebuggingNewModelOverviewExperience.modelOverviewData =
-  {
-    featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3
-    },
-    hasModelOverviewComponent: true,
-    initialCohorts: [
-      {
-        metrics: {
-          accuracy: "0.674"
-        },
-        name: "All data",
-        sampleSize: "89"
-      }
-    ],
-    newCohort: {
+modelAssessmentDatasets.HousingDecisionMaking.modelOverviewData = {
+  hasModelOverviewComponent: false
+};
+modelAssessmentDatasets.MulticlassDnnModelDebugging.modelOverviewData = {
+  featureCohortView: {
+    multiFeatureCohorts: 9,
+    singleFeatureCohorts: 3
+  },
+  hasModelOverviewComponent: true,
+  initialCohorts: [
+    {
       metrics: {
-        accuracy: "0.67"
+        accuracy: "0.674"
       },
-      name: "CohortCreateE2E-multiclass-dnn",
-      sampleSize: "88"
+      name: "All data",
+      sampleSize: "89"
     }
-  };
+  ],
+  newCohort: {
+    metrics: {
+      accuracy: "0.67"
+    },
+    name: "CohortCreateE2E-multiclass-dnn",
+    sampleSize: "88"
+  }
+};
 
 const modelAssessmentDatasetsDataBalanceExperience: {
   [name: string]: IModelAssessmentData;
@@ -760,15 +747,11 @@ const withType: {
 
 const allDatasets = {
   ...modelAssessmentDatasets,
-  ...modelAssessmentDatasetsNewModelOverviewExperience,
   ...modelAssessmentDatasetsDataBalanceExperience
 };
 const allWithType: {
   [key in keyof typeof allDatasets]: IModelAssessmentData;
-} = Object.assign(
-  modelAssessmentDatasetsNewModelOverviewExperience,
-  modelAssessmentDatasetsDataBalanceExperience
-);
+} = Object.assign(modelAssessmentDatasetsDataBalanceExperience);
 
 export {
   withType as modelAssessmentDatasets,
