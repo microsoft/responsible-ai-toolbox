@@ -1,7 +1,8 @@
 {
   "Common": {
     "close": "Close",
-    "tooltipButton": "Tooltip button"
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -893,7 +894,7 @@
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
       "_placeholder.comment": "placeholder text explaining how to activate this chart, by clicking on a neighboring chart.",
       "featureImportanceOf": "Feature importance of",
-      "placeholder": "Click on a feature on the bar chart above to show its dependence plot"
+      "placeholder": "Select a feature to show its dependence plot"
     },
     "ExplanationScatter": {
       "_class.comment": "label for predicted class",

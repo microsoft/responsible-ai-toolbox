@@ -4,7 +4,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_iris_data, create_simple_titanic_data,
+from common_utils import (create_diabetes_data, create_iris_data,
+                          create_simple_titanic_data,
+                          create_sklearn_random_forest_regressor,
                           create_sklearn_svm_classifier,
                           create_titanic_pipeline)
 
@@ -17,6 +19,7 @@ TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
+REGRESSION_ERROR = 'Error'
 
 
 class TestCohortFilter(object):
@@ -123,8 +126,8 @@ class TestCohortFilter(object):
                     'column': SEPAL_WIDTH,
                     'method': 'in the range of'}]
         validation_data = create_validation_data(X_test, y_test)
-        validation_data = validation_data.loc[X_test[SEPAL_WIDTH] >= 2.8]
-        validation_data = validation_data.loc[X_test[SEPAL_WIDTH] <= 3.4]
+        validation_data = validation_data.loc[
+            (X_test[SEPAL_WIDTH] <= 3.4) & (X_test[SEPAL_WIDTH] >= 2.8)]
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
@@ -136,6 +139,41 @@ class TestCohortFilter(object):
                            categorical_features,
                            model_task,
                            filters=filters)
+
+    @pytest.mark.parametrize('arg, correct_prediction',
+                             [([1], False), ([0], True)])
+    def test_cohort_filter_multiclass_classification_outcome(
+            self, arg, correct_prediction):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        model_task = ModelTask.CLASSIFICATION
+        categorical_features = []
+
+        # the index 1, corresponds to incorrect prediction
+        # the index 0 correspond to correct prediction
+        filters = [{'arg': arg,
+                    'column': CLASSIFICATION_OUTCOME,
+                    'method': 'includes'}]
+        pred_y = model.predict(X_test)
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        if correct_prediction:
+            validation_filter = validation_data[PRED_Y] == validation_data[
+                TRUE_Y]
+        else:
+            validation_filter = validation_data[PRED_Y] != validation_data[
+                TRUE_Y]
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters,
+                           is_empty_validation_data=(not correct_prediction))
 
     def test_cohort_filter_includes(self):
         X_train, X_test, y_train, y_test, numeric, categorical = \
@@ -184,7 +222,7 @@ class TestCohortFilter(object):
                            filters=filters)
 
     @pytest.mark.parametrize('arg, outcome', [([1, 2], False), ([0, 3], True)])
-    def test_cohort_filter_classification_outcome(self, arg, outcome):
+    def test_cohort_filter_binary_classification_outcome(self, arg, outcome):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
         feature_names = categorical + numeric
@@ -226,7 +264,38 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
-        model_task = ModelTask.CLASSIFICATION
+        run_error_analyzer(validation_data,
+                           model,
+                           X_test,
+                           y_test,
+                           feature_names,
+                           categorical_features,
+                           model_task,
+                           filters=filters)
+
+    def test_cohort_filter_regression_error(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_diabetes_data()
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+
+        # filter on regression error, which can be done from the
+        # RAI dashboard
+        filters = [{'arg': [40],
+                    'column': REGRESSION_ERROR,
+                    'method': 'less and equal'}]
+
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        pred_y = model.predict(X_test)
+
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        validation_filter = abs(validation_data[PRED_Y] - validation_data[
+            TRUE_Y]) <= 40.0
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+
+        model_task = ModelTask.REGRESSION
+        categorical_features = []
         run_error_analyzer(validation_data,
                            model,
                            X_test,
@@ -263,7 +332,8 @@ def run_error_analyzer(validation_data,
                        categorical_features,
                        model_task,
                        filters=None,
-                       composite_filters=None):
+                       composite_filters=None,
+                       is_empty_validation_data=False):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
@@ -275,5 +345,8 @@ def run_error_analyzer(validation_data,
                                        composite_filters)
 
     # validate there is some data selected for each of the filters
-    assert validation_data.shape[0] > 0
+    if is_empty_validation_data:
+        assert validation_data.shape[0] == 0
+    else:
+        assert validation_data.shape[0] > 0
     assert validation_data.equals(filtered_data)

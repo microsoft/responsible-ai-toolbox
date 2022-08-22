@@ -34,7 +34,9 @@ export class SVGToolTip extends React.Component<
     const element = this.props.target.current;
     if (element) {
       element.addEventListener("mouseenter", this.onMouseEnter);
+      element.addEventListener("focus", this.onMouseEnter);
       element.addEventListener("mouseleave", this.onMouseLeave);
+      element.addEventListener("focusout", this.onMouseLeave);
     }
   }
   public render(): React.ReactNode {

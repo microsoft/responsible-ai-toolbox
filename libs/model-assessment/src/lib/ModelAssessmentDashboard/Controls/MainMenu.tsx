@@ -181,7 +181,7 @@ export class MainMenu extends React.PureComponent<
           // cursor should not change when hovering because we don't want users to think that something will happen if they click
           styles={{ rootHovered: { cursor: "default" } }}
         >
-          {cohortInfoTitle}
+          <h2>{cohortInfoTitle}</h2>
         </CommandButton>
       </TooltipHost>
     );

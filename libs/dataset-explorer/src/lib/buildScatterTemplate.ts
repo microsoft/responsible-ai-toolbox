@@ -28,6 +28,19 @@ export function buildScatterTemplate(
       hovertemplate += `${yName}: ${y}<br>`;
     }
   }
+  if (jointData.datasetMetaData?.featureMetaData) {
+    const identityFeatureName =
+      jointData.datasetMetaData.featureMetaData?.identity_feature_name;
+
+    if (identityFeatureName) {
+      const jointDatasetFeatureName =
+        jointData.getJointDatasetFeatureName(identityFeatureName);
+
+      if (jointDatasetFeatureName) {
+        hovertemplate += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData.ID}<br>`;
+      }
+    }
+  }
   if (chartProps.colorAxis) {
     hovertemplate += `${
       jointData.metaDict[chartProps.colorAxis.property].label

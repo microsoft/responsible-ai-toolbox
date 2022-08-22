@@ -28,7 +28,6 @@ import * as React from "react";
 import { AddTabButton } from "../../AddTabButton";
 import {
   isFlightActive,
-  newModelOverviewExperienceFlight,
   dataBalanceExperienceFlight
 } from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
@@ -124,7 +123,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
-                    <div
+                    <h3
                       className={classNames.sectionHeader}
                       id="errorAnalysisHeader"
                     >
@@ -134,7 +133,7 @@ export class TabsView extends React.PureComponent<
                             .ErrorAnalysis
                         }
                       </Text>
-                    </div>
+                    </h3>
                     <ErrorAnalysisViewTab
                       disabledView={disabledView}
                       tree={this.props.errorAnalysisData[0].tree}
@@ -175,21 +174,15 @@ export class TabsView extends React.PureComponent<
                 )}
               {t.key === GlobalTabKeys.ModelOverviewTab && (
                 <>
-                  <div className={classNames.sectionHeader}>
+                  <h3 className={classNames.sectionHeader}>
                     <Text variant={"xxLarge"} id="modelStatisticsHeader">
                       {
                         localization.ModelAssessment.ComponentNames
                           .ModelOverview
                       }
                     </Text>
-                  </div>
-                  <ModelOverview
-                    showNewModelOverviewExperience={isFlightActive(
-                      newModelOverviewExperienceFlight,
-                      this.context.featureFlights
-                    )}
-                    telemetryHook={this.props.telemetryHook}
-                  />
+                  </h3>
+                  <ModelOverview telemetryHook={this.props.telemetryHook} />
                 </>
               )}
               {t.key === GlobalTabKeys.DataAnalysisTab && (
@@ -211,14 +204,14 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.FeatureImportancesTab &&
                 this.props.modelExplanationData?.[0] && (
                   <>
-                    <div className={classNames.sectionHeader}>
+                    <h3 className={classNames.sectionHeader}>
                       <Text variant={"xxLarge"} id="featureImportanceHeader">
                         {
                           localization.ModelAssessment.ComponentNames
                             .FeatureImportances
                         }
                       </Text>
-                    </div>
+                    </h3>
                     <FeatureImportancesTab
                       modelMetadata={this.props.modelMetadata}
                       modelExplanationData={this.props.modelExplanationData}
@@ -234,7 +227,7 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.CausalAnalysisTab &&
                 this.props.causalAnalysisData?.[0] && (
                   <>
-                    <div
+                    <h3
                       className={classNames.sectionHeader}
                       id="causalAnalysisHeader"
                     >
@@ -244,7 +237,7 @@ export class TabsView extends React.PureComponent<
                             .CausalAnalysis
                         }
                       </Text>
-                    </div>
+                    </h3>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
                       telemetryHook={this.props.telemetryHook}
@@ -255,14 +248,14 @@ export class TabsView extends React.PureComponent<
               {t.key === GlobalTabKeys.CounterfactualsTab &&
                 this.props.counterfactualData?.[0] && (
                   <>
-                    <div className={classNames.sectionHeader}>
+                    <h3 className={classNames.sectionHeader}>
                       <Text variant={"xxLarge"}>
                         {
                           localization.ModelAssessment.ComponentNames
                             .Counterfactuals
                         }
                       </Text>
-                    </div>
+                    </h3>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
                       telemetryHook={this.props.telemetryHook}
