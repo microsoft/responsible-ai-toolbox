@@ -156,11 +156,13 @@ class CausalManager(BaseManager):
                        f"not exist in train data: {list(difference_set)}")
             raise UserConfigValidationException(message)
 
-        difference_set = set(heterogeneity_features) - set(self._train.columns)
-        if len(difference_set) > 0:
-            message = ("Feature names in heterogeneity_features do "
-                       f"not exist in train data: {list(difference_set)}")
-            raise UserConfigValidationException(message)
+        if heterogeneity_features is not None:
+            difference_set = \
+             set(heterogeneity_features) - set(self._train.columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in heterogeneity_features do "
+                        f"not exist in train data: {list(difference_set)}")
+                raise UserConfigValidationException(message)
 
         if self._task_type == ModelTask.CLASSIFICATION:
             is_multiclass = len(np.unique(
