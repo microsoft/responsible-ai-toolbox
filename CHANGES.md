@@ -69,6 +69,7 @@ this file to understand what changed.
     - Localized file check-in by OneLocBuild Task: Build definition ID 21368: Build ID 69976515 by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1653
     - Add unit test for calculateLineData by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1654
     - Add test for uncovered condition in responsibleai_dashboard_input.py by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1638
+    - update raiwidgets and responsibleai to erroranalysis 0.3.9 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1657
   - ## RAIInsights
     - responsibleai: Add FeatureMetadata class and related tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1604
     - Add categorical statistics computation in RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1598
@@ -76,6 +77,8 @@ this file to understand what changed.
     - Inject FeatureMetadata into RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1616
     - responsibleai: Remove old manager namespaces by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1564
     - Fix docs in rai_base_insights.py by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1650
+    - fix failing RAI Insights test due to change in EA \_string_ind_data type by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1658
+    - Enable validations for FeatureMetadata when passed into RAIInsights by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1651
   - ## Counterfactual
     - [300 line limit] Refactor CounterfactualList by @tongyu-microsoft in https://github.com/microsoft/responsible-ai-toolbox/pull/1619
     - Reduce the time taken by RAIInsights counterfactual tests by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1622
@@ -99,6 +102,7 @@ this file to understand what changed.
     - Handle 'Classification outcome' cohort filter for multiclass scenario in SDK by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1623
     - Handle 'Regression Error' cohort filter for regression scenario in SDK by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1644
     - [Accessibility] Error analysis tree node change 1. Bubble error rate colors; 2. Bubble text & fill by @RubyZ10 in https://github.com/microsoft/responsible-ai-toolbox/pull/1649
+    - release erroranalysis 0.3.9 by @imatiach-msft in https://github.com/microsoft/responsible-ai-toolbox/pull/1655
   - ## Dataset Explorer
     - Add identity feature value to dataset explorer scatter plot by @gaugup in https://github.com/microsoft/responsible-ai-toolbox/pull/1645
   - ## Model Overview
