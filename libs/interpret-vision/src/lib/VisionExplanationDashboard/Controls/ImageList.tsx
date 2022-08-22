@@ -19,11 +19,14 @@ import { imageListStyles } from "./ImageList.styles";
 export interface IImageListProps {
   data: IVisionListItem[];
   imageDim: number;
+  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
 }
 
 export interface IImageListState {
   data: IVisionListItem[];
+  filter: string;
+  filteredValues: IVisionListItem[];
 }
 
 const RowsPerPage = 3;
@@ -45,13 +48,37 @@ export class ImageList extends React.Component<
     this.rowHeight = 0;
     this.paddingPercentage = 0;
     this.state = {
-      data: []
+      data: [],
+      filter: this.props.searchValue,
+      filteredValues: []
     };
+  }
+
+  static getDerivedStateFromProps(
+    props: IImageListProps,
+    state: IImageListState
+  ) {
+    console.log(props, state);
+    if (props.searchValue.length === 0) {
+      return {
+        filter: props.searchValue,
+        filteredValues: state.data
+      };
+    }
+    if (props.searchValue !== state.filter) {
+      return {
+        filter: props.searchValue,
+        filteredValues: state.data.filter((item) =>
+          item.predictedY.includes(props.searchValue)
+        )
+      };
+    }
+    return undefined;
   }
 
   public componentDidMount() {
     const data = this.props.data;
-    this.setState({ data });
+    this.setState({ data, filteredValues: data });
   }
 
   public render(): React.ReactNode {
@@ -61,7 +88,7 @@ export class ImageList extends React.Component<
       <FocusZone>
         <List
           key={this.props.imageDim}
-          items={this.state.data}
+          items={this.state.filteredValues}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageHeight={this.getPageHeight}

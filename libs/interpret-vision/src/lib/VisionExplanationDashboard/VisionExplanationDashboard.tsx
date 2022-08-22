@@ -33,6 +33,7 @@ export interface IVisionExplanationDashboardState {
   numRows: number;
   pageSize: number;
   panelOpen: boolean;
+  searchValue: string;
   selectedItem: IVisionListItem | undefined;
   selectedKey: string;
 }
@@ -81,6 +82,7 @@ export class VisionExplanationDashboard extends React.Component<
       numRows: 3,
       pageSize: 10,
       panelOpen: false,
+      searchValue: "",
       selectedItem: undefined,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView,
       successInstances: []
@@ -174,6 +176,8 @@ export class VisionExplanationDashboard extends React.Component<
                   <SearchBox
                     className={classNames.searchBox}
                     placeholder={localization.InterpretVision.Dashboard.search}
+                    value={this.state.searchValue}
+                    onChange={this.onSearch}
                   />
                 </Stack.Item>
                 <Stack.Item>
@@ -267,6 +271,7 @@ export class VisionExplanationDashboard extends React.Component<
                   <ImageList
                     data={this.state.errorInstances}
                     imageDim={this.state.imageDim}
+                    searchValue={this.state.searchValue}
                     selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
@@ -285,6 +290,7 @@ export class VisionExplanationDashboard extends React.Component<
                   <ImageList
                     data={this.state.successInstances}
                     imageDim={this.state.imageDim}
+                    searchValue={this.state.searchValue}
                     selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
@@ -357,6 +363,16 @@ export class VisionExplanationDashboard extends React.Component<
 
   private onPanelClose = () => {
     this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
+  };
+
+  private onSearch = (
+    _event?: React.ChangeEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
+    if (!newValue) {
+      newValue = "";
+    }
+    this.setState({ searchValue: newValue });
   };
 
   private onItemSelect = (item: IVisionListItem): void => {
