@@ -311,6 +311,7 @@ export class TreeViewRenderer extends React.PureComponent<
               telemetryHook={this.props.telemetryHook}
             />
             <svg
+              aria-label={localization.ErrorAnalysis.TreeView.ariaLabel}
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
