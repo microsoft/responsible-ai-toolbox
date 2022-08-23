@@ -26,7 +26,7 @@ export interface IImageListProps {
 export interface IImageListState {
   data: IVisionListItem[];
   filter: string;
-  filteredValues: IVisionListItem[];
+  filteredItems: IVisionListItem[];
 }
 
 const RowsPerPage = 3;
@@ -50,7 +50,7 @@ export class ImageList extends React.Component<
     this.state = {
       data: [],
       filter: this.props.searchValue,
-      filteredValues: []
+      filteredItems: []
     };
   }
 
@@ -58,18 +58,19 @@ export class ImageList extends React.Component<
     props: IImageListProps,
     state: IImageListState
   ) {
-    console.log(props, state);
     if (props.searchValue.length === 0) {
       return {
         filter: props.searchValue,
-        filteredValues: state.data
+        filteredItems: state.data
       };
     }
     if (props.searchValue !== state.filter) {
       return {
         filter: props.searchValue,
-        filteredValues: state.data.filter((item) =>
-          item.predictedY.includes(props.searchValue)
+        filteredItems: state.data.filter(
+          (item) =>
+            item.predictedY.includes(props.searchValue) ||
+            item.trueY.includes(props.searchValue)
         )
       };
     }
@@ -78,7 +79,7 @@ export class ImageList extends React.Component<
 
   public componentDidMount() {
     const data = this.props.data;
-    this.setState({ data, filteredValues: data });
+    this.setState({ data, filteredItems: data });
   }
 
   public render(): React.ReactNode {
@@ -88,7 +89,7 @@ export class ImageList extends React.Component<
       <FocusZone>
         <List
           key={this.props.imageDim}
-          items={this.state.filteredValues}
+          items={this.state.filteredItems}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageHeight={this.getPageHeight}

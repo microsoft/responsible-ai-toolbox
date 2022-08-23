@@ -22,11 +22,15 @@ export interface ITableListProps {
   successInstances: IVisionListItem[];
   imageDim: number;
   pageSize: number;
+  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
 }
 
 export interface ITableListState {
   items: IVisionListItem[];
+  filter: string;
+  filteredGroups: IGroup[];
+  filteredItems: IVisionListItem[];
   groups: IGroup[];
   columns: IColumn[];
 }
@@ -40,9 +44,69 @@ export class TableList extends React.Component<
 
     this.state = {
       columns: [],
+      filter: this.props.searchValue,
+      filteredGroups: [],
+      filteredItems: [],
       groups: [],
       items: []
     };
+  }
+
+  static getDerivedStateFromProps(
+    props: ITableListProps,
+    state: ITableListState
+  ) {
+    if (props.searchValue.length === 0) {
+      let items: IVisionListItem[] = [];
+
+      items = items.concat(props.successInstances);
+      items = items.concat(props.errorInstances);
+
+      const groups: IGroup[] = [
+        {
+          count: props.successInstances.length,
+          key: "success",
+          level: 0,
+          name: localization.InterpretVision.Dashboard.titleBarSuccess,
+          startIndex: 0
+        },
+        {
+          count: props.errorInstances.length,
+          key: "error",
+          level: 0,
+          name: localization.InterpretVision.Dashboard.titleBarError,
+          startIndex: props.successInstances.length
+        }
+      ];
+
+      return {
+        filter: props.searchValue,
+        filteredGroups: groups,
+        filteredItems: items
+      };
+    }
+    if (props.searchValue !== state.filter) {
+      const groups = state.groups;
+      const filteredItems = state.items.filter(
+        (item) =>
+          item.predictedY.includes(props.searchValue) ||
+          item.trueY.includes(props.searchValue)
+      );
+      const filteredSuccessInstances = filteredItems.filter(
+        (item) => item.predictedY === item.trueY
+      );
+
+      groups[0].count = filteredSuccessInstances.length;
+      groups[1].startIndex = filteredSuccessInstances.length;
+      groups[1].count = filteredItems.length - filteredSuccessInstances.length;
+
+      return {
+        filter: props.searchValue,
+        filteredGroups: groups,
+        filteredItems
+      };
+    }
+    return undefined;
   }
 
   public componentDidMount(): void {
@@ -110,15 +174,22 @@ export class TableList extends React.Component<
         name: localization.InterpretVision.Dashboard.columnFive
       }
     ];
-    this.setState({ columns, groups, items });
+    this.setState({
+      columns,
+      filteredGroups: groups,
+      filteredItems: items,
+      groups,
+      items
+    });
   }
 
   public render(): React.ReactNode {
     return (
       <FocusZone style={{ width: "100%" }}>
         <DetailsList
-          items={this.state.items}
-          groups={this.state.groups}
+          key={this.props.searchValue}
+          items={this.state.filteredItems}
+          groups={this.state.filteredGroups}
           columns={this.state.columns}
           groupProps={{ showEmptyGroups: true }}
           onRenderDetailsHeader={this.onRenderDetailsHeader}

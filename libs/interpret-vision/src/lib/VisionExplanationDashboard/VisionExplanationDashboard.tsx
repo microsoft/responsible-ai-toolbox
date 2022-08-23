@@ -305,6 +305,7 @@ export class VisionExplanationDashboard extends React.Component<
               errorInstances={this.state.errorInstances}
               successInstances={this.state.successInstances}
               imageDim={this.state.imageDim}
+              searchValue={this.state.searchValue}
               selectItem={this.onItemSelect}
               pageSize={this.state.pageSize}
             />
