@@ -28,7 +28,7 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
         color: "black",
         fontSize: FontSizes.small,
         justifySelf: "center",
-        paddingBottom: "100%",
+        paddingBottom: 10,
         width: "100%"
       },
       list: {
@@ -37,9 +37,9 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
       },
       tile: {
         float: "left",
-        marginTop: "0.5%",
-        paddingLeft: "1%",
-        paddingRight: "1%",
+        marginTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
         position: "relative",
         textAlign: "center"
       }

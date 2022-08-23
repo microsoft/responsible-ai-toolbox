@@ -3,7 +3,7 @@
 
 export interface IVisionExplanationDashboardData {
   classNames: string[];
-  localExplanations: number[];
+  localExplanations: string[];
   prediction: number[];
   images: string[];
 }

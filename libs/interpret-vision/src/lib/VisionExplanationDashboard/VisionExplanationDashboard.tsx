@@ -10,20 +10,35 @@ import {
   PivotItem,
   SearchBox,
   Slider,
-  CommandBarButton
+  CommandBarButton,
+  Separator
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { Flyout } from "./Controls/Flyout";
 import { ImageList } from "./Controls/ImageList";
+import { TableList } from "./Controls/TableList";
 import { TitleBar } from "./Controls/TitleBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 
 export interface IVisionExplanationDashboardState {
   imageDim: number;
+  pageSize: number;
   panelOpen: boolean;
+  selectedItem: IListItem | undefined;
   selectedKey: string;
+}
+
+export interface IListItem {
+  title: string;
+  subtitle?: string;
+  image: string;
+  trueY?: number;
+  predictedY?: number;
+  index?: number;
+  other?: number;
 }
 
 enum VisionDatasetExplorerTabOptions {
@@ -37,6 +52,12 @@ export enum TitleBarOptions {
   Success
 }
 
+const PageSizeOptions: IDropdownOption[] = [
+  { key: "s", text: "10" },
+  { key: "m", text: "25" },
+  { key: "l", text: "50" },
+  { key: "xl", text: "100" }
+];
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
@@ -46,7 +67,9 @@ export class VisionExplanationDashboard extends React.Component<
 
     this.state = {
       imageDim: 200,
+      pageSize: Number(PageSizeOptions[0].text),
       panelOpen: false,
+      selectedItem: undefined,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
     };
   }
@@ -103,7 +126,7 @@ export class VisionExplanationDashboard extends React.Component<
           </Stack>
         </Stack.Item>
         <Stack.Item>
-          <div className={classNames.line} />
+          <Separator styles={{ root: { width: "100%" } }} />
         </Stack.Item>
         <Stack.Item>
           <Stack>
@@ -159,11 +182,34 @@ export class VisionExplanationDashboard extends React.Component<
                 min={20}
                 className={classNames.slider}
                 label={localization.InterpretVision.Dashboard.thumbnailSize}
-                defaultValue={40}
+                defaultValue={50}
                 showValue={false}
                 onChange={this.onSliderChange}
               />
             </Stack.Item>
+            {this.state.selectedKey ===
+              VisionDatasetExplorerTabOptions.TableView && (
+              <Stack.Item>
+                <Stack
+                  horizontal
+                  tokens={{ childrenGap: "s1" }}
+                  verticalAlign="center"
+                >
+                  <Stack.Item>
+                    <Text>
+                      {localization.InterpretVision.Dashboard.pageSize}
+                    </Text>
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Dropdown
+                      defaultSelectedKey="s"
+                      options={PageSizeOptions}
+                      onChange={this.onPageSizeSelect}
+                    />
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+            )}
           </Stack>
         </Stack.Item>
         {this.state.selectedKey ===
@@ -172,12 +218,7 @@ export class VisionExplanationDashboard extends React.Component<
             <Stack
               horizontal
               tokens={{ childrenGap: "l1" }}
-              /* Height calculated as approximately three times the image height so as to create three rows, 
-              with extra space added for the image labels */
-              style={{
-                height:
-                  this.state.imageDim * 3 + Math.floor(this.state.imageDim / 2)
-              }}
+              className={classNames.mainImageContainer}
             >
               <Stack
                 className={classNames.halfContainer}
@@ -188,8 +229,9 @@ export class VisionExplanationDashboard extends React.Component<
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
+                    data={this.props.dataSummary}
                     imageDim={this.state.imageDim}
-                    openPanel={this.onButtonClick}
+                    selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
               </Stack>
@@ -202,20 +244,44 @@ export class VisionExplanationDashboard extends React.Component<
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
+                    data={this.props.dataSummary}
                     imageDim={this.state.imageDim}
-                    openPanel={this.onButtonClick}
+                    selectItem={this.onItemSelect}
                   />
                 </Stack.Item>
               </Stack>
             </Stack>
           </Stack>
         )}
+        {this.state.selectedKey ===
+          VisionDatasetExplorerTabOptions.TableView && (
+          <Stack className={classNames.mainContainer}>
+            <TableList
+              data={this.props.dataSummary}
+              imageDim={this.state.imageDim}
+              selectItem={this.onItemSelect}
+              pageSize={this.state.pageSize}
+            />
+          </Stack>
+        )}
+        <Stack.Item>
+          <Flyout
+            data={this.props.dataSummary}
+            isOpen={this.state.panelOpen}
+            item={this.state.selectedItem}
+            callback={this.onPanelClose}
+          />
+        </Stack.Item>
       </Stack>
     );
   }
 
-  private onButtonClick = () => {
+  private onPanelClose = () => {
     this.setState({ panelOpen: !this.state.panelOpen });
+  };
+
+  private onItemSelect = (item: IListItem): void => {
+    this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
   };
 
   /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 
@@ -231,6 +297,13 @@ export class VisionExplanationDashboard extends React.Component<
     } else {
       this.setState({ imageDim: Math.floor((value / 100) * 100) });
     }
+  };
+
+  private onPageSizeSelect = (
+    _event: React.FormEvent<HTMLDivElement>,
+    item: IDropdownOption | undefined
+  ): void => {
+    this.setState({ pageSize: Number(item?.text) });
   };
 
   private handleLinkClick = (item?: PivotItem) => {
