@@ -1,9 +1,14 @@
-import { ITreeNode } from "./TreeViewState";
-import { localization } from "@responsible-ai/localization";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { Metrics } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { HierarchyPointNode } from "d3-hierarchy";
+
 import { FilterProps } from "../../FilterProps";
 import { MetricLocalizationType, MetricUtils } from "../../MetricUtils";
-import { HierarchyPointNode } from "d3-hierarchy";
+
+import { ITreeNode } from "./TreeViewState";
 
 export function treeNodeAriaLabel(
   node: HierarchyPointNode<ITreeNode>,
