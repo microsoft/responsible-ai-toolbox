@@ -454,6 +454,28 @@ class TestCausalUserConfigValidations:
         with pytest.raises(UserConfigValidationException, match=message):
             rai_insights.causal.add(treatment_features=['not_a_feature'])
 
+    def test_heterogeneity_features_list_not_having_train_features(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        rai_insights = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='classification')
+
+        message = ("Feature names in heterogeneity_features "
+                   "do not exist in train data: \\['not_a_feature'\\]")
+        with pytest.raises(UserConfigValidationException, match=message):
+            rai_insights.causal.add(
+                treatment_features=['col1'],
+                heterogeneity_features=['not_a_feature'])
+
 
 class TestCounterfactualUserConfigValidations:
 
