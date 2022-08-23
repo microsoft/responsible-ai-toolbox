@@ -1,9 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-
 import gender_guesser.detector as gender
 import pkg_resources
-
 
 resource_package = __name__
 positive_negative_words_path = '/'.join(('data', 'positive-negative.csv'))
@@ -23,7 +21,6 @@ neutral_words_data = pkg_resources.resource_string(
 positive_negative_raw = positive_negative_words_data
 # positive_negative_file.close()
 positive_negative_lines = positive_negative_raw.split("\n")
-
 
 positive_words = set()
 negative_words = set()

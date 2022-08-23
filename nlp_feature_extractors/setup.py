@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-
 import setuptools
-
 
 VERSION = "0.0.2"
 
