@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
 import gender_guesser.detector as gender
 import pkg_resources
 

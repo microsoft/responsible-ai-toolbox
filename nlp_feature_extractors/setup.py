@@ -1,7 +1,9 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
 import setuptools
 
 
-# this must be incremented every time we push an update to pypi (but not before)
 VERSION = "0.0.2"
 
 # supply contents of our README file as our package's long description
@@ -37,7 +39,9 @@ setuptools.setup(
 
     # normally, only *.py files are included - this forces our YAML file and
     # controller scripts to be included
-    package_data={'': ['*.yaml', '*.sh', '*.bat', '*.txt', '*.rst', '*.crt', '*.json', '*.js', '*.html', '*.css', '*.csv']},
+    package_data={
+        '': ['*.yaml', '*.sh', '*.bat', '*.txt', '*.rst', '*.crt', '*.json',
+             '*.js', '*.html', '*.css', '*.csv']},
     include_package_data=True,
 
     # the packages that our package is dependent on
