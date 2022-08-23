@@ -44,7 +44,7 @@ export class TableList extends React.Component<
 
     this.state = {
       columns: [],
-      filter: this.props.searchValue,
+      filter: this.props.searchValue.toLowerCase(),
       filteredGroups: [],
       filteredItems: [],
       groups: [],
@@ -56,7 +56,8 @@ export class TableList extends React.Component<
     props: ITableListProps,
     state: ITableListState
   ) {
-    if (props.searchValue.length === 0) {
+    const searchVal = props.searchValue.toLowerCase();
+    if (searchVal.length === 0) {
       let items: IVisionListItem[] = [];
 
       items = items.concat(props.successInstances);
@@ -80,17 +81,17 @@ export class TableList extends React.Component<
       ];
 
       return {
-        filter: props.searchValue,
+        filter: searchVal,
         filteredGroups: groups,
         filteredItems: items
       };
     }
-    if (props.searchValue !== state.filter) {
+    if (searchVal !== state.filter) {
       const groups = state.groups;
       const filteredItems = state.items.filter(
         (item) =>
-          item.predictedY.includes(props.searchValue) ||
-          item.trueY.includes(props.searchValue)
+          item.predictedY.toLowerCase().includes(searchVal) ||
+          item.trueY.toLowerCase().includes(searchVal)
       );
       const filteredSuccessInstances = filteredItems.filter(
         (item) => item.predictedY === item.trueY
@@ -101,7 +102,7 @@ export class TableList extends React.Component<
       groups[1].count = filteredItems.length - filteredSuccessInstances.length;
 
       return {
-        filter: props.searchValue,
+        filter: searchVal,
         filteredGroups: groups,
         filteredItems
       };
@@ -185,7 +186,7 @@ export class TableList extends React.Component<
 
   public render(): React.ReactNode {
     return (
-      <FocusZone style={{ width: "100%" }}>
+      <FocusZone style={{ height: "600px", overflow: "auto", width: "100%" }}>
         <DetailsList
           key={this.props.searchValue}
           items={this.state.filteredItems}

@@ -49,7 +49,7 @@ export class ImageList extends React.Component<
     this.paddingPercentage = 0;
     this.state = {
       data: [],
-      filter: this.props.searchValue,
+      filter: this.props.searchValue.toLowerCase(),
       filteredItems: []
     };
   }
@@ -58,19 +58,20 @@ export class ImageList extends React.Component<
     props: IImageListProps,
     state: IImageListState
   ) {
-    if (props.searchValue.length === 0) {
+    const searchVal = props.searchValue.toLowerCase();
+    if (searchVal.length === 0) {
       return {
-        filter: props.searchValue,
+        filter: searchVal,
         filteredItems: state.data
       };
     }
-    if (props.searchValue !== state.filter) {
+    if (searchVal !== state.filter) {
       return {
-        filter: props.searchValue,
+        filter: searchVal,
         filteredItems: state.data.filter(
           (item) =>
-            item.predictedY.includes(props.searchValue) ||
-            item.trueY.includes(props.searchValue)
+            item.predictedY.toLowerCase().includes(searchVal) ||
+            item.trueY.toLowerCase().includes(searchVal)
         )
       };
     }
