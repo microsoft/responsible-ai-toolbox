@@ -1,6 +1,4 @@
-azure-storage-blob==12.9.0
-jupyter==1.0.0
-raiwidgets==0.6.1
-transformers==4.2.2
+azure-storage-blob
+jupyter
+transformers>=4.17.0
 torch
-
