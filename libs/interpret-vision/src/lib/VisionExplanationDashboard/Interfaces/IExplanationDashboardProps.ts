@@ -14,6 +14,6 @@ export interface IDatasetSummary {
    */
   images: string[];
   classNames?: string[];
-  localExplanations: number[];
+  localExplanations: string[];
   prediction?: number[];
 }
