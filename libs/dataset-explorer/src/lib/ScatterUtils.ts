@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 export function getScatterColors(): string[] {
   const colors = [];
   for (let i = 0; i < 5; i++) {

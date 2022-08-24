@@ -33,6 +33,16 @@ export const interactiveLegendStyles: (
 ) => {
   const theme = getTheme();
   return mergeStyleSets<IInteractiveLegendStyles>({
+    circleColorBox: {
+      backgroundColor: color,
+      borderRadius: "6px",
+      cursor: "pointer",
+      display: "inline-block",
+      height: "12px",
+      margin: "11px 4px 11px 8px",
+      opacity: activated ? 1 : 0.4,
+      width: "12px"
+    },
     clickTarget: {
       alignItems: "center",
       cursor: "pointer",
@@ -40,59 +50,20 @@ export const interactiveLegendStyles: (
       flex: "1",
       flexDirection: "row"
     },
-    circleColorBox: {
-      borderRadius: "6px",
-      cursor: "pointer",
-      display: "inline-block",
-      height: "12px",
-      margin: "11px 4px 11px 8px",
-      width: "12px",
-      opacity: activated ? 1 : 0.4,
-      backgroundColor: color
-    },
-    squareColorBox: {
-      cursor: "pointer",
-      display: "inline-block",
-      height: "11px",
-      margin: "11px 4px 11px 8px",
-      width: "11px",
-      opacity: activated ? 1 : 0.4,
-      backgroundColor: color
-    },
-    diamondColorBox: {
-      transform: "rotate(45deg)",
-      cursor: "pointer",
-      display: "inline-block",
-      height: "11px",
-      margin: "11px 4px 11px 8px",
-      width: "11px",
-      opacity: activated ? 1 : 0.4,
-      backgroundColor: color
-    },
-    triangleColorBox: {
-      width: 0,
-      height: 0,
-      margin: "11px 4px 11px 8px",
-      borderLeft: "6px solid transparent",
-      borderRight: "6px solid transparent",
-      borderBottom: "12px solid",
-      opacity: activated ? 1 : 0.4,
-      color: color
-    },
-    triangleDownColorBox: {
-      width: 0,
-      height: 0,
-      margin: "11px 4px 11px 8px",
-      borderLeft: "6px solid transparent",
-      borderRight: "6px solid transparent",
-      borderTop: "12px solid",
-      opacity: activated ? 1 : 0.4,
-      color: color
-    },
     deleteButton: {
       color: theme.semanticColors.errorText,
       display: "inline-block",
       width: "16px"
+    },
+    diamondColorBox: {
+      backgroundColor: color,
+      cursor: "pointer",
+      display: "inline-block",
+      height: "11px",
+      margin: "11px 4px 11px 8px",
+      opacity: activated ? 1 : 0.4,
+      transform: "rotate(45deg)",
+      width: "11px"
     },
     disabledItem: {
       alignItems: "center",
@@ -130,6 +101,35 @@ export const interactiveLegendStyles: (
     root: {
       paddingBottom: "8px",
       paddingTop: "8px"
+    },
+    squareColorBox: {
+      backgroundColor: color,
+      cursor: "pointer",
+      display: "inline-block",
+      height: "11px",
+      margin: "11px 4px 11px 8px",
+      opacity: activated ? 1 : 0.4,
+      width: "11px"
+    },
+    triangleColorBox: {
+      borderBottom: "12px solid",
+      borderLeft: "6px solid transparent",
+      borderRight: "6px solid transparent",
+      color,
+      height: 0,
+      margin: "11px 4px 11px 8px",
+      opacity: activated ? 1 : 0.4,
+      width: 0
+    },
+    triangleDownColorBox: {
+      borderLeft: "6px solid transparent",
+      borderRight: "6px solid transparent",
+      borderTop: "12px solid",
+      color,
+      height: 0,
+      margin: "11px 4px 11px 8px",
+      opacity: activated ? 1 : 0.4,
+      width: 0
     }
   });
 };

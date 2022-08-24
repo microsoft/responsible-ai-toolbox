@@ -95,7 +95,7 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
     activated?: boolean
   ): string => {
     const classes = interactiveLegendStyles(activated, color);
-    // this classes sequence need to be consist with the sequence of symbols in ScatterUtils getScatterSymbols()
+    // this is used as data series symbol in the side panel, the sequence needs to be consist with the sequence of symbols in ScatterUtils getScatterSymbols()
     switch (true) {
       case index % 5 === 0:
         return classes.circleColorBox;
