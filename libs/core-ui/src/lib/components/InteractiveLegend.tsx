@@ -45,6 +45,11 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
   }
 
   private buildRowElement(item: ILegendItem, index: number): React.ReactNode {
+    const colorBoxClassName = this.getColorBoxCss(
+      index,
+      item.color,
+      !item.disabled
+    );
     if (item.disabled) {
       return (
         <div
@@ -52,7 +57,7 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
           title={item.disabledMessage || ""}
           key={index}
         >
-          <div className={this.classes.inactiveColorBox} />
+          <div className={colorBoxClassName} />
           <Text nowrap variant={"medium"} className={this.classes.label}>
             {item.name}
           </Text>
@@ -70,9 +75,9 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
       <div className={rootClass} key={index}>
         <InteractiveLegendClickButton
           activated={item.activated}
-          color={item.color}
           index={index}
           name={item.name}
+          colorBoxClassName={colorBoxClassName}
           onClick={item.onClick}
         />
         <InteractiveLegendEditAndDeleteButton
@@ -83,4 +88,27 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
       </div>
     );
   }
+
+  private getColorBoxCss = (
+    index: number,
+    color?: string,
+    activated?: boolean
+  ): string => {
+    const classes = interactiveLegendStyles(activated, color);
+    // this classes sequence need to be consist with the sequence of symbols in ScatterUtils getScatterSymbols()
+    switch (true) {
+      case index % 5 === 0:
+        return classes.circleColorBox;
+      case index % 5 === 1:
+        return classes.squareColorBox;
+      case index % 5 === 2:
+        return classes.diamondColorBox;
+      case index % 5 === 3:
+        return classes.triangleColorBox;
+      case index % 5 === 4:
+        return classes.triangleDownColorBox;
+      default:
+        return classes.circleColorBox;
+    }
+  };
 }
