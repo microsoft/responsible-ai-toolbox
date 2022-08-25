@@ -1,13 +1,21 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 import { getColorBoxClassName } from "./InteractiveLegendUtils";
 
 describe("InteractiveLegend", () => {
   it("should get the correct colorBox className", () => {
     const classes = interactiveLegendStyles();
-    expect(getColorBoxClassName(0)).toEqual(classes.circleColorBox);
-    expect(getColorBoxClassName(1)).toEqual(classes.squareColorBox);
-    expect(getColorBoxClassName(2)).toEqual(classes.diamondColorBox);
-    expect(getColorBoxClassName(3)).toEqual(classes.triangleColorBox);
-    expect(getColorBoxClassName(4)).toEqual(classes.triangleDownColorBox);
+    const classNames = [
+      classes.circleColorBox,
+      classes.squareColorBox,
+      classes.diamondColorBox,
+      classes.triangleColorBox,
+      classes.triangleDownColorBox
+    ];
+    classNames.forEach((className, index) => {
+      expect(getColorBoxClassName(index)).toEqual(className);
+    });
   });
 });

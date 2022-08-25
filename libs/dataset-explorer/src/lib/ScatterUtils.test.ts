@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getScatterColors, getScatterSymbols } from "./ScatterUtils";
 
 describe("ScatterUtils", () => {

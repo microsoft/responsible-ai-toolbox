@@ -10,14 +10,15 @@ export function getColorBoxClassName(
 ): string {
   const classes = interactiveLegendStyles(activated, color);
   // this is used as data series symbol in the side panel, the sequence needs to be consist with the sequence of symbols in ScatterUtils getScatterSymbols()
-  switch (true) {
-    case index % 5 === 1:
+  const modIndex = index % 5;
+  switch (modIndex) {
+    case 1:
       return classes.squareColorBox;
-    case index % 5 === 2:
+    case 2:
       return classes.diamondColorBox;
-    case index % 5 === 3:
+    case 3:
       return classes.triangleColorBox;
-    case index % 5 === 4:
+    case 4:
       return classes.triangleDownColorBox;
     default:
       return classes.circleColorBox;
