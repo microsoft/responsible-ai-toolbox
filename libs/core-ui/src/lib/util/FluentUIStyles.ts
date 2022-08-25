@@ -160,13 +160,10 @@ export class FluentUIStyles {
 
   public static fluentUIColorPalette: string[] =
     FluentUIStyles.getFlunetUIPalette(getTheme());
-
   public static scatterFluentUIColorPalette: string[] =
     FluentUIStyles.getScatterFluentUIPalette(getTheme());
-
   public static plotlyColorHexPalette: string[] =
     FluentUIStyles.getFlunetUIPalette(getTheme());
-
   public static plotlyColorPalette: IRGBColor[] =
     FluentUIStyles.plotlyColorHexPalette.map((hex) =>
       FluentUIStyles.hex2rgb(hex)
