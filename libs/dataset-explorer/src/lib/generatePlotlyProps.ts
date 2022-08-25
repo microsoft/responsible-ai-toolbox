@@ -18,7 +18,7 @@ import Plotly, { DataTransform } from "plotly.js";
 import { basePlotlyProperties } from "./basePlotlyProperties";
 import { buildCustomData } from "./buildCustomData";
 import { buildHoverTemplate } from "./buildHoverTemplate";
-import { getScatterColors, getScatterSymbols } from "./ScatterUtils";
+import { getScatterSymbols } from "./ScatterUtils";
 
 export function generatePlotlyProps(
   jointData: JointDataset,
@@ -89,8 +89,8 @@ export function generatePlotlyProps(
           const styles = jointData.metaDict[
             chartProps.colorAxis.property
           ].sortedCategoricalValues?.map((label, index) => {
-            const colors = getScatterColors();
             const symbols = getScatterSymbols();
+            const colors = FluentUIStyles.scatterFluentUIColorPalette;
             return {
               target: index,
               value: {

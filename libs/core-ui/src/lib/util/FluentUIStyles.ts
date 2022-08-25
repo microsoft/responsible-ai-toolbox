@@ -161,6 +161,9 @@ export class FluentUIStyles {
   public static fluentUIColorPalette: string[] =
     FluentUIStyles.getFlunetUIPalette(getTheme());
 
+  public static scatterFluentUIColorPalette: string[] =
+    FluentUIStyles.getScatterFluentUIPalette(getTheme());
+
   public static plotlyColorHexPalette: string[] =
     FluentUIStyles.getFlunetUIPalette(getTheme());
 
@@ -248,6 +251,18 @@ export class FluentUIStyles {
         colorsMap.get(colorName as keyof IColorNames) ??
         FluentUIStyles.fluentUIColorPalette[0]
     );
+  }
+
+  public static getScatterFluentUIPalette(theme: ITheme): string[] {
+    const colors = [];
+    for (let i = 0; i < 5; i++) {
+      colors.push(
+        theme.palette.magentaDark,
+        theme.palette.orangeLighter,
+        theme.palette.teal
+      );
+    }
+    return colors;
   }
 
   public static getColorsMap(theme: ITheme): Map<keyof IColorNames, string> {
