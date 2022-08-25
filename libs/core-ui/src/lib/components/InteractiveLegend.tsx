@@ -7,6 +7,7 @@ import React from "react";
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 import { InteractiveLegendClickButton } from "./InteractiveLegendClickButton";
 import { InteractiveLegendEditAndDeleteButton } from "./InteractiveLegendEditAndDeleteButton";
+import { getColorBoxClassName } from "./InteractiveLegendUtils";
 
 export enum SortingState {
   Ascending = "ascending",
@@ -45,7 +46,7 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
   }
 
   private buildRowElement(item: ILegendItem, index: number): React.ReactNode {
-    const colorBoxClassName = this.getColorBoxCss(
+    const colorBoxClassName = getColorBoxClassName(
       index,
       item.color,
       !item.disabled
@@ -88,27 +89,4 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
       </div>
     );
   }
-
-  private getColorBoxCss = (
-    index: number,
-    color?: string,
-    activated?: boolean
-  ): string => {
-    const classes = interactiveLegendStyles(activated, color);
-    // this is used as data series symbol in the side panel, the sequence needs to be consist with the sequence of symbols in ScatterUtils getScatterSymbols()
-    switch (true) {
-      case index % 5 === 0:
-        return classes.circleColorBox;
-      case index % 5 === 1:
-        return classes.squareColorBox;
-      case index % 5 === 2:
-        return classes.diamondColorBox;
-      case index % 5 === 3:
-        return classes.triangleColorBox;
-      case index % 5 === 4:
-        return classes.triangleDownColorBox;
-      default:
-        return classes.circleColorBox;
-    }
-  };
 }
