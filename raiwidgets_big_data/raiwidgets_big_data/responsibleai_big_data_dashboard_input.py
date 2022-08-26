@@ -12,7 +12,10 @@ from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
+from raiwidgets_big_data.box_plot_distribution import \
+    _get_box_plot_distribution
 from responsibleai import RAIInsights
+from responsibleai.exceptions import UserConfigValidationException
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -120,6 +123,50 @@ class ResponsibleAIBigDataDashboardInput(ResponsibleAIDashboardInput):
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate local causal effects,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_model_overview_probability_distribution(self, post_data):
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            query_class = post_data[2]
+            if self._analysis._classes is None:
+                raise UserConfigValidationException(
+                    "Classes are not defined for the model")
+
+            class_index = None
+            for index, class_name in enumerate(self._analysis._classes):
+                if class_name == query_class:
+                    class_index = index
+                    break
+
+            if class_index is None:
+                raise UserConfigValidationException(
+                    "Class {} is not defined for the model".format(
+                        query_class))
+
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+            predict_proba = self._analysis.model.predict_proba(
+                filtered_data_df)
+
+            probability_distribution = \
+                _get_box_plot_distribution(
+                    predict_proba[class_index])
+            return {
+                WidgetRequestResponseConstants.data: probability_distribution
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate the probability distribution,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
