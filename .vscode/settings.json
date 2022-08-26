@@ -86,7 +86,4 @@
   "python.testing.nosetestsEnabled": false,
   "python.testing.pytestEnabled": true,
   "python.testing.autoTestDiscoverOnSaveEnabled": true,
-  "python.analysis.extraPaths": [
-    "./raiwidgets"
-  ]
 }

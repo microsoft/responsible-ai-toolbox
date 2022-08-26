@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from raiwidgets.interfaces import BoxPlotData
+from raiwidgets_big_data.interfaces import BoxPlotData
 
 
 def _get_box_plot_distribution(data: np.ndarray) -> BoxPlotData:
