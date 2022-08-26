@@ -10,10 +10,10 @@ from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
-from raiwidgets.model_overview.distribution.box_plot_distribution import \
-    _get_box_plot_distribution
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
+from raiwidgets_big_data.box_plot_distribution import \
+    _get_box_plot_distribution
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
 
