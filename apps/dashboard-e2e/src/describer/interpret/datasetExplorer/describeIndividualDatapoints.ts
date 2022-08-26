@@ -25,6 +25,7 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
         );
       });
       it("should render", () => {
+        cy.wait(1000);
         expect(props.chart.Elements.length).greaterThan(0);
       });
     });
