@@ -12,8 +12,17 @@ from raiutils.data_processing import convert_to_list
 from raiutils.models import is_classifier
 from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
+from raiwidgets.dataset_explorer._bar_chart_plot import compute_bar_chart_plot
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
+from raiwidgets.model_overview.distribution.box_plot_distribution import \
+    _get_box_plot_distribution
+from raiwidgets.model_overview.metrics.binary_classification_metrics import \
+    _get_binary_classification_metric
+from raiwidgets.model_overview.metrics.multiclass_classification_metrics import \
+    _get_multiclass_classification_metric
+from raiwidgets.model_overview.metrics.regression_metrics import \
+    _get_regression_metric
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
@@ -211,6 +220,74 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: []
             }
 
+    def get_local_counterfactuals(self, post_data):
+        try:
+            id, features = post_data
+            counterfactuals = \
+                self._analysis.counterfactual.request_counterfactuals(
+                    id, pd.DataFrame.from_records(features))
+            return {
+                WidgetRequestResponseConstants.data: counterfactuals
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate local counterfactuals,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_local_explanations(self, post_data):
+        try:
+            features = post_data
+            serialized_local_explanations = \
+                self._analysis.explainer.request_explanations(
+                    local=True, data=pd.DataFrame.from_records(features))
+            return {
+                WidgetRequestResponseConstants.data:
+                    serialized_local_explanations
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate local explanations,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_global_explanations(self, post_data):
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            serialized_global_explanations = \
+                self._analysis.explainer.request_explanations(
+                    local=False, data=filtered_data_df)
+            return {
+                WidgetRequestResponseConstants.data:
+                    serialized_global_explanations
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global explanations,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
     def get_global_causal_effects(self, post_data):
         try:
             id = post_data[0]
@@ -261,6 +338,163 @@ class ResponsibleAIDashboardInput:
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate global causal policy for cohort,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_local_causal_effects(self, post_data):
+        try:
+            id, data = post_data
+            data = pd.DataFrame(
+                data, columns=self.dashboard_input.dataset.feature_names)
+
+            local_effects = \
+                self._analysis.causal.request_local_instance_effects(
+                    id, data)
+            return {
+                WidgetRequestResponseConstants.data: local_effects
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate local causal effects,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_bar_chart_plot_data(self, post_data):
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            bar_chart_x_axis = post_data[2]
+            num_bins = post_data[3]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+            categorical_features = \
+                self.dashboard_input.dataset.categorical_features
+            plot_data = compute_bar_chart_plot(
+                test_dataframe=filtered_data_df,
+                categorical_features=categorical_features,
+                bar_chart_x_axis=bar_chart_x_axis,
+                num_bins=num_bins)
+            return {
+                WidgetRequestResponseConstants.data: plot_data
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate bar chart plot data,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_model_overview_metric(self, post_data):
+        try:
+            # TODO: Add cohort level filtering logic
+            metric = post_data
+            predicted_y = np.array(self.dashboard_input.dataset.predicted_y)
+            true_y = np.array(self.dashboard_input.dataset.true_y)
+            if self.dashboard_input.dataset.task_type == ModelTask.REGRESSION:
+                metric_value = _get_regression_metric(
+                    true_y=true_y,
+                    predicted_y=predicted_y,
+                    metric=metric)
+            else:
+                if len(self.dashboard_input.dataset.class_names) <= 2:
+                    metric_value = _get_binary_classification_metric(
+                        true_y=true_y,
+                        predicted_y=predicted_y,
+                        metric=metric)
+                else:
+                    metric_value = _get_multiclass_classification_metric(
+                        true_y=true_y,
+                        predicted_y=predicted_y,
+                        metric=metric)
+            return {
+                WidgetRequestResponseConstants.data: metric_value
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate metric value,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_model_overview_num_samples(self, post_data):
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+            num_samples = filtered_data_df.shape[0]
+            return {
+                WidgetRequestResponseConstants.data: num_samples
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to compute the number of samples,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_model_overview_probability_distribution(self, post_data):
+        try:
+            filters = post_data[0]
+            composite_filters = post_data[1]
+            query_class = post_data[2]
+            if self._analysis._classes is None:
+                raise UserConfigValidationException(
+                    "Classes are not defined for the model")
+
+            class_index = None
+            for index, class_name in enumerate(self._analysis._classes):
+                if class_name == query_class:
+                    class_index = index
+                    break
+
+            if class_index is None:
+                raise UserConfigValidationException(
+                    "Class {} is not defined for the model".format(
+                        query_class))
+
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+            predict_proba = self._analysis.model.predict_proba(
+                filtered_data_df)
+
+            probability_distribution = \
+                _get_box_plot_distribution(
+                    predict_proba[class_index])
+            return {
+                WidgetRequestResponseConstants.data: probability_distribution
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate the probability distribution,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }

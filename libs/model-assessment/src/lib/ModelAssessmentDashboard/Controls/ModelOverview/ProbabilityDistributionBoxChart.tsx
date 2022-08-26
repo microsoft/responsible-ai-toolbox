@@ -30,12 +30,18 @@ export class ProbabilityDistributionBoxChart extends React.Component<
 
   public render(): React.ReactNode {
     const theme = getTheme();
-
+    console.log("okok selectedCohorts", this.props.selectedCohorts);
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
 
     const boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
+      // we need a flag:boolean to differentiate if it is over 5k.
+      const result = this.context.requestBoxPlotDistribution?.(
+        cohort,
+        this.props.probabilityOption!.key.toString()
+      );
+      console.log("okok result:", result);
       return calculateBoxPlotDataFromErrorCohort(
         cohort,
         index,

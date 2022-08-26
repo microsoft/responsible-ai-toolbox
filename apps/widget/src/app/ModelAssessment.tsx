@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import {
+  ErrorCohort,
   ICausalWhatIfData,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IHighchartBoxData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -27,6 +29,7 @@ export class ModelAssessment extends React.Component {
       | "requestMatrix"
       | "requestImportances"
       | "requestCausalWhatIf"
+      | "requestBoxPlotDistribution"
     > = {};
     if (config.baseUrl) {
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
@@ -55,6 +58,16 @@ export class ModelAssessment extends React.Component {
           [id, features, featureName, newValue, target],
           "/causal_whatif",
           abortSignal
+        );
+      };
+      callBack.requestBoxPlotDistribution = async (
+        cohort: ErrorCohort,
+        key: string
+      ): Promise<IHighchartBoxData> => {
+        const data = cohort.cohort.filteredData.map((dict) => dict[key]);
+        return callFlaskService(
+          data,
+          "/model_overview_probability_distribution"
         );
       };
     }

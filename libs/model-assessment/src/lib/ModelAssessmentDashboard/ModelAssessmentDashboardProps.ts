@@ -12,7 +12,9 @@ import {
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
-  IPreBuiltCohort
+  IHighchartBoxData,
+  IPreBuiltCohort,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -63,6 +65,10 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestBoxPlotDistribution?: (
+    cohorts: ErrorCohort,
+    key: string
+  ) => Promise<IHighchartBoxData>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryEvent) => void;

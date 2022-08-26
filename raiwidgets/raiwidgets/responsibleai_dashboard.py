@@ -84,3 +84,62 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.importances())
 
         self.add_url_rule(importances, '/importances', methods=["POST"])
+
+        def local_counterfactuals():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_local_counterfactuals(data))
+
+        self.add_url_rule(
+            local_counterfactuals, '/local_counterfactuals', methods=["POST"])
+
+        def local_explanations():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_local_explanations(data))
+
+        self.add_url_rule(
+            local_explanations, '/local_explanations', methods=["POST"])
+
+        def global_explanations():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_global_explanations(data))
+
+        self.add_url_rule(
+            global_explanations, '/global_explanations', methods=["POST"])
+
+        def local_causal_effects():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_local_causal_effects(data))
+
+        self.add_url_rule(local_causal_effects, '/local_causal_effects',
+                          methods=["POST"])
+
+        def bar_chart_plot():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_bar_chart_plot_data(data))
+
+        self.add_url_rule(bar_chart_plot, '/bar_chart_plot',
+                          methods=["POST"])
+
+        def model_overview_metric():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_model_overview_metric(data))
+
+        self.add_url_rule(model_overview_metric, '/model_overview_metric',
+                          methods=["POST"])
+
+        def model_overview_num_samples():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_model_overview_num_samples(data))
+
+        self.add_url_rule(model_overview_num_samples,
+                          '/model_overview_num_samples',
+                          methods=["POST"])
+
+        def model_overview_probability_distribution():
+            data = request.get_json(force=True)
+            return jsonify(
+                self.input.get_model_overview_probability_distribution(data))
+
+        self.add_url_rule(model_overview_probability_distribution,
+                          '/model_overview_probability_distribution',
+                          methods=["POST"])
