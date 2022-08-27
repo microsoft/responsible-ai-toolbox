@@ -25,7 +25,6 @@ export function describeIndividualDatapoints(dataShape: IInterpretData): void {
         );
       });
       it("should render", () => {
-        cy.wait(1500); // eslint-disable-line cypress/no-unnecessary-waiting
         expect(props.chart.Elements.length).greaterThan(0);
       });
     });
