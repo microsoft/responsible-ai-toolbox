@@ -17,7 +17,6 @@ export interface IFlyoutStyles {
   imageContainer: IStyle;
   title: IStyle;
   label: IStyle;
-  line: IStyle;
   mainContainer: IStyle;
   successIcon: IStyle;
   separator: IStyle;
@@ -53,11 +52,6 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       bottom: 20,
       position: "relative",
       textAlign: "start"
-    },
-    line: {
-      borderBottom: "1px solid #EDEBE9",
-      paddingBottom: "10px",
-      width: "100%"
     },
     mainContainer: {
       height: "100%",

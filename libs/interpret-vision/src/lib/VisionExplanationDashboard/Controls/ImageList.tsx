@@ -34,6 +34,9 @@ const ImagePadding = 2;
 const imageProps: IImageProps = {
   imageFit: ImageFit.cover
 };
+const stackTokens = {
+  childrenGap: "s1"
+};
 
 export class ImageList extends React.Component<
   IImageListProps,
@@ -105,7 +108,7 @@ export class ImageList extends React.Component<
 
     return (
       <Stack
-        tokens={{ childrenGap: "s1" }}
+        tokens={stackTokens}
         className={classNames.tile}
         style={{
           width: `${100 / this.columnCount}%`

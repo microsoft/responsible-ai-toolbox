@@ -9,7 +9,7 @@ import { VisionDatasetExplorerTabOptions } from "../VisionExplanationDashboard";
 
 export interface IPageSizeSelectorsProps {
   selectedKey: string;
-  onNumRowsSelect: (
+  onNumRowsSelect?: (
     _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
   ) => void;
@@ -34,10 +34,14 @@ const NumRowsOptions: IDropdownOption[] = [
   { key: "5", text: "5" }
 ];
 
+const stackTokens = {
+  childrenGap: "s1"
+};
+
 export class PageSizeSelectors extends React.Component<IPageSizeSelectorsProps> {
   public render(): React.ReactNode {
     return (
-      <Stack horizontal tokens={{ childrenGap: "s1" }} verticalAlign="center">
+      <Stack horizontal tokens={stackTokens} verticalAlign="center">
         <Stack.Item>
           <Text>
             {this.props.selectedKey ===

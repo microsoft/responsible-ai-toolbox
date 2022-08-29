@@ -28,6 +28,10 @@ export interface ITabsViewProps {
   onItemSelect: (item: IVisionListItem) => void;
 }
 
+const stackTokens = {
+  childrenGap: "l1"
+};
+
 export class TabsView extends React.Component<ITabsViewProps> {
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
@@ -65,16 +69,13 @@ export class TabsView extends React.Component<ITabsViewProps> {
         );
       default:
         return (
-          <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
+          <Stack horizontal={false} grow tokens={stackTokens}>
             <Stack
               horizontal
-              tokens={{ childrenGap: "l1" }}
+              tokens={stackTokens}
               className={classNames.mainImageContainer}
             >
-              <Stack
-                className={classNames.halfContainer}
-                tokens={{ childrenGap: "l1" }}
-              >
+              <Stack className={classNames.halfContainer} tokens={stackTokens}>
                 <Stack.Item>
                   <TitleBar
                     count={this.props.errorInstances.length}
@@ -90,10 +91,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                   />
                 </Stack.Item>
               </Stack>
-              <Stack
-                className={classNames.halfContainer}
-                tokens={{ childrenGap: "l1" }}
-              >
+              <Stack className={classNames.halfContainer} tokens={stackTokens}>
                 <Stack.Item>
                   <TitleBar
                     count={this.props.successInstances.length}
