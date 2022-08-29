@@ -134,12 +134,3 @@ class ResponsibleAIDashboard(Dashboard):
         self.add_url_rule(model_overview_num_samples,
                           '/model_overview_num_samples',
                           methods=["POST"])
-
-        def model_overview_probability_distribution():
-            data = request.get_json(force=True)
-            return jsonify(
-                self.input.get_model_overview_probability_distribution(data))
-
-        self.add_url_rule(model_overview_probability_distribution,
-                          '/model_overview_probability_distribution',
-                          methods=["POST"])

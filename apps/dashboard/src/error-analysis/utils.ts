@@ -3,6 +3,7 @@
 
 import { strict as assert } from "assert";
 
+import { IHighchartBoxData } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
 import { dummyMatrixData } from "./__mock_data__/dummyMatrix";
@@ -197,6 +198,36 @@ export function generateJsonMatrix(dataset: DatasetName) {
         } else {
           resolve(_.cloneDeep(dummyMatrixData));
         }
+      }, 300);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timeout);
+        reject(new DOMException("Aborted", "AbortError"));
+      });
+    });
+
+    return promise;
+  };
+}
+
+export function createJsonBoxPlotGenerator(
+  featureNames: string[],
+  dataset: DatasetName
+) {
+  return (
+    _data: any[],
+    signal: AbortSignal
+  ): Promise<IHighchartBoxData | unknown> => {
+    const promise = new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        assert(
+          dataset === DatasetName.BreastCancer ||
+            dataset === DatasetName.AdultCensusIncome ||
+            dataset === DatasetName.Boston ||
+            dataset === DatasetName.BreastCancerPrecision ||
+            dataset === DatasetName.BreastCancerRecall ||
+            dataset === DatasetName.Wine
+        );
+        resolve(featureNames.map(() => Math.random()));
       }, 300);
       signal.addEventListener("abort", () => {
         clearTimeout(timeout);
