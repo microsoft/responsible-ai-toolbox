@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Locators } from "../Constants";
 import {
   IModelAssessmentData,
   RAINotebookNames
@@ -28,6 +29,7 @@ export function describeDatasetExplorer(
         cy.visit(hostDetails.host);
       }
       cy.get("#ModelAssessmentDashboard").should("exist");
+      cy.get(Locators.DataAnalysisTab).eq(1).click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
       it("should render no data message", () => {

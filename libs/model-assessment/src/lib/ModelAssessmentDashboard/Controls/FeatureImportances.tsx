@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Pivot, PivotItem, Stack } from "@fluentui/react";
+import { IObjectWithKey, Pivot, PivotItem, Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   defaultModelAssessmentContext,
@@ -22,6 +22,7 @@ import { featureImportanceTabStyles } from "./FeatureImportances.styles";
 import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
+  allSelectedItems: IObjectWithKey[];
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
@@ -116,6 +117,7 @@ export class FeatureImportancesTab extends React.PureComponent<
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.LocalExplanation && (
           <IndividualFeatureImportanceView
+            allSelectedItems={this.props.allSelectedItems}
             features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
             invokeModel={this.props.requestPredictions}

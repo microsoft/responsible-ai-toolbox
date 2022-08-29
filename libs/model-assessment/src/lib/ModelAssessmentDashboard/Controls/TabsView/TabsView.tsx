@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DefaultEffects, PivotItem, Stack, Text } from "@fluentui/react";
+import {
+  DefaultEffects,
+  IObjectWithKey,
+  PivotItem,
+  Stack,
+  Text
+} from "@fluentui/react";
 import { CausalInsightsTab } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
@@ -39,6 +45,7 @@ import { tabsViewStyles } from "./TabsView.styles";
 import { ITabsViewProps } from "./TabsViewProps";
 
 export interface ITabsViewState {
+  allSelectedItems: IObjectWithKey[];
   errorAnalysisOption: ErrorAnalysisOptions;
   importances: number[];
   mapShiftErrorAnalysisOption: ErrorAnalysisOptions;
@@ -74,6 +81,7 @@ export class TabsView extends React.PureComponent<
     });
     const importances = props.errorAnalysisData?.[0]?.importances ?? [];
     this.state = {
+      allSelectedItems: [],
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       importances,
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
@@ -213,6 +221,7 @@ export class TabsView extends React.PureComponent<
                       dataBalanceExperienceFlight,
                       this.context.featureFlights
                     )}
+                    onAllSelectedItemsChange={this.onAllSelectedItemsChange}
                   />
                 </>
               )}
@@ -228,6 +237,7 @@ export class TabsView extends React.PureComponent<
                       </Text>
                     </h3>
                     <FeatureImportancesTab
+                      allSelectedItems={this.state.allSelectedItems}
                       modelMetadata={this.props.modelMetadata}
                       modelExplanationData={this.props.modelExplanationData}
                       selectedWeightVector={this.state.selectedWeightVector}
@@ -326,6 +336,12 @@ export class TabsView extends React.PureComponent<
       errorCohort.cohort.clearCachedImportances()
     );
     this.setState({ selectedWeightVector: weightOption });
+  };
+
+  private onAllSelectedItemsChange = (
+    allSelectedItems: IObjectWithKey[]
+  ): void => {
+    this.setState({ allSelectedItems });
   };
 
   private handleErrorDetectorChanged = (item?: PivotItem): void => {
