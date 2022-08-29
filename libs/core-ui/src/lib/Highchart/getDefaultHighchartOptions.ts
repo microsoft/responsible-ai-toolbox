@@ -50,8 +50,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       },
       scatter: {
         marker: {
-          radius: 3,
-          symbol: "circle"
+          radius: 3
         }
       }
     },

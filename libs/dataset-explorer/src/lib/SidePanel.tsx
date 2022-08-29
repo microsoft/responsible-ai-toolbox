@@ -14,8 +14,8 @@ import {
   Cohort,
   ChartTypes,
   IGenericChartProps,
-  FluentUIStyles,
-  InteractiveLegend
+  InteractiveLegend,
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -49,6 +49,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
     const colorSeries = this.buildColorLegend();
+    const scatterColors = FluentUIStyles.scatterFluentUIColorPalette;
     return (
       <Stack>
         <ChoiceGroup
@@ -85,7 +86,7 @@ export class SidePanel extends React.Component<ISidePanelProps> {
                   items={colorSeries.map((name, i) => {
                     return {
                       activated: true,
-                      color: FluentUIStyles.fluentUIColorPalette[i],
+                      color: scatterColors[i],
                       index: i,
                       name
                     };

@@ -50,7 +50,10 @@ export function getGroupedData(
     result.push({
       color:
         styles?.[index].value.marker?.color || getPrimaryChartColor(getTheme()),
-      data: d
+      data: d,
+      marker: {
+        symbol: styles?.[index].value.marker?.symbol || "circle"
+      }
     });
   });
   return result;
