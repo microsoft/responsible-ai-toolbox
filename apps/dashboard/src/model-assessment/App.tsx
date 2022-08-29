@@ -23,7 +23,8 @@ import {
   getJsonMatrix,
   getJsonTreeAdultCensusIncome,
   getJsonTreeBoston,
-  getJsonTreeWine
+  getJsonTreeWine,
+  createJsonBoxPlotGenerator
 } from "../error-analysis/utils";
 
 interface IAppProps extends IModelAssessmentData {
@@ -79,6 +80,11 @@ export class App extends React.Component<IAppProps> {
           generateJsonTreeAdultCensusIncome;
         modelAssessmentDashboardProps.requestImportances =
           createJsonImportancesGenerator(
+            this.props.dataset.feature_names,
+            DatasetName.AdultCensusIncome
+          );
+        modelAssessmentDashboardProps.requestBoxPlotDistribution =
+          createJsonBoxPlotGenerator(
             this.props.dataset.feature_names,
             DatasetName.AdultCensusIncome
           );

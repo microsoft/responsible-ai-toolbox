@@ -31,23 +31,33 @@ export class ProbabilityDistributionBoxChart extends React.Component<
   public render(): React.ReactNode {
     const theme = getTheme();
     console.log("okok selectedCohorts", this.props.selectedCohorts);
+    console.log("okok selectedCohorts1", this.props.selectedCohorts);
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
 
-    const boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
-      // we need a flag:boolean to differentiate if it is over 5k.
-      const result = this.context.requestBoxPlotDistribution?.(
-        cohort,
-        this.props.probabilityOption!.key.toString()
-      );
-      console.log("okok result:", result);
-      return calculateBoxPlotDataFromErrorCohort(
-        cohort,
-        index,
-        this.props.probabilityOption!.key.toString()
-      );
-    });
+    const boxPlotData = this.props.selectedCohorts.map(
+      (cohort: ErrorCohort, index: number) => {
+        // we need a flag:boolean to differentiate if it is over 5k.
+        const key = this.props.probabilityOption!.key.toString();
+        const data = cohort.cohort.filteredData.map((dict) => dict[key]);
+        console.log(
+          "okok prob distribution box plot:",
+          this.context.requestBoxPlotDistribution,
+          this.context
+        );
+        const result = this.context.requestBoxPlotDistribution?.(
+          data,
+          new AbortController().signal
+        );
+        console.log("okok result:", result);
+        return calculateBoxPlotDataFromErrorCohort(
+          cohort,
+          index,
+          this.props.probabilityOption!.key.toString()
+        );
+      }
+    );
     const outlierData = boxPlotData
       .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
       .map((outlierProbs, cohortIndex) => {

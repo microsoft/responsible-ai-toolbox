@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  ErrorCohort,
   ICausalWhatIfData,
   IErrorAnalysisMatrix,
   IHighchartBoxData
@@ -61,10 +60,11 @@ export class ModelAssessment extends React.Component {
         );
       };
       callBack.requestBoxPlotDistribution = async (
-        cohort: ErrorCohort,
-        key: string
+        data: any[]
+        // abortSignal: AbortSignal
       ): Promise<IHighchartBoxData> => {
-        const data = cohort.cohort.filteredData.map((dict) => dict[key]);
+        // const data = cohort.cohort.filteredData.map((dict) => dict[key]);
+        console.log("okok call flask");
         return callFlaskService(
           data,
           "/model_overview_probability_distribution"
