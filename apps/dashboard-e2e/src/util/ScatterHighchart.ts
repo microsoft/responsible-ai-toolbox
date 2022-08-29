@@ -59,8 +59,6 @@ export class ScatterHighchart extends Chart<IHighScatter> {
       );
     }
     const exec = dReg.exec(d);
-
-    debugger;
     if (!exec) {
       const qExec = qReg.exec(d);
       if (qExec) {
