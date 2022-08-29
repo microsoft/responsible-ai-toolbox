@@ -7,7 +7,8 @@ export interface IAppConfig {
     | "Interpret"
     | "ErrorAnalysis"
     | "ModelPerformance"
-    | "ResponsibleAI";
+    | "ResponsibleAI"
+    | "Vision";
   id: string;
   baseUrl: string;
   withCredentials: boolean;

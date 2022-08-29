@@ -75,6 +75,7 @@ export * from "./lib/Interfaces/IFairnessData";
 export * from "./lib/Interfaces/IDataset";
 export * from "./lib/Interfaces/IGlobalExplanationProps";
 export * from "./lib/Interfaces/IModelExplanationData";
+export * from "./lib/Interfaces/IVisionModelExplanationData";
 export * from "./lib/Interfaces/IWeightedDropdownContext";
 export * from "./lib/Interfaces/IFilter";
 export * from "./lib/Interfaces/IPreBuiltFilter";

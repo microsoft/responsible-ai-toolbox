@@ -3,45 +3,37 @@
 
 import {
   IDropdownOption,
-  Dropdown,
-  Text,
   Stack,
-  Pivot,
   PivotItem,
-  SearchBox,
   Slider,
-  CommandBarButton,
   Separator
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { Flyout } from "./Controls/Flyout";
-import { ImageList } from "./Controls/ImageList";
-import { TableList } from "./Controls/TableList";
-import { TitleBar } from "./Controls/TitleBar";
+import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
+import { Pivots } from "./Controls/Pivots";
+import { TabsView } from "./Controls/TabsView";
+import { ToolBar } from "./Controls/ToolBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
 
 export interface IVisionExplanationDashboardState {
+  currentExplanation: string;
+  errorInstances: IVisionListItem[];
+  successInstances: IVisionListItem[];
   imageDim: number;
+  loadingExplanation: boolean;
   pageSize: number;
   panelOpen: boolean;
-  selectedItem: IListItem | undefined;
+  searchValue: string;
+  selectedItem: IVisionListItem | undefined;
   selectedKey: string;
 }
 
-export interface IListItem {
-  title: string;
-  subtitle?: string;
-  image: string;
-  trueY?: number;
-  predictedY?: number;
-  index?: number;
-  other?: number;
-}
-
-enum VisionDatasetExplorerTabOptions {
+export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
   TableView = "Table view",
   DataCharacteristics = "Data characteristics"
@@ -52,34 +44,36 @@ export enum TitleBarOptions {
   Success
 }
 
-const PageSizeOptions: IDropdownOption[] = [
-  { key: "s", text: "10" },
-  { key: "m", text: "25" },
-  { key: "l", text: "50" },
-  { key: "xl", text: "100" }
-];
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
 > {
+  computedExplanations: Map<number, string>;
+
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
 
+    this.computedExplanations = new Map();
     this.state = {
+      currentExplanation: "",
+      errorInstances: [],
       imageDim: 200,
-      pageSize: Number(PageSizeOptions[0].text),
+      loadingExplanation: false,
+      pageSize: 10,
       panelOpen: false,
+      searchValue: "",
       selectedItem: undefined,
-      selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView
+      selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView,
+      successInstances: []
     };
+  }
+
+  public componentDidMount() {
+    this.preprocessData();
   }
 
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
-    const dropdownOptions: Array<IDropdownOption<unknown>> = [
-      { key: 0, text: localization.InterpretVision.Dashboard.allData }
-    ];
-
     return (
       <Stack
         horizontal={false}
@@ -87,88 +81,19 @@ export class VisionExplanationDashboard extends React.Component<
         tokens={{ childrenGap: "l1", padding: "m 40px" }}
       >
         <Stack.Item>
-          <Stack horizontal horizontalAlign="space-between" verticalAlign="end">
-            <Stack.Item>
-              <Pivot
-                selectedKey={this.state.selectedKey}
-                onLinkClick={this.handleLinkClick}
-                linkSize={"normal"}
-                headersOnly
-                className={classNames.tabs}
-              >
-                <PivotItem
-                  headerText={
-                    localization.InterpretVision.Dashboard.tabOptionFirst
-                  }
-                  itemKey={VisionDatasetExplorerTabOptions.ImageExplorerView}
-                />
-                <PivotItem
-                  headerText={
-                    localization.InterpretVision.Dashboard.tabOptionSecond
-                  }
-                  itemKey={VisionDatasetExplorerTabOptions.TableView}
-                />
-                <PivotItem
-                  headerText={
-                    localization.InterpretVision.Dashboard.tabOptionThird
-                  }
-                  itemKey={VisionDatasetExplorerTabOptions.DataCharacteristics}
-                />
-              </Pivot>
-            </Stack.Item>
-            <Stack.Item>
-              <CommandBarButton
-                className={classNames.filterButton}
-                iconProps={{ iconName: "Settings" }}
-                text={localization.InterpretVision.Dashboard.settings}
-              />
-            </Stack.Item>
-          </Stack>
+          <Pivots
+            selectedKey={this.state.selectedKey}
+            onLinkClick={this.handleLinkClick}
+          />
         </Stack.Item>
         <Stack.Item>
           <Separator styles={{ root: { width: "100%" } }} />
         </Stack.Item>
         <Stack.Item>
-          <Stack>
-            <Stack.Item className={classNames.cohortPickerLabelWrapper}>
-              <Text
-                variant="mediumPlus"
-                className={classNames.cohortPickerLabel}
-              >
-                {localization.Interpret.ModelPerformance.cohortPickerLabel}
-              </Text>
-            </Stack.Item>
-            <Stack.Item>
-              <Stack
-                horizontal
-                className={classNames.toolBarContainer}
-                tokens={{ childrenGap: "l1" }}
-                verticalAlign="center"
-              >
-                <Stack.Item>
-                  <Dropdown
-                    className={classNames.cohortDropdown}
-                    id="dataExplorerCohortDropdown"
-                    options={dropdownOptions}
-                    selectedKey={0}
-                  />
-                </Stack.Item>
-                <Stack.Item>
-                  <SearchBox
-                    className={classNames.searchBox}
-                    placeholder={localization.InterpretVision.Dashboard.search}
-                  />
-                </Stack.Item>
-                <Stack.Item>
-                  <CommandBarButton
-                    className={classNames.filterButton}
-                    iconProps={{ iconName: "Filter" }}
-                    text={localization.InterpretVision.Dashboard.filter}
-                  />
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-          </Stack>
+          <ToolBar
+            searchValue={this.state.searchValue}
+            onSearch={this.onSearch}
+          />
         </Stack.Item>
         <Stack.Item>
           <Stack
@@ -185,90 +110,41 @@ export class VisionExplanationDashboard extends React.Component<
                 defaultValue={50}
                 showValue={false}
                 onChange={this.onSliderChange}
+                disabled={
+                  this.state.selectedKey ===
+                  VisionDatasetExplorerTabOptions.DataCharacteristics
+                }
               />
             </Stack.Item>
-            {this.state.selectedKey ===
-              VisionDatasetExplorerTabOptions.TableView && (
+            {this.state.selectedKey !==
+              VisionDatasetExplorerTabOptions.ImageExplorerView && (
               <Stack.Item>
-                <Stack
-                  horizontal
-                  tokens={{ childrenGap: "s1" }}
-                  verticalAlign="center"
-                >
-                  <Stack.Item>
-                    <Text>
-                      {localization.InterpretVision.Dashboard.pageSize}
-                    </Text>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Dropdown
-                      defaultSelectedKey="s"
-                      options={PageSizeOptions}
-                      onChange={this.onPageSizeSelect}
-                    />
-                  </Stack.Item>
-                </Stack>
+                <PageSizeSelectors
+                  selectedKey={this.state.selectedKey}
+                  onPageSizeSelect={this.onPageSizeSelect}
+                />
               </Stack.Item>
             )}
           </Stack>
         </Stack.Item>
-        {this.state.selectedKey ===
-          VisionDatasetExplorerTabOptions.ImageExplorerView && (
-          <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
-            <Stack
-              horizontal
-              tokens={{ childrenGap: "l1" }}
-              className={classNames.mainImageContainer}
-            >
-              <Stack
-                className={classNames.halfContainer}
-                tokens={{ childrenGap: "l1" }}
-              >
-                <Stack.Item>
-                  <TitleBar type={TitleBarOptions.Error} />
-                </Stack.Item>
-                <Stack.Item className={classNames.imageListContainer}>
-                  <ImageList
-                    data={this.props.dataSummary}
-                    imageDim={this.state.imageDim}
-                    selectItem={this.onItemSelect}
-                  />
-                </Stack.Item>
-              </Stack>
-              <Stack
-                className={classNames.halfContainer}
-                tokens={{ childrenGap: "l1" }}
-              >
-                <Stack.Item>
-                  <TitleBar type={TitleBarOptions.Success} />
-                </Stack.Item>
-                <Stack.Item className={classNames.imageListContainer}>
-                  <ImageList
-                    data={this.props.dataSummary}
-                    imageDim={this.state.imageDim}
-                    selectItem={this.onItemSelect}
-                  />
-                </Stack.Item>
-              </Stack>
-            </Stack>
-          </Stack>
-        )}
-        {this.state.selectedKey ===
-          VisionDatasetExplorerTabOptions.TableView && (
-          <Stack className={classNames.mainContainer}>
-            <TableList
-              data={this.props.dataSummary}
-              imageDim={this.state.imageDim}
-              selectItem={this.onItemSelect}
-              pageSize={this.state.pageSize}
-            />
-          </Stack>
-        )}
+        <Stack.Item>
+          <TabsView
+            errorInstances={this.state.errorInstances}
+            successInstances={this.state.successInstances}
+            imageDim={this.state.imageDim}
+            pageSize={this.state.pageSize}
+            searchValue={this.state.searchValue}
+            selectedItem={this.state.selectedItem}
+            selectedKey={this.state.selectedKey}
+            onItemSelect={this.onItemSelect}
+          />
+        </Stack.Item>
         <Stack.Item>
           <Flyout
-            data={this.props.dataSummary}
+            explanation={this.state.currentExplanation}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
+            loadingExplanation={this.state.loadingExplanation}
             callback={this.onPanelClose}
           />
         </Stack.Item>
@@ -276,12 +152,67 @@ export class VisionExplanationDashboard extends React.Component<
     );
   }
 
+  private preprocessData() {
+    const dataSummary = this.props.dataSummary;
+    const errorInstances: IVisionListItem[] = this.state.errorInstances;
+    const successInstances: IVisionListItem[] = this.state.successInstances;
+
+    dataSummary.images.forEach((image, index) => {
+      const item: IVisionListItem = {
+        image,
+        index,
+        predictedY: dataSummary.predictedY[index],
+        trueY: dataSummary.trueY[index]
+      };
+      item.predictedY === item.trueY
+        ? successInstances.push(item)
+        : errorInstances.push(item);
+    });
+
+    this.setState({ errorInstances, successInstances });
+  }
+
   private onPanelClose = () => {
-    this.setState({ panelOpen: !this.state.panelOpen });
+    this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
   };
 
-  private onItemSelect = (item: IListItem): void => {
+  private onSearch = (
+    _event?: React.ChangeEvent<HTMLInputElement>,
+    newValue?: string
+  ): void => {
+    if (!newValue) {
+      newValue = "";
+    }
+    this.setState({ searchValue: newValue });
+  };
+
+  private onItemSelect = (item: IVisionListItem): void => {
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
+
+    const index = item.index;
+
+    const computedExplanation = this.computedExplanations.get(index);
+    if (computedExplanation) {
+      this.setState({
+        currentExplanation: computedExplanation,
+        loadingExplanation: false
+      });
+      return;
+    }
+
+    if (this.props.requestExp) {
+      this.setState({ loadingExplanation: true });
+      this.props
+        .requestExp(index, new AbortController().signal)
+        .then((result) => {
+          const explanation = result.toString();
+          this.computedExplanations.set(index, explanation);
+          this.setState({
+            currentExplanation: explanation,
+            loadingExplanation: false
+          });
+        });
+    }
   };
 
   /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 
