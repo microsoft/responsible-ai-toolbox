@@ -56,7 +56,7 @@ export interface IModelAssessmentContext {
       ) => Promise<any[]>)
     | undefined;
   requestBoxPlotDistribution?: (
-    request: any[],
+    request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData | unknown>;
   shiftErrorCohort(cohort: ErrorCohort): void;

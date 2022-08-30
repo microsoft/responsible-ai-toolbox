@@ -60,7 +60,7 @@ export class ModelAssessment extends React.Component {
         );
       };
       callBack.requestBoxPlotDistribution = async (
-        data: any[]
+        data: any // IBoxPlotDistributionData
         // abortSignal: AbortSignal
       ): Promise<IHighchartBoxData> => {
         // const data = cohort.cohort.filteredData.map((dict) => dict[key]);
