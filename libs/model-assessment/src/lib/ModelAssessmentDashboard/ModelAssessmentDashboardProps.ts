@@ -4,6 +4,7 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
+  IVisionModelExplanationData,
   ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
@@ -25,6 +26,7 @@ export interface IModelAssessmentData {
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
   cohortData?: IPreBuiltCohort[];
+  visionModelExplanationData?: IVisionModelExplanationData;
 }
 
 export interface IModelAssessmentDashboardProps
@@ -63,6 +65,7 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryEvent) => void;

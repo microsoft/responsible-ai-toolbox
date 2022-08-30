@@ -11,16 +11,15 @@ import {
 export interface IFlyoutStyles {
   cell: IStyle;
   errorIcon: IStyle;
-  explanation: IStyle;
   featureListContainer: IStyle;
   iconContainer: IStyle;
   image: IStyle;
   imageContainer: IStyle;
+  title: IStyle;
   label: IStyle;
   mainContainer: IStyle;
-  separator: IStyle;
   successIcon: IStyle;
-  title: IStyle;
+  separator: IStyle;
 }
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
@@ -33,10 +32,6 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       color: theme.semanticColors.errorIcon,
       fontSize: "large",
       fontWeight: "600"
-    },
-    explanation: {
-      position: "relative",
-      right: 85
     },
     featureListContainer: {
       height: 300,
@@ -63,9 +58,7 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       overflow: "hidden"
     },
     separator: {
-      root: {
-        width: "100&"
-      }
+      width: "100%"
     },
     successIcon: {
       color: theme.semanticColors.successIcon,
