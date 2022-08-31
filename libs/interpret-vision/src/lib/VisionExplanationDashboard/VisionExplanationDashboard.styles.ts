@@ -45,7 +45,7 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       imageListContainer: {
         border: `1px solid ${theme.semanticColors.disabledBorder}`,
         height: "100%",
-        overflow: "scroll"
+        overflow: "auto"
       },
       mainContainer: {
         alignItems: "center",

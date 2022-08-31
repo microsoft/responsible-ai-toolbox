@@ -4,6 +4,8 @@
 import { Chart, IChartElement } from "./Chart";
 
 const dReg = /^M ([\d.]+) ([\d.]+) A 3 3 0 1 1 ([\d.]+) ([\d.]+) Z$/;
+const qReg =
+  /^M ([\d.]+) ([\d.]+) L ([\d.]+) ([\d.]+) L ([\d.]+) ([\d.]+) L ([\d.]+) ([\d.]+) Z$/; //quadrangle coordinates
 
 export interface IHighScatter extends IChartElement {
   readonly x?: number;
@@ -58,6 +60,21 @@ export class ScatterHighchart extends Chart<IHighScatter> {
     }
     const exec = dReg.exec(d);
     if (!exec) {
+      const qExec = qReg.exec(d);
+      if (qExec) {
+        const [, ...strCords] = qExec;
+        const [x1, y1, x2, y2, x3, y3, x4, y4] = strCords.map((s) => Number(s));
+        return {
+          bottom: x2,
+          left: x4,
+          right: x3,
+          top: y4,
+          x: x1,
+          y1,
+          y2,
+          y3
+        };
+      }
       throw new Error(
         `${idx}th path element in svg have invalid "d" attribute`
       );

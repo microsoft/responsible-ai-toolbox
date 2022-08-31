@@ -1297,16 +1297,19 @@
   "InterpretVision": {
     "Dashboard": {
       "allData": "All Data",
-      "columnOne": "Title",
+      "columnOne": "Image",
       "columnTwo": "Index",
       "columnThree": "True Y",
       "columnFour": "Predicted Y",
       "columnFive": "Other metadata",
+      "examples": "examples",
       "filter": "Filter",
+      "loading": "Computing explanation for index",
+      "pageSize": "Page size: ",
+      "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
-      "panelTitle": "Selected instance",
-      "pageSize": "Page size: ",
+      "rows": "Rows: ",
       "search": "Search",
       "settings": "Settings",
       "tabOptionFirst": "Image explorer view",
@@ -1367,7 +1370,8 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
-      "ModelOverview": "Model overview"
+      "ModelOverview": "Model overview",
+      "VisionTab": "Vision data explorer"
     },
     "DashboardSettings": {
       "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",

@@ -6,14 +6,19 @@ export interface IVisionExplanationDashboardProps {
    * the interface design for the dashboard
    */
   dataSummary: IDatasetSummary;
+  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
 }
 
 export interface IDatasetSummary {
   /*
    * information about the document given
    */
-  images: string[];
+  modelClass?: ModelClass;
   classNames?: string[];
-  localExplanations: string[];
-  prediction?: number[];
+  images: string[];
+  predictedY: string[];
+  probabilityY?: number[][];
+  trueY: string[];
 }
+
+type ModelClass = "Tree" | "EBM" | "blackbox";

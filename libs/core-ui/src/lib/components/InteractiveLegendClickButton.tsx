@@ -8,14 +8,14 @@ import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 
 interface IInteractiveLegendProps {
   activated: boolean;
-  color: string;
   index: number;
   name: string;
+  colorBoxClassName?: string;
   onClick?: (index: number) => void;
 }
 
 export class InteractiveLegendClickButton extends React.PureComponent<IInteractiveLegendProps> {
-  private readonly classes = interactiveLegendStyles();
+  private readonly classes = interactiveLegendStyles(this.props.activated);
 
   public render(): React.ReactNode {
     return (
@@ -29,11 +29,8 @@ export class InteractiveLegendClickButton extends React.PureComponent<IInteracti
       >
         <div
           className={
-            this.props.activated === false
-              ? this.classes.inactiveColorBox
-              : this.classes.colorBox
+            this.props.colorBoxClassName || this.classes.circleColorBox
           }
-          style={{ backgroundColor: this.props.color }}
         />
         <Text nowrap variant={"medium"} className={this.classes.label}>
           {this.props.name}

@@ -21,6 +21,7 @@ import {
   MatrixFilter,
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
+import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
 import { InfoCallout } from "libs/error-analysis/src/lib/ErrorAnalysisDashboard/Controls/InfoCallout/InfoCallout";
 import _, { Dictionary } from "lodash";
@@ -159,6 +160,20 @@ export class TabsView extends React.PureComponent<
               className={classNames.section}
               styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
             >
+              {t.key === GlobalTabKeys.VisionTab &&
+                this.props.visionModelExplanationData && (
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"}>
+                        {localization.ModelAssessment.ComponentNames.VisionTab}
+                      </Text>
+                    </div>
+                    <VisionTab
+                      dataSummary={this.props.visionModelExplanationData}
+                      requestExp={this.props.requestExp}
+                    />
+                  </>
+                )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
