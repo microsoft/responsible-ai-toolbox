@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import { fullLgDown } from "@responsible-ai/core-ui";
 
 export interface IFeatureImportanceBarStyles {
   chart: IStyle;
@@ -21,7 +22,8 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       width: "95%"
     },
     chartWithVertical: {
-      width: "80%"
+      width: "80%",
+      ...fullLgDown
     },
     noData: {
       flex: "1",

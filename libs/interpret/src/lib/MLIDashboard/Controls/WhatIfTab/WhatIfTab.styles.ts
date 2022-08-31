@@ -7,7 +7,11 @@ import {
   mergeStyleSets,
   IStyle
 } from "@fluentui/react";
-import { descriptionMaxWidth, FluentUIStyles } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexLgDown,
+  FluentUIStyles
+} from "@responsible-ai/core-ui";
 
 export interface IWhatIfTabStyles {
   absoluteValueToggle: IStyle;
@@ -92,7 +96,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       boldText: {
         fontWeight: "600",
-        paddingBottom: "5px"
+        padding: "0 30px 5px 0"
       },
       calloutActions: {
         marginTop: 20,
@@ -128,15 +132,21 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       choiceBoxArea: {
         alignItems: "baseline",
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        flexFlow: "wrap"
       },
       choiceGroup: {
-        paddingLeft: "30px"
+        // paddingLeft: "30px"
       },
       choiceGroupFlexContainer: {
-        display: "inline-flex",
+        //  display: "inline-flex",
         justifyContent: "space-between",
-        width: "500px"
+        width: "500px",
+        selectors: {
+          "@media screen and (min-width: 1023px)": {
+            display: "inline-flex"
+          }
+        }
       },
       cohortPickerLabel: {
         fontWeight: "600",
@@ -184,12 +194,19 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         display: "flex",
         flexDirection: "row",
         minHeight: "300px",
-        width: "100%"
+        width: "100%",
+        ...flexLgDown
       },
       featureImportanceControls: {
         display: "flex",
         flexDirection: "row",
-        padding: "18px 30px 4px 67px"
+        padding: "18px 30px 4px 67px",
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            padding: "18px 0 4px 0",
+            flexFlow: "wrap"
+          }
+        }
       },
       featureImportanceLegend: {
         height: "100%",
@@ -345,7 +362,11 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       startingK: {
         flex: 1,
-        paddingRight: legendWidth
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            paddingRight: legendWidth
+          }
+        }
       },
       subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {

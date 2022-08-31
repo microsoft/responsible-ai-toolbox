@@ -1,3 +1,4 @@
+import { hideXlDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -11,7 +12,8 @@ export const matrixSummaryStyles: () => IProcessedStyleSet<IMatrixSummaryStyles>
   () => {
     return mergeStyleSets<IMatrixSummaryStyles>({
       legendDescriptionStyle: {
-        width: 500
+        width: 500,
+        ...hideXlDown
       }
     });
   };

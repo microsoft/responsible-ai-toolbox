@@ -267,7 +267,7 @@ export class ModelOverview extends React.Component<
         <Stack tokens={{ childrenGap: "10px" }}>
           <Text
             variant="medium"
-            className={classNames.descriptionText}
+            className={classNames.topLevelDescriptionText}
             id="modelOverviewDescription"
           >
             {localization.ModelAssessment.ModelOverview.topLevelDescription}

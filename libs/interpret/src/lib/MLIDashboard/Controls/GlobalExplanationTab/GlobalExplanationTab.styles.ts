@@ -2,13 +2,17 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexLgDown,
+  fullLgDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface IGlobalTabStyles {
   chartCallout: IStyle;
   chartContainer: IStyle;
   chartLeftPart: IStyle;
-  chartRightPart: IStyle;
   page: IStyle;
   globalChartControls: IStyle;
   globalChartWithLegend: IStyle;
@@ -22,6 +26,7 @@ export interface IGlobalTabStyles {
   startingK: IStyle;
   topK: IStyle;
   rightJustifiedContainer: IStyle;
+  dependencePlotChartContainer: IStyle;
 }
 
 export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
@@ -37,13 +42,12 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       },
       chartContainer: {
         paddingLeft: "25px",
-        width: "100%"
+        width: "100%",
+        ...flexLgDown
       },
       chartLeftPart: {
-        width: "80%"
-      },
-      chartRightPart: {
-        width: "20%"
+        width: "80%",
+        ...fullLgDown
       },
       globalChartControls: {
         display: "flex",
@@ -69,7 +73,8 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       infoWithText: {
         maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
-        width: "100%"
+        width: "100%",
+        ...hideXlDown
       },
       legendAndSort: {
         height: "100%",
@@ -110,6 +115,12 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       topK: {
         padding: "10px 0 0 25px",
         width: "70%"
+      },
+      dependencePlotChartContainer: {
+        paddingLeft: "25px",
+        width: "100%",
+        marginBottom: "20px",
+        ...flexLgDown
       }
     });
   };

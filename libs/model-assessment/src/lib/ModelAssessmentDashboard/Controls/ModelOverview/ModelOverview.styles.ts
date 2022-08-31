@@ -1,3 +1,4 @@
+import { hideXlDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -14,6 +15,7 @@ export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
   configurationActionButton: IStyle;
+  topLevelDescriptionText: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
   generalSemiBoldText: IStyle;
@@ -43,6 +45,11 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
+      },
+      topLevelDescriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth,
+        ...hideXlDown
       }
     });
   };

@@ -1,3 +1,4 @@
+import { hideXlDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -7,6 +8,7 @@ import { metricStyles, textStyles } from "../../Styles/CommonStyles.styles";
 
 export interface ITreeLegendStyles {
   button: IStyle;
+  metric: IStyle;
   metricBarBlack: IStyle;
   metricBarGreen: IStyle;
   metricBarRed: IStyle;
@@ -24,8 +26,10 @@ export const treeLegendStyles: () => IProcessedStyleSet<ITreeLegendStyles> =
     const commonTextStyles = textStyles();
     return mergeStyleSets<ITreeLegendStyles>({
       button: {
-        maxWidth: "136px"
+        maxWidth: "136px",
+        ...hideXlDown
       },
+      metric: hideXlDown,
       metricBarBlack: commonMetricStyles.metricBarBlack,
       metricBarGreen: commonMetricStyles.metricBarGreen,
       metricBarRed: commonMetricStyles.metricBarRed,

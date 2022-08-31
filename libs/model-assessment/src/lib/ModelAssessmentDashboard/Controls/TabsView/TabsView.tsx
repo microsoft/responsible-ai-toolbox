@@ -22,6 +22,7 @@ import {
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
+import { InfoCallout } from "libs/error-analysis/src/lib/ErrorAnalysisDashboard/Controls/InfoCallout/InfoCallout";
 import _, { Dictionary } from "lodash";
 import * as React from "react";
 
@@ -31,7 +32,10 @@ import {
   dataBalanceExperienceFlight
 } from "../../FeatureFlights";
 import { GlobalTabKeys } from "../../ModelAssessmentEnums";
-import { FeatureImportancesTab } from "../FeatureImportances";
+import {
+  FeatureImportancesTab,
+  FeatureImportancesTabOptions
+} from "../FeatureImportances";
 import { ModelOverview } from "../ModelOverview/ModelOverview";
 
 import { tabsViewStyles } from "./TabsView.styles";
@@ -46,12 +50,17 @@ export interface ITabsViewState {
   selectedWeightVector: WeightVectorOption;
   weightVectorLabels: Dictionary<string>;
   weightVectorOptions: WeightVectorOption[];
+  featureImportanceOption: FeatureImportancesTabOptions;
 }
 
 export class TabsView extends React.PureComponent<
   ITabsViewProps,
   ITabsViewState
 > {
+  private readonly _errorAnalysisIconId = "errorAnalysisIconId";
+  private readonly _modelOverviewIconId = "modelOverviewIconId";
+  private readonly _dataAnalysisIconId = "dataAnalysisIconId";
+  private readonly _featureImportanceIconId = "featureImportanceIconId";
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
@@ -83,7 +92,8 @@ export class TabsView extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       weightVectorLabels,
-      weightVectorOptions
+      weightVectorOptions,
+      featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation
     };
     if (this.props.requestImportances) {
       this.props
@@ -101,6 +111,35 @@ export class TabsView extends React.PureComponent<
       this.props.baseCohort.cohort.name !==
         localization.ErrorAnalysis.Cohort.defaultLabel;
     const classNames = tabsViewStyles();
+    let errorAnalysisInfo = "";
+    let errorAnalysisInfoTitle = "";
+    if (this.state.errorAnalysisOption === ErrorAnalysisOptions.TreeMap) {
+      errorAnalysisInfo = this.props.requestDebugML
+        ? localization.ErrorAnalysis.TreeView.treeDescription
+        : localization.ErrorAnalysis.TreeView.treeStaticDescription;
+      errorAnalysisInfoTitle =
+        localization.ErrorAnalysis.TreeView.treeMapInfoTitle;
+    } else {
+      errorAnalysisInfo = this.props.requestMatrix
+        ? localization.ErrorAnalysis.MatrixSummary.heatMapDescription
+        : localization.ErrorAnalysis.MatrixSummary.heatMapStaticDescription;
+      errorAnalysisInfoTitle =
+        localization.ErrorAnalysis.MatrixSummary.heatMapInfoTitle;
+    }
+    let featureImportanceInfoTitle = "";
+    let featureImportanceInfo = "";
+    if (
+      this.state.featureImportanceOption ===
+      FeatureImportancesTabOptions.GlobalExplanation
+    ) {
+      featureImportanceInfoTitle = localization.Interpret.GlobalTab.infoTitle;
+      featureImportanceInfo = localization.Interpret.GlobalTab.helperText;
+    } else {
+      featureImportanceInfoTitle =
+        localization.ModelAssessment.FeatureImportances.InfoTitle;
+      featureImportanceInfo =
+        localization.ModelAssessment.FeatureImportances.IndividualFeature;
+    }
     return (
       <Stack tokens={{ padding: "l1" }}>
         {this.props.activeGlobalTabs[0]?.key !==
@@ -133,6 +172,13 @@ export class TabsView extends React.PureComponent<
                             .ErrorAnalysis
                         }
                       </Text>
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={this._errorAnalysisIconId}
+                          infoText={errorAnalysisInfo}
+                          title={errorAnalysisInfoTitle}
+                        />
+                      </div>
                     </h3>
                     <ErrorAnalysisViewTab
                       disabledView={disabledView}
@@ -181,17 +227,38 @@ export class TabsView extends React.PureComponent<
                           .ModelOverview
                       }
                     </Text>
+                    <div className={classNames.sectionTooltip}>
+                      <InfoCallout
+                        iconId={this._modelOverviewIconId}
+                        infoText={
+                          localization.ModelAssessment.ModelOverview
+                            .topLevelDescription
+                        }
+                        title={
+                          localization.ModelAssessment.ModelOverview.infoTitle
+                        }
+                      />
+                    </div>
                   </h3>
                   <ModelOverview telemetryHook={this.props.telemetryHook} />
                 </>
               )}
               {t.key === GlobalTabKeys.DataAnalysisTab && (
                 <>
-                  <div className={classNames.sectionHeader}>
+                  <h3 className={classNames.sectionHeader}>
                     <Text variant={"xxLarge"} id="dataAnalysisHeader">
                       {localization.ModelAssessment.ComponentNames.DataAnalysis}
                     </Text>
-                  </div>
+                    <div className={classNames.sectionTooltip}>
+                      <InfoCallout
+                        iconId={this._dataAnalysisIconId}
+                        infoText={
+                          localization.Interpret.DatasetExplorer.helperText
+                        }
+                        title={localization.Common.infoTitle}
+                      />
+                    </div>
+                  </h3>
                   <DataAnalysisTab
                     telemetryHook={this.props.telemetryHook}
                     showDataBalanceExperience={isFlightActive(
@@ -211,6 +278,13 @@ export class TabsView extends React.PureComponent<
                             .FeatureImportances
                         }
                       </Text>
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={this._featureImportanceIconId}
+                          infoText={featureImportanceInfo}
+                          title={featureImportanceInfoTitle}
+                        />
+                      </div>
                     </h3>
                     <FeatureImportancesTab
                       modelMetadata={this.props.modelMetadata}
@@ -221,6 +295,7 @@ export class TabsView extends React.PureComponent<
                       requestPredictions={this.props.requestPredictions}
                       onWeightVectorChange={this.onWeightVectorChange}
                       telemetryHook={this.props.telemetryHook}
+                      onPivotChange={this.onFeatureImportanceOptionChange}
                     />
                   </>
                 )}
@@ -304,6 +379,12 @@ export class TabsView extends React.PureComponent<
       </Stack>
     );
   }
+
+  private onFeatureImportanceOptionChange = (
+    option: FeatureImportancesTabOptions
+  ): void => {
+    this.setState({ featureImportanceOption: option });
+  };
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {
     this.props.jointDataset.buildLocalFlattenMatrix(weightOption);

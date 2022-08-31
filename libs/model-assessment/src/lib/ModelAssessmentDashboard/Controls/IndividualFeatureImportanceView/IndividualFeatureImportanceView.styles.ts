@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface IFeatureImportanceStyles {
   chevronButton: IStyle;
@@ -48,7 +48,11 @@ export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFe
           paddingTop: 4
         }
       ],
-      infoWithText: { maxWidth: descriptionMaxWidth, paddingLeft: 25 },
+      infoWithText: {
+        maxWidth: descriptionMaxWidth,
+        paddingLeft: 25,
+        ...hideXlDown
+      },
       selectionCounter: {
         paddingLeft: 25,
         paddingTop: 12

@@ -1,3 +1,4 @@
+import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -7,7 +8,11 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { descriptionMaxWidth, FluentUIStyles } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  FluentUIStyles,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface IDatasetExplorerTabStyles {
   boldText: IStyle;
@@ -18,13 +23,13 @@ export interface IDatasetExplorerTabStyles {
   chartWithVertical: IStyle;
   cohortDropdown: IStyle;
   cohortPickerWrapper: IStyle;
+  cohortPicker: IStyle;
   cohortPickerLabel: IStyle;
   colorBox: IStyle;
   colorValue: IStyle;
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
   legendAndText: IStyle;
-  horizontalAxisWithPadding: IStyle;
   paddingDiv: IStyle;
   horizontalAxis: IStyle;
   page: IStyle;
@@ -37,6 +42,8 @@ export interface IDatasetExplorerTabStyles {
   legendItem: IStyle;
   smallItalic: IStyle;
   sidePanel: IStyle;
+  chartAndType: IStyle;
+  chart: IStyle;
 }
 
 export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
@@ -52,6 +59,11 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         padding: "10px 20px",
         width: "200px"
       },
+      chart: {
+        width: "100%",
+        marginBottom: "40px"
+      },
+      chartAndType: flexLgDown,
       chartContainer: {
         height: "100%",
         width: "90%"
@@ -66,8 +78,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       ],
       chartWithAxes: {
         height: "100%",
-        paddingRight: "10px",
-        width: "85%"
+        paddingRight: "10px"
       },
       chartWithVertical: {
         width: "100%"
@@ -75,6 +86,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       cohortDropdown: {
         width: "170px"
       },
+      cohortPicker: flexLgDown,
       cohortPickerLabel: {
         fontWeight: "600",
         paddingRight: "8px"
@@ -101,9 +113,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       horizontalAxis: {
         textAlign: "center"
       },
-      horizontalAxisWithPadding: {
-        paddingBottom: "20px"
-      },
       individualChartContainer: {
         width: "90%"
       },
@@ -114,7 +123,8 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       infoWithText: {
         maxWidth: descriptionMaxWidth,
-        width: "100%"
+        width: "100%",
+        ...hideXlDown
       },
       legendAndText: {
         height: "100%",
@@ -129,7 +139,12 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       mainArea: {
         height: "100%",
-        width: "100%"
+        width: "100%",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            marginTop: "60px !important"
+          }
+        }
       },
       paddingDiv: {
         width: "50px"
@@ -149,7 +164,8 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "max-content"
       },
       sidePanel: {
-        width: "15%"
+        width: "15%",
+        ...fullLgDown
       },
       smallItalic: [FluentUIStyles.placeholderItalic],
       verticalAxis: {
