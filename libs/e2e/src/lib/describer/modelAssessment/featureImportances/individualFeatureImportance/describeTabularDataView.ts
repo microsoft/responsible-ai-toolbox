@@ -30,6 +30,7 @@ export function describeTabularDataView(
       });
 
       it("should collapse 'Correct predictions' by default", () => {
+        cy.get(Locators.DataAnalysisTab).eq(0).click();
         cy.get(Locators.IFICollapseButton).should("be.visible");
       });
 

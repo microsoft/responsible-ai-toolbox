@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 
 import {
-  IStyle,
-  mergeStyleSets,
+  getTheme,
   IProcessedStyleSet,
-  getTheme
+  IStyle,
+  mergeStyleSets
 } from "@fluentui/react";
 import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
-export interface IFeatureImportanceStyles {
+export interface ITableViewStyles {
   chevronButton: IStyle;
   header: IStyle;
   headerCount: IStyle;
@@ -19,7 +19,7 @@ export interface IFeatureImportanceStyles {
   tabularDataView: IStyle;
 }
 
-export const individualFeatureImportanceViewStyles: () => IProcessedStyleSet<IFeatureImportanceStyles> =
+export const tableViewStyles: () => IProcessedStyleSet<ITableViewStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets({

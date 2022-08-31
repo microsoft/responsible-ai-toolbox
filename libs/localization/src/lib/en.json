@@ -1362,6 +1362,7 @@
       "CohortSettingsTitle": "Cohort settings"
     },
     "ComponentNames": {
+      "ChartView": "Chart view",
       "CausalAnalysis": "Causal analysis",
       "Counterfactuals": "Counterfactuals",
       "DataAnalysis": "Data analysis",
@@ -1371,6 +1372,7 @@
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
       "ModelOverview": "Model overview",
+      "TableView": "Table view",
       "VisionTab": "Vision data explorer"
     },
     "DashboardSettings": {
@@ -1530,10 +1532,12 @@
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
       "InfoTitle": "Additional information on individual feature importance",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
       "LocalExplanation": "Individual feature importance",
       "SelectionCounter": "{0}/{1} datapoints selected",
-      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time.",
+      "RowCheckboxAriaLabel": "Row checkbox",
+      "SelectionColumnAriaLabel": "Toggle selection"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",

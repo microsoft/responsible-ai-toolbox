@@ -132,6 +132,7 @@ export enum Locators {
   MissingParameterPlaceholder = "#ModelOverview #MissingParameterPlaceholder",
   CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')",
   DataAnalysisPivot = "#dataAnalysisPivot",
+  DataAnalysisTab = "#dataAnalysisPivot .ms-Pivot-link",
   DataBalancePivotItem = "#dataAnalysisPivot button[name='Data balance']",
   FeatureBalanceMeasures = "#featureBalanceMeasures",
   FeatureBalanceMeasuresHeader = "#featureBalanceMeasures #featureBalanceMeasuresHeader",

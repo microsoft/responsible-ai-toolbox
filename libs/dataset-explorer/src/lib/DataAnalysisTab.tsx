@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Pivot, PivotItem } from "@fluentui/react";
+import { IObjectWithKey, Pivot, PivotItem } from "@fluentui/react";
 import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
   ITelemetryEvent,
   TelemetryEventName,
   TelemetryLevels
@@ -13,18 +15,25 @@ import React from "react";
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceTab";
 import { DatasetExplorerTab } from "./DatasetExplorerTab";
+import { TableView } from "./TableView/TableView";
 
 interface IDataAnalysisTabProps {
+  onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   showDataBalanceExperience: boolean;
 }
 
 enum DataAnalysisTabOptions {
-  DatasetExplorer = "DatasetExplorer",
-  DataBalance = "DataBalance"
+  ChartView = "ChartView",
+  DataBalance = "DataBalance",
+  TableView = "TableView"
 }
 
 export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+
   public render(): React.ReactNode {
     const styles = dataAnalysisTabStyles();
 
@@ -36,8 +45,22 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
         id="dataAnalysisPivot"
       >
         <PivotItem
-          itemKey={DataAnalysisTabOptions.DatasetExplorer}
-          headerText={localization.ModelAssessment.ComponentNames.DataExplorer}
+          itemKey={DataAnalysisTabOptions.TableView}
+          headerText={localization.ModelAssessment.ComponentNames.TableView}
+        >
+          <TableView
+            features={this.context.modelMetadata.featureNames}
+            jointDataset={this.context.jointDataset}
+            selectedCohort={this.context.selectedErrorCohort}
+            modelType={this.context.modelMetadata.modelType}
+            onAllSelectedItemsChange={this.props.onAllSelectedItemsChange}
+            telemetryHook={this.props.telemetryHook}
+          />
+        </PivotItem>
+
+        <PivotItem
+          itemKey={DataAnalysisTabOptions.ChartView}
+          headerText={localization.ModelAssessment.ComponentNames.ChartView}
         >
           <DatasetExplorerTab telemetryHook={this.props.telemetryHook} />
         </PivotItem>
@@ -63,7 +86,9 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
 
   private getTelemetryEventName = (itemKey?: string) => {
     switch (itemKey) {
-      case DataAnalysisTabOptions.DatasetExplorer:
+      case DataAnalysisTabOptions.TableView:
+        return TelemetryEventName.TableViewTabSelected;
+      case DataAnalysisTabOptions.ChartView:
         return TelemetryEventName.DatasetExplorerTabSelected;
       case DataAnalysisTabOptions.DataBalance:
         return TelemetryEventName.DataBalanceTabSelected;
