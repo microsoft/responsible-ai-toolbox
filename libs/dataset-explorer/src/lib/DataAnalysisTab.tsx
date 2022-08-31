@@ -15,7 +15,7 @@ import React from "react";
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceTab";
 import { DatasetExplorerTab } from "./DatasetExplorerTab";
-import { TableView } from "./TableView/TableView";
+import { TableViewTab } from "./TableView/TableViewTab";
 
 interface IDataAnalysisTabProps {
   onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
@@ -50,7 +50,7 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
           itemKey={DataAnalysisTabOptions.TableView}
           headerText={localization.ModelAssessment.ComponentNames.TableView}
         >
-          <TableView
+          <TableViewTab
             features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
             selectedCohort={this.context.selectedErrorCohort}
