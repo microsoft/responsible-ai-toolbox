@@ -9,7 +9,7 @@ import { FeatureImportancesTabOptions } from "../FeatureImportances";
 
 import { ITabsViewProps } from "./TabsViewProps";
 
-interface Info {
+interface IInfo {
   body: string;
   title: string;
 }
@@ -19,7 +19,7 @@ export function getInfo(
   props?: ITabsViewProps,
   errorAnalysisOption?: ErrorAnalysisOptions,
   featureImportanceOption?: FeatureImportancesTabOptions
-): Info {
+): IInfo {
   let body = "";
   let title = "";
   if (tabKey === GlobalTabKeys.ErrorAnalysisTab) {
