@@ -22,12 +22,12 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
   () => {
     const theme = getTheme();
     return mergeStyleSets<IErrorAnalysisStyles>({
-      errorAnalysisView: flexLgDown,
       cohortInfo: {
         overflow: "auto",
         width: "40%",
         ...fullLgDown
       },
+      errorAnalysisView: flexLgDown,
       errorAnalysis: {
         color: theme.semanticColors.bodyText,
         overflow: "auto",

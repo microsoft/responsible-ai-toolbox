@@ -16,6 +16,7 @@ import { DataAnalysisTab } from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
+  InfoCallout,
   MapShift,
   MatrixArea,
   MatrixFilter,
@@ -23,7 +24,6 @@ import {
 } from "@responsible-ai/error-analysis";
 import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
-import { InfoCallout } from "libs/error-analysis/src/lib/ErrorAnalysisDashboard/Controls/InfoCallout/InfoCallout";
 import _, { Dictionary } from "lodash";
 import * as React from "react";
 
@@ -58,12 +58,13 @@ export class TabsView extends React.PureComponent<
   ITabsViewProps,
   ITabsViewState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: IModelAssessmentContext = defaultModelAssessmentContext;
+
   private readonly _errorAnalysisIconId = "errorAnalysisIconId";
   private readonly _modelOverviewIconId = "modelOverviewIconId";
   private readonly _dataAnalysisIconId = "dataAnalysisIconId";
   private readonly _featureImportanceIconId = "featureImportanceIconId";
-  public static contextType = ModelAssessmentContext;
-  public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   public constructor(props: ITabsViewProps) {
     super(props);
@@ -84,6 +85,7 @@ export class TabsView extends React.PureComponent<
     const importances = props.errorAnalysisData?.[0]?.importances ?? [];
     this.state = {
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
+      featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation,
       importances,
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       mapShiftVisible: false,
@@ -93,8 +95,7 @@ export class TabsView extends React.PureComponent<
           ? WeightVectors.AbsAvg
           : 0,
       weightVectorLabels,
-      weightVectorOptions,
-      featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation
+      weightVectorOptions
     };
     if (this.props.requestImportances) {
       this.props

@@ -1,4 +1,3 @@
-import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -10,7 +9,9 @@ import {
 } from "@fluentui/react";
 import {
   descriptionMaxWidth,
+  flexLgDown,
   FluentUIStyles,
+  fullLgDown,
   hideXlDown
 } from "@responsible-ai/core-ui";
 
@@ -60,8 +61,8 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         width: "200px"
       },
       chart: {
-        width: "100%",
-        marginBottom: "40px"
+        marginBottom: "40px",
+        width: "100%"
       },
       chartAndType: flexLgDown,
       chartContainer: {
@@ -139,12 +140,12 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       },
       mainArea: {
         height: "100%",
-        width: "100%",
         selectors: {
           "@media screen and (max-width: 479px)": {
             marginTop: "60px !important"
           }
-        }
+        },
+        width: "100%"
       },
       paddingDiv: {
         width: "50px"

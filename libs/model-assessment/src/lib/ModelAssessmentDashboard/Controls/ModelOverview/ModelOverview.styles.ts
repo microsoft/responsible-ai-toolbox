@@ -1,4 +1,3 @@
-import { hideXlDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -9,7 +8,7 @@ import {
   getTheme,
   FontWeights
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewStyles {
   dropdown: IStyle;

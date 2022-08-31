@@ -141,12 +141,12 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       choiceGroupFlexContainer: {
         //  display: "inline-flex",
         justifyContent: "space-between",
-        width: "500px",
         selectors: {
           "@media screen and (min-width: 1023px)": {
             display: "inline-flex"
           }
-        }
+        },
+        width: "500px"
       },
       cohortPickerLabel: {
         fontWeight: "600",
@@ -203,8 +203,8 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         padding: "18px 30px 4px 67px",
         selectors: {
           "@media screen and (max-width: 639px)": {
-            padding: "18px 0 4px 0",
-            flexFlow: "wrap"
+            flexFlow: "wrap",
+            padding: "18px 0 4px 0"
           }
         }
       },

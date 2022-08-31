@@ -49,6 +49,12 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         width: "80%",
         ...fullLgDown
       },
+      dependencePlotChartContainer: {
+        marginBottom: "20px",
+        ...flexLgDown,
+        paddingLeft: "25px",
+        width: "100%"
+      },
       globalChartControls: {
         display: "flex",
         flexDirection: "row",
@@ -115,12 +121,6 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       topK: {
         padding: "10px 0 0 25px",
         width: "70%"
-      },
-      dependencePlotChartContainer: {
-        paddingLeft: "25px",
-        width: "100%",
-        marginBottom: "20px",
-        ...flexLgDown
       }
     });
   };

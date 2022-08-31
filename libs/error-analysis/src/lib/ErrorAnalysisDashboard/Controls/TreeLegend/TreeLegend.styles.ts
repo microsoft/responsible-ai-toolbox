@@ -1,8 +1,8 @@
-import { hideXlDown } from "@responsible-ai/core-ui";
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import { hideXlDown } from "@responsible-ai/core-ui";
 
 import { metricStyles, textStyles } from "../../Styles/CommonStyles.styles";
 
