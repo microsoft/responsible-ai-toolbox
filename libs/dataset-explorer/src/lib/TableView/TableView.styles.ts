@@ -7,7 +7,7 @@ import {
   IStyle,
   mergeStyleSets
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface ITableViewStyles {
   chevronButton: IStyle;
@@ -48,7 +48,11 @@ export const tableViewStyles: () => IProcessedStyleSet<ITableViewStyles> =
           paddingTop: 4
         }
       ],
-      infoWithText: { maxWidth: descriptionMaxWidth, paddingLeft: 25 },
+      infoWithText: {
+        maxWidth: descriptionMaxWidth,
+        paddingLeft: 25,
+        ...hideXlDown
+      },
       selectionCounter: {
         paddingLeft: 25,
         paddingTop: 12

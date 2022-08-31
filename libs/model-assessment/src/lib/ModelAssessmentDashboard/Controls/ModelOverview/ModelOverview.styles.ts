@@ -8,12 +8,13 @@ import {
   getTheme,
   FontWeights
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
   configurationActionButton: IStyle;
+  topLevelDescriptionText: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
   generalSemiBoldText: IStyle;
@@ -43,6 +44,11 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
+      },
+      topLevelDescriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth,
+        ...hideXlDown
       }
     });
   };
