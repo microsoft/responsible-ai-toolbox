@@ -27,13 +27,13 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         width: "40%",
         ...fullLgDown
       },
-      errorAnalysisView: flexLgDown,
       errorAnalysis: {
         color: theme.semanticColors.bodyText,
         overflow: "auto",
         padding: "0 20px 20px",
         width: "100%"
       },
+      errorAnalysisView: flexLgDown,
       errorAnalysisWrapper: { paddingLeft: "15px" },
       featureList: {
         padding: "16px 0 10px 0"

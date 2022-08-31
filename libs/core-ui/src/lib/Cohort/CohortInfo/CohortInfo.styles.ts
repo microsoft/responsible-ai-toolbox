@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+
 import { flexLgDown } from "../../util/getCommonStyles";
 
 export interface ICohortInfoStyles {

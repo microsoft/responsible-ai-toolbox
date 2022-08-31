@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+
 import { fullLgDown } from "../util/getCommonStyles";
 
 export interface IFeatureImportanceBarStyles {
