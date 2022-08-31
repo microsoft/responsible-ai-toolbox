@@ -39,8 +39,15 @@ import {
 } from "../FeatureImportances";
 import { ModelOverview } from "../ModelOverview/ModelOverview";
 
+import {
+  dataAnalysisIconId,
+  errorAnalysisIconId,
+  featureImportanceIconId,
+  modelOverviewIconId
+} from "./constants";
 import { tabsViewStyles } from "./TabsView.styles";
 import { ITabsViewProps } from "./TabsViewProps";
+import { getInfo } from "./utils";
 
 export interface ITabsViewState {
   errorAnalysisOption: ErrorAnalysisOptions;
@@ -60,11 +67,6 @@ export class TabsView extends React.PureComponent<
 > {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
-
-  private readonly _errorAnalysisIconId = "errorAnalysisIconId";
-  private readonly _modelOverviewIconId = "modelOverviewIconId";
-  private readonly _dataAnalysisIconId = "dataAnalysisIconId";
-  private readonly _featureImportanceIconId = "featureImportanceIconId";
 
   public constructor(props: ITabsViewProps) {
     super(props);
@@ -113,35 +115,6 @@ export class TabsView extends React.PureComponent<
       this.props.baseCohort.cohort.name !==
         localization.ErrorAnalysis.Cohort.defaultLabel;
     const classNames = tabsViewStyles();
-    let errorAnalysisInfo = "";
-    let errorAnalysisInfoTitle = "";
-    if (this.state.errorAnalysisOption === ErrorAnalysisOptions.TreeMap) {
-      errorAnalysisInfo = this.props.requestDebugML
-        ? localization.ErrorAnalysis.TreeView.treeDescription
-        : localization.ErrorAnalysis.TreeView.treeStaticDescription;
-      errorAnalysisInfoTitle =
-        localization.ErrorAnalysis.TreeView.treeMapInfoTitle;
-    } else {
-      errorAnalysisInfo = this.props.requestMatrix
-        ? localization.ErrorAnalysis.MatrixSummary.heatMapDescription
-        : localization.ErrorAnalysis.MatrixSummary.heatMapStaticDescription;
-      errorAnalysisInfoTitle =
-        localization.ErrorAnalysis.MatrixSummary.heatMapInfoTitle;
-    }
-    let featureImportanceInfoTitle = "";
-    let featureImportanceInfo = "";
-    if (
-      this.state.featureImportanceOption ===
-      FeatureImportancesTabOptions.GlobalExplanation
-    ) {
-      featureImportanceInfoTitle = localization.Interpret.GlobalTab.infoTitle;
-      featureImportanceInfo = localization.Interpret.GlobalTab.helperText;
-    } else {
-      featureImportanceInfoTitle =
-        localization.ModelAssessment.FeatureImportances.InfoTitle;
-      featureImportanceInfo =
-        localization.ModelAssessment.FeatureImportances.IndividualFeature;
-    }
     return (
       <Stack tokens={{ padding: "l1" }}>
         {this.props.activeGlobalTabs[0]?.key !==
@@ -190,9 +163,21 @@ export class TabsView extends React.PureComponent<
                       </Text>
                       <div className={classNames.sectionTooltip}>
                         <InfoCallout
-                          iconId={this._errorAnalysisIconId}
-                          infoText={errorAnalysisInfo}
-                          title={errorAnalysisInfoTitle}
+                          iconId={errorAnalysisIconId}
+                          infoText={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              this.state.errorAnalysisOption
+                            )[0]
+                          }
+                          title={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              this.state.errorAnalysisOption
+                            )[1]
+                          }
                         />
                       </div>
                     </h3>
@@ -245,7 +230,7 @@ export class TabsView extends React.PureComponent<
                     </Text>
                     <div className={classNames.sectionTooltip}>
                       <InfoCallout
-                        iconId={this._modelOverviewIconId}
+                        iconId={modelOverviewIconId}
                         infoText={
                           localization.ModelAssessment.ModelOverview
                             .topLevelDescription
@@ -267,7 +252,7 @@ export class TabsView extends React.PureComponent<
                     </Text>
                     <div className={classNames.sectionTooltip}>
                       <InfoCallout
-                        iconId={this._dataAnalysisIconId}
+                        iconId={dataAnalysisIconId}
                         infoText={
                           localization.Interpret.DatasetExplorer.helperText
                         }
@@ -296,9 +281,23 @@ export class TabsView extends React.PureComponent<
                       </Text>
                       <div className={classNames.sectionTooltip}>
                         <InfoCallout
-                          iconId={this._featureImportanceIconId}
-                          infoText={featureImportanceInfo}
-                          title={featureImportanceInfoTitle}
+                          iconId={featureImportanceIconId}
+                          infoText={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              this.state.featureImportanceOption
+                            )[0]
+                          }
+                          title={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              this.state.featureImportanceOption
+                            )[1]
+                          }
                         />
                       </div>
                     </h3>
