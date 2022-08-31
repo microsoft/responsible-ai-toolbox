@@ -169,14 +169,14 @@ export class TabsView extends React.PureComponent<
                               t.key,
                               this.props,
                               this.state.errorAnalysisOption
-                            )[0]
+                            ).body
                           }
                           title={
                             getInfo(
                               t.key,
                               this.props,
                               this.state.errorAnalysisOption
-                            )[1]
+                            ).title
                           }
                         />
                       </div>
@@ -288,7 +288,7 @@ export class TabsView extends React.PureComponent<
                               this.props,
                               undefined,
                               this.state.featureImportanceOption
-                            )[0]
+                            ).body
                           }
                           title={
                             getInfo(
@@ -296,7 +296,7 @@ export class TabsView extends React.PureComponent<
                               this.props,
                               undefined,
                               this.state.featureImportanceOption
-                            )[1]
+                            ).title
                           }
                         />
                       </div>

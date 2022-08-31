@@ -9,37 +9,41 @@ import { FeatureImportancesTabOptions } from "../FeatureImportances";
 
 import { ITabsViewProps } from "./TabsViewProps";
 
+interface info {
+  body: string;
+  title: string;
+}
+
 export function getInfo(
   tabKey: GlobalTabKeys,
   props?: ITabsViewProps,
   errorAnalysisOption?: ErrorAnalysisOptions,
   featureImportanceOption?: FeatureImportancesTabOptions
-): string[] {
-  let infoBody = "";
-  let infoTitle = "";
+): info {
+  let body = "";
+  let title = "";
   if (tabKey === GlobalTabKeys.ErrorAnalysisTab) {
     if (errorAnalysisOption === ErrorAnalysisOptions.HeatMap) {
-      infoBody = props?.requestMatrix
+      body = props?.requestMatrix
         ? localization.ErrorAnalysis.MatrixSummary.heatMapDescription
         : localization.ErrorAnalysis.MatrixSummary.heatMapStaticDescription;
-      infoTitle = localization.ErrorAnalysis.MatrixSummary.heatMapInfoTitle;
+      title = localization.ErrorAnalysis.MatrixSummary.heatMapInfoTitle;
     } else {
-      infoBody = props?.requestDebugML
+      body = props?.requestDebugML
         ? localization.ErrorAnalysis.TreeView.treeDescription
         : localization.ErrorAnalysis.TreeView.treeStaticDescription;
-      infoTitle = localization.ErrorAnalysis.TreeView.treeMapInfoTitle;
+      title = localization.ErrorAnalysis.TreeView.treeMapInfoTitle;
     }
   } else if (tabKey === GlobalTabKeys.FeatureImportancesTab) {
     if (
       featureImportanceOption === FeatureImportancesTabOptions.GlobalExplanation
     ) {
-      infoTitle = localization.Interpret.GlobalTab.infoTitle;
-      infoBody = localization.Interpret.GlobalTab.helperText;
+      title = localization.Interpret.GlobalTab.infoTitle;
+      body = localization.Interpret.GlobalTab.helperText;
     } else {
-      infoTitle = localization.ModelAssessment.FeatureImportances.InfoTitle;
-      infoBody =
-        localization.ModelAssessment.FeatureImportances.IndividualFeature;
+      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
+      body = localization.ModelAssessment.FeatureImportances.IndividualFeature;
     }
   }
-  return [infoBody, infoTitle];
+  return { body, title };
 }

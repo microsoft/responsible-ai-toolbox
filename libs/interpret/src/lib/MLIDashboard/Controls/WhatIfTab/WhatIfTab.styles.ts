@@ -50,7 +50,6 @@ export interface IWhatIfTabStyles {
   smallItalic: IStyle;
   legendHlepWrapper: IStyle;
   choiceBoxArea: IStyle;
-  choiceGroup: IStyle;
   choiceGroupFlexContainer: IStyle;
   panelIconAndLabel: IStyle;
   predictedBlock: IStyle;
@@ -135,11 +134,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flexDirection: "row",
         flexFlow: "wrap"
       },
-      choiceGroup: {
-        // paddingLeft: "30px"
-      },
       choiceGroupFlexContainer: {
-        //  display: "inline-flex",
         justifyContent: "space-between",
         selectors: {
           "@media screen and (min-width: 1023px)": {

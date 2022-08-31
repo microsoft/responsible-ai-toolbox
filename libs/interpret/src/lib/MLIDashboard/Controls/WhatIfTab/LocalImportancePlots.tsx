@@ -343,7 +343,6 @@ export class LocalImportancePlots extends React.Component<
               {localization.Interpret.WhatIfTab.showLabel}
             </Text>
             <ChoiceGroup
-              className={classNames.choiceGroup}
               styles={{
                 flexContainer: classNames.choiceGroupFlexContainer
               }}
