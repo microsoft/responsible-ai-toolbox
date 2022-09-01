@@ -88,9 +88,10 @@ function ensureAllModelOverviewBasicElementsArePresent() {
   cy.get(Locators.ModelOverviewHeader).should("exist");
   cy.get(Locators.ModelOverviewDescription).should("exist");
   cy.get(Locators.ModelOverviewCohortViewSelector).should("exist");
+  // when there are 2 pivot items, with overflow, it will have a hidden overflow button, so the length is 3
   cy.get(Locators.ModelOverviewCohortViewSelectorButtons).should(
     "have.length",
-    2
+    3
   );
   cy.get(Locators.ModelOverviewMetricSelection).should("exist");
 }
@@ -174,7 +175,8 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
   if (datasetShape.isRegression || datasetShape.isMulticlass) {
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 1);
+    // when there are 1 pivot item, with overflow, it will have a hidden overflow button, so the length is 2
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
       "not.exist"
     );
@@ -203,7 +205,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         .should("have.attr", "aria-label", expectedAriaLabel);
     }
   } else {
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
   }
@@ -253,7 +255,7 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
   const expectedNumberOfChartPivotItems =
-    datasetShape.isRegression || datasetShape.isMulticlass ? 1 : 2;
+    datasetShape.isRegression || datasetShape.isMulticlass ? 2 : 3;
   cy.get(Locators.ModelOverviewChartPivotItems).should(
     "have.length",
     expectedNumberOfChartPivotItems
