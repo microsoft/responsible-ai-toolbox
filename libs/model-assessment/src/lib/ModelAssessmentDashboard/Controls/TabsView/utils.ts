@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { DataAnalysisTabOptions } from "@responsible-ai/dataset-explorer";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
 
@@ -18,7 +19,8 @@ export function getInfo(
   tabKey: GlobalTabKeys,
   props?: ITabsViewProps,
   errorAnalysisOption?: ErrorAnalysisOptions,
-  featureImportanceOption?: FeatureImportancesTabOptions
+  featureImportanceOption?: FeatureImportancesTabOptions,
+  dataAnalysisOption?: DataAnalysisTabOptions
 ): IInfo {
   let body = "";
   let title = "";
@@ -40,9 +42,14 @@ export function getInfo(
     ) {
       title = localization.Interpret.GlobalTab.infoTitle;
       body = localization.Interpret.GlobalTab.helperText;
-    } else {
-      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
+    }
+  } else if (tabKey === GlobalTabKeys.DataAnalysisTab) {
+    if (dataAnalysisOption === DataAnalysisTabOptions.ChartView) {
+      body = localization.Interpret.DatasetExplorer.helperText;
+      title = localization.Interpret.DatasetExplorer.infoTitle;
+    } else if (dataAnalysisOption === DataAnalysisTabOptions.TableView) {
       body = localization.ModelAssessment.FeatureImportances.IndividualFeature;
+      title = localization.ModelAssessment.FeatureImportances.InfoTitle;
     }
   }
   return { body, title };

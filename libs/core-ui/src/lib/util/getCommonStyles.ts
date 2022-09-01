@@ -30,6 +30,24 @@ export const hideXxlUp = {
   }
 };
 
+// flex when screen size is less or equal than small(639px)
+export const flexSmDown = {
+  selectors: {
+    "@media screen and (max-width: 479px)": {
+      flexFlow: "wrap"
+    }
+  }
+};
+
+// flex when screen size is less or equal than medium(639px)
+export const flexMdDown = {
+  selectors: {
+    "@media screen and (max-width: 639px)": {
+      flexFlow: "wrap"
+    }
+  }
+};
+
 // flex when screen size is less or equal than large(1023px)
 export const flexLgDown = {
   selectors: {

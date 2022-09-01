@@ -7,6 +7,12 @@ import {
   IStyle,
   getTheme
 } from "@fluentui/react";
+import {
+  flexMdDown,
+  flexSmDown,
+  hideXlDown,
+  hideXxlUp
+} from "@responsible-ai/core-ui";
 
 export interface ICounterfactualPanelStyles {
   listContainer: IStyle;
@@ -30,11 +36,16 @@ export interface ICounterfactualPanelStyles {
   tooltipTitle: IStyle;
   tooltipHost: IStyle;
   headerText: IStyle;
+  description: IStyle;
   panelStyle: IStyle;
   stackHeader: IStyle;
   counterfactualName: IStyle;
   tooltipHostDisplay: IStyle;
   saveDescription: IStyle;
+  infoCallout: IStyle;
+  buttons: IStyle;
+  bottom: IStyle;
+  buttonWrapper: IStyle;
 }
 
 export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactualPanelStyles> =
@@ -45,14 +56,23 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         fontWeight: "600",
         paddingBottom: "5px"
       },
+      bottom: flexSmDown,
       button: {
         marginTop: "20px",
         minWidth: "150px",
         verticalAlign: "center"
       },
+      buttonWrapper: {
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            marginLeft: "0 !important"
+          }
+        }
+      },
       buttonRow: {
         padding: "20px 0"
       },
+      buttons: flexMdDown,
       container: {
         width: "100%"
       },
@@ -70,9 +90,11 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       customPredictBlock: {
         padding: "10px"
       },
+      description: hideXlDown,
       headerText: {
         paddingBottom: "6px"
       },
+      infoCallout: { display: "inline", ...hideXxlUp },
       listContainer: {
         height: "100%",
         maxWidth: "900px",
@@ -110,7 +132,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
       predictedLink: {
         color: theme.palette.blue
       },
-      saveDescription: { color: theme.semanticColors.buttonTextDisabled },
+      saveDescription: {
+        color: theme.semanticColors.buttonTextDisabled,
+        ...hideXlDown
+      },
       searchBox: {
         width: "210px"
       },
