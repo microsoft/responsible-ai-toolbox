@@ -1,24 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IVisionExplanationDashboardData } from "@responsible-ai/core-ui";
+
 export interface IVisionExplanationDashboardProps {
   /*
    * the interface design for the dashboard
    */
-  dataSummary: IDatasetSummary;
+  dataSummary: IVisionExplanationDashboardData;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
 }
-
-export interface IDatasetSummary {
-  /*
-   * information about the document given
-   */
-  modelClass?: ModelClass;
-  classNames?: string[];
-  images: string[];
-  predictedY: string[];
-  probabilityY?: number[][];
-  trueY: string[];
-}
-
-type ModelClass = "Tree" | "EBM" | "blackbox";

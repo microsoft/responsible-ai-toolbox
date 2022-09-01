@@ -26,6 +26,7 @@ export interface IVisionExplanationDashboardState {
   successInstances: IVisionListItem[];
   imageDim: number;
   loadingExplanation: boolean;
+  otherMetadataFieldName: string;
   numRows: number;
   pageSize: number;
   panelOpen: boolean;
@@ -67,6 +68,7 @@ export class VisionExplanationDashboard extends React.Component<
       imageDim: 200,
       loadingExplanation: false,
       numRows: 3,
+      otherMetadataFieldName: "mean_pixel_value",
       pageSize: 10,
       panelOpen: false,
       searchValue: "",
@@ -142,6 +144,7 @@ export class VisionExplanationDashboard extends React.Component<
             successInstances={this.state.successInstances}
             imageDim={this.state.imageDim}
             numRows={this.state.numRows}
+            otherMetadataFieldName={this.state.otherMetadataFieldName}
             pageSize={this.state.pageSize}
             searchValue={this.state.searchValue}
             selectedItem={this.state.selectedItem}
@@ -167,19 +170,38 @@ export class VisionExplanationDashboard extends React.Component<
     const errorInstances: IVisionListItem[] = this.state.errorInstances;
     const successInstances: IVisionListItem[] = this.state.successInstances;
 
-    dataSummary.images.forEach((image, index) => {
+    const predictedY = dataSummary.predicted_y.map((index) => {
+      return dataSummary.class_names[index];
+    });
+
+    const trueY = dataSummary.true_y.map((index) => {
+      return dataSummary.class_names[index];
+    });
+
+    const features: number[] = dataSummary.features!.map((featuresArr) => {
+      return featuresArr[0] as number;
+    });
+
+    const fieldName = dataSummary.feature_names![0];
+
+    dataSummary.images?.forEach((image, index) => {
       const item: IVisionListItem = {
+        [fieldName]: features[index],
         image,
         index,
-        predictedY: dataSummary.predictedY[index],
-        trueY: dataSummary.trueY[index]
+        predictedY: predictedY[index],
+        trueY: trueY[index]
       };
       item.predictedY === item.trueY
         ? successInstances.push(item)
         : errorInstances.push(item);
     });
 
-    this.setState({ errorInstances, successInstances });
+    this.setState({
+      errorInstances,
+      otherMetadataFieldName: fieldName,
+      successInstances
+    });
   }
 
   private onPanelClose = () => {

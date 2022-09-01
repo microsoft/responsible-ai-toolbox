@@ -13,7 +13,6 @@ import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
 import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
-import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -36,6 +35,7 @@ import {
   emotion,
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
+import { visionData } from "../model-assessment-vision/__mock_data__/visionData";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -95,7 +95,8 @@ export const applicationKeys = <const>[
   "fairness",
   "errorAnalysis",
   "modelAssessment",
-  "modelAssessmentText"
+  "modelAssessmentText",
+  "modelAssessmentVision"
 ];
 
 export type IApplications = {
@@ -108,6 +109,8 @@ export type IApplications = {
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentVision: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
 };
 
@@ -185,7 +188,17 @@ export const applications: IApplications = <const>{
   },
   interpretVision: {
     datasets: {
-      visionData: { data: visionData }
+      visionData: {
+        data: {
+          categorical_features: visionData.categorical_features,
+          class_names: visionData.class_names!,
+          feature_names: visionData.feature_names,
+          features: visionData.features!,
+          images: visionData.images!,
+          predicted_y: visionData.predicted_y!,
+          true_y: visionData.true_y
+        }
+      }
     },
     versions: { "Version-1": 1 }
   },
@@ -262,6 +275,23 @@ export const applications: IApplications = <const>{
         classDimension: 3,
         dataset: emotion,
         modelExplanationData: [emotionModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentVision: {
+    datasets: {
+      visionModelExplanationData: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: visionData.categorical_features,
+          class_names: visionData.class_names!,
+          feature_names: visionData.feature_names,
+          features: visionData.features!,
+          images: visionData.images!,
+          predicted_y: visionData.predicted_y!,
+          true_y: visionData.true_y
+        }
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }
