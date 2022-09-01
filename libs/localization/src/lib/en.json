@@ -1301,6 +1301,17 @@
     }
   },
   "InterpretVision": {
+    "Cohort": {
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
     "Dashboard": {
       "allData": "All Data",
       "columnOne": "Image",
@@ -1310,21 +1321,31 @@
       "columnFive": "Other metadata",
       "examples": "examples",
       "filter": "Filter",
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
       "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
       "rows": "Rows: ",
       "search": "Search",
       "settings": "Settings",
       "showAll": "Show all",
+      "selectAll": "Select all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
       "tabOptionThird": "Data characteristics",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
-      "titleBarSuccess": "Success instances"
+      "titleBarSuccess": "Success instances",
+      "trueY": "Ground truh: "
     }
   },
   "ModelAssessment": {

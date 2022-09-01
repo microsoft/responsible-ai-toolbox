@@ -4,10 +4,11 @@
 import {
   FocusZone,
   Stack,
-  DefaultButton,
   Image,
   IRectangle,
-  mergeStyles
+  mergeStyles,
+  Dropdown,
+  IDropdownOption
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -25,13 +26,26 @@ export interface IDataCharacteristicsProps {
 }
 export interface IDataCharacteristicsState {
   columnCount: number[];
-  items: Map<string, IVisionListItem[]>;
-  labels: string[];
-  labelVisibilities: Map<string, boolean>;
+  dropdownOptionsP: IDropdownOption[];
+  dropdownOptionsT: IDropdownOption[];
+  itemsP: Map<string, IVisionListItem[]>;
+  itemsT: Map<string, IVisionListItem[]>;
+  labelType: string;
+  labelTypeDropdownOptions: IDropdownOption[];
+  labelVisibilitiesP: Map<string, boolean>;
+  labelVisibilitiesT: Map<string, boolean>;
   renderStartIndex: number[];
+  selectedKeysP: string[];
+  selectedKeysT: string[];
   showBackArrow: boolean[];
 }
 const stackTokens = { childrenGap: "l1" };
+const labelTypes = {
+  predictedY: "predictedY",
+  trueY: "trueY"
+};
+
+const SelectAllKey = "selectAll";
 export class DataCharacteristics extends React.Component<
   IDataCharacteristicsProps,
   IDataCharacteristicsState
@@ -42,64 +56,40 @@ export class DataCharacteristics extends React.Component<
     this.rowHeight = 0;
     this.state = {
       columnCount: [],
-      items: new Map(),
-      labels: [],
-      labelVisibilities: new Map(),
+      dropdownOptionsP: [],
+      dropdownOptionsT: [],
+      itemsP: new Map(),
+      itemsT: new Map(),
+      labelType: labelTypes.predictedY,
+      labelTypeDropdownOptions: [],
+      labelVisibilitiesP: new Map(),
+      labelVisibilitiesT: new Map(),
       renderStartIndex: [],
+      selectedKeysP: [],
+      selectedKeysT: [],
       showBackArrow: []
     };
   }
 
   public componentDidMount(): void {
-    const examples: IVisionListItem[] = this.props.data;
-    const {
-      items,
-      labelVisibilities,
-      renderStartIndex,
-      showBackArrow,
-      columnCount
-    } = this.state;
-    const labels: string[] = [];
-    examples.forEach((example) => {
-      const label = example.predictedY;
-      if (!label || !items) {
-        return;
-      }
-      if (!labels.includes(label)) {
-        labels.push(label);
-        labelVisibilities.set(label, true);
-      }
-      if (items.has(label)) {
-        const arr = items.get(label);
-        if (!arr) {
-          return;
-        }
-        arr.push(example);
-        items.set(label, arr);
-      } else {
-        const arr: IVisionListItem[] = [];
-        arr.push(example);
-        items.set(label, arr);
-      }
-    });
-    labels.forEach(() => {
-      renderStartIndex.push(0);
-      showBackArrow.push(false);
-      columnCount.push(0);
-    });
-    this.setState({
-      columnCount,
-      items,
-      labels,
-      labelVisibilities,
-      renderStartIndex,
-      showBackArrow
-    });
+    const labelTypeDropdownOptions: IDropdownOption[] = [
+      { key: labelTypes.predictedY, text: labelTypes.predictedY },
+      { key: labelTypes.trueY, text: labelTypes.trueY }
+    ];
+    this.setState({ labelTypeDropdownOptions });
+    this.processData();
+  }
+
+  public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
+    if (prevProps.data !== this.props.data) {
+      this.processData();
+    }
   }
 
   public render(): React.ReactNode {
     const classNames = dataCharacteristicsStyles();
-    const items = this.state.items;
+    const predicted = this.state.labelType === labelTypes.predictedY;
+    const items = predicted ? this.state.itemsP : this.state.itemsT;
     let keys = [];
     for (const key of items.keys()) {
       keys.push(key);
@@ -118,32 +108,36 @@ export class DataCharacteristics extends React.Component<
               <Stack.Item className={classNames.labelsContainer}>
                 <Stack horizontal tokens={{ childrenGap: "s1" }}>
                   <Stack.Item>
-                    <Stack horizontal>
-                      {this.state.labels.map((label) => (
-                        <Stack.Item key={label}>
-                          {this.state.labelVisibilities.get(label) && (
-                            <DefaultButton
-                              text={label}
-                              iconProps={{ iconName: "Cancel" }}
-                              onClick={() => {
-                                const visibilities =
-                                  this.state.labelVisibilities;
-                                visibilities.set(label, false);
-                                this.setState({
-                                  labelVisibilities: visibilities
-                                });
-                              }}
-                            />
-                          )}
-                        </Stack.Item>
-                      ))}
-                    </Stack>
+                    <Dropdown
+                      id="labelTypeDropdown"
+                      label={
+                        localization.InterpretVision.Dashboard.labelTypeDropdown
+                      }
+                      options={this.state.labelTypeDropdownOptions}
+                      selectedKey={this.state.labelType}
+                      onChange={this.onLabelTypeChange}
+                    />
                   </Stack.Item>
                   <Stack.Item>
-                    <DefaultButton
-                      primary
-                      text={localization.InterpretVision.Dashboard.showAll}
-                      onClick={this.showAll}
+                    <Dropdown
+                      id="labelVisibilitySelectorsDropdown"
+                      className={classNames.dropdown}
+                      label={
+                        localization.InterpretVision.Dashboard
+                          .labelVisibilityDropdown
+                      }
+                      options={
+                        this.state.labelType === labelTypes.predictedY
+                          ? this.state.dropdownOptionsP
+                          : this.state.dropdownOptionsT
+                      }
+                      selectedKeys={
+                        this.state.labelType === labelTypes.predictedY
+                          ? this.state.selectedKeysP
+                          : this.state.selectedKeysT
+                      }
+                      onChange={this.onLabelVisibilitySelect}
+                      multiSelect
                     />
                   </Stack.Item>
                 </Stack>
@@ -159,6 +153,9 @@ export class DataCharacteristics extends React.Component<
           >
             {keys.map((label, index) => {
               const list = items.get(label);
+              const labelVisibilities = predicted
+                ? this.state.labelVisibilitiesP
+                : this.state.labelVisibilitiesT;
               if (!list) {
                 return <div />;
               }
@@ -168,14 +165,16 @@ export class DataCharacteristics extends React.Component<
                   tokens={stackTokens}
                   className={classNames.instanceContainer}
                 >
-                  {this.state.labelVisibilities.get(label.toString()) && (
+                  {labelVisibilities.get(label.toString()) && (
                     <Stack.Item>
                       <DataCharacteristicsRow
                         columnCount={this.state.columnCount[index]}
                         index={index}
                         imageDim={this.props.imageDim}
                         label={label}
+                        labelType={this.state.labelType}
                         list={list}
+                        processData={this.processData}
                         renderStartIndex={this.state.renderStartIndex}
                         showBackArrow={this.state.showBackArrow}
                         totalListLength={this.props.data.length}
@@ -227,8 +226,202 @@ export class DataCharacteristics extends React.Component<
     );
   };
 
+  private processData = (): void => {
+    const examples: IVisionListItem[] = this.props.data;
+    const columnCount: number[] = [];
+    const itemsP: Map<string, IVisionListItem[]> = new Map();
+    const itemsT: Map<string, IVisionListItem[]> = new Map();
+    const labelVisibilitiesP: Map<string, boolean> = new Map();
+    const labelVisibilitiesT: Map<string, boolean> = new Map();
+    const renderStartIndex: number[] = [];
+    const showBackArrow: boolean[] = [];
+    const dropdownOptionsP: IDropdownOption[] = [];
+    const dropdownOptionsT: IDropdownOption[] = [];
+    const selectedKeysP: string[] = [];
+    const selectedKeysT: string[] = [];
+    dropdownOptionsP.push({
+      key: SelectAllKey,
+      text: localization.InterpretVision.Dashboard.selectAll
+    });
+    dropdownOptionsT.push({
+      key: SelectAllKey,
+      text: localization.InterpretVision.Dashboard.selectAll
+    });
+    examples.forEach((example) => {
+      const labelP = example[labelTypes.predictedY].toString();
+      const labelT = example[labelTypes.trueY].toString();
+      if (!labelP || !labelT || !itemsP || !itemsT) {
+        return;
+      }
+      if (!selectedKeysP.includes(labelP)) {
+        dropdownOptionsP.push({ key: labelP, text: labelP });
+        selectedKeysP.push(labelP);
+        labelVisibilitiesP.set(labelP, true);
+      }
+      if (!selectedKeysT.includes(labelT)) {
+        dropdownOptionsT.push({ key: labelT, text: labelT });
+        selectedKeysT.push(labelT);
+        labelVisibilitiesT.set(labelT, true);
+      }
+      if (itemsP.has(labelP)) {
+        const arr = itemsP.get(labelP);
+        if (!arr) {
+          return;
+        }
+        arr.push(example);
+        itemsP.set(labelP, arr);
+      } else {
+        const arr: IVisionListItem[] = [];
+        arr.push(example);
+        itemsP.set(labelP, arr);
+      }
+      if (itemsT.has(labelT)) {
+        const arr = itemsT.get(labelT);
+        if (!arr) {
+          return;
+        }
+        arr.push(example);
+        itemsT.set(labelT, arr);
+      } else {
+        const arr: IVisionListItem[] = [];
+        arr.push(example);
+        itemsT.set(labelT, arr);
+      }
+    });
+    selectedKeysP.forEach(() => {
+      renderStartIndex.push(0);
+      showBackArrow.push(false);
+      columnCount.push(0);
+    });
+    dropdownOptionsP.sort((a, b) => {
+      if (b.key === SelectAllKey) {
+        return 1;
+      }
+      if (a.key === SelectAllKey || a.key < b.key) {
+        return -1;
+      }
+      return 1;
+    });
+    dropdownOptionsT.sort((a, b) => {
+      if (b.key === SelectAllKey) {
+        return 1;
+      }
+      if (a.key === SelectAllKey || a.key < b.key) {
+        return -1;
+      }
+      return 1;
+    });
+    selectedKeysP.push(SelectAllKey);
+    selectedKeysT.push(SelectAllKey);
+    this.setState({
+      columnCount,
+      dropdownOptionsP,
+      dropdownOptionsT,
+      itemsP,
+      itemsT,
+      labelVisibilitiesP,
+      labelVisibilitiesT,
+      renderStartIndex,
+      selectedKeysP,
+      selectedKeysT,
+      showBackArrow
+    });
+  };
+
+  private onLabelTypeChange = (
+    _event: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption<any> | undefined
+  ): void => {
+    if (item) {
+      this.setState({ labelType: item.key.toString() });
+    }
+  };
+
+  private onLabelVisibilitySelect = (
+    _event: React.FormEvent<HTMLDivElement>,
+    item?: IDropdownOption<any> | undefined
+  ): void => {
+    if (item) {
+      const predicted = this.state.labelType === labelTypes.predictedY;
+
+      if (item.key === SelectAllKey) {
+        const dropdownOptions = predicted
+          ? this.state.dropdownOptionsP
+          : this.state.dropdownOptionsT;
+        const selectedKeys: string[] = [];
+        const labelVisibilities: Map<string, boolean> = new Map();
+        if (
+          (predicted &&
+            this.state.selectedKeysP.length >= dropdownOptions.length - 1) ||
+          (!predicted &&
+            this.state.selectedKeysT.length >= dropdownOptions.length - 1)
+        ) {
+          dropdownOptions.forEach((option, index) => {
+            if (index !== 0) {
+              labelVisibilities.set(option.key.toString(), false);
+            }
+          });
+        } else {
+          dropdownOptions.forEach((option, index) => {
+            if (index !== 0) {
+              selectedKeys.push(option.key.toString());
+              labelVisibilities.set(option.key.toString(), true);
+            }
+          });
+          selectedKeys.push(SelectAllKey);
+        }
+        if (predicted) {
+          this.setState({
+            labelVisibilitiesP: labelVisibilities,
+            selectedKeysP: [...selectedKeys]
+          });
+        } else {
+          this.setState({
+            labelVisibilitiesT: labelVisibilities,
+            selectedKeysT: [...selectedKeys]
+          });
+        }
+        return;
+      }
+
+      let selectedKeys: string[] = [];
+      let labelVisibilities: Map<string, boolean> = new Map();
+
+      if (predicted) {
+        selectedKeys = this.state.selectedKeysP;
+        labelVisibilities = this.state.labelVisibilitiesP;
+      } else {
+        selectedKeys = this.state.selectedKeysT;
+        labelVisibilities = this.state.labelVisibilitiesT;
+      }
+
+      if (selectedKeys.includes(SelectAllKey)) {
+        selectedKeys.splice(selectedKeys.indexOf(SelectAllKey), 1);
+      }
+      const key = item.key.toString();
+      selectedKeys.includes(key)
+        ? selectedKeys.splice(selectedKeys.indexOf(key), 1)
+        : selectedKeys.push(key);
+      labelVisibilities.set(key, !labelVisibilities.get(key));
+      if (predicted) {
+        this.setState({
+          labelVisibilitiesP: labelVisibilities,
+          selectedKeysP: [...selectedKeys]
+        });
+      } else {
+        this.setState({
+          labelVisibilitiesT: labelVisibilities,
+          selectedKeysT: [...selectedKeys]
+        });
+      }
+    }
+  };
+
   private sortKeys(keys: string[]): string[] {
-    const { items } = this.state;
+    const items =
+      this.state.labelType === labelTypes.predictedY
+        ? this.state.itemsP
+        : this.state.itemsT;
     keys.sort(function (a, b) {
       const aItems = items.get(a);
       const bItems = items.get(b);
@@ -238,6 +431,9 @@ export class DataCharacteristics extends React.Component<
       const bCount = bItems?.filter(
         (item) => item.predictedY !== item.trueY
       ).length;
+      if (aCount === bCount) {
+        return a > b ? 1 : -1;
+      }
       return !aCount || !bCount ? 0 : bCount - aCount;
     });
     return keys;
@@ -289,12 +485,4 @@ export class DataCharacteristics extends React.Component<
     };
     return getItemCountForPage;
   }
-
-  private showAll = () => {
-    const visibilities = this.state.labelVisibilities;
-    for (const label of visibilities.keys()) {
-      visibilities.set(label, true);
-    }
-    this.setState({ labelVisibilities: visibilities });
-  };
 }

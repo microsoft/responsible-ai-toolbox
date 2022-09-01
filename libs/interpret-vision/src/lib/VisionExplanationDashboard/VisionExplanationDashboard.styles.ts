@@ -11,14 +11,19 @@ export interface IDatasetExplorerTab {
   cohortDropdown: IStyle;
   cohortPickerLabel: IStyle;
   cohortPickerLabelWrapper: IStyle;
-  searchBox: IStyle;
+  errorMessage: IStyle;
   filterButton: IStyle;
+  searchBox: IStyle;
   toolBarContainer: IStyle;
+  itemsSelectedContainer: IStyle;
+  legendIndicator: IStyle;
   mainContainer: IStyle;
   mainImageContainer: IStyle;
   halfContainer: IStyle;
   imageListContainer: IStyle;
   slider: IStyle;
+  tableListContainer: IStyle;
+  tableListImage: IStyle;
   tabs: IStyle;
 }
 
@@ -35,6 +40,10 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       cohortPickerLabelWrapper: {
         paddingBottom: "5px"
       },
+      errorMessage: {
+        color: theme.semanticColors.errorText,
+        textAlign: "center"
+      },
       filterButton: {
         height: "32px"
       },
@@ -46,6 +55,16 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
         border: `1px solid ${theme.semanticColors.disabledBorder}`,
         height: "100%",
         overflow: "auto"
+      },
+      itemsSelectedContainer: {
+        height: "100%",
+        textAlign: "center"
+      },
+      legendIndicator: {
+        paddingBottom: 2,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 2
       },
       mainContainer: {
         alignItems: "center",
@@ -60,6 +79,15 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       },
       slider: {
         width: "320px"
+      },
+      tableListContainer: {
+        height: "600px",
+        overflow: "auto",
+        width: "100%"
+      },
+      tableListImage: {
+        borderRadius: 4,
+        height: "auto"
       },
       tabs: {
         display: "flex",

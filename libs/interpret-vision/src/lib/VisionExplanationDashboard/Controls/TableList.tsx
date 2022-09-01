@@ -11,19 +11,26 @@ import {
   IColumn,
   Image,
   Text,
-  Stack
+  Stack,
+  Selection,
+  MarqueeSelection
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+
 export interface ITableListProps {
+  addCohort: (name: string, switchCohort: boolean) => void;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
+  otherMetadataFieldName: string;
   pageSize: number;
   searchValue: string;
   selectItem: (item: IVisionListItem) => void;
+  updateSelectedIndices: (indices: number[]) => void;
 }
 
 export interface ITableListState {
@@ -39,9 +46,12 @@ export class TableList extends React.Component<
   ITableListProps,
   ITableListState
 > {
+  private _selection: Selection;
   public constructor(props: ITableListProps) {
     super(props);
-
+    this._selection = new Selection({
+      onSelectionChanged: () => this.updateSelection()
+    });
     this.state = {
       columns: [],
       filter: this.props.searchValue.toLowerCase(),
@@ -167,12 +177,12 @@ export class TableList extends React.Component<
         name: localization.InterpretVision.Dashboard.columnFour
       },
       {
-        fieldName: "other",
+        fieldName: this.props.otherMetadataFieldName,
         isResizable: true,
         key: "other",
         maxWidth: 400,
         minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFive
+        name: this.props.otherMetadataFieldName
       }
     ];
     this.setState({
@@ -185,17 +195,27 @@ export class TableList extends React.Component<
   }
 
   public render(): React.ReactNode {
+    const classNames = visionExplanationDashboardStyles();
     return (
-      <FocusZone style={{ height: "600px", overflow: "auto", width: "100%" }}>
-        <DetailsList
-          key={this.props.searchValue}
-          items={this.state.filteredItems}
-          groups={this.state.filteredGroups}
-          columns={this.state.columns}
-          groupProps={{ showEmptyGroups: true }}
-          onRenderDetailsHeader={this.onRenderDetailsHeader}
-          onRenderItemColumn={this.onRenderColumn}
-        />
+      <FocusZone className={classNames.tableListContainer}>
+        <Stack>
+          <Stack.Item>
+            <MarqueeSelection selection={this._selection}>
+              <DetailsList
+                key={this.props.searchValue}
+                items={this.state.filteredItems}
+                groups={this.state.filteredGroups}
+                columns={this.state.columns}
+                groupProps={{ showEmptyGroups: true }}
+                onRenderDetailsHeader={this.onRenderDetailsHeader}
+                onRenderItemColumn={this.onRenderColumn}
+                selection={this._selection}
+                setKey="set"
+                onItemInvoked={this.props.selectItem}
+              />
+            </MarqueeSelection>
+          </Stack.Item>
+        </Stack>
       </FocusZone>
     );
   }
@@ -217,9 +237,11 @@ export class TableList extends React.Component<
 
   private onRenderColumn = (
     item: IVisionListItem | undefined,
-    index: number | undefined,
+    _index: number | undefined,
     column?: IColumn | undefined
   ) => {
+    const classNames = visionExplanationDashboardStyles();
+
     const value =
       item && column && column.fieldName
         ? item[column.fieldName as keyof IVisionListItem]
@@ -230,45 +252,31 @@ export class TableList extends React.Component<
         ? item["image" as keyof IVisionListItem]
         : "";
 
-    if (typeof image === "number") {
-      return <div />;
-    }
-    if (index) {
-      index = index + 1;
-    }
-
     return (
-      <div data-is-focusable>
-        <Stack
-          horizontal
-          tokens={{ childrenGap: "s1" }}
-          onClick={this.callbackWrapper(item)}
-        >
-          {image ? (
-            <Stack.Item>
-              <Image
-                src={`data:image/jpg;base64,${image}`}
-                style={{
-                  borderRadius: 4,
-                  height: "auto",
-                  width: this.props.imageDim
-                }}
-              />
-            </Stack.Item>
-          ) : (
-            <Stack.Item>
-              <Text>{value}</Text>
-            </Stack.Item>
-          )}
-        </Stack>
-      </div>
+      <Stack horizontal tokens={{ childrenGap: "s1" }}>
+        {image ? (
+          <Stack.Item>
+            <Image
+              className={classNames.tableListImage}
+              src={`data:image/jpg;base64,${image}`}
+              style={{ width: this.props.imageDim }}
+            />
+          </Stack.Item>
+        ) : (
+          <Stack.Item>
+            <Text>{value}</Text>
+          </Stack.Item>
+        )}
+      </Stack>
     );
   };
 
-  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
-    if (!item) {
-      return;
-    }
-    this.props.selectItem(item);
+  private updateSelection = (): void => {
+    const selection = this._selection.getSelection() as IVisionListItem[];
+    const indices: number[] = [];
+    selection.forEach((item: IVisionListItem) => {
+      indices.push(item.index);
+    });
+    this.props.updateSelectedIndices(indices);
   };
 }

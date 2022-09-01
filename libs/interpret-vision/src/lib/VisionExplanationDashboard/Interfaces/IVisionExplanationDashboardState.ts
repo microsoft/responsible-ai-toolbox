@@ -1,0 +1,20 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import { IVisionListItem } from "@responsible-ai/core-ui";
+
+export interface IVisionExplanationDashboardState {
+  currentExplanation: string;
+  errorInstances: IVisionListItem[];
+  successInstances: IVisionListItem[];
+  imageDim: number;
+  loadingExplanation: boolean;
+  otherMetadataFieldName: string;
+  numRows: number;
+  pageSize: number;
+  panelOpen: boolean;
+  searchValue: string;
+  selectedIndices: number[];
+  selectedItem: IVisionListItem | undefined;
+  selectedKey: string;
+}
