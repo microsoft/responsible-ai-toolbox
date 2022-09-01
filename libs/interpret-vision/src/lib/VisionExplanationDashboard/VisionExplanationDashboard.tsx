@@ -26,6 +26,7 @@ export interface IVisionExplanationDashboardState {
   successInstances: IVisionListItem[];
   imageDim: number;
   loadingExplanation: boolean;
+  numRows: number;
   pageSize: number;
   panelOpen: boolean;
   searchValue: string;
@@ -44,6 +45,12 @@ export enum TitleBarOptions {
   Success
 }
 
+const defaultImageSizes = {
+  dataCharacteristics: 100,
+  imageExplorerView: 200,
+  tableView: 50
+};
+
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
@@ -59,6 +66,7 @@ export class VisionExplanationDashboard extends React.Component<
       errorInstances: [],
       imageDim: 200,
       loadingExplanation: false,
+      numRows: 3,
       pageSize: 10,
       panelOpen: false,
       searchValue: "",
@@ -121,6 +129,7 @@ export class VisionExplanationDashboard extends React.Component<
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.state.selectedKey}
+                  onNumRowsSelect={this.onNumRowsSelect}
                   onPageSizeSelect={this.onPageSizeSelect}
                 />
               </Stack.Item>
@@ -132,6 +141,7 @@ export class VisionExplanationDashboard extends React.Component<
             errorInstances={this.state.errorInstances}
             successInstances={this.state.successInstances}
             imageDim={this.state.imageDim}
+            numRows={this.state.numRows}
             pageSize={this.state.pageSize}
             searchValue={this.state.searchValue}
             selectedItem={this.state.selectedItem}
@@ -230,6 +240,13 @@ export class VisionExplanationDashboard extends React.Component<
     }
   };
 
+  private onNumRowsSelect = (
+    _event: React.FormEvent<HTMLDivElement>,
+    item: IDropdownOption | undefined
+  ): void => {
+    this.setState({ numRows: Number(item?.text) });
+  };
+
   private onPageSizeSelect = (
     _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
@@ -243,9 +260,13 @@ export class VisionExplanationDashboard extends React.Component<
       if (
         item.props.itemKey === VisionDatasetExplorerTabOptions.ImageExplorerView
       ) {
-        this.setState({ imageDim: 200 });
+        this.setState({ imageDim: defaultImageSizes.imageExplorerView });
+      } else if (
+        item.props.itemKey === VisionDatasetExplorerTabOptions.TableView
+      ) {
+        this.setState({ imageDim: defaultImageSizes.tableView });
       } else {
-        this.setState({ imageDim: 50 });
+        this.setState({ imageDim: defaultImageSizes.dataCharacteristics });
       }
     }
   };
