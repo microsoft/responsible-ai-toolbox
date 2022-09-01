@@ -31,14 +31,13 @@ export class ProbabilityDistributionBoxChart extends React.Component<
   public render(): React.ReactNode {
     const theme = getTheme();
     console.log("okok selectedCohorts", this.props.selectedCohorts);
-    console.log("okok selectedCohorts1", this.props.selectedCohorts);
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
 
     const boxPlotData = this.props.selectedCohorts.map(
-      (cohort: ErrorCohort, index: number) => {
-        return calculateBoxPlotDataFromErrorCohort(
+      async (cohort: ErrorCohort, index: number) => {
+        return await calculateBoxPlotDataFromErrorCohort(
           cohort,
           index,
           this.props.probabilityOption!.key.toString(),
@@ -47,13 +46,14 @@ export class ProbabilityDistributionBoxChart extends React.Component<
         );
       }
     );
-    const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierProbs, cohortIndex) => {
-        return outlierProbs?.map((prob) => [cohortIndex, prob]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
+    const outlierData = undefined;
+    // boxPlotData
+    //   .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+    //   .map((outlierProbs, cohortIndex) => {
+    //     return outlierProbs?.map((prob) => [cohortIndex, prob]);
+    //   })
+    //   .filter((list) => list !== undefined)
+    //   .reduce((list1, list2) => list1!.concat(list2!), []);
 
     return (
       <BasicHighChart

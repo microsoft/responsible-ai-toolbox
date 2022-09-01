@@ -4,18 +4,18 @@
 import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
-export function calculateBoxPlotDataFromErrorCohort(
+export async function calculateBoxPlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
   index: number,
   key: string,
-  queryClass?: number,
+  queryClass?: string,
   requestBoxPlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData | unknown>
+  ) => Promise<IHighchartBoxData>
 ) {
   if (requestBoxPlotDistribution) {
-    return calculateBoxPlotDataFromSDK(
+    return await calculateBoxPlotDataFromSDK(
       errorCohort,
       requestBoxPlotDistribution,
       queryClass
@@ -34,18 +34,29 @@ export async function calculateBoxPlotDataFromSDK(
   requestBoxPlotDistribution: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData | unknown>,
-  queryClass?: number
-): Promise<IHighchartBoxData | unknown> {
-  const data = [
-    errorCohort.cohort.compositeFilters,
+  ) => Promise<IHighchartBoxData>,
+  queryClass?: string
+): Promise<IHighchartBoxData> {
+  const filtersRelabeled = ErrorCohort.getLabeledFilters(
     errorCohort.cohort.filters,
-    queryClass
+    errorCohort.jointDataset
+  );
+
+  const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    errorCohort.cohort.compositeFilters,
+    errorCohort.jointDataset
+  );
+  const data = [
+    filtersRelabeled,
+    compositeFiltersRelabeled,
+    Number(queryClass)
   ];
-  const result = await requestBoxPlotDistribution?.(
+  console.log("okok data:", data);
+  const result: IHighchartBoxData = await requestBoxPlotDistribution?.(
     data,
     new AbortController().signal
   );
+  console.log("okok result:", result);
   return result;
 }
 

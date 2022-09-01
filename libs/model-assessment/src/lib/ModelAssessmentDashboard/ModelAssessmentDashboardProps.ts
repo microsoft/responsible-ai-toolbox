@@ -67,7 +67,7 @@ export interface IModelAssessmentDashboardProps
   requestBoxPlotDistribution?: (
     request: any[],
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData | unknown>;
+  ) => Promise<IHighchartBoxData>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryEvent) => void;
