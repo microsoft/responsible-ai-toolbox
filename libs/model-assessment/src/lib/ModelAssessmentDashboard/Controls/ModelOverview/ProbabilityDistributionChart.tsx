@@ -244,6 +244,7 @@ export class ProbabilityDistributionChart extends React.Component<
       .map((_, index) => {
         const key = JointDataset.ProbabilityYRoot + index.toString();
         return {
+          id: index.toString(),
           key,
           text: this.context.jointDataset.metaDict[key].label
         };

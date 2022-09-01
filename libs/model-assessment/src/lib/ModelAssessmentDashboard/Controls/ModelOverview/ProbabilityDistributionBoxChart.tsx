@@ -38,32 +38,12 @@ export class ProbabilityDistributionBoxChart extends React.Component<
 
     const boxPlotData = this.props.selectedCohorts.map(
       (cohort: ErrorCohort, index: number) => {
-        // we need a flag:boolean to differentiate if it is over 5k.
-        if (this.context.requestBoxPlotDistribution) {
-          const key = this.props.probabilityOption!.key.toString();
-          // const data = cohort.cohort.filteredData.map((dict) => dict[key]);
-          const data = {
-            compositeFilters: cohort.cohort.compositeFilters,
-            filters: cohort.cohort.filters,
-            queryClass: key
-          };
-          console.log(
-            "okok prob distribution box plot:",
-            this.context.requestBoxPlotDistribution,
-            this.context,
-            "key",
-            key
-          );
-          const result = this.context.requestBoxPlotDistribution?.(
-            data,
-            new AbortController().signal
-          );
-          console.log("okok result:", result);
-        }
         return calculateBoxPlotDataFromErrorCohort(
           cohort,
           index,
-          this.props.probabilityOption!.key.toString()
+          this.props.probabilityOption!.key.toString(),
+          this.props.probabilityOption!.id,
+          this.context.requestBoxPlotDistribution
         );
       }
     );

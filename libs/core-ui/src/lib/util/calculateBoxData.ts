@@ -7,13 +7,46 @@ import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 export function calculateBoxPlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
   index: number,
-  key: string
+  key: string,
+  queryClass?: number,
+  requestBoxPlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData | unknown>
 ) {
+  if (requestBoxPlotDistribution) {
+    return calculateBoxPlotDataFromSDK(
+      errorCohort,
+      requestBoxPlotDistribution,
+      queryClass
+    );
+  }
   // key is the identifier for the column (e.g., probability)
+  // If compute instance is not connected, calculate based on the first 5k data
   return calculateBoxPlotData(
     errorCohort.cohort.filteredData.map((dict) => dict[key]),
     index
   );
+}
+
+export async function calculateBoxPlotDataFromSDK(
+  errorCohort: ErrorCohort,
+  requestBoxPlotDistribution: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData | unknown>,
+  queryClass?: number
+): Promise<IHighchartBoxData | unknown> {
+  const data = [
+    errorCohort.cohort.compositeFilters,
+    errorCohort.cohort.filters,
+    queryClass
+  ];
+  const result = await requestBoxPlotDistribution?.(
+    data,
+    new AbortController().signal
+  );
+  return result;
 }
 
 export function calculateBoxPlotData(
