@@ -25,10 +25,10 @@ import {
   TelemetryEventName,
   TelemetryLevels
 } from "@responsible-ai/core-ui";
+import { InfoCallout } from "@responsible-ai/error-analysis";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-import { InfoCallout } from "@responsible-ai/error-analysis";
 
 import { CounterfactualList } from "./CounterfactualList";
 import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";

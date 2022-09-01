@@ -26,7 +26,6 @@ import {
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
   InfoCallout,
-  InfoCallout,
   MapShift,
   MatrixArea,
   MatrixFilter,
@@ -58,7 +57,6 @@ import {
 } from "./constants";
 import { tabsViewStyles } from "./TabsView.styles";
 import { ITabsViewProps } from "./TabsViewProps";
-import { getInfo } from "./utils";
 import { getInfo } from "./utils";
 
 export interface ITabsViewState {
@@ -103,7 +101,6 @@ export class TabsView extends React.PureComponent<
       allSelectedItems: [],
       dataAnalysisOption: DataAnalysisTabOptions.TableView,
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
-      featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation,
       featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation,
       importances,
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
@@ -197,25 +194,6 @@ export class TabsView extends React.PureComponent<
                           }
                         />
                       </div>
-                      <div className={classNames.sectionTooltip}>
-                        <InfoCallout
-                          iconId={errorAnalysisIconId}
-                          infoText={
-                            getInfo(
-                              t.key,
-                              this.props,
-                              this.state.errorAnalysisOption
-                            ).body
-                          }
-                          title={
-                            getInfo(
-                              t.key,
-                              this.props,
-                              this.state.errorAnalysisOption
-                            ).title
-                          }
-                        />
-                      </div>
                     </h3>
                     <ErrorAnalysisViewTab
                       disabledView={disabledView}
@@ -264,18 +242,6 @@ export class TabsView extends React.PureComponent<
                           .ModelOverview
                       }
                     </Text>
-                    <div className={classNames.sectionTooltip}>
-                      <InfoCallout
-                        iconId={modelOverviewIconId}
-                        infoText={
-                          localization.ModelAssessment.ModelOverview
-                            .topLevelDescription
-                        }
-                        title={
-                          localization.ModelAssessment.ModelOverview.infoTitle
-                        }
-                      />
-                    </div>
                     <div className={classNames.sectionTooltip}>
                       <InfoCallout
                         iconId={modelOverviewIconId}
@@ -381,7 +347,6 @@ export class TabsView extends React.PureComponent<
                       requestPredictions={this.props.requestPredictions}
                       onWeightVectorChange={this.onWeightVectorChange}
                       telemetryHook={this.props.telemetryHook}
-                      onPivotChange={this.onFeatureImportanceOptionChange}
                       onPivotChange={this.onFeatureImportanceOptionChange}
                     />
                   </>

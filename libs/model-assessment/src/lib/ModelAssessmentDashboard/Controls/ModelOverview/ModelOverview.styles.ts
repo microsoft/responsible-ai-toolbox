@@ -19,7 +19,6 @@ export interface IModelOverviewStyles {
   sectionStack: IStyle;
   configurationActionButton: IStyle;
   topLevelDescriptionText: IStyle;
-  topLevelDescriptionText: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
   generalSemiBoldText: IStyle;

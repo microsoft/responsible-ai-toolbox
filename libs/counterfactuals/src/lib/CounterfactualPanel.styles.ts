@@ -62,6 +62,10 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
         minWidth: "150px",
         verticalAlign: "center"
       },
+      buttonRow: {
+        padding: "20px 0"
+      },
+      buttons: flexMdDown,
       buttonWrapper: {
         selectors: {
           "@media screen and (max-width: 479px)": {
@@ -69,10 +73,6 @@ export const counterfactualPanelStyles: () => IProcessedStyleSet<ICounterfactual
           }
         }
       },
-      buttonRow: {
-        padding: "20px 0"
-      },
-      buttons: flexMdDown,
       container: {
         width: "100%"
       },
