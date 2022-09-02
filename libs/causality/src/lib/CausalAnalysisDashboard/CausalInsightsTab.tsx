@@ -20,6 +20,7 @@ import { CausalAnalysisView } from "./Controls/CausalAnalysisView/CausalAnalysis
 export interface ICausalInsightsTabProps {
   data: ICausalAnalysisData;
   telemetryHook?: (message: ITelemetryEvent) => void;
+  onPivotChange?: (option: CausalAnalysisOptions) => void;
 }
 
 interface ICausalInsightsTabState {
@@ -53,8 +54,8 @@ export class CausalInsightsTab extends React.PureComponent<
           </MessageBar>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal tokens={{ childrenGap: "s1" }}>
-            <Pivot onLinkClick={this.onViewTypeChange}>
+          <Stack>
+            <Pivot onLinkClick={this.onViewTypeChange} overflowBehavior="menu">
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}
                 headerText={localization.CausalAnalysis.MainMenu.aggregate}
@@ -93,6 +94,7 @@ export class CausalInsightsTab extends React.PureComponent<
         level: TelemetryLevels.ButtonClick,
         type: this.getTelemetryEventName(item.props.itemKey)
       });
+      this.props.onPivotChange?.(item.props.itemKey as CausalAnalysisOptions);
     }
   };
 

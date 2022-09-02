@@ -133,43 +133,56 @@ export class MatrixFilter extends React.PureComponent<
             isErrorMetric={this.state.matrixLegendState.isErrorMetric}
             disabledView={this.props.disabledView}
           />
-          <Stack horizontal tokens={stackTokens} horizontalAlign="start">
+          <Stack
+            horizontal
+            tokens={stackTokens}
+            horizontalAlign="start"
+            className={classNames.selections}
+          >
             <MetricSelector
               isEnabled={this.props.isEnabled && !featuresUnselected}
               setMetric={this.setMetric}
               telemetryHook={this.props.telemetryHook}
             />
-            <Stack.Item key="feature1key">
-              <ComboBox
-                defaultSelectedKey={this.state.selectedFeature1 || ""}
-                label="Rows: Feature 1"
-                options={this.options}
-                dropdownMaxWidth={300}
-                useComboBoxAsMenuWidth
-                onChange={this.handleFeature1Changed}
-                calloutProps={{
-                  calloutMaxHeight: 300,
-                  directionalHintFixed: true
-                }}
-                disabled={!this.props.isEnabled}
-              />
-            </Stack.Item>
-            <Stack.Item key="feature2key">
-              <ComboBox
-                defaultSelectedKey={this.state.selectedFeature2 || ""}
-                label="Columns: Feature 2"
-                options={this.options}
-                dropdownMaxWidth={300}
-                useComboBoxAsMenuWidth
-                onChange={this.handleFeature2Changed}
-                calloutProps={{
-                  calloutMaxHeight: 300,
-                  directionalHintFixed: true
-                }}
-                defaultValue={this.state.selectedFeature2}
-                disabled={!this.props.isEnabled}
-              />
-            </Stack.Item>
+            <Stack horizontal className={classNames.featureSelections}>
+              <Stack.Item key="feature1key" className={classNames.rowSelection}>
+                <ComboBox
+                  defaultSelectedKey={this.state.selectedFeature1 || ""}
+                  label={
+                    localization.ErrorAnalysis.MetricSelector
+                      .feature1SelectorLabel
+                  }
+                  options={this.options}
+                  dropdownMaxWidth={300}
+                  useComboBoxAsMenuWidth
+                  onChange={this.handleFeature1Changed}
+                  calloutProps={{
+                    calloutMaxHeight: 300,
+                    directionalHintFixed: true
+                  }}
+                  disabled={!this.props.isEnabled}
+                />
+              </Stack.Item>
+              <Stack.Item key="feature2key">
+                <ComboBox
+                  defaultSelectedKey={this.state.selectedFeature2 || ""}
+                  label={
+                    localization.ErrorAnalysis.MetricSelector
+                      .feature2SelectorLabel
+                  }
+                  options={this.options}
+                  dropdownMaxWidth={300}
+                  useComboBoxAsMenuWidth
+                  onChange={this.handleFeature2Changed}
+                  calloutProps={{
+                    calloutMaxHeight: 300,
+                    directionalHintFixed: true
+                  }}
+                  defaultValue={this.state.selectedFeature2}
+                  disabled={!this.props.isEnabled}
+                />
+              </Stack.Item>
+            </Stack>
           </Stack>
           {!this.props.disabledView && (
             <MatrixArea

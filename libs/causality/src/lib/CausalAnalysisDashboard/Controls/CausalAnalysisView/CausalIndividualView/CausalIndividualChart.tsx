@@ -107,7 +107,11 @@ export class CausalIndividualChart extends React.PureComponent<
       this.context.selectedErrorCohort.cohort
     );
     return (
-      <Stack horizontal id={this.chartAndConfigsId}>
+      <Stack
+        horizontal
+        id={this.chartAndConfigsId}
+        className={classNames.chart}
+      >
         <Stack.Item className={classNames.chartWithAxes}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog

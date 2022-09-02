@@ -12,6 +12,8 @@ import React from "react";
 
 import { MatrixOptions } from "../MatrixOptions/MatrixOptions";
 
+import { matrixAreaStyles } from "./MatrixArea.styles";
+
 interface IMatrixAreaOptionsProps {
   disableClearAll: boolean;
   disableSelectAll: boolean;
@@ -33,8 +35,14 @@ export class MatrixAreaOptions extends React.PureComponent<IMatrixAreaOptionsPro
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const classNames = matrixAreaStyles();
     return (
-      <Stack horizontal tokens={stackTokens} verticalAlign="center">
+      <Stack
+        horizontal
+        tokens={stackTokens}
+        verticalAlign="center"
+        className={classNames.matrixAreaOptions}
+      >
         <DefaultButton
           text={localization.ErrorAnalysis.MatrixArea.clearAll}
           onClick={this.props.clearAll}
