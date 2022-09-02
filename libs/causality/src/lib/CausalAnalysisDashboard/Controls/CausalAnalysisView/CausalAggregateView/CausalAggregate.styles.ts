@@ -2,7 +2,12 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexLgDown,
+  fullLgDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface ICausalAggregateStyles {
   callout: IStyle;
@@ -24,13 +29,10 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
       },
       container: {
         height: "100%",
-        marginTop: "0px !important"
+        marginTop: "0px !important",
+        ...flexLgDown
       },
-      description: {
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "10px"
-      },
+      description: hideXlDown,
       header: {
         fontSize: 14,
         fontWeight: "600",
@@ -54,7 +56,8 @@ export const CausalAggregateStyles: () => IProcessedStyleSet<ICausalAggregateSty
       },
       leftPane: {
         padding: "0 10px 10px 10px",
-        width: "70%"
+        width: "70%",
+        ...fullLgDown
       },
       rightPane: {
         paddingTop: "16px",

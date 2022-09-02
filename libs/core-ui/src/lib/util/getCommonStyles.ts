@@ -57,7 +57,7 @@ export const flexLgDown = {
   }
 };
 
-// flex when screen size is less or equal than large(1365px)
+// flex when screen size is less or equal than extra large(1365px)
 export const flexXlDown = {
   selectors: {
     "@media screen and (max-width: 1365px)": {
@@ -70,6 +70,15 @@ export const flexXlDown = {
 export const fullLgDown = {
   selectors: {
     "@media screen and (max-width: 1023px)": {
+      width: "100%"
+    }
+  }
+};
+
+// 100% width when screen size is less or equal than extra large(1365px)
+export const fullXlDown = {
+  selectors: {
+    "@media screen and (max-width: 1365px)": {
       width: "100%"
     }
   }

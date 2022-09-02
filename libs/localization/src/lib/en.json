@@ -3,7 +3,6 @@
     "close": "Close",
     "tooltipButton": "Tooltip button",
     "identityFeature": "Identity feature",
-    "infoTitle": "Additional information",
     "infoTitle": "Additional information"
   },
   "CausalAnalysis": {
@@ -21,6 +20,7 @@
       "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
       "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "here": "here",
+      "infoTitle": "Additional information on aggregated causal effects",
       "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
       "unconfounding": "What are confounding features?"
     },
@@ -32,6 +32,7 @@
       "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
       "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "index": "Datapoint index",
+      "infoTitle": "Additional information on individual causal what-if",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "newOutcome": "New outcome",
       "selectTreatment": "Select treatment",
@@ -65,6 +66,7 @@
       "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
       "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
       "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "infoTitle": "Additional information on treatment policy",
       "nSample": "n = {0}",
       "noData": "No data"
     }
@@ -328,7 +330,9 @@
       "metricValue": "Metric value"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Select metric",
+      "feature1SelectorLabel": "Rows: Feature 1",
+      "feature2SelectorLabel": "Columns: Feature 2"
     },
     "Navigation": {
       "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",

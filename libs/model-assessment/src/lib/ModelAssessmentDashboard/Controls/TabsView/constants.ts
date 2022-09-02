@@ -6,3 +6,4 @@ export const modelOverviewIconId = "modelOverviewIconId";
 export const dataAnalysisIconId = "dataAnalysisIconId";
 export const featureImportanceIconId = "featureImportanceIconId";
 export const counterfactualIconId = "counterfactualIconId";
+export const causalAnalysisIconId = "causalAnalysisIconId";

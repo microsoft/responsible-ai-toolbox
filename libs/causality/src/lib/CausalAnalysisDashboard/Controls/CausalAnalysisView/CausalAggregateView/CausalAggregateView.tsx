@@ -41,7 +41,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
         tokens={{ childrenGap: "l1", padding: "8px" }}
       >
         <Stack horizontal={false}>
-          <Stack.Item>
+          <Stack.Item className={styles.description}>
             <Text variant={"medium"} className={styles.label}>
               {localization.CausalAnalysis.AggregateView.description}
             </Text>

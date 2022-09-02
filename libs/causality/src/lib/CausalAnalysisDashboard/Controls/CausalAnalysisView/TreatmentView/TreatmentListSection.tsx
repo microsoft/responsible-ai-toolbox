@@ -44,9 +44,14 @@ export class TreatmentListSection extends React.Component<
           <Label>{localization.Counterfactuals.individualTreatment}</Label>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
+          <Stack
+            horizontal
+            grow
+            tokens={{ childrenGap: "l1" }}
+            className={styles.treatmentList}
+          >
             <Stack.Item className={styles.detailsList}>
-              <Stack horizontal>
+              <Stack horizontal className={styles.spinButtonAndText}>
                 <Stack.Item className={styles.spinButtonText}>
                   <Text variant={"medium"}>
                     {localization.formatString(

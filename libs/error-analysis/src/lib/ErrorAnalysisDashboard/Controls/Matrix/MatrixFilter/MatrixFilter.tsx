@@ -148,7 +148,10 @@ export class MatrixFilter extends React.PureComponent<
               <Stack.Item key="feature1key" className={classNames.rowSelection}>
                 <ComboBox
                   defaultSelectedKey={this.state.selectedFeature1 || ""}
-                  label="Rows: Feature 1"
+                  label={
+                    localization.ErrorAnalysis.MetricSelector
+                      .feature1SelectorLabel
+                  }
                   options={this.options}
                   dropdownMaxWidth={300}
                   useComboBoxAsMenuWidth
@@ -163,7 +166,10 @@ export class MatrixFilter extends React.PureComponent<
               <Stack.Item key="feature2key">
                 <ComboBox
                   defaultSelectedKey={this.state.selectedFeature2 || ""}
-                  label="Columns: Feature 2"
+                  label={
+                    localization.ErrorAnalysis.MetricSelector
+                      .feature2SelectorLabel
+                  }
                   options={this.options}
                   dropdownMaxWidth={300}
                   useComboBoxAsMenuWidth
