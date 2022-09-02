@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Stack, Text } from "@fluentui/react";
+import { Stack } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -11,6 +11,7 @@ import {
 } from "../VisionExplanationDashboard";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 
+import { DataCharacteristics } from "./DataCharacteristics";
 import { ImageList } from "./ImageList";
 import { TableList } from "./TableList";
 import { TitleBar } from "./TitleBar";
@@ -19,6 +20,7 @@ export interface ITabsViewProps {
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
+  numRows: number;
   pageSize: number;
   searchValue: string;
   selectedItem: IVisionListItem | undefined;
@@ -36,9 +38,19 @@ export class TabsView extends React.Component<ITabsViewProps> {
     switch (this.props.selectedKey) {
       case VisionDatasetExplorerTabOptions.DataCharacteristics:
         return (
-          <Stack className={classNames.mainContainer} tokens={stackTokens}>
-            <Stack.Item>
-              <Text>not implemented</Text>
+          <Stack
+            className={classNames.mainContainer}
+            tokens={{ childrenGap: "l1" }}
+          >
+            <Stack.Item style={{ width: "100%" }}>
+              <DataCharacteristics
+                data={this.props.errorInstances.concat(
+                  ...this.props.successInstances
+                )}
+                imageDim={this.props.imageDim}
+                numRows={this.props.numRows}
+                selectItem={this.props.onItemSelect}
+              />
             </Stack.Item>
           </Stack>
         );
