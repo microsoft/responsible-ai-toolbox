@@ -46,7 +46,11 @@ export class ProbabilityDistributionBoxChart extends React.Component<
   ): void {
     if (
       this.state.boxPlotData.length === 0 ||
-      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts)
+      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
+      !_.isEqual(
+        prevProps.probabilityOption!.id,
+        this.props.probabilityOption!.id
+      )
     ) {
       const boxPlotData = this.props.selectedCohorts.map(
         (cohort: ErrorCohort, index: number) => {
