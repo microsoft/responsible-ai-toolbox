@@ -25,7 +25,7 @@ export interface IFlyoutProps {
   isOpen: boolean;
   item: IVisionListItem | undefined;
   loadingExplanation: boolean;
-  otherMetadataFieldName: string;
+  otherMetadataFieldNames: string[];
   callback: () => void;
 }
 
@@ -53,13 +53,14 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     if (!item) {
       return;
     }
-    const fieldName = this.props.otherMetadataFieldName;
-    if (item[fieldName]) {
-      console.log("in here");
-      const metadata = [];
-      metadata.push([fieldName, item[fieldName]]);
-      this.setState({ item, metadata });
-    }
+    const fieldNames = this.props.otherMetadataFieldNames;
+    const metadata: Array<Array<string | number | boolean>> = [];
+    fieldNames.forEach((fieldName) => {
+      if (item[fieldName]) {
+        metadata.push([fieldName, item[fieldName]]);
+      }
+    });
+    this.setState({ item, metadata });
   }
 
   public componentDidUpdate(prevProps: IFlyoutProps): void {
@@ -68,14 +69,16 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       if (!item) {
         return;
       }
+      const fieldNames = this.props.otherMetadataFieldNames;
+      const metadata: Array<Array<string | number | boolean>> = [];
+      fieldNames.forEach((fieldName) => {
+        if (item[fieldName]) {
+          metadata.push([fieldName, item[fieldName]]);
+        }
+      });
       this.setState({
         item: this.props.item,
-        metadata: [
-          [
-            this.props.otherMetadataFieldName,
-            item[this.props.otherMetadataFieldName]
-          ]
-        ]
+        metadata
       });
     }
   }

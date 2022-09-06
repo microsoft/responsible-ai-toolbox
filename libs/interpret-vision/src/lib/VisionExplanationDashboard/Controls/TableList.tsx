@@ -26,7 +26,7 @@ export interface ITableListProps {
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
-  otherMetadataFieldName: string;
+  otherMetadataFieldNames: string[];
   pageSize: number;
   searchValue: string;
   selectItem: (item: IVisionListItem) => void;
@@ -175,16 +175,19 @@ export class TableList extends React.Component<
         maxWidth: 400,
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnFour
-      },
-      {
-        fieldName: this.props.otherMetadataFieldName,
-        isResizable: true,
-        key: "other",
-        maxWidth: 400,
-        minWidth: 200,
-        name: this.props.otherMetadataFieldName
       }
     ];
+    const fieldNames = this.props.otherMetadataFieldNames;
+    fieldNames.forEach((fieldName) => {
+      columns.push({
+        fieldName,
+        isResizable: true,
+        key: fieldName,
+        maxWidth: 400,
+        minWidth: 200,
+        name: fieldName
+      });
+    });
     this.setState({
       columns,
       filteredGroups: groups,

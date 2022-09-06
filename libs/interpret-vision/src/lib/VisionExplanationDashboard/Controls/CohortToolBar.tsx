@@ -32,7 +32,7 @@ export interface ICohortToolBarState {
 }
 
 const dialogContentProps = {
-  closeButtonAriaLabel: "Close",
+  closeButtonAriaLabel: localization.InterpretVision.Cohort.close,
   title: localization.InterpretVision.Cohort.title,
   type: DialogType.normal
 };

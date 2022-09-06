@@ -9,7 +9,7 @@ export interface IVisionExplanationDashboardState {
   successInstances: IVisionListItem[];
   imageDim: number;
   loadingExplanation: boolean;
-  otherMetadataFieldName: string;
+  otherMetadataFieldNames: string[];
   numRows: number;
   pageSize: number;
   panelOpen: boolean;

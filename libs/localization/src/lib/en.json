@@ -1302,6 +1302,7 @@
   },
   "InterpretVision": {
     "Cohort": {
+      "close": "Close",
       "errorCohortName": "Please choose a unique cohort name.",
       "errorNumSelected": "Please select at least one (1) item.",
       "itemsSelectedSingular": "item selected",

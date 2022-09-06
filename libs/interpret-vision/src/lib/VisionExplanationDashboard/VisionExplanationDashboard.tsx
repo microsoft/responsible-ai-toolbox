@@ -6,9 +6,7 @@ import {
   Stack,
   PivotItem,
   Slider,
-  Separator,
-  Text,
-  mergeStyles
+  Separator
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
@@ -26,7 +24,6 @@ import React from "react";
 
 import { CohortToolBar } from "./Controls/CohortToolBar";
 import { Flyout } from "./Controls/Flyout";
-import { imageListStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
 import { TabsView } from "./Controls/TabsView";
@@ -74,7 +71,7 @@ export class VisionExplanationDashboard extends React.Component<
       imageDim: 200,
       loadingExplanation: false,
       numRows: 3,
-      otherMetadataFieldName: "mean_pixel_value",
+      otherMetadataFieldNames: ["mean_pixel_value"],
       pageSize: 10,
       panelOpen: false,
       searchValue: "",
@@ -97,7 +94,6 @@ export class VisionExplanationDashboard extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
-    const imageStyles = imageListStyles();
     return (
       <Stack
         horizontal={false}
@@ -144,7 +140,7 @@ export class VisionExplanationDashboard extends React.Component<
               />
             </Stack.Item>
             {this.state.selectedKey !==
-            VisionDatasetExplorerTabOptions.ImageExplorerView ? (
+              VisionDatasetExplorerTabOptions.ImageExplorerView && (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.state.selectedKey}
@@ -152,38 +148,6 @@ export class VisionExplanationDashboard extends React.Component<
                   onPageSizeSelect={this.onPageSizeSelect}
                 />
               </Stack.Item>
-            ) : (
-              <Stack
-                horizontal
-                tokens={{ childrenGap: "l1" }}
-                verticalAlign="center"
-              >
-                <Stack.Item>
-                  <Text>
-                    {localization.InterpretVision.Dashboard.predictedLabel}
-                  </Text>
-                </Stack.Item>
-                <Stack.Item
-                  className={mergeStyles(
-                    imageStyles.errorIndicator,
-                    classNames.legendIndicator
-                  )}
-                >
-                  <Text className={imageStyles.labelPredicted}>
-                    {localization.InterpretVision.Dashboard.legendFailure}
-                  </Text>
-                </Stack.Item>
-                <Stack.Item
-                  className={mergeStyles(
-                    imageStyles.successIndicator,
-                    classNames.legendIndicator
-                  )}
-                >
-                  <Text className={imageStyles.labelPredicted}>
-                    {localization.InterpretVision.Dashboard.legendSuccess}
-                  </Text>
-                </Stack.Item>
-              </Stack>
             )}
           </Stack>
         </Stack.Item>
@@ -204,7 +168,7 @@ export class VisionExplanationDashboard extends React.Component<
             successInstances={this.state.successInstances}
             imageDim={this.state.imageDim}
             numRows={this.state.numRows}
-            otherMetadataFieldName={this.state.otherMetadataFieldName}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             pageSize={this.state.pageSize}
             searchValue={this.state.searchValue}
             selectedItem={this.state.selectedItem}
@@ -221,7 +185,7 @@ export class VisionExplanationDashboard extends React.Component<
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             loadingExplanation={this.state.loadingExplanation}
-            otherMetadataFieldName={this.state.otherMetadataFieldName}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
           />
         </Stack.Item>
@@ -247,16 +211,18 @@ export class VisionExplanationDashboard extends React.Component<
       return featuresArr[0] as number;
     });
 
-    const fieldName = dataSummary.feature_names![0];
+    const fieldNames = dataSummary.feature_names!;
 
     dataSummary.images?.forEach((image, index) => {
       const item: IVisionListItem = {
-        [fieldName]: features[index],
         image,
         index,
         predictedY: predictedY[index],
         trueY: trueY[index]
       };
+      fieldNames.forEach((fieldName) => {
+        item[fieldName] = features[index];
+      });
       item.predictedY === item.trueY
         ? successInstances.push(item)
         : errorInstances.push(item);
@@ -267,7 +233,7 @@ export class VisionExplanationDashboard extends React.Component<
 
     this.setState({
       errorInstances,
-      otherMetadataFieldName: fieldName,
+      otherMetadataFieldNames: fieldNames,
       successInstances
     });
   }

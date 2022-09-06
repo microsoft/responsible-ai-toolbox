@@ -155,21 +155,6 @@ export class ImageList extends React.Component<
             />
           </Stack.Item>
           <Stack.Item
-            className={
-              item?.predictedY === item?.trueY
-                ? classNames.successIndicator
-                : classNames.errorIndicator
-            }
-            style={{
-              left: ImagePadding,
-              maxWidth: this.props.imageDim
-            }}
-          >
-            <Text className={classNames.labelPredicted}>
-              {item?.predictedY}
-            </Text>
-          </Stack.Item>
-          <Stack.Item
             className={classNames.labelContainer}
             style={{
               left: ImagePadding - 14,
@@ -202,7 +187,7 @@ export class ImageList extends React.Component<
     let items = this.state.filteredItems;
     items = items.map((i) => {
       if (i.index === item.index) {
-        i.selected = !i.selected ? true : false;
+        i.selected = !i.selected;
       }
       return i;
     });
