@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import * as Highcharts from "highcharts";
 import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
@@ -34,6 +35,16 @@ export function HighchartReact(
   const containerRef = React.createRef<HTMLDivElement>();
 
   const createChart = () => {
+    Highcharts.setOptions({
+      lang: {
+        viewFullscreen: localization.ChartContextMenu.viewInFullScreen,
+        printChart: localization.ChartContextMenu.printChart,
+        downloadPNG: localization.ChartContextMenu.downloadPNG,
+        downloadJPEG: localization.ChartContextMenu.downloadJPEG,
+        downloadPDF: localization.ChartContextMenu.downloadPDF,
+        downloadSVG: localization.ChartContextMenu.downloadSVG
+      }
+    });
     let chart: Highcharts.Chart | null | undefined;
     try {
       chart =
