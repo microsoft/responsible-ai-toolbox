@@ -60,11 +60,8 @@ export class ModelAssessment extends React.Component {
         );
       };
       callBack.requestBoxPlotDistribution = async (
-        data: any // IBoxPlotDistributionData
-        // abortSignal: AbortSignal
+        data: any
       ): Promise<IHighchartBoxData> => {
-        // const data = cohort.cohort.filteredData.map((dict) => dict[key]);
-        console.log("okok call flask");
         return callFlaskService(
           data,
           "/model_overview_probability_distribution"
