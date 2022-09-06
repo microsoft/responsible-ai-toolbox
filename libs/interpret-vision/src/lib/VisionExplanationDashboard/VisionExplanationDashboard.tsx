@@ -6,7 +6,9 @@ import {
   Stack,
   PivotItem,
   Slider,
-  Separator
+  Separator,
+  Text,
+  mergeStyles
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
@@ -24,6 +26,7 @@ import React from "react";
 
 import { CohortToolBar } from "./Controls/CohortToolBar";
 import { Flyout } from "./Controls/Flyout";
+import { imageListStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
 import { TabsView } from "./Controls/TabsView";
@@ -94,6 +97,7 @@ export class VisionExplanationDashboard extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
+    const imageStyles = imageListStyles();
     return (
       <Stack
         horizontal={false}
@@ -140,7 +144,7 @@ export class VisionExplanationDashboard extends React.Component<
               />
             </Stack.Item>
             {this.state.selectedKey !==
-              VisionDatasetExplorerTabOptions.ImageExplorerView && (
+            VisionDatasetExplorerTabOptions.ImageExplorerView ? (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.state.selectedKey}
@@ -148,6 +152,38 @@ export class VisionExplanationDashboard extends React.Component<
                   onPageSizeSelect={this.onPageSizeSelect}
                 />
               </Stack.Item>
+            ) : (
+              <Stack
+                horizontal
+                tokens={{ childrenGap: "l1" }}
+                verticalAlign="center"
+              >
+                <Stack.Item>
+                  <Text>
+                    {localization.InterpretVision.Dashboard.predictedLabel}
+                  </Text>
+                </Stack.Item>
+                <Stack.Item
+                  className={mergeStyles(
+                    imageStyles.errorIndicator,
+                    classNames.legendIndicator
+                  )}
+                >
+                  <Text className={imageStyles.labelPredicted}>
+                    {localization.InterpretVision.Dashboard.legendFailure}
+                  </Text>
+                </Stack.Item>
+                <Stack.Item
+                  className={mergeStyles(
+                    imageStyles.successIndicator,
+                    classNames.legendIndicator
+                  )}
+                >
+                  <Text className={imageStyles.labelPredicted}>
+                    {localization.InterpretVision.Dashboard.legendSuccess}
+                  </Text>
+                </Stack.Item>
+              </Stack>
             )}
           </Stack>
         </Stack.Item>

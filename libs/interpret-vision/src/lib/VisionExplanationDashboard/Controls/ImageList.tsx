@@ -27,7 +27,6 @@ export interface IImageListState {
   data: IVisionListItem[];
   filter: string;
   filteredItems: IVisionListItem[];
-  selectedItems: boolean[];
 }
 
 const RowsPerPage = 3;
@@ -54,8 +53,7 @@ export class ImageList extends React.Component<
     this.state = {
       data: [],
       filter: this.props.searchValue.toLowerCase(),
-      filteredItems: [],
-      selectedItems: []
+      filteredItems: []
     };
   }
 
@@ -92,21 +90,17 @@ export class ImageList extends React.Component<
 
   public componentDidMount() {
     const data = this.props.data;
-    const selectedItems: boolean[] = [];
-    for (let i = 0; i < data.length; i++) {
-      selectedItems.push(false);
-    }
-    this.setState({ data, filteredItems: data, selectedItems });
+    this.setState({ data, filteredItems: data });
   }
 
   public render(): React.ReactNode {
     const classNames = imageListStyles();
-    const items = this.state.filteredItems;
+
     return (
       <FocusZone>
         <List
           key={this.props.imageDim}
-          items={items}
+          items={this.state.filteredItems}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageHeight={this.getPageHeight}
@@ -127,7 +121,7 @@ export class ImageList extends React.Component<
         tokens={stackTokens}
         className={classNames.tile}
         style={{
-          height: this.props.imageDim * 1.05,
+          height: this.props.imageDim * 1.1,
           width: `${100 / this.columnCount}%`
         }}
       >
@@ -136,11 +130,9 @@ export class ImageList extends React.Component<
           style={{ paddingBottom: this.props.imageDim / 1.4 }}
         >
           <Stack.Item
-            className={
-              item.selected ? classNames.selectedImage : classNames.imageFrame
-            }
+            className={classNames.imageFrame}
             style={{
-              height: this.props.imageDim * 1.05,
+              height: this.props.imageDim,
               overflow: "hidden",
               width: this.props.imageDim - ImagePadding
             }}
@@ -153,6 +145,21 @@ export class ImageList extends React.Component<
               width={this.props.imageDim}
               className={classNames.image}
             />
+          </Stack.Item>
+          <Stack.Item
+            className={
+              item?.predictedY === item?.trueY
+                ? classNames.successIndicator
+                : classNames.errorIndicator
+            }
+            style={{
+              left: ImagePadding,
+              maxWidth: this.props.imageDim
+            }}
+          >
+            <Text className={classNames.labelPredicted}>
+              {item?.predictedY}
+            </Text>
           </Stack.Item>
           <Stack.Item
             className={classNames.labelContainer}
@@ -180,20 +187,6 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
-    const { selectedItems } = this.state;
-    selectedItems[item.index] = !selectedItems[item.index];
-    this.setState({ selectedItems: [...selectedItems] });
-
-    let items = this.state.filteredItems;
-    items = items.map((i) => {
-      if (i.index === item.index) {
-        i.selected = !i.selected;
-      }
-      return i;
-    });
-
-    this.setState({ filteredItems: [...items] });
-
     this.props.selectItem(item);
   };
 

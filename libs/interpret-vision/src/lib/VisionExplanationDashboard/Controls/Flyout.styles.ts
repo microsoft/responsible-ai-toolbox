@@ -24,6 +24,7 @@ export interface IFlyoutStyles {
   sectionIndent: IStyle;
   separator: IStyle;
   title: IStyle;
+  indentedTitle: IStyle;
 }
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
@@ -58,6 +59,9 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       maxHeight: "250px",
       maxWidth: "250px"
     },
+    indentedTitle: mergeStyles(title, {
+      marginLeft: "6%"
+    }),
     label: {
       bottom: 20,
       position: "relative",
@@ -68,7 +72,8 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       overflow: "hidden"
     },
     sectionIndent: {
-      marginLeft: "6%"
+      overflow: "hidden",
+      width: "100%"
     },
     separator: {
       width: "100%"
