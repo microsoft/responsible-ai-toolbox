@@ -1,8 +1,9 @@
-datasets==1.2.1
+datasets
 gender-guesser==0.4.0
 negspacy==1.0.0
-numpy==1.19.3
+numpy>=1.17.2
 protobuf==3.17.3
 sentencepiece==0.1.96
 spacy==3.0.3
 tqdm==4.49.0
+raiutils>=0.2.0

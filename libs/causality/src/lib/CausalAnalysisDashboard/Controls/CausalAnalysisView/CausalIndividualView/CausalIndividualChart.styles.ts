@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
+import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 
 export interface ICausalIndividualChartStyles {
   legendAndText: IStyle;
+  chart: IStyle;
   chartWithAxes: IStyle;
   chartWithVertical: IStyle;
   verticalAxis: IStyle;
@@ -18,8 +20,10 @@ export const causalIndividualChartStyles: () => IProcessedStyleSet<ICausalIndivi
   () => {
     const legendWidth = "400px";
     return mergeStyleSets<ICausalIndividualChartStyles>({
+      chart: flexLgDown,
       chartWithAxes: {
-        width: "80%"
+        width: "80%",
+        ...fullLgDown
       },
       chartWithVertical: {
         width: "100%"

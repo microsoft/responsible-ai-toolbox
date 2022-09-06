@@ -29,7 +29,7 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
       this.props.data.treatment_feature
     );
     return (
-      <Stack horizontal grow>
+      <Stack horizontal grow className={styles.treatmentBarChart}>
         <Stack.Item className={styles.treatmentBarContainer}>
           {this.props.data?.policy_gains ? (
             <BasicHighChart

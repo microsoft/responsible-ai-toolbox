@@ -23,6 +23,7 @@ export class ModelAssessment extends React.Component {
     const modelData: IModelAssessmentData = modelDataImported;
     const callBack: Pick<
       IModelAssessmentDashboardProps,
+      | "requestExp"
       | "requestPredictions"
       | "requestDebugML"
       | "requestMatrix"
@@ -31,6 +32,9 @@ export class ModelAssessment extends React.Component {
       | "requestBoxPlotDistribution"
     > = {};
     if (config.baseUrl) {
+      callBack.requestExp = async (data: number): Promise<any[]> => {
+        return callFlaskService(data, "/get_exp");
+      };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
         return callFlaskService(data, "/predict");
       };

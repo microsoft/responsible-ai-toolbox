@@ -64,7 +64,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               }
             />
           </Stack>
-          <Stack>
+          <Stack className={classNames.metric}>
             <Stack horizontal>
               <div className={classNames.metricBarBlack} />
               <Stack tokens={cellTokens}>
@@ -119,7 +119,7 @@ export class TreeLegend extends React.Component<ITreeLegendProps> {
               </g>
             </svg>
           </Stack>
-          <Stack>
+          <Stack className={classNames.metric}>
             <Stack horizontal>
               <div
                 className={

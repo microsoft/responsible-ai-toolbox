@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../../../util/getMenu";
+import { Locators } from "../../Constants";
 import {
   IModelAssessmentData,
   RAINotebookNames
@@ -30,6 +31,7 @@ export function describeIndividualFeatureImportance(
         cy.visit(hostDetails.host);
       }
       cy.get("#ModelAssessmentDashboard").should("exist");
+      cy.get(Locators.DataAnalysisTab).eq(0).click();
     });
     if (datasetShape.featureImportanceData?.noDataset) {
       it("should render no data message", () => {

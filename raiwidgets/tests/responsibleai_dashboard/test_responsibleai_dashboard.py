@@ -42,12 +42,33 @@ class TestResponsibleAIDashboard:
         json.dumps(rai_widget.input.dashboard_input,
                    default=serialize_json_safe)
 
+    def validate_widget_end_points(self, widget):
+        end_point_list = [
+            'predict',
+            'tree',
+            'matrix',
+            'causal_whatif',
+            'global_causal_effects',
+            'global_causal_policy',
+            'importances']
+        widget_end_point_list = list(
+            widget._service.app.view_functions.keys())
+
+        for end_point in end_point_list:
+            end_point_found = False
+            for widget_end_point in widget_end_point_list:
+                if re.search(end_point, widget_end_point):
+                    end_point_found = True
+                    break
+            assert end_point_found
+
     def test_responsibleai_adult_save_and_load(
             self, tmpdir, create_rai_insights_object_classification):
         ri = create_rai_insights_object_classification
 
         widget = ResponsibleAIDashboard(ri)
         self.validate_rai_dashboard_data(widget)
+        self.validate_widget_end_points(widget)
 
         save_dir = tmpdir.mkdir('save-dir')
         ri.save(save_dir)
@@ -55,6 +76,7 @@ class TestResponsibleAIDashboard:
 
         widget_copy = ResponsibleAIDashboard(ri_copy)
         self.validate_rai_dashboard_data(widget_copy)
+        self.validate_widget_end_points(widget_copy)
 
     def test_responsibleai_housing_save_and_load(
             self, tmpdir, create_rai_insights_object_regression):
@@ -62,6 +84,7 @@ class TestResponsibleAIDashboard:
 
         widget = ResponsibleAIDashboard(ri)
         self.validate_rai_dashboard_data(widget)
+        self.validate_widget_end_points(widget)
 
         save_dir = tmpdir.mkdir('save-dir')
         ri.save(save_dir)
@@ -69,6 +92,7 @@ class TestResponsibleAIDashboard:
 
         widget_copy = ResponsibleAIDashboard(ri_copy)
         self.validate_rai_dashboard_data(widget_copy)
+        self.validate_widget_end_points(widget_copy)
 
     def test_responsibleai_housing_with_pre_defined_cohorts(
             self, create_rai_insights_object_regression):
@@ -119,6 +143,7 @@ class TestResponsibleAIDashboard:
                          user_cohort_true_y])
 
         self.validate_rai_dashboard_data(widget)
+        self.validate_widget_end_points(widget)
 
     def test_responsibleai_adult_with_pre_defined_cohorts(
             self, create_rai_insights_object_classification):
@@ -160,6 +185,7 @@ class TestResponsibleAIDashboard:
                          user_cohort_index])
 
         self.validate_rai_dashboard_data(widget)
+        self.validate_widget_end_points(widget)
 
     def test_responsibleai_adult_with_ill_defined_cohorts(
             self, create_rai_insights_object_classification):
@@ -230,3 +256,4 @@ class TestResponsibleAIDashboard:
         ri = create_rai_insights_object_classification
         widget = ResponsibleAIDashboard(ri, feature_flights=flights)
         self.validate_rai_dashboard_data(widget)
+        self.validate_widget_end_points(widget)

@@ -94,6 +94,7 @@ export class ProbabilityDistributionChart extends React.Component<
         <Stack
           horizontal
           tokens={{ childrenGap: "10px", padding: "10px 0 0 0" }}
+          className={classNames.splineButtons}
         >
           <Stack.Item className={classNames.chartToggle}>
             <Toggle
