@@ -52,7 +52,9 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
           <Stack.Item className={styles.callout}>
             <LabelWithCallout
               label={localization.CausalAnalysis.MainMenu.why}
-              calloutTitle={localization.CausalAnalysis.AggregateView.unconfounding}
+              calloutTitle={
+                localization.CausalAnalysis.AggregateView.unconfounding
+              }
               type="button"
               telemetryHook={this.props.telemetryHook}
               calloutEventName={
@@ -63,7 +65,9 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
                 {localization.CausalAnalysis.AggregateView.confoundingFeature}
               </Text>
               <Link
-                href={"https://www.microsoft.com/research/project/econml/#!how-to"}
+                href={
+                  "https://www.microsoft.com/research/project/econml/#!how-to"
+                }
                 target="_blank"
               >
                 {localization.Interpret.ExplanationSummary.clickHere}
