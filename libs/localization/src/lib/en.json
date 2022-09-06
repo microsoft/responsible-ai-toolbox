@@ -5,6 +5,14 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information"
   },
+  "ChartContextMenu": {
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binary treatments: ",
