@@ -196,7 +196,7 @@ class RAIInsights(RAIBaseInsights):
             self.categorical_features)
 
         self._explainer_manager = ExplainerManager(
-            self.model, self.get_test_data(), self.get_test_data(),
+            self.model, self.get_train_data(), self.get_test_data(),
             self.target_column,
             self._classes,
             categorical_features=self.categorical_features)
