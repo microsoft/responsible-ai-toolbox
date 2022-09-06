@@ -7,7 +7,11 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexXlDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 import { Property } from "csstype";
 
 export interface ITreeViewRendererStyles {
@@ -30,7 +34,10 @@ export const treeViewRendererStyles = (props?: {
 }): IProcessedStyleSet<ITreeViewRendererStyles> => {
   const theme = getTheme();
   return mergeStyleSets<ITreeViewRendererStyles>({
-    infoWithText: { maxWidth: descriptionMaxWidth },
+    infoWithText: {
+      maxWidth: descriptionMaxWidth,
+      ...hideXlDown
+    },
     legend: {
       pointerEvents: "none"
     },
@@ -60,7 +67,8 @@ export const treeViewRendererStyles = (props?: {
     },
     svgContainer: {
       overflow: "auto",
-      width: "100%"
+      width: "100%",
+      ...flexXlDown
     },
     svgOuterFrame: {
       margin: 0,

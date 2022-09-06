@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { getTheme } from "@fluentui/react";
-import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
+import { getRandomId, SVGToolTip } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
 import React from "react";
 
@@ -11,6 +11,7 @@ import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
 import { treeViewRendererStyles } from "./TreeViewRenderer.styles";
 import { ITreeNode } from "./TreeViewState";
+import { getNodeText, treeNodeAriaLabel } from "./TreeViewUtils";
 
 export interface ITreeViewNodeProps {
   disabledView: boolean;
@@ -30,12 +31,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     const classNames = treeViewRendererStyles();
     const gradientFillId = getRandomId();
     const theme = getTheme();
-    const nodeFilterProps = node.data.filterProps;
-    const ariaLabel = `${nodeFilterProps.numCorrect} ${
-      nodeFilterProps.numIncorrect
-    } ${nodeFilterProps.errorCoverage.toFixed(
-      2
-    )} ${nodeFilterProps.metricValue.toFixed(2)}`; // TODO: waiting for PM input
+    const ariaLabel = treeNodeAriaLabel(node, this.props.disabledView);
     let strokeWidth = 1.5;
     if (this.props.node.data.nodeState.onSelectedPath) {
       if (node.data.nodeState.isSelectedLeaf) {
@@ -109,7 +105,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
             ry={10}
           />
           <text textAnchor="middle" className={classNames.nodeText}>
-            {this.getNodeText(node)}
+            {getNodeText(node)}
           </text>
         </g>
         {!this.props.disabledView && (
@@ -127,14 +123,4 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
   private onSelect = (): void => {
     this.props.onSelect(this.props.node);
   };
-
-  private getNodeText(node: HierarchyPointNode<ITreeNode>): string {
-    if (
-      node.data.metricName !== Metrics.ErrorRate &&
-      node.data.metricName !== undefined
-    ) {
-      return node.data.metricValue.toFixed(2);
-    }
-    return `${node.data.error}/${node.data.size}`;
-  }
 }

@@ -4,7 +4,9 @@
 import numpy as np
 import pandas as pd
 import pytest
-from tests.common_utils import (create_iris_data, create_simple_titanic_data,
+from tests.common_utils import (create_housing_data, create_iris_data,
+                                create_simple_titanic_data,
+                                create_sklearn_random_forest_regressor,
                                 create_sklearn_svm_classifier,
                                 create_titanic_pipeline)
 
@@ -16,6 +18,7 @@ TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
+REGRESSION_ERROR = 'Error'
 
 
 class TestCohortFilterRAIInsights(object):
@@ -147,6 +150,43 @@ class TestCohortFilterRAIInsights(object):
                          model_task,
                          filters=filters)
 
+    @pytest.mark.parametrize('arg, correct_prediction',
+                             [([1], False), ([0], True)])
+    def test_cohort_filter_multiclass_classification_outcome(
+            self, arg, correct_prediction):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        model_task = ModelTask.CLASSIFICATION
+        categorical_features = []
+
+        # the index 1, corresponds to incorrect prediction
+        # the index 0 correspond to correct prediction
+        filters = [{'arg': arg,
+                    'column': CLASSIFICATION_OUTCOME,
+                    'method': 'includes'}]
+        pred_y = model.predict(X_test)
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        if correct_prediction:
+            validation_filter = validation_data[PRED_Y] == validation_data[
+                TRUE_Y]
+        else:
+            validation_filter = validation_data[PRED_Y] != validation_data[
+                TRUE_Y]
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+        model_task = ModelTask.CLASSIFICATION
+        run_rai_insights(validation_data,
+                         model,
+                         X_train,
+                         y_train,
+                         X_test,
+                         y_test,
+                         feature_names,
+                         categorical_features,
+                         model_task,
+                         filters=filters,
+                         is_empty_validation_data=(not correct_prediction))
+
     def test_cohort_filter_includes(self):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
@@ -254,6 +294,40 @@ class TestCohortFilterRAIInsights(object):
                          model_task,
                          filters=filters)
 
+    def test_cohort_filter_regression_error(self):
+        X_train, X_test, y_train, y_test, feature_names = \
+            create_housing_data()
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
+
+        # filter on regression error, which can be done from the
+        # RAI dashboard
+        filters = [{'arg': [40],
+                    'column': REGRESSION_ERROR,
+                    'method': 'less and equal'}]
+
+        model = create_sklearn_random_forest_regressor(X_train, y_train)
+        pred_y = model.predict(X_test)
+
+        validation_data = create_validation_data(X_test, y_test, pred_y)
+        validation_filter = abs(validation_data[PRED_Y] - validation_data[
+            TRUE_Y]) <= 40.0
+        validation_data = validation_data.loc[validation_filter]
+        validation_data = validation_data.drop(columns=PRED_Y)
+
+        model_task = ModelTask.REGRESSION
+        categorical_features = []
+        run_rai_insights(validation_data,
+                         model,
+                         X_train,
+                         y_train,
+                         X_test,
+                         y_test,
+                         feature_names,
+                         categorical_features,
+                         model_task,
+                         filters=filters)
+
 
 def create_iris_pandas():
     X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
@@ -283,7 +357,8 @@ def run_rai_insights(validation_data,
                      categorical_features,
                      model_task,
                      filters=None,
-                     composite_filters=None):
+                     composite_filters=None,
+                     is_empty_validation_data=False):
     train = X_train.copy()
     train["target"] = y_train
     test = X_test.copy()
@@ -297,5 +372,8 @@ def run_rai_insights(validation_data,
         composite_filters)
 
     # validate there is some data selected for each of the filters
-    assert validation_data.shape[0] > 0
+    if is_empty_validation_data:
+        assert validation_data.shape[0] == 0
+    else:
+        assert validation_data.shape[0] > 0
     assert validation_data.equals(filtered_data)

@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface ICounterfactualsTabStyles {
   container: IStyle;
@@ -22,6 +22,6 @@ export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactuals
         color: theme.semanticColors.bodyText,
         padding: "0 40px 10px 40px"
       },
-      infoWithText: { maxWidth: descriptionMaxWidth }
+      infoWithText: { ...hideXlDown, maxWidth: descriptionMaxWidth }
     });
   };

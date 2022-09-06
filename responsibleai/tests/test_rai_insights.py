@@ -352,24 +352,15 @@ def validate_rai_insights(
     assert rai_insights.target_column == target_column
     assert rai_insights.task_type == task_type
     assert rai_insights.categorical_features == (categorical_features or [])
+    expected_length = 0
     if categorical_features is not None:
-        assert len(rai_insights.categorical_features) == \
-            len(categorical_features)
-        assert len(rai_insights._categories) == len(categorical_features)
-        assert len(rai_insights._categorical_indexes) == \
-            len(categorical_features)
-        assert len(rai_insights._category_dictionary) == \
-            len(categorical_features)
-        if len(categorical_features) == 0:
-            assert isinstance(rai_insights._string_ind_data, list)
-        else:
-            assert isinstance(rai_insights._string_ind_data, np.ndarray)
-    else:
-        assert len(rai_insights.categorical_features) == 0
-        assert len(rai_insights._categories) == 0
-        assert len(rai_insights._categorical_indexes) == 0
-        assert len(rai_insights._category_dictionary) == 0
-        assert isinstance(rai_insights._string_ind_data, np.ndarray)
+        expected_length = len(categorical_features)
+    assert len(rai_insights.categorical_features) == expected_length
+    assert len(rai_insights._categories) == expected_length
+    assert len(rai_insights._categorical_indexes) == expected_length
+    assert len(rai_insights._category_dictionary) == expected_length
+    for ind_data in rai_insights._string_ind_data:
+        assert len(ind_data) == expected_length
 
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()

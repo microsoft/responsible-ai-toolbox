@@ -276,6 +276,9 @@ export class TreeViewRenderer extends React.PureComponent<
 
     const svgWidth = maxX - minX;
     const svgHeight = maxY - minY;
+    const chartAriaLabel = this.props.disabledView
+      ? localization.ErrorAnalysis.TreeView.disabledArialLabel
+      : localization.ErrorAnalysis.TreeView.ariaLabel;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item className={classNames.infoWithText}>
@@ -311,6 +314,7 @@ export class TreeViewRenderer extends React.PureComponent<
               telemetryHook={this.props.telemetryHook}
             />
             <svg
+              aria-label={chartAriaLabel}
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"

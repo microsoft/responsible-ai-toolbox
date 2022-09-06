@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 export interface IVisionExplanationDashboardData {
-  classNames: string[];
-  localExplanations: number[];
-  prediction: number[];
+  classNames?: string[];
   images: string[];
+  predictedY: string[];
+  trueY: string[];
 }

@@ -84,3 +84,9 @@ class ResponsibleAIDashboard(Dashboard):
             return jsonify(self.input.importances())
 
         self.add_url_rule(importances, '/importances', methods=["POST"])
+
+        def get_exp():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_exp(data))
+
+        self.add_url_rule(get_exp, '/get_exp', methods=["POST"])

@@ -230,7 +230,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 selectedFeatureIndex={this.state.selectedFeatureIndex}
               />
             </Stack.Item>
-            <Stack.Item className={classNames.chartRightPart}>
+            <Stack.Item>
               <SidePanel
                 cohortSeries={this.state.cohortSeries}
                 cohorts={this.props.cohorts}
@@ -277,7 +277,10 @@ export class GlobalExplanationTab extends React.PureComponent<
               </LabelWithCallout>
             </Stack.Item>
             <Stack.Item>
-              <Stack horizontal className={classNames.chartContainer}>
+              <Stack
+                horizontal
+                className={classNames.dependencePlotChartContainer}
+              >
                 <Stack.Item className={classNames.chartLeftPart}>
                   <div
                     id="DependencePlot"
