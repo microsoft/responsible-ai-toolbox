@@ -105,7 +105,6 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
       mockRequestBoxPlotDistribution = jest
         .fn()
         .mockReturnValue(expectedResult);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const boxPlotData = await calculateBoxPlotDataFromErrorCohort(
         {
           cohort: {
@@ -125,12 +124,12 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
         "",
         "0",
         mockRequestBoxPlotDistribution
-      )!;
-      expect(boxPlotData.high).toEqual(expectedResult.high);
-      expect(boxPlotData.q3).toEqual(expectedResult.q3);
-      expect(boxPlotData.median).toEqual(expectedResult.median);
-      expect(boxPlotData.q1).toEqual(expectedResult.q1);
-      expect(boxPlotData.low).toEqual(expectedResult.low);
+      );
+      expect(boxPlotData?.high).toEqual(expectedResult.high);
+      expect(boxPlotData?.q3).toEqual(expectedResult.q3);
+      expect(boxPlotData?.median).toEqual(expectedResult.median);
+      expect(boxPlotData?.q1).toEqual(expectedResult.q1);
+      expect(boxPlotData?.low).toEqual(expectedResult.low);
       expect(mockRequestBoxPlotDistribution).toHaveBeenCalled();
     }
   );
@@ -150,7 +149,6 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
       mockRequestBoxPlotDistribution = jest
         .fn()
         .mockReturnValue(expectedResult);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const boxPlotData = await calculateBoxPlotDataFromErrorCohort(
         {
           cohort: {
@@ -177,7 +175,7 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
         },
         0,
         "ProbabilityClass0"
-      )!;
+      );
       expect(boxPlotData).toBeDefined();
       expect(mockRequestBoxPlotDistribution).not.toHaveBeenCalled();
     }
@@ -200,7 +198,6 @@ describe("calculateBoxPlotDataFromSDK", () => {
       mockRequestBoxPlotDistribution = jest
         .fn()
         .mockReturnValue(expectedResult);
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const boxPlotData = await calculateBoxPlotDataFromSDK(
         {
           cohort: {
@@ -218,7 +215,7 @@ describe("calculateBoxPlotDataFromSDK", () => {
         },
         mockRequestBoxPlotDistribution,
         "0"
-      )!;
+      );
       expect(boxPlotData.high).toEqual(expectedResult.high);
       expect(boxPlotData.q3).toEqual(expectedResult.q3);
       expect(boxPlotData.median).toEqual(expectedResult.median);
