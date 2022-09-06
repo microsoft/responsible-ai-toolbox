@@ -5,83 +5,67 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  FontSizes,
-  getTheme,
-  mergeStyles
+  FontSizes
 } from "@fluentui/react";
 
 export interface IDatasetExplorerTabStyles {
-  indicator: IStyle;
-  errorIndicator: IStyle;
-  successIndicator: IStyle;
   list: IStyle;
   tile: IStyle;
   label: IStyle;
-  labelPredicted: IStyle;
   labelContainer: IStyle;
   image: IStyle;
   imageFrame: IStyle;
   imageSizer: IStyle;
+  selectedImage: IStyle;
 }
 
 export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
   () => {
-    const theme = getTheme();
-    const indicator: IStyle = {
-      borderRadius: 45,
-      marginLeft: 5,
-      marginTop: 2,
-      textAlign: "center"
-    };
     return mergeStyleSets<IDatasetExplorerTabStyles>({
-      errorIndicator: mergeStyles(indicator, {
-        backgroundColor: theme.semanticColors.errorBackground
-      }),
       image: {
-        left: -20,
+        left: -6,
         position: "absolute",
-        top: 22
+        top: -5,
+        width: "100%"
       },
       imageFrame: {
         bottom: 2,
-        left: 1,
+        left: 2,
         position: "absolute",
         right: 2,
         top: 2
       },
       imageSizer: {
-        overflow: "hidden"
-        //paddingBottom: "80%"
+        marginBottom: "2%",
+        paddingBottom: "100%"
       },
-      indicator,
       label: {
         color: "white",
         fontSize: FontSizes.small,
-        fontWeight: "600",
-        paddingLeft: 10
+        fontWeight: "600"
       },
       labelContainer: {
-        background: "rgba(0,0,0,0.4)",
+        background: "rgba(0,0,0,0.3)",
         boxSizing: "border-box",
-        paddingBottom: 5,
-        paddingTop: 2,
-        position: "relative",
-        textAlign: "start",
-        top: 4,
-        width: "98%"
-      },
-      labelPredicted: {
-        color: "black",
-        fontSize: FontSizes.small
+        padding: 10,
+        position: "absolute",
+        textAlign: "center"
       },
       list: {
         fontSize: 0,
         overflow: "hidden",
         position: "relative"
       },
-      successIndicator: mergeStyles(indicator, {
-        backgroundColor: theme.semanticColors.successBackground
-      }),
+      selectedImage: {
+        border: "5px solid blue",
+        bottom: 2,
+        height: "90%",
+        left: 2,
+        position: "absolute",
+        right: 2,
+        top: 2,
+        width: "90%"
+      },
       tile: {
         float: "left",
         outline: "none",

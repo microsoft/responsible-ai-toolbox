@@ -16,7 +16,6 @@ export interface IDatasetExplorerTab {
   searchBox: IStyle;
   toolBarContainer: IStyle;
   itemsSelectedContainer: IStyle;
-  legendIndicator: IStyle;
   mainContainer: IStyle;
   mainImageContainer: IStyle;
   halfContainer: IStyle;
@@ -59,12 +58,6 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       itemsSelectedContainer: {
         height: "100%",
         textAlign: "center"
-      },
-      legendIndicator: {
-        paddingBottom: 2,
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 2
       },
       mainContainer: {
         alignItems: "center",
