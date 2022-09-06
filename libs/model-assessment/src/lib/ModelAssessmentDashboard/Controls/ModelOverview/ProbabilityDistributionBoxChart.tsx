@@ -29,27 +29,16 @@ export interface IProbabilityDistributionBoxChartState {
   outlierData: number[][] | undefined;
 }
 
-export class ProbabilityDistributionBoxChart extends React.Component<
-  IProbabilityDistributionBoxChartProps,
-  IProbabilityDistributionBoxChartState
-> {
+export class ProbabilityDistributionBoxChart extends React.Component<IProbabilityDistributionBoxChartProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
-  public constructor(props: IProbabilityDistributionBoxChartProps) {
-    super(props);
-    this.state = {
-      boxPlotData: this.props.boxPlotState.boxPlotData,
-      outlierData: this.props.boxPlotState.outlierData
-    };
-  }
 
   public componentDidUpdate(
     prevProps: IProbabilityDistributionBoxChartProps
   ): void {
     if (
-      this.state.boxPlotData.length === 0 ||
+      this.props.boxPlotState.boxPlotData.length === 0 ||
       !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
       !_.isEqual(
         prevProps.probabilityOption!.id,
@@ -96,7 +85,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<
           },
           series: [
             {
-              data: this.state.boxPlotData.map(
+              data: this.props.boxPlotState.boxPlotData.map(
                 (boxData) => boxData as PointOptionsObject
               ),
               fillColor: theme.semanticColors.inputBackgroundChecked,
@@ -105,7 +94,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<
               type: "boxplot"
             },
             {
-              data: this.state.outlierData,
+              data: this.props.boxPlotState.outlierData,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .outlierLabel,
               tooltip: {
@@ -139,8 +128,8 @@ export class ProbabilityDistributionBoxChart extends React.Component<
       .filter((list) => list !== undefined)
       .reduce((list1, list2) => list1!.concat(list2!), []);
     if (
-      !_.isEqual(data, this.state.boxPlotData) ||
-      !_.isEqual(this.state.outlierData, outlierData)
+      !_.isEqual(data, this.props.boxPlotState.boxPlotData) ||
+      !_.isEqual(this.props.boxPlotState.outlierData, outlierData)
     ) {
       this.props.onBoxPlotStateUpdate({ boxPlotData: data, outlierData });
     }

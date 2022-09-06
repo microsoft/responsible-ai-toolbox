@@ -32,6 +32,7 @@ import {
   DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
@@ -514,7 +515,9 @@ export class ModelOverview extends React.Component<
   private onBoxPlotStateUpdate = (
     boxPlotState: IProbabilityDistributionBoxChartState
   ) => {
-    this.setState({ boxPlotState });
+    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
+      this.setState({ boxPlotState });
+    }
   };
 
   private onClickMetricsConfiguration = () => {
