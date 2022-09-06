@@ -51,12 +51,12 @@ export async function calculateBoxPlotDataFromSDK(
     compositeFiltersRelabeled,
     Number(queryClass)
   ];
-  console.log("okok data:", data);
+
   const result: IHighchartBoxData = await requestBoxPlotDistribution?.(
     data,
     new AbortController().signal
   );
-  console.log("okok result:", result);
+
   return result;
 }
 
