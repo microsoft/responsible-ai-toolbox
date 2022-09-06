@@ -16,11 +16,15 @@ import _ from "lodash";
 import React from "react";
 
 interface IProbabilityDistributionBoxChartProps {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
+  onBoxPlotStateUpdate: (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ) => void;
 }
 
-interface IProbabilityDistributionBoxChartState {
+export interface IProbabilityDistributionBoxChartState {
   boxPlotData: Array<IHighchartBoxData | undefined>;
   outlierData: number[][] | undefined;
 }
@@ -36,8 +40,8 @@ export class ProbabilityDistributionBoxChart extends React.Component<
   public constructor(props: IProbabilityDistributionBoxChartProps) {
     super(props);
     this.state = {
-      boxPlotData: [],
-      outlierData: undefined
+      boxPlotData: this.props.boxPlotState.boxPlotData,
+      outlierData: this.props.boxPlotState.outlierData
     };
   }
 
@@ -127,9 +131,6 @@ export class ProbabilityDistributionBoxChart extends React.Component<
     boxPlotData: Array<Promise<IHighchartBoxData | undefined>>
   ): Promise<void> {
     const data = await Promise.all(boxPlotData);
-    if (data !== this.state.boxPlotData) {
-      this.setState({ boxPlotData: data });
-    }
     const outlierData = data
       .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
       .map((outlierProbs, cohortIndex) => {
@@ -137,8 +138,11 @@ export class ProbabilityDistributionBoxChart extends React.Component<
       })
       .filter((list) => list !== undefined)
       .reduce((list1, list2) => list1!.concat(list2!), []);
-    if (_.isEqual(this.state.outlierData, outlierData)) {
-      this.setState({ outlierData });
+    if (
+      !_.isEqual(data, this.state.boxPlotData) ||
+      !_.isEqual(this.state.outlierData, outlierData)
+    ) {
+      this.props.onBoxPlotStateUpdate({ boxPlotData: data, outlierData });
     }
   }
 }
