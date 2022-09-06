@@ -37,12 +37,12 @@ export function HighchartReact(
   const createChart = () => {
     Highcharts.setOptions({
       lang: {
-        viewFullscreen: localization.ChartContextMenu.viewInFullScreen,
-        printChart: localization.ChartContextMenu.printChart,
-        downloadPNG: localization.ChartContextMenu.downloadPNG,
         downloadJPEG: localization.ChartContextMenu.downloadJPEG,
         downloadPDF: localization.ChartContextMenu.downloadPDF,
-        downloadSVG: localization.ChartContextMenu.downloadSVG
+        downloadPNG: localization.ChartContextMenu.downloadPNG,
+        downloadSVG: localization.ChartContextMenu.downloadSVG,
+        printChart: localization.ChartContextMenu.printChart,
+        viewFullscreen: localization.ChartContextMenu.viewInFullScreen
       }
     });
     let chart: Highcharts.Chart | null | undefined;
