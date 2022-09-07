@@ -24,12 +24,12 @@
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.binaryDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.]]></Val>
+          <Val><![CDATA[On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliğin açılması, sınıf/etiket 1’in olasılığının X birim artmasına neden olur.]]></Val>
+            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliği açmak, '{0}' sınıfı/etiketi olasılığının X birim artmasına neden olur.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[On average in this sample, turing on this feature will cause the outcome to increase by X units]]></Val>
+            <Val><![CDATA[On average in this sample, turning on this feature will cause the probability of class/label 1 to increase by X units.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -87,13 +87,22 @@
       </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.continuousDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.]]></Val>
+          <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliği 1 birim artırmak, sınıf/etiket 1’in olasılığının X birim artmasına neden olur.]]></Val>
+            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliği 1 birim artırmak, '{0}' sınıfı/etiketi olasılığının X birim artmasına neden olur.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the outcome to increase by X units]]></Val>
+            <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the probability of class/label 1 to increase by X units.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.continuousRegressionDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliği 1 birim artırmak, hedef tahminlerinin X birim artmasına/azalmasına neden olur.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -139,6 +148,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";CausalAnalysis.AggregateView.regressionDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu örnekte ortalama olarak, bu özelliği açmak, hedef tahminlerinin X birim artmasına/azalmasına neden olur.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";CausalAnalysis.AggregateView.unconfounding" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[What are confounding features?]]></Val>
@@ -174,15 +192,6 @@
           <Val><![CDATA[This tab requires a datapoint be selected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bu sekme, bir veri noktasının seçilmesini gerektirir.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";CausalAnalysis.IndividualView.datapointIndex" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Datapoint index]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Datapoint dizini]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -240,6 +249,15 @@
           <Val><![CDATA[Select treatment]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tedavi seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";CausalAnalysis.IndividualView.selectedDatapoint" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Selected datapoint]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seçili veri noktası]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -387,10 +405,13 @@
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.Left" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} <= {1}]]></Val>
+          <Val><![CDATA[{0} less than or equal to {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} <= {1}]]></Val>
+            <Val><![CDATA[{0}, şundan az veya şuna eşittir: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} <= {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -405,10 +426,13 @@
       </Item>
       <Item ItemId=";CausalAnalysis.TreatmentPolicy.Right" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} > {1}]]></Val>
+          <Val><![CDATA[{0} greater than {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} > {1}]]></Val>
+            <Val><![CDATA[{0}, şundan büyüktür: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} > {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -508,6 +532,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Common.close" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Close]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kapat]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Common.identityFeature" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identity feature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kimlik özelliği]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Common.tooltipButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tooltip button]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Araç ipucu düğmesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Core.ComparisonTypes.Unknown" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[unknown]]></Val>
@@ -519,28 +570,37 @@
       </Item>
       <Item ItemId=";Core.ComparisonTypes.eq" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} == {1}]]></Val>
+          <Val><![CDATA[{0} equal to {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} == {1}]]></Val>
+            <Val><![CDATA[{0}, şuna eşittir: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} == {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.gt" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} > {1}]]></Val>
+          <Val><![CDATA[{0} greater than {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} > {1}]]></Val>
+            <Val><![CDATA[{0}, şundan büyüktür: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} > {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.gte" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} >= {1}]]></Val>
+          <Val><![CDATA[{0} greater than or equal to {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} >= {1}]]></Val>
+            <Val><![CDATA[{0}, şundan büyük veya şuna eşittir: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} >= {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -555,28 +615,37 @@
       </Item>
       <Item ItemId=";Core.ComparisonTypes.lt" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} < {1}]]></Val>
+          <Val><![CDATA[{0} less than {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} < {1}]]></Val>
+            <Val><![CDATA[{0}, şundan azdır: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} < {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.lte" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} <= {1}]]></Val>
+          <Val><![CDATA[{0} less than or equal to {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} <= {1}]]></Val>
+            <Val><![CDATA[{0}, şundan az veya şuna eşittir: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} <= {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Core.ComparisonTypes.ne" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[{0} != {1}]]></Val>
+          <Val><![CDATA[{0} not equal to {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0} != {1}]]></Val>
+            <Val><![CDATA[{0}, şuna eşit değildir: {1}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[{0} != {1}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -607,6 +676,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Core.EmptyCohortDialog.subText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortunuz veri noktası içermiyor. Kaydetmeden önce filtrelerinizi veri kümesi kohortunuzda en az bir veri noktası içerecek şekilde ayarlayın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.EmptyCohortDialog.title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dataset cohort contains no datapoints]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortta veri noktası yok]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Core.ExpandableText.SeeLess" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[See less]]></Val>
@@ -630,6 +717,60 @@
           <Val><![CDATA[No data]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Veri yok]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.PreBuiltCohort.featureNameNotFound" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature name not found in the dataset]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik adı veri kümesinde bulunamadı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.PreBuiltCohort.notACategoricalFeature" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature is not categorical]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik kategorik değil]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.ShiftCohort.apply" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Apply]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uygula]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.ShiftCohort.cancel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cancel]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İptal et]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.ShiftCohort.subText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select a cohort from the cohort list. Apply the cohort to the dashboard.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohort listesinden bir kohort seçin. Kohortu panoya uygulayın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Core.ShiftCohort.title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch Cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohort Değiştir]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -673,11 +814,65 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Counterfactuals.ErrorDialog.Close" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Close]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kapat]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.ErrorDialog.ErrorPrefix" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error encountered: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Karşılaşılan hata: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.ErrorDialog.PythonError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Python error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Python hatası]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Counterfactuals.RecommendedTreatment" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Recommended treatment]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Önerilen işlem]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.WhatIf.percentCounterfactualLocalImportance" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Percentage of counterfactuals that varied the feature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özelliği farklı yapan karşı işlem yüzdesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.WhatIf.predictedClass" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Predicted class]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tahmin edilen sınıf]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.WhatIf.predictedValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Predicted value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tahmin edilen değer]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -771,6 +966,15 @@
           <Val><![CDATA[Current class]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Geçerli sınıf]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.currentRange" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Current range]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geçerli aralık]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -882,13 +1086,22 @@
       </Item>
       <Item ItemId=";Counterfactuals.panelDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
+          <Val><![CDATA[Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tahmin karşıolgusallarına göz atın ve kendi karşıolgusalınızı oluşturun. Bir giriş veri noktasına ve istenen {0} tahminine bağlı olarak tabloda, bu tahmini veren yakınsal ve çeşitli karşıolgusal örnekleri kümesi gösterilir. Kendi tahmin karşıolgusalınızı oluşturmak için karşıolgusalları öneri olarak kullanabilir, bunların değerlerini görmek için özellik arayabilir ve her karşıolgusal adı altındaki “değer ayarla” metnine tıklayarak önerilen karşıolgusal özellik değerlerini ayarlayabilirsiniz. Karşıolgusalınızı adlandırın ve kaydedin.]]></Val>
+            <Val><![CDATA[Karşı işlemlere göz atın ve kendinizinkini oluşturun. Çeşitli karşı işlem örneklerinden önerilen değerleri görmek için özelliklerde ara yapın. Her bir karşı işlem adının altındaki "Değer Ayarla" metnine tıklayarak önerilen karşı işlem özellik değerlerini ayarlayın. Karşı işleminizi adlandırın ve kaydedin.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. the table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
+            <Val><![CDATA[Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking "set values" text under each counterfactual name. Name your counterfactual and save it.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Counterfactuals.panelDescriptionWithoutSetValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Karşı işlemlere göz atın ve kendinizinkini oluşturun. Çeşitli karşı işlem örneklerinden önerilen değerleri görmek için özelliklerde ara yapın.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1021,12 +1234,51 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.CohortBaseAndFilters.errorExplorer" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error explorer]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hata gezgini]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortBaseAndFilters.filters" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Filters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Filtreler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortBaseAndFilters.globalCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Global cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Genel kohort:]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.CohortBaseAndFilters.globalCohortAndFilters" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Global cohort and filters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Genel kohort ve filtreler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.CohortInfo.baseCohortInstances" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Instances in base cohort]]></Val>
+          <Val><![CDATA[Instances in global cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Temel kohortdaki örnekler]]></Val>
+            <Val><![CDATA[Genel kohortdaki örnekler]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Instances in base cohort]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1138,6 +1390,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.FeatureList.apply" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Apply]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uygula]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.FeatureList.features" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Features]]></Val>
@@ -1152,6 +1413,24 @@
           <Val><![CDATA[Importances]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Önem dereceleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FeatureList.staticTreeMapDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ağaç haritasını eğitmek için kullanılan özellikleri görüntüleyin. Özellik önem dereceleri, gerçek etiketlerde hatayla birlikte karşılıklı bilgiler kullanılarak hesaplandı.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.FeatureList.treeMapDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ağaç haritasını yeniden eğitmek için aşağıdaki özellikleri seçin ve kaydedin. Özellik önem dereceleri, doğru etiketlerinde hata bulunan iki taraflı bilgiler kullanılarak hesaplanır. Ağaç haritasını eğitirken bunu kılavuz olarak kullanın.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1318,21 +1597,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ErrorAnalysis.MainMenu.saveCohort" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ErrorAnalysis.MainMenu.newCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Save cohort]]></Val>
+          <Val><![CDATA[New cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kohortu kaydet]]></Val>
+            <Val><![CDATA[Yeni kohort]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.MainMenu.shiftCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Shift cohort]]></Val>
+          <Val><![CDATA[Switch cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kaydırma kohortu]]></Val>
+            <Val><![CDATA[Kohort değiştir]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Shift cohort]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1372,6 +1654,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.MapShift.heatSubText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ağaç görünümünden çıkmak istediğinizden emin misiniz? Cohort ayarlarından erişmek için filtrelerinizi yeni bir kohort olarak kaydedebilirsiniz. Aksi takdirde filtreleriniz kaybolur.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.MapShift.heatTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Leave tree view?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ağaç görünümünden çıkılsın mı?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.MapShift.move" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Move]]></Val>
@@ -1399,20 +1699,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ErrorAnalysis.MapShift.subText" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ErrorAnalysis.MapShift.treeSubText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Do you want to restart your exploration with a different map?  Save it as a new cohort.  Otherwise, your chosen filters will be lost.]]></Val>
+          <Val><![CDATA[Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Açıklamanızı farklı bir haritayla yeniden başlatmak istiyor musunuz? Bunu yeni bir kohort olarak kaydedin. Aksi takdirde seçtiğiniz filtreler kaybolur.]]></Val>
+            <Val><![CDATA[Isı haritası görünümünden ayrılmak istediğinizden emin misiniz? Cohort ayarlarından erişmek için filtrelerinizi yeni bir kohort olarak kaydedebilirsiniz. Aksi takdirde filtreleriniz kaybolur.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ErrorAnalysis.MapShift.title" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ErrorAnalysis.MapShift.treeTitle" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Map shift]]></Val>
+          <Val><![CDATA[Leave heatmap view?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Harita kaydırma]]></Val>
+            <Val><![CDATA[Isı haritası görünümünden çıkılsın mı?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1552,6 +1852,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.accuracyScore" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Accuracy score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğruluk puanı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.accuracyScoreInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The accuracy score represents the ratio of correct to total instances in the data.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğruluk puanı, verideki doğru ve toplam örneklerin oranını temsil eder.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.accuracyScoreShort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Accuracy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğruluk]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.accuracyScoreTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on accuracy score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğruluk puanı hakkında ek bilgiler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.errorRate" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error rate]]></Val>
@@ -1575,6 +1911,69 @@
           <Val><![CDATA[Additional information on error rate]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Hata oranıyla ilgili ek bilgiler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.f1Score" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.f1ScoreInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The F1 score is the harmonic mean of the precision and recall metrics.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 skoru, duyarlık ve yakalama ölçümlerinin armonik ortalamasıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.f1ScoreTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 skoru hakkında ek bilgi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.macroF1Score" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Macro averaged F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Makro ortalama F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.macroF1ScoreInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Makro ortalama F1 skoru, makro ortalama duyarlık ve yakalama ölçümlerinin armonik ortalamasıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.macroF1ScoreShort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Macro F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Makro F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.macroF1ScoreTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on macro averaged F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Makro ortalama F1 skoru hakkında ek bilgi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1741,6 +2140,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.microF1Score" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Micro averaged F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mikro ortalama F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.microF1ScoreInfo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mikro ortalama F1 skoru, mikro ortalama duyarlık ve yakalama ölçümlerinin armonik ortalamasıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.microF1ScoreShort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Micro F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mikro F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ErrorAnalysis.Metrics.microF1ScoreTitle" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Additional information on micro averaged F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mikro ortalama F1 skoru hakkında ek bilgi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.Metrics.microPrecision" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Micro averaged precision score]]></Val>
@@ -1885,6 +2320,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.Navigation.cohortSaved" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[New cohort is saved! See Cohort list under Cohort settings.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yeni kohort kaydedildi! Kohort ayarları altındaki Kohort listesine bakın.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.Navigation.dataExplorer" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Data explorer]]></Val>
@@ -2005,6 +2449,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ErrorAnalysis.TreeLegend.clearSelection" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Clear selection]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seçimi temizle]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ErrorAnalysis.TreeView.disabledWarning" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Error treemap is disabled unless global cohort is switched to represent "All data" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap.]]></Val>
@@ -2016,22 +2469,25 @@
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeView.treeDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Feature list."]]></Val>
+          <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Feature list." Use the "select metric" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ağaç görselleştirmesi, verilerdeki hata örneklerini başarı örneklerinden hiyerarşik olarak en iyi şekilde ayırmak için her özellik arasındaki karşılıklı bilgileri ve hatayı kullanır. Bu, yaygın hata desenlerini bulma ve vurgulama işlemini basitleştirir. Önemli hata desenlerini bulmak için daha güçlü kırmızı renge (yüksek hata oranı) ve daha yüksek dolgu satırına (yüksek hata kapsamı) sahip düğümleri arayın. Ağaçta kullanılan özelliklerin listesini düzenlemek için "Özellik listesi" seçeneğine tıklayın.]]></Val>
+            <Val><![CDATA[Ağaç görselleştirmesi, verilerde hiyerarşik olarak hata örneklerini başarı örneklerinden en iyi şekilde ayırmak için her bir özellik ve hata arasındaki karşılıklı bilgileri kullanır. Bu, yaygın hata desenlerini keşfetme ve vurgulama sürecini basitleştirir. Önemli hata desenlerini bulmak için, daha güçlü kırmızı renge (yani yüksek hata oranına) ve daha yüksek bir doldurma çizgisine (yani yüksek hata kapsamına) sahip düğümleri arayın. Ağaçta kullanılan özelliklerin listesini düzenlemek için "Özellik listesi" üzerine tıklayın. Hata ve başarı düğümlerinizin performansı hakkında daha fazla bilgi edinmek için "metrik seç" açılır menüsünü kullanın. Lütfen bu ölçüm seçiminin hata ağacınızın oluşturulma şeklini etkilemeyeceğini unutmayın.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Configure error explorer."]]></Val>
+            <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on "Feature list."]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ErrorAnalysis.TreeView.treeStaticDescription" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on "Feature list."]]></Val>
+          <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on "Feature list." Use the "select metric" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ağaç görselleştirmesi, verilerdeki hata örneklerini başarı örneklerinden hiyerarşik olarak en iyi şekilde ayırmak için her özellik arasındaki karşılıklı bilgileri ve hatayı kullanır. Bu, yaygın hata desenlerini bulma ve vurgulama işlemini basitleştirir. Önemli hata desenleri bulmak için daha güçlü kırmızı renge (yüksek hata oranı) ve daha yüksek dolgu satırına (yüksek hata kapsamı) sahip düğümleri arayın. Bu hata ağacını oluştururken kullanılan özelliklerin listesini görüntülemek için "Özellik listesi" seçeneğine tıklayın.]]></Val>
+            <Val><![CDATA[Ağaç görselleştirmesi, verilerde hiyerarşik olarak hata örneklerini başarı örneklerinden en iyi şekilde ayırmak için her bir özellik ve hata arasındaki karşılıklı bilgileri kullanır. Bu, yaygın hata desenlerini keşfetme ve vurgulama sürecini basitleştirir. Önemli hata desenlerini bulmak için, daha güçlü kırmızı renge (yani yüksek hata oranına) ve daha yüksek bir doldurma çizgisine (yani yüksek hata kapsamına) sahip düğümleri arayın. Bu hata ağacını oluştururken kullanılan özelliklerin listesini görüntülemek için "Özellik listesi" üzerine tıklayın. Hata ve başarı düğümlerinizin performansı hakkında daha fazla bilgi edinmek için "metrik seç" açılır menüsünü kullanın. Lütfen bu ölçüm seçiminin hata ağacınızın oluşturulma şeklini etkilemeyeceğini unutmayın.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on "Feature list."]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2314,11 +2770,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ErrorAnalysis.treeMapDescription" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ErrorAnalysis.scaleWarning" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.]]></Val>
+          <Val><![CDATA[For scale reasons of the UI explanations are randomly downsampled]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ağaç haritasını yeniden eğitmek için aşağıdaki özellikleri seçin ve kaydedin. Özellik önem dereceleri, doğru etiketlerinde hata bulunan iki taraflı bilgiler kullanılarak hesaplanır. Ağaç haritasını eğitirken bunu kılavuz olarak kullanın.]]></Val>
+            <Val><![CDATA[Kullanıcı arabiriminden kaynaklanan ölçekleme dolayısıyla, açıklamalar rastgele olarak aşağı örneklenmiştir]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4708,6 +5164,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.AxisConfigDialog.apply" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Apply]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uygula]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.AxisConfigDialog.binLabel" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Apply binning to data]]></Val>
@@ -4749,15 +5214,6 @@
           <Val><![CDATA[Number of bins]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bölme sayısı]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Interpret.AxisConfigDialog.select" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Select]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Seç]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4956,6 +5412,15 @@
           <Val><![CDATA[All data]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tüm veriler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.Cohort.temporaryCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Temporary cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geçici kohort]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5188,6 +5653,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.CohortEditor.cohortNameDupError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort with same name already exists]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aynı ada sahip bir kohort zaten var.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.CohortEditor.cohortNameError" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Missing cohort name]]></Val>
@@ -5236,6 +5710,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.CohortEditor.invalidValueError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Value should be between {0} and {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Değer {0} ile {1} arasında olmalıdır]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.CohortEditor.minimumGreaterThanMaximum" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Minimum value inputs must be less than maximum value inputs.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[En düşük değer girişleri, en büyük değer giriş değerinden küçük olmalıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.CohortEditor.noAddedFilters" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[No filters]]></Val>
@@ -5266,6 +5758,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.CohortEditor.saveAndSwitch" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Save and switch]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kaydet ve değiştir]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.CohortEditor.selectFilter" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Select filter]]></Val>
@@ -5280,6 +5781,15 @@
           <Val><![CDATA[Classification outcome]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Sınıflandırma sonucu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.Columns.correctlyClassified" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Correctly classified]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğru sınıflandırılmış]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5316,6 +5826,15 @@
           <Val><![CDATA[False positive]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Hatalı pozitif]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.Columns.misclassified" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Misclassified]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yanlış sınıflandırılmış]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5473,14 +5992,23 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.DatasetExplorer.datasetCohortDropdown" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dataset cohort dropdown]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortu açılan listesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.DatasetExplorer.helperText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.]]></Val>
+          <Val><![CDATA[Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Veri kümesi istatistiklerini, öngörülen sonuç, veri kümesi özellikleri ve hata grupları gibi filtrelerle birlikte analiz etmek için veri kümesi kohortları oluşturun. Veri kümenizdeki fazla/yetersiz sunum hakkında bilgi edinin.]]></Val>
+            <Val><![CDATA[Tahmin edilen sonuç, veri kümesi özellikleri ve hata grupları gibi filtreler boyunca veri kümesi istatistiklerini analiz etmek için veri kümesi kohortları oluşturun. Veri kümenizdeki fazla/eksik sunum hakkında bilgi edinin.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Create dataset cohorts to the left to analyze statistics along filters such as predicted outcome, dataset features and error groups. Use the x-axis and color selectors to further slice your dataset into more dimensions.]]></Val>
+            <Val><![CDATA[Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/underpresentation in your dataset.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -5523,10 +6051,13 @@
       </Item>
       <Item ItemId=";Interpret.DependencePlot.placeholder" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Click on a feature on the bar chart above to show its dependence plot]]></Val>
+          <Val><![CDATA[Select a feature to show its dependence plot]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bağımlılık çizimini görüntülemek için yukarıdaki çubuk grafiğinde bulunan bir özelliğe tıklayın]]></Val>
+            <Val><![CDATA[Bağımlılık çizimini göstermek için bir özellik seçin]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Click on a feature on the bar chart above to show its dependence plot]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5805,10 +6336,13 @@
       </Item>
       <Item ItemId=";Interpret.FilterOperations.equals" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ = {0}]]></Val>
+          <Val><![CDATA[ equal to {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ = {0}]]></Val>
+            <Val><![CDATA[ şuna eşittir: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[ = {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5823,19 +6357,25 @@
       </Item>
       <Item ItemId=";Interpret.FilterOperations.greaterThan" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ > {0}]]></Val>
+          <Val><![CDATA[ greater than {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ > {0}]]></Val>
+            <Val><![CDATA[ şundan büyüktür: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[ > {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Interpret.FilterOperations.greaterThanEquals" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ >= {0}]]></Val>
+          <Val><![CDATA[ greater than or equal to {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ >= {0}]]></Val>
+            <Val><![CDATA[ şundan büyük veya şuna eşittir: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[ >= {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5859,19 +6399,25 @@
       </Item>
       <Item ItemId=";Interpret.FilterOperations.lessThan" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ < {0}]]></Val>
+          <Val><![CDATA[ less than {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ < {0}]]></Val>
+            <Val><![CDATA[ şundan azdır: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[ < {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Interpret.FilterOperations.lessThanEquals" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[ <= {0}]]></Val>
+          <Val><![CDATA[ less than or equal to {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ <= {0}]]></Val>
+            <Val><![CDATA[ şundan az veya şuna eşittir: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[ <= {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6021,10 +6567,13 @@
       </Item>
       <Item ItemId=";Interpret.GlobalTab.absoluteValues" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Absolute values]]></Val>
+          <Val><![CDATA[View as absolute values]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Mutlak değerler]]></Val>
+            <Val><![CDATA[Mutlak değerler olarak görüntüle]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Absolute values]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6144,10 +6693,13 @@
       </Item>
       <Item ItemId=";Interpret.GlobalTab.sortBy" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Sort by]]></Val>
+          <Val><![CDATA[Sort by datapoint]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Sıralama ölçütü]]></Val>
+            <Val><![CDATA[Veri noktalarına göre sırala]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Sort by]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6177,6 +6729,24 @@
           <Val><![CDATA[Class importance weights]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Sınıf önem derecesi ağırlıkları]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.GlobalTab.weightOptionsDropdown" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class importance weights dropdown]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sınıf önem derecesi ağırlıkları açılan listesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.IcePlot.close" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Close]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kapat]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6285,6 +6855,15 @@
           <Val><![CDATA[Probability: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Olasılık: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.IcePlot.pythonError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Python error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Python hatası]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6409,27 +6988,45 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interpret.Statistics.f1Score" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[F1 score: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 Skoru: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interpret.Statistics.fnr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[False Negative Rates: {0}]]></Val>
+          <Val><![CDATA[False negative rate: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Hatalı Negatif Oranları: {0}]]></Val>
+            <Val><![CDATA[Hatalı negatif oranı: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[FNR: {0}]]></Val>
+            <Val><![CDATA[False Negative Rates: {0}]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Interpret.Statistics.fpr" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[False Positive Rates: {0}]]></Val>
+          <Val><![CDATA[False positive rate: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Hatalı Pozitif Oranları: {0}]]></Val>
+            <Val><![CDATA[Hatalı pozitif oranı: {0}]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[FPR: {0}]]></Val>
+            <Val><![CDATA[False Positive Rates: {0}]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.Statistics.mae" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean absolute error: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ortalama mutlak hata: {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6444,10 +7041,13 @@
       </Item>
       <Item ItemId=";Interpret.Statistics.mse" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[MSE: {0}]]></Val>
+          <Val><![CDATA[Mean squared error: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[MSE: {0}]]></Val>
+            <Val><![CDATA[Ortalama hata karesi: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[MSE: {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6462,10 +7062,13 @@
       </Item>
       <Item ItemId=";Interpret.Statistics.rSquared" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[R-squared: {0}]]></Val>
+          <Val><![CDATA[R²: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[R-kare: {0}]]></Val>
+            <Val><![CDATA[R²: {0}]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[R-squared: {0}]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6474,6 +7077,15 @@
           <Val><![CDATA[Recall: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Yakalama: {0}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Interpret.Statistics.selectionRate" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Selection rate: {0}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seçim oranı: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6723,10 +7335,13 @@
       </Item>
       <Item ItemId=";Interpret.WhatIfTab.featureImportanceGetStartedText" ItemType="0" PsrId="306" InstFlg="true" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Select a point to see its local importance]]></Val>
+          <Val><![CDATA[Select a datapoint in the table above to view its local feature importances]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Yerel önem derecesini görmek için bir nokta seçin]]></Val>
+            <Val><![CDATA[Yerel özellik önem derecelerini görüntülemek için yukarıdaki tablodan bir veri noktası seçin]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Select a point to see its local importance]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7330,6 +7945,267 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";InterpretText.BarChart.featureImportance" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[FEATURE IMPORTANCE]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ÖZELLİK ÖNEM DERECESİ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.Legend.featureLegend" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[TEXT FEATURE LEGEND]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[METİN ÖZELLİĞİ GÖSTERGESİ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.Legend.negFeatureImportance" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[NEGATIVE FEATURE IMPORTANCE]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[NEGATİF ÖZELLİK ÖNEM DERECESİ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.Legend.posFeatureImportance" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[POSITIVE FEATURE IMPORTANCE]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[POZİTİF ÖZELLİK ÖNEM DERECESİ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.allButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[ALL FEATURES]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[TÜM ÖZELLİKLER]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.colon" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.importantWords" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Most Important Words]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[En Önemli Sözcükler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.interpretibilityDashboard" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Interpretability Dashboard]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yorumlanabilirlik Panosu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.label" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Etiket]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.legendText" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pozitif skaler özellik önem dereceleri, sözcüğün seçili etiketinizin sınıflandırması için önemli olduğu kapsamı temsil eder ve negatif skaler özellik önem dereceleri ise modelinizi seçili etiketinizden uzaklaştıran sözcükleri temsil eder.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.negButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[NEGATIVE FEATURES]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[NEGATİF ÖZELLİKLER]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.posButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[POSITIVE FEATURES]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[POZİTİF ÖZELLİKLER]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretText.View.topFeatureList" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Top feature list analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[En çok kullanılan özellikler listesinin analizi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.allData" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[All Data]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm Veriler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.columnFive" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Other metadata]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Diğer meta veriler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.columnFour" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Predicted Y]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tahmini Y]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.columnOne" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Title]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Başlık]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.columnThree" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[True Y]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğru Y]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.columnTwo" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Index]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Endeks]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.filter" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Filter]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Filtre]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.pageSize" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Page size: ]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sayfa boyutu: ]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.search" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Search]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ara]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.settings" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ayarlar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.tabOptionFirst" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Image explorer view]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Görüntü gezgini görünümü]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.tabOptionSecond" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Table view]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tablo görünümü]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.tabOptionThird" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Data characteristics]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri özellikleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.thumbnailSize" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Thumbnail size]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Küçük resim boyutu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.titleBarError" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Error instances]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hata örnekleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";InterpretVision.Dashboard.titleBarSuccess" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Success instances]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Başarı örnekleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.AddingTab.AddButtonText" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add]]></Val>
@@ -7477,6 +8353,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ModelAssessment.Cohort.delete" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sil]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.Cohort.deleteCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Deleting {0}?]]></Val>
@@ -7506,10 +8391,13 @@
       </Item>
       <Item ItemId=";ModelAssessment.Cohort.shiftCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Shift cohort]]></Val>
+          <Val><![CDATA[Switch cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kaydırma kohortu]]></Val>
+            <Val><![CDATA[Kohort değiştir]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Shift cohort]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7518,15 +8406,6 @@
           <Val><![CDATA[Select a cohort from the cohort list. Apply the cohort to the dashboard.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Kohort listesinden bir kohort seçin. Kohortu panoya uygulayın.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";ModelAssessment.CohortInformation.CreateNewCohort" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Create new cohort]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Yeni kohort oluştur]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7567,11 +8446,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.CohortInformation.SwitchGlobalCohort" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.CohortInformation.NewCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Switch global cohort]]></Val>
+          <Val><![CDATA[New cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Genel kohortu değiştir]]></Val>
+            <Val><![CDATA[Yeni kohort]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.CohortInformation.ShiftCohort" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch cohort]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohort değiştir]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7612,6 +8500,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.DataAnalysis" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Data analysis]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri analizi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ComponentNames.DataBalance" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Data balance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri dengesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.ComponentNames.DataExplorer" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Data explorer]]></Val>
@@ -7648,23 +8554,23 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.ComponentNames.ModelStatistics" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.ComponentNames.ModelOverview" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Model statistics]]></Val>
+          <Val><![CDATA[Model overview]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Model istatistikleri]]></Val>
+            <Val><![CDATA[Modele genel bakış]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";ModelAssessment.DashboardSettings.Content" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
+          <Val><![CDATA[This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bu listede panonun düzeni gösterilir. Aşağıdaki bileşenlerde görüntülenmek üzere hata analizi bileşenini kullanarak verileri filtreleyebilirsiniz. Bileşen ekleyebilir, akışı yeniden sıralamak için bunları sürükleyip bırakabilir veya bileşenleri silebilirsiniz.]]></Val>
+            <Val><![CDATA[Bu liste, panonun düzenini gösterir. Aşağıdaki bileşenlerde görüntülenmek üzere, hata analizi bileşenini kullanarak verileri filtreleyebilirsiniz.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[This list shows the layout of the dashboard. Each component tagged with Identify can filter down data to be viewed in the components below wit. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
+            <Val><![CDATA[This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below. You can add components, drag and drop them to reorder the flow or delete components.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -7725,13 +8631,643 @@
       </Item>
       <Item ItemId=";ModelAssessment.DashboardSettings.Title" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dashboard navigation]]></Val>
+          <Val><![CDATA[Dashboard configuration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pano gezintisi]]></Val>
+            <Val><![CDATA[Pano yapılandırması]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Dashboard layout]]></Val>
+            <Val><![CDATA[Dashboard navigation]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Callout.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam denge ölçüleri, veri kümemizdeki eşitsizlik hakkında daha gelişmiş bilgiler elde etmemizi sağlar. İlgili sütun kümesi üzerinde hesaplanır ve etiket sütununa bağımlı değildir. Bu ölçüler, ilgili sütunlarımıza ait tüm özellik değeri kombinasyonları genelinde kayıtların dağılımını gösterir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Callout.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What are aggregate balance measures?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam denge ölçüleri nedir?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.AtkinsonIndex.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Atkinson Endeksi, bir toplumdaki vatandaşlar arasında gelir dağılımının daha eşit olması için o toplumun feragat etmesi gereken toplam gelir yüzdesini ifade eden bir gelir eşitsizliği ölçüsüdür. Veri kümesi için bu, ilgili sütunlarla ilişkili olarak mükemmel dengeye sahip bir veri kümesine sahip olmak için atılacak kayıtların yüzdesini temsil eder. Endeksin değer aralığı 0 ile 1 arasındadır ve burada daha küçük endeks değerleri düşük eşitsizlik düzeylerini gösterir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.AtkinsonIndex.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Atkinson Index]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Atkinson Endeksi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.TheilLIndex.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Theil L Endeksi, α = 0 değerli Genelleştirilmiş Entropi Endeksi kullanılarak hesaplanan gelir eşitsizliği ölçüsüdür ve bu yüzden dağılımın alt sonundaki farklılıklara daha duyarlıdır. Bu endeks, veri kümesinde sıklıkla oluşmayan kayıt kombinasyonlarını daha iyi yakalar. Ayrıca ortalama log sapması ölçüsü olarak da adlandırılır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.TheilLIndex.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Theil Index (L)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Theil Endeksi (L)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.TheilTIndex.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Theil T Endeksi, α = 1 değerli Genelleştirilmiş Entropi Endeksi kullanılarak hesaplanan gelir eşitsizliği ölçüsüdür ve bu yüzden dağılımın üst sonundaki farklılıklara daha duyarlıdır. Bu endeks, veri kümesinde sıklıkla oluşan kayıt kombinasyonlarını daha iyi yakalar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Measures.TheilTIndex.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Theil Index (T)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Theil Endeksi (T)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.MeasuresNotComputed" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam denge ölçüleri hesaplanmadı. Bunları hesaplamak için lütfen: (1) görev türünün 'sınıflandırma' olduğundan, (2) kategorik özellikler listesinin geçerli olup boş olmadığından ve (3) içgörüler hesaplanırken hata oluşmadığından emin olun.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Aggregate balance measures]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam denge ölçüleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Table.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Description]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Açıklama]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Table.FeatureName" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik adı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.AggregateBalanceMeasures.Table.FeatureValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik değeri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Callout.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dağılım dengesi ölçüleri, verilerimizi referans bir tekdüze dağılımla karşılaştırmamızı sağlar. Bu ölçüler ilgili sütun başına hesaplanır ve etiket sütununa bağımlı değildir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Callout.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What are distribution balance measures?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dağılım dengesi ölçüleri nedir?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Chart.Axes.DistributionMeasure" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Distribution measure]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dağılım ölçüsü]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Chart.Axes.MeasureValue" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Measure value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçü değeri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Chart.Title1" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Comparing]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Karşılaştırma]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Chart.Title2" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[with the Uniform Distribution]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tekdüze Dağılım ile]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.ChiSquarePValue.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ki-kare testinin p-değeri, gözlemlenen ve beklenen sıklıklar arasındaki farkın rastgele olduğunu belirten sıfır hipotezinin aleyhinde kanıtlar sağlar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.ChiSquarePValue.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Chi-Square P-Value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ki-Kare P-Değeri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.ChiSquareStatistic.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ki-kare testi, kategorik verilerin her kategorideki beklenen sıklıklarla karşılaştırıldığında belirtilen sıklıklara sahip olduğu sıfır hipotezini doğrular.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.ChiSquareStatistic.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Chi-Square (χ2) Statistic]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ki-Kare (χ2) İstatistiği]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.CrossEntropy.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İki olasılık dağılımı arasındaki log kaybı olarak da bilinen çapraz entropi, veri kümemizin olasılık dağılımının negatif toplamını referans olasılık dağılımının log ölçüsüyle çarparak hesaplayan bir bilişim kuramı ölçüsüdür.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.CrossEntropy.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cross Entropy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Çapraz Entropi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.InfiniteNormDistance.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Chebyshev mesafesi veya satranç tahtası mesafesi olarak da bilinen sonsuzluk norm mesafesi, iki vektör arasındaki mesafenin herhangi bir koordinat boyutu boyunca bu vektörler arasındaki en büyük fark olduğunu belirten bir ölçüdür. Ölçü negatif değerli değildir ve 0 değeri iki dağılımın eşit olduğu anlamına gelir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.InfiniteNormDistance.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infinite Norm Distance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sonsuzluk Norm Mesafesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.JSDistance.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1]5D;, in which a measure value of 0 means the distribution is perfectly balanced.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jensen-Shannon (JS) mesafesi iki olasılık dağılımı arasındaki benzerliği ölçer. Kullback-Leibler (KL) sapmasının simetrik ve düz hali ve JS sapmasının kareköküdür. [0, 1]5D; değer aralığına sahiptir ve bu aralıkta 0 ölçü değeri dağılımın tamamen dengeli olduğu anlamına gelir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.JSDistance.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Jensen-Shannon Distance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jensen-Shannon Mesafesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.KLDivergence.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu Kullback-Leibler (KL) sapması, bir olasılık dağılımının ikinci bir olasılık dağılımından nasıl farklı olduğunun bir ölçüsüdür. Bir dağılım diğer bir dağılımı yaklaşık olarak tahmin etmek için kullanıldığında kaybolan bilgi miktarını temsil eder. Ölçü negatif değerli değildir ve 0 değeri iki dağılımın eşit olduğu anlamına gelir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.KLDivergence.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Kullback-Leibler Divergence]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kullback-Leibler Sapması]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.TotalVariationDistance.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam varyasyon mesafesi, iki dağılım arasındaki Manhattan (L1) mesafesinin yarısına eşittir. İki dağılım arasındaki mutlak değer farklarının toplamı kullanılarak hesaplanır. Ölçü negatif değerli değildir ve 0 değeri iki dağılımın eşit olduğu anlamına gelir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.TotalVariationDistance.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Total Variation Distance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Toplam Varyasyon Mesafesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.WassersteinDistance.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wasserstein mesafesi, bir dağılımı başka bir dağılıma dönüştürmek için gereken minimum 'iş' miktarı olarak düşünülebileceğinden, toprak taşıma mesafesi olarak da bilinir. Taşınması gereken dağılım ağırlığının miktarının, dağılımın taşınması gereken mesafeyle çarpımı olarak ölçülür. Ölçü negatif değerli değildir ve 0 değeri iki dağılımın eşit olduğu anlamına gelir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Measures.WassersteinDistance.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wasserstein Distance]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wasserstein Mesafesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.MeasuresNotComputed" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dağılım dengesi ölçüleri hesaplanmadı. Bunları hesaplamak için lütfen: (1) görev türünün 'sınıflandırma' olduğundan, (2) kategorik özellikler listesinin geçerli olup boş olmadığından ve (3) içgörüler hesaplanırken hata oluşmadığından emin olun.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.DistributionBalanceMeasures.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Distribution balance measures]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dağılım dengesi ölçüleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Callout.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik dengesi ölçüleri, tüm özellik değerleri kombinasyonlarının dengeli olasılıkta pozitif sonucu (doğru tahmin) alıp almayacağını görmemizi sağlar.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Callout.Title" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[What are feature balance measures?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik dengesi ölçüleri nedir?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart.Axes.ClassA" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class A]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A Sınıfı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart.Axes.ClassB" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Class B]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[B Sınıfı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart.Tooltip.And" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[and]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ve]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart.Tooltip.ValueDescription1" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[have a]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[değer]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Chart.Tooltip.ValueDescription2" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[of]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[/]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Description1" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Showing]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gösterilen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Description2" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[gaps on all classes of]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[tüm sınıflarda ölçülen farklar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Description3" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[for label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[etiket için]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.FeaturePicker" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.LabelPicker" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Positive label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pozitif etiket]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.MeasurePicker" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Measure]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçü]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.JaccardIndex.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1]5D;, where 0 means that the distributions are completely disjoint and 1 means they are completely identical.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jaccard İndeksi farkı, A Sınıfının Jaccard İndeksi ile B Sınıfının Jaccard İndeksi arasındaki farkı temsil eder. Jaccard İndeksi, bir birlik üzerinden kesişim ölçüsüdür. Bu nedenle [0, 1]5D; aralığına sahiptir ve bu aralıkta 0 dağılımların tamamen ayrı olduğunu ifade ederken 1 dağılımların tamamen aynı olduğunu ifade eder.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.JaccardIndex.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Jaccard Index]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Jaccard İndeksi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.KendallRankCorrelation.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[(KRC) farkı, A Sınıfının KRC değeri ile B Sınıfının KRC değeri arasındaki farkı temsil eder. Kendall Sıralı Korelasyonu ölçülen iki miktar arasındaki sırasal ilişkilendirmeyi ölçmek için kullanılan bir bağıntı istatistiğidir. İki değişken için gözlemler benzer sıraya sahipse ölçü yüksektir ve bu iki değişken benzer olmayan sıraya sahip olduğunda ise ölçü düşüktür.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.KendallRankCorrelation.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Kendall Rank Correlation]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kendall Sıralı Korelasyonu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.LogLikelihoodRatio.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[(LLR) farkı, A Sınıfının LLR değeri ile B Sınıfının LLR değeri arasındaki farkı temsil eder. Log Olasılık Oranı pozitif etikete sahip bir özelliğin olasılığı ile pozitif etiketin olasılığı arasındaki oranı ölçmek için kullanılan bir bağıntı istatistiğidir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.LogLikelihoodRatio.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Log-Likelihood Ratio]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Log Olasılık Oranı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.PointwiseMutualInformation.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[(PMI) farkı, A Sınıfının PMI değeri ile B Sınıfının PMI değeri arasındaki farkı temsil eder. Noktasal Karşılıklı Bilgi, A Sınıfı ve B Sınıfı örnekleri için ifade edilecek olursa, bu sınıfların ortak dağılımları ve kendi (birbirinden bağımsız varsayılan) dağılımları dikkate alındığında bunların çakışma olasılığı arasındaki farkını nicel olarak değerlendiren bir entropi ölçüsüdür.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.PointwiseMutualInformation.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Pointwise Mutual Information]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Noktasal Karşılıklı Bilgi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.SorensenDiceCoefficient.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[(SDC) farkı, A Sınıfının SDC değeri ile B Sınıfının SDC değeri arasındaki farkı temsil eder. Sørensen-Dice Katsayısı, iki örneğin benzerliğini ölçmek için kullanılan bir birlik üzerinden kesişim ölçüsüdür. F1 puanıyla ilişkilidir ve her iki kümede ortak olan öğe sayısının her bir kümedeki öğe sayısının toplamına bölümünün iki katına eşittir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.SorensenDiceCoefficient.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Sørensen-Dice Coefficient]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sørensen-Dice Katsayısı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.StatisticalParity.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[(SP) farkı, A Sınıfının SP değeri ile B Sınıfının SP değeri arasındaki farkı temsil eder. İstatistiksel Eşlik pozitif oranını yani bir sınıfın ne kadar pozitif sonuç aldığını ölçer. Fark, iki sınıfın pozitif oranları arasındaki farkı ölçer. 0’a yakın bir değer, her iki sınıfın pozitif sonucu eşit oranlarda aldığı anlamına gelir. Pozitif bir değer ilk sınıfın pozitif etiketini ikinci sınıftan daha çok gördüğü anlamına gelir. Negatif bir değer ise tam tersine işaret eder.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.StatisticalParity.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Statistical Parity]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İstatistiksel Eşlik]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.TTest.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[boşluk, A Sınıfı ile B Sınıfının t-testi arasındaki farkı temsil eder. t-testi, iki grubun (eşleştirilmiş) ortalamasını karşılaştırmak için kullanılan bir bağıntı istatistiğidir. İki grubun önemli ölçüde farklı olup olmadığını görmek için t-dağıtım tablosundaki boşluk değerine bakılır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.TTest.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[t-test]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[t-test]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.TTestPValue.Description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[boşluk, A Sınıfı ile B Sınıfı arasındaki t-test boşluğunun istatistiksel önemini temsil eder. t-test boşluğu değeri ve serbestlik derecesi, p-değerini hesaplamak için kullanılır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Measures.TTestPValue.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[t-test p-value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[t-test p-değeri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.MeasuresNotComputed" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik bakiyesi ölçüleri hesaplanmadı. Bunları hesaplamak için lütfen: (1) görev türünün 'sınıflandırma' olduğundan, (2) kategorik özellikler listesinin geçerli olup boş olmadığından, (3) içgörüler hesaplanırken hata oluşmadığından emin olun.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.FeatureBalanceMeasures.Name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature balance measures]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik bakiyesi ölçüleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.LearnMore" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Learn more]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Daha fazla bilgi edinin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.DataBalance.MeasuresNotComputed" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu sekme, bu veri kümesi için veri dengeleme ölçülerini hesaplamayı gerektirir. Ölçüler, bir 'sınıflandırma' görev türü ve boş olmayan kategorik özellikler listesi belirtildiğinde hesaplanır.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7764,10 +9300,13 @@
       </Item>
       <Item ItemId=";ModelAssessment.FeatureImportances.IndividualFeature" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.]]></Val>
+          <Val><![CDATA[Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Bir veri noktasını seçmek için tablodaki bir veri noktasına tıklayarak bunun yerel özellik önem derecesi değerlerini (yerel açıklama) ve her birinin koşullu beklenti (ICE) çizimini aşağıda görüntüleyin. 5000’den fazla veri noktası olan veri kümeleri için görünüm, kolay keşif sağlamak üzere rastgele bir alt örnektir.]]></Val>
+            <Val><![CDATA[Aşağıdaki yerel özellik önem değerlerini (yerel açıklama) ve bireysel koşullu beklenti (ICE) grafiğini görüntülemek için tabloda bir veri noktasına (5 veri noktasına kadar) tıklayarak bir veri noktası seçin.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Select a datapoint by clicking on a datapoint (or multiple datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below. For datasets with more than 5000 datapoints, the view is a random subsample to enable easy exploration.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7780,14 +9319,32 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.SelectionCounter" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[{0}/{1} datapoints selected]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0}/{1} veri noktası seçildi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.FeatureImportances.SelectionLimit" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Up to 5 datapoints can be selected at this time.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Şu anda en fazla 5 veri noktası seçilebilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";ModelAssessment.MainMenu.DashboardSettings" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dashboard navigation]]></Val>
+          <Val><![CDATA[Dashboard configuration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pano gezintisi]]></Val>
+            <Val><![CDATA[Pano yapılandırması]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Dashboard settings]]></Val>
+            <Val><![CDATA[Dashboard navigation]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -7828,20 +9385,761 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.MainMenu.saveCohort" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.MainMenu.shiftCohort" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Save cohort]]></Val>
+          <Val><![CDATA[Switch cohort]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kohortu kaydet]]></Val>
+            <Val><![CDATA[Kohort değiştir]]></Val>
+          </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Shift cohort]]></Val>
+          </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.BoxPlot.boxPlotSeriesLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Box Plot]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kutu Grafiği]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";ModelAssessment.MainMenu.shiftCohort" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";ModelAssessment.ModelOverview.BoxPlot.outlierLabel" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Shift cohort]]></Val>
+          <Val><![CDATA[Outliers]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Kaydırma kohortu]]></Val>
+            <Val><![CDATA[Aykırı değerler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.BoxPlot.outlierProbability" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[probability]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[olasılık]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.boxPlotPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select at least one cohort to view the box plot.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kutu grafiğini görüntülemek için en az bir kohort seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.chartCohortSelectionPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select at least one cohort overall to view the chart.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Grafiği görüntülemek için genel olarak en az bir kohort seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.chartConfigApply" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Apply]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uygula]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.chartConfigCancel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cancel]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[İptal]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.chartConfigDatasetCohortSelectionPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select dataset cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortlarını seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.chartConfigFeatureBasedCohortSelectionPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select feature-based cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik tabanlı kohortları seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.cohortSelection.flyoutDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortları veya özellik kohortları görüntülemeyi seçebilirsiniz. Özellik kohortları kullanılamıyorsa öncelikle özellik kohortları görünümünde bir veya daha fazla özellik seçmeniz gerekir. Ardından özellik kohortları oluşturulur ve böylece özellik kohortlarını burada seçebilirsiniz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.cohortSelection.flyoutHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohortları seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.cohortSelectionButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohortları seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.countAxisLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Count]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sayı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.countColumnHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Sample size]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Örneklem büyüklüğü]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.dataCohortsChartSelectionHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dataset cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Veri kümesi kohortları]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.dataCohortsHeatmapHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohortlar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.disaggregatedAnalysisBaseCohortDislaimer" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The cohorts in the following feature-based analysis are based on the global cohort, {0}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aşağıdaki özellik tabanlı analizdeki kohortlar genel kohorta bağlıdır, {0}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.disaggregatedAnalysisBaseCohortWarning" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} kohortdan farklı olarak, {1} filtre içerir. Sonuç olarak, tüm veri kümesinin yalnızca bir alt kümesini yakalar ve içgörüler tam veri kümesine genelleştirilemeyebilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.disaggregatedAnalysisFeatureSelectionPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select features to generate the feature-based analysis.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik tabanlı analiz oluşturmak için özellikleri seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.disaggregatedAnalysisHeatmapHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik kohortları]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.fairnessMetricsHeatmapHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fairness metrics]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eşitlik ölçümleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureBasedCohortsChartSelectionHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature cohorts]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik kohortları]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureBasedViewDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik tabanlı (tek özelliğin seçili olması durumunda) ve kesişimli (iki özelliğin seçili olması durumunda) kohortlar arasında model performans çözümlemesini görmek için en fazla iki özellik seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.categoricalGroupsCountRemark" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This feature has {0} unique values.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu özelliğin {0} benzersiz değeri var.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.continuousFeatureBinningLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Change the number of bins]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bölme sayısını değiştirme]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.continuousGroupsCountRemark" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This feature is continuous and split into {0} bins.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu özellik süreklidir ve {0} bölmeye bölünmüştür.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.featureColumnHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Features]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellikler]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.flyoutDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eşitlik, modelinizin davranışındaki farklara göre değerlendirilir. Verilerinizi seçilen her bir özelliğin değerlerine göre böleriz ve modelinizin performans ölçümleri ile tahminlerinin bu bölmeler arasında nasıl farklılık gösterdiğini değerlendiririz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.flyoutHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose your features]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özelliklerinizi seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.flyoutSubHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Along which features would you like to evaluate your model's fairness?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modelinizin eşitliğini hangi özelliklerle birlikte değerlendirmek istiyorsunuz?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.groupsColumnHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Groups]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gruplar]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureConfiguration.tooManyFeaturesSelectedWarning" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Please select only up to two features.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Lütfen en fazla iki özellik seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featureSelectionDropdownPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select features to use for a feature-based analysis.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik tabanlı analiz için kullanmak üzere özellikleri seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.featuresDropdown" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Feature(s)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellik(ler)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.helpMeChooseFeaturesButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Help me choose features]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Özellikleri seçmeme yardımcı olun]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.helpMeChooseMetricsButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Help me choose metrics]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçümleri seçmeme yardımcı olun]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricChartDropdownSelectionHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.flyoutDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Model türünüz temel alındığında, önerilen performans ölçümleri bunlardır. Eşitlik analizi veya ayrıştırılmış analiz, modelinizin performansının özellik alt grupları arasında nasıl farklılık gösterdiğini değerlendirerek gerçekleştirilir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.flyoutHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose your metrics]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçümlerinizi seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.flyoutSubHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[How would you like to measure your model's performance?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modelinizin performansını nasıl ölçmek istiyorsunuz?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.metricDescriptionColumnHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric Description]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm Açıklaması]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.metricNameColumnHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric name]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm adı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricConfiguration.noMetricsSelectedWarning" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Please select at least one metric.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Lütfen en az bir ölçüm seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricSelectionButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose metric]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricSelectionDropdownPlaceholder" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select metrics to compare your cohorts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohortlarınızı karşılaştırmak için ölçümleri seçin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.accuracy.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The fraction of data points classified correctly.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğru olarak sınıflandırılmış veri noktalarının kesir değeri.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.accuracy.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Accuracy]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğruluk]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.f1Score.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[F1-score is the harmonic mean of precision and recall.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 skoru, duyarlık ile yakalamanın harmonik ortalamasıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.f1Score.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[F1 score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[F1 skoru]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.fairnessMetricDifference" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Difference]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Fark]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.fairnessMetricRatio" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Ratio]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Oran]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.falseNegativeRate.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The fraction of data points classified incorrectly among those whose true label is 1.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğru etiketi 1 olanlar arasında yanlış sınıflandırılmış veri noktalarının kesir değeri.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.falseNegativeRate.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[False negative rate]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hatalı negatif oranı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.falsePositiveRate.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The fraction of data points classified incorrectly among those whose true label is 0.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Doğru etiketi 0 olanlar arasında yanlış sınıflandırılmış veri noktalarının kesir değeri.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.falsePositiveRate.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[False positive rate]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hatalı pozitif oranı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanAbsoluteError.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The average of absolute values of errors. More robust to outliers than MSE.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hata mutlak değerlerinin ortalaması. Aykırı değerlere karşı MSE'den daha dayanıklıdır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanAbsoluteError.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean absolute error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ortalama mutlak hata]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanPrediction.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The average of all predictions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tüm tahminlerin ortalaması.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanPrediction.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean prediction]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ortalama tahmin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanSquaredError.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The average of squared errors.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Hata karelerinin ortalaması.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.meanSquaredError.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Mean squared error]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ortalama hata karesi]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.precision.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The fraction of data points classified correctly among those classified as 1.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[1 olarak sınıflandırılanların arasında doğru şekilde sınıflandırılmış veri noktalarının kesir değeri.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.precision.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Precision score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Duyarlık puanı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.recall.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gerçek etiketi 1 olanların arasında doğru bir şekilde sınıflandırılmış veri noktalarının kesir değeri. Alternatif adlar: gerçek pozitif oran, hassasiyet.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.recall.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recall score]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yakalama puanı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.selectionRate.description" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The percentage of predictions with label 1.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Etiketi 1 olan tahminlerin yüzdesi.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metrics.selectionRate.name" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Selection rate]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Seçim oranı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricsDropdown" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metric(s)]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm(ler)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.metricsVisualizationsPivotItem" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Metrics visualizations]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ölçüm görselleştirmeleri]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.nA" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[N/A]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[YOK]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.notAvailable" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[N/A]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[YOK]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.other" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Other]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Diğer]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.probabilityDistributionPivotItem" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Probability distribution]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Olasılık dağılımı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.probabilityForClassSelectionHeader" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Probability for class]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Sınıf olasılığı]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.probabilityLabelSelectionButton" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Choose label]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Etiket seçin]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.probabilitySplineChartToggleLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use spline chart]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eğri grafiği kullan]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.selectAllCohortsOption" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Select all]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tümünü seç]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.tableCountTooltip" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cohort {0} contains {1} instances.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohort {0}, {1} örnek içerir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.tableDifferenceTooltip" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} farkı {1}. Kohort {3} üzerindeki en düşük {2} değerini kohort {5} üzerindeki en büyük {4} değerinden çıkararak hesaplanır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.tableMetricTooltip" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The model's {0} on cohort {1} is {2}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Kohort {1} üzerinde modele ait {0} şudur: {2}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.tableRatioTooltip" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} oranı {1}. Kohort {3} üzerindeki en düşük {2} değerini kohort {5} üzerindeki en düşük {4} değerine bölerek hesaplanır.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.topLevelDescription" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the "Dataset cohorts" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the "Feature cohorts" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tahmin değerlerinizin dağılımını ve model performans ölçümlerinin değerlerini inceleyerek modelinizin performansını değerlendirin. Önceden oluşturulmuş veya yeni oluşturulmuş farklı veri kümesi gruplarındaki performansının karşılaştırmalı bir analizine bakarak modelinizi incelemek için "Veri kümesi grupları" sekmesini kullanın. Hassas/hassas olmayan özellik alt gruplarındaki performansının karşılaştırmalı bir analizine bakarak modelinizi incelemek için "Özellik kohortları"nı kullanın. (ör. farklı cinsiyetler veya gelir düzeyleri arasındaki performans)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";ModelAssessment.ModelOverview.visualDisplayToggleLabel" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Show heatmap]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Isı haritasını göster]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
