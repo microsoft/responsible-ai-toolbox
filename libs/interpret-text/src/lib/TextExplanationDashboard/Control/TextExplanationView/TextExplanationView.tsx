@@ -5,6 +5,7 @@ import {
   ChoiceGroup,
   IChoiceGroupOption,
   IStackTokens,
+  Label,
   Slider,
   Stack,
   Text
@@ -85,22 +86,7 @@ export class TextExplanationView extends React.PureComponent<
     return (
       <Stack>
         <Stack tokens={componentStackTokens} horizontal>
-          <Stack.Item
-            align="stretch"
-            grow
-            disableShrink
-            className={classNames.textHighlighting}
-          >
-            <TextHighlighting
-              text={this.state.text}
-              localExplanations={this.state.importances}
-              topK={this.state.topK}
-              radio={this.state.radio}
-            />
-          </Stack.Item>
-          <Stack.Item align="end">
-            <TextFeatureLegend />
-          </Stack.Item>
+          <Text>{localization.InterpretText.View.legendText}</Text>
         </Stack>
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item grow disableShrink>
@@ -123,22 +109,18 @@ export class TextExplanationView extends React.PureComponent<
                     )}
                 </Text>
               </Stack.Item>
+              <Stack.Item>
+                <Label>{localization.InterpretText.View.importantWords}</Label>
+              </Stack.Item>
               <Stack.Item id="TextTopKSlider">
                 <Slider
                   min={1}
                   max={this.state.maxK}
                   step={1}
                   defaultValue={this.state.topK}
-                  showValue={false}
+                  showValue
                   onChange={this.setTopK}
                 />
-              </Stack.Item>
-              <Stack.Item align="center">
-                <Text variant={"large"}>
-                  {`${this.state.topK.toString()} ${
-                    localization.InterpretText.View.importantWords
-                  }`}
-                </Text>
               </Stack.Item>
               <Stack.Item>
                 <ClassImportanceWeights
@@ -158,14 +140,25 @@ export class TextExplanationView extends React.PureComponent<
                   />
                 </Stack.Item>
               )}
-              {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
-                <Stack.Item>
-                  <Text variant={"small"}>
-                    {localization.InterpretText.View.legendText}
-                  </Text>
-                </Stack.Item>
-              )}
             </Stack>
+          </Stack.Item>
+        </Stack>
+        <Stack tokens={componentStackTokens} horizontal>
+          <Stack.Item
+            align="stretch"
+            grow
+            disableShrink
+            className={classNames.textHighlighting}
+          >
+            <TextHighlighting
+              text={this.state.text}
+              localExplanations={this.state.importances}
+              topK={this.state.topK}
+              radio={this.state.radio}
+            />
+          </Stack.Item>
+          <Stack.Item align="end">
+            <TextFeatureLegend />
           </Stack.Item>
         </Stack>
       </Stack>
