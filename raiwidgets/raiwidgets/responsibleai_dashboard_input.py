@@ -195,7 +195,8 @@ class ResponsibleAIDashboardInput:
         try:
             id, features, feature_name, new_value, target = post_data
             whatif = self._analysis.causal._whatif(
-                id, pd.DataFrame.from_records(features), new_value,
+                id, self._analysis.get_test_data(
+                    test_data=pd.DataFrame.from_records(features)), new_value,
                 feature_name, target)
             return {
                 WidgetRequestResponseConstants.data: whatif

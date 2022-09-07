@@ -153,7 +153,7 @@ class RAIInsights(RAIBaseInsights):
                     columns=self._feature_metadata.dropped_features,
                     axis=1)
 
-    def get_test_data(self):
+    def get_test_data(self, test_data=None):
         """Returns the test dataset after dropping
         features if such a list is configured.
 
@@ -161,14 +161,21 @@ class RAIInsights(RAIBaseInsights):
         :rtype: pandas.DataFrame
         """
         if self._feature_metadata is None:
-            return self.test
+            return test_data if test_data is not None else self.test
+            # return self.test
         else:
             if self._feature_metadata.dropped_features is None:
-                return self.test
+                test_data if test_data is not None else self.test
+                # return self.test
             else:
-                return self.test.drop(
-                    columns=self._feature_metadata.dropped_features,
-                    axis=1)
+                if test_data is None:
+                    return self.test.drop(
+                        columns=self._feature_metadata.dropped_features,
+                        axis=1)
+                else:
+                    return test_data.drop(
+                        columns=self._feature_metadata.dropped_features,
+                        axis=1)
 
     def _initialize_managers(self):
         """Initializes the managers.

@@ -403,7 +403,7 @@ class ErrorAnalysisManager(BaseManager):
         inst.__dict__['_categorical_features'] = categorical_features
         target_column = rai_insights.target_column
         true_y = rai_insights.test[target_column]
-        dataset = rai_insights.test.drop(columns=[target_column])
+        dataset = rai_insights.get_test_data().drop(columns=[target_column])
         inst.__dict__['_dataset'] = dataset
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
