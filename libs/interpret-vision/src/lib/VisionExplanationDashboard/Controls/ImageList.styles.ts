@@ -16,6 +16,7 @@ export interface IDatasetExplorerTabStyles {
   image: IStyle;
   imageFrame: IStyle;
   imageSizer: IStyle;
+  selectedImage: IStyle;
 }
 
 export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
@@ -54,6 +55,16 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
         fontSize: 0,
         overflow: "hidden",
         position: "relative"
+      },
+      selectedImage: {
+        border: "5px solid blue",
+        bottom: 2,
+        height: "90%",
+        left: 2,
+        position: "absolute",
+        right: 2,
+        top: 2,
+        width: "90%"
       },
       tile: {
         float: "left",

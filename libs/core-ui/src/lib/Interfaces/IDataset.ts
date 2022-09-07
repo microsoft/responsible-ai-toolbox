@@ -7,6 +7,7 @@ import { IFeatureMetaData } from "./IMetaData";
 export enum DatasetTaskType {
   Regression = "regression",
   Classification = "classification",
+  ImageClassification = "image_classification",
   TextClassification = "text_classification"
 }
 
@@ -22,6 +23,7 @@ export interface IDataset {
   target_column?: string;
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
+  images?: string[];
 }
 
 // TODO Remove DatasetSummary when possible
