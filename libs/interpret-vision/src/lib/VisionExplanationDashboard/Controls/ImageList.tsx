@@ -27,10 +27,11 @@ export interface IImageListState {
   data: IVisionListItem[];
   filter: string;
   filteredItems: IVisionListItem[];
+  selectedItems: boolean[];
 }
 
 const RowsPerPage = 3;
-const ImagePadding = 2;
+const ImagePadding = 15;
 const imageProps: IImageProps = {
   imageFit: ImageFit.cover
 };
@@ -53,7 +54,8 @@ export class ImageList extends React.Component<
     this.state = {
       data: [],
       filter: this.props.searchValue.toLowerCase(),
-      filteredItems: []
+      filteredItems: [],
+      selectedItems: []
     };
   }
 
@@ -61,6 +63,13 @@ export class ImageList extends React.Component<
     props: IImageListProps,
     state: IImageListState
   ) {
+    if (props.data !== state.data && props.data.length > 0) {
+      return {
+        filter: "",
+        filteredItems: props.data
+      };
+    }
+
     const searchVal = props.searchValue.toLowerCase();
     if (searchVal.length === 0) {
       return {
@@ -83,17 +92,21 @@ export class ImageList extends React.Component<
 
   public componentDidMount() {
     const data = this.props.data;
-    this.setState({ data, filteredItems: data });
+    const selectedItems: boolean[] = [];
+    for (let i = 0; i < data.length; i++) {
+      selectedItems.push(false);
+    }
+    this.setState({ data, filteredItems: data, selectedItems });
   }
 
   public render(): React.ReactNode {
     const classNames = imageListStyles();
-
+    const items = this.state.filteredItems;
     return (
       <FocusZone>
         <List
           key={this.props.imageDim}
-          items={this.state.filteredItems}
+          items={items}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageHeight={this.getPageHeight}
@@ -105,20 +118,29 @@ export class ImageList extends React.Component<
 
   private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = imageListStyles();
+    if (!item) {
+      return;
+    }
 
     return (
       <Stack
         tokens={stackTokens}
         className={classNames.tile}
         style={{
+          height: this.props.imageDim * 1.05,
           width: `${100 / this.columnCount}%`
         }}
       >
-        <Stack.Item className={classNames.imageSizer}>
+        <Stack.Item
+          className={classNames.imageSizer}
+          style={{ paddingBottom: this.props.imageDim / 1.4 }}
+        >
           <Stack.Item
-            className={classNames.imageFrame}
+            className={
+              item.selected ? classNames.selectedImage : classNames.imageFrame
+            }
             style={{
-              height: this.props.imageDim - ImagePadding,
+              height: this.props.imageDim * 1.05,
               overflow: "hidden",
               width: this.props.imageDim - ImagePadding
             }}
@@ -135,16 +157,18 @@ export class ImageList extends React.Component<
           <Stack.Item
             className={classNames.labelContainer}
             style={{
-              left: ImagePadding,
-              top: ImagePadding,
-              width: "100%"
+              left: ImagePadding - 14,
+              width:
+                this.props.imageDim > 200
+                  ? this.props.imageDim
+                  : this.props.imageDim - 1.35 * ImagePadding
             }}
           >
             <Text
               className={classNames.label}
-              style={{ width: this.props.imageDim - 3 }}
+              style={{ width: this.props.imageDim - 20 }}
             >
-              {item?.predictedY}
+              {item?.trueY}
             </Text>
           </Stack.Item>
         </Stack.Item>
@@ -156,6 +180,20 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
+    const { selectedItems } = this.state;
+    selectedItems[item.index] = !selectedItems[item.index];
+    this.setState({ selectedItems: [...selectedItems] });
+
+    let items = this.state.filteredItems;
+    items = items.map((i) => {
+      if (i.index === item.index) {
+        i.selected = !i.selected;
+      }
+      return i;
+    });
+
+    this.setState({ filteredItems: [...items] });
+
     this.props.selectItem(item);
   };
 

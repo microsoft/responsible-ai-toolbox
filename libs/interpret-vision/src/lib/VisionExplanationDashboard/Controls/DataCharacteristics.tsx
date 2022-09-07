@@ -51,50 +51,13 @@ export class DataCharacteristics extends React.Component<
   }
 
   public componentDidMount(): void {
-    const examples: IVisionListItem[] = this.props.data;
-    const {
-      items,
-      labelVisibilities,
-      renderStartIndex,
-      showBackArrow,
-      columnCount
-    } = this.state;
-    const labels: string[] = [];
-    examples.forEach((example) => {
-      const label = example.predictedY;
-      if (!label || !items) {
-        return;
-      }
-      if (!labels.includes(label)) {
-        labels.push(label);
-        labelVisibilities.set(label, true);
-      }
-      if (items.has(label)) {
-        const arr = items.get(label);
-        if (!arr) {
-          return;
-        }
-        arr.push(example);
-        items.set(label, arr);
-      } else {
-        const arr: IVisionListItem[] = [];
-        arr.push(example);
-        items.set(label, arr);
-      }
-    });
-    labels.forEach(() => {
-      renderStartIndex.push(0);
-      showBackArrow.push(false);
-      columnCount.push(0);
-    });
-    this.setState({
-      columnCount,
-      items,
-      labels,
-      labelVisibilities,
-      renderStartIndex,
-      showBackArrow
-    });
+    this.processData();
+  }
+
+  public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
+    if (prevProps.data !== this.props.data) {
+      this.processData();
+    }
   }
 
   public render(): React.ReactNode {
@@ -225,6 +188,52 @@ export class DataCharacteristics extends React.Component<
         <div className={indicatorStyle} />
       </Stack>
     );
+  };
+
+  private processData = (): void => {
+    const examples: IVisionListItem[] = this.props.data;
+    const columnCount: number[] = [];
+    const items: Map<string, IVisionListItem[]> = new Map();
+    const labels: string[] = [];
+    const labelVisibilities: Map<string, boolean> = new Map();
+    const renderStartIndex: number[] = [];
+    const showBackArrow: boolean[] = [];
+
+    examples.forEach((example) => {
+      const label = example.predictedY;
+      if (!label || !items) {
+        return;
+      }
+      if (!labels.includes(label)) {
+        labels.push(label);
+        labelVisibilities.set(label, true);
+      }
+      if (items.has(label)) {
+        const arr = items.get(label);
+        if (!arr) {
+          return;
+        }
+        arr.push(example);
+        items.set(label, arr);
+      } else {
+        const arr: IVisionListItem[] = [];
+        arr.push(example);
+        items.set(label, arr);
+      }
+    });
+    labels.forEach(() => {
+      renderStartIndex.push(0);
+      showBackArrow.push(false);
+      columnCount.push(0);
+    });
+    this.setState({
+      columnCount,
+      items,
+      labels,
+      labelVisibilities,
+      renderStartIndex,
+      showBackArrow
+    });
   };
 
   private sortKeys(keys: string[]): string[] {

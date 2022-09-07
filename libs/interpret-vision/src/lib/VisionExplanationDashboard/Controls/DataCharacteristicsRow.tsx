@@ -51,6 +51,16 @@ const leftArrow: IIconProps = {
 };
 
 export class DataCharacteristicsRow extends React.Component<IDataCharacteristicsRowProps> {
+  /*
+  public componentDidUpdate(prevProps: IDataCharacteristicsRowProps): void {
+    if (
+      prevProps.labelType !== this.props.labelType ||
+      prevProps.list !== this.props.list
+    ) {
+      this.setState({ list: [...this.props.list] });
+    }
+  }
+*/
   public render(): React.ReactNode {
     const classNames = dataCharacteristicsStyles();
     const {
@@ -92,6 +102,7 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
             )}
             <Stack.Item className={listContainerStyle}>
               <List
+                key={this.props.list[0].predictedY}
                 items={list}
                 onRenderCell={onRenderCell}
                 getPageHeight={getPageHeight}
