@@ -4,7 +4,6 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  IVisionModelExplanationData,
   ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
@@ -13,6 +12,7 @@ import {
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
+  IHighchartBoxData,
   IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
@@ -26,7 +26,6 @@ export interface IModelAssessmentData {
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
   cohortData?: IPreBuiltCohort[];
-  visionModelExplanationData?: IVisionModelExplanationData;
 }
 
 export interface IModelAssessmentDashboardProps
@@ -65,6 +64,10 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestBoxPlotDistribution?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
 

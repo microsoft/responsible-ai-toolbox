@@ -5,7 +5,8 @@ import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
-  getTheme
+  getTheme,
+  mergeStyles
 } from "@fluentui/react";
 
 export interface IFlyoutStyles {
@@ -15,15 +16,22 @@ export interface IFlyoutStyles {
   iconContainer: IStyle;
   image: IStyle;
   imageContainer: IStyle;
-  title: IStyle;
+  errorTitle: IStyle;
+  successTitle: IStyle;
   label: IStyle;
   mainContainer: IStyle;
   successIcon: IStyle;
+  sectionIndent: IStyle;
   separator: IStyle;
+  title: IStyle;
+  indentedTitle: IStyle;
 }
 
 export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
   const theme = getTheme();
+  const title: IStyle = {
+    fontWeight: "600"
+  };
   return mergeStyleSets<IFlyoutStyles>({
     cell: {
       marginBottom: "20px"
@@ -33,6 +41,9 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       fontSize: "large",
       fontWeight: "600"
     },
+    errorTitle: mergeStyles(title, {
+      color: theme.semanticColors.errorText
+    }),
     featureListContainer: {
       height: 300,
       overflow: "auto"
@@ -48,6 +59,9 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       maxHeight: "250px",
       maxWidth: "250px"
     },
+    indentedTitle: mergeStyles(title, {
+      marginLeft: "6%"
+    }),
     label: {
       bottom: 20,
       position: "relative",
@@ -57,6 +71,10 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       height: "100%",
       overflow: "hidden"
     },
+    sectionIndent: {
+      overflow: "hidden",
+      width: "100%"
+    },
     separator: {
       width: "100%"
     },
@@ -65,8 +83,9 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       fontSize: "large",
       fontWeight: "600"
     },
-    title: {
-      fontWeight: "600"
-    }
+    successTitle: mergeStyles(title, {
+      color: theme.semanticColors.successIcon
+    }),
+    title
   });
 };

@@ -1,15 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export interface IVisionModelExplanationData {
-  classNames?: string[];
-  images: string[];
-  predictedY: string[];
-  probabilityY?: number[][];
-  trueY: string[];
-}
-
 export interface IVisionListItem {
+  [key: string]: string | number | boolean;
   image: string;
   predictedY: string;
   trueY: string;

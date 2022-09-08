@@ -147,7 +147,7 @@ export class DatasetExplorerTab extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item className={classNames.cohortPickerWrapper}>
-          <Stack horizontal grow>
+          <Stack horizontal grow className={classNames.cohortPicker}>
             <Text variant="mediumPlus" className={classNames.cohortPickerLabel}>
               {localization.Interpret.ModelPerformance.cohortPickerLabel}
             </Text>
@@ -221,61 +221,46 @@ export class DatasetExplorerTab extends React.Component<
           )}
         </Stack.Item>
         <Stack.Item className={classNames.mainArea}>
-          <Stack horizontal grow>
-            <Stack.Item className={classNames.chartWithAxes}>
-              <Stack horizontal className={classNames.chartWithVertical}>
-                <Stack.Item className={classNames.verticalAxis}>
-                  <div className={classNames.rotatedVerticalBox}>
-                    <DefaultButton
-                      onClick={this.setYOpen}
-                      text={
-                        this.context.jointDataset.metaDict[
-                          this.state.chartProps.yAxis.property
-                        ].abbridgedLabel
-                      }
-                      title={
-                        this.context.jointDataset.metaDict[
-                          this.state.chartProps.yAxis.property
-                        ].label
-                      }
-                    />
-                  </div>
-                </Stack.Item>
-                <Stack.Item className={classNames.chartContainer}>
-                  {canRenderChart ? (
-                    <BasicHighChart
-                      configOverride={getDatasetOption(
-                        plotlyProps,
-                        this.context.jointDataset,
-                        this.state.chartProps
-                      )}
-                      theme={getTheme()}
-                    />
-                  ) : (
-                    <MissingParametersPlaceholder>
-                      {localization.Interpret.ValidationErrors.datasizeError}
-                    </MissingParametersPlaceholder>
-                  )}
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-            <Stack.Item className={classNames.sidePanel}>
-              <SidePanel
-                chartProps={this.state.chartProps}
-                cohorts={this.context.errorCohorts.map(
-                  (errorCohort) => errorCohort.cohort
-                )}
-                jointDataset={this.context.jointDataset}
-                selectedCohortIndex={this.state.selectedCohortIndex}
-                setColorOpen={this.setColorOpen}
-                onChartTypeChange={this.onChartTypeChange}
-              />
-            </Stack.Item>
-          </Stack>
-          <div className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.paddingDiv} />
-            <div className={classNames.horizontalAxis}>
-              <div>
+          <Stack horizontal grow className={classNames.chartAndType}>
+            <div className={classNames.chart}>
+              <Stack.Item className={classNames.chartWithAxes}>
+                <Stack horizontal className={classNames.chartWithVertical}>
+                  <Stack.Item className={classNames.verticalAxis}>
+                    <div className={classNames.rotatedVerticalBox}>
+                      <DefaultButton
+                        onClick={this.setYOpen}
+                        text={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.yAxis.property
+                          ].abbridgedLabel
+                        }
+                        title={
+                          this.context.jointDataset.metaDict[
+                            this.state.chartProps.yAxis.property
+                          ].label
+                        }
+                      />
+                    </div>
+                  </Stack.Item>
+                  <Stack.Item className={classNames.chartContainer}>
+                    {canRenderChart ? (
+                      <BasicHighChart
+                        configOverride={getDatasetOption(
+                          plotlyProps,
+                          this.context.jointDataset,
+                          this.state.chartProps
+                        )}
+                        theme={getTheme()}
+                      />
+                    ) : (
+                      <MissingParametersPlaceholder>
+                        {localization.Interpret.ValidationErrors.datasizeError}
+                      </MissingParametersPlaceholder>
+                    )}
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+              <div className={classNames.horizontalAxis}>
                 <DefaultButton
                   onClick={this.setXOpen}
                   text={
@@ -291,7 +276,19 @@ export class DatasetExplorerTab extends React.Component<
                 />
               </div>
             </div>
-          </div>
+            <Stack.Item className={classNames.sidePanel}>
+              <SidePanel
+                chartProps={this.state.chartProps}
+                cohorts={this.context.errorCohorts.map(
+                  (errorCohort) => errorCohort.cohort
+                )}
+                jointDataset={this.context.jointDataset}
+                selectedCohortIndex={this.state.selectedCohortIndex}
+                setColorOpen={this.setColorOpen}
+                onChartTypeChange={this.onChartTypeChange}
+              />
+            </Stack.Item>
+          </Stack>
         </Stack.Item>
       </Stack>
     );

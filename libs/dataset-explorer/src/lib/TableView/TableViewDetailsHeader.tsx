@@ -6,26 +6,32 @@ import {
   IDetailsHeaderProps,
   IRenderFunction,
   SelectAllVisibility,
+  Stack,
   TooltipHost
 } from "@fluentui/react";
 import React from "react";
 
-export const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
-  props,
-  defaultRender
-) => {
-  if (!props) {
-    return <div />;
-  }
-  const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
-    (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
-  return (
-    <div>
-      {defaultRender?.({
-        ...props,
-        onRenderColumnHeaderTooltip,
-        selectAllVisibility: SelectAllVisibility.hidden
-      })}
-    </div>
-  );
-};
+export function generateOnRenderDetailsHeader(
+  selectAllVisibility: SelectAllVisibility
+): IRenderFunction<IDetailsHeaderProps> {
+  const onRenderDetailsHeader: IRenderFunction<IDetailsHeaderProps> = (
+    props,
+    defaultRender
+  ) => {
+    if (!props) {
+      return <Stack />;
+    }
+    const onRenderColumnHeaderTooltip: IRenderFunction<IDetailsColumnRenderTooltipProps> =
+      (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />;
+    return (
+      <Stack>
+        {defaultRender?.({
+          ...props,
+          onRenderColumnHeaderTooltip,
+          selectAllVisibility
+        })}
+      </Stack>
+    );
+  };
+  return onRenderDetailsHeader;
+}

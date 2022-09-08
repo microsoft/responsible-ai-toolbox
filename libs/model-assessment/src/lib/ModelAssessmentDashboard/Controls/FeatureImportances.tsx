@@ -34,13 +34,14 @@ interface IFeatureImportancesProps {
   modelMetadata: IExplanationModelMetadata;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
+  onPivotChange?: (option: FeatureImportancesTabOptions) => void;
 }
 
 interface IFeatureImportancesState {
   activeFeatureImportancesOption: FeatureImportancesTabOptions;
 }
 
-enum FeatureImportancesTabOptions {
+export enum FeatureImportancesTabOptions {
   GlobalExplanation = "global",
   LocalExplanation = "local"
 }
@@ -82,6 +83,7 @@ export class FeatureImportancesTab extends React.PureComponent<
             linkSize={"normal"}
             headersOnly
             className={classNames.tabs}
+            overflowBehavior="menu"
           >
             <PivotItem
               itemKey={FeatureImportancesTabOptions.GlobalExplanation}
@@ -142,10 +144,11 @@ export class FeatureImportancesTab extends React.PureComponent<
         item.props.itemKey as FeatureImportancesTabOptions
       )
     ) {
+      const option = item.props.itemKey as FeatureImportancesTabOptions;
       this.setState({
-        activeFeatureImportancesOption: item.props
-          .itemKey as FeatureImportancesTabOptions
+        activeFeatureImportancesOption: option
       });
+      this.props.onPivotChange?.(option);
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,
         type:

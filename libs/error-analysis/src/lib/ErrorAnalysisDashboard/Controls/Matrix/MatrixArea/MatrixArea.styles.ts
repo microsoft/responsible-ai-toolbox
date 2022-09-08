@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
+import { flexMdDown } from "@responsible-ai/core-ui";
 
 export interface IMatrixAreaStyles {
   emptyLabelPadding: IStyle;
@@ -10,6 +11,7 @@ export interface IMatrixAreaStyles {
   matrixLabelTab: IStyle;
   matrixLabel: IStyle;
   matrixArea: IStyle;
+  matrixAreaOptions: IStyle;
 }
 
 export const matrixAreaStyles: () => IProcessedStyleSet<IMatrixAreaStyles> =
@@ -28,6 +30,7 @@ export const matrixAreaStyles: () => IProcessedStyleSet<IMatrixAreaStyles> =
         paddingTop: "10px",
         width: "100%"
       },
+      matrixAreaOptions: flexMdDown,
       matrixLabel: {
         paddingLeft: "20px"
       },

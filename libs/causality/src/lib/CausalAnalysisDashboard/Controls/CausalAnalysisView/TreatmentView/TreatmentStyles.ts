@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface ITreatmentStyles {
   container: IStyle;
@@ -37,6 +37,7 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
       },
       header: {
         fontSize: 14,
+        ...hideXlDown,
         maxWidth: descriptionMaxWidth,
         textAlign: "left"
       },

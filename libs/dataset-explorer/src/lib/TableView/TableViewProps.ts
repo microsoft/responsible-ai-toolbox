@@ -15,5 +15,6 @@ export interface ITableViewProps {
   selectedCohort: ErrorCohort;
   modelType?: ModelTypes;
   onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
+  subsetSelectedItems?: IObjectWithKey[];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }

@@ -7,14 +7,13 @@ import {
   IStyle,
   mergeStyleSets
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 
 export interface ITableViewStyles {
   chevronButton: IStyle;
+  detailsList: IStyle;
   header: IStyle;
   headerCount: IStyle;
   headerTitle: IStyle;
-  infoWithText: IStyle;
   selectionCounter: IStyle;
   tabularDataView: IStyle;
 }
@@ -27,6 +26,10 @@ export const tableViewStyles: () => IProcessedStyleSet<ITableViewStyles> =
         marginLeft: 48,
         paddingTop: 6,
         width: 36
+      },
+      detailsList: {
+        height: "500px",
+        position: "relative"
       },
       header: {
         margin: `8px 0`,
@@ -48,7 +51,6 @@ export const tableViewStyles: () => IProcessedStyleSet<ITableViewStyles> =
           paddingTop: 4
         }
       ],
-      infoWithText: { maxWidth: descriptionMaxWidth, paddingLeft: 25 },
       selectionCounter: {
         paddingLeft: 25,
         paddingTop: 12

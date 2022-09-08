@@ -25,6 +25,7 @@ import {
   TelemetryEventName,
   TelemetryLevels
 } from "@responsible-ai/core-ui";
+import { InfoCallout } from "@responsible-ai/error-analysis";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -110,6 +111,10 @@ export class CounterfactualPanel extends React.Component<
 
   private renderHeader = (): JSX.Element => {
     const classes = counterfactualPanelStyles();
+    const iconId = "counterfactualFlyoutIconId";
+    const description = this.context.requestPredictions
+      ? localization.Counterfactuals.panelDescription
+      : localization.Counterfactuals.panelDescriptionWithoutSetValue;
     const tooltipProps: ITooltipProps = {
       onRenderContent: () => (
         <div className={classes.tooltipWrapper}>
@@ -137,16 +142,23 @@ export class CounterfactualPanel extends React.Component<
                 ? localization.Counterfactuals.whatIfPanelHeader
                 : localization.Counterfactuals.panelHeader}
             </Text>
+            <div className={classes.infoCallout}>
+              <InfoCallout
+                iconId={iconId}
+                infoText={description}
+                title={localization.Common.infoTitle}
+              />
+            </div>
           </Stack.Item>
-          <Stack.Item>
-            <Text variant={"medium"}>
-              {this.context.requestPredictions
-                ? localization.Counterfactuals.panelDescription
-                : localization.Counterfactuals.panelDescriptionWithoutSetValue}
-            </Text>
+          <Stack.Item className={classes.description}>
+            <Text variant={"medium"}>{description}</Text>
           </Stack.Item>
           <Stack.Item className={classes.buttonRow}>
-            <Stack horizontal tokens={{ childrenGap: "l1" }}>
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "l1" }}
+              className={classes.buttons}
+            >
               <Stack.Item className={classes.searchBox}>
                 <SearchBox
                   placeholder={
@@ -197,7 +209,11 @@ export class CounterfactualPanel extends React.Component<
       return <div />;
     }
     return (
-      <Stack horizontal tokens={{ childrenGap: "l1" }}>
+      <Stack
+        horizontal
+        tokens={{ childrenGap: "l1" }}
+        className={classes.bottom}
+      >
         <Stack.Item align="end" grow={1}>
           <CounterfactualPanelNameTextField
             value={this.props.temporaryPoint?.[
@@ -206,7 +222,7 @@ export class CounterfactualPanel extends React.Component<
             setCustomRowProperty={this.setCustomRowProperty}
           />
         </Stack.Item>
-        <Stack.Item align="end" grow={5}>
+        <Stack.Item align="end" grow={5} className={classes.buttonWrapper}>
           <PrimaryButton
             className={classes.button}
             text={localization.Counterfactuals.saveAsNew}

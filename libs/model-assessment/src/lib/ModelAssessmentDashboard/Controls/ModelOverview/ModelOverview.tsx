@@ -32,6 +32,7 @@ import {
   DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
@@ -43,6 +44,7 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
+import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
@@ -51,6 +53,7 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -85,6 +88,7 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
+      boxPlotState: { boxPlotData: [], outlierData: undefined },
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
@@ -267,7 +271,7 @@ export class ModelOverview extends React.Component<
         <Stack tokens={{ childrenGap: "10px" }}>
           <Text
             variant="medium"
-            className={classNames.descriptionText}
+            className={classNames.topLevelDescriptionText}
             id="modelOverviewDescription"
           >
             {localization.ModelAssessment.ModelOverview.topLevelDescription}
@@ -275,6 +279,7 @@ export class ModelOverview extends React.Component<
           <Pivot
             onLinkClick={this.handleViewPivot}
             id="modelOverviewCohortViewSelector"
+            overflowBehavior="menu"
           >
             <PivotItem
               headerText={
@@ -299,7 +304,11 @@ export class ModelOverview extends React.Component<
               }
             </Text>
           )}
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack
+            horizontal
+            tokens={{ childrenGap: "10px" }}
+            className={classNames.selections}
+          >
             <ComboBox
               id="modelOverviewMetricSelection"
               placeholder={
@@ -326,7 +335,11 @@ export class ModelOverview extends React.Component<
             </ActionButton>
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "10px" }}
+              className={classNames.selections}
+            >
               <ComboBox
                 id="modelOverviewFeatureSelection"
                 componentRef={this.featureComboBoxRef}
@@ -454,7 +467,7 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot">
+            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
               {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                 <PivotItem
                   headerText={
@@ -466,6 +479,8 @@ export class ModelOverview extends React.Component<
                     onChooseCohorts={this.onChooseCohorts}
                     cohorts={chartCohorts}
                     telemetryHook={this.props.telemetryHook}
+                    boxPlotState={this.state.boxPlotState}
+                    onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
                     onToggleChange={this.onSplineToggleChange}
                     showSplineChart={this.state.showSplineChart}
                   />
@@ -495,6 +510,14 @@ export class ModelOverview extends React.Component<
 
   private onSplineToggleChange = (checked: boolean) => {
     this.setState({ showSplineChart: checked });
+  };
+
+  private onBoxPlotStateUpdate = (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ) => {
+    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
+      this.setState({ boxPlotState });
+    }
   };
 
   private onClickMetricsConfiguration = () => {
