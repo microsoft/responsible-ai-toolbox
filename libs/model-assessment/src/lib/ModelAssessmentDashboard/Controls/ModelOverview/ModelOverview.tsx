@@ -275,6 +275,7 @@ export class ModelOverview extends React.Component<
           <Pivot
             onLinkClick={this.handleViewPivot}
             id="modelOverviewCohortViewSelector"
+            overflowBehavior="menu"
           >
             <PivotItem
               headerText={
@@ -299,7 +300,11 @@ export class ModelOverview extends React.Component<
               }
             </Text>
           )}
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack
+            horizontal
+            tokens={{ childrenGap: "10px" }}
+            className={classNames.selections}
+          >
             <ComboBox
               id="modelOverviewMetricSelection"
               placeholder={
@@ -326,7 +331,11 @@ export class ModelOverview extends React.Component<
             </ActionButton>
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "10px" }}
+              className={classNames.selections}
+            >
               <ComboBox
                 id="modelOverviewFeatureSelection"
                 componentRef={this.featureComboBoxRef}
@@ -454,7 +463,7 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot">
+            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
               {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                 <PivotItem
                   headerText={

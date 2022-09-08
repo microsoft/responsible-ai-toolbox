@@ -15,15 +15,16 @@ import React from "react";
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceTab";
 import { DatasetExplorerTab } from "./DatasetExplorerTab";
-import { TableView } from "./TableView/TableView";
+import { TableViewTab } from "./TableView/TableViewTab";
 
 interface IDataAnalysisTabProps {
   onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   showDataBalanceExperience: boolean;
+  onPivotChange?: (option: DataAnalysisTabOptions) => void;
 }
 
-enum DataAnalysisTabOptions {
+export enum DataAnalysisTabOptions {
   ChartView = "ChartView",
   DataBalance = "DataBalance",
   TableView = "TableView"
@@ -43,12 +44,13 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
         styles={{ root: styles.pivotLabelWrapper }}
         onLinkClick={this.onTabClick}
         id="dataAnalysisPivot"
+        overflowBehavior="menu"
       >
         <PivotItem
           itemKey={DataAnalysisTabOptions.TableView}
           headerText={localization.ModelAssessment.ComponentNames.TableView}
         >
-          <TableView
+          <TableViewTab
             features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
             selectedCohort={this.context.selectedErrorCohort}
@@ -82,6 +84,9 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
       level: TelemetryLevels.ButtonClick,
       type: this.getTelemetryEventName(item?.props.itemKey)
     });
+    if (item && item.props.itemKey) {
+      this.props.onPivotChange?.(item.props.itemKey as DataAnalysisTabOptions);
+    }
   };
 
   private getTelemetryEventName = (itemKey?: string) => {

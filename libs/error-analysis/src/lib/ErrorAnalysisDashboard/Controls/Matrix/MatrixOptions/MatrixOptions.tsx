@@ -32,7 +32,11 @@ export class MatrixOptions extends React.Component<IMatrixOptionsProps> {
   public render(): React.ReactNode {
     const classNames = matrixOptionsStyles();
     return (
-      <Stack horizontal tokens={stackTokens}>
+      <Stack
+        horizontal
+        tokens={stackTokens}
+        className={classNames.matrixOptions}
+      >
         <Stack.Item className={classNames.toggleStackStyle}>
           <Toggle
             defaultChecked={this.props.quantileBinning}

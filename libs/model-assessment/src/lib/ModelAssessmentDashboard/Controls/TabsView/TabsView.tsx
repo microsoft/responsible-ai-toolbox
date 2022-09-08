@@ -8,7 +8,10 @@ import {
   Stack,
   Text
 } from "@fluentui/react";
-import { CausalInsightsTab } from "@responsible-ai/causality";
+import {
+  CausalAnalysisOptions,
+  CausalInsightsTab
+} from "@responsible-ai/causality";
 import {
   WeightVectorOption,
   ModelTypes,
@@ -18,7 +21,10 @@ import {
   IModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
-import { DataAnalysisTab } from "@responsible-ai/dataset-explorer";
+import {
+  DataAnalysisTab,
+  DataAnalysisTabOptions
+} from "@responsible-ai/dataset-explorer";
 import {
   ErrorAnalysisOptions,
   ErrorAnalysisViewTab,
@@ -46,6 +52,8 @@ import {
 import { ModelOverview } from "../ModelOverview/ModelOverview";
 
 import {
+  causalAnalysisIconId,
+  counterfactualIconId,
   dataAnalysisIconId,
   errorAnalysisIconId,
   featureImportanceIconId,
@@ -66,6 +74,8 @@ export interface ITabsViewState {
   weightVectorLabels: Dictionary<string>;
   weightVectorOptions: WeightVectorOption[];
   featureImportanceOption: FeatureImportancesTabOptions;
+  dataAnalysisOption: DataAnalysisTabOptions;
+  causalAnalysisOption: CausalAnalysisOptions;
 }
 
 export class TabsView extends React.PureComponent<
@@ -94,6 +104,8 @@ export class TabsView extends React.PureComponent<
     const importances = props.errorAnalysisData?.[0]?.importances ?? [];
     this.state = {
       allSelectedItems: [],
+      causalAnalysisOption: CausalAnalysisOptions.Aggregate,
+      dataAnalysisOption: DataAnalysisTabOptions.TableView,
       errorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       featureImportanceOption: FeatureImportancesTabOptions.GlobalExplanation,
       importances,
@@ -142,20 +154,29 @@ export class TabsView extends React.PureComponent<
               className={classNames.section}
               styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
             >
-              {t.key === GlobalTabKeys.VisionTab &&
-                this.props.visionModelExplanationData && (
-                  <>
-                    <div className={classNames.sectionHeader}>
-                      <Text variant={"xxLarge"}>
-                        {localization.ModelAssessment.ComponentNames.VisionTab}
-                      </Text>
-                    </div>
-                    <VisionTab
-                      dataSummary={this.props.visionModelExplanationData}
-                      requestExp={this.props.requestExp}
-                    />
-                  </>
-                )}
+              {t.key === GlobalTabKeys.VisionTab && this.props.dataset.images && (
+                <>
+                  <div className={classNames.sectionHeader}>
+                    <Text variant={"xxLarge"}>
+                      {localization.ModelAssessment.ComponentNames.VisionTab}
+                    </Text>
+                  </div>
+                  <VisionTab
+                    dataSummary={{
+                      class_names: this.props.dataset.class_names!,
+                      feature_names: this.props.dataset.feature_names,
+                      features: this.props.dataset.features!,
+                      images: this.props.dataset.images,
+                      predicted_y: this.props.dataset.predicted_y!,
+                      true_y: this.props.dataset.true_y
+                    }}
+                    requestExp={this.props.requestExp}
+                    cohorts={this.props.cohorts}
+                    setSelectedCohort={this.props.setSelectedCohort}
+                    selectedCohort={this.props.selectedCohort}
+                  />
+                </>
+              )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
@@ -258,15 +279,30 @@ export class TabsView extends React.PureComponent<
                     <Text variant={"xxLarge"} id="dataAnalysisHeader">
                       {localization.ModelAssessment.ComponentNames.DataAnalysis}
                     </Text>
-                    <div className={classNames.sectionTooltip}>
-                      <InfoCallout
-                        iconId={dataAnalysisIconId}
-                        infoText={
-                          localization.Interpret.DatasetExplorer.helperText
-                        }
-                        title={localization.Common.infoTitle}
-                      />
-                    </div>
+                    {this.state.dataAnalysisOption !==
+                      DataAnalysisTabOptions.DataBalance && (
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={dataAnalysisIconId}
+                          infoText={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              this.state.dataAnalysisOption
+                            ).body
+                          }
+                          title={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              this.state.dataAnalysisOption
+                            ).title
+                          }
+                        />
+                      </div>
+                    )}
                   </h3>
                   <DataAnalysisTab
                     telemetryHook={this.props.telemetryHook}
@@ -275,6 +311,7 @@ export class TabsView extends React.PureComponent<
                       this.context.featureFlights
                     )}
                     onAllSelectedItemsChange={this.onAllSelectedItemsChange}
+                    onPivotChange={this.onDataAnalysisOptionChange}
                   />
                 </>
               )}
@@ -288,27 +325,18 @@ export class TabsView extends React.PureComponent<
                             .FeatureImportances
                         }
                       </Text>
-                      <div className={classNames.sectionTooltip}>
-                        <InfoCallout
-                          iconId={featureImportanceIconId}
-                          infoText={
-                            getInfo(
-                              t.key,
-                              this.props,
-                              undefined,
-                              this.state.featureImportanceOption
-                            ).body
-                          }
-                          title={
-                            getInfo(
-                              t.key,
-                              this.props,
-                              undefined,
-                              this.state.featureImportanceOption
-                            ).title
-                          }
-                        />
-                      </div>
+                      {this.state.featureImportanceOption ===
+                        FeatureImportancesTabOptions.GlobalExplanation && (
+                        <div className={classNames.sectionTooltip}>
+                          <InfoCallout
+                            iconId={featureImportanceIconId}
+                            infoText={
+                              localization.Interpret.GlobalTab.helperText
+                            }
+                            title={localization.Interpret.GlobalTab.infoTitle}
+                          />
+                        </div>
+                      )}
                     </h3>
                     <FeatureImportancesTab
                       allSelectedItems={this.state.allSelectedItems}
@@ -337,10 +365,34 @@ export class TabsView extends React.PureComponent<
                             .CausalAnalysis
                         }
                       </Text>
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={causalAnalysisIconId}
+                          infoText={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              undefined,
+                              this.state.causalAnalysisOption
+                            ).body
+                          }
+                          title={
+                            getInfo(
+                              t.key,
+                              this.props,
+                              undefined,
+                              undefined,
+                              this.state.causalAnalysisOption
+                            ).title
+                          }
+                        />
+                      </div>
                     </h3>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
                       telemetryHook={this.props.telemetryHook}
+                      onPivotChange={this.onCausalAnalysisOptionChange}
                     />
                   </>
                 )}
@@ -355,6 +407,15 @@ export class TabsView extends React.PureComponent<
                             .Counterfactuals
                         }
                       </Text>
+                      <div className={classNames.sectionTooltip}>
+                        <InfoCallout
+                          iconId={counterfactualIconId}
+                          infoText={
+                            localization.Counterfactuals.whatifDescription
+                          }
+                          title={localization.Common.infoTitle}
+                        />
+                      </div>
                     </h3>
                     <CounterfactualsTab
                       data={this.props.counterfactualData?.[0]}
@@ -409,6 +470,18 @@ export class TabsView extends React.PureComponent<
     option: FeatureImportancesTabOptions
   ): void => {
     this.setState({ featureImportanceOption: option });
+  };
+
+  private onDataAnalysisOptionChange = (
+    option: DataAnalysisTabOptions
+  ): void => {
+    this.setState({ dataAnalysisOption: option });
+  };
+
+  private onCausalAnalysisOptionChange = (
+    option: CausalAnalysisOptions
+  ): void => {
+    this.setState({ causalAnalysisOption: option });
   };
 
   private onWeightVectorChange = (weightOption: WeightVectorOption): void => {

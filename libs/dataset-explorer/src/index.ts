@@ -3,3 +3,4 @@
 
 export * from "./lib/DatasetExplorerTab";
 export * from "./lib/DataAnalysisTab";
+export * from "./lib/TableView/TableView";

@@ -148,19 +148,23 @@ export class TextExplanationView extends React.PureComponent<
                   weightLabels={this.props.weightLabels}
                 />
               </Stack.Item>
-              <Stack.Item id="TextChoiceGroup">
-                <ChoiceGroup
-                  defaultSelectedKey="all"
-                  options={options}
-                  onChange={this.changeRadioButton}
-                  required
-                />
-              </Stack.Item>
-              <Stack.Item>
-                <Text variant={"small"}>
-                  {localization.InterpretText.View.legendText}
-                </Text>
-              </Stack.Item>
+              {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
+                <Stack.Item id="TextChoiceGroup">
+                  <ChoiceGroup
+                    defaultSelectedKey="all"
+                    options={options}
+                    onChange={this.changeRadioButton}
+                    required
+                  />
+                </Stack.Item>
+              )}
+              {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
+                <Stack.Item>
+                  <Text variant={"small"}>
+                    {localization.InterpretText.View.legendText}
+                  </Text>
+                </Stack.Item>
+              )}
             </Stack>
           </Stack.Item>
         </Stack>

@@ -5,6 +5,14 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information"
   },
+  "ChartContextMenu": {
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binary treatments: ",
@@ -20,6 +28,7 @@
       "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
       "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "here": "here",
+      "infoTitle": "Additional information on aggregated causal effects",
       "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
       "unconfounding": "What are confounding features?"
     },
@@ -31,6 +40,7 @@
       "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
       "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "index": "Datapoint index",
+      "infoTitle": "Additional information on individual causal what-if",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "newOutcome": "New outcome",
       "selectTreatment": "Select treatment",
@@ -64,6 +74,7 @@
       "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
       "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
       "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "infoTitle": "Additional information on treatment policy",
       "nSample": "n = {0}",
       "noData": "No data"
     }
@@ -327,7 +338,9 @@
       "metricValue": "Metric value"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Select metric",
+      "feature1SelectorLabel": "Rows: Feature 1",
+      "feature2SelectorLabel": "Columns: Feature 2"
     },
     "Navigation": {
       "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
@@ -889,6 +902,7 @@
       "aggregatePlots": "Aggregate plots",
       "chartType": "Chart type",
       "colorValue": "Color value",
+      "infoTitle": "Additional information on data analysis chart view",
       "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
@@ -1295,6 +1309,18 @@
     }
   },
   "InterpretVision": {
+    "Cohort": {
+      "close": "Close",
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
     "Dashboard": {
       "allData": "All Data",
       "columnOne": "Image",
@@ -1304,21 +1330,31 @@
       "columnFive": "Other metadata",
       "examples": "examples",
       "filter": "Filter",
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
       "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
       "rows": "Rows: ",
       "search": "Search",
       "settings": "Settings",
       "showAll": "Show all",
+      "selectAll": "Select all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
       "tabOptionThird": "Data characteristics",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
-      "titleBarSuccess": "Success instances"
+      "titleBarSuccess": "Success instances",
+      "trueY": "Ground truh: "
     }
   },
   "ModelAssessment": {
@@ -1532,13 +1568,18 @@
       "CorrectPredictions": "Correct predictions",
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
-      "InfoTitle": "Additional information on individual feature importance",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "InfoTitle": "Additional information on data analysis table view",
+      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "Individual feature importance",
       "SelectionCounter": "{0}/{1} datapoints selected",
       "SelectionLimit": "Up to 5 datapoints can be selected at this time.",
       "RowCheckboxAriaLabel": "Row checkbox",
       "SelectionColumnAriaLabel": "Toggle selection"
+    },
+    "IndividualFeatureImportanceView": {
+      "SmallInstanceSelection": "Instance selection",
+      "SmallTableText": "(change instances to explain in data analysis)"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Stack } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { IVisionListItem, ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
 import {
@@ -17,15 +17,20 @@ import { TableList } from "./TableList";
 import { TitleBar } from "./TitleBar";
 
 export interface ITabsViewProps {
+  addCohort: (name: string, switchCohort: boolean) => void;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
   numRows: number;
+  otherMetadataFieldNames: string[];
   pageSize: number;
   searchValue: string;
   selectedItem: IVisionListItem | undefined;
   selectedKey: string;
   onItemSelect: (item: IVisionListItem) => void;
+  updateSelectedIndices: (indices: number[]) => void;
+  selectedCohort: ErrorCohort;
+  setSelectedCohort: (cohort: ErrorCohort) => void;
 }
 
 const stackTokens = {
@@ -58,12 +63,15 @@ export class TabsView extends React.Component<ITabsViewProps> {
         return (
           <Stack className={classNames.mainContainer}>
             <TableList
+              addCohort={this.props.addCohort}
               errorInstances={this.props.errorInstances}
               successInstances={this.props.successInstances}
               imageDim={this.props.imageDim}
+              otherMetadataFieldNames={this.props.otherMetadataFieldNames}
               searchValue={this.props.searchValue}
               selectItem={this.props.onItemSelect}
               pageSize={this.props.pageSize}
+              updateSelectedIndices={this.props.updateSelectedIndices}
             />
           </Stack>
         );
