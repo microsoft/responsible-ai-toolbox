@@ -1345,16 +1345,16 @@
       "predictedY": "Predicted: ",
       "rows": "Rows: ",
       "search": "Search",
+      "selectAll": "Select all",
       "settings": "Settings",
       "showAll": "Show all",
-      "selectAll": "Select all",
       "tabOptionFirst": "Image explorer view",
       "tabOptionSecond": "Table view",
       "tabOptionThird": "Data characteristics",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
       "titleBarSuccess": "Success instances",
-      "trueY": "Ground truh: "
+      "trueY": "Ground truth: "
     }
   },
   "ModelAssessment": {
