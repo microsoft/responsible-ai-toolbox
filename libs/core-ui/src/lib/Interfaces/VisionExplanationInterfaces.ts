@@ -2,8 +2,11 @@
 // Licensed under the MIT License.
 
 export interface IVisionExplanationDashboardData {
-  classNames?: string[];
+  true_y: number[];
+  predicted_y: number[];
+  features?: unknown[][];
+  feature_names?: string[];
+  class_names: string[];
   images: string[];
-  predictedY: string[];
-  trueY: string[];
+  categorical_features?: string[];
 }

@@ -102,7 +102,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               causalAnalysisData={this.props.causalAnalysisData}
               counterfactualData={this.props.counterfactualData}
               errorAnalysisData={this.props.errorAnalysisData}
-              visionModelExplanationData={this.props.visionModelExplanationData}
               cohortData={this.props.cohortData}
               cohorts={this.state.cohorts}
               jointDataset={this.state.jointDataset}

@@ -7,7 +7,6 @@ import { config } from "./config";
 import { ErrorAnalysis } from "./ErrorAnalysis";
 import { Fairness } from "./Fairness";
 import { Interpret } from "./Interpret";
-import { InterpretVision } from "./InterpretVision";
 import { ModelAssessment } from "./ModelAssessment";
 
 export class App extends React.Component {
@@ -23,8 +22,6 @@ export class App extends React.Component {
         return <ErrorAnalysis />;
       case "ResponsibleAI":
         return <ModelAssessment />;
-      case "Vision":
-        return <InterpretVision />;
       default:
         return "Not Found";
     }
