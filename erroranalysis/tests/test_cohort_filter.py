@@ -13,7 +13,7 @@ from common_utils import (create_diabetes_data, create_iris_data,
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
                                                ModelTask)
-from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from erroranalysis._internal.error_analyzer import ModelAnalyzer, PredictionsAnalyzer
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
@@ -335,6 +335,14 @@ def run_error_analyzer(validation_data,
                        composite_filters=None,
                        is_empty_validation_data=False):
     error_analyzer = ModelAnalyzer(model,
+                                   X_test,
+                                   y_test,
+                                   feature_names,
+                                   categorical_features,
+                                   model_task=model_task)
+    
+    y_pred = model.predict(X_test)
+    error_analyzer = PredictionsAnalyzer(y_pred,
                                    X_test,
                                    y_test,
                                    feature_names,
