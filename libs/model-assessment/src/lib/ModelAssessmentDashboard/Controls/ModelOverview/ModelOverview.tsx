@@ -32,6 +32,7 @@ import {
   DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
@@ -43,6 +44,7 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
+import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
@@ -51,6 +53,7 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -85,6 +88,7 @@ export class ModelOverview extends React.Component<
   constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
+      boxPlotState: { boxPlotData: [], outlierData: undefined },
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
@@ -475,6 +479,8 @@ export class ModelOverview extends React.Component<
                     onChooseCohorts={this.onChooseCohorts}
                     cohorts={chartCohorts}
                     telemetryHook={this.props.telemetryHook}
+                    boxPlotState={this.state.boxPlotState}
+                    onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
                     onToggleChange={this.onSplineToggleChange}
                     showSplineChart={this.state.showSplineChart}
                   />
@@ -504,6 +510,14 @@ export class ModelOverview extends React.Component<
 
   private onSplineToggleChange = (checked: boolean) => {
     this.setState({ showSplineChart: checked });
+  };
+
+  private onBoxPlotStateUpdate = (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ) => {
+    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
+      this.setState({ boxPlotState });
+    }
   };
 
   private onClickMetricsConfiguration = () => {
