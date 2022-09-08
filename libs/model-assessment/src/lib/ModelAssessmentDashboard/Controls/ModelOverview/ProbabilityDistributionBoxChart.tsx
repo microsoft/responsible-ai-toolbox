@@ -4,6 +4,7 @@
 import { getTheme, IChoiceGroupOption } from "@fluentui/react";
 import {
   BasicHighChart,
+  calculateBoxPlotData,
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
@@ -14,6 +15,8 @@ import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import _ from "lodash";
 import React from "react";
+
+import { isFlightActive, newSdkEndpointsFlight } from "../../FeatureFlights";
 
 interface IProbabilityDistributionBoxChartProps {
   boxPlotState: IProbabilityDistributionBoxChartState;
@@ -37,26 +40,28 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
   public componentDidUpdate(
     prevProps: IProbabilityDistributionBoxChartProps
   ): void {
-    if (
-      this.props.boxPlotState.boxPlotData.length === 0 ||
-      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
-      !_.isEqual(
-        prevProps.probabilityOption!.id,
-        this.props.probabilityOption!.id
-      )
-    ) {
-      const boxPlotData = this.props.selectedCohorts.map(
-        (cohort: ErrorCohort, index: number) => {
-          return calculateBoxPlotDataFromErrorCohort(
-            cohort,
-            index,
-            this.props.probabilityOption!.key.toString(),
-            this.props.probabilityOption!.id,
-            this.context.requestBoxPlotDistribution
-          );
-        }
-      );
-      this.getOutlierData(boxPlotData);
+    if (isFlightActive(newSdkEndpointsFlight, this.context.featureFlights)) {
+      if (
+        this.props.boxPlotState.boxPlotData.length === 0 ||
+        !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
+        !_.isEqual(
+          prevProps.probabilityOption!.id,
+          this.props.probabilityOption!.id
+        )
+      ) {
+        const boxPlotData = this.props.selectedCohorts.map(
+          (cohort: ErrorCohort, index: number) => {
+            return calculateBoxPlotDataFromErrorCohort(
+              cohort,
+              index,
+              this.props.probabilityOption!.key.toString(),
+              this.props.probabilityOption!.id,
+              this.context.requestBoxPlotDistribution
+            );
+          }
+        );
+        this.getOutlierData(boxPlotData);
+      }
     }
   }
 
@@ -65,6 +70,30 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
+
+    const isNewSdkEndpointsFlightOn = isFlightActive(
+      newSdkEndpointsFlight,
+      this.context.featureFlights
+    );
+    let boxPlotData;
+    let outlierData;
+    if (!isNewSdkEndpointsFlightOn) {
+      boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
+        return calculateBoxPlotData(
+          cohort.cohort.filteredData.map(
+            (dict) => dict[this.props.probabilityOption!.key.toString()]
+          ),
+          index
+        );
+      });
+      outlierData = boxPlotData
+        .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+        .map((outlierProbs, cohortIndex) => {
+          return outlierProbs?.map((prob) => [cohortIndex, prob]);
+        })
+        .filter((list) => list !== undefined)
+        .reduce((list1, list2) => list1!.concat(list2!), []);
+    }
 
     return (
       <BasicHighChart
@@ -85,16 +114,20 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
           },
           series: [
             {
-              data: this.props.boxPlotState.boxPlotData.map(
-                (boxData) => boxData as PointOptionsObject
-              ),
+              data: isNewSdkEndpointsFlightOn
+                ? this.props.boxPlotState.boxPlotData.map(
+                    (boxData) => boxData as PointOptionsObject
+                  )
+                : boxPlotData?.map((boxData) => boxData as PointOptionsObject),
               fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
               type: "boxplot"
             },
             {
-              data: this.props.boxPlotState.outlierData,
+              data: isNewSdkEndpointsFlightOn
+                ? this.props.boxPlotState.outlierData
+                : outlierData,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .outlierLabel,
               tooltip: {
