@@ -4,16 +4,60 @@
 import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
-export function calculateBoxPlotDataFromErrorCohort(
+export async function calculateBoxPlotDataFromErrorCohort(
   errorCohort: ErrorCohort,
   index: number,
-  key: string
+  key: string,
+  queryClass?: string,
+  requestBoxPlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>
 ) {
+  if (requestBoxPlotDistribution) {
+    return await calculateBoxPlotDataFromSDK(
+      errorCohort,
+      requestBoxPlotDistribution,
+      queryClass
+    );
+  }
   // key is the identifier for the column (e.g., probability)
+  // If compute instance is not connected, calculate based on the first 5k data
   return calculateBoxPlotData(
     errorCohort.cohort.filteredData.map((dict) => dict[key]),
     index
   );
+}
+
+export async function calculateBoxPlotDataFromSDK(
+  errorCohort: ErrorCohort,
+  requestBoxPlotDistribution: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>,
+  queryClass?: string
+): Promise<IHighchartBoxData> {
+  const filtersRelabeled = ErrorCohort.getLabeledFilters(
+    errorCohort.cohort.filters,
+    errorCohort.jointDataset
+  );
+
+  const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    errorCohort.cohort.compositeFilters,
+    errorCohort.jointDataset
+  );
+  const data = [
+    filtersRelabeled,
+    compositeFiltersRelabeled,
+    Number(queryClass)
+  ];
+
+  const result: IHighchartBoxData = await requestBoxPlotDistribution?.(
+    data,
+    new AbortController().signal
+  );
+
+  return result;
 }
 
 export function calculateBoxPlotData(

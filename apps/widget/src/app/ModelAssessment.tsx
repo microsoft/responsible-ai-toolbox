@@ -3,7 +3,8 @@
 
 import {
   ICausalWhatIfData,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IHighchartBoxData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -28,6 +29,7 @@ export class ModelAssessment extends React.Component {
       | "requestMatrix"
       | "requestImportances"
       | "requestCausalWhatIf"
+      | "requestBoxPlotDistribution"
     > = {};
     if (config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -59,6 +61,14 @@ export class ModelAssessment extends React.Component {
           [id, features, featureName, newValue, target],
           "/causal_whatif",
           abortSignal
+        );
+      };
+      callBack.requestBoxPlotDistribution = async (
+        data: any
+      ): Promise<IHighchartBoxData> => {
+        return callFlaskService(
+          data,
+          "/model_overview_probability_distribution"
         );
       };
     }
