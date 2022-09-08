@@ -300,7 +300,8 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                                              filters,
                                              composite_filters)
         y_test = validation_data[TRUE_Y]
-        validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
+        validation_data = validation_data.drop(columns=[
+            TRUE_Y, ROW_INDEX, PRED_Y])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
     validation_data_len = len(validation_data)

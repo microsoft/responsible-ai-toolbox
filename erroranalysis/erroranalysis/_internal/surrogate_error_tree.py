@@ -244,9 +244,9 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX]
-    if not is_model_analyzer:
-        pred_y = filtered_df[PRED_Y]
-        dropped_cols.append(PRED_Y)
+    #if not is_model_analyzer:
+    pred_y = filtered_df[PRED_Y]
+    dropped_cols.append(PRED_Y)
     input_data = filtered_df.drop(columns=dropped_cols)
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     if is_pandas:

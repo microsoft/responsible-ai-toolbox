@@ -279,18 +279,17 @@ class FilterDataWithCohortFilters:
         else:
             df[TRUE_Y] = self.true_y
 
-        if self.model is None:
-            df[PRED_Y] = self.pred_y
-
         if not is_spark(df):
             df[ROW_INDEX] = np.arange(0, len(self.true_y))
+
+        if self.pred_y is not None:
+            df[PRED_Y] = self.pred_y
+        else:
+            df[PRED_Y] = self.model.predict(
+                df.drop(columns=[TRUE_Y, ROW_INDEX]))
+
         if has_classification_outcome:
-            if PRED_Y in df:
-                pred_y = df[PRED_Y]
-            else:
-                # calculate directly via prediction on model
-                pred_y = self.model.predict(
-                    df.drop(columns=[TRUE_Y, ROW_INDEX]))
+            pred_y = df[PRED_Y]
 
             classes = get_ordered_classes(
                 self.classes, self.true_y, pred_y)
@@ -305,12 +304,7 @@ class FilterDataWithCohortFilters:
                     self._compute_multiclass_classification_outcome_data(
                         self.true_y, pred_y)
         elif has_regression_error:
-            if PRED_Y in df:
-                pred_y = df[PRED_Y]
-            else:
-                # calculate directly via prediction on model
-                pred_y = self.model.predict(
-                    df.drop(columns=[TRUE_Y, ROW_INDEX]))
+            pred_y = df[PRED_Y]
             # calculate regression error and add to df
             df[REGRESSION_ERROR] = self._compute_regression_error_data(
                 self.true_y, pred_y)
@@ -385,6 +379,8 @@ class FilterDataWithCohortFilters:
                 colname = filter[COLUMN]
                 if colname == 'True Y':
                     colname = TRUE_Y
+                if colname == 'Predicted Y':
+                    colname = PRED_Y
                 if method == CohortFilterMethods.METHOD_GREATER:
                     queries.append("`" + colname + "` > " + arg0)
                 elif method == CohortFilterMethods.METHOD_LESS:
