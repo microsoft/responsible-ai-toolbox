@@ -212,7 +212,6 @@ class ResponsibleAIDashboardInput:
             }
 
     def get_exp(self, index):
-        print(index)
         try:
             exp = self._analysis.explainer.compute_single_explanation(index)
             return {

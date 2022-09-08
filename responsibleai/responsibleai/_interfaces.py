@@ -22,6 +22,7 @@ class Dataset:
     target_column: str
     feature_metadata: Optional[Dict[str, Any]]
     data_balance_measures: Dict[str, Any]
+    images: Optional[List[str]]
 
 
 class BoundedCoordinates:
