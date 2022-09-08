@@ -95,8 +95,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
           closeButtonAriaLabel="Close"
           onDismiss={callback}
           isLightDismiss
-          type={PanelType.custom}
-          customWidth="700px"
+          type={PanelType.medium}
           className={classNames.mainContainer}
         >
           <Stack tokens={stackTokens.medium}>
@@ -197,7 +196,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               className={classNames.sectionIndent}
             >
               <Stack.Item>
-                <Text variant="large" className={classNames.title}>
+                <Text variant="large" className={classNames.indentedTitle}>
                   {localization.InterpretVision.Dashboard.panelExplanation}
                 </Text>
               </Stack.Item>
@@ -225,7 +224,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               className={classNames.sectionIndent}
             >
               <Stack.Item>
-                <Text variant="large" className={classNames.title}>
+                <Text variant="large" className={classNames.indentedTitle}>
                   {localization.InterpretVision.Dashboard.panelInformation}
                 </Text>
               </Stack.Item>

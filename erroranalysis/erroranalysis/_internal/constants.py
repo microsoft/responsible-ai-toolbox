@@ -64,10 +64,11 @@ class MatrixParams:
 class Metrics(str, Enum):
     """Provide the supported error analysis metrics.
 
-    The regression metrics are 'mean_absolute_error',
-    'mean_squared_error', 'median_absolute_error',
-    and 'r2_score'.  The binary classification
-    metrics are 'f1_score', 'precision_score',
+    The regression metrics are 'mean_prediction',
+    'mean_absolute_error', 'mean_squared_error',
+    'median_absolute_error' and 'r2_score'.
+    The binary classification metrics are
+    'f1_score', 'precision_score',
     'recall_score', 'accuracy_score', 'error_rate',
     'false negative rate', 'false positive rate' and
     'selection rate'. The multiclass classification
@@ -77,6 +78,7 @@ class Metrics(str, Enum):
     'accuracy_score' and 'error_rate'.
     """
     ACCURACY_SCORE = 'accuracy_score'
+    MEAN_PREDICTION = 'mean_prediction'
     MEAN_ABSOLUTE_ERROR = 'mean_absolute_error'
     MEAN_SQUARED_ERROR = 'mean_squared_error'
     MEDIAN_ABSOLUTE_ERROR = 'median_absolute_error'
@@ -121,6 +123,7 @@ class TreeNode(str, Enum):
 
 metric_to_display_name = {
     Metrics.ACCURACY_SCORE: 'Accuracy score',
+    Metrics.MEAN_PREDICTION: 'Mean prediction',
     Metrics.MEAN_ABSOLUTE_ERROR: 'Mean absolute error',
     Metrics.MEAN_SQUARED_ERROR: 'Mean squared error',
     Metrics.MEDIAN_ABSOLUTE_ERROR: 'Median absolute error',
@@ -175,6 +178,7 @@ binary_classification_metrics = [
 
 
 regression_metrics = [
+    Metrics.MEAN_PREDICTION,
     Metrics.MEAN_ABSOLUTE_ERROR,
     Metrics.MEAN_SQUARED_ERROR,
     Metrics.MEDIAN_ABSOLUTE_ERROR,

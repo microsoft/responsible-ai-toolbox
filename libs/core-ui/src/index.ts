@@ -83,6 +83,7 @@ export * from "./lib/Interfaces/ICohort";
 export * from "./lib/Interfaces/IPreBuiltCohort";
 export * from "./lib/Interfaces/IErrorAnalysisData";
 export * from "./lib/Interfaces/IDataBalanceMeasures";
+export * from "./lib/Interfaces/IHighchartBoxData";
 export * from "./lib/Interfaces/IMetaData";
 export * from "./lib/Interfaces/TextExplanationInterfaces";
 export * from "./lib/Interfaces/VisionExplanationInterfaces";
