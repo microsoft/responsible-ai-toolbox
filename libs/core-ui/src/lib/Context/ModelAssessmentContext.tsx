@@ -14,8 +14,8 @@ import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
-import { IVisionModelExplanationData } from "../Interfaces/IVisionModelExplanationData";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 
@@ -24,7 +24,6 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
-  visionModelExplanationData?: IVisionModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   featureFlights?: string[];
@@ -56,6 +55,10 @@ export interface IModelAssessmentContext {
         explanationAlgorithm?: string
       ) => Promise<any[]>)
     | undefined;
+  requestBoxPlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

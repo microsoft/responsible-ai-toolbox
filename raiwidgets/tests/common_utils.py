@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
+
 from raiwidgets.interfaces import WidgetRequestResponseConstants
 
 
@@ -11,6 +13,9 @@ class CheckResponsibleAIDashboardInputTestResult:
             flask_server_prediction_output
         assert WidgetRequestResponseConstants.error not in \
             flask_server_prediction_output
+
+        json.dumps(flask_server_prediction_output[
+            WidgetRequestResponseConstants.data])
 
     def check_failure_criteria(self, flask_server_prediction_output,
                                expected_error_message):

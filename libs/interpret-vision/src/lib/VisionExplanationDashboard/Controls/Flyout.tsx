@@ -25,30 +25,68 @@ export interface IFlyoutProps {
   isOpen: boolean;
   item: IVisionListItem | undefined;
   loadingExplanation: boolean;
+  otherMetadataFieldNames: string[];
   callback: () => void;
 }
 
+export interface IFlyoutState {
+  item: IVisionListItem | undefined;
+  metadata: Array<Array<string | number | boolean>> | undefined;
+}
+
 const stackTokens = {
-  childrenGap: "l1"
+  large: { childrenGap: "l2" },
+  medium: { childrenGap: "l1" }
 };
 
-export class Flyout extends React.Component<IFlyoutProps> {
+export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public constructor(props: IFlyoutProps) {
     super(props);
-    this.state = {};
+    this.state = {
+      item: undefined,
+      metadata: undefined
+    };
+  }
+
+  public componentDidMount(): void {
+    const item = this.props.item;
+    if (!item) {
+      return;
+    }
+    const fieldNames = this.props.otherMetadataFieldNames;
+    const metadata: Array<Array<string | number | boolean>> = [];
+    fieldNames.forEach((fieldName) => {
+      if (item[fieldName]) {
+        metadata.push([fieldName, item[fieldName]]);
+      }
+    });
+    this.setState({ item, metadata });
+  }
+
+  public componentDidUpdate(prevProps: IFlyoutProps): void {
+    if (prevProps !== this.props) {
+      const item = this.props.item;
+      if (!item) {
+        return;
+      }
+      const fieldNames = this.props.otherMetadataFieldNames;
+      const metadata: Array<Array<string | number | boolean>> = [];
+      fieldNames.forEach((fieldName) => {
+        if (item[fieldName]) {
+          metadata.push([fieldName, item[fieldName]]);
+        }
+      });
+      this.setState({
+        item: this.props.item,
+        metadata
+      });
+    }
   }
 
   public render(): React.ReactNode {
-    const { isOpen, item, callback } = this.props;
-
+    const { isOpen, callback } = this.props;
+    const item = this.state.item;
     const classNames = flyoutStyles();
-
-    const list = [];
-
-    for (let i = 0; i < 30; i++) {
-      list.push({ title: "Feature 1", value: "value" });
-    }
-
     return (
       <FocusZone>
         <Panel
@@ -57,48 +95,86 @@ export class Flyout extends React.Component<IFlyoutProps> {
           closeButtonAriaLabel="Close"
           onDismiss={callback}
           isLightDismiss
-          type={PanelType.custom}
-          customWidth="700px"
+          type={PanelType.medium}
           className={classNames.mainContainer}
         >
-          <Stack tokens={stackTokens}>
+          <Stack tokens={stackTokens.medium}>
             <Stack.Item>
               <Separator className={classNames.separator} />
             </Stack.Item>
             <Stack.Item>
               <Stack
                 horizontal
-                tokens={stackTokens}
+                tokens={stackTokens.medium}
                 horizontalAlign="space-around"
                 verticalAlign="center"
               >
                 <Stack.Item>
                   <Stack
-                    horizontal
-                    tokens={{ childrenGap: "s1" }}
-                    horizontalAlign="center"
-                    verticalAlign="center"
+                    tokens={stackTokens.large}
+                    horizontalAlign="start"
+                    verticalAlign="start"
                   >
-                    <Stack.Item className={classNames.iconContainer}>
-                      <Icon
-                        iconName={
-                          item?.predictedY !== item?.trueY
-                            ? "Cancel"
-                            : "Checkmark"
-                        }
-                        className={
-                          item?.predictedY !== item?.trueY
-                            ? classNames.errorIcon
-                            : classNames.successIcon
-                        }
-                      />
+                    <Stack
+                      horizontal
+                      tokens={{ childrenGap: "s1" }}
+                      horizontalAlign="center"
+                      verticalAlign="center"
+                    >
+                      <Stack.Item className={classNames.iconContainer}>
+                        <Icon
+                          iconName={
+                            item?.predictedY !== item?.trueY
+                              ? "Cancel"
+                              : "Checkmark"
+                          }
+                          className={
+                            item?.predictedY !== item?.trueY
+                              ? classNames.errorIcon
+                              : classNames.successIcon
+                          }
+                        />
+                      </Stack.Item>
+                      <Stack.Item>
+                        {item?.predictedY !== item?.trueY ? (
+                          <Text
+                            variant="large"
+                            className={classNames.errorTitle}
+                          >
+                            {
+                              localization.InterpretVision.Dashboard
+                                .titleBarError
+                            }
+                          </Text>
+                        ) : (
+                          <Text
+                            variant="large"
+                            className={classNames.successTitle}
+                          >
+                            {
+                              localization.InterpretVision.Dashboard
+                                .titleBarSuccess
+                            }
+                          </Text>
+                        )}
+                      </Stack.Item>
+                    </Stack>
+                    <Stack.Item>
+                      <Text variant="large">
+                        {localization.InterpretVision.Dashboard.indexLabel}
+                        {item?.index}
+                      </Text>
                     </Stack.Item>
                     <Stack.Item>
-                      <Text variant="large" className={classNames.title}>
-                        {item?.predictedY !== item?.trueY
-                          ? localization.InterpretVision.Dashboard.titleBarError
-                          : localization.InterpretVision.Dashboard
-                              .titleBarSuccess}
+                      <Text variant="large">
+                        {localization.InterpretVision.Dashboard.predictedY}
+                        {item?.predictedY}
+                      </Text>
+                    </Stack.Item>
+                    <Stack.Item>
+                      <Text variant="large">
+                        {localization.InterpretVision.Dashboard.trueY}
+                        {item?.trueY}
                       </Text>
                     </Stack.Item>
                   </Stack>
@@ -109,46 +185,56 @@ export class Flyout extends React.Component<IFlyoutProps> {
                     className={classNames.image}
                     imageFit={ImageFit.contain}
                   />
-                  <Text variant="large" className={classNames.label}>
-                    {item?.predictedY}
-                  </Text>
                 </Stack.Item>
               </Stack>
             </Stack.Item>
             <Stack.Item>
               <Separator className={classNames.separator} />
             </Stack.Item>
-            <Stack.Item>
-              <Text variant="large" className={classNames.title}>
-                {localization.InterpretVision.Dashboard.panelExplanation}
-              </Text>
-            </Stack.Item>
-            {!this.props.loadingExplanation ? (
+            <Stack
+              tokens={stackTokens.medium}
+              className={classNames.sectionIndent}
+            >
               <Stack.Item>
-                <Image
-                  src={`data:image/jpg;base64,${this.props.explanation}`}
-                  width="800px"
-                  style={{ position: "relative", right: 85 }}
-                />
+                <Text variant="large" className={classNames.indentedTitle}>
+                  {localization.InterpretVision.Dashboard.panelExplanation}
+                </Text>
               </Stack.Item>
-            ) : (
-              <Stack.Item>
-                <Spinner
-                  label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
-                />
-              </Stack.Item>
-            )}
+              {!this.props.loadingExplanation ? (
+                <Stack.Item>
+                  <Image
+                    src={`data:image/jpg;base64,${this.props.explanation}`}
+                    width="800px"
+                    style={{ position: "relative", right: 85 }}
+                  />
+                </Stack.Item>
+              ) : (
+                <Stack.Item>
+                  <Spinner
+                    label={`${localization.InterpretVision.Dashboard.loading} ${item?.index}`}
+                  />
+                </Stack.Item>
+              )}
+            </Stack>
             <Stack.Item>
               <Separator className={classNames.separator} />
             </Stack.Item>
-            <Stack.Item>
-              <Text variant="large" className={classNames.title}>
-                {localization.InterpretVision.Dashboard.panelInformation}
-              </Text>
-            </Stack.Item>
-            <Stack.Item className={classNames.featureListContainer}>
-              <List items={list} onRenderCell={this.onRenderCell} />
-            </Stack.Item>
+            <Stack
+              tokens={{ childrenGap: "l2" }}
+              className={classNames.sectionIndent}
+            >
+              <Stack.Item>
+                <Text variant="large" className={classNames.indentedTitle}>
+                  {localization.InterpretVision.Dashboard.panelInformation}
+                </Text>
+              </Stack.Item>
+              <Stack.Item className={classNames.featureListContainer}>
+                <List
+                  items={this.state.metadata}
+                  onRenderCell={this.onRenderCell}
+                />
+              </Stack.Item>
+            </Stack>
           </Stack>
         </Panel>
       </FocusZone>
@@ -156,10 +242,12 @@ export class Flyout extends React.Component<IFlyoutProps> {
   }
 
   private onRenderCell = (
-    item?: { title: string; value: string } | undefined
+    item?: Array<string | number | boolean> | undefined
   ) => {
+    if (!item) {
+      return;
+    }
     const classNames = flyoutStyles();
-
     return (
       <Stack.Item>
         <Stack
@@ -168,13 +256,13 @@ export class Flyout extends React.Component<IFlyoutProps> {
           verticalAlign="center"
           className={classNames.cell}
         >
-          <Stack.Item>
-            <Text variant="large">{item?.title}</Text>
-          </Stack.Item>
-          <Stack.Item>
-            <Text variant="large">{item?.value}</Text>
-          </Stack.Item>
+          {item.map((val) => (
+            <Stack.Item key={val.toString()}>
+              <Text variant="large">{val}</Text>
+            </Stack.Item>
+          ))}
         </Stack>
+        <Separator className={classNames.separator} />
       </Stack.Item>
     );
   };

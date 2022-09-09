@@ -5,6 +5,14 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information"
   },
+  "ChartContextMenu": {
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binary treatments: ",
@@ -1301,6 +1309,18 @@
     }
   },
   "InterpretVision": {
+    "Cohort": {
+      "close": "Close",
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
     "Dashboard": {
       "allData": "All Data",
       "columnOne": "Image",
@@ -1310,13 +1330,22 @@
       "columnFive": "Other metadata",
       "examples": "examples",
       "filter": "Filter",
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
       "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
       "pageSize": "Page size: ",
       "panelTitle": "Selected instance",
       "panelExplanation": "Explanation",
       "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
       "rows": "Rows: ",
       "search": "Search",
+      "selectAll": "Select all",
       "settings": "Settings",
       "showAll": "Show all",
       "tabOptionFirst": "Image explorer view",
@@ -1324,7 +1353,8 @@
       "tabOptionThird": "Data characteristics",
       "thumbnailSize": "Thumbnail size",
       "titleBarError": "Error instances",
-      "titleBarSuccess": "Success instances"
+      "titleBarSuccess": "Success instances",
+      "trueY": "Ground truth: "
     }
   },
   "ModelAssessment": {
@@ -1539,12 +1569,17 @@
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
       "InfoTitle": "Additional information on data analysis table view",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "Individual feature importance",
       "SelectionCounter": "{0}/{1} datapoints selected",
       "SelectionLimit": "Up to 5 datapoints can be selected at this time.",
       "RowCheckboxAriaLabel": "Row checkbox",
       "SelectionColumnAriaLabel": "Toggle selection"
+    },
+    "IndividualFeatureImportanceView": {
+      "SmallInstanceSelection": "Instance selection",
+      "SmallTableText": "(change instances to explain in data analysis)"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",

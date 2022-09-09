@@ -24,12 +24,19 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
+import {
+  IProbabilityDistributionBoxChartState,
+  ProbabilityDistributionBoxChart
+} from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   cohorts: ErrorCohort[];
   showSplineChart: boolean;
+  onBoxPlotStateUpdate: (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ) => void;
   onChooseCohorts: () => void;
   onToggleChange: (checked: boolean) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -152,8 +159,10 @@ export class ProbabilityDistributionChart extends React.Component<
                   />
                 ) : (
                   <ProbabilityDistributionBoxChart
+                    boxPlotState={this.props.boxPlotState}
                     selectedCohorts={this.props.cohorts}
                     probabilityOption={this.state.probabilityOption}
+                    onBoxPlotStateUpdate={this.props.onBoxPlotStateUpdate}
                   />
                 )}
                 <Stack.Item
@@ -245,6 +254,7 @@ export class ProbabilityDistributionChart extends React.Component<
       .map((_, index) => {
         const key = JointDataset.ProbabilityYRoot + index.toString();
         return {
+          id: index.toString(),
           key,
           text: this.context.jointDataset.metaDict[key].label
         };

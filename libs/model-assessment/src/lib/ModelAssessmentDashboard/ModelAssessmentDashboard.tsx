@@ -74,6 +74,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestExp: this.props.requestExp,
           requestLocalFeatureExplanations:
@@ -101,7 +102,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               causalAnalysisData={this.props.causalAnalysisData}
               counterfactualData={this.props.counterfactualData}
               errorAnalysisData={this.props.errorAnalysisData}
-              visionModelExplanationData={this.props.visionModelExplanationData}
               cohortData={this.props.cohortData}
               cohorts={this.state.cohorts}
               jointDataset={this.state.jointDataset}

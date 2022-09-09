@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import numpy as np
 from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
                              mean_absolute_error, mean_squared_error,
                              median_absolute_error, precision_score, r2_score,
@@ -134,6 +135,19 @@ def macro_f1_score(y_true, y_pred):
     return f1_score(y_true, y_pred, average=MACRO)
 
 
+def mean_prediction(y_true, y_pred):
+    """Compute mean value for prediction.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted values.
+    :type y_pred: numpy.ndarray
+    :return: Mean Prediction.
+    :rtype: float
+    """
+    return np.mean(y_pred)
+
+
 def get_ordered_classes(classes, true_y, pred_y):
     """Get the ordered classes for the given true and predicted labels.
 
@@ -178,6 +192,7 @@ def is_multi_agg_metric(metric):
 
 
 metric_to_func = {
+    Metrics.MEAN_PREDICTION: mean_prediction,
     Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
     Metrics.MEAN_SQUARED_ERROR: mean_squared_error,
     Metrics.MEDIAN_ABSOLUTE_ERROR: median_absolute_error,
@@ -198,6 +213,7 @@ metric_to_func = {
 }
 
 metric_to_task = {
+    Metrics.MEAN_PREDICTION: ModelTask.REGRESSION,
     Metrics.MEAN_ABSOLUTE_ERROR: ModelTask.REGRESSION,
     Metrics.MEAN_SQUARED_ERROR: ModelTask.REGRESSION,
     Metrics.MEDIAN_ABSOLUTE_ERROR: ModelTask.REGRESSION,

@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react";
 
 export interface IDataCharacteristicsStyles {
+  dropdown: IStyle;
   list: IStyle;
   listContainer: IStyle;
   tile: IStyle;
@@ -32,6 +33,9 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
   () => {
     const theme = getTheme();
     return mergeStyleSets<IDataCharacteristicsStyles>({
+      dropdown: {
+        width: 300
+      },
       errorIndicator: {
         border: `2px solid ${theme.semanticColors.errorIcon}`,
         boxSizing: "border-box",
@@ -65,7 +69,6 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
         width: "100%"
       },
       labelsContainer: {
-        overflow: "auto",
         width: "100%"
       },
       list: {
