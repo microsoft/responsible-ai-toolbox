@@ -54,6 +54,7 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
+_MODEL = "model"
 
 
 class RAIInsights(RAIBaseInsights):
@@ -138,13 +139,17 @@ class RAIInsights(RAIBaseInsights):
 
         self._try_add_data_balance()
 
-        # Cache predictions of the model
-        self.predict_output = model.predict(
-            test.drop(columns=[target_column]))
-        if hasattr(model, SKLearn.PREDICT_PROBA):
-            self.predict_proba_output = model.predict(
+        if model is not None:
+            # Cache predictions of the model
+            self.predict_output = model.predict(
                 test.drop(columns=[target_column]))
+            if hasattr(model, SKLearn.PREDICT_PROBA):
+                self.predict_proba_output = model.predict(
+                    test.drop(columns=[target_column]))
+            else:
+                self.predict_proba_output = None
         else:
+            self.predict_output = None
             self.predict_proba_output = None
 
     def _initialize_managers(self):
@@ -735,6 +740,11 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to data location.
         :type path: str
         """
+        if inst.__dict__[_MODEL] is None:
+            inst.__dict__[_PREDICT_OUTPUT] = None
+            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+            return
+
         prediction_output_path = Path(path) / _PREDICTIONS
 
         with open(prediction_output_path / (
