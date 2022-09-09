@@ -352,8 +352,10 @@ def validate_rai_insights(
     for ind_data in rai_insights._string_ind_data:
         assert len(ind_data) == expected_length
 
+    assert rai_insights.predict_output is not None
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()
         np.testing.assert_array_equal(rai_insights._classes,
                                       classes)
+        assert rai_insights.predict_proba_output is not None
