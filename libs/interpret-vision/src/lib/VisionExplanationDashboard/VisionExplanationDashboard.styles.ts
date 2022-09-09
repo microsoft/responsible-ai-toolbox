@@ -1,24 +1,35 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "@fluentui/react";
 export interface IDatasetExplorerTab {
   cohortDropdown: IStyle;
   cohortPickerLabel: IStyle;
   cohortPickerLabelWrapper: IStyle;
-  line: IStyle;
-  searchBox: IStyle;
+  errorMessage: IStyle;
   filterButton: IStyle;
+  searchBox: IStyle;
   toolBarContainer: IStyle;
+  legendIndicator: IStyle;
+  itemsSelectedContainer: IStyle;
   mainContainer: IStyle;
+  mainImageContainer: IStyle;
   halfContainer: IStyle;
   imageListContainer: IStyle;
   slider: IStyle;
+  tableListContainer: IStyle;
+  tableListImage: IStyle;
   tabs: IStyle;
 }
 
 export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDatasetExplorerTab> =
   () => {
+    const theme = getTheme();
     return mergeStyleSets<IDatasetExplorerTab>({
       cohortDropdown: {
         width: "300px"
@@ -29,6 +40,10 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
       cohortPickerLabelWrapper: {
         paddingBottom: "5px"
       },
+      errorMessage: {
+        color: theme.semanticColors.errorText,
+        textAlign: "center"
+      },
       filterButton: {
         height: "32px"
       },
@@ -37,23 +52,42 @@ export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDataset
         width: "50%"
       },
       imageListContainer: {
-        border: "1px solid #D2D4D6",
+        border: `1px solid ${theme.semanticColors.disabledBorder}`,
         height: "100%",
-        overflow: "scroll"
+        overflow: "auto"
       },
-      line: {
-        borderTop: "1px solid #EDEBE9"
+      itemsSelectedContainer: {
+        height: "32px",
+        textAlign: "center"
+      },
+      legendIndicator: {
+        paddingBottom: 2,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 2
       },
       mainContainer: {
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%"
       },
+      mainImageContainer: {
+        height: "650px"
+      },
       searchBox: {
         width: "300px"
       },
       slider: {
         width: "320px"
+      },
+      tableListContainer: {
+        height: "600px",
+        overflow: "auto",
+        width: "100%"
+      },
+      tableListImage: {
+        borderRadius: 4,
+        height: "auto"
       },
       tabs: {
         display: "flex",

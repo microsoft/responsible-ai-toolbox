@@ -8,6 +8,7 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
+import { PointMarkerOptionsObject } from "highcharts";
 import _ from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
@@ -17,6 +18,7 @@ export interface IDatasetExplorerSeries {
   name?: string;
   color: any;
   data: IDatasetExplorerData[];
+  marker?: PointMarkerOptionsObject;
 }
 export interface IDatasetExplorerData {
   x: number;
@@ -77,7 +79,10 @@ export function getDatasetScatter(
     result.push({
       color:
         styles?.[index].value.marker?.color || getPrimaryChartColor(getTheme()),
-      data: d
+      data: d,
+      marker: {
+        symbol: (styles?.[index].value.marker?.symbol as string) || "circle"
+      }
     });
   });
   return result;

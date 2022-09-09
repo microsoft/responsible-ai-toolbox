@@ -20,10 +20,10 @@ import _ from "lodash";
 import React from "react";
 
 import { generatePlotlyProps } from "../util/generatePlotlyProps";
+import { getCounterfactualChartOptions } from "../util/getCounterfactualChartOptions";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
-import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
@@ -239,7 +239,6 @@ export class CounterfactualChart extends React.PureComponent<
       TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
     );
   };
-
   private logTelemetryEvent = (eventName: TelemetryEventName) => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,

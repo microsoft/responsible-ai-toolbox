@@ -1,14 +1,11 @@
 # Error analysis package
-/erroranalysis @gaugup @imatiach-msft
+/erroranalysis @gaugup @imatiach-msft @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # Responsible AI widgets package
-/raiwidgets @imatiach-msft @xuke444 @romanlutz
+/raiwidgets @imatiach-msft @xuke444 @romanlutz @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # Responsible AI SDK package
-/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0
-
-# workspace settings
-#/* @xuke444
+/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0 @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # App
 /apps @xuke444 @vinuthakaranth @romanlutz
@@ -34,15 +31,14 @@
 #interpret-text ui
 /libs/interpret-text @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth
 
+#interpret-vision ui
+/libs/interpret-vision @imatiach-msft @gaugup @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth
+
 #model-assessment ui
 /libs/model-assessment @romanlutz @xuke444 @tongyu-microsoft @vinuthakaranth @RubyZ10
 
 #e2e tests
 /libs/e2e @vinuthakaranth @tongyu-microsoft @romanlutz @imatiach-msft @RubyZ10
 
-
-
-
-
-
-
+#core ui
+/libs/core-ui @imatiach-msft @tongyu-microsoft @xuke444 @RubyZ10 @vinuthakaranth @romanlutz

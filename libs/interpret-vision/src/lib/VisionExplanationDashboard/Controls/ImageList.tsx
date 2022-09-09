@@ -6,58 +6,101 @@ import {
   FocusZone,
   List,
   Image,
+  IImageProps,
   ImageFit,
-  IRectangle
+  IRectangle,
+  Stack
 } from "@fluentui/react";
+import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { imageListStyles } from "./ImageList.styles";
 
 export interface IImageListProps {
+  data: IVisionListItem[];
   imageDim: number;
-  openPanel: () => void;
+  searchValue: string;
+  selectItem: (item: IVisionListItem) => void;
 }
 
 export interface IImageListState {
-  columnCount: number;
-}
-
-export interface IListItem {
-  title: string;
-  image: string;
+  data: IVisionListItem[];
+  filter: string;
+  filteredItems: IVisionListItem[];
 }
 
 const RowsPerPage = 3;
+const ImagePadding = 15;
+const imageProps: IImageProps = {
+  imageFit: ImageFit.cover
+};
+const stackTokens = {
+  childrenGap: "s1"
+};
 
 export class ImageList extends React.Component<
   IImageListProps,
   IImageListState
 > {
+  columnCount: number;
+  rowHeight: number;
+  paddingPercentage: number;
   public constructor(props: IImageListProps) {
     super(props);
-
+    this.columnCount = 0;
+    this.rowHeight = 0;
+    this.paddingPercentage = 0;
     this.state = {
-      columnCount: 1
+      data: [],
+      filter: this.props.searchValue.toLowerCase(),
+      filteredItems: []
     };
+  }
+
+  static getDerivedStateFromProps(
+    props: IImageListProps,
+    state: IImageListState
+  ) {
+    if (props.data !== state.data && props.data.length > 0) {
+      return {
+        filter: "",
+        filteredItems: props.data
+      };
+    }
+
+    const searchVal = props.searchValue.toLowerCase();
+    if (searchVal.length === 0) {
+      return {
+        filter: searchVal,
+        filteredItems: state.data
+      };
+    }
+    if (searchVal !== state.filter) {
+      return {
+        filter: searchVal,
+        filteredItems: state.data.filter(
+          (item) =>
+            item.predictedY.toLowerCase().includes(searchVal) ||
+            item.trueY.toLowerCase().includes(searchVal)
+        )
+      };
+    }
+    return undefined;
+  }
+
+  public componentDidMount() {
+    const data = this.props.data;
+    this.setState({ data, filteredItems: data });
   }
 
   public render(): React.ReactNode {
     const classNames = imageListStyles();
 
-    const items: IListItem[] = [];
-
-    for (let i = 0; i < 20; i++) {
-      items.push({
-        image:
-          "https://1.bp.blogspot.com/-uhSQ0kz07ZI/UjCVa4_ru9I/AAAAAAAAYZI/g7RsfGH81LA/s1600/Duckling+Wallpapers+%25286%2529.jpg",
-        title: `label ${(i + 1).toString()}`
-      });
-    }
-
     return (
       <FocusZone>
         <List
-          items={items}
+          key={this.props.imageDim}
+          items={this.state.filteredItems}
           onRenderCell={this.onRenderCell}
           className={classNames.list}
           getPageHeight={this.getPageHeight}
@@ -67,47 +110,101 @@ export class ImageList extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IListItem | undefined) => {
+  private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = imageListStyles();
+    if (!item) {
+      return;
+    }
+
     return (
-      <div
-        data-is-focusable
+      <Stack
+        tokens={stackTokens}
         className={classNames.tile}
-        onClick={this.props.openPanel}
-        onKeyPress={this.props.openPanel}
-        role="button"
-        tabIndex={0}
+        style={{
+          height: this.props.imageDim * 1.1,
+          width: `${100 / this.columnCount}%`
+        }}
       >
-        <Text className={classNames.label}>{item?.title}</Text>
-        <Image
-          alt={item?.title}
-          width={this.props.imageDim}
-          height={this.props.imageDim}
-          imageFit={ImageFit.contain}
-          src={item?.image}
-        />
-      </div>
+        <Stack.Item
+          className={classNames.imageSizer}
+          style={{ paddingBottom: this.props.imageDim / 1.4 }}
+        >
+          <Stack.Item
+            className={classNames.imageFrame}
+            style={{
+              height: this.props.imageDim,
+              overflow: "hidden",
+              width: this.props.imageDim - ImagePadding
+            }}
+          >
+            <Image
+              {...imageProps}
+              alt={item?.predictedY}
+              src={`data:image/jpg;base64,${item?.image}`}
+              onClick={this.callbackWrapper(item)}
+              width={this.props.imageDim}
+              className={classNames.image}
+            />
+          </Stack.Item>
+          <Stack.Item
+            className={
+              item?.predictedY === item?.trueY
+                ? classNames.successIndicator
+                : classNames.errorIndicator
+            }
+            style={{
+              left: ImagePadding,
+              maxWidth: this.props.imageDim
+            }}
+          >
+            <Text className={classNames.labelPredicted}>
+              {item?.predictedY}
+            </Text>
+          </Stack.Item>
+          <Stack.Item
+            className={classNames.labelContainer}
+            style={{
+              left: ImagePadding - 14,
+              width:
+                this.props.imageDim > 200
+                  ? this.props.imageDim
+                  : this.props.imageDim - 1.35 * ImagePadding
+            }}
+          >
+            <Text
+              className={classNames.label}
+              style={{ width: this.props.imageDim - 20 }}
+            >
+              {item?.trueY}
+            </Text>
+          </Stack.Item>
+        </Stack.Item>
+      </Stack>
     );
   };
 
+  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
+    if (!item) {
+      return;
+    }
+    this.props.selectItem(item);
+  };
+
   private getPageHeight = () => {
-    return this.props.imageDim * RowsPerPage;
+    return this.rowHeight * RowsPerPage;
   };
 
   private getItemCountForPage = (
     itemIndex?: number | undefined,
-    surfaceRect?: IRectangle | undefined
-  ) => {
-    if (!surfaceRect || !itemIndex) {
-      return 0;
+    visibleRect?: IRectangle | undefined
+  ): number => {
+    if (!visibleRect) {
+      return this.columnCount * RowsPerPage;
     }
-
     if (itemIndex === 0) {
-      this.setState({
-        columnCount: Math.ceil(surfaceRect.width / this.props.imageDim)
-      });
+      this.columnCount = Math.ceil(visibleRect.width / this.props.imageDim);
+      this.rowHeight = Math.floor(visibleRect.width / this.columnCount);
     }
-
-    return this.state.columnCount * RowsPerPage;
+    return this.columnCount * RowsPerPage;
   };
 }

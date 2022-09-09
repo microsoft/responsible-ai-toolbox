@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, IProcessedStyleSet } from "@fluentui/react";
-import { getRandomId, SVGToolTip, Metrics } from "@responsible-ai/core-ui";
+import { getTheme } from "@fluentui/react";
+import { getRandomId, SVGToolTip } from "@responsible-ai/core-ui";
 import { HierarchyPointNode } from "d3-hierarchy";
 import React from "react";
 
-import { isColorDark } from "../../ColorPalette";
+import { ColorPalette } from "../../ColorPalette";
 import { FilterTooltip } from "../FilterTooltip/FilterTooltip";
 
-import {
-  ITreeViewRendererStyles,
-  treeViewRendererStyles
-} from "./TreeViewRenderer.styles";
+import { treeViewRendererStyles } from "./TreeViewRenderer.styles";
 import { ITreeNode } from "./TreeViewState";
+import { getNodeText, treeNodeAriaLabel } from "./TreeViewUtils";
 
 export interface ITreeViewNodeProps {
   disabledView: boolean;
@@ -33,13 +31,26 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
     const classNames = treeViewRendererStyles();
     const gradientFillId = getRandomId();
     const theme = getTheme();
+    const ariaLabel = treeNodeAriaLabel(node, this.props.disabledView);
+    let strokeWidth = 1.5;
+    if (this.props.node.data.nodeState.onSelectedPath) {
+      if (node.data.nodeState.isSelectedLeaf) {
+        strokeWidth = 6;
+      } else {
+        strokeWidth = 3;
+      }
+    }
     return (
       <>
         <g
+          onFocus={this.onSelect}
           style={node.data.nodeState.style}
           onClick={this.onSelect}
           pointerEvents="all"
           ref={this.ref}
+          tabIndex={0}
+          aria-label={ariaLabel}
+          className={classNames.treeNodeOutline}
         >
           <linearGradient id={gradientFillId} x1="0.5" y1="1" x2="0.5" y2="0">
             <stop
@@ -55,12 +66,12 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
             <stop
               offset={`${this.props.fillOffset * 100}%`}
               stopOpacity="1"
-              stopColor={theme.semanticColors.bodyBackgroundChecked}
+              stopColor={ColorPalette.NodeFilledColor}
             />
             <stop
               offset="100%"
               stopOpacity="1"
-              stopColor={theme.semanticColors.bodyBackgroundChecked}
+              stopColor={ColorPalette.NodeFilledColor}
             />
           </linearGradient>
           <circle
@@ -74,30 +85,27 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
               color: "black",
               stroke: this.props.node.data.nodeState.onSelectedPath
                 ? theme.semanticColors.link
-                : this.props.node.data.errorColor,
-              strokeWidth: this.props.node.data.nodeState.onSelectedPath ? 3 : 2
+                : ColorPalette.NodeOutlineColor,
+              strokeDasharray:
+                this.props.node.data.nodeState.onSelectedPath &&
+                !node.data.nodeState.isSelectedLeaf
+                  ? "6, 6"
+                  : "",
+              strokeWidth
             }}
             fill={`url(#${gradientFillId})`}
           />
-          {node.data.nodeState.onSelectedPath && (
-            <circle
-              r={node.data.r * 1.4}
-              className={
-                node.data.nodeState.isSelectedLeaf
-                  ? classNames.clickedNodeFull
-                  : classNames.clickedNodeDashed
-              }
-            />
-          )}
-          <text
-            textAnchor="middle"
-            className={this.getNodeClassName(
-              classNames,
-              node.data.filterProps.errorCoverage,
-              node.data.errorColor
-            )}
-          >
-            {this.getNodeText(node)}
+          <rect
+            x={-22}
+            y={-12}
+            width={45}
+            height={20}
+            style={{ fill: ColorPalette.white }}
+            rx={10}
+            ry={10}
+          />
+          <text textAnchor="middle" className={classNames.nodeText}>
+            {getNodeText(node)}
           </text>
         </g>
         {!this.props.disabledView && (
@@ -115,26 +123,4 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
   private onSelect = (): void => {
     this.props.onSelect(this.props.node);
   };
-
-  private getNodeText(node: HierarchyPointNode<ITreeNode>): string {
-    if (
-      node.data.metricName !== Metrics.ErrorRate &&
-      node.data.metricName !== undefined
-    ) {
-      return node.data.metricValue.toFixed(2);
-    }
-    return `${node.data.error}/${node.data.size}`;
-  }
-
-  private getNodeClassName(
-    classNames: IProcessedStyleSet<ITreeViewRendererStyles>,
-    ratio: number,
-    fill: string | undefined
-  ): string {
-    let nodeTextClassName = classNames.nodeText;
-    if (ratio > 50 && isColorDark(fill)) {
-      nodeTextClassName = classNames.filledNodeText;
-    }
-    return nodeTextClassName;
-  }
 }

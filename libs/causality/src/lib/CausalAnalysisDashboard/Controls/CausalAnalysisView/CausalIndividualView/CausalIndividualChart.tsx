@@ -107,7 +107,11 @@ export class CausalIndividualChart extends React.PureComponent<
       this.context.selectedErrorCohort.cohort
     );
     return (
-      <Stack horizontal id={this.chartAndConfigsId}>
+      <Stack
+        horizontal
+        id={this.chartAndConfigsId}
+        className={classNames.chart}
+      >
         <Stack.Item className={classNames.chartWithAxes}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
@@ -456,6 +460,39 @@ export class CausalIndividualChart extends React.PureComponent<
         });
       } else {
         trace.y = rawY;
+      }
+    }
+    if (
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.identity_feature_name
+    ) {
+      const identityFeatureName =
+        this.context.jointDataset.datasetMetaData?.featureMetaData
+          ?.identity_feature_name;
+
+      const jointDatasetFeatureName =
+        this.context.jointDataset.getJointDatasetFeatureName(
+          identityFeatureName
+        );
+
+      if (jointDatasetFeatureName) {
+        const metaIdentityFeature =
+          this.context.jointDataset.metaDict[jointDatasetFeatureName];
+        const rawIdentityFeature = JointDataset.unwrap(
+          dictionary,
+          jointDatasetFeatureName
+        );
+        hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+        rawIdentityFeature.forEach((val, index) => {
+          if (metaIdentityFeature?.treatAsCategorical) {
+            customdata[index].ID =
+              metaIdentityFeature.sortedCategoricalValues?.[val];
+          } else {
+            customdata[index].ID = (val as number).toLocaleString(undefined, {
+              maximumSignificantDigits: 5
+            });
+          }
+        });
       }
     }
     hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;

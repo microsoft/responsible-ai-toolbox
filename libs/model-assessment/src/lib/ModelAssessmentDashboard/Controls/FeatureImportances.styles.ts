@@ -25,8 +25,6 @@ export const featureImportanceTabStyles: () => IProcessedStyleSet<IFeatureImport
         padding: "16px 24px 16px 40px"
       },
       tabs: {
-        display: "flex",
-        flexDirection: "row",
         justifyContent: "start",
         padding: "0px 30px"
       }

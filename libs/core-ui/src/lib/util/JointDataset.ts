@@ -645,6 +645,28 @@ export class JointDataset {
     });
   }
 
+  public getJointDatasetFeatureName(
+    userFeatureName: string
+  ): string | undefined {
+    // Return the joint dataset feature name for the given user feature name.
+    let jointDatasetFeatureName = undefined;
+    let isUserFeatureNameFound = false;
+    for (jointDatasetFeatureName in this.metaDict) {
+      if (
+        this.metaDict[jointDatasetFeatureName].abbridgedLabel ===
+        userFeatureName
+      ) {
+        isUserFeatureNameFound = true;
+        break;
+      }
+    }
+
+    if (isUserFeatureNameFound) {
+      return jointDatasetFeatureName;
+    }
+    return undefined;
+  }
+
   private initializeDataDictIfNeeded(arr: any[]): void {
     if (arr === undefined) {
       return;

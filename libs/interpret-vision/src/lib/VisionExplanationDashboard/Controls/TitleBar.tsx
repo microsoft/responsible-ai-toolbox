@@ -7,6 +7,7 @@ import React from "react";
 
 import { titleBarStyles } from "./TitleBar.styles";
 export interface ITitleBarProps {
+  count: number;
   type: TitleBarOptions;
 }
 
@@ -54,7 +55,7 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
         </Stack.Item>
         <Stack.Item>
           <Text variant="large" className={classNames.titleBarNumber}>
-            {this.props.type === TitleBarOptions.Error ? "6170" : "3825"}
+            {this.props.count}
           </Text>
         </Stack.Item>
       </Stack>

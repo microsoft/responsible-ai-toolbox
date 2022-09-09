@@ -17,7 +17,6 @@ import React from "react";
 
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
-import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
@@ -73,7 +72,9 @@ export class CausalIndividualView extends React.PureComponent<
             <Stack.Item className={styles.callout}>
               <LabelWithCallout
                 label={localization.CausalAnalysis.MainMenu.why}
-                calloutTitle={causalCalloutDictionary.confounding.title}
+                calloutTitle={
+                  localization.CausalAnalysis.AggregateView.unconfounding
+                }
                 type="button"
                 telemetryHook={this.props.telemetryHook}
                 calloutEventName={
@@ -81,10 +82,12 @@ export class CausalIndividualView extends React.PureComponent<
                 }
               >
                 <Text block>
-                  {causalCalloutDictionary.confounding.description}
+                  {localization.CausalAnalysis.AggregateView.confoundingFeature}
                 </Text>
                 <Link
-                  href={causalCalloutDictionary.confounding.linkUrl}
+                  href={
+                    "https://www.microsoft.com/research/project/econml/#!how-to"
+                  }
                   target="_blank"
                 >
                   {localization.Interpret.ExplanationSummary.clickHere}

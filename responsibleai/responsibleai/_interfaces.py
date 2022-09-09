@@ -22,6 +22,7 @@ class Dataset:
     target_column: str
     feature_metadata: Optional[Dict[str, Any]]
     data_balance_measures: Dict[str, Any]
+    images: Optional[List[str]]
 
 
 class BoundedCoordinates:
@@ -66,6 +67,13 @@ class ModelExplanationData:
     modelClass: ModelClass
     explanationMethod: str
     precomputedExplanations: PrecomputedExplanations
+
+
+class VisionExplanationData:
+    classNames: List[str]
+    images: List[str]
+    predictedY: List[str]
+    trueY: List[str]
 
 
 class ErrorAnalysisData:

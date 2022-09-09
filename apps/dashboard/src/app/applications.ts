@@ -1,15 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IExplanationDashboardData,
-  IFairnessData,
-  ISerializedExplanationData,
-  ITextExplanationDashboardData,
-  IVisionExplanationDashboardData
-} from "@responsible-ai/core-ui";
-import { IModelAssessmentData } from "@responsible-ai/model-assessment";
-
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
@@ -20,8 +11,8 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
+import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
-import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -44,6 +35,7 @@ import {
   emotion,
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
+import { visionData } from "../model-assessment-vision/__mock_data__/visionData";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -80,68 +72,28 @@ import {
   wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
-export interface IInterpretDataSet {
-  data: IExplanationDashboardData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IInterpretTextDataSet {
-  data: ITextExplanationDashboardData;
-}
-
-export interface IInterpretVisionDataSet {
-  data: IVisionExplanationDashboardData;
-}
-
-export interface IFairnessDataSet {
-  data: IFairnessData;
-}
-
-export interface IErrorAnalysisDataSet {
-  data: IExplanationDashboardData | ISerializedExplanationData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IModelAssessmentDataSet extends IModelAssessmentData {
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IDataSet<TDataSet> {
-  datasets: { [key: string]: TDataSet };
-}
-
-export interface IInterpretSetting {
-  versions: { [key: string]: 1 | 2 };
-}
-
-export interface IInterpretTextSetting {
-  versions: { [key: string]: 1 };
-}
-
-export interface IInterpretVisionSetting {
-  versions: { [key: string]: 1 };
-}
-
-export interface IFairnessSetting {
-  versions: { [key: string]: 2 };
-}
-
-export interface IErrorAnalysisSetting {
-  versions: { [key: string]: 1 | 2 | 3 };
-}
-
-export interface IModelAssessmentSetting {
-  versions: { [key: string]: 1 | 2 };
-}
+import {
+  IFairnessSetting,
+  IDataSet,
+  IFairnessDataSet,
+  IInterpretSetting,
+  IInterpretDataSet,
+  IInterpretTextSetting,
+  IInterpretTextDataSet,
+  IErrorAnalysisSetting,
+  IErrorAnalysisDataSet,
+  IModelAssessmentSetting,
+  IModelAssessmentDataSet
+} from "./applicationInterfaces";
 
 export const applicationKeys = <const>[
   "interpret",
   "interpretText",
-  "interpretVision",
   "fairness",
   "errorAnalysis",
   "modelAssessment",
-  "modelAssessmentText"
+  "modelAssessmentText",
+  "modelAssessmentVision"
 ];
 
 export type IApplications = {
@@ -150,10 +102,11 @@ export type IApplications = {
   fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
-  interpretVision: IInterpretVisionSetting & IDataSet<IInterpretVisionDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentVision: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
 };
 
@@ -224,13 +177,8 @@ export const applications: IApplications = <const>{
   },
   interpretText: {
     datasets: {
+      emotionLongDoc: { data: emotionLongDoc },
       newsgroupBinaryData: { data: newsgroupBinaryData }
-    },
-    versions: { "Version-1": 1 }
-  },
-  interpretVision: {
-    datasets: {
-      visionData: { data: visionData }
     },
     versions: { "Version-1": 1 }
   },
@@ -307,6 +255,23 @@ export const applications: IApplications = <const>{
         classDimension: 3,
         dataset: emotion,
         modelExplanationData: [emotionModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentVision: {
+    datasets: {
+      visionModelExplanationData: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: visionData.categorical_features,
+          class_names: visionData.class_names!,
+          feature_names: visionData.feature_names,
+          features: visionData.features!,
+          images: visionData.images!,
+          predicted_y: visionData.predicted_y!,
+          true_y: visionData.true_y
+        }
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

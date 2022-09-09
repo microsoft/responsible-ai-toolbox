@@ -10,14 +10,13 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list
 from raiutils.models import is_classifier
+from raiwidgets.cohort import Cohort
+from raiwidgets.constants import ErrorMessages
+from raiwidgets.error_handling import _format_exception
+from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
-
-from .cohort import Cohort
-from .constants import ErrorMessages
-from .error_handling import _format_exception
-from .interfaces import WidgetRequestResponseConstants
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -208,6 +207,77 @@ class ResponsibleAIDashboardInput:
             return {
                 WidgetRequestResponseConstants.error:
                     "Failed to generate causal what-if,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_exp(self, index):
+        try:
+            exp = self._analysis.explainer.compute_single_explanation(index)
+            return {
+                WidgetRequestResponseConstants.data: exp
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate image explanation,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_global_causal_effects(self, post_data):
+        try:
+            id = post_data[0]
+            filters = post_data[1]
+            composite_filters = post_data[2]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            global_effects = \
+                self._analysis.causal.request_global_cohort_effects(
+                    id, filtered_data_df)
+            return {
+                WidgetRequestResponseConstants.data: global_effects
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global causal effects for cohort,"
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+    def get_global_causal_policy(self, post_data):
+        try:
+            id = post_data[0]
+            filters = post_data[1]
+            composite_filters = post_data[2]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            global_policy = \
+                self._analysis.causal.request_global_cohort_policy(
+                    id, filtered_data_df)
+            return {
+                WidgetRequestResponseConstants.data: global_policy
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate global causal policy for cohort,"
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }

@@ -211,8 +211,8 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       });
       hovertemplate += `${yLabel}: %{customdata.Yformatted}<br>`;
     }
-    const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
-    indecies.forEach((absoluteIndex, i) => {
+    const indices = cohort.unwrap(JointDataset.IndexLabel, false);
+    indices.forEach((absoluteIndex, i) => {
       customdata[i].AbsoluteIndex = absoluteIndex;
     });
     hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.AbsoluteIndex}<br>`;

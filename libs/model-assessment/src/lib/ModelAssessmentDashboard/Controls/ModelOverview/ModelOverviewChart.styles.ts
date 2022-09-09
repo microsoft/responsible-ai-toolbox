@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import { flexMdDown } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewChartStyles {
   rotatedVerticalBox: IStyle;
@@ -12,6 +13,7 @@ export interface IModelOverviewChartStyles {
   placeholderText: IStyle;
   chartConfigDropdown: IStyle;
   chartToggle: IStyle;
+  splineButtons: IStyle;
 }
 
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
@@ -46,6 +48,7 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
         transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
         width: "max-content"
       },
+      splineButtons: flexMdDown,
       verticalAxis: {
         height: "auto",
         position: "relative",

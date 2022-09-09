@@ -107,7 +107,8 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=categorical_features,
             classes=classes,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test)
+            maximum_rows_for_test=maximum_rows_for_test,
+            feature_metadata=feature_metadata)
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
@@ -229,6 +230,10 @@ class RAIInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
 
         valid_tasks = [

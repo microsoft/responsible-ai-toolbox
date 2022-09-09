@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import {
+  IStyle,
+  mergeStyleSets,
+  IProcessedStyleSet,
+  getTheme
+} from "@fluentui/react";
 
 export interface ITitleBarStyles {
   errorIcon: IStyle;
@@ -12,18 +17,16 @@ export interface ITitleBarStyles {
 }
 
 export const titleBarStyles: () => IProcessedStyleSet<ITitleBarStyles> = () => {
+  const theme = getTheme();
   return mergeStyleSets<ITitleBarStyles>({
     errorIcon: {
-      color: "#d13438",
+      color: theme.semanticColors.errorIcon,
       fontSize: "large",
       fontWeight: "600"
     },
-    iconContainer: {
-      position: "relative",
-      top: "2px"
-    },
+    iconContainer: {},
     successIcon: {
-      color: "#107c10",
+      color: theme.semanticColors.successIcon,
       fontSize: "large",
       fontWeight: "600"
     },
@@ -31,7 +34,7 @@ export const titleBarStyles: () => IProcessedStyleSet<ITitleBarStyles> = () => {
       fontWeight: "600"
     },
     titleBarNumber: {
-      color: "#0078D4"
+      color: theme.palette.blue
     }
   });
 };

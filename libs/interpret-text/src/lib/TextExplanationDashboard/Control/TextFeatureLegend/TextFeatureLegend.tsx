@@ -21,7 +21,7 @@ export class TextFeatureLegend extends React.Component {
   public render(): React.ReactNode {
     const classNames = textFeatureLegendStyles();
     return (
-      <Stack tokens={componentStackTokens}>
+      <Stack id="TextFeatureLegend" tokens={componentStackTokens}>
         <Stack.Item>
           <Text variant={"large"} className={classNames.legend}>
             {localization.InterpretText.Legend.featureLegend}

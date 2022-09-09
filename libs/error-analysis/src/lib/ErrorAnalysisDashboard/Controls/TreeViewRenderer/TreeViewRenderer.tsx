@@ -69,8 +69,8 @@ export interface ISVGDatum {
 }
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
-const errorAvgColor = ColorPalette.ErrorAvgColor;
 const disabledColor = ColorPalette.DisabledColor;
+const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -276,6 +276,9 @@ export class TreeViewRenderer extends React.PureComponent<
 
     const svgWidth = maxX - minX;
     const svgHeight = maxY - minY;
+    const chartAriaLabel = this.props.disabledView
+      ? localization.ErrorAnalysis.TreeView.disabledArialLabel
+      : localization.ErrorAnalysis.TreeView.ariaLabel;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item className={classNames.infoWithText}>
@@ -311,6 +314,7 @@ export class TreeViewRenderer extends React.PureComponent<
               telemetryHook={this.props.telemetryHook}
             />
             <svg
+              aria-label={chartAriaLabel}
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
@@ -356,16 +360,17 @@ export class TreeViewRenderer extends React.PureComponent<
                         y={linkLabel.bbY}
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
-                        fill="white"
-                        stroke={ColorPalette.LinkLabelOutline}
-                        strokeWidth="1px"
-                        rx="10"
-                        ry="10"
+                        fill={theme.semanticColors.bodyBackground}
+                        stroke={theme.semanticColors.link}
+                        strokeWidth="3px"
+                        rx="15"
+                        ry="15"
                         pointerEvents="none"
                       />
                       <text
                         className={classNames.linkLabel}
                         pointerEvents="none"
+                        fontFamily="Segoe UI Semibold"
                       >
                         {linkLabel.text}
                       </text>
@@ -466,12 +471,10 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = isErrorMetric
-        ? ColorPalette.MinErrorColor
-        : ColorPalette.MinMetricColor;
+      const minColor = ColorPalette.white;
       const maxColor = isErrorMetric
-        ? ColorPalette.MaxErrorColor
-        : ColorPalette.MaxMetricColor;
+        ? ColorPalette.ErrorColor100
+        : ColorPalette.MetricColor100;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
