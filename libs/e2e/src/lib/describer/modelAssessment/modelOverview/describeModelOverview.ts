@@ -198,7 +198,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
               ","
             )}.`
           : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
-              datasetShape.isRegression ? "Mean absolute error" : "Accuracy"
+              datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
             }.`;
       cy.get(Locators.ModelOverviewMetricChartBars)
         .first()
