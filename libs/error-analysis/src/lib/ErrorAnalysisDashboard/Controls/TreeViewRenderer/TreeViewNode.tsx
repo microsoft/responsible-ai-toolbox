@@ -97,7 +97,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
           />
           <rect
             x={-22}
-            y={-13}
+            y={-12}
             width={45}
             height={20}
             style={{ fill: ColorPalette.white }}
