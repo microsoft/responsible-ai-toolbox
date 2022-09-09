@@ -3,7 +3,6 @@
 
 import pandas as pd
 import pytest
-
 from tests.common_utils import create_adult_income_dataset
 
 # Constants representing columns in the synthetic_data fixture
