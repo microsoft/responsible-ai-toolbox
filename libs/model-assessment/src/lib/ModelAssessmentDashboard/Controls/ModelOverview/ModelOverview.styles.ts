@@ -23,6 +23,7 @@ export interface IModelOverviewStyles {
   generalText: IStyle;
   generalSemiBoldText: IStyle;
   selections: IStyle;
+  smallDropdown: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -56,6 +57,9 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         padding: "0 40px 10px 40px"
       },
       selections: flexLgDown,
+      smallDropdown: {
+        width: "150px"
+      },
       topLevelDescriptionText: {
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth,

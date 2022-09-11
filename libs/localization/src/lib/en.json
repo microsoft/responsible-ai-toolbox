@@ -1602,6 +1602,14 @@
           "name": "F1 score",
           "description": "F1-score is the harmonic mean of precision and recall."
         },
+        "f1ScoreMacro": {
+          "name": "Macro F1 score",
+          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+        },
+        "f1ScoreMicro": {
+          "name": "Micro F1 score",
+          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
+        },
         "meanAbsoluteError": {
           "name": "Mean absolute error",
           "description": "The average of absolute values of errors. More robust to outliers than MSE."
@@ -1614,9 +1622,25 @@
           "name": "Precision score",
           "description": "The fraction of data points classified correctly among those classified as 1."
         },
+        "precisionMacro": {
+          "name": "Macro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+        },
+        "precisionMicro": {
+          "name": "Micro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+        },
         "recall": {
           "name": "Recall score",
           "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "recallMacro": {
+          "name": "Macro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+        },
+        "recallMicro": {
+          "name": "Micro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
         },
         "falsePositiveRate": {
           "name": "False positive rate",
@@ -1638,6 +1662,11 @@
         "fairnessMetricRatio": "Ratio"
       },
       "metricsDropdown": "Metric(s)",
+      "metricsTypeDropdown": "Aggregate method",
+      "metricTypes": {
+        "macro": "Macro",
+        "micro": "Micro"
+      },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",

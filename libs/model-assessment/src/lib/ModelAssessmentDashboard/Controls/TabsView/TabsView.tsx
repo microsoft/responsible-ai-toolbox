@@ -168,6 +168,7 @@ export class TabsView extends React.PureComponent<
                       features: this.props.dataset.features!,
                       images: this.props.dataset.images,
                       predicted_y: this.props.dataset.predicted_y!,
+                      task_type: this.props.dataset.task_type,
                       true_y: this.props.dataset.true_y
                     }}
                     requestExp={this.props.requestExp}
