@@ -63,7 +63,7 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
         background: "rgba(0,0,0,0.4)",
         boxSizing: "border-box",
         paddingBottom: 5,
-        paddingTop: 2,
+        paddingTop: 1,
         position: "relative",
         textAlign: "start",
         top: 4,

@@ -4,11 +4,11 @@
 import { IVisionListItem } from "@responsible-ai/core-ui";
 
 export interface IVisionExplanationDashboardState {
-  currentExplanation: string;
+  computedExplanations: Map<number, string>;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
-  loadingExplanation: boolean;
+  loadingExplanation: boolean[];
   otherMetadataFieldNames: string[];
   numRows: number;
   pageSize: number;
