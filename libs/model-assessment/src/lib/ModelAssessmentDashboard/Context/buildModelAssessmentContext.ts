@@ -15,7 +15,8 @@ import {
   getClassLength,
   getModelType,
   MetricCohortStats,
-  DatasetTaskType
+  DatasetTaskType,
+  Method
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -124,10 +125,15 @@ export function buildInitialModelAssessmentContext(
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
-  const modelType = getModelType(
+  let method: Method =
     props.dataset.task_type === DatasetTaskType.Regression
       ? "regressor"
-      : "classifier",
+      : "classifier";
+  if (props.dataset.task_type === DatasetTaskType.ImageClassification) {
+    method = "image";
+  }
+  const modelType = getModelType(
+    method,
     props.modelExplanationData?.[0]?.precomputedExplanations,
     props.dataset.probability_y
   );
