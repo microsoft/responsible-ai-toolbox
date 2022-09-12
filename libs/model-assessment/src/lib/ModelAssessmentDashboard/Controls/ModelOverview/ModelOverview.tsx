@@ -29,7 +29,8 @@ import {
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  DatasetTaskType
+  DatasetTaskType,
+  ImageClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -117,6 +118,15 @@ export class ModelOverview extends React.Component<
       } else {
         defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
       }
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.ImageClassification
+    ) {
+      defaultSelectedMetrics = [
+        ImageClassificationMetrics.Accuracy,
+        ImageClassificationMetrics.MacroF1,
+        ImageClassificationMetrics.MacroPrecision,
+        ImageClassificationMetrics.MacroRecall
+      ];
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [

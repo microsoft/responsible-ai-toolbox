@@ -59,7 +59,7 @@ export class CohortToolBar extends React.Component<
   public componentDidMount() {
     const cohortNames: string[] = [];
     this.props.cohorts.forEach((cohort: ErrorCohort) => {
-      cohortNames.push(cohort.cohort.name);
+      cohortNames.push(cohort.cohort.name.toLowerCase());
     });
     const selectionCount: number = this.props.selectedIndices.length;
     this.setState({ cohortNames, selectionCount });
@@ -68,6 +68,13 @@ export class CohortToolBar extends React.Component<
   public componentDidUpdate(prevProps: ICohortToolBarProps): void {
     if (prevProps.selectedIndices !== this.props.selectedIndices) {
       this.setState({ selectionCount: this.props.selectedIndices.length });
+    }
+    if (prevProps.cohorts !== this.props.cohorts) {
+      const cohortNames: string[] = [];
+      this.props.cohorts.forEach((cohort: ErrorCohort) => {
+        cohortNames.push(cohort.cohort.name.toLowerCase());
+      });
+      this.setState({ cohortNames });
     }
   }
 
@@ -151,18 +158,18 @@ export class CohortToolBar extends React.Component<
 
   private addCohortWrapper = (switchCohort: boolean) => () => {
     let cohortName = this.state.newCohortName;
+    if (cohortName.length === 0) {
+      cohortName = `Cohort ${this.state.cohortNames.length + 1}`;
+    }
     if (this.state.selectionCount === 0) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorNumSelected
       });
-    } else if (this.state.cohortNames.includes(cohortName)) {
+    } else if (this.state.cohortNames.includes(cohortName.toLowerCase())) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorCohortName
       });
     } else {
-      if (cohortName.length === 0) {
-        cohortName = `Cohort ${this.props.cohorts.length + 1}`;
-      }
       this.setState({ hideSaveCohortDialog: true });
       this.setState({ errorMessage: "" });
       this.setState({ newCohortName: "" });

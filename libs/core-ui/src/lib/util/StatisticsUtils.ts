@@ -5,6 +5,10 @@ import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 
+import {
+  generateMicroMacroMetrics,
+  ImageClassificationMetrics
+} from "./ImageStatisticsUtils";
 import { JointDataset } from "./JointDataset";
 import {
   ClassificationEnum,
@@ -160,6 +164,65 @@ const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
   ];
 };
 
+const generateImageStats: (
+  trueYs: number[],
+  predYs: number[]
+) => ILabeledStatistic[] = (
+  trueYs: number[],
+  predYs: number[]
+): ILabeledStatistic[] => {
+  const correctCount = predYs.filter(
+    (pred, index) => pred === trueYs[index]
+  ).length;
+  const accuracy = correctCount / predYs.length;
+  const precision = generateMicroMacroMetrics(predYs, trueYs);
+  const microP = precision.microScore;
+  const macroP = precision.macroScore;
+  const recall = generateMicroMacroMetrics(trueYs, predYs);
+  const microR = recall.microScore;
+  const macroR = recall.macroScore;
+  const microF1 = 2 * ((microP * microR) / (microP + microR)) || 0;
+  const macroF1 = 2 * ((macroP * macroR) / (macroP + macroR)) || 0;
+
+  return [
+    {
+      key: ImageClassificationMetrics.Accuracy,
+      label: localization.Interpret.Statistics.accuracy,
+      stat: accuracy
+    },
+    {
+      key: ImageClassificationMetrics.MicroPrecision,
+      label: localization.Interpret.Statistics.precision,
+      stat: microP
+    },
+    {
+      key: ImageClassificationMetrics.MicroRecall,
+      label: localization.Interpret.Statistics.recall,
+      stat: microR
+    },
+    {
+      key: ImageClassificationMetrics.MicroF1,
+      label: localization.Interpret.Statistics.f1Score,
+      stat: microF1
+    },
+    {
+      key: ImageClassificationMetrics.MacroPrecision,
+      label: localization.Interpret.Statistics.precision,
+      stat: macroP
+    },
+    {
+      key: ImageClassificationMetrics.MacroRecall,
+      label: localization.Interpret.Statistics.recall,
+      stat: macroR
+    },
+    {
+      key: ImageClassificationMetrics.MacroF1,
+      label: localization.Interpret.Statistics.f1Score,
+      stat: macroF1
+    }
+  ];
+};
+
 export const generateMetrics: (
   jointDataset: JointDataset,
   selectionIndexes: number[][],
@@ -169,15 +232,22 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes
 ): ILabeledStatistic[][] => {
+  const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
+  const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
   if (modelType === ModelTypes.Regression) {
-    const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
-    const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
     const errors = jointDataset.unwrap(JointDataset.RegressionError);
     return selectionIndexes.map((selectionArray) => {
       const trueYSubset = selectionArray.map((i) => trueYs[i]);
       const predYSubset = selectionArray.map((i) => predYs[i]);
       const errorsSubset = selectionArray.map((i) => errors[i]);
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
+    });
+  }
+  if (modelType === ModelTypes.Image) {
+    return selectionIndexes.map((selectionArray) => {
+      const trueYSubset = selectionArray.map((i) => trueYs[i]);
+      const predYSubset = selectionArray.map((i) => predYs[i]);
+      return generateImageStats(trueYSubset, predYSubset);
     });
   }
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);

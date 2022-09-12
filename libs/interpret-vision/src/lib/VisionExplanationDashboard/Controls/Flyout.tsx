@@ -21,10 +21,10 @@ import React from "react";
 import { flyoutStyles } from "./Flyout.styles";
 
 export interface IFlyoutProps {
-  explanation: string;
+  explanations: Map<number, string>;
   isOpen: boolean;
   item: IVisionListItem | undefined;
-  loadingExplanation: boolean;
+  loadingExplanation: boolean[];
   otherMetadataFieldNames: string[];
   callback: () => void;
 }
@@ -86,6 +86,10 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
   public render(): React.ReactNode {
     const { isOpen, callback } = this.props;
     const item = this.state.item;
+    if (!item) {
+      return <div />;
+    }
+    const index = item.index;
     const classNames = flyoutStyles();
     return (
       <FocusZone>
@@ -196,15 +200,17 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               className={classNames.sectionIndent}
             >
               <Stack.Item>
-                <Text variant="large" className={classNames.indentedTitle}>
+                <Text variant="large" className={classNames.title}>
                   {localization.InterpretVision.Dashboard.panelExplanation}
                 </Text>
               </Stack.Item>
-              {!this.props.loadingExplanation ? (
+              {!this.props.loadingExplanation[index] ? (
                 <Stack.Item>
                   <Image
-                    src={`data:image/jpg;base64,${this.props.explanation}`}
-                    width="800px"
+                    src={`data:image/jpg;base64,${this.props.explanations.get(
+                      index
+                    )}`}
+                    width="700px"
                     style={{ position: "relative", right: 85 }}
                   />
                 </Stack.Item>
@@ -224,7 +230,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
               className={classNames.sectionIndent}
             >
               <Stack.Item>
-                <Text variant="large" className={classNames.indentedTitle}>
+                <Text variant="large" className={classNames.title}>
                   {localization.InterpretVision.Dashboard.panelInformation}
                 </Text>
               </Stack.Item>
