@@ -7,7 +7,7 @@ Responsible AI Toolbox is a suite of tools providing a collection of model and d
 
 
 <p align="center">
-<img src="./img/responsible-ai-toolbox.png" alt="Model Assessment" width="550"/>
+<img src="./img/responsible-ai-toolbox.png" alt="ResponsibleAIToolboxOverview" width="550"/>
 
 
 The Toolbox consists of two repositories: 
@@ -27,7 +27,7 @@ The Toolbox consists of two repositories:
 
 
 <p align="center">
-<img src="./img/responsible-ai-dashboard.png" alt="Model Assessment" width="550"/>
+<img src="./img/responsible-ai-dashboard.png" alt="ResponsibleAIDashboard" width="550"/>
 
 
 
