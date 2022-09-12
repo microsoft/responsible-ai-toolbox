@@ -59,20 +59,17 @@ export class VisionExplanationDashboard extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
-  computedExplanations: Map<number, string>;
   originalErrorInstances: IVisionListItem[];
   originalSuccessInstances: IVisionListItem[];
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
-    this.computedExplanations = new Map();
     this.originalErrorInstances = [];
     this.originalSuccessInstances = [];
     this.state = {
-      currentExplanation: "",
+      computedExplanations: new Map(),
       errorInstances: [],
       imageDim: 200,
-      loadingExplanation: false,
+      loadingExplanation: [],
       numRows: 3,
       otherMetadataFieldNames: ["mean_pixel_value"],
       pageSize: 10,
@@ -217,7 +214,7 @@ export class VisionExplanationDashboard extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <Flyout
-            explanation={this.state.currentExplanation}
+            explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             loadingExplanation={this.state.loadingExplanation}
@@ -248,7 +245,8 @@ export class VisionExplanationDashboard extends React.Component<
     });
 
     const fieldNames = dataSummary.feature_names!;
-
+    const loadingExplanation: boolean[] = [];
+    const computedExplanations: Map<number, string> = new Map();
     dataSummary.images?.forEach((image, index) => {
       const item: IVisionListItem = {
         image,
@@ -262,13 +260,18 @@ export class VisionExplanationDashboard extends React.Component<
       item.predictedY === item.trueY
         ? successInstances.push(item)
         : errorInstances.push(item);
+
+      loadingExplanation.push(false);
+      computedExplanations.set(index, "");
     });
 
     this.originalErrorInstances = errorInstances;
     this.originalSuccessInstances = successInstances;
 
     this.setState({
+      computedExplanations,
       errorInstances,
+      loadingExplanation,
       otherMetadataFieldNames: fieldNames,
       successInstances
     });
@@ -331,7 +334,7 @@ export class VisionExplanationDashboard extends React.Component<
   };
 
   private onPanelClose = () => {
-    this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
+    this.setState({ panelOpen: !this.state.panelOpen });
   };
 
   private onSearch = (
@@ -348,26 +351,28 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
 
     const index = item.index;
-
-    const computedExplanation = this.computedExplanations.get(index);
+    const { computedExplanations, loadingExplanation } = this.state;
+    const computedExplanation = computedExplanations.get(index);
     if (computedExplanation) {
+      loadingExplanation[index] = false;
       this.setState({
-        currentExplanation: computedExplanation,
-        loadingExplanation: false
+        loadingExplanation
       });
       return;
     }
 
     if (this.props.requestExp) {
-      this.setState({ loadingExplanation: true });
+      loadingExplanation[index] = true;
+      this.setState({ loadingExplanation });
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
           const explanation = result.toString();
-          this.computedExplanations.set(index, explanation);
+          computedExplanations.set(index, explanation);
+          loadingExplanation[index] = false;
           this.setState({
-            currentExplanation: explanation,
-            loadingExplanation: false
+            computedExplanations,
+            loadingExplanation
           });
         });
     }

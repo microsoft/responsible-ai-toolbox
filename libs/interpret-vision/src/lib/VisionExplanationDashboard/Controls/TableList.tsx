@@ -67,7 +67,7 @@ export class TableList extends React.Component<
     state: ITableListState
   ) {
     const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
+    if (searchVal !== state.filter && searchVal.length === 0) {
       let items: IVisionListItem[] = [];
 
       items = items.concat(props.successInstances);
@@ -117,7 +117,7 @@ export class TableList extends React.Component<
         filteredItems
       };
     }
-    return undefined;
+    return {};
   }
 
   public componentDidMount(): void {

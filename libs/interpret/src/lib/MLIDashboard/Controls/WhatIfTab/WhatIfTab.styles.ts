@@ -333,6 +333,11 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flexDirection: "row",
         justifyContent: "flex-end",
         paddingRight: legendWidth,
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            paddingRight: "0"
+          }
+        },
         width: "100%"
       },
       rotatedVerticalBox: {
