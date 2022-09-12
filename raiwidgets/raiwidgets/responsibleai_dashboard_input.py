@@ -97,8 +97,10 @@ class ResponsibleAIDashboardInput:
 
     def on_predict(self, data):
         try:
+            print(data)
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
+            data = self._analysis.get_test_data(test_data=data)
             if (self._is_classifier):
                 prediction = convert_to_list(
                     self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)

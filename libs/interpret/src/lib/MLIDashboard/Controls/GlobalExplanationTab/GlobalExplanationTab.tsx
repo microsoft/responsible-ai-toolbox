@@ -135,6 +135,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
+    console.log(this.context);
     const classNames = globalTabStyles();
 
     if (!this.context.jointDataset.hasLocalExplanations) {

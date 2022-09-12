@@ -79,6 +79,7 @@ export class GlobalOnlyChart extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
+    console.log(this.context);
     if (
       !this.context.modelExplanationData?.precomputedExplanations
         ?.globalFeatureImportance

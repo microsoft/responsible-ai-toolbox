@@ -97,6 +97,7 @@ export class FeatureImportanceBar extends React.Component<
   }
 
   private getHightChartOption(): IHighchartsConfig {
+    console.log(this.props);
     return this.props.chartType === ChartTypes.Bar
       ? getFeatureImportanceBarOptions(
           this.props.sortArray,

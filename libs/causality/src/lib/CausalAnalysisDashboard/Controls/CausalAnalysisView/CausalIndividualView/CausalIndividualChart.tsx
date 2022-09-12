@@ -219,9 +219,39 @@ export class CausalIndividualChart extends React.PureComponent<
       </Stack>
     );
   }
-
+  private readonly getRawValue = (
+    v: number | undefined,
+    k: string
+  ): string | number | undefined => {
+    const meta = this.context.jointDataset.metaDict[k];
+    if (v === undefined) {
+      return v;
+    }
+    if (
+      (meta.isCategorical || meta?.treatAsCategorical) &&
+      meta.sortedCategoricalValues
+    ) {
+      return meta.sortedCategoricalValues[v];
+    }
+    return v;
+  };
+  
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.temporaryPoint = this.context.jointDataset.getRow(index);
+    console.log(this.context.selectedErrorCohort.cohort.getRow(index))
+    console.log(this.temporaryPoint);
+    const data = _.chain(
+      this.context.selectedErrorCohort.cohort.getRow(index)
+    )
+      .pickBy(
+        (_, k) =>
+          this.context.jointDataset.metaDict[k]?.category ===
+          ColumnCategories.Dataset
+      )
+      .mapValues(this.getRawValue)
+      .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
+      .value();
+    console.log(data);
     this.temporaryPoint[CausalIndividualConstants.namePath] =
       localization.formatString(
         localization.Interpret.WhatIf.defaultCustomRootName,
