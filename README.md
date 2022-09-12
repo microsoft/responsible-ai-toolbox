@@ -3,18 +3,22 @@
 # Responsible AI Toolbox
 Responsible AI is an approach to assessing, developing, and deploying AI systems in a safe, trustworthy, and ethical manner, and take responsible decisions and actions.
 
-Responsible AI Toolbox is a suite of tools provides a collection of model and data exploration and assessment user interfaces that enable a better understanding of AI systems. These interfaces empower developers and stakeholders of AI systems to develop and monitor AI more responsibly, and take better data-driven actions.
+Responsible AI Toolbox is a suite of tools providing a collection of model and data exploration and assessment user interfaces and libraries that enable a better understanding of AI systems. These interfaces and libraries empower developers and stakeholders of AI systems to develop and monitor AI more responsibly, and take better data-driven actions.
 
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/microsoft/responsible-ai-widgets/main/img/responsible-ai-toolbox.png" alt="Model Assessment" width="250"/>
+<img src="./img/responsible-ai-toolbox.png" alt="Model Assessment" width="550"/>
 
 
-The Toolbox consists of four dashboards: 
--	[Error Analysis dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), for identifying model errors and discovering cohorts of data for which the model underperforms. 
--	[Interpretability dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/explanation-dashboard-README.md), for understanding model predictions. This dashboard is powered by InterpretML.
--	[Fairness dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/fairness-dashboard-README.md), for understanding model’s fairness issues using various group-fairness metrics across sensitive features and cohorts. This dashboard is powered by Fairlearn.
--	[Responsible AI dashboard](https://github.com/microsoft/responsible-ai-toolbox#introducing-responsible-ai-dashboard), a single pane of glass bringing together several mature Responsible AI tools from the toolbox for a holistic responsible assessment and debugging of models and making informed business decisions. With this dashboard, you can identify model errors, diagnose why those errors are happening, and mitigate them. Moreover, the causal decision-making capabilities provide actionable insights to your stakeholders and customers.
+The Toolbox consists of two repositories: 
+
+ 
+| Repository| Tools Covered  |
+|--|--|
+| [Responsible-AI-Toolbox Reposity](https://github.com/microsoft/responsible-ai-toolbox) (Here) |[Responsible AI dashboard](https://github.com/microsoft/responsible-ai-toolbox#introducing-responsible-ai-dashboard), a single pane of glass bringing together several mature Responsible AI tools from the toolbox for a holistic responsible assessment and debugging of models and making informed business decisions. With this dashboard, you can identify model errors, diagnose why those errors are happening, and mitigate them. Moreover, the causal decision-making capabilities provide actionable insights to your stakeholders and customers.<br><br>[Error Analysis dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), for identifying model errors and discovering cohorts of data for which the model underperforms. 	<br><br>[Interpretability dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/explanation-dashboard-README.md), for understanding model predictions. This dashboard is powered by InterpretML.<br><br>[Fairness dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/fairness-dashboard-README.md), for understanding model’s fairness issues using various group-fairness metrics across sensitive features and cohorts. This dashboard is powered by Fairlearn. 
+| [Responsible-AI-Toolbox-Mitigations Reposity](https://github.com/microsoft/responsible-ai-toolbox-mitigations) | The Responsible AI Mitigations Library helps AI practitioners explore different measurements and mitigation steps that may be most appropriate when the model underperforms for a given data cohort. The library currently has two modules: <br><br>DataProcessing, which offers mitigation techniques for improving model performance for specific cohorts. <br><br>DataBalanceAnalysis, which provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.|
+
+  
 
 
 ## Introducing Responsible AI dashboard
@@ -22,9 +26,8 @@ The Toolbox consists of four dashboards:
 [Responsible AI dashboard](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/responsibleaidashboard/tour.ipynb) is a single pane of glass, enabling you to easily flow through different stages of model debugging and decision-making. This customizable experience can be taken in a multitude of directions, from analyzing the model or data holistically, to conducting a deep dive or comparison on cohorts of interest, to explaining and perturbing model predictions for individual instances, and to informing users on business decisions and actions.
 
 
-
 <p align="center">
-<img src="https://raw.githubusercontent.com/microsoft/responsible-ai-widgets/main/img/responsible-ai-dashboard-intro.png" alt="Model Assessment" width="200"/>
+<img src="./img/responsible-ai-dashboard.png" alt="Model Assessment" width="550"/>
 
 
 
@@ -34,6 +37,7 @@ In order to achieve these capabilities, the dashboard integrates together ideas 
 
 
 - <b>Error Analysis</b> powered by [Error Analysis](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), which identifies cohorts of data with higher error rate than the overall benchmark. These discrepancies might occur when the system or model underperforms for specific demographic groups or infrequently observed input conditions in the training data.
+- <b>Fairness Assessment</b> powered by [Fairlearn](https://github.com/fairlearn/fairlearn), which identifies which groups of people may be disproportionately negatively impacted by an AI system and in what ways?
 
 - <b>Model Interpretability</b> powered by [InterpretML](https://github.com/interpretml/interpret-community), which explains blackbox models, helping users understand their model's global behavior, or the reasons behind individual predictions.
 
@@ -66,10 +70,13 @@ pip install raiwidgets
 ### Responsible AI dashboard Customization
 
 The Responsible AI Toolbox’s strength lies in its customizability. It empowers users to design tailored, end-to-end model debugging and decision-making workflows that address their particular needs. Need some inspiration? Here are some examples of how Toolbox components can be put together to analyze scenarios in different ways:
+
+Please note that model overview (including fairness analysis) and data explorer components are activated by default!
  
 | Responsible AI Dashboard Flow| Use Case  |
 |--|--|
 | Model Overview -> Error Analysis -> Data Explorer | To identify model errors and diagnose them by understanding the underlying data distribution
+| Model Overview -> Fairness Assessment -> Data Explorer | To identify model fairness issues and diagnose them by understanding the underlying data distribution
 | Model Overview -> Error Analysis -> Counterfactuals Analysis and What-If | To diagnose errors in individual instances with counterfactual analysis (minimum change to lead to a different model prediction)
 | Model Overview -> Data Explorer -> Data Balance | To understand the root cause of errors and fairness issues introduced via data imbalances or lack of representation of a particular data cohort
  | Model Overview -> Interpretability | To diagnose model errors through understanding how the model has made its predictions
@@ -122,3 +129,4 @@ Tools within the Responsible AI Toolbox can also be used with AI models offered 
 - [Vinutha Karanth](https://github.com/vinuthakaranth)
 - [Tong Yu](https://github.com/tongyu-microsoft)
 - [Ruby Zhu](https://github.com/RubyZ10)
+- [Mehrnoosh Sameki](https://github.com/mesameki)
