@@ -1595,7 +1595,7 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy",
+          "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
         },
         "f1Score": {
