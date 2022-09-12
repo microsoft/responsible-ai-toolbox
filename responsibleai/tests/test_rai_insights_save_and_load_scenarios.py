@@ -8,15 +8,14 @@ from tempfile import TemporaryDirectory
 import numpy as np
 import pandas as pd
 import pytest
+from tests.common_utils import (create_adult_income_dataset,
+                                create_binary_classification_dataset,
+                                create_complex_classification_pipeline,
+                                create_iris_data, create_lightgbm_classifier)
 
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.feature_metadata import FeatureMetadata
-
-from .common_utils import (create_adult_income_dataset,
-                           create_binary_classification_dataset,
-                           create_complex_classification_pipeline,
-                           create_iris_data, create_lightgbm_classifier)
 
 LABELS = 'labels'
 
@@ -307,6 +306,15 @@ def validate_rai_insights(
     if feature_metadata is not None:
         assert rai_insights._feature_metadata == feature_metadata
     assert target_column not in rai_insights._feature_columns
+
+    if rai_insights.model is None:
+        assert rai_insights.predict_output is None
+        assert rai_insights.predict_proba_output is None
+    else:
+        assert rai_insights.predict_output is not None
+        if task_type == ModelTask.CLASSIFICATION:
+            assert rai_insights.predict_proba_output is not None
+
     if task_type == ModelTask.CLASSIFICATION:
         classes = train_data[target_column].unique()
         classes.sort()
