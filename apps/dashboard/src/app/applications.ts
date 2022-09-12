@@ -270,6 +270,7 @@ export const applications: IApplications = <const>{
           features: visionData.features!,
           images: visionData.images!,
           predicted_y: visionData.predicted_y!,
+          task_type: visionData.task_type,
           true_y: visionData.true_y
         }
       } as IModelAssessmentDataSet
