@@ -37,7 +37,7 @@ In order to achieve these capabilities, the dashboard integrates together ideas 
 
 
 - <b>Error Analysis</b> powered by [Error Analysis](https://github.com/microsoft/responsible-ai-widgets/blob/main/docs/erroranalysis-dashboard-README.md), which identifies cohorts of data with higher error rate than the overall benchmark. These discrepancies might occur when the system or model underperforms for specific demographic groups or infrequently observed input conditions in the training data.
-- <b>Fairness Assessment</b> powered by [Fairlearn](https://github.com/fairlearn/fairlearn), which identifies which groups of people may be disproportionately negatively impacted by an AI system and in what ways?
+- <b>Fairness Assessment</b> powered by [Fairlearn](https://github.com/fairlearn/fairlearn), which identifies which groups of people may be disproportionately negatively impacted by an AI system and in what ways.
 
 - <b>Model Interpretability</b> powered by [InterpretML](https://github.com/interpretml/interpret-community), which explains blackbox models, helping users understand their model's global behavior, or the reasons behind individual predictions.
 
