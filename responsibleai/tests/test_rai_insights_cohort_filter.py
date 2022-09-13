@@ -43,6 +43,50 @@ class TestCohortFilterRAIInsights(object):
                          model_task,
                          filters=filters)
 
+    @pytest.mark.skip("Skipping this test due to a bug condition "
+                      "in cohort filtering")
+    def test_cohort_filter_predicted_y(self):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        filters = [{'arg': [2],
+                    'column': 'Predicted Y',
+                    'method': 'includes'}]
+        validation_data = create_validation_data(X_test, y_test)
+        validation_data = validation_data.loc[y_test == 2]
+        model_task = ModelTask.CLASSIFICATION
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        categorical_features = []
+        run_rai_insights(validation_data,
+                         model,
+                         X_train,
+                         y_train,
+                         X_test,
+                         y_test,
+                         feature_names,
+                         categorical_features,
+                         model_task,
+                         filters=filters)
+
+    def test_cohort_filter_true_y(self):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        filters = [{'arg': [2],
+                    'column': 'True Y',
+                    'method': 'includes'}]
+        validation_data = create_validation_data(X_test, y_test)
+        validation_data = validation_data.loc[y_test == 2]
+        model_task = ModelTask.CLASSIFICATION
+        model = create_sklearn_svm_classifier(X_train, y_train)
+        categorical_features = []
+        run_rai_insights(validation_data,
+                         model,
+                         X_train,
+                         y_train,
+                         X_test,
+                         y_test,
+                         feature_names,
+                         categorical_features,
+                         model_task,
+                         filters=filters)
+
     def test_cohort_filter_less(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
         filters = [{'arg': [2.8],
