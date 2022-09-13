@@ -9,7 +9,7 @@ export function getFetchPredictionPromise(
   invokeModel: (data: any[], abortSignal: AbortSignal) => Promise<any[]>
 ) {
   const abortController = new AbortController();
-  const rawData = JointDataset.datasetSlice(
+  const rawData = JointDataset.datasetSliceWithUserFeatureNames(
     fetchingReference,
     jointDataset.metaDict,
     jointDataset.datasetFeatureCount

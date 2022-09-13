@@ -334,6 +334,30 @@ export class JointDataset {
     return result;
   }
 
+  // recover the dictionary representation of the eval dataset values with user
+  // feature names from a row.
+  // This includes subbing categorical values back in in place of indexes
+  public static datasetSliceWithUserFeatureNames(
+    row: { [key: string]: any },
+    metaDict: { [key: string]: IJointMeta },
+    length: number
+  ): any {
+    console.log(row);
+    let resultDict = {}
+    for (let i = 0; i < length; i++) {
+      const key = JointDataset.DataLabelRoot + i.toString();
+      let value = undefined
+      if (metaDict[key].isCategorical) {
+        value = metaDict[key].sortedCategoricalValues?.[row[key]];
+      } else {
+        value = row[key];
+      }
+      resultDict[metaDict[key].label] = value
+    }
+    console.log(resultDict);
+    return resultDict;
+  }
+
   // recover the array representation of just the local explanations from a row
   public static localExplanationSlice(
     row: { [key: string]: any },
