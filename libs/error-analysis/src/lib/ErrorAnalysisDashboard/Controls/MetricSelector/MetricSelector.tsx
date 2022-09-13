@@ -47,8 +47,8 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
       };
       options.push(this.addDropdownOption(Metrics.ErrorRate));
       options.push(this.addDropdownOption(Metrics.MacroPrecisionScore));
-      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroPrecisionScore));
+      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroF1Score));
       options.push(this.addDropdownOption(Metrics.MacroF1Score));
