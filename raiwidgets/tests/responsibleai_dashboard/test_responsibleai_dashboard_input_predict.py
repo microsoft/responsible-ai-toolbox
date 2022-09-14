@@ -1,6 +1,8 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
+import json
+
 from common_utils import CheckResponsibleAIDashboardInputTestResult
 
 from raiwidgets.responsibleai_dashboard_input import \
@@ -17,9 +19,14 @@ class TestResponsibleAIDashboardInputClassificationPredict(
         test_data = ri.test
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        test_pred_data = test_data.head(1).drop("Income", axis=1).values
+
+        test_pred_data_end_point = json.loads(test_data.head(1).drop(
+            "Income", axis=1).to_json(orient='records'))
+        test_pred_data = test_data.head(1).drop(
+            "Income", axis=1)
+
         flask_server_prediction_output = dashboard_input.on_predict(
-            test_pred_data)
+            test_pred_data_end_point)
         knn_prediction = knn.predict_proba(test_pred_data)
 
         assert knn_prediction is not None
@@ -32,9 +39,12 @@ class TestResponsibleAIDashboardInputClassificationPredict(
         test_data = ri.test
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        test_pred_data = test_data.head(1).values
+
+        test_pred_data_end_point = json.loads(
+            test_data.head(1).to_json(orient='records'))
+
         flask_server_prediction_output = dashboard_input.on_predict(
-            test_pred_data)
+            test_pred_data_end_point)
 
         self.check_failure_criteria(
             flask_server_prediction_output,
@@ -51,9 +61,14 @@ class TestResponsibleAIDashboardInputRegressionPredict(
         test_data = ri.test
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        test_pred_data = test_data.head(1).drop("target", axis=1).values
+
+        test_pred_data_end_point = json.loads(test_data.head(1).drop(
+            "target", axis=1).to_json(orient='records'))
+        test_pred_data = test_data.head(1).drop(
+            "target", axis=1)
+
         flask_server_prediction_output = dashboard_input.on_predict(
-            test_pred_data)
+            test_pred_data_end_point)
         rf_prediction = rf.predict(test_pred_data)
 
         assert rf_prediction is not None
@@ -71,9 +86,14 @@ class TestResponsibleAIDashboardInputMultiClassClassification(
         test_data = ri.test
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        test_pred_data = test_data.head(1).drop("target", axis=1).values
+
+        test_pred_data_end_point = json.loads(test_data.head(1).drop(
+            "target", axis=1).to_json(orient='records'))
+        test_pred_data = test_data.head(1).drop(
+            "target", axis=1)
+
         flask_server_prediction_output = dashboard_input.on_predict(
-            test_pred_data)
+            test_pred_data_end_point)
         rf_prediction = rf.predict_proba(test_pred_data)
 
         assert rf_prediction is not None

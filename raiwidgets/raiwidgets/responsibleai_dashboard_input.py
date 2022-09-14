@@ -97,14 +97,14 @@ class ResponsibleAIDashboardInput:
 
     def on_predict(self, data):
         try:
-            data = pd.DataFrame(
-                data, columns=self.dashboard_input.dataset.feature_names)
+            dataframe = pd.DataFrame.from_records(data)
             if (self._is_classifier):
                 prediction = convert_to_list(
-                    self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
+                    self._analysis.model.predict_proba(dataframe),
+                    EXP_VIZ_ERR_MSG)
             else:
                 prediction = convert_to_list(
-                    self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
+                    self._analysis.model.predict(dataframe), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
             }
