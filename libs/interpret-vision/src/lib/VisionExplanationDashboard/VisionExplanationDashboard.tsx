@@ -6,33 +6,34 @@ import {
   Stack,
   PivotItem,
   Slider,
-  Separator
+  Separator,
+  Text,
+  mergeStyles
 } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import {
+  defaultModelAssessmentContext,
+  IVisionListItem,
+  ModelAssessmentContext,
+  Cohort,
+  IFilter,
+  FilterMethods,
+  ICompositeFilter,
+  Operations,
+  JointDataset
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { CohortToolBar } from "./Controls/CohortToolBar";
 import { Flyout } from "./Controls/Flyout";
+import { imageListStyles } from "./Controls/ImageList.styles";
 import { PageSizeSelectors } from "./Controls/PageSizeSelectors";
 import { Pivots } from "./Controls/Pivots";
 import { TabsView } from "./Controls/TabsView";
 import { ToolBar } from "./Controls/ToolBar";
-import { IVisionExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
+import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
+import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
-
-export interface IVisionExplanationDashboardState {
-  currentExplanation: string;
-  errorInstances: IVisionListItem[];
-  successInstances: IVisionListItem[];
-  imageDim: number;
-  loadingExplanation: boolean;
-  numRows: number;
-  pageSize: number;
-  panelOpen: boolean;
-  searchValue: string;
-  selectedItem: IVisionListItem | undefined;
-  selectedKey: string;
-}
 
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
@@ -55,33 +56,45 @@ export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
 > {
-  computedExplanations: Map<number, string>;
-
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+  originalErrorInstances: IVisionListItem[];
+  originalSuccessInstances: IVisionListItem[];
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
-
-    this.computedExplanations = new Map();
+    this.originalErrorInstances = [];
+    this.originalSuccessInstances = [];
     this.state = {
-      currentExplanation: "",
+      computedExplanations: new Map(),
       errorInstances: [],
       imageDim: 200,
-      loadingExplanation: false,
+      loadingExplanation: [],
       numRows: 3,
+      otherMetadataFieldNames: ["mean_pixel_value"],
       pageSize: 10,
       panelOpen: false,
       searchValue: "",
+      selectedIndices: [],
       selectedItem: undefined,
       selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView,
       successInstances: []
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.preprocessData();
+  }
+
+  public componentDidUpdate(prevProps: IVisionExplanationDashboardProps): void {
+    if (this.props.selectedCohort !== prevProps.selectedCohort) {
+      this.updateItems();
+    }
   }
 
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
+    const imageStyles = imageListStyles();
     return (
       <Stack
         horizontal={false}
@@ -99,8 +112,11 @@ export class VisionExplanationDashboard extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <ToolBar
+            cohorts={this.props.cohorts}
             searchValue={this.state.searchValue}
             onSearch={this.onSearch}
+            selectedCohort={this.props.selectedCohort}
+            setSelectedCohort={this.props.setSelectedCohort}
           />
         </Stack.Item>
         <Stack.Item>
@@ -125,7 +141,7 @@ export class VisionExplanationDashboard extends React.Component<
               />
             </Stack.Item>
             {this.state.selectedKey !==
-              VisionDatasetExplorerTabOptions.ImageExplorerView && (
+            VisionDatasetExplorerTabOptions.ImageExplorerView ? (
               <Stack.Item>
                 <PageSizeSelectors
                   selectedKey={this.state.selectedKey}
@@ -133,28 +149,76 @@ export class VisionExplanationDashboard extends React.Component<
                   onPageSizeSelect={this.onPageSizeSelect}
                 />
               </Stack.Item>
+            ) : (
+              <Stack
+                horizontal
+                tokens={{ childrenGap: "l1" }}
+                verticalAlign="center"
+              >
+                <Stack.Item>
+                  <Text>
+                    {localization.InterpretVision.Dashboard.predictedLabel}
+                  </Text>
+                </Stack.Item>
+                <Stack.Item
+                  className={mergeStyles(
+                    imageStyles.errorIndicator,
+                    classNames.legendIndicator
+                  )}
+                >
+                  <Text className={imageStyles.labelPredicted}>
+                    {localization.InterpretVision.Dashboard.legendFailure}
+                  </Text>
+                </Stack.Item>
+                <Stack.Item
+                  className={mergeStyles(
+                    imageStyles.successIndicator,
+                    classNames.legendIndicator
+                  )}
+                >
+                  <Text className={imageStyles.labelPredicted}>
+                    {localization.InterpretVision.Dashboard.legendSuccess}
+                  </Text>
+                </Stack.Item>
+              </Stack>
             )}
           </Stack>
         </Stack.Item>
+        {this.state.selectedKey ===
+          VisionDatasetExplorerTabOptions.TableView && (
+          <Stack.Item>
+            <CohortToolBar
+              addCohort={this.addCohortWrapper}
+              cohorts={this.props.cohorts}
+              selectedIndices={this.state.selectedIndices}
+            />
+          </Stack.Item>
+        )}
         <Stack.Item>
           <TabsView
+            addCohort={this.addCohortWrapper}
             errorInstances={this.state.errorInstances}
             successInstances={this.state.successInstances}
             imageDim={this.state.imageDim}
             numRows={this.state.numRows}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             pageSize={this.state.pageSize}
             searchValue={this.state.searchValue}
             selectedItem={this.state.selectedItem}
             selectedKey={this.state.selectedKey}
             onItemSelect={this.onItemSelect}
+            updateSelectedIndices={this.updateSelectedIndices}
+            selectedCohort={this.props.selectedCohort}
+            setSelectedCohort={this.props.setSelectedCohort}
           />
         </Stack.Item>
         <Stack.Item>
           <Flyout
-            explanation={this.state.currentExplanation}
+            explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             loadingExplanation={this.state.loadingExplanation}
+            otherMetadataFieldNames={this.state.otherMetadataFieldNames}
             callback={this.onPanelClose}
           />
         </Stack.Item>
@@ -166,24 +230,111 @@ export class VisionExplanationDashboard extends React.Component<
     const dataSummary = this.props.dataSummary;
     const errorInstances: IVisionListItem[] = this.state.errorInstances;
     const successInstances: IVisionListItem[] = this.state.successInstances;
+    const classNames = this.props.dataSummary.class_names;
 
-    dataSummary.images.forEach((image, index) => {
+    const predictedY = dataSummary.predicted_y.map((index) => {
+      return classNames[index];
+    });
+
+    const trueY = dataSummary.true_y.map((index) => {
+      return classNames[index];
+    });
+
+    const features: number[] = dataSummary.features!.map((featuresArr) => {
+      return featuresArr[0] as number;
+    });
+
+    const fieldNames = dataSummary.feature_names!;
+    const loadingExplanation: boolean[] = [];
+    const computedExplanations: Map<number, string> = new Map();
+    dataSummary.images?.forEach((image, index) => {
       const item: IVisionListItem = {
         image,
         index,
-        predictedY: dataSummary.predictedY[index],
-        trueY: dataSummary.trueY[index]
+        predictedY: predictedY[index],
+        trueY: trueY[index]
       };
+      fieldNames.forEach((fieldName) => {
+        item[fieldName] = features[index];
+      });
       item.predictedY === item.trueY
         ? successInstances.push(item)
         : errorInstances.push(item);
+
+      loadingExplanation.push(false);
+      computedExplanations.set(index, "");
     });
 
-    this.setState({ errorInstances, successInstances });
+    this.originalErrorInstances = errorInstances;
+    this.originalSuccessInstances = successInstances;
+
+    this.setState({
+      computedExplanations,
+      errorInstances,
+      loadingExplanation,
+      otherMetadataFieldNames: fieldNames,
+      successInstances
+    });
   }
 
+  private updateItems = () => {
+    const indices = new Set(
+      this.props.selectedCohort.cohort.filteredData.map(
+        (row: { [key: string]: number }) => {
+          return row[JointDataset.IndexLabel] as number;
+        }
+      )
+    );
+
+    let errorInstances = this.originalErrorInstances;
+    let successInstances = this.originalSuccessInstances;
+
+    errorInstances = errorInstances.filter((item: IVisionListItem) =>
+      indices.has(item.index)
+    );
+    successInstances = successInstances.filter((item: IVisionListItem) =>
+      indices.has(item.index)
+    );
+    this.setState({
+      errorInstances: [...errorInstances],
+      successInstances: [...successInstances]
+    });
+  };
+
+  private updateSelectedIndices = (indices: number[]) => {
+    this.setState({ selectedIndices: indices });
+  };
+
+  private addCohortWrapper = (name: string, switchCohort: boolean) => {
+    const { selectedIndices } = this.state;
+    const filters: IFilter[] = [];
+
+    selectedIndices.forEach((index) => {
+      const filter: IFilter = {
+        arg: [index],
+        column: "Index",
+        method: FilterMethods.Equal
+      };
+      filters.push(filter);
+    });
+
+    const compositeFilter: ICompositeFilter = {
+      compositeFilters: filters,
+      operation: Operations.Or
+    };
+
+    const cohort = new Cohort(
+      name,
+      this.context.jointDataset,
+      [],
+      [compositeFilter]
+    );
+
+    this.context.addCohort(cohort, switchCohort);
+  };
+
   private onPanelClose = () => {
-    this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
+    this.setState({ panelOpen: !this.state.panelOpen });
   };
 
   private onSearch = (
@@ -200,26 +351,28 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
 
     const index = item.index;
-
-    const computedExplanation = this.computedExplanations.get(index);
+    const { computedExplanations, loadingExplanation } = this.state;
+    const computedExplanation = computedExplanations.get(index);
     if (computedExplanation) {
+      loadingExplanation[index] = false;
       this.setState({
-        currentExplanation: computedExplanation,
-        loadingExplanation: false
+        loadingExplanation
       });
       return;
     }
 
     if (this.props.requestExp) {
-      this.setState({ loadingExplanation: true });
+      loadingExplanation[index] = true;
+      this.setState({ loadingExplanation });
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
           const explanation = result.toString();
-          this.computedExplanations.set(index, explanation);
+          computedExplanations.set(index, explanation);
+          loadingExplanation[index] = false;
           this.setState({
-            currentExplanation: explanation,
-            loadingExplanation: false
+            computedExplanations,
+            loadingExplanation
           });
         });
     }

@@ -4,7 +4,6 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  IVisionModelExplanationData,
   ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
@@ -27,7 +26,6 @@ export interface IModelAssessmentData {
   counterfactualData?: ICounterfactualData[];
   errorAnalysisData?: IErrorAnalysisData[];
   cohortData?: IPreBuiltCohort[];
-  visionModelExplanationData?: IVisionModelExplanationData;
 }
 
 export interface IModelAssessmentDashboardProps

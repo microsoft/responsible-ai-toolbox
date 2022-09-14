@@ -16,7 +16,6 @@ import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
-import { IVisionModelExplanationData } from "../Interfaces/IVisionModelExplanationData";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 
@@ -25,7 +24,6 @@ export interface IModelAssessmentContext {
   counterfactualData?: ICounterfactualData;
   dataset: IDataset;
   modelExplanationData?: IModelExplanationData;
-  visionModelExplanationData?: IVisionModelExplanationData;
   errorAnalysisData?: IErrorAnalysisData;
   theme?: ITheme;
   featureFlights?: string[];

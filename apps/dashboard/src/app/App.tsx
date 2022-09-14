@@ -12,9 +12,9 @@ import { Redirect, generatePath } from "react-router-dom";
 import { App as ErrorAnalysis } from "../error-analysis/App";
 import { App as Fairness } from "../fairness/App";
 import { App as InterpretText } from "../interpret-text/App";
-import { App as InterpretVision } from "../interpret-vision/App";
 import { App as Interpret } from "../interpret/App";
 import { App as ModelAssessmentText } from "../model-assessment-text/App";
+import { App as ModelAssessmentVision } from "../model-assessment-vision/App";
 import { App as ModelAssessment } from "../model-assessment/App";
 
 import { AppHeader } from "./AppHeader";
@@ -91,22 +91,6 @@ export class App extends React.Component<IAppSetting, IAppState> {
               }
             />
           )}
-          {this.state.application === "interpretVision" && (
-            <InterpretVision
-              dataset={
-                applications[this.state.application].datasets[
-                  this.state.dataset
-                ].data
-              }
-              theme={themes[this.state.theme]}
-              language={Language[this.state.language]}
-              version={
-                applications[this.state.application].versions[
-                  this.state.version
-                ]
-              }
-            />
-          )}
           {this.state.application === "fairness" && (
             <Fairness
               dataset={
@@ -166,6 +150,25 @@ export class App extends React.Component<IAppSetting, IAppState> {
           )}
           {this.state.application === "modelAssessmentText" && (
             <ModelAssessmentText
+              {...applications[this.state.application].datasets[
+                this.state.dataset
+              ]}
+              theme={themes[this.state.theme]}
+              language={Language[this.state.language]}
+              version={
+                applications[this.state.application].versions[
+                  this.state.version
+                ]
+              }
+              featureFlights={
+                this.state.featureFlights === noFlights
+                  ? []
+                  : parseFeatureFlights(this.state.featureFlights)
+              }
+            />
+          )}
+          {this.state.application === "modelAssessmentVision" && (
+            <ModelAssessmentVision
               {...applications[this.state.application].datasets[
                 this.state.dataset
               ]}

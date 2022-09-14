@@ -30,7 +30,7 @@ export interface IImageListState {
 }
 
 const RowsPerPage = 3;
-const ImagePadding = 2;
+const ImagePadding = 15;
 const imageProps: IImageProps = {
   imageFit: ImageFit.cover
 };
@@ -61,6 +61,13 @@ export class ImageList extends React.Component<
     props: IImageListProps,
     state: IImageListState
   ) {
+    if (props.data !== state.data && props.data.length > 0) {
+      return {
+        filter: "",
+        filteredItems: props.data
+      };
+    }
+
     const searchVal = props.searchValue.toLowerCase();
     if (searchVal.length === 0) {
       return {
@@ -105,20 +112,27 @@ export class ImageList extends React.Component<
 
   private onRenderCell = (item?: IVisionListItem | undefined) => {
     const classNames = imageListStyles();
+    if (!item) {
+      return;
+    }
 
     return (
       <Stack
         tokens={stackTokens}
         className={classNames.tile}
         style={{
+          height: this.props.imageDim * 1.1,
           width: `${100 / this.columnCount}%`
         }}
       >
-        <Stack.Item className={classNames.imageSizer}>
+        <Stack.Item
+          className={classNames.imageSizer}
+          style={{ paddingBottom: this.props.imageDim / 1.4 }}
+        >
           <Stack.Item
             className={classNames.imageFrame}
             style={{
-              height: this.props.imageDim - ImagePadding,
+              height: this.props.imageDim,
               overflow: "hidden",
               width: this.props.imageDim - ImagePadding
             }}
@@ -133,18 +147,35 @@ export class ImageList extends React.Component<
             />
           </Stack.Item>
           <Stack.Item
-            className={classNames.labelContainer}
+            className={
+              item?.predictedY === item?.trueY
+                ? classNames.successIndicator
+                : classNames.errorIndicator
+            }
             style={{
               left: ImagePadding,
-              top: ImagePadding,
-              width: "100%"
+              maxWidth: this.props.imageDim
+            }}
+          >
+            <Text className={classNames.labelPredicted}>
+              {item?.predictedY}
+            </Text>
+          </Stack.Item>
+          <Stack.Item
+            className={classNames.labelContainer}
+            style={{
+              left: ImagePadding - 14,
+              width:
+                this.props.imageDim > 200
+                  ? this.props.imageDim
+                  : this.props.imageDim - 1.35 * ImagePadding
             }}
           >
             <Text
               className={classNames.label}
-              style={{ width: this.props.imageDim - 3 }}
+              style={{ width: this.props.imageDim - 20 }}
             >
-              {item?.predictedY}
+              {item?.trueY}
             </Text>
           </Stack.Item>
         </Stack.Item>
