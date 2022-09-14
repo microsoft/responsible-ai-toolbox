@@ -34,7 +34,7 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         width: "100%"
       },
       errorAnalysisView: flexLgDown,
-      errorAnalysisWrapper: { paddingLeft: "15px" },
+      errorAnalysisWrapper: { paddingLeft: "15px", marginTop: "10px" },
       featureList: {
         padding: "16px 0 10px 0"
       },
