@@ -107,7 +107,7 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
           <text
             textAnchor="middle"
             className={classNames.nodeText}
-            dominant-baseline="middle"
+            dominantBaseline="middle"
           >
             {getNodeText(node)}
           </text>
