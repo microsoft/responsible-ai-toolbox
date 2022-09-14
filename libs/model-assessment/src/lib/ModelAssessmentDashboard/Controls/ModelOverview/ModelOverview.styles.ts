@@ -31,12 +31,7 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
     const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
       configurationActionButton: {
-        paddingTop: "44px",
-        selectors: {
-          "@media screen and (max-width: 1023px)": {
-            paddingBottom: "20px"
-          }
-        }
+        marginTop: "25px"
       },
       descriptionText: {
         color: theme.semanticColors.bodyText,

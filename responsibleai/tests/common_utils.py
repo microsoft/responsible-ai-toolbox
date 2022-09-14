@@ -171,18 +171,25 @@ def create_binary_classification_dataset():
     return X_train, y_train, X_test, y_test, classes
 
 
-def create_housing_data():
+def create_housing_data(create_small_dataset=True):
     # Import California housing dataset
     housing = fetch_california_housing()
     # Split data into train and test
-    x_train, x_test, y_train, y_test = train_test_split(housing.data,
-                                                        housing.target,
-                                                        test_size=0.2,
-                                                        random_state=7)
+    if create_small_dataset:
+        x_train, x_test, y_train, y_test = train_test_split(housing.data,
+                                                            housing.target,
+                                                            train_size=500,
+                                                            test_size=50,
+                                                            random_state=7)
+    else:
+        x_train, x_test, y_train, y_test = train_test_split(housing.data,
+                                                            housing.target,
+                                                            test_size=0.2,
+                                                            random_state=7)
     return x_train, x_test, y_train, y_test, housing.feature_names
 
 
-def create_adult_income_dataset():
+def create_adult_income_dataset(create_small_dataset=True):
     dataset = helpers.load_adult_income_dataset()
     continuous_features = ['age', 'hours_per_week']
     target_name = 'income'
@@ -194,9 +201,14 @@ def create_adult_income_dataset():
                                 set(continuous_features) -
                                 set([target_name]))
     # Split data into train and test
-    data_train, data_test, y_train, y_test = train_test_split(
-        dataset, target,
-        test_size=5000, random_state=7, stratify=target)
+    if create_small_dataset:
+        data_train, data_test, y_train, y_test = train_test_split(
+            dataset, target, train_size=500,
+            test_size=50, random_state=7, stratify=target)
+    else:
+        data_train, data_test, y_train, y_test = train_test_split(
+            dataset, target, test_size=5000, random_state=7,
+            stratify=target)
     return data_train, data_test, y_train, y_test, categorical_features, \
         continuous_features, target_name, classes, \
         feature_columns, feature_range_keys

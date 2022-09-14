@@ -273,7 +273,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             # fix counts to include skipped categories
             fix_counts = []
             counts_idx = 0
-            for idx, catdf in enumerate(cutdf.cat.categories):
+            for idx, _ in enumerate(cutdf.cat.categories):
                 if idx not in catn:
                     fix_counts.append(0)
                 else:
