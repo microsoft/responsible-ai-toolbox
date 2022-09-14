@@ -14,7 +14,7 @@ export class ChartBuilder {
     rows: T[]
   ): Array<Partial<Data>> {
     const groupingDictionary: { [key: string]: Partial<Data> } = {};
-    let defaultSeries: Partial<Data> | undefined;
+    const defaultSeries = ChartBuilder.buildDefaultSeries(datum);
     const datumLevelPaths: string = datum.datapointLevelAccessors
       ? `, ${Object.keys(datum.datapointLevelAccessors)
           .map((key) => {
@@ -151,17 +151,15 @@ export class ChartBuilder {
       group: any;
       size: any;
     },
-    defaultSeries: Partial<Data> | undefined,
+    defaultSeries: Partial<Data>,
     groupingDictionary: { [key: string]: Partial<Data> }
   ): Partial<Data> {
     let series: Partial<Data>;
+
     // Handle mutiple group by in the future
     if (datum.groupBy && datum.groupBy.length > 0) {
       const key = row.group;
       if (!key) {
-        if (defaultSeries === undefined) {
-          defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-        }
         series = defaultSeries;
       } else {
         if (groupingDictionary[key] === undefined) {
@@ -172,9 +170,6 @@ export class ChartBuilder {
         series = groupingDictionary[key];
       }
     } else {
-      if (defaultSeries === undefined) {
-        defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-      }
       series = defaultSeries;
     }
     return series;
