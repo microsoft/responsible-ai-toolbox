@@ -3,6 +3,8 @@
 
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 
+import { Cohort } from "../Cohort/Cohort";
+import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 
 import {
@@ -106,20 +108,15 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
         .fn()
         .mockReturnValue(expectedResult);
       const boxPlotData = await calculateBoxPlotDataFromErrorCohort(
-        {
-          cohort: {
-            cachedAverageImportance: [],
-            cachedTransposedLocalFeatureImportances: [],
-            cohortIndex: 1,
-            compositeFilters: [],
-            currentSortKey: "Index",
-            currentSortReversed: false,
-            filteredData: [],
+        new ErrorCohort(
+          new Cohort(
+            "Cohort Classification outcome",
+            jointDataset,
             filters,
-            name: "Cohort Classification outcome"
-          },
+            []
+          ),
           jointDataset
-        },
+        ),
         0,
         "",
         "0",
@@ -149,30 +146,24 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
       mockRequestBoxPlotDistribution = jest
         .fn()
         .mockReturnValue(expectedResult);
-      const boxPlotData = await calculateBoxPlotDataFromErrorCohort(
+      const cohort = new Cohort(
+        "Cohort Classification outcome",
+        jointDataset,
+        filters,
+        []
+      );
+      cohort.filteredData = [
         {
-          cohort: {
-            cachedAverageImportance: [],
-            cachedTransposedLocalFeatureImportances: [],
-            cohortIndex: 1,
-            compositeFilters: [],
-            currentSortKey: "Index",
-            currentSortReversed: false,
-            filteredData: [
-              {
-                Age: 67,
-                ClassificationOutcome: 3,
-                Index: 0,
-                PredictedY: 1,
-                ProbabilityClass0: 0.7510962272030672,
-                TrueY: 1
-              }
-            ],
-            filters,
-            name: "Cohort Classification outcome"
-          },
-          jointDataset
-        },
+          Age: 67,
+          ClassificationOutcome: 3,
+          Index: 0,
+          PredictedY: 1,
+          ProbabilityClass0: 0.7510962272030672,
+          TrueY: 1
+        }
+      ];
+      const boxPlotData = await calculateBoxPlotDataFromErrorCohort(
+        new ErrorCohort(cohort, jointDataset),
         0,
         "ProbabilityClass0"
       );
@@ -199,20 +190,15 @@ describe("calculateBoxPlotDataFromSDK", () => {
         .fn()
         .mockReturnValue(expectedResult);
       const boxPlotData = await calculateBoxPlotDataFromSDK(
-        {
-          cohort: {
-            cachedAverageImportance: [],
-            cachedTransposedLocalFeatureImportances: [],
-            cohortIndex: 1,
-            compositeFilters: [],
-            currentSortKey: "Index",
-            currentSortReversed: false,
-            filteredData: [],
+        new ErrorCohort(
+          new Cohort(
+            "Cohort Classification outcome",
+            jointDataset,
             filters,
-            name: "Cohort Classification outcome"
-          },
+            []
+          ),
           jointDataset
-        },
+        ),
         mockRequestBoxPlotDistribution,
         "0"
       );
