@@ -180,9 +180,6 @@ export class FeatureList extends React.Component<
                 placeholder="Search"
                 styles={searchBoxStyles}
                 onSearch={this.onSearch}
-                onClear={() => {
-                  this.onSearch("");
-                }}
                 onChange={(_, newValue?: string): void => {
                   if (newValue === undefined) {
                     return;
