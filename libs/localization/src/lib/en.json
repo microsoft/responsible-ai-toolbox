@@ -284,79 +284,79 @@
       "binningThresholdTitle": "Additional information on binning threshold"
     },
     "Metrics": {
-      "accuracyScore": {
+      "AccuracyScore": {
         "Name": "Accuracy score",
         "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
         "Short": "Accuracy",
         "Title": "Additional information on accuracy score"
       },
-      "errorRate": {
+      "ErrorRate": {
         "Name": "Error rate",
         "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
         "Short": "Error rate",
         "Title": "Additional information on error rate"
       },
-      "f1Score": {
+      "F1Score": {
         "Name": "F1 score",
         "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
         "Short": "F1 score",
         "Title": "Additional information on F1 score"
       },
-      "meanAbsoluteError": {
+      "MeanAbsoluteError": {
         "Name": "Mean absolute error",
         "Info": "The mean absolute error is the average of the sum of the errors.",
         "Short": "Mean abs. error",
         "Title": "Additional information on mean absolute error"
       },
-      "meanSquaredError": {
+      "MeanSquaredError": {
         "Name": "Mean squared error",
         "Info": "The mean squared error is the average of the squares of the errors.",
         "Short": "Mean sq. error",
         "Title": "Additional information on mean squared error"
       },
-      "precision": {
+      "Precision": {
         "Name": "Precision score",
         "Info": "The precision is the ratio of true positives over all predicted positives.",
         "Short": "Precision",
         "Title": "Additional information on precision"
       },
-      "recall": {
+      "Recall": {
         "Name": "Recall score",
         "Info": "The recall is the ratio of true positives over all actual positives.",
         "Short": "Recall",
         "Title": "Additional information on recall"
       },
-      "macroPrecision": {
+      "MacroPrecision": {
         "Name": "Macro averaged precision score",
         "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
         "Short": "Macro precision",
         "Title": "Additional information on macro averaged precision"
       },
-      "microPrecision": {
+      "MicroPrecision": {
         "Name": "Micro averaged precision score",
         "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
         "Short": "Micro precision",
         "Title": "Additional information on micro averaged precision"
       },
-      "macroRecall": {
+      "MacroRecall": {
         "Name": "Macro averaged recall score",
         "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
         "Short": "Macro recall",
         "Title": "Additional information on macro averaged recall"
       },
-      "microRecall": {
+      "MicroRecall": {
         "Name": "Micro averaged recall score",
         "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
         "Short": "Micro recall",
         "Title": "Additional information on micro averaged recall"
       },
-      "macroF1Score": {
+      "MacroF1Score": {
         "Name": "Macro averaged F1 score",
         "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
         "Short": "Macro F1 score",
         "Title": "Additional information on macro averaged F1 score"
       },
-      "microF1Score": {
+      "MicroF1Score": {
         "Name": "Micro averaged F1 score",
         "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
         "Short": "Micro F1 score",

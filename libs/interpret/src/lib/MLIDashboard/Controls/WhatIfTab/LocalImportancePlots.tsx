@@ -440,7 +440,7 @@ export class LocalImportancePlots extends React.Component<
   private getSortedArray = (
     sortIndex: number | undefined,
     checked: boolean
-  ): void => {
+  ): number[] => {
     if (sortIndex !== undefined) {
       return checked
         ? ModelExplanationUtils.getAbsoluteSortIndices(

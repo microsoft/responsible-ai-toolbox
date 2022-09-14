@@ -12,23 +12,23 @@ export enum MetricLocalizationType {
 }
 
 const localizedMetricMapping = {
-  [Metrics.AccuracyScore]: localization.ErrorAnalysis.Metrics.accuracyScore,
-  [Metrics.ErrorRate]: localization.ErrorAnalysis.Metrics.errorRate,
+  [Metrics.AccuracyScore]: localization.ErrorAnalysis.Metrics.AccuracyScore,
+  [Metrics.ErrorRate]: localization.ErrorAnalysis.Metrics.ErrorRate,
   [Metrics.MeanSquaredError]:
-    localization.ErrorAnalysis.Metrics.meanSquaredError,
+    localization.ErrorAnalysis.Metrics.MeanSquaredError,
   [Metrics.MeanAbsoluteError]:
-    localization.ErrorAnalysis.Metrics.meanAbsoluteError,
-  [Metrics.F1Score]: localization.ErrorAnalysis.Metrics.f1Score,
-  [Metrics.PrecisionScore]: localization.ErrorAnalysis.Metrics.precision,
-  [Metrics.RecallScore]: localization.ErrorAnalysis.Metrics.recall,
+    localization.ErrorAnalysis.Metrics.MeanAbsoluteError,
+  [Metrics.F1Score]: localization.ErrorAnalysis.Metrics.F1Score,
+  [Metrics.PrecisionScore]: localization.ErrorAnalysis.Metrics.Precision,
+  [Metrics.RecallScore]: localization.ErrorAnalysis.Metrics.Recall,
   [Metrics.MacroPrecisionScore]:
-    localization.ErrorAnalysis.Metrics.macroPrecision,
+    localization.ErrorAnalysis.Metrics.MacroPrecision,
   [Metrics.MicroPrecisionScore]:
-    localization.ErrorAnalysis.Metrics.microPrecision,
-  [Metrics.MacroRecallScore]: localization.ErrorAnalysis.Metrics.macroRecall,
-  [Metrics.MicroRecallScore]: localization.ErrorAnalysis.Metrics.microRecall,
-  [Metrics.MacroF1Score]: localization.ErrorAnalysis.Metrics.macroF1Score,
-  [Metrics.MicroF1Score]: localization.ErrorAnalysis.Metrics.microF1Score
+    localization.ErrorAnalysis.Metrics.MicroPrecision,
+  [Metrics.MacroRecallScore]: localization.ErrorAnalysis.Metrics.MacroRecall,
+  [Metrics.MicroRecallScore]: localization.ErrorAnalysis.Metrics.MicroRecall,
+  [Metrics.MacroF1Score]: localization.ErrorAnalysis.Metrics.MacroF1Score,
+  [Metrics.MicroF1Score]: localization.ErrorAnalysis.Metrics.MicroF1Score
 };
 
 export class MetricUtils {

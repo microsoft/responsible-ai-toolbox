@@ -16,7 +16,7 @@ export const onToggleCollapse = (props?: IDetailsGroupDividerProps) => {
 
 export const onRenderGroupHeader = (
   props?: IDetailsGroupDividerProps
-): React.ReactNode => {
+): React.ReactElement => {
   const classNames = tableViewStyles();
   const iconName = props?.group?.isCollapsed
     ? "ChevronRightMed"
