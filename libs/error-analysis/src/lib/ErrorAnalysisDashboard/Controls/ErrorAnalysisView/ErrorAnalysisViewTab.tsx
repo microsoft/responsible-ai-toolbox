@@ -149,7 +149,7 @@ export class ErrorAnalysisViewTab extends React.Component<
     );
   }
 
-  private saveFeatures = (features: string[]) => {
+  private saveFeatures = (features: string[]): void => {
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
   };

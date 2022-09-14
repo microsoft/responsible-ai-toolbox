@@ -258,7 +258,9 @@ export class FeatureList extends React.Component<
     return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
   };
 
-  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+  private renderRowFields = (
+    props: IDetailsRowFieldsProps
+  ): React.ReactElement => {
     if (this.props.isEnabled) {
       return <DetailsRowFields {...props} />;
     }
@@ -319,7 +321,7 @@ export class FeatureList extends React.Component<
     return <span />;
   };
 
-  private readonly renderPanelFooter = () => {
+  private readonly renderPanelFooter = (): React.ReactElement => {
     // Remove apply button in static view
     if (!this.props.isEnabled) {
       return <span />;
@@ -378,7 +380,7 @@ export class FeatureList extends React.Component<
     return keys;
   }
 
-  private onSearch = (searchValue: string) => {
+  private onSearch = (searchValue: string): void => {
     this.setState(
       {
         searchedFeatures: this.props.features.filter((feature) =>
@@ -409,7 +411,7 @@ export class FeatureList extends React.Component<
     );
   }
 
-  private updateMaxDepth = (maxDepth: number) => {
+  private updateMaxDepth = (maxDepth: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       maxDepth,
@@ -422,7 +424,7 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private updateNumLeaves = (numLeaves: number) => {
+  private updateNumLeaves = (numLeaves: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -435,7 +437,7 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private updateMinChildSamples = (minChildSamples: number) => {
+  private updateMinChildSamples = (minChildSamples: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -448,13 +450,15 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private applyClick = () => {
+  private applyClick = (): void => {
     const selectedFeatures = [...this.state.selectedFeatures];
     this.props.saveFeatures(selectedFeatures);
-    this.context.errorAnalysisData!.maxDepth = this.state.maxDepth;
-    this.context.errorAnalysisData!.numLeaves = this.state.numLeaves;
-    this.context.errorAnalysisData!.minChildSamples =
-      this.state.minChildSamples;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.maxDepth = this.state.maxDepth;
+      this.context.errorAnalysisData.numLeaves = this.state.numLeaves;
+      this.context.errorAnalysisData.minChildSamples =
+        this.state.minChildSamples;
+    }
     this.setState({
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(selectedFeatures),

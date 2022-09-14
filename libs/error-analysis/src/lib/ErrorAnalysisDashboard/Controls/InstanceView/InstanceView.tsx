@@ -230,7 +230,7 @@ export class InstanceView extends React.Component<
               messages={this.props.messages}
               customPoints={this.props.customPoints}
               dataView={DataViewKeys.SelectedInstances}
-              setSelectedIndexes={(_: number[]): void => {
+              setSelectedIndexes={(): void => {
                 // do nothing.
               }}
               selectedIndexes={[]}

@@ -42,30 +42,12 @@ export class ChartBuilder {
     // the preferred solution of size ref
     const maxBubbleValue = 10;
     projectedRows.forEach((row) => {
-      let series: Partial<Data>;
-
-      // Handle mutiple group by in the future
-      if (datum.groupBy && datum.groupBy.length > 0) {
-        const key = row.group;
-        if (key === undefined || key === null) {
-          if (defaultSeries === undefined) {
-            defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-          }
-          series = defaultSeries;
-        } else {
-          if (groupingDictionary[key] === undefined) {
-            const temp = ChartBuilder.buildDefaultSeries(datum);
-            temp.name = key;
-            groupingDictionary[key] = temp;
-          }
-          series = groupingDictionary[key];
-        }
-      } else {
-        if (defaultSeries === undefined) {
-          defaultSeries = ChartBuilder.buildDefaultSeries(datum);
-        }
-        series = defaultSeries;
-      }
+      const series: Partial<Data> = this.getSeries(
+        datum,
+        row,
+        defaultSeries,
+        groupingDictionary
+      );
 
       // Due to logging supporting heterogeneous metric types, a metric can be a scalar on one run and a vector on another
       // Support these cases in the minimally surprising way by upcasting a scalar point to match the highest dimension for that row (like numpy does)
@@ -161,6 +143,42 @@ export class ChartBuilder {
     return result;
   }
 
+  private static getSeries(
+    datum: IData,
+    row: {
+      x: any;
+      y: any;
+      group: any;
+      size: any;
+    },
+    defaultSeries: Partial<Data> | undefined,
+    groupingDictionary: { [key: string]: Partial<Data> }
+  ): Partial<Data> {
+    let series: Partial<Data>;
+    // Handle mutiple group by in the future
+    if (datum.groupBy && datum.groupBy.length > 0) {
+      const key = row.group;
+      if (!key) {
+        if (defaultSeries === undefined) {
+          defaultSeries = ChartBuilder.buildDefaultSeries(datum);
+        }
+        series = defaultSeries;
+      } else {
+        if (groupingDictionary[key] === undefined) {
+          const temp = ChartBuilder.buildDefaultSeries(datum);
+          temp.name = key;
+          groupingDictionary[key] = temp;
+        }
+        series = groupingDictionary[key];
+      }
+    } else {
+      if (defaultSeries === undefined) {
+        defaultSeries = ChartBuilder.buildDefaultSeries(datum);
+      }
+      series = defaultSeries;
+    }
+    return series;
+  }
   private static buildDefaultSeries(datum: IData): Partial<Data> {
     const series: Partial<Data> = _.cloneDeep(datum);
     // defining an x/y accessor will overwrite any hardcoded x or y values.

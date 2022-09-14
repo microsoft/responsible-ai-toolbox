@@ -35,7 +35,7 @@ export class TreatmentTable extends React.PureComponent<
     this.state = { rows: this.getRows() };
   }
 
-  public componentDidUpdate(prevProp: ITreatmentTableProps) {
+  public componentDidUpdate(prevProp: ITreatmentTableProps): void {
     if (this.props.data !== prevProp.data) {
       this.setState({ rows: this.getRows() });
     }
@@ -55,7 +55,7 @@ export class TreatmentTable extends React.PureComponent<
     );
   }
 
-  private getRows = () => {
+  private getRows = (): React.ReactNode[][] => {
     if (!this.props.data) {
       return [];
     }
@@ -100,7 +100,7 @@ export class TreatmentTable extends React.PureComponent<
     data: ICausalPolicyTreeNode,
     rowSpan: number,
     colSpan: number
-  ) => {
+  ): React.ReactNode[][] => {
     const res = [];
     const queue = [];
     queue.push({
@@ -162,7 +162,9 @@ export class TreatmentTable extends React.PureComponent<
   };
 
   private getMaxLevel(node: ICausalPolicyTreeNode): number {
-    if (node.leaf) return 1;
+    if (node.leaf) {
+      return 1;
+    }
     return (
       Math.max(this.getMaxLevel(node.left), this.getMaxLevel(node.right)) + 1
     );

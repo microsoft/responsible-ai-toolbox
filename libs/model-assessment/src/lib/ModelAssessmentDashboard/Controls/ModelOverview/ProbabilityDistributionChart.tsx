@@ -56,7 +56,7 @@ export class ProbabilityDistributionChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IProbabilityDistributionChartProps) {
+  public constructor(props: IProbabilityDistributionChartProps) {
     super(props);
     this.state = { probabilityFlyoutIsVisible: false };
   }
@@ -178,7 +178,7 @@ export class ProbabilityDistributionChart extends React.Component<
                       localization.ModelAssessment.ModelOverview
                         .probabilityLabelSelectionButton
                     }
-                    onClick={() =>
+                    onClick={(): void =>
                       this.setState({
                         probabilityFlyoutIsVisible: true
                       })
@@ -193,7 +193,7 @@ export class ProbabilityDistributionChart extends React.Component<
           id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"
           isOpen={this.state.probabilityFlyoutIsVisible}
           closeButtonAriaLabel="Close"
-          onDismiss={() => {
+          onDismiss={(): void => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
           onRenderFooterContent={this.onRenderFooterContent}
@@ -216,21 +216,22 @@ export class ProbabilityDistributionChart extends React.Component<
     );
   }
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
-          onClick={() => {
-            if (this.state.newlySelectedProbabilityOption)
+          onClick={(): void => {
+            if (this.state.newlySelectedProbabilityOption) {
               this.setState({
                 probabilityFlyoutIsVisible: false,
                 probabilityOption: this.state.newlySelectedProbabilityOption
               });
+            }
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
-          onClick={() => {
+          onClick={(): void => {
             this.setState({ probabilityFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
@@ -264,7 +265,7 @@ export class ProbabilityDistributionChart extends React.Component<
   private onSplineChartToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       this.props.onToggleChange(checked);
       this.props.telemetryHook?.({

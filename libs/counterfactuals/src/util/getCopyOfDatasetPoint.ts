@@ -4,12 +4,13 @@
 import { FluentUIStyles, JointDataset } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
+import { Dictionary } from "lodash";
 
 export function getCopyOfDatasetPoint(
   index: number,
   jointDataset: JointDataset,
   customPointLength: number
-) {
+): Dictionary<any> {
   const temporaryPoint: {
     [key: string]: any;
   } = jointDataset.getRow(index);

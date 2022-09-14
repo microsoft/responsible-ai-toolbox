@@ -5,7 +5,6 @@ import { getTheme } from "@fluentui/react";
 import { getBoxData, getPrimaryChartColor } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 
 export function getDatasetBoxOption(plotlyProps: IPlotlyProperty): any {
   const boxData = plotlyProps.data.map((d: any) => getBoxData(d.x, d.y).box);

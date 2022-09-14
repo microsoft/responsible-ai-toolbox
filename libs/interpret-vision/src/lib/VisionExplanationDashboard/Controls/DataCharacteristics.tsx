@@ -58,7 +58,7 @@ export class DataCharacteristics extends React.Component<
   IDataCharacteristicsProps,
   IDataCharacteristicsState
 > {
-  rowHeight: number;
+  private rowHeight: number;
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
     this.rowHeight = 0;
@@ -205,7 +205,9 @@ export class DataCharacteristics extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IVisionListItem | undefined) => {
+  private onRenderCell = (
+    item?: IVisionListItem | undefined
+  ): React.ReactElement => {
     const classNames = dataCharacteristicsStyles();
     const indicatorStyle = mergeStyles(
       classNames.indicator,
@@ -442,7 +444,7 @@ export class DataCharacteristics extends React.Component<
     return keys;
   }
 
-  private loadNextItems = (index: number) => () => {
+  private loadNextItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
     let columnCount = this.state.columnCount[index];
     columnCount -= columnCount % 2 !== 0 ? 1 : 0;
@@ -451,7 +453,7 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private loadPrevItems = (index: number) => () => {
+  private loadPrevItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
     renderStartIndex[index] -= this.state.columnCount[index];
     if (renderStartIndex[index] <= 0) {
@@ -461,15 +463,20 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private callbackWrapper = (item: IVisionListItem) => () => {
+  private callbackWrapper = (item: IVisionListItem) => (): void => {
     this.props.selectItem(item);
   };
 
-  private getPageHeight = () => {
+  private getPageHeight = (): number => {
     return this.rowHeight;
   };
 
-  private getItemCountForPageWrapper(index: number) {
+  private getItemCountForPageWrapper = (
+    index: number
+  ): ((
+    itemIndex?: number | undefined,
+    visibleRect?: IRectangle | undefined
+  ) => number) => {
     const getItemCountForPage = (
       itemIndex?: number | undefined,
       visibleRect?: IRectangle | undefined
@@ -487,5 +494,5 @@ export class DataCharacteristics extends React.Component<
       return columnCount[index];
     };
     return getItemCountForPage;
-  }
+  };
 }

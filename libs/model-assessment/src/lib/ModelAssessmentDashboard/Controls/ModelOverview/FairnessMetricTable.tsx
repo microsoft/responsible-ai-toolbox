@@ -106,7 +106,7 @@ export class FairnessMetricTable extends React.Component<
             }
           ],
           tooltip: {
-            formatter() {
+            formatter(): string | undefined {
               // to avoid semantic error during build cast point to any
               const point = this.point as any;
               const pointValue = point.value;
@@ -163,7 +163,7 @@ export class FairnessMetricTable extends React.Component<
               columns: [
                 {
                   labels: {
-                    formatter() {
+                    formatter(): string {
                       return `<div style='width:300px'>${this.value}</div>`;
                     },
                     useHTML: true

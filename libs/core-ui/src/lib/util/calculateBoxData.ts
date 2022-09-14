@@ -13,7 +13,7 @@ export async function calculateBoxPlotDataFromErrorCohort(
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>
-) {
+): Promise<IHighchartBoxData | undefined> {
   if (requestBoxPlotDistribution) {
     return await calculateBoxPlotDataFromSDK(
       errorCohort,
@@ -101,7 +101,10 @@ export function calculateBoxPlotData(
   return undefined;
 }
 
-export function getPercentile(sortedData: number[], percentile: number) {
+export function getPercentile(
+  sortedData: number[],
+  percentile: number
+): number | undefined {
   if (percentile <= 0 || percentile >= 100 || sortedData.length === 0) {
     return undefined;
   }

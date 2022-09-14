@@ -54,7 +54,7 @@ export function buildFalseNegativeErrorBounds(
 export function buildCustomTooltips(
   barPlotlyProps: BarPlotlyProps,
   dashboardContext: IFairnessContext
-) {
+): void {
   const digitsOfPrecision = 1;
 
   for (let j = 0; j < barPlotlyProps.data.length; j++) {
@@ -68,13 +68,9 @@ export function buildCustomTooltips(
         const tempX = tempData ? tempData.x?.[i] : undefined;
 
         // ensure x is number
-        const x =
-          tempX !== undefined && typeof tempX == "number" ? tempX : undefined;
+        const x = typeof tempX == "number" ? tempX : undefined;
         // ensure y is string
-        const y =
-          tempY !== undefined && typeof tempY == "string"
-            ? tempY.trim()
-            : undefined;
+        const y = typeof tempY == "string" ? tempY.trim() : undefined;
         const lowerErrorX =
           tempData?.error_x?.type === "data"
             ? tempData.error_x.arrayminus?.[i]
@@ -95,12 +91,9 @@ export function buildCustomTooltips(
                 (x + upperErrorX)
               ).toFixed(digitsOfPrecision)}%]`
             : "";
-
-        if (
-          barPlotlyProps?.data?.[j]?.customdata &&
-          _.isArray(barPlotlyProps.data[j].customdata)
-        ) {
-          barPlotlyProps.data[j].customdata!.push({
+        const customdata = barPlotlyProps?.data?.[j]?.customdata;
+        if (customdata && _.isArray(customdata)) {
+          customdata.push({
             outcomeMetric,
             x:
               x !== undefined
