@@ -145,16 +145,11 @@ def compute_matrix(analyzer, features, filters, composite_filters,
         input_data = input_data.to_numpy()
     if is_model_analyzer:
         pred_y = analyzer.model.predict(input_data)
-    if is_model_analyzer:
-        if analyzer.model_task == ModelTask.CLASSIFICATION:
-            diff = analyzer.model.predict(input_data) != true_y
-        else:
-            diff = analyzer.model.predict(input_data) - true_y
+
+    if analyzer.model_task == ModelTask.CLASSIFICATION:
+        diff = pred_y != true_y
     else:
-        if analyzer.model_task == ModelTask.CLASSIFICATION:
-            diff = pred_y != true_y
-        else:
-            diff = pred_y - true_y
+        diff = pred_y - true_y
     if not isinstance(diff, np.ndarray):
         diff = np.array(diff)
     if not isinstance(pred_y, np.ndarray):
@@ -278,7 +273,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
             # fix counts to include skipped categories
             fix_counts = []
             counts_idx = 0
-            for idx, catdf in enumerate(cutdf.cat.categories):
+            for idx, _ in enumerate(cutdf.cat.categories):
                 if idx not in catn:
                     fix_counts.append(0)
                 else:

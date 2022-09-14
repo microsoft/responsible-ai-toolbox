@@ -3,8 +3,7 @@
 
 import pandas as pd
 import pytest
-
-from ..common_utils import create_adult_income_dataset
+from tests.common_utils import create_adult_income_dataset
 
 # Constants representing columns in the synthetic_data fixture
 SYNTHETIC_DATA_LABEL = "Label"
@@ -25,7 +24,7 @@ def adult_data():
         classes,
         _,
         _,
-    ) = create_adult_income_dataset()
+    ) = create_adult_income_dataset(create_small_dataset=False)
     data_train[target_col] = y_train
     data_test[target_col] = y_test
     return data_train, data_test, categorical_features, target_col, classes

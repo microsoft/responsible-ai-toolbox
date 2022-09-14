@@ -38,7 +38,6 @@ export class DatasetCohortStatsTable extends React.Component<
       ),
       this.context.modelMetadata.modelType
     );
-
     const items = generateCohortsStatsTable(
       this.context.errorCohorts,
       this.props.selectableMetrics,
