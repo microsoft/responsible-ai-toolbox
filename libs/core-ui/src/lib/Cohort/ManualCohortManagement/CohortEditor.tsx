@@ -66,6 +66,7 @@ export class CohortEditor extends React.PureComponent<
           onRenderFooter={this.renderFooter}
           isFooterAtBottom
           isLightDismiss
+          closeButtonAriaLabel={localization.Common.close}
         >
           <CohortEditorPanelContent
             {...this.props}

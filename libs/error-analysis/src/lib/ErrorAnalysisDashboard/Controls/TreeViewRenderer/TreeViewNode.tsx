@@ -97,14 +97,18 @@ export class TreeViewNode extends React.Component<ITreeViewNodeProps> {
           />
           <rect
             x={-22}
-            y={-12}
+            y={-10.5}
             width={45}
             height={20}
             style={{ fill: ColorPalette.white }}
             rx={10}
             ry={10}
           />
-          <text textAnchor="middle" className={classNames.nodeText}>
+          <text
+            textAnchor="middle"
+            className={classNames.nodeText}
+            dominant-baseline="middle"
+          >
             {getNodeText(node)}
           </text>
         </g>

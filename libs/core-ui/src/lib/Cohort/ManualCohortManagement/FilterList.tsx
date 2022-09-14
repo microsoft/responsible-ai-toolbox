@@ -40,6 +40,7 @@ export class FilterList extends React.Component<IFilterListProps> {
               id={`editFilerBtn-${index}`}
               iconProps={{ iconName: "Edit" }}
               onClick={(): void => this.props.editFilter?.(index)}
+              ariaLabel={localization.Common.editButton}
             />
           )}
           {this.props.removeFilter && (
@@ -47,6 +48,7 @@ export class FilterList extends React.Component<IFilterListProps> {
               id={`removeFilterBtn-${index}`}
               iconProps={{ iconName: "Clear" }}
               onClick={(): void => this.props.removeFilter?.(index)}
+              ariaLabel={localization.Common.close}
             />
           )}
         </div>
