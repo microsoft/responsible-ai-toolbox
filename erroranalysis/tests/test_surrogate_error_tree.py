@@ -51,8 +51,6 @@ class TestSurrogateErrorTree(object):
     def test_surrogate_error_tree_iris(self, analyzer_type):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
 
-        # import pdb
-        # pdb.set_trace()
         models = create_models_classification(X_train, y_train)
 
         for model in models:
