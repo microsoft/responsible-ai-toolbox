@@ -19,7 +19,6 @@ import {
   JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { getCategoricalOption } from "../util/getCategoricalOption";
@@ -122,7 +121,7 @@ export class CounterfactualListDetailsFooter extends React.Component<ICounterfac
               onChange={(
                 _event: React.FormEvent<IComboBox>,
                 option?: IComboBoxOption
-              ) =>
+              ): void =>
                 this.props.updateComboBoxColValue(
                   column.key,
                   dropdownOption.data.categoricalOptions,

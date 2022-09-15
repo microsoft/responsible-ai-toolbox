@@ -34,7 +34,7 @@ export function HighchartReact(
   const chartRef = React.useRef<Highcharts.Chart | null>();
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const createChart = () => {
+  const createChart = (): Highcharts.Chart | null | undefined => {
     Highcharts.setOptions({
       lang: {
         downloadJPEG: localization.ChartContextMenu.downloadJPEG,
@@ -94,7 +94,7 @@ export function HighchartReact(
   React.useEffect(() => {
     // We need to have a separate hook since we want this to be executed
     // only when component is unloaded
-    return () => {
+    return (): void => {
       chartRef.current?.destroy();
     };
   }, []);

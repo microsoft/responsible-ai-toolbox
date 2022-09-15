@@ -81,7 +81,7 @@ export class MainMenu extends React.PureComponent<
     ];
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(): void {
     this.commandBar.current?.remeasure();
   }
 
@@ -207,7 +207,7 @@ export class MainMenu extends React.PureComponent<
     }));
   };
 
-  private toggleChangeCohortVisibility = () => {
+  private toggleChangeCohortVisibility = (): void => {
     if (!this.state.changeCohortVisible) {
       this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
     }
@@ -215,7 +215,7 @@ export class MainMenu extends React.PureComponent<
       changeCohortVisible: !prev.changeCohortVisible
     }));
   };
-  private toggleCreateCohortVisibility = () => {
+  private toggleCreateCohortVisibility = (): void => {
     if (!this.state.createCohortVisible) {
       this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
     }
@@ -223,7 +223,7 @@ export class MainMenu extends React.PureComponent<
       createCohortVisible: !prev.createCohortVisible
     }));
   };
-  private logButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

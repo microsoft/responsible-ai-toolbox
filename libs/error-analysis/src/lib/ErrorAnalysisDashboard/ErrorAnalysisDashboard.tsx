@@ -70,6 +70,8 @@ import {
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { IErrorAnalysisDashboardState } from "./Interfaces/IErrorAnalysisDashboardState";
 
+const maxLength = 18;
+
 export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
   IErrorAnalysisDashboardState
@@ -114,17 +116,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     }
   }
 
-  private static buildModelMetadata(
-    props: IErrorAnalysisDashboardProps
-  ): IExplanationModelMetadata {
-    const modelType = getModelType(
-      props.modelInformation.method,
-      props.precomputedExplanations,
-      props.probabilityY
-    );
+  private static getFeatures(props: IErrorAnalysisDashboardProps): {
+    featureNames: string[];
+    featureNamesAbridged: string[];
+  } {
     let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
-    const maxLength = 18;
     if (featureNames !== undefined) {
       if (!featureNames.every((name) => typeof name === "string")) {
         featureNames = featureNames.map((x) => x.toString());
@@ -175,6 +172,21 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
       featureNamesAbridged = featureNames;
     }
+    return {
+      featureNames,
+      featureNamesAbridged
+    };
+  }
+
+  private static buildModelMetadata(
+    props: IErrorAnalysisDashboardProps
+  ): IExplanationModelMetadata {
+    const modelType = getModelType(
+      props.modelInformation.method,
+      props.precomputedExplanations,
+      props.probabilityY
+    );
+    const { featureNames, featureNamesAbridged } = this.getFeatures(props);
     let classNames = props.dataSummary.classNames;
     let classLength = 1;
     if (
@@ -190,7 +202,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     } else if (modelType === ModelTypes.Binary) {
       classLength = 2;
     } else if (modelType === ModelTypes.Multiclass) {
-      classLength = new Set([...props.trueY!].concat(props.predictedY!)).size;
+      classLength = new Set(
+        [...(props.trueY || [])].concat(props.predictedY || [])
+      ).size;
     }
 
     if (!classNames || classNames.length !== classLength) {
@@ -287,7 +301,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     let selectedFeatures = props.features;
     if (props.requestDebugML === undefined) {
-      selectedFeatures = props.errorAnalysisData.tree_features!;
+      selectedFeatures = props.errorAnalysisData.tree_features || [];
     }
     const importances = props.errorAnalysisData.importances ?? [];
     return {
@@ -340,11 +354,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       <ModelAssessmentContext.Provider
         value={{
           //error analysis does not have manual cohort adding
-          addCohort: () => undefined,
+          addCohort: (): void => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
-          deleteCohort: () => undefined,
-          editCohort: () => undefined,
+          deleteCohort: (): void => undefined,
+          editCohort: (): void => undefined,
           errorAnalysisData: this.props.errorAnalysisData,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,

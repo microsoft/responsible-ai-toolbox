@@ -7,7 +7,6 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 
 import { getDatasetBarOption } from "./getDatasetBarOption";
 import { getDatasetBoxOption } from "./getDatasetBoxOption";

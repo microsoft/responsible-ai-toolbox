@@ -1,53 +1,49 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IComboBoxOption } from "@fluentui/react";
 import {
+  ChartTypes,
   Cohort,
   FluentUIStyles,
+  getPrimaryChartColor,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
-import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { IData, IPlotlyProperty, PlotlyMode } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
+
+import { CausalIndividualConstants } from "./CausalIndividualConstants";
 
 export function generatePlotlyProps(
   jointData: JointDataset,
   chartProps: IGenericChartProps,
   cohort: Cohort,
-  selectedPointsIndexes: number[],
-  customPoints: Array<{
-    [key: string]: any;
-  }>
+  selectedIndex: number | undefined,
+  temporaryPoint: Dictionary<any> | undefined
 ): IPlotlyProperty {
-  const plotlyProps = _.cloneDeep(WhatIfConstants.basePlotlyProperties);
+  const plotlyProps = _.cloneDeep(
+    CausalIndividualConstants.basePlotlyProperties
+  );
+  const theme = getTheme();
   plotlyProps.data[0].hoverinfo = "all";
   const indexes = cohort.unwrap(JointDataset.IndexLabel);
   plotlyProps.data[0].type = chartProps.chartType;
   plotlyProps.data[0].mode = PlotlyMode.Markers;
   plotlyProps.data[0].marker = {
     color: indexes.map((rowIndex) => {
-      const selectionIndex = selectedPointsIndexes.indexOf(rowIndex);
-      if (selectionIndex === -1) {
+      if (rowIndex !== selectedIndex) {
         return FluentUIStyles.fabricColorInactiveSeries;
       }
-      return FluentUIStyles.fluentUIColorPalette[selectionIndex];
+      return getPrimaryChartColor(theme);
     }) as any,
     size: 8,
-    symbol: indexes.map((i) =>
-      selectedPointsIndexes.includes(i) ? "square" : "circle"
-    ) as any
+    symbol: indexes.map((i) => (selectedIndex === i ? "square" : "circle"))
   };
 
   plotlyProps.data[1] = {
     marker: {
-      color: customPoints.map(
-        (_, i) =>
-          FluentUIStyles.fluentUIColorPalette[
-            WhatIfConstants.MAX_SELECTION + 1 + i
-          ]
-      ),
       size: 12,
       symbol: "star"
     },
@@ -62,7 +58,7 @@ export function generatePlotlyProps(
       line: {
         color:
           FluentUIStyles.fluentUIColorPalette[
-            WhatIfConstants.MAX_SELECTION + 1 + customPoints.length
+            CausalIndividualConstants.MAX_SELECTION + 1
           ],
         width: 2
       },
@@ -100,7 +96,15 @@ export function generatePlotlyProps(
     plotlyProps.data[0],
     jointData
   );
-  generateDataTrace(customPoints, chartProps, plotlyProps.data[1], jointData);
+  generateDataTrace([], chartProps, plotlyProps.data[1], jointData);
+  if (temporaryPoint) {
+    generateDataTrace(
+      [temporaryPoint],
+      chartProps,
+      plotlyProps.data[2],
+      jointData
+    );
+  }
   return plotlyProps;
 }
 
@@ -118,10 +122,7 @@ function generateDataTrace(
     dict[JointDataset.IndexLabel] = val;
     return dict;
   });
-  dictionary.forEach((val, index) => {
-    customdata[index].Name = val.Name ? val.Name : val.Index;
-  });
-  let hovertemplate = "{point.customdata.Name}<br>";
+  let hovertemplate = "";
   if (chartProps.xAxis) {
     const metaX = jointDataset.metaDict[chartProps.xAxis.property];
     const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
@@ -167,37 +168,70 @@ function generateDataTrace(
       trace.y = rawY;
     }
   }
-  if (jointDataset.datasetMetaData?.featureMetaData !== undefined) {
+  if (jointDataset.datasetMetaData?.featureMetaData?.identity_feature_name) {
     const identityFeatureName =
-      jointDataset.datasetMetaData.featureMetaData?.identity_feature_name;
+      jointDataset.datasetMetaData?.featureMetaData?.identity_feature_name;
 
-    if (identityFeatureName !== undefined) {
-      const jointDatasetFeatureName =
-        jointDataset.getJointDatasetFeatureName(identityFeatureName);
+    const jointDatasetFeatureName =
+      jointDataset.getJointDatasetFeatureName(identityFeatureName);
 
-      if (jointDatasetFeatureName !== undefined) {
-        const metaIdentityFeature =
-          jointDataset.metaDict[jointDatasetFeatureName];
-        const rawIdentityFeature = JointDataset.unwrap(
-          dictionary,
-          jointDatasetFeatureName
-        );
-        hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
-        rawIdentityFeature.forEach((val, index) => {
-          if (metaIdentityFeature?.treatAsCategorical) {
-            customdata[index].ID =
-              metaIdentityFeature.sortedCategoricalValues?.[val];
-          } else {
-            customdata[index].ID = (val as number).toLocaleString(undefined, {
-              maximumSignificantDigits: 5
-            });
-          }
-        });
-      }
+    if (jointDatasetFeatureName) {
+      const metaIdentityFeature =
+        jointDataset.metaDict[jointDatasetFeatureName];
+      const rawIdentityFeature = JointDataset.unwrap(
+        dictionary,
+        jointDatasetFeatureName
+      );
+      hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): {point.customdata.ID}<br>`;
+      rawIdentityFeature.forEach((val, index) => {
+        if (metaIdentityFeature?.treatAsCategorical) {
+          customdata[index].ID =
+            metaIdentityFeature.sortedCategoricalValues?.[val];
+        } else {
+          customdata[index].ID = (val as number).toLocaleString(undefined, {
+            maximumSignificantDigits: 5
+          });
+        }
+      });
     }
   }
   hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
   hovertemplate += "<extra></extra>";
   trace.customdata = customdata as any;
   trace.hovertemplate = hovertemplate;
+}
+
+export function generateDefaultChartAxes(
+  jointDataset: JointDataset
+): IGenericChartProps | undefined {
+  const yKey = `${JointDataset.DataLabelRoot}0`;
+  const yIsDithered = jointDataset.metaDict[yKey]?.treatAsCategorical;
+  const chartProps: IGenericChartProps = {
+    chartType: ChartTypes.Scatter,
+    xAxis: {
+      options: {},
+      property: jointDataset.hasPredictedProbabilities
+        ? `${JointDataset.ProbabilityYRoot}0`
+        : JointDataset.IndexLabel
+    },
+    yAxis: {
+      options: {
+        bin: false,
+        dither: yIsDithered
+      },
+      property: yKey
+    }
+  };
+  return chartProps;
+}
+
+export function getDataOptions(cohort: Cohort): IComboBoxOption[] {
+  const indexes = cohort.unwrap(JointDataset.IndexLabel);
+  indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
+  return indexes.map((index) => {
+    return {
+      key: index,
+      text: `Index ${index}`
+    };
+  });
 }

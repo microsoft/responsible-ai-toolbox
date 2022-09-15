@@ -53,7 +53,7 @@ export function getIndividualChartOptions(
         cursor: "pointer",
         point: {
           events: {
-            click() {
+            click(): void {
               if (onClickHandler === undefined) {
                 return;
               }

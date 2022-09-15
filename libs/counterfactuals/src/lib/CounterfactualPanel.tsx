@@ -241,18 +241,18 @@ export class CounterfactualPanel extends React.Component<
   private toggleSortFeatures = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       this.setState({ sortFeatures: checked });
     }
   };
-  private onClosePanel = () => {
+  private onClosePanel = (): void => {
     this.setState({
       filterText: undefined
     });
     this.props.closePanel();
   };
-  private handleSavePoint = () => {
+  private handleSavePoint = (): void => {
     this.props.saveAsPoint();
     this.onClosePanel();
     this.props.telemetryHook?.({

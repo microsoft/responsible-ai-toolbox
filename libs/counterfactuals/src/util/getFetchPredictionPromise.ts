@@ -7,7 +7,7 @@ export function getFetchPredictionPromise(
   fetchingReference: { [key: string]: any },
   jointDataset: JointDataset,
   invokeModel: (data: any[], abortSignal: AbortSignal) => Promise<any[]>
-) {
+): Promise<any[]> {
   const abortController = new AbortController();
   const rawData = JointDataset.datasetSlice(
     fetchingReference,

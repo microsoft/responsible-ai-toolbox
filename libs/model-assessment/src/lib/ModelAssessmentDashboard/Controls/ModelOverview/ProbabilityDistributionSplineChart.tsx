@@ -29,12 +29,11 @@ export class ProbabilityDistributionSplineChart extends React.Component<
 
   public render(): React.ReactNode {
     const theme = getTheme();
-
     const splinePlotData = this.props.selectedCohorts.map((cohort) => {
       return calculateSplinePlotDataFromErrorCohort(
         cohort,
-        this.props.probabilityOption!.key.toString()
-      )!; // TODO: handle undefined case
+        this.props.probabilityOption?.key
+      ); // TODO: handle undefined case
     });
 
     return (
@@ -60,7 +59,7 @@ export class ProbabilityDistributionSplineChart extends React.Component<
           },
           series: splinePlotData.map((splineData, index) => {
             return {
-              data: splineData.map(
+              data: splineData?.map(
                 (probBinCount: { binCount: any }) => probBinCount.binCount
               ),
               name: this.props.selectedCohorts[index].cohort.name,
@@ -69,11 +68,11 @@ export class ProbabilityDistributionSplineChart extends React.Component<
           }),
           xAxis: {
             categories: splinePlotData.map((splineData) =>
-              splineData.map(
+              splineData?.map(
                 (probBinCount: { binName: any }) => probBinCount.binName
               )
             )[0],
-            title: { text: this.props.probabilityOption!.text }
+            title: { text: this.props.probabilityOption?.text }
           },
           yAxis: {
             title: {

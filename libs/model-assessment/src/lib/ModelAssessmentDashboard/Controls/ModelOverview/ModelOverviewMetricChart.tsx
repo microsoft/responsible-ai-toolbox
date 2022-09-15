@@ -45,7 +45,7 @@ export class ModelOverviewMetricChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IModelOverviewMetricChartProps) {
+  public constructor(props: IModelOverviewMetricChartProps) {
     super(props);
     const firstMetric = this.props.selectableMetrics[0].key.toString();
     this.state = {
@@ -74,11 +74,10 @@ export class ModelOverviewMetricChart extends React.Component<
 
     return (
       <>
-        <Stack horizontal grow id="modelOverviewMetricChart">
-          <Stack.Item className={classNames.verticalAxis}>
+        <Stack id="modelOverviewMetricChart">
+          <Stack.Item className={classNames.cohortSelectionButton}>
             <DefaultButton
               id="modelOverviewMetricChartCohortSelectionButton"
-              className={classNames.rotatedVerticalBox}
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -128,7 +127,7 @@ export class ModelOverviewMetricChart extends React.Component<
                     localization.ModelAssessment.ModelOverview
                       .metricSelectionButton
                   }
-                  onClick={() =>
+                  onClick={(): void =>
                     this.setState({
                       metricSelectionFlyoutIsVisible: true
                     })
@@ -141,7 +140,7 @@ export class ModelOverviewMetricChart extends React.Component<
         <Panel
           isOpen={this.state.metricSelectionFlyoutIsVisible}
           closeButtonAriaLabel="Close"
-          onDismiss={() => {
+          onDismiss={(): void => {
             this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
           onRenderFooterContent={this.onRenderFooterContent}
@@ -169,11 +168,11 @@ export class ModelOverviewMetricChart extends React.Component<
     );
   }
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
-          onClick={() => {
+          onClick={(): void => {
             this.setState({
               metricSelectionFlyoutIsVisible: false
             });
@@ -182,7 +181,7 @@ export class ModelOverviewMetricChart extends React.Component<
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
-          onClick={() => {
+          onClick={(): void => {
             this.setState({ metricSelectionFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}

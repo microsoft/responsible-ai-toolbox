@@ -169,7 +169,7 @@ export function getFeatureBalanceMeasuresChart(
 
   return {
     chart: {
-      numberFormatter: (value: number) => value.toFixed(3),
+      numberFormatter: (value: number): string => value.toFixed(3),
       type: "heatmap"
     },
     colorAxis: colorAxisOptions,
@@ -192,7 +192,7 @@ export function getFeatureBalanceMeasuresChart(
       }
     ],
     tooltip: {
-      formatter() {
+      formatter(): string {
         // to avoid semantic error during build cast point to any
         const point = this.point as any;
 

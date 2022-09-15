@@ -31,7 +31,7 @@ export function describeGlobalExplanationChart<
       if (props.dataShape.featureNames) {
         const columns = props.dataShape.featureNames.slice(0, 4);
         for (const column of columns) {
-          cy.get(`#FeatureImportanceBar svg g.highcharts-xaxis-labels`).should(
+          cy.get("#FeatureImportanceBar svg g.highcharts-xaxis-labels").should(
             "contain.text",
             column
           );
@@ -39,7 +39,9 @@ export function describeGlobalExplanationChart<
       }
     });
     it.skip(`should have ${props.dataShape.featureNames?.length} elements`, () => {
-      expect(props.chart.Elements).length(props.dataShape.featureNames!.length);
+      expect(props.chart.Elements).length(
+        props.dataShape.featureNames?.length || 0
+      );
     });
     if (!props.dataShape.featureImportanceData?.noLocalImportance) {
       describe.skip("Chart Settings", () => {
@@ -54,7 +56,7 @@ export function describeGlobalExplanationChart<
             .type("{rightarrow}")
             .then(() => {
               expect(props.chart.VisibleElements).length(
-                Math.min(topK + 1, props.dataShape.featureNames!.length)
+                Math.min(topK + 1, props.dataShape.featureNames?.length || 0)
               );
             });
         });

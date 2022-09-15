@@ -59,8 +59,8 @@ export class VisionExplanationDashboard extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  originalErrorInstances: IVisionListItem[];
-  originalSuccessInstances: IVisionListItem[];
+  private originalErrorInstances: IVisionListItem[];
+  private originalSuccessInstances: IVisionListItem[];
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
     this.originalErrorInstances = [];
@@ -226,7 +226,7 @@ export class VisionExplanationDashboard extends React.Component<
     );
   }
 
-  private preprocessData() {
+  private preprocessData(): void {
     const dataSummary = this.props.dataSummary;
     const errorInstances: IVisionListItem[] = this.state.errorInstances;
     const successInstances: IVisionListItem[] = this.state.successInstances;
@@ -240,11 +240,14 @@ export class VisionExplanationDashboard extends React.Component<
       return classNames[index];
     });
 
-    const features: number[] = dataSummary.features!.map((featuresArr) => {
+    const features = dataSummary.features?.map((featuresArr) => {
       return featuresArr[0] as number;
     });
 
-    const fieldNames = dataSummary.feature_names!;
+    const fieldNames = dataSummary.feature_names;
+    if (!features || !fieldNames) {
+      return;
+    }
     const loadingExplanation: boolean[] = [];
     const computedExplanations: Map<number, string> = new Map();
     dataSummary.images?.forEach((image, index) => {
@@ -277,7 +280,7 @@ export class VisionExplanationDashboard extends React.Component<
     });
   }
 
-  private updateItems = () => {
+  private updateItems = (): void => {
     const indices = new Set(
       this.props.selectedCohort.cohort.filteredData.map(
         (row: { [key: string]: number }) => {
@@ -301,11 +304,11 @@ export class VisionExplanationDashboard extends React.Component<
     });
   };
 
-  private updateSelectedIndices = (indices: number[]) => {
+  private updateSelectedIndices = (indices: number[]): void => {
     this.setState({ selectedIndices: indices });
   };
 
-  private addCohortWrapper = (name: string, switchCohort: boolean) => {
+  private addCohortWrapper = (name: string, switchCohort: boolean): void => {
     const { selectedIndices } = this.state;
     const filters: IFilter[] = [];
 
@@ -333,7 +336,7 @@ export class VisionExplanationDashboard extends React.Component<
     this.context.addCohort(cohort, switchCohort);
   };
 
-  private onPanelClose = () => {
+  private onPanelClose = (): void => {
     this.setState({ panelOpen: !this.state.panelOpen });
   };
 
@@ -382,7 +385,7 @@ export class VisionExplanationDashboard extends React.Component<
   look close to the Figma design sketch. For handleLinkClick, the default values chosen are half
   the maximum values chosen in onSliderChange. */
 
-  private onSliderChange = (value: number) => {
+  private onSliderChange = (value: number): void => {
     if (
       this.state.selectedKey ===
       VisionDatasetExplorerTabOptions.ImageExplorerView
@@ -407,9 +410,9 @@ export class VisionExplanationDashboard extends React.Component<
     this.setState({ pageSize: Number(item?.text) });
   };
 
-  private handleLinkClick = (item?: PivotItem) => {
-    if (item) {
-      this.setState({ selectedKey: item.props.itemKey! });
+  private handleLinkClick = (item?: PivotItem): void => {
+    if (item && item.props.itemKey !== undefined) {
+      this.setState({ selectedKey: item.props.itemKey });
       if (
         item.props.itemKey === VisionDatasetExplorerTabOptions.ImageExplorerView
       ) {
