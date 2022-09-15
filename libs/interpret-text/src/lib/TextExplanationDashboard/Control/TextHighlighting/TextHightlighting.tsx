@@ -26,7 +26,7 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
     const text = this.props.text;
     const importances = this.props.localExplanations;
     const k = this.props.topK;
-    const sortedList = Utils.sortedTopK(importances, k!, this.props.radio!);
+    const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
     return (
       <Stack
         id="TextHighlighting"

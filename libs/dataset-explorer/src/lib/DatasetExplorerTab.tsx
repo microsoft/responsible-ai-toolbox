@@ -36,7 +36,7 @@ import { generatePlotlyProps } from "./generatePlotlyProps";
 import { getDatasetOption } from "./getDatasetOption";
 import { SidePanel } from "./SidePanel";
 
-export class IDatasetExplorerTabProps {
+export interface IDatasetExplorerTabProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -320,7 +320,7 @@ export class DatasetExplorerTab extends React.Component<
     this.logButtonClick(TelemetryEventName.DatasetExplorerNewChartTypeSelected);
   };
 
-  private logButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

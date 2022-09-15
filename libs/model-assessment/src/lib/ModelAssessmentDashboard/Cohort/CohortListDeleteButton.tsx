@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { IconButton } from "@fluentui/react";
-import _ from "lodash";
 import React from "react";
 
 export interface ICohortListDeleteButtonProps {

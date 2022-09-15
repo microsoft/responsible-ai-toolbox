@@ -80,8 +80,9 @@ export class CounterfactualListColumnName extends React.Component<ICounterfactua
         </Stack>
       );
     }
-    if (this.props.index === undefined || !this.props.item?.row)
+    if (this.props.index === undefined || !this.props.item?.row) {
       return React.Fragment;
+    }
     return (
       <Stack>
         <Text>{this.props.item.row}</Text>

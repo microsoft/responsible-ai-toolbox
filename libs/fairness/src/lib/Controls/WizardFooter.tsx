@@ -34,11 +34,11 @@ export class WizardFooter extends React.PureComponent<IWizardFooterProps> {
     );
   }
 
-  private onNext = () => {
+  private onNext = (): void => {
     this.props.onSetTab(this.props.nextTabKey);
   };
 
-  private onPrevious = () => {
+  private onPrevious = (): void => {
     if (this.props.previousTabKey) {
       this.props.onSetTab(this.props.previousTabKey);
     }

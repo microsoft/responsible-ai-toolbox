@@ -52,7 +52,7 @@ export class TextExplanationView extends React.PureComponent<
   ITextExplanationViewProps,
   ITextExplanationViewState
 > {
-  constructor(props: ITextExplanationViewProps) {
+  public constructor(props: ITextExplanationViewProps) {
     /*
      * Initializes the text view with its state
      */
@@ -81,7 +81,7 @@ export class TextExplanationView extends React.PureComponent<
     }
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const classNames = textExplanationDashboardStyles();
     return (
       <Stack>
@@ -104,8 +104,8 @@ export class TextExplanationView extends React.PureComponent<
                   {localization.InterpretText.View.label +
                     localization.InterpretText.View.colon +
                     Utils.predictClass(
-                      this.props.dataSummary.classNames!,
-                      this.props.dataSummary.prediction!
+                      this.props.dataSummary.classNames,
+                      this.props.dataSummary.prediction
                     )}
                 </Text>
               </Stack.Item>

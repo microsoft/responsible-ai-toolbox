@@ -76,7 +76,7 @@ export class CounterfactualList extends React.Component<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.onSelect(0);
   }
 
@@ -122,7 +122,9 @@ export class CounterfactualList extends React.Component<
     return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
   };
 
-  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+  private renderRowFields = (
+    props: IDetailsRowFieldsProps
+  ): React.ReactElement => {
     const classNames = counterfactualListStyle();
     const rowClass = props?.itemIndex === 0 ? classNames.highlightRow : "";
     return (
@@ -186,7 +188,7 @@ export class CounterfactualList extends React.Component<
   private renderName = (
     item?: Record<string, string | number>,
     index?: number | undefined
-  ) => {
+  ): React.ReactElement => {
     return (
       <CounterfactualListColumnName
         {...this.props}
@@ -252,7 +254,11 @@ export class CounterfactualList extends React.Component<
     });
   };
 
-  private renderItemColumn = (item: any, index?: number, column?: IColumn) => {
+  private renderItemColumn = (
+    item: any,
+    index?: number,
+    column?: IColumn
+  ): React.ReactElement => {
     const classNames = counterfactualListStyle();
     const fieldContent = item[column?.fieldName as unknown as string] as string;
     const itemClass =

@@ -22,7 +22,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { getCurrentLabel } from "../util/getCurrentLabel";
@@ -144,7 +143,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     });
   }
 
-  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

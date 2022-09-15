@@ -38,7 +38,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
                     className={classNames.matrixCellPivot2Categories}
                   >
                     <MatrixCategory
-                      featureName={this.props.selectedFeature2!}
+                      featureName={this.props.selectedFeature2}
                       category={this.props.category1Values}
                       index={i}
                     />
@@ -62,7 +62,7 @@ export class MatrixFooter extends React.PureComponent<IMatrixFooterProps> {
                     className={classNames.matrixCellPivot2Categories}
                   >
                     <MatrixCategory
-                      featureName={this.props.selectedFeature2!}
+                      featureName={this.props.selectedFeature2}
                       category={this.props.category2Values}
                       index={i}
                     />

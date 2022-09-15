@@ -8,7 +8,6 @@ import {
   ISpinButtonStyleProps,
   ISpinButtonStyles
 } from "@fluentui/react";
-import _ from "lodash";
 import React from "react";
 
 export interface IAxisConfigSpinButtonProps {
@@ -51,15 +50,15 @@ export class AxisConfigDialogSpinButton extends React.PureComponent<IAxisConfigS
     );
   }
 
-  private onIncrement = (value: string) => {
+  private onIncrement = (value: string): void => {
     this.props.setNumericValue(1, value);
   };
 
-  private onDecrement = (value: string) => {
+  private onDecrement = (value: string): void => {
     this.props.setNumericValue(-1, value);
   };
 
-  private onValidate = (value: string) => {
+  private onValidate = (value: string): void => {
     this.props.setNumericValue(0, value);
   };
 }

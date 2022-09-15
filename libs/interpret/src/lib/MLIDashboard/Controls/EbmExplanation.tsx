@@ -15,7 +15,6 @@ import {
   IData,
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import memoize from "memoize-one";
 import React from "react";
 

@@ -117,7 +117,7 @@ export function describeWhatIfCreate(
       cy.get(Locators.WhatIfSaveAsNewDatapointButton).click();
       cy.get(Locators.WhatIfSaveAsDataPoints).should(
         "contain",
-        dataShape.whatIfCounterfactualsData!.whatIfNameLabel
+        dataShape.whatIfCounterfactualsData?.whatIfNameLabel
       );
 
       // Should be able to delete datapoint created

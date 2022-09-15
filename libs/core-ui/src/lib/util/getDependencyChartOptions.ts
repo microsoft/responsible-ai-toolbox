@@ -43,7 +43,7 @@ export function getDependencyChartOptions(
         },
         tooltip: {
           headerFormat: "",
-          pointFormat: `{point.customData.template}`
+          pointFormat: "{point.customData.template}"
         }
       }
     },

@@ -42,14 +42,12 @@ export class ImageList extends React.Component<
   IImageListProps,
   IImageListState
 > {
-  columnCount: number;
-  rowHeight: number;
-  paddingPercentage: number;
+  private columnCount: number;
+  private rowHeight: number;
   public constructor(props: IImageListProps) {
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
-    this.paddingPercentage = 0;
     this.state = {
       data: [],
       filter: this.props.searchValue.toLowerCase(),
@@ -57,10 +55,10 @@ export class ImageList extends React.Component<
     };
   }
 
-  static getDerivedStateFromProps(
+  public static getDerivedStateFromProps(
     props: IImageListProps,
     state: IImageListState
-  ) {
+  ): Partial<IImageListState> {
     if (props.data !== state.data && props.data.length > 0) {
       return {
         filter: "",
@@ -85,10 +83,10 @@ export class ImageList extends React.Component<
         )
       };
     }
-    return undefined;
+    return state;
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     const data = this.props.data;
     this.setState({ data, filteredItems: data });
   }
@@ -110,7 +108,9 @@ export class ImageList extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IVisionListItem | undefined) => {
+  private onRenderCell = (
+    item?: IVisionListItem | undefined
+  ): React.ReactNode => {
     const classNames = imageListStyles();
     if (!item) {
       return;
@@ -183,14 +183,15 @@ export class ImageList extends React.Component<
     );
   };
 
-  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
-    if (!item) {
-      return;
-    }
-    this.props.selectItem(item);
-  };
+  private callbackWrapper =
+    (item?: IVisionListItem | undefined) => (): void => {
+      if (!item) {
+        return;
+      }
+      this.props.selectItem(item);
+    };
 
-  private getPageHeight = () => {
+  private getPageHeight = (): number => {
     return this.rowHeight * RowsPerPage;
   };
 

@@ -75,82 +75,12 @@ export class App extends React.Component<IAppProps> {
     };
     let dashboardProp: IErrorAnalysisDashboardProps;
     if (this.props.classDimension === 1) {
-      const dataset = this.props.dataset as IExplanationDashboardData;
-      const featureNames = dataset.dataSummary.featureNames
-        ? dataset.dataSummary.featureNames
-        : [];
-      if (this.props.version === 1) {
-        dashboardProp = {
-          ...dataset,
-          errorAnalysisData: {
-            maxDepth: 3,
-            metric: Metrics.MeanSquaredError,
-            minChildSamples: 21,
-            numLeaves: 31
-          },
-          explanationMethod: "mimic",
-          features: featureNames,
-          locale: this.props.language,
-          localUrl: "https://www.bing.com/",
-          requestDebugML: generateJsonTreeBoston,
-          requestImportances: createJsonImportancesGenerator(
-            "dataSummary" in this.props.dataset &&
-              this.props.dataset.dataSummary.featureNames
-              ? this.props.dataset.dataSummary.featureNames
-              : [],
-            DatasetName.Boston
-          ),
-          requestMatrix: generateJsonMatrix(DatasetName.Boston),
-          requestPredictions: !this.props.classDimension
-            ? undefined
-            : createPredictionsRequestGenerator(this.props.classDimension),
-          stringParams: { contextualHelp: this.messages },
-          theme: this.props.theme
-        };
-      } else if (this.props.version === 3) {
-        dashboardProp = {
-          ...dataset,
-          errorAnalysisData: {
-            maxDepth: 3,
-            metric: Metrics.MeanSquaredError,
-            minChildSamples: 21,
-            numLeaves: 31
-          },
-          explanationMethod: "mimic",
-          features: featureNames,
-          locale: this.props.language,
-          localUrl: "https://www.bing.com/",
-          requestDebugML: requestDebugMLMethod,
-          requestImportances: requestImportancesMethod,
-          requestMatrix: requestMatrixMethod,
-          requestPredictions: requestPredictionsMethod,
-          stringParams: { contextualHelp: this.messages },
-          theme: this.props.theme
-        };
-      } else {
-        const staticTree = getJsonTreeBoston(featureNames);
-        const staticMatrix = getJsonMatrix();
-        dashboardProp = {
-          ...dataset,
-          errorAnalysisData: {
-            matrix: staticMatrix.data,
-            matrix_features: staticMatrix.features,
-            maxDepth: 3,
-            metric: Metrics.MeanSquaredError,
-            minChildSamples: 21,
-            numLeaves: 31,
-            tree: staticTree.data,
-            tree_features: staticTree.features
-          },
-          explanationMethod: "mimic",
-          features: featureNames,
-          locale: this.props.language,
-          localUrl: "https://www.bing.com/",
-          stringParams: { contextualHelp: this.messages },
-          theme: this.props.theme
-        };
-      }
-      return <ErrorAnalysisDashboard {...dashboardProp} />;
+      return this.get1D(
+        requestDebugMLMethod,
+        requestImportancesMethod,
+        requestMatrixMethod,
+        requestPredictionsMethod
+      );
     }
     if ("categoricalMap" in this.props.dataset) {
       if (this.props.version === 1) {
@@ -356,6 +286,100 @@ export class App extends React.Component<IAppProps> {
     }
     return <ErrorAnalysisDashboard {...dashboardProp} />;
   }
+
+  private get1D = (
+    requestDebugML:
+      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
+      | undefined,
+    requestImportances:
+      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
+      | undefined,
+    requestMatrix:
+      | ((
+          request: any[],
+          abortSignal: AbortSignal
+        ) => Promise<IErrorAnalysisMatrix>)
+      | undefined,
+    requestPredictions:
+      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
+      | undefined
+  ): React.ReactNode => {
+    let dashboardProp: IErrorAnalysisDashboardProps;
+    const dataset = this.props.dataset as IExplanationDashboardData;
+    const featureNames = dataset.dataSummary.featureNames || [];
+    if (this.props.version === 1) {
+      dashboardProp = {
+        ...dataset,
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.MeanSquaredError,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
+        explanationMethod: "mimic",
+        features: featureNames,
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        requestDebugML: generateJsonTreeBoston,
+        requestImportances: createJsonImportancesGenerator(
+          "dataSummary" in this.props.dataset &&
+            this.props.dataset.dataSummary.featureNames
+            ? this.props.dataset.dataSummary.featureNames
+            : [],
+          DatasetName.Boston
+        ),
+        requestMatrix: generateJsonMatrix(DatasetName.Boston),
+        requestPredictions: !this.props.classDimension
+          ? undefined
+          : createPredictionsRequestGenerator(this.props.classDimension),
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
+    } else if (this.props.version === 3) {
+      dashboardProp = {
+        ...dataset,
+        errorAnalysisData: {
+          maxDepth: 3,
+          metric: Metrics.MeanSquaredError,
+          minChildSamples: 21,
+          numLeaves: 31
+        },
+        explanationMethod: "mimic",
+        features: featureNames,
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        requestDebugML,
+        requestImportances,
+        requestMatrix,
+        requestPredictions,
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
+    } else {
+      const staticTree = getJsonTreeBoston(featureNames);
+      const staticMatrix = getJsonMatrix();
+      dashboardProp = {
+        ...dataset,
+        errorAnalysisData: {
+          matrix: staticMatrix.data,
+          matrix_features: staticMatrix.features,
+          maxDepth: 3,
+          metric: Metrics.MeanSquaredError,
+          minChildSamples: 21,
+          numLeaves: 31,
+          tree: staticTree.data,
+          tree_features: staticTree.features
+        },
+        explanationMethod: "mimic",
+        features: featureNames,
+        locale: this.props.language,
+        localUrl: "https://www.bing.com/",
+        stringParams: { contextualHelp: this.messages },
+        theme: this.props.theme
+      };
+    }
+    return <ErrorAnalysisDashboard {...dashboardProp} />;
+  };
 }
 
 export async function callFlaskService<TRequest, TResponse>(

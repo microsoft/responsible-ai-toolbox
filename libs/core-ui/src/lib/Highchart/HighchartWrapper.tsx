@@ -23,7 +23,7 @@ export interface IHighchartWrapperProps {
 
 // tslint:disable-next-line: function-name
 export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
-  public render() {
+  public render(): React.ReactNode {
     const { chartOptions = {}, modules, plotClassName, theme } = this.props;
     const { custom = {} } = chartOptions;
 
@@ -39,7 +39,7 @@ export class HighchartWrapper extends React.Component<IHighchartWrapperProps> {
       chartOptions,
       plotClassName && { chart: { className: plotClassName } },
       themeOptions
-    ) as Highcharts.Options;
+    );
 
     if (mergedOptions?.chart) {
       // There is no way to override zoomType with undefined value, merge will just ignore this.

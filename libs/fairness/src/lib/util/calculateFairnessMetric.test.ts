@@ -4,8 +4,11 @@
 import { calculateFairnessMetric } from "./calculateFairnessMetric";
 import { FairnessModes } from "./FairnessMetrics";
 
-const closeTo = (expected: number, precision = 2) => ({
-  asymmetricMatch: (actual: number) =>
+const closeTo = (
+  expected: number,
+  precision = 2
+): { asymmetricMatch: (actual: number) => boolean } => ({
+  asymmetricMatch: (actual: number): boolean =>
     Math.abs(expected - actual) < Math.pow(10, -precision) / 2
 });
 describe("calculateFairnessMetric", () => {

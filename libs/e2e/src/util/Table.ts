@@ -53,7 +53,7 @@ export function assertRowSelected(
 export function getTableColumnsValues(
   columnNames: string[],
   srPrefix?: string
-) {
+): string[][] {
   const selectorPrefix = srPrefix ? `${srPrefix}` : "";
   const columnValuesToSkipLocalization: string[][] = [];
   columnNames.forEach((columnName) => {
@@ -64,7 +64,10 @@ export function getTableColumnsValues(
   return columnValuesToSkipLocalization;
 }
 
-export function getTableColumnValues(columnName: string, srPrefix: string) {
+export function getTableColumnValues(
+  columnName: string,
+  srPrefix: string
+): string[] {
   const columnValues: string[] = [];
   Cypress.$(`${srPrefix}  [data-automationid="ColumnsHeaderColumn"]`).each(
     (columnIndex, columnValue) => {

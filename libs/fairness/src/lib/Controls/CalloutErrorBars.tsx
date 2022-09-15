@@ -3,7 +3,6 @@
 
 import { ActionButton, Stack, Text, Callout, Link } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { SharedStyles } from "../Shared.styles";

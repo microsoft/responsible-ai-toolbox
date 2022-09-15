@@ -249,7 +249,7 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
 
   private onRenderCell = (
     item?: Array<string | number | boolean> | undefined
-  ) => {
+  ): React.ReactNode => {
     if (!item) {
       return;
     }
