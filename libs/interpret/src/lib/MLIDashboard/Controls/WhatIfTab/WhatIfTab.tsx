@@ -367,7 +367,6 @@ export class WhatIfTab extends React.PureComponent<
               >
                 {this.state.yDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,
@@ -385,7 +384,6 @@ export class WhatIfTab extends React.PureComponent<
                 )}
                 {this.state.xDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,

@@ -126,7 +126,6 @@ export class CausalIndividualChart extends React.PureComponent<
                           this.state.chartProps.yAxis.property
                         ].label
                       }
-                      jointDataset={this.context.jointDataset}
                       orderedGroupTitles={[
                         ColumnCategories.Index,
                         ColumnCategories.Dataset,
@@ -139,7 +138,6 @@ export class CausalIndividualChart extends React.PureComponent<
                         this.state.chartProps.chartType === ChartTypes.Scatter
                       }
                       onAccept={this.onYSet}
-                      telemetryHook={this.props.telemetryHook}
                     />
                   </div>
                 </Stack.Item>
@@ -168,7 +166,6 @@ export class CausalIndividualChart extends React.PureComponent<
                       this.state.chartProps.xAxis.property
                     ].label
                   }
-                  jointDataset={this.context.jointDataset}
                   orderedGroupTitles={[
                     ColumnCategories.Index,
                     ColumnCategories.Dataset,
@@ -187,7 +184,6 @@ export class CausalIndividualChart extends React.PureComponent<
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
                   onAccept={this.onXSet}
-                  telemetryHook={this.props.telemetryHook}
                 />
               </div>
             </Stack>
