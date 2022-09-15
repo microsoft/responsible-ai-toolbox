@@ -144,7 +144,7 @@ class RAIInsights(RAIBaseInsights):
             self.predict_output = model.predict(
                 test.drop(columns=[target_column]))
             if hasattr(model, SKLearn.PREDICT_PROBA):
-                self.predict_proba_output = model.predict(
+                self.predict_proba_output = model.predict_proba(
                     test.drop(columns=[target_column]))
             else:
                 self.predict_proba_output = None
