@@ -103,7 +103,6 @@ export class CounterfactualChart extends React.PureComponent<
         )}
         {this.state.yDialogOpen && (
           <AxisConfigDialog
-            jointDataset={this.context.jointDataset}
             orderedGroupTitles={[
               ColumnCategories.Index,
               ColumnCategories.Dataset,
@@ -115,12 +114,10 @@ export class CounterfactualChart extends React.PureComponent<
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             onAccept={this.onYSet}
             onCancel={this.setYClose}
-            telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.state.xDialogOpen && (
           <AxisConfigDialog
-            jointDataset={this.context.jointDataset}
             orderedGroupTitles={[
               ColumnCategories.Index,
               ColumnCategories.Dataset,
@@ -138,7 +135,6 @@ export class CounterfactualChart extends React.PureComponent<
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             onAccept={this.onXSet}
             onCancel={this.setXClose}
-            telemetryHook={this.props.telemetryHook}
           />
         )}
         <Stack horizontal={false}>

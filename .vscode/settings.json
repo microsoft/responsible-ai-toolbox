@@ -45,6 +45,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "abbridged",
     "automl",
     "bdist",
     "bgcolor",
