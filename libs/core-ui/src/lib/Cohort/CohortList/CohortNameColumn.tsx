@@ -20,7 +20,7 @@ export class CohortNameColumn extends React.Component<ICohortNameColumnProps> {
     );
   }
 
-  private onClick = () => {
+  private onClick = (): void => {
     this.props.onClick(this.props.name);
   };
 }

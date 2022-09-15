@@ -32,7 +32,7 @@ export const tableViewStyles: () => IProcessedStyleSet<ITableViewStyles> =
         position: "relative"
       },
       header: {
-        margin: `8px 0`,
+        margin: "8px 0",
         padding: 8,
         // Overlay the sizer bars
         position: "relative",

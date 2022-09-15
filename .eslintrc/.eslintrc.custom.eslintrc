@@ -134,7 +134,7 @@
         ]
       }
     ],
-    "complexity": "warn",
+    "complexity": "error",
     "curly": ["error", "all"],
     "max-lines": "warn",
     "no-else-return": "error",

@@ -45,8 +45,8 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
         this.props.boxPlotState.boxPlotData.length === 0 ||
         !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
         !_.isEqual(
-          prevProps.probabilityOption!.id,
-          this.props.probabilityOption!.id
+          prevProps.probabilityOption?.id,
+          this.props.probabilityOption?.id
         )
       ) {
         const boxPlotData = this.props.selectedCohorts.map(
@@ -54,8 +54,8 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
             return calculateBoxPlotDataFromErrorCohort(
               cohort,
               index,
-              this.props.probabilityOption!.key.toString(),
-              this.props.probabilityOption!.id,
+              this.props.probabilityOption?.key || "",
+              this.props.probabilityOption?.id,
               this.context.requestBoxPlotDistribution
             );
           }
@@ -80,8 +80,10 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
     if (!isNewSdkEndpointsFlightOn) {
       boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
         return calculateBoxPlotData(
-          cohort.cohort.filteredData.map(
-            (dict) => dict[this.props.probabilityOption!.key.toString()]
+          cohort.cohort.filteredData.map((dict) =>
+            this.props.probabilityOption
+              ? dict[this.props.probabilityOption.key.toString()]
+              : 0
           ),
           index
         );
@@ -92,7 +94,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
           return outlierProbs?.map((prob) => [cohortIndex, prob]);
         })
         .filter((list) => list !== undefined)
-        .reduce((list1, list2) => list1!.concat(list2!), []);
+        .reduce((list1, list2) => list1?.concat(list2 || []), []);
     }
 
     return (
@@ -131,7 +133,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .outlierLabel,
               tooltip: {
-                pointFormatter() {
+                pointFormatter(): string {
                   return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                 }
               },
@@ -142,7 +144,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
             categories: selectedCohortNames
           },
           yAxis: {
-            title: { text: this.props.probabilityOption!.text }
+            title: { text: this.props.probabilityOption?.text }
           }
         }}
       />
@@ -159,7 +161,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
         return outlierProbs?.map((prob) => [cohortIndex, prob]);
       })
       .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
+      .reduce((list1, list2) => list1?.concat(list2 || []), []);
     if (
       !_.isEqual(data, this.props.boxPlotState.boxPlotData) ||
       !_.isEqual(this.props.boxPlotState.outlierData, outlierData)

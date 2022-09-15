@@ -3,7 +3,6 @@
 
 import { IGenericChartProps, JointDataset } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 
 interface IDatasetExplorerSeries {
   name: string;

@@ -65,7 +65,7 @@ export function getFeatureImportanceBoxOptions(
       boxplot: {
         point: {
           events: {
-            click() {
+            click(): void {
               if (onFeatureSelection === undefined) {
                 return;
               }

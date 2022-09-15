@@ -21,7 +21,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { CohortDeleteDialog } from "./CohortDeleteDialog";
@@ -122,7 +121,7 @@ export class CohortList extends React.Component<
     item: ICohortListItem,
     index: number | undefined,
     column: IColumn | undefined
-  ) => {
+  ): React.ReactNode => {
     const style = cohortListStyles();
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
@@ -271,11 +270,11 @@ export class CohortList extends React.Component<
     });
   };
 
-  private onDismissDelete = () => {
+  private onDismissDelete = (): void => {
     this.setState({ currentDeleteIndex: undefined });
   };
 
-  private onDeleteCohort = () => {
+  private onDeleteCohort = (): void => {
     if (this.state.currentDeleteIndex !== undefined) {
       const index = this.state.currentDeleteIndex;
       const all = this.getAllCohort();
@@ -313,12 +312,12 @@ export class CohortList extends React.Component<
     return allItems;
   }
 
-  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean) => {
+  private saveEditedCohort = (cohort: Cohort, switchNew?: boolean): void => {
     this.context.editCohort(cohort, switchNew);
     this.toggleEditPanel();
   };
 
-  private toggleEditPanel = () => {
+  private toggleEditPanel = (): void => {
     this.setState({ currentEditCohort: undefined });
   };
 }

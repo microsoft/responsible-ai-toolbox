@@ -32,7 +32,7 @@ import {
   getBinCountForProperty
 } from "./AxisConfigDialogUtils";
 
-export interface IAxisConfigProps {
+export interface IAxisConfigDialogProps {
   jointDataset: JointDataset;
   orderedGroupTitles: ColumnCategories[];
   selectedColumn: ISelectorConfig;
@@ -44,15 +44,15 @@ export interface IAxisConfigProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
-export interface IAxisConfigState {
+export interface IAxisConfigDialogState {
   selectedColumn: ISelectorConfig;
   binCount?: number;
   selectedFilterGroup?: string;
 }
 
 export class AxisConfigDialog extends React.PureComponent<
-  IAxisConfigProps,
-  IAxisConfigState
+  IAxisConfigDialogProps,
+  IAxisConfigDialogState
 > {
   private static readonly MIN_HIST_COLS = 2;
   private static readonly MAX_HIST_COLS = 40;
@@ -80,7 +80,7 @@ export class AxisConfigDialog extends React.PureComponent<
         text: this.props.jointDataset.metaDict[key].abbridgedLabel
       };
     });
-  public constructor(props: IAxisConfigProps) {
+  public constructor(props: IAxisConfigDialogProps) {
     super(props);
     this.state = {
       binCount: getBinCountForProperty(
@@ -203,15 +203,17 @@ export class AxisConfigDialog extends React.PureComponent<
     );
   };
 
-  private onSelectedColumnUpdated = (selectedColumn: ISelectorConfig) => {
+  private onSelectedColumnUpdated = (selectedColumn: ISelectorConfig): void => {
     this.setState({ selectedColumn });
   };
 
-  private onBinCountUpdated = (binCount?: number) => {
+  private onBinCountUpdated = (binCount?: number): void => {
     this.setState({ binCount });
   };
 
-  private onSelectedFilterGroupUpdated = (selectedFilterGroup?: string) => {
+  private onSelectedFilterGroupUpdated = (
+    selectedFilterGroup?: string
+  ): void => {
     this.setState({ selectedFilterGroup });
   };
 

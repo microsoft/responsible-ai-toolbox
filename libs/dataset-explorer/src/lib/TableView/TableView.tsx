@@ -5,7 +5,6 @@ import {
   ConstrainMode,
   DetailsList,
   DetailsListLayoutMode,
-  Fabric,
   IGroup,
   MarqueeSelection,
   mergeStyles,
@@ -81,10 +80,8 @@ export class TableView extends React.Component<
 
   public constructor(props: ITableViewProps) {
     super(props);
-
     const tableState = this.updateItems();
     const selectedIndices: number[] = [];
-
     this.state = {
       indexToUnselect: undefined,
       selectedIndices,
@@ -176,38 +173,36 @@ export class TableView extends React.Component<
               height: `${height.toString()}px`
             })}
           >
-            <Fabric>
-              <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-                <MarqueeSelection selection={this.selection}>
-                  <DetailsList
-                    items={this.state.rows}
-                    columns={this.state.columns}
-                    groups={this.state.groups}
-                    setKey="set"
-                    layoutMode={DetailsListLayoutMode.fixedColumns}
-                    constrainMode={ConstrainMode.unconstrained}
-                    onRenderDetailsHeader={generateOnRenderDetailsHeader(
-                      selectAllVisibility
-                    )}
-                    selectionPreservedOnEmptyClick
-                    ariaLabelForSelectionColumn={
-                      localization.ModelAssessment.FeatureImportances
-                        .SelectionColumnAriaLabel
-                    }
-                    checkButtonAriaLabel={
-                      localization.ModelAssessment.FeatureImportances
-                        .RowCheckboxAriaLabel
-                    }
-                    groupProps={{
-                      onRenderHeader: onRenderGroupHeader,
-                      showEmptyGroups: true
-                    }}
-                    selectionMode={selectionMode}
-                    selection={this.selection}
-                  />
-                </MarqueeSelection>
-              </ScrollablePane>
-            </Fabric>
+            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+              <MarqueeSelection selection={this.selection}>
+                <DetailsList
+                  items={this.state.rows}
+                  columns={this.state.columns}
+                  groups={this.state.groups}
+                  setKey="set"
+                  layoutMode={DetailsListLayoutMode.fixedColumns}
+                  constrainMode={ConstrainMode.unconstrained}
+                  onRenderDetailsHeader={generateOnRenderDetailsHeader(
+                    selectAllVisibility
+                  )}
+                  selectionPreservedOnEmptyClick
+                  ariaLabelForSelectionColumn={
+                    localization.ModelAssessment.FeatureImportances
+                      .SelectionColumnAriaLabel
+                  }
+                  checkButtonAriaLabel={
+                    localization.ModelAssessment.FeatureImportances
+                      .RowCheckboxAriaLabel
+                  }
+                  groupProps={{
+                    onRenderHeader: onRenderGroupHeader,
+                    showEmptyGroups: true
+                  }}
+                  selectionMode={selectionMode}
+                  selection={this.selection}
+                />
+              </MarqueeSelection>
+            </ScrollablePane>
           </div>
         </Stack.Item>
       </Stack>

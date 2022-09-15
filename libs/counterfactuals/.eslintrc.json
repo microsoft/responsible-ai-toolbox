@@ -16,9 +16,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "max-lines": "error"
-      }
+      "rules": {}
     },
     {
       "files": ["*.js", "*.jsx"],
