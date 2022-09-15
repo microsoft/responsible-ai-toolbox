@@ -6,7 +6,6 @@ import {
   DetailsList,
   DetailsHeader,
   IDetailsHeaderProps,
-  IRenderFunction,
   IGroup,
   IColumn,
   Image,
@@ -50,7 +49,7 @@ export class TableList extends React.Component<
   public constructor(props: ITableListProps) {
     super(props);
     this._selection = new Selection({
-      onSelectionChanged: () => this.updateSelection()
+      onSelectionChanged: (): void => this.updateSelection()
     });
     this.state = {
       columns: [],
@@ -62,12 +61,12 @@ export class TableList extends React.Component<
     };
   }
 
-  static getDerivedStateFromProps(
+  public static getDerivedStateFromProps(
     props: ITableListProps,
     state: ITableListState
-  ) {
+  ): Partial<ITableListState> {
     const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
+    if (searchVal !== state.filter && searchVal.length === 0) {
       let items: IVisionListItem[] = [];
 
       items = items.concat(props.successInstances);
@@ -117,7 +116,7 @@ export class TableList extends React.Component<
         filteredItems
       };
     }
-    return undefined;
+    return {};
   }
 
   public componentDidMount(): void {
@@ -224,9 +223,8 @@ export class TableList extends React.Component<
   }
 
   private onRenderDetailsHeader = (
-    props: IDetailsHeaderProps | undefined,
-    _defaultRender?: IRenderFunction<IDetailsHeaderProps> | undefined
-  ) => {
+    props: IDetailsHeaderProps | undefined
+  ): React.ReactElement => {
     if (!props) {
       return <div />;
     }
@@ -242,7 +240,7 @@ export class TableList extends React.Component<
     item: IVisionListItem | undefined,
     _index: number | undefined,
     column?: IColumn | undefined
-  ) => {
+  ): React.ReactNode => {
     const classNames = visionExplanationDashboardStyles();
 
     const value =

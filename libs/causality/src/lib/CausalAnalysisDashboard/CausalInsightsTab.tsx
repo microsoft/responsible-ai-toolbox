@@ -98,7 +98,7 @@ export class CausalInsightsTab extends React.PureComponent<
     }
   };
 
-  private getTelemetryEventName = (itemKey: string) => {
+  private getTelemetryEventName = (itemKey: string): TelemetryEventName => {
     switch (itemKey) {
       case CausalAnalysisOptions.Aggregate:
         return TelemetryEventName.AggregateCausalTabClick;

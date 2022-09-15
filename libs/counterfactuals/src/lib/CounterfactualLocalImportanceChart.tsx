@@ -7,7 +7,6 @@ import {
   ModelAssessmentContext,
   ICounterfactualData
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { getCurrentLabel } from "../util/getCurrentLabel";

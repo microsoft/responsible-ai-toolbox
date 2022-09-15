@@ -53,7 +53,7 @@ export function describeModelOverview(
         );
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
-          datasetShape.featureNames![0],
+          datasetShape.featureNames?.[0] || "",
           true
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
@@ -65,7 +65,7 @@ export function describeModelOverview(
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
-          datasetShape.featureNames![2]
+          datasetShape.featureNames?.[2] || ""
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
@@ -84,7 +84,7 @@ export function describeModelOverview(
   });
 }
 
-function ensureAllModelOverviewBasicElementsArePresent() {
+function ensureAllModelOverviewBasicElementsArePresent(): void {
   cy.get(Locators.ModelOverviewHeader).should("exist");
   cy.get(Locators.ModelOverviewDescription).should("exist");
   cy.get(Locators.ModelOverviewCohortViewSelector).should("exist");
@@ -100,15 +100,16 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
   isNotebookTest: boolean
-) {
-  const data = datasetShape.modelOverviewData!;
-  const initialCohorts = data.initialCohorts!;
+): void {
+  const data = datasetShape.modelOverviewData;
+  const initialCohorts = data?.initialCohorts;
   cy.get(Locators.ModelOverviewFeatureSelection).should("not.exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "not.exist"
   );
   if (isNotebookTest) {
-    const numberOfCohorts = initialCohorts.length + (includeNewCohort ? 1 : 0);
+    const numberOfCohorts =
+      (initialCohorts?.length || 0) + (includeNewCohort ? 1 : 0);
     if (numberOfCohorts <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
@@ -121,7 +122,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("not.exist");
   cy.get(Locators.ModelOverviewTableYAxisGrid).should(
     "include.text",
-    initialCohorts[0].name
+    initialCohorts?.[0].name
   );
 
   const metricsOrder: string[] = [];
@@ -143,21 +144,21 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   }
 
   const heatmapCellContents: string[] = [];
-  const cohorts = initialCohorts.concat(
-    includeNewCohort ? [data.newCohort!] : []
+  const cohorts = initialCohorts?.concat(
+    includeNewCohort && data?.newCohort ? [data.newCohort] : []
   );
-  cohorts.forEach((cohortData) => {
+  cohorts?.forEach((cohortData) => {
     heatmapCellContents.push(cohortData.sampleSize);
   });
   metricsOrder.forEach((metricName) => {
-    cohorts.forEach((cohortData) => {
+    cohorts?.forEach((cohortData) => {
       heatmapCellContents.push(cohortData.metrics[metricName]);
     });
   });
 
   if (isNotebookTest) {
     cy.get(Locators.ModelOverviewHeatmapCells)
-      .should("have.length", cohorts.length * (metricsOrder.length + 1))
+      .should("have.length", (cohorts?.length || 0) * (metricsOrder.length + 1))
       .each(($cell) => {
         // somehow the cell string is one invisible character longer, trim
         expect($cell.text().slice(0, $cell.text().length - 1)).to.be.oneOf(
@@ -184,21 +185,27 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     if (isNotebookTest) {
       cy.get(Locators.ModelOverviewMetricChartBars).should(
         "have.length",
-        cohorts.length
+        cohorts?.length
       );
       // check aria-label of bar chart - aria-label uses comma as delimiter
       // between digits for thousands instead of whitespace
-      const displayedMetric = datasetShape.isRegression
-        ? initialCohorts[0].metrics.meanAbsoluteError
-        : initialCohorts[0].metrics.accuracy;
+      const displayedMetric =
+        (datasetShape.isRegression
+          ? initialCohorts?.[0].metrics.meanAbsoluteError
+          : initialCohorts?.[0].metrics.accuracy) || "";
       const expectedAriaLabel =
         !datasetShape.isRegression && !datasetShape.isMulticlass
-          ? `1. ${initialCohorts[0].name}, ${displayedMetric.replace(
+          ? `1. ${initialCohorts?.[0].name}, ${displayedMetric.replace(
               " ",
               ","
             )}.`
-          : `${initialCohorts[0].name}, ${displayedMetric.replace(" ", ",")}. ${
-              datasetShape.isRegression ? "Mean absolute error" : "Accuracy"
+          : `${initialCohorts?.[0].name}, ${displayedMetric.replace(
+              " ",
+              ","
+            )}. ${
+              datasetShape.isRegression
+                ? "Mean absolute error"
+                : "Accuracy score"
             }.`;
       cy.get(Locators.ModelOverviewMetricChartBars)
         .first()
@@ -213,7 +220,7 @@ function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
 
 function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
   isNotebookTest: boolean
-) {
+): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
@@ -245,7 +252,7 @@ function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
 function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
   selectedFeatures: number
-) {
+): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
     "exist"
@@ -265,11 +272,10 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
       "not.exist"
     );
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    const featureCohortView =
-      datasetShape.modelOverviewData!.featureCohortView!;
-    let expectedNumberOfCohorts = featureCohortView.singleFeatureCohorts;
+    const featureCohortView = datasetShape.modelOverviewData?.featureCohortView;
+    let expectedNumberOfCohorts = featureCohortView?.singleFeatureCohorts;
     if (selectedFeatures > 1) {
-      expectedNumberOfCohorts = featureCohortView.multiFeatureCohorts;
+      expectedNumberOfCohorts = featureCohortView?.multiFeatureCohorts;
     }
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
@@ -284,7 +290,7 @@ function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresen
 function ensureNewCohortsShowUpInCharts(
   datasetShape: IModelAssessmentData,
   isNotebookTest: boolean
-) {
+): void {
   cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
   ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     datasetShape,

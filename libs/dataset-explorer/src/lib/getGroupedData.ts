@@ -7,7 +7,6 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 import { IDatasetExplorerSeries } from "./getDatasetScatter";

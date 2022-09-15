@@ -59,10 +59,13 @@ export class BoxChart extends Chart<IBox> {
       : { ...boxCoordinate };
   };
 
-  private readonly getBoxCoordinate = (
+  private readonly getD = (
     idx: number,
     boxElement: HTMLElement
-  ): Pick<IBox, "left" | "right" | "q1" | "q2" | "q3" | "top" | "bottom"> => {
+  ): {
+    d: string;
+    exec: RegExpExecArray;
+  } => {
     const d = boxElement.getAttribute("d");
     if (!d) {
       throw new Error(
@@ -75,6 +78,14 @@ export class BoxChart extends Chart<IBox> {
         `${idx}th path element in svg have invalid "d" attribute`
       );
     }
+    return { d, exec };
+  };
+
+  private readonly getBoxCoordinate = (
+    idx: number,
+    boxElement: HTMLElement
+  ): Pick<IBox, "left" | "right" | "q1" | "q2" | "q3" | "top" | "bottom"> => {
+    const { d, exec } = this.getD(idx, boxElement);
     if (boxRegHorizontal.exec(d)) {
       return this.getHorizontalBoxCoordinates(exec, idx);
     }

@@ -97,7 +97,7 @@ export class IntroTab extends React.PureComponent<IIntroTabProps> {
     );
   }
 
-  private onNext = () => {
+  private onNext = (): void => {
     this.props.onNext(this.props.featureBinTabKey);
   };
 }

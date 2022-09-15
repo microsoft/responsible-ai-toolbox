@@ -43,7 +43,7 @@ interface IOverallMetricChartState {
   chartProps: IGenericChartProps | undefined;
 }
 
-class IOverallMetricChartProps {
+interface IOverallMetricChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 

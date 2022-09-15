@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as Highcharts from "highcharts";
+
 import { IColorNames } from "../util/FluentUIStyles";
 
 export interface IHighchartsCustomConfig {

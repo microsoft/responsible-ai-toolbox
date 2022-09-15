@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import * as Highcharts from "highcharts";
 
 import { IColorNames } from "../util/FluentUIStyles";
 

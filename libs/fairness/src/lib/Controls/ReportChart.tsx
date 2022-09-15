@@ -161,7 +161,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
   public onChange = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption | undefined
-  ) => {
+  ): void => {
     if (!option) {
       return;
     }

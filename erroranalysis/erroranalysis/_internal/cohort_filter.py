@@ -285,8 +285,12 @@ class FilterDataWithCohortFilters:
         if self.pred_y is not None:
             df[PRED_Y] = self.pred_y
         else:
-            df[PRED_Y] = self.model.predict(
-                df.drop(columns=[TRUE_Y, ROW_INDEX]))
+            if not is_spark(self.dataset):
+                if not isinstance(self.dataset, pd.DataFrame):
+                    df[PRED_Y] = self.model.predict(self.dataset)
+                else:
+                    df[PRED_Y] = self.model.predict(
+                        df.drop(columns=[TRUE_Y, ROW_INDEX]))
 
         if has_classification_outcome:
             pred_y = df[PRED_Y]

@@ -3,7 +3,6 @@
 
 import { ChoiceGroup, IChoiceGroupOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";

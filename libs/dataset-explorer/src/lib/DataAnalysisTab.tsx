@@ -89,7 +89,7 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
     }
   };
 
-  private getTelemetryEventName = (itemKey?: string) => {
+  private getTelemetryEventName = (itemKey?: string): TelemetryEventName => {
     switch (itemKey) {
       case DataAnalysisTabOptions.TableView:
         return TelemetryEventName.TableViewTabSelected;
