@@ -208,7 +208,14 @@
     "no-octal-escape": "error",
     "no-redeclare": "error",
     "no-regex-spaces": "error",
-    "no-restricted-syntax": ["error", "WithStatement"],
+    "no-restricted-syntax": [
+      "error",
+      "WithStatement",
+      {
+        "message": "Please don't use bind. Prefer use arrow function.",
+        "selector": "MemberExpression > Identifier[name='bind']"
+      }
+    ],
     "no-script-url": "error",
     "no-self-assign": "error",
     "no-self-compare": "error",

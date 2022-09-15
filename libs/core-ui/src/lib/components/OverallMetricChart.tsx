@@ -121,7 +121,6 @@ export class OverallMetricChart extends React.PureComponent<
         <div className={classNames.chartWithAxes} id={this.chartAndConfigsId}>
           {this.state.yDialogOpen && (
             <AxisConfigDialog
-              jointDataset={this.context.jointDataset}
               orderedGroupTitles={[
                 ColumnCategories.Cohort,
                 ColumnCategories.Dataset
@@ -138,12 +137,10 @@ export class OverallMetricChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
-              telemetryHook={this.props.telemetryHook}
             />
           )}
           {this.state.xDialogOpen && (
             <AxisConfigDialog
-              jointDataset={this.context.jointDataset}
               orderedGroupTitles={[ColumnCategories.Outcome]}
               selectedColumn={this.state.chartProps.xAxis}
               canBin={false}
@@ -151,7 +148,6 @@ export class OverallMetricChart extends React.PureComponent<
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
-              telemetryHook={this.props.telemetryHook}
             />
           )}
           <div className={classNames.chartWithVertical}>
