@@ -155,7 +155,7 @@ export class FeatureList extends React.Component<
   public render(): React.ReactNode {
     return (
       <Panel
-        headerText="Feature List"
+        headerText={localization.ErrorAnalysis.FeatureList.featureList}
         isOpen={this.props.isOpen}
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
@@ -180,7 +180,6 @@ export class FeatureList extends React.Component<
                 placeholder="Search"
                 styles={searchBoxStyles}
                 onSearch={this.onSearch}
-                onClear={this.onSearch}
                 onChange={(_, newValue?: string): void => {
                   if (newValue === undefined) {
                     return;
