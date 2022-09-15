@@ -134,7 +134,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     pred_y = filtered_df[PRED_Y]
     dropped_cols = [TRUE_Y, ROW_INDEX, PRED_Y]
     input_data = filtered_df.drop(columns=dropped_cols)
-    
+
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     metric = analyzer.metric
     if is_pandas:

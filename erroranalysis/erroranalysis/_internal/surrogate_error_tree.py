@@ -176,7 +176,6 @@ def compute_error_tree(analyzer,
                                      composite_filters)
     if filtered_df.shape[0] == 0:
         return create_empty_node(analyzer.metric)
-    is_model_analyzer = hasattr(analyzer, MODEL)
     indexes = []
     for feature in features:
         indexes.append(analyzer.feature_names.index(feature))
@@ -184,7 +183,7 @@ def compute_error_tree(analyzer,
     dataset_sub_names = list(dataset_sub_names)
     if not is_spark(filtered_df):
         booster, filtered_indexed_df, cat_info = get_surrogate_booster_local(
-            filtered_df, analyzer, is_model_analyzer, indexes,
+            filtered_df, analyzer, indexes,
             dataset_sub_names, max_depth, num_leaves, min_child_samples)
         cat_ind_reindexed, categories_reindexed = cat_info
     else:
@@ -208,7 +207,7 @@ def compute_error_tree(analyzer,
     return tree
 
 
-def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
+def get_surrogate_booster_local(filtered_df, analyzer,
                                 indexes, dataset_sub_names, max_depth,
                                 num_leaves, min_child_samples):
     """Get surrogate booster for local pandas DataFrame.
@@ -220,8 +219,6 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     :param analyzer: The error analyzer containing the categorical
         features and categories for the full dataset.
     :type analyzer: BaseAnalyzer
-    :param is_model_analyzer: Whether the analyzer is a model analyzer.
-    :type is_model_analyzer: bool
     :param indexes: The indexes of the features to train the surrogate model
         on.
     :type indexes: list[int]
@@ -243,18 +240,17 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
     """
     row_index = filtered_df[ROW_INDEX]
     true_y = filtered_df[TRUE_Y]
-    dropped_cols = [TRUE_Y, ROW_INDEX]
-    #if not is_model_analyzer:
     pred_y = filtered_df[PRED_Y]
-    dropped_cols.append(PRED_Y)
+
+    dropped_cols = [TRUE_Y, ROW_INDEX, PRED_Y]
     input_data = filtered_df.drop(columns=dropped_cols)
+
     is_pandas = isinstance(analyzer.dataset, pd.DataFrame)
     if is_pandas:
         true_y = true_y.to_numpy()
     else:
         input_data = input_data.to_numpy()
-    if is_model_analyzer:
-        pred_y = analyzer.model.predict(input_data)
+
     if analyzer.model_task == ModelTask.CLASSIFICATION:
         diff = pred_y != true_y
     else:

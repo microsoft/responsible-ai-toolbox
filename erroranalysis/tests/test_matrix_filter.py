@@ -14,9 +14,9 @@ from common_utils import (create_adult_census_data,
                           create_titanic_pipeline, create_wine_data)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
-from erroranalysis._internal.constants import (ROW_INDEX, TRUE_Y, PRED_Y,
-                                               MatrixParams,
-                                               Metrics, ModelTask, f1_metrics,
+from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
+                                               MatrixParams, Metrics,
+                                               ModelTask, f1_metrics,
                                                metric_to_display_name,
                                                precision_metrics,
                                                recall_metrics)
@@ -398,7 +398,8 @@ def run_error_analyzer(model,
                                              filters,
                                              composite_filters)
         y_test = validation_data[TRUE_Y]
-        validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX, PRED_Y])
+        validation_data = validation_data.drop(
+            columns=[TRUE_Y, ROW_INDEX, PRED_Y])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
     expected_count = len(validation_data)

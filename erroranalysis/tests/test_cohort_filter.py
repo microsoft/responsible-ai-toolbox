@@ -13,10 +13,8 @@ from common_utils import (create_diabetes_data, create_iris_data,
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
                                                ModelTask)
-from erroranalysis._internal.error_analyzer import (
-    ModelAnalyzer,
-    PredictionsAnalyzer
-)
+from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
+                                                    PredictionsAnalyzer)
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
@@ -109,13 +107,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                                    model,
-                                    X_test,
-                                    y_test,
-                                    feature_names,
-                                    categorical_features,
-                                    model_task,
-                                    filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_less_and_equal(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -132,13 +130,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_greater(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -154,13 +152,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_greater_and_equal(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -176,13 +174,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_in_the_range_of(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -199,13 +197,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     @pytest.mark.parametrize('arg, correct_prediction',
                              [([1], False), ([0], True)])
@@ -233,15 +231,16 @@ class TestCohortFilter(object):
         validation_data = validation_data.loc[validation_filter]
 
         model_task = ModelTask.CLASSIFICATION
-        run_different_error_analyzers(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters,
-                           is_empty_validation_data=(not correct_prediction))
+        run_different_error_analyzers(
+            validation_data,
+            model,
+            X_test,
+            y_test,
+            feature_names,
+            categorical_features,
+            model_task,
+            filters=filters,
+            is_empty_validation_data=(not correct_prediction))
 
     def test_cohort_filter_includes(self):
         X_train, X_test, y_train, y_test, numeric, categorical = \
@@ -252,7 +251,7 @@ class TestCohortFilter(object):
         filters = [{'arg': [0, 2],
                     'column': EMBARKED,
                     'method': 'includes'}]
-    
+
         pred_y = clf.predict(X_test)
         validation_data = create_validation_data(X_test, y_test, pred_y)
         filter_embarked = X_test[EMBARKED].isin(['S', 'C'])
@@ -279,7 +278,7 @@ class TestCohortFilter(object):
         filters = [{'arg': [0, 2],
                     'column': EMBARKED,
                     'method': 'excludes'}]
-    
+
         pred_y = clf.predict(X_test)
         validation_data = create_validation_data(X_test, y_test, pred_y)
         filter_embarked = X_test[EMBARKED].isin(['Q'])
@@ -289,13 +288,13 @@ class TestCohortFilter(object):
         feature_names = categorical + numeric
         categorical_features = categorical
         run_different_error_analyzers(validation_data,
-                                     clf,
-                                     X_test,
-                                     y_test,
-                                     feature_names,
-                                     categorical_features,
-                                     model_task,
-                                     filters=filters)
+                                      clf,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     @pytest.mark.parametrize('arg, outcome', [([1, 2], False), ([0, 3], True)])
     def test_cohort_filter_binary_classification_outcome(self, arg, outcome):
@@ -322,13 +321,13 @@ class TestCohortFilter(object):
         feature_names = categorical + numeric
         categorical_features = categorical
         run_different_error_analyzers(validation_data,
-                                     clf,
-                                     X_test,
-                                     y_test,
-                                     feature_names,
-                                     categorical_features,
-                                     model_task,
-                                     filters=filters)
+                                      clf,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_index(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -345,13 +344,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                                     model,
-                                     X_test,
-                                     y_test,
-                                     feature_names,
-                                     categorical_features,
-                                     model_task,
-                                     filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
     def test_cohort_filter_regression_error(self):
         X_train, X_test, y_train, y_test, feature_names = \
@@ -375,13 +374,13 @@ class TestCohortFilter(object):
         model_task = ModelTask.REGRESSION
         categorical_features = []
         run_different_error_analyzers(validation_data,
-                                     model,
-                                     X_test,
-                                     y_test,
-                                     feature_names,
-                                     categorical_features,
-                                     model_task,
-                                     filters=filters)
+                                      model,
+                                      X_test,
+                                      y_test,
+                                      feature_names,
+                                      categorical_features,
+                                      model_task,
+                                      filters=filters)
 
 
 def create_iris_pandas():
