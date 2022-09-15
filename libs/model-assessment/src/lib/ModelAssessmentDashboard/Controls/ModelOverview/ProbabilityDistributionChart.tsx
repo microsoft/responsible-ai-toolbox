@@ -92,6 +92,9 @@ export class ProbabilityDistributionChart extends React.Component<
     }
 
     const noCohortSelected = this.props.cohorts.length === 0;
+    const showChooseCohortsButton =
+      this.props.showSplineChart ||
+      (!noCohortSelected && !this.props.showSplineChart);
 
     return (
       <Stack
@@ -115,9 +118,9 @@ export class ProbabilityDistributionChart extends React.Component<
               checked={this.props.showSplineChart}
             />
           </Stack.Item>
-          {this.props.showSplineChart && (
+          {showChooseCohortsButton && (
             <DefaultButton
-              id="modelOverviewProbabilityDistributionLineChartCohortSelectionButton"
+              id="modelOverviewProbabilityDistributionCohortSelectionButton"
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
@@ -125,69 +128,51 @@ export class ProbabilityDistributionChart extends React.Component<
             />
           )}
         </Stack>
-        <Stack horizontal>
-          {!noCohortSelected && !this.props.showSplineChart && (
-            <Stack.Item className={classNames.verticalAxis}>
-              <DefaultButton
-                id="modelOverviewProbabilityDistributionBoxChartCohortSelectionButton"
-                className={classNames.rotatedVerticalBox}
-                text={
-                  localization.ModelAssessment.ModelOverview
-                    .cohortSelectionButton
-                }
-                onClick={this.props.onChooseCohorts}
-              />
-            </Stack.Item>
+        <Stack className={classNames.chart}>
+          {noCohortSelected && (
+            <div className={classNames.placeholderText}>
+              <Text>
+                {localization.ModelAssessment.ModelOverview.boxPlotPlaceholder}
+              </Text>
+            </div>
           )}
-          <Stack.Item className={classNames.chart}>
-            {noCohortSelected && (
-              <div className={classNames.placeholderText}>
-                <Text>
-                  {
+          {!noCohortSelected && (
+            <Stack>
+              {this.props.showSplineChart ? (
+                <ProbabilityDistributionSplineChart
+                  selectedCohorts={this.props.cohorts}
+                  probabilityOption={this.state.probabilityOption}
+                />
+              ) : (
+                <ProbabilityDistributionBoxChart
+                  boxPlotState={this.props.boxPlotState}
+                  selectedCohorts={this.props.cohorts}
+                  probabilityOption={this.state.probabilityOption}
+                  onBoxPlotStateUpdate={this.props.onBoxPlotStateUpdate}
+                />
+              )}
+              <Stack.Item
+                className={
+                  this.props.showSplineChart
+                    ? classNames.horizontalAxisNoExtraLeftPadding
+                    : classNames.horizontalAxis
+                }
+              >
+                <DefaultButton
+                  id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
+                  text={
                     localization.ModelAssessment.ModelOverview
-                      .boxPlotPlaceholder
+                      .probabilityLabelSelectionButton
                   }
-                </Text>
-              </div>
-            )}
-            {!noCohortSelected && (
-              <Stack>
-                {this.props.showSplineChart ? (
-                  <ProbabilityDistributionSplineChart
-                    selectedCohorts={this.props.cohorts}
-                    probabilityOption={this.state.probabilityOption}
-                  />
-                ) : (
-                  <ProbabilityDistributionBoxChart
-                    boxPlotState={this.props.boxPlotState}
-                    selectedCohorts={this.props.cohorts}
-                    probabilityOption={this.state.probabilityOption}
-                    onBoxPlotStateUpdate={this.props.onBoxPlotStateUpdate}
-                  />
-                )}
-                <Stack.Item
-                  className={
-                    this.props.showSplineChart
-                      ? classNames.horizontalAxisNoExtraLeftPadding
-                      : classNames.horizontalAxis
+                  onClick={(): void =>
+                    this.setState({
+                      probabilityFlyoutIsVisible: true
+                    })
                   }
-                >
-                  <DefaultButton
-                    id="modelOverviewProbabilityDistributionChartLabelSelectionButton"
-                    text={
-                      localization.ModelAssessment.ModelOverview
-                        .probabilityLabelSelectionButton
-                    }
-                    onClick={(): void =>
-                      this.setState({
-                        probabilityFlyoutIsVisible: true
-                      })
-                    }
-                  />
-                </Stack.Item>
-              </Stack>
-            )}
-          </Stack.Item>
+                />
+              </Stack.Item>
+            </Stack>
+          )}
         </Stack>
         <Panel
           id="modelOverviewProbabilityDistributionChartLabelSelectionFlyout"

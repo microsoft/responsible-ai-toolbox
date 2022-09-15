@@ -158,6 +158,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
               (this.props.openedFilter.method === FilterMethods.InTheRangeOf ? (
                 <>
                   <SpinButton
+                    ariaLabel={localization.Common.spinButton}
                     labelPosition={Position.top}
                     value={this.props.openedFilter.arg[0].toString()}
                     label={localization.Interpret.Filters.minimum}
@@ -184,6 +185,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                     }}
                   />
                   <SpinButton
+                    ariaLabel={localization.Common.spinButton}
                     labelPosition={Position.top}
                     value={this.props.openedFilter.arg[1].toString()}
                     label={localization.Interpret.Filters.maximum}
@@ -223,6 +225,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
                 </>
               ) : (
                 <SpinButton
+                  ariaLabel={localization.Common.spinButton}
                   labelPosition={Position.top}
                   label={localization.Interpret.Filters.numericValue}
                   min={selectedMeta.featureRange.min}

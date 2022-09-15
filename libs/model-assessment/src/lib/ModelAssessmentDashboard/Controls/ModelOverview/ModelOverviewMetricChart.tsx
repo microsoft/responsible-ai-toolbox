@@ -74,11 +74,10 @@ export class ModelOverviewMetricChart extends React.Component<
 
     return (
       <>
-        <Stack horizontal grow id="modelOverviewMetricChart">
-          <Stack.Item className={classNames.verticalAxis}>
+        <Stack id="modelOverviewMetricChart">
+          <Stack.Item className={classNames.cohortSelectionButton}>
             <DefaultButton
               id="modelOverviewMetricChartCohortSelectionButton"
-              className={classNames.rotatedVerticalBox}
               text={
                 localization.ModelAssessment.ModelOverview.cohortSelectionButton
               }
