@@ -201,6 +201,7 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort."
     },
     "FeatureList": {
+      "featureList": "Feature List",
       "apply": "Apply",
       "features": "Features",
       "importances": "Importances",
