@@ -3,7 +3,6 @@
 
 import { DefaultButton, PrimaryButton, Stack, Panel } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { ConfirmationDialog } from "../../components/ConfirmationDialog";
@@ -97,13 +96,13 @@ export class CohortEditor extends React.PureComponent<
           </DefaultButton>
         )}
         <PrimaryButton
-          onClick={() => this.saveCohort()}
+          onClick={(): void => this.saveCohort()}
           disabled={this.isSaveDisabled()}
         >
           {localization.Interpret.CohortEditor.save}
         </PrimaryButton>
         <DefaultButton
-          onClick={() => this.saveCohort(true)}
+          onClick={(): void => this.saveCohort(true)}
           disabled={this.isSaveDisabled()}
         >
           {localization.Interpret.CohortEditor.saveAndSwitch}
@@ -199,17 +198,17 @@ export class CohortEditor extends React.PureComponent<
     }
   };
 
-  private onCohortNameUpdated = (cohortName?: string) => {
+  private onCohortNameUpdated = (cohortName?: string): void => {
     this.setState({ cohortName });
   };
 
   private onCompositeFiltersUpdated = (
     compositeFilters: ICompositeFilter[]
-  ) => {
+  ): void => {
     this.setState({ compositeFilters });
   };
 
-  private onFilterUpdated = (filters: IFilter[]) => {
+  private onFilterUpdated = (filters: IFilter[]): void => {
     this.setState({ filters });
   };
 }

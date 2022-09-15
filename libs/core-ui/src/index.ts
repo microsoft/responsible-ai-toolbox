@@ -56,6 +56,7 @@ export * from "./lib/util/toScientific";
 export * from "./lib/util/ITelemetryEvent";
 export * from "./lib/util/TelemetryEventName";
 export * from "./lib/components/OverallMetricChart";
+export * from "./lib/components/AxisConfig";
 export * from "./lib/components/AxisConfigDialog";
 export * from "./lib/components/AxisConfigDialogSpinButton";
 export * from "./lib/components/ConfirmationDialog";

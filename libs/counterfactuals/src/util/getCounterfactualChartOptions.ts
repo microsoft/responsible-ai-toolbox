@@ -60,7 +60,7 @@ export function getCounterfactualChartOptions(
         cursor: "pointer",
         point: {
           events: {
-            click() {
+            click(): void {
               if (onClickHandler === undefined) {
                 return;
               }

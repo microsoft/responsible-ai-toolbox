@@ -53,11 +53,11 @@ export class MetricConfigurationFlyout extends React.Component<
     defaultModelAssessmentContext;
   private _selection: Selection;
 
-  constructor(props: IMetricConfigurationFlyoutProps) {
+  public constructor(props: IMetricConfigurationFlyoutProps) {
     super(props);
 
     this._selection = new Selection({
-      onSelectionChanged: () => {
+      onSelectionChanged: (): void => {
         const selectedMetrics = this._selection
           .getSelection()
           .map((objWithKey) => objWithKey.key?.toString() ?? "")
@@ -73,13 +73,13 @@ export class MetricConfigurationFlyout extends React.Component<
     this.updateSelection();
   }
 
-  componentDidMount() {
+  public componentDidMount(): void {
     this.setState({ items: this.getItems() }, () => {
       this.updateSelection();
     });
   }
 
-  componentDidUpdate(prevProps: IMetricConfigurationFlyoutProps) {
+  public componentDidUpdate(prevProps: IMetricConfigurationFlyoutProps): void {
     if (
       this.props.selectedMetrics.length !== prevProps.selectedMetrics.length ||
       this.props.selectedMetrics.some((metricName, index) => {
@@ -152,11 +152,11 @@ export class MetricConfigurationFlyout extends React.Component<
     );
   }
 
-  private onConfirm = () => {
+  private onConfirm = (): void => {
     this.props.updateSelectedMetrics(this.state.newlySelectedMetrics);
   };
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     const noMetricsSelected = this._selection.getSelectedCount() === 0;
     return (
       <Stack tokens={{ childrenGap: "10px" }}>
@@ -183,7 +183,7 @@ export class MetricConfigurationFlyout extends React.Component<
     );
   };
 
-  private updateSelection = () => {
+  private updateSelection = (): void => {
     this._selection.setItems(this.state.items);
     this.state.newlySelectedMetrics.forEach((metricName) => {
       this._selection.setIndexSelected(

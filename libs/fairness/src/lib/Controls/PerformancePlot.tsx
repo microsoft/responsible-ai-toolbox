@@ -5,7 +5,6 @@ import { getTheme, Stack } from "@fluentui/react";
 import { IBounds, PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, chartColors } from "@responsible-ai/mlchartlib";
-import _ from "lodash";
 import React from "react";
 
 import { BarPlotlyProps } from "../BarPlotlyProps";

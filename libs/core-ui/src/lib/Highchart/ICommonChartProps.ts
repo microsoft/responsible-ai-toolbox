@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import React from "react";
 
 import { IHighchartsConfig } from "./IHighchartsConfig";
 

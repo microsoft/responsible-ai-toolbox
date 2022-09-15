@@ -190,11 +190,11 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({ chartProps: newProps });
   };
 
-  private onSelectedPointsIndexesUpdated = (newSelection: number[]) => {
+  private onSelectedPointsIndexesUpdated = (newSelection: number[]): void => {
     this.setState({ selectedPointsIndexes: newSelection });
   };
 
-  private onCustomPointLengthUpdated = (customPointLength: number) => {
+  private onCustomPointLengthUpdated = (customPointLength: number): void => {
     this.setState({ customPointLength });
   };
 

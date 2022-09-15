@@ -67,7 +67,7 @@ export class ScatterHighchart extends Chart<IHighScatter> {
       Number(s)
     );
     if (horTip === vertTip) {
-      throw new Error(`Horizontal tip is equal to vertical length`);
+      throw new Error("Horizontal tip is equal to vertical length");
     }
     return {
       bottom: x, // x

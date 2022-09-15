@@ -24,7 +24,14 @@ export class Utils {
     return sorted.map((val) => val[1]);
   }
 
-  public static sortedTopK(list: number[], k: number, radio: string): number[] {
+  public static sortedTopK(
+    list: number[],
+    k: number | undefined,
+    radio: string | undefined
+  ): number[] {
+    if (!k || !radio) {
+      return [];
+    }
     /*
      * Returns a list of indices for the tokens to be displayed based on user controls for number of tokens and type of tokens, list will be of len(number of relevant tokens)
      * returns an empty list if there are no tokens that match the radio key
@@ -66,7 +73,7 @@ export class Utils {
     return sortedList;
   }
 
-  public static takeTopK(list: number[], k: number) {
+  public static takeTopK(list: number[], k: number): number[] {
     /*
      * Returns a list after splicing and taking the top K
      * param list: the list to splice
@@ -89,9 +96,12 @@ export class Utils {
   }
 
   public static predictClass(
-    className: string[],
-    prediction: number[]
-  ): string {
+    className: string[] | undefined,
+    prediction: number[] | undefined
+  ): string | undefined {
+    if (!className || !prediction) {
+      return "";
+    }
     /*
      * Returns the predicted class
      * param className: the list of possible classes

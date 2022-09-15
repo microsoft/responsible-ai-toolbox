@@ -27,7 +27,7 @@ export class EmptyCohortDialog extends React.Component<IEmptyCohortDialogProps> 
         hidden={false}
         dialogContentProps={dialogContentProps}
         modalProps={modalProps}
-        onDismiss={() => this.props.onClose()}
+        onDismiss={(): void => this.props.onClose()}
       />
     );
   }

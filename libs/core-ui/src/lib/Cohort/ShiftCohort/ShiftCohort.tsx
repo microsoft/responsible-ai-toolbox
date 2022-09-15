@@ -147,7 +147,7 @@ export class ShiftCohort extends React.Component<
     this.props.onApply(this.state.savedCohorts[this.state.selectedCohort]);
   }
 
-  private onApplyClick = () => {
+  private onApplyClick = (): void => {
     this.props.onDismiss();
     this.shiftCohort();
   };

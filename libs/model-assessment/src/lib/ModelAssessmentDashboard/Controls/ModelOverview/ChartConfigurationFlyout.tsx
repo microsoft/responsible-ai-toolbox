@@ -55,7 +55,7 @@ export class ChartConfigurationFlyout extends React.Component<
   private datasetCohortsChoiceGroupOption = "datasetCohorts";
   private featureBasedCohortsChoiceGroupOption = "featureBasedCohorts";
 
-  constructor(props: IChartConfigurationFlyoutProps) {
+  public constructor(props: IChartConfigurationFlyoutProps) {
     super(props);
     this.state = {
       datasetCohortViewIsNewlySelected: this.props.datasetCohortViewIsSelected,
@@ -70,7 +70,7 @@ export class ChartConfigurationFlyout extends React.Component<
     };
   }
 
-  public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps) {
+  public componentDidUpdate(prevProps: IChartConfigurationFlyoutProps): void {
     // update dataset cohorts if any new ones were created
     const prevMaxCohortID = this.getMaxCohortId(prevProps.datasetCohorts);
     const currMaxCohortID = this.getMaxCohortId(this.props.datasetCohorts);
@@ -265,7 +265,7 @@ export class ChartConfigurationFlyout extends React.Component<
     );
   }
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
@@ -281,7 +281,7 @@ export class ChartConfigurationFlyout extends React.Component<
     );
   };
 
-  private noCohortIsSelected = () => {
+  private noCohortIsSelected = (): boolean => {
     return (
       (this.state.datasetCohortViewIsNewlySelected &&
         this.state.newlySelectedDatasetCohorts.length === 0) ||
@@ -304,7 +304,7 @@ export class ChartConfigurationFlyout extends React.Component<
     }
   };
 
-  private onConfirm = () => {
+  private onConfirm = (): void => {
     this.props.updateCohortSelection(
       this.state.newlySelectedDatasetCohorts,
       this.state.newlySelectedFeatureBasedCohorts,
@@ -371,13 +371,13 @@ export class ChartConfigurationFlyout extends React.Component<
     return currentlySelected;
   };
 
-  private getIndexAndNames(errorCohorts: ErrorCohort[]) {
+  private getIndexAndNames(errorCohorts: ErrorCohort[]): IDropdownOption[] {
     return errorCohorts.map((cohort, index) => {
       return { key: index.toString(), text: cohort.cohort.name };
     });
   }
 
-  private getIdAndNames(errorCohorts: ErrorCohort[]) {
+  private getIdAndNames(errorCohorts: ErrorCohort[]): IDropdownOption[] {
     return errorCohorts.map((errorCohort) => {
       return {
         key: errorCohort.cohort.getCohortID().toString(),
@@ -386,7 +386,7 @@ export class ChartConfigurationFlyout extends React.Component<
     });
   }
 
-  private getMaxCohortId(cohorts: ErrorCohort[]) {
+  private getMaxCohortId(cohorts: ErrorCohort[]): number {
     return Math.max(
       ...cohorts.map((errorCohort) => errorCohort.cohort.getCohortID())
     );

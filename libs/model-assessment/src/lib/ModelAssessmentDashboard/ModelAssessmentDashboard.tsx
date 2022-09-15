@@ -172,7 +172,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ activeGlobalTabs: tabs });
   };
 
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
@@ -278,7 +278,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
   };
 
-  private deleteCohort = (cohort: ErrorCohort) => {
+  private deleteCohort = (cohort: ErrorCohort): void => {
     if (
       this.state.baseCohort.cohort.name === cohort.cohort.name ||
       this.state.selectedCohort.cohort.name === cohort.cohort.name

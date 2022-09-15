@@ -440,15 +440,16 @@ export class TreeViewRenderer extends React.PureComponent<
       if (
         !requestTreeNodes ||
         requestTreeNodes.length === 0 ||
-        !requestTreeNodes[0]
+        !requestTreeNodes[0] ||
+        !this.context.errorAnalysisData
       ) {
         return state;
       }
 
-      const maxDepth = this.context.errorAnalysisData!.maxDepth;
-      const numLeaves = this.context.errorAnalysisData!.numLeaves;
-      const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
-      const metric = this.context.errorAnalysisData!.metric;
+      const maxDepth = this.context.errorAnalysisData.maxDepth;
+      const numLeaves = this.context.errorAnalysisData.numLeaves;
+      const minChildSamples = this.context.errorAnalysisData.minChildSamples;
+      const metric = this.context.errorAnalysisData.metric;
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
@@ -688,7 +689,9 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private setMetric = (metric: string): void => {
-    this.context.errorAnalysisData!.metric = metric;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.metric = metric;
+    }
     this.fetchTreeNodes();
   };
 
@@ -713,7 +716,10 @@ export class TreeViewRenderer extends React.PureComponent<
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
-    const errorAnalysisData = this.context.errorAnalysisData!;
+    const errorAnalysisData = this.context.errorAnalysisData;
+    if (!errorAnalysisData) {
+      return;
+    }
     this.props
       .getTreeNodes(
         [

@@ -33,6 +33,6 @@ export interface IMatrixAreaProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   updateMatrixLegendState: (maxMetric: number, isErrorMetric: boolean) => void;
-  metric: string;
+  metric: string | undefined;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
