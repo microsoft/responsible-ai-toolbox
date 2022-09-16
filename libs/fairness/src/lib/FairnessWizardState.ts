@@ -29,6 +29,10 @@ export const performanceTabKey = "performanceTab";
 export const fairnessTabKey = "fairnessTab";
 export const reportTabKey = "reportTab";
 
+export const flights = {
+  skipFairness: false
+};
+
 export interface IWizardStateV2 {
   showIntro: boolean;
   activeTabKey: string;

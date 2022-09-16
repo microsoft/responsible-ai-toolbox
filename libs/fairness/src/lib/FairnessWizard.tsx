@@ -16,7 +16,11 @@ import React from "react";
 
 import { EmptyHeader } from "./Controls/EmptyHeader";
 import { FairnessWizardStyles } from "./FairnessWizard.styles";
-import { getFairnessWizardState, IWizardStateV2 } from "./FairnessWizardState";
+import {
+  flights,
+  getFairnessWizardState,
+  IWizardStateV2
+} from "./FairnessWizardState";
 import { FairnessWizardTabs } from "./FairnessWizardTabs";
 import { IFairnessProps } from "./IFairnessProps";
 import { IFairnessOption } from "./util/FairnessMetrics";
@@ -46,10 +50,6 @@ export interface IFeatureBinPickerPropsV2 {
   selectedBinIndex: number;
   onBinChange: (index: number) => void;
 }
-
-export const flights = {
-  skipFairness: false
-};
 
 export class FairnessWizard extends React.PureComponent<
   IFairnessProps,
