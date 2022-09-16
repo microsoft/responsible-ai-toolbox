@@ -30,6 +30,7 @@ export class ModelAssessment extends React.Component {
       | "requestImportances"
       | "requestCausalWhatIf"
       | "requestBoxPlotDistribution"
+      | "requestGlobalCausalEffects"
     > = {};
     if (config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -69,6 +70,18 @@ export class ModelAssessment extends React.Component {
         return callFlaskService(
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestGlobalCausalEffects = async (
+        id: string,
+        filter: unknown[],
+        composite_filter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalWhatIfData[]> => {
+        return callFlaskService(
+          [id, filter, composite_filter],
+          "/global_causal_effects",
+          abortSignal
         );
       };
     }

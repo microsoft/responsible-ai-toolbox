@@ -59,6 +59,12 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestGlobalCausalEffects?: (
+    id: string,
+    filter: unknown[],
+    composite_filter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
