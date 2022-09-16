@@ -4,18 +4,17 @@
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 
-import {
-  featureBinTabKey,
-  introTabKey,
-  IWizardStateV2
-} from "./FairnessWizard";
 import { IFairnessProps } from "./IFairnessProps";
 import {
   IFairnessOption,
   defaultFairnessMetricPrioritization,
   fairnessOptions
 } from "./util/FairnessMetrics";
-import { IRunTimeFairnessContext } from "./util/IFairnessContext";
+import { IBinnedResponse } from "./util/IBinnedResponse";
+import {
+  IFairnessContext,
+  IRunTimeFairnessContext
+} from "./util/IFairnessContext";
 import { MetricsCache } from "./util/MetricsCache";
 import {
   defaultPerformanceMetricPrioritization,
@@ -23,6 +22,27 @@ import {
   performanceOptions
 } from "./util/PerformanceMetrics";
 import { WizardBuilder } from "./util/WizardBuilder";
+
+export const introTabKey = "introTab";
+export const featureBinTabKey = "featureBinTab";
+export const performanceTabKey = "performanceTab";
+export const fairnessTabKey = "fairnessTab";
+export const reportTabKey = "reportTab";
+
+export interface IWizardStateV2 {
+  showIntro: boolean;
+  activeTabKey: string;
+  selectedModelId?: number;
+  dashboardContext: IFairnessContext;
+  performanceMetrics: IPerformanceOption[];
+  fairnessMetrics: IFairnessOption[];
+  selectedPerformanceKey: string | undefined;
+  selectedFairnessKey: string | undefined;
+  errorBarsEnabled: boolean;
+  featureBins: IBinnedResponse[];
+  selectedBinIndex: number;
+  metricCache: MetricsCache;
+}
 
 function getPerformanceMetrics(
   fairnessContext: IRunTimeFairnessContext,

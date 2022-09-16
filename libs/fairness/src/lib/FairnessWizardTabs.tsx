@@ -10,15 +10,15 @@ import { FeatureTab } from "./Controls/FeatureTab";
 import { IntroTab } from "./Controls/IntroTab";
 import { ModelComparisonChart } from "./Controls/ModelComparisonChart";
 import { PerformanceTab } from "./Controls/PerformanceTab";
+import { flights } from "./FairnessWizard";
+import { FairnessWizardStyles } from "./FairnessWizard.styles";
 import {
   introTabKey,
   featureBinTabKey,
   performanceTabKey,
   fairnessTabKey,
-  reportTabKey,
-  flights
-} from "./FairnessWizard";
-import { FairnessWizardStyles } from "./FairnessWizard.styles";
+  reportTabKey
+} from "./FairnessWizardState";
 import { IFairnessOption } from "./util/FairnessMetrics";
 import { IBinnedResponse } from "./util/IBinnedResponse";
 import { IFairnessContext } from "./util/IFairnessContext";
