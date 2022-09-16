@@ -5,7 +5,7 @@ import { Stack, Dropdown, IDropdownOption, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { VisionDatasetExplorerTabOptions } from "../VisionExplanationDashboard";
+import { VisionDatasetExplorerTabOptions } from "../VisionExplanationDashboardHelper";
 
 export interface IPageSizeSelectorsProps {
   selectedKey: string;
