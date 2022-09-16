@@ -5,8 +5,8 @@ import { Stack, Pivot, PivotItem, CommandBarButton } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { VisionDatasetExplorerTabOptions } from "../VisionExplanationDashboard";
 import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+import { VisionDatasetExplorerTabOptions } from "../VisionExplanationDashboardHelper";
 
 export interface IPivotsProps {
   selectedKey: string;
