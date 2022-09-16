@@ -125,7 +125,7 @@ export const applications: IApplications = <const>{
         data: breastCancerData
       }
     },
-    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
+    versions: { "1": 1, "2:Static-View": 2 }
   },
   fairness: {
     datasets: {

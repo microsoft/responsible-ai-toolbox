@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../util/getMenu";
-import { interpretDatasets } from "../interpretDatasets";
+import { interpretDatasets } from "../interpretDatasets/interpretDatasets";
 
 import { describeAggregatePlot } from "./describeAggregatePlot";
 import { describeIndividualDatapoints } from "./describeIndividualDatapoints";
