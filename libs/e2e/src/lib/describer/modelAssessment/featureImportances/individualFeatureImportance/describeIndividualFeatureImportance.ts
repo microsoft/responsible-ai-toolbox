@@ -3,11 +3,11 @@
 
 import { getMenu } from "../../../../../util/getMenu";
 import { Locators } from "../../Constants";
+import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
 import {
   IModelAssessmentData,
   RAINotebookNames
 } from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
 import { describeTabularDataView } from "./describeTabularDataView";
 
