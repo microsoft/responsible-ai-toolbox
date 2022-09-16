@@ -3,6 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
+  ErrorCohort,
   ICausalAnalysisData,
   ITelemetryEvent,
   ModelAssessmentContext
@@ -17,6 +18,7 @@ import { TreatmentView } from "./TreatmentView/TreatmentView";
 
 export interface ICausalAnalysisViewProps {
   viewOption: string;
+  newCohort: ErrorCohort;
   data: ICausalAnalysisData;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
@@ -51,8 +53,42 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     );
   }
 
-  public componentDidUpdate(prevProps: ICausalAnalysisViewProps): void {
+  public async componentDidUpdate(prevProps: ICausalAnalysisViewProps): Promise<void> {
+    console.log(prevProps);
+    console.log(this.props);
+    console.log(this.context);
+    if (this.context.causalAnalysisData && this.context.requestGlobalCausalEffects) {
+      console.log("Fetching global causal effects from SDK backend");
+      const filtersRelabeled = ErrorCohort.getLabeledFilters(
+        this.props.newCohort.cohort.filters,
+        this.props.newCohort.jointDataset
+      );
+    
+      const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+        this.props.newCohort.cohort.compositeFilters,
+        this.props.newCohort.jointDataset
+      );
+      console.log(filtersRelabeled);
+      console.log(compositeFiltersRelabeled);
+      const query_data = [
+        this.context.causalAnalysisData?.id,
+        filtersRelabeled,
+        compositeFiltersRelabeled
+      ];
+      console.log(query_data);
+      const result = await this.context.requestGlobalCausalEffects(
+        this.context.causalAnalysisData?.id,
+        filtersRelabeled,
+        compositeFiltersRelabeled,
+        new AbortController().signal
+      );
+      console.log(result);
+    }
     if (this.props.viewOption !== prevProps.viewOption) {
+      this.forceUpdate();
+    }
+    if (this.props.newCohort.cohort.name !== prevProps.newCohort.cohort.name) {
+      console.log("cohort updated");
       this.forceUpdate();
     }
   }
