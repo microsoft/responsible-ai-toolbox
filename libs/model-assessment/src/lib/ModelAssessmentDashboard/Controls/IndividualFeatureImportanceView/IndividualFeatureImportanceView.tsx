@@ -63,7 +63,6 @@ export class IndividualFeatureImportanceView extends React.Component<
           modelType={this.props.modelType}
           onAllSelectedItemsChange={this.onAllSubsetSelectedItemsChange}
           telemetryHook={this.props.telemetryHook}
-          // subsetSelectedItems={this.props.allSelectedItems}
         />
         {!hasTextImportances && (
           <TabularLocalImportancePlots
