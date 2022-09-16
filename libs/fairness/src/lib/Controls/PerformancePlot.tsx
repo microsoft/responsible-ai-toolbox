@@ -54,208 +54,197 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
         return `${name} `;
       }
     );
-
-    if (
-      this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.BinaryClassification
-    ) {
-      barPlotlyProps.data = [
-        {
-          color: chartColors[0],
-          hoverinfo: "skip",
-          name: localization.Fairness.Metrics.falsePositiveRate,
-          orientation: "h",
-          text: this.props.metrics.falsePositiveRates?.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "fallout_rate", false, 2)
-          ),
-          textposition: "auto",
-          type: "bar",
-          width: 0.5,
-          x: this.props.metrics.falsePositiveRates?.bins,
-          y: groupNamesWithBuffer
-        } as any,
-        {
-          color: chartColors[1],
-          hoverinfo: "skip",
-          name: localization.Fairness.Metrics.falseNegativeRate,
-          orientation: "h",
-          text: this.props.metrics.falseNegativeRates?.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "miss_rate", false, 2)
-          ),
-          textposition: "auto",
-          type: "bar",
-          width: 0.5,
-          x: this.props.metrics.falseNegativeRates?.bins.map((x) => -1 * x),
-          y: groupNamesWithBuffer
-        }
-      ];
-      // Plot Error Bars
-      if (
-        this.props.errorPickerProps.errorBarsEnabled &&
-        this.props.metrics.falsePositiveRates !== undefined
-      ) {
-        barPlotlyProps.data[0].error_x = buildFalsePositiveErrorBounds(
-          this.props.metrics.falsePositiveRates
-        );
-        barPlotlyProps.data[0].textposition = "none";
-      }
-      if (
-        this.props.errorPickerProps.errorBarsEnabled &&
-        this.props.metrics.falseNegativeRates !== undefined
-      ) {
-        barPlotlyProps.data[1].error_x = buildFalseNegativeErrorBounds(
-          this.props.metrics.falseNegativeRates
-        );
-        barPlotlyProps.data[1].textposition = "none";
-      }
-
-      // Annotations for both sides of the chart
-      if (barPlotlyProps.layout) {
-        barPlotlyProps.layout.annotations = [
+    switch (this.props.dashboardContext.modelMetadata.PredictionType) {
+      case PredictionTypes.BinaryClassification:
+        barPlotlyProps.data = [
           {
-            font: {
-              color: theme.semanticColors.bodySubtext,
-              size: 10
-            },
-            showarrow: false,
-            text: localization.Fairness.Report.falseNegativeRate,
-            x: 0.02,
-            xref: "paper",
-            y: 1,
-            yref: "paper"
-          },
+            color: chartColors[0],
+            hoverinfo: "skip",
+            name: localization.Fairness.Metrics.falsePositiveRate,
+            orientation: "h",
+            text: this.props.metrics.falsePositiveRates?.bins.map((num) =>
+              FormatMetrics.formatNumbers(num, "fallout_rate", false, 2)
+            ),
+            textposition: "auto",
+            type: "bar",
+            width: 0.5,
+            x: this.props.metrics.falsePositiveRates?.bins,
+            y: groupNamesWithBuffer
+          } as any,
           {
-            font: {
-              color: theme.semanticColors.bodySubtext,
-              size: 10
-            },
-            showarrow: false,
-            text: localization.Fairness.Report.falsePositiveRate,
-            x: 0.98,
-            xref: "paper",
-            y: 1,
-            yref: "paper"
+            color: chartColors[1],
+            hoverinfo: "skip",
+            name: localization.Fairness.Metrics.falseNegativeRate,
+            orientation: "h",
+            text: this.props.metrics.falseNegativeRates?.bins.map((num) =>
+              FormatMetrics.formatNumbers(num, "miss_rate", false, 2)
+            ),
+            textposition: "auto",
+            type: "bar",
+            width: 0.5,
+            x: this.props.metrics.falseNegativeRates?.bins.map((x) => -1 * x),
+            y: groupNamesWithBuffer
           }
         ];
-      }
-      if (barPlotlyProps.layout?.xaxis) {
-        barPlotlyProps.layout.xaxis.tickformat = ",.0%";
-      }
-      performanceChartCalloutHelpBarStrings = [
-        localization.Fairness.Report.classificationPerformanceHowToReadV2
-      ];
-    }
-    if (
-      this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.Probability
-    ) {
-      barPlotlyProps.data = [
-        {
-          color: chartColors[0],
-          hoverinfo: "skip",
-          name: localization.Fairness.Metrics.overprediction,
-          orientation: "h",
-          text: this.props.metrics.overpredictions?.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "overprediction", false, 2)
-          ),
-          textposition: "auto",
-          type: "bar",
-          width: 0.5,
-          x: this.props.metrics.overpredictions?.bins,
-          y: groupNamesWithBuffer
-        } as any,
-        {
-          color: chartColors[1],
-          hoverinfo: "skip",
-          name: localization.Fairness.Metrics.underprediction,
-          orientation: "h",
-          text: this.props.metrics.underpredictions?.bins.map((num) =>
-            FormatMetrics.formatNumbers(num, "underprediction", false, 2)
-          ),
-          textposition: "auto",
-          type: "bar",
-          width: 0.5,
-          x: this.props.metrics.underpredictions?.bins.map((x) => -1 * x),
-          y: groupNamesWithBuffer
+        // Plot Error Bars
+        if (
+          this.props.errorPickerProps.errorBarsEnabled &&
+          this.props.metrics.falsePositiveRates !== undefined
+        ) {
+          barPlotlyProps.data[0].error_x = buildFalsePositiveErrorBounds(
+            this.props.metrics.falsePositiveRates
+          );
+          barPlotlyProps.data[0].textposition = "none";
         }
-      ];
-      if (barPlotlyProps.layout) {
-        barPlotlyProps.layout.annotations = [
-          {
-            font: {
-              color: theme.semanticColors.bodySubtext,
-              size: 10
+        if (
+          this.props.errorPickerProps.errorBarsEnabled &&
+          this.props.metrics.falseNegativeRates !== undefined
+        ) {
+          barPlotlyProps.data[1].error_x = buildFalseNegativeErrorBounds(
+            this.props.metrics.falseNegativeRates
+          );
+          barPlotlyProps.data[1].textposition = "none";
+        }
+        // Annotations for both sides of the chart
+        if (barPlotlyProps.layout) {
+          barPlotlyProps.layout.annotations = [
+            {
+              font: {
+                color: theme.semanticColors.bodySubtext,
+                size: 10
+              },
+              showarrow: false,
+              text: localization.Fairness.Report.falseNegativeRate,
+              x: 0.02,
+              xref: "paper",
+              y: 1,
+              yref: "paper"
             },
-            showarrow: false,
-            text: localization.Fairness.Report.underestimationError,
-            x: 0.1,
-            xref: "paper",
-            y: 1,
-            yref: "paper"
-          },
+            {
+              font: {
+                color: theme.semanticColors.bodySubtext,
+                size: 10
+              },
+              showarrow: false,
+              text: localization.Fairness.Report.falsePositiveRate,
+              x: 0.98,
+              xref: "paper",
+              y: 1,
+              yref: "paper"
+            }
+          ];
+        }
+        if (barPlotlyProps.layout?.xaxis) {
+          barPlotlyProps.layout.xaxis.tickformat = ",.0%";
+        }
+        performanceChartCalloutHelpBarStrings = [
+          localization.Fairness.Report.classificationPerformanceHowToReadV2
+        ];
+        break;
+      case PredictionTypes.Probability:
+        barPlotlyProps.data = [
           {
-            font: {
-              color: theme.semanticColors.bodySubtext,
-              size: 10
-            },
-            showarrow: false,
-            text: localization.Fairness.Report.overestimationError,
-            x: 0.9,
-            xref: "paper",
-            y: 1,
-            yref: "paper"
+            color: chartColors[0],
+            hoverinfo: "skip",
+            name: localization.Fairness.Metrics.overprediction,
+            orientation: "h",
+            text: this.props.metrics.overpredictions?.bins.map((num) =>
+              FormatMetrics.formatNumbers(num, "overprediction", false, 2)
+            ),
+            textposition: "auto",
+            type: "bar",
+            width: 0.5,
+            x: this.props.metrics.overpredictions?.bins,
+            y: groupNamesWithBuffer
+          } as any,
+          {
+            color: chartColors[1],
+            hoverinfo: "skip",
+            name: localization.Fairness.Metrics.underprediction,
+            orientation: "h",
+            text: this.props.metrics.underpredictions?.bins.map((num) =>
+              FormatMetrics.formatNumbers(num, "underprediction", false, 2)
+            ),
+            textposition: "auto",
+            type: "bar",
+            width: 0.5,
+            x: this.props.metrics.underpredictions?.bins.map((x) => -1 * x),
+            y: groupNamesWithBuffer
           }
         ];
-      }
-      performanceChartCalloutHelpBarStrings = [
-        localization.Fairness.Report.probabilityPerformanceHowToRead1,
-        localization.Fairness.Report.probabilityPerformanceHowToRead2,
-        localization.Fairness.Report.probabilityPerformanceHowToRead3
-      ];
-    }
-    if (
-      this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.Regression
-    ) {
-      const performanceText = this.props.metrics.predictions?.map(
-        (val, index) => {
-          return `${localization.formatString(
-            localization.Fairness.Report.tooltipError,
-            FormatMetrics.formatNumbers(
-              this.props.metrics?.errors?.[index],
-              "average",
-              false,
-              3
+        if (barPlotlyProps.layout) {
+          barPlotlyProps.layout.annotations = [
+            {
+              font: {
+                color: theme.semanticColors.bodySubtext,
+                size: 10
+              },
+              showarrow: false,
+              text: localization.Fairness.Report.underestimationError,
+              x: 0.1,
+              xref: "paper",
+              y: 1,
+              yref: "paper"
+            },
+            {
+              font: {
+                color: theme.semanticColors.bodySubtext,
+                size: 10
+              },
+              showarrow: false,
+              text: localization.Fairness.Report.overestimationError,
+              x: 0.9,
+              xref: "paper",
+              y: 1,
+              yref: "paper"
+            }
+          ];
+        }
+        performanceChartCalloutHelpBarStrings = [
+          localization.Fairness.Report.probabilityPerformanceHowToRead1,
+          localization.Fairness.Report.probabilityPerformanceHowToRead2,
+          localization.Fairness.Report.probabilityPerformanceHowToRead3
+        ];
+        break;
+      case PredictionTypes.Regression:
+        barPlotlyProps.data = [
+          {
+            boxmean: true,
+            boxpoints: "all",
+            color: chartColors[0],
+            hoverinfo: "text",
+            hoveron: "points",
+            jitter: 0.4,
+            orientation: "h",
+            pointpos: 0,
+            text: this.props.metrics.predictions?.map((val, index) => {
+              return `${localization.formatString(
+                localization.Fairness.Report.tooltipError,
+                FormatMetrics.formatNumbers(
+                  this.props.metrics?.errors?.[index],
+                  "average",
+                  false,
+                  3
+                )
+              )}<br>${localization.formatString(
+                localization.Fairness.Report.tooltipPrediction,
+                FormatMetrics.formatNumbers(val, "average", false, 3)
+              )}`;
+            }),
+            type: "box",
+            x: this.props.metrics.errors,
+            y: this.props.dashboardContext.binVector.map(
+              (binIndex) => groupNamesWithBuffer[binIndex]
             )
-          )}<br>${localization.formatString(
-            localization.Fairness.Report.tooltipPrediction,
-            FormatMetrics.formatNumbers(val, "average", false, 3)
-          )}`;
-        }
-      );
-      barPlotlyProps.data = [
-        {
-          boxmean: true,
-          boxpoints: "all",
-          color: chartColors[0],
-          hoverinfo: "text",
-          hoveron: "points",
-          jitter: 0.4,
-          orientation: "h",
-          pointpos: 0,
-          text: performanceText,
-          type: "box",
-          x: this.props.metrics.errors,
-          y: this.props.dashboardContext.binVector.map(
-            (binIndex) => groupNamesWithBuffer[binIndex]
-          )
-        } as any
-      ];
-      performanceChartCalloutHelpBarStrings = [
-        localization.Fairness.Report.regressionPerformanceHowToRead
-      ];
+          } as any
+        ];
+        performanceChartCalloutHelpBarStrings = [
+          localization.Fairness.Report.regressionPerformanceHowToRead
+        ];
+        break;
+      default:
+        break;
     }
-
     // Create custom hover tooltips
     if (
       this.props.dashboardContext.modelMetadata.PredictionType ===
@@ -263,7 +252,6 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
     ) {
       buildCustomTooltips(barPlotlyProps, this.props.dashboardContext);
     }
-
     return (
       <Stack id="performancePlot">
         <div
