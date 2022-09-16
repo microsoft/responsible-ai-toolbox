@@ -74,6 +74,12 @@ export interface IModelAssessmentDashboardProps
     composite_filter: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestGlobalCausalPolicy?: (
+    id: string,
+    filter: unknown[],
+    composite_filter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
 

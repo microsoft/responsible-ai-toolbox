@@ -27,6 +27,8 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  // private currentGlobalCausalEffects = undefined | ICausalAnalysisData;
+  // private currentGlobalCausalPolicy = undefined | ICausalAnalysisData;
 
   public render(): React.ReactNode {
     return (
@@ -83,6 +85,35 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         new AbortController().signal
       );
       console.log(result);
+      // this.currentGlobalCausalEffects = result;
+    }
+    if (this.context.causalAnalysisData && this.context.requestGlobalCausalPolicy) {
+      console.log("Fetching global causal policy from SDK backend");
+      const filtersRelabeled = ErrorCohort.getLabeledFilters(
+        this.props.newCohort.cohort.filters,
+        this.props.newCohort.jointDataset
+      );
+    
+      const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+        this.props.newCohort.cohort.compositeFilters,
+        this.props.newCohort.jointDataset
+      );
+      console.log(filtersRelabeled);
+      console.log(compositeFiltersRelabeled);
+      const query_data = [
+        this.context.causalAnalysisData?.id,
+        filtersRelabeled,
+        compositeFiltersRelabeled
+      ];
+      console.log(query_data);
+      const result = await this.context.requestGlobalCausalPolicy(
+        this.context.causalAnalysisData?.id,
+        filtersRelabeled,
+        compositeFiltersRelabeled,
+        new AbortController().signal
+      );
+      console.log(result);
+      // this.currentGlobalCausalPolicy = result;
     }
     if (this.props.viewOption !== prevProps.viewOption) {
       this.forceUpdate();
