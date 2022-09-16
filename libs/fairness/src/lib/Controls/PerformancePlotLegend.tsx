@@ -8,7 +8,7 @@ import React from "react";
 
 import { SharedStyles } from "../Shared.styles";
 
-import { IPerformancePlotLegendProps } from "./PerformancePlot";
+import { IPerformancePlotLegendProps } from "./IPerformancePlotLegendProps";
 import { PerformancePlotStyles } from "./PerformancePlot.styles";
 
 export class PerformancePlotLegend extends React.PureComponent<IPerformancePlotLegendProps> {

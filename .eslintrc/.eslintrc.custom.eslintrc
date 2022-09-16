@@ -136,7 +136,7 @@
     ],
     "complexity": "error",
     "curly": ["error", "all"],
-    "max-lines": "warn",
+    "max-lines": "error",
     "no-else-return": "error",
     "no-useless-call": "error",
     "object-shorthand": "error",
