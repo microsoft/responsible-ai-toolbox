@@ -4,7 +4,6 @@
 import pytest
 from common_utils import CheckResponsibleAIDashboardInputTestResult
 
-from raiutils.data_processing import serialize_json_safe
 from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 
@@ -69,9 +68,8 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         post_data = (id, filters, [])
 
         flask_server_prediction_output = \
-            serialize_json_safe(
-                dashboard_input.get_global_causal_effects(
-                    post_data))
+            dashboard_input.get_global_causal_effects(
+                post_data)
 
         self.check_success_criteria(flask_server_prediction_output)
 
@@ -106,9 +104,8 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         post_data = (id, filters, [])
 
         flask_server_prediction_output = \
-            serialize_json_safe(
-                dashboard_input.get_global_causal_policy(
-                    post_data))
+            dashboard_input.get_global_causal_policy(
+                post_data)
 
         self.check_success_criteria(flask_server_prediction_output)
 
