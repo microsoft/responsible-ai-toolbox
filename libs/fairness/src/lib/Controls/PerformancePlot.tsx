@@ -297,8 +297,3 @@ export class PerformancePlot extends React.PureComponent<IPerformancePlotProps> 
     );
   }
 }
-
-export interface IPerformancePlotLegendProps {
-  showSubtitle: boolean;
-  useOverUnderPrediction: boolean;
-}
