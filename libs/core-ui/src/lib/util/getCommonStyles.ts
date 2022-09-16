@@ -97,10 +97,10 @@ export const noPaddingMdDown = {
 
 // Visually hide content, but will be read by screen reader
 export const srOnly = mergeStyles({
-  position: "absolute",
-  left: "-10000px",
-  top: "auto",
-  width: "1px",
   height: "1px",
-  overflow: "hidden"
+  left: "-10000px",
+  overflow: "hidden",
+  position: "absolute",
+  top: "auto",
+  width: "1px"
 });

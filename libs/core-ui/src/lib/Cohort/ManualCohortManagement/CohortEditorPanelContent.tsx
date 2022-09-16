@@ -8,7 +8,6 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "@fluentui/react";
-import { srOnly } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React, { FormEvent } from "react";
@@ -18,6 +17,7 @@ import {
   ICompositeFilter,
   IFilter
 } from "../../Interfaces/IFilter";
+import { srOnly } from "../../util/getCommonStyles";
 import { JointDataset } from "../../util/JointDataset";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";

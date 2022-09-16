@@ -54,7 +54,7 @@ export class InfoCallout extends React.Component<
             styles={{ container: FluentUIStyles.calloutContainer }}
           >
             <FocusZone>
-              <div data-is-focusable={true} className={classNames.calloutInfo}>
+              <div data-is-focusable className={classNames.calloutInfo}>
                 <span>{this.props.infoText}</span>
               </div>
             </FocusZone>

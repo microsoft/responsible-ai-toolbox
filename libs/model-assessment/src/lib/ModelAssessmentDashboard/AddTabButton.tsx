@@ -62,7 +62,7 @@ export class AddTabButton extends React.Component<
             >
               <Stack tokens={{ childrenGap: "l1" }}>
                 <FocusZone>
-                  <div data-is-focusable={true}>
+                  <div data-is-focusable>
                     {localization.ModelAssessment.AddingTab.CalloutContent}
                   </div>
                 </FocusZone>
