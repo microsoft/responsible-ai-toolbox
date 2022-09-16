@@ -4,6 +4,7 @@
 import {
   Callout,
   Dropdown,
+  FocusZone,
   IconButton,
   IDropdownOption,
   PrimaryButton,
@@ -60,7 +61,11 @@ export class AddTabButton extends React.Component<
               setInitialFocus
             >
               <Stack tokens={{ childrenGap: "l1" }}>
-                {localization.ModelAssessment.AddingTab.CalloutContent}
+                <FocusZone>
+                  <div data-is-focusable={true}>
+                    {localization.ModelAssessment.AddingTab.CalloutContent}
+                  </div>
+                </FocusZone>
                 <Dropdown
                   options={this.props.availableTabs}
                   onChange={this.onChange}

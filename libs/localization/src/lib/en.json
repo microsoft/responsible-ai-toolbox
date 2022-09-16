@@ -888,7 +888,9 @@
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "saveAndSwitch": "Save and switch",
-      "selectFilter": "Select filter"
+      "selectFilter": "Select filter",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "_classificationOutcome.comment": "Whether the prediction from the model matched the true value",

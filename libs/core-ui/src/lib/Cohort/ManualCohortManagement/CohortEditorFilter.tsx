@@ -64,6 +64,13 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
       };
     });
   private comparisonOptions: IComboBoxOption[] = comparisonOptions;
+  private onAddFilterClick = (): void => {
+    this.props.saveState(this.props.filters.length);
+    const filterInfo = document.querySelector("#filterInfo");
+    if (filterInfo) {
+      filterInfo.textContent = localization.Interpret.CohortEditor.filterAdded;
+    }
+  };
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
@@ -285,9 +292,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             <Stack.Item>
               <PrimaryButton
                 text={localization.Interpret.CohortEditor.addFilter}
-                onClick={(): void =>
-                  this.props.saveState(this.props.filters.length)
-                }
+                onClick={this.onAddFilterClick}
               />
             </Stack.Item>
           )}

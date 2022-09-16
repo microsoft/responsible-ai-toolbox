@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Callout, IconButton } from "@fluentui/react";
+import { Callout, FocusZone, IconButton } from "@fluentui/react";
 import { FluentUIStyles } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -53,9 +53,11 @@ export class InfoCallout extends React.Component<
             role="alertdialog"
             styles={{ container: FluentUIStyles.calloutContainer }}
           >
-            <div className={classNames.calloutInfo}>
-              <span>{this.props.infoText}</span>
-            </div>
+            <FocusZone>
+              <div data-is-focusable={true} className={classNames.calloutInfo}>
+                <span>{this.props.infoText}</span>
+              </div>
+            </FocusZone>
           </Callout>
         )}
       </span>

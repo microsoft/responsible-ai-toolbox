@@ -8,6 +8,7 @@ import {
   ChoiceGroup,
   IChoiceGroupOption
 } from "@fluentui/react";
+import { srOnly } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React, { FormEvent } from "react";
@@ -128,6 +129,12 @@ export class CohortEditorPanelContent extends React.PureComponent<
           <Link className={styles.clearFilter} onClick={this.clearAllFilters}>
             {localization.Interpret.CohortEditor.clearAllFilters}
           </Link>
+          <div
+            className={srOnly}
+            role="region"
+            aria-live="polite"
+            id="filterInfo"
+          />
         </Stack.Item>
       </Stack>
     );
@@ -144,6 +151,11 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private clearAllFilters = (): void => {
     this.props.onCompositeFiltersUpdated([]);
     this.props.onFiltersUpdated([]);
+    const filterInfo = document.querySelector("#filterInfo");
+    if (filterInfo) {
+      filterInfo.textContent =
+        localization.Interpret.CohortEditor.noFiltersApplied;
+    }
   };
 
   private getErrorMessage = (): string | undefined => {
