@@ -41,7 +41,10 @@ export class IndividualFeatureImportanceView extends React.Component<
         ?.textFeatureImportance;
     const classNames = individualFeatureImportanceStyles();
     return (
-      <Stack tokens={verticalComponentTokens}>
+      <Stack
+        tokens={verticalComponentTokens}
+        id="IndividualFeatureImportanceView"
+      >
         <Stack horizontal tokens={horizontalComponentTokens}>
           <Label className={classNames.boldText}>
             {
