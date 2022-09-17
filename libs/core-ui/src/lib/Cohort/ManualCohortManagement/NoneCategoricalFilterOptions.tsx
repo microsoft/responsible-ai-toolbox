@@ -12,9 +12,11 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import React from "react";
+
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
 import { FluentUIStyles } from "../../util/FluentUIStyles";
 import { IJointMeta } from "../../util/JointDatasetUtils";
+
 import { cohortEditorStyles } from "./CohortEditor.styles";
 import { comparisonOptions } from "./CohortEditorFilterUtils";
 
