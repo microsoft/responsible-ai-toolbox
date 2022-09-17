@@ -5,11 +5,11 @@ import { Stack } from "@fluentui/react";
 import { IVisionListItem, ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 import {
   TitleBarOptions,
   VisionDatasetExplorerTabOptions
-} from "../VisionExplanationDashboard";
-import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+} from "../VisionExplanationDashboardHelper";
 
 import { DataCharacteristics } from "./DataCharacteristics";
 import { ImageList } from "./ImageList";

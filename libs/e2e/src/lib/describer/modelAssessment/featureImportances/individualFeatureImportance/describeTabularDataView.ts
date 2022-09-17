@@ -4,11 +4,11 @@
 import { getMenu } from "../../../../../util/getMenu";
 import { selectRow } from "../../../../../util/Table";
 import { Locators } from "../../Constants";
-import { IModelAssessmentData } from "../../IModelAssessmentData";
 import {
   modelAssessmentDatasets,
   regExForNumbersWithBrackets
-} from "../../modelAssessmentDatasets";
+} from "../../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 // import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";

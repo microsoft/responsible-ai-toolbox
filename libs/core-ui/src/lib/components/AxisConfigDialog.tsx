@@ -18,8 +18,12 @@ import _ from "lodash";
 import React from "react";
 
 import { cohortKey } from "../cohortKey";
+import {
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
+} from "../Context/ModelAssessmentContext";
 import { ISelectorConfig } from "../util/IGenericChartProps";
-import { ITelemetryEvent, TelemetryLevels } from "../util/ITelemetryEvent";
+import { TelemetryLevels } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories } from "../util/JointDatasetUtils";
 import { TelemetryEventName } from "../util/TelemetryEventName";
@@ -33,7 +37,6 @@ import {
 } from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigDialogProps {
-  jointDataset: JointDataset;
   orderedGroupTitles: ColumnCategories[];
   selectedColumn: ISelectorConfig;
   canBin: boolean;
@@ -41,63 +44,66 @@ export interface IAxisConfigDialogProps {
   canDither: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
-  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface IAxisConfigDialogState {
   selectedColumn: ISelectorConfig;
   binCount?: number;
   selectedFilterGroup?: string;
+  dataArray: IComboBoxOption[];
+  classArray: IComboBoxOption[];
 }
 
 export class AxisConfigDialog extends React.PureComponent<
   IAxisConfigDialogProps,
   IAxisConfigDialogState
 > {
+  public static contextType = ModelAssessmentContext;
   private static readonly MIN_HIST_COLS = 2;
   private static readonly MAX_HIST_COLS = 40;
   private static readonly DEFAULT_BIN_COUNT = 5;
 
-  private readonly dataArray: IComboBoxOption[] = new Array(
-    this.props.jointDataset.datasetFeatureCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.DataLabelRoot + index.toString();
-      return {
-        key,
-        text: this.props.jointDataset.metaDict[key].abbridgedLabel
-      };
-    });
-  private readonly classArray: IComboBoxOption[] = new Array(
-    this.props.jointDataset.predictionClassCount
-  )
-    .fill(0)
-    .map((_, index) => {
-      const key = JointDataset.ProbabilityYRoot + index.toString();
-      return {
-        key,
-        text: this.props.jointDataset.metaDict[key].abbridgedLabel
-      };
-    });
-  public constructor(props: IAxisConfigDialogProps) {
-    super(props);
-    this.state = {
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+
+  public componentDidMount(): void {
+    this.setState({
       binCount: getBinCountForProperty(
-        this.props.jointDataset.metaDict[this.props.selectedColumn.property],
+        this.context.jointDataset.metaDict[this.props.selectedColumn.property],
         this.props.canBin,
         AxisConfigDialog.DEFAULT_BIN_COUNT
       ),
+      classArray: new Array(this.context.jointDataset.predictionClassCount)
+        .fill(0)
+        .map((_, index) => {
+          const key = JointDataset.ProbabilityYRoot + index.toString();
+          return {
+            key,
+            text: this.context.jointDataset.metaDict[key].abbridgedLabel
+          };
+        }),
+      dataArray: new Array(this.context.jointDataset.datasetFeatureCount)
+        .fill(0)
+        .map((_, index) => {
+          const key = JointDataset.DataLabelRoot + index.toString();
+          return {
+            key,
+            text: this.context.jointDataset.metaDict[key].abbridgedLabel
+          };
+        }),
       selectedColumn: _.cloneDeep(this.props.selectedColumn),
       selectedFilterGroup: extractSelectionKey(
         this.props.selectedColumn.property
       )
-    };
+    });
   }
 
   public render(): React.ReactNode {
+    if (!this.state) {
+      return React.Fragment;
+    }
     const selectedMeta =
-      this.props.jointDataset.metaDict[this.state.selectedColumn.property];
+      this.context.jointDataset.metaDict[this.state.selectedColumn.property];
     const isDataColumn = this.state.selectedColumn.property.includes(
       JointDataset.DataLabelRoot
     );
@@ -119,6 +125,7 @@ export class AxisConfigDialog extends React.PureComponent<
           <Stack.Item>
             <AxisConfigChoiceGroup
               {...this.props}
+              jointDataset={this.context.jointDataset}
               defaultBinCount={AxisConfigDialog.DEFAULT_BIN_COUNT}
               selectedFilterGroup={this.state.selectedFilterGroup}
               onBinCountUpdated={this.onBinCountUpdated}
@@ -145,7 +152,7 @@ export class AxisConfigDialog extends React.PureComponent<
               <Stack>
                 {isDataColumn && (
                   <ComboBox
-                    options={this.dataArray}
+                    options={this.state.dataArray}
                     onChange={this.setSelectedProperty}
                     label={
                       localization.Interpret.AxisConfigDialog.selectFeature
@@ -155,7 +162,7 @@ export class AxisConfigDialog extends React.PureComponent<
                 )}
                 {isProbabilityColumn && (
                   <ComboBox
-                    options={this.classArray}
+                    options={this.state.classArray}
                     onChange={this.setSelectedProperty}
                     label={localization.Interpret.AxisConfigDialog.selectClass}
                     selectedKey={this.state.selectedColumn.property}
@@ -175,6 +182,7 @@ export class AxisConfigDialog extends React.PureComponent<
                   )}
                 <AxisConfigBinOptions
                   {...this.props}
+                  jointDataset={this.context.jointDataset}
                   defaultBinCount={AxisConfigDialog.DEFAULT_BIN_COUNT}
                   maxHistCols={AxisConfigDialog.MAX_HIST_COLS}
                   minHistCols={AxisConfigDialog.MIN_HIST_COLS}
@@ -224,7 +232,7 @@ export class AxisConfigDialog extends React.PureComponent<
     if (checked === undefined) {
       return;
     }
-    this.props.jointDataset.setTreatAsCategorical(
+    this.context.jointDataset.setTreatAsCategorical(
       this.state.selectedColumn.property,
       checked
     );
@@ -236,13 +244,13 @@ export class AxisConfigDialog extends React.PureComponent<
 
   private readonly saveState = (): void => {
     if (this.state.binCount) {
-      this.props.jointDataset.addBin(
+      this.context.jointDataset.addBin(
         this.state.selectedColumn.property,
         this.state.binCount
       );
     }
     this.props.onAccept(this.state.selectedColumn);
-    this.props.telemetryHook?.({
+    this.context.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: TelemetryEventName.NewAxisConfigSelected
     });
@@ -251,9 +259,9 @@ export class AxisConfigDialog extends React.PureComponent<
   private setDefaultStateForKey(property: string): void {
     const dither =
       this.props.canDither &&
-      this.props.jointDataset.metaDict[property]?.treatAsCategorical;
+      this.context.jointDataset.metaDict[property]?.treatAsCategorical;
     const binCount = getBinCountForProperty(
-      this.props.jointDataset.metaDict[property],
+      this.context.jointDataset.metaDict[property],
       this.props.canBin,
       AxisConfigDialog.DEFAULT_BIN_COUNT
     );

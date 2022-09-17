@@ -3,7 +3,6 @@
 
 import { ITheme } from "@fluentui/react";
 import {
-  IErrorAnalysisMatrix,
   IExplanationDashboardData,
   ISerializedExplanationData,
   Metrics
@@ -54,33 +53,9 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
-    let requestPredictionsMethod = undefined;
-    let requestMatrixMethod = undefined;
-    let requestDebugMLMethod = undefined;
-    let requestImportancesMethod = undefined;
-
-    requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-      return callFlaskService(data, "/predict");
-    };
-    requestMatrixMethod = async (
-      data: any[]
-    ): Promise<IErrorAnalysisMatrix> => {
-      return callFlaskService(data, "/matrix");
-    };
-    requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
-      return callFlaskService(data, "/tree");
-    };
-    requestImportancesMethod = async (data: any[]): Promise<any[]> => {
-      return callFlaskService(data, "/importances");
-    };
     let dashboardProp: IErrorAnalysisDashboardProps;
     if (this.props.classDimension === 1) {
-      return this.get1D(
-        requestDebugMLMethod,
-        requestImportancesMethod,
-        requestMatrixMethod,
-        requestPredictionsMethod
-      );
+      return this.get1D();
     }
     if ("categoricalMap" in this.props.dataset) {
       if (this.props.version === 1) {
@@ -110,37 +85,6 @@ export class App extends React.Component<IAppProps> {
               this.props.dataset.featureNames,
               DatasetName.AdultCensusIncome
             )}
-            localUrl={""}
-            locale={undefined}
-            features={this.props.dataset.featureNames}
-            errorAnalysisData={{
-              maxDepth: 3,
-              metric: Metrics.ErrorRate,
-              minChildSamples: 21,
-              numLeaves: 31
-            }}
-          />
-        );
-      } else if (this.props.version === 3) {
-        return (
-          <ErrorAnalysisDashboard
-            modelInformation={{ modelClass: "blackbox" }}
-            dataSummary={{
-              categoricalMap: this.props.dataset.categoricalMap,
-              classNames: this.props.dataset.classNames,
-              featureNames: this.props.dataset.featureNames
-            }}
-            testData={this.props.dataset.trainingData}
-            predictedY={this.props.dataset.predictedY as any}
-            probabilityY={this.props.dataset.probabilityY}
-            trueY={this.props.dataset.trueY as any}
-            precomputedExplanations={{
-              localFeatureImportance: this.props.dataset.localExplanations
-            }}
-            requestDebugML={requestDebugMLMethod}
-            requestImportances={requestImportancesMethod}
-            requestMatrix={requestMatrixMethod}
-            requestPredictions={requestPredictionsMethod}
             localUrl={""}
             locale={undefined}
             features={this.props.dataset.featureNames}
@@ -228,29 +172,6 @@ export class App extends React.Component<IAppProps> {
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
-    } else if (this.props.version === 3) {
-      const dataset = this.props.dataset as IExplanationDashboardData;
-      dashboardProp = {
-        ...dataset,
-        errorAnalysisData: {
-          maxDepth: 3,
-          metric: Metrics.ErrorRate,
-          minChildSamples: 21,
-          numLeaves: 31
-        },
-        explanationMethod: "mimic",
-        features: dataset.dataSummary.featureNames
-          ? dataset.dataSummary.featureNames
-          : [],
-        locale: this.props.language,
-        localUrl: "https://www.bing.com/",
-        requestDebugML: requestDebugMLMethod,
-        requestImportances: requestImportancesMethod,
-        requestMatrix: requestMatrixMethod,
-        requestPredictions: requestPredictionsMethod,
-        stringParams: { contextualHelp: this.messages },
-        theme: this.props.theme
-      };
     } else {
       let requestFunction = getJsonTreeBreastCancer;
       if (this.props.datasetName === "breastCancerRecallData") {
@@ -287,23 +208,7 @@ export class App extends React.Component<IAppProps> {
     return <ErrorAnalysisDashboard {...dashboardProp} />;
   }
 
-  private get1D = (
-    requestDebugML:
-      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
-      | undefined,
-    requestImportances:
-      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
-      | undefined,
-    requestMatrix:
-      | ((
-          request: any[],
-          abortSignal: AbortSignal
-        ) => Promise<IErrorAnalysisMatrix>)
-      | undefined,
-    requestPredictions:
-      | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
-      | undefined
-  ): React.ReactNode => {
+  private get1D = (): React.ReactNode => {
     let dashboardProp: IErrorAnalysisDashboardProps;
     const dataset = this.props.dataset as IExplanationDashboardData;
     const featureNames = dataset.dataSummary.featureNames || [];
@@ -335,26 +240,6 @@ export class App extends React.Component<IAppProps> {
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
-    } else if (this.props.version === 3) {
-      dashboardProp = {
-        ...dataset,
-        errorAnalysisData: {
-          maxDepth: 3,
-          metric: Metrics.MeanSquaredError,
-          minChildSamples: 21,
-          numLeaves: 31
-        },
-        explanationMethod: "mimic",
-        features: featureNames,
-        locale: this.props.language,
-        localUrl: "https://www.bing.com/",
-        requestDebugML,
-        requestImportances,
-        requestMatrix,
-        requestPredictions,
-        stringParams: { contextualHelp: this.messages },
-        theme: this.props.theme
-      };
     } else {
       const staticTree = getJsonTreeBoston(featureNames);
       const staticMatrix = getJsonMatrix();
@@ -380,30 +265,4 @@ export class App extends React.Component<IAppProps> {
     }
     return <ErrorAnalysisDashboard {...dashboardProp} />;
   };
-}
-
-export async function callFlaskService<TRequest, TResponse>(
-  data: TRequest,
-  urlPath: string
-): Promise<TResponse> {
-  const url = `http://localhost:5000${urlPath}`;
-  return fetch(url, {
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "post"
-  })
-    .then((resp) => {
-      if (resp.status >= 200 && resp.status < 300) {
-        return resp.json();
-      }
-      return Promise.reject(new Error(resp.statusText));
-    })
-    .then((json) => {
-      if (json.error !== undefined) {
-        throw new Error(json.error);
-      }
-      return Promise.resolve(json.data);
-    });
 }
