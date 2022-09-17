@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../../../util/getMenu";
+import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
 import {
   IModelAssessmentData,
   RAINotebookNames
 } from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {

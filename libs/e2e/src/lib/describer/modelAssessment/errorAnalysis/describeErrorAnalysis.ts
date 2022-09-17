@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../Constants";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
 import {
   IModelAssessmentData,
   RAINotebookNames
 } from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 import { describeErrorAnalysisCohortInfo } from "./describeErrorAnalysisCohortInfo";
 import { describeErrorAnalysisTreeMap } from "./describeErrorAnalysisTreeMap";

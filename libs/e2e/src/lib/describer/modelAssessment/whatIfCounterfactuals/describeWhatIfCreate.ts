@@ -3,8 +3,8 @@
 
 import { getSpan } from "../../../../util/getSpan";
 import { Locators } from "../Constants";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 export function describeWhatIfCreate(
   dataShape: IModelAssessmentData,

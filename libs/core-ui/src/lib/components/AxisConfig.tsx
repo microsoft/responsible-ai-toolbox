@@ -5,8 +5,6 @@ import { DefaultButton } from "@fluentui/react";
 import React from "react";
 
 import { ISelectorConfig } from "../util/IGenericChartProps";
-import { ITelemetryEvent } from "../util/ITelemetryEvent";
-import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories } from "../util/JointDatasetUtils";
 
 import { AxisConfigDialog } from "./AxisConfigDialog";
@@ -14,14 +12,12 @@ import { AxisConfigDialog } from "./AxisConfigDialog";
 export interface IAxisConfigProps {
   buttonText: string;
   buttonTitle: string;
-  jointDataset: JointDataset;
   orderedGroupTitles: ColumnCategories[];
   selectedColumn: ISelectorConfig;
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
-  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface IAxisConfigState {
@@ -49,14 +45,12 @@ export class AxisConfig extends React.PureComponent<
         {this.state.dialogOpen && (
           <AxisConfigDialog
             onCancel={this.setClose}
-            jointDataset={this.props.jointDataset}
             orderedGroupTitles={this.props.orderedGroupTitles}
             selectedColumn={this.props.selectedColumn}
             canBin={this.props.canBin}
             mustBin={this.props.mustBin}
             canDither={this.props.canDither}
             onAccept={this.onAccept}
-            telemetryHook={this.props.telemetryHook}
           />
         )}
       </>
