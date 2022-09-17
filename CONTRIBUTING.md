@@ -126,7 +126,7 @@ cypress window will open locally - select test file to run the tests
 6. `pip install -e raiwidgets` to install raiwidgets locally.
 7. `pip install jupyter`
 8. `cd notebooks\responsibleaidashboard`
-9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`.
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible running notebook manually and using `yarn e2e-widget -w --host {host} -n {notebook}` where host is where rai widget runs on (printed in notebook output) and notebook is the name of notebook you are running. Eg: `yarn e2e-widget -w --host 5000 -n responsibleaidashboard-census-classification-model-debugging`
 
 Cypress window will open locally - select test file to run the tests.
 

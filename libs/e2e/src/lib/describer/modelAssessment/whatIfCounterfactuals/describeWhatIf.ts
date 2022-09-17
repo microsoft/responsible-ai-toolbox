@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { visit } from "@responsible-ai/e2e";
+
 import { Locators } from "../Constants";
 import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../IModelAssessmentData";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeAxisFlyouts } from "./describeAxisFlyouts";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
@@ -16,18 +15,11 @@ const testName = "What If";
 
 export function describeWhatIf(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
     if (

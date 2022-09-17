@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { visit } from "@responsible-ai/e2e";
+
 import { getMenu } from "../../../../../util/getMenu";
 import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../../IModelAssessmentData";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
@@ -19,21 +18,14 @@ const testName = "Aggregate feature importance";
 
 export function describeAggregateFeatureImportance(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasets
+  name: keyof typeof modelAssessmentDatasets
 ): void {
   if (datasetShape.featureImportanceData?.noFeatureImportance) {
     return;
   }
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
     if (!datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
