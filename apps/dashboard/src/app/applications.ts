@@ -35,7 +35,8 @@ import {
   emotion,
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
-import { visionData } from "../model-assessment-vision/__mock_data__/visionData";
+import { fridge } from "../model-assessment-vision/__mock_data__/fridge";
+import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -259,17 +260,30 @@ export const applications: IApplications = <const>{
   },
   modelAssessmentVision: {
     datasets: {
-      visionModelExplanationData: {
+      fridge: {
         classDimension: 3,
         dataset: {
-          categorical_features: visionData.categorical_features,
-          class_names: visionData.class_names,
-          feature_names: visionData.feature_names,
-          features: visionData.features,
-          images: visionData.images,
-          predicted_y: visionData.predicted_y,
-          task_type: visionData.task_type,
-          true_y: visionData.true_y
+          categorical_features: fridge.categorical_features,
+          class_names: fridge.class_names,
+          feature_names: fridge.feature_names,
+          features: fridge.features,
+          images: fridge.images,
+          predicted_y: fridge.predicted_y,
+          task_type: fridge.task_type,
+          true_y: fridge.true_y
+        }
+      },
+      imagenet: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: imagenet.categorical_features,
+          class_names: imagenet.class_names,
+          feature_names: imagenet.feature_names,
+          features: imagenet.features,
+          images: imagenet.images,
+          predicted_y: imagenet.predicted_y,
+          task_type: imagenet.task_type,
+          true_y: imagenet.true_y
         }
       } as IModelAssessmentDataSet
     },
