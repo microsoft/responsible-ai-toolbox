@@ -197,7 +197,7 @@ export class MatrixFilter extends React.PureComponent<
               baseCohort={this.props.baseCohort}
               updateMatrixLegendState={this.updateMatrixLegendState}
               isEnabled={this.props.isEnabled}
-              metric={this.context.errorAnalysisData!.metric}
+              metric={this.context.errorAnalysisData?.metric}
               telemetryHook={this.props.telemetryHook}
             />
           )}
@@ -225,7 +225,9 @@ export class MatrixFilter extends React.PureComponent<
   };
 
   private setMetric = (metric: string): void => {
-    this.context.errorAnalysisData!.metric = metric;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.metric = metric;
+    }
     this.forceUpdate();
   };
 

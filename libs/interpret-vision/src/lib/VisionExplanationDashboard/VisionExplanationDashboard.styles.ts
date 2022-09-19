@@ -7,7 +7,7 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
-export interface IDatasetExplorerTab {
+export interface IVisionExplanationDashboardStyles {
   cohortDropdown: IStyle;
   cohortPickerLabel: IStyle;
   cohortPickerLabelWrapper: IStyle;
@@ -15,8 +15,8 @@ export interface IDatasetExplorerTab {
   filterButton: IStyle;
   searchBox: IStyle;
   toolBarContainer: IStyle;
-  legendIndicator: IStyle;
   itemsSelectedContainer: IStyle;
+  legendIndicator: IStyle;
   mainContainer: IStyle;
   mainImageContainer: IStyle;
   halfContainer: IStyle;
@@ -27,10 +27,10 @@ export interface IDatasetExplorerTab {
   tabs: IStyle;
 }
 
-export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IDatasetExplorerTab> =
+export const visionExplanationDashboardStyles: () => IProcessedStyleSet<IVisionExplanationDashboardStyles> =
   () => {
     const theme = getTheme();
-    return mergeStyleSets<IDatasetExplorerTab>({
+    return mergeStyleSets<IVisionExplanationDashboardStyles>({
       cohortDropdown: {
         width: "300px"
       },

@@ -28,7 +28,7 @@ export class ChangeGlobalCohort extends React.Component<IChangeGlobalCohortProps
       )
     );
   }
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.context.shiftErrorCohort(cohort);
     this.props.onDismiss();
   };

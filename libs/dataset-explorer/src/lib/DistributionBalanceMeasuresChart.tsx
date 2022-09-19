@@ -35,7 +35,7 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
   IDistributionBalanceMeasuresProps,
   IDistributionBalanceMeasuresState
 > {
-  static readonly INFO_ICON = "&#9432;";
+  private static readonly INFO_ICON = "&#9432;";
 
   public constructor(props: IDistributionBalanceMeasuresProps) {
     super(props);
@@ -188,7 +188,7 @@ export class DistributionBalanceMeasuresChart extends React.PureComponent<
 
     return {
       chart: {
-        numberFormatter: (value: number) => value.toFixed(3),
+        numberFormatter: (value: number): string => value.toFixed(3),
         type: "column"
       },
       legend: {

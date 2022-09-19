@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../util/getMenu";
-import { interpretDatasets } from "../interpretDatasets";
+import { interpretDatasets } from "../interpretDatasets/interpretDatasets";
 
 import { describeAxisConfigDialog } from "./describeAxisConfigDialog";
 import { describeModelPerformanceStats } from "./describeModelPerformanceStats";

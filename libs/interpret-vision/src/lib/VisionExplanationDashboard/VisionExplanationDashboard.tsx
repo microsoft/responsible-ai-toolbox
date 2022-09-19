@@ -13,13 +13,7 @@ import {
 import {
   defaultModelAssessmentContext,
   IVisionListItem,
-  ModelAssessmentContext,
-  Cohort,
-  IFilter,
-  FilterMethods,
-  ICompositeFilter,
-  Operations,
-  JointDataset
+  ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -34,24 +28,14 @@ import { ToolBar } from "./Controls/ToolBar";
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
 import { visionExplanationDashboardStyles } from "./VisionExplanationDashboard.styles";
-
-export enum VisionDatasetExplorerTabOptions {
-  ImageExplorerView = "Image explorer view",
-  TableView = "Table view",
-  DataCharacteristics = "Data characteristics"
-}
-
-export enum TitleBarOptions {
-  Error,
-  Success
-}
-
-const defaultImageSizes = {
-  dataCharacteristics: 100,
-  imageExplorerView: 200,
-  tableView: 50
-};
-
+import {
+  preprocessData,
+  getItems,
+  defaultState,
+  VisionDatasetExplorerTabOptions,
+  defaultImageSizes,
+  getCohort
+} from "./VisionExplanationDashboardHelper";
 export class VisionExplanationDashboard extends React.Component<
   IVisionExplanationDashboardProps,
   IVisionExplanationDashboardState
@@ -59,42 +43,32 @@ export class VisionExplanationDashboard extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-
-  computedExplanations: Map<number, string>;
-  originalErrorInstances: IVisionListItem[];
-  originalSuccessInstances: IVisionListItem[];
+  private originalErrorInstances: IVisionListItem[] = [];
+  private originalSuccessInstances: IVisionListItem[] = [];
   public constructor(props: IVisionExplanationDashboardProps) {
     super(props);
-    this.computedExplanations = new Map();
-    this.originalErrorInstances = [];
-    this.originalSuccessInstances = [];
-    this.state = {
-      currentExplanation: "",
-      errorInstances: [],
-      imageDim: 200,
-      loadingExplanation: false,
-      numRows: 3,
-      otherMetadataFieldNames: ["mean_pixel_value"],
-      pageSize: 10,
-      panelOpen: false,
-      searchValue: "",
-      selectedIndices: [],
-      selectedItem: undefined,
-      selectedKey: VisionDatasetExplorerTabOptions.ImageExplorerView,
-      successInstances: []
-    };
+    this.state = defaultState;
   }
-
   public componentDidMount(): void {
-    this.preprocessData();
+    const data = preprocessData(this.props);
+    if (!data) {
+      return;
+    }
+    this.originalErrorInstances = data.errorInstances;
+    this.originalSuccessInstances = data.successInstances;
+    this.setState(data);
   }
-
   public componentDidUpdate(prevProps: IVisionExplanationDashboardProps): void {
     if (this.props.selectedCohort !== prevProps.selectedCohort) {
-      this.updateItems();
+      this.setState(
+        getItems(
+          this.props,
+          this.originalErrorInstances,
+          this.originalSuccessInstances
+        )
+      );
     }
   }
-
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     const imageStyles = imageListStyles();
@@ -217,7 +191,7 @@ export class VisionExplanationDashboard extends React.Component<
         </Stack.Item>
         <Stack.Item>
           <Flyout
-            explanation={this.state.currentExplanation}
+            explanations={this.state.computedExplanations}
             isOpen={this.state.panelOpen}
             item={this.state.selectedItem}
             loadingExplanation={this.state.loadingExplanation}
@@ -228,156 +202,56 @@ export class VisionExplanationDashboard extends React.Component<
       </Stack>
     );
   }
-
-  private preprocessData() {
-    const dataSummary = this.props.dataSummary;
-    const errorInstances: IVisionListItem[] = this.state.errorInstances;
-    const successInstances: IVisionListItem[] = this.state.successInstances;
-    const classNames = this.props.dataSummary.class_names;
-
-    const predictedY = dataSummary.predicted_y.map((index) => {
-      return classNames[index];
-    });
-
-    const trueY = dataSummary.true_y.map((index) => {
-      return classNames[index];
-    });
-
-    const features: number[] = dataSummary.features!.map((featuresArr) => {
-      return featuresArr[0] as number;
-    });
-
-    const fieldNames = dataSummary.feature_names!;
-
-    dataSummary.images?.forEach((image, index) => {
-      const item: IVisionListItem = {
-        image,
-        index,
-        predictedY: predictedY[index],
-        trueY: trueY[index]
-      };
-      fieldNames.forEach((fieldName) => {
-        item[fieldName] = features[index];
-      });
-      item.predictedY === item.trueY
-        ? successInstances.push(item)
-        : errorInstances.push(item);
-    });
-
-    this.originalErrorInstances = errorInstances;
-    this.originalSuccessInstances = successInstances;
-
-    this.setState({
-      errorInstances,
-      otherMetadataFieldNames: fieldNames,
-      successInstances
-    });
-  }
-
-  private updateItems = () => {
-    const indices = new Set(
-      this.props.selectedCohort.cohort.filteredData.map(
-        (row: { [key: string]: number }) => {
-          return row[JointDataset.IndexLabel] as number;
-        }
-      )
-    );
-
-    let errorInstances = this.originalErrorInstances;
-    let successInstances = this.originalSuccessInstances;
-
-    errorInstances = errorInstances.filter((item: IVisionListItem) =>
-      indices.has(item.index)
-    );
-    successInstances = successInstances.filter((item: IVisionListItem) =>
-      indices.has(item.index)
-    );
-    this.setState({
-      errorInstances: [...errorInstances],
-      successInstances: [...successInstances]
-    });
-  };
-
-  private updateSelectedIndices = (indices: number[]) => {
+  private updateSelectedIndices = (indices: number[]): void => {
     this.setState({ selectedIndices: indices });
   };
-
-  private addCohortWrapper = (name: string, switchCohort: boolean) => {
-    const { selectedIndices } = this.state;
-    const filters: IFilter[] = [];
-
-    selectedIndices.forEach((index) => {
-      const filter: IFilter = {
-        arg: [index],
-        column: "Index",
-        method: FilterMethods.Equal
-      };
-      filters.push(filter);
-    });
-
-    const compositeFilter: ICompositeFilter = {
-      compositeFilters: filters,
-      operation: Operations.Or
-    };
-
-    const cohort = new Cohort(
-      name,
-      this.context.jointDataset,
-      [],
-      [compositeFilter]
+  private addCohortWrapper = (name: string, switchCohort: boolean): void => {
+    this.context.addCohort(
+      getCohort(name, this.state.selectedIndices, this.context.jointDataset),
+      switchCohort
     );
-
-    this.context.addCohort(cohort, switchCohort);
   };
-
-  private onPanelClose = () => {
-    this.setState({ currentExplanation: "", panelOpen: !this.state.panelOpen });
+  private onPanelClose = (): void => {
+    this.setState({ panelOpen: !this.state.panelOpen });
   };
-
   private onSearch = (
     _event?: React.ChangeEvent<HTMLInputElement>,
     newValue?: string
   ): void => {
-    if (!newValue) {
-      newValue = "";
-    }
-    this.setState({ searchValue: newValue });
+    this.setState({ searchValue: newValue || "" });
   };
-
   private onItemSelect = (item: IVisionListItem): void => {
     this.setState({ panelOpen: !this.state.panelOpen, selectedItem: item });
-
     const index = item.index;
-
-    const computedExplanation = this.computedExplanations.get(index);
+    const { computedExplanations, loadingExplanation } = this.state;
+    const computedExplanation = computedExplanations.get(index);
     if (computedExplanation) {
+      loadingExplanation[index] = false;
       this.setState({
-        currentExplanation: computedExplanation,
-        loadingExplanation: false
+        loadingExplanation
       });
       return;
     }
-
     if (this.props.requestExp) {
-      this.setState({ loadingExplanation: true });
+      loadingExplanation[index] = true;
+      this.setState({ loadingExplanation });
       this.props
         .requestExp(index, new AbortController().signal)
         .then((result) => {
           const explanation = result.toString();
-          this.computedExplanations.set(index, explanation);
+          computedExplanations.set(index, explanation);
+          loadingExplanation[index] = false;
           this.setState({
-            currentExplanation: explanation,
-            loadingExplanation: false
+            computedExplanations,
+            loadingExplanation
           });
         });
     }
   };
-
   /* For onSliderChange, the max imageDims for each tab (400 and 100) are selected arbitrary to 
   look close to the Figma design sketch. For handleLinkClick, the default values chosen are half
   the maximum values chosen in onSliderChange. */
-
-  private onSliderChange = (value: number) => {
+  private onSliderChange = (value: number): void => {
     if (
       this.state.selectedKey ===
       VisionDatasetExplorerTabOptions.ImageExplorerView
@@ -387,34 +261,31 @@ export class VisionExplanationDashboard extends React.Component<
       this.setState({ imageDim: Math.floor((value / 100) * 100) });
     }
   };
-
   private onNumRowsSelect = (
     _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
   ): void => {
     this.setState({ numRows: Number(item?.text) });
   };
-
   private onPageSizeSelect = (
     _event: React.FormEvent<HTMLDivElement>,
     item: IDropdownOption | undefined
   ): void => {
     this.setState({ pageSize: Number(item?.text) });
   };
-
-  private handleLinkClick = (item?: PivotItem) => {
-    if (item) {
-      this.setState({ selectedKey: item.props.itemKey! });
-      if (
-        item.props.itemKey === VisionDatasetExplorerTabOptions.ImageExplorerView
-      ) {
-        this.setState({ imageDim: defaultImageSizes.imageExplorerView });
-      } else if (
-        item.props.itemKey === VisionDatasetExplorerTabOptions.TableView
-      ) {
-        this.setState({ imageDim: defaultImageSizes.tableView });
-      } else {
-        this.setState({ imageDim: defaultImageSizes.dataCharacteristics });
+  private handleLinkClick = (item?: PivotItem): void => {
+    if (item && item.props.itemKey !== undefined) {
+      this.setState({ selectedKey: item.props.itemKey });
+      switch (item.props.itemKey) {
+        case VisionDatasetExplorerTabOptions.ImageExplorerView:
+          this.setState({ imageDim: defaultImageSizes.imageExplorerView });
+          break;
+        case VisionDatasetExplorerTabOptions.TableView:
+          this.setState({ imageDim: defaultImageSizes.tableView });
+          break;
+        default:
+          this.setState({ imageDim: defaultImageSizes.dataCharacteristics });
+          break;
       }
     }
   };

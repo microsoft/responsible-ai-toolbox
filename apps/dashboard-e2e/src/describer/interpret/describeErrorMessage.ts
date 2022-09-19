@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { interpretDatasets } from "./interpretDatasets";
+import { interpretDatasets } from "./interpretDatasets/interpretDatasets";
 
 export function describeErrorMessage(
   name: keyof typeof interpretDatasets

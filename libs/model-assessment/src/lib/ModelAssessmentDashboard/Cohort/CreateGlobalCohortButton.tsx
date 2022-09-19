@@ -40,7 +40,7 @@ export class CreateGlobalCohortButton extends React.Component<
       </>
     );
   }
-  private toggleVisibility = () => {
+  private toggleVisibility = (): void => {
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));

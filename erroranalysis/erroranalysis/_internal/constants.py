@@ -74,8 +74,8 @@ class Metrics(str, Enum):
     'selection rate'. The multiclass classification
     metrics are 'macro_precision_score',
     'micro_precision_score', 'macro_recall_score',
-    'micro_recall_score', 'f1_score',
-    'accuracy_score' and 'error_rate'.
+    'micro_recall_score', 'macro_f1_score',
+    'micro_f1_score', 'accuracy_score' and 'error_rate'.
     """
     ACCURACY_SCORE = 'accuracy_score'
     MEAN_PREDICTION = 'mean_prediction'
@@ -190,6 +190,7 @@ multiclass_classification_metrics = [
     Metrics.MICRO_PRECISION_SCORE,
     Metrics.MACRO_RECALL_SCORE,
     Metrics.MICRO_RECALL_SCORE,
-    Metrics.F1_SCORE,
+    Metrics.MACRO_F1_SCORE,
+    Metrics.MICRO_F1_SCORE,
     Metrics.ACCURACY_SCORE,
     Metrics.ERROR_RATE]

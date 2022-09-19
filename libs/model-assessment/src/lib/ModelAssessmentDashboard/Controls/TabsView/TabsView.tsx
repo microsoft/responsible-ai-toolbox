@@ -36,7 +36,7 @@ import {
 } from "@responsible-ai/error-analysis";
 import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
-import _, { Dictionary } from "lodash";
+import { Dictionary } from "lodash";
 import * as React from "react";
 
 import { AddTabButton } from "../../AddTabButton";
@@ -154,29 +154,33 @@ export class TabsView extends React.PureComponent<
               className={classNames.section}
               styles={{ root: { boxShadow: DefaultEffects.elevation4 } }}
             >
-              {t.key === GlobalTabKeys.VisionTab && this.props.dataset.images && (
-                <>
-                  <div className={classNames.sectionHeader}>
-                    <Text variant={"xxLarge"}>
-                      {localization.ModelAssessment.ComponentNames.VisionTab}
-                    </Text>
-                  </div>
-                  <VisionTab
-                    dataSummary={{
-                      class_names: this.props.dataset.class_names!,
-                      feature_names: this.props.dataset.feature_names,
-                      features: this.props.dataset.features!,
-                      images: this.props.dataset.images,
-                      predicted_y: this.props.dataset.predicted_y!,
-                      true_y: this.props.dataset.true_y
-                    }}
-                    requestExp={this.props.requestExp}
-                    cohorts={this.props.cohorts}
-                    setSelectedCohort={this.props.setSelectedCohort}
-                    selectedCohort={this.props.selectedCohort}
-                  />
-                </>
-              )}
+              {t.key === GlobalTabKeys.VisionTab &&
+                this.props.dataset.images &&
+                this.props.dataset.predicted_y &&
+                this.props.dataset.class_names && (
+                  <>
+                    <div className={classNames.sectionHeader}>
+                      <Text variant={"xxLarge"}>
+                        {localization.ModelAssessment.ComponentNames.VisionTab}
+                      </Text>
+                    </div>
+                    <VisionTab
+                      dataSummary={{
+                        class_names: this.props.dataset.class_names,
+                        feature_names: this.props.dataset.feature_names,
+                        features: this.props.dataset.features,
+                        images: this.props.dataset.images,
+                        predicted_y: this.props.dataset.predicted_y,
+                        task_type: this.props.dataset.task_type,
+                        true_y: this.props.dataset.true_y
+                      }}
+                      requestExp={this.props.requestExp}
+                      cohorts={this.props.cohorts}
+                      setSelectedCohort={this.props.setSelectedCohort}
+                      selectedCohort={this.props.selectedCohort}
+                    />
+                  </>
+                )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>

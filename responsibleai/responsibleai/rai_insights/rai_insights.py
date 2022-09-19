@@ -47,11 +47,14 @@ _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
 _PREDICT_PROBA = 'predict_proba'
+_PREDICT_OUTPUT = 'predict_output'
+_PREDICT_PROBA_OUTPUT = 'predict_proba_output'
 _COLUMN_NAME = 'column_name'
 _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
+_MODEL = "model"
 
 
 class RAIInsights(RAIBaseInsights):
@@ -135,6 +138,19 @@ class RAIInsights(RAIBaseInsights):
             serializer)
 
         self._try_add_data_balance()
+
+        if model is not None:
+            # Cache predictions of the model
+            self.predict_output = model.predict(
+                test.drop(columns=[target_column]))
+            if hasattr(model, SKLearn.PREDICT_PROBA):
+                self.predict_proba_output = model.predict_proba(
+                    test.drop(columns=[target_column]))
+            else:
+                self.predict_proba_output = None
+        else:
+            self.predict_output = None
+            self.predict_proba_output = None
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -282,7 +298,7 @@ class RAIInsights(RAIBaseInsights):
                 )
 
             if len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)):
+                    len(set(test.columns) - set(train.columns)) != 0:
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
@@ -302,7 +318,8 @@ class RAIInsights(RAIBaseInsights):
                             target_column)
                     )
 
-                difference_set = set(categorical_features) - set(train.columns)
+                difference_set = set(categorical_features) - set(
+                    train.drop(columns=[target_column]).columns)
                 if len(difference_set) > 0:
                     message = ("Feature names in categorical_features "
                                "do not exist in train data: "
@@ -326,6 +343,18 @@ class RAIInsights(RAIBaseInsights):
                             "Please check your test data.".format(column)
                         )
 
+            train_features = train.drop(columns=[target_column]).columns
+            numeric_features = train.drop(
+                columns=[target_column]).select_dtypes(
+                    include='number').columns.tolist()
+            string_features_set = set(train_features) - set(numeric_features)
+            if len(string_features_set - set(categorical_features)) > 0:
+                raise UserConfigValidationException(
+                    "The following string features were not "
+                    "identified as categorical features: {0}".format(
+                        string_features_set - set(categorical_features))
+                )
+
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:
                 if len(set(train[target_column].unique()) -
@@ -347,9 +376,9 @@ class RAIInsights(RAIBaseInsights):
             if model is not None:
                 # Pick one row from train and test data
                 small_train_data = train.iloc[0:1].drop(
-                    [target_column], axis=1)
+                    columns=[target_column])
                 small_test_data = test.iloc[0:1].drop(
-                    [target_column], axis=1)
+                    columns=[target_column])
 
                 small_train_features_before = list(small_train_data.columns)
 
@@ -468,8 +497,6 @@ class RAIInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
-        pred_y = self.model.predict(
-            self.test.drop(columns=[self.target_column]))
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
             dataset=self.test.drop(columns=[self.target_column]),
@@ -477,7 +504,7 @@ class RAIInsights(RAIBaseInsights):
             categorical_features=self.categorical_features,
             categories=self._categories,
             true_y=self.test[self.target_column],
-            pred_y=pred_y,
+            pred_y=self.predict_output,
             model_task=self.task_type)
 
         return filter_data_with_cohort.filter_data_from_cohort(
@@ -608,20 +635,14 @@ class RAIInsights(RAIBaseInsights):
         if self.model is None:
             return
 
-        test_without_target_column = self.test.drop(
-            [self.target_column], axis=1)
-
-        predict_output = self.model.predict(test_without_target_column)
         self._write_to_file(
             prediction_output_path / (_PREDICT + _JSON_EXTENSION),
-            json.dumps(predict_output.tolist()))
+            json.dumps(self.predict_output.tolist()))
 
-        if hasattr(self.model, SKLearn.PREDICT_PROBA):
-            predict_proba_output = self.model.predict_proba(
-                test_without_target_column)
+        if self.predict_proba_output is not None:
             self._write_to_file(
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
-                json.dumps(predict_proba_output.tolist()))
+                json.dumps(self.predict_proba_output.tolist()))
 
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
@@ -724,6 +745,36 @@ class RAIInsights(RAIBaseInsights):
                     inst.__dict__[_TARGET_COLUMN]]))
 
     @staticmethod
+    def _load_predictions(inst, path):
+        """Load the predict() and predict_proba() output.
+
+        :param inst: RAIBaseInsights object instance.
+        :type inst: RAIBaseInsights
+        :param path: The directory path to data location.
+        :type path: str
+        """
+        if inst.__dict__[_MODEL] is None:
+            inst.__dict__[_PREDICT_OUTPUT] = None
+            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+            return
+
+        prediction_output_path = Path(path) / _PREDICTIONS
+
+        with open(prediction_output_path / (
+                _PREDICT + _JSON_EXTENSION), 'r') as file:
+            predict_output = json.load(file)
+        inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
+
+        if inst.__dict__[_TASK_TYPE] == ModelTask.CLASSIFICATION:
+            with open(prediction_output_path / (
+                    _PREDICT_PROBA + _JSON_EXTENSION), 'r') as file:
+                predict_proba_output = json.load(file)
+            inst.__dict__[_PREDICT_PROBA_OUTPUT] = np.array(
+                predict_proba_output)
+        else:
+            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+
+    @staticmethod
     def load(path):
         """Load the RAIInsights from the given path.
 
@@ -747,5 +798,7 @@ class RAIInsights(RAIBaseInsights):
         # load current state
         RAIBaseInsights._load(path, inst, manager_map,
                               RAIInsights._load_metadata)
+
+        RAIInsights._load_predictions(inst, path)
 
         return inst

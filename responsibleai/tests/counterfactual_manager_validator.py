@@ -12,7 +12,7 @@ from responsibleai.exceptions import (DuplicateManagerConfigException,
 
 
 def verify_counterfactual_object(counterfactual_obj, feature_importance=False):
-    counterfactual_obj.cf_examples_list is not None
+    assert counterfactual_obj.cf_examples_list is not None
     if feature_importance:
         assert counterfactual_obj.local_importance is not None
         assert counterfactual_obj.summary_importance is not None

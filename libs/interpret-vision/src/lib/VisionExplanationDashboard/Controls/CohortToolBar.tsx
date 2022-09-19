@@ -56,10 +56,10 @@ export class CohortToolBar extends React.Component<
     };
   }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     const cohortNames: string[] = [];
     this.props.cohorts.forEach((cohort: ErrorCohort) => {
-      cohortNames.push(cohort.cohort.name);
+      cohortNames.push(cohort.cohort.name.toLowerCase());
     });
     const selectionCount: number = this.props.selectedIndices.length;
     this.setState({ cohortNames, selectionCount });
@@ -68,6 +68,13 @@ export class CohortToolBar extends React.Component<
   public componentDidUpdate(prevProps: ICohortToolBarProps): void {
     if (prevProps.selectedIndices !== this.props.selectedIndices) {
       this.setState({ selectionCount: this.props.selectedIndices.length });
+    }
+    if (prevProps.cohorts !== this.props.cohorts) {
+      const cohortNames: string[] = [];
+      this.props.cohorts.forEach((cohort: ErrorCohort) => {
+        cohortNames.push(cohort.cohort.name.toLowerCase());
+      });
+      this.setState({ cohortNames });
     }
   }
 
@@ -87,7 +94,7 @@ export class CohortToolBar extends React.Component<
           <Stack.Item>
             <PrimaryButton
               text={localization.InterpretVision.Cohort.save}
-              onClick={this.openDialogue()}
+              onClick={this.openDialogue}
             />
           </Stack.Item>
         </Stack>
@@ -134,35 +141,35 @@ export class CohortToolBar extends React.Component<
     );
   }
 
-  private openDialogue = () => () => {
+  private openDialogue = (): void => {
     this.setState({ hideSaveCohortDialog: false });
   };
 
-  private hideDialogue = () => {
+  private hideDialogue = (): void => {
     this.setState({ hideSaveCohortDialog: true });
   };
 
   private onChangeNewCohortName = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
-  ) => {
+  ): void => {
     this.setState({ newCohortName: newValue || "" });
   };
 
-  private addCohortWrapper = (switchCohort: boolean) => () => {
+  private addCohortWrapper = (switchCohort: boolean) => (): void => {
     let cohortName = this.state.newCohortName;
+    if (cohortName.length === 0) {
+      cohortName = `Cohort ${this.state.cohortNames.length + 1}`;
+    }
     if (this.state.selectionCount === 0) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorNumSelected
       });
-    } else if (this.state.cohortNames.includes(cohortName)) {
+    } else if (this.state.cohortNames.includes(cohortName.toLowerCase())) {
       this.setState({
         errorMessage: localization.InterpretVision.Cohort.errorCohortName
       });
     } else {
-      if (cohortName.length === 0) {
-        cohortName = `Cohort ${this.props.cohorts.length + 1}`;
-      }
       this.setState({ hideSaveCohortDialog: true });
       this.setState({ errorMessage: "" });
       this.setState({ newCohortName: "" });

@@ -9,7 +9,6 @@ import {
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { AggregateBalanceMeasuresTable } from "./AggregateBalanceMeasuresTable";
@@ -17,7 +16,7 @@ import { dataBalanceTabStyles } from "./DataBalanceTab.styles";
 import { DistributionBalanceMeasuresChart } from "./DistributionBalanceMeasuresChart";
 import { FeatureBalanceMeasuresChart } from "./FeatureBalanceMeasuresChart";
 
-export class IDataBalanceTabProps {
+export interface IDataBalanceTabProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 

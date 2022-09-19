@@ -7,7 +7,9 @@ import { IFeatureConfigurationRow } from "./FeatureConfigurationFlyout";
 
 const maxGroups = 10;
 
-export function shortFeatureGroups(items: IFeatureConfigurationRow[]) {
+export function shortFeatureGroups(
+  items: IFeatureConfigurationRow[]
+): IFeatureConfigurationRow[] {
   // if feature groups is more than 10, keep the top 10 groups, for the rest show as Other
   items.forEach((item) => {
     if (item.groups.length > maxGroups) {

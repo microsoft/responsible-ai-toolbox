@@ -19,7 +19,7 @@ export class FeatureTabActionButton extends React.PureComponent<IFeatureTabActio
     );
   }
 
-  private onClick = () => {
+  private onClick = (): void => {
     this.props.onClick(this.props.index);
   };
 }
