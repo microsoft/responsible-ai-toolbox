@@ -300,8 +300,10 @@ async function main() {
     console.log("setting flights to undefined!!!");
   }
   checkIfAllNotebooksHaveTests();
-  if (!!skipgen && !host) {
+  if (!skipgen && !host) {
     convertNotebooks(notebook, flights);
+  } else {
+    console.log("Skipping converting notebooks", skipgen, host);
   }
 
   if (host && watch) {
