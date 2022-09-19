@@ -431,6 +431,32 @@ class TestRAIInsightsValidations:
                 task_type='classification',
                 feature_metadata=feature_metadata)
 
+    def test_misidentified_categorical_features(self):
+        X_train = pd.DataFrame(data=[['1', 1], ['2', 3]],
+                               columns=['c1', 'c2'])
+        y_train = np.array([1, 0])
+        X_test = pd.DataFrame(data=[['1', 2], ['2', 3]],
+                              columns=['c1', 'c2'])
+        y_test = np.array([1, 0])
+
+        model = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
+                               max_depth=5, n_estimators=200, n_jobs=1,
+                               random_state=777)
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification')
+
+        assert "The following string features were not " + \
+            "identified as categorical features: {\'c1\'}" in str(ucve.value)
+
 
 class TestCausalUserConfigValidations:
 
