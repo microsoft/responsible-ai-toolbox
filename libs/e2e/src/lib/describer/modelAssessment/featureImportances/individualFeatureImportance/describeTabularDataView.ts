@@ -30,7 +30,6 @@ export function describeTabularDataView(
       });
 
       it("should collapse 'Correct predictions' by default", () => {
-        cy.get(Locators.DataAnalysisTab).eq(0).click();
         cy.get(Locators.IFICollapseButton).should("be.visible");
       });
 
@@ -62,12 +61,16 @@ export function describeTabularDataView(
         if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
           cy.get(Locators.IFICollapseButton).eq(1).click(); // expand correct predictions
         }
-        selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
+        selectRow(
+          "Index",
+          dataShape.featureImportanceData?.rowToSelect || "4",
+          Locators.IFIContainer
+        );
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
         );
-        selectRow("Index", "4");
+        selectRow("Index", "4", Locators.IFIContainer);
       });
     });
 
