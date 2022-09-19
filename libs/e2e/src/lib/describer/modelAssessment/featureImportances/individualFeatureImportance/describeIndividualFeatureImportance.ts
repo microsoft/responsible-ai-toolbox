@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { visit } from "@responsible-ai/e2e";
-
 import { getMenu } from "../../../../../util/getMenu";
+import { visit } from "../../../../../util/visit";
 import { Locators } from "../../Constants";
 import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
