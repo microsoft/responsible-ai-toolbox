@@ -35,13 +35,13 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
       <>
         {this.props.viewOption === CausalAnalysisOptions.Aggregate && (
           <CausalAggregateView
-            data={this.props.data}
+            globalEffects={this.props.data.global_effects}
             telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Individual && (
           <CausalIndividualView
-            data={this.props.data}
+            localEffects={this.props.data.local_effects}
             telemetryHook={this.props.telemetryHook}
           />
         )}
