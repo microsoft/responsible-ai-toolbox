@@ -83,7 +83,7 @@ export function getFeatureImportanceBarOptions(
         cursor: "pointer",
         point: {
           events: {
-            click() {
+            click(): void {
               if (onFeatureSelection === undefined) {
                 return;
               }

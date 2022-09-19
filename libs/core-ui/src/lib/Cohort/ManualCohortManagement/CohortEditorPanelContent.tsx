@@ -170,7 +170,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
 
   private onSelectedFilterCategoryUpdated = (
     selectedFilterCategory?: string
-  ) => {
+  ): void => {
     this.setState({ selectedFilterCategory });
   };
 
@@ -224,7 +224,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     });
   };
 
-  private onOpenedFilterUpdated = (openedFilter?: IFilter) => {
+  private onOpenedFilterUpdated = (openedFilter?: IFilter): void => {
     this.setState({ openedFilter });
   };
 

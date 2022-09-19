@@ -18,8 +18,8 @@ export function getTokenImportancesChartOptions(
   theme: ITheme
 ): IHighchartsConfig {
   const importances = props.localExplanations;
-  const k = props.topK!;
-  const sortedList = Utils.sortedTopK(importances, k, props.radio!);
+  const k = props.topK;
+  const sortedList = Utils.sortedTopK(importances, k, props.radio);
   const [x, y, ylabel, tooltip]: [number[], number[], string[], string[]] = [
     [],
     [],
@@ -80,7 +80,7 @@ export function getTokenImportancesChartOptions(
     plotOptions: {
       bar: {
         tooltip: {
-          pointFormatter() {
+          pointFormatter(): string {
             return `${tooltip[this.x || 0]}: ${this.y || 0}`;
           }
         }

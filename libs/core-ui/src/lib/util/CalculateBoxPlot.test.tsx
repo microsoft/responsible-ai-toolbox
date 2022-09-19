@@ -222,12 +222,12 @@ describe("calculateBoxPlot", () => {
     ${[1, 0, 2]}               | ${{ high: 2, low: 0, median: 1, q1: 0, q3: 2 }}
     ${[10, 5, -10, -5, 2, -2]} | ${{ high: 10, low: -10, median: 0, q1: -5, q3: 5 }}
   `("should return correct box values", ({ input, expectedResult }) => {
-    const boxPlotData = calculateBoxPlotData(input)!;
-    expect(boxPlotData.high).toEqual(expectedResult.high);
-    expect(boxPlotData.q3).toEqual(expectedResult.q3);
-    expect(boxPlotData.median).toEqual(expectedResult.median);
-    expect(boxPlotData.q1).toEqual(expectedResult.q1);
-    expect(boxPlotData.low).toEqual(expectedResult.low);
+    const boxPlotData = calculateBoxPlotData(input);
+    expect(boxPlotData?.high).toEqual(expectedResult.high);
+    expect(boxPlotData?.q3).toEqual(expectedResult.q3);
+    expect(boxPlotData?.median).toEqual(expectedResult.median);
+    expect(boxPlotData?.q1).toEqual(expectedResult.q1);
+    expect(boxPlotData?.low).toEqual(expectedResult.low);
   });
 });
 
@@ -240,7 +240,7 @@ describe("calculateBoxPlotEmptyArray", () => {
 describe("calculateBoxPlotWithIndex", () => {
   it("should return index as x", () => {
     const index = 15;
-    expect(calculateBoxPlotData([1], index)!.x!).toBe(index);
+    expect(calculateBoxPlotData([1], index)?.x).toBe(index);
   });
 });
 

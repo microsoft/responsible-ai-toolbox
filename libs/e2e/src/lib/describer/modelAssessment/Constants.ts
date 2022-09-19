@@ -8,8 +8,9 @@ export enum Locators {
   SaveAsNewCohortButton = "button:contains('Save as a new cohort')",
   ClearSelectionButton = "button:contains('Clear selection')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
-  IFICollapseButton = "i[data-icon-name='ChevronRightMed']",
-  IFITableRowSelected = 'div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
+  IFIContainer = "#IndividualFeatureImportanceView", // IFI - Individual feature importance
+  IFICollapseButton = "#IndividualFeatureImportanceView i[data-icon-name='ChevronRightMed']",
+  IFITableRowSelected = '#IndividualFeatureImportanceView div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
   IFIDropdownSelectedOption = "div[class^='featureImportanceChartAndLegend']",
   IFIScrollableTable = "div[class*='tabularDataView'] div.ms-ScrollablePane div.ms-ScrollablePane--contentContainer",
   IFINumberOfBars = "#FeatureImportanceBar svg g.highcharts-series-group rect",

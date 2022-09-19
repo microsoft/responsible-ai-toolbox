@@ -1,7 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IInterpretData } from "./IInterpretData";
+import { IInterpretData } from "../IInterpretData";
+
+import {
+  bostonData,
+  bostonDataGlobal,
+  bostonDataNoDataset,
+  bostonDataNoPredict,
+  bostonDataNoY
+} from "./bostonData";
+import {
+  irisData,
+  irisDataNoLocal,
+  irisGlobal,
+  irisNoData,
+  irisNoFeatures
+} from "./irisData";
 
 const interpretDatasets = {
   automlMimicAdult: {
@@ -24,97 +39,11 @@ const interpretDatasets = {
     noDataset: true,
     noPredict: true
   },
-  bostonData: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ]
-  },
-  bostonDataGlobal: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
-    featureNames: ["INDUS", "DIS", "NOX", "LSTAT", "AGE", "CHAS", "B", "CRIM"],
-    noLocalImportance: true
-  },
-  bostonDataNoDataset: {
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
-    noDataset: true
-  },
-  bostonDataNoPredict: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
-    noPredict: true
-  },
-  bostonDataNoY: {
-    datapoint: 102,
-    datasetBarLabel: ["0 - 20", "21 - 40", "41 - 60", "61 - 80", "81 - 101"],
-    defaultXAxis: "Index",
-    defaultYAxis: "CRIM",
-    featureNames: [
-      "LSTAT",
-      "RM",
-      "PTRATIO",
-      "NOX",
-      "DIS",
-      "AGE",
-      "TAX",
-      "CRIM",
-      "B",
-      "INDUS",
-      "RAD",
-      "ZN",
-      "CHAS"
-    ],
-    noPredict: true,
-    noY: true
-  },
+  bostonData,
+  bostonDataGlobal,
+  bostonDataNoDataset,
+  bostonDataNoPredict,
+  bostonDataNoY,
   breastCancerData: {
     datapoint: 114,
     datasetBarLabel: ["0 - 22", "23 - 45", "46 - 67", "68 - 90", "91 - 113"],
@@ -281,77 +210,11 @@ const interpretDatasets = {
     ],
     isClassification: true
   },
-  irisData: {
-    aggregateFeatureImportanceExpectedValues: {
-      "Average of absolute value": 0.329,
-      "Class: setosa": 0.387,
-      "Class: versicolor": 0.365,
-      "Class: virginica": 0.236
-    },
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
-    defaultXAxis: "Index",
-    defaultYAxis: "sepal length (cm)",
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true
-  },
-  irisDataNoLocal: {
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
-    defaultXAxis: "Index",
-    defaultYAxis: "sepal length (cm)",
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
-    noLocalImportance: true
-  },
-  irisGlobal: {
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
-    noDataset: true,
-    noLocalImportance: true,
-    noPredict: true,
-    noY: true
-  },
-  irisNoData: {
-    featureNames: [
-      "petal length (cm)",
-      "petal width (cm)",
-      "sepal length (cm)",
-      "sepal width (cm)"
-    ],
-    isClassification: true,
-    isMulticlass: true,
-    noDataset: true,
-    noPredict: true,
-    noY: true
-  },
-  irisNoFeatures: {
-    datapoint: 30,
-    datasetBarLabel: ["0 - 5", "6 - 11", "12 - 17", "18 - 23", "24 - 29"],
-    defaultXAxis: "Index",
-    defaultYAxis: "Feature 0",
-    featureNames: ["Feature 2", "Feature 3", "Feature 0", "Feature 1"],
-    isClassification: true,
-    isMulticlass: true
-  }
+  irisData,
+  irisDataNoLocal,
+  irisGlobal,
+  irisNoData,
+  irisNoFeatures
 };
 const withType: {
   [key in keyof typeof interpretDatasets]: IInterpretData;

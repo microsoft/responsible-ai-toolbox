@@ -9,7 +9,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import { PointMarkerOptionsObject } from "highcharts";
-import _ from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 import { getGroupedData } from "./getGroupedData";

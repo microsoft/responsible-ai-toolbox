@@ -62,8 +62,9 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       const textFeatureImportance =
         this.context.modelExplanationData?.precomputedExplanations
           ?.textFeatureImportance?.[row[0]];
-      if (!textFeatureImportance)
+      if (!textFeatureImportance) {
         return { importances: [], prediction: [], text: [] };
+      }
       const text = textFeatureImportance?.text;
       const rowDict = this.props.jointDataset.getRow(row[0]);
       const prediction = new Array(this.props.jointDataset.predictionClassCount)

@@ -118,16 +118,14 @@ export const applications: IApplications = <const>{
       breastCancerData: { classDimension: 2, data: breastCancerData },
       breastCancerPrecisionData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Precision"
+        data: breastCancerData
       },
       breastCancerRecallData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Recall"
+        data: breastCancerData
       }
     },
-    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
+    versions: { "1": 1, "2:Static-View": 2 }
   },
   fairness: {
     datasets: {
@@ -265,11 +263,11 @@ export const applications: IApplications = <const>{
         classDimension: 3,
         dataset: {
           categorical_features: visionData.categorical_features,
-          class_names: visionData.class_names!,
+          class_names: visionData.class_names,
           feature_names: visionData.feature_names,
-          features: visionData.features!,
-          images: visionData.images!,
-          predicted_y: visionData.predicted_y!,
+          features: visionData.features,
+          images: visionData.images,
+          predicted_y: visionData.predicted_y,
           task_type: visionData.task_type,
           true_y: visionData.true_y
         }

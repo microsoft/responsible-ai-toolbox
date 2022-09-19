@@ -121,7 +121,7 @@ function generateDataTrace(
   dictionary.forEach((val, index) => {
     customdata[index].Name = val.Name ? val.Name : val.Index;
   });
-  let hovertemplate = `{point.customdata.Name}<br>`;
+  let hovertemplate = "{point.customdata.Name}<br>";
   if (chartProps.xAxis) {
     const metaX = jointDataset.metaDict[chartProps.xAxis.property];
     const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);

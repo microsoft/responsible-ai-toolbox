@@ -83,3 +83,12 @@ export const fullXlDown = {
     }
   }
 };
+
+// no padding when screen size is less or equal than medium(639px)
+export const noPaddingMdDown = {
+  selectors: {
+    "@media screen and (max-width: 639px)": {
+      padding: "0"
+    }
+  }
+};

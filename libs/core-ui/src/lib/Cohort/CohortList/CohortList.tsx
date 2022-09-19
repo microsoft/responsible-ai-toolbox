@@ -130,7 +130,7 @@ export class CohortList extends React.Component<
     item: ICohortListItem,
     index: number | undefined,
     column: IColumn | undefined
-  ) => {
+  ): React.ReactNode => {
     if (column !== undefined && index !== undefined) {
       const fieldContent = item[
         column.fieldName as keyof ICohortListItem

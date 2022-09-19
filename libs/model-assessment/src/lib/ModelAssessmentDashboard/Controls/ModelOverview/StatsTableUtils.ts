@@ -30,7 +30,10 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[],
   useTexturedBackgroundForNaN: boolean
-) {
+): {
+  fairnessStats: IFairnessStats[];
+  items: PointOptionsObject[];
+} {
   // The "count" metric has to be treated separately
   // since it's not handled like other metrics, but
   // is part of the ErrorCohort object.
@@ -169,7 +172,7 @@ export function wrapText(
   maxLines = 2,
   lineStart = 0,
   currentLine = 0
-) {
+): string {
   if (text.length <= lineStart + maxLineLength) {
     // label is short enough to fit on current line
     return text;
@@ -229,7 +232,7 @@ export interface IMetricOption extends IDropdownOption {
 export function getSelectableMetrics(
   taskType: DatasetTaskType,
   isMulticlass: boolean
-) {
+): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
   if (taskType === DatasetTaskType.Classification) {
     if (isMulticlass) {
