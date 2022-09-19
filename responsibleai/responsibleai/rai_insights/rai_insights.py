@@ -350,8 +350,8 @@ class RAIInsights(RAIBaseInsights):
             string_features_set = set(train_features) - set(numeric_features)
             if len(string_features_set - set(categorical_features)) > 0:
                 raise UserConfigValidationException(
-                    "Looks like some string features {0} were not "
-                    "identified as categorical features".format(
+                    "The following string features were not "
+                    "identified as categorical features: {0}".format(
                         string_features_set - set(categorical_features))
                 )
 

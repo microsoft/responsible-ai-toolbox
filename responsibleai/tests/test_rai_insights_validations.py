@@ -454,8 +454,8 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification')
 
-        assert "Looks like some string features {\'c1\'} " + \
-            "were not identified as categorical features" in str(ucve.value)
+        assert "The following string features were not " + \
+            "identified as categorical features: {\'c1\'}" in str(ucve.value)
 
 
 class TestCausalUserConfigValidations:
