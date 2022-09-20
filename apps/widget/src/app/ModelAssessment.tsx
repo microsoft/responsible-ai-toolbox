@@ -79,7 +79,7 @@ export class ModelAssessment extends React.Component {
         filter: unknown[],
         compositeFilter: unknown[],
         abortSignal: AbortSignal
-      ): Promise<ICausalAnalysisData[]> => {
+      ): Promise<ICausalAnalysisData> => {
         return callFlaskService(
           [id, filter, compositeFilter],
           "/global_causal_effects",
@@ -91,7 +91,7 @@ export class ModelAssessment extends React.Component {
         filter: unknown[],
         compositeFilter: unknown[],
         abortSignal: AbortSignal
-      ): Promise<ICausalAnalysisData[]> => {
+      ): Promise<ICausalAnalysisData> => {
         return callFlaskService(
           [id, filter, compositeFilter],
           "/global_causal_policy",
