@@ -12,12 +12,12 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React, { FormEvent } from "react";
 
+import { Announce } from "../../components/Announce";
 import {
   FilterMethods,
   ICompositeFilter,
   IFilter
 } from "../../Interfaces/IFilter";
-import { srOnly } from "../../util/getCommonStyles";
 import { JointDataset } from "../../util/JointDataset";
 
 import { cohortEditorStyles } from "./CohortEditor.styles";
@@ -42,6 +42,7 @@ export interface ICohortEditorPanelContentState {
   filterIndex?: number;
   openedFilter?: IFilter;
   selectedFilterCategory?: string;
+  filtersMessage?: string;
 }
 
 export class CohortEditorPanelContent extends React.PureComponent<
@@ -76,6 +77,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     super(props);
     this.state = {
       filterIndex: this.props.filterList?.length || 0,
+      filtersMessage: "",
       openedFilter: this.getFilterValue(
         this.leftItems[0] && this.leftItems[0].key
       ),
@@ -114,6 +116,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           openedFilter={this.state.openedFilter}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
+          setFilterMessage={this.setFilterMessage}
         />
         <Stack.Item>
           <CohortEditorFilterList
@@ -129,12 +132,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           <Link className={styles.clearFilter} onClick={this.clearAllFilters}>
             {localization.Interpret.CohortEditor.clearAllFilters}
           </Link>
-          <div
-            className={srOnly}
-            role="region"
-            aria-live="polite"
-            id="filterInfo"
-          />
+          <Announce message={this.state.filtersMessage} />
         </Stack.Item>
       </Stack>
     );
@@ -151,11 +149,13 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private clearAllFilters = (): void => {
     this.props.onCompositeFiltersUpdated([]);
     this.props.onFiltersUpdated([]);
-    const filterInfo = document.querySelector("#filterInfo");
-    if (filterInfo) {
-      filterInfo.textContent =
-        localization.Interpret.CohortEditor.noFiltersApplied;
-    }
+    this.setFilterMessage(localization.Interpret.CohortEditor.noFiltersApplied);
+  };
+
+  private setFilterMessage = (filtersMessage?: string): void => {
+    this.setState({
+      filtersMessage
+    });
   };
 
   private getErrorMessage = (): string | undefined => {

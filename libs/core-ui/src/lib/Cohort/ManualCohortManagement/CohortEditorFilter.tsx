@@ -29,6 +29,7 @@ export interface ICohortEditorFilterProps {
   filters: IFilter[];
   showInvalidMinMaxValueError: boolean;
   showInvalidValueError: boolean;
+  setFilterMessage: (filtersMessage: string) => void;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -168,9 +169,8 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
   }
   private onAddFilterClick = (): void => {
     this.props.saveState(this.props.filters.length);
-    const filterInfo = document.querySelector("#filterInfo");
-    if (filterInfo) {
-      filterInfo.textContent = localization.Interpret.CohortEditor.filterAdded;
-    }
+    this.props.setFilterMessage(
+      localization.Interpret.CohortEditor.filterAdded
+    );
   };
 }

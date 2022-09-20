@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { mergeStyles } from "@fluentui/react";
-
 export const descriptionMaxWidth = "750px";
 
 // hide when screen size is less or equal than large(1023px)
@@ -94,13 +92,3 @@ export const noPaddingMdDown = {
     }
   }
 };
-
-// Visually hide content, but will be read by screen reader
-export const srOnly = mergeStyles({
-  height: "1px",
-  left: "-10000px",
-  overflow: "hidden",
-  position: "absolute",
-  top: "auto",
-  width: "1px"
-});
