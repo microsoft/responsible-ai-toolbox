@@ -3,6 +3,7 @@
 
 import {
   ICausalWhatIfData,
+  ICausalAnalysisData,
   IErrorAnalysisMatrix,
   IHighchartBoxData
 } from "@responsible-ai/core-ui";
@@ -78,7 +79,7 @@ export class ModelAssessment extends React.Component {
         filter: unknown[],
         composite_filter: unknown[],
         abortSignal: AbortSignal
-      ): Promise<ICausalWhatIfData[]> => {
+      ): Promise<ICausalAnalysisData[]> => {
         return callFlaskService(
           [id, filter, composite_filter],
           "/global_causal_effects",
@@ -90,7 +91,7 @@ export class ModelAssessment extends React.Component {
         filter: unknown[],
         composite_filter: unknown[],
         abortSignal: AbortSignal
-      ): Promise<ICausalWhatIfData[]> => {
+      ): Promise<ICausalAnalysisData[]> => {
         return callFlaskService(
           [id, filter, composite_filter],
           "/global_causal_policy",
