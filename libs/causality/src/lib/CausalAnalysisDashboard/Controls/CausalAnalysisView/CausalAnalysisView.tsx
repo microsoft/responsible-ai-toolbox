@@ -63,8 +63,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     console.log(this.context);
     if (!this.context.causalAnalysisData) {
       this.currentGlobalCausalEffects = this.props.data.global_effects;
-    } else {
-      if (this.context.requestGlobalCausalEffects) {
+    } else if (this.context.requestGlobalCausalEffects) {
         console.log("Fetching global causal effects from SDK backend");
         const filtersRelabeled = ErrorCohort.getLabeledFilters(
           this.props.newCohort.cohort.filters,
@@ -90,11 +89,10 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
           new AbortController().signal
         );
         console.log(result);
-        this.currentGlobalCausalEffects = result[0].global_effects;
+        this.currentGlobalCausalEffects = result.global_effects;
       } else {
         this.currentGlobalCausalEffects = this.props.data.global_effects;
       }
-    }
   }
 
   private async getGlobalCausalPolicy(): Promise<void>{
@@ -102,8 +100,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     console.log(this.context);
     if (!this.context.causalAnalysisData) {
       this.currentGlobalCausalPolicy = this.props.data.policies;
-    } else {
-      if (this.context.requestGlobalCausalPolicy) {
+    } else if (this.context.requestGlobalCausalPolicy) {
         console.log("Fetching global causal policy from SDK backend");
         const filtersRelabeled = ErrorCohort.getLabeledFilters(
           this.props.newCohort.cohort.filters,
@@ -129,11 +126,10 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
           new AbortController().signal
         );
         console.log(result);
-        this.currentGlobalCausalPolicy = result[0].policies;
+        this.currentGlobalCausalPolicy = result.policies;
       } else {
         this.currentGlobalCausalPolicy = this.props.data.policies;
       }
-    }
   }
 
   public async componentDidUpdate(prevProps: ICausalAnalysisViewProps): Promise<void> {
