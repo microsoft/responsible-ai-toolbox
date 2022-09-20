@@ -77,11 +77,11 @@ export class ModelAssessment extends React.Component {
       callBack.requestGlobalCausalEffects = async (
         id: string,
         filter: unknown[],
-        composite_filter: unknown[],
+        compositeFilter: unknown[],
         abortSignal: AbortSignal
       ): Promise<ICausalAnalysisData[]> => {
         return callFlaskService(
-          [id, filter, composite_filter],
+          [id, filter, compositeFilter],
           "/global_causal_effects",
           abortSignal
         );
@@ -89,11 +89,11 @@ export class ModelAssessment extends React.Component {
       callBack.requestGlobalCausalPolicy = async (
         id: string,
         filter: unknown[],
-        composite_filter: unknown[],
+        compositeFilter: unknown[],
         abortSignal: AbortSignal
       ): Promise<ICausalAnalysisData[]> => {
         return callFlaskService(
-          [id, filter, composite_filter],
+          [id, filter, compositeFilter],
           "/global_causal_policy",
           abortSignal
         );

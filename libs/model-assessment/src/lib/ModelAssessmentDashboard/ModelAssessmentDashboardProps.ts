@@ -71,15 +71,15 @@ export interface IModelAssessmentDashboardProps
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],
-    composite_filter: unknown[],
+    compositeFilter: unknown[],
     abortSignal: AbortSignal
-  ) => Promise<ICausalAnalysisData[]>;
+  ) => Promise<ICausalAnalysisData>;
   requestGlobalCausalPolicy?: (
     id: string,
     filter: unknown[],
-    composite_filter: unknown[],
+    compositeFilter: unknown[],
     abortSignal: AbortSignal
-  ) => Promise<ICausalAnalysisData[]>;
+  ) => Promise<ICausalAnalysisData>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
 
