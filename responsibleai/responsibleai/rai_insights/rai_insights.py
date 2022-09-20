@@ -298,7 +298,7 @@ class RAIInsights(RAIBaseInsights):
                 )
 
             if len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)):
+                    len(set(test.columns) - set(train.columns)) != 0:
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
@@ -318,7 +318,8 @@ class RAIInsights(RAIBaseInsights):
                             target_column)
                     )
 
-                difference_set = set(categorical_features) - set(train.columns)
+                difference_set = set(categorical_features) - set(
+                    train.drop(columns=[target_column]).columns)
                 if len(difference_set) > 0:
                     message = ("Feature names in categorical_features "
                                "do not exist in train data: "
@@ -341,6 +342,18 @@ class RAIInsights(RAIBaseInsights):
                             "Error finding unique values in column {0}. "
                             "Please check your test data.".format(column)
                         )
+
+            train_features = train.drop(columns=[target_column]).columns
+            numeric_features = train.drop(
+                columns=[target_column]).select_dtypes(
+                    include='number').columns.tolist()
+            string_features_set = set(train_features) - set(numeric_features)
+            if len(string_features_set - set(categorical_features)) > 0:
+                raise UserConfigValidationException(
+                    "The following string features were not "
+                    "identified as categorical features: {0}".format(
+                        string_features_set - set(categorical_features))
+                )
 
             if classes is not None and task_type == \
                     ModelTask.CLASSIFICATION:

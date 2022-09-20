@@ -92,7 +92,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.errorInstances}
+                    items={this.props.errorInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}
@@ -108,7 +108,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.successInstances}
+                    items={this.props.successInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}
