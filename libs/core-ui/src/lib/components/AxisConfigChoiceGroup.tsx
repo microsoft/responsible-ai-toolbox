@@ -10,7 +10,10 @@ import { ISelectorConfig } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories } from "../util/JointDatasetUtils";
 
-import { getBinCountForProperty } from "./AxisConfigDialogUtils";
+import {
+  getBinCountForProperty,
+  metaDescription
+} from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigChoiceGroupProps {
   canBin: boolean;
@@ -36,46 +39,63 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     JointDataset.RegressionError,
     JointDataset.ProbabilityYRoot,
     ColumnCategories.None
-  ].reduce((previousValue: Array<{ key: string; title: string }>, key) => {
-    const metaVal = this.props.jointDataset.metaDict[key];
-    if (
-      key === JointDataset.DataLabelRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
-      this.props.jointDataset.hasDataset
-    ) {
-      previousValue.push({
-        key,
-        title: localization.Interpret.Columns.dataset
-      });
-      return previousValue;
-    }
-    if (
-      key === JointDataset.ProbabilityYRoot &&
-      this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
-      this.props.jointDataset.hasPredictedProbabilities
-    ) {
-      previousValue.push({
-        key,
-        title: localization.Interpret.Columns.predictedProbabilities
-      });
-      return previousValue;
-    }
-    if (
-      metaVal === undefined ||
-      !this.props.orderedGroupTitles.includes(metaVal.category)
-    ) {
-      return previousValue;
-    }
+  ].reduce(
+    (
+      previousValue: Array<{ key: string; title: string; ariaLabel?: string }>,
+      key
+    ) => {
+      const metaVal = this.props.jointDataset.metaDict[key];
+      let ariaLabel = metaVal?.abbridgedLabel;
+      if (key === ColumnCategories.None) {
+        ariaLabel += localization.Interpret.AxisConfigDialog.countHelperText;
+      } else {
+        const metaDesc = metaDescription(metaVal);
+        ariaLabel += metaVal?.treatAsCategorical
+          ? metaDesc.categoricalDescription
+          : metaDesc.minDescription + metaDesc.maxDescription;
+      }
 
-    previousValue.push({ key, title: metaVal.abbridgedLabel });
-    return previousValue;
-  }, []);
+      if (
+        key === JointDataset.DataLabelRoot &&
+        this.props.orderedGroupTitles.includes(ColumnCategories.Dataset) &&
+        this.props.jointDataset.hasDataset
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.dataset
+        });
+        return previousValue;
+      }
+      if (
+        key === JointDataset.ProbabilityYRoot &&
+        this.props.orderedGroupTitles.includes(ColumnCategories.Outcome) &&
+        this.props.jointDataset.hasPredictedProbabilities
+      ) {
+        previousValue.push({
+          key,
+          title: localization.Interpret.Columns.predictedProbabilities
+        });
+        return previousValue;
+      }
+      if (
+        metaVal === undefined ||
+        !this.props.orderedGroupTitles.includes(metaVal.category)
+      ) {
+        return previousValue;
+      }
+
+      previousValue.push({ ariaLabel, key, title: metaVal.abbridgedLabel });
+      return previousValue;
+    },
+    []
+  );
 
   public render(): React.ReactNode {
     return (
       <ChoiceGroup
         label={localization.Interpret.AxisConfigDialog.selectFilter}
         options={this.leftItems.map((i) => ({
+          ariaLabel: i.ariaLabel,
           key: i.key,
           text: i.title
         }))}
