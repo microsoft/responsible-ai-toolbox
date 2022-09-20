@@ -13,6 +13,7 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsMulticlass,
   ModelTypes,
   ModelExplanationUtils,
   FluentUIStyles
@@ -333,6 +334,8 @@ export class Violin extends React.PureComponent<
         -0.5,
         this.props.config.topK - 0.5
       ]);
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       return (
         <div className={violinStyles.aggregateChart}>
           <div className={violinStyles.topControls}>
@@ -346,8 +349,7 @@ export class Violin extends React.PureComponent<
               useComboBoxAsMenuWidth
               styles={FluentUIStyles.smallDropdownStyle}
             />
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType !== ModelTypes.Regression &&
+            {modelMetadata.modelType !== ModelTypes.Regression &&
               this.groupByOptions.length > 1 && (
                 <ComboBox
                   label={localization.Interpret.Violin.groupBy}
@@ -380,8 +382,7 @@ export class Violin extends React.PureComponent<
                 className={violinStyles.featureSlider}
                 max={Math.min(
                   Violin.maxFeatures,
-                  this.props.dashboardContext.explanationContext.modelMetadata
-                    .featureNames.length
+                  modelMetadata.featureNames.length
                 )}
                 min={1}
                 step={1}
@@ -390,8 +391,7 @@ export class Violin extends React.PureComponent<
                 showValue
               />
             </div>
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType === ModelTypes.Multiclass && (
+            {IsMulticlass(modelMetadata.modelType) && (
               <div>
                 <div className={violinStyles.selectorLabel}>
                   <span className={violinStyles.selectorSpan}>
@@ -580,8 +580,10 @@ export class Violin extends React.PureComponent<
                 .globalImportanceExplanation
             }
           </span>
-          {this.props.dashboardContext.explanationContext.modelMetadata
-            .modelType === ModelTypes.Multiclass && (
+          {IsMulticlass(
+            this.props.dashboardContext.explanationContext.modelMetadata
+              .modelType
+          ) && (
             <span>
               {
                 localization.Interpret.FeatureImportanceWrapper
