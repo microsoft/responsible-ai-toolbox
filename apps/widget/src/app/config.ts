@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { callFlaskService } from "./callFlaskService";
+
 export interface IAppConfig {
   dashboardType:
     | "Fairness"
@@ -15,5 +17,17 @@ export interface IAppConfig {
   locale: string | undefined;
   featureFlights: string | undefined;
 }
-
-export const config: IAppConfig = JSON.parse("__rai_config__");
+export async function getConfig(): Promise<IAppConfig> {
+  if (!process.env.NX_based_url) {
+    return JSON.parse("__rai_config__");
+  }
+  const data = await callFlaskService<"", IAppConfig>(
+    {
+      baseUrl: process.env.NX_based_url,
+      withCredentials: false
+    },
+    "",
+    "/config"
+  );
+  return data;
+}

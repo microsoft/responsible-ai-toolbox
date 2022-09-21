@@ -3,7 +3,6 @@
 
 import { getTheme, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";

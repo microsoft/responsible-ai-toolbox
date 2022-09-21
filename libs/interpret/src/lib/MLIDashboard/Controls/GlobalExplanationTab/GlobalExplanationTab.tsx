@@ -439,7 +439,9 @@ export class GlobalExplanationTab extends React.PureComponent<
     featureIndex: number
   ): void => {
     for (let i = 0; i < this.state.seriesIsActive.length; i++) {
-      if (!this.state.seriesIsActive[i]) continue;
+      if (!this.state.seriesIsActive[i]) {
+        continue;
+      }
       if (cohortIndex-- === 0) {
         this.props.telemetryHook?.({
           level: TelemetryLevels.ButtonClick,

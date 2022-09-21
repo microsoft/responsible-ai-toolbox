@@ -50,10 +50,7 @@ export const dataCharacteristicsStyles: () => IProcessedStyleSet<IDataCharacteri
         top: -5
       },
       image: {
-        height: "auto",
-        left: 0,
-        position: "relative",
-        top: 0
+        position: "relative"
       },
       indicator: {
         marginBottom: 20

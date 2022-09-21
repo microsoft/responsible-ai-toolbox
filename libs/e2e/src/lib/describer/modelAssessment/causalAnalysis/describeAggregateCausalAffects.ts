@@ -47,7 +47,7 @@ export function describeAggregateCausalAffects(
           ["Feature"],
           Locators.CausalAnalysisTable
         ).forEach((column) => {
-          dataShape.causalAnalysisData?.featureListInCausalTable!.includes(
+          dataShape.causalAnalysisData?.featureListInCausalTable?.includes(
             column[0]
           );
         });

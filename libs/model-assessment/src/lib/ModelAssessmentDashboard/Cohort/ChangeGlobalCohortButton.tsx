@@ -40,7 +40,7 @@ export class ChangeGlobalCohortButton extends React.Component<
       </>
     );
   }
-  private toggleShiftCohortVisibility = () => {
+  private toggleShiftCohortVisibility = (): void => {
     this.setState((prev) => ({ shiftCohortVisible: !prev.shiftCohortVisible }));
   };
 }

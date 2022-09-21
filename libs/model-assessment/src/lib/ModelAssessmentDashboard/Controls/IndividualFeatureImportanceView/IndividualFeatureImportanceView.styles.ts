@@ -12,7 +12,7 @@ import {
 export const verticalComponentTokens: IStackTokens = { padding: "l1" };
 export const horizontalComponentTokens: IStackTokens = {
   childrenGap: "l1",
-  padding: `0px 0px 0px 25px`
+  padding: "0px 0px 0px 25px"
 };
 
 export interface IIndividualFeatureImportanceViewStyles {

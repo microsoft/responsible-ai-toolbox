@@ -107,7 +107,7 @@ export function getIceChartOption(
         },
         tooltip: {
           headerFormat: "",
-          pointFormat: `{point.customData.template}`
+          pointFormat: "{point.customData.template}"
         }
       },
       scatter: {
@@ -120,7 +120,7 @@ export function getIceChartOption(
         },
         tooltip: {
           headerFormat: "",
-          pointFormat: `{point.customData.template}`
+          pointFormat: "{point.customData.template}"
         }
       }
     },

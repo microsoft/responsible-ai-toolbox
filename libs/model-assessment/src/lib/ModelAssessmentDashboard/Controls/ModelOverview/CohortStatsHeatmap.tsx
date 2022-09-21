@@ -40,7 +40,7 @@ export class CohortStatsHeatmap extends React.Component<
     this.state = { key: 0 };
   }
 
-  public componentDidUpdate(prevProps: ICohortStatsHeatmapProps) {
+  public componentDidUpdate(prevProps: ICohortStatsHeatmapProps): void {
     const cohortsChanged =
       prevProps.cohorts.length !== this.props.cohorts.length ||
       prevProps.cohorts.some(
@@ -118,7 +118,7 @@ export class CohortStatsHeatmap extends React.Component<
             }
           ],
           tooltip: {
-            formatter() {
+            formatter(): string | undefined {
               // to avoid semantic error during build cast point to any
               const pointValue = (this.point as any).value;
               if (this.point.y === undefined || pointValue === undefined) {
@@ -171,7 +171,7 @@ export class CohortStatsHeatmap extends React.Component<
               columns: [
                 {
                   labels: {
-                    formatter() {
+                    formatter(): string {
                       const text = wrapText(this.value.toString());
                       return `<div style='width:300px'>${text}</div>`;
                     },

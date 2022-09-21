@@ -8,75 +8,35 @@ import {
   IRectangle,
   mergeStyles,
   Dropdown,
-  IDropdownOption
+  IDropdownOption,
+  ImageFit
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
+import {
+  defaultState,
+  getLabelVisibility,
+  IDataCharacteristicsProps,
+  IDataCharacteristicsState,
+  labelTypes,
+  processData,
+  stackTokens
+} from "./DataCharacteristicsHelper";
 import { DataCharacteristicsLegend } from "./DataCharacteristicsLegend";
 import { DataCharacteristicsRow } from "./DataCharacteristicsRow";
 
-export interface IDataCharacteristicsProps {
-  data: IVisionListItem[];
-  imageDim: number;
-  numRows: number;
-  selectItem(item: IVisionListItem): void;
-}
-export interface IDataCharacteristicsState {
-  columnCount: number[];
-  dropdownOptionsPredicted: IDropdownOption[];
-  dropdownOptionsTrue: IDropdownOption[];
-  itemsPredicted: Map<string, IVisionListItem[]>;
-  itemsTrue: Map<string, IVisionListItem[]>;
-  labelType: string;
-  labelTypeDropdownOptions: IDropdownOption[];
-  labelVisibilitiesPredicted: Map<string, boolean>;
-  labelVisibilitiesTrue: Map<string, boolean>;
-  renderStartIndex: number[];
-  selectedKeysPredicted: string[];
-  selectedKeysTrue: string[];
-  showBackArrow: boolean[];
-}
-
-interface IItemsData {
-  dropdownOptions: IDropdownOption[];
-  items: Map<string, IVisionListItem[]>;
-  labelVisibilities: Map<string, boolean>;
-  selectedKeys: string[];
-}
-
-const stackTokens = { childrenGap: "l1" };
-const labelTypes = {
-  predictedY: "predictedY",
-  trueY: "trueY"
-};
-
-const SelectAllKey = "selectAll";
 export class DataCharacteristics extends React.Component<
   IDataCharacteristicsProps,
   IDataCharacteristicsState
 > {
-  rowHeight: number;
+  private rowHeight: number;
   public constructor(props: IDataCharacteristicsProps) {
     super(props);
     this.rowHeight = 0;
-    this.state = {
-      columnCount: [],
-      dropdownOptionsPredicted: [],
-      dropdownOptionsTrue: [],
-      itemsPredicted: new Map(),
-      itemsTrue: new Map(),
-      labelType: labelTypes.predictedY,
-      labelTypeDropdownOptions: [],
-      labelVisibilitiesPredicted: new Map(),
-      labelVisibilitiesTrue: new Map(),
-      renderStartIndex: [],
-      selectedKeysPredicted: [],
-      selectedKeysTrue: [],
-      showBackArrow: []
-    };
+    this.state = defaultState;
   }
 
   public componentDidMount(): void {
@@ -84,7 +44,9 @@ export class DataCharacteristics extends React.Component<
       { key: labelTypes.predictedY, text: labelTypes.predictedY },
       { key: labelTypes.trueY, text: labelTypes.trueY }
     ];
-    this.setState({ labelTypeDropdownOptions });
+    this.setState({
+      labelTypeDropdownOptions
+    });
     this.processData();
   }
 
@@ -205,11 +167,18 @@ export class DataCharacteristics extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IVisionListItem | undefined) => {
+  private processData = (): void => {
+    this.setState(processData(this.props.data));
+  };
+
+  private onRenderCell = (
+    item?: IVisionListItem | undefined
+  ): React.ReactElement => {
+    const imageDim = this.props.imageDim;
     const classNames = dataCharacteristicsStyles();
     const indicatorStyle = mergeStyles(
       classNames.indicator,
-      { width: this.props.imageDim },
+      { width: imageDim },
       item?.predictedY === item?.trueY
         ? classNames.successIndicator
         : classNames.errorIndicator
@@ -218,116 +187,19 @@ export class DataCharacteristics extends React.Component<
       <div />
     ) : (
       <Stack className={classNames.tile}>
-        <Stack.Item
-          style={{ height: this.props.imageDim, width: this.props.imageDim }}
-        >
+        <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
             alt={item?.predictedY}
             src={`data:image/jpg;base64,${item?.image}`}
             onClick={this.callbackWrapper(item)}
             className={classNames.image}
-            style={{ width: this.props.imageDim }}
+            style={{ display: "inline", height: imageDim }}
+            imageFit={ImageFit.none}
           />
         </Stack.Item>
         <div className={indicatorStyle} />
       </Stack>
     );
-  };
-
-  private generateItems = (
-    type: string,
-    examples: IVisionListItem[]
-  ): IItemsData => {
-    const dropdownOptions: IDropdownOption[] = [];
-    const items: Map<string, IVisionListItem[]> = new Map();
-    const labelVisibilities: Map<string, boolean> = new Map();
-    const selectedKeys: string[] = [];
-    examples.forEach((example) => {
-      const label = example[type].toString();
-      if (!label || !items) {
-        return;
-      }
-      if (!selectedKeys.includes(label)) {
-        dropdownOptions.push({ key: label, text: label });
-        selectedKeys.push(label);
-        labelVisibilities.set(label, true);
-      }
-      if (items.has(label)) {
-        const arr = items.get(label);
-        if (!arr) {
-          return;
-        }
-        arr.push(example);
-        items.set(label, arr);
-      } else {
-        const arr: IVisionListItem[] = [];
-        arr.push(example);
-        items.set(label, arr);
-      }
-    });
-    selectedKeys.push(SelectAllKey);
-    dropdownOptions.push({
-      key: SelectAllKey,
-      text: localization.InterpretVision.Dashboard.selectAll
-    });
-    dropdownOptions.sort((a, b) => {
-      if (b.key === SelectAllKey) {
-        return 1;
-      }
-      if (a.key === SelectAllKey || a.key < b.key) {
-        return -1;
-      }
-      return 1;
-    });
-    return {
-      dropdownOptions,
-      items,
-      labelVisibilities,
-      selectedKeys
-    };
-  };
-
-  private processData = (): void => {
-    const examples: IVisionListItem[] = this.props.data;
-    const columnCount: number[] = [];
-    const renderStartIndex: number[] = [];
-    const showBackArrow: boolean[] = [];
-
-    const predicted: IItemsData = this.generateItems(
-      labelTypes.predictedY,
-      examples
-    );
-    const dropdownOptionsPredicted: IDropdownOption[] =
-      predicted.dropdownOptions;
-    const itemsPredicted: Map<string, IVisionListItem[]> = predicted.items;
-    const labelVisibilitiesPredicted: Map<string, boolean> =
-      predicted.labelVisibilities;
-    const selectedKeysPredicted: string[] = predicted.selectedKeys;
-
-    const trues: IItemsData = this.generateItems(labelTypes.trueY, examples);
-    const dropdownOptionsTrue: IDropdownOption[] = trues.dropdownOptions;
-    const itemsTrue: Map<string, IVisionListItem[]> = trues.items;
-    const labelVisibilitiesTrue: Map<string, boolean> = trues.labelVisibilities;
-    const selectedKeysTrue: string[] = trues.selectedKeys;
-
-    selectedKeysPredicted.forEach(() => {
-      renderStartIndex.push(0);
-      showBackArrow.push(false);
-      columnCount.push(0);
-    });
-    this.setState({
-      columnCount,
-      dropdownOptionsPredicted,
-      dropdownOptionsTrue,
-      itemsPredicted,
-      itemsTrue,
-      labelVisibilitiesPredicted,
-      labelVisibilitiesTrue,
-      renderStartIndex,
-      selectedKeysPredicted,
-      selectedKeysTrue,
-      showBackArrow
-    });
   };
 
   private onLabelTypeChange = (
@@ -343,81 +215,10 @@ export class DataCharacteristics extends React.Component<
     _event: React.FormEvent<HTMLDivElement>,
     item?: IDropdownOption<any> | undefined
   ): void => {
-    if (item) {
-      const predicted = this.state.labelType === labelTypes.predictedY;
-
-      if (item.key === SelectAllKey) {
-        const dropdownOptions = predicted
-          ? this.state.dropdownOptionsPredicted
-          : this.state.dropdownOptionsTrue;
-        const selectedKeys: string[] = [];
-        const labelVisibilities: Map<string, boolean> = new Map();
-        if (
-          (predicted &&
-            this.state.selectedKeysPredicted.length >=
-              dropdownOptions.length - 1) ||
-          (!predicted &&
-            this.state.selectedKeysTrue.length >= dropdownOptions.length - 1)
-        ) {
-          dropdownOptions.forEach((option, index) => {
-            if (index !== 0) {
-              labelVisibilities.set(option.key.toString(), false);
-            }
-          });
-        } else {
-          dropdownOptions.forEach((option, index) => {
-            if (index !== 0) {
-              selectedKeys.push(option.key.toString());
-              labelVisibilities.set(option.key.toString(), true);
-            }
-          });
-          selectedKeys.push(SelectAllKey);
-        }
-        if (predicted) {
-          this.setState({
-            labelVisibilitiesPredicted: labelVisibilities,
-            selectedKeysPredicted: [...selectedKeys]
-          });
-        } else {
-          this.setState({
-            labelVisibilitiesTrue: labelVisibilities,
-            selectedKeysTrue: [...selectedKeys]
-          });
-        }
-        return;
-      }
-
-      let selectedKeys: string[] = [];
-      let labelVisibilities: Map<string, boolean> = new Map();
-
-      if (predicted) {
-        selectedKeys = this.state.selectedKeysPredicted;
-        labelVisibilities = this.state.labelVisibilitiesPredicted;
-      } else {
-        selectedKeys = this.state.selectedKeysTrue;
-        labelVisibilities = this.state.labelVisibilitiesTrue;
-      }
-
-      if (selectedKeys.includes(SelectAllKey)) {
-        selectedKeys.splice(selectedKeys.indexOf(SelectAllKey), 1);
-      }
-      const key = item.key.toString();
-      selectedKeys.includes(key)
-        ? selectedKeys.splice(selectedKeys.indexOf(key), 1)
-        : selectedKeys.push(key);
-      labelVisibilities.set(key, !labelVisibilities.get(key));
-      if (predicted) {
-        this.setState({
-          labelVisibilitiesPredicted: labelVisibilities,
-          selectedKeysPredicted: [...selectedKeys]
-        });
-      } else {
-        this.setState({
-          labelVisibilitiesTrue: labelVisibilities,
-          selectedKeysTrue: [...selectedKeys]
-        });
-      }
+    if (!item) {
+      return;
     }
+    this.setState(getLabelVisibility(item, this.state));
   };
 
   private sortKeys(keys: string[]): string[] {
@@ -442,7 +243,7 @@ export class DataCharacteristics extends React.Component<
     return keys;
   }
 
-  private loadNextItems = (index: number) => () => {
+  private loadNextItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
     let columnCount = this.state.columnCount[index];
     columnCount -= columnCount % 2 !== 0 ? 1 : 0;
@@ -451,7 +252,7 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private loadPrevItems = (index: number) => () => {
+  private loadPrevItems = (index: number) => (): void => {
     const { renderStartIndex, showBackArrow } = this.state;
     renderStartIndex[index] -= this.state.columnCount[index];
     if (renderStartIndex[index] <= 0) {
@@ -461,15 +262,20 @@ export class DataCharacteristics extends React.Component<
     this.setState({ renderStartIndex, showBackArrow });
   };
 
-  private callbackWrapper = (item: IVisionListItem) => () => {
+  private callbackWrapper = (item: IVisionListItem) => (): void => {
     this.props.selectItem(item);
   };
 
-  private getPageHeight = () => {
+  private getPageHeight = (): number => {
     return this.rowHeight;
   };
 
-  private getItemCountForPageWrapper(index: number) {
+  private getItemCountForPageWrapper = (
+    index: number
+  ): ((
+    itemIndex?: number | undefined,
+    visibleRect?: IRectangle | undefined
+  ) => number) => {
     const getItemCountForPage = (
       itemIndex?: number | undefined,
       visibleRect?: IRectangle | undefined
@@ -487,5 +293,5 @@ export class DataCharacteristics extends React.Component<
       return columnCount[index];
     };
     return getItemCountForPage;
-  }
+  };
 }

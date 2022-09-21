@@ -11,7 +11,6 @@ import {
   TelemetryEventName,
   ICounterfactualData
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { getOriginalData } from "../util/getOriginalData";
@@ -186,7 +185,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
     });
   };
 
-  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

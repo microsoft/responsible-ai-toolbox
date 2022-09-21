@@ -5,8 +5,8 @@ import { localization } from "@responsible-ai/localization";
 
 import { selectRow } from "../../../../../util/Table";
 import { Locators } from "../../Constants";
+import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
 
 export function describeSubLineChart(
   dataShape: IModelAssessmentData,
