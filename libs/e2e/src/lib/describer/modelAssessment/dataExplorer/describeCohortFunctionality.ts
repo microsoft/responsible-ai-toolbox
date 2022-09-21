@@ -31,8 +31,21 @@ export function describeCohortFunctionality(
       cy.get(Locators.CancelButton).click();
       cy.get(Locators.YesButton).click();
     });
+
+    it("should be able to delete cohort", () => {
+      cy.get(Locators.CohortSettingsButton).click();
+      const cohortName = `CohortCreateE2E-${generateId(4)}`;
+      cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
+      cy.get(Locators.CohortNameInput).clear().type(cohortName);
+      cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
+      cy.get(Locators.CohortAddFilterButton).click();
+      cy.get(Locators.CohortSaveButton).eq(1).click({ force: true }); // Save button
+      cy.get(Locators.DeleteButtons).last().click(); // last delete button
+      cy.get(Locators.ConfirmationDeleteButton).click();
+      cy.get(Locators.CohortSettingsCancelButton).click();
+    });
     it("Should update dataset selection with new cohort when a new cohort is created", () => {
-      cy.get(Locators.CreateNewCohortButton).click();
+      cy.get(Locators.CreateNewCohortButton).eq(0).click();
       cy.get(Locators.CohortEditPanel).should("exist");
       const cohortName = `CohortCreateE2E-${generateId(4)}`;
       cy.get(Locators.CohortNameInput).clear().type(cohortName);
