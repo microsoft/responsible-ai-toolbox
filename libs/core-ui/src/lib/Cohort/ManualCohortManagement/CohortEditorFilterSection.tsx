@@ -20,6 +20,7 @@ export interface ICohortEditorFilterSectionProps {
   onFiltersUpdated: (filters: IFilter[]) => void;
   onOpenedFilterUpdated: (openedFilter?: IFilter) => void;
   onSelectedFilterCategoryUpdated: (selectedFilterCategory?: string) => void;
+  setFilterMessage: (filtersMessage: string) => void;
 }
 
 export interface ICohortEditorFilterSectionState {
@@ -61,6 +62,7 @@ export class CohortEditorFilterSection extends React.PureComponent<
             showInvalidValueError={this.state.showInvalidValueError}
             showInvalidMinMaxValueError={this.state.showInvalidMinMaxValueError}
             filterIndex={this.props.filterIndex}
+            setFilterMessage={this.props.setFilterMessage}
           />
         )}
       </Stack.Item>
