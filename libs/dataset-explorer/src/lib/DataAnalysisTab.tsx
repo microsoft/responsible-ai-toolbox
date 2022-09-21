@@ -55,7 +55,6 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
             jointDataset={this.context.jointDataset}
             selectedCohort={this.context.selectedErrorCohort}
             modelType={this.context.modelMetadata.modelType}
-            onAllSelectedItemsChange={this.props.onAllSelectedItemsChange}
             telemetryHook={this.props.telemetryHook}
           />
         </PivotItem>
