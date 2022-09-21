@@ -12,8 +12,7 @@ import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
 import {
   allowUserInteract,
   getBinCountForProperty,
-  getMaxValue,
-  getMinValue
+  metaDescription
 } from "./AxisConfigDialogUtils";
 
 export interface IAxisConfigBinOptionsProps {
@@ -34,15 +33,11 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.selectedColumn.property];
-    const minVal = getMinValue(selectedMeta);
-    const maxVal = getMaxValue(selectedMeta);
+    const selectedColumnDesc = metaDescription(selectedMeta);
     return selectedMeta?.treatAsCategorical ? (
       <>
         <Text variant={"small"}>
-          {`${localization.formatString(
-            localization.Interpret.Filters.uniqueValues,
-            selectedMeta.sortedCategoricalValues?.length
-          )}`}
+          {selectedColumnDesc.categoricalDescription}
         </Text>
         {this.props.canDither && (
           <Checkbox
@@ -56,16 +51,10 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
     ) : (
       <>
         <Text variant={"small"} nowrap block>
-          {localization.formatString(
-            localization.Interpret.Filters.min,
-            minVal
-          )}
+          {selectedColumnDesc.minDescription}
         </Text>
         <Text variant={"small"} nowrap block>
-          {localization.formatString(
-            localization.Interpret.Filters.max,
-            maxVal
-          )}
+          {selectedColumnDesc.maxDescription}
         </Text>
         {this.props.canBin && !this.props.mustBin && (
           <Checkbox

@@ -888,7 +888,9 @@
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "saveAndSwitch": "Save and switch",
-      "selectFilter": "Select filter"
+      "selectFilter": "Select filter",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "_classificationOutcome.comment": "Whether the prediction from the model matched the true value",
@@ -1609,8 +1611,7 @@
       "SelectionColumnAriaLabel": "Toggle selection"
     },
     "IndividualFeatureImportanceView": {
-      "SmallInstanceSelection": "Instance selection",
-      "SmallTableText": "(change instances to explain in data analysis)"
+      "SmallInstanceSelection": "Instance selection"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",
@@ -1767,6 +1768,9 @@
       "infoTitle": "Additional information on model overview",
       "visualDisplayToggleLabel": "Show heatmap",
       "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
+    },
+    "TableViewTab": {
+      "Heading": "View the dataset in a table format for all features and rows."
     }
   }
 }

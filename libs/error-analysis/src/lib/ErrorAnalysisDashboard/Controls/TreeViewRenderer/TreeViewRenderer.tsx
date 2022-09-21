@@ -324,7 +324,7 @@ export class TreeViewRenderer extends React.PureComponent<
                 width: svgWidth * 1.5
               }}
             >
-              <g className={containerStyles}>
+              <g className={containerStyles} tabIndex={0}>
                 <g>
                   {links.map((link) => (
                     <path
