@@ -48,6 +48,8 @@ const componentStackTokens: IStackTokens = {
   padding: "m"
 };
 
+const MaxImportantWords = 15;
+
 export class TextExplanationView extends React.PureComponent<
   ITextExplanationViewProps,
   ITextExplanationViewState
@@ -62,12 +64,14 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations,
       weightVector
     );
+    const maxK = this.calculateMaxKImportances(importances);
+    const topK = this.calculateTopKImportances(importances);
     this.state = {
       importances,
-      maxK: Math.min(15, Math.ceil(Utils.countNonzeros(importances))),
+      maxK,
       radio: RadioKeys.All,
       text: this.props.dataSummary.text,
-      topK: Math.ceil(Utils.countNonzeros(importances) / 2)
+      topK
     };
   }
 
@@ -117,7 +121,7 @@ export class TextExplanationView extends React.PureComponent<
                   min={1}
                   max={this.state.maxK}
                   step={1}
-                  defaultValue={this.state.topK}
+                  value={this.state.topK}
                   showValue
                   onChange={this.setTopK}
                 />
@@ -175,7 +179,28 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations,
       weightOption
     );
-    this.setState({ importances, text: this.props.dataSummary.text });
+    const topK = this.calculateTopKImportances(importances);
+    const maxK = this.calculateMaxKImportances(importances);
+    this.setState({
+      importances,
+      maxK,
+      text: this.props.dataSummary.text,
+      topK
+    });
+  }
+
+  private calculateTopKImportances(importances: number[]): number {
+    return Math.min(
+      MaxImportantWords,
+      Math.ceil(Utils.countNonzeros(importances) / 2)
+    );
+  }
+
+  private calculateMaxKImportances(importances: number[]): number {
+    return Math.min(
+      MaxImportantWords,
+      Math.ceil(Utils.countNonzeros(importances))
+    );
   }
 
   private computeImportancesForWeightVector(
