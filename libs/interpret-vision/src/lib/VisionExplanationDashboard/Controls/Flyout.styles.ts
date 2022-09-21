@@ -52,7 +52,9 @@ export const flyoutStyles: () => IProcessedStyleSet<IFlyoutStyles> = () => {
       top: "2px"
     },
     image: {
-      marginBottom: "20px"
+      height: "250px",
+      marginBottom: "20px",
+      width: "250px"
     },
     imageContainer: {
       maxHeight: "250px",

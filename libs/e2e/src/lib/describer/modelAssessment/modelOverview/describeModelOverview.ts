@@ -2,12 +2,10 @@
 // Licensed under the MIT License.
 
 import { multiSelectComboBox } from "../../../../util/comboBox";
+import { visit } from "../../../../util/visit";
 import { Locators } from "../Constants";
 import { modelAssessmentDatasetsIncludingFlights } from "../datasets/modelAssessmentDatasets";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../IModelAssessmentData";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelOverviewBasicElementsArePresent";
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
@@ -19,20 +17,13 @@ const testName = "Model Overview v2";
 
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
-  name?: keyof typeof modelAssessmentDatasetsIncludingFlights,
+  name: keyof typeof modelAssessmentDatasetsIncludingFlights,
   isNotebookTest = true
 ): void {
   describe(testName, () => {
     if (isNotebookTest) {
       before(() => {
-        if (name) {
-          const hosts = Cypress.env().hosts;
-          const hostDetails = hosts.find((obj: { file: string }) => {
-            return obj.file === RAINotebookNames[name];
-          });
-          cy.task("log", hostDetails.host);
-          cy.visit(hostDetails.host);
-        }
+        visit(name);
       });
     } else {
       before(() => {
