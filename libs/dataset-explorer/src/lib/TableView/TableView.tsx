@@ -32,7 +32,6 @@ import React from "react";
 
 import { tableViewStyles } from "./TableView.styles";
 import { generateOnRenderDetailsHeader } from "./TableViewDetailsHeader";
-import { onRenderGroupHeader } from "./TableViewGroupHeader";
 import { ITableViewProps } from "./TableViewProps";
 import { IITableViewState, ITableViewTableState } from "./TableViewState";
 
@@ -199,7 +198,13 @@ export class TableView extends React.Component<
           localization.ModelAssessment.FeatureImportances.RowCheckboxAriaLabel
         }
         groupProps={{
-          onRenderHeader: onRenderGroupHeader,
+          headerProps: {
+            styles: {
+              title: {
+                fontSize: "14px"
+              }
+            }
+          },
           showEmptyGroups: true
         }}
         selectionMode={selectionMode}
