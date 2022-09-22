@@ -204,22 +204,6 @@ export class CausalIndividualChart extends React.PureComponent<
       </Stack>
     );
   }
-  private readonly getRawValue = (
-    v: number | undefined,
-    k: string
-  ): string | number | undefined => {
-    const meta = this.context.jointDataset.metaDict[k];
-    if (v === undefined) {
-      return v;
-    }
-    if (
-      (meta.isCategorical || meta?.treatAsCategorical) &&
-      meta.sortedCategoricalValues
-    ) {
-      return meta.sortedCategoricalValues[v];
-    }
-    return v;
-  };
   
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.setState({
