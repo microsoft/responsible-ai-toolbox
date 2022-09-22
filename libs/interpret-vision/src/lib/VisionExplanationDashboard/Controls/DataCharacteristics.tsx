@@ -8,7 +8,8 @@ import {
   IRectangle,
   mergeStyles,
   Dropdown,
-  IDropdownOption
+  IDropdownOption,
+  ImageFit
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -173,10 +174,11 @@ export class DataCharacteristics extends React.Component<
   private onRenderCell = (
     item?: IVisionListItem | undefined
   ): React.ReactElement => {
+    const imageDim = this.props.imageDim;
     const classNames = dataCharacteristicsStyles();
     const indicatorStyle = mergeStyles(
       classNames.indicator,
-      { width: this.props.imageDim },
+      { width: imageDim },
       item?.predictedY === item?.trueY
         ? classNames.successIndicator
         : classNames.errorIndicator
@@ -185,15 +187,14 @@ export class DataCharacteristics extends React.Component<
       <div />
     ) : (
       <Stack className={classNames.tile}>
-        <Stack.Item
-          style={{ height: this.props.imageDim, width: this.props.imageDim }}
-        >
+        <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
             alt={item?.predictedY}
             src={`data:image/jpg;base64,${item?.image}`}
             onClick={this.callbackWrapper(item)}
             className={classNames.image}
-            style={{ width: this.props.imageDim }}
+            style={{ display: "inline", height: imageDim }}
+            imageFit={ImageFit.none}
           />
         </Stack.Item>
         <div className={indicatorStyle} />

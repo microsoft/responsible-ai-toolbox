@@ -5,7 +5,7 @@ import { DatasetTaskType, IDataset } from "@responsible-ai/core-ui";
 
 import { images } from "./images";
 
-export const visionData: IDataset = {
+export const imagenet: IDataset = {
   categorical_features: [],
   class_names: [
     "tench",

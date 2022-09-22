@@ -16,7 +16,7 @@ from erroranalysis._internal.utils import is_spark
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
-REGRESSION_ERROR = 'Error'
+REGRESSION_ERROR = 'Regression error'
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,

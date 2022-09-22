@@ -14,18 +14,18 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { ISearchable } from "../Interfaces/ISearchable";
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+
 import { imageListStyles } from "./ImageList.styles";
 
-export interface IImageListProps {
-  data: IVisionListItem[];
+export interface IImageListProps extends ISearchable {
+  items: IVisionListItem[];
   imageDim: number;
-  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
 }
 
 export interface IImageListState {
-  data: IVisionListItem[];
-  filter: string;
   filteredItems: IVisionListItem[];
 }
 
@@ -49,46 +49,26 @@ export class ImageList extends React.Component<
     this.columnCount = 0;
     this.rowHeight = 0;
     this.state = {
-      data: [],
-      filter: this.props.searchValue.toLowerCase(),
       filteredItems: []
     };
   }
 
-  public static getDerivedStateFromProps(
-    props: IImageListProps,
-    state: IImageListState
-  ): Partial<IImageListState> {
-    if (props.data !== state.data && props.data.length > 0) {
-      return {
-        filter: "",
-        filteredItems: props.data
-      };
+  public componentDidUpdate(prevProps: IImageListProps): void {
+    if (
+      this.props.items !== prevProps.items ||
+      this.props.searchValue !== prevProps.searchValue
+    ) {
+      const searchVal = this.props.searchValue.toLowerCase();
+      let filteredItems: IVisionListItem[] = this.props.items;
+      if (searchVal.length > 0) {
+        filteredItems = getFilteredDataFromSearch(searchVal, filteredItems);
+      }
+      this.setState({ filteredItems });
     }
-
-    const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data
-      };
-    }
-    if (searchVal !== state.filter) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data.filter(
-          (item) =>
-            item.predictedY.toLowerCase().includes(searchVal) ||
-            item.trueY.toLowerCase().includes(searchVal)
-        )
-      };
-    }
-    return state;
   }
 
   public componentDidMount(): void {
-    const data = this.props.data;
-    this.setState({ data, filteredItems: data });
+    this.setState({ filteredItems: this.props.items });
   }
 
   public render(): React.ReactNode {

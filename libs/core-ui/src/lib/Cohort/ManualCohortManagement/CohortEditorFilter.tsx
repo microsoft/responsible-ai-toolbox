@@ -8,22 +8,19 @@ import {
   ComboBox,
   DefaultButton,
   PrimaryButton,
-  SpinButton,
   Stack,
-  Text,
-  Position
+  Text
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes, roundDecimal } from "@responsible-ai/mlchartlib";
 import React from "react";
 
-import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
+import { IFilter } from "../../Interfaces/IFilter";
 import { FluentUIStyles } from "../../util/FluentUIStyles";
 import { JointDataset } from "../../util/JointDataset";
 import { IJointMeta } from "../../util/JointDatasetUtils";
 
-import { cohortEditorStyles } from "./CohortEditor.styles";
-import { comparisonOptions } from "./CohortEditorFilterUtils";
+import { NoneCategoricalFilterOptions } from "./NoneCategoricalFilterOptions";
 
 export interface ICohortEditorFilterProps {
   openedFilter: IFilter;
@@ -32,6 +29,7 @@ export interface ICohortEditorFilterProps {
   filters: IFilter[];
   showInvalidMinMaxValueError: boolean;
   showInvalidValueError: boolean;
+  setFilterMessage: (filtersMessage: string) => void;
   setSelectedProperty(
     ev: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -63,16 +61,9 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
         text: this.props.jointDataset.metaDict[key].abbridgedLabel
       };
     });
-  private comparisonOptions: IComboBoxOption[] = comparisonOptions;
   public render(): React.ReactNode {
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.openedFilter.column];
-    const numericDelta =
-      selectedMeta?.treatAsCategorical ||
-      selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
-      !selectedMeta.featureRange
-        ? 1
-        : (selectedMeta.featureRange.max - selectedMeta.featureRange.min) / 10;
     const isDataColumn = this.props.openedFilter.column.includes(
       JointDataset.DataLabelRoot
     );
@@ -80,7 +71,6 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
     // filterIndex is set when the filter is editing openedFilter and reset to filters.length otherwise
     const isEditingFilter =
       this.props.filterIndex !== this.props.filters.length;
-    const styles = cohortEditorStyles();
     let minVal, maxVal;
     if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
       // Numerical values treated as categorical are stored with the values in the column,
@@ -136,132 +126,16 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             />
           </>
         ) : (
-          <>
-            <Text block nowrap variant={"small"}>
-              {`${localization.formatString(
-                localization.Interpret.Filters.min,
-                minVal
-              )} ${localization.formatString(
-                localization.Interpret.Filters.max,
-                maxVal
-              )}`}
-            </Text>
-            <ComboBox
-              label={localization.Interpret.Filters.numericalComparison}
-              selectedKey={this.props.openedFilter.method}
-              onChange={this.props.setComparison}
-              options={this.comparisonOptions}
-              useComboBoxAsMenuWidth
-              calloutProps={FluentUIStyles.calloutProps}
-            />
-            {selectedMeta.featureRange &&
-              (this.props.openedFilter.method === FilterMethods.InTheRangeOf ? (
-                <>
-                  <SpinButton
-                    ariaLabel={localization.Common.spinButton}
-                    labelPosition={Position.top}
-                    value={this.props.openedFilter.arg[0].toString()}
-                    label={localization.Interpret.Filters.minimum}
-                    min={selectedMeta.featureRange.min}
-                    max={selectedMeta.featureRange.max}
-                    onIncrement={(value): void => {
-                      this.props.setNumericValue(
-                        numericDelta,
-                        selectedMeta,
-                        0,
-                        value
-                      );
-                    }}
-                    onDecrement={(value): void => {
-                      this.props.setNumericValue(
-                        -numericDelta,
-                        selectedMeta,
-                        0,
-                        value
-                      );
-                    }}
-                    onValidate={(value): void => {
-                      this.props.setNumericValue(0, selectedMeta, 0, value);
-                    }}
-                  />
-                  <SpinButton
-                    ariaLabel={localization.Common.spinButton}
-                    labelPosition={Position.top}
-                    value={this.props.openedFilter.arg[1].toString()}
-                    label={localization.Interpret.Filters.maximum}
-                    min={selectedMeta.featureRange.min}
-                    max={selectedMeta.featureRange.max}
-                    onIncrement={(value): void => {
-                      this.props.setNumericValue(
-                        numericDelta,
-                        selectedMeta,
-                        1,
-                        value
-                      );
-                    }}
-                    onDecrement={(value): void => {
-                      this.props.setNumericValue(
-                        -numericDelta,
-                        selectedMeta,
-                        1,
-                        value
-                      );
-                    }}
-                    onValidate={(value): void => {
-                      this.props.setNumericValue(0, selectedMeta, 1, value);
-                    }}
-                  />
-                  {this.props.showInvalidMinMaxValueError &&
-                    selectedMeta.featureRange && (
-                      <p className={styles.invalidValueError}>
-                        {localization.formatString(
-                          localization.Interpret.CohortEditor
-                            .minimumGreaterThanMaximum,
-                          selectedMeta.featureRange.min,
-                          selectedMeta.featureRange.max
-                        )}
-                      </p>
-                    )}
-                </>
-              ) : (
-                <SpinButton
-                  ariaLabel={localization.Common.spinButton}
-                  labelPosition={Position.top}
-                  label={localization.Interpret.Filters.numericValue}
-                  min={selectedMeta.featureRange.min}
-                  max={selectedMeta.featureRange.max}
-                  value={this.props.openedFilter.arg[0].toString()}
-                  onIncrement={(value): void => {
-                    this.props.setNumericValue(
-                      numericDelta,
-                      selectedMeta,
-                      0,
-                      value
-                    );
-                  }}
-                  onDecrement={(value): void => {
-                    this.props.setNumericValue(
-                      -numericDelta,
-                      selectedMeta,
-                      0,
-                      value
-                    );
-                  }}
-                  onValidate={(value): void => {
-                    this.props.setNumericValue(0, selectedMeta, 0, value);
-                  }}
-                />
-              ))}
-            {this.props.showInvalidValueError && selectedMeta.featureRange && (
-              <p className={styles.invalidValueError}>
-                {localization.formatString(
-                  localization.Interpret.CohortEditor.invalidValueError,
-                  selectedMeta.featureRange.min,
-                  selectedMeta.featureRange.max
-                )}
-              </p>
-            )}
-          </>
+          <NoneCategoricalFilterOptions
+            selectedMeta={selectedMeta}
+            openedFilter={this.props.openedFilter}
+            showInvalidMinMaxValueError={this.props.showInvalidMinMaxValueError}
+            showInvalidValueError={this.props.showInvalidMinMaxValueError}
+            minVal={minVal}
+            maxVal={maxVal}
+            setComparison={this.props.setComparison}
+            setNumericValue={this.props.setNumericValue}
+          />
         )}
         <Stack horizontal tokens={{ childrenGap: "l1" }}>
           {isEditingFilter ? (
@@ -285,9 +159,7 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
             <Stack.Item>
               <PrimaryButton
                 text={localization.Interpret.CohortEditor.addFilter}
-                onClick={(): void =>
-                  this.props.saveState(this.props.filters.length)
-                }
+                onClick={this.onAddFilterClick}
               />
             </Stack.Item>
           )}
@@ -295,4 +167,10 @@ export class CohortEditorFilter extends React.Component<ICohortEditorFilterProps
       </Stack>
     );
   }
+  private onAddFilterClick = (): void => {
+    this.props.saveState(this.props.filters.length);
+    this.props.setFilterMessage(
+      localization.Interpret.CohortEditor.filterAdded
+    );
+  };
 }

@@ -12,6 +12,7 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React, { FormEvent } from "react";
 
+import { Announce } from "../../components/Announce";
 import {
   FilterMethods,
   ICompositeFilter,
@@ -41,6 +42,7 @@ export interface ICohortEditorPanelContentState {
   filterIndex?: number;
   openedFilter?: IFilter;
   selectedFilterCategory?: string;
+  filtersMessage?: string;
 }
 
 export class CohortEditorPanelContent extends React.PureComponent<
@@ -75,6 +77,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
     super(props);
     this.state = {
       filterIndex: this.props.filterList?.length || 0,
+      filtersMessage: "",
       openedFilter: this.getFilterValue(
         this.leftItems[0] && this.leftItems[0].key
       ),
@@ -113,6 +116,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           openedFilter={this.state.openedFilter}
           onOpenedFilterUpdated={this.onOpenedFilterUpdated}
           onSelectedFilterCategoryUpdated={this.onSelectedFilterCategoryUpdated}
+          setFilterMessage={this.setFilterMessage}
         />
         <Stack.Item>
           <CohortEditorFilterList
@@ -128,6 +132,7 @@ export class CohortEditorPanelContent extends React.PureComponent<
           <Link className={styles.clearFilter} onClick={this.clearAllFilters}>
             {localization.Interpret.CohortEditor.clearAllFilters}
           </Link>
+          <Announce message={this.state.filtersMessage} />
         </Stack.Item>
       </Stack>
     );
@@ -144,6 +149,13 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private clearAllFilters = (): void => {
     this.props.onCompositeFiltersUpdated([]);
     this.props.onFiltersUpdated([]);
+    this.setFilterMessage(localization.Interpret.CohortEditor.noFiltersApplied);
+  };
+
+  private setFilterMessage = (filtersMessage?: string): void => {
+    this.setState({
+      filtersMessage
+    });
   };
 
   private getErrorMessage = (): string | undefined => {

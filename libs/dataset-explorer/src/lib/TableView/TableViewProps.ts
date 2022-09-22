@@ -14,7 +14,6 @@ export interface ITableViewProps {
   jointDataset: JointDataset;
   selectedCohort: ErrorCohort;
   modelType?: ModelTypes;
-  onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
-  subsetSelectedItems?: IObjectWithKey[];
+  onAllSelectedItemsChange?: (allSelectedItems: IObjectWithKey[]) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
