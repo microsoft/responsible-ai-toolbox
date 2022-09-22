@@ -4,7 +4,8 @@
 import {
   IExplanationModelMetadata,
   IGenericChartProps,
-  ICohortBasedComponentState
+  ICohortBasedComponentState,
+  ICausalAnalysisData
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 
@@ -26,6 +27,7 @@ export interface IModelAssessmentDashboardState
   selectedWhatIfIndex: number | undefined;
   errorAnalysisOption: ErrorAnalysisOptions;
   saveCohortVisible: boolean;
+  causalAnalysisData?: ICausalAnalysisData[];
 }
 
 export interface IModelAssessmentDashboardTab {

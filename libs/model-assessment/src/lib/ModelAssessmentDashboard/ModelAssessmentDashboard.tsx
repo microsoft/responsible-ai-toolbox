@@ -41,12 +41,21 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     loadTheme(props.theme || defaultTheme);
     this.addTabDropdownOptions = getAvailableTabs(this.props, true);
   }
-  public componentDidUpdate(prev: IModelAssessmentDashboardProps): void {
+  public componentDidMount(): void {
+    this.updateCausal();
+  }
+  public componentDidUpdate(
+    prev: IModelAssessmentDashboardProps,
+    prevState: IModelAssessmentDashboardState
+  ): void {
     if (prev.theme !== this.props.theme) {
       loadTheme(this.props.theme || defaultTheme);
     }
     if (this.props.locale && prev.locale !== this.props.locale) {
       localization.setLanguage(this.props.locale);
+    }
+    if (this.state.selectedCohort !== prevState.selectedCohort) {
+      this.updateCausal();
     }
   }
 
@@ -57,7 +66,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
         value={{
           addCohort: this.addCohort,
           baseErrorCohort: this.state.baseCohort,
-          causalAnalysisData: this.props.causalAnalysisData?.[0],
+          causalAnalysisData: this.state.causalAnalysisData?.[0],
           counterfactualData: this.props.counterfactualData?.[0],
           dataset: this.props.dataset,
           deleteCohort: this.deleteCohort,
@@ -99,7 +108,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <Stack.Item className={classNames.mainContent}>
             <TabsView
               modelExplanationData={this.props.modelExplanationData}
-              causalAnalysisData={this.props.causalAnalysisData}
+              causalAnalysisData={this.state.causalAnalysisData}
               counterfactualData={this.props.counterfactualData}
               errorAnalysisData={this.props.errorAnalysisData}
               cohortData={this.props.cohortData}
@@ -140,6 +149,29 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       </ModelAssessmentContext.Provider>
     );
   }
+
+  private updateCausal = async (): Promise<void> => {
+    //update causal
+    console.log("updating cohort");
+    if (!this.props.requestCausal) {
+      return;
+    }
+    const causal = await this.props.requestCausal();
+    const dataset = await this.props.requestData();
+    const jointDataset = new JointDataset({
+      dataset: dataset.features,
+      featureMetaData: dataset.feature_metadata,
+      localExplanations,
+      metadata: modelMetadata,
+      predictedProbabilities: props.dataset.probability_y,
+      predictedY: props.dataset.predicted_y,
+      trueY: props.dataset.true_y
+    });
+    this.setState({
+      causalAnalysisData: causal,
+      jointDataset
+    });
+  };
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });

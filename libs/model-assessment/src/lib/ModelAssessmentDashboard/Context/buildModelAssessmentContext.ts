@@ -103,6 +103,7 @@ export function buildInitialModelAssessmentContext(
   return {
     activeGlobalTabs,
     baseCohort: cohorts[0],
+    causalAnalysisData: props.causalAnalysisData,
     cohorts,
     customPoints: [],
     dataChartConfig: undefined,

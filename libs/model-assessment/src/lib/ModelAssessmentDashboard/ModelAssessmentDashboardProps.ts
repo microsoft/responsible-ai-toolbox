@@ -64,6 +64,10 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestCausal?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalWhatIfData[]>;
   requestBoxPlotDistribution?: (
     request: any[],
     abortSignal: AbortSignal
