@@ -41,7 +41,7 @@ export enum Locators {
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
   CohortAddFilterButton = "button:contains('Add filter')",
   CohortSaveButton = "button:contains('Save')",
-  primarySaveButton = "#cohortEditPanel button.ms-Button--primary",
+  PrimarySaveButton = "#cohortEditPanel button.ms-Button--primary",
   CohortSaveAndSwitchButton = "button:contains('Save and switch')",
   CohortEmptyDialogCloseButton = ".emptyCohortDialog button",
   NewCohortSpan = "span:contains('CohortCreateE2E')",
