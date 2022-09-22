@@ -12,7 +12,7 @@ const testName = "Causal Analysis";
 
 export function describeCausalAnalysis(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {

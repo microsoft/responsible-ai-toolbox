@@ -5,13 +5,17 @@ import { modelAssessmentDatasets } from "../lib/describer/modelAssessment/datase
 import { RAINotebookNames } from "../lib/describer/modelAssessment/IModelAssessmentData";
 
 export function visit(
-  name: keyof typeof modelAssessmentDatasets,
+  name?: keyof typeof modelAssessmentDatasets,
   relativePath = "/"
 ): void {
   let fileName: string;
   const hosts = Cypress.env().hosts;
-  if (!hosts) {
+  if (!name) {
+    return;
+  }
+  if (!hosts || !name) {
     cy.visit(relativePath);
+    return;
   }
   const hostDetails = hosts.find((obj: { file: string }) => {
     fileName = RAINotebookNames[name];

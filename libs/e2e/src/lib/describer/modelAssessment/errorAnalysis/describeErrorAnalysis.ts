@@ -13,7 +13,7 @@ const testName = "Error Analysis";
 
 export function describeErrorAnalysis(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {

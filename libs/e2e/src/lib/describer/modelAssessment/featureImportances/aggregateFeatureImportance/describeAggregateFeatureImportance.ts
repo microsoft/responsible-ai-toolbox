@@ -17,7 +17,7 @@ const testName = "Aggregate feature importance";
 
 export function describeAggregateFeatureImportance(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   if (datasetShape.featureImportanceData?.noFeatureImportance) {
     return;
