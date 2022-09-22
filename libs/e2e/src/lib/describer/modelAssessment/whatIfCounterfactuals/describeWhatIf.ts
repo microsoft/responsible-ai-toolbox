@@ -14,7 +14,7 @@ const testName = "What If";
 
 export function describeWhatIf(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {
