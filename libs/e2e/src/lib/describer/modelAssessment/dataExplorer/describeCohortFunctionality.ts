@@ -39,7 +39,7 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortNameInput).clear().type(cohortName);
       cy.get(Locators.CohortFilterSelection).eq(1).check(); // select Dataset
       cy.get(Locators.CohortAddFilterButton).click();
-      cy.get(Locators.CohortSaveButton).eq(1).click({ force: true }); // Save button
+      cy.get(Locators.primarySaveButton).click({ force: true }); // Save button
       cy.get(Locators.DeleteButtons).last().click(); // last delete button
       cy.get(Locators.ConfirmationDeleteButton).click();
       cy.get(Locators.CohortSettingsCancelButton).click();
