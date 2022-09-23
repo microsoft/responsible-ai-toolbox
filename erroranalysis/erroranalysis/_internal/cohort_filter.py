@@ -16,7 +16,7 @@ from erroranalysis._internal.utils import is_spark
 
 MODEL = 'model'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
-REGRESSION_ERROR = 'Error'
+REGRESSION_ERROR = 'Regression error'
 
 
 def filter_from_cohort(analyzer, filters, composite_filters,
@@ -383,6 +383,8 @@ class FilterDataWithCohortFilters:
                 method = filter[METHOD]
                 arg0 = str(filter[ARG][0])
                 colname = filter[COLUMN]
+                if colname == 'True Y':
+                    colname = TRUE_Y
                 if method == CohortFilterMethods.METHOD_GREATER:
                     queries.append("`" + colname + "` > " + arg0)
                 elif method == CohortFilterMethods.METHOD_LESS:

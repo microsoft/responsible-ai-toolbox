@@ -102,6 +102,9 @@ export function getModelType(
 ): ModelTypes {
   // If Python provides a hint, use it!
   if (method) {
+    if (method === "image") {
+      return ModelTypes.Image;
+    }
     if (method === ModelTypes.Regression.valueOf() || method === "regressor") {
       return ModelTypes.Regression;
     } else if (method === ModelTypes.Binary.valueOf()) {

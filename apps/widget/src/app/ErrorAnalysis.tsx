@@ -6,59 +6,65 @@ import { ErrorAnalysisDashboard } from "@responsible-ai/error-analysis";
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
-import { config } from "./config";
-import { modelData } from "./modelData";
+import { IAppConfig } from "./config";
 
-export class ErrorAnalysis extends React.Component {
+interface IErrorAnalysisProps {
+  config: IAppConfig;
+  modelData: any;
+}
+export class ErrorAnalysis extends React.Component<IErrorAnalysisProps> {
   public render(): React.ReactNode {
     let requestPredictionsMethod = undefined;
     let requestMatrixMethod = undefined;
     let requestDebugMLMethod = undefined;
     let requestImportancesMethod = undefined;
-    if (config.baseUrl) {
-      if (modelData.enablePredict) {
+    if (this.props.config.baseUrl) {
+      if (this.props.modelData.enablePredict) {
         requestPredictionsMethod = async (data: any[]): Promise<any[]> => {
-          return callFlaskService(data, "/predict");
+          return callFlaskService(this.props.config, data, "/predict");
         };
       }
       requestMatrixMethod = async (
         data: any[]
       ): Promise<IErrorAnalysisMatrix> => {
-        return callFlaskService(data, "/matrix");
+        return callFlaskService(this.props.config, data, "/matrix");
       };
       requestDebugMLMethod = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/tree");
+        return callFlaskService(this.props.config, data, "/tree");
       };
       requestImportancesMethod = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/importances");
+        return callFlaskService(this.props.config, data, "/importances");
       };
     }
 
     return (
       <ErrorAnalysisDashboard
-        modelInformation={{ method: modelData.method, modelClass: "blackbox" }}
-        dataSummary={{
-          categoricalMap: modelData.categoricalMap,
-          classNames: modelData.classNames,
-          featureNames: modelData.featureNames
+        modelInformation={{
+          method: this.props.modelData.method,
+          modelClass: "blackbox"
         }}
-        testData={modelData.trainingData}
-        predictedY={modelData.predictedY}
-        probabilityY={modelData.probabilityY}
-        trueY={modelData.trueY}
+        dataSummary={{
+          categoricalMap: this.props.modelData.categoricalMap,
+          classNames: this.props.modelData.classNames,
+          featureNames: this.props.modelData.featureNames
+        }}
+        testData={this.props.modelData.trainingData}
+        predictedY={this.props.modelData.predictedY}
+        probabilityY={this.props.modelData.probabilityY}
+        trueY={this.props.modelData.trueY}
         precomputedExplanations={{
-          ebmGlobalExplanation: modelData.ebmData,
-          globalFeatureImportance: modelData.globalExplanation,
-          localFeatureImportance: modelData.localExplanations
+          ebmGlobalExplanation: this.props.modelData.ebmData,
+          globalFeatureImportance: this.props.modelData.globalExplanation,
+          localFeatureImportance: this.props.modelData.localExplanations
         }}
         requestPredictions={requestPredictionsMethod}
         requestDebugML={requestDebugMLMethod}
         requestMatrix={requestMatrixMethod}
         requestImportances={requestImportancesMethod}
-        localUrl={config.baseUrl}
-        locale={config.locale}
-        features={modelData.featureNames}
-        errorAnalysisData={modelData.errorAnalysisData}
+        localUrl={this.props.config.baseUrl}
+        locale={this.props.config.locale}
+        features={this.props.modelData.featureNames}
+        errorAnalysisData={this.props.modelData.errorAnalysisData}
       />
     );
   }

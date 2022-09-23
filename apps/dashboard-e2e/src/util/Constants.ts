@@ -8,5 +8,5 @@ export enum Locators {
   TextHighlighting = "#TextHighlighting",
   TextExplanationChart = "#TextExplanationChart",
   TextTopKSlider = "#TextTopKSlider",
-  TextWordsDropdown = `#ClassImportanceWeights div.ms-Dropdown-container`
+  TextWordsDropdown = "#ClassImportanceWeights div.ms-Dropdown-container"
 }

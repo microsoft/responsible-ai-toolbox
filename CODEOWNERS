@@ -1,17 +1,14 @@
 # Error analysis package
-/erroranalysis @gaugup @imatiach-msft
+/erroranalysis @gaugup @imatiach-msft @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # Responsible AI widgets package
-/raiwidgets @imatiach-msft @xuke444 @romanlutz
+/raiwidgets @imatiach-msft @xuke444 @romanlutz @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # Responsible AI SDK package
-/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0
-
-# workspace settings
-#/* @xuke444
+/responsibleai @gaugup @imatiach-msft @xuke444 @kicha0 @RubyZ10 @vinuthakaranth @tongyu-microsoft
 
 # App
-/apps @xuke444 @vinuthakaranth @romanlutz
+/apps @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10
 
 #causal ui
 /libs/causality @tongyu-microsoft @romanlutz @vinuthakaranth @xuke444 @RubyZ10

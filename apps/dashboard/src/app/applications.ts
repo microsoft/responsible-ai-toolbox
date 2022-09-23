@@ -13,7 +13,6 @@ import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
 import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
 import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
-import { visionData } from "../interpret-vision/__mock_data__/visionData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -36,6 +35,8 @@ import {
   emotion,
   emotionModelExplanationData
 } from "../model-assessment-text/__mock_data__/emotion";
+import { fridge } from "../model-assessment-vision/__mock_data__/fridge";
+import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -80,8 +81,6 @@ import {
   IInterpretDataSet,
   IInterpretTextSetting,
   IInterpretTextDataSet,
-  IInterpretVisionSetting,
-  IInterpretVisionDataSet,
   IErrorAnalysisSetting,
   IErrorAnalysisDataSet,
   IModelAssessmentSetting,
@@ -91,11 +90,11 @@ import {
 export const applicationKeys = <const>[
   "interpret",
   "interpretText",
-  "interpretVision",
   "fairness",
   "errorAnalysis",
   "modelAssessment",
-  "modelAssessmentText"
+  "modelAssessmentText",
+  "modelAssessmentVision"
 ];
 
 export type IApplications = {
@@ -104,10 +103,11 @@ export type IApplications = {
   fairness: IFairnessSetting & IDataSet<IFairnessDataSet>;
   interpret: IInterpretSetting & IDataSet<IInterpretDataSet>;
   interpretText: IInterpretTextSetting & IDataSet<IInterpretTextDataSet>;
-  interpretVision: IInterpretVisionSetting & IDataSet<IInterpretVisionDataSet>;
   errorAnalysis: IErrorAnalysisSetting & IDataSet<IErrorAnalysisDataSet>;
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentVision: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
 };
 
@@ -119,16 +119,14 @@ export const applications: IApplications = <const>{
       breastCancerData: { classDimension: 2, data: breastCancerData },
       breastCancerPrecisionData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Precision"
+        data: breastCancerData
       },
       breastCancerRecallData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Recall"
+        data: breastCancerData
       }
     },
-    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
+    versions: { "1": 1, "2:Static-View": 2 }
   },
   fairness: {
     datasets: {
@@ -180,12 +178,6 @@ export const applications: IApplications = <const>{
     datasets: {
       emotionLongDoc: { data: emotionLongDoc },
       newsgroupBinaryData: { data: newsgroupBinaryData }
-    },
-    versions: { "Version-1": 1 }
-  },
-  interpretVision: {
-    datasets: {
-      visionData: { data: visionData }
     },
     versions: { "Version-1": 1 }
   },
@@ -262,6 +254,37 @@ export const applications: IApplications = <const>{
         classDimension: 3,
         dataset: emotion,
         modelExplanationData: [emotionModelExplanationData]
+      } as IModelAssessmentDataSet
+    },
+    versions: { "1": 1, "2:Static-View": 2 }
+  },
+  modelAssessmentVision: {
+    datasets: {
+      fridge: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: fridge.categorical_features,
+          class_names: fridge.class_names,
+          feature_names: fridge.feature_names,
+          features: fridge.features,
+          images: fridge.images,
+          predicted_y: fridge.predicted_y,
+          task_type: fridge.task_type,
+          true_y: fridge.true_y
+        }
+      },
+      imagenet: {
+        classDimension: 3,
+        dataset: {
+          categorical_features: imagenet.categorical_features,
+          class_names: imagenet.class_names,
+          feature_names: imagenet.feature_names,
+          features: imagenet.features,
+          images: imagenet.images,
+          predicted_y: imagenet.predicted_y,
+          task_type: imagenet.task_type,
+          true_y: imagenet.true_y
+        }
       } as IModelAssessmentDataSet
     },
     versions: { "1": 1, "2:Static-View": 2 }

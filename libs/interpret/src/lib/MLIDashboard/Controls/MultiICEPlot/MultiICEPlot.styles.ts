@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
+import { flexMdDown } from "@responsible-ai/core-ui";
 
 export interface IMultiIcePlotStyles {
   iceWrapper: IStyle;
@@ -20,17 +21,24 @@ export const multiIcePlotStyles: () => IProcessedStyleSet<IMultiIcePlotStyles> =
       controlArea: {
         display: "flex",
         justifyContent: "space-between",
-        padding: "10px 15px 3px 67px"
+        padding: "10px 15px 3px 67px",
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            padding: "10px 15px 3px 0"
+          }
+        }
       },
       iceWrapper: {
         display: "flex",
         flex: "1",
         flexDirection: "column",
-        justifyContent: "stretch"
+        justifyContent: "stretch",
+        width: "80%"
       },
       parameterList: {
         display: "flex",
-        flex: "1"
+        flex: "1",
+        ...flexMdDown
       },
       placeholder: {
         fontSize: "25px",

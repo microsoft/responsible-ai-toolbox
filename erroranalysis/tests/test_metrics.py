@@ -41,8 +41,6 @@ class TestMetrics:
     def test_multiclass_classification_metrics(self, metric):
         if metric == Metrics.ERROR_RATE:
             pytest.skip('Not implemented')
-        if metric == Metrics.F1_SCORE:
-            pytest.skip('The default binary option raises error')
         y_true = np.array([1, 0, 2, 1, 0, 1])
         y_pred = np.array([0, 0, 2, 1, 0, 1])
         assert isinstance(metric_to_func[metric](y_true, y_pred), float)

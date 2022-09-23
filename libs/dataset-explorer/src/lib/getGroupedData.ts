@@ -7,7 +7,6 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 import { IDatasetExplorerSeries } from "./getDatasetScatter";
@@ -50,7 +49,10 @@ export function getGroupedData(
     result.push({
       color:
         styles?.[index].value.marker?.color || getPrimaryChartColor(getTheme()),
-      data: d
+      data: d,
+      marker: {
+        symbol: styles?.[index].value.marker?.symbol || "circle"
+      }
     });
   });
   return result;

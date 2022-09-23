@@ -9,7 +9,7 @@ import { IMatrixSingleCategory } from "../IMatrixCategory";
 import { matrixCategoryStyles } from "./MatrixCategory.styles";
 
 export interface IMatrixCategoryProps {
-  featureName: string;
+  featureName: string | undefined;
   category: IMatrixSingleCategory[];
   index: number;
 }

@@ -257,10 +257,9 @@ export class ICEPlot extends React.Component<IIcePlotProps, IIcePlotState> {
 
   public render(): React.ReactNode {
     if (this.props.invokeModel === undefined) {
-      const explanationStrings = this.props.messages
-        ? this.props.messages.PredictorReq
-        : undefined;
-      return <NoDataMessage explanationStrings={explanationStrings} />;
+      return (
+        <NoDataMessage explanationStrings={this.props.messages?.PredictorReq} />
+      );
     }
     const featureRange =
       this.state.requestFeatureIndex !== undefined

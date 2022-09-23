@@ -3,8 +3,8 @@
 
 import { getSpan } from "../../../../util/getSpan";
 import { Locators } from "../Constants";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
 
 export function describeWhatIfCreate(
   dataShape: IModelAssessmentData,
@@ -117,7 +117,7 @@ export function describeWhatIfCreate(
       cy.get(Locators.WhatIfSaveAsNewDatapointButton).click();
       cy.get(Locators.WhatIfSaveAsDataPoints).should(
         "contain",
-        dataShape.whatIfCounterfactualsData!.whatIfNameLabel
+        dataShape.whatIfCounterfactualsData?.whatIfNameLabel
       );
 
       // Should be able to delete datapoint created

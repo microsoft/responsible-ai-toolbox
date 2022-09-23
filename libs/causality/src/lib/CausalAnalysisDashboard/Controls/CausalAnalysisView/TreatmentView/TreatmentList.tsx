@@ -19,7 +19,6 @@ import {
   toScientific
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

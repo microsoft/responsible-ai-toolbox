@@ -22,7 +22,7 @@ export class TextExplanationDashboard extends React.PureComponent<
   ITextExplanationDashboardProps,
   ITextExplanationDashboardState
 > {
-  constructor(props: ITextExplanationDashboardProps) {
+  public constructor(props: ITextExplanationDashboardProps) {
     /*
      * Initializes the dashboard with its state
      */
@@ -46,7 +46,7 @@ export class TextExplanationDashboard extends React.PureComponent<
     };
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <TextExplanationView
         dataSummary={this.props.dataSummary}

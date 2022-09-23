@@ -28,7 +28,7 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
     let dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 200 }
+      dropdown: { marginRight: "20px", width: 200 }
     };
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
@@ -43,12 +43,12 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
       options.push(this.addDropdownOption(Metrics.MeanAbsoluteError));
     } else if (modelType === ModelTypes.Multiclass) {
       dropdownStyles = {
-        dropdown: { width: 235 }
+        dropdown: { marginRight: "20px", width: 235 }
       };
       options.push(this.addDropdownOption(Metrics.ErrorRate));
       options.push(this.addDropdownOption(Metrics.MacroPrecisionScore));
-      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroPrecisionScore));
+      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroF1Score));
       options.push(this.addDropdownOption(Metrics.MacroF1Score));

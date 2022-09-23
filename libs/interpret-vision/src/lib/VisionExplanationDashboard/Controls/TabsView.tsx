@@ -1,29 +1,36 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Stack, Text } from "@fluentui/react";
-import { IVisionListItem } from "@responsible-ai/core-ui";
+import { Stack } from "@fluentui/react";
+import { IVisionListItem, ErrorCohort } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
 import {
   TitleBarOptions,
   VisionDatasetExplorerTabOptions
-} from "../VisionExplanationDashboard";
-import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+} from "../VisionExplanationDashboardHelper";
 
+import { DataCharacteristics } from "./DataCharacteristics";
 import { ImageList } from "./ImageList";
 import { TableList } from "./TableList";
 import { TitleBar } from "./TitleBar";
 
 export interface ITabsViewProps {
+  addCohort: (name: string, switchCohort: boolean) => void;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
+  numRows: number;
+  otherMetadataFieldNames: string[];
   pageSize: number;
   searchValue: string;
   selectedItem: IVisionListItem | undefined;
   selectedKey: string;
   onItemSelect: (item: IVisionListItem) => void;
+  updateSelectedIndices: (indices: number[]) => void;
+  selectedCohort: ErrorCohort;
+  setSelectedCohort: (cohort: ErrorCohort) => void;
 }
 
 const stackTokens = {
@@ -36,9 +43,19 @@ export class TabsView extends React.Component<ITabsViewProps> {
     switch (this.props.selectedKey) {
       case VisionDatasetExplorerTabOptions.DataCharacteristics:
         return (
-          <Stack className={classNames.mainContainer} tokens={stackTokens}>
-            <Stack.Item>
-              <Text>not implemented</Text>
+          <Stack
+            className={classNames.mainContainer}
+            tokens={{ childrenGap: "l1" }}
+          >
+            <Stack.Item style={{ width: "100%" }}>
+              <DataCharacteristics
+                data={this.props.errorInstances.concat(
+                  ...this.props.successInstances
+                )}
+                imageDim={this.props.imageDim}
+                numRows={this.props.numRows}
+                selectItem={this.props.onItemSelect}
+              />
             </Stack.Item>
           </Stack>
         );
@@ -46,12 +63,15 @@ export class TabsView extends React.Component<ITabsViewProps> {
         return (
           <Stack className={classNames.mainContainer}>
             <TableList
+              addCohort={this.props.addCohort}
               errorInstances={this.props.errorInstances}
               successInstances={this.props.successInstances}
               imageDim={this.props.imageDim}
+              otherMetadataFieldNames={this.props.otherMetadataFieldNames}
               searchValue={this.props.searchValue}
               selectItem={this.props.onItemSelect}
               pageSize={this.props.pageSize}
+              updateSelectedIndices={this.props.updateSelectedIndices}
             />
           </Stack>
         );
@@ -72,7 +92,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.errorInstances}
+                    items={this.props.errorInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}
@@ -88,7 +108,7 @@ export class TabsView extends React.Component<ITabsViewProps> {
                 </Stack.Item>
                 <Stack.Item className={classNames.imageListContainer}>
                   <ImageList
-                    data={this.props.successInstances}
+                    items={this.props.successInstances}
                     imageDim={this.props.imageDim}
                     searchValue={this.props.searchValue}
                     selectItem={this.props.onItemSelect}

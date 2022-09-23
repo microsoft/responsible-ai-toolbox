@@ -74,6 +74,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestExp: this.props.requestExp,
           requestLocalFeatureExplanations:
@@ -101,7 +102,6 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               causalAnalysisData={this.props.causalAnalysisData}
               counterfactualData={this.props.counterfactualData}
               errorAnalysisData={this.props.errorAnalysisData}
-              visionModelExplanationData={this.props.visionModelExplanationData}
               cohortData={this.props.cohortData}
               cohorts={this.state.cohorts}
               jointDataset={this.state.jointDataset}
@@ -172,7 +172,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ activeGlobalTabs: tabs });
   };
 
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
@@ -278,7 +278,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
   };
 
-  private deleteCohort = (cohort: ErrorCohort) => {
+  private deleteCohort = (cohort: ErrorCohort): void => {
     if (
       this.state.baseCohort.cohort.name === cohort.cohort.name ||
       this.state.selectedCohort.cohort.name === cohort.cohort.name

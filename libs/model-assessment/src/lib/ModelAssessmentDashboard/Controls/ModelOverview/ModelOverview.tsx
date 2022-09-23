@@ -29,9 +29,11 @@ import {
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  DatasetTaskType
+  DatasetTaskType,
+  ImageClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
@@ -43,6 +45,7 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
+import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
@@ -51,6 +54,7 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -82,9 +86,10 @@ export class ModelOverview extends React.Component<
     defaultModelAssessmentContext;
   private featureComboBoxRef = React.createRef<IComboBox>();
 
-  constructor(props: IModelOverviewProps) {
+  public constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
+      boxPlotState: { boxPlotData: [], outlierData: undefined },
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
@@ -113,6 +118,15 @@ export class ModelOverview extends React.Component<
       } else {
         defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
       }
+    } else if (
+      this.context.dataset.task_type === DatasetTaskType.ImageClassification
+    ) {
+      defaultSelectedMetrics = [
+        ImageClassificationMetrics.Accuracy,
+        ImageClassificationMetrics.MacroF1,
+        ImageClassificationMetrics.MacroPrecision,
+        ImageClassificationMetrics.MacroRecall
+      ];
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
@@ -130,7 +144,7 @@ export class ModelOverview extends React.Component<
     });
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(): void {
     const maxCohortId = this.getMaxCohortId();
     if (maxCohortId > this.state.maxCohortId) {
       // A cohort has a higher ID than the previously recorded
@@ -267,7 +281,7 @@ export class ModelOverview extends React.Component<
         <Stack tokens={{ childrenGap: "10px" }}>
           <Text
             variant="medium"
-            className={classNames.descriptionText}
+            className={classNames.topLevelDescriptionText}
             id="modelOverviewDescription"
           >
             {localization.ModelAssessment.ModelOverview.topLevelDescription}
@@ -275,6 +289,7 @@ export class ModelOverview extends React.Component<
           <Pivot
             onLinkClick={this.handleViewPivot}
             id="modelOverviewCohortViewSelector"
+            overflowBehavior="menu"
           >
             <PivotItem
               headerText={
@@ -299,7 +314,11 @@ export class ModelOverview extends React.Component<
               }
             </Text>
           )}
-          <Stack horizontal tokens={{ childrenGap: "10px" }}>
+          <Stack
+            horizontal
+            tokens={{ childrenGap: "10px" }}
+            className={classNames.selections}
+          >
             <ComboBox
               id="modelOverviewMetricSelection"
               placeholder={
@@ -326,7 +345,11 @@ export class ModelOverview extends React.Component<
             </ActionButton>
           </Stack>
           {!this.state.datasetCohortViewIsVisible && (
-            <Stack horizontal tokens={{ childrenGap: "10px" }}>
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "10px" }}
+              className={classNames.selections}
+            >
               <ComboBox
                 id="modelOverviewFeatureSelection"
                 componentRef={this.featureComboBoxRef}
@@ -446,7 +469,7 @@ export class ModelOverview extends React.Component<
           />
           <MetricConfigurationFlyout
             isOpen={this.state.metricConfigurationIsVisible}
-            onDismissFlyout={() => {
+            onDismissFlyout={(): void => {
               this.setState({ metricConfigurationIsVisible: false });
             }}
             selectedMetrics={this.state.selectedMetrics}
@@ -454,7 +477,7 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot">
+            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
               {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                 <PivotItem
                   headerText={
@@ -466,6 +489,8 @@ export class ModelOverview extends React.Component<
                     onChooseCohorts={this.onChooseCohorts}
                     cohorts={chartCohorts}
                     telemetryHook={this.props.telemetryHook}
+                    boxPlotState={this.state.boxPlotState}
+                    onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
                     onToggleChange={this.onSplineToggleChange}
                     showSplineChart={this.state.showSplineChart}
                   />
@@ -493,36 +518,44 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private onSplineToggleChange = (checked: boolean) => {
+  private onSplineToggleChange = (checked: boolean): void => {
     this.setState({ showSplineChart: checked });
   };
 
-  private onClickMetricsConfiguration = () => {
+  private onBoxPlotStateUpdate = (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ): void => {
+    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
+      this.setState({ boxPlotState });
+    }
+  };
+
+  private onClickMetricsConfiguration = (): void => {
     this.setState({ metricConfigurationIsVisible: true });
     this.logButtonClick(
       TelemetryEventName.ModelOverviewMetricsConfigurationClick
     );
   };
 
-  private onClickFeatureConfiguration = () => {
+  private onClickFeatureConfiguration = (): void => {
     this.setState({ featureConfigurationIsVisible: true });
     this.logButtonClick(
       TelemetryEventName.ModelOverviewFeatureConfigurationClick
     );
   };
 
-  private onDismissChartConfigurationFlyout = () => {
+  private onDismissChartConfigurationFlyout = (): void => {
     this.setState({ chartConfigurationIsVisible: false });
   };
 
-  private onDismissFeatureConfigurationFlyout = () => {
+  private onDismissFeatureConfigurationFlyout = (): void => {
     this.setState({ featureConfigurationIsVisible: false });
   };
 
   private onVisualDisplayToggleChange = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       this.setState({ showHeatmapColors: checked });
       this.logButtonClick(
@@ -531,10 +564,10 @@ export class ModelOverview extends React.Component<
     }
   };
 
-  private onChooseCohorts = () =>
+  private onChooseCohorts = (): void =>
     this.setState({ chartConfigurationIsVisible: true });
 
-  private onApplyMetric = (metric: string) => {
+  private onApplyMetric = (metric: string): void => {
     this.setState({ selectedMetric: metric });
   };
 
@@ -542,7 +575,7 @@ export class ModelOverview extends React.Component<
     selectedDatasetCohorts: number[],
     selectedFeatureBasedCohorts: number[],
     datasetCohortChartIsSelected: boolean
-  ) =>
+  ): void =>
     this.setState({
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: datasetCohortChartIsSelected,
@@ -644,10 +677,10 @@ export class ModelOverview extends React.Component<
     }
   };
 
-  private generateFeatureBasedCohorts(
+  private generateFeatureBasedCohorts = (
     selectedFeatures: number[],
     numberOfContinuousFeatureBins: { [featureIndex: number]: number }
-  ) {
+  ): ErrorCohort[] => {
     return generateOverlappingFeatureBasedCohorts(
       this.context.baseErrorCohort,
       this.context.jointDataset,
@@ -655,7 +688,7 @@ export class ModelOverview extends React.Component<
       selectedFeatures,
       numberOfContinuousFeatureBins
     );
-  }
+  };
 
   private handleViewPivot = (item?: PivotItem | undefined): void => {
     if (item) {
@@ -686,15 +719,15 @@ export class ModelOverview extends React.Component<
     }
   };
 
-  private getMaxCohortId() {
+  private getMaxCohortId = (): number => {
     return Math.max(
       ...this.context.errorCohorts.map((errorCohort) =>
         errorCohort.cohort.getCohortID()
       )
     );
-  }
+  };
 
-  private logButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

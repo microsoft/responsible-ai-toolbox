@@ -343,7 +343,6 @@ export class LocalImportancePlots extends React.Component<
               {localization.Interpret.WhatIfTab.showLabel}
             </Text>
             <ChoiceGroup
-              className={classNames.choiceGroup}
               styles={{
                 flexContainer: classNames.choiceGroupFlexContainer
               }}
@@ -428,7 +427,7 @@ export class LocalImportancePlots extends React.Component<
   private toggleSortAbsolute = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       const sortArray = this.getSortedArray(
         this.state.sortingSeriesIndex,
@@ -441,7 +440,7 @@ export class LocalImportancePlots extends React.Component<
   private getSortedArray = (
     sortIndex: number | undefined,
     checked: boolean
-  ) => {
+  ): number[] => {
     if (sortIndex !== undefined) {
       return checked
         ? ModelExplanationUtils.getAbsoluteSortIndices(

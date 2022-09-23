@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { IProcessedStyleSet, mergeStyleSets, IStyle } from "@fluentui/react";
+import { flexLgDown, fullLgDown } from "@responsible-ai/core-ui";
 
 export interface ICounterfactualChartStyles {
   chartWithAxes: IStyle;
+  chartWithLegend: IStyle;
   chartWithVertical: IStyle;
   horizontalAxis: IStyle;
   horizontalAxisWithPadding: IStyle;
@@ -20,9 +22,11 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
   () => {
     return mergeStyleSets<ICounterfactualChartStyles>({
       chartWithAxes: {
+        ...fullLgDown,
         paddingTop: "30px",
         width: "80%"
       },
+      chartWithLegend: flexLgDown,
       chartWithVertical: {
         width: "100%"
       },

@@ -8,15 +8,22 @@ import {
   getTheme,
   FontWeights
 } from "@fluentui/react";
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexLgDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface IModelOverviewStyles {
   dropdown: IStyle;
   sectionStack: IStyle;
   configurationActionButton: IStyle;
+  topLevelDescriptionText: IStyle;
   descriptionText: IStyle;
   generalText: IStyle;
   generalSemiBoldText: IStyle;
+  selections: IStyle;
+  smallDropdown: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -24,7 +31,7 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
     const theme = getTheme();
     return mergeStyleSets<IModelOverviewStyles>({
       configurationActionButton: {
-        paddingTop: "44px"
+        marginTop: "25px"
       },
       descriptionText: {
         color: theme.semanticColors.bodyText,
@@ -43,6 +50,15 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       },
       sectionStack: {
         padding: "0 40px 10px 40px"
+      },
+      selections: flexLgDown,
+      smallDropdown: {
+        width: "150px"
+      },
+      topLevelDescriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth,
+        ...hideXlDown
       }
     });
   };

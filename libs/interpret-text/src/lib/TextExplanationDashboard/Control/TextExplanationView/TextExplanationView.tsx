@@ -5,6 +5,7 @@ import {
   ChoiceGroup,
   IChoiceGroupOption,
   IStackTokens,
+  Label,
   Slider,
   Stack,
   Text
@@ -47,11 +48,13 @@ const componentStackTokens: IStackTokens = {
   padding: "m"
 };
 
+const MaxImportantWords = 15;
+
 export class TextExplanationView extends React.PureComponent<
   ITextExplanationViewProps,
   ITextExplanationViewState
 > {
-  constructor(props: ITextExplanationViewProps) {
+  public constructor(props: ITextExplanationViewProps) {
     /*
      * Initializes the text view with its state
      */
@@ -61,12 +64,14 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations,
       weightVector
     );
+    const maxK = this.calculateMaxKImportances(importances);
+    const topK = this.calculateTopKImportances(importances);
     this.state = {
       importances,
-      maxK: Math.min(15, Math.ceil(Utils.countNonzeros(importances))),
+      maxK,
       radio: RadioKeys.All,
       text: this.props.dataSummary.text,
-      topK: Math.ceil(Utils.countNonzeros(importances) / 2)
+      topK
     };
   }
 
@@ -80,10 +85,68 @@ export class TextExplanationView extends React.PureComponent<
     }
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const classNames = textExplanationDashboardStyles();
     return (
       <Stack>
+        <Stack tokens={componentStackTokens} horizontal>
+          <Text>{localization.InterpretText.View.legendText}</Text>
+        </Stack>
+        <Stack tokens={componentStackTokens} horizontal>
+          <Stack.Item grow disableShrink>
+            <BarChart
+              text={this.state.text}
+              localExplanations={this.state.importances}
+              topK={this.state.topK}
+              radio={this.state.radio}
+            />
+          </Stack.Item>
+          <Stack.Item grow className={classNames.chartRight}>
+            <Stack tokens={componentStackTokens}>
+              <Stack.Item>
+                <Text variant={"xLarge"}>
+                  {localization.InterpretText.View.label +
+                    localization.InterpretText.View.colon +
+                    Utils.predictClass(
+                      this.props.dataSummary.classNames,
+                      this.props.dataSummary.prediction
+                    )}
+                </Text>
+              </Stack.Item>
+              <Stack.Item>
+                <Label>{localization.InterpretText.View.importantWords}</Label>
+              </Stack.Item>
+              <Stack.Item id="TextTopKSlider">
+                <Slider
+                  min={1}
+                  max={this.state.maxK}
+                  step={1}
+                  value={this.state.topK}
+                  showValue
+                  onChange={this.setTopK}
+                />
+              </Stack.Item>
+              <Stack.Item>
+                <ClassImportanceWeights
+                  onWeightChange={this.onWeightVectorChange}
+                  selectedWeightVector={this.props.selectedWeightVector}
+                  weightOptions={this.props.weightOptions}
+                  weightLabels={this.props.weightLabels}
+                />
+              </Stack.Item>
+              {this.props.selectedWeightVector !== WeightVectors.AbsAvg && (
+                <Stack.Item id="TextChoiceGroup">
+                  <ChoiceGroup
+                    defaultSelectedKey="all"
+                    options={options}
+                    onChange={this.changeRadioButton}
+                    required
+                  />
+                </Stack.Item>
+              )}
+            </Stack>
+          </Stack.Item>
+        </Stack>
         <Stack tokens={componentStackTokens} horizontal>
           <Stack.Item
             align="stretch"
@@ -102,68 +165,6 @@ export class TextExplanationView extends React.PureComponent<
             <TextFeatureLegend />
           </Stack.Item>
         </Stack>
-        <Stack tokens={componentStackTokens} horizontal>
-          <Stack.Item grow disableShrink>
-            <BarChart
-              text={this.state.text}
-              localExplanations={this.state.importances}
-              topK={this.state.topK}
-              radio={this.state.radio}
-            />
-          </Stack.Item>
-          <Stack.Item grow className={classNames.chartRight}>
-            <Stack tokens={componentStackTokens}>
-              <Stack.Item>
-                <Text variant={"xLarge"}>
-                  {localization.InterpretText.View.label +
-                    localization.InterpretText.View.colon +
-                    Utils.predictClass(
-                      this.props.dataSummary.classNames!,
-                      this.props.dataSummary.prediction!
-                    )}
-                </Text>
-              </Stack.Item>
-              <Stack.Item id="TextTopKSlider">
-                <Slider
-                  min={1}
-                  max={this.state.maxK}
-                  step={1}
-                  defaultValue={this.state.topK}
-                  showValue={false}
-                  onChange={this.setTopK}
-                />
-              </Stack.Item>
-              <Stack.Item align="center">
-                <Text variant={"large"}>
-                  {`${this.state.topK.toString()} ${
-                    localization.InterpretText.View.importantWords
-                  }`}
-                </Text>
-              </Stack.Item>
-              <Stack.Item>
-                <ClassImportanceWeights
-                  onWeightChange={this.onWeightVectorChange}
-                  selectedWeightVector={this.props.selectedWeightVector}
-                  weightOptions={this.props.weightOptions}
-                  weightLabels={this.props.weightLabels}
-                />
-              </Stack.Item>
-              <Stack.Item id="TextChoiceGroup">
-                <ChoiceGroup
-                  defaultSelectedKey="all"
-                  options={options}
-                  onChange={this.changeRadioButton}
-                  required
-                />
-              </Stack.Item>
-              <Stack.Item>
-                <Text variant={"small"}>
-                  {localization.InterpretText.View.legendText}
-                </Text>
-              </Stack.Item>
-            </Stack>
-          </Stack.Item>
-        </Stack>
       </Stack>
     );
   }
@@ -178,7 +179,28 @@ export class TextExplanationView extends React.PureComponent<
       this.props.dataSummary.localExplanations,
       weightOption
     );
-    this.setState({ importances, text: this.props.dataSummary.text });
+    const topK = this.calculateTopKImportances(importances);
+    const maxK = this.calculateMaxKImportances(importances);
+    this.setState({
+      importances,
+      maxK,
+      text: this.props.dataSummary.text,
+      topK
+    });
+  }
+
+  private calculateTopKImportances(importances: number[]): number {
+    return Math.min(
+      MaxImportantWords,
+      Math.ceil(Utils.countNonzeros(importances) / 2)
+    );
+  }
+
+  private calculateMaxKImportances(importances: number[]): number {
+    return Math.min(
+      MaxImportantWords,
+      Math.ceil(Utils.countNonzeros(importances))
+    );
   }
 
   private computeImportancesForWeightVector(

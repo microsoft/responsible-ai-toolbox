@@ -4,7 +4,6 @@
 import { TextField } from "@fluentui/react";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";

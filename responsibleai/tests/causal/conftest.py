@@ -8,8 +8,7 @@ import pandas as pd
 import pytest
 import shap
 from sklearn.model_selection import train_test_split
-
-from ..common_utils import create_adult_income_dataset, create_housing_data
+from tests.common_utils import create_adult_income_dataset, create_housing_data
 
 
 @pytest.fixture(scope='session')
@@ -26,7 +25,8 @@ def adult_data():
 @pytest.fixture(scope='session')
 def housing_data() -> Tuple[pd.DataFrame, pd.DataFrame, str]:
     target_feature = 'TARGET'
-    X_train, X_test, y_train, y_test, feature_names = create_housing_data()
+    X_train, X_test, y_train, y_test, feature_names = create_housing_data(
+        create_small_dataset=False)
     train_df = pd.DataFrame(X_train, columns=feature_names)
     train_df[target_feature] = y_train
     test_df = pd.DataFrame(X_test, columns=feature_names)

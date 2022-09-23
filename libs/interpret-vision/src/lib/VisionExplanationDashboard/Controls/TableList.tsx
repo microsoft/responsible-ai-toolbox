@@ -6,29 +6,34 @@ import {
   DetailsList,
   DetailsHeader,
   IDetailsHeaderProps,
-  IRenderFunction,
   IGroup,
   IColumn,
   Image,
   Text,
-  Stack
+  Stack,
+  Selection,
+  MarqueeSelection
 } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-export interface ITableListProps {
+import { ISearchable } from "../Interfaces/ISearchable";
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { visionExplanationDashboardStyles } from "../VisionExplanationDashboard.styles";
+
+export interface ITableListProps extends ISearchable {
+  addCohort: (name: string, switchCohort: boolean) => void;
   errorInstances: IVisionListItem[];
   successInstances: IVisionListItem[];
   imageDim: number;
+  otherMetadataFieldNames: string[];
   pageSize: number;
-  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
+  updateSelectedIndices: (indices: number[]) => void;
 }
 
 export interface ITableListState {
-  items: IVisionListItem[];
-  filter: string;
   filteredGroups: IGroup[];
   filteredItems: IVisionListItem[];
   groups: IGroup[];
@@ -39,75 +44,70 @@ export class TableList extends React.Component<
   ITableListProps,
   ITableListState
 > {
+  private _selection: Selection;
   public constructor(props: ITableListProps) {
     super(props);
-
+    this._selection = new Selection({
+      onSelectionChanged: (): void => this.updateSelection()
+    });
     this.state = {
       columns: [],
-      filter: this.props.searchValue.toLowerCase(),
       filteredGroups: [],
       filteredItems: [],
-      groups: [],
-      items: []
+      groups: []
     };
   }
 
-  static getDerivedStateFromProps(
-    props: ITableListProps,
-    state: ITableListState
-  ) {
-    const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
+  public componentDidUpdate(prevProps: ITableListProps): void {
+    if (
+      this.props.errorInstances !== prevProps.errorInstances ||
+      this.props.successInstances !== prevProps.successInstances ||
+      this.props.searchValue !== prevProps.searchValue
+    ) {
       let items: IVisionListItem[] = [];
 
-      items = items.concat(props.successInstances);
-      items = items.concat(props.errorInstances);
+      items = items.concat(this.props.successInstances);
+      items = items.concat(this.props.errorInstances);
+      const searchVal = this.props.searchValue.toLowerCase();
+      if (searchVal.length === 0) {
+        const groups: IGroup[] = [
+          {
+            count: this.props.successInstances.length,
+            key: "success",
+            level: 0,
+            name: localization.InterpretVision.Dashboard.titleBarSuccess,
+            startIndex: 0
+          },
+          {
+            count: this.props.errorInstances.length,
+            key: "error",
+            level: 0,
+            name: localization.InterpretVision.Dashboard.titleBarError,
+            startIndex: this.props.successInstances.length
+          }
+        ];
 
-      const groups: IGroup[] = [
-        {
-          count: props.successInstances.length,
-          key: "success",
-          level: 0,
-          name: localization.InterpretVision.Dashboard.titleBarSuccess,
-          startIndex: 0
-        },
-        {
-          count: props.errorInstances.length,
-          key: "error",
-          level: 0,
-          name: localization.InterpretVision.Dashboard.titleBarError,
-          startIndex: props.successInstances.length
-        }
-      ];
+        this.setState({
+          filteredGroups: groups,
+          filteredItems: items
+        });
+      } else {
+        const groups = this.state.groups;
+        const filteredItems = getFilteredDataFromSearch(searchVal, items);
+        const filteredSuccessInstances = filteredItems.filter(
+          (item) => item.predictedY === item.trueY
+        );
+        groups[0].count = filteredSuccessInstances.length;
+        groups[1].startIndex = filteredSuccessInstances.length;
+        groups[1].count =
+          filteredItems.length - filteredSuccessInstances.length;
 
-      return {
-        filter: searchVal,
-        filteredGroups: groups,
-        filteredItems: items
-      };
+        this.setState({
+          filteredGroups: groups,
+          filteredItems
+        });
+      }
     }
-    if (searchVal !== state.filter) {
-      const groups = state.groups;
-      const filteredItems = state.items.filter(
-        (item) =>
-          item.predictedY.toLowerCase().includes(searchVal) ||
-          item.trueY.toLowerCase().includes(searchVal)
-      );
-      const filteredSuccessInstances = filteredItems.filter(
-        (item) => item.predictedY === item.trueY
-      );
-
-      groups[0].count = filteredSuccessInstances.length;
-      groups[1].startIndex = filteredSuccessInstances.length;
-      groups[1].count = filteredItems.length - filteredSuccessInstances.length;
-
-      return {
-        filter: searchVal,
-        filteredGroups: groups,
-        filteredItems
-      };
-    }
-    return undefined;
   }
 
   public componentDidMount(): void {
@@ -165,45 +165,56 @@ export class TableList extends React.Component<
         maxWidth: 400,
         minWidth: 200,
         name: localization.InterpretVision.Dashboard.columnFour
-      },
-      {
-        fieldName: "other",
-        isResizable: true,
-        key: "other",
-        maxWidth: 400,
-        minWidth: 200,
-        name: localization.InterpretVision.Dashboard.columnFive
       }
     ];
+    const fieldNames = this.props.otherMetadataFieldNames;
+    fieldNames.forEach((fieldName) => {
+      columns.push({
+        fieldName,
+        isResizable: true,
+        key: fieldName,
+        maxWidth: 400,
+        minWidth: 200,
+        name: fieldName
+      });
+    });
     this.setState({
       columns,
       filteredGroups: groups,
       filteredItems: items,
-      groups,
-      items
+      groups
     });
   }
 
   public render(): React.ReactNode {
+    const classNames = visionExplanationDashboardStyles();
     return (
-      <FocusZone style={{ height: "600px", overflow: "auto", width: "100%" }}>
-        <DetailsList
-          key={this.props.searchValue}
-          items={this.state.filteredItems}
-          groups={this.state.filteredGroups}
-          columns={this.state.columns}
-          groupProps={{ showEmptyGroups: true }}
-          onRenderDetailsHeader={this.onRenderDetailsHeader}
-          onRenderItemColumn={this.onRenderColumn}
-        />
+      <FocusZone className={classNames.tableListContainer}>
+        <Stack>
+          <Stack.Item>
+            <MarqueeSelection selection={this._selection}>
+              <DetailsList
+                key={this.props.searchValue}
+                items={this.state.filteredItems}
+                groups={this.state.filteredGroups}
+                columns={this.state.columns}
+                groupProps={{ showEmptyGroups: true }}
+                onRenderDetailsHeader={this.onRenderDetailsHeader}
+                onRenderItemColumn={this.onRenderColumn}
+                selection={this._selection}
+                setKey="set"
+                onItemInvoked={this.props.selectItem}
+              />
+            </MarqueeSelection>
+          </Stack.Item>
+        </Stack>
       </FocusZone>
     );
   }
 
   private onRenderDetailsHeader = (
-    props: IDetailsHeaderProps | undefined,
-    _defaultRender?: IRenderFunction<IDetailsHeaderProps> | undefined
-  ) => {
+    props: IDetailsHeaderProps | undefined
+  ): React.ReactElement => {
     if (!props) {
       return <div />;
     }
@@ -217,9 +228,11 @@ export class TableList extends React.Component<
 
   private onRenderColumn = (
     item: IVisionListItem | undefined,
-    index: number | undefined,
+    _index: number | undefined,
     column?: IColumn | undefined
-  ) => {
+  ): React.ReactNode => {
+    const classNames = visionExplanationDashboardStyles();
+
     const value =
       item && column && column.fieldName
         ? item[column.fieldName as keyof IVisionListItem]
@@ -230,45 +243,31 @@ export class TableList extends React.Component<
         ? item["image" as keyof IVisionListItem]
         : "";
 
-    if (typeof image === "number") {
-      return <div />;
-    }
-    if (index) {
-      index = index + 1;
-    }
-
     return (
-      <div data-is-focusable>
-        <Stack
-          horizontal
-          tokens={{ childrenGap: "s1" }}
-          onClick={this.callbackWrapper(item)}
-        >
-          {image ? (
-            <Stack.Item>
-              <Image
-                src={`data:image/jpg;base64,${image}`}
-                style={{
-                  borderRadius: 4,
-                  height: "auto",
-                  width: this.props.imageDim
-                }}
-              />
-            </Stack.Item>
-          ) : (
-            <Stack.Item>
-              <Text>{value}</Text>
-            </Stack.Item>
-          )}
-        </Stack>
-      </div>
+      <Stack horizontal tokens={{ childrenGap: "s1" }}>
+        {image ? (
+          <Stack.Item>
+            <Image
+              className={classNames.tableListImage}
+              src={`data:image/jpg;base64,${image}`}
+              style={{ width: this.props.imageDim }}
+            />
+          </Stack.Item>
+        ) : (
+          <Stack.Item>
+            <Text>{value}</Text>
+          </Stack.Item>
+        )}
+      </Stack>
     );
   };
 
-  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
-    if (!item) {
-      return;
-    }
-    this.props.selectItem(item);
+  private updateSelection = (): void => {
+    const selection = this._selection.getSelection() as IVisionListItem[];
+    const indices: number[] = [];
+    selection.forEach((item: IVisionListItem) => {
+      indices.push(item.index);
+    });
+    this.props.updateSelectedIndices(indices);
   };
 }

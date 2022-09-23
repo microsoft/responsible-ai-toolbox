@@ -7,6 +7,7 @@ import React from "react";
 import { interactiveLegendStyles } from "./InteractiveLegend.styles";
 import { InteractiveLegendClickButton } from "./InteractiveLegendClickButton";
 import { InteractiveLegendEditAndDeleteButton } from "./InteractiveLegendEditAndDeleteButton";
+import { getColorBoxClassName } from "./InteractiveLegendUtils";
 
 export enum SortingState {
   Ascending = "ascending",
@@ -45,6 +46,11 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
   }
 
   private buildRowElement(item: ILegendItem, index: number): React.ReactNode {
+    const colorBoxClassName = getColorBoxClassName(
+      index,
+      item.color,
+      !item.disabled
+    );
     if (item.disabled) {
       return (
         <div
@@ -52,7 +58,7 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
           title={item.disabledMessage || ""}
           key={index}
         >
-          <div className={this.classes.inactiveColorBox} />
+          <div className={colorBoxClassName} />
           <Text nowrap variant={"medium"} className={this.classes.label}>
             {item.name}
           </Text>
@@ -70,9 +76,9 @@ export class InteractiveLegend extends React.PureComponent<IInteractiveLegendPro
       <div className={rootClass} key={index}>
         <InteractiveLegendClickButton
           activated={item.activated}
-          color={item.color}
           index={index}
           name={item.name}
+          colorBoxClassName={colorBoxClassName}
           onClick={item.onClick}
         />
         <InteractiveLegendEditAndDeleteButton

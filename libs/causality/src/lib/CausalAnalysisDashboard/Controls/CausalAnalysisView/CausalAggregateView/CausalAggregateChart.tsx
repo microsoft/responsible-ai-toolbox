@@ -9,7 +9,7 @@ import {
   ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
-import _, { isEqual } from "lodash";
+import { isEqual } from "lodash";
 import React from "react";
 
 export interface ICausalAggregateChartProps {

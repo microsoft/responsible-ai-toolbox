@@ -61,7 +61,7 @@ export function describeSubBarChart(dataShape: IModelAssessmentData): void {
         .type("{rightarrow}")
         .then(() => {
           expect(props.subBarChart.VisibleElements).length(
-            Math.min(topK + 1, props.dataShape.featureNames!.length)
+            Math.min(topK + 1, props.dataShape.featureNames?.length || 0)
           );
         });
     });

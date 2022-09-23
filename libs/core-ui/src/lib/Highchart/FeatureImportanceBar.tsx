@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { getTheme, Stack, Text } from "@fluentui/react";
-import _ from "lodash";
 import React from "react";
 
 import { getFeatureImportanceBarOptions } from "../util/getFeatureImportanceBarOptions";

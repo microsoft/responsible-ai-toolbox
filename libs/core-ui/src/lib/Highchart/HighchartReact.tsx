@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import * as Highcharts from "highcharts";
 import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
@@ -33,7 +34,17 @@ export function HighchartReact(
   const chartRef = React.useRef<Highcharts.Chart | null>();
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const createChart = () => {
+  const createChart = (): Highcharts.Chart | null | undefined => {
+    Highcharts.setOptions({
+      lang: {
+        downloadJPEG: localization.ChartContextMenu.downloadJPEG,
+        downloadPDF: localization.ChartContextMenu.downloadPDF,
+        downloadPNG: localization.ChartContextMenu.downloadPNG,
+        downloadSVG: localization.ChartContextMenu.downloadSVG,
+        printChart: localization.ChartContextMenu.printChart,
+        viewFullscreen: localization.ChartContextMenu.viewInFullScreen
+      }
+    });
     let chart: Highcharts.Chart | null | undefined;
     try {
       chart =
@@ -83,7 +94,7 @@ export function HighchartReact(
   React.useEffect(() => {
     // We need to have a separate hook since we want this to be executed
     // only when component is unloaded
-    return () => {
+    return (): void => {
       chartRef.current?.destroy();
     };
   }, []);

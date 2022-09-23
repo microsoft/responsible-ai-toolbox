@@ -68,7 +68,7 @@ export class ErrorAnalysisViewTab extends React.Component<
     const classNames = errorAnalysisStyles();
     const featureListIcon: IIconProps = { iconName: "BulletedListMirrored" };
     return (
-      <Stack horizontal>
+      <Stack horizontal className={classNames.errorAnalysisView}>
         <Stack
           grow
           tokens={{ padding: "l1" }}
@@ -132,7 +132,11 @@ export class ErrorAnalysisViewTab extends React.Component<
           />
         </Stack>
         <Stack tokens={{ padding: "l1" }}>
-          <Separator vertical styles={{ root: { height: "100%" } }} />
+          <Separator
+            vertical
+            styles={{ root: { height: "100%" } }}
+            className={classNames.separator}
+          />
         </Stack>
         <Stack className={classNames.cohortInfo} tokens={{ padding: "l1" }}>
           <CohortInfo
@@ -145,7 +149,7 @@ export class ErrorAnalysisViewTab extends React.Component<
     );
   }
 
-  private saveFeatures = (features: string[]) => {
+  private saveFeatures = (features: string[]): void => {
     this.props.selectFeatures(features);
     this.setState({ openFeatureList: false });
   };

@@ -11,12 +11,12 @@ import {
   TelemetryEventName,
   ICounterfactualData
 } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { getOriginalData } from "../util/getOriginalData";
 
 import { CounterfactualChart } from "./CounterfactualChart";
+import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
 
 export interface ICounterfactualChartWithLegendProps {
@@ -70,9 +70,14 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
+    const classNames = counterfactualChartStyles();
     return (
       <Stack.Item>
-        <Stack horizontal id={"IndividualFeatureContainer"}>
+        <Stack
+          horizontal
+          id={"IndividualFeatureContainer"}
+          className={classNames.chartWithLegend}
+        >
           <CounterfactualChart
             chartProps={this.props.chartProps}
             customPoints={this.state.customPoints}
@@ -180,7 +185,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
     });
   };
 
-  private logTelemetryEvent = (eventName: TelemetryEventName) => {
+  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

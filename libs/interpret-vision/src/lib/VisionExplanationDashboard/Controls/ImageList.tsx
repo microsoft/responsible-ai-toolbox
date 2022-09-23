@@ -14,23 +14,23 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { ISearchable } from "../Interfaces/ISearchable";
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+
 import { imageListStyles } from "./ImageList.styles";
 
-export interface IImageListProps {
-  data: IVisionListItem[];
+export interface IImageListProps extends ISearchable {
+  items: IVisionListItem[];
   imageDim: number;
-  searchValue: string;
   selectItem: (item: IVisionListItem) => void;
 }
 
 export interface IImageListState {
-  data: IVisionListItem[];
-  filter: string;
   filteredItems: IVisionListItem[];
 }
 
 const RowsPerPage = 3;
-const ImagePadding = 2;
+const ImagePadding = 15;
 const imageProps: IImageProps = {
   imageFit: ImageFit.cover
 };
@@ -42,48 +42,33 @@ export class ImageList extends React.Component<
   IImageListProps,
   IImageListState
 > {
-  columnCount: number;
-  rowHeight: number;
-  paddingPercentage: number;
+  private columnCount: number;
+  private rowHeight: number;
   public constructor(props: IImageListProps) {
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
-    this.paddingPercentage = 0;
     this.state = {
-      data: [],
-      filter: this.props.searchValue.toLowerCase(),
       filteredItems: []
     };
   }
 
-  static getDerivedStateFromProps(
-    props: IImageListProps,
-    state: IImageListState
-  ) {
-    const searchVal = props.searchValue.toLowerCase();
-    if (searchVal.length === 0) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data
-      };
+  public componentDidUpdate(prevProps: IImageListProps): void {
+    if (
+      this.props.items !== prevProps.items ||
+      this.props.searchValue !== prevProps.searchValue
+    ) {
+      const searchVal = this.props.searchValue.toLowerCase();
+      let filteredItems: IVisionListItem[] = this.props.items;
+      if (searchVal.length > 0) {
+        filteredItems = getFilteredDataFromSearch(searchVal, filteredItems);
+      }
+      this.setState({ filteredItems });
     }
-    if (searchVal !== state.filter) {
-      return {
-        filter: searchVal,
-        filteredItems: state.data.filter(
-          (item) =>
-            item.predictedY.toLowerCase().includes(searchVal) ||
-            item.trueY.toLowerCase().includes(searchVal)
-        )
-      };
-    }
-    return undefined;
   }
 
-  public componentDidMount() {
-    const data = this.props.data;
-    this.setState({ data, filteredItems: data });
+  public componentDidMount(): void {
+    this.setState({ filteredItems: this.props.items });
   }
 
   public render(): React.ReactNode {
@@ -103,22 +88,31 @@ export class ImageList extends React.Component<
     );
   }
 
-  private onRenderCell = (item?: IVisionListItem | undefined) => {
+  private onRenderCell = (
+    item?: IVisionListItem | undefined
+  ): React.ReactNode => {
     const classNames = imageListStyles();
+    if (!item) {
+      return;
+    }
 
     return (
       <Stack
         tokens={stackTokens}
         className={classNames.tile}
         style={{
+          height: this.props.imageDim * 1.1,
           width: `${100 / this.columnCount}%`
         }}
       >
-        <Stack.Item className={classNames.imageSizer}>
+        <Stack.Item
+          className={classNames.imageSizer}
+          style={{ paddingBottom: this.props.imageDim / 1.4 }}
+        >
           <Stack.Item
             className={classNames.imageFrame}
             style={{
-              height: this.props.imageDim - ImagePadding,
+              height: this.props.imageDim,
               overflow: "hidden",
               width: this.props.imageDim - ImagePadding
             }}
@@ -133,18 +127,35 @@ export class ImageList extends React.Component<
             />
           </Stack.Item>
           <Stack.Item
-            className={classNames.labelContainer}
+            className={
+              item?.predictedY === item?.trueY
+                ? classNames.successIndicator
+                : classNames.errorIndicator
+            }
             style={{
               left: ImagePadding,
-              top: ImagePadding,
-              width: "100%"
+              maxWidth: this.props.imageDim
+            }}
+          >
+            <Text className={classNames.labelPredicted}>
+              {item?.predictedY}
+            </Text>
+          </Stack.Item>
+          <Stack.Item
+            className={classNames.labelContainer}
+            style={{
+              left: ImagePadding - 14,
+              width:
+                this.props.imageDim > 200
+                  ? this.props.imageDim
+                  : this.props.imageDim - 1.35 * ImagePadding
             }}
           >
             <Text
               className={classNames.label}
-              style={{ width: this.props.imageDim - 3 }}
+              style={{ width: this.props.imageDim - 20 }}
             >
-              {item?.predictedY}
+              {item?.trueY}
             </Text>
           </Stack.Item>
         </Stack.Item>
@@ -152,14 +163,15 @@ export class ImageList extends React.Component<
     );
   };
 
-  private callbackWrapper = (item?: IVisionListItem | undefined) => () => {
-    if (!item) {
-      return;
-    }
-    this.props.selectItem(item);
-  };
+  private callbackWrapper =
+    (item?: IVisionListItem | undefined) => (): void => {
+      if (!item) {
+        return;
+      }
+      this.props.selectItem(item);
+    };
 
-  private getPageHeight = () => {
+  private getPageHeight = (): number => {
     return this.rowHeight * RowsPerPage;
   };
 

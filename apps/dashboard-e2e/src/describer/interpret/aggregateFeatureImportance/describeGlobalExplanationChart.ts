@@ -30,13 +30,13 @@ export function describeGlobalExplanationChart<
     it("should have x axis label", () => {
       const columns = props.dataShape.featureNames.slice(0, 4);
       for (const column of columns) {
-        cy.get(`#FeatureImportanceBar svg g.highcharts-xaxis-labels`).should(
+        cy.get("#FeatureImportanceBar svg g.highcharts-xaxis-labels").should(
           "contain.text",
           column
         );
       }
     });
-    it(`should have box elements`, () => {
+    it("should have box elements", () => {
       expect(props.chart.Elements.length).greaterThan(0);
     });
     if (!props.dataShape.noLocalImportance) {
