@@ -875,11 +875,10 @@ def compute_metrics_local(df, metric, total, classes):
                                             pred_y, metric)
         success = total - error
     else:
-        error = int(df[DIFF].sum())
-        if total == 0:
-            metric_value = 0
-        else:
-            metric_value = error / total
+        func = metric_to_func[metric]
+        diff = df[DIFF]
+        metric_value = func(None, None, diff)
+        error = metric_value * total
         success = total - error
     return metric_value, success, error
 
