@@ -14,7 +14,7 @@ const testName = "Dataset explorer";
 
 export function describeDatasetExplorer(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {

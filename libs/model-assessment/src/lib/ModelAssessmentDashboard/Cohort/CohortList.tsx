@@ -181,7 +181,7 @@ export class CohortList extends React.Component<
                 <Stack.Item>
                   <CohortListDeleteButton
                     disabled={this.isActiveCohort(item.key)}
-                    key={item.key}
+                    itemKey={item.key}
                     onDeleteCohortClick={this.onDeleteCohortClick}
                   />
                 </Stack.Item>

@@ -1,11 +1,37 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
+
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories, IJointMeta } from "../util/JointDatasetUtils";
 
+export interface IAxisValueDescription {
+  minDescription: string;
+  maxDescription: string;
+  categoricalDescription: string;
+}
+
+export function metaDescription(metaVal: IJointMeta): IAxisValueDescription {
+  const minVal = getMinValue(metaVal);
+  const maxVal = getMaxValue(metaVal);
+  const minDescription = localization.formatString(
+    localization.Interpret.Filters.min,
+    minVal
+  );
+  const maxDescription = localization.formatString(
+    localization.Interpret.Filters.max,
+    maxVal
+  );
+  const categoricalDescription = localization.formatString(
+    localization.Interpret.Filters.uniqueValues,
+    metaVal?.sortedCategoricalValues?.length
+  );
+  return { categoricalDescription, maxDescription, minDescription };
+}
+
 export function getMinValue(selectedMeta: IJointMeta): number | string {
-  if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
+  if (selectedMeta?.treatAsCategorical || !selectedMeta?.featureRange) {
     return 0;
   }
   if (Number.isInteger(selectedMeta.featureRange.min)) {
@@ -15,7 +41,7 @@ export function getMinValue(selectedMeta: IJointMeta): number | string {
 }
 
 export function getMaxValue(selectedMeta: IJointMeta): number | string {
-  if (selectedMeta?.treatAsCategorical || !selectedMeta.featureRange) {
+  if (selectedMeta?.treatAsCategorical || !selectedMeta?.featureRange) {
     return 0;
   }
   if (Number.isInteger(selectedMeta.featureRange.max)) {

@@ -45,18 +45,23 @@ export class IndividualFeatureImportanceView extends React.Component<
         tokens={verticalComponentTokens}
         id="IndividualFeatureImportanceView"
       >
-        <Stack horizontal tokens={horizontalComponentTokens}>
+        <Stack
+          horizontal
+          tokens={horizontalComponentTokens}
+          verticalAlign="center"
+        >
           <Label className={classNames.boldText}>
             {
               localization.ModelAssessment.IndividualFeatureImportanceView
                 .SmallInstanceSelection
             }
           </Label>
-          <Text variant="large">
-            {
-              localization.ModelAssessment.IndividualFeatureImportanceView
-                .SmallTableText
-            }
+          <Text variant="medium">
+            {hasTextImportances
+              ? localization.ModelAssessment.FeatureImportances
+                  .IndividualFeatureText
+              : localization.ModelAssessment.FeatureImportances
+                  .IndividualFeatureTabular}
           </Text>
         </Stack>
         <TableView
@@ -85,7 +90,7 @@ export class IndividualFeatureImportanceView extends React.Component<
         {hasTextImportances && (
           <TextLocalImportancePlots
             jointDataset={this.context.jointDataset}
-            selectedItems={this.props.allSelectedItems}
+            selectedItems={this.state.allSubsetSelectedItems}
             selectedWeightVector={this.props.selectedWeightVector}
             weightOptions={this.props.weightOptions}
             weightLabels={this.props.weightLabels}

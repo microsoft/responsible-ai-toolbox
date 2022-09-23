@@ -19,6 +19,18 @@ class TestMetrics:
         y_pred = np.array([0, 0, 1, 1, 0, 1])
         assert isinstance(metric_to_func[metric](y_true, y_pred), float)
 
+    @pytest.mark.parametrize('metric', [Metrics.FALSE_NEGATIVE_RATE,
+                                        Metrics.FALSE_POSITIVE_RATE,
+                                        Metrics.SELECTION_RATE])
+    def test_binary_classification_metrics_single_class(self, metric):
+        y_true = np.array([0, 0, 0, 0, 0, 0])
+        y_pred = np.array([0, 0, 0, 0, 0, 0])
+        classes = [0, 1]
+        with pytest.raises(ValueError):
+            metric_to_func[metric](y_true, y_pred)
+        assert isinstance(metric_to_func[metric](y_true, y_pred, classes),
+                          float)
+
     @pytest.mark.parametrize('metric', regression_metrics)
     def test_regression_metrics(self, metric):
         y_true = np.array([1.1, 0.9, 1.3, 1.0, 1.4, 5.0])

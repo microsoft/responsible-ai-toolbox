@@ -17,7 +17,7 @@ const testName = "Model Overview v2";
 
 export function describeModelOverview(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasetsIncludingFlights,
+  name?: keyof typeof modelAssessmentDatasetsIncludingFlights,
   isNotebookTest = true
 ): void {
   describe(testName, () => {
