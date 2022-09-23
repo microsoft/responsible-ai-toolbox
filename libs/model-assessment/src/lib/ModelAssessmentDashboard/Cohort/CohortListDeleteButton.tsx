@@ -6,7 +6,7 @@ import React from "react";
 
 export interface ICohortListDeleteButtonProps {
   disabled: boolean;
-  key: number;
+  itemKey: number;
   onDeleteCohortClick: (index: number) => void;
 }
 
@@ -22,6 +22,6 @@ export class CohortListDeleteButton extends React.Component<ICohortListDeleteBut
   }
 
   private onDeleteCohortClick = (): void => {
-    this.props.onDeleteCohortClick(this.props.key);
+    this.props.onDeleteCohortClick(this.props.itemKey);
   };
 }

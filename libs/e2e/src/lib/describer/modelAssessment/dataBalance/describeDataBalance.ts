@@ -14,7 +14,7 @@ const testName = "Data balance";
 
 export function describeDataBalance(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   describe(testName, () => {
     before(() => {

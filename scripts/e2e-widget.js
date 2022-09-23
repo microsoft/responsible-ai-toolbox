@@ -190,11 +190,15 @@ async function runNotebooks(selectedNotebook, host) {
   });
   if (selectedNotebook) {
     const nbFileName = `${selectedNotebook}.py`;
-    console.log(`Should only run ${nbFileName}`);
-    files = files.filter((f) => f === nbFileName);
-    if (files.length === 0) {
-      console.log(`Could not find any matching notebook for ${nbFileName}.`);
-      exit(1);
+    if (host) {
+      files = [nbFileName];
+    } else {
+      console.log(`Should only run ${nbFileName}`);
+      files = files.filter((f) => f === nbFileName);
+      if (files.length === 0) {
+        console.log(`Could not find any matching notebook for ${nbFileName}.`);
+        exit(1);
+      }
     }
   }
   const hosts = [];
