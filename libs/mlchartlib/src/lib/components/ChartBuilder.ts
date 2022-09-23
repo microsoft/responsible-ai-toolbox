@@ -42,7 +42,7 @@ export class ChartBuilder {
     // the preferred solution of size ref
     const maxBubbleValue = 10;
     projectedRows.forEach((row) => {
-      const series: Partial<Data> = this.getSeries(
+      const series: Partial<Data> = ChartBuilder.getSeries(
         datum,
         row,
         defaultSeries,
