@@ -32,6 +32,11 @@ export interface IFeatureImportanceDependenceProps {
 
 export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
   public render(): React.ReactNode {
+    console.log(
+      "!!this props.cohort FID: ",
+      this.props.cohort,
+      this.props.selectedWeight
+    );
     const classNames = dependencePlotStyles();
     if (this.props.chartProps === undefined) {
       return (
@@ -79,6 +84,7 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                   FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
+                key={this.props.chartProps.xAxis.property}
               />
             </Stack.Item>
           </Stack>

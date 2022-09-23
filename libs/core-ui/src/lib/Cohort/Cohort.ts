@@ -107,6 +107,7 @@ export class Cohort {
   // Bin object stores array of upper bounds for each bin, return the index
   // of the bin of the value;
   public unwrap(key: string, applyBin?: boolean): any[] {
+    console.log("!!key: ", key);
     if (
       applyBin &&
       !this.jointDataset.metaDict[key].isCategorical &&
