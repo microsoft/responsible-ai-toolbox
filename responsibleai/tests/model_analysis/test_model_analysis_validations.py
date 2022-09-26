@@ -8,14 +8,13 @@ from unittest.mock import MagicMock
 
 import pandas as pd
 import pytest
+from tests.common_utils import (create_binary_classification_dataset,
+                                create_cancer_data, create_housing_data,
+                                create_iris_data, create_lightgbm_classifier,
+                                create_sklearn_random_forest_regressor)
 
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.modelanalysis.model_analysis import ModelAnalysis
-
-from tests.common_utils import (create_binary_classification_dataset,
-                           create_cancer_data, create_housing_data,
-                           create_iris_data, create_lightgbm_classifier,
-                           create_sklearn_random_forest_regressor)
 
 
 class TestModelAnalysisValidations:
