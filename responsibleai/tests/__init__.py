@@ -3,7 +3,7 @@
 
 """Responsible AI Test package."""
 from .test_dependencies import TestDependencies
-from .test_model_analysis import TestModelAnalysis
+from .model_analysis.test_model_analysis import TestModelAnalysis
 
 __version__ = ""
 
