@@ -49,11 +49,12 @@ export class TabsView extends React.Component<ITabsViewProps> {
           >
             <Stack.Item style={{ width: "100%" }}>
               <DataCharacteristics
-                data={this.props.errorInstances.concat(
+                items={this.props.errorInstances.concat(
                   ...this.props.successInstances
                 )}
                 imageDim={this.props.imageDim}
                 numRows={this.props.numRows}
+                searchValue={this.props.searchValue}
                 selectItem={this.props.onItemSelect}
               />
             </Stack.Item>
