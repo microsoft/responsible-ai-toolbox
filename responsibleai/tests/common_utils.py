@@ -22,6 +22,8 @@ from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
                                    StandardScaler)
 from xgboost import XGBClassifier
 
+from raiutils.common.retries import retry_function
+
 
 def create_sklearn_random_forest_classifier(X, y):
     rfc = RandomForestClassifier(n_estimators=10, max_depth=4,
@@ -189,8 +191,23 @@ def create_housing_data(create_small_dataset=True):
     return x_train, x_test, y_train, y_test, housing.feature_names
 
 
+class FetchDiceAdultCensusIncomeDataset(object):
+    def __init__(self):
+        pass
+
+    def fetch(self):
+        return helpers.load_adult_income_dataset()
+
+
 def create_adult_income_dataset(create_small_dataset=True):
-    dataset = helpers.load_adult_income_dataset()
+    fetcher = FetchDiceAdultCensusIncomeDataset()
+    action_name = "Adult dataset download"
+    err_msg = "Failed to download adult dataset"
+    max_retries = 4
+    retry_delay = 60
+    dataset = retry_function(fetcher.fetch, action_name, err_msg,
+                             max_retries=max_retries,
+                             retry_delay=retry_delay)
     continuous_features = ['age', 'hours_per_week']
     target_name = 'income'
     target = dataset[target_name]
