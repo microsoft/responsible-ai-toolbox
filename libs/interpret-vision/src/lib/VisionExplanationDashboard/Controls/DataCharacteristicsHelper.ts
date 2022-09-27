@@ -115,7 +115,9 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
 }
 
 export function processItems(
-  items: IVisionListItem[]
+  items: IVisionListItem[],
+  resetLabels: boolean,
+  state: IDataCharacteristicsState
 ): Pick<
   IDataCharacteristicsState,
   | "columnCount"
@@ -138,15 +140,22 @@ export function processItems(
   const predicted: IItemsData = generateItems(labelTypes.predictedY, examples);
   const dropdownOptionsPredicted: IDropdownOption[] = predicted.dropdownOptions;
   const itemsPredicted: Map<string, IVisionListItem[]> = predicted.items;
-  const labelVisibilitiesPredicted: Map<string, boolean> =
-    predicted.labelVisibilities;
-  const selectedKeysPredicted: string[] = predicted.selectedKeys;
 
   const trues: IItemsData = generateItems(labelTypes.trueY, examples);
   const dropdownOptionsTrue: IDropdownOption[] = trues.dropdownOptions;
   const itemsTrue: Map<string, IVisionListItem[]> = trues.items;
-  const labelVisibilitiesTrue: Map<string, boolean> = trues.labelVisibilities;
-  const selectedKeysTrue: string[] = trues.selectedKeys;
+
+  let labelVisibilitiesPredicted: Map<string, boolean> =
+    predicted.labelVisibilities;
+  let selectedKeysPredicted: string[] = predicted.selectedKeys;
+  let labelVisibilitiesTrue: Map<string, boolean> = trues.labelVisibilities;
+  let selectedKeysTrue: string[] = trues.selectedKeys;
+  if (!resetLabels) {
+    labelVisibilitiesPredicted = state.labelVisibilitiesPredicted;
+    selectedKeysPredicted = state.selectedKeysPredicted;
+    labelVisibilitiesTrue = state.labelVisibilitiesTrue;
+    selectedKeysTrue = state.selectedKeysTrue;
+  }
 
   selectedKeysPredicted.forEach(() => {
     renderStartIndex.push(0);
