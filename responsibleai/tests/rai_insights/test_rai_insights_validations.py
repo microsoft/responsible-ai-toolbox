@@ -60,6 +60,40 @@ class TestRAIInsightsValidations:
             "adjust maximum_rows_for_test" in \
             str(ucve.value)
 
+    def test_empty_train_or_test_datasets(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_iris_data()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+        X_test_empty = pd.DataFrame(columns=X_test.columns)
+        X_train_empty = pd.DataFrame(columns=X_train.columns)
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='Either of the train/test are empty. '
+                      'Please provide non-empty dataframes for train '
+                      'and test sets.'):
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test_empty,
+                target_column=TARGET,
+                task_type='classification')
+
+        with pytest.raises(
+                UserConfigValidationException,
+                match='Either of the train/test are empty. '
+                      'Please provide non-empty dataframes for train '
+                      'and test sets.'):
+            RAIInsights(
+                model=model,
+                train=X_train_empty,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification')
+
     def test_validate_bad_target_name(self):
         X_train, X_test, y_train, y_test, _, _ = \
             create_iris_data()

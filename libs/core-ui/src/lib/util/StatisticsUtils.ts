@@ -243,7 +243,7 @@ export const generateMetrics: (
       return generateRegressionStats(trueYSubset, predYSubset, errorsSubset);
     });
   }
-  if (modelType === ModelTypes.Image) {
+  if (modelType === ModelTypes.ImageMulticlass) {
     return selectionIndexes.map((selectionArray) => {
       const trueYSubset = selectionArray.map((i) => trueYs[i]);
       const predYSubset = selectionArray.map((i) => predYs[i]);

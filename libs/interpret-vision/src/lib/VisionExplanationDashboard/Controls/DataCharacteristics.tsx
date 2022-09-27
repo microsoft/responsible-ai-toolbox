@@ -42,12 +42,14 @@ export class DataCharacteristics extends React.Component<
   }
 
   public componentDidMount(): void {
-    this.processData();
+    this.processData(true);
   }
 
   public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
-    if (prevProps.items !== this.props.items) {
-      this.processData();
+    if (this.props.items !== prevProps.items) {
+      this.processData(true);
+    } else if (this.props.searchValue !== prevProps.searchValue) {
+      this.processData(false);
     }
   }
 
@@ -139,7 +141,6 @@ export class DataCharacteristics extends React.Component<
                         label={label}
                         labelType={this.state.labelType}
                         list={list}
-                        processData={this.processData}
                         renderStartIndex={this.state.renderStartIndex}
                         showBackArrow={this.state.showBackArrow}
                         totalListLength={this.props.items.length}
@@ -162,12 +163,12 @@ export class DataCharacteristics extends React.Component<
     );
   }
 
-  private processData = (): void => {
+  private processData = (resetLabels: boolean): void => {
     const filteredItems = getFilteredDataFromSearch(
       this.props.searchValue,
       this.props.items
     );
-    this.setState(processItems(filteredItems));
+    this.setState(processItems(filteredItems, resetLabels, this.state));
   };
 
   private onRenderCell = (

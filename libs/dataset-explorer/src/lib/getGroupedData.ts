@@ -7,6 +7,7 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
+import { TransformStyle } from "plotly.js";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 import { IDatasetExplorerSeries } from "./getDatasetScatter";
@@ -16,7 +17,7 @@ export function getGroupedData(
   yData: number[],
   customData: any,
   groups: any,
-  styles: any,
+  styles: TransformStyle[] | undefined,
   jointData: JointDataset,
   chartProps?: IGenericChartProps
 ): IDatasetExplorerSeries[] {
@@ -46,14 +47,16 @@ export function getGroupedData(
     });
   }
   groupedData.forEach((d: any, index: number) => {
-    result.push({
-      color:
-        styles?.[index].value.marker?.color || getPrimaryChartColor(getTheme()),
-      data: d,
-      marker: {
-        symbol: styles?.[index].value.marker?.symbol || "circle"
-      }
-    });
+    if (styles) {
+      result.push({
+        color:
+          styles[index].value.marker?.color || getPrimaryChartColor(getTheme()),
+        data: d,
+        marker: {
+          symbol: styles[index].value.marker?.symbol?.toString() || "circle"
+        }
+      });
+    }
   });
   return result;
 }
