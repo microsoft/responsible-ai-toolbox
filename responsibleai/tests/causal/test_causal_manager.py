@@ -129,6 +129,9 @@ class TestCausalManager:
         assert hasattr(causal_data, 'global_effects')
         EFFECTS_ATTRIBUTES = [
             'point',
+            'outcome',
+            'feature',
+            'feature_value',
             'stderr',
             'zstat',
             'ci_lower',

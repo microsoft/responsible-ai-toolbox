@@ -17,6 +17,7 @@ from raiwidgets.interfaces import WidgetRequestResponseConstants
 from responsibleai import RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
+from raiutils.data_processing import serialize_json_safe
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -239,8 +240,9 @@ class ResponsibleAIDashboardInput:
                 include_original_columns_only=True)
 
             global_effects = \
-                self._analysis.causal.request_global_cohort_effects(
-                    id, filtered_data_df)
+                serialize_json_safe(
+                    self._analysis.causal.request_global_cohort_effects(
+                        id, filtered_data_df))
             return {
                 WidgetRequestResponseConstants.data: global_effects
             }
@@ -266,8 +268,9 @@ class ResponsibleAIDashboardInput:
                 include_original_columns_only=True)
 
             global_policy = \
-                self._analysis.causal.request_global_cohort_policy(
-                    id, filtered_data_df)
+                serialize_json_safe(
+                    self._analysis.causal.request_global_cohort_policy(
+                        id, filtered_data_df))
             return {
                 WidgetRequestResponseConstants.data: global_policy
             }
