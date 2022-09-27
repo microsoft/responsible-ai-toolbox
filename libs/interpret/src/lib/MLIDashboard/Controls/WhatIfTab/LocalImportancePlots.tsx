@@ -20,6 +20,8 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationModelMetadata,
+  IsClassifier,
+  IsMulticlass,
   ModelTypes,
   WeightVectorOption,
   JointDataset,
@@ -207,8 +209,7 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {(this.props.metadata.modelType === ModelTypes.Multiclass ||
-                  this.props.metadata.modelType === ModelTypes.Binary) && (
+                {IsClassifier(this.props.metadata.modelType) && (
                   <div>
                     <ClassImportanceWeights
                       onWeightChange={this.props.onWeightChange}
@@ -305,7 +306,7 @@ export class LocalImportancePlots extends React.Component<
                 calloutProps={FluentUIStyles.calloutProps}
                 styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
-              {this.props.metadata.modelType === ModelTypes.Multiclass && (
+              {IsMulticlass(this.props.metadata.modelType) && (
                 <ComboBox
                   autoComplete={"on"}
                   className={classNames.iceClassSelection}
