@@ -118,7 +118,8 @@ export function buildInitialModelAssessmentContext(
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedWhatIfIndex: undefined,
-    sortVector: undefined
+    sortVector: undefined,
+    onAddMessage: ""
   };
 }
 
