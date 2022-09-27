@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { localization } from "@responsible-ai/localization";
+
 import { GlobalTabKeys } from "../ModelAssessmentEnums";
 
 export function addTabMessage(tab: GlobalTabKeys): string {

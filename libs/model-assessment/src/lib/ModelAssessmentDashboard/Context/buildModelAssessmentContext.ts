@@ -115,11 +115,11 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
+    onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedWhatIfIndex: undefined,
-    sortVector: undefined,
-    onAddMessage: ""
+    sortVector: undefined
   };
 }
 
