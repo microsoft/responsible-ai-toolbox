@@ -27,7 +27,6 @@ export interface IDataCharacteristicsRowProps {
   showBackArrow: boolean[];
   totalListLength: number;
   onRenderCell: (item?: IVisionListItem | undefined) => JSX.Element;
-  processData: () => void;
   loadPrevItems: (index: number) => () => void;
   loadNextItems: (index: number) => () => void;
   getPageHeight: () => number;
