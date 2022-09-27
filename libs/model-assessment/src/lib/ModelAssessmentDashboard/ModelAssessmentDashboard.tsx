@@ -11,10 +11,10 @@ import {
   SaveCohort,
   defaultTheme,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  Announce
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Announce } from "libs/core-ui/src/lib/components/Announce";
 import _ from "lodash";
 import * as React from "react";
 
