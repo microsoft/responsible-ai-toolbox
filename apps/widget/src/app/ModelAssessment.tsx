@@ -85,6 +85,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         abortSignal: AbortSignal
       ): Promise<ICausalAnalysisData> => {
         return callFlaskService(
+          this.props.config,
           [id, filter, compositeFilter],
           "/global_causal_effects",
           abortSignal
@@ -97,6 +98,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         abortSignal: AbortSignal
       ): Promise<ICausalAnalysisData> => {
         return callFlaskService(
+          this.props.config,
           [id, filter, compositeFilter],
           "/global_causal_policy",
           abortSignal
