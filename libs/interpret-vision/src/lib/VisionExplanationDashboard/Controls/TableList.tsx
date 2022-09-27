@@ -64,46 +64,22 @@ export class TableList extends React.Component<
       this.props.successInstances !== prevProps.successInstances ||
       this.props.searchValue !== prevProps.searchValue
     ) {
-      let items: IVisionListItem[] = [];
-
-      items = items.concat(this.props.successInstances);
-      items = items.concat(this.props.errorInstances);
+      const filteredItems: IVisionListItem[] = this.getFilteredItems();
       const searchVal = this.props.searchValue.toLowerCase();
       if (searchVal.length === 0) {
-        const groups: IGroup[] = [
-          {
-            count: this.props.successInstances.length,
-            key: "success",
-            level: 0,
-            name: localization.InterpretVision.Dashboard.titleBarSuccess,
-            startIndex: 0
-          },
-          {
-            count: this.props.errorInstances.length,
-            key: "error",
-            level: 0,
-            name: localization.InterpretVision.Dashboard.titleBarError,
-            startIndex: this.props.successInstances.length
-          }
-        ];
+        const groups: IGroup[] = this.getGroups();
 
         this.setState({
           filteredGroups: groups,
-          filteredItems: items
+          filteredItems
         });
       } else {
-        const groups = this.state.groups;
-        const filteredItems = getFilteredDataFromSearch(searchVal, items);
-        const filteredSuccessInstances = filteredItems.filter(
-          (item) => item.predictedY === item.trueY
+        const filteredGroups: IGroup[] = this.getFilteredGroups(
+          filteredItems,
+          this.state.groups
         );
-        groups[0].count = filteredSuccessInstances.length;
-        groups[1].startIndex = filteredSuccessInstances.length;
-        groups[1].count =
-          filteredItems.length - filteredSuccessInstances.length;
-
         this.setState({
-          filteredGroups: groups,
+          filteredGroups,
           filteredItems
         });
       }
@@ -111,27 +87,12 @@ export class TableList extends React.Component<
   }
 
   public componentDidMount(): void {
-    let items: IVisionListItem[] = [];
-
-    items = items.concat(this.props.successInstances);
-    items = items.concat(this.props.errorInstances);
-
-    const groups: IGroup[] = [
-      {
-        count: this.props.successInstances.length,
-        key: "success",
-        level: 0,
-        name: localization.InterpretVision.Dashboard.titleBarSuccess,
-        startIndex: 0
-      },
-      {
-        count: this.props.errorInstances.length,
-        key: "error",
-        level: 0,
-        name: localization.InterpretVision.Dashboard.titleBarError,
-        startIndex: this.props.successInstances.length
-      }
-    ];
+    const filteredItems: IVisionListItem[] = this.getFilteredItems();
+    const groups: IGroup[] = this.getGroups();
+    const filteredGroups: IGroup[] = this.getFilteredGroups(
+      filteredItems,
+      groups
+    );
 
     const columns: IColumn[] = [
       {
@@ -180,8 +141,8 @@ export class TableList extends React.Component<
     });
     this.setState({
       columns,
-      filteredGroups: groups,
-      filteredItems: items,
+      filteredGroups,
+      filteredItems,
       groups
     });
   }
@@ -210,6 +171,57 @@ export class TableList extends React.Component<
         </Stack>
       </FocusZone>
     );
+  }
+
+  private getFilteredItems(): IVisionListItem[] {
+    let items: IVisionListItem[] = [];
+
+    items = items.concat(this.props.successInstances);
+    items = items.concat(this.props.errorInstances);
+    const searchValue = this.props.searchValue.toLowerCase();
+    if (searchValue.length === 0) {
+      return items;
+    }
+    const filteredItems = getFilteredDataFromSearch(searchValue, items);
+    return filteredItems;
+  }
+
+  private getGroups(): IGroup[] {
+    const groups: IGroup[] = [
+      {
+        count: this.props.successInstances.length,
+        key: "success",
+        level: 0,
+        name: localization.InterpretVision.Dashboard.titleBarSuccess,
+        startIndex: 0
+      },
+      {
+        count: this.props.errorInstances.length,
+        key: "error",
+        level: 0,
+        name: localization.InterpretVision.Dashboard.titleBarError,
+        startIndex: this.props.successInstances.length
+      }
+    ];
+    return groups;
+  }
+
+  private getFilteredGroups(
+    filteredItems: IVisionListItem[],
+    groups: IGroup[]
+  ): IGroup[] {
+    const searchValue = this.props.searchValue.toLowerCase();
+    if (searchValue.length === 0) {
+      return groups;
+    }
+    const filteredSuccessInstances = filteredItems.filter(
+      (item) => item.predictedY === item.trueY
+    );
+    groups[0].count = filteredSuccessInstances.length;
+    groups[1].startIndex = filteredSuccessInstances.length;
+    groups[1].count = filteredItems.length - filteredSuccessInstances.length;
+
+    return groups;
   }
 
   private onRenderDetailsHeader = (

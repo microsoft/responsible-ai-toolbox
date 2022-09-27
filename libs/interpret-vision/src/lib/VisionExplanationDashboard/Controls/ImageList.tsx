@@ -48,8 +48,10 @@ export class ImageList extends React.Component<
     super(props);
     this.columnCount = 0;
     this.rowHeight = 0;
+
+    const filteredItems: IVisionListItem[] = this.getFilteredItems();
     this.state = {
-      filteredItems: []
+      filteredItems
     };
   }
 
@@ -58,17 +60,9 @@ export class ImageList extends React.Component<
       this.props.items !== prevProps.items ||
       this.props.searchValue !== prevProps.searchValue
     ) {
-      const searchVal = this.props.searchValue.toLowerCase();
-      let filteredItems: IVisionListItem[] = this.props.items;
-      if (searchVal.length > 0) {
-        filteredItems = getFilteredDataFromSearch(searchVal, filteredItems);
-      }
+      const filteredItems: IVisionListItem[] = this.getFilteredItems();
       this.setState({ filteredItems });
     }
-  }
-
-  public componentDidMount(): void {
-    this.setState({ filteredItems: this.props.items });
   }
 
   public render(): React.ReactNode {
@@ -86,6 +80,15 @@ export class ImageList extends React.Component<
         />
       </FocusZone>
     );
+  }
+
+  private getFilteredItems(): IVisionListItem[] {
+    const searchValue = this.props.searchValue.toLowerCase();
+    let filteredItems: IVisionListItem[] = this.props.items;
+    if (searchValue.length > 0) {
+      filteredItems = getFilteredDataFromSearch(searchValue, filteredItems);
+    }
+    return filteredItems;
   }
 
   private onRenderCell = (

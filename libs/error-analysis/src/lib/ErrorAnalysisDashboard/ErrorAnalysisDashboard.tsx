@@ -41,7 +41,8 @@ import {
   IFilter,
   WeightVectorOption,
   EditCohort,
-  ShiftCohort
+  ShiftCohort,
+  IsMulticlass
 } from "@responsible-ai/core-ui";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
@@ -201,7 +202,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
     } else if (modelType === ModelTypes.Binary) {
       classLength = 2;
-    } else if (modelType === ModelTypes.Multiclass) {
+    } else if (IsMulticlass(modelType)) {
       classLength = new Set(
         [...(props.trueY || [])].concat(props.predictedY || [])
       ).size;
@@ -289,7 +290,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     modelMetadata.classNames.forEach((name, index) => {
@@ -333,10 +334,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
       selectedFeatures,
-      selectedWeightVector:
-        modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsMulticlass(modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,

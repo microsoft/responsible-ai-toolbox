@@ -5,12 +5,15 @@ import { IDropdownOption } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-export interface IDataCharacteristicsProps {
-  data: IVisionListItem[];
+import { ISearchable } from "../Interfaces/ISearchable";
+
+export interface IDataCharacteristicsProps extends ISearchable {
+  items: IVisionListItem[];
   imageDim: number;
   numRows: number;
   selectItem(item: IVisionListItem): void;
 }
+
 export interface IDataCharacteristicsState {
   columnCount: number[];
   dropdownOptionsPredicted: IDropdownOption[];
@@ -41,6 +44,10 @@ export const labelTypes = {
 };
 
 export const SelectAllKey = "selectAll";
+const labelTypeDropdownOptions: IDropdownOption[] = [
+  { key: labelTypes.predictedY, text: labelTypes.predictedY },
+  { key: labelTypes.trueY, text: labelTypes.trueY }
+];
 export const defaultState = {
   columnCount: [],
   dropdownOptionsPredicted: [],
@@ -48,7 +55,7 @@ export const defaultState = {
   itemsPredicted: new Map(),
   itemsTrue: new Map(),
   labelType: labelTypes.predictedY,
-  labelTypeDropdownOptions: [],
+  labelTypeDropdownOptions,
   labelVisibilitiesPredicted: new Map(),
   labelVisibilitiesTrue: new Map(),
   renderStartIndex: [],
@@ -107,8 +114,10 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   };
 }
 
-export function processData(
-  data: IVisionListItem[]
+export function processItems(
+  items: IVisionListItem[],
+  resetLabels: boolean,
+  state: IDataCharacteristicsState
 ): Pick<
   IDataCharacteristicsState,
   | "columnCount"
@@ -123,7 +132,7 @@ export function processData(
   | "selectedKeysTrue"
   | "showBackArrow"
 > {
-  const examples: IVisionListItem[] = data;
+  const examples: IVisionListItem[] = items;
   const columnCount: number[] = [];
   const renderStartIndex: number[] = [];
   const showBackArrow: boolean[] = [];
@@ -131,15 +140,22 @@ export function processData(
   const predicted: IItemsData = generateItems(labelTypes.predictedY, examples);
   const dropdownOptionsPredicted: IDropdownOption[] = predicted.dropdownOptions;
   const itemsPredicted: Map<string, IVisionListItem[]> = predicted.items;
-  const labelVisibilitiesPredicted: Map<string, boolean> =
-    predicted.labelVisibilities;
-  const selectedKeysPredicted: string[] = predicted.selectedKeys;
 
   const trues: IItemsData = generateItems(labelTypes.trueY, examples);
   const dropdownOptionsTrue: IDropdownOption[] = trues.dropdownOptions;
   const itemsTrue: Map<string, IVisionListItem[]> = trues.items;
-  const labelVisibilitiesTrue: Map<string, boolean> = trues.labelVisibilities;
-  const selectedKeysTrue: string[] = trues.selectedKeys;
+
+  let labelVisibilitiesPredicted: Map<string, boolean> =
+    predicted.labelVisibilities;
+  let selectedKeysPredicted: string[] = predicted.selectedKeys;
+  let labelVisibilitiesTrue: Map<string, boolean> = trues.labelVisibilities;
+  let selectedKeysTrue: string[] = trues.selectedKeys;
+  if (!resetLabels) {
+    labelVisibilitiesPredicted = state.labelVisibilitiesPredicted;
+    selectedKeysPredicted = state.selectedKeysPredicted;
+    labelVisibilitiesTrue = state.labelVisibilitiesTrue;
+    selectedKeysTrue = state.selectedKeysTrue;
+  }
 
   selectedKeysPredicted.forEach(() => {
     renderStartIndex.push(0);
