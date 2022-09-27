@@ -52,7 +52,7 @@ export class CausalInsightsTab extends React.PureComponent<
       >
         <Stack.Item>
           <MessageBar>
-            {localization.CausalAnalysis.MainMenu.cohortInfo}
+            {this.getCausalMessage()}
           </MessageBar>
         </Stack.Item>
         <Stack.Item>
@@ -111,6 +111,14 @@ export class CausalInsightsTab extends React.PureComponent<
         return TelemetryEventName.CasualTreatmentPolicyTabClick;
       default:
         return TelemetryEventName.AggregateCausalTabClick;
+    }
+  };
+
+  private getCausalMessage(): string {
+    if (!this.context.requestGlobalCausalEffects) {
+      return localization.CausalAnalysis.MainMenu.cohortInfo;
+    } else {
+      return "The current causal effects are for cohort: " + this.props.newCohort.cohort.name;
     }
   };
 }
