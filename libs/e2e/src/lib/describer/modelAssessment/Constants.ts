@@ -9,7 +9,7 @@ export enum Locators {
   ClearSelectionButton = "button:contains('Clear selection')",
   IFIPredictionSpan = "span[class^='headerCount']", // IFI - Individual feature importance
   IFIContainer = "#IndividualFeatureImportanceView", // IFI - Individual feature importance
-  IFICollapseButton = "#IndividualFeatureImportanceView i[data-icon-name='ChevronRightMed']",
+  IFICollapseButton = '#IndividualFeatureImportanceView button[class^="ms-GroupHeader-expand"]',
   IFITableRowSelected = '#IndividualFeatureImportanceView div[class^="ms-List-page"] div[class^="ms-DetailsRow"] div[class^="ms-Check is-checked"]',
   IFIDropdownSelectedOption = "div[class^='featureImportanceChartAndLegend']",
   IFIScrollableTable = "div[class*='tabularDataView'] div.ms-ScrollablePane div.ms-ScrollablePane--contentContainer",

@@ -5,12 +5,15 @@ import { IDropdownOption } from "@fluentui/react";
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-export interface IDataCharacteristicsProps {
-  data: IVisionListItem[];
+import { ISearchable } from "../Interfaces/ISearchable";
+
+export interface IDataCharacteristicsProps extends ISearchable {
+  items: IVisionListItem[];
   imageDim: number;
   numRows: number;
   selectItem(item: IVisionListItem): void;
 }
+
 export interface IDataCharacteristicsState {
   columnCount: number[];
   dropdownOptionsPredicted: IDropdownOption[];
@@ -41,6 +44,10 @@ export const labelTypes = {
 };
 
 export const SelectAllKey = "selectAll";
+const labelTypeDropdownOptions: IDropdownOption[] = [
+  { key: labelTypes.predictedY, text: labelTypes.predictedY },
+  { key: labelTypes.trueY, text: labelTypes.trueY }
+];
 export const defaultState = {
   columnCount: [],
   dropdownOptionsPredicted: [],
@@ -48,7 +55,7 @@ export const defaultState = {
   itemsPredicted: new Map(),
   itemsTrue: new Map(),
   labelType: labelTypes.predictedY,
-  labelTypeDropdownOptions: [],
+  labelTypeDropdownOptions,
   labelVisibilitiesPredicted: new Map(),
   labelVisibilitiesTrue: new Map(),
   renderStartIndex: [],
@@ -107,8 +114,8 @@ function generateItems(type: string, examples: IVisionListItem[]): IItemsData {
   };
 }
 
-export function processData(
-  data: IVisionListItem[]
+export function processItems(
+  items: IVisionListItem[]
 ): Pick<
   IDataCharacteristicsState,
   | "columnCount"
@@ -123,7 +130,7 @@ export function processData(
   | "selectedKeysTrue"
   | "showBackArrow"
 > {
-  const examples: IVisionListItem[] = data;
+  const examples: IVisionListItem[] = items;
   const columnCount: number[] = [];
   const renderStartIndex: number[] = [];
   const showBackArrow: boolean[] = [];

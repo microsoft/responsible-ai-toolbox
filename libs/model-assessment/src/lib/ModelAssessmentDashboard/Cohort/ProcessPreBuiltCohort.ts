@@ -5,7 +5,7 @@ import {
   ErrorCohort,
   JointDataset,
   IFilter,
-  ModelTypes,
+  IsClassifier,
   FilterMethods,
   Cohort,
   IPreBuiltFilter
@@ -113,10 +113,7 @@ function translatePreBuiltCohortFilterForTarget(
   if (cohortColumnName === CohortColumnNames.TrueY) {
     filterColumnName = JointDataset.TrueYLabel;
   }
-  if (
-    jointDataset.getModelType() === ModelTypes.Multiclass ||
-    jointDataset.getModelType() === ModelTypes.Binary
-  ) {
+  if (IsClassifier(jointDataset.getModelType())) {
     const modelClasses = jointDataset.getModelClasses();
     const index = preBuiltCohortFilter.arg
       .map((modelClass) => modelClasses.indexOf(modelClass))
