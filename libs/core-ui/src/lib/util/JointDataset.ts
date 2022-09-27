@@ -14,6 +14,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
+import { IsMulticlass } from "../util/ExplanationUtils";
 import {
   WeightVectors,
   WeightVectorOption
@@ -266,7 +267,7 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
-      if (args.metadata.modelType === ModelTypes.Multiclass) {
+      if (IsMulticlass(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -379,7 +380,7 @@ export class JointDataset {
       row[JointDataset.ClassificationError] = predictionCategory;
       return;
     }
-    if (modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelType)) {
       row[JointDataset.ClassificationError] =
         row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
           ? MulticlassClassificationEnum.Misclassified

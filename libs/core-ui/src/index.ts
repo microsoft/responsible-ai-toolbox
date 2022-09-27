@@ -24,6 +24,7 @@ export * from "./lib/Context/ModelAssessmentContext";
 export * from "./lib/util/array";
 export * from "./lib/util/buildInitialContext";
 export * from "./lib/util/DatasetUtils";
+export * from "./lib/util/ExplanationUtils";
 export * from "./lib/util/FluentUIStyles";
 export * from "./lib/util/JointDataset";
 export * from "./lib/util/JointDatasetUtils";
