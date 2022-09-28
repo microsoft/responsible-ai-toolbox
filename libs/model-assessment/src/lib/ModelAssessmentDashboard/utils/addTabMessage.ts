@@ -25,6 +25,6 @@ export function addTabMessage(tab: GlobalTabKeys): string {
     case GlobalTabKeys.VisionTab:
       return strings.Vision;
     default:
-      return "";
+      throw new Error(`Unexpected component ${tab}.`);
   }
 }
