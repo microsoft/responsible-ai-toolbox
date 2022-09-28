@@ -27,7 +27,7 @@ export interface ICausalAnalysisViewProps {
 
 interface ICausalAnalysisState {
   currentGlobalCausalEffects: ICausalAnalysisSingleData[];
-  currenLocalCausalEffects: ICausalAnalysisSingleData[][];
+  currentLocalCausalEffects: ICausalAnalysisSingleData[][];
   currentGlobalCausalPolicy: undefined | ICausalPolicy[];
 }
 
@@ -39,7 +39,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   public constructor(props: ICausalAnalysisViewProps) {
     super(props);
     this.state = {currentGlobalCausalEffects: this.props.data.global_effects,
-                  currenLocalCausalEffects: this.props.data.local_effects,
+                  currentLocalCausalEffects: this.props.data.local_effects,
                   currentGlobalCausalPolicy: this.props.data.policies}
   };
 
@@ -54,7 +54,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         )}
         {this.props.viewOption === CausalAnalysisOptions.Individual && (
           <CausalIndividualView
-            localEffects={this.state.currenLocalCausalEffects}
+            localEffects={this.state.currentLocalCausalEffects}
             telemetryHook={this.props.telemetryHook}
           />
         )}
@@ -81,7 +81,6 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
       this.forceUpdate();
     }
     if (this.props.newCohort.cohort.name !== prevProps.newCohort.cohort.name) {
-      console.log("cohort updated");
       if (this.props.viewOption === CausalAnalysisOptions.Aggregate) {
         this.getGlobalCausalEffects();
       }
@@ -93,36 +92,23 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   }
 
   private getGlobalCausalEffects = async(): Promise<void> =>{
-    console.log(this.props);
-    console.log(this.context);
     if (!this.context.causalAnalysisData) {
       this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
     } else if (this.context.requestGlobalCausalEffects) {
-      console.log("Fetching global causal effects from SDK backend");
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
       );
-
       const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
         this.props.newCohort.cohort.compositeFilters,
         this.props.newCohort.jointDataset
       );
-      console.log(filtersRelabeled);
-      console.log(compositeFiltersRelabeled);
-      const queryData = [
-        this.context.causalAnalysisData?.id,
-        filtersRelabeled,
-        compositeFiltersRelabeled
-      ];
-      console.log(queryData);
       const result = await this.context.requestGlobalCausalEffects(
         this.context.causalAnalysisData?.id,
         filtersRelabeled,
         compositeFiltersRelabeled,
         new AbortController().signal
       );
-      console.log(result);
       this.setState({currentGlobalCausalEffects: result.global_effects});
     } else {
       this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
@@ -130,36 +116,23 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   }
 
   private getGlobalCausalPolicy = async (): Promise<void> =>{
-    console.log(this.props);
-    console.log(this.context);
     if (!this.context.causalAnalysisData) {
       this.setState({currentGlobalCausalPolicy: this.props.data.policies});
     } else if (this.context.requestGlobalCausalPolicy) {
-      console.log("Fetching global causal policy from SDK backend");
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
       );
-
       const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
         this.props.newCohort.cohort.compositeFilters,
         this.props.newCohort.jointDataset
       );
-      console.log(filtersRelabeled);
-      console.log(compositeFiltersRelabeled);
-      const queryData = [
-        this.context.causalAnalysisData?.id,
-        filtersRelabeled,
-        compositeFiltersRelabeled
-      ];
-      console.log(queryData);
       const result = await this.context.requestGlobalCausalPolicy(
         this.context.causalAnalysisData?.id,
         filtersRelabeled,
         compositeFiltersRelabeled,
         new AbortController().signal
       );
-      console.log(result);
       this.setState({currentGlobalCausalPolicy: result.policies});
     } else {
       this.setState({currentGlobalCausalPolicy: this.props.data.policies});
