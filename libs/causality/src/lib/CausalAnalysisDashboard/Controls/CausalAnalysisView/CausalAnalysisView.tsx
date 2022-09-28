@@ -25,35 +25,42 @@ export interface ICausalAnalysisViewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
-export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewProps> {
+interface ICausalAnalysisState {
+  currentGlobalCausalEffects: ICausalAnalysisSingleData[];
+  currenLocalCausalEffects: ICausalAnalysisSingleData[][];
+  currentGlobalCausalPolicy: undefined | ICausalPolicy[];
+}
+
+export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewProps, ICausalAnalysisState> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private currentGlobalCausalEffects: ICausalAnalysisSingleData[] =
-    this.props.data.global_effects;
-  private currenLocalCausalEffects: ICausalAnalysisSingleData[][] =
-    this.props.data.local_effects;
-  private currentGlobalCausalPolicy: undefined | ICausalPolicy[] =
-    this.props.data.policies;
+
+  public constructor(props: ICausalAnalysisViewProps) {
+    super(props);
+    this.state = {currentGlobalCausalEffects: this.props.data.global_effects,
+                  currenLocalCausalEffects: this.props.data.local_effects,
+                  currentGlobalCausalPolicy: this.props.data.policies}
+  };
 
   public render(): React.ReactNode {
     return (
       <>
         {this.props.viewOption === CausalAnalysisOptions.Aggregate && (
           <CausalAggregateView
-            globalEffects={this.currentGlobalCausalEffects}
+            globalEffects={this.state.currentGlobalCausalEffects}
             telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Individual && (
           <CausalIndividualView
-            localEffects={this.currenLocalCausalEffects}
+            localEffects={this.state.currenLocalCausalEffects}
             telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Treatment && (
           <TreatmentView
-            data={this.currentGlobalCausalPolicy}
+            data={this.state.currentGlobalCausalPolicy}
             telemetryHook={this.props.telemetryHook}
           />
         )}
@@ -65,23 +72,31 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     prevProps: ICausalAnalysisViewProps
   ): Promise<void> {
     if (this.props.viewOption !== prevProps.viewOption) {
-      this.getGlobalCausalEffects();
-      this.getGlobalCausalPolicy();
+      if (this.props.viewOption === CausalAnalysisOptions.Aggregate) {
+        this.getGlobalCausalEffects();
+      }
+      if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
+        this.getGlobalCausalPolicy();
+      }
       this.forceUpdate();
     }
     if (this.props.newCohort.cohort.name !== prevProps.newCohort.cohort.name) {
       console.log("cohort updated");
-      this.getGlobalCausalEffects();
-      this.getGlobalCausalPolicy();
+      if (this.props.viewOption === CausalAnalysisOptions.Aggregate) {
+        this.getGlobalCausalEffects();
+      }
+      if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
+        this.getGlobalCausalPolicy();
+      }
       this.forceUpdate();
     }
   }
 
-  private async getGlobalCausalEffects(): Promise<void> {
+  private getGlobalCausalEffects = async(): Promise<void> =>{
     console.log(this.props);
     console.log(this.context);
     if (!this.context.causalAnalysisData) {
-      this.currentGlobalCausalEffects = this.props.data.global_effects;
+      this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
     } else if (this.context.requestGlobalCausalEffects) {
       console.log("Fetching global causal effects from SDK backend");
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
@@ -108,17 +123,17 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         new AbortController().signal
       );
       console.log(result);
-      this.currentGlobalCausalEffects = result.global_effects;
+      this.setState({currentGlobalCausalEffects: result.global_effects});
     } else {
-      this.currentGlobalCausalEffects = this.props.data.global_effects;
+      this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
     }
   }
 
-  private async getGlobalCausalPolicy(): Promise<void> {
+  private getGlobalCausalPolicy = async (): Promise<void> =>{
     console.log(this.props);
     console.log(this.context);
     if (!this.context.causalAnalysisData) {
-      this.currentGlobalCausalPolicy = this.props.data.policies;
+      this.setState({currentGlobalCausalPolicy: this.props.data.policies});
     } else if (this.context.requestGlobalCausalPolicy) {
       console.log("Fetching global causal policy from SDK backend");
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
@@ -145,9 +160,9 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         new AbortController().signal
       );
       console.log(result);
-      this.currentGlobalCausalPolicy = result.policies;
+      this.setState({currentGlobalCausalPolicy: result.policies});
     } else {
-      this.currentGlobalCausalPolicy = this.props.data.policies;
+      this.setState({currentGlobalCausalPolicy: this.props.data.policies});
     }
   }
 }
