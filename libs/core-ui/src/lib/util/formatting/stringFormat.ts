@@ -7,7 +7,7 @@ export function stringFormat(
   str: string,
   mapping: _.Dictionary<string>
 ): string {
-  return _.replace(str, /\{\{|\}\}|\{(\w+)\}/g, (match, key) => {
+  return _.replace(str, /{{|}}|{(\w+)}/g, (match, key) => {
     if (match === "{{") {
       return "{";
     }

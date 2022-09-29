@@ -13,8 +13,8 @@ describe("stringFormat", () => {
   it("should encode", () => {
     expect(
       stringFormat("We have {items} items {{brackets}} {{{dot}}}", {
-        items: "5",
-        dot: "."
+        dot: ".",
+        items: "5"
       })
     ).toBe("We have 5 items {brackets} {.}");
   });
