@@ -92,9 +92,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   }
 
   private getGlobalCausalEffects = async(): Promise<void> =>{
-    if (!this.context.causalAnalysisData) {
-      this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
-    } else if (this.context.requestGlobalCausalEffects) {
+    if (this.context.causalAnalysisData && this.context.requestGlobalCausalEffects) {
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
@@ -116,9 +114,7 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
   }
 
   private getGlobalCausalPolicy = async (): Promise<void> =>{
-    if (!this.context.causalAnalysisData) {
-      this.setState({currentGlobalCausalPolicy: this.props.data.policies});
-    } else if (this.context.requestGlobalCausalPolicy) {
+    if (this.context.causalAnalysisData && this.context.requestGlobalCausalPolicy) {
       const filtersRelabeled = ErrorCohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
