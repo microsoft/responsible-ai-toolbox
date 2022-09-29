@@ -2,6 +2,7 @@
 
 trigger:
   - main
+  - postga
 
 pool:
   vmImage: "ubuntu-latest"
