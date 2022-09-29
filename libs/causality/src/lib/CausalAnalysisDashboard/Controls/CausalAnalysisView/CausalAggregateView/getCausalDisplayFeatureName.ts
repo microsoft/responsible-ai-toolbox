@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalAnalysisSingleData } from "../Interfaces/ICausalAnalysisData";
+import { ICausalAnalysisSingleData } from "@responsible-ai/core-ui";
 
 export function getCausalDisplayFeatureName(
   item: ICausalAnalysisSingleData
