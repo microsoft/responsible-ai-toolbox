@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import {
+  getPrimaryChartColor,
+  IHighchartsConfig,
+  ICausalPolicyGains
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-
-import { getPrimaryChartColor } from "../Highchart/ChartColors";
-import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
-import { ICausalPolicyGains } from "../Interfaces/ICausalAnalysisData";
 
 export function getTreatmentBarChartOptions(
   data: ICausalPolicyGains,
