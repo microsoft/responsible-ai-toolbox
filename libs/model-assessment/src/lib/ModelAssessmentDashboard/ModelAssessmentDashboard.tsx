@@ -11,7 +11,8 @@ import {
   SaveCohort,
   defaultTheme,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  Announce
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -25,6 +26,7 @@ import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.style
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
+import { addTabMessage } from "./utils/addTabMessage";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -124,6 +126,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               addTabDropdownOptions={this.addTabDropdownOptions}
               addTab={this.addTab}
             />
+            <Announce message={this.state.onAddMessage} />
           </Stack.Item>
           {this.state.saveCohortVisible && (
             <SaveCohort
@@ -163,7 +166,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       name:
         this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
     });
-    this.setState({ activeGlobalTabs: tabs });
+    this.setState({ activeGlobalTabs: tabs, onAddMessage: addTabMessage(tab) });
   };
 
   private removeTab = (index: number): void => {

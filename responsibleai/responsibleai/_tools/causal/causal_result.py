@@ -109,7 +109,7 @@ class CausalResult(BaseResult['CausalResult']):
         causal_data.global_effects = \
             self.causal_analysis.cohort_causal_effect(
                 X_test, alpha=self.config.alpha,
-                keep_all_levels=True).to_dict(
+                keep_all_levels=True).reset_index().to_dict(
                     orient="records")
         return causal_data
 
