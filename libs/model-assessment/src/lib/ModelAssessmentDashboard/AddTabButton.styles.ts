@@ -10,6 +10,7 @@ import {
 
 export interface IAddTabButtonStyles {
   callout: IStyle;
+  calloutContent: IStyle;
   button: IStyle;
   splitter: IStyle;
   buttonSection: IStyle;
@@ -33,6 +34,9 @@ export const addTabButtonStyles =
       callout: {
         padding: "1em",
         width: "15em"
+      },
+      calloutContent: {
+        padding: "2px"
       },
       splitter: {
         backgroundColor: theme.semanticColors.variantBorder,
