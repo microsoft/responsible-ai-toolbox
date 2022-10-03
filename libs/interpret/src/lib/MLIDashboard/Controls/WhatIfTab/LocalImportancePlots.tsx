@@ -180,7 +180,7 @@ export class LocalImportancePlots extends React.Component<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNamesAbridged}
+                unsortedX={this.props.metadata.featureNames}
                 unsortedSeries={this.props.includedFeatureImportance}
                 topK={this.state.topK}
               />
