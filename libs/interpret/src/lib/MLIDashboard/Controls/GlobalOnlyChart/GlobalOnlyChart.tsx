@@ -49,7 +49,7 @@ export class GlobalOnlyChart extends React.PureComponent<
       featureNames:
         this.context.modelExplanationData?.precomputedExplanations
           .globalFeatureImportance.featureNames ||
-        this.context.modelMetadata.featureNamesFull,
+        this.context.modelMetadata.featureNames,
       globalSeries:
         perClassExplanationDimension === 1
           ? [

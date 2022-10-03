@@ -99,7 +99,6 @@ export class WizardBuilder {
       featureIsCategorical: props.precomputedFeatureBins.map(() => true),
       featureNames,
       featureNamesAbridged: featureNames,
-      featureNamesFull: featureNames,
       featureRanges,
       PredictionType: props.predictionType
     };
@@ -148,7 +147,6 @@ export class WizardBuilder {
       featureIsCategorical,
       featureNames,
       featureNamesAbridged: featureNames,
-      featureNamesFull: featureNames,
       featureRanges,
       PredictionType: predictionType
     };

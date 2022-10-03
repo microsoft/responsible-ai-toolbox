@@ -120,11 +120,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
   private static getFeatures(props: IErrorAnalysisDashboardProps): {
     featureNames: string[];
     featureNamesAbridged: string[];
-    featureNamesFull: string[];
   } {
     let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
-    let featureNamesFull: string[];
     if (featureNames !== undefined) {
       if (!featureNames.every((name) => typeof name === "string")) {
         featureNames = featureNames.map((x) => x.toString());
@@ -134,7 +132,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
           ? name
           : `${name.slice(0, maxLength)}...`;
       });
-      featureNamesFull = featureNames;
     } else {
       let featureLength = 0;
       if (props.testData && props.testData[0] !== undefined) {
@@ -175,12 +172,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         localization.ErrorAnalysis.defaultFeatureNames
       );
       featureNamesAbridged = featureNames;
-      featureNamesFull = featureNames;
     }
     return {
       featureNames,
-      featureNamesAbridged,
-      featureNamesFull
+      featureNamesAbridged
     };
   }
 
@@ -192,8 +187,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       props.precomputedExplanations,
       props.probabilityY
     );
-    const { featureNames, featureNamesAbridged, featureNamesFull } =
-      this.getFeatures(props);
+    const { featureNames, featureNamesAbridged } = this.getFeatures(props);
     let classNames = props.dataSummary.classNames;
     let classLength = 1;
     if (
@@ -236,7 +230,6 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       featureIsCategorical,
       featureNames,
       featureNamesAbridged,
-      featureNamesFull,
       featureRanges,
       modelType
     };

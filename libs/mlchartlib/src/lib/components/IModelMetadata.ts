@@ -7,7 +7,6 @@ import { INumericRange } from "./INumericRange";
 export interface IModelMetadata {
   featureNames: string[];
   featureNamesAbridged: string[];
-  featureNamesFull: string[];
   classNames: string[];
   featureIsCategorical?: boolean[];
   featureRanges: Array<INumericRange | ICategoricalRange>;

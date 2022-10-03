@@ -525,7 +525,6 @@ export class ExplanationDashboard extends React.Component<
     const modelType = ExplanationDashboard.getModelType(props);
     let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
-    let featureNamesFull: string[];
     const maxLength = 18;
     if (featureNames !== undefined) {
       if (!featureNames.every((name) => typeof name === "string")) {
@@ -536,7 +535,6 @@ export class ExplanationDashboard extends React.Component<
           ? name
           : `${name.slice(0, maxLength)}...`;
       });
-      featureNamesFull = featureNames;
     } else {
       let featureLength = 0;
       if (props.testData && props.testData[0] !== undefined) {
@@ -583,7 +581,6 @@ export class ExplanationDashboard extends React.Component<
         localization.Interpret.defaultFeatureNames
       );
       featureNamesAbridged = featureNames;
-      featureNamesFull = featureNames;
     }
     let classNames = props.dataSummary.classNames;
     const classLength = ExplanationDashboard.getClassLength(props);
@@ -609,7 +606,6 @@ export class ExplanationDashboard extends React.Component<
       featureIsCategorical,
       featureNames,
       featureNamesAbridged,
-      featureNamesFull,
       featureRanges,
       modelType
     };
