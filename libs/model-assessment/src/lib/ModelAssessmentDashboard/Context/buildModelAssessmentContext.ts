@@ -143,7 +143,6 @@ function buildModelMetadata(
   );
   let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
-  let featureNamesFull: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
     if (!featureNames.every((name) => typeof name === "string")) {
@@ -152,7 +151,6 @@ function buildModelMetadata(
     featureNamesAbridged = featureNames.map((name) => {
       return name.length <= maxLength ? name : `${name.slice(0, maxLength)}...`;
     });
-    featureNamesFull = featureNames;
   } else {
     let featureLength = 0;
     if (props.dataset.features && props.dataset.features[0] !== undefined) {
@@ -198,7 +196,6 @@ function buildModelMetadata(
       localization.ErrorAnalysis.defaultFeatureNames
     );
     featureNamesAbridged = featureNames;
-    featureNamesFull = featureNames;
   }
   let classNames = props.dataset.class_names;
   if (modelType !== ModelTypes.ImageMulticlass) {
@@ -237,7 +234,6 @@ function buildModelMetadata(
     featureIsCategorical,
     featureNames,
     featureNamesAbridged,
-    featureNamesFull,
     featureRanges,
     modelType
   };
