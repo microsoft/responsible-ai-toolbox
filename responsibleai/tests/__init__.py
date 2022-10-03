@@ -2,8 +2,8 @@
 # Licensed under the MIT License.
 
 """Responsible AI Test package."""
+from .model_analysis.test_model_analysis import TestModelAnalysis
 from .test_dependencies import TestDependencies
-from .test_model_analysis import TestModelAnalysis
 
 __version__ = ""
 

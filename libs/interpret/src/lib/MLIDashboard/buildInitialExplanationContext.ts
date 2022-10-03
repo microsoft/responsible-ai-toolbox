@@ -4,6 +4,7 @@
 import {
   Cohort,
   IMultiClassLocalFeatureImportance,
+  IsMulticlass,
   ISingleClassLocalFeatureImportance,
   WeightVectors,
   JointDataset,
@@ -194,7 +195,7 @@ export function buildInitialExplanationContext(
     [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
   };
   const weightVectorOptions = [];
-  if (modelMetadata.modelType === ModelTypes.Multiclass) {
+  if (IsMulticlass(modelMetadata.modelType)) {
     weightVectorOptions.push(WeightVectors.AbsAvg);
   }
   modelMetadata.classNames.forEach((name, index) => {
@@ -211,10 +212,9 @@ export function buildInitialExplanationContext(
     modelMetadata,
     requestPredictions: props.requestPredictions,
     selectedCohort: cohorts[0],
-    selectedWeightVector:
-      modelMetadata.modelType === ModelTypes.Multiclass
-        ? WeightVectors.AbsAvg
-        : 0,
+    selectedWeightVector: IsMulticlass(modelMetadata.modelType)
+      ? WeightVectors.AbsAvg
+      : 0,
     showingDataSizeWarning: jointDataset.datasetRowCount > rowWarningSize,
     validationWarnings: validationCheck.errorStrings,
     weightVectorLabels,

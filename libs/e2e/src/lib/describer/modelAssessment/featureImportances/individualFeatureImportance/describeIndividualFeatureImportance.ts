@@ -13,7 +13,7 @@ const testName = "Individual feature importance";
 
 export function describeIndividualFeatureImportance(
   datasetShape: IModelAssessmentData,
-  name: keyof typeof modelAssessmentDatasets
+  name?: keyof typeof modelAssessmentDatasets
 ): void {
   if (datasetShape.featureImportanceData?.noFeatureImportance) {
     return;

@@ -14,11 +14,11 @@ import {
 } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
-  ModelTypes,
   WeightVectors,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
-  IModelAssessmentContext
+  IModelAssessmentContext,
+  IsMulticlass
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -91,7 +91,7 @@ export class TabsView extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (props.modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(props.modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     props.modelMetadata.classNames.forEach((name, index) => {
@@ -112,10 +112,9 @@ export class TabsView extends React.PureComponent<
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       mapShiftVisible: false,
       selectedFeatures: props.dataset.feature_names,
-      selectedWeightVector:
-        props.modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsMulticlass(props.modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       weightVectorLabels,
       weightVectorOptions
     };

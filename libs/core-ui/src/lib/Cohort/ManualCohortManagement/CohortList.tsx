@@ -9,6 +9,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../../Interfaces/IExplanationContext";
+import { IsMulticlass } from "../../util/ExplanationUtils";
 import { JointDataset } from "../../util/JointDataset";
 import { limitStringLength } from "../../util/string";
 import { Cohort } from "../Cohort";
@@ -26,7 +27,7 @@ export class CohortList extends React.PureComponent<ICohortListProps> {
     let modelType: string;
     if (this.props.metadata.modelType === ModelTypes.Binary) {
       modelType = localization.Interpret.CohortBanner.binaryClassifier;
-    } else if (this.props.metadata.modelType === ModelTypes.Multiclass) {
+    } else if (IsMulticlass(this.props.metadata.modelType)) {
       modelType = localization.Interpret.CohortBanner.multiclassClassifier;
     } else {
       modelType = localization.Interpret.CohortBanner.regressor;

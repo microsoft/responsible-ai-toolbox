@@ -12,6 +12,9 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
     fontColor: theme?.semanticColors.bodyText
   };
   return {
+    accessibility: {
+      screenReaderSection: { beforeChartFormat: "" }
+    },
     chart: {
       animation: false,
       backgroundColor: colorTheme.backgroundColor,

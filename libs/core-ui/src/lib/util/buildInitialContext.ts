@@ -102,15 +102,18 @@ export function getModelType(
 ): ModelTypes {
   // If Python provides a hint, use it!
   if (method) {
-    if (method === "image") {
-      return ModelTypes.Image;
-    }
     if (method === ModelTypes.Regression.valueOf() || method === "regressor") {
       return ModelTypes.Regression;
     } else if (method === ModelTypes.Binary.valueOf()) {
       return ModelTypes.Binary;
     } else if (method === ModelTypes.Multiclass.valueOf()) {
       return ModelTypes.Multiclass;
+    } else if (method === "imageclassifier") {
+      // TODO: split this into binary/multiclass once we support binary
+      return ModelTypes.ImageMulticlass;
+    } else if (method === "textclassifier") {
+      // TODO: split this into binary/multiclass once we support binary
+      return ModelTypes.TextMulticlass;
     }
   }
   switch (getClassLength(precomputedExplanations, probabilityY)) {

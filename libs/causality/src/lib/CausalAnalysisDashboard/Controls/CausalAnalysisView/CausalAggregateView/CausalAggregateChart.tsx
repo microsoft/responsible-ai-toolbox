@@ -5,12 +5,13 @@ import { getTheme } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   BasicHighChart,
-  getErrorBarChartOptions,
   ICausalAnalysisSingleData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { isEqual } from "lodash";
 import React from "react";
+
+import { getErrorBarChartOptions } from "./getErrorBarChartOptions";
 
 export interface ICausalAggregateChartProps {
   data: ICausalAnalysisSingleData[];

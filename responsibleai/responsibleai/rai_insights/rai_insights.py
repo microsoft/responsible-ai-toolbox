@@ -287,6 +287,12 @@ class RAIInsights(RAIBaseInsights):
                     'The serializer should be serializable via pickle')
 
         if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
+            if len(train) <= 0 or len(test) <= 0:
+                raise UserConfigValidationException(
+                    'Either of the train/test are empty. '
+                    'Please provide non-empty dataframes for train '
+                    'and test sets.'
+                )
             if test.shape[0] > maximum_rows_for_test:
                 msg_fmt = 'The test data has {0} rows, ' +\
                     'but limit is set to {1} rows. ' +\
