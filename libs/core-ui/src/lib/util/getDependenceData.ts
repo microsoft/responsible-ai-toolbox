@@ -60,7 +60,6 @@ export function getDependenceData(
   if (chartProps.yAxis) {
     const yLabel = localization.Interpret.Charts.featureImportance;
     yData = cohort.unwrap(chartProps.yAxis.property);
-    console.log("!!yData: ", yData);
     yData.forEach((val, index) => {
       customData[index].Yformatted = val.toLocaleString(undefined, {
         maximumFractionDigits: 3
@@ -69,7 +68,6 @@ export function getDependenceData(
         ? `${customData[index].template}${yLabel}: ${customData[index].Yformatted}<br>`
         : `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
-    console.log("!!yData final: ", yData);
   }
   if (jointData.datasetMetaData?.featureMetaData) {
     const identityFeatureName =
@@ -113,6 +111,5 @@ export function getDependenceData(
       y: yData[index]
     } as IDependenceData;
   });
-  console.log("!!result: ", result);
   return result;
 }

@@ -17,7 +17,6 @@ export function getDependencyChartOptions(
   pointColor: string,
   theme?: ITheme
 ): IHighchartsConfig {
-  console.log("!!data: ", data, xLabels);
   const colorTheme = {
     axisColor: theme?.palette.neutralPrimary,
     axisGridColor: theme?.palette.neutralLight,
