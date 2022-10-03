@@ -70,6 +70,7 @@ function buildModelMetadata(
   const modelType = getModelType(props);
   let featureNames = props.dataSummary.featureNames;
   let featureNamesAbridged: string[];
+  let featureNamesFull: string[];
   const maxLength = 18;
   if (featureNames !== undefined) {
     if (!featureNames.every((name) => typeof name === "string")) {
@@ -78,6 +79,7 @@ function buildModelMetadata(
     featureNamesAbridged = featureNames.map((name) => {
       return name.length <= maxLength ? name : `${name.slice(0, maxLength)}...`;
     });
+    featureNamesFull = featureNames;
   } else {
     let featureLength = 0;
     if (props.testData && props.testData[0] !== undefined) {
@@ -121,6 +123,7 @@ function buildModelMetadata(
       localization.Interpret.defaultFeatureNames
     );
     featureNamesAbridged = featureNames;
+    featureNamesFull = featureNames;
   }
   let classNames = props.dataSummary.classNames;
   const classLength = getClassLength(props);
@@ -146,6 +149,7 @@ function buildModelMetadata(
     featureIsCategorical,
     featureNames,
     featureNamesAbridged,
+    featureNamesFull,
     featureRanges,
     modelType
   };

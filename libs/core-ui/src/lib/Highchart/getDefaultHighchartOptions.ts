@@ -73,7 +73,8 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       gridLineWidth: 0,
       labels: {
         style: {
-          color: colorTheme.fontColor
+          color: colorTheme.fontColor,
+          textOverflow: "ellipsis"
         }
       },
       title: {
