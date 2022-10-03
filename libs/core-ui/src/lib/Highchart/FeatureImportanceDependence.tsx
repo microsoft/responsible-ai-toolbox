@@ -79,7 +79,6 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                   FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
                   getTheme()
                 )}
-                key={this.props.chartProps.xAxis.property}
               />
             </Stack.Item>
           </Stack>
