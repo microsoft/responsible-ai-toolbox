@@ -36,7 +36,9 @@ import {
 import {
   ITableState,
   ModelAssessmentContext,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  Announce,
+  stringFormat
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -81,6 +83,7 @@ export interface IFeatureListState {
   lastAppliedMaxDepth: number;
   lastAppliedNumLeaves: number;
   lastAppliedMinChildSamples: number;
+  searchResultMessage: string;
 }
 
 export class FeatureList extends React.Component<
@@ -116,6 +119,7 @@ export class FeatureList extends React.Component<
       minChildSamples: 21,
       numLeaves: 21,
       searchedFeatures,
+      searchResultMessage: "",
       selectedFeatures: this.props.selectedFeatures,
       tableState
     };
@@ -187,6 +191,7 @@ export class FeatureList extends React.Component<
                   this.onSearch(newValue);
                 }}
               />
+              <Announce message={this.state.searchResultMessage} />
             </Stack.Item>
             <Customizer
               settings={(currentSettings): ISettings => ({
@@ -380,10 +385,18 @@ export class FeatureList extends React.Component<
   }
 
   private onSearch = (searchValue: string): void => {
+    const result = this.props.features.filter((feature) =>
+      feature.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+    );
     this.setState(
       {
-        searchedFeatures: this.props.features.filter((feature) =>
-          feature.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+        searchedFeatures: result,
+        searchResultMessage: stringFormat(
+          localization.ErrorAnalysis.FeatureList.searchResultMessage,
+          {
+            resultLength: result.length.toString(),
+            searchValue
+          }
         )
       },
       () => {
