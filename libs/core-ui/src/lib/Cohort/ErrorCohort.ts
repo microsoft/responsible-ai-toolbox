@@ -43,15 +43,17 @@ export class ErrorCohort {
     features: string[]
   ): IFilter[] {
     // return the filters relabeled from original label to Data#
-    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
-      const index = features.indexOf(filter.column);
-      const key = JointDataset.DataLabelRoot + index.toString();
-      return {
-        arg: filter.arg,
-        column: key,
-        method: filter.method
-      };
-    });
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const index = features.indexOf(filter.column);
+        const key = JointDataset.DataLabelRoot + index.toString();
+        return {
+          arg: filter.arg,
+          column: key,
+          method: filter.method
+        };
+      });
     return filtersRelabeled;
   }
 
@@ -60,14 +62,16 @@ export class ErrorCohort {
     jointDataset: JointDataset
   ): IFilter[] {
     // return the filters relabeled from Data# to original label
-    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
-      const label = jointDataset.metaDict[filter.column].label;
-      return {
-        arg: filter.arg,
-        column: label,
-        method: filter.method
-      };
-    });
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const label = jointDataset.metaDict[filter.column].label;
+        return {
+          arg: filter.arg,
+          column: label,
+          method: filter.method
+        };
+      });
     return filtersRelabeled;
   }
 
