@@ -169,29 +169,31 @@ export class Cohort {
     row: { [key: string]: number },
     filters: IFilter[]
   ): boolean {
-    return filters.every((filter) => {
-      const rowVal = row[filter.column];
-      switch (filter.method) {
-        case FilterMethods.Equal:
-          return rowVal === filter.arg[0];
-        case FilterMethods.GreaterThan:
-          return rowVal > filter.arg[0];
-        case FilterMethods.GreaterThanEqualTo:
-          return rowVal >= filter.arg[0];
-        case FilterMethods.LessThan:
-          return rowVal < filter.arg[0];
-        case FilterMethods.LessThanEqualTo:
-          return rowVal <= filter.arg[0];
-        case FilterMethods.Includes:
-          return (filter.arg as number[]).includes(rowVal);
-        case FilterMethods.Excludes:
-          return !(filter.arg as number[]).includes(rowVal);
-        case FilterMethods.InTheRangeOf:
-          return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-        default:
-          return false;
-      }
-    });
+    return filters
+      .filter((item) => item)
+      .every((filter) => {
+        const rowVal = row[filter.column];
+        switch (filter.method) {
+          case FilterMethods.Equal:
+            return rowVal === filter.arg[0];
+          case FilterMethods.GreaterThan:
+            return rowVal > filter.arg[0];
+          case FilterMethods.GreaterThanEqualTo:
+            return rowVal >= filter.arg[0];
+          case FilterMethods.LessThan:
+            return rowVal < filter.arg[0];
+          case FilterMethods.LessThanEqualTo:
+            return rowVal <= filter.arg[0];
+          case FilterMethods.Includes:
+            return (filter.arg as number[]).includes(rowVal);
+          case FilterMethods.Excludes:
+            return !(filter.arg as number[]).includes(rowVal);
+          case FilterMethods.InTheRangeOf:
+            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+          default:
+            return false;
+        }
+      });
   }
 
   private filterRecursively(
