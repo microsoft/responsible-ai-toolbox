@@ -64,13 +64,22 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
-    def test_cohort_filter_true_y(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+    @pytest.mark.parametrize('use_str_labels', [True, False])
+    def test_cohort_filter_true_y(self, use_str_labels):
+        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas(
+            use_str_labels)
+        classes = None
+        if use_str_labels:
+            classes = create_iris_data()[5]
         filters = [{'arg': [2],
                     'column': 'True Y',
                     'method': 'includes'}]
         validation_data = create_validation_data(X_test, y_test)
-        validation_data = validation_data.loc[y_test == 2]
+        if use_str_labels:
+            validation_filter = y_test == classes[2]
+        else:
+            validation_filter = y_test == 2
+        validation_data = validation_data.loc[validation_filter]
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
@@ -81,7 +90,8 @@ class TestCohortFilter(object):
                            feature_names,
                            categorical_features,
                            model_task,
-                           filters=filters)
+                           filters=filters,
+                           classes=classes)
 
     def test_cohort_filter_less(self):
         X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
@@ -346,11 +356,16 @@ class TestCohortFilter(object):
                            filters=filters)
 
 
-def create_iris_pandas():
-    X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+def create_iris_pandas(use_str_labels=False):
+    X_train, X_test, y_train, y_test, feature_names, classes = \
+        create_iris_data()
 
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
+
+    if use_str_labels:
+        y_train = np.array([classes[y] for y in y_train])
+        y_test = np.array([classes[y] for y in y_test])
 
     return X_train, X_test, y_train, y_test, feature_names
 
@@ -373,13 +388,15 @@ def run_error_analyzer(validation_data,
                        model_task,
                        filters=None,
                        composite_filters=None,
-                       is_empty_validation_data=False):
+                       is_empty_validation_data=False,
+                       classes=None):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
                                    feature_names,
                                    categorical_features,
-                                   model_task=model_task)
+                                   model_task=model_task,
+                                   classes=classes)
     filtered_data = filter_from_cohort(error_analyzer,
                                        filters,
                                        composite_filters)
