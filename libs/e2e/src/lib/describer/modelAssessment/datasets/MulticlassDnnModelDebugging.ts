@@ -22,8 +22,8 @@ export const MulticlassDnnModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
-    datapoint: 500,
     avgOfAbsValue: "Average of absolute value",
+    datapoint: 500,
     dropdownRowName: "Row 24",
     hasCorrectIncorrectDatapoints: true,
     hasFeatureImportanceComponent: true,

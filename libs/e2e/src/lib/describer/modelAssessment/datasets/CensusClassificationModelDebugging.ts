@@ -28,8 +28,8 @@ export const CensusClassificationModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
-    datapoint: 500,
     avgOfAbsValue: "Average of absolute value",
+    datapoint: 500,
     dropdownRowName: "Row 4",
     hasCorrectIncorrectDatapoints: true,
     hasFeatureImportanceComponent: true,
