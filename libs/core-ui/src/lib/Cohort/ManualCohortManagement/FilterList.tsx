@@ -31,29 +31,31 @@ export class FilterList extends React.Component<IFilterListProps> {
       localization.Interpret.FilterOperations.inTheRangeOf
   };
   public render(): React.ReactNode {
-    return this.props.filters.map((filter, index) => {
-      return (
-        <div key={index}>
-          {this.setFilterLabel(filter)}
-          {this.props.editFilter && (
-            <IconButton
-              id={`editFilerBtn-${index}`}
-              iconProps={{ iconName: "Edit" }}
-              onClick={(): void => this.props.editFilter?.(index)}
-              ariaLabel={localization.Common.editButton}
-            />
-          )}
-          {this.props.removeFilter && (
-            <IconButton
-              id={`removeFilterBtn-${index}`}
-              iconProps={{ iconName: "Clear" }}
-              onClick={(): void => this.props.removeFilter?.(index)}
-              ariaLabel={localization.Common.close}
-            />
-          )}
-        </div>
-      );
-    });
+    return this.props.filters
+      .filter((item) => item)
+      .map((filter, index) => {
+        return (
+          <div key={index}>
+            {this.setFilterLabel(filter)}
+            {this.props.editFilter && (
+              <IconButton
+                id={`editFilerBtn-${index}`}
+                iconProps={{ iconName: "Edit" }}
+                onClick={(): void => this.props.editFilter?.(index)}
+                ariaLabel={localization.Common.editButton}
+              />
+            )}
+            {this.props.removeFilter && (
+              <IconButton
+                id={`removeFilterBtn-${index}`}
+                iconProps={{ iconName: "Clear" }}
+                onClick={(): void => this.props.removeFilter?.(index)}
+                ariaLabel={localization.Common.close}
+              />
+            )}
+          </div>
+        );
+      });
   }
 
   private setFilterLabel(filter: IFilter): React.ReactNode {
