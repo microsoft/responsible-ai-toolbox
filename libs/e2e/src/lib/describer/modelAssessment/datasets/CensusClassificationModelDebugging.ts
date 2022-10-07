@@ -29,6 +29,7 @@ export const CensusClassificationModelDebugging = {
   },
   featureImportanceData: {
     datapoint: 500,
+    avgOfAbsValue: "Average of absolute value",
     dropdownRowName: "Row 4",
     hasCorrectIncorrectDatapoints: true,
     hasFeatureImportanceComponent: true,
@@ -38,8 +39,7 @@ export const CensusClassificationModelDebugging = {
     noLocalImportance: false,
     rowToSelect: "4",
     topFeaturesCurrentValue: "4",
-    topFeaturesText: "Top 4 features by their importance",
-    avgOfAbsValue: "Average of absolute value"
+    topFeaturesText: "Top 4 features by their importance"
   },
   featureNames: [
     "marital-status",

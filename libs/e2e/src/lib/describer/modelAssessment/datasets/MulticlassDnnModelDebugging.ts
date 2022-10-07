@@ -23,6 +23,7 @@ export const MulticlassDnnModelDebugging = {
   },
   featureImportanceData: {
     datapoint: 500,
+    avgOfAbsValue: "Average of absolute value",
     dropdownRowName: "Row 24",
     hasCorrectIncorrectDatapoints: true,
     hasFeatureImportanceComponent: true,
@@ -32,8 +33,7 @@ export const MulticlassDnnModelDebugging = {
     noLocalImportance: false,
     rowToSelect: "24",
     topFeaturesCurrentValue: "4",
-    topFeaturesText: "Top 4 features by their importance",
-    avgOfAbsValue: "Average of absolute value"
+    topFeaturesText: "Top 4 features by their importance"
   },
   featureNames: [
     "total_phenols",
