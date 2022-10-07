@@ -18,7 +18,7 @@ TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
-REGRESSION_ERROR = 'Error'
+REGRESSION_ERROR = 'Regression error'
 
 
 class TestCohortFilterRAIInsights(object):

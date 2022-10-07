@@ -1,7 +1,7 @@
 dice-ml>=0.8,<0.9
 econml>=0.13.1
 jsonschema
-erroranalysis>=0.3.10
+erroranalysis>=0.3.11
 interpret-community>=0.27.0
 lightgbm>=2.0.11
 numpy>=1.17.2
