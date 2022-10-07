@@ -117,6 +117,7 @@ export interface IFeatureImportanceData {
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
+  avgOfAbsValue?: string;
 }
 
 export interface IDataBalanceData {

@@ -32,7 +32,8 @@ export const MulticlassDnnModelDebugging = {
     noLocalImportance: false,
     rowToSelect: "24",
     topFeaturesCurrentValue: "4",
-    topFeaturesText: "Top 4 features by their importance"
+    topFeaturesText: "Top 4 features by their importance",
+    avgOfAbsValue: "Average of absolute value"
   },
   featureNames: [
     "total_phenols",

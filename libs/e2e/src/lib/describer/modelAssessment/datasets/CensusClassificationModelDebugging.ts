@@ -38,7 +38,8 @@ export const CensusClassificationModelDebugging = {
     noLocalImportance: false,
     rowToSelect: "4",
     topFeaturesCurrentValue: "4",
-    topFeaturesText: "Top 4 features by their importance"
+    topFeaturesText: "Top 4 features by their importance",
+    avgOfAbsValue: "Average of absolute value"
   },
   featureNames: [
     "marital-status",
