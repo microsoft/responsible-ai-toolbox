@@ -3,6 +3,5 @@
 
 export interface IConfusionMatrixData {
   confusionMatrix: number[][];
-  labels: string[];
   selectedLabels: string[];
 }

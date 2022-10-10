@@ -22,8 +22,9 @@ export function calculateConfusionMatrixData(
 
   const labelMap = new Map<number, number>();
 
+  // Inspired from sklearn
+  // https://github.com/scikit-learn/scikit-learn/blob/8694eb00f8a3c0dede331fe60c0415bfaafef631/sklearn/metrics/_classification.py#L335
   let idx = 0;
-
   allLabels.forEach((element, index) => {
     if (selectedLabelSet.has(element)) {
       labelMap.set(index, idx);
@@ -31,11 +32,9 @@ export function calculateConfusionMatrixData(
     }
   });
 
-  const confusionMatrixSize = labelMap.size;
-
-  const cm: number[][] = new Array(confusionMatrixSize)
+  const cm: number[][] = new Array(labelMap.size)
     .fill(0)
-    .map(() => new Array(confusionMatrixSize).fill(0));
+    .map(() => new Array(labelMap.size).fill(0));
 
   yTrue.forEach((element, index) => {
     const trueIdx = labelMap.get(element);
@@ -46,7 +45,6 @@ export function calculateConfusionMatrixData(
   });
   return {
     confusionMatrix: cm,
-    labels: allLabels,
     selectedLabels: selectedLabels !== undefined ? selectedLabels : allLabels
   };
 }

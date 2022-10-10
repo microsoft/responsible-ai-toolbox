@@ -6,10 +6,10 @@ import { calculateConfusionMatrixData } from "./calculateConfusionMatrixData";
 describe("calculateConfusionMatrixData", () => {
   it.each`
     yTrue     | yPred     | labels                            | selectedLabels     | expectedResult
-    ${[]}     | ${[]}     | ${[]}                             | ${undefined}       | ${{ confusionMatrix: [], labels: [], selectedLabels: [] }}
-    ${[0]}    | ${[0]}    | ${["categoryOne"]}                | ${undefined}       | ${{ confusionMatrix: [[1]], labels: ["categoryOne"], selectedLabels: ["categoryOne"] }}
-    ${[1]}    | ${[0]}    | ${["categoryOne", "categoryTwo"]} | ${undefined}       | ${{ confusionMatrix: [[0, 0], [1, 0]], labels: ["categoryOne", "categoryTwo"], selectedLabels: ["categoryOne", "categoryTwo"] }}
-    ${[1, 1]} | ${[0, 1]} | ${["categoryOne", "categoryTwo"]} | ${["categoryTwo"]} | ${{ confusionMatrix: [[1]], labels: ["categoryOne", "categoryTwo"], selectedLabels: ["categoryTwo"] }}
+    ${[]}     | ${[]}     | ${[]}                             | ${undefined}       | ${{ confusionMatrix: [], selectedLabels: [] }}
+    ${[0]}    | ${[0]}    | ${["categoryOne"]}                | ${undefined}       | ${{ confusionMatrix: [[1]], selectedLabels: ["categoryOne"] }}
+    ${[1]}    | ${[0]}    | ${["categoryOne", "categoryTwo"]} | ${undefined}       | ${{ confusionMatrix: [[0, 0], [1, 0]], selectedLabels: ["categoryOne", "categoryTwo"] }}
+    ${[1, 1]} | ${[0, 1]} | ${["categoryOne", "categoryTwo"]} | ${["categoryTwo"]} | ${{ confusionMatrix: [[1]], selectedLabels: ["categoryTwo"] }}
   `(
     "should return correct confusion matrix and labels",
     ({ yTrue, yPred, labels, selectedLabels, expectedResult }) => {
