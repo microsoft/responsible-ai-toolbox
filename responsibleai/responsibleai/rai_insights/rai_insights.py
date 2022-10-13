@@ -511,7 +511,8 @@ class RAIInsights(RAIBaseInsights):
             categories=self._categories,
             true_y=self.test[self.target_column],
             pred_y=self.predict_output,
-            model_task=self.task_type)
+            model_task=self.task_type,
+            classes=self._classes)
 
         return filter_data_with_cohort.filter_data_from_cohort(
             filters=filters,

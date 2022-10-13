@@ -23,7 +23,8 @@ REGRESSION_ERROR = 'Regression error'
 
 class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'equal'}]
@@ -51,7 +52,7 @@ class TestCohortFilterRAIInsights(object):
                         "in Predicted Y cohort filtering")
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_pandas(use_str_labels)
-        filters = [{'arg': ['virginica'],
+        filters = [{'arg': [2],
                     'column': target_type,
                     'method': 'includes'}]
         validation_data = create_validation_data(X_test, y_test)
@@ -75,7 +76,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_less(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'less'}]
@@ -96,7 +98,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_less_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
 
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
@@ -118,7 +121,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_greater(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater'}]
@@ -139,7 +143,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_greater_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater and equal'}]
@@ -160,7 +165,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_in_the_range_of(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8, 3.4],
                     'column': SEPAL_WIDTH,
                     'method': 'in the range of'}]
@@ -185,7 +191,8 @@ class TestCohortFilterRAIInsights(object):
                              [([1], False), ([0], True)])
     def test_cohort_filter_multiclass_classification_outcome(
             self, arg, correct_prediction):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         model = create_sklearn_svm_classifier(X_train, y_train)
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
@@ -303,7 +310,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_index(self):
-        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         # filter on index, which can be done from the RAI dashboard
         filters = [{'arg': [40],
                     'column': ROW_INDEX,
@@ -412,6 +420,4 @@ def run_rai_insights(validation_data,
         assert validation_data.shape[0] == 0
     else:
         assert validation_data.shape[0] > 0
-    import pdb
-    pdb.set_trace()
     assert validation_data.equals(filtered_data)
