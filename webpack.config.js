@@ -17,6 +17,13 @@ module.exports = (config) => {
     test: /\.py$/i,
     use: "raw-loader"
   });
+  config.module.rules.unshift({
+    test: /\.worker\.ts$/i,
+    loader: "worker-loader",
+    options: {
+      inline: "no-fallback"
+    }
+  });
 
   if (process.env.debug) {
     require("fs-extra").writeJSONSync("./webpack.json", config, {

@@ -16,7 +16,7 @@
     {
       "files": ["*.ts"],
       "rules": {
-        "filenames/match-regex": ["error", ["^[A-z]+$"]],
+        "filenames/match-regex": ["error", ["^[A-z]+(\\.worker|\\.d)?$"]],
         "no-dupe-class-members": "off"
       }
     },

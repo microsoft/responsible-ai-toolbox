@@ -51,22 +51,18 @@ def create_classification_pipeline(X):
     return pipeline
 
 
+
 def train(task_type, feature_names, features, true_y):
-    from js import console
-    console.log(task_type, feature_names, features, true_y)
-    
-    X_train_original = pd.DataFrame(features, columns=feature_names)
-    y_train = np.array(true_y)
+    X_train = pd.DataFrame(
+        data=features, columns=feature_names)
+    y_train = np.array(list(true_y))
+    pipeline = create_classification_pipeline(X_train)
 
-    pipeline = create_classification_pipeline(X_train_original)
-
-    y_train = y_train[target_feature].to_numpy()
-
-    model = pipeline.fit(X_train_original, y_train)
+    model = pipeline.fit(X_train, y_train)
 
     def request_prediction(data):
         data = pd.DataFrame(
-            data, columns=X_train_original.columns)
+            data, columns=X_train.columns)
         if (task_type == "classification"):
             return json.dumps(convert_to_list(model.predict_proba(data)))
         return json.dumps(convert_to_list(model.predict(data)))

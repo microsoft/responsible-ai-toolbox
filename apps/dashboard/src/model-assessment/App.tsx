@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "@fluentui/react";
+import { ITheme, MessageBar, Stack } from "@fluentui/react";
 import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
@@ -10,7 +10,6 @@ import {
   IModelAssessmentDashboardProps,
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
-import { loadPyodide, PyodideInterface } from "pyodide";
 import React from "react";
 
 import {
@@ -27,7 +26,7 @@ import {
   getJsonTreeWine
 } from "../error-analysis/utils";
 
-import model from "./model.py";
+import ModelWorker from "./Model.worker";
 
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
@@ -38,10 +37,12 @@ interface IAppProps extends IModelAssessmentData {
 }
 
 interface IAppState {
-  requestPredictions: (
+  requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
+  message?: string;
+  modelReady: boolean;
 }
 
 export class App extends React.Component<IAppProps, IAppState> {
@@ -53,8 +54,16 @@ export class App extends React.Component<IAppProps, IAppState> {
     PredictorReq: [{ displayText: "PredictorReq", format: "text" }],
     TestReq: [{ displayText: "TestReq", format: "text" }]
   };
+  private worker: ModelWorker | undefined;
+  private requestPredictionPromise: Map<number, (value: any[]) => void>;
+  private requestPredictionPromiseId: number;
+  public constructor(props: IAppProps) {
+    super(props);
+    this.state = { modelReady: false };
+    this.requestPredictionPromise = new Map();
+    this.requestPredictionPromiseId = 0;
+  }
 
-  private pyodide: PyodideInterface | undefined;
   public componentDidMount(): void {
     this.loadPython();
   }
@@ -73,11 +82,9 @@ export class App extends React.Component<IAppProps, IAppState> {
         localUrl: "https://www.bing.com/",
         requestCausalWhatIf: this.requestCausalWhatIf,
         requestMatrix: generateJsonMatrix(DatasetName.BreastCancer),
-        requestPredictions:
-          this.state?.requestPredictions ??
-          (!this.props.classDimension
-            ? undefined
-            : createPredictionsRequestGenerator(this.props.classDimension)),
+        requestPredictions: this.state.modelReady
+          ? this.requestPrediction
+          : createPredictionsRequestGenerator(this.props.classDimension),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
@@ -142,30 +149,58 @@ export class App extends React.Component<IAppProps, IAppState> {
       };
     }
 
-    return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    return (
+      <Stack>
+        <MessageBar>{this.state.message}</MessageBar>
+        <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />
+      </Stack>
+    );
   }
 
+  private workerCallback = (mess: MessageEvent): void => {
+    const { type, message } = mess.data;
+    if (message) {
+      this.setState({ message });
+    }
+    if (type === "message") {
+      return;
+    }
+    if (type === "ready") {
+      this.setState({
+        modelReady: true
+      });
+    }
+    if (type === "predict") {
+      const { id, data } = mess.data;
+      const resolver = this.requestPredictionPromise.get(id);
+      this.requestPredictionPromise.delete(id);
+      resolver?.(JSON.parse(data));
+    }
+  };
+
   private async loadPython(): Promise<void> {
-    this.pyodide = await loadPyodide({
-      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
-    });
-    await this.pyodide.loadPackage(["scikit-learn", "pandas", "micropip"]);
-    const micropip = this.pyodide.pyimport("micropip");
-    await micropip.install("raiutils");
-    await this.pyodide.runPythonAsync(model);
-    const train = this.pyodide.globals.get("train");
-    const requestPredictions = train(
-      this.props.dataset.task_type,
-      this.props.dataset.feature_names,
-      this.props.dataset.features,
-      this.props.dataset.true_y
-    );
-    this.setState({
-      requestPredictions: (data: any[]): Promise<any[]> => {
-        return JSON.parse(requestPredictions(data));
-      }
+    this.worker = new ModelWorker();
+    this.worker.addEventListener("message", this.workerCallback);
+    this.worker.postMessage({
+      featureNames: this.props.dataset.feature_names,
+      features: this.props.dataset.features,
+      taskType: this.props.dataset.task_type,
+      trueY: this.props.dataset.true_y,
+      type: "init"
     });
   }
+
+  private requestPrediction = (data: any[]): Promise<any[]> => {
+    return new Promise((resolver) => {
+      const id = this.requestPredictionPromiseId++;
+      this.requestPredictionPromise.set(id, resolver);
+      this.worker?.postMessage({
+        data,
+        id,
+        type: "predict"
+      });
+    });
+  };
 
   private readonly requestCausalWhatIf = async (
     _id: string,
