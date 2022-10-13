@@ -13,6 +13,10 @@ module.exports = (config) => {
     tls: "empty",
     child_process: "empty"
   };
+  config.module.rules.push({
+    test: /\.py$/i,
+    use: "raw-loader"
+  });
 
   if (process.env.debug) {
     require("fs-extra").writeJSONSync("./webpack.json", config, {

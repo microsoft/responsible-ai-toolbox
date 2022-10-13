@@ -19,6 +19,12 @@
       }
     },
     {
+      "files": ["src/global.d.ts"],
+      "rules": {
+        "filenames/match-regex": ["off"]
+      }
+    },
+    {
       "files": ["**/__mock_data__/*.ts"],
       "rules": {
         "max-lines": "off"

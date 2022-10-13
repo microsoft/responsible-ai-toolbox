@@ -10,6 +10,7 @@ import {
   IModelAssessmentDashboardProps,
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
+import { loadPyodide, PyodideInterface } from "pyodide";
 import React from "react";
 
 import {
@@ -26,6 +27,8 @@ import {
   getJsonTreeWine
 } from "../error-analysis/utils";
 
+import model from "./model.py";
+
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
@@ -34,7 +37,14 @@ interface IAppProps extends IModelAssessmentData {
   featureFlights?: string[];
 }
 
-export class App extends React.Component<IAppProps> {
+interface IAppState {
+  requestPredictions: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+}
+
+export class App extends React.Component<IAppProps, IAppState> {
   private messages: HelpMessageDict = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq", format: "text" }],
     LocalOrGlobalAndTestReq: [
@@ -43,6 +53,11 @@ export class App extends React.Component<IAppProps> {
     PredictorReq: [{ displayText: "PredictorReq", format: "text" }],
     TestReq: [{ displayText: "TestReq", format: "text" }]
   };
+
+  private pyodide: PyodideInterface | undefined;
+  public componentDidMount(): void {
+    this.loadPython();
+  }
 
   public render(): React.ReactNode {
     if (this.props.modelExplanationData) {
@@ -58,9 +73,11 @@ export class App extends React.Component<IAppProps> {
         localUrl: "https://www.bing.com/",
         requestCausalWhatIf: this.requestCausalWhatIf,
         requestMatrix: generateJsonMatrix(DatasetName.BreastCancer),
-        requestPredictions: !this.props.classDimension
-          ? undefined
-          : createPredictionsRequestGenerator(this.props.classDimension),
+        requestPredictions:
+          this.state?.requestPredictions ??
+          (!this.props.classDimension
+            ? undefined
+            : createPredictionsRequestGenerator(this.props.classDimension)),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
       };
@@ -126,6 +143,28 @@ export class App extends React.Component<IAppProps> {
     }
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+  }
+
+  private async loadPython(): Promise<void> {
+    this.pyodide = await loadPyodide({
+      indexURL: "https://cdn.jsdelivr.net/pyodide/v0.21.3/full/"
+    });
+    await this.pyodide.loadPackage(["scikit-learn", "pandas", "micropip"]);
+    const micropip = this.pyodide.pyimport("micropip");
+    await micropip.install("raiutils");
+    await this.pyodide.runPythonAsync(model);
+    const train = this.pyodide.globals.get("train");
+    const requestPredictions = train(
+      this.props.dataset.task_type,
+      this.props.dataset.feature_names,
+      this.props.dataset.features,
+      this.props.dataset.true_y
+    );
+    this.setState({
+      requestPredictions: (data: any[]): Promise<any[]> => {
+        return JSON.parse(requestPredictions(data));
+      }
+    });
   }
 
   private readonly requestCausalWhatIf = async (
