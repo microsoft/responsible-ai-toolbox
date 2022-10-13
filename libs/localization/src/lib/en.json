@@ -1070,6 +1070,7 @@
       "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
+      "sortByCohort": "Sort by cohort",
       "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
