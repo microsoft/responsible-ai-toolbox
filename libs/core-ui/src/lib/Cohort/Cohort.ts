@@ -248,4 +248,47 @@ export class Cohort {
     }
     return filteredData;
   }
+
+  public static getLabeledFilters(
+    filters: IFilter[],
+    jointDataset: JointDataset
+  ): IFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const label = jointDataset.metaDict[filter.column].label;
+        return {
+          arg: filter.arg,
+          column: label,
+          method: filter.method
+        };
+      });
+    return filtersRelabeled;
+  }
+
+  public static getLabeledCompositeFilters(
+    compositeFilters: ICompositeFilter[],
+    jointDataset: JointDataset
+  ): ICompositeFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = compositeFilters.map(
+      (compositeFilter: ICompositeFilter): ICompositeFilter => {
+        if (compositeFilter.method) {
+          return Cohort.getLabeledFilters(
+            [compositeFilter as IFilter],
+            jointDataset
+          )[0] as ICompositeFilter;
+        }
+        return {
+          compositeFilters: Cohort.getLabeledCompositeFilters(
+            compositeFilter.compositeFilters,
+            jointDataset
+          ),
+          operation: compositeFilter.operation
+        } as ICompositeFilter;
+      }
+    );
+    return filtersRelabeled;
+  }
 }
