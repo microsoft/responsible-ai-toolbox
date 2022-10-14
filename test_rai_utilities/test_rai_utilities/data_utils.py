@@ -3,7 +3,6 @@
 
 import numpy as np
 import pandas as pd
-import shap
 from pandas import read_csv
 from sklearn.datasets import (fetch_california_housing, load_breast_cancer,
                               load_diabetes, load_iris, load_wine,

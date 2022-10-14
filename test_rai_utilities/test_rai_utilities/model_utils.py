@@ -14,7 +14,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import (FunctionTransformer, OneHotEncoder,
                                    StandardScaler)
-from xgboost import XGBClassifier
 
 
 def create_sklearn_random_forest_classifier(X, y):
@@ -29,13 +28,6 @@ def create_lightgbm_classifier(X, y):
                           max_depth=5, n_estimators=200, n_jobs=1,
                           random_state=777)
     model = lgbm.fit(X, y)
-    return model
-
-
-def create_xgboost_classifier(X, y):
-    xgb = XGBClassifier(learning_rate=0.1, max_depth=3, n_estimators=100,
-                        n_jobs=1, random_state=777)
-    model = xgb.fit(X, y)
     return model
 
 
