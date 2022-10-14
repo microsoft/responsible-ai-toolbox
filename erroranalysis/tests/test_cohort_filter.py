@@ -46,7 +46,7 @@ class TestCohortFilter(object):
 
     @pytest.mark.parametrize('target_type', ['Predicted Y', 'True Y'])
     @pytest.mark.parametrize('use_str_labels', [True, False])
-    def test_cohort_filter_true_y(self, use_str_labels, target_type):
+    def test_cohort_filter_target(self, use_str_labels, target_type):
         if target_type == 'Predicted Y':
             pytest.skip("Skipping this test due to a bug condition "
                         "in Predicted Y cohort filtering")
