@@ -1,4 +1,4 @@
-name: Release raiutils to PyPI
+name: Release test_rai_utilities to PyPI
 
 # trigger manually only ("collaborator" or more permissions required)
 on:
@@ -32,42 +32,42 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade setuptools wheel twine
 
-      - name: install requirements.txt for raiutils
+      - name: install requirements.txt for test_rai_utilities
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-        working-directory: raiutils
+        working-directory: test_rai_utilities
 
       - name: pip freeze
         run: pip freeze
 
-      - name: build wheel for raiutils
+      - name: build wheel for test_rai_utilities
         run: python setup.py sdist bdist_wheel
-        working-directory: raiutils
+        working-directory: test_rai_utilities
 
       # run tests before publishing to PyPI
 
-      - name: install raiutils wheel locally
+      - name: install test_rai_utilities wheel locally
         run: find ./dist/ -name '*.whl' -exec pip install {} \;
-        working-directory: raiutils
+        working-directory: test_rai_utilities
 
-      - name: run raiutils tests
+      - name: run test_rai_utilities tests
         run: pytest ./tests/
-        working-directory: raiutils
+        working-directory: test_rai_utilities
 
       # publish to PyPI
-      - name: Publish raiutils package to Test PyPI
+      - name: Publish test_rai_utilities package to Test PyPI
         if: ${{ github.event.inputs.type == 'Test' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIUTILS }}
           repository_url: https://test.pypi.org/legacy/
-          packages_dir: raiutils/dist/
-      - name: Publish raiutils package to PyPI
+          packages_dir: test_rai_utilities/dist/
+      - name: Publish test_rai_utilities package to PyPI
         if: ${{ github.event.inputs.type == 'Prod' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIUTILS }}
-          packages_dir: raiutils/dist/
+          packages_dir: test_rai_utilities/dist/
