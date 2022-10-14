@@ -4,7 +4,6 @@
 # Defines common utilities for error analysis tests
 import numpy as np
 import pandas as pd
-from lightgbm import LGBMClassifier
 from sklearn import svm
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -20,14 +19,6 @@ def create_sklearn_random_forest_classifier(X, y):
     rfc = RandomForestClassifier(n_estimators=10, max_depth=4,
                                  random_state=777)
     model = rfc.fit(X, y)
-    return model
-
-
-def create_lightgbm_classifier(X, y):
-    lgbm = LGBMClassifier(boosting_type='gbdt', learning_rate=0.1,
-                          max_depth=5, n_estimators=200, n_jobs=1,
-                          random_state=777)
-    model = lgbm.fit(X, y)
     return model
 
 
