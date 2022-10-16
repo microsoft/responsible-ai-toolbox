@@ -61,7 +61,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIUTILS }}
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_TEST_RAI_UTILITIES }}
           repository_url: https://test.pypi.org/legacy/
           packages_dir: test_rai_utilities/dist/
       - name: Publish test_rai_utilities package to PyPI
