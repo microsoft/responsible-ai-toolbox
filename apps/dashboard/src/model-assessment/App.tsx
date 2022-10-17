@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme, MessageBar, Stack } from "@fluentui/react";
+import { ITheme, MessageBar, Stack, Text } from "@fluentui/react";
 import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
@@ -27,6 +27,7 @@ import {
 } from "../error-analysis/utils";
 
 import ModelWorker from "./Model.worker";
+import { ModelWorkerMessageType } from "./ModelWorkerMessageTypes";
 
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
@@ -41,7 +42,7 @@ interface IAppState {
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any[]>;
-  message?: string;
+  messages: string[];
   modelReady: boolean;
 }
 
@@ -59,7 +60,7 @@ export class App extends React.Component<IAppProps, IAppState> {
   private requestPredictionPromiseId: number;
   public constructor(props: IAppProps) {
     super(props);
-    this.state = { modelReady: false };
+    this.state = { messages: [], modelReady: false };
     this.requestPredictionPromise = new Map();
     this.requestPredictionPromiseId = 0;
   }
@@ -151,7 +152,13 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     return (
       <Stack>
-        <MessageBar>{this.state.message}</MessageBar>
+        <MessageBar>
+          <Stack>
+            {this.state.messages.map((m, i) => (
+              <Text key={i}>{m}</Text>
+            ))}
+          </Stack>
+        </MessageBar>
         <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />
       </Stack>
     );
@@ -160,17 +167,19 @@ export class App extends React.Component<IAppProps, IAppState> {
   private workerCallback = (mess: MessageEvent): void => {
     const { type, message } = mess.data;
     if (message) {
-      this.setState({ message });
+      this.setState((prev) => ({
+        messages: [...prev.messages, message]
+      }));
     }
-    if (type === "message") {
+    if (type === ModelWorkerMessageType.Message) {
       return;
     }
-    if (type === "ready") {
+    if (type === ModelWorkerMessageType.Ready) {
       this.setState({
         modelReady: true
       });
     }
-    if (type === "predict") {
+    if (type === ModelWorkerMessageType.Predict) {
       const { id, data } = mess.data;
       const resolver = this.requestPredictionPromise.get(id);
       this.requestPredictionPromise.delete(id);
@@ -186,7 +195,7 @@ export class App extends React.Component<IAppProps, IAppState> {
       features: this.props.dataset.features,
       taskType: this.props.dataset.task_type,
       trueY: this.props.dataset.true_y,
-      type: "init"
+      type: ModelWorkerMessageType.Init
     });
   }
 
@@ -197,7 +206,7 @@ export class App extends React.Component<IAppProps, IAppState> {
       this.worker?.postMessage({
         data,
         id,
-        type: "predict"
+        type: ModelWorkerMessageType.Predict
       });
     });
   };

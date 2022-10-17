@@ -33,13 +33,5 @@
     "import/first": "error",
     "import/no-amd": "error",
     "import/no-webpack-loader-syntax": "error"
-  },
-  "overrides": [
-    {
-      "files": ["*.worker.ts"],
-      "rules": {
-        "import/no-default-export": "off"
-      }
-    }
-  ]
+  }
 }
