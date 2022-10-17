@@ -38,6 +38,7 @@ import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
+import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
@@ -512,6 +513,18 @@ export class ModelOverview extends React.Component<
                   selectedMetric={this.state.selectedMetric}
                 />
               </PivotItem>
+              {(this.context.modelMetadata.modelType === ModelTypes.Binary ||
+                this.context.modelMetadata.modelType ===
+                  ModelTypes.Multiclass) && (
+                <PivotItem
+                  headerText={
+                    localization.ModelAssessment.ModelOverview
+                      .confusionMatrixPivotItem
+                  }
+                >
+                  <ConfusionMatrixHeatmap id="test" />
+                </PivotItem>
+              )}
             </Pivot>
           )}
         </Stack>
