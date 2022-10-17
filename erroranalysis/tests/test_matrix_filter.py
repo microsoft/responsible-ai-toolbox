@@ -7,8 +7,7 @@ import pytest
 from common_utils import (create_adult_census_data,
                           create_binary_classification_dataset,
                           create_cancer_data, create_diabetes_data,
-                          create_housing_data, create_iris_data,
-                          create_kneighbors_classifier,
+                          create_housing_data, create_kneighbors_classifier,
                           create_models_classification,
                           create_models_regression, create_simple_titanic_data,
                           create_titanic_pipeline, create_wine_data)
@@ -29,6 +28,7 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from test_rai_utilities.data_utils import create_iris_data
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD

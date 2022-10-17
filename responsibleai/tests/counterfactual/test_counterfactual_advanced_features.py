@@ -12,7 +12,8 @@ from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from tests.common_utils import create_lightgbm_classifier
+from test_rai_utilities.data_utils import create_iris_data
 
 
 class TestCounterfactualAdvancedFeatures(object):

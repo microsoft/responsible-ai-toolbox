@@ -7,7 +7,8 @@ from responsibleai._interfaces import ModelExplanationData
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.rai_insights import RAIInsights
 
-from ..common_utils import create_iris_data, create_lightgbm_classifier
+from tests.common_utils import create_lightgbm_classifier
+from test_rai_utilities.data_utils import create_iris_data
 
 
 class TestExplainerManager:

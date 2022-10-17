@@ -15,7 +15,7 @@ from tests.common_utils import (create_adult_income_dataset,
                                 create_binary_classification_dataset,
                                 create_cancer_data,
                                 create_complex_classification_pipeline,
-                                create_housing_data, create_iris_data,
+                                create_housing_data,
                                 create_models_classification,
                                 create_models_regression)
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -23,6 +23,7 @@ from tests.error_analysis_validator import (setup_error_analysis,
                                             validate_error_analysis)
 from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
+from test_rai_utilities.data_utils import create_iris_data
 
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames

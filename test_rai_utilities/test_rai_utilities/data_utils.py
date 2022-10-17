@@ -20,6 +20,8 @@ def create_iris_data(append_special_characters=False):
         name.replace(' (cm)', '-' if append_special_characters else '')
         for name in iris.feature_names]
 
+    X_train = pd.DataFrame(X_train, columns=feature_names)
+    X_test = pd.DataFrame(X_test, columns=feature_names)
     classes = iris.target_names
     return X_train, X_test, y_train, y_test, feature_names, classes
 

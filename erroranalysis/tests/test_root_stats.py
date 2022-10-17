@@ -4,7 +4,7 @@
 import pytest
 from common_utils import (create_binary_classification_dataset,
                           create_cancer_data, create_housing_data,
-                          create_iris_data, create_models_classification,
+                          create_models_classification,
                           create_models_regression, create_simple_titanic_data,
                           create_titanic_pipeline)
 
@@ -12,6 +12,7 @@ from erroranalysis._internal.constants import (Metrics, RootKeys,
                                                metric_to_display_name)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.metrics import metric_to_func
+from test_rai_utilities.data_utils import create_iris_data
 
 TOL = 1e-10
 

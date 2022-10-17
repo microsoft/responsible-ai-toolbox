@@ -16,7 +16,7 @@ from tests.common_utils import (create_adult_income_dataset,
                                 create_binary_classification_dataset,
                                 create_cancer_data,
                                 create_complex_classification_pipeline,
-                                create_housing_data, create_iris_data,
+                                create_housing_data,
                                 create_models_classification,
                                 create_models_regression)
 from tests.counterfactual_manager_validator import validate_counterfactual
@@ -29,6 +29,7 @@ from responsibleai import ModelAnalysis, ModelTask
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
+from test_rai_utilities.data_utils import create_iris_data
 
 LABELS = 'labels'
 

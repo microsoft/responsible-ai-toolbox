@@ -10,8 +10,9 @@ import pytest
 from lightgbm import LGBMClassifier
 from tests.common_utils import (create_binary_classification_dataset,
                                 create_cancer_data, create_housing_data,
-                                create_iris_data, create_lightgbm_classifier,
+                                create_lightgbm_classifier,
                                 create_sklearn_random_forest_regressor)
+from test_rai_utilities.data_utils import create_iris_data
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException

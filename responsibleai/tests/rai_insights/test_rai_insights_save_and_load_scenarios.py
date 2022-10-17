@@ -11,11 +11,12 @@ import pytest
 from tests.common_utils import (create_adult_income_dataset,
                                 create_binary_classification_dataset,
                                 create_complex_classification_pipeline,
-                                create_iris_data, create_lightgbm_classifier)
+                                create_lightgbm_classifier)
 
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.feature_metadata import FeatureMetadata
+from test_rai_utilities.data_utils import create_iris_data
 
 LABELS = 'labels'
 
