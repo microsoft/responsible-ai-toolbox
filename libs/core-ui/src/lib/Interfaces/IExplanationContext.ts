@@ -9,7 +9,9 @@ export enum ModelTypes {
   Regression = "regression",
   Binary = "binary",
   Multiclass = "multiclass",
+  ImageBinary = "imagebinary",
   ImageMulticlass = "imagemulticlass",
+  TextBinary = "textbinary",
   TextMulticlass = "textmulticlass"
 }
 
