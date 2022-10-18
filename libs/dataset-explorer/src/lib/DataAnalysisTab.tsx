@@ -12,9 +12,9 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { DatasetExplorerTab } from "./ChartView/DataAnalysisView/DatasetExplorerTab";
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceView/DataBalanceTab";
-import { DatasetExplorerTab } from "./ChartView/DataAnalysisView/DatasetExplorerTab";
 import { TableViewTab } from "./TableView/TableViewTab";
 
 interface IDataAnalysisTabProps {
