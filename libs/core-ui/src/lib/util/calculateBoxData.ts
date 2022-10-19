@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
-import { Cohort } from "../Cohort/Cohort"
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
 export async function calculateBoxPlotDataFromErrorCohort(
