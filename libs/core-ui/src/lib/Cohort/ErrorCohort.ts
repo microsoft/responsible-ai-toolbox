@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
+import { IFilter } from "../Interfaces/IFilter";
 import { getBasicFilterString } from "../util/getBasicFilterString";
 import { getCompositeFilterString } from "../util/getCompositeFilterString";
 import { JointDataset } from "../util/JointDataset";
