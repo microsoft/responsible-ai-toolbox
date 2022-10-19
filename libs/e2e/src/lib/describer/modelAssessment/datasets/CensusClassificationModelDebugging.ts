@@ -56,6 +56,7 @@ export const CensusClassificationModelDebugging = {
     "education",
     "capital-loss"
   ],
+  isBinary: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,

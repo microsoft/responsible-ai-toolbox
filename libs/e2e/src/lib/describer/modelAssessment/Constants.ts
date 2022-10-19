@@ -136,6 +136,8 @@ export enum Locators {
   ModelOverviewMetricChartCohortSelectionButton = "#ModelOverview #modelOverviewMetricChartCohortSelectionButton",
   ModelOverviewMetricChart = "#ModelOverview #ModelOverviewMetricChart",
   ModelOverviewMetricChartBars = "#ModelOverview #ModelOverviewMetricChart .highcharts-bar-series > rect",
+  ModelOverviewConfusionMatrix = "#ModelOverview #modelOverviewConfusionMatrix",
+  ModelOverviewConfusionMatrixHeatmap = "#ModelOverview #ModelOverviewConfusionMatrix",
   MissingParameterPlaceholder = "#ModelOverview #MissingParameterPlaceholder",
   CounterfactualHeader = "#ModelAssessmentDashboard span:contains('What-If counterfactuals')",
   DataAnalysisPivot = "#dataAnalysisPivot",

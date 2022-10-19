@@ -38,7 +38,6 @@ import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
-import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
 import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
@@ -46,9 +45,8 @@ import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisU
 import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
-import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
+import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
-import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -479,53 +477,19 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
-              {this.context.modelMetadata.modelType === ModelTypes.Binary && (
-                <PivotItem
-                  headerText={
-                    localization.ModelAssessment.ModelOverview
-                      .probabilityDistributionPivotItem
-                  }
-                >
-                  <ProbabilityDistributionChart
-                    onChooseCohorts={this.onChooseCohorts}
-                    cohorts={chartCohorts}
-                    telemetryHook={this.props.telemetryHook}
-                    boxPlotState={this.state.boxPlotState}
-                    onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
-                    onToggleChange={this.onSplineToggleChange}
-                    showSplineChart={this.state.showSplineChart}
-                  />
-                </PivotItem>
-              )}
-              <PivotItem
-                headerText={
-                  localization.ModelAssessment.ModelOverview
-                    .metricsVisualizationsPivotItem
-                }
-              >
-                <ModelOverviewMetricChart
-                  onChooseCohorts={this.onChooseCohorts}
-                  onApplyMetric={this.onApplyMetric}
-                  selectableMetrics={selectableMetrics}
-                  cohorts={chartCohorts}
-                  cohortStats={labeledStatistics}
-                  selectedMetric={this.state.selectedMetric}
-                />
-              </PivotItem>
-              {(this.context.modelMetadata.modelType === ModelTypes.Binary ||
-                this.context.modelMetadata.modelType ===
-                  ModelTypes.Multiclass) && (
-                <PivotItem
-                  headerText={
-                    localization.ModelAssessment.ModelOverview
-                      .confusionMatrixPivotItem
-                  }
-                >
-                  <ConfusionMatrixHeatmap id="test" />
-                </PivotItem>
-              )}
-            </Pivot>
+            <ModelOverviewChartPivot
+              onChooseCohorts={this.onChooseCohorts}
+              cohorts={chartCohorts}
+              telemetryHook={this.props.telemetryHook}
+              boxPlotState={this.state.boxPlotState}
+              onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
+              onToggleChange={this.onSplineToggleChange}
+              showSplineChart={this.state.showSplineChart}
+              onApplyMetric={this.onApplyMetric}
+              selectableMetrics={selectableMetrics}
+              cohortStats={labeledStatistics}
+              selectedMetric={this.state.selectedMetric}
+            />
           )}
         </Stack>
       </Stack>

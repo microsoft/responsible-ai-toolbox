@@ -16,13 +16,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
-  const expectedNumberOfChartPivotItems =
-    datasetShape.isRegression || datasetShape.isMulticlass ? 2 : 3;
-  cy.get(Locators.ModelOverviewChartPivotItems).should(
-    "have.length",
-    expectedNumberOfChartPivotItems
-  );
-  if (datasetShape.isRegression || datasetShape.isMulticlass) {
+
+  if (datasetShape.isRegression) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
       "not.exist"
     );
@@ -36,6 +32,18 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
       "have.length",
       expectedNumberOfCohorts
     );
+  } else if (datasetShape.isMulticlass) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
+    );
+    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
+  } else if (datasetShape.isBinary) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 4);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
+    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
+    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
   } else {
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
