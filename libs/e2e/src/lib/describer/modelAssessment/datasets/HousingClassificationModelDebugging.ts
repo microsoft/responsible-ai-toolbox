@@ -74,6 +74,7 @@ export const HousingClassificationModelDebugging = {
     "PoolArea",
     "YrSold"
   ],
+  isBinary: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 6,
