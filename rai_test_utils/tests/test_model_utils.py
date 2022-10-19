@@ -1,10 +1,10 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from rai_test_utils.datasets.tabular.tabular_data_utils import (
-    create_housing_data, create_iris_data)
-from rai_test_utils.models.model_utils import (create_models_classification,
-                                               create_models_regression)
+from rai_test_utils.datasets.tabular import (create_housing_data,
+                                             create_iris_data)
+from rai_test_utils.models import (create_models_classification,
+                                   create_models_regression)
 
 
 class TestModelUtils:

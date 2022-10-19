@@ -1,8 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from rai_test_utils.datasets.tabular.tabular_data_utils import \
-    create_housing_data
+from rai_test_utils.datasets.tabular import create_housing_data
 
 
 class TestDataUtils:
