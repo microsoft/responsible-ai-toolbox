@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   Stack,
   StackItem,
@@ -19,29 +18,16 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  Point,
-  PointOptionsObject,
-  TooltipFormatterContextObject
-} from "highcharts";
+import { Point, PointOptionsObject } from "highcharts";
 import * as _ from "lodash";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { wrapText } from "./StatsTableUtils";
 
-interface IConfusionMatrixProps {
-  // onChooseCohorts: () => void;
-  // cohorts: ErrorCohort[];
-  // selectableMetrics: IDropdownOption[];
-  // classes: string[];
-  // items: PointOptionsObject[];
-  // showColors: boolean;
-  // id: string;
-  id: string;
-}
-
 interface IConfusionMatrixState {
+  predictedY: number[];
+  trueY: number[];
   allClasses: string[];
   selectedClasses: string[];
   selectedCohort: number;
@@ -52,7 +38,7 @@ interface IConfusionMatrixPoint extends Point {
 }
 
 export class ConfusionMatrixHeatmap extends React.Component<
-  IConfusionMatrixProps,
+  Record<string, never>,
   IConfusionMatrixState
 > {
   public static contextType = ModelAssessmentContext;
@@ -60,21 +46,28 @@ export class ConfusionMatrixHeatmap extends React.Component<
     defaultModelAssessmentContext;
 
   public constructor(
-    props: IConfusionMatrixProps,
+    props: Record<string, never> = {},
     context: React.ContextType<typeof ModelAssessmentContext>
   ) {
     super(props);
+
+    const predictedY: number[] = context.dataset.predicted_y
+      ? context.dataset.predicted_y
+      : [];
+    const trueY: number[] = context.dataset.true_y
+      ? context.dataset.true_y
+      : [];
+
     this.state = {
       allClasses: context.dataset.class_names
         ? context.dataset.class_names
-        : _.range(
-            Math.max(
-              ...context.dataset.predicted_y!,
-              ...context.dataset.true_y!
-            ) + 1
-          ).map((x) => `Class ${x}`),
+        : _.range(Math.max(...predictedY, ...trueY) + 1).map(
+            (x: number) => `Class ${x}`
+          ),
+      predictedY,
       selectedClasses: [],
-      selectedCohort: context.errorCohorts[0].cohort.getCohortID()
+      selectedCohort: context.errorCohorts[0].cohort.getCohortID(),
+      trueY
     };
   }
 
@@ -82,7 +75,8 @@ export class ConfusionMatrixHeatmap extends React.Component<
     const classNames = modelOverviewChartStyles();
 
     const selectedIndices: number[] = [];
-    this.context.errorCohorts.forEach((errorCohort) => {
+
+    this.context.errorCohorts.forEach((errorCohort: ErrorCohort) => {
       if (errorCohort.cohort.getCohortID() === this.state.selectedCohort) {
         selectedIndices.push(
           ...errorCohort.cohort.unwrap(JointDataset.IndexLabel)
@@ -94,8 +88,8 @@ export class ConfusionMatrixHeatmap extends React.Component<
     const yTrue: number[] = [];
 
     selectedIndices.forEach((idx) => {
-      yPred.push(this.context.dataset.predicted_y![idx]);
-      yTrue.push(this.context.dataset.true_y![idx]);
+      yPred.push(this.state.predictedY[idx]);
+      yTrue.push(this.state.trueY[idx]);
     });
 
     const confusionMatrixData = calculateConfusionMatrixData(
@@ -104,22 +98,25 @@ export class ConfusionMatrixHeatmap extends React.Component<
       this.state.allClasses,
       this.state.selectedClasses
     );
+
     const confusionMatrix: PointOptionsObject[] = [];
+    const selectedLabels: string[] = [];
 
-    confusionMatrixData!.confusionMatrix.forEach((row, rowIdx) =>
-      row.forEach((it, colIdx) => {
-        confusionMatrix.push({
-          value: it,
-          x: colIdx,
-          y: rowIdx
-        });
-      })
-    );
-
-    const selectedLabels: string[] = confusionMatrixData!.selectedLabels;
+    if (confusionMatrixData !== undefined) {
+      confusionMatrixData.confusionMatrix.forEach((row, rowIdx) =>
+        row.forEach((it, colIdx) => {
+          confusionMatrix.push({
+            value: it,
+            x: colIdx,
+            y: rowIdx
+          });
+        })
+      );
+      selectedLabels.push(...confusionMatrixData.selectedLabels);
+    }
 
     return (
-      <Stack>
+      <Stack id="modelOverviewConfusionMatrix">
         <Stack horizontal>
           <StackItem className={classNames.dropdown}>
             <ComboBox
@@ -153,7 +150,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
                   .confusionMatrixClassSelectionLabel
               }
               selectedKey={this.state.selectedClasses}
-              options={this.state.allClasses!.map((category: string) => {
+              options={this.state.allClasses.map((category: string) => {
                 return { key: category, text: category };
               })}
               errorMessage={
@@ -173,27 +170,30 @@ export class ConfusionMatrixHeatmap extends React.Component<
           this.state.selectedClasses.length <= 10 && (
             <StackItem className={classNames.chart}>
               <HeatmapHighChart
-                id="modelOverviewConfusionMatrix"
+                id="ModelOverviewConfusionMatrix"
                 configOverride={{
                   chart: {
+                    height: this.state.selectedClasses.length * 80 + 200,
                     marginBottom: 80,
-                    marginTop: 40,
+                    marginTop: 80,
                     plotBorderWidth: 1,
-                    type: "heatmap"
+                    type: "heatmap",
+                    width: this.state.selectedClasses.length * 80 + 200
                   },
                   colorAxis: {
                     maxColor: "#2f7ed8",
                     min: 0,
                     minColor: "#FFFFFF"
                   },
+                  custom: {
+                    minHeight: 300
+                  },
                   legend: {
                     align: "right",
                     enabled: true,
                     layout: "vertical",
-                    margin: 0,
-                    symbolHeight: 275,
-                    verticalAlign: "top",
-                    y: 25
+                    symbolHeight: this.state.selectedClasses.length * 80 + 40,
+                    verticalAlign: "middle"
                   },
                   series: [
                     {
@@ -207,42 +207,33 @@ export class ConfusionMatrixHeatmap extends React.Component<
                     }
                   ],
                   tooltip: {
-                    formatter: (function (comp) {
-                      return function (
-                        this: TooltipFormatterContextObject
-                      ): string | undefined {
-                        const point: IConfusionMatrixPoint = this
-                          .point as IConfusionMatrixPoint;
-                        const pointValueBold = `<b>${point.value} </b>`;
-                        const trueClassBold = `<b>${comp.getPointCategoryName(
-                          point,
-                          "y"
-                        )}</b>`;
-                        const predictedClassBold = `<b>${comp.getPointCategoryName(
-                          point,
-                          "x"
-                        )}</b>`;
-
-                        return wrapText(
-                          localization.formatString(
-                            localization.ModelAssessment.ModelOverview
-                              .confusionMatrixHeatmapTooltip,
-                            pointValueBold,
-                            trueClassBold,
-                            predictedClassBold
-                          ),
-                          40,
-                          10
-                        );
-                      };
-                    })(this)
+                    formatter(): string | undefined {
+                      const x = this.point.x ? this.point.x : 0;
+                      const y = this.point.y ? this.point.y : 0;
+                      const point: IConfusionMatrixPoint = this
+                        .point as IConfusionMatrixPoint;
+                      const pointValueBold = `<b>${point.value} </b>`;
+                      const predictedClassBold = `<b>${this.series.xAxis.categories[x]}</b>`;
+                      const trueClassBold = `<b>${this.series.yAxis.categories[y]}</b>`;
+                      return wrapText(
+                        localization.formatString(
+                          localization.ModelAssessment.ModelOverview
+                            .confusionMatrixHeatmapTooltip,
+                          pointValueBold,
+                          trueClassBold,
+                          predictedClassBold
+                        ),
+                        40,
+                        10
+                      );
+                    }
                   },
-
                   xAxis: {
                     categories: selectedLabels
                   },
                   yAxis: {
-                    categories: selectedLabels
+                    categories: selectedLabels,
+                    reversed: true
                   }
                 }}
               />
@@ -251,16 +242,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
       </Stack>
     );
   }
-
-  private getPointCategoryName = (
-    point: IConfusionMatrixPoint,
-    dimension: string
-  ): string => {
-    const series = point.series,
-      isY = dimension === "y",
-      axis = series[isY ? "yAxis" : "xAxis"];
-    return axis.categories[point[isY ? "y" : "x"]!];
-  };
 
   private onSelectCohort = (
     _: React.FormEvent<IComboBox>,

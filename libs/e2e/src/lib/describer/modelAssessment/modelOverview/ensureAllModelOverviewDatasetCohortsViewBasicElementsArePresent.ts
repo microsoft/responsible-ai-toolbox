@@ -83,13 +83,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   );
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
-  if (datasetShape.isRegression || datasetShape.isMulticlass) {
-    // when there are 1 pivot item, with overflow, it will have a hidden overflow button, so the length is 2
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-      "not.exist"
-    );
-    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+  function ensureNotebookModelOverviewChartIsCorrect(): void {
     if (isNotebookTest) {
       cy.get(Locators.ModelOverviewMetricChartBars).should(
         "have.length",
@@ -119,6 +113,29 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         .first()
         .should("have.attr", "aria-label", expectedAriaLabel);
     }
+  }
+  // when there are 1 pivot item, with overflow, it will have a hidden overflow button, so the length is 2
+  if (datasetShape.isRegression) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
+    );
+    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
+    ensureNotebookModelOverviewChartIsCorrect();
+  } else if (datasetShape.isMulticlass) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
+    );
+    cy.get(Locators.ModelOverviewMetricChart).should("exist");
+    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
+    ensureNotebookModelOverviewChartIsCorrect();
+  } else if (datasetShape.isBinary) {
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 4);
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
+    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
+    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
   } else {
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
