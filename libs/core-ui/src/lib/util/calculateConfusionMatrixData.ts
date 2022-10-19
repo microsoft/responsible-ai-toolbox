@@ -45,6 +45,6 @@ export function calculateConfusionMatrixData(
   });
   return {
     confusionMatrix: cm,
-    selectedLabels: selectedLabels !== undefined ? selectedLabels : allLabels
+    selectedLabels: [...labelMap.keys()].map((idx) => allLabels[idx])
   };
 }

@@ -14,6 +14,7 @@ export interface IModelAssessmentData {
   cohortDefaultName?: string;
   isMulticlass?: boolean;
   isRegression?: boolean;
+  isBinary?: boolean;
 }
 
 export interface IErrorAnalysisData {
