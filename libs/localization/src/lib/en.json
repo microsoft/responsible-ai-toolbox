@@ -8,12 +8,16 @@
     "editButton": "Edit"
   },
   "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
     "viewInFullScreen": "View in full screen",
     "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
     "downloadPNG": "Download PNG image",
     "downloadJPEG": "Download JPEG image",
     "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image"
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
