@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import * as Highcharts from "highcharts";
 import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
+import * as ExportData from "highcharts/modules/export-data";
 import * as Exporting from "highcharts/modules/exporting";
 import * as React from "react";
 
@@ -15,6 +16,7 @@ import { HighchartsModuleNames } from "./HighchartTypes";
 // Other modules need to be loaded on demand using modules property of the chart component.
 Accessibility.default(Highcharts);
 Exporting.default(Highcharts);
+ExportData.default(Highcharts);
 // init module
 HighchartsMore(Highcharts);
 
