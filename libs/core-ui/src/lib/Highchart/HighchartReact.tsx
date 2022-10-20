@@ -39,11 +39,15 @@ export function HighchartReact(
   const createChart = (): Highcharts.Chart | null | undefined => {
     Highcharts.setOptions({
       lang: {
+        downloadCSV: localization.ChartContextMenu.downloadCSV,
         downloadJPEG: localization.ChartContextMenu.downloadJPEG,
         downloadPDF: localization.ChartContextMenu.downloadPDF,
         downloadPNG: localization.ChartContextMenu.downloadPNG,
         downloadSVG: localization.ChartContextMenu.downloadSVG,
+        downloadXLS: localization.ChartContextMenu.downloadXLS,
+        hideData: localization.ChartContextMenu.hideData,
         printChart: localization.ChartContextMenu.printChart,
+        viewData: localization.ChartContextMenu.viewData,
         viewFullscreen: localization.ChartContextMenu.viewInFullScreen
       }
     });
