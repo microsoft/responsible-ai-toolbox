@@ -6,6 +6,7 @@ export const MulticlassDnnModelDebugging = {
     hasCausalAnalysisComponent: false
   },
   cohortDefaultName: "All data",
+  isRetainedArgValuesCategorical: true,
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
     distributionBalanceMeasuresComputed: false,

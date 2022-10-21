@@ -12,6 +12,7 @@ export interface IModelAssessmentData {
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
   cohortDefaultName?: string;
+  isRetainedArgValuesCategorical?: boolean;
   isMulticlass?: boolean;
   isRegression?: boolean;
 }

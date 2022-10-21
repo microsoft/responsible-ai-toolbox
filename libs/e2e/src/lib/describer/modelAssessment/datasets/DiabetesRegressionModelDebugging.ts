@@ -6,6 +6,7 @@ export const DiabetesRegressionModelDebugging = {
     hasCausalAnalysisComponent: false
   },
   cohortDefaultName: "All data",
+  isRetainedArgValuesCategorical: false,
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
     distributionBalanceMeasuresComputed: false,
