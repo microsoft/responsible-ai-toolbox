@@ -75,7 +75,6 @@ export const HousingDecisionMaking = {
     "PoolArea",
     "YrSold"
   ],
-  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     hasModelOverviewComponent: false
   },

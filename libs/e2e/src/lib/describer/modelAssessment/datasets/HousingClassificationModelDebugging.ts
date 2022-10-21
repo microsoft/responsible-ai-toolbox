@@ -74,7 +74,6 @@ export const HousingClassificationModelDebugging = {
     "PoolArea",
     "YrSold"
   ],
-  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 6,

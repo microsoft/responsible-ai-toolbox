@@ -56,7 +56,6 @@ export const CensusClassificationModelDebugging = {
     "education",
     "capital-loss"
   ],
-  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,

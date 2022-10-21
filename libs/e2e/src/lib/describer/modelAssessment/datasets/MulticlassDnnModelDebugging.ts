@@ -50,7 +50,6 @@ export const MulticlassDnnModelDebugging = {
     "color_intensity"
   ],
   isMulticlass: true,
-  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,

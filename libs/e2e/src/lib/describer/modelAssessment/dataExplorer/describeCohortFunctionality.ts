@@ -45,32 +45,30 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortSettingsCancelButton).click();
     });
 
-    if (dataShape.isRetainedArgValuesCategorical) {
-      it("should be able to retain values selected after duplicating cohort", () => {
-        cy.get(Locators.CohortSettingsButton).click();
-        cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
-        cy.get(Locators.CohortPredictedYButton).click();
-        cy.get(Locators.CohortPredictedYValuesCaretButton).click();
-        cy.get(Locators.CohortPredictedYGFirstOption).first().click();
-        cy.get(Locators.CohortPredictedYValuesInput)
-          .invoke("attr", "placeholder")
-          .then((text) => {
-            cy.get(Locators.CohortAddFilterButton).click({ force: true });
-            cy.get(Locators.CohortEditorSaveButton).first().click();
-            cy.get(Locators.DuplicateButtons).last().click();
-            cy.get(Locators.EditButtons).last().click();
-            cy.get(Locators.CohortPredictedYButton).click();
-            cy.get(Locators.CohortPredictedYValuesInput).should(
-              "have.attr",
-              "value",
-              text
-            );
-          });
-        cy.get(Locators.CancelButton).click();
-        cy.get(Locators.YesButton).click();
-        cy.get(Locators.CohortSettingsCancelButton).click();
-      });
-    }
+    it("should be able to retain values selected after duplicating cohort", () => {
+      cy.get(Locators.CohortSettingsButton).click();
+      cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
+      cy.get(Locators.CohortPredictedYButton).click();
+      cy.get(Locators.CohortPredictedYValuesCaretButton).click();
+      cy.get(Locators.CohortPredictedYGFirstOption).first().click();
+      cy.get(Locators.CohortPredictedYValuesInput)
+        .invoke("attr", "placeholder")
+        .then((text) => {
+          cy.get(Locators.CohortAddFilterButton).click({ force: true });
+          cy.get(Locators.CohortEditorSaveButton).first().click();
+          cy.get(Locators.DuplicateButtons).last().click();
+          cy.get(Locators.EditButtons).last().click();
+          cy.get(Locators.CohortPredictedYButton).click();
+          cy.get(Locators.CohortPredictedYValuesInput).should(
+            "have.attr",
+            "value",
+            text
+          );
+        });
+      cy.get(Locators.CancelButton).click();
+      cy.get(Locators.YesButton).click();
+      cy.get(Locators.CohortSettingsCancelButton).click();
+    });
 
     it("Should update dataset selection with new cohort when a new cohort is created", () => {
       cy.get(Locators.CreateNewCohortButton).eq(0).click();

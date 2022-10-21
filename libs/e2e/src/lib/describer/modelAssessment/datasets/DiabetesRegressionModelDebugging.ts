@@ -35,7 +35,6 @@ export const DiabetesRegressionModelDebugging = {
   },
   featureNames: ["s5", "bmi", "bp", "s3", "sex", "s1", "s4", "s2", "age", "s6"],
   isRegression: true,
-  isRetainedArgValuesCategorical: false,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,
