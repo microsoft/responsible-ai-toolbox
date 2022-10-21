@@ -45,6 +45,12 @@ export interface ICohortEditorPanelContentState {
   filtersMessage?: string;
 }
 
+export const filterArgRetainableList = [
+  JointDataset.PredictedYLabel,
+  JointDataset.TrueYLabel,
+  JointDataset.ClassificationError
+];
+
 export class CohortEditorPanelContent extends React.PureComponent<
   ICohortEditorPanelContentProps,
   ICohortEditorPanelContentState
@@ -204,10 +210,10 @@ export class CohortEditorPanelContent extends React.PureComponent<
   }
 
   private getFilterValue(key: string): IFilter {
-    const arg = this.getPreviousFilterArgValue(key);
     const filter: IFilter = { column: key } as IFilter;
     const meta = this.props.jointDataset.metaDict[key];
     if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
+      const arg = this.getPreviousFilterArgValue(key);
       filter.method = FilterMethods.Includes;
       filter.arg = arg ?? [
         ...new Array(meta.sortedCategoricalValues.length).keys()
@@ -222,7 +228,9 @@ export class CohortEditorPanelContent extends React.PureComponent<
   private getPreviousFilterArgValue(key: string): number[] | undefined {
     let arg;
     // only execute this if in edit mode
+    // On duplication retained arg is shown only for filters in filterArgRetainableList
     this.props.disableEditName &&
+      filterArgRetainableList.includes(key) &&
       this.props.filterList?.forEach((filter) => {
         if (filter.column === key) {
           arg = filter.arg;
