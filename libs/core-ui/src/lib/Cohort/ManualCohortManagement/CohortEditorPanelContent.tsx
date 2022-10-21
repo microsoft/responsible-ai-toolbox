@@ -204,16 +204,31 @@ export class CohortEditorPanelContent extends React.PureComponent<
   }
 
   private getFilterValue(key: string): IFilter {
+    const arg = this.getPreviousFilterArgValue(key);
     const filter: IFilter = { column: key } as IFilter;
     const meta = this.props.jointDataset.metaDict[key];
     if (meta?.treatAsCategorical && meta.sortedCategoricalValues) {
       filter.method = FilterMethods.Includes;
-      filter.arg = [...new Array(meta.sortedCategoricalValues.length).keys()];
+      filter.arg = arg ?? [
+        ...new Array(meta.sortedCategoricalValues.length).keys()
+      ];
     } else {
       filter.method = FilterMethods.LessThan;
       filter.arg = [meta.featureRange?.max || Number.MAX_SAFE_INTEGER];
     }
     return filter;
+  }
+
+  private getPreviousFilterArgValue(key: string): number[] | undefined {
+    let arg;
+    // only execute this if in edit mode
+    this.props.disableEditName &&
+      this.props.filterList?.forEach((filter) => {
+        if (filter.column === key) {
+          arg = filter.arg;
+        }
+      });
+    return arg;
   }
 
   private removeFilter = (index: number): void => {
