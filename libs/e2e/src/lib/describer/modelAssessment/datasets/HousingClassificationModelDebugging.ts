@@ -6,7 +6,6 @@ export const HousingClassificationModelDebugging = {
     hasCausalAnalysisComponent: false
   },
   cohortDefaultName: "All data",
-  isRetainedArgValuesCategorical: true,
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
     distributionBalanceMeasuresComputed: false,
@@ -75,6 +74,7 @@ export const HousingClassificationModelDebugging = {
     "PoolArea",
     "YrSold"
   ],
+  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 6,

@@ -11,7 +11,6 @@ export const DiabetesDecisionMaking = {
     hasCausalAnalysisComponent: true
   },
   cohortDefaultName: "All data",
-  isRetainedArgValuesCategorical: true,
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
     distributionBalanceMeasuresComputed: false,
@@ -33,6 +32,7 @@ export const DiabetesDecisionMaking = {
   },
   featureNames: ["s5", "bmi", "bp", "s3", "sex", "s1", "s4", "s2", "age", "s6"],
   isRegression: true,
+  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,

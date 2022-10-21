@@ -6,7 +6,6 @@ export const CensusClassificationModelDebugging = {
     hasCausalAnalysisComponent: false
   },
   cohortDefaultName: "All data",
-  isRetainedArgValuesCategorical: true,
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: true,
     distributionBalanceMeasuresComputed: true,
@@ -57,6 +56,7 @@ export const CensusClassificationModelDebugging = {
     "education",
     "capital-loss"
   ],
+  isRetainedArgValuesCategorical: true,
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,
