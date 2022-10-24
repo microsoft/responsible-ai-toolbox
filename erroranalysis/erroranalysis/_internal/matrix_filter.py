@@ -21,6 +21,7 @@ from erroranalysis._internal.metrics import (get_ordered_classes,
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
 CATEGORY2 = 'category2'
+CONVERT_DTYPES = 'convert_dtypes'
 COUNT = 'count'
 FALSE_COUNT = 'falseCount'
 INTERVAL_MIN = 'intervalMin'
@@ -166,6 +167,10 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     dataset_sub_features = input_data[:, indexes]
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     df = pd.DataFrame(dataset_sub_features, columns=dataset_sub_names)
+    # Fix for newer versions of pandas where qcut fails for object dtypes.
+    # Note this bug appears in newer versions of pandas+numpy but
+    # convert_dtypes method only exists in pandas>1.1.4.
+    df = convert_dtypes(df)
     df_err = df.copy()
     df_err[DIFF] = diff
     if metric == Metrics.ERROR_RATE:
@@ -173,6 +178,7 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     else:
         df_err[TRUE_Y] = true_y
         df_err[PRED_Y] = pred_y
+    df_err = convert_dtypes(df_err)
     # construct matrix
     matrix = []
     if len(dataset_sub_names) == 2:
@@ -316,6 +322,19 @@ def compute_matrix(analyzer, features, filters, composite_filters,
     return matrix
 
 
+def convert_dtypes(df):
+    """Converts the dtypes of the dataframe to the most efficient type.
+
+    :param df: The dataframe to convert.
+    :type df: pandas.DataFrame
+    :return: The converted dataframe.
+    :rtype: pandas.DataFrame
+    """
+    if hasattr(df, CONVERT_DTYPES):
+        df = df.convert_dtypes()
+    return df
+
+
 def warn_duplicate_edges(feat):
     """Alert user that a feature has too many duplicate values for bins.
 
@@ -353,7 +372,10 @@ def bin_data(df, feat, bins, quantile_binning=False):
     # so the same categories are used.
     is_bins_constant = not isinstance(bins, pd.IntervalIndex)
     if not is_bins_constant:
-        bin_indexes = bins.get_indexer(feat_col)
+        if feat_col.empty:
+            bin_indexes = np.array([])
+        else:
+            bin_indexes = bins.get_indexer(np.array(feat_col))
         cat = pd.Categorical.from_codes(bin_indexes,
                                         categories=bins,
                                         ordered=True)
