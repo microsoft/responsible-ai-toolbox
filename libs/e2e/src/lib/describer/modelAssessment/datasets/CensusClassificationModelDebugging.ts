@@ -5,6 +5,7 @@ export const CensusClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
+  checkDupCohort: true,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: true,
