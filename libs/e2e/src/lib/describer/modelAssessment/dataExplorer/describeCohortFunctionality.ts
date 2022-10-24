@@ -50,8 +50,11 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
       cy.get(Locators.CohortPredictedYButton).click();
       cy.get(Locators.CohortPredictedYValuesCaretButton).click();
-      cy.get(Locators.CohortPredictedYGFirstOption).then(($checkbox) => {
-        if ($checkbox.length !== 0) {
+      cy.get(Locators.CohortEditPanel).then(($editPanel) => {
+        if (
+          $editPanel.find(Locators.CohortPredictedYGFirstOptionCheckbox)
+            .length > 0
+        ) {
           cy.get(Locators.CohortPredictedYGFirstOption).first().click();
           cy.get(Locators.CohortPredictedYValuesInput)
             .invoke("attr", "placeholder")

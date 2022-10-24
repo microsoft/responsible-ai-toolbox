@@ -42,6 +42,7 @@ export enum Locators {
   CohortDatasetValueInput = "#cohortEditPanel input[class^='ms-spinButton-input']",
   CohortPredictedYButton = "#cohortEditPanel span:contains('Predicted Y')",
   CohortPredictedYGFirstOption = "#cohortEditPanel div.ms-Checkbox",
+  CohortPredictedYGFirstOptionCheckbox = "div.ms-Checkbox",
   CohortPredictedYValuesInput = "#cohortEditPanel div.ms-ComboBox-container input[type='text']",
   CohortPredictedYValuesCaretButton = "#cohortEditPanel i[data-icon-name='ChevronDown']",
   CohortFilterSelection = "#cohortEditPanel [type='radio']",
