@@ -16,7 +16,7 @@ export const HousingDecisionMaking = {
     ],
     hasCausalAnalysisComponent: true
   },
-  checkDupCohort: true,
+  checkDupCohort: false,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
