@@ -50,21 +50,25 @@ export function describeCohortFunctionality(
       cy.get(Locators.CohortSettingsCreateNewCohortButton).click();
       cy.get(Locators.CohortPredictedYButton).click();
       cy.get(Locators.CohortPredictedYValuesCaretButton).click();
-      cy.get(Locators.CohortPredictedYGFirstOption).first().click();
-      cy.get(Locators.CohortPredictedYValuesInput)
-        .invoke("attr", "placeholder")
-        .then((text) => {
-          cy.get(Locators.CohortAddFilterButton).click({ force: true });
-          cy.get(Locators.CohortEditorSaveButton).first().click();
-          cy.get(Locators.DuplicateButtons).last().click();
-          cy.get(Locators.EditButtons).last().click();
-          cy.get(Locators.CohortPredictedYButton).click();
-          cy.get(Locators.CohortPredictedYValuesInput).should(
-            "have.attr",
-            "value",
-            text
-          );
-        });
+      cy.get(Locators.CohortPredictedYGFirstOption).then(($checkbox) => {
+        if ($checkbox.length !== 0) {
+          cy.get(Locators.CohortPredictedYGFirstOption).first().click();
+          cy.get(Locators.CohortPredictedYValuesInput)
+            .invoke("attr", "placeholder")
+            .then((text) => {
+              cy.get(Locators.CohortAddFilterButton).click({ force: true });
+              cy.get(Locators.CohortEditorSaveButton).first().click();
+              cy.get(Locators.DuplicateButtons).last().click();
+              cy.get(Locators.EditButtons).last().click();
+              cy.get(Locators.CohortPredictedYButton).click();
+              cy.get(Locators.CohortPredictedYValuesInput).should(
+                "have.attr",
+                "value",
+                text
+              );
+            });
+        }
+      });
       cy.get(Locators.CancelButton).click();
       cy.get(Locators.YesButton).click();
       cy.get(Locators.CohortSettingsCancelButton).click();
