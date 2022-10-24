@@ -332,6 +332,19 @@ class TestMatrixFilter(object):
                                      y_test, feature_names, model_task,
                                      matrix_features=matrix_features)
 
+    def test_matrix_filter_titanic_object_dtype_quantile(self):
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
+        feature_names = categorical + numeric
+        matrix_features = [numeric[0], numeric[1]]
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        run_error_analyzer(clf, X_test, y_test, feature_names,
+                           categorical_features,
+                           matrix_features=matrix_features,
+                           quantile_binning=True,
+                           model_task=ModelTask.CLASSIFICATION)
+
 
 def run_error_analyzer_on_models(X_train,
                                  y_train,
