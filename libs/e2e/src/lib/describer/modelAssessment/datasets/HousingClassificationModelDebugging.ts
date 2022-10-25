@@ -29,6 +29,7 @@ export const HousingClassificationModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
+    avgOfAbsValue: "Average of absolute value",
     datapoint: 730,
     dropdownRowName: "Row 4",
     hasCorrectIncorrectDatapoints: true,
