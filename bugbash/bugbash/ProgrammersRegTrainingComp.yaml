@@ -1,0 +1,21 @@
+
+$schema: http://azureml/sdk-2-0/CommandComponent.json
+name: rai_parkinsons_training_component
+display_name: Parkinsons training component for RAI example
+version: 1
+type: command
+inputs:
+  training_data:
+    type: path
+  target_column_name:
+    type: string
+outputs:
+  model_output:
+    type: path
+code: ./parkinsons_component_src/
+environment: azureml://registries/azureml/environments/AzureML-responsibleai-0.20-ubuntu20.04-py38-cpu/versions/4
+command: >-
+  python training_script_reg.py
+  --training_data ${{inputs.training_data}}
+  --target_column_name ${{inputs.target_column_name}}
+  --model_output ${{outputs.model_output}}

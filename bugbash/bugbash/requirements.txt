@@ -1,0 +1,12 @@
+--extra-index-url=https://azuremlsdktestpypi.azureedge.net/azureml-v2-cli-e2e-test/71878296
+azure-common
+azure-ai-ml
+mltable==0.1.0b3
+azureml_dataprep
+azureml_dataprep_rslex
+responsibleai~=0.20.0
+raiwidgets~=0.20.0
+jupyter
+pandas
+pyarrow
+shap

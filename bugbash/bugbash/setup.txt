@@ -1,0 +1,12 @@
+Create conda environment with the required packages:
+
+conda create -n raienv python=3.8
+conda activate raienv
+pip install -r requirements.txt
+
+
+Setup ipykernel to add environment to your jupyter notebook kernel. Please restart jupyter to see newly added kernel:
+
+conda activate raienv
+conda install -c anaconda ipykernel
+python -m ipykernel install --user --name=raienv
