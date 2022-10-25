@@ -10,6 +10,7 @@ export const DiabetesDecisionMaking = {
     featureListInCausalTable: ["s2(num)", "bmi(num)", "bp(num)"],
     hasCausalAnalysisComponent: true
   },
+  checkDupCohort: true,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
