@@ -347,6 +347,7 @@ export class LocalImportancePlots extends React.Component<
               styles={{
                 flexContainer: classNames.choiceGroupFlexContainer
               }}
+              className={classNames.choiceGroupLabel}
               options={secondaryPlotChoices}
               selectedKey={this.state.secondaryChartChoice}
               onChange={this.setSecondaryChart}
