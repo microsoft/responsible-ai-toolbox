@@ -23,7 +23,7 @@ setuptools.setup(
     description="Common basic test utilities used across various RAI tools",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/responsible-ai-widgets",
+    url="https://github.com/microsoft/responsible-ai-toolbox",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     install_requires=install_requires,
