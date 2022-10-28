@@ -42,7 +42,11 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         padding: "50px 20px 0 0"
       },
       dropdown: {
-        width: "220px"
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            width: "220px"
+          }
+        }
       },
       label: {
         display: "inline-block",
@@ -82,7 +86,8 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         ...flexLgDown,
         selectors: {
           "@media screen and (max-width: 1023px)": {
-            paddingLeft: "0"
+            paddingLeft: "0",
+            overflowX: "auto"
           },
           "@media screen and (min-width: 1024px)": {
             flexFlow: "nowrap"
