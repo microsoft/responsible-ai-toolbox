@@ -16,7 +16,8 @@ export const matrixOptionsStyles: () => IProcessedStyleSet<IMatrixLegendStyles> 
       matrixOptions: {
         selectors: {
           "@media screen and (max-width: 639px)": {
-            margin: "15px 0 !important"
+            margin: "15px 0 !important",
+            flexWrap: "wrap"
           }
         }
       },
@@ -24,7 +25,11 @@ export const matrixOptionsStyles: () => IProcessedStyleSet<IMatrixLegendStyles> 
         padding: 0
       },
       sliderStackStyle: {
-        minWidth: 200
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            minWidth: 200
+          }
+        }
       },
       toggleStackStyle: {
         minWidth: 100

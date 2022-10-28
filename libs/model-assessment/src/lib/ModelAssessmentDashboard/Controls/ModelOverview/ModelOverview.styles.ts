@@ -24,6 +24,7 @@ export interface IModelOverviewStyles {
   generalSemiBoldText: IStyle;
   selections: IStyle;
   smallDropdown: IStyle;
+  tabs: IStyle;
 }
 
 export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles> =
@@ -59,6 +60,14 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth,
         ...hideXlDown
+      },
+      tabs: {
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap"
+          }
+        }
       }
     });
   };
