@@ -86,8 +86,8 @@ export const TreatmentTableStyles: () => IProcessedStyleSet<ITreatmentTableStyle
         ...flexLgDown,
         selectors: {
           "@media screen and (max-width: 1023px)": {
-            paddingLeft: "0",
-            overflowX: "auto"
+            overflowX: "auto",
+            paddingLeft: "0"
           },
           "@media screen and (min-width: 1024px)": {
             flexFlow: "nowrap"

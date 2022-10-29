@@ -37,7 +37,11 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
       errorAnalysisWrapper: {
         marginTop: "10px",
         paddingLeft: "15px",
-        flexWrap: "wrap"
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            flexWrap: "wrap"
+          }
+        }
       },
       featureList: {
         padding: "16px 0 10px 0"

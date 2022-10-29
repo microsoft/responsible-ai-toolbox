@@ -56,11 +56,6 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
       smallDropdown: {
         width: "150px"
       },
-      topLevelDescriptionText: {
-        color: theme.semanticColors.bodyText,
-        maxWidth: descriptionMaxWidth,
-        ...hideXlDown
-      },
       tabs: {
         selectors: {
           "[role='tablist'].ms-Pivot": {
@@ -68,6 +63,11 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
             flexWrap: "wrap"
           }
         }
+      },
+      topLevelDescriptionText: {
+        color: theme.semanticColors.bodyText,
+        maxWidth: descriptionMaxWidth,
+        ...hideXlDown
       }
     });
   };

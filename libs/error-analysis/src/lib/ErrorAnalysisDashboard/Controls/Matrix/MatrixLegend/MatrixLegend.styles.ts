@@ -28,8 +28,8 @@ export const matrixLegendStyles: () => IProcessedStyleSet<IMatrixLegendStyles> =
       metricBarBlack: commonMetricStyles.metricBarBlack,
       metricBarGreen: commonMetricStyles.metricBarGreen,
       metricBarRed: commonMetricStyles.metricBarRed,
+      metricLegendStack: flexMdDown,
       smallHeader: commonTextStyles.smallHeader,
-      valueBlack: commonMetricStyles.valueBlack,
-      metricLegendStack: flexMdDown
+      valueBlack: commonMetricStyles.valueBlack
     });
   };

@@ -16,8 +16,8 @@ export const matrixOptionsStyles: () => IProcessedStyleSet<IMatrixLegendStyles> 
       matrixOptions: {
         selectors: {
           "@media screen and (max-width: 639px)": {
-            margin: "15px 0 !important",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
+            margin: "15px 0 !important"
           }
         }
       },
