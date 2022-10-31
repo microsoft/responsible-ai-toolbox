@@ -11,7 +11,13 @@ jobs:
     strategy:
       matrix:
         packageDirectory:
-          ["rai_core_flask", "responsibleai", "erroranalysis", "raiutils"]
+          [
+            "rai_core_flask",
+            "responsibleai",
+            "erroranalysis",
+            "raiutils",
+            "rai_test_utils"
+          ]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.6", "3.7", "3.8", "3.9"]
         exclude:
