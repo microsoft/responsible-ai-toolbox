@@ -69,16 +69,16 @@ export class MainMenu extends React.PureComponent<
       {
         iconOnly: true,
         iconProps: settingsIcon,
-        key: "cohortSettings",
         id: "cohortSettings",
+        key: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
         iconOnly: true,
         iconProps: navigationIcon,
-        key: "dashboardSettings",
         id: "dashboardSettings",
+        key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
       }
