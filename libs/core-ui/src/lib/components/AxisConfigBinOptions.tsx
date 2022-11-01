@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Checkbox, Text } from "@fluentui/react";
+import { Text, Toggle } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
@@ -40,9 +40,10 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
           {selectedColumnDesc.categoricalDescription}
         </Text>
         {this.props.canDither && (
-          <Checkbox
+          <Toggle
             key={this.props.selectedColumn.property}
             label={localization.Interpret.AxisConfigDialog.ditherLabel}
+            inlineLabel
             checked={this.props.selectedColumn.options.dither}
             onChange={this.ditherChecked}
           />
@@ -57,9 +58,10 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
           {selectedColumnDesc.maxDescription}
         </Text>
         {this.props.canBin && !this.props.mustBin && (
-          <Checkbox
+          <Toggle
             key={this.props.selectedColumn.property}
             label={localization.Interpret.AxisConfigDialog.binLabel}
+            inlineLabel
             checked={this.props.selectedColumn.options.bin}
             onChange={this.shouldBinClicked}
           />
@@ -77,9 +79,10 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
         {!(this.props.mustBin || this.props.selectedColumn.options.bin) &&
           this.props.canDither &&
           allowUserInteract(this.props.selectedColumn.property) && (
-            <Checkbox
+            <Toggle
               key={this.props.selectedColumn.property}
               label={localization.Interpret.AxisConfigDialog.ditherLabel}
+              inlineLabel
               checked={this.props.selectedColumn.options.dither}
               onChange={this.ditherChecked}
             />

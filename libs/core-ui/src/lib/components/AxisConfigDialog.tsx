@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  Checkbox,
   IComboBoxOption,
   IComboBox,
   ComboBox,
@@ -10,7 +9,8 @@ import {
   PrimaryButton,
   Panel,
   Stack,
-  DefaultButton
+  DefaultButton,
+  Toggle
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -170,12 +170,13 @@ export class AxisConfigDialog extends React.PureComponent<
                 )}
                 {selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
                   allowUserInteract(this.state.selectedColumn.property) && (
-                    <Checkbox
+                    <Toggle
                       key={this.state.selectedColumn.property}
                       label={
                         localization.Interpret.AxisConfigDialog
                           .TreatAsCategorical
                       }
+                      inlineLabel
                       checked={selectedMeta.treatAsCategorical}
                       onChange={this.setAsCategorical}
                     />
