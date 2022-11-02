@@ -478,7 +478,11 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
+            <Pivot
+              id="modelOverviewChartPivot"
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
               {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                 <PivotItem
                   headerText={

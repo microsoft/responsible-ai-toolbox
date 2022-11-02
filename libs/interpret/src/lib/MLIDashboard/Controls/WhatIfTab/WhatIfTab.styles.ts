@@ -80,6 +80,7 @@ export interface IWhatIfTabStyles {
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
   subPlotContainer: IStyle;
+  choiceGroupLabel: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -141,7 +142,14 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
             display: "inline-flex"
           }
         },
-        width: "500px"
+        width: "auto"
+      },
+      choiceGroupLabel: {
+        selectors: {
+          "label.ms-ChoiceField-field": {
+            marginRight: "15px"
+          }
+        }
       },
       cohortPickerLabel: {
         fontWeight: "600",

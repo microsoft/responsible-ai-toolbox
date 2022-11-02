@@ -164,6 +164,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
+                    overflowBehavior="menu"
                   >
                     {this.pivotItems.map((props) => (
                       <PivotItem key={props.itemKey} {...props} />
