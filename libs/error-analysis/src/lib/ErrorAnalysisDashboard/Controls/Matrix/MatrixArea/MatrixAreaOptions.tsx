@@ -43,24 +43,30 @@ export class MatrixAreaOptions extends React.PureComponent<IMatrixAreaOptionsPro
         verticalAlign="center"
         className={classNames.matrixAreaOptions}
       >
-        <DefaultButton
-          text={localization.ErrorAnalysis.MatrixArea.clearAll}
-          onClick={this.props.clearAll}
-          disabled={this.props.disableClearAll}
-        />
-        <DefaultButton
-          text={localization.ErrorAnalysis.MatrixArea.selectAll}
-          onClick={this.props.selectAll}
-          disabled={this.props.disableSelectAll}
-        />
-        <MatrixOptions
-          quantileBinning={this.props.quantileBinning}
-          binningThreshold={this.props.numBins}
-          updateQuantileBinning={this.props.updateQuantileBinning}
-          updateNumBins={this.props.updateNumBins}
-          isEnabled={this.props.isEnabled}
-          telemetryHook={this.props.telemetryHook}
-        />
+        <Stack.Item>
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.clearAll}
+            onClick={this.props.clearAll}
+            disabled={this.props.disableClearAll}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.selectAll}
+            onClick={this.props.selectAll}
+            disabled={this.props.disableSelectAll}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <MatrixOptions
+            quantileBinning={this.props.quantileBinning}
+            binningThreshold={this.props.numBins}
+            updateQuantileBinning={this.props.updateQuantileBinning}
+            updateNumBins={this.props.updateNumBins}
+            isEnabled={this.props.isEnabled}
+            telemetryHook={this.props.telemetryHook}
+          />
+        </Stack.Item>
       </Stack>
     );
   }

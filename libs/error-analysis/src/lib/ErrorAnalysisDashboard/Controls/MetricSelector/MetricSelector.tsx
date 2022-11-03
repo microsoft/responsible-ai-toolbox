@@ -29,7 +29,7 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
     let dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { marginRight: "20px", width: 200 }
+      dropdown: { marginRight: "20px" }
     };
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
