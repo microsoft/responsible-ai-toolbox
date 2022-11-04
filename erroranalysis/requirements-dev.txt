@@ -6,3 +6,4 @@ requests==2.25.1
 requirements-parser==0.2.0
 xgboost<=1.0.0
 shap>=0.20.0, <=0.39.0
+rai_test_utils
