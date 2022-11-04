@@ -782,6 +782,7 @@
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "Number of bins",
       "selectClass": "Select class",
       "selectFeature": "Select feature",

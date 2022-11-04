@@ -119,7 +119,8 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
       options: {
         dither
       },
-      property
+      property,
+      type: this.props.jointDataset.metaDict[property]?.AxisType
     });
   };
 
@@ -138,7 +139,8 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
         options: {
           dither: false
         },
-        property
+        property,
+        type: this.props.jointDataset.metaDict[property]?.AxisType
       });
       return;
     }
@@ -148,6 +150,7 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     ) {
       property += "0";
     }
+    console.log("okok property:", property);
     this.setDefaultStateForKey(property);
   };
 }
