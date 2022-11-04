@@ -79,15 +79,7 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
             <Text variant="small">
               {selectedColumnDesc.categoricalDescription}
             </Text>
-            {this.props.canDither && (
-              <Toggle
-                key="dither-toggle-categorical-checked"
-                label={localization.Interpret.AxisConfigDialog.ditherLabel}
-                inlineLabel
-                checked={this.props.selectedColumn.options.dither}
-                onChange={this.ditherChecked}
-              />
-            )}
+            {this.props.canDither && this.getDitherToggle()}
           </>
         ) : (
           <>
@@ -112,20 +104,25 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
               )}
             {!(this.props.mustBin || this.props.selectedColumn.options.bin) &&
               this.props.canDither &&
-              allowUserInteract(this.props.selectedColumn.property) && (
-                <Toggle
-                  key="dither-toggle-categorical-unchecked"
-                  label={localization.Interpret.AxisConfigDialog.ditherLabel}
-                  inlineLabel
-                  checked={this.props.selectedColumn.options.dither}
-                  onChange={this.ditherChecked}
-                />
-              )}
+              allowUserInteract(this.props.selectedColumn.property) &&
+              this.getDitherToggle()}
           </>
         )}
       </Stack>
     );
   }
+
+  private getDitherToggle = (): JSX.Element => {
+    return (
+      <Toggle
+        key="dither-toggle"
+        label={localization.Interpret.AxisConfigDialog.ditherLabel}
+        inlineLabel
+        checked={this.props.selectedColumn.options.dither}
+        onChange={this.ditherChecked}
+      />
+    );
+  };
 
   private readonly setAsCategorical = (
     _ev?: React.FormEvent<HTMLElement>,
