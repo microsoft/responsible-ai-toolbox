@@ -4,4 +4,4 @@ pytest-mock==3.6.1
 requests==2.25.1
 
 requirements-parser==0.2.0
-rai_test_utils
+rai_test_utils==0.0.0
