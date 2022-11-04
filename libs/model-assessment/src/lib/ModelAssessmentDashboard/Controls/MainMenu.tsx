@@ -67,13 +67,17 @@ export class MainMenu extends React.PureComponent<
     };
     this.menuFarItems = [
       {
+        iconOnly: true,
         iconProps: settingsIcon,
+        id: "cohortSettings",
         key: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
+        iconOnly: true,
         iconProps: navigationIcon,
+        id: "dashboardSettings",
         key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
