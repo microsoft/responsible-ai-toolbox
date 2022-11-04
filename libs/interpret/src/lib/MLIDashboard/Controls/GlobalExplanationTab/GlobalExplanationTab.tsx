@@ -10,7 +10,8 @@ import {
   Text,
   Link,
   Slider,
-  Stack
+  Stack,
+  Toggle
 } from "@fluentui/react";
 import {
   Cohort,
@@ -31,6 +32,7 @@ import {
   TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { Dictionary } from "lodash";
 import React from "react";
 
@@ -70,6 +72,7 @@ interface IGlobalExplanationTabState {
   globalBarSettings?: IGlobalBarSettings;
   dependenceProps?: IGenericChartProps;
   cohortSeries: IGlobalSeries[];
+  logarithmicScaling: boolean;
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -98,6 +101,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.state = {
       chartType: ChartTypes.Bar,
       cohortSeries: [],
+      logarithmicScaling: false,
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: this.props.cohorts.map(() => true),
       sortArray: [],
@@ -157,6 +161,11 @@ export class GlobalExplanationTab extends React.PureComponent<
         text: this.context.jointDataset.metaDict[key].label
       });
     }
+    const selectedMeta = this.state.dependenceProps?.xAxis.property
+      ? this.context.jointDataset.metaDict[
+          this.state.dependenceProps?.xAxis.property
+        ]
+      : undefined;
 
     return (
       <Stack horizontal={false} className={classNames.page}>
@@ -294,6 +303,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                         this.props.cohorts[this.state.selectedCohortIndex]
                       }
                       jointDataset={this.context.jointDataset}
+                      logarithmicScaling={this.state.logarithmicScaling}
                       metadata={this.context.modelMetadata}
                       selectedWeight={this.props.selectedWeightVector}
                       selectedWeightLabel={
@@ -331,6 +341,22 @@ export class GlobalExplanationTab extends React.PureComponent<
                       onChange={this.setSelectedCohort}
                     />
                   )}
+                  {featureOptions &&
+                    (selectedMeta?.featureRange?.rangeType ===
+                      RangeTypes.Integer ||
+                      selectedMeta?.featureRange?.rangeType ===
+                        RangeTypes.Numeric) && (
+                      <Toggle
+                        key="logarithmic-scaling-toggle"
+                        label={
+                          localization.Interpret.AxisConfigDialog
+                            .logarithmicScaling
+                        }
+                        inlineLabel
+                        checked={this.state.logarithmicScaling}
+                        onChange={this.setLogarithmicScaling}
+                      />
+                    )}
                 </Stack.Item>
               </Stack>
             </Stack.Item>
@@ -339,6 +365,16 @@ export class GlobalExplanationTab extends React.PureComponent<
       </Stack>
     );
   }
+
+  private readonly setLogarithmicScaling = (
+    _ev?: React.FormEvent<HTMLElement>,
+    checked?: boolean
+  ): void => {
+    if (checked === undefined || checked === this.state.logarithmicScaling) {
+      return;
+    }
+    this.setState({ logarithmicScaling: checked });
+  };
 
   private setSelectedCohort = (
     _event: React.FormEvent,

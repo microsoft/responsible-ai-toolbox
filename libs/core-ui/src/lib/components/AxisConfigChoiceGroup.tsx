@@ -150,7 +150,6 @@ export class AxisConfigChoiceGroup extends React.PureComponent<IAxisConfigChoice
     ) {
       property += "0";
     }
-    console.log("okok property:", property);
     this.setDefaultStateForKey(property);
   };
 }
