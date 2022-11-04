@@ -10,6 +10,7 @@ import {
 
 export interface ICausalInsightsStyles {
   container: IStyle;
+  tabs: IStyle;
 }
 
 export const causalInsightsStyles: () => IProcessedStyleSet<ICausalInsightsStyles> =
@@ -19,6 +20,14 @@ export const causalInsightsStyles: () => IProcessedStyleSet<ICausalInsightsStyle
       container: {
         color: theme.semanticColors.bodyText,
         padding: "0 40px 10px 40px"
+      },
+      tabs: {
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap"
+          }
+        }
       }
     });
   };

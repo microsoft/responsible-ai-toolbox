@@ -96,6 +96,7 @@ export class FairnessWizardTabs extends React.Component<IFairnessWizardTabsProps
               }}
               selectedKey={this.props.activeTabKey}
               onLinkClick={this.props.handleTabClick}
+              overflowBehavior="menu"
             >
               <PivotItem
                 headerText={localization.Fairness.sensitiveFeatures}

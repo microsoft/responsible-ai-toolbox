@@ -55,7 +55,11 @@ export class CausalInsightsTab extends React.PureComponent<
         </Stack.Item>
         <Stack.Item>
           <Stack>
-            <Pivot onLinkClick={this.onViewTypeChange} overflowBehavior="menu">
+            <Pivot
+              onLinkClick={this.onViewTypeChange}
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
               <PivotItem
                 itemKey={CausalAnalysisOptions.Aggregate}
                 headerText={localization.CausalAnalysis.MainMenu.aggregate}

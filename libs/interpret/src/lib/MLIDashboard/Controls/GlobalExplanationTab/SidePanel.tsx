@@ -70,7 +70,7 @@ export class SidePanel extends React.Component<
     return (
       <Stack className={classNames.legendAndSort}>
         <Dropdown
-          label={localization.Interpret.GlobalTab.sortBy}
+          label={localization.Interpret.GlobalTab.sortByCohort}
           selectedKey={this.props.sortingSeriesIndex}
           options={this.props.cohortSeries.map((row, rowIndex) => ({
             key: rowIndex,

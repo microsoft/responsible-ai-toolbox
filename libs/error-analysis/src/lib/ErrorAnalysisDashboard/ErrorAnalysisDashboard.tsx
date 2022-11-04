@@ -558,6 +558,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                       linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
+                      overflowBehavior="menu"
                     >
                       {this.pivotItems.map((props) => (
                         <PivotItem key={props.itemKey} {...props} />
