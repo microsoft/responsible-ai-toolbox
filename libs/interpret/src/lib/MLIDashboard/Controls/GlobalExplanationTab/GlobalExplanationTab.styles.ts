@@ -83,12 +83,12 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
         ...hideXlDown
       },
       legendAndSort: {
-        height: "100%",
         "@media screen and (min-width: 479px)": {
           paddingLeft: "25px",
           paddingTop: "55px",
           width: rightMarginWidth
-        }
+        },
+        height: "100%"
       },
       legendHelpText: {
         fontWeight: "300"

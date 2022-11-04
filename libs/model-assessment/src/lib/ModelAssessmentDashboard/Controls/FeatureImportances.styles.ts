@@ -30,7 +30,10 @@ export const featureImportanceTabStyles: () => IProcessedStyleSet<IFeatureImport
         selectors: {
           "[role='tablist'].ms-Pivot": {
             display: "flex",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
           }
         }
       }

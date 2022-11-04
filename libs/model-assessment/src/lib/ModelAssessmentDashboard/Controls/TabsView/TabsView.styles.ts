@@ -28,20 +28,25 @@ export const tabsViewStyles: () => IProcessedStyleSet<ITabsViewStyles> = () => {
     },
     sectionHeader: {
       color: theme.semanticColors.bodyText,
+      display: "block",
+      overflow: "hidden",
       padding: "16px 24px 16px 40px",
       textOverflow: "ellipsis",
-      display: "block",
-      overflow: "hidden"
+      selectors: {
+        ":hover": {
+          overflow: "visible",
+          whiteSpace: "normal",
+          height: "auto"
+        }
+      }
     },
     sectionTooltip: {
       display: "inline",
       ...hideXxlUp
     },
     stackStyle: {
+      padding: "20px",
       selectors: {
-        "@media screen and (min-width: 479px)": {
-          padding: "20px"
-        },
         "@media screen and (max-width: 479px)": {
           padding: "5px"
         }

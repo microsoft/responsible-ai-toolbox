@@ -62,8 +62,8 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
             display: "flex",
             flexWrap: "wrap",
             overflow: "hidden",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis"
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
           }
         }
       },
