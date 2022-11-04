@@ -84,9 +84,11 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       },
       legendAndSort: {
         height: "100%",
-        paddingLeft: "25px",
-        paddingTop: "55px",
-        width: rightMarginWidth
+        "@media screen and (min-width: 479px)": {
+          paddingLeft: "25px",
+          paddingTop: "55px",
+          width: rightMarginWidth
+        }
       },
       legendHelpText: {
         fontWeight: "300"

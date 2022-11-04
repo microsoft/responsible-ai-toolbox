@@ -16,6 +16,7 @@ export interface IErrorAnalysisStyles {
   featureList: IStyle;
   errorAnalysisWrapper: IStyle;
   separator: IStyle;
+  tabs: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -46,6 +47,17 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
       featureList: {
         padding: "16px 0 10px 0"
       },
-      separator: hideLgDown
+      separator: hideLgDown,
+      tabs: {
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis"
+          }
+        }
+      }
     });
   };
