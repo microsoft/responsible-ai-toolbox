@@ -31,14 +31,14 @@ export const tabsViewStyles: () => IProcessedStyleSet<ITabsViewStyles> = () => {
       display: "block",
       overflow: "hidden",
       padding: "16px 24px 16px 40px",
-      textOverflow: "ellipsis",
       selectors: {
         ":hover": {
+          height: "auto",
           overflow: "visible",
-          whiteSpace: "normal",
-          height: "auto"
+          whiteSpace: "normal"
         }
-      }
+      },
+      textOverflow: "ellipsis"
     },
     sectionTooltip: {
       display: "inline",
