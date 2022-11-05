@@ -8,6 +8,7 @@ import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 import { IGlobalExplanationProps } from "../Interfaces/IGlobalExplanationProps";
 import { Method } from "../Interfaces/IModelExplanationData";
+import { IDataset } from "../Interfaces/IDataset"
 
 import { isThreeDimArray, isTwoDimArray } from "./array";
 
@@ -124,4 +125,18 @@ export function getModelType(
     default:
       return ModelTypes.Multiclass;
   }
+}
+
+export function ifLargeData(dataset: IDataset): boolean {
+  if (dataset?.is_large_data_scenario) {
+    return dataset.is_large_data_scenario;
+  }
+  return false;
+}
+
+export function ShouldUseEntireTestSet(dataset: IDataset): boolean {
+  if (dataset?.is_large_data_scenario && dataset?.use_entire_test_data) {
+    return dataset.is_large_data_scenario && dataset.use_entire_test_data;
+  }
+  return false;
 }
