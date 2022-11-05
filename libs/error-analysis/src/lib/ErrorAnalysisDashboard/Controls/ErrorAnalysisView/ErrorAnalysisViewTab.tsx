@@ -80,6 +80,7 @@ export class ErrorAnalysisViewTab extends React.Component<
                 onLinkClick={this.handleTabClick}
                 selectedKey={this.props.selectedKey}
                 overflowBehavior="menu"
+                className={classNames.tabs}
               >
                 <PivotItem
                   itemKey={ErrorAnalysisOptions.TreeMap}
