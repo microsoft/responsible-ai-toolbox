@@ -330,8 +330,8 @@ export class FeatureConfigurationFlyout extends React.Component<
                 min={minFeatureBins}
                 max={maxFeatureBins}
                 step={1}
-                incrementButtonAriaLabel="Increase value by 1"
-                decrementButtonAriaLabel="Decrease value by 1"
+                incrementButtonAriaLabel={localization.Common.increaseValue}
+                decrementButtonAriaLabel={localization.Common.decreaseValue}
                 onIncrement={this.onSpinButtonChange(1, featureIndex)}
                 onDecrement={this.onSpinButtonChange(-1, featureIndex)}
               />
