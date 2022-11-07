@@ -25,6 +25,7 @@ export interface IFeatureImportanceDependenceProps {
   jointDataset: JointDataset;
   cohort: Cohort;
   cohortIndex: number;
+  logarithmicScaling: boolean;
   metadata: IExplanationModelMetadata;
   selectedWeight: WeightVectorOption;
   selectedWeightLabel: string;
@@ -77,6 +78,7 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
                   FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
+                  this.props.logarithmicScaling,
                   getTheme()
                 )}
               />
