@@ -25,7 +25,10 @@ export const causalInsightsStyles: () => IProcessedStyleSet<ICausalInsightsStyle
         selectors: {
           "[role='tablist'].ms-Pivot": {
             display: "flex",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
           }
         }
       }

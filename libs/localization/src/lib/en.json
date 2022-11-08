@@ -5,7 +5,11 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information",
     "spinButton": "Spin",
-    "editButton": "Edit"
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1"
   },
   "ChartContextMenu": {
     "viewInFullScreen": "View in full screen",
