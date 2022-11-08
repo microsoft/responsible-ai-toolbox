@@ -6,14 +6,7 @@ from enum import Enum
 
 import pandas as pd
 import pytest
-from common_utils import (create_adult_census_data,
-                          create_binary_classification_dataset,
-                          create_cancer_data, create_diabetes_data,
-                          create_iris_data, create_kneighbors_classifier,
-                          create_models_classification,
-                          create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_titanic_pipeline, replicate_dataset)
+from common_utils import replicate_dataset
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
@@ -28,6 +21,14 @@ from erroranalysis._internal.error_analyzer import (ModelAnalyzer,
 from erroranalysis._internal.surrogate_error_tree import (
     TreeSide, cache_subtree_features, create_surrogate_model,
     get_categorical_info, get_max_split_index, traverse)
+from rai_test_utils.datasets.tabular import (
+    create_adult_census_data, create_binary_classification_dataset,
+    create_cancer_data, create_diabetes_data, create_iris_data,
+    create_simple_titanic_data)
+from rai_test_utils.models.model_utils import create_models_classification
+from rai_test_utils.models.sklearn import (
+    create_kneighbors_classifier, create_sklearn_random_forest_regressor,
+    create_titanic_pipeline)
 
 SIZE = 'size'
 PARENTID = 'parentId'
