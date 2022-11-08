@@ -80,7 +80,7 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
         fontWeight: "500"
       },
       tooltipRect: {
-        outline: `1px solid ${theme.palette.blackTranslucent40}`
+        outline: `1px solid ${theme.palette.themeLighterAlt}`
       },
       valueBlack: mergeStyles(value, {
         color: theme.palette.black,
