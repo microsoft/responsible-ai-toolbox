@@ -62,25 +62,29 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
       numCorrect: {
         fontSize: "8px",
         fontWeight: "500",
-        transform: "translate(10px, 15px)"
+        transform: "translate(10px, 15px)",
+        fill: theme.semanticColors.bodyText
       },
       numIncorrect: {
         fontSize: "8px",
         fontWeight: "500",
-        transform: "translate(10px, 25px)"
+        transform: "translate(10px, 25px)",
+        fill: theme.semanticColors.bodyText
       },
       showFilterTooltip: {
         visibility: "visible"
       },
       smallHeader: {
         fontSize: "8px",
-        fontWeight: "500"
+        fontWeight: "500",
+        fill: theme.semanticColors.bodyText
       },
       tooltipRect: {
-        outline: `1px solid ${theme.palette.themeLighterAlt}`
+        outline: `1px solid ${theme.palette.blackTranslucent40}`
       },
       valueBlack: mergeStyles(value, {
-        color: theme.palette.black
+        color: theme.palette.black,
+        fill: theme.semanticColors.bodyText
       })
     });
   };
