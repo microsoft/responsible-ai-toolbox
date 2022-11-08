@@ -60,24 +60,24 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
         transform: "translate(20px, 75px)"
       },
       numCorrect: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
         fontWeight: "500",
-        transform: "translate(10px, 15px)",
-        fill: theme.semanticColors.bodyText
+        transform: "translate(10px, 15px)"
       },
       numIncorrect: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
         fontWeight: "500",
-        transform: "translate(10px, 25px)",
-        fill: theme.semanticColors.bodyText
+        transform: "translate(10px, 25px)"
       },
       showFilterTooltip: {
         visibility: "visible"
       },
       smallHeader: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
-        fontWeight: "500",
-        fill: theme.semanticColors.bodyText
+        fontWeight: "500"
       },
       tooltipRect: {
         outline: `1px solid ${theme.palette.blackTranslucent40}`
