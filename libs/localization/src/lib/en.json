@@ -5,15 +5,23 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information",
     "spinButton": "Spin",
-    "editButton": "Edit"
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1"
   },
   "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
     "viewInFullScreen": "View in full screen",
     "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
     "downloadPNG": "Download PNG image",
     "downloadJPEG": "Download JPEG image",
     "downloadPDF": "Download PDF document",
-    "downloadSVG": "Download SVG vector image"
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
   },
   "CausalAnalysis": {
     "AggregateView": {
@@ -782,6 +790,7 @@
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "Number of bins",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
@@ -1070,6 +1079,7 @@
       "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
+      "sortByCohort": "Sort by cohort",
       "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
