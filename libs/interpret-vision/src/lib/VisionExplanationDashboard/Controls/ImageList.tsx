@@ -98,6 +98,8 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
+    const predictedY = item?.predictedY;
+    const alt = Array.isArray(predictedY) ? predictedY.join(",") : predictedY;
 
     return (
       <Stack
@@ -122,7 +124,7 @@ export class ImageList extends React.Component<
           >
             <Image
               {...imageProps}
-              alt={item?.predictedY}
+              alt={alt}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}
               width={this.props.imageDim}
