@@ -19,6 +19,8 @@ export interface IDataset {
   features: unknown[][];
   feature_names: string[];
   categorical_features: string[];
+  is_large_data_scenario?: boolean;
+  use_entire_test_data?: boolean;
   class_names?: string[];
   target_column?: string;
   data_balance_measures?: IDataBalanceMeasures;
