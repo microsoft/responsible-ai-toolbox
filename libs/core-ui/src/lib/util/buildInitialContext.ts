@@ -5,7 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import memoize from "memoize-one";
 
 import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
-import { IDataset } from "../Interfaces/IDataset"
+import { IDataset } from "../Interfaces/IDataset";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 import { IGlobalExplanationProps } from "../Interfaces/IGlobalExplanationProps";
 import { Method } from "../Interfaces/IModelExplanationData";
