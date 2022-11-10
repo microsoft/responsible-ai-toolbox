@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ifEnableLargeData, IDataset, DatasetTaskType } from "@responsible-ai/core-ui"
+import {
+  IDataset,
+  DatasetTaskType
+} from "../Interfaces/IDataset"
+
+import { ifEnableLargeData } from "./buildInitialContext"
+
 
 const bostonDataset: IDataset = {
     categorical_features: ["CHAS"],
