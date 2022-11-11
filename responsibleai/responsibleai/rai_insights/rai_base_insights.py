@@ -17,7 +17,7 @@ from responsibleai._internal.constants import Metadata
 
 _DATA = 'data'
 _DTYPES = 'dtypes'
-_RAIVERSION = "raiversion"
+_RAIVERSION = "rai_version"
 _TRAIN = 'train'
 _TEST = 'test'
 _MODEL = Metadata.MODEL
