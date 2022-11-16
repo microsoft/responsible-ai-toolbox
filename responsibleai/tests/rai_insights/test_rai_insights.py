@@ -279,6 +279,7 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
 def validate_common_state_directories(path, task_type):
     all_other_files = os.listdir(path)
+    assert "rai_version.json" in all_other_files
     assert "meta.json" in all_other_files
     assert "model.pkl" in all_other_files
 

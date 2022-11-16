@@ -161,7 +161,8 @@ export class CounterfactualChart extends React.PureComponent<
                 <BasicHighChart
                   configOverride={getCounterfactualChartOptions(
                     plotlyProps,
-                    this.selectPointFromChart
+                    this.selectPointFromChart,
+                    this.props.chartProps
                   )}
                   theme={getTheme()}
                   id="CounterfactualChart"
