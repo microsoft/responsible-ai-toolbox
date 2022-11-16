@@ -33,11 +33,33 @@ export interface ITabsViewProps {
   setSelectedCohort: (cohort: ErrorCohort) => void;
 }
 
+export interface ITabViewState {
+  items: IVisionListItem[];
+}
+
 const stackTokens = {
   childrenGap: "l1"
 };
 
-export class TabsView extends React.Component<ITabsViewProps> {
+export class TabsView extends React.Component<ITabsViewProps, ITabViewState> {
+  public constructor(props: ITabsViewProps) {
+    super(props);
+    this.state = {
+      items: this.props.errorInstances.concat(...this.props.successInstances)
+    };
+  }
+
+  public componentDidUpdate(prevProps: ITabsViewProps): void {
+    if (
+      this.props.errorInstances !== prevProps.errorInstances ||
+      this.props.successInstances !== prevProps.successInstances
+    ) {
+      this.setState({
+        items: this.props.errorInstances.concat(...this.props.successInstances)
+      });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = visionExplanationDashboardStyles();
     switch (this.props.selectedKey) {
@@ -49,11 +71,10 @@ export class TabsView extends React.Component<ITabsViewProps> {
           >
             <Stack.Item style={{ width: "100%" }}>
               <DataCharacteristics
-                data={this.props.errorInstances.concat(
-                  ...this.props.successInstances
-                )}
+                items={this.state.items}
                 imageDim={this.props.imageDim}
                 numRows={this.props.numRows}
+                searchValue={this.props.searchValue}
                 selectItem={this.props.onItemSelect}
               />
             </Stack.Item>

@@ -221,7 +221,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                 ]}
                 sortArray={this.state.sortArray}
                 chartType={this.state.chartType}
-                unsortedX={this.context.modelMetadata.featureNamesAbridged}
+                unsortedX={this.context.modelMetadata.featureNames}
                 originX={this.context.modelMetadata.featureNames}
                 unsortedSeries={this.getActiveCohortSeries(
                   this.state.seriesIsActive

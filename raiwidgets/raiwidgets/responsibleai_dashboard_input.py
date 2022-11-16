@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
-from raiutils.data_processing import convert_to_list
+from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
 from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
@@ -242,8 +242,9 @@ class ResponsibleAIDashboardInput:
                 include_original_columns_only=True)
 
             global_effects = \
-                self._analysis.causal.request_global_cohort_effects(
-                    id, filtered_data_df)
+                serialize_json_safe(
+                    self._analysis.causal.request_global_cohort_effects(
+                        id, filtered_data_df))
             return {
                 WidgetRequestResponseConstants.data: global_effects
             }
@@ -269,8 +270,9 @@ class ResponsibleAIDashboardInput:
                 include_original_columns_only=True)
 
             global_policy = \
-                self._analysis.causal.request_global_cohort_policy(
-                    id, filtered_data_df)
+                serialize_json_safe(
+                    self._analysis.causal.request_global_cohort_policy(
+                        id, filtered_data_df))
             return {
                 WidgetRequestResponseConstants.data: global_policy
             }

@@ -79,6 +79,8 @@ export class ErrorAnalysisViewTab extends React.Component<
               <Pivot
                 onLinkClick={this.handleTabClick}
                 selectedKey={this.props.selectedKey}
+                overflowBehavior="menu"
+                className={classNames.tabs}
               >
                 <PivotItem
                   itemKey={ErrorAnalysisOptions.TreeMap}
@@ -103,24 +105,28 @@ export class ErrorAnalysisViewTab extends React.Component<
               )}
             </Stack.Item>
           </Stack>
-          <ErrorAnalysisView
-            tree={this.props.tree}
-            messages={this.props.messages}
-            disabledView={this.props.disabledView}
-            features={this.props.features}
-            selectedFeatures={this.props.selectedFeatures}
-            getTreeNodes={this.props.getTreeNodes}
-            getMatrix={this.props.getMatrix}
-            matrix={this.props.matrix}
-            matrixFeatures={this.props.matrixFeatures}
-            errorAnalysisOption={this.props.errorAnalysisOption}
-            onClearCohortSelectionClick={this.props.onClearCohortSelectionClick}
-            updateSelectedCohort={this.props.updateSelectedCohort}
-            selectedCohort={this.props.selectedCohort}
-            baseCohort={this.props.baseCohort}
-            showCohortName={this.props.showCohortName}
-            telemetryHook={this.props.telemetryHook}
-          />
+          <Stack.Item>
+            <ErrorAnalysisView
+              tree={this.props.tree}
+              messages={this.props.messages}
+              disabledView={this.props.disabledView}
+              features={this.props.features}
+              selectedFeatures={this.props.selectedFeatures}
+              getTreeNodes={this.props.getTreeNodes}
+              getMatrix={this.props.getMatrix}
+              matrix={this.props.matrix}
+              matrixFeatures={this.props.matrixFeatures}
+              errorAnalysisOption={this.props.errorAnalysisOption}
+              onClearCohortSelectionClick={
+                this.props.onClearCohortSelectionClick
+              }
+              updateSelectedCohort={this.props.updateSelectedCohort}
+              selectedCohort={this.props.selectedCohort}
+              baseCohort={this.props.baseCohort}
+              showCohortName={this.props.showCohortName}
+              telemetryHook={this.props.telemetryHook}
+            />
+          </Stack.Item>
           <FeatureList
             isOpen={this.state.openFeatureList}
             onDismiss={(): void => this.setState({ openFeatureList: false })}

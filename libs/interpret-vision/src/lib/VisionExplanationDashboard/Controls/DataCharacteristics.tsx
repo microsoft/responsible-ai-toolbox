@@ -15,6 +15,8 @@ import { IVisionListItem } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import {
   defaultState,
@@ -22,7 +24,7 @@ import {
   IDataCharacteristicsProps,
   IDataCharacteristicsState,
   labelTypes,
-  processData,
+  processItems,
   stackTokens
 } from "./DataCharacteristicsHelper";
 import { DataCharacteristicsLegend } from "./DataCharacteristicsLegend";
@@ -40,19 +42,14 @@ export class DataCharacteristics extends React.Component<
   }
 
   public componentDidMount(): void {
-    const labelTypeDropdownOptions: IDropdownOption[] = [
-      { key: labelTypes.predictedY, text: labelTypes.predictedY },
-      { key: labelTypes.trueY, text: labelTypes.trueY }
-    ];
-    this.setState({
-      labelTypeDropdownOptions
-    });
-    this.processData();
+    this.processData(true);
   }
 
   public componentDidUpdate(prevProps: IDataCharacteristicsProps): void {
-    if (prevProps.data !== this.props.data) {
-      this.processData();
+    if (this.props.items !== prevProps.items) {
+      this.processData(true);
+    } else if (this.props.searchValue !== prevProps.searchValue) {
+      this.processData(false);
     }
   }
 
@@ -144,10 +141,9 @@ export class DataCharacteristics extends React.Component<
                         label={label}
                         labelType={this.state.labelType}
                         list={list}
-                        processData={this.processData}
                         renderStartIndex={this.state.renderStartIndex}
                         showBackArrow={this.state.showBackArrow}
-                        totalListLength={this.props.data.length}
+                        totalListLength={this.props.items.length}
                         onRenderCell={this.onRenderCell}
                         loadPrevItems={this.loadPrevItems}
                         loadNextItems={this.loadNextItems}
@@ -167,8 +163,12 @@ export class DataCharacteristics extends React.Component<
     );
   }
 
-  private processData = (): void => {
-    this.setState(processData(this.props.data));
+  private processData = (resetLabels: boolean): void => {
+    const filteredItems = getFilteredDataFromSearch(
+      this.props.searchValue,
+      this.props.items
+    );
+    this.setState(processItems(filteredItems, resetLabels, this.state));
   };
 
   private onRenderCell = (

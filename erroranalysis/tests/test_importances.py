@@ -3,15 +3,17 @@
 
 import time
 
-from common_utils import (create_binary_classification_dataset,
-                          create_cancer_data, create_housing_data,
-                          create_iris_data, create_models_classification,
-                          create_models_regression, create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_titanic_pipeline, replicate_dataset)
+from common_utils import replicate_dataset
 
 from erroranalysis._internal.constants import ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data, create_iris_data, create_simple_titanic_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_regressor, create_titanic_pipeline)
 
 TOL = 1e-10
 

@@ -4,14 +4,6 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_adult_census_data,
-                          create_binary_classification_dataset,
-                          create_cancer_data, create_diabetes_data,
-                          create_housing_data, create_iris_data,
-                          create_kneighbors_classifier,
-                          create_models_classification,
-                          create_models_regression, create_simple_titanic_data,
-                          create_titanic_pipeline, create_wine_data)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (ROW_INDEX, TRUE_Y, MatrixParams,
@@ -29,6 +21,14 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from rai_test_utils.datasets.tabular import (
+    create_adult_census_data, create_binary_classification_dataset,
+    create_cancer_data, create_diabetes_data, create_housing_data,
+    create_iris_data, create_simple_titanic_data, create_wine_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import (create_kneighbors_classifier,
+                                           create_titanic_pipeline)
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
@@ -331,6 +331,19 @@ class TestMatrixFilter(object):
         run_error_analyzer_on_models(X_train, y_train, X_test,
                                      y_test, feature_names, model_task,
                                      matrix_features=matrix_features)
+
+    def test_matrix_filter_titanic_object_dtype_quantile(self):
+        (X_train, X_test, y_train, y_test, numeric,
+            categorical) = create_simple_titanic_data()
+        feature_names = categorical + numeric
+        matrix_features = [numeric[0], numeric[1]]
+        clf = create_titanic_pipeline(X_train, y_train)
+        categorical_features = categorical
+        run_error_analyzer(clf, X_test, y_test, feature_names,
+                           categorical_features,
+                           matrix_features=matrix_features,
+                           quantile_binning=True,
+                           model_task=ModelTask.CLASSIFICATION)
 
 
 def run_error_analyzer_on_models(X_train,

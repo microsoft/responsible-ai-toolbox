@@ -27,6 +27,7 @@ import {
   ErrorCohort,
   ILabeledStatistic,
   ITelemetryEvent,
+  IsMulticlass,
   TelemetryLevels,
   TelemetryEventName,
   DatasetTaskType,
@@ -176,7 +177,7 @@ export class ModelOverview extends React.Component<
 
     const selectableMetrics = getSelectableMetrics(
       this.context.dataset.task_type,
-      this.context.jointDataset.getModelType() === ModelTypes.Multiclass
+      IsMulticlass(this.context.jointDataset.getModelType())
     );
 
     const columns: string[] = [
@@ -477,7 +478,11 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
+            <Pivot
+              id="modelOverviewChartPivot"
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
               {this.context.modelMetadata.modelType === ModelTypes.Binary && (
                 <PivotItem
                   headerText={

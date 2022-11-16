@@ -2,9 +2,9 @@ name: CI RAIWidgets pytest
 
 on:
   push:
-    branches: [main]
+    branches: [main, postga]
   pull_request:
-    branches: [main]
+    branches: [main, postga]
 
 jobs:
   ci-raiwidgets-pytest:

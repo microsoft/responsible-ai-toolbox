@@ -14,11 +14,11 @@ import {
 } from "@responsible-ai/causality";
 import {
   WeightVectorOption,
-  ModelTypes,
   WeightVectors,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
-  IModelAssessmentContext
+  IModelAssessmentContext,
+  IsClassifier
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -91,7 +91,7 @@ export class TabsView extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (props.modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsClassifier(props.modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     props.modelMetadata.classNames.forEach((name, index) => {
@@ -112,10 +112,9 @@ export class TabsView extends React.PureComponent<
       mapShiftErrorAnalysisOption: ErrorAnalysisOptions.TreeMap,
       mapShiftVisible: false,
       selectedFeatures: props.dataset.feature_names,
-      selectedWeightVector:
-        props.modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsClassifier(props.modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       weightVectorLabels,
       weightVectorOptions
     };
@@ -136,7 +135,7 @@ export class TabsView extends React.PureComponent<
         localization.ErrorAnalysis.Cohort.defaultLabel;
     const classNames = tabsViewStyles();
     return (
-      <Stack tokens={{ padding: "l1" }}>
+      <Stack className={classNames.stackStyle}>
         {this.props.activeGlobalTabs[0]?.key !==
           GlobalTabKeys.ErrorAnalysisTab && (
           <Stack.Item className={classNames.buttonSection}>

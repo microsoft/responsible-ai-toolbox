@@ -7,6 +7,7 @@ import {
   ModelTypes,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
+  IsMulticlass,
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName
@@ -28,7 +29,7 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
     let dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { marginRight: "20px", width: 200 }
+      dropdown: { marginRight: "20px" }
     };
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
@@ -41,7 +42,7 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     } else if (modelType === ModelTypes.Regression) {
       options.push(this.addDropdownOption(Metrics.MeanSquaredError));
       options.push(this.addDropdownOption(Metrics.MeanAbsoluteError));
-    } else if (modelType === ModelTypes.Multiclass) {
+    } else if (IsMulticlass(modelType)) {
       dropdownStyles = {
         dropdown: { marginRight: "20px", width: 235 }
       };

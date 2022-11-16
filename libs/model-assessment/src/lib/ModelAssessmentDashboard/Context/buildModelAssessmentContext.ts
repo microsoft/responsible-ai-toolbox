@@ -16,7 +16,8 @@ import {
   getModelType,
   MetricCohortStats,
   DatasetTaskType,
-  Method
+  Method,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -115,6 +116,7 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
+    onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedWhatIfIndex: undefined,
@@ -130,7 +132,9 @@ function buildModelMetadata(
       ? "regressor"
       : "classifier";
   if (props.dataset.task_type === DatasetTaskType.ImageClassification) {
-    method = "image";
+    method = "imageclassifier";
+  } else if (props.dataset.task_type === DatasetTaskType.TextClassification) {
+    method = "textclassifier";
   }
   const modelType = getModelType(
     method,
@@ -194,14 +198,20 @@ function buildModelMetadata(
     featureNamesAbridged = featureNames;
   }
   let classNames = props.dataset.class_names;
-  const classLength = getClassLength(
-    props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.dataset.probability_y
-  );
-  if (!classNames || classNames.length !== classLength) {
-    classNames = buildIndexedNames(
-      classLength,
-      localization.ErrorAnalysis.defaultClassNames
+  if (modelType !== ModelTypes.ImageMulticlass) {
+    const classLength = getClassLength(
+      props.modelExplanationData?.[0]?.precomputedExplanations,
+      props.dataset.probability_y
+    );
+    if (!classNames || classNames.length !== classLength) {
+      classNames = buildIndexedNames(
+        classLength,
+        localization.ErrorAnalysis.defaultClassNames
+      );
+    }
+  } else if (!classNames) {
+    throw new Error(
+      "Invalid input data for image classification, class names required."
     );
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(

@@ -14,7 +14,6 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  getCausalDisplayFeatureName,
   ICausalAnalysisSingleData,
   ModelAssessmentContext,
   nameof
@@ -22,6 +21,8 @@ import {
 import { localization } from "@responsible-ai/localization";
 import { isEqual } from "lodash";
 import React from "react";
+
+import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];

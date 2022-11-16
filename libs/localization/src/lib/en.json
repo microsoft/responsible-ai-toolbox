@@ -5,7 +5,11 @@
     "identityFeature": "Identity feature",
     "infoTitle": "Additional information",
     "spinButton": "Spin",
-    "editButton": "Edit"
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1"
   },
   "ChartContextMenu": {
     "viewInFullScreen": "View in full screen",
@@ -206,7 +210,8 @@
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
-      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels.",
+      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximum depth",
@@ -1394,7 +1399,17 @@
     "AddingTab": {
       "AddButtonText": "Add",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
-      "CalloutTitle": "Add component"
+      "CalloutTitle": "Add component",
+      "TabAddedMessage": {
+        "DataAnalysis": "Data analysis component added",
+        "FeatureImportances": "Feature importances component added",
+        "ErrorAnalysis": "Error analysis component added",
+        "Fairness": "Fairness component added",
+        "ModelOverview": "Model overview component added",
+        "CausalAnalysis": "Causal analysis component added",
+        "Counterfactuals": "Counterfactuals component added",
+        "Vision": "Vision data explorer component added"
+      }
     },
     "CausalAnalysis": {
       "Table": {

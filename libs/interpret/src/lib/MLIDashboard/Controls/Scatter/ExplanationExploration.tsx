@@ -9,7 +9,7 @@ import {
   DefaultButton,
   IconButton
 } from "@fluentui/react";
-import { ModelTypes, FluentUIStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles, IsClassifier } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
@@ -77,8 +77,7 @@ export class ExplanationExploration extends React.PureComponent<
       const weightContext = this.props.dashboardContext.weightContext;
       const modelType =
         this.props.dashboardContext.explanationContext.modelMetadata.modelType;
-      const includeWeightDropdown =
-        modelType === ModelTypes.Multiclass || modelType === ModelTypes.Binary;
+      const includeWeightDropdown = IsClassifier(modelType);
       let plotProp = ScatterUtils.populatePlotlyProps(
         projectedData,
         _.cloneDeep(this.plotlyProps)

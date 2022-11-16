@@ -59,7 +59,7 @@ export function describeTabularDataView(
       });
       it("should select the row", () => {
         if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
-          cy.get(Locators.IFICollapseButton).eq(1).click(); // expand correct predictions
+          cy.get(Locators.IFICollapseButton).eq(0).click(); // expand correct predictions
         }
         selectRow(
           "Index",
