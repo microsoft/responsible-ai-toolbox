@@ -33,6 +33,7 @@ export * from "./lib/util/generateRoute";
 export * from "./lib/util/getRandomId";
 export * from "./lib/util/getCohortFilterCount";
 export * from "./lib/util/getDependencyChartOptions";
+export * from "./lib/util/getBubbleChartOptions";
 export * from "./lib/util/IGenericChartProps";
 export * from "./lib/util/ImageStatisticsUtils";
 export * from "./lib/util/initializeOfficeFabric";

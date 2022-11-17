@@ -5,7 +5,7 @@ import { getTheme, DefaultButton, Stack } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
-  JointDataset,
+  // JointDataset,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -13,14 +13,14 @@ import {
   ModelAssessmentContext,
   BasicHighChart,
   ITelemetryEvent,
-  TelemetryLevels,
-  TelemetryEventName
+  // TelemetryLevels,
+  // TelemetryEventName,
+  getBubbleChartOptions
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 
-import { generatePlotlyProps } from "../util/generatePlotlyProps";
-import { getCounterfactualChartOptions } from "../util/getCounterfactualChartOptions";
+// import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
@@ -75,13 +75,13 @@ export class CounterfactualChart extends React.PureComponent<
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
 
-    const plotlyProps = generatePlotlyProps(
-      this.context.jointDataset,
-      this.props.chartProps,
-      this.context.selectedErrorCohort.cohort,
-      this.props.selectedPointsIndexes,
-      this.props.customPoints
-    );
+    // const plotlyProps = generatePlotlyProps(
+    //   this.context.jointDataset,
+    //   this.props.chartProps,
+    //   this.context.selectedErrorCohort.cohort,
+    //   this.props.selectedPointsIndexes,
+    //   this.props.customPoints
+    // );
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -159,10 +159,7 @@ export class CounterfactualChart extends React.PureComponent<
               </Stack.Item>
               <Stack.Item className={classNames.mainChartContainer}>
                 <BasicHighChart
-                  configOverride={getCounterfactualChartOptions(
-                    plotlyProps,
-                    this.selectPointFromChart
-                  )}
+                  configOverride={getBubbleChartOptions()}
                   theme={getTheme()}
                   id="CounterfactualChart"
                 />
@@ -227,18 +224,18 @@ export class CounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: false });
   };
 
-  private selectPointFromChart = (data: any): void => {
-    const index = data.customdata[JointDataset.IndexLabel];
-    this.props.setTemporaryPointToCopyOfDatasetPoint(index);
-    this.props.toggleSelectionOfPoint(index);
-    this.logTelemetryEvent(
-      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
-    );
-  };
-  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
-    this.props.telemetryHook?.({
-      level: TelemetryLevels.ButtonClick,
-      type: eventName
-    });
-  };
+  // private selectPointFromChart = (data: any): void => {
+  //   const index = data.customdata[JointDataset.IndexLabel];
+  //   this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+  //   this.props.toggleSelectionOfPoint(index);
+  //   this.logTelemetryEvent(
+  //     TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+  //   );
+  // };
+  // private logTelemetryEvent = (eventName: TelemetryEventName): void => {
+  //   this.props.telemetryHook?.({
+  //     level: TelemetryLevels.ButtonClick,
+  //     type: eventName
+  //   });
+  // };
 }
