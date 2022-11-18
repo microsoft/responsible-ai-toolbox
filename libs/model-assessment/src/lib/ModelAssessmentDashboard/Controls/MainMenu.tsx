@@ -71,6 +71,7 @@ export class MainMenu extends React.PureComponent<
         iconProps: settingsIcon,
         id: "cohortSettings",
         key: "cohortSettings",
+        ariaLabel: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
@@ -79,6 +80,7 @@ export class MainMenu extends React.PureComponent<
         iconProps: navigationIcon,
         id: "dashboardSettings",
         key: "dashboardSettings",
+        ariaLabel: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
       }
