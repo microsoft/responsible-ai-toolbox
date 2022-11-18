@@ -14,7 +14,7 @@ import {
   IFilter,
   FilterMethods,
   CohortSource,
-  ErrorCohort,
+  Cohort,
   ErrorCohortStats,
   getRandomId,
   Metrics,
@@ -708,11 +708,11 @@ export class TreeViewRenderer extends React.PureComponent<
       }
       return;
     }
-    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+    const filtersRelabeled = Cohort.getLabeledFilters(
       this.props.baseCohort.cohort.filters,
       this.props.baseCohort.jointDataset
     );
-    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );

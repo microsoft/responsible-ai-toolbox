@@ -12,10 +12,12 @@ from typing import Any, Optional
 
 import pandas as pd
 
+import responsibleai
 from responsibleai._internal.constants import Metadata
 
 _DATA = 'data'
 _DTYPES = 'dtypes'
+_RAIVERSION = "rai_version"
 _TRAIN = 'train'
 _TEST = 'test'
 _MODEL = Metadata.MODEL
@@ -154,6 +156,11 @@ class RAIBaseInsights(ABC):
                             json.dumps(dtypes))
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
                             self.test.to_json(orient='split'))
+
+        self._write_to_file(Path(path) /
+                            (_RAIVERSION + _JSON_EXTENSION),
+                            json.dumps(
+                                {"responsibleai": responsibleai.__version__}))
 
     @abstractmethod
     def _save_metadata(self, path):
