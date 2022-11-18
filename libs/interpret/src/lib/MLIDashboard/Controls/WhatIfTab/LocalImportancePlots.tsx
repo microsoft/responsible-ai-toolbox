@@ -155,13 +155,11 @@ export class LocalImportancePlots extends React.Component<
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
-              <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.formatString(
+              <Slider
+                label={localization.formatString(
                   localization.Interpret.GlobalTab.topAtoB,
                   this.state.topK
                 )}
-              </Text>
-              <Slider
                 className={classNames.startingK}
                 ariaLabel={
                   localization.Interpret.AggregateImportance.topKFeatures
@@ -197,6 +195,7 @@ export class LocalImportancePlots extends React.Component<
                       options={featureImportanceSortOptions}
                       selectedKey={this.state.sortingSeriesIndex}
                       onChange={this.setSortIndex}
+                      ariaLabel={localization.Interpret.GlobalTab.sortBy}
                     />
                   </Stack.Item>
                   <Stack.Item className={classNames.absoluteValueToggle}>
