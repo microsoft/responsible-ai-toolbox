@@ -5,6 +5,7 @@ import { localization } from "@responsible-ai/localization";
 import memoize from "memoize-one";
 
 import { IPrecomputedExplanations } from "../Interfaces/ExplanationInterfaces";
+import { IDataset } from "../Interfaces/IDataset";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
 import { IGlobalExplanationProps } from "../Interfaces/IGlobalExplanationProps";
 import { Method } from "../Interfaces/IModelExplanationData";
@@ -124,4 +125,11 @@ export function getModelType(
     default:
       return ModelTypes.Multiclass;
   }
+}
+
+export function ifEnableLargeData(dataset: IDataset): boolean {
+  if (dataset?.is_large_data_scenario && dataset?.use_entire_test_data) {
+    return dataset.is_large_data_scenario && dataset.use_entire_test_data;
+  }
+  return false;
 }
