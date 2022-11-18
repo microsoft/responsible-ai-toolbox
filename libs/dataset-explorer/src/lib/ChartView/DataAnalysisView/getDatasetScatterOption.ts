@@ -24,6 +24,12 @@ export function getDatasetScatterOption(
         }
       }
     },
-    series: dataSeries
+    series: dataSeries,
+    xAxis: {
+      type: chartProps?.xAxis.type
+    },
+    yAxis: {
+      type: chartProps?.yAxis.type
+    }
   };
 }
