@@ -1405,7 +1405,8 @@
         "ModelOverview": "Model overview component added",
         "CausalAnalysis": "Causal analysis component added",
         "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added"
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
       }
     },
     "CausalAnalysis": {

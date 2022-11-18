@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import List, Optional, Dict, Any
 
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -11,7 +11,8 @@ class FeatureMetadata:
     def __init__(self, identity_feature_name: Optional[str] = None,
                  datetime_features: Optional[List[str]] = None,
                  categorical_features: Optional[List[str]] = None,
-                 dropped_features: Optional[List[str]] = None):
+                 dropped_features: Optional[List[str]] = None,
+                 forecasting_grains: Optional[List[str]] = None):
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
@@ -28,10 +29,12 @@ class FeatureMetadata:
                                  the user during training of their model.
         :type dropped_features: Optional[List[str]]
         """
+        
         self.identity_feature_name = identity_feature_name
         self.datetime_features = datetime_features
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
+        self.forecasting_grains = forecasting_grains
         if self.datetime_features is not None:
             warnings.warn('datetime_features are not in use currently.')
         if self.categorical_features is not None:
@@ -55,6 +58,16 @@ class FeatureMetadata:
                     ' in user features.'.format(
                         self.identity_feature_name))
 
+    def validate_feature_metadata_with_forecasting_grains(
+        self, test, train):
+        if self.forecasting_grains is not None:
+            if not set(self.forecasting_grains).issubset(set(test.columns)) \
+            or not set(self.forecasting_grains).issubset(set(train.columns)):
+                raise UserConfigValidationException(
+                    'One or more of forecasting_grains {0} are not present'
+                    ' in test or train datasets'.format(
+                        ' '.join(self.forecasting_grains)))     
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert the feature metadata to a dictionary.
 
@@ -65,7 +78,8 @@ class FeatureMetadata:
             'identity_feature_name': self.identity_feature_name,
             'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
-            'dropped_features': self.dropped_features
+            'dropped_features': self.dropped_features,
+            'forecasting_grains': self.forecasting_grains
         }
 
     def __eq__(self, other_feature_metadata) -> bool:
@@ -84,4 +98,6 @@ class FeatureMetadata:
             self.categorical_features == \
             other_feature_metadata.categorical_features and \
             self.dropped_features == \
-            other_feature_metadata.dropped_features
+            other_feature_metadata.dropped_features and \
+            self.forecasting_grains == \
+            other_feature_metadata.forecasting_grains

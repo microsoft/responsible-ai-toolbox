@@ -83,3 +83,8 @@ class ResponsibleAIDashboard(Dashboard):
             data = request.get_json(force=True)
             return jsonify(self.input.get_exp(data))
         self.add_url_rule(get_exp, '/get_exp', methods=["POST"])
+
+        def forecast():
+            data = request.get_json(force=True)
+            return jsonify(self.input.forecast(data))
+        self.add_url_rule(forecast, '/forecast', methods=["POST"])

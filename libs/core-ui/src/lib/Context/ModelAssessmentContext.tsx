@@ -62,6 +62,10 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;

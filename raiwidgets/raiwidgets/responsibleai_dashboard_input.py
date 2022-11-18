@@ -39,7 +39,6 @@ class ResponsibleAIDashboardInput:
         model = analysis.model
         self._is_classifier = is_classifier(model)
         self.dashboard_input = analysis.get_data()
-
         self._validate_cohort_list(cohort_list)
         if cohort_list is not None:
             # Add cohort_list to dashboard_input
@@ -283,3 +282,78 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
+
+    def forecast(self, post_data):
+        try:
+            filters = post_data[0]
+            # do we need this? ask ilya
+            composite_filters = post_data[1]
+            # composite_filters = post_data[2]
+            transformations = post_data[2]
+            # op, feature, value = post_data[2:]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+            
+            # transforming with pandas
+            for op, feature, value in transformations:
+                func = None
+                if op == "Add":
+                    func = lambda x: x + float(value)
+                elif op == "Subtract":
+                    func = lambda x: x - float(value)
+                elif op == "Multiply":
+                    func = lambda x: x * float(value)
+                elif op == "Divide":
+                    func = lambda x: x / float(value)
+                else:
+                    raise Exception()
+
+                filtered_data_df[feature] = filtered_data_df[feature].map(func)
+
+            prediction = convert_to_list(
+                self._analysis.model.predict(filtered_data_df), EXP_VIZ_ERR_MSG)
+            return {
+                WidgetRequestResponseConstants.data: prediction
+            }
+            return {
+                WidgetRequestResponseConstants.data: ["post_data", *post_data, "predictions", *prediction]
+            }
+            return {
+                WidgetRequestResponseConstants.data: post_data
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate forecast for cohort, "
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+
+        # try:
+        #     data = pd.DataFrame(
+        #         data, columns=self.dashboard_input.dataset.feature_names)
+        #     if (self._is_classifier):
+        #         prediction = convert_to_list(
+        #             self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
+        #     else:
+        #         prediction = convert_to_list(
+        #             self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
+        #     return {
+        #         WidgetRequestResponseConstants.data: prediction
+        #     }
+        # except Exception as e:
+        #     print(e)
+        #     traceback.print_exc()
+        #     e_str = _format_exception(e)
+        #     return {
+        #         WidgetRequestResponseConstants.error: "Model threw exception"
+        #         " while predicting..."
+        #         "inner error: {}".format(e_str),
+        #         WidgetRequestResponseConstants.data: []
+        #     }

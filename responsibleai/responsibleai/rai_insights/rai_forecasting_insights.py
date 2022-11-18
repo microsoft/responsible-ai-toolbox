@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-"""Defines the RAIInsights class."""
+"""Defines the RAIForecastingInsights class."""
 
 import json
 import pickle
@@ -16,16 +16,11 @@ from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
-from responsibleai._interfaces import Dataset, RAIInsightsData
+from responsibleai._interfaces import Dataset, RAIForecastingInsightsData
 from responsibleai._internal.constants import ManagerNames, Metadata
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
-from responsibleai.managers.causal_manager import CausalManager
-from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.data_balance_manager import DataBalanceManager
-from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
-from responsibleai.managers.explainer_manager import ExplainerManager
-from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _PREDICTIONS = 'predictions'
@@ -57,21 +52,21 @@ _MAX_VALUE = 'max_value'
 _MODEL = "model"
 
 
-class RAIInsights(RAIBaseInsights):
+class RAIForecastingInsights(RAIBaseInsights):
     """Defines the top-level Model Analysis API.
-    Use RAIInsights to analyze errors, explain the most important
+    Use RAIForecastingInsights to analyze errors, explain the most important
     features, compute counterfactuals and run causal analysis in a
     single API.
     """
 
+    # take in also grain columns
     def __init__(self, model: Optional[Any], train: pd.DataFrame,
-                 test: pd.DataFrame, target_column: str, task_type: str,
+                 test: pd.DataFrame, target_column: str,
                  categorical_features: Optional[List[str]] = None,
-                 classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
                  feature_metadata: Optional[FeatureMetadata] = None):
-        """Creates an RAIInsights object.
+        """Creates an RAIForecastingInsights object.
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
             or function that accepts a 2d ndarray.
@@ -82,13 +77,8 @@ class RAIInsights(RAIBaseInsights):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param task_type: The task to run, can be `classification` or
-            `regression`.
-        :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
-        :param classes: The class labels in the training dataset
-        :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
             methods for custom model serialization.
             The save method writes the model to file given a parent directory.
@@ -104,53 +94,57 @@ class RAIInsights(RAIBaseInsights):
         :type feature_metadata: FeatureMetadata
         """
         categorical_features = categorical_features or []
+        self._is_true_y_present = self._check_true_y_present(target_column, test)
+        self.task_type = "forecasting"
         self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type,
+            target_column=target_column,
             categorical_features=categorical_features,
-            classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test,
             feature_metadata=feature_metadata)
-        self._classes = RAIInsights._get_classes(
-            task_type=task_type,
-            train=train,
-            target_column=target_column,
-            classes=classes
-        )
-        self._feature_columns = \
-            test.drop(columns=[target_column]).columns.tolist()
-        self._feature_ranges = RAIInsights._get_feature_ranges(
+        self._classes = None
+        self._test_without_true_y = test if not self._is_true_y_present \
+            else test.drop(columns=[target_column])
+
+        self._feature_columns = self._test_without_true_y.columns.tolist()
+
+        self._feature_ranges = RAIForecastingInsights._get_feature_ranges(
             test=test, categorical_features=categorical_features,
             feature_columns=self._feature_columns)
+            
         self._feature_metadata = feature_metadata
 
         self.categorical_features = categorical_features
+
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
                 all_feature_names=self._feature_columns,
                 categorical_features=self.categorical_features,
-                dataset=test.drop(columns=[target_column]))
-        
-        super(RAIInsights, self).__init__(
-            model, train, test, target_column, task_type,
-            serializer)
+                dataset=self._test_without_true_y)
 
-        self._try_add_data_balance()
+        self.datetime_index = test.index
+
+        super(RAIForecastingInsights, self).__init__(
+            model, train, test, target_column, self.task_type,
+            serializer)
 
         if model is not None:
             # Cache predictions of the model
             self.predict_output = model.predict(
-                test.drop(columns=[target_column]))
+                self._test_without_true_y)
             if hasattr(model, SKLearn.PREDICT_PROBA):
                 self.predict_proba_output = model.predict_proba(
-                    test.drop(columns=[target_column]))
+                    self._test_without_true_y)
             else:
                 self.predict_proba_output = None
         else:
             self.predict_output = None
             self.predict_proba_output = None
+
+    def _check_true_y_present(self, target_column, test):
+        return target_column in list(test.columns)
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -158,68 +152,47 @@ class RAIInsights(RAIBaseInsights):
         Initialized the causal, counterfactual, error analysis
         and explainer managers.
         """
-        self._causal_manager = CausalManager(
-            self.train, self.test, self.target_column,
-            self.task_type, self.categorical_features)
 
-        self._counterfactual_manager = CounterfactualManager(
-            model=self.model, train=self.train, test=self.test,
-            target_column=self.target_column, task_type=self.task_type,
-            categorical_features=self.categorical_features)
+        # self._causal_manager = CausalManager(
+        #     self.train, self.test, self.target_column,
+        #     self.task_type, self.categorical_features)
+
+        # self._counterfactual_manager = CounterfactualManager(
+        #     model=self.model, train=self.train, test=self.test,
+        #     target_column=self.target_column, task_type=self.task_type,
+        #     categorical_features=self.categorical_features)
 
         self._data_balance_manager = DataBalanceManager(
             train=self.train, test=self.test, target_column=self.target_column,
             classes=self._classes, task_type=self.task_type)
 
-        self._error_analysis_manager = ErrorAnalysisManager(
-            self.model, self.test, self.target_column,
-            self._classes,
-            self.categorical_features)
+        # self._error_analysis_manager = ErrorAnalysisManager(
+        #     self.model, self.test, self.target_column,
+        #     self._classes,
+        #     self.categorical_features)
 
-        self._explainer_manager = ExplainerManager(
-            self.model, self.train, self.test,
-            self.target_column,
-            self._classes,
-            categorical_features=self.categorical_features)
+        # self._explainer_manager = ExplainerManager(
+        #     self.model, self.train, self.test,
+        #     self.target_column,
+        #     self._classes,
+        #     categorical_features=self.categorical_features)
 
-        self._managers = [self._causal_manager,
-                          self._counterfactual_manager,
+        self._managers = [
+            # self._causal_manager,
+                        #   self._counterfactual_manager,
                           self._data_balance_manager,
-                          self._error_analysis_manager,
-                          self._explainer_manager]
-
-    @staticmethod
-    def _get_classes(task_type, train, target_column, classes):
-        if task_type == ModelTask.CLASSIFICATION:
-            if classes is None:
-                classes = train[target_column].unique()
-                # sort the classes after calling unique in numeric case
-                classes.sort()
-                return classes
-            else:
-                return classes
-        else:
-            return None
-
-    def _try_add_data_balance(self):
-        """
-        Add data balance measures to be computed on categorical features
-        if it is a classification task.
-        """
-        if self.task_type == ModelTask.CLASSIFICATION and \
-                len(self.categorical_features) > 0 and \
-                self._classes is not None:
-            self._data_balance_manager.add(
-                cols_of_interest=self.categorical_features)
+                        #   self._error_analysis_manager,
+                        #   self._explainer_manager
+                          ]
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
-            target_column: str, task_type: str,
-            categorical_features: List[str], classes: np.ndarray,
+            target_column: str,
+            categorical_features: List[str],
             serializer,
             maximum_rows_for_test: int,
             feature_metadata: Optional[FeatureMetadata] = None):
-        """Validate the inputs for the RAIInsights constructor.
+        """Validate the inputs for the RAIForecastingInsights constructor.
 
         :param model: The model to compute RAI insights for.
             A model that implements sklearn.predict or sklearn.predict_proba
@@ -251,15 +224,6 @@ class RAIInsights(RAIBaseInsights):
                                  of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-
-        valid_tasks = [
-            ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value
-        ]
-        if task_type not in valid_tasks:
-            message = (f"Unsupported task type '{task_type}'. "
-                       f"Should be one of {valid_tasks}")
-            raise UserConfigValidationException(message)
 
         if model is None:
             warnings.warn(
@@ -303,15 +267,16 @@ class RAIInsights(RAIBaseInsights):
                         test.shape[0], maximum_rows_for_test)
                 )
 
-            if len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)) != 0:
+
+            if (len(set(train.columns) - set(test.columns)) != 0 or \
+                    len(set(test.columns) - set(train.columns)) != 0) and \
+                        self._is_true_y_present:
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
-            if target_column not in list(train.columns) or \
-                    target_column not in list(test.columns):
+            if target_column not in list(train.columns):
                 raise UserConfigValidationException(
-                    'Target name {0} not present in train/test data'.format(
+                    'Target name {0} not present in train data'.format(
                         target_column)
                 )
 
@@ -361,30 +326,16 @@ class RAIInsights(RAIBaseInsights):
                         string_features_set - set(categorical_features))
                 )
 
-            if classes is not None and task_type == \
-                    ModelTask.CLASSIFICATION:
-                if len(set(train[target_column].unique()) -
-                       set(classes)) != 0 or \
-                        len(set(classes) -
-                            set(train[target_column].unique())) != 0:
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (train data) do not match')
-
-                if len(set(test[target_column].unique()) -
-                       set(classes)) != 0 or \
-                        len(set(classes) -
-                            set(test[target_column].unique())) != 0:
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (test data) do not match')
-
             if model is not None:
                 # Pick one row from train and test data
                 small_train_data = train.iloc[0:1].drop(
                     columns=[target_column])
-                small_test_data = test.iloc[0:1].drop(
-                    columns=[target_column])
+
+                if self._is_true_y_present:
+                    small_test_data = test.iloc[0:1].drop(
+                        columns=[target_column])
+                else:
+                    small_test_data = test.iloc[0:1]
 
                 small_train_features_before = list(small_train_data.columns)
 
@@ -401,26 +352,11 @@ class RAIInsights(RAIBaseInsights):
                                              small_train_data,
                                              SKLearn.PREDICT)
 
-                # Run predict_proba() of the model
-                if task_type == ModelTask.CLASSIFICATION:
-                    try:
-                        model.predict_proba(small_train_data)
-                        model.predict_proba(small_test_data)
-                    except Exception:
-                        raise UserConfigValidationException(
-                            'The model passed cannot be used for'
-                            ' getting predictions via predict_proba()'
-                        )
-                self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT_PROBA)
-
-                if task_type == ModelTask.REGRESSION:
-                    if hasattr(model, SKLearn.PREDICT_PROBA):
-                        raise UserConfigValidationException(
-                            'The regression model'
-                            'provided has a predict_proba function. '
-                            'Please check the task_type.')
+                if hasattr(model, SKLearn.PREDICT_PROBA):
+                    raise UserConfigValidationException(
+                        'The regression model'
+                        'provided has a predict_proba function. '
+                        'Please check the task_type.')
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
@@ -435,6 +371,10 @@ class RAIInsights(RAIBaseInsights):
 
             feature_metadata.validate_feature_metadata_with_user_features(
                 list(train.columns))
+            feature_metadata.validate_feature_metadata_with_forecasting_grains(
+                test,
+                train
+            )
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -457,37 +397,37 @@ class RAIInsights(RAIBaseInsights):
                  'predict function is defined correctly.').format(function)
             )
 
-    @property
-    def causal(self) -> CausalManager:
-        """Get the causal manager.
-        :return: The causal manager.
-        :rtype: CausalManager
-        """
-        return self._causal_manager
+    # @property
+    # def causal(self) -> CausalManager:
+    #     """Get the causal manager.
+    #     :return: The causal manager.
+    #     :rtype: CausalManager
+    #     """
+    #     return self._causal_manager
 
-    @property
-    def counterfactual(self) -> CounterfactualManager:
-        """Get the counterfactual manager.
-        :return: The counterfactual manager.
-        :rtype: CounterfactualManager
-        """
-        return self._counterfactual_manager
+    # @property
+    # def counterfactual(self) -> CounterfactualManager:
+    #     """Get the counterfactual manager.
+    #     :return: The counterfactual manager.
+    #     :rtype: CounterfactualManager
+    #     """
+    #     return self._counterfactual_manager
 
-    @property
-    def error_analysis(self) -> ErrorAnalysisManager:
-        """Get the error analysis manager.
-        :return: The error analysis manager.
-        :rtype: ErrorAnalysisManager
-        """
-        return self._error_analysis_manager
+    # @property
+    # def error_analysis(self) -> ErrorAnalysisManager:
+    #     """Get the error analysis manager.
+    #     :return: The error analysis manager.
+    #     :rtype: ErrorAnalysisManager
+    #     """
+    #     return self._error_analysis_manager
 
-    @property
-    def explainer(self) -> ExplainerManager:
-        """Get the explainer manager.
-        :return: The explainer manager.
-        :rtype: ExplainerManager
-        """
-        return self._explainer_manager
+    # @property
+    # def explainer(self) -> ExplainerManager:
+    #     """Get the explainer manager.
+    #     :return: The explainer manager.
+    #     :rtype: ExplainerManager
+    #     """
+    #     return self._explainer_manager
 
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False):
@@ -503,13 +443,15 @@ class RAIInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
+
+        true_y = self.predict_output if not self._is_true_y_present else self.test[self.target_column]
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=self.test.drop(columns=[self.target_column]),
-            features=self.test.drop(columns=[self.target_column]).columns,
+            dataset=self._test_without_true_y,
+            features=self._test_without_true_y.columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
-            true_y=self.test[self.target_column],
+            true_y=true_y,
             pred_y=self.predict_output,
             model_task=self.task_type,
             classes=self._classes)
@@ -520,23 +462,20 @@ class RAIInsights(RAIBaseInsights):
             include_original_columns_only=include_original_columns_only)
 
     def get_data(self):
-        """Get all data as RAIInsightsData object
+        """Get all data as RAIForecastingInsightsData object
 
         :return: Model Analysis Data
-        :rtype: RAIInsightsData
+        :rtype: RAIForecastingInsightsData
         """
-        data = RAIInsightsData()
+        data = RAIForecastingInsightsData()
         data.dataset = self._get_dataset()
-        data.modelExplanationData = self.explainer.get_data()
-        data.errorAnalysisData = self.error_analysis.get_data()
-        data.causalAnalysisData = self.causal.get_data()
-        data.counterfactualData = self.counterfactual.get_data()
         return data
 
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
         dashboard_dataset.categorical_features = self.categorical_features
+        dashboard_dataset.is_forecasting_true_y = self._is_true_y_present
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
 
@@ -552,8 +491,7 @@ class RAIInsights(RAIBaseInsights):
         predicted_y = None
         feature_length = None
 
-        dataset: pd.DataFrame = self.test.drop(
-            [self.target_column], axis=1)
+        dataset: pd.DataFrame = self._test_without_true_y
 
         if isinstance(dataset, pd.DataFrame) and hasattr(dataset, 'columns'):
             self._dataframeColumns = dataset.columns
@@ -574,11 +512,8 @@ class RAIInsights(RAIBaseInsights):
             except Exception as ex:
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
+
         if predicted_y is not None:
-            if(self.task_type == "classification" and
-                    dashboard_dataset.class_names is not None):
-                predicted_y = [dashboard_dataset.class_names.index(
-                    y) for y in predicted_y]
             dashboard_dataset.predicted_y = predicted_y
         row_length = 0
 
@@ -595,14 +530,13 @@ class RAIInsights(RAIBaseInsights):
                                  " initialize the dashboard without passing a"
                                  " dataset.")
             dashboard_dataset.features = list_dataset
+
+        # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
+        dashboard_dataset.index = convert_to_list(self.test.index.strftime("%Y-%m-%d"))
             
-        true_y = self.test[self.target_column]
+        true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
-            if(self.task_type == "classification" and
-               dashboard_dataset.class_names is not None):
-                true_y = [dashboard_dataset.class_names.index(
-                    y) for y in true_y]
             dashboard_dataset.true_y = convert_to_list(true_y)
 
         features = dataset.columns
@@ -615,6 +549,7 @@ class RAIInsights(RAIBaseInsights):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
+
         if is_classifier(self.model) and dataset is not None:
             try:
                 probability_y = self.model.predict_proba(dataset)
@@ -633,7 +568,7 @@ class RAIInsights(RAIBaseInsights):
     def _save_predictions(self, path):
         """Save the predict() and predict_proba() output.
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIForecastingInsights to.
         :type path: str
         """
         prediction_output_path = Path(path) / _PREDICTIONS
@@ -655,7 +590,7 @@ class RAIInsights(RAIBaseInsights):
         """Save the metadata like target column, categorical features,
            task type and the classes (if any).
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIForecastingInsights to.
         :type path: str
         """
         top_dir = Path(path)
@@ -701,8 +636,8 @@ class RAIInsights(RAIBaseInsights):
     def _load_metadata(inst, path):
         """Load the metadata.
 
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
+        :param inst: RAIForecastingInsights object instance.
+        :type inst: RAIForecastingInsights
         :param path: The directory path to metadata location.
         :type path: str
         """
@@ -719,12 +654,7 @@ class RAIInsights(RAIBaseInsights):
         else:
             classes = meta[_CLASSES]
 
-        inst.__dict__['_' + _CLASSES] = RAIInsights._get_classes(
-            task_type=meta[_TASK_TYPE],
-            train=inst.__dict__[_TRAIN],
-            target_column=meta[_TARGET_COLUMN],
-            classes=classes
-        )
+        inst.__dict__['_' + _CLASSES] = None
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
@@ -771,41 +701,33 @@ class RAIInsights(RAIBaseInsights):
                 _PREDICT + _JSON_EXTENSION), 'r') as file:
             predict_output = json.load(file)
         inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
-
-        if inst.__dict__[_TASK_TYPE] == ModelTask.CLASSIFICATION:
-            with open(prediction_output_path / (
-                    _PREDICT_PROBA + _JSON_EXTENSION), 'r') as file:
-                predict_proba_output = json.load(file)
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = np.array(
-                predict_proba_output)
-        else:
-            inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+        inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
 
     @staticmethod
     def load(path):
-        """Load the RAIInsights from the given path.
+        """Load the RAIForecastingInsights from the given path.
 
-        :param path: The directory path to load the RAIInsights from.
+        :param path: The directory path to load the RAIForecastingInsights from.
         :type path: str
-        :return: The RAIInsights object after loading.
-        :rtype: RAIInsights
+        :return: The RAIForecastingInsights object after loading.
+        :rtype: RAIForecastingInsights
         """
-        # create the RAIInsights without any properties using the __new__
+        # create the RAIForecastingInsights without any properties using the __new__
         # function, similar to pickle
-        inst = RAIInsights.__new__(RAIInsights)
+        inst = RAIForecastingInsights.__new__(RAIForecastingInsights)
 
         manager_map = {
-            ManagerNames.CAUSAL: CausalManager,
-            ManagerNames.COUNTERFACTUAL: CounterfactualManager,
+            # ManagerNames.CAUSAL: CausalManager,
+            # ManagerNames.COUNTERFACTUAL: CounterfactualManager,
             ManagerNames.DATA_BALANCE: DataBalanceManager,
-            ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
-            ManagerNames.EXPLAINER: ExplainerManager,
+            # ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
+            # ManagerNames.EXPLAINER: ExplainerManager,
         }
 
         # load current state
         RAIBaseInsights._load(path, inst, manager_map,
-                              RAIInsights._load_metadata)
+                              RAIForecastingInsights._load_metadata)
 
-        RAIInsights._load_predictions(inst, path)
+        RAIForecastingInsights._load_predictions(inst, path)
 
         return inst

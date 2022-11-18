@@ -12,3 +12,4 @@ class ModelTask(str, Enum):
 
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    FORECASTING = 'forecasting'

@@ -34,6 +34,7 @@ import {
   MatrixFilter,
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
+import { ForecastingDashboard as ForecastingTab } from "@responsible-ai/forecasting";
 import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -118,7 +119,10 @@ export class TabsView extends React.PureComponent<
       weightVectorLabels,
       weightVectorOptions
     };
-    if (this.props.requestImportances) {
+    if (
+      this.props.requestImportances &&
+      this.props.dataset.is_forecasting_true_y === undefined
+    ) {
       this.props
         .requestImportances([], new AbortController().signal)
         .then((result) => {
@@ -180,6 +184,16 @@ export class TabsView extends React.PureComponent<
                     />
                   </>
                 )}
+              {t.key === GlobalTabKeys.ForecastingTab && (
+                <>
+                  <div className={classNames.sectionHeader}>
+                    <Text variant={"xxLarge"}>What-if Analysis</Text>
+                  </div>
+                  <ForecastingTab
+                    baseErrorCohortName={this.props.baseCohort.cohort.name}
+                  />
+                </>
+              )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>

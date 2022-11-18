@@ -6,4 +6,5 @@ export interface IFeatureMetaData {
   datetime_features?: string[];
   categorical_features?: string[];
   dropped_features?: string[];
+  forecasting_grains?: string[];
 }

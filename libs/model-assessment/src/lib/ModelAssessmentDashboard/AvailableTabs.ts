@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDropdownOption } from "@fluentui/react";
+import { DatasetTaskType } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
@@ -21,7 +22,12 @@ export function getAvailableTabs(
       text: localization.ModelAssessment.ComponentNames.ErrorAnalysis
     });
   }
-
+  if (props.dataset.task_type === DatasetTaskType.Forecasting) {
+    availableTabs.push({
+      key: GlobalTabKeys.ForecastingTab,
+      text: "Forecasting"
+    });
+  }
   if (props.dataset.images) {
     availableTabs.push({
       key: GlobalTabKeys.VisionTab,

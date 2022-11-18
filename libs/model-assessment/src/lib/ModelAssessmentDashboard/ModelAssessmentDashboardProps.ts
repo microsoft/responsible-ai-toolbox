@@ -70,7 +70,10 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<IHighchartBoxData>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
-
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness

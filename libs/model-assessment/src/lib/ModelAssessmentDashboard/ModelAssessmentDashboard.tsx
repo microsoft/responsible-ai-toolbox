@@ -79,6 +79,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestExp: this.props.requestExp,
+          requestForecast: this.props.requestForecast,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,

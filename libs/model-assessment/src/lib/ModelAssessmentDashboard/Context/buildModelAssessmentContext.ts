@@ -49,6 +49,7 @@ export function buildInitialModelAssessmentContext(
       props.modelExplanationData[0].precomputedExplanations
         .localFeatureImportance;
   }
+
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
     featureMetaData: props.dataset.feature_metadata,
@@ -56,7 +57,9 @@ export function buildInitialModelAssessmentContext(
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
-    trueY: props.dataset.true_y
+    trueY: props.dataset.is_forecasting_true_y
+      ? props.dataset.true_y
+      : undefined
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations

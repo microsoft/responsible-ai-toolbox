@@ -8,7 +8,8 @@ export enum DatasetTaskType {
   Regression = "regression",
   Classification = "classification",
   ImageClassification = "image_classification",
-  TextClassification = "text_classification"
+  TextClassification = "text_classification",
+  Forecasting = "forecasting"
 }
 
 export interface IDataset {
@@ -24,6 +25,8 @@ export interface IDataset {
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
   images?: string[];
+  index?: string[];
+  is_forecasting_true_y?: boolean;
 }
 
 // TODO Remove DatasetSummary when possible
