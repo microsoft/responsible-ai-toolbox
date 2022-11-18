@@ -399,17 +399,20 @@ def run_error_analyzer(model,
         features = [feature_names[0], feature_names[1]]
     else:
         features = matrix_features
+
+    # Validate compute_matrix_on_dataset() output
     matrix = error_analyzer.compute_matrix(features,
                                            filters,
                                            composite_filters,
                                            quantile_binning=quantile_binning,
                                            num_bins=num_bins)
-    validation_data = X_test
+    validation_data = X_test.copy()
+    y_test_validation = y_test
     if filters is not None or composite_filters is not None:
         validation_data = filter_from_cohort(error_analyzer,
                                              filters,
                                              composite_filters)
-        y_test = validation_data[TRUE_Y]
+        y_test_validation = validation_data[TRUE_Y]
         validation_data = validation_data.drop(columns=[TRUE_Y, ROW_INDEX])
         if not isinstance(X_test, pd.DataFrame):
             validation_data = validation_data.values
@@ -419,8 +422,39 @@ def run_error_analyzer(model,
                                                metric,
                                                model,
                                                validation_data,
-                                               y_test)
+                                               y_test_validation)
     validate_matrix(matrix,
+                    expected_count,
+                    expected_error,
+                    features,
+                    metric=metric)
+
+    # Validate compute_matrix_on_dataset() output
+    dataset = X_test.copy()
+    if not isinstance(dataset, pd.DataFrame):
+        dataset = pd.DataFrame(data=dataset, columns=feature_names)
+    dataset[TRUE_Y] = y_test
+    dataset[ROW_INDEX] = np.arange(0, len(y_test))
+
+    new_matrix = error_analyzer.compute_matrix_on_dataset(
+        features, dataset,
+        quantile_binning=quantile_binning,
+        num_bins=num_bins)
+    expected_count = len(dataset)
+    metric = error_analyzer.metric
+
+    if not isinstance(X_test, pd.DataFrame):
+        dataset = dataset.drop(columns=[TRUE_Y, ROW_INDEX]).values
+    else:
+        dataset = dataset.drop(columns=[TRUE_Y, ROW_INDEX])
+
+    expected_error = get_expected_metric_error(
+        error_analyzer,
+        metric,
+        model,
+        dataset,
+        y_test)
+    validate_matrix(new_matrix,
                     expected_count,
                     expected_error,
                     features,

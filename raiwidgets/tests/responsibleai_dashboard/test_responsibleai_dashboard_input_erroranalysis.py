@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-
+import pytest
 from common_utils import CheckResponsibleAIDashboardInputTestResult
 
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -8,12 +8,18 @@ from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 
 
+@pytest.mark.parametrize("with_model", [True, False])
 class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
     CheckResponsibleAIDashboardInputTestResult
 ):
     def test_rai_dashboard_input_adult_matrix_success(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
+            self, create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         features = ['Age', 'Workclass']
         filters = []
         composite_filters = []
@@ -41,8 +47,13 @@ class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_matrix_failure(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
+            self, create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         features = ['Age', 'Workclass']
         filters = []
         composite_filters = []
@@ -60,8 +71,13 @@ class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
             "Failed to generate json matrix representation,")
 
     def test_rai_dashboard_input_adult_debug_ml_success(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
+            self, create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
 
         features = ri.test.drop("Income", axis=1).columns.tolist()
         filters = []
@@ -79,9 +95,13 @@ class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_adult_debug_ml_failure(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
-
+            self, create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
         features = ri.test.drop("Income", axis=1).columns.tolist()
         filters = []
         composite_filters = []
@@ -100,8 +120,13 @@ class TestResponsibleAIDashboardInputClassificationErrorAnalysis(
             "Failed to generate json tree representation,")
 
     def test_rai_dashboard_input_adult_importances_success(
-            self, create_rai_insights_object_classification):
-        ri = create_rai_insights_object_classification
+            self, create_rai_insights_object_classification_with_model,
+            create_rai_insights_object_classification_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_classification_with_model
+        else:
+            ri = create_rai_insights_object_classification_with_predictions
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
         flask_server_prediction_output = dashboard_input.importances()

@@ -27,6 +27,7 @@ import {
   MulticlassClassificationEnum,
   IDatasetMeta
 } from "./JointDatasetUtils";
+import { AxisTypes } from "./IGenericChartProps";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to
@@ -470,6 +471,14 @@ export class JointDataset {
         row[key] = this.numericValuedColumnsCache[rowIndex][key];
       });
       this.addBin(key);
+    }
+  }
+
+  public setLogarithmicScaling(key: string, value: boolean): void {
+    if (value) {
+      this.metaDict[key].AxisType = AxisTypes.Logarithmic;
+    } else {
+      this.metaDict[key].AxisType = undefined;
     }
   }
 
