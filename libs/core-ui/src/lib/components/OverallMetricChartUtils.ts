@@ -12,6 +12,7 @@ import { cohortKey } from "../cohortKey";
 import { IModelAssessmentContext } from "../Context/ModelAssessmentContext";
 import { getPrimaryChartColor } from "../Highchart/ChartColors";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { IsBinary } from "../util/ExplanationUtils";
 import { FluentUIStyles } from "../util/FluentUIStyles";
 import { ChartTypes, IGenericChartProps } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
@@ -177,7 +178,7 @@ export function generateDefaultChartAxes(
   }
   let bestModelMetricKey: string;
   if (
-    context.modelMetadata.modelType === ModelTypes.Binary &&
+    IsBinary(context.modelMetadata.modelType) &&
     context.jointDataset.hasPredictedProbabilities
   ) {
     bestModelMetricKey = `${JointDataset.ProbabilityYRoot}0`;
