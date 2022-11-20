@@ -234,15 +234,80 @@ export function getSelectableMetrics(
   isMulticlass: boolean
 ): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === DatasetTaskType.Classification) {
+  if (
+    taskType === DatasetTaskType.Classification ||
+    taskType === DatasetTaskType.TextClassification ||
+    taskType === DatasetTaskType.ImageClassification
+  ) {
     if (isMulticlass) {
-      selectableMetrics.push({
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      });
+      if (taskType === DatasetTaskType.ImageClassification) {
+        selectableMetrics.push(
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.accuracy
+                .description,
+            key: ImageClassificationMetrics.Accuracy,
+            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+                .description,
+            key: ImageClassificationMetrics.MacroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMacro
+                .description,
+            key: ImageClassificationMetrics.MacroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+                .description,
+            key: ImageClassificationMetrics.MacroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+                .description,
+            key: ImageClassificationMetrics.MicroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMicro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMicro
+                .description,
+            key: ImageClassificationMetrics.MicroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+                .description,
+            key: ImageClassificationMetrics.MicroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMicro.name
+          }
+        );
+      } else {
+        selectableMetrics.push({
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description,
+          key: MulticlassClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
+        });
+      }
     } else {
       selectableMetrics.push(
         {
@@ -300,64 +365,6 @@ export function getSelectableMetrics(
         }
       );
     }
-  } else if (taskType === DatasetTaskType.ImageClassification) {
-    selectableMetrics.push(
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: ImageClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.precisionMacro
-            .description,
-        key: ImageClassificationMetrics.MacroPrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics.precisionMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.recallMacro
-            .description,
-        key: ImageClassificationMetrics.MacroRecall,
-        text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
-            .description,
-        key: ImageClassificationMetrics.MacroF1,
-        text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.precisionMicro
-            .description,
-        key: ImageClassificationMetrics.MicroPrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics.precisionMicro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.recallMicro
-            .description,
-        key: ImageClassificationMetrics.MicroRecall,
-        text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
-            .description,
-        key: ImageClassificationMetrics.MicroF1,
-        text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
-          .name
-      }
-    );
   } else {
     // task_type === "regression"
     selectableMetrics.push(
