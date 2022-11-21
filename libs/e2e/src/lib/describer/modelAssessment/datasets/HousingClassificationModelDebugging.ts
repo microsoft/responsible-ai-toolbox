@@ -5,6 +5,7 @@ export const HousingClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
+  checkDupCohort: true,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
@@ -28,6 +29,7 @@ export const HousingClassificationModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
+    avgOfAbsValue: "Average of absolute value",
     datapoint: 730,
     dropdownRowName: "Row 4",
     hasCorrectIncorrectDatapoints: true,

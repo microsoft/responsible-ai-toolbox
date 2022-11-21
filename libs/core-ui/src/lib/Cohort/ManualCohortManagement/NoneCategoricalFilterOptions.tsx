@@ -92,6 +92,8 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
                 onValidate={(value): void => {
                   setNumericValue(0, selectedMeta, 0, value);
                 }}
+                incrementButtonAriaLabel={localization.Common.increaseValue}
+                decrementButtonAriaLabel={localization.Common.decreaseValue}
               />
               <SpinButton
                 ariaLabel={localization.Common.spinButton}
@@ -109,6 +111,8 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
                 onValidate={(value): void => {
                   setNumericValue(0, selectedMeta, 1, value);
                 }}
+                incrementButtonAriaLabel={localization.Common.increaseValue}
+                decrementButtonAriaLabel={localization.Common.decreaseValue}
               />
               {this.props.showInvalidMinMaxValueError &&
                 selectedMeta.featureRange && (
@@ -139,6 +143,8 @@ export class NoneCategoricalFilterOptions extends React.Component<INoneCategoric
               onValidate={(value): void => {
                 setNumericValue(0, selectedMeta, 0, value);
               }}
+              incrementButtonAriaLabel={localization.Common.increaseValue}
+              decrementButtonAriaLabel={localization.Common.decreaseValue}
             />
           ))}
         {this.props.showInvalidValueError && selectedMeta.featureRange && (

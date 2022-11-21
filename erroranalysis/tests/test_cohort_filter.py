@@ -4,16 +4,17 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_diabetes_data, create_iris_data,
-                          create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_sklearn_svm_classifier,
-                          create_titanic_pipeline)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
                                                ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from rai_test_utils.datasets.tabular import (create_diabetes_data,
+                                             create_iris_data,
+                                             create_simple_titanic_data)
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_regressor, create_sklearn_svm_classifier,
+    create_titanic_pipeline)
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'

@@ -8,7 +8,8 @@ import {
   ModelTypes,
   ErrorCohort,
   ITelemetryEvent,
-  ILabeledStatistic
+  ILabeledStatistic,
+  IsBinary
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -33,6 +34,7 @@ interface IModelOverviewChartPivotProps {
   selectableMetrics: IMetricOption[];
   cohortStats: ILabeledStatistic[][];
   selectedMetric: string;
+  className: string;
 }
 
 export class ModelOverviewChartPivot extends React.Component<IModelOverviewChartPivotProps> {
@@ -42,8 +44,12 @@ export class ModelOverviewChartPivot extends React.Component<IModelOverviewChart
 
   public render(): React.ReactNode {
     return (
-      <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
-        {this.context.modelMetadata.modelType === ModelTypes.Binary && (
+      <Pivot
+        id="modelOverviewChartPivot"
+        overflowBehavior="menu"
+        className={this.props.className}
+      >
+        {IsBinary(this.context.modelMetadata.modelType) && (
           <PivotItem
             headerText={
               localization.ModelAssessment.ModelOverview

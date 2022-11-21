@@ -14,7 +14,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
-import { IsMulticlass } from "../util/ExplanationUtils";
+import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
 import {
   WeightVectors,
   WeightVectorOption
@@ -27,6 +27,7 @@ import {
   MulticlassClassificationEnum,
   IDatasetMeta
 } from "./JointDatasetUtils";
+import { AxisTypes } from "./IGenericChartProps";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to
@@ -252,7 +253,7 @@ export class JointDataset {
           sortedCategoricalValues: undefined
         };
       }
-      if (args.metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -369,7 +370,7 @@ export class JointDataset {
       );
       return;
     }
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       // sum pred and 2*true to map to ints 0 - 3,
       // 0: TN
       // 1: FP
@@ -470,6 +471,14 @@ export class JointDataset {
         row[key] = this.numericValuedColumnsCache[rowIndex][key];
       });
       this.addBin(key);
+    }
+  }
+
+  public setLogarithmicScaling(key: string, value: boolean): void {
+    if (value) {
+      this.metaDict[key].AxisType = AxisTypes.Logarithmic;
+    } else {
+      this.metaDict[key].AxisType = undefined;
     }
   }
 

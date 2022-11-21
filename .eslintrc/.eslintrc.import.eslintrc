@@ -10,6 +10,7 @@
           "regenerator-runtime/runtime.js",
           "highcharts/modules/accessibility",
           "highcharts/modules/exporting",
+          "highcharts/modules/export-data",
           "highcharts/highcharts-more",
           "highcharts/modules/heatmap",
           "highcharts/modules/pattern-fill",

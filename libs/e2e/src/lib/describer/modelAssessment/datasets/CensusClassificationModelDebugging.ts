@@ -5,6 +5,7 @@ export const CensusClassificationModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
+  checkDupCohort: true,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: true,
@@ -28,6 +29,7 @@ export const CensusClassificationModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
+    avgOfAbsValue: "Average of absolute value",
     datapoint: 500,
     dropdownRowName: "Row 4",
     hasCorrectIncorrectDatapoints: true,

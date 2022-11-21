@@ -699,6 +699,7 @@ export class ExplanationDashboard extends React.Component<
               linkSize={"normal"}
               headersOnly
               styles={FluentUIStyles.verticalTabsStyle}
+              overflowBehavior="menu"
             >
               {this.pivotItems.map((props) => (
                 <PivotItem key={props.itemKey} {...props} />
