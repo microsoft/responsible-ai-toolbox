@@ -115,6 +115,7 @@ export class CounterfactualListDetailsFooter extends React.Component<ICounterfac
             <ComboBox
               key={`${column.key}`}
               autoComplete={"on"}
+              ariaLabel={column.key}
               allowFreeform
               selectedKey={`${this.props.itemColumnData[column.key]}`}
               options={dropdownOption.data.categoricalOptions}
