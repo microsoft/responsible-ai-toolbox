@@ -12,6 +12,7 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsBinary,
   IsMulticlass,
   ModelTypes,
   ModelExplanationUtils,
@@ -235,7 +236,7 @@ export class Beehive extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (explanationContext.modelMetadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(explanationContext.modelMetadata.modelType)) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
