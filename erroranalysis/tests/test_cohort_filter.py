@@ -4,16 +4,17 @@
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_diabetes_data, create_iris_data,
-                          create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_sklearn_svm_classifier,
-                          create_titanic_pipeline)
 
 from erroranalysis._internal.cohort_filter import filter_from_cohort
 from erroranalysis._internal.constants import (PRED_Y, ROW_INDEX, TRUE_Y,
                                                ModelTask)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from rai_test_utils.datasets.tabular import (create_diabetes_data,
+                                             create_iris_data,
+                                             create_simple_titanic_data)
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_regressor, create_sklearn_svm_classifier,
+    create_titanic_pipeline)
 
 TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
@@ -25,7 +26,8 @@ REGRESSION_ERROR = 'Regression error'
 class TestCohortFilter(object):
 
     def test_cohort_filter_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'equal'}]
@@ -43,15 +45,24 @@ class TestCohortFilter(object):
                            model_task,
                            filters=filters)
 
-    @pytest.mark.skip("Skipping this test due to a bug condition "
-                      "in cohort filtering")
-    def test_cohort_filter_predicted_y(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+    @pytest.mark.parametrize('target_type', ['Predicted Y', 'True Y'])
+    @pytest.mark.parametrize('use_str_labels', [True, False])
+    def test_cohort_filter_target(self, use_str_labels, target_type):
+        if target_type == 'Predicted Y':
+            pytest.skip("Skipping this test due to a bug condition "
+                        "in Predicted Y cohort filtering")
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_pandas(use_str_labels)
         filters = [{'arg': [2],
-                    'column': 'Predicted Y',
+                    'column': target_type,
                     'method': 'includes'}]
         validation_data = create_validation_data(X_test, y_test)
-        validation_data = validation_data.loc[y_test == 2]
+        if use_str_labels:
+            validation_filter = y_test == classes[2]
+        else:
+            classes = np.unique(y_test).tolist()
+            validation_filter = y_test == 2
+        validation_data = validation_data.loc[validation_filter]
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
@@ -62,29 +73,12 @@ class TestCohortFilter(object):
                            feature_names,
                            categorical_features,
                            model_task,
-                           filters=filters)
-
-    def test_cohort_filter_true_y(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
-        filters = [{'arg': [2],
-                    'column': 'True Y',
-                    'method': 'includes'}]
-        validation_data = create_validation_data(X_test, y_test)
-        validation_data = validation_data.loc[y_test == 2]
-        model_task = ModelTask.CLASSIFICATION
-        model = create_sklearn_svm_classifier(X_train, y_train)
-        categorical_features = []
-        run_error_analyzer(validation_data,
-                           model,
-                           X_test,
-                           y_test,
-                           feature_names,
-                           categorical_features,
-                           model_task,
-                           filters=filters)
+                           filters=filters,
+                           classes=classes)
 
     def test_cohort_filter_less(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'less'}]
@@ -103,7 +97,8 @@ class TestCohortFilter(object):
                            filters=filters)
 
     def test_cohort_filter_less_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
 
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
@@ -123,7 +118,8 @@ class TestCohortFilter(object):
                            filters=filters)
 
     def test_cohort_filter_greater(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater'}]
@@ -142,7 +138,8 @@ class TestCohortFilter(object):
                            filters=filters)
 
     def test_cohort_filter_greater_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater and equal'}]
@@ -161,7 +158,8 @@ class TestCohortFilter(object):
                            filters=filters)
 
     def test_cohort_filter_in_the_range_of(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8, 3.4],
                     'column': SEPAL_WIDTH,
                     'method': 'in the range of'}]
@@ -184,7 +182,8 @@ class TestCohortFilter(object):
                              [([1], False), ([0], True)])
     def test_cohort_filter_multiclass_classification_outcome(
             self, arg, correct_prediction):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         model = create_sklearn_svm_classifier(X_train, y_train)
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
@@ -294,7 +293,8 @@ class TestCohortFilter(object):
                            filters=filters)
 
     def test_cohort_filter_index(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         # filter on index, which can be done from the RAI dashboard
         filters = [{'arg': [40],
                     'column': ROW_INDEX,
@@ -346,13 +346,18 @@ class TestCohortFilter(object):
                            filters=filters)
 
 
-def create_iris_pandas():
-    X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+def create_iris_pandas(use_str_labels=False):
+    X_train, X_test, y_train, y_test, feature_names, classes = \
+        create_iris_data()
 
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
 
-    return X_train, X_test, y_train, y_test, feature_names
+    if use_str_labels:
+        y_train = np.array([classes[y] for y in y_train])
+        y_test = np.array([classes[y] for y in y_test])
+
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
 def create_validation_data(X_test, y_test, pred_y=None):
@@ -373,13 +378,15 @@ def run_error_analyzer(validation_data,
                        model_task,
                        filters=None,
                        composite_filters=None,
-                       is_empty_validation_data=False):
+                       is_empty_validation_data=False,
+                       classes=None):
     error_analyzer = ModelAnalyzer(model,
                                    X_test,
                                    y_test,
                                    feature_names,
                                    categorical_features,
-                                   model_task=model_task)
+                                   model_task=model_task,
+                                   classes=classes)
     filtered_data = filter_from_cohort(error_analyzer,
                                        filters,
                                        composite_filters)

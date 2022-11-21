@@ -88,11 +88,17 @@ Web Development Server is listening at http://localhost:4200/
 at which point you can follow the link to your browser and select the
 dashboard and version of your choice.
 
+### Linting
+
 To check for linting issues and auto-apply fixes where possible run
 
 ```
 yarn lintfix
 ```
+
+You could also use [prettier](https://prettier.io/docs/en/install.html) to lint your files. Once you have installed prettier using `yarn`, you could use `yarn prettier --write .` to lint files in a particular directory.
+
+### Building
 
 To build a specific app run
 

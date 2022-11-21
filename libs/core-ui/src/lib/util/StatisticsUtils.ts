@@ -4,6 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { IsBinary } from "../util/ExplanationUtils";
 
 import {
   generateMicroMacroMetrics,
@@ -253,7 +254,7 @@ export const generateMetrics: (
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
     const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       return generateBinaryStats(outcomeSubset);
     }
     // modelType === ModelTypes.Multiclass

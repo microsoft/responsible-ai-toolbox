@@ -18,12 +18,13 @@ TOL = 1e-10
 SEPAL_WIDTH = 'sepal width'
 EMBARKED = 'embarked'
 CLASSIFICATION_OUTCOME = 'Classification outcome'
-REGRESSION_ERROR = 'Error'
+REGRESSION_ERROR = 'Regression error'
 
 
 class TestCohortFilterRAIInsights(object):
     def test_cohort_filter_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'equal'}]
@@ -43,17 +44,23 @@ class TestCohortFilterRAIInsights(object):
                          model_task,
                          filters=filters)
 
+    @pytest.mark.parametrize('use_str_labels', [True, False])
     @pytest.mark.parametrize('target_type', ['Predicted Y', 'True Y'])
-    def test_cohort_filter_target(self, target_type):
+    def test_cohort_filter_target(self, target_type, use_str_labels):
         if target_type == 'Predicted Y':
             pytest.skip("Skipping this test due to a bug condition "
                         "in Predicted Y cohort filtering")
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, classes = \
+            create_iris_pandas(use_str_labels)
         filters = [{'arg': [2],
                     'column': target_type,
                     'method': 'includes'}]
         validation_data = create_validation_data(X_test, y_test)
-        validation_data = validation_data.loc[y_test == 2]
+        if use_str_labels:
+            validation_filter = y_test == classes[2]
+        else:
+            validation_filter = y_test == 2
+        validation_data = validation_data.loc[validation_filter]
         model_task = ModelTask.CLASSIFICATION
         model = create_sklearn_svm_classifier(X_train, y_train)
         categorical_features = []
@@ -69,7 +76,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_less(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'less'}]
@@ -90,7 +98,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_less_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
 
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
@@ -112,7 +121,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_greater(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater'}]
@@ -133,7 +143,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_greater_and_equal(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8],
                     'column': SEPAL_WIDTH,
                     'method': 'greater and equal'}]
@@ -154,7 +165,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_in_the_range_of(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         filters = [{'arg': [2.8, 3.4],
                     'column': SEPAL_WIDTH,
                     'method': 'in the range of'}]
@@ -179,7 +191,8 @@ class TestCohortFilterRAIInsights(object):
                              [([1], False), ([0], True)])
     def test_cohort_filter_multiclass_classification_outcome(
             self, arg, correct_prediction):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         model = create_sklearn_svm_classifier(X_train, y_train)
         model_task = ModelTask.CLASSIFICATION
         categorical_features = []
@@ -263,7 +276,7 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     @pytest.mark.parametrize('arg, outcome', [([1, 2], False), ([0, 3], True)])
-    def test_cohort_filter_classification_outcome(self, arg, outcome):
+    def test_cohort_filter_binary_classification_outcome(self, arg, outcome):
         X_train, X_test, y_train, y_test, numeric, categorical = \
             create_simple_titanic_data()
         feature_names = categorical + numeric
@@ -297,7 +310,8 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
     def test_cohort_filter_index(self):
-        X_train, X_test, y_train, y_test, feature_names = create_iris_pandas()
+        X_train, X_test, y_train, y_test, feature_names, _ = \
+            create_iris_pandas()
         # filter on index, which can be done from the RAI dashboard
         filters = [{'arg': [40],
                     'column': ROW_INDEX,
@@ -354,13 +368,18 @@ class TestCohortFilterRAIInsights(object):
                          filters=filters)
 
 
-def create_iris_pandas():
-    X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+def create_iris_pandas(use_str_labels=False):
+    X_train, X_test, y_train, y_test, feature_names, classes = \
+        create_iris_data()
 
     X_train = pd.DataFrame(X_train, columns=feature_names)
     X_test = pd.DataFrame(X_test, columns=feature_names)
 
-    return X_train, X_test, y_train, y_test, feature_names
+    if use_str_labels:
+        y_train = np.array([classes[y] for y in y_train])
+        y_test = np.array([classes[y] for y in y_test])
+
+    return X_train, X_test, y_train, y_test, feature_names, classes
 
 
 def create_validation_data(X_test, y_test, pred_y=None):

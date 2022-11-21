@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Link } from "@fluentui/react";
+import { getTheme, Link } from "@fluentui/react";
 import {
   ITelemetryEvent,
   TelemetryEventName,
@@ -18,8 +18,16 @@ export interface ICounterfactualListSetValueProps {
 
 export class CounterfactualListSetValue extends React.Component<ICounterfactualListSetValueProps> {
   public render(): React.ReactNode {
+    const theme = getTheme();
     return (
-      <Link onClick={this.onSelect}>
+      <Link
+        onClick={this.onSelect}
+        styles={{
+          root: {
+            color: theme.palette.themeDark
+          }
+        }}
+      >
         {localization.Counterfactuals.WhatIf.setValue}
       </Link>
     );

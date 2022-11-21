@@ -46,19 +46,20 @@ class TestRAIInsightsValidations:
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
 
-        with pytest.raises(UserConfigValidationException) as ucve:
+        with pytest.warns(
+                UserWarning,
+                match="The size of test set {0} is greater than "
+                      "supported limit of {1}. Computing insights"
+                      " for first {1} samples "
+                      "of test set".format(len(y_test),
+                                           len(y_test) - 1)):
             RAIInsights(
                 model=model,
                 train=X_train,
                 test=X_test,
-                target_column='bad_target',
+                target_column=TARGET,
                 task_type='classification',
                 maximum_rows_for_test=len(y_test) - 1)
-        assert "The test data has 31 rows, but limit is set to 30 rows" in \
-            str(ucve.value)
-        assert "Please resample the test data or " +\
-            "adjust maximum_rows_for_test" in \
-            str(ucve.value)
 
     def test_empty_train_or_test_datasets(self):
         X_train, X_test, y_train, y_test, _, _ = \

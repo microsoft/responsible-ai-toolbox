@@ -21,7 +21,11 @@ export function getDatasetBarOption(
     series,
     xAxis: {
       categories:
-        xAxisProp && jointData.metaDict[xAxisProp].sortedCategoricalValues
+        xAxisProp && jointData.metaDict[xAxisProp].sortedCategoricalValues,
+      type: chartProps?.xAxis.type
+    },
+    yAxis: {
+      type: chartProps?.yAxis.type
     }
   };
 }

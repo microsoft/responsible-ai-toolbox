@@ -16,6 +16,7 @@ export interface IErrorAnalysisStyles {
   featureList: IStyle;
   errorAnalysisWrapper: IStyle;
   separator: IStyle;
+  tabs: IStyle;
 }
 
 export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles> =
@@ -34,10 +35,29 @@ export const errorAnalysisStyles: () => IProcessedStyleSet<IErrorAnalysisStyles>
         width: "100%"
       },
       errorAnalysisView: flexLgDown,
-      errorAnalysisWrapper: { marginTop: "10px", paddingLeft: "15px" },
+      errorAnalysisWrapper: {
+        marginTop: "10px",
+        paddingLeft: "15px",
+        selectors: {
+          "@media screen and (max-width: 479px)": {
+            flexWrap: "wrap"
+          }
+        }
+      },
       featureList: {
         padding: "16px 0 10px 0"
       },
-      separator: hideLgDown
+      separator: hideLgDown,
+      tabs: {
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }
+        }
+      }
     });
   };

@@ -7,6 +7,7 @@ import {
   ModelTypes,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
+  IsBinary,
   IsMulticlass,
   ITelemetryEvent,
   TelemetryLevels,
@@ -29,11 +30,11 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
     let dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { marginRight: "20px", width: 200 }
+      dropdown: { marginRight: "20px" }
     };
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       options.push(this.addDropdownOption(Metrics.ErrorRate));
       options.push(this.addDropdownOption(Metrics.PrecisionScore));
       options.push(this.addDropdownOption(Metrics.RecallScore));

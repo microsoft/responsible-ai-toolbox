@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
@@ -37,12 +38,12 @@ export async function calculateBoxPlotDataFromSDK(
   ) => Promise<IHighchartBoxData>,
   queryClass?: string
 ): Promise<IHighchartBoxData> {
-  const filtersRelabeled = ErrorCohort.getLabeledFilters(
+  const filtersRelabeled = Cohort.getLabeledFilters(
     errorCohort.cohort.filters,
     errorCohort.jointDataset
   );
 
-  const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+  const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
     errorCohort.cohort.compositeFilters,
     errorCohort.jointDataset
   );

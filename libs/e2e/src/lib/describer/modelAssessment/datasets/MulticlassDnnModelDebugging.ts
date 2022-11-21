@@ -5,6 +5,7 @@ export const MulticlassDnnModelDebugging = {
   causalAnalysisData: {
     hasCausalAnalysisComponent: false
   },
+  checkDupCohort: false,
   cohortDefaultName: "All data",
   dataBalanceData: {
     aggregateBalanceMeasuresComputed: false,
@@ -22,6 +23,7 @@ export const MulticlassDnnModelDebugging = {
     hasErrorAnalysisComponent: true
   },
   featureImportanceData: {
+    avgOfAbsValue: "Average of absolute value",
     datapoint: 500,
     dropdownRowName: "Row 24",
     hasCorrectIncorrectDatapoints: true,
