@@ -36,7 +36,7 @@ export interface IHighchartsCustomConfig {
   minHeight?: number | string | null;
 
   /**
-   * An explicit minimum height for the chart.
+   * An explicit minimum width for the chart.
    */
   minWidth?: number | string | null;
 
