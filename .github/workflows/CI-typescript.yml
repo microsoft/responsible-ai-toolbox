@@ -10,7 +10,7 @@ env:
 
 on:
   pull_request:
-    branches: [main, postga]
+    branches: [main]
 
 jobs:
   ci-typescript:
