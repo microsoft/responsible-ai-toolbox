@@ -67,6 +67,7 @@ export class MainMenu extends React.PureComponent<
     };
     this.menuFarItems = [
       {
+        ariaLabel: "cohortSettings",
         iconOnly: true,
         iconProps: settingsIcon,
         id: "cohortSettings",
@@ -75,6 +76,7 @@ export class MainMenu extends React.PureComponent<
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
+        ariaLabel: "dashboardSettings",
         iconOnly: true,
         iconProps: navigationIcon,
         id: "dashboardSettings",

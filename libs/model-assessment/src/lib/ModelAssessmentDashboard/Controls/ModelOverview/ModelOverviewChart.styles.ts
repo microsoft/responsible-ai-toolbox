@@ -19,6 +19,7 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
   () => {
     return mergeStyleSets<IModelOverviewChartStyles>({
       chart: {
+        overflowX: "auto",
         width: "100%"
       },
       chartConfigDropdown: {

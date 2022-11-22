@@ -2,9 +2,9 @@ name: CI e2e notebooks
 
 on:
   push:
-    branches: [main, postga]
+    branches: [main]
   pull_request:
-    branches: [main, postga]
+    branches: [main]
 
 jobs:
   ui-build:

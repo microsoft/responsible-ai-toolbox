@@ -77,7 +77,7 @@ export class ProbabilityDistributionChart extends React.Component<
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
     if (!this.context.jointDataset.hasPredictedProbabilities) {
-      return;
+      return React.Fragment;
     }
 
     const probabilityOptions = this.getProbabilityOptions();
