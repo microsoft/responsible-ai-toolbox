@@ -28,5 +28,5 @@ export function getDatasetOption(
   ) {
     return getDatasetBarOption(jointData, plotlyProps, chartProps);
   }
-  return getDatasetBoxOption(plotlyProps);
+  return getDatasetBoxOption(jointData, plotlyProps, chartProps);
 }
