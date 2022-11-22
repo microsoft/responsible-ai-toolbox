@@ -33,6 +33,7 @@ export enum TelemetryEventName {
   DatasetExplorerTabSelected = "RAI_DatasetExplorerTabSelected",
   DatasetExplorerNewCohortSelected = "RAI_DatasetExplorerNewCohortSelected",
   DatasetExplorerNewChartTypeSelected = "RAI_DatasetExplorerNewChartTypeSelected",
+  TableViewTabSelected = "RAI_TableViewTabSelected",
   // Feature importances
   AggregateFeatureImportanceTabClick = "RAI_AggregateFeatureImportanceTabClick",
   IndividualFeatureImportanceTabClick = "RAI_IndividualFeatureImportanceTabClick",

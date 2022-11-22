@@ -6,9 +6,16 @@ import {
   mergeStyles,
   mergeStyleSets,
   IProcessedStyleSet,
+  IStackStyles,
   getTheme
 } from "@fluentui/react";
 import { getPrimaryChartColor } from "@responsible-ai/core-ui";
+
+export const textStackStyles: IStackStyles = {
+  root: {
+    maxWidth: "1500px"
+  }
+};
 
 export interface ITextHighlightingStyles {
   normal: IStyle;
@@ -28,6 +35,7 @@ export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingS
         {
           color: getPrimaryChartColor(theme),
           fontSize: theme.fonts.large.fontSize,
+          margin: "2px",
           padding: 0,
           textDecorationLine: "underline"
         }

@@ -204,7 +204,7 @@ export class PrecisionStatsAggregator extends BaseStatsAggregator {
     );
   }
 
-  private computeMetricValue(tp: number[], fp: number[]) {
+  private computeMetricValue(tp: number[], fp: number[]): number {
     let metricValue = 0;
     if (this.metricName === Metrics.PrecisionScore) {
       if (tp.length === 2) {
@@ -293,7 +293,7 @@ export class RecallStatsAggregator extends BaseStatsAggregator {
     );
   }
 
-  private computeMetricValue(tp: number[], fn: number[]) {
+  private computeMetricValue(tp: number[], fn: number[]): number {
     let metricValue = 0;
     if (this.metricName === Metrics.RecallScore) {
       if (tp.length === 2) {
@@ -506,7 +506,7 @@ export class AccuracyStatsAggregator extends BaseStatsAggregator {
     tn: number[],
     fp: number[],
     fn: number[]
-  ) {
+  ): number {
     let metricValue = 0;
     if (tp.length === 1) {
       // For binary case where only positive labels specified

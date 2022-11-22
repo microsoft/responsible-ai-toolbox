@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as Highcharts from "highcharts";
+
 import { IColorNames } from "../util/FluentUIStyles";
 
 export interface IHighchartsCustomConfig {
@@ -32,6 +34,11 @@ export interface IHighchartsCustomConfig {
    * An explicit minimum height for the chart.
    */
   minHeight?: number | string | null;
+
+  /**
+   * An explicit minimum width for the chart.
+   */
+  minWidth?: number | string | null;
 
   /**
    * Gets called when parent component is rerendered and chart is updated

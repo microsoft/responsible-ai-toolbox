@@ -3,6 +3,7 @@
 
 import { Link, Stack, Text } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ITelemetryEvent,
@@ -12,8 +13,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-
-import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalAggregateStyles } from "./CausalAggregate.styles";
 import { CausalAggregateChart } from "./CausalAggregateChart";
@@ -40,7 +39,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
         tokens={{ childrenGap: "l1", padding: "8px" }}
       >
         <Stack horizontal={false}>
-          <Stack.Item>
+          <Stack.Item className={styles.description}>
             <Text variant={"medium"} className={styles.label}>
               {localization.CausalAnalysis.AggregateView.description}
             </Text>
@@ -53,7 +52,9 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
           <Stack.Item className={styles.callout}>
             <LabelWithCallout
               label={localization.CausalAnalysis.MainMenu.why}
-              calloutTitle={causalCalloutDictionary.confounding.title}
+              calloutTitle={
+                localization.CausalAnalysis.AggregateView.unconfounding
+              }
               type="button"
               telemetryHook={this.props.telemetryHook}
               calloutEventName={
@@ -61,10 +62,12 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
               }
             >
               <Text block>
-                {causalCalloutDictionary.confounding.description}
+                {localization.CausalAnalysis.AggregateView.confoundingFeature}
               </Text>
               <Link
-                href={causalCalloutDictionary.confounding.linkUrl}
+                href={
+                  "https://www.microsoft.com/research/project/econml/#!how-to"
+                }
                 target="_blank"
               >
                 {localization.Interpret.ExplanationSummary.clickHere}
@@ -114,7 +117,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   }
 
   private getContinuousDescription(): string {
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
       let positiveClass = "1";
       if (this.context.dataset.class_names !== undefined) {
         positiveClass = this.context.dataset.class_names[1];
@@ -130,7 +133,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
   }
 
   private getBinaryDescription(): string {
-    if (this.context.dataset.task_type === "classification") {
+    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
       let positiveClass = "1";
       if (this.context.dataset.class_names !== undefined) {
         positiveClass = this.context.dataset.class_names[1];

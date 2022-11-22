@@ -67,13 +67,19 @@ export class MainMenu extends React.PureComponent<
     };
     this.menuFarItems = [
       {
+        ariaLabel: "cohortSettings",
+        iconOnly: true,
         iconProps: settingsIcon,
+        id: "cohortSettings",
         key: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
+        ariaLabel: "dashboardSettings",
+        iconOnly: true,
         iconProps: navigationIcon,
+        id: "dashboardSettings",
         key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
@@ -81,7 +87,7 @@ export class MainMenu extends React.PureComponent<
     ];
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(): void {
     this.commandBar.current?.remeasure();
   }
 
@@ -181,7 +187,7 @@ export class MainMenu extends React.PureComponent<
           // cursor should not change when hovering because we don't want users to think that something will happen if they click
           styles={{ rootHovered: { cursor: "default" } }}
         >
-          {cohortInfoTitle}
+          <h2>{cohortInfoTitle}</h2>
         </CommandButton>
       </TooltipHost>
     );
@@ -207,7 +213,7 @@ export class MainMenu extends React.PureComponent<
     }));
   };
 
-  private toggleChangeCohortVisibility = () => {
+  private toggleChangeCohortVisibility = (): void => {
     if (!this.state.changeCohortVisible) {
       this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
     }
@@ -215,7 +221,7 @@ export class MainMenu extends React.PureComponent<
       changeCohortVisible: !prev.changeCohortVisible
     }));
   };
-  private toggleCreateCohortVisibility = () => {
+  private toggleCreateCohortVisibility = (): void => {
     if (!this.state.createCohortVisible) {
       this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
     }
@@ -223,7 +229,7 @@ export class MainMenu extends React.PureComponent<
       createCohortVisible: !prev.createCohortVisible
     }));
   };
-  private logButtonClick = (eventName: TelemetryEventName) => {
+  private logButtonClick = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName

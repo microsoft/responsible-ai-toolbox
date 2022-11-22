@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IFilter, ICompositeFilter } from "../Interfaces/IFilter";
+import { IFilter } from "../Interfaces/IFilter";
 import { getBasicFilterString } from "../util/getBasicFilterString";
 import { getCompositeFilterString } from "../util/getCompositeFilterString";
 import { JointDataset } from "../util/JointDataset";
@@ -43,56 +43,17 @@ export class ErrorCohort {
     features: string[]
   ): IFilter[] {
     // return the filters relabeled from original label to Data#
-    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
-      const index = features.indexOf(filter.column);
-      const key = JointDataset.DataLabelRoot + index.toString();
-      return {
-        arg: filter.arg,
-        column: key,
-        method: filter.method
-      };
-    });
-    return filtersRelabeled;
-  }
-
-  public static getLabeledFilters(
-    filters: IFilter[],
-    jointDataset: JointDataset
-  ): IFilter[] {
-    // return the filters relabeled from Data# to original label
-    const filtersRelabeled = filters.map((filter: IFilter): IFilter => {
-      const label = jointDataset.metaDict[filter.column].label;
-      return {
-        arg: filter.arg,
-        column: label,
-        method: filter.method
-      };
-    });
-    return filtersRelabeled;
-  }
-
-  public static getLabeledCompositeFilters(
-    compositeFilters: ICompositeFilter[],
-    jointDataset: JointDataset
-  ): ICompositeFilter[] {
-    // return the filters relabeled from Data# to original label
-    const filtersRelabeled = compositeFilters.map(
-      (compositeFilter: ICompositeFilter): ICompositeFilter => {
-        if (compositeFilter.method) {
-          return ErrorCohort.getLabeledFilters(
-            [compositeFilter as IFilter],
-            jointDataset
-          )[0] as ICompositeFilter;
-        }
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const index = features.indexOf(filter.column);
+        const key = JointDataset.DataLabelRoot + index.toString();
         return {
-          compositeFilters: ErrorCohort.getLabeledCompositeFilters(
-            compositeFilter.compositeFilters,
-            jointDataset
-          ),
-          operation: compositeFilter.operation
-        } as ICompositeFilter;
-      }
-    );
+          arg: filter.arg,
+          column: key,
+          method: filter.method
+        };
+      });
     return filtersRelabeled;
   }
 

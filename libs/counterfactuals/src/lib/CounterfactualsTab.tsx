@@ -16,7 +16,7 @@ import { Dictionary } from "lodash";
 import React from "react";
 
 import { buildCounterfactualState } from "./buildCounterfactualState";
-import { CounterfactualChart } from "./CounterfactualChart";
+import { CounterfactualComponent } from "./CounterfactualComponent";
 import { counterfactualsTabStyles } from "./CounterfactualsTab.styles";
 
 export interface ICounterfactualsTabProps {
@@ -56,7 +56,7 @@ export class CounterfactualsTab extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <CounterfactualChart
+          <CounterfactualComponent
             invokeModel={this.context.requestPredictions}
             data={this.props.data}
             selectedWeightVector={this.state.selectedWeightVector}

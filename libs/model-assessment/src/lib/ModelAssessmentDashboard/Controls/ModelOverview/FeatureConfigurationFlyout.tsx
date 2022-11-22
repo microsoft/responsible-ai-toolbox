@@ -28,6 +28,7 @@ import React from "react";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { generateFeatureBasedFilters } from "./DisaggregatedAnalysisUtils";
+import { shortFeatureGroups } from "./FeaturesUtils";
 
 interface IFeatureConfigurationFlyoutProps {
   isOpen: boolean;
@@ -46,7 +47,7 @@ interface IFeatureConfigurationFlyoutState {
   items: IFeatureConfigurationRow[];
 }
 
-interface IFeatureConfigurationRow {
+export interface IFeatureConfigurationRow {
   key: string;
   featureName: string;
   featureRemark: string;
@@ -66,7 +67,7 @@ export class FeatureConfigurationFlyout extends React.Component<
     defaultModelAssessmentContext;
   private _selection: Selection;
 
-  constructor(props: IFeatureConfigurationFlyoutProps) {
+  public constructor(props: IFeatureConfigurationFlyoutProps) {
     super(props);
 
     this._selection = new Selection({
@@ -86,7 +87,7 @@ export class FeatureConfigurationFlyout extends React.Component<
     this.updateSelection();
   }
 
-  componentDidMount() {
+  public componentDidMount(): void {
     this.setState(
       { items: this.getItems(this.state.newNumberOfContinuousFeatureBins) },
       () => {
@@ -95,7 +96,7 @@ export class FeatureConfigurationFlyout extends React.Component<
     );
   }
 
-  componentDidUpdate(prevProps: IFeatureConfigurationFlyoutProps) {
+  public componentDidUpdate(prevProps: IFeatureConfigurationFlyoutProps): void {
     // Update selected features in state whenever the flyout is opened.
     // At other times we can't update with props since they may be outdated compared to the state.
     if (this.props.isOpen && !prevProps.isOpen) {
@@ -131,6 +132,7 @@ export class FeatureConfigurationFlyout extends React.Component<
         onRender: this.renderGroups
       }
     ];
+    const items = shortFeatureGroups(this.state.items);
 
     return (
       <Panel
@@ -161,7 +163,7 @@ export class FeatureConfigurationFlyout extends React.Component<
             }
           </Text>
           <DetailsList
-            items={this.state.items}
+            items={items}
             columns={columns}
             selectionMode={SelectionMode.multiple}
             selection={this._selection}
@@ -172,21 +174,21 @@ export class FeatureConfigurationFlyout extends React.Component<
     );
   }
 
-  private updateSelection = () => {
+  private updateSelection = (): void => {
     this._selection.setItems(this.state.items);
     this.state.newlySelectedFeatures.forEach((featureIndex) => {
       this._selection.setIndexSelected(featureIndex, true, true);
     });
   };
 
-  private onConfirm = () => {
+  private onConfirm = (): void => {
     this.props.updateSelectedFeatures(
       this.state.newlySelectedFeatures,
       this.state.newNumberOfContinuousFeatureBins
     );
   };
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): React.ReactElement => {
     const tooManyFeaturesSelected = this._selection.getSelectedCount() > 2;
     // check that feature selection has not changed
     const featureSelectionChanged =
@@ -277,7 +279,7 @@ export class FeatureConfigurationFlyout extends React.Component<
     );
   };
 
-  private renderGroups = (row?: IFeatureConfigurationRow) => {
+  private renderGroups = (row?: IFeatureConfigurationRow): React.ReactNode => {
     const isStringArray =
       Array.isArray(row?.groups) &&
       row?.groups.every((group: any) => typeof group === "string");
@@ -298,7 +300,9 @@ export class FeatureConfigurationFlyout extends React.Component<
     return;
   };
 
-  private renderFeatureColumn = (row?: IFeatureConfigurationRow) => {
+  private renderFeatureColumn = (
+    row?: IFeatureConfigurationRow
+  ): React.ReactNode => {
     const isStringArray =
       Array.isArray(row?.groups) &&
       row?.groups.every((group: any) => typeof group === "string");
@@ -326,8 +330,12 @@ export class FeatureConfigurationFlyout extends React.Component<
                 min={minFeatureBins}
                 max={maxFeatureBins}
                 step={1}
-                incrementButtonAriaLabel="Increase value by 1"
-                decrementButtonAriaLabel="Decrease value by 1"
+                incrementButtonAriaLabel={
+                  localization.Common.increaseValueByOne
+                }
+                decrementButtonAriaLabel={
+                  localization.Common.decreaseValueByOne
+                }
                 onIncrement={this.onSpinButtonChange(1, featureIndex)}
                 onDecrement={this.onSpinButtonChange(-1, featureIndex)}
               />
@@ -338,8 +346,11 @@ export class FeatureConfigurationFlyout extends React.Component<
     return;
   };
 
-  private onSpinButtonChange(delta: number, featureIndex: number) {
-    const spinButtonChangeFunction = (value?: string) => {
+  private onSpinButtonChange(
+    delta: number,
+    featureIndex: number
+  ): (value?: string) => void {
+    const spinButtonChangeFunction = (value?: string): void => {
       if (value !== undefined) {
         const continuousFeatureBins =
           this.state.newNumberOfContinuousFeatureBins;

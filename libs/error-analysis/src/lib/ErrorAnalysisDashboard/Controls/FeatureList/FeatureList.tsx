@@ -36,7 +36,9 @@ import {
 import {
   ITableState,
   ModelAssessmentContext,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  Announce,
+  stringFormat
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -81,6 +83,7 @@ export interface IFeatureListState {
   lastAppliedMaxDepth: number;
   lastAppliedNumLeaves: number;
   lastAppliedMinChildSamples: number;
+  searchResultMessage: string;
 }
 
 export class FeatureList extends React.Component<
@@ -116,6 +119,7 @@ export class FeatureList extends React.Component<
       minChildSamples: 21,
       numLeaves: 21,
       searchedFeatures,
+      searchResultMessage: "",
       selectedFeatures: this.props.selectedFeatures,
       tableState
     };
@@ -155,7 +159,7 @@ export class FeatureList extends React.Component<
   public render(): React.ReactNode {
     return (
       <Panel
-        headerText="Feature List"
+        headerText={localization.ErrorAnalysis.FeatureList.featureList}
         isOpen={this.props.isOpen}
         focusTrapZoneProps={focusTrapZoneProps}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
@@ -180,7 +184,6 @@ export class FeatureList extends React.Component<
                 placeholder="Search"
                 styles={searchBoxStyles}
                 onSearch={this.onSearch}
-                onClear={this.onSearch}
                 onChange={(_, newValue?: string): void => {
                   if (newValue === undefined) {
                     return;
@@ -188,6 +191,7 @@ export class FeatureList extends React.Component<
                   this.onSearch(newValue);
                 }}
               />
+              <Announce message={this.state.searchResultMessage} />
             </Stack.Item>
             <Customizer
               settings={(currentSettings): ISettings => ({
@@ -258,7 +262,9 @@ export class FeatureList extends React.Component<
     return <DetailsRow rowFieldsAs={this.renderRowFields} {...props} />;
   };
 
-  private renderRowFields = (props: IDetailsRowFieldsProps) => {
+  private renderRowFields = (
+    props: IDetailsRowFieldsProps
+  ): React.ReactElement => {
     if (this.props.isEnabled) {
       return <DetailsRowFields {...props} />;
     }
@@ -319,7 +325,7 @@ export class FeatureList extends React.Component<
     return <span />;
   };
 
-  private readonly renderPanelFooter = () => {
+  private readonly renderPanelFooter = (): React.ReactElement => {
     // Remove apply button in static view
     if (!this.props.isEnabled) {
       return <span />;
@@ -378,11 +384,19 @@ export class FeatureList extends React.Component<
     return keys;
   }
 
-  private onSearch = (searchValue: string) => {
+  private onSearch = (searchValue: string): void => {
+    const result = this.props.features.filter((feature) =>
+      feature.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+    );
     this.setState(
       {
-        searchedFeatures: this.props.features.filter((feature) =>
-          feature.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+        searchedFeatures: result,
+        searchResultMessage: stringFormat(
+          localization.ErrorAnalysis.FeatureList.searchResultMessage,
+          {
+            resultLength: result.length.toString(),
+            searchValue
+          }
         )
       },
       () => {
@@ -409,7 +423,7 @@ export class FeatureList extends React.Component<
     );
   }
 
-  private updateMaxDepth = (maxDepth: number) => {
+  private updateMaxDepth = (maxDepth: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       maxDepth,
@@ -422,7 +436,7 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private updateNumLeaves = (numLeaves: number) => {
+  private updateNumLeaves = (numLeaves: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -435,7 +449,7 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private updateMinChildSamples = (minChildSamples: number) => {
+  private updateMinChildSamples = (minChildSamples: number): void => {
     const enableApplyButton = this.checkEnableApplyButton(
       this.state.selectedFeatures,
       this.state.maxDepth,
@@ -448,13 +462,15 @@ export class FeatureList extends React.Component<
     });
   };
 
-  private applyClick = () => {
+  private applyClick = (): void => {
     const selectedFeatures = [...this.state.selectedFeatures];
     this.props.saveFeatures(selectedFeatures);
-    this.context.errorAnalysisData!.maxDepth = this.state.maxDepth;
-    this.context.errorAnalysisData!.numLeaves = this.state.numLeaves;
-    this.context.errorAnalysisData!.minChildSamples =
-      this.state.minChildSamples;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.maxDepth = this.state.maxDepth;
+      this.context.errorAnalysisData.numLeaves = this.state.numLeaves;
+      this.context.errorAnalysisData.minChildSamples =
+        this.state.minChildSamples;
+    }
     this.setState({
       enableApplyButton: false,
       lastAppliedFeatures: new Set<string>(selectedFeatures),

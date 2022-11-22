@@ -1,14 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IExplanationDashboardData,
-  IFairnessData,
-  ISerializedExplanationData,
-  ITextExplanationDashboardData
-} from "@responsible-ai/core-ui";
-import { IModelAssessmentData } from "@responsible-ai/model-assessment";
-
 import { adultCensus } from "../error-analysis/__mock_data__/adultCensus";
 import { binaryClassification } from "../fairness/__mock_data__/binaryClassification";
 import { binaryClassificationWithError } from "../fairness/__mock_data__/binaryClassificationWithError";
@@ -19,7 +11,6 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
-import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -38,10 +29,6 @@ import { irisGlobal } from "../interpret/__mock_data__/irisGlobal";
 import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
-import {
-  emotion,
-  emotionModelExplanationData
-} from "../model-assessment-text/__mock_data__/emotion";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -78,51 +65,21 @@ import {
   wineCohortDataIndex
 } from "../model-assessment/__mock_data__/wineData";
 
-export interface IInterpretDataSet {
-  data: IExplanationDashboardData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IInterpretTextDataSet {
-  data: ITextExplanationDashboardData;
-}
-
-export interface IFairnessDataSet {
-  data: IFairnessData;
-}
-
-export interface IErrorAnalysisDataSet {
-  data: IExplanationDashboardData | ISerializedExplanationData;
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IModelAssessmentDataSet extends IModelAssessmentData {
-  classDimension?: 1 | 2 | 3;
-}
-
-export interface IDataSet<TDataSet> {
-  datasets: { [key: string]: TDataSet };
-}
-
-export interface IInterpretSetting {
-  versions: { [key: string]: 1 | 2 };
-}
-
-export interface IInterpretTextSetting {
-  versions: { [key: string]: 1 };
-}
-
-export interface IFairnessSetting {
-  versions: { [key: string]: 2 };
-}
-
-export interface IErrorAnalysisSetting {
-  versions: { [key: string]: 1 | 2 | 3 };
-}
-
-export interface IModelAssessmentSetting {
-  versions: { [key: string]: 1 | 2 };
-}
+import {
+  IFairnessSetting,
+  IDataSet,
+  IFairnessDataSet,
+  IInterpretSetting,
+  IInterpretDataSet,
+  IInterpretTextSetting,
+  IInterpretTextDataSet,
+  IErrorAnalysisSetting,
+  IErrorAnalysisDataSet,
+  IModelAssessmentSetting,
+  IModelAssessmentDataSet
+} from "./applicationInterfaces";
+import { textApplications } from "./textApplications";
+import { visionApplications } from "./visionApplications";
 
 export const applicationKeys = <const>[
   "interpret",
@@ -130,7 +87,8 @@ export const applicationKeys = <const>[
   "fairness",
   "errorAnalysis",
   "modelAssessment",
-  "modelAssessmentText"
+  "modelAssessmentText",
+  "modelAssessmentVision"
 ];
 
 export type IApplications = {
@@ -143,6 +101,8 @@ export type IApplications = {
   modelAssessment: IModelAssessmentSetting & IDataSet<IModelAssessmentDataSet>;
   modelAssessmentText: IModelAssessmentSetting &
     IDataSet<IModelAssessmentDataSet>;
+  modelAssessmentVision: IModelAssessmentSetting &
+    IDataSet<IModelAssessmentDataSet>;
 };
 
 export const applications: IApplications = <const>{
@@ -153,16 +113,14 @@ export const applications: IApplications = <const>{
       breastCancerData: { classDimension: 2, data: breastCancerData },
       breastCancerPrecisionData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Precision"
+        data: breastCancerData
       },
       breastCancerRecallData: {
         classDimension: 2,
-        data: breastCancerData,
-        metric: "Recall"
+        data: breastCancerData
       }
     },
-    versions: { "1": 1, "2:Static-View": 2, "3:Live-Debug": 3 }
+    versions: { "1": 1, "2:Static-View": 2 }
   },
   fairness: {
     datasets: {
@@ -210,12 +168,7 @@ export const applications: IApplications = <const>{
     },
     versions: { "Version-1": 1, "Version-2": 2 }
   },
-  interpretText: {
-    datasets: {
-      newsgroupBinaryData: { data: newsgroupBinaryData }
-    },
-    versions: { "Version-1": 1 }
-  },
+  interpretText: textApplications.interpretText,
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
@@ -283,14 +236,6 @@ export const applications: IApplications = <const>{
     },
     versions: { "1": 1, "2:Static-View": 2 }
   },
-  modelAssessmentText: {
-    datasets: {
-      emotion: {
-        classDimension: 3,
-        dataset: emotion,
-        modelExplanationData: [emotionModelExplanationData]
-      } as IModelAssessmentDataSet
-    },
-    versions: { "1": 1, "2:Static-View": 2 }
-  }
+  modelAssessmentText: textApplications.modelAssessmentText,
+  modelAssessmentVision: visionApplications.modelAssessmentVision
 };

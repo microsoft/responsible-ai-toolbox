@@ -14,7 +14,7 @@ import {
   IFilter,
   FilterMethods,
   CohortSource,
-  ErrorCohort,
+  Cohort,
   ErrorCohortStats,
   getRandomId,
   Metrics,
@@ -69,8 +69,8 @@ export interface ISVGDatum {
 }
 
 const svgOuterFrame: React.RefObject<SVGSVGElement> = React.createRef();
-const errorAvgColor = ColorPalette.ErrorAvgColor;
 const disabledColor = ColorPalette.DisabledColor;
+const errorAvgColor = ColorPalette.ErrorAvgColor;
 const errorRatioThreshold = 1;
 
 export class TreeViewRenderer extends React.PureComponent<
@@ -276,6 +276,9 @@ export class TreeViewRenderer extends React.PureComponent<
 
     const svgWidth = maxX - minX;
     const svgHeight = maxY - minY;
+    const chartAriaLabel = this.props.disabledView
+      ? localization.ErrorAnalysis.TreeView.disabledArialLabel
+      : localization.ErrorAnalysis.TreeView.ariaLabel;
     return (
       <Stack tokens={{ childrenGap: "l1", padding: "l1" }}>
         <Stack.Item className={classNames.infoWithText}>
@@ -311,6 +314,7 @@ export class TreeViewRenderer extends React.PureComponent<
               telemetryHook={this.props.telemetryHook}
             />
             <svg
+              aria-label={chartAriaLabel}
               ref={svgOuterFrame}
               className={classNames.svgOuterFrame}
               id="svgOuterFrame"
@@ -320,7 +324,7 @@ export class TreeViewRenderer extends React.PureComponent<
                 width: svgWidth * 1.5
               }}
             >
-              <g className={containerStyles}>
+              <g className={containerStyles} tabIndex={0}>
                 <g>
                   {links.map((link) => (
                     <path
@@ -356,16 +360,17 @@ export class TreeViewRenderer extends React.PureComponent<
                         y={linkLabel.bbY}
                         width={linkLabel.bbWidth}
                         height={linkLabel.bbHeight}
-                        fill="white"
-                        stroke={ColorPalette.LinkLabelOutline}
-                        strokeWidth="1px"
-                        rx="10"
-                        ry="10"
+                        fill={theme.semanticColors.bodyBackground}
+                        stroke={theme.semanticColors.link}
+                        strokeWidth="3px"
+                        rx="15"
+                        ry="15"
                         pointerEvents="none"
                       />
                       <text
                         className={classNames.linkLabel}
                         pointerEvents="none"
+                        fontFamily="Segoe UI Semibold"
                       >
                         {linkLabel.text}
                       </text>
@@ -435,15 +440,16 @@ export class TreeViewRenderer extends React.PureComponent<
       if (
         !requestTreeNodes ||
         requestTreeNodes.length === 0 ||
-        !requestTreeNodes[0]
+        !requestTreeNodes[0] ||
+        !this.context.errorAnalysisData
       ) {
         return state;
       }
 
-      const maxDepth = this.context.errorAnalysisData!.maxDepth;
-      const numLeaves = this.context.errorAnalysisData!.numLeaves;
-      const minChildSamples = this.context.errorAnalysisData!.minChildSamples;
-      const metric = this.context.errorAnalysisData!.metric;
+      const maxDepth = this.context.errorAnalysisData.maxDepth;
+      const numLeaves = this.context.errorAnalysisData.numLeaves;
+      const minChildSamples = this.context.errorAnalysisData.minChildSamples;
+      const metric = this.context.errorAnalysisData.metric;
 
       const rootSize = requestTreeNodes[0].size;
       const rootErrorSize = requestTreeNodes[0].error;
@@ -466,12 +472,10 @@ export class TreeViewRenderer extends React.PureComponent<
         })
       );
 
-      const minColor = isErrorMetric
-        ? ColorPalette.MinErrorColor
-        : ColorPalette.MinMetricColor;
+      const minColor = ColorPalette.white;
       const maxColor = isErrorMetric
-        ? ColorPalette.MaxErrorColor
-        : ColorPalette.MaxMetricColor;
+        ? ColorPalette.ErrorColor100
+        : ColorPalette.MetricColor100;
 
       const colorgrad = d3scaleLinear<Property.Color>()
         .domain([min, max])
@@ -685,7 +689,9 @@ export class TreeViewRenderer extends React.PureComponent<
   }
 
   private setMetric = (metric: string): void => {
-    this.context.errorAnalysisData!.metric = metric;
+    if (this.context.errorAnalysisData) {
+      this.context.errorAnalysisData.metric = metric;
+    }
     this.fetchTreeNodes();
   };
 
@@ -702,15 +708,18 @@ export class TreeViewRenderer extends React.PureComponent<
       }
       return;
     }
-    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+    const filtersRelabeled = Cohort.getLabeledFilters(
       this.props.baseCohort.cohort.filters,
       this.props.baseCohort.jointDataset
     );
-    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
       this.props.baseCohort.cohort.compositeFilters,
       this.props.baseCohort.jointDataset
     );
-    const errorAnalysisData = this.context.errorAnalysisData!;
+    const errorAnalysisData = this.context.errorAnalysisData;
+    if (!errorAnalysisData) {
+      return;
+    }
     this.props
       .getTreeNodes(
         [

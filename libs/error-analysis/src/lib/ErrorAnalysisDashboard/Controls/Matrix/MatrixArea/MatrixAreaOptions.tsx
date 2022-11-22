@@ -12,6 +12,8 @@ import React from "react";
 
 import { MatrixOptions } from "../MatrixOptions/MatrixOptions";
 
+import { matrixAreaStyles } from "./MatrixArea.styles";
+
 interface IMatrixAreaOptionsProps {
   disableClearAll: boolean;
   disableSelectAll: boolean;
@@ -33,26 +35,38 @@ export class MatrixAreaOptions extends React.PureComponent<IMatrixAreaOptionsPro
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    const classNames = matrixAreaStyles();
     return (
-      <Stack horizontal tokens={stackTokens} verticalAlign="center">
-        <DefaultButton
-          text={localization.ErrorAnalysis.MatrixArea.clearAll}
-          onClick={this.props.clearAll}
-          disabled={this.props.disableClearAll}
-        />
-        <DefaultButton
-          text={localization.ErrorAnalysis.MatrixArea.selectAll}
-          onClick={this.props.selectAll}
-          disabled={this.props.disableSelectAll}
-        />
-        <MatrixOptions
-          quantileBinning={this.props.quantileBinning}
-          binningThreshold={this.props.numBins}
-          updateQuantileBinning={this.props.updateQuantileBinning}
-          updateNumBins={this.props.updateNumBins}
-          isEnabled={this.props.isEnabled}
-          telemetryHook={this.props.telemetryHook}
-        />
+      <Stack
+        horizontal
+        tokens={stackTokens}
+        verticalAlign="center"
+        className={classNames.matrixAreaOptions}
+      >
+        <Stack.Item>
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.clearAll}
+            onClick={this.props.clearAll}
+            disabled={this.props.disableClearAll}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <DefaultButton
+            text={localization.ErrorAnalysis.MatrixArea.selectAll}
+            onClick={this.props.selectAll}
+            disabled={this.props.disableSelectAll}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <MatrixOptions
+            quantileBinning={this.props.quantileBinning}
+            binningThreshold={this.props.numBins}
+            updateQuantileBinning={this.props.updateQuantileBinning}
+            updateNumBins={this.props.updateNumBins}
+            isEnabled={this.props.isEnabled}
+            telemetryHook={this.props.telemetryHook}
+          />
+        </Stack.Item>
       </Stack>
     );
   }

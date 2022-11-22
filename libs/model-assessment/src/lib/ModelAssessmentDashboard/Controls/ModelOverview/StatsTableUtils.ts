@@ -4,10 +4,11 @@
 import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   BinaryClassificationMetrics,
-  classificationTask,
+  DatasetTaskType,
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
+  ImageClassificationMetrics,
   MulticlassClassificationMetrics,
   RegressionMetrics
 } from "@responsible-ai/core-ui";
@@ -29,7 +30,10 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[],
   useTexturedBackgroundForNaN: boolean
-) {
+): {
+  fairnessStats: IFairnessStats[];
+  items: PointOptionsObject[];
+} {
   // The "count" metric has to be treated separately
   // since it's not handled like other metrics, but
   // is part of the ErrorCohort object.
@@ -168,7 +172,7 @@ export function wrapText(
   maxLines = 2,
   lineStart = 0,
   currentLine = 0
-) {
+): string {
   if (text.length <= lineStart + maxLineLength) {
     // label is short enough to fit on current line
     return text;
@@ -226,19 +230,84 @@ export interface IMetricOption extends IDropdownOption {
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression" | "text_classification",
+  taskType: DatasetTaskType,
   isMulticlass: boolean
-) {
+): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === classificationTask) {
+  if (
+    taskType === DatasetTaskType.Classification ||
+    taskType === DatasetTaskType.TextClassification ||
+    taskType === DatasetTaskType.ImageClassification
+  ) {
     if (isMulticlass) {
-      selectableMetrics.push({
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      });
+      if (taskType === DatasetTaskType.ImageClassification) {
+        selectableMetrics.push(
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.accuracy
+                .description,
+            key: ImageClassificationMetrics.Accuracy,
+            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+                .description,
+            key: ImageClassificationMetrics.MacroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMacro
+                .description,
+            key: ImageClassificationMetrics.MacroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+                .description,
+            key: ImageClassificationMetrics.MacroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+                .description,
+            key: ImageClassificationMetrics.MicroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMicro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMicro
+                .description,
+            key: ImageClassificationMetrics.MicroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+                .description,
+            key: ImageClassificationMetrics.MicroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMicro.name
+          }
+        );
+      } else {
+        selectableMetrics.push({
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description,
+          key: MulticlassClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
+        });
+      }
     } else {
       selectableMetrics.push(
         {

@@ -12,7 +12,7 @@ import {
 import {
   Cohort,
   IExplanationModelMetadata,
-  ModelTypes,
+  IsClassifier,
   WeightVectorOption,
   ChartTypes,
   LabelWithCallout,
@@ -70,7 +70,7 @@ export class SidePanel extends React.Component<
     return (
       <Stack className={classNames.legendAndSort}>
         <Dropdown
-          label={localization.Interpret.GlobalTab.sortBy}
+          label={localization.Interpret.GlobalTab.sortByCohort}
           selectedKey={this.props.sortingSeriesIndex}
           options={this.props.cohortSeries.map((row, rowIndex) => ({
             key: rowIndex,
@@ -85,8 +85,7 @@ export class SidePanel extends React.Component<
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
         />
-        {(this.props.metadata.modelType === ModelTypes.Multiclass ||
-          this.props.metadata.modelType === ModelTypes.Binary) &&
+        {IsClassifier(this.props.metadata.modelType) &&
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
@@ -118,6 +117,9 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                ariaLabel={
+                  localization.Interpret.GlobalTab.weightOptionsDropdown
+                }
               />
             </div>
           )}
@@ -144,10 +146,7 @@ export class SidePanel extends React.Component<
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {
-    if (
-      this.props.metadata.modelType === ModelTypes.Multiclass ||
-      this.props.metadata.modelType === ModelTypes.Binary
-    ) {
+    if (IsClassifier(this.props.metadata.modelType)) {
       return this.props.weightOptions.map((option) => {
         return {
           key: option,

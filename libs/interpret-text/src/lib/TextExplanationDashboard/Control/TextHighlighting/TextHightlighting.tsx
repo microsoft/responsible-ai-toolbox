@@ -7,7 +7,10 @@ import React from "react";
 import { Utils } from "../../CommonUtils";
 import { IChartProps } from "../../Interfaces/IChartProps";
 
-import { textHighlightingStyles } from "./TextHighlighting.styles";
+import {
+  textHighlightingStyles,
+  textStackStyles
+} from "./TextHighlighting.styles";
 
 const textStackTokens: IStackTokens = {
   childrenGap: "s2",
@@ -23,9 +26,16 @@ export class TextHighlighting extends React.PureComponent<IChartProps> {
     const text = this.props.text;
     const importances = this.props.localExplanations;
     const k = this.props.topK;
-    const sortedList = Utils.sortedTopK(importances, k!, this.props.radio!);
+    const sortedList = Utils.sortedTopK(importances, k, this.props.radio);
     return (
-      <Stack horizontal horizontalAlign="start" tokens={textStackTokens}>
+      <Stack
+        id="TextHighlighting"
+        horizontal
+        horizontalAlign="start"
+        tokens={textStackTokens}
+        wrap
+        styles={textStackStyles}
+      >
         {text.map((word, wordIndex) => {
           let styleType = classNames.normal;
           const score = importances[wordIndex];

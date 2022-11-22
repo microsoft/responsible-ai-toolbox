@@ -22,6 +22,13 @@ export function getAvailableTabs(
     });
   }
 
+  if (props.dataset.images) {
+    availableTabs.push({
+      key: GlobalTabKeys.VisionTab,
+      text: localization.ModelAssessment.ComponentNames.VisionTab
+    });
+  }
+
   if (props.dataset.predicted_y) {
     availableTabs.push({
       key: GlobalTabKeys.ModelOverviewTab,

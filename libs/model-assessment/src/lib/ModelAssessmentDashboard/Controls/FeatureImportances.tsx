@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Pivot, PivotItem, Stack } from "@fluentui/react";
+import { IObjectWithKey, Pivot, PivotItem, Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   defaultModelAssessmentContext,
@@ -22,6 +22,7 @@ import { featureImportanceTabStyles } from "./FeatureImportances.styles";
 import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
+  allSelectedItems: IObjectWithKey[];
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
@@ -33,13 +34,14 @@ interface IFeatureImportancesProps {
   modelMetadata: IExplanationModelMetadata;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
+  onPivotChange?: (option: FeatureImportancesTabOptions) => void;
 }
 
 interface IFeatureImportancesState {
   activeFeatureImportancesOption: FeatureImportancesTabOptions;
 }
 
-enum FeatureImportancesTabOptions {
+export enum FeatureImportancesTabOptions {
   GlobalExplanation = "global",
   LocalExplanation = "local"
 }
@@ -74,29 +76,27 @@ export class FeatureImportancesTab extends React.PureComponent<
 
     return (
       <Stack className={classNames.container}>
-        <Stack.Item>
-          <Pivot
-            selectedKey={this.state.activeFeatureImportancesOption}
-            onLinkClick={this.onPivotLinkClick}
-            linkSize={"normal"}
-            headersOnly
-            className={classNames.tabs}
-          >
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.GlobalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances
-                  .GlobalExplanation
-              }
-            />
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.LocalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances.LocalExplanation
-              }
-            />
-          </Pivot>
-        </Stack.Item>
+        <Pivot
+          selectedKey={this.state.activeFeatureImportancesOption}
+          onLinkClick={this.onPivotLinkClick}
+          linkSize={"normal"}
+          headersOnly
+          className={classNames.tabs}
+          overflowBehavior="menu"
+        >
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.GlobalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.GlobalExplanation
+            }
+          />
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.LocalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.LocalExplanation
+            }
+          />
+        </Pivot>
 
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.GlobalExplanation && (
@@ -116,6 +116,7 @@ export class FeatureImportancesTab extends React.PureComponent<
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.LocalExplanation && (
           <IndividualFeatureImportanceView
+            allSelectedItems={this.props.allSelectedItems}
             features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
             invokeModel={this.props.requestPredictions}
@@ -140,10 +141,11 @@ export class FeatureImportancesTab extends React.PureComponent<
         item.props.itemKey as FeatureImportancesTabOptions
       )
     ) {
+      const option = item.props.itemKey as FeatureImportancesTabOptions;
       this.setState({
-        activeFeatureImportancesOption: item.props
-          .itemKey as FeatureImportancesTabOptions
+        activeFeatureImportancesOption: option
       });
+      this.props.onPivotChange?.(option);
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,
         type:

@@ -3,7 +3,7 @@
 
 import { IFilter } from "../Interfaces/IFilter";
 
-import { IJointMeta } from "./JointDataset";
+import { IJointMeta } from "./JointDatasetUtils";
 
 export function getFilterBoundsArgs(
   metaDict: IJointMeta,

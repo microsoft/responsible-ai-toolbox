@@ -7,6 +7,8 @@ import {
   ModelTypes,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
+  IsBinary,
+  IsMulticlass,
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName
@@ -28,11 +30,11 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     defaultModelAssessmentContext;
   public render(): React.ReactNode {
     let dropdownStyles: Partial<IDropdownStyles> = {
-      dropdown: { width: 200 }
+      dropdown: { marginRight: "20px" }
     };
     const options: IDropdownOption[] = [];
     const modelType = this.context.modelMetadata.modelType;
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       options.push(this.addDropdownOption(Metrics.ErrorRate));
       options.push(this.addDropdownOption(Metrics.PrecisionScore));
       options.push(this.addDropdownOption(Metrics.RecallScore));
@@ -41,14 +43,14 @@ export class MetricSelector extends React.Component<IMetricSelectorProps> {
     } else if (modelType === ModelTypes.Regression) {
       options.push(this.addDropdownOption(Metrics.MeanSquaredError));
       options.push(this.addDropdownOption(Metrics.MeanAbsoluteError));
-    } else if (modelType === ModelTypes.Multiclass) {
+    } else if (IsMulticlass(modelType)) {
       dropdownStyles = {
-        dropdown: { width: 235 }
+        dropdown: { marginRight: "20px", width: 235 }
       };
       options.push(this.addDropdownOption(Metrics.ErrorRate));
       options.push(this.addDropdownOption(Metrics.MacroPrecisionScore));
-      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroPrecisionScore));
+      options.push(this.addDropdownOption(Metrics.MacroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroRecallScore));
       options.push(this.addDropdownOption(Metrics.MicroF1Score));
       options.push(this.addDropdownOption(Metrics.MacroF1Score));

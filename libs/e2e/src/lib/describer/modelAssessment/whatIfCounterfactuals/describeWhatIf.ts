@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { visit } from "../../../../util/visit";
 import { Locators } from "../Constants";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../modelAssessmentDatasets";
+import { modelAssessmentDatasets } from "../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { describeAxisFlyouts } from "./describeAxisFlyouts";
 import { describeWhatIfCommonFunctionalities } from "./describeWhatIfCommonFunctionalities";
@@ -20,14 +18,7 @@ export function describeWhatIf(
 ): void {
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
     if (

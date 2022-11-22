@@ -69,7 +69,7 @@ export function generateOverlappingFeatureBasedCohorts(
   dataset: IDataset,
   selectedFeatures: number[],
   numberOfContinuousFeaturebins: { [featureIndex: number]: number }
-) {
+): ErrorCohort[] {
   const filters: ICompositeFilter[][] = [];
   selectedFeatures.forEach((featureIndex) => {
     const featureFilters = generateFeatureBasedFilters(
@@ -112,7 +112,7 @@ export function generateOverlappingFeatureBasedCohorts(
     } as ICompositeFilter;
     const mergedOtherCohort = new ErrorCohort(
       new Cohort(
-        localization.ModelAssessment.ModelOverview.otherCohortName,
+        localization.ModelAssessment.ModelOverview.other,
         jointDataset,
         [],
         [mergedCompositeFilter]
@@ -130,7 +130,7 @@ export function generateFeatureBasedFilters(
   dataset: IDataset,
   featureIndex: number,
   nGroupsPerFeature = 3
-) {
+): ICompositeFilter[] | undefined {
   const featureName = dataset.feature_names[featureIndex];
   const featureMetaName = JointDataset.DataLabelRoot + featureIndex;
   if (dataset.categorical_features.includes(featureName)) {
@@ -188,7 +188,7 @@ export function generateFeatureBasedFilters(
   return featureFilters;
 }
 
-export function getMinMax(values: unknown[]) {
+export function getMinMax(values: unknown[]): { min: number; max: number } {
   let min = Number.MAX_SAFE_INTEGER;
   let max = Number.MIN_SAFE_INTEGER;
   values.forEach((value) => {

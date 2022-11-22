@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import React from "react";
 import ReactDom from "react-dom";
 
@@ -34,7 +35,9 @@ export class SVGToolTip extends React.Component<
     const element = this.props.target.current;
     if (element) {
       element.addEventListener("mouseenter", this.onMouseEnter);
+      element.addEventListener("focus", this.onMouseEnter);
       element.addEventListener("mouseleave", this.onMouseLeave);
+      element.addEventListener("focusout", this.onMouseLeave);
     }
   }
   public render(): React.ReactNode {
@@ -42,6 +45,7 @@ export class SVGToolTip extends React.Component<
       return React.Fragment;
     }
     const classNames = SVGToolTipStyles();
+    const theme = getTheme();
     return ReactDom.createPortal(
       <g
         style={{ transform: `translate(${this.state.x}px, ${this.state.y}px)` }}
@@ -49,8 +53,8 @@ export class SVGToolTip extends React.Component<
       >
         <rect
           className={classNames.tooltipRect}
-          fill="white"
           strokeWidth="2"
+          fill={theme.semanticColors.bodyBackground}
           height="100"
           width="80"
           y="0"

@@ -132,7 +132,13 @@ jobs:
 
       - name: Run widget tests without flights
         shell: bash -l {0}
-        run: yarn e2e-widget -f ""
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-census-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-regression-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
 
       - name: Upload e2e test screen shot
         if: always()
@@ -228,6 +234,7 @@ jobs:
             fairness,
             interpret,
             interpret-text,
+            interpret-vision,
             localization,
             error-analysis,
             model-assessment

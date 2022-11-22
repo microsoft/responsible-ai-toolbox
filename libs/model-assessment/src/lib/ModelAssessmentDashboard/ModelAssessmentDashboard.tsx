@@ -11,7 +11,8 @@ import {
   SaveCohort,
   defaultTheme,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  Announce
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -25,6 +26,7 @@ import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.style
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
+import { addTabMessage } from "./utils/addTabMessage";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -74,7 +76,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
+          requestExp: this.props.requestExp,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -108,6 +112,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               selectedCohort={this.state.selectedCohort}
               dataset={this.props.dataset}
               onClearCohortSelectionClick={this.clearCohortSelection}
+              requestExp={this.props.requestExp}
               requestPredictions={this.props.requestPredictions}
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
@@ -121,6 +126,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               addTabDropdownOptions={this.addTabDropdownOptions}
               addTab={this.addTab}
             />
+            <Announce message={this.state.onAddMessage} />
           </Stack.Item>
           {this.state.saveCohortVisible && (
             <SaveCohort
@@ -160,7 +166,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       name:
         this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
     });
-    this.setState({ activeGlobalTabs: tabs });
+    this.setState({ activeGlobalTabs: tabs, onAddMessage: addTabMessage(tab) });
   };
 
   private removeTab = (index: number): void => {
@@ -169,7 +175,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ activeGlobalTabs: tabs });
   };
 
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
@@ -275,7 +281,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
   };
 
-  private deleteCohort = (cohort: ErrorCohort) => {
+  private deleteCohort = (cohort: ErrorCohort): void => {
     if (
       this.state.baseCohort.cohort.name === cohort.cohort.name ||
       this.state.selectedCohort.cohort.name === cohort.cohort.name

@@ -6,22 +6,27 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   JointDataset,
-  ITextExplanationDashboardData
+  ITextExplanationDashboardData,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import {
-  ITextExplanationDashboardProps,
-  TextExplanationDashboard
+  ITextExplanationViewProps,
+  TextExplanationView
 } from "@responsible-ai/interpret-text";
 import React from "react";
 
 export interface ITextLocalImportancePlotsProps {
   jointDataset: JointDataset;
   selectedItems: IObjectWithKey[];
+  onWeightChange: (option: WeightVectorOption) => void;
+  selectedWeightVector: WeightVectorOption;
+  weightOptions: WeightVectorOption[];
+  weightLabels: any;
 }
 
 export interface ITextFeatureImportances {
   text: string[];
-  importances: number[];
+  importances: number[][];
   prediction: number[];
 }
 
@@ -42,10 +47,14 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       prediction: textFeatureImportances.prediction,
       text: textFeatureImportances.text
     };
-    const dashboardProp: ITextExplanationDashboardProps = {
-      dataSummary: textExplanationDashboardData
+    const dashboardProp: ITextExplanationViewProps = {
+      dataSummary: textExplanationDashboardData,
+      onWeightChange: this.props.onWeightChange,
+      selectedWeightVector: this.props.selectedWeightVector,
+      weightLabels: this.props.weightLabels,
+      weightOptions: this.props.weightOptions
     };
-    return <TextExplanationDashboard {...dashboardProp} />;
+    return <TextExplanationView {...dashboardProp} />;
   }
 
   private getTextFeatureImportances(): ITextFeatureImportances[] {
@@ -53,12 +62,18 @@ export class TextLocalImportancePlots extends React.Component<ITextLocalImportan
       const textFeatureImportance =
         this.context.modelExplanationData?.precomputedExplanations
           ?.textFeatureImportance?.[row[0]];
-      if (!textFeatureImportance)
+      if (!textFeatureImportance) {
         return { importances: [], prediction: [], text: [] };
+      }
       const text = textFeatureImportance?.text;
-      const importances = textFeatureImportance?.localExplanations;
       const rowDict = this.props.jointDataset.getRow(row[0]);
-      const prediction = [rowDict[JointDataset.PredictedYLabel]];
+      const prediction = new Array(this.props.jointDataset.predictionClassCount)
+        .fill(0)
+        .map((_, index) => {
+          const key = JointDataset.ProbabilityYRoot + index.toString();
+          return rowDict[key];
+        });
+      const importances: number[][] = textFeatureImportance?.localExplanations;
       return {
         importances,
         prediction,
