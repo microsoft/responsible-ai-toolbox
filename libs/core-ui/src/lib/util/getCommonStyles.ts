@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { mergeStyles } from "@fluentui/react";
+
 export const descriptionMaxWidth = "750px";
 
 // hide when screen size is less or equal than large(1023px)
@@ -92,3 +94,8 @@ export const noPaddingMdDown = {
     }
   }
 };
+
+export const tableStyles = mergeStyles({
+  overflowX: "auto",
+  width: "100%"
+});

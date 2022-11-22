@@ -2,9 +2,9 @@ name: GitHub Pages
 
 on:
   push:
-    branches: [main, postga]
+    branches: [main]
   pull_request:
-    branches: [main, postga]
+    branches: [main]
 
 jobs:
   website-build-and-deploy:

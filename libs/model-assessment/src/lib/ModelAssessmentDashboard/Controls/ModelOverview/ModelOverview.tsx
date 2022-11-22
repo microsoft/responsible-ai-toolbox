@@ -27,6 +27,7 @@ import {
   ErrorCohort,
   ILabeledStatistic,
   ITelemetryEvent,
+  IsBinary,
   IsMulticlass,
   TelemetryLevels,
   TelemetryEventName,
@@ -108,7 +109,11 @@ export class ModelOverview extends React.Component<
 
   public componentDidMount(): void {
     let defaultSelectedMetrics: string[] = [];
-    if (this.context.dataset.task_type === DatasetTaskType.Classification) {
+    if (
+      this.context.dataset.task_type === DatasetTaskType.Classification ||
+      this.context.dataset.task_type === DatasetTaskType.TextClassification ||
+      this.context.dataset.task_type === DatasetTaskType.ImageClassification
+    ) {
       if (this.context.jointDataset.getModelType() === ModelTypes.Binary) {
         defaultSelectedMetrics = [
           BinaryClassificationMetrics.Accuracy,
@@ -116,18 +121,18 @@ export class ModelOverview extends React.Component<
           BinaryClassificationMetrics.FalseNegativeRate,
           BinaryClassificationMetrics.SelectionRate
         ];
+      } else if (
+        this.context.dataset.task_type === DatasetTaskType.ImageClassification
+      ) {
+        defaultSelectedMetrics = [
+          ImageClassificationMetrics.Accuracy,
+          ImageClassificationMetrics.MacroF1,
+          ImageClassificationMetrics.MacroPrecision,
+          ImageClassificationMetrics.MacroRecall
+        ];
       } else {
         defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
       }
-    } else if (
-      this.context.dataset.task_type === DatasetTaskType.ImageClassification
-    ) {
-      defaultSelectedMetrics = [
-        ImageClassificationMetrics.Accuracy,
-        ImageClassificationMetrics.MacroF1,
-        ImageClassificationMetrics.MacroPrecision,
-        ImageClassificationMetrics.MacroRecall
-      ];
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
@@ -478,8 +483,12 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot id="modelOverviewChartPivot" overflowBehavior="menu">
-              {this.context.modelMetadata.modelType === ModelTypes.Binary && (
+            <Pivot
+              id="modelOverviewChartPivot"
+              overflowBehavior="menu"
+              className={classNames.tabs}
+            >
+              {IsBinary(this.context.modelMetadata.modelType) && (
                 <PivotItem
                   headerText={
                     localization.ModelAssessment.ModelOverview

@@ -145,6 +145,7 @@ export class CausalIndividualChart extends React.PureComponent<
                   <BasicHighChart
                     configOverride={getIndividualChartOptions(
                       plotlyProps,
+                      this.state.chartProps,
                       this.selectPointFromChart
                     )}
                     theme={getTheme()}

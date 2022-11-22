@@ -65,6 +65,7 @@ export class ClassImportanceWeights extends React.Component<
             options={this.weightOptions}
             selectedKey={this.props.selectedWeightVector}
             onChange={this.setWeightOption}
+            ariaLabel={localization.Interpret.GlobalTab.weightOptions}
           />
         )}
         {this.state.crossClassInfoVisible && (

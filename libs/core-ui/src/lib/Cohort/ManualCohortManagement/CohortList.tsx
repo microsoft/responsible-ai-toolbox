@@ -5,11 +5,8 @@ import { DefaultButton, PrimaryButton, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import {
-  IExplanationModelMetadata,
-  ModelTypes
-} from "../../Interfaces/IExplanationContext";
-import { IsMulticlass } from "../../util/ExplanationUtils";
+import { IExplanationModelMetadata } from "../../Interfaces/IExplanationContext";
+import { IsBinary, IsMulticlass } from "../../util/ExplanationUtils";
 import { JointDataset } from "../../util/JointDataset";
 import { limitStringLength } from "../../util/string";
 import { Cohort } from "../Cohort";
@@ -25,7 +22,7 @@ export interface ICohortListProps {
 export class CohortList extends React.PureComponent<ICohortListProps> {
   public render(): React.ReactNode {
     let modelType: string;
-    if (this.props.metadata.modelType === ModelTypes.Binary) {
+    if (IsBinary(this.props.metadata.modelType)) {
       modelType = localization.Interpret.CohortBanner.binaryClassifier;
     } else if (IsMulticlass(this.props.metadata.modelType)) {
       modelType = localization.Interpret.CohortBanner.multiclassClassifier;

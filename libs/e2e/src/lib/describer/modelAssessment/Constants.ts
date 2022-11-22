@@ -31,7 +31,7 @@ export enum Locators {
   SortByDropdownOptions = "div[class^='dropdownItemsWrapper'] button:contains('CohortCreateE2E')",
   CohortSettingsCreateNewCohortButton = "#CohortSettingsPanel button:contains('New cohort')",
   CreateNewCohortButton = "button:contains('New cohort')",
-  CohortSettingsButton = "button:contains('Cohort settings')",
+  CohortSettingsButton = "#cohortSettings",
   CohortSettingsCancelButton = "#CohortSettingsPanel i[data-icon-name='Cancel']",
   DeleteButtons = "i[data-icon-name='Trash']",
   DuplicateButtons = "button:contains('Duplicate')",
