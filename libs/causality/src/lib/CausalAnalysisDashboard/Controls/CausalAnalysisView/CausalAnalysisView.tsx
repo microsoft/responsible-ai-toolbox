@@ -3,6 +3,7 @@
 
 import {
   defaultModelAssessmentContext,
+  Cohort,
   ErrorCohort,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
@@ -31,17 +32,22 @@ interface ICausalAnalysisState {
   currentGlobalCausalPolicy: undefined | ICausalPolicy[];
 }
 
-export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewProps, ICausalAnalysisState> {
+export class CausalAnalysisView extends React.PureComponent<
+  ICausalAnalysisViewProps,
+  ICausalAnalysisState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
   public constructor(props: ICausalAnalysisViewProps) {
     super(props);
-    this.state = {currentGlobalCausalEffects: this.props.data.global_effects,
-                  currentLocalCausalEffects: this.props.data.local_effects,
-                  currentGlobalCausalPolicy: this.props.data.policies}
-  };
+    this.state = {
+      currentGlobalCausalEffects: this.props.data.global_effects,
+      currentLocalCausalEffects: this.props.data.local_effects,
+      currentGlobalCausalPolicy: this.props.data.policies
+    };
+  }
 
   public render(): React.ReactNode {
     return (
@@ -91,13 +97,16 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     }
   }
 
-  private getGlobalCausalEffects = async(): Promise<void> =>{
-    if (this.context.causalAnalysisData && this.context.requestGlobalCausalEffects) {
-      const filtersRelabeled = ErrorCohort.getLabeledFilters(
+  private getGlobalCausalEffects = async (): Promise<void> => {
+    if (
+      this.context.causalAnalysisData &&
+      this.context.requestGlobalCausalEffects
+    ) {
+      const filtersRelabeled = Cohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
       );
-      const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+      const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
         this.props.newCohort.cohort.compositeFilters,
         this.props.newCohort.jointDataset
       );
@@ -107,19 +116,24 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         compositeFiltersRelabeled,
         new AbortController().signal
       );
-      this.setState({currentGlobalCausalEffects: result.global_effects});
+      this.setState({ currentGlobalCausalEffects: result.global_effects });
     } else {
-      this.setState({currentGlobalCausalEffects: this.props.data.global_effects});
+      this.setState({
+        currentGlobalCausalEffects: this.props.data.global_effects
+      });
     }
-  }
+  };
 
-  private getGlobalCausalPolicy = async (): Promise<void> =>{
-    if (this.context.causalAnalysisData && this.context.requestGlobalCausalPolicy) {
-      const filtersRelabeled = ErrorCohort.getLabeledFilters(
+  private getGlobalCausalPolicy = async (): Promise<void> => {
+    if (
+      this.context.causalAnalysisData &&
+      this.context.requestGlobalCausalPolicy
+    ) {
+      const filtersRelabeled = Cohort.getLabeledFilters(
         this.props.newCohort.cohort.filters,
         this.props.newCohort.jointDataset
       );
-      const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+      const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
         this.props.newCohort.cohort.compositeFilters,
         this.props.newCohort.jointDataset
       );
@@ -129,9 +143,9 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
         compositeFiltersRelabeled,
         new AbortController().signal
       );
-      this.setState({currentGlobalCausalPolicy: result.policies});
+      this.setState({ currentGlobalCausalPolicy: result.policies });
     } else {
-      this.setState({currentGlobalCausalPolicy: this.props.data.policies});
+      this.setState({ currentGlobalCausalPolicy: this.props.data.policies });
     }
-  }
+  };
 }

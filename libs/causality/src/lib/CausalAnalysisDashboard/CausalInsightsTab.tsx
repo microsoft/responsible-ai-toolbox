@@ -51,9 +51,7 @@ export class CausalInsightsTab extends React.PureComponent<
         className={classNames.container}
       >
         <Stack.Item>
-          <MessageBar>
-            {this.getCausalMessage()}
-          </MessageBar>
+          <MessageBar>{this.getCausalMessage()}</MessageBar>
         </Stack.Item>
         <Stack.Item>
           <Stack>
@@ -122,7 +120,10 @@ export class CausalInsightsTab extends React.PureComponent<
     if (!this.context.requestGlobalCausalEffects) {
       return localization.CausalAnalysis.MainMenu.cohortInfo;
     } else {
-      return "The current causal effects are for cohort: " + this.props.newCohort.cohort.name;
+      return (
+        "The current causal effects are for cohort: " +
+        this.props.newCohort.cohort.name
+      );
     }
-  };
+  }
 }
