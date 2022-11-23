@@ -406,7 +406,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       ifEnableLargeData(this.context.dataset) &&
       this.context.requestGlobalExplanations
     ) {
-      console.log("Requesting explanations from SDK");
       let allCohortGlobalExplanations: any[] = [];
       let cohortIndex = 0;
 
@@ -420,31 +419,17 @@ export class GlobalExplanationTab extends React.PureComponent<
           this.context.jointDataset
         );
 
-        console.log("===========");
-        console.log(filtersRelabeled);
-        console.log(compositeFiltersRelabeled);
-
         const result = await this.context.requestGlobalExplanations(
           filtersRelabeled,
           compositeFiltersRelabeled,
           new AbortController().signal
         );
 
-        console.log(result);
-        console.log(
-          result.precomputedExplanations.globalFeatureImportance.feature_list
-        );
-        console.log(
-          result.precomputedExplanations.globalFeatureImportance.scores
-        );
-        console.log("===========");
-
         allCohortGlobalExplanations.push({
           colorIndex: cohortIndex,
           name: cohort.name,
           unsortedAggregateY:
             result.precomputedExplanations.globalFeatureImportance.scores
-          // unsortedIndividualY: cohort.transposedLocalFeatureImportances()
         });
 
         cohortIndex += 1;
@@ -467,7 +452,6 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   private async getGlobalSeries(): Promise<void> {
-    console.log(this.props.cohorts);
     let globalExplanationsSDKValue = await this.getCohortSeriesSDK();
     if (globalExplanationsSDKValue) {
       this.setState({
@@ -500,7 +484,6 @@ export class GlobalExplanationTab extends React.PureComponent<
       selectedCohortIndex = 0;
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
-    console.log(seriesIsActive);
     this.getGlobalSeries();
     this.setState({
       selectedCohortIndex,
