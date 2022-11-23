@@ -406,10 +406,10 @@ export class GlobalExplanationTab extends React.PureComponent<
       ifEnableLargeData(this.context.dataset) &&
       this.context.requestGlobalExplanations
     ) {
-      let allCohortGlobalExplanations: any[] = [];
+      const allCohortGlobalExplanations: any[] = [];
       let cohortIndex = 0;
 
-      for (let cohort of this.props.cohorts) {
+      for (const cohort of this.props.cohorts) {
         const filtersRelabeled = Cohort.getLabeledFilters(
           cohort.filters,
           this.context.jointDataset
@@ -435,9 +435,9 @@ export class GlobalExplanationTab extends React.PureComponent<
         cohortIndex += 1;
       }
       return allCohortGlobalExplanations;
-    } else {
-      return undefined;
     }
+
+    return undefined;
   }
 
   private getGlobalSeriesUI(): IGlobalSeries[] {
