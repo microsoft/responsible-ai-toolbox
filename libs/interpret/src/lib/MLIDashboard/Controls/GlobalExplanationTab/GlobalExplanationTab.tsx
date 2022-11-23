@@ -29,7 +29,8 @@ import {
   FeatureImportanceBar,
   ITelemetryEvent,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -121,9 +122,8 @@ export class GlobalExplanationTab extends React.PureComponent<
       ].calculateAverageImportance()
     ).reverse();
 
-    const cohortSeries = this.getGlobalSeries();
+    this.getGlobalSeries();
     this.setState({
-      cohortSeries,
       globalBarSettings: this.getDefaultSettings(),
       sortArray
     });
@@ -401,7 +401,61 @@ export class GlobalExplanationTab extends React.PureComponent<
     });
   };
 
-  private getGlobalSeries(): IGlobalSeries[] {
+  private async getCohortSeriesSDK(): Promise<IGlobalSeries[] | undefined> {
+    if (
+      ifEnableLargeData(this.context.dataset) &&
+      this.context.requestGlobalExplanations
+    ) {
+      console.log("Requesting explanations from SDK");
+      let allCohortGlobalExplanations: any[] = [];
+      let cohortIndex = 0;
+
+      for (let cohort of this.props.cohorts) {
+        const filtersRelabeled = Cohort.getLabeledFilters(
+          cohort.filters,
+          this.context.jointDataset
+        );
+        const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
+          cohort.compositeFilters,
+          this.context.jointDataset
+        );
+
+        console.log("===========");
+        console.log(filtersRelabeled);
+        console.log(compositeFiltersRelabeled);
+
+        const result = await this.context.requestGlobalExplanations(
+          filtersRelabeled,
+          compositeFiltersRelabeled,
+          new AbortController().signal
+        );
+
+        console.log(result);
+        console.log(
+          result.precomputedExplanations.globalFeatureImportance.feature_list
+        );
+        console.log(
+          result.precomputedExplanations.globalFeatureImportance.scores
+        );
+        console.log("===========");
+
+        allCohortGlobalExplanations.push({
+          colorIndex: cohortIndex,
+          name: cohort.name,
+          unsortedAggregateY:
+            result.precomputedExplanations.globalFeatureImportance.scores
+          // unsortedIndividualY: cohort.transposedLocalFeatureImportances()
+        });
+
+        cohortIndex += 1;
+      }
+      return allCohortGlobalExplanations;
+    } else {
+      return undefined;
+    }
+  }
+
+  private getGlobalSeriesUI(): IGlobalSeries[] {
     return this.props.cohorts.map((cohort, i) => {
       return {
         colorIndex: i,
@@ -410,6 +464,20 @@ export class GlobalExplanationTab extends React.PureComponent<
         unsortedIndividualY: cohort.transposedLocalFeatureImportances()
       };
     });
+  }
+
+  private async getGlobalSeries(): Promise<void> {
+    console.log(this.props.cohorts);
+    let globalExplanationsSDKValue = await this.getCohortSeriesSDK();
+    if (globalExplanationsSDKValue) {
+      this.setState({
+        cohortSeries: globalExplanationsSDKValue
+      });
+    } else {
+      this.setState({
+        cohortSeries: this.getGlobalSeriesUI()
+      });
+    }
   }
 
   // This can probably be done cheaper by passing the active array to the charts, and zeroing
@@ -432,8 +500,9 @@ export class GlobalExplanationTab extends React.PureComponent<
       selectedCohortIndex = 0;
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
+    console.log(seriesIsActive);
+    this.getGlobalSeries();
     this.setState({
-      cohortSeries: this.getGlobalSeries(),
       selectedCohortIndex,
       seriesIsActive
     });
