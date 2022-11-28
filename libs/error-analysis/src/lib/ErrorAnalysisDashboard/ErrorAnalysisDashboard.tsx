@@ -22,7 +22,6 @@ import {
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes,
   WeightVectors,
   CohortInfoPanel,
   CohortListPanel,
@@ -42,6 +41,7 @@ import {
   WeightVectorOption,
   EditCohort,
   ShiftCohort,
+  IsBinary,
   IsMulticlass
 } from "@responsible-ai/core-ui";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
@@ -200,7 +200,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         props.precomputedExplanations,
         props.probabilityY
       );
-    } else if (modelType === ModelTypes.Binary) {
+    } else if (IsBinary(modelType)) {
       classLength = 2;
     } else if (IsMulticlass(modelType)) {
       classLength = new Set(

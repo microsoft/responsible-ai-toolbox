@@ -14,7 +14,7 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
-import { IsMulticlass } from "../util/ExplanationUtils";
+import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
 import {
   WeightVectors,
   WeightVectorOption
@@ -253,7 +253,7 @@ export class JointDataset {
           sortedCategoricalValues: undefined
         };
       }
-      if (args.metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -370,7 +370,7 @@ export class JointDataset {
       );
       return;
     }
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       // sum pred and 2*true to map to ints 0 - 3,
       // 0: TN
       // 1: FP

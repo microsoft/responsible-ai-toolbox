@@ -450,8 +450,29 @@ class BaseAnalyzer(ABC):
                                                      IMPORTANCES_THRESHOLD)
             input_data = input_data[indexes]
             diff = diff[indexes]
+        try:
+            importances = self._compute_mutual_info(input_data, diff)
+        except ValueError:
+            # Impute input_data if it contains NaNs, infinity or a value too
+            # large for dtype('float64')
+            input_data = np.nan_to_num(input_data)
+            importances = self._compute_mutual_info(input_data, diff)
+        return importances
+
+    def _compute_mutual_info(self, input_data, diff):
+        """Compute the mutual information between the features and error.
+
+        :param input_data: The input data to compute the mutual information
+            on.
+        :type input_data: numpy.ndarray
+        :param diff: The difference between the label and prediction
+            columns.
+        :type diff: numpy.ndarray
+        :return: The computed mutual information between the features and
+            error.
+        :rtype: list[float]
+        """
         if self._model_task == ModelTask.CLASSIFICATION:
-            # compute the feature importances using mutual information
             return mutual_info_classif(input_data, diff).tolist()
         else:
             return mutual_info_regression(input_data, diff).tolist()
