@@ -157,11 +157,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
-              featureFlights={
-                this.state.featureFlights === noFlights
-                  ? []
-                  : parseFeatureFlights(this.state.featureFlights)
-              }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
             />
           )}
           {this.state.application === "modelAssessmentVision" && (
@@ -176,11 +172,7 @@ export class App extends React.Component<IAppSetting, IAppState> {
                   this.state.version
                 ]
               }
-              featureFlights={
-                this.state.featureFlights === noFlights
-                  ? []
-                  : parseFeatureFlights(this.state.featureFlights)
-              }
+              featureFlights={parseFeatureFlights(this.state.featureFlights)}
             />
           )}
         </div>
