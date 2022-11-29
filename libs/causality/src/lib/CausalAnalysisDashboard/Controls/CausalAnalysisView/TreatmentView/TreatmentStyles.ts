@@ -1,12 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
-import {
-  IProcessedStyleSet,
-  IStyle,
-  mergeStyleSets
-} from "office-ui-fabric-react";
+import { IProcessedStyleSet, IStyle, mergeStyleSets } from "@fluentui/react";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface ITreatmentStyles {
   container: IStyle;
@@ -41,6 +37,7 @@ export const TreatmentStyles: () => IProcessedStyleSet<ITreatmentStyles> =
       },
       header: {
         fontSize: 14,
+        ...hideXlDown,
         maxWidth: descriptionMaxWidth,
         textAlign: "left"
       },

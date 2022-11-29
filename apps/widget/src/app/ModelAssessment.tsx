@@ -3,7 +3,8 @@
 
 import {
   ICausalWhatIfData,
-  IErrorAnalysisMatrix
+  IErrorAnalysisMatrix,
+  IHighchartBoxData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -14,34 +15,41 @@ import {
 import React from "react";
 
 import { callFlaskService } from "./callFlaskService";
-import { config } from "./config";
-import { modelData as modelDataImported } from "./modelData";
+import { IAppConfig } from "./config";
 
-export class ModelAssessment extends React.Component {
+interface IModelAssessmentProps {
+  config: IAppConfig;
+  modelData: IModelAssessmentData;
+}
+export class ModelAssessment extends React.Component<IModelAssessmentProps> {
   public render(): React.ReactNode {
-    const modelData: IModelAssessmentData = modelDataImported;
     const callBack: Pick<
       IModelAssessmentDashboardProps,
+      | "requestExp"
       | "requestPredictions"
       | "requestDebugML"
       | "requestMatrix"
       | "requestImportances"
       | "requestCausalWhatIf"
+      | "requestBoxPlotDistribution"
     > = {};
-    if (config.baseUrl !== undefined) {
+    if (this.props.config.baseUrl) {
+      callBack.requestExp = async (data: number): Promise<any[]> => {
+        return callFlaskService(this.props.config, data, "/get_exp");
+      };
       callBack.requestPredictions = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/predict");
+        return callFlaskService(this.props.config, data, "/predict");
       };
       callBack.requestMatrix = async (
         data: any[]
       ): Promise<IErrorAnalysisMatrix> => {
-        return callFlaskService(data, "/matrix");
+        return callFlaskService(this.props.config, data, "/matrix");
       };
       callBack.requestDebugML = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/tree");
+        return callFlaskService(this.props.config, data, "/tree");
       };
       callBack.requestImportances = async (data: any[]): Promise<any[]> => {
-        return callFlaskService(data, "/importances");
+        return callFlaskService(this.props.config, data, "/importances");
       };
       callBack.requestCausalWhatIf = async (
         id: string,
@@ -52,21 +60,31 @@ export class ModelAssessment extends React.Component {
         abortSignal: AbortSignal
       ): Promise<ICausalWhatIfData[]> => {
         return callFlaskService(
+          this.props.config,
           [id, features, featureName, newValue, target],
           "/causal_whatif",
           abortSignal
+        );
+      };
+      callBack.requestBoxPlotDistribution = async (
+        data: any
+      ): Promise<IHighchartBoxData> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/model_overview_probability_distribution"
         );
       };
     }
 
     return (
       <ModelAssessmentDashboard
-        {...modelData}
+        {...this.props.modelData}
         {...callBack}
-        localUrl={config.baseUrl}
-        locale={config.locale}
+        localUrl={this.props.config.baseUrl}
+        locale={this.props.config.locale}
         theme={undefined}
-        featureFlights={parseFeatureFlights(config.featureFlights)}
+        featureFlights={parseFeatureFlights(this.props.config.featureFlights)}
       />
     );
   }

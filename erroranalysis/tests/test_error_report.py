@@ -6,13 +6,14 @@ import uuid
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_cancer_data, create_dataframe,
-                          create_housing_data, create_iris_data,
-                          create_models_classification,
-                          create_models_regression)
 
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import ErrorReport
+from rai_test_utils.datasets.tabular import (create_cancer_data,
+                                             create_housing_data,
+                                             create_iris_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
 
 
 class TestErrorReport(object):
@@ -29,6 +30,18 @@ class TestErrorReport(object):
             run_error_analyzer(model, X_test, y_test, feature_names,
                                categorical_features,
                                expect_user_warnings=alter_feature_names)
+
+    def test_error_report_iris_numpy_int64_features(self):
+        X_train, X_test, y_train, y_test, _, _ = create_iris_data()
+        # Test with numpy feature indexes instead of string feature names
+        feature_names = range(0, X_train.shape[1])
+        feature_names = [np.int64(i) for i in feature_names]
+        models = create_models_classification(X_train, y_train)
+
+        for model in models:
+            categorical_features = []
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               categorical_features)
 
     def test_error_report_cancer(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
@@ -56,8 +69,8 @@ class TestErrorReport(object):
     def test_error_report_housing_pandas(self, filter_features):
         X_train, X_test, y_train, y_test, feature_names = \
             create_housing_data()
-        X_train = create_dataframe(X_train, feature_names)
-        X_test = create_dataframe(X_test, feature_names)
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
         models = create_models_regression(X_train, y_train)
 
         for model in models:

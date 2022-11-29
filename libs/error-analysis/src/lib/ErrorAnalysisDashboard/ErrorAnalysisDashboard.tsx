@@ -2,13 +2,26 @@
 // Licensed under the MIT License.
 
 import {
+  Customizer,
+  getId,
+  IPivotItemProps,
+  ISettings,
+  Layer,
+  LayerHost,
+  mergeStyleSets,
+  MessageBar,
+  MessageBarType,
+  PivotItem,
+  Pivot,
+  Text
+} from "@fluentui/react";
+import {
   Cohort,
   IMultiClassLocalFeatureImportance,
   ISingleClassLocalFeatureImportance,
   isThreeDimArray,
   JointDataset,
   IExplanationModelMetadata,
-  ModelTypes,
   WeightVectors,
   CohortInfoPanel,
   CohortListPanel,
@@ -27,28 +40,15 @@ import {
   IFilter,
   WeightVectorOption,
   EditCohort,
-  ShiftCohort
+  ShiftCohort,
+  IsBinary,
+  IsMulticlass
 } from "@responsible-ai/core-ui";
 import { DatasetExplorerTab } from "@responsible-ai/dataset-explorer";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { ModelMetadata } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import {
-  Customizer,
-  getId,
-  IPivotItemProps,
-  ISettings,
-  Layer,
-  LayerHost,
-  mergeStyleSets,
-  MessageBar,
-  MessageBarType,
-  PivotItem,
-  Pivot,
-  PivotLinkSize,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { ErrorAnalysisView } from "./Controls/ErrorAnalysisView/ErrorAnalysisView";
@@ -70,6 +70,8 @@ import {
 } from "./ErrorAnalysisEnums";
 import { IErrorAnalysisDashboardProps } from "./Interfaces/IErrorAnalysisDashboardProps";
 import { IErrorAnalysisDashboardState } from "./Interfaces/IErrorAnalysisDashboardState";
+
+const maxLength = 18;
 
 export class ErrorAnalysisDashboard extends React.PureComponent<
   IErrorAnalysisDashboardProps,
@@ -115,17 +117,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     }
   }
 
-  private static buildModelMetadata(
-    props: IErrorAnalysisDashboardProps
-  ): IExplanationModelMetadata {
-    const modelType = getModelType(
-      props.modelInformation.method,
-      props.precomputedExplanations,
-      props.probabilityY
-    );
+  private static getFeatures(props: IErrorAnalysisDashboardProps): {
+    featureNames: string[];
+    featureNamesAbridged: string[];
+  } {
     let featureNames = props.dataSummary.featureNames;
     let featureNamesAbridged: string[];
-    const maxLength = 18;
     if (featureNames !== undefined) {
       if (!featureNames.every((name) => typeof name === "string")) {
         featureNames = featureNames.map((x) => x.toString());
@@ -176,6 +173,21 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       );
       featureNamesAbridged = featureNames;
     }
+    return {
+      featureNames,
+      featureNamesAbridged
+    };
+  }
+
+  private static buildModelMetadata(
+    props: IErrorAnalysisDashboardProps
+  ): IExplanationModelMetadata {
+    const modelType = getModelType(
+      props.modelInformation.method,
+      props.precomputedExplanations,
+      props.probabilityY
+    );
+    const { featureNames, featureNamesAbridged } = this.getFeatures(props);
     let classNames = props.dataSummary.classNames;
     let classLength = 1;
     if (
@@ -188,10 +200,12 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
         props.precomputedExplanations,
         props.probabilityY
       );
-    } else if (modelType === ModelTypes.Binary) {
+    } else if (IsBinary(modelType)) {
       classLength = 2;
-    } else if (modelType === ModelTypes.Multiclass) {
-      classLength = new Set([...props.trueY!].concat(props.predictedY!)).size;
+    } else if (IsMulticlass(modelType)) {
+      classLength = new Set(
+        [...(props.trueY || [])].concat(props.predictedY || [])
+      ).size;
     }
 
     if (!classNames || classNames.length !== classLength) {
@@ -276,7 +290,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       [WeightVectors.AbsAvg]: localization.Interpret.absoluteAverage
     };
     const weightVectorOptions = [];
-    if (modelMetadata.modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelMetadata.modelType)) {
       weightVectorOptions.push(WeightVectors.AbsAvg);
     }
     modelMetadata.classNames.forEach((name, index) => {
@@ -288,7 +302,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
     let selectedFeatures = props.features;
     if (props.requestDebugML === undefined) {
-      selectedFeatures = props.errorAnalysisData.tree_features!;
+      selectedFeatures = props.errorAnalysisData.tree_features || [];
     }
     const importances = props.errorAnalysisData.importances ?? [];
     return {
@@ -320,10 +334,9 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       predictionTab: PredictionTabKeys.CorrectPredictionTab,
       selectedCohort: cohorts[0],
       selectedFeatures,
-      selectedWeightVector:
-        modelMetadata.modelType === ModelTypes.Multiclass
-          ? WeightVectors.AbsAvg
-          : 0,
+      selectedWeightVector: IsMulticlass(modelMetadata.modelType)
+        ? WeightVectors.AbsAvg
+        : 0,
       selectedWhatIfIndex: undefined,
       showMessageBar: false,
       viewType: ViewTypeKeys.ErrorAnalysisView,
@@ -341,11 +354,11 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       <ModelAssessmentContext.Provider
         value={{
           //error analysis does not have manual cohort adding
-          addCohort: () => undefined,
+          addCohort: (): void => undefined,
           baseErrorCohort: this.state.baseCohort,
           dataset: {} as IDataset,
-          deleteCohort: () => undefined,
-          editCohort: () => undefined,
+          deleteCohort: (): void => undefined,
+          editCohort: (): void => undefined,
           errorAnalysisData: this.props.errorAnalysisData,
           errorCohorts: this.state.cohorts,
           jointDataset: this.state.jointDataset,
@@ -368,8 +381,8 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       >
         <div className={classNames.page}>
           <Navigation
-            updateViewState={this.updateViewState.bind(this)}
-            updatePredictionTabState={this.updatePredictionTabState.bind(this)}
+            updateViewState={this.updateViewState}
+            updatePredictionTabState={this.updatePredictionTabState}
             viewType={this.state.viewType}
             activeGlobalTab={this.state.activeGlobalTab}
             activePredictionTab={this.state.predictionTab}
@@ -377,7 +390,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
             closeMessageBar={this.closeMessageBar}
           />
           <MainMenu
-            viewExplanation={this.viewExplanation.bind(this)}
+            viewExplanation={this.viewExplanation}
             onInfoPanelClick={(): void =>
               this.setState({ openInfoPanel: true })
             }
@@ -520,7 +533,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     onClearCohortSelectionClick={(): void =>
                       this.clearCohortSelection()
                     }
-                    updateSelectedCohort={this.updateSelectedCohort.bind(this)}
+                    updateSelectedCohort={this.updateSelectedCohort}
                     disabledView={false}
                     features={this.props.features}
                     selectedFeatures={this.state.selectedFeatures}
@@ -542,9 +555,10 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
                     <Pivot
                       selectedKey={this.state.activeGlobalTab}
                       onLinkClick={this.handleGlobalTabClick}
-                      linkSize={PivotLinkSize.normal}
+                      linkSize={"normal"}
                       headersOnly
                       styles={{ root: classNames.pivotLabelWrapper }}
+                      overflowBehavior="menu"
                     >
                       {this.pivotItems.map((props) => (
                         <PivotItem key={props.itemKey} {...props} />
@@ -678,13 +692,13 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     });
   };
 
-  private updateSelectedCohort(
+  private updateSelectedCohort = (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],
     source: CohortSource = CohortSource.None,
     cells: number,
     cohortStats: MetricCohortStats | undefined
-  ): void {
+  ): void => {
     // Need to relabel the filter names based on index in joint dataset
     const filtersRelabeled = ErrorCohort.getDataFilters(
       filters,
@@ -725,7 +739,7 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
       cohorts,
       selectedCohort
     });
-  }
+  };
 
   private clearCohortSelection = (): void => {
     const cohorts = this.state.cohorts.filter(
@@ -751,25 +765,27 @@ export class ErrorAnalysisDashboard extends React.PureComponent<
     }
   };
 
-  private viewExplanation(): void {
+  private viewExplanation = (): void => {
     this.setState({
       openFeatureList: false,
       viewType: ViewTypeKeys.ExplanationView
     });
-  }
+  };
 
-  private updateViewState(viewType: ViewTypeKeys): void {
+  private updateViewState = (viewType: ViewTypeKeys): void => {
     if (viewType !== ViewTypeKeys.ExplanationView) {
       const predictionTab = PredictionTabKeys.CorrectPredictionTab;
       this.setState({ openWhatIf: false, predictionTab, viewType });
     } else {
       this.setState({ viewType });
     }
-  }
+  };
 
-  private updatePredictionTabState(predictionTab: PredictionTabKeys): void {
+  private updatePredictionTabState = (
+    predictionTab: PredictionTabKeys
+  ): void => {
     this.setState({ predictionTab });
-  }
+  };
 
   private closeMessageBar = (): void => {
     this.setState({ showMessageBar: false });

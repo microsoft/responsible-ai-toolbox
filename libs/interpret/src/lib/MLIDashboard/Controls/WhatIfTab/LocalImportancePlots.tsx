@@ -2,37 +2,42 @@
 // Licensed under the MIT License.
 
 import {
+  IComboBox,
+  ComboBox,
+  IComboBoxOption,
+  IDropdownOption,
+  Dropdown,
+  ChoiceGroup,
+  IChoiceGroupOption,
+  Slider,
+  Text,
+  Callout,
+  Link,
+  CommandBarButton,
+  Label,
+  Toggle,
+  Stack
+} from "@fluentui/react";
+import {
   IExplanationModelMetadata,
+  IsClassifier,
+  IsMulticlass,
   ModelTypes,
   WeightVectorOption,
   JointDataset,
   ModelExplanationUtils,
   ChartTypes,
   MissingParametersPlaceholder,
-  FabricStyles,
-  FeatureImportanceBar
+  FluentUIStyles,
+  FeatureImportanceBar,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import {
-  ChoiceGroup,
-  IChoiceGroupOption,
-  Slider,
-  Text,
-  ComboBox,
-  IComboBox,
-  DirectionalHint,
-  Callout,
-  Link,
-  IconButton,
-  CommandBarButton,
-  Dropdown,
-  IDropdownOption,
-  Label,
-  Toggle,
-  Stack
-} from "office-ui-fabric-react";
 import React from "react";
 
+import { ClassImportanceWeights } from "../ClassImportanceWeights/ClassImportanceWeights";
 import { IGlobalSeries } from "../GlobalExplanationTab/IGlobalSeries";
 import { MultiICEPlot } from "../MultiICEPlot/MultiICEPlot";
 
@@ -54,6 +59,7 @@ export interface ILocalImportancePlotsProps {
   sortingSeriesIndex: number | undefined;
   invokeModel?: (data: any[], abortSignal: AbortSignal) => Promise<any[]>;
   onWeightChange: (option: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export interface ILocalImportancePlotsState {
@@ -64,7 +70,6 @@ export interface ILocalImportancePlotsState {
   secondaryChartChoice: string;
   selectedFeatureKey: string;
   selectedICEClass: number;
-  crossClassInfoVisible: boolean;
   iceTooltipVisible: boolean;
 }
 
@@ -72,7 +77,6 @@ export class LocalImportancePlots extends React.Component<
   ILocalImportancePlotsProps,
   ILocalImportancePlotsState
 > {
-  private weightOptions: IDropdownOption[] | undefined;
   private classOptions: IDropdownOption[] = this.props.metadata.classNames.map(
     (name, index) => {
       return { key: index, text: name };
@@ -84,16 +88,7 @@ export class LocalImportancePlots extends React.Component<
     if (!this.props.jointDataset.hasDataset) {
       return;
     }
-    if (this.props.metadata.modelType === ModelTypes.Multiclass) {
-      this.weightOptions = this.props.weightOptions.map((option) => {
-        return {
-          key: option,
-          text: this.props.weightLabels[option]
-        };
-      });
-    }
     this.state = {
-      crossClassInfoVisible: false,
       iceTooltipVisible: false,
       secondaryChartChoice: WhatIfConstants.featureImportanceKey,
       selectedFeatureKey: `${JointDataset.DataLabelRoot}0`,
@@ -160,13 +155,11 @@ export class LocalImportancePlots extends React.Component<
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
-              <Text variant="medium" className={classNames.sliderLabel}>
-                {localization.formatString(
+              <Slider
+                label={localization.formatString(
                   localization.Interpret.GlobalTab.topAtoB,
                   this.state.topK
                 )}
-              </Text>
-              <Slider
                 className={classNames.startingK}
                 ariaLabel={
                   localization.Interpret.AggregateImportance.topKFeatures
@@ -185,7 +178,7 @@ export class LocalImportancePlots extends React.Component<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNamesAbridged}
+                unsortedX={this.props.metadata.featureNames}
                 unsortedSeries={this.props.includedFeatureImportance}
                 topK={this.state.topK}
               />
@@ -202,6 +195,7 @@ export class LocalImportancePlots extends React.Component<
                       options={featureImportanceSortOptions}
                       selectedKey={this.state.sortingSeriesIndex}
                       onChange={this.setSortIndex}
+                      ariaLabel={localization.Interpret.GlobalTab.sortBy}
                     />
                   </Stack.Item>
                   <Stack.Item className={classNames.absoluteValueToggle}>
@@ -214,74 +208,14 @@ export class LocalImportancePlots extends React.Component<
                   </Stack.Item>
                 </Stack>
 
-                {this.props.metadata.modelType === ModelTypes.Multiclass && (
+                {IsClassifier(this.props.metadata.modelType) && (
                   <div>
-                    <div className={classNames.multiclassWeightLabel}>
-                      <Text
-                        variant={"medium"}
-                        className={classNames.multiclassWeightLabelText}
-                      >
-                        {localization.Interpret.GlobalTab.weightOptions}
-                      </Text>
-                      <IconButton
-                        id={"cross-class-weight-info"}
-                        iconProps={{ iconName: "Info" }}
-                        title={localization.Interpret.CrossClass.info}
-                        onClick={this.toggleCrossClassInfo}
-                      />
-                    </div>
-                    {this.weightOptions && (
-                      <Dropdown
-                        options={this.weightOptions}
-                        selectedKey={this.props.selectedWeightVector}
-                        onChange={this.setWeightOption}
-                      />
-                    )}
-                    {this.state.crossClassInfoVisible && (
-                      <Callout
-                        doNotLayer
-                        target={"#cross-class-weight-info"}
-                        setInitialFocus
-                        onDismiss={this.toggleCrossClassInfo}
-                        directionalHint={DirectionalHint.leftCenter}
-                        role="alertdialog"
-                        styles={{ container: FabricStyles.calloutContainer }}
-                      >
-                        <div className={classNames.calloutWrapper}>
-                          <div className={classNames.calloutHeader}>
-                            <Text className={classNames.calloutTitle}>
-                              {
-                                localization.Interpret.CrossClass
-                                  .crossClassWeights
-                              }
-                            </Text>
-                          </div>
-                          <div className={classNames.calloutInner}>
-                            <Text>
-                              {localization.Interpret.CrossClass.overviewInfo}
-                            </Text>
-                            <ul>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .absoluteValInfo
-                                  }
-                                </Text>
-                              </li>
-                              <li>
-                                <Text>
-                                  {
-                                    localization.Interpret.CrossClass
-                                      .enumeratedClassInfo
-                                  }
-                                </Text>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </Callout>
-                    )}
+                    <ClassImportanceWeights
+                      onWeightChange={this.props.onWeightChange}
+                      selectedWeightVector={this.props.selectedWeightVector}
+                      weightOptions={this.props.weightOptions}
+                      weightLabels={this.props.weightLabels}
+                    />
                   </div>
                 )}
               </div>
@@ -319,7 +253,7 @@ export class LocalImportancePlots extends React.Component<
                 setInitialFocus
                 onDismiss={this.toggleICETooltip}
                 role="alertdialog"
-                styles={{ container: FabricStyles.calloutContainer }}
+                styles={{ container: FluentUIStyles.calloutContainer }}
               >
                 <div className={classNames.calloutWrapper}>
                   <div className={classNames.calloutHeader}>
@@ -368,10 +302,10 @@ export class LocalImportancePlots extends React.Component<
                 ariaLabel="feature picker"
                 selectedKey={this.state.selectedFeatureKey}
                 useComboBoxAsMenuWidth
-                calloutProps={FabricStyles.calloutProps}
-                styles={FabricStyles.limitedSizeMenuDropdown}
+                calloutProps={FluentUIStyles.calloutProps}
+                styles={FluentUIStyles.limitedSizeMenuDropdown}
               />
-              {this.props.metadata.modelType === ModelTypes.Multiclass && (
+              {IsMulticlass(this.props.metadata.modelType) && (
                 <ComboBox
                   autoComplete={"on"}
                   className={classNames.iceClassSelection}
@@ -381,8 +315,8 @@ export class LocalImportancePlots extends React.Component<
                   ariaLabel="class picker"
                   selectedKey={this.state.selectedICEClass}
                   useComboBoxAsMenuWidth
-                  calloutProps={FabricStyles.calloutProps}
-                  styles={FabricStyles.limitedSizeMenuDropdown}
+                  calloutProps={FluentUIStyles.calloutProps}
+                  styles={FluentUIStyles.limitedSizeMenuDropdown}
                 />
               )}
             </div>
@@ -409,10 +343,10 @@ export class LocalImportancePlots extends React.Component<
               {localization.Interpret.WhatIfTab.showLabel}
             </Text>
             <ChoiceGroup
-              className={classNames.choiceGroup}
               styles={{
                 flexContainer: classNames.choiceGroupFlexContainer
               }}
+              className={classNames.choiceGroupLabel}
               options={secondaryPlotChoices}
               selectedKey={this.state.secondaryChartChoice}
               onChange={this.setSecondaryChart}
@@ -434,7 +368,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onFeatureSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -444,7 +378,7 @@ export class LocalImportancePlots extends React.Component<
 
   private onICEClassSelected = (
     _event: React.FormEvent<IComboBox>,
-    item?: IDropdownOption
+    item?: IComboBoxOption
   ): void => {
     if (item?.key === undefined) {
       return;
@@ -470,17 +404,6 @@ export class LocalImportancePlots extends React.Component<
     this.setState({ sortArray, sortingSeriesIndex: newIndex });
   };
 
-  private setWeightOption = (
-    _event: React.FormEvent<HTMLDivElement>,
-    item?: IDropdownOption
-  ): void => {
-    if (item?.key === undefined) {
-      return;
-    }
-    const newIndex = item.key as WeightVectorOption;
-    this.props.onWeightChange(newIndex);
-  };
-
   private setSecondaryChart = (
     _event?: React.FormEvent,
     item?: IChoiceGroupOption
@@ -489,10 +412,13 @@ export class LocalImportancePlots extends React.Component<
       return;
     }
     this.setState({ secondaryChartChoice: item.key });
-  };
-
-  private toggleCrossClassInfo = (): void => {
-    this.setState({ crossClassInfoVisible: !this.state.crossClassInfoVisible });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type:
+        item.key === WhatIfConstants.featureImportanceKey
+          ? TelemetryEventName.IndividualFeatureImportanceFeatureImportancePlotClick
+          : TelemetryEventName.IndividualFeatureImportanceICEPlotClick
+    });
   };
 
   private toggleICETooltip = (): void => {
@@ -502,7 +428,7 @@ export class LocalImportancePlots extends React.Component<
   private toggleSortAbsolute = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       const sortArray = this.getSortedArray(
         this.state.sortingSeriesIndex,
@@ -515,7 +441,7 @@ export class LocalImportancePlots extends React.Component<
   private getSortedArray = (
     sortIndex: number | undefined,
     checked: boolean
-  ) => {
+  ): number[] => {
     if (sortIndex !== undefined) {
       return checked
         ? ModelExplanationUtils.getAbsoluteSortIndices(

@@ -60,17 +60,10 @@ jobs:
         run: |
           yarn buildall
 
-      - if: ${{ matrix.operatingSystem != 'macos-latest' }}
-        name: Install pytorch on non-MacOS
+      - name: Install pytorch
         shell: bash -l {0}
         run: |
           conda install --yes --quiet pytorch torchvision captum cpuonly -c pytorch
-
-      - if: ${{ matrix.operatingSystem == 'macos-latest' }}
-        name: Install Anaconda packages on MacOS, which should not include cpuonly according to official docs
-        shell: bash -l {0}
-        run: |
-          conda install --yes --quiet pytorch torchvision captum -c pytorch
 
       - name: update and upgrade pip, setuptools, wheel, and twine
         shell: bash -l {0}
@@ -137,9 +130,22 @@ jobs:
         run: pytest ./tests/
         working-directory: ${{ env.raiDirectory }}
 
-      - name: Run widget tests
+      - name: Run widget tests without flights
         shell: bash -l {0}
-        run: yarn e2e-widget
+        run: |
+          yarn e2e-widget -n "responsibleaidashboard-census-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-regression-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-housing-classification-model-debugging" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-diabetes-decision-making" -f ""
+          yarn e2e-widget -n "responsibleaidashboard-multiclass-dnn-model-debugging" -f ""
+
+      - name: Upload e2e test screen shot
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: raiwidgets-e2e-screen-shot
+          path: ./dist/cypress
 
       - name: Upload a raiwidgets build result
         uses: actions/upload-artifact@v3
@@ -181,7 +187,7 @@ jobs:
 
       - name: Publish responsibleai package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -190,7 +196,7 @@ jobs:
 
       - name: Publish responsibleai package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'responsibleai' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RESPONSIBLEAI }}
@@ -198,7 +204,7 @@ jobs:
 
       - name: Publish raiwidgets package to Test PyPI
         if: ${{ github.event.inputs.releaseType == 'Test' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN_RAIWIDGETS }}
@@ -207,7 +213,7 @@ jobs:
 
       - name: Publish raiwidgets package to Prod PyPI
         if: ${{ github.event.inputs.releaseType == 'Prod' && matrix.package == 'raiwidgets' }}
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN_RAIWIDGETS }}
@@ -227,6 +233,8 @@ jobs:
             counterfactuals,
             fairness,
             interpret,
+            interpret-text,
+            interpret-vision,
             localization,
             error-analysis,
             model-assessment

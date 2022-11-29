@@ -4,11 +4,11 @@
 import { getMenu } from "../../../../../util/getMenu";
 import { selectRow } from "../../../../../util/Table";
 import { Locators } from "../../Constants";
-import { IModelAssessmentData } from "../../IModelAssessmentData";
 import {
   modelAssessmentDatasets,
   regExForNumbersWithBrackets
-} from "../../modelAssessmentDatasets";
+} from "../../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 // import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
@@ -29,8 +29,11 @@ export function describeTabularDataView(
           .should("match", regExForNumbersWithBrackets);
       });
 
+      it("should collapse 'Correct predictions' by default", () => {
+        cy.get(Locators.IFICollapseButton).should("be.visible");
+      });
+
       it("should have right number of incorrect prediction datapoints", () => {
-        cy.get(Locators.IFIExpandCollapseButton).first().click(); // collapse correct predictions
         cy.get(Locators.IFIPredictionSpan)
           .eq(1)
           .invoke("text")
@@ -55,12 +58,19 @@ export function describeTabularDataView(
         cy.get("#subPlotContainer").should("contain.text", message);
       });
       it("should select the row", () => {
-        selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
+        if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
+          cy.get(Locators.IFICollapseButton).eq(0).click(); // expand correct predictions
+        }
+        selectRow(
+          "Index",
+          dataShape.featureImportanceData?.rowToSelect || "4",
+          Locators.IFIContainer
+        );
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
         );
-        selectRow("Index", "4");
+        selectRow("Index", "4", Locators.IFIContainer);
       });
     });
 

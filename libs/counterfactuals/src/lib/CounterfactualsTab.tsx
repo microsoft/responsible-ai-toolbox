@@ -1,25 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Stack, Text } from "@fluentui/react";
 import {
   Cohort,
   defaultModelAssessmentContext,
   ICounterfactualData,
+  ITelemetryEvent,
   ModelAssessmentContext,
   ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { buildCounterfactualState } from "./buildCounterfactualState";
-import { CounterfactualChart } from "./CounterfactualChart";
+import { CounterfactualComponent } from "./CounterfactualComponent";
 import { counterfactualsTabStyles } from "./CounterfactualsTab.styles";
 
 export interface ICounterfactualsTabProps {
   data: ICounterfactualData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 export interface ICounterfactualsTabState {
   cohorts: Cohort[];
@@ -54,13 +56,14 @@ export class CounterfactualsTab extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <CounterfactualChart
+          <CounterfactualComponent
             invokeModel={this.context.requestPredictions}
             data={this.props.data}
             selectedWeightVector={this.state.selectedWeightVector}
             weightOptions={this.state.weightVectorOptions}
             weightLabels={this.state.weightVectorLabels}
             onWeightChange={this.onWeightVectorChange}
+            telemetryHook={this.props.telemetryHook}
           />
         </Stack.Item>
       </Stack>

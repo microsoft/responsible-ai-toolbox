@@ -2,7 +2,17 @@
 // Licensed under the MIT License.
 
 import {
-  FabricStyles,
+  IComboBoxOption,
+  IComboBox,
+  PrimaryButton,
+  IDropdownOption,
+  Pivot,
+  PivotItem,
+  IPivotItemProps,
+  initializeIcons
+} from "@fluentui/react";
+import {
+  FluentUIStyles,
   isTwoDimArray,
   IExplanationContext,
   IExplanationGenerators,
@@ -26,46 +36,24 @@ import {
   SelectionContext,
   ModelMetadata
 } from "@responsible-ai/mlchartlib";
-import { initializeIcons } from "@uifabric/icons";
 import _ from "lodash";
 import memoize from "memoize-one";
-import {
-  PrimaryButton,
-  IComboBox,
-  IComboBoxOption,
-  IDropdownOption,
-  Pivot,
-  PivotItem,
-  PivotLinkFormat,
-  PivotLinkSize,
-  IPivotItemProps
-} from "office-ui-fabric-react";
 import React from "react";
 
-import { EbmExplanation } from "./Controls/EbmExplanation";
-import { FeatureImportanceBar } from "./Controls/FeatureImportance/FeatureImportanceBar";
 import { FeatureImportanceModes } from "./Controls/FeatureImportance/FeatureImportanceModes";
 import {
   IFeatureImportanceConfig,
   globalFeatureImportanceId,
-  barId,
-  FeatureImportanceWrapper
+  barId
 } from "./Controls/FeatureImportance/FeatureImportanceWrapper";
 import { ICEPlot } from "./Controls/ICEPlot";
 import { PerturbationExploration } from "./Controls/PerturbationExploration";
-import {
-  DataExploration,
-  dataScatterId
-} from "./Controls/Scatter/DataExploration";
-import {
-  ExplanationExploration,
-  explanationScatterId
-} from "./Controls/Scatter/ExplanationExploration";
 import {
   localBarId,
   SinglePointFeatureImportance
 } from "./Controls/SinglePointFeatureImportance";
 import { explanationDashboardStyles } from "./ExplanationDashboard.styles";
+import { ExplanationDashboardActiveTabs } from "./ExplanationDashboardActiveTabs";
 import { IExplanationDashboardProps } from "./Interfaces/IExplanationDashboardProps";
 import { IBarChartConfig } from "./SharedComponents/IBarChartConfig";
 import { validateInputs } from "./validateInputs";
@@ -481,8 +469,7 @@ export class ExplanationDashboard extends React.Component<
       return undefined;
     }
     switch (modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         return localExplanations.map((featuresByClasses) => {
           return featuresByClasses.map((classArray) => {
@@ -491,6 +478,7 @@ export class ExplanationDashboard extends React.Component<
         });
       }
       case ModelTypes.Multiclass:
+      case ModelTypes.Binary:
       default: {
         return localExplanations.map((featuresByClasses, rowIndex) => {
           return featuresByClasses.map((classArray) => {
@@ -707,99 +695,26 @@ export class ExplanationDashboard extends React.Component<
                 ExplanationDashboard.globalTabKeys[this.state.activeGlobalTab]
               }
               onLinkClick={this.handleGlobalTabClick}
-              linkFormat={PivotLinkFormat.tabs}
-              linkSize={PivotLinkSize.normal}
+              linkFormat={"tabs"}
+              linkSize={"normal"}
               headersOnly
-              styles={FabricStyles.verticalTabsStyle}
+              styles={FluentUIStyles.verticalTabsStyle}
+              overflowBehavior="menu"
             >
               {this.pivotItems.map((props) => (
                 <PivotItem key={props.itemKey} {...props} />
               ))}
             </Pivot>
-            {this.state.activeGlobalTab === 0 && (
-              <DataExploration
-                dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme as any}
-                selectionContext={this.selectionContext}
-                selectedRow={this.state.selectedRow}
-                plotlyProps={
-                  this.state.configs[dataScatterId] as IPlotlyProperty
-                }
-                onChange={this.onConfigChanged}
-                messages={
-                  this.props.stringParams
-                    ? this.props.stringParams.contextualHelp
-                    : undefined
-                }
-              />
-            )}
-            {this.state.activeGlobalTab === 1 && (
-              <FeatureImportanceBar
-                dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme as any}
-                selectionContext={this.selectionContext}
-                selectedRow={this.state.selectedRow}
-                config={this.state.configs[barId] as IFeatureImportanceConfig}
-                onChange={this.onConfigChanged}
-                messages={
-                  this.props.stringParams
-                    ? this.props.stringParams.contextualHelp
-                    : undefined
-                }
-              />
-            )}
-            {this.state.activeGlobalTab === 2 && (
-              <ExplanationExploration
-                dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme as any}
-                selectionContext={this.selectionContext}
-                selectedRow={this.state.selectedRow}
-                plotlyProps={
-                  this.state.configs[explanationScatterId] as IPlotlyProperty
-                }
-                onChange={this.onConfigChanged}
-                messages={
-                  this.props.stringParams
-                    ? this.props.stringParams.contextualHelp
-                    : undefined
-                }
-              />
-            )}
-            {this.state.activeGlobalTab === 3 && (
-              <FeatureImportanceWrapper
-                dashboardContext={this.state.dashboardContext}
-                theme={this.props.theme as any}
-                selectionContext={this.selectionContext}
-                selectedRow={this.state.selectedRow}
-                config={
-                  this.state.configs[
-                    globalFeatureImportanceId
-                  ] as IFeatureImportanceConfig
-                }
-                onChange={this.onConfigChanged}
-                messages={
-                  this.props.stringParams
-                    ? this.props.stringParams.contextualHelp
-                    : undefined
-                }
-              />
-            )}
-            {this.state.activeGlobalTab === 4 && (
-              <EbmExplanation
-                explanationContext={
-                  this.state.dashboardContext.explanationContext
-                }
-                theme={this.props.theme as any}
-              />
-            )}
-            {this.state.activeGlobalTab === 5 && (
-              <iframe
-                title="custom"
-                srcDoc={
-                  this.state.dashboardContext.explanationContext.customVis
-                }
-              />
-            )}
+            <ExplanationDashboardActiveTabs
+              activeGlobalTab={this.state.activeGlobalTab}
+              configs={this.state.configs}
+              dashboardContext={this.state.dashboardContext}
+              selectedRow={this.state.selectedRow}
+              selectionContext={this.selectionContext}
+              theme={this.props.theme as any}
+              onConfigChanged={this.onConfigChanged}
+              stringParams={this.props.stringParams}
+            />
           </div>
           {this.state.dashboardContext.explanationContext.localExplanation && (
             <div className={explanationDashboardStyles.localChartsWrapper}>
@@ -819,10 +734,10 @@ export class ExplanationDashboard extends React.Component<
                       ]
                     }
                     onLinkClick={this.handleLocalTabClick}
-                    linkFormat={PivotLinkFormat.tabs}
-                    linkSize={PivotLinkSize.normal}
+                    linkFormat={"tabs"}
+                    linkSize={"normal"}
                     headersOnly
-                    styles={FabricStyles.verticalTabsStyle}
+                    styles={FluentUIStyles.verticalTabsStyle}
                   >
                     <PivotItem
                       headerText={localization.Interpret.localFeatureImportance}
@@ -830,8 +745,7 @@ export class ExplanationDashboard extends React.Component<
                     />
                     {this.props.requestPredictions !== undefined &&
                       this.state.dashboardContext.explanationContext.testDataset
-                        .dataset &&
-                      this.props.requestPredictions && (
+                        .dataset && (
                         <PivotItem
                           headerText={
                             localization.Interpret.perturbationExploration

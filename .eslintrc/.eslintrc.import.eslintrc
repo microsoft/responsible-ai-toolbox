@@ -8,9 +8,9 @@
         "allow": [
           "core-js/stable",
           "regenerator-runtime/runtime.js",
-          "office-ui-fabric-react/lib/utilities/positioning",
           "highcharts/modules/accessibility",
           "highcharts/modules/exporting",
+          "highcharts/modules/export-data",
           "highcharts/highcharts-more",
           "highcharts/modules/heatmap",
           "highcharts/modules/pattern-fill",

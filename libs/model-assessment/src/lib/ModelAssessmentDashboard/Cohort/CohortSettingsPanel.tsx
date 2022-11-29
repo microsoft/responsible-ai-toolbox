@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Panel, PanelType, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Panel, PanelType, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { ChangeGlobalCohortButton } from "./ChangeGlobalCohortButton";
@@ -35,6 +35,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         type={PanelType.medium}
+        id={"CohortSettingsPanel"}
       >
         <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
           <Stack.Item>

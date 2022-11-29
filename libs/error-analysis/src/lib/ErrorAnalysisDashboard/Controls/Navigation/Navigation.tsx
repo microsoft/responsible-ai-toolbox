@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
 import {
   Breadcrumb,
   IBreadcrumbItem,
@@ -14,7 +13,8 @@ import {
   MessageBar,
   MessageBarType,
   Stack
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
@@ -134,7 +134,7 @@ export class Navigation extends React.Component<INavigationProps> {
               <MessageBar
                 messageBarType={MessageBarType.success}
                 isMultiline={false}
-                onDismiss={() => this.props.closeMessageBar()}
+                onDismiss={(): void => this.props.closeMessageBar()}
                 className={classNames.root}
                 styles={messageBarStyles}
               >

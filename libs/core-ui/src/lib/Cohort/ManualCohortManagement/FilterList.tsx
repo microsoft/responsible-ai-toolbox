@@ -1,13 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IconButton, TooltipHost, TooltipOverflowMode } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
 import { roundDecimal } from "@responsible-ai/mlchartlib";
-import {
-  IconButton,
-  TooltipHost,
-  TooltipOverflowMode
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { FilterMethods, IFilter } from "../../Interfaces/IFilter";
@@ -35,27 +31,31 @@ export class FilterList extends React.Component<IFilterListProps> {
       localization.Interpret.FilterOperations.inTheRangeOf
   };
   public render(): React.ReactNode {
-    return this.props.filters.map((filter, index) => {
-      return (
-        <div key={index}>
-          {this.setFilterLabel(filter)}
-          {this.props.editFilter && (
-            <IconButton
-              id={`editFilerBtn-${index}`}
-              iconProps={{ iconName: "Edit" }}
-              onClick={(): void => this.props.editFilter?.(index)}
-            />
-          )}
-          {this.props.removeFilter && (
-            <IconButton
-              id={`removeFilterBtn-${index}`}
-              iconProps={{ iconName: "Clear" }}
-              onClick={(): void => this.props.removeFilter?.(index)}
-            />
-          )}
-        </div>
-      );
-    });
+    return this.props.filters
+      .filter((item) => item)
+      .map((filter, index) => {
+        return (
+          <div key={index}>
+            {this.setFilterLabel(filter)}
+            {this.props.editFilter && (
+              <IconButton
+                id={`editFilerBtn-${index}`}
+                iconProps={{ iconName: "Edit" }}
+                onClick={(): void => this.props.editFilter?.(index)}
+                ariaLabel={localization.Common.editButton}
+              />
+            )}
+            {this.props.removeFilter && (
+              <IconButton
+                id={`removeFilterBtn-${index}`}
+                iconProps={{ iconName: "Clear" }}
+                onClick={(): void => this.props.removeFilter?.(index)}
+                ariaLabel={localization.Common.close}
+              />
+            )}
+          </div>
+        );
+      });
   }
 
   private setFilterLabel(filter: IFilter): React.ReactNode {
@@ -65,7 +65,7 @@ export class FilterList extends React.Component<IFilterListProps> {
 
     if (
       selectedFilter.isCategorical ||
-      this.props.jointDataset.metaDict[filter.column].treatAsCategorical
+      this.props.jointDataset.metaDict[filter.column]?.treatAsCategorical
     ) {
       const selectedValues: string[] = [];
       const filterArgs = filter.arg;

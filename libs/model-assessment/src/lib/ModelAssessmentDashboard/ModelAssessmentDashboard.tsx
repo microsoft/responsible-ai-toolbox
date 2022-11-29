@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IDropdownOption, loadTheme, Stack } from "@fluentui/react";
 import {
   CohortBasedComponent,
   ModelAssessmentContext,
@@ -8,16 +9,13 @@ import {
   CohortSource,
   Cohort,
   SaveCohort,
-  defaultTheme
+  defaultTheme,
+  TelemetryLevels,
+  TelemetryEventName,
+  Announce
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
-import {
-  getTheme,
-  IDropdownOption,
-  loadTheme,
-  Stack
-} from "office-ui-fabric-react";
 import * as React from "react";
 
 import { getAvailableTabs } from "./AvailableTabs";
@@ -28,6 +26,7 @@ import { modelAssessmentDashboardStyles } from "./ModelAssessmentDashboard.style
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { IModelAssessmentDashboardState } from "./ModelAssessmentDashboardState";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
+import { addTabMessage } from "./utils/addTabMessage";
 
 export class ModelAssessmentDashboard extends CohortBasedComponent<
   IModelAssessmentDashboardProps,
@@ -77,7 +76,9 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               }
             : undefined,
           modelMetadata: this.state.modelMetadata,
+          requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
+          requestExp: this.props.requestExp,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
           requestPredictions: this.props.requestPredictions,
@@ -95,6 +96,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           <MainMenu
             activeGlobalTabs={this.state.activeGlobalTabs}
             removeTab={this.removeTab}
+            telemetryHook={this.props.telemetryHook}
           />
           <Stack.Item className={classNames.mainContent}>
             <TabsView
@@ -110,11 +112,13 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               selectedCohort={this.state.selectedCohort}
               dataset={this.props.dataset}
               onClearCohortSelectionClick={this.clearCohortSelection}
+              requestExp={this.props.requestExp}
               requestPredictions={this.props.requestPredictions}
               requestDebugML={this.props.requestDebugML}
               requestImportances={this.props.requestImportances}
               requestMatrix={this.props.requestMatrix}
               stringParams={this.props.stringParams}
+              telemetryHook={this.props.telemetryHook}
               updateSelectedCohort={this.updateSelectedCohort}
               setSaveCohortVisible={this.setSaveCohortVisible}
               setSelectedCohort={this.setSelectedCohort}
@@ -122,6 +126,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
               addTabDropdownOptions={this.addTabDropdownOptions}
               addTab={this.addTab}
             />
+            <Announce message={this.state.onAddMessage} />
           </Stack.Item>
           {this.state.saveCohortVisible && (
             <SaveCohort
@@ -141,6 +146,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
 
   private setSaveCohortVisible = (): void => {
     this.setState({ saveCohortVisible: true });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapSaveAsNewCohortClick
+    });
   };
 
   private addTab = (index: number, tab: GlobalTabKeys): void => {
@@ -157,7 +166,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       name:
         this.addTabDropdownOptions.find(({ key }) => key === tab)?.text || ""
     });
-    this.setState({ activeGlobalTabs: tabs });
+    this.setState({ activeGlobalTabs: tabs, onAddMessage: addTabMessage(tab) });
   };
 
   private removeTab = (index: number): void => {
@@ -166,7 +175,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     this.setState({ activeGlobalTabs: tabs });
   };
 
-  private shiftErrorCohort = (cohort: ErrorCohort) => {
+  private shiftErrorCohort = (cohort: ErrorCohort): void => {
     this.setState({
       baseCohort: cohort,
       selectedCohort: cohort
@@ -187,6 +196,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts,
       selectedCohort: this.state.baseCohort
     });
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapClearSelection
+    });
   };
 
   private onSaveCohort = (
@@ -205,6 +218,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? savedCohort : preState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.ErrorAnalysisTreeMapCohortSaved
+    });
   };
 
   private addCohort = (
@@ -231,6 +248,10 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
       cohorts: newCohorts,
       selectedCohort: switchNew ? newErrorCohort : prevState.selectedCohort
     }));
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.NewCohortAdded
+    });
   };
 
   private editCohort = (editCohort: Cohort, switchNew?: boolean): void => {
@@ -260,7 +281,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
     }
   };
 
-  private deleteCohort = (cohort: ErrorCohort) => {
+  private deleteCohort = (cohort: ErrorCohort): void => {
     if (
       this.state.baseCohort.cohort.name === cohort.cohort.name ||
       this.state.selectedCohort.cohort.name === cohort.cohort.name

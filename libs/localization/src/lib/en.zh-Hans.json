@@ -1,14 +1,21 @@
 {
+  "Common": {
+    "close": "Close",
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "二元治疗:",
-      "binaryDescription": "在此示例中，启用此功能将导致类/标签 1 的概率平均增加 X 单位。",
+      "binaryDescription": "On average in this sample, turning on this feature will cause the probability of class/label '{0}' to increase by X units.",
+      "regressionDescription": "On average in this sample, turning on this feature will cause the predictions of the target to increase/decrease by X units.",
       "causalPoint": "因果效果点",
       "confidenceLower": "置信区间(下部)",
       "confidenceUpper": "置信区间(上部)",
       "confoundingFeature": "混杂特征与治疗和所关注结果都有关联。混杂因素在直接因果效应之外创建了一条从治疗到结果的额外关联路径。除非已测量混杂特征并将其纳入模型中，否则这些额外关联可以使因果效应的估计值产生偏差。偏差可以是正的或负的，具体取决于忽略的混杂因素、治疗和结果之间的关联方向。",
       "continuous": "持续治疗: ",
-      "continuousDescription": "在此示例中，平均而言，将此功能增加 1 个单位将导致类/标签 1 的概率增加 X 个单位。",
+      "continuousDescription": "On average in this sample, increasing this feature by 1 unit will cause the probability of class/label '{0}' to increase by X units.",
+      "continuousRegressionDescription": "On average in this sample, increasing this feature by 1 unit will cause the predictions of the target to increase/decrease by X units.",
       "description": "因果分析回答“假设”问题，即在不同的策略选择下，现实世界结果会如何变化，例如产品的不同定价策略或患者的替代治疗方法。与识别重要关联模式的模型预测不同，这些工具可帮助你识别直接影响所关注结果的最重要的因果关系特征。这些模型在保持其他混杂特征不变的情况下可确定一个特征(通常称为“治疗”)的因果效应。为了获得最佳结果，请确保完整数据集包含所有可能作为混杂因素而与结果关联的可用特征。",
       "directAggregate": "每种处理的直接聚合因果效应(置信区间为 95%)",
       "here": "此处",
@@ -19,7 +26,7 @@
       "currentOutcome": "当前结果",
       "currentTreatment": "当前处理值",
       "dataRequired": "此选项卡要求选择一个数据点。",
-      "datapointIndex": "数据点索引",
+      "selectedDatapoint": "Selected datapoint",
       "description": "个体因果效应可以为个性化干预提供信息，例如针对客户的针对性促销或个性化治疗计划。具有一组特定特征的个人如何响应因果特征或治疗中的变化? 如果更改特定个体的治疗级别，则因果 what-if 工具将计算特定个体在现实世界中的边际更改。通过此分析，可以了解在不同的策略选择(例如产品的不同定价策略或患者的替代治疗方法)下现实世界结果的更改情况。请指定感兴趣的治疗方法，并观察现实世界结果将如何变化。",
       "directIndividual": "每种处理的直接个体因果效应(置信区间为 95%)",
       "index": "数据点索引",
@@ -45,16 +52,16 @@
       "BarTextBinary": "如果应用了上述建议的全局治疗策略，则第一个条形表示平均相对增益。报告的增益报告所使用治疗中的数值变化。第二个条形指示通过对所有人启用二元治疗产生的相对增益(或损失)。",
       "BarTextContinuous": "如果应用了上述建议的全局治疗策略，则第一个条形表示平均相对增益。报告的增益反映治疗特征增加/减少了示例中典型治疗大小的 10%。第二个条形指示连续治疗增减 10% 的相对增益(或损失)。",
       "Description": "这些工具有助于构建策略以供将来干预。你可以确定示例的哪些部分会遇到对因果驱动程序 (即处理) 的最大响应，或构造规则来定义将来哪些人口将具有最大的治疗效果。",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "建议的处理 = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "设置治疗功能",
       "Size": "样本大小的可解释建议全局治疗策略(n) = {0}",
       "Table": "可以通过获取一行，然后获取该特定行的列来读取表。",
       "TableDescription": "此表显示了可应用于当前数据样本或其他人群的建议治疗策略。该表提供了一个简单的规则，以根据对于个体是否响应所选治疗方法具有最大影响的特征，将观察结果切分为数据队列。该表还指定了分配给每个段的当前数据样本中的数据点数量。",
       "alwaysTreat": "始终处理“{0}”",
       "averageGainBinary": "将治疗 {0} 设置为其基线值 {1} 的平均增益。",
-      "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
+      "averageGainContinuous": "替代策略相对于无“{0}”治疗的平均增益。",
       "header": "这些工具有助于构建策略以供进行干预。你可以确定示例的哪些部分对因果特征或治疗的变化做出最大响应，并构造规则来定义特定干预未来应针对哪些人群。",
       "nSample": "n = {0}",
       "noData": "无数据"
@@ -69,17 +76,31 @@
       "Title": "无数据"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} 在({1})的集中",
       "nin": "{0} 不在({1})的集中",
       "rg": "{0} 在 ({1}) 的范围内",
       "nrg": "{0} 在 ({1}) 的范围内",
       "Unknown": "未知"
+    },
+    "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "title": "Switch Cohort",
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+    },
+    "PreBuiltCohort": {
+      "featureNameNotFound": "Feature name not found in the dataset",
+      "notACategoricalFeature": "Feature is not categorical"
+    },
+    "EmptyCohortDialog": {
+      "title": "Dataset cohort contains no datapoints",
+      "subText": "It seems your dataset cohort contains no datapoints, adjust your filters to include at least one datapoint in your dataset cohort before saving."
     }
   },
   "Counterfactuals": {
@@ -87,19 +108,28 @@
     "EffectLowerBound": "CI 下限",
     "EffectOfTreatment": "建议的效果",
     "EffectUpperBound": "CI 上限",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "建议的治疗",
     "WhatIf": {
       "setValue": "设置值",
       "sortFeatures": "按反事实特征重要性对特征列排序",
-      "toggleToolTipBody": "Counterfactual examples generate local feature importances which indicate which top features were perturbed the most to achieve the desired class classification scenarios or desired range for regression scenarios.",
-      "toggleToolTipHeader": "Ranked counterfactual features"
+      "percentCounterfactualLocalImportance": "Percentage of counterfactuals that varied the feature",
+      "toggleToolTipBody": "反事实示例生成本地特征重要性，可以指示哪些主要功能最受干扰，以实现回归方案所需的类分类方案或所需范围。",
+      "toggleToolTipHeader": "已设置级别的反事实功能",
+      "predictedClass": "Predicted class",
+      "predictedValue": "Predicted value"
     },
     "counterfactualEx": "反事实示例 {0}",
     "counterfactualName": "模拟反事实名",
-    "createWhatIfCounterfactual": "Create what-if counterfactual",
-    "createCounterfactual": "Counterfactual",
+    "createWhatIfCounterfactual": "创建 What-if 反事实",
+    "createCounterfactual": "反事实",
     "createOwn": "创建自己的反事实:",
     "currentClass": "当前类",
+    "currentRange": "Current range",
     "decreaseByOne": "将值减少 1",
     "desiredClass": "反事实的所需类",
     "header": "What-If 反事实",
@@ -111,9 +141,10 @@
     "localImportanceSelectData": "选择数据点以查看本地重要性图表",
     "noData": "无数据",
     "noFeatures": "无可用特征",
-    "panelDescription": "Browse prediction counterfactuals and create your own. Based on an input datapoint and on the desired prediction {0}. The table shows a proximal, diverse set of counterfactual examples that yield that prediction. To create your own prediction counterfactual, you can use the counterfactuals as suggestions, search features to see their values, and set suggested counterfactual feature values by clicking \"set values\" text under each counterfactual name. Name your counterfactual and save it.",
-    "whatIfPanelHeader": "What-if counterfactuals",
-    "panelHeader": "Counterfactuals",
+    "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
+    "panelDescriptionWithoutSetValue": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples.",
+    "whatIfPanelHeader": "What-If 反事实",
+    "panelHeader": "反事实",
     "recommendedPolicy": "建议的策略增益",
     "referenceDatapoint": "引用数据点: 行 {0}",
     "saveAsNew": "另存为新数据点",
@@ -129,8 +160,14 @@
       "cohort": "队列",
       "defaultLabel": "所有数据"
     },
+    "CohortBaseAndFilters": {
+      "globalCohortAndFilters": "Global cohort and filters",
+      "globalCohort": "Global cohort",
+      "errorExplorer": "Error explorer",
+      "filters": "Filters"
+    },
     "CohortInfo": {
-      "baseCohortInstances": "基本队列中的实例",
+      "baseCohortInstances": "Instances in global cohort",
       "basicInformation": "基本信息",
       "cohortInformation": "队列信息",
       "correct": "正确",
@@ -149,19 +186,25 @@
       "subText": "了解选中的队列。编辑其队列名。删除此队列。"
     },
     "FeatureList": {
+      "apply": "Apply",
       "features": "特征",
-      "importances": "重要性"
+      "importances": "重要性",
+      "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
     },
     "TreeViewParameters": {
-      "maximumDepth": "Maximum depth",
-      "maximumDepthInfoText": "The maximum depth of the surrogate tree trained on errors",
-      "maximumDepthTitle": "Additional information on maximum depth",
-      "numLeaves": "Number of leaves",
-      "numLeavesInfoText": "The number of leaves of the surrogate tree trained on errors",
-      "numLeavesTitle": "Additional information on number of leaves",
-      "minDataInLeaf": "Minimum number of samples in one leaf",
-      "minDataInLeafInfoText": "The minimum number of data required to create one leaf",
-      "minDataInLeafTitle": "Additional information on minimum number of samples in one leaf"
+      "maximumDepth": "最大深度",
+      "maximumDepthInfoText": "针对错误训练的代理项树的最大深度",
+      "maximumDepthTitle": "有关最大深度的其他信息",
+      "numLeaves": "叶数",
+      "numLeavesInfoText": "针对错误训练的代理项树的叶数",
+      "numLeavesTitle": "有关叶数的其他信息",
+      "minDataInLeaf": "一个叶中示例的最小数目",
+      "minDataInLeafInfoText": "创建一个叶所需的最小数据数",
+      "minDataInLeafTitle": "有关一个叶中最小示例数的其他信息"
+    },
+    "TreeLegend": {
+      "clearSelection": "Clear selection"
     },
     "FilterTooltip": {
       "correctNum": "正确(#): ",
@@ -188,8 +231,8 @@
       "featureList": "特征列表",
       "fullscreen": "全屏",
       "heatMap": "热度地图",
-      "saveCohort": "保存对列",
-      "shiftCohort": "移动队列",
+      "newCohort": "New cohort",
+      "shiftCohort": "Switch cohort",
       "treeMap": "树形图",
       "whatIf": "What-If"
     },
@@ -199,8 +242,10 @@
       "move": "移动",
       "saveAs": "另存为新队列",
       "shift": "移动",
-      "subText": "是否要使用不同的地图重启探索? 请将其另存为新队列。否则，所选筛选器将会丢失。",
-      "title": "映射移动"
+      "heatTitle": "Leave tree view?",
+      "heatSubText": "Are you sure you want to leave tree view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost.",
+      "treeTitle": "Leave heatmap view?",
+      "treeSubText": "Are you sure you want to leave heatmap view? You can save your filters as a new cohort so you can access them in Cohort settings. Otherwise your filters will be lost."
     },
     "MatrixArea": {
       "clearAll": "全部清除",
@@ -208,11 +253,11 @@
       "selectAll": "选择全部"
     },
     "MatrixFilter": {
-      "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
+      "disabledWarning": "除非将全局队列切换为表示“全部数据”，否则禁用错误热度地图，因为正在为完整数据集生成热度地图。切换回完整数据集以查看错误热度地图。"
     },
     "MatrixSummary": {
       "heatMapDescription": "借助热度地图，可以专注于特定的相交特征筛选器和计算非聚合错误率。请从要比较的两个数据集特征开始。",
-      "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
+      "heatMapStaticDescription": "借助热度地图，可以专注于特定的交集功能筛选器和计算非聚合错误率。在查看仪表板之前，必需最多选择两个功能才能通过 SDK 创建热度地图。"
     },
     "MatrixOptions": {
       "quantileBinningLabel": "分位数分箱",
@@ -225,9 +270,16 @@
       "binningThresholdTitle": "有关分箱阈值的其他信息"
     },
     "Metrics": {
+      "accuracyScore": "Accuracy score",
+      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
+      "accuracyScoreShort": "Accuracy",
+      "accuracyScoreTitle": "Additional information on accuracy score",
       "errorRate": "错误率",
       "errorRateInfo": "错误率表示系统失败节点中实例的百分比。",
       "errorRateTitle": "有关错误率的其他信息",
+      "f1Score": "F1 score",
+      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
+      "f1ScoreTitle": "Additional information on F1 score",
       "meanAbsoluteError": "平均绝对误差",
       "meanAbsoluteErrorInfo": "平均绝对误差是误差总和的平均值。",
       "meanAbsoluteErrorShort": "平均 abs. 误差",
@@ -236,37 +288,46 @@
       "meanSquaredErrorInfo": "均方误差是错误平方的平均值。",
       "meanSquaredErrorShort": "平均 sq. 误差",
       "meanSquaredErrorTitle": "有关均方误差的其他信息",
-      "precision": "Precision score",
-      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Additional information on precision",
-      "recall": "Recall score",
-      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
-      "recallShort": "Recall",
-      "recallTitle": "Additional information on recall",
-      "macroPrecision": "Macro averaged precision score",
-      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-      "macroPrecisionShort": "Macro precision",
-      "macroPrecisionTitle": "Additional information on macro averaged precision",
-      "microPrecision": "Micro averaged precision score",
-      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-      "microPrecisionShort": "Micro precision",
-      "microPrecisionTitle": "Additional information on micro averaged precision",
-      "macroRecall": "Macro averaged recall score",
-      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-      "macroRecallShort": "Macro recall",
-      "macroRecallTitle": "Additional information on macro averaged recall",
-      "microRecall": "Micro averaged recall score",
-      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-      "microRecallShort": "Micro recall",
-      "microRecallTitle": "Additional information on micro averaged recall",
+      "precision": "精准率分数",
+      "precisionInfo": "精准率是真阳性与所有预测阳性的比率。",
+      "precisionShort": "精准率",
+      "precisionTitle": "有关精准率的其他信息",
+      "recall": "召回率分数",
+      "recallInfo": "召回率是指真阳性与所有实际阳性之比。",
+      "recallShort": "召回率",
+      "recallTitle": "有关召回率的其他信息",
+      "macroPrecision": "宏平均精准率分数",
+      "macroPrecisionInfo": "宏平均精准率是指真阳性与按每个类和平均独立计算的所有预测阳性之间的比率。",
+      "macroPrecisionShort": "宏精准率",
+      "macroPrecisionTitle": "有关宏平均精准率的其他信息",
+      "microPrecision": "微平均精准率分数",
+      "microPrecisionInfo": "微平均精准率是指真阳性与所有类聚合的所有预测阳性之比。",
+      "microPrecisionShort": "微精准率",
+      "microPrecisionTitle": "有关微平均精准率的其他信息",
+      "macroRecall": "宏平均召回率分数",
+      "macroRecallInfo": "宏平均召回率是指真阳性与按每个类和平均独立计算的所有实际阳性之间的比率。",
+      "macroRecallShort": "宏召回率",
+      "macroRecallTitle": "有关宏平均召回率的其他信息",
+      "microRecall": "微平均召回率分数",
+      "microRecallInfo": "微平均召回率是指真阳性与所有类聚合的所有实际阳性之比。",
+      "microRecallShort": "微召回率",
+      "microRecallTitle": "有关微平均召回率的其他信息",
+      "macroF1Score": "Macro averaged F1 score",
+      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+      "macroF1ScoreShort": "Macro F1 score",
+      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
+      "microF1Score": "Micro averaged F1 score",
+      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+      "microF1ScoreShort": "Micro F1 score",
+      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
       "metricName": "指标名",
       "metricValue": "指标值"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "选择指标"
     },
     "Navigation": {
+      "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
       "dataExplorer": "数据资源管理器",
       "errorExplorer": "错误资源管理器",
       "globalExplanation": "全局说明",
@@ -280,13 +341,13 @@
       "move": "移动",
       "save": "保存",
       "saveTitle": "另存为新队列",
-      "subText": "Save the current cohort to the cohort settings. You can revisit the saved cohort via the cohort settings.",
-      "defaultLabelCopy": "All data copy"
+      "subText": "将当前队列保存到队列设置。可通过队列设置重新访问已保存的队列。",
+      "defaultLabelCopy": "所有数据复制"
     },
     "TreeView": {
-      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\"",
-      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\"",
-      "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
+      "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
+      "disabledWarning": "除非全局队列切换为表示“所有数据”，否则将禁用错误树状图，因为正在为完整数据集生成树状图。切换回完整数据集以查看错误树状图。"
     },
     "WhatIfPanel": {
       "whatIfHeader": "What-If"
@@ -312,13 +373,13 @@
     "instanceView": "实例视图",
     "localExplanationView": "局部解释",
     "noFeature": "无特征",
-    "treeMapDescription": "若要重新训练树状图，请选择并保存下面的特征。特征重要性使用共同信息计算得出(错误标注在真实标签上)。 请将其用做训练树状图的指南。",
+    "scaleWarning": "For scale reasons of the UI explanations are randomly downsampled",
     "whatIfDatapoints": "What-If 数据点"
   },
   "Fairness": {
     "ValidationErrors": {
-      "missingPerformanceMetric": "No performance metric found.",
-      "missingFairnessMetric": "No fairness metric found."
+      "missingPerformanceMetric": "找不到性能指标。",
+      "missingFairnessMetric": "找不到公平度指标。"
     },
     "BinDialog": {
       "cancel": "取消",
@@ -613,12 +674,12 @@
     },
     "AxisConfigDialog": {
       "TreatAsCategorical": "视为类别",
+      "apply": "Apply",
       "binLabel": "对数据应用分箱",
       "countHelperText": "点数直方图",
       "ditherLabel": "应抖动",
       "groupByCohort": "按队列分组",
       "numOfBins": "箱数",
-      "select": "选择",
       "selectClass": "选择类",
       "selectFeature": "选择特征",
       "selectFilter": "选择轴值"
@@ -646,7 +707,8 @@
     },
     "Cohort": {
       "cohort": "队列",
-      "defaultLabel": "所有数据"
+      "defaultLabel": "所有数据",
+      "temporaryCohort": "Temporary cohort"
     },
     "CohortBanner": {
       "addCohort": "新建队列",
@@ -657,7 +719,7 @@
       "datasetCohorts": "数据集队列",
       "details": "详细信息",
       "duplicateCohort": "复制",
-      "edit": "Edit",
+      "edit": "编辑",
       "editCohort": "编辑队列",
       "features": "{0} 个特征",
       "filters": "{0} 个筛选器",
@@ -676,14 +738,18 @@
       "cancelTitle": "取消队列",
       "cancelYes": "是",
       "cohortNameError": "缺少队列名",
+      "cohortNameDupError": "Cohort with same name already exists",
       "cohortNameLabel": "数据集队列名",
       "cohortNamePlaceholder": "命名你的队列",
-      "clearAllFilters": "Clear all filters",
-      "defaultFilterState": "Select a filter to add parameters to your dataset cohort. Filters from your current viewing cohort are pre-populated.",
+      "clearAllFilters": "清除所有筛选器",
+      "defaultFilterState": "选择一个筛选器，以将参数添加到数据集队列。预填充当前查看队列中的筛选器。",
       "delete": "删除",
+      "invalidValueError": "Value should be between {0} and {1}",
+      "minimumGreaterThanMaximum": "Minimum value inputs must be less than maximum value inputs.",
       "noAddedFilters": "无筛选器",
       "placeholderName": "队列 {0}",
       "save": "保存",
+      "saveAndSwitch": "Save and switch",
       "selectFilter": "选择筛选器"
     },
     "Columns": {
@@ -696,7 +762,9 @@
       "predictedProbabilities": "预测概率",
       "regressionError": "回归错误",
       "trueNegative": "真负",
-      "truePositive": "真正"
+      "truePositive": "真正",
+      "correctlyClassified": "Correctly classified",
+      "misclassified": "Misclassified"
     },
     "CrossClass": {
       "absoluteValInfo": "绝对值的平均值: 显示所有可能类中特征重要性的总和，除以类的数量",
@@ -712,14 +780,15 @@
       "aggregatePlots": "聚合绘图",
       "chartType": "图表类型",
       "colorValue": "颜色值",
-      "helperText": "创建数据集队列，以按筛选器分析数据统计信息，如预测结果、数据集特征和错误组。了解数据集中的呈现过度/不足。",
+      "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "单个数据点",
       "missingParameters": "此选项卡要求提供评估数据集。",
-      "noColor": "无"
+      "noColor": "无",
+      "datasetCohortDropdown": "Dataset cohort dropdown"
     },
     "DependencePlot": {
       "featureImportanceOf": "特性重要性",
-      "placeholder": "单击上面条形图中的特征可以显示它的相关性绘图"
+      "placeholder": "Select a feature to show its dependence plot"
     },
     "ExplanationScatter": {
       "class": "类: ",
@@ -758,14 +827,14 @@
       "violinText": "小提琴图"
     },
     "FilterOperations": {
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " 不包含 {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " 包含 {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} 和 其他 {1} 个"
     },
     "Filters": {
@@ -788,10 +857,10 @@
       "helperText": "了解影响整体模型预测的前 k 个重要特征。使用滑块以按降序显示特征重要性。"
     },
     "GlobalTab": {
-      "absoluteValues": "Absolute values",
+      "absoluteValues": "View as absolute values",
       "aggregateFeatureImportance": "聚合特征重要性",
       "collapsedHelperText": "浏览影响整体模型预测的前 K 个重要特征。",
-      "datapoint": "Datapoint",
+      "datapoint": "数据点",
       "datasetCohortSelector": "选择数据集队列",
       "datasetCohorts": "数据集队列",
       "datasetRequired": "相关性绘图需要计算数据集和局部特征重要性数组。",
@@ -801,12 +870,14 @@
       "helperText": "探索影响总体模型预测的前 k 个重要特征(即全局解释)。使用滑块降序显示特征重要性。并排显示所有队列的功能重要性，并且可以通过选择图例中的队列来切换关闭。单击关系图中的任何特征以查看下面的密度图，以了解所选特征的值如何影响预测。",
       "legendHelpText": "通过单击图例项在绘图中切换启用/禁用队列。",
       "missingParameters": "此选项卡要求提供局部特征重要性参数。",
-      "sortBy": "排序依据",
+      "sortBy": "Sort by datapoint",
       "topAtoB": "前 {0} 个特征(按重要性排列)",
       "viewDependencePlotFor": "查看以下特征的相关性绘图:",
-      "weightOptions": "类重要性权重"
+      "weightOptions": "类重要性权重",
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
+      "close": "Close",
       "errorPrefix": "出现错误: {0}",
       "featurePickerLabel": "特征:",
       "integerError": "必须为整数",
@@ -819,6 +890,7 @@
       "prediction": "预测",
       "predictionLabel": "预测: {0}",
       "probabilityLabel": "概率: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "步骤:",
       "submitPrompt": "提交范围以查看 ICE 绘图",
       "topLevelErrorMessage": "参数中的错误"
@@ -840,13 +912,16 @@
     },
     "Statistics": {
       "accuracy": "准确度: {0}",
-      "fnr": "漏报率: {0}",
-      "fpr": "误报率: {0}",
+      "fnr": "False negative rate: {0}",
+      "fpr": "False positive rate: {0}",
       "meanPrediction": "平均值预测 {0}",
-      "mse": "均方误差: {0}",
+      "mse": "Mean squared error: {0}",
       "precision": "精准率: {0}",
-      "rSquared": "R 平方: {0}",
-      "recall": "召回率: {0}"
+      "rSquared": "R²: {0}",
+      "recall": "召回率: {0}",
+      "selectionRate": "Selection rate: {0}",
+      "mae": "Mean absolute error: {0}",
+      "f1Score": "F1 score: {0}"
     },
     "ValidationErrors": {
       "addFilters": "添加筛选器",
@@ -882,7 +957,7 @@
       "dataPointInfo": "数据点信息",
       "deltaLabel": "增量",
       "disclaimer": "免责声明: 这些是基于许多近似值的解释，而不是预测的“原因”。在无法从数学上进行严格、扎实的因果推理的情况下，不建议用户在现实生活中根据此工具制定决策。",
-      "featureImportanceGetStartedText": "选择一点以查看其局部重要性",
+      "featureImportanceGetStartedText": "Select a datapoint in the table above to view its local feature importances",
       "featureImportanceLackingParameters": "请提供局部特征重要性，以查看每个特征对各个预测有何影响。",
       "featureImportancePlot": "特征重要性绘图",
       "featureValues": "特征值",
@@ -951,6 +1026,47 @@
     "selectPoint": "选择一点以查看其局部解释",
     "summaryImportance": "摘要重要性"
   },
+  "InterpretText": {
+    "View": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "legendText": "Positive scalar feature importances represents the extent that the word was important towards the classification of your selected label, and negative scalar feature importances represents words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "Legend": {
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
+  },
+  "InterpretVision": {
+    "Dashboard": {
+      "allData": "All Data",
+      "columnOne": "Title",
+      "columnTwo": "Index",
+      "columnThree": "True Y",
+      "columnFour": "Predicted Y",
+      "columnFive": "Other metadata",
+      "filter": "Filter",
+      "pageSize": "Page size: ",
+      "search": "Search",
+      "settings": "Settings",
+      "tabOptionFirst": "Image explorer view",
+      "tabOptionSecond": "Table view",
+      "tabOptionThird": "Data characteristics",
+      "thumbnailSize": "Thumbnail size",
+      "titleBarError": "Error instances",
+      "titleBarSuccess": "Success instances"
+    }
+  },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "添加",
@@ -970,18 +1086,19 @@
     },
     "Cohort": {
       "apply": "应用",
+      "delete": "Delete",
       "cancel": "取消",
       "cohortInfo": "队列信息",
       "cohortList": "队列列表",
-      "deleteCohort": "Deleting {0}?",
-      "deleteConfirm": "Are you sure you want to delete this cohort?",
+      "deleteCohort": "正在删除 {0}?",
+      "deleteConfirm": "是否确定要删除此队列?",
       "selectCohort": "选择队列",
-      "shiftCohort": "移动队列",
+      "shiftCohort": "Switch cohort",
       "shiftCohortDescription": "从队列列表中选择队列。将该队列应用到仪表板。"
     },
     "CohortInformation": {
-      "SwitchGlobalCohort": "Switch global cohort",
-      "CreateNewCohort": "新建队列",
+      "ShiftCohort": "Switch cohort",
+      "NewCohort": "New cohort",
       "DataPoints": "数据点数量",
       "DefaultCohort": " (默认)",
       "Filters": "筛选器数",
@@ -994,14 +1111,16 @@
     "ComponentNames": {
       "CausalAnalysis": "因果分析",
       "Counterfactuals": "反事实",
+      "DataAnalysis": "Data analysis",
+      "DataBalance": "Data balance",
       "DataExplorer": "数据资源管理器",
       "ErrorAnalysis": "错误分析",
       "Fairness": "公平度",
       "FeatureImportances": "特征重要性",
-      "ModelStatistics": "模型统计信息"
+      "ModelOverview": "Model overview"
     },
     "DashboardSettings": {
-      "Content": "此表显示了仪表板的布局。可以使用错误分析组件向下筛选要在以下组件中查看的数据。可以添加和拖放组件以对流重新排序或删除组件。",
+      "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
       "DashboardComponents": "仪表板组件",
       "DataPoints": "数据点数量",
       "DeleteDialog": {
@@ -1010,26 +1129,282 @@
         "Delete": "删除",
         "Title": "删除 {0}?"
       },
-      "Title": "仪表板导航"
+      "Title": "Dashboard configuration"
+    },
+    "DataBalance": {
+      "AggregateBalanceMeasures": {
+        "Callout": {
+          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
+          "Title": "What are aggregate balance measures?"
+        },
+        "Measures": {
+          "AtkinsonIndex": {
+            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
+            "Name": "Atkinson Index"
+          },
+          "TheilLIndex": {
+            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
+            "Name": "Theil Index (L)"
+          },
+          "TheilTIndex": {
+            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
+            "Name": "Theil Index (T)"
+          }
+        },
+        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Aggregate balance measures",
+        "Table": {
+          "Description": "Description",
+          "FeatureName": "Feature name",
+          "FeatureValue": "Feature value"
+        }
+      },
+      "DistributionBalanceMeasures": {
+        "Callout": {
+          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
+          "Title": "What are distribution balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "DistributionMeasure": "Distribution measure",
+            "MeasureValue": "Measure value"
+          },
+          "Title1": "Comparing",
+          "Title2": "with the Uniform Distribution"
+        },
+        "Measures": {
+          "ChiSquarePValue": {
+            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
+            "Name": "Chi-Square P-Value"
+          },
+          "ChiSquareStatistic": {
+            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
+            "Name": "Chi-Square (χ2) Statistic"
+          },
+          "CrossEntropy": {
+            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
+            "Name": "Cross Entropy"
+          },
+          "InfiniteNormDistance": {
+            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Infinite Norm Distance"
+          },
+          "JSDistance": {
+            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
+            "Name": "Jensen-Shannon Distance"
+          },
+          "KLDivergence": {
+            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Kullback-Leibler Divergence"
+          },
+          "TotalVariationDistance": {
+            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Total Variation Distance"
+          },
+          "WassersteinDistance": {
+            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Wasserstein Distance"
+          }
+        },
+        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Distribution balance measures"
+      },
+      "FeatureBalanceMeasures": {
+        "Callout": {
+          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
+          "Title": "What are feature balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "ClassA": "Class A",
+            "ClassB": "Class B"
+          },
+          "Tooltip": {
+            "And": "and",
+            "ValueDescription1": "have a",
+            "ValueDescription2": "of"
+          }
+        },
+        "Description1": "Showing",
+        "Description2": "gaps on all classes of",
+        "Description3": "for label",
+        "FeaturePicker": "Feature",
+        "LabelPicker": "Positive label",
+        "MeasurePicker": "Measure",
+        "Measures": {
+          "JaccardIndex": {
+            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
+            "Name": "Jaccard Index"
+          },
+          "KendallRankCorrelation": {
+            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
+            "Name": "Kendall Rank Correlation"
+          },
+          "LogLikelihoodRatio": {
+            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
+            "Name": "Log-Likelihood Ratio"
+          },
+          "PointwiseMutualInformation": {
+            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
+            "Name": "Pointwise Mutual Information"
+          },
+          "SorensenDiceCoefficient": {
+            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+            "Name": "Sørensen-Dice Coefficient"
+          },
+          "StatisticalParity": {
+            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
+            "Name": "Statistical Parity"
+          },
+          "TTest": {
+            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Name": "t-test"
+          },
+          "TTestPValue": {
+            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
+            "Name": "t-test p-value"
+          }
+        },
+        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Feature balance measures"
+      },
+      "LearnMore": "Learn more",
+      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
     },
     "FeatureImportances": {
       "CorrectPredictions": "正确的预测",
       "GlobalExplanation": "聚合特征重要性",
       "IncorrectPredictions": "不正确的预测",
-      "IndividualFeature": "通过单击表中的一个数据点(或多个数据点)来选择数据点，以查看其本地特征重要性值(本地解释)和下面的单个条件预期(ICE)绘图。对于数据点超过 5000 个的数据集，该视图是一个随机子样本，可用于轻松浏览。",
-      "LocalExplanation": "单个特征重要性"
+      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "LocalExplanation": "单个特征重要性",
+      "SelectionCounter": "{0}/{1} datapoints selected",
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
     },
     "MainMenu": {
-      "DashboardSettings": "仪表板导航",
+      "DashboardSettings": "Dashboard configuration",
       "cohortInfo": "队列信息",
       "cohortList": "队列列表",
       "cohortSettings": "队列设置",
       "createCohort": "创建队列",
-      "saveCohort": "保存对列",
-      "shiftCohort": "移动队列"
+      "shiftCohort": "Switch cohort"
     },
     "Navigation": {
       "modelStatistics": "模型统计信息"
+    },
+    "ModelOverview": {
+      "metrics": {
+        "accuracy": {
+          "name": "Accuracy",
+          "description": "The fraction of data points classified correctly."
+        },
+        "f1Score": {
+          "name": "F1 score",
+          "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "meanAbsoluteError": {
+          "name": "Mean absolute error",
+          "description": "The average of absolute values of errors. More robust to outliers than MSE."
+        },
+        "meanSquaredError": {
+          "name": "Mean squared error",
+          "description": "The average of squared errors."
+        },
+        "precision": {
+          "name": "Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1."
+        },
+        "recall": {
+          "name": "Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "falsePositiveRate": {
+          "name": "False positive rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 0."
+        },
+        "falseNegativeRate": {
+          "name": "False negative rate",
+          "description": "The fraction of data points classified incorrectly among those whose true label is 1."
+        },
+        "selectionRate": {
+          "name": "Selection rate",
+          "description": "The percentage of predictions with label 1."
+        },
+        "meanPrediction": {
+          "name": "Mean prediction",
+          "description": "The average of all predictions."
+        },
+        "fairnessMetricDifference": "Difference",
+        "fairnessMetricRatio": "Ratio"
+      },
+      "metricsDropdown": "Metric(s)",
+      "notAvailable": "N/A",
+      "countColumnHeader": "Sample size",
+      "dataCohortsHeatmapHeader": "Cohorts",
+      "dataCohortsChartSelectionHeader": "Dataset cohorts",
+      "featureBasedCohortsChartSelectionHeader": "Feature cohorts",
+      "disaggregatedAnalysisHeatmapHeader": "Feature cohorts",
+      "fairnessMetricsHeatmapHeader": "Fairness metrics",
+      "featuresDropdown": "Feature(s)",
+      "metricChartDropdownSelectionHeader": "Metric",
+      "probabilityForClassSelectionHeader": "Probability for class",
+      "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
+      "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
+      "probabilityDistributionPivotItem": "Probability distribution",
+      "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
+      "tableCountTooltip": "Cohort {0} contains {1} instances.",
+      "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
+      "tableDifferenceTooltip": "The {0} difference is {1}. It is calculated by subtracting the minimum value {2} from cohort {3} from the maximum value {4} from cohort {5}.",
+      "tableRatioTooltip": "The {0} ratio is {1}. It is calculated by dividing the minimum value {2} from cohort {3} by the maximum value {4} from cohort {5}.",
+      "boxPlotPlaceholder": "Select at least one cohort to view the box plot.",
+      "chartCohortSelectionPlaceholder": "Select at least one cohort overall to view the chart.",
+      "metricSelectionButton": "Choose metric",
+      "cohortSelectionButton": "Choose cohorts",
+      "probabilityLabelSelectionButton": "Choose label",
+      "selectAllCohortsOption": "Select all",
+      "other": "Other",
+      "BoxPlot": {
+        "outlierProbability": "probability",
+        "outlierLabel": "Outliers",
+        "boxPlotSeriesLabel": "Box Plot"
+      },
+      "chartConfigApply": "Apply",
+      "chartConfigCancel": "Cancel",
+      "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
+      "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "nA": "N/A",
+      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
+      "countAxisLabel": "Count",
+      "helpMeChooseFeaturesButton": "Help me choose features",
+      "helpMeChooseMetricsButton": "Help me choose metrics",
+      "featureConfiguration": {
+        "flyoutHeader": "Choose your features",
+        "flyoutSubHeader": "Along which features would you like to evaluate your model's fairness?",
+        "flyoutDescription": "Fairness is evaluated in terms of disparities in your model's behavior. We will split your data according to values of each selected feature, and evaluate how your model's performance metrics differ across these splits.",
+        "featureColumnHeader": "Features",
+        "groupsColumnHeader": "Groups",
+        "categoricalGroupsCountRemark": "This feature has {0} unique values.",
+        "continuousGroupsCountRemark": "This feature is continuous and split into {0} bins.",
+        "continuousFeatureBinningLabel": "Change the number of bins",
+        "tooManyFeaturesSelectedWarning": "Please select only up to two features."
+      },
+      "metricConfiguration": {
+        "flyoutHeader": "Choose your metrics",
+        "flyoutSubHeader": "How would you like to measure your model's performance?",
+        "flyoutDescription": "Based on your model type, these are the recommended performance metrics. Fairness analysis or disaggregated analysis is performed by evaluating how your model's performance differs across feature subgroups.",
+        "noMetricsSelectedWarning": "Please select at least one metric.",
+        "metricNameColumnHeader": "Metric name",
+        "metricDescriptionColumnHeader": "Metric Description"
+      },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+      },
+      "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "visualDisplayToggleLabel": "Show heatmap",
+      "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
     }
   }
 }

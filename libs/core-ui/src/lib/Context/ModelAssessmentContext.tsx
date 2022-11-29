@@ -14,8 +14,9 @@ import { ICounterfactualData } from "../Interfaces/ICounterfactualData";
 import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
+import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
-import { ITelemetryMessage } from "../util/ITelemetryMessage";
+import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 
 export interface IModelAssessmentContext {
@@ -35,7 +36,7 @@ export interface IModelAssessmentContext {
   jointDataset: JointDataset;
   modelMetadata: IExplanationModelMetadata;
 
-  telemetryHook: (message: ITelemetryMessage) => void;
+  telemetryHook: (message: ITelemetryEvent) => void;
   requestCausalWhatIf?: (
     id: string,
     features: unknown[],
@@ -54,6 +55,13 @@ export interface IModelAssessmentContext {
         explanationAlgorithm?: string
       ) => Promise<any[]>)
     | undefined;
+  requestBoxPlotDistribution?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
+  requestExp?:
+    | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
+    | undefined;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;
@@ -70,6 +78,7 @@ export const defaultModelAssessmentContext: IModelAssessmentContext = {
   jointDataset: {} as JointDataset,
   modelExplanationData: undefined,
   modelMetadata: {} as IExplanationModelMetadata,
+  requestExp: undefined,
   requestLocalFeatureExplanations: undefined,
   requestPredictions: undefined,
   selectedErrorCohort: {} as ErrorCohort,

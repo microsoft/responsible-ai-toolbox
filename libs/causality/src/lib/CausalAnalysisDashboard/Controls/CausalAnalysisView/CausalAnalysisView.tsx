@@ -4,6 +4,7 @@
 import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
+  ITelemetryEvent,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import React from "react";
@@ -17,6 +18,7 @@ import { TreatmentView } from "./TreatmentView/TreatmentView";
 export interface ICausalAnalysisViewProps {
   viewOption: string;
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
 export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewProps> {
@@ -28,13 +30,22 @@ export class CausalAnalysisView extends React.PureComponent<ICausalAnalysisViewP
     return (
       <>
         {this.props.viewOption === CausalAnalysisOptions.Aggregate && (
-          <CausalAggregateView data={this.props.data} />
+          <CausalAggregateView
+            data={this.props.data}
+            telemetryHook={this.props.telemetryHook}
+          />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Individual && (
-          <CausalIndividualView data={this.props.data} />
+          <CausalIndividualView
+            data={this.props.data}
+            telemetryHook={this.props.telemetryHook}
+          />
         )}
         {this.props.viewOption === CausalAnalysisOptions.Treatment && (
-          <TreatmentView data={this.props.data.policies} />
+          <TreatmentView
+            data={this.props.data.policies}
+            telemetryHook={this.props.telemetryHook}
+          />
         )}
       </>
     );

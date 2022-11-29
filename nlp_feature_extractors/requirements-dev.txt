@@ -1,0 +1,4 @@
+azure-storage-blob
+jupyter
+transformers>=4.17.0
+torch

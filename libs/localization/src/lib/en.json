@@ -1,4 +1,28 @@
 {
+  "Common": {
+    "close": "Close",
+    "tooltipButton": "Tooltip button",
+    "identityFeature": "Identity feature",
+    "infoTitle": "Additional information",
+    "spinButton": "Spin",
+    "editButton": "Edit",
+    "decreaseValue": "Decrease value",
+    "increaseValue": "Increase value",
+    "decreaseValueByOne": "Decrease value by 1",
+    "increaseValueByOne": "Increase value by 1"
+  },
+  "ChartContextMenu": {
+    "hideData": "Hide data table",
+    "viewData": "View data table",
+    "viewInFullScreen": "View in full screen",
+    "printChart": "Print chart",
+    "downloadCSV": "Download CSV",
+    "downloadPNG": "Download PNG image",
+    "downloadJPEG": "Download JPEG image",
+    "downloadPDF": "Download PDF document",
+    "downloadSVG": "Download SVG vector image",
+    "downloadXLS": "Download XLS"
+  },
   "CausalAnalysis": {
     "AggregateView": {
       "binary": "Binary treatments: ",
@@ -14,6 +38,7 @@
       "description": "Causal analysis answers “what if” questions about how real world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Unlike model predictions that identify important correlation patterns, these tools help you identify the most important causal features that directly affect your outcome of interest. These models identify the causal effect of one feature (typically referred to as a “treatment”), holding other confounding features constant. For best results, make sure that the full dataset contains all available features that may correlate with the outcome as confounders.",
       "directAggregate": "Direct aggregate causal effect of each treatment with 95% confidence interval",
       "here": "here",
+      "infoTitle": "Additional information on aggregated causal effects",
       "lasso": "A lasso (or logistic regression if y is binary) was fit to predict y from X[-i], and a lasso (or logistic regression if X[i] is categorical) was fit to predict X[i] from Χ[-i]. The causal effect can be viewed as the average correlation of the residuals/surprise variation of the two prediction tasks. Learn more about Double Machine Learning",
       "unconfounding": "What are confounding features?"
     },
@@ -21,10 +46,11 @@
       "currentOutcome": "Current outcome",
       "currentTreatment": "Current treatment value",
       "dataRequired": "This tab requires a datapoint be selected.",
-      "datapointIndex": "Datapoint index",
+      "selectedDatapoint": "Selected datapoint",
       "description": "Individual causal effects can inform personalized interventions, such as a targeted promotion to customers or an individualized treatment plan. How would an individual with a particular set of features respond to a change in a causal feature, or treatment?  The causal what-if tool calculates marginal changes in real-world outcomes for a particular individual if you change their level of a treatment. This analysis enables you to understand how real-world outcomes would have changed under different policy choices, such as a different pricing strategy for a product or an alternative treatment for a patient. Specify the treatment of interest and observe how the real-world outcome would change.",
       "directIndividual": "Direct individual causal effect of each treatment with 95% confidence interval",
       "index": "Datapoint index",
+      "infoTitle": "Additional information on individual causal what-if",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
       "newOutcome": "New outcome",
       "selectTreatment": "Select treatment",
@@ -47,9 +73,9 @@
       "BarTextBinary": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains report the numerical change in treatment we used. The second bar indicates relative gains (or losses) from treating everyone by turning on binary treatments.",
       "BarTextContinuous": "The first bar indicates average relative gains if the recommended global treatment policy described above were applied. The reported gains reflect increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample. The second bar indicates relative gains (or losses) from increasing/decreasing continuous treatments by 10%.",
       "Description": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to a causal driver (i.e. treatment) or construct rules to define which future populations will have the largest treatment effects.",
-      "Left": "{0} <= {1}",
+      "Left": "{0} less than or equal to {1}",
       "Recommended": "Recommended treatment = {0}",
-      "Right": "{0} > {1}",
+      "Right": "{0} greater than {1}",
       "SelectPolicy": "Set treatment feature",
       "Size": "Interpretable recommended global treatment policy for sample size (n) = {0}",
       "Table": "The table can be read by taking a row and then taking a column of that specific row.",
@@ -58,6 +84,7 @@
       "averageGainBinary": "Average gains of setting the treatment {0} to its baseline value {1}.",
       "averageGainContinuous": "Average gains of alternative policies over no '{0}' treatment.",
       "header": "These tools help build policies for future interventions. You can identify what parts of your sample experience the largest responses to changes in causal features, or treatments, and construct rules to define which future populations should be targeted for particular interventions.",
+      "infoTitle": "Additional information on treatment policy",
       "nSample": "n = {0}",
       "noData": "No data"
     }
@@ -71,12 +98,12 @@
       "Title": "No data"
     },
     "ComparisonTypes": {
-      "lt": "{0} < {1}",
-      "lte": "{0} <= {1}",
-      "gt": "{0} > {1}",
-      "gte": "{0} >= {1}",
-      "eq": "{0} == {1}",
-      "ne": "{0} != {1}",
+      "lt": "{0} less than {1}",
+      "lte": "{0} less than or equal to {1}",
+      "gt": "{0} greater than {1}",
+      "gte": "{0} greater than or equal to {1}",
+      "eq": "{0} equal to {1}",
+      "ne": "{0} not equal to {1}",
       "in": "{0} in the set of ({1})",
       "nin": "{0} not in the set of ({1})",
       "rg": "{0} in the range of ({1})",
@@ -84,6 +111,8 @@
       "Unknown": "unknown"
     },
     "ShiftCohort": {
+      "apply": "Apply",
+      "cancel": "Cancel",
       "title": "Switch Cohort",
       "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
     },
@@ -101,6 +130,11 @@
     "EffectLowerBound": "CI lower",
     "EffectOfTreatment": "Effect of recommendation",
     "EffectUpperBound": "CI upper",
+    "ErrorDialog": {
+      "Close": "Close",
+      "ErrorPrefix": "Error encountered: {0}",
+      "PythonError": "Python error"
+    },
     "RecommendedTreatment": "Recommended treatment",
     "WhatIf": {
       "setValue": "Set Value",
@@ -175,10 +209,13 @@
       "subText": "Learn about the selected cohort. Edit its cohort name. Delete this cohort."
     },
     "FeatureList": {
+      "featureList": "Feature List",
+      "apply": "Apply",
       "features": "Features",
       "importances": "Importances",
       "treeMapDescription": "To retrain the tree map, select and save the features below. The feature importances were calculated using mutual information with the error on the true labels.  Please use it as a guideline for training the tree map.",
-      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels."
+      "staticTreeMapDescription": "View the features that were used to train the tree map. The feature importances were calculated using mutual information with the error on the true labels.",
+      "searchResultMessage": "Results displayed out of {resultLength} for {searchValue}"
     },
     "TreeViewParameters": {
       "maximumDepth": "Maximum depth",
@@ -244,6 +281,7 @@
       "disabledWarning": "Error heatmap is disabled unless global cohort is switched to represent \"All data\" due to the heatmap being generated for the full dataset. Switch back to the full dataset to view the error heatmap."
     },
     "MatrixSummary": {
+      "heatMapInfoTitle": "Additional information on heat map",
       "heatMapDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Start with two dataset features to compare.",
       "heatMapStaticDescription": "With the heat map you can focus on specific intersectional feature filters and compute disaggregated error rates. Up to two features must be selected to create a heat map via SDK before viewing the dashboard."
     },
@@ -258,61 +296,91 @@
       "binningThresholdTitle": "Additional information on binning threshold"
     },
     "Metrics": {
-      "accuracyScore": "Accuracy score",
-      "accuracyScoreInfo": "The accuracy score represents the ratio of correct to total instances in the data.",
-      "accuracyScoreShort": "Accuracy",
-      "accuracyScoreTitle": "Additional information on accuracy score",
-      "errorRate": "Error rate",
-      "errorRateInfo": "The error rate represents the percentage of instances in the node for which the system has failed.",
-      "errorRateTitle": "Additional information on error rate",
-      "f1Score": "F1 score",
-      "f1ScoreInfo": "The F1 score is the harmonic mean of the precision and recall metrics.",
-      "f1ScoreTitle": "Additional information on F1 score",
-      "meanAbsoluteError": "Mean absolute error",
-      "meanAbsoluteErrorInfo": "The mean absolute error is the average of the sum of the errors.",
-      "meanAbsoluteErrorShort": "Mean abs. error",
-      "meanAbsoluteErrorTitle": "Additional information on mean absolute error",
-      "meanSquaredError": "Mean squared error",
-      "meanSquaredErrorInfo": "The mean squared error is the average of the squares of the errors.",
-      "meanSquaredErrorShort": "Mean sq. error",
-      "meanSquaredErrorTitle": "Additional information on mean squared error",
-      "precision": "Precision score",
-      "precisionInfo": "The precision is the ratio of true positives over all predicted positives.",
-      "precisionShort": "Precision",
-      "precisionTitle": "Additional information on precision",
-      "recall": "Recall score",
-      "recallInfo": "The recall is the ratio of true positives over all actual positives.",
-      "recallShort": "Recall",
-      "recallTitle": "Additional information on recall",
-      "macroPrecision": "Macro averaged precision score",
-      "macroPrecisionInfo": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
-      "macroPrecisionShort": "Macro precision",
-      "macroPrecisionTitle": "Additional information on macro averaged precision",
-      "microPrecision": "Micro averaged precision score",
-      "microPrecisionInfo": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
-      "microPrecisionShort": "Micro precision",
-      "microPrecisionTitle": "Additional information on micro averaged precision",
-      "macroRecall": "Macro averaged recall score",
-      "macroRecallInfo": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
-      "macroRecallShort": "Macro recall",
-      "macroRecallTitle": "Additional information on macro averaged recall",
-      "microRecall": "Micro averaged recall score",
-      "microRecallInfo": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
-      "microRecallShort": "Micro recall",
-      "microRecallTitle": "Additional information on micro averaged recall",
-      "macroF1Score": "Macro averaged F1 score",
-      "macroF1ScoreInfo": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
-      "macroF1ScoreShort": "Macro F1 score",
-      "macroF1ScoreTitle": "Additional information on macro averaged F1 score",
-      "microF1Score": "Micro averaged F1 score",
-      "microF1ScoreInfo": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
-      "microF1ScoreShort": "Micro F1 score",
-      "microF1ScoreTitle": "Additional information on micro averaged F1 score",
+      "AccuracyScore": {
+        "Name": "Accuracy score",
+        "Info": "The accuracy score represents the ratio of correct to total instances in the data.",
+        "Short": "Accuracy",
+        "Title": "Additional information on accuracy score"
+      },
+      "ErrorRate": {
+        "Name": "Error rate",
+        "Info": "The error rate represents the percentage of instances in the node for which the system has failed.",
+        "Short": "Error rate",
+        "Title": "Additional information on error rate"
+      },
+      "F1Score": {
+        "Name": "F1 score",
+        "Info": "The F1 score is the harmonic mean of the precision and recall metrics.",
+        "Short": "F1 score",
+        "Title": "Additional information on F1 score"
+      },
+      "MeanAbsoluteError": {
+        "Name": "Mean absolute error",
+        "Info": "The mean absolute error is the average of the sum of the errors.",
+        "Short": "Mean abs. error",
+        "Title": "Additional information on mean absolute error"
+      },
+      "MeanSquaredError": {
+        "Name": "Mean squared error",
+        "Info": "The mean squared error is the average of the squares of the errors.",
+        "Short": "Mean sq. error",
+        "Title": "Additional information on mean squared error"
+      },
+      "Precision": {
+        "Name": "Precision score",
+        "Info": "The precision is the ratio of true positives over all predicted positives.",
+        "Short": "Precision",
+        "Title": "Additional information on precision"
+      },
+      "Recall": {
+        "Name": "Recall score",
+        "Info": "The recall is the ratio of true positives over all actual positives.",
+        "Short": "Recall",
+        "Title": "Additional information on recall"
+      },
+      "MacroPrecision": {
+        "Name": "Macro averaged precision score",
+        "Info": "The macro averaged precision is the ratio of true positives over all predicted positives computed independently per class and averaged.",
+        "Short": "Macro precision",
+        "Title": "Additional information on macro averaged precision"
+      },
+      "MicroPrecision": {
+        "Name": "Micro averaged precision score",
+        "Info": "The micro averaged precision is the ratio of true positives over all predicted positives aggregated for all classes.",
+        "Short": "Micro precision",
+        "Title": "Additional information on micro averaged precision"
+      },
+      "MacroRecall": {
+        "Name": "Macro averaged recall score",
+        "Info": "The macro averaged recall is the ratio of true positives over all actual positives computed independently per class and averaged.",
+        "Short": "Macro recall",
+        "Title": "Additional information on macro averaged recall"
+      },
+      "MicroRecall": {
+        "Name": "Micro averaged recall score",
+        "Info": "The micro averaged recall is the ratio of true positives over all actual positives aggregated for all classes.",
+        "Short": "Micro recall",
+        "Title": "Additional information on micro averaged recall"
+      },
+      "MacroF1Score": {
+        "Name": "Macro averaged F1 score",
+        "Info": "The macro averaged F1 score is the harmonic mean of the macro averaged precision and recall metrics.",
+        "Short": "Macro F1 score",
+        "Title": "Additional information on macro averaged F1 score"
+      },
+      "MicroF1Score": {
+        "Name": "Micro averaged F1 score",
+        "Info": "The micro averaged F1 score is the harmonic mean of the micro averaged precision and recall metrics.",
+        "Short": "Micro F1 score",
+        "Title": "Additional information on micro averaged F1 score"
+      },
       "metricName": "Metric name",
       "metricValue": "Metric value"
     },
     "MetricSelector": {
-      "selectorLabel": "Select metric"
+      "selectorLabel": "Select metric",
+      "feature1SelectorLabel": "Rows: Feature 1",
+      "feature2SelectorLabel": "Columns: Feature 2"
     },
     "Navigation": {
       "cohortSaved": "New cohort is saved! See Cohort list under Cohort settings.",
@@ -333,6 +401,9 @@
       "defaultLabelCopy": "All data copy"
     },
     "TreeView": {
+      "ariaLabel": "Interactive chart",
+      "disabledArialLabel": "Disabled interactive chart",
+      "treeMapInfoTitle": "Additional information on tree map",
       "treeDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To edit the list of features being used in the tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
       "treeStaticDescription": "The tree visualization uses the mutual information between each feature and the error to best separate error instances from success instances hierarchically in the data. This simplifies the process of discovering and highlighting common failure patterns. To find important failure patterns, look for nodes with a stronger red color (i.e., high error rate) and a higher fill line (i.e., high error coverage). To view the list of features used in creating this error tree, click on \"Feature list.\" Use the \"select metric\" dropdown menu to learn more about your error and success nodes' performance. Please note that this metric selection will not impact the way your error tree is generated.",
       "disabledWarning": "Error treemap is disabled unless global cohort is switched to represent \"All data\" due to the treemap being generated for the full dataset. Switch back to the full dataset to view the error treemap."
@@ -714,12 +785,13 @@
       "_selectClass.comment": "label for dropdown listing all classes",
       "_selectFeature.comment": "dropdown label to select feature (column) for charting",
       "_selectFilter.comment": "label on dropdown to pick value for charting",
+      "apply": "Apply",
       "binLabel": "Apply binning to data",
       "countHelperText": "A histogram of the number of points",
       "ditherLabel": "Should dither",
       "groupByCohort": "Group by cohort",
+      "logarithmicScaling": "Enable logarithmic scaling",
       "numOfBins": "Number of bins",
-      "select": "Select",
       "selectClass": "Select class",
       "selectFeature": "Select feature",
       "selectFilter": "Select your axis value"
@@ -826,7 +898,9 @@
       "placeholderName": "Cohort {0}",
       "save": "Save",
       "saveAndSwitch": "Save and switch",
-      "selectFilter": "Select filter"
+      "selectFilter": "Select filter",
+      "noFiltersApplied": "No filters applied",
+      "filterAdded": "Filter added"
     },
     "Columns": {
       "_classificationOutcome.comment": "Whether the prediction from the model matched the true value",
@@ -871,16 +945,18 @@
       "aggregatePlots": "Aggregate plots",
       "chartType": "Chart type",
       "colorValue": "Color value",
+      "infoTitle": "Additional information on data analysis chart view",
       "helperText": "Create dataset cohorts to analyze dataset statistics along filters such as predicted outcome, dataset features and error groups. Learn about the over/under presentation in your dataset.",
       "individualDatapoints": "Individual datapoints",
       "missingParameters": "This tab requires an evaluation dataset be supplied.",
-      "noColor": "None"
+      "noColor": "None",
+      "datasetCohortDropdown": "Dataset cohort dropdown"
     },
     "DependencePlot": {
       "_featureImportanceOf.comment": "axis label on chart showing the importance of a selected feature (column)",
       "_placeholder.comment": "placeholder text explaining how to activate this chart, by clicking on a neighboring chart.",
       "featureImportanceOf": "Feature importance of",
-      "placeholder": "Click on a feature on the bar chart above to show its dependence plot"
+      "placeholder": "Select a feature to show its dependence plot"
     },
     "ExplanationScatter": {
       "_class.comment": "label for predicted class",
@@ -939,14 +1015,14 @@
     "FilterOperations": {
       "_includes.comment": "tooltip label for a filter with included values",
       "_overflowFilterArgs.comment": "first placeholder is the first one or two items in a long list, the second placeholder is the count of remaining items",
-      "equals": " = {0}",
+      "equals": " equal to {0}",
       "excludes": " excludes {0} ",
-      "greaterThan": " > {0}",
-      "greaterThanEquals": " >= {0}",
+      "greaterThan": " greater than {0}",
+      "greaterThanEquals": " greater than or equal to {0}",
       "inTheRangeOf": "[ {0} ]",
       "includes": " includes {0} ",
-      "lessThan": " < {0}",
-      "lessThanEquals": " <= {0}",
+      "lessThan": " less than {0}",
+      "lessThanEquals": " less than or equal to {0}",
       "overflowFilterArgs": "{0} and {1} others"
     },
     "Filters": {
@@ -1000,12 +1076,15 @@
       "dependencePlotHelperText": "This dependence plot shows the relationship of the values of a feature to its corresponding feature importance values.",
       "dependencePlotTitle": "Dependence plots",
       "helperText": "Explore the top-k important features that impact your overall model predictions (a.k.a. global explanation). Use the slider to show descending feature importances. All cohorts’ feature importances are shown side by side and can be toggled off by selecting the cohort in the legend. Click on any of the features in the graph to see a density plot below of how values of the selected feature affect prediction.",
+      "infoTitle": "Additional information on aggregate feature importance",
       "legendHelpText": "Toggle cohorts on and off in the plot by clicking on the legend items.",
       "missingParameters": "This tab requires the local feature importance parameter be supplied.",
+      "sortByCohort": "Sort by cohort",
       "sortBy": "Sort by datapoint",
       "topAtoB": "Top {0} features by their importance",
       "viewDependencePlotFor": "View dependence plot for:",
-      "weightOptions": "Class importance weights"
+      "weightOptions": "Class importance weights",
+      "weightOptionsDropdown": "Class importance weights dropdown"
     },
     "IcePlot": {
       "_errorPrefix.comment": "prefix in front of external error",
@@ -1023,6 +1102,7 @@
       "_stepInputLabel.comment": "number of samples to include between minimum and maximum (integer)",
       "_submitPrompt.comment": "prompt to user giving instructions to enter a numeric range",
       "_topLevelErrorMessage.comment": "error message for any parameter issue",
+      "close": "Close",
       "errorPrefix": "Error encountered: {0}",
       "featurePickerLabel": "Feature:",
       "integerError": "Must be an integer",
@@ -1035,6 +1115,7 @@
       "prediction": "Prediction",
       "predictionLabel": "Prediction: {0}",
       "probabilityLabel": "Probability: {0}",
+      "pythonError": "Python error",
       "stepInputLabel": "Steps:",
       "submitPrompt": "Submit a range to view an ICE plot",
       "topLevelErrorMessage": "Error in parameter"
@@ -1250,11 +1331,91 @@
     "selectPoint": "Select a point to see its local explanation",
     "summaryImportance": "Summary importance"
   },
+  "InterpretText": {
+    "View": {
+      "interpretibilityDashboard": "Interpretability Dashboard",
+      "importantWords": "Show most Important Words",
+      "topFeatureList": "Top feature list analysis",
+      "allButton": "ALL FEATURES",
+      "negButton": "NEGATIVE FEATURES",
+      "posButton": "POSITIVE FEATURES",
+      "legendText": "Positive scalar feature importances represent the extent that the words were important towards the classification of your selected label, and negative scalar feature importances represent words that encouraged your model away from your selected label.",
+      "label": "Label",
+      "colon": ": "
+    },
+    "Legend": {
+      "featureLegend": "TEXT FEATURE LEGEND",
+      "posFeatureImportance": "POSITIVE FEATURE IMPORTANCE",
+      "negFeatureImportance": "NEGATIVE FEATURE IMPORTANCE"
+    },
+    "BarChart": {
+      "featureImportance": "FEATURE IMPORTANCE"
+    }
+  },
+  "InterpretVision": {
+    "Cohort": {
+      "close": "Close",
+      "errorCohortName": "Please choose a unique cohort name.",
+      "errorNumSelected": "Please select at least one (1) item.",
+      "itemsSelectedSingular": "item selected",
+      "itemsSelectedPlural": "items selected",
+      "save": "Save cohort",
+      "saveAndClose": "Save and close",
+      "saveAndSwitch": "Save and switch",
+      "textField": "New cohort name",
+      "title": "Save new cohort"
+    },
+    "Dashboard": {
+      "allData": "All Data",
+      "columnOne": "Image",
+      "columnTwo": "Index",
+      "columnThree": "True Y",
+      "columnFour": "Predicted Y",
+      "columnFive": "Other metadata",
+      "examples": "examples",
+      "filter": "Filter",
+      "indexLabel": "Image ",
+      "labelTypeDropdown": "Select label type",
+      "labelVisibilityDropdown": "Select labels to display",
+      "legendFailure": "failure",
+      "legendSuccess": "success",
+      "loading": "Computing explanation for index",
+      "multiselect": "Multiselect",
+      "pageSize": "Page size: ",
+      "panelTitle": "Selected instance",
+      "panelExplanation": "Explanation",
+      "panelInformation": "Information",
+      "predictedLabel": "Predicted label",
+      "predictedY": "Predicted: ",
+      "rows": "Rows: ",
+      "search": "Search",
+      "selectAll": "Select all",
+      "settings": "Settings",
+      "showAll": "Show all",
+      "tabOptionFirst": "Image explorer view",
+      "tabOptionSecond": "Table view",
+      "tabOptionThird": "Data characteristics",
+      "thumbnailSize": "Thumbnail size",
+      "titleBarError": "Error instances",
+      "titleBarSuccess": "Success instances",
+      "trueY": "Ground truth: "
+    }
+  },
   "ModelAssessment": {
     "AddingTab": {
       "AddButtonText": "Add",
       "CalloutContent": "Adding some components (error tree view, error heat map) will allow you to filter down the data from the global cohort that you see in the components below.",
-      "CalloutTitle": "Add component"
+      "CalloutTitle": "Add component",
+      "TabAddedMessage": {
+        "DataAnalysis": "Data analysis component added",
+        "FeatureImportances": "Feature importances component added",
+        "ErrorAnalysis": "Error analysis component added",
+        "Fairness": "Fairness component added",
+        "ModelOverview": "Model overview component added",
+        "CausalAnalysis": "Causal analysis component added",
+        "Counterfactuals": "Counterfactuals component added",
+        "Vision": "Vision data explorer component added"
+      }
     },
     "CausalAnalysis": {
       "Table": {
@@ -1292,13 +1453,18 @@
       "CohortSettingsTitle": "Cohort settings"
     },
     "ComponentNames": {
+      "ChartView": "Chart view",
       "CausalAnalysis": "Causal analysis",
       "Counterfactuals": "Counterfactuals",
+      "DataAnalysis": "Data analysis",
+      "DataBalance": "Data balance",
       "DataExplorer": "Data explorer",
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
-      "ModelOverview": "Model overview"
+      "ModelOverview": "Model overview",
+      "TableView": "Table view",
+      "VisionTab": "Vision data explorer"
     },
     "DashboardSettings": {
       "Content": "This list shows the layout of the dashboard. You can filter down data using the error analysis component, to be viewed in the components below.",
@@ -1312,14 +1478,161 @@
       },
       "Title": "Dashboard configuration"
     },
+    "DataBalance": {
+      "AggregateBalanceMeasures": {
+        "Callout": {
+          "Description": "Aggregate balance measures allow us to obtain a higher notion of inequality about our dataset. They are calculated on the set of our columns of interest and do not depend on the label column. These measures look at the distribution of records across all feature value combinations of our columns of interest.",
+          "Title": "What are aggregate balance measures?"
+        },
+        "Measures": {
+          "AtkinsonIndex": {
+            "Description": "The Atkinson Index is a measure of income inequality that presents the percentage of total income that a given society would have to forego in order to have more equal shares of income between its citizens. For the dataset, this represents the percentage of records that need to be dropped to have a perfectly balanced dataset with respect to the columns of interest. The index lies between 0 and 1, where smaller values of the index indicate lower levels of inequality.",
+            "Name": "Atkinson Index"
+          },
+          "TheilLIndex": {
+            "Description": "Theil's L Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 0, and therefore it is more sensitive to differences at the lower end of the distribution. This index better captures record combinations that don't occur too often in the dataset. It is also referred to as the mean log deviation measure.",
+            "Name": "Theil Index (L)"
+          },
+          "TheilTIndex": {
+            "Description": "Theil's T Index is a measure of income inequality that is calculated using the Generalized Entropy Index with α = 1, and therefore it is more sensitive to differences at the higher end of the distribution. This index better captures record combinations that occur very often in the dataset.",
+            "Name": "Theil Index (T)"
+          }
+        },
+        "MeasuresNotComputed": "Aggregate balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Aggregate balance measures",
+        "Table": {
+          "Description": "Description",
+          "FeatureName": "Feature name",
+          "FeatureValue": "Feature value"
+        }
+      },
+      "DistributionBalanceMeasures": {
+        "Callout": {
+          "Description": "Distribution balance measures allow us to compare our data with a reference uniform distribution. These measures are calculated per column of interest and do not depend on the label column.",
+          "Title": "What are distribution balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "DistributionMeasure": "Distribution measure",
+            "MeasureValue": "Measure value"
+          },
+          "Title1": "Comparing",
+          "Title2": "with the Uniform Distribution"
+        },
+        "Measures": {
+          "ChiSquarePValue": {
+            "Description": "The p-value of the chi-square test gives evidence against the null hypothesis that the difference in observed and expected frequencies is by random chance.",
+            "Name": "Chi-Square P-Value"
+          },
+          "ChiSquareStatistic": {
+            "Description": "The chi-square test validates the null hypothesis that the categorical data has the given frequencies when compared with the expected frequencies in each category.",
+            "Name": "Chi-Square (χ2) Statistic"
+          },
+          "CrossEntropy": {
+            "Description": "The cross-entropy, also known as log loss, between two probability distributions is a measure from information theory that computes the negative summation of our dataset's probability distribution multiplied by the log of the reference probability distribution.",
+            "Name": "Cross Entropy"
+          },
+          "InfiniteNormDistance": {
+            "Description": "The infinite norm distance, also called the Chebyshev distance or chessboard distance, is a measure which states that the distance between two vectors is the greatest of their difference along any coordinate dimension. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Infinite Norm Distance"
+          },
+          "JSDistance": {
+            "Description": "The Jensen-Shannon (JS) distance measures the similarity between two probability distributions. It is the symmetrized and smoothed version of the Kullback-Leibler (KL) divergence and the square root of the JS divergence. Its range is [0, 1], in which a measure value of 0 means the distribution is perfectly balanced.",
+            "Name": "Jensen-Shannon Distance"
+          },
+          "KLDivergence": {
+            "Description": "The Kullback-Leibler (KL) divergence is a measure of how one probability distribution is different from a second probability distribution. It represents the amount of information lost when one distribution is used to approximate the other. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Kullback-Leibler Divergence"
+          },
+          "TotalVariationDistance": {
+            "Description": "The total variation distance is equal to half the Manhattan (L1) distance between two distributions. It is computed using the summation of absolute value differences between two distributions. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Total Variation Distance"
+          },
+          "WassersteinDistance": {
+            "Description": "The Wasserstein distance is also known as the earth mover's distance, since it can be seen as the minimum amount of 'work' required to transform one distribution into another. Work is measured as the amount of distribution weight that must be moved, multiplied by the distance it has to be moved. The measure is non-negative, and a value of 0 means that the two distributions are equal.",
+            "Name": "Wasserstein Distance"
+          }
+        },
+        "MeasuresNotComputed": "Distribution balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Distribution balance measures"
+      },
+      "FeatureBalanceMeasures": {
+        "Callout": {
+          "Description": "Feature balance measures allow us to see whether each combination of feature values is receiving the positive outcome (true prediction) at balanced probability.",
+          "Title": "What are feature balance measures?"
+        },
+        "Chart": {
+          "Axes": {
+            "ClassA": "Class A",
+            "ClassB": "Class B"
+          },
+          "Tooltip": {
+            "And": "and",
+            "ValueDescription1": "have a",
+            "ValueDescription2": "of"
+          }
+        },
+        "Description1": "Showing",
+        "Description2": "gaps on all classes of",
+        "Description3": "for label",
+        "FeaturePicker": "Feature",
+        "LabelPicker": "Positive label",
+        "MeasurePicker": "Measure",
+        "Measures": {
+          "JaccardIndex": {
+            "Description": "gap represents the difference between the Jaccard Index of Class A and Jaccard Index of Class B. Jaccard Index itself is an intersection-over-union measure and therefore has a range of [0, 1], where 0 means that the distributions are completely disjoint and 1 means they are completely identical.",
+            "Name": "Jaccard Index"
+          },
+          "KendallRankCorrelation": {
+            "Description": "(KRC) gap represents the difference between the KRC of Class A and KRC of Class B. Kendall Rank Correlation itself is a correlation statistic used to measure the ordinal association between two measured quantities, and the measure is high when observations have a similar rank and low when observations have a dissimilar rank between the two variables.",
+            "Name": "Kendall Rank Correlation"
+          },
+          "LogLikelihoodRatio": {
+            "Description": "(LLR) gap represents the difference between the LLR of Class A and LLR of Class B. Log Likelihood Ratio itself is a correlation statistic used to measure the ratio between the probability of a feature with the positive label and the probability of the positive label.",
+            "Name": "Log-Likelihood Ratio"
+          },
+          "PointwiseMutualInformation": {
+            "Description": "(PMI) gap represents the difference between the PMI of Class A and PMI of Class B. Pointwise Mutual Information itself is a entropy measure that, given Class A and Class B, quantifies the discrepancy between the probability of their coincidence given their joint distribution and their individual distributions (assuming independence).",
+            "Name": "Pointwise Mutual Information"
+          },
+          "SorensenDiceCoefficient": {
+            "Description": "(SDC) gap represents the difference between the SDC of Class A and SDC of Class B. Sørensen-Dice Coefficient itself is an intserction-over-union measure that is used to guage the similarity of two samples. It is related to the F1 score, and it equals twice the number of elements common to both sets divided by the sum of the number of elements in each set.",
+            "Name": "Sørensen-Dice Coefficient"
+          },
+          "StatisticalParity": {
+            "Description": "(SP) gap represents the difference between the SP of Class A and SP of Class B. Statistical Parity itself measures the positive rate, which is how much one class receives the positive outcome. The gap measures the difference between the two classes' positive rates. As close to 0 means both classes receive the positive outcome equally. A positive value means the first class sees the positive label more than the second class. A negative value means the opposite.",
+            "Name": "Statistical Parity"
+          },
+          "TTest": {
+            "Description": "gap represents the difference between the t-test of Class A and t-test of Class B. t-test itself is a correlation statistic used to compare the means of two groups (pairwise). The gap value is looked up on the t-distribution table to tell if the two groups are significantly different.",
+            "Name": "t-test"
+          },
+          "TTestPValue": {
+            "Description": "gap represents the statistical signifiance of the t-test gap between Class A and Class B. The t-test gap value and degrees of freedom are used to calculate the p-value.",
+            "Name": "t-test p-value"
+          }
+        },
+        "MeasuresNotComputed": "Feature balance measures were not computed. To compute them, please ensure that: (1) the task type is 'classification', (2) the list of categorical features is valid and non-empty, and (3) no errors are thrown when computing insights.",
+        "Name": "Feature balance measures"
+      },
+      "LearnMore": "Learn more",
+      "MeasuresNotComputed": "This tab requires data balance measures to be computed for this dataset. Measures are computed when a 'classification' task type and a list of non-empty categorical features are specified."
+    },
     "FeatureImportances": {
       "CorrectPredictions": "Correct predictions",
       "GlobalExplanation": "Aggregate feature importance",
       "IncorrectPredictions": "Incorrect predictions",
-      "IndividualFeature": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plot below.",
+      "InfoTitle": "Additional information on data analysis table view",
+      "IndividualFeatureTabular": "Select a datapoint by clicking on a datapoint (up to 5 datapoints) in the table to view their local feature importance values (local explanation) and individual conditional expectation (ICE) plots.",
+      "IndividualFeatureText": "Select a datapoint by clicking on a datapoint in the table to view the local feature importance values (local explanation).",
       "LocalExplanation": "Individual feature importance",
       "SelectionCounter": "{0}/{1} datapoints selected",
-      "SelectionLimit": "Up to 5 datapoints can be selected at this time."
+      "SelectionLimit": "Up to 5 datapoints can be selected at this time.",
+      "RowCheckboxAriaLabel": "Row checkbox",
+      "SelectionColumnAriaLabel": "Toggle selection"
+    },
+    "IndividualFeatureImportanceView": {
+      "SmallInstanceSelection": "Instance selection"
     },
     "MainMenu": {
       "DashboardSettings": "Dashboard configuration",
@@ -1335,12 +1648,20 @@
     "ModelOverview": {
       "metrics": {
         "accuracy": {
-          "name": "Accuracy",
+          "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
         },
         "f1Score": {
           "name": "F1 score",
           "description": "F1-score is the harmonic mean of precision and recall."
+        },
+        "f1ScoreMacro": {
+          "name": "Macro F1 score",
+          "description": "Macro F1 score is the harmonic mean of precision and recall for each class, with each class weighted equally."
+        },
+        "f1ScoreMicro": {
+          "name": "Micro F1 score",
+          "description": "Micro F1 score is the harmonic mean of precision and recall for each class, with each class weighted according to how many instances it contains."
         },
         "meanAbsoluteError": {
           "name": "Mean absolute error",
@@ -1354,9 +1675,25 @@
           "name": "Precision score",
           "description": "The fraction of data points classified correctly among those classified as 1."
         },
+        "precisionMacro": {
+          "name": "Macro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted equally."
+        },
+        "precisionMicro": {
+          "name": "Micro Precision score",
+          "description": "The fraction of data points classified correctly among those classified as 1 for each class with each class weighted according to how many instances it contains."
+        },
         "recall": {
           "name": "Recall score",
           "description": "The fraction of data points classified correctly among those whose true label is 1. Alternative names: true positive rate, sensitivity."
+        },
+        "recallMacro": {
+          "name": "Macro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted equally."
+        },
+        "recallMicro": {
+          "name": "Micro Recall score",
+          "description": "The fraction of data points classified correctly among those whose true label is 1 for each class with each class weighted according to how many instances it contains."
         },
         "falsePositiveRate": {
           "name": "False positive rate",
@@ -1378,6 +1715,11 @@
         "fairnessMetricRatio": "Ratio"
       },
       "metricsDropdown": "Metric(s)",
+      "metricsTypeDropdown": "Aggregate method",
+      "metricTypes": {
+        "macro": "Macro",
+        "micro": "Micro"
+      },
       "notAvailable": "N/A",
       "countColumnHeader": "Sample size",
       "dataCohortsHeatmapHeader": "Cohorts",
@@ -1403,19 +1745,20 @@
       "cohortSelectionButton": "Choose cohorts",
       "probabilityLabelSelectionButton": "Choose label",
       "selectAllCohortsOption": "Select all",
+      "other": "Other",
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",
         "boxPlotSeriesLabel": "Box Plot"
       },
-      "chartConfigConfirm": "Confirm",
+      "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
-      "probabilityLineChartToggleLabel": "Use line chart",
+      "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
       "helpMeChooseFeaturesButton": "Help me choose features",
       "helpMeChooseMetricsButton": "Help me choose metrics",
@@ -1438,9 +1781,17 @@
         "metricNameColumnHeader": "Metric name",
         "metricDescriptionColumnHeader": "Metric Description"
       },
+      "cohortSelection": {
+        "flyoutHeader": "Choose cohorts",
+        "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+      },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
+      "infoTitle": "Additional information on model overview",
       "visualDisplayToggleLabel": "Show heatmap",
       "featureBasedViewDescription": "Select up to two features to see the model performance breakdown across feature-based cohorts (if one feature is selected) or intersectional cohorts (if two features are selected)."
+    },
+    "TableViewTab": {
+      "Heading": "View the dataset in a table format for all features and rows."
     }
   }
 }

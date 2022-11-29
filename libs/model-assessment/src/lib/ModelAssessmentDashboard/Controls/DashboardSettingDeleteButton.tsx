@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IconButton } from "@fluentui/react";
 import { ConfirmationDialog } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IconButton } from "office-ui-fabric-react";
 import React from "react";
 
 export interface IDashboardSettingDeleteButtonProps {
@@ -25,6 +25,9 @@ export class DashboardSettingDeleteButton extends React.PureComponent<
         <IconButton
           iconProps={{ iconName: "Delete" }}
           onClick={this.showDialog}
+          ariaLabel={
+            localization.ModelAssessment.DashboardSettings.DeleteDialog.Delete
+          }
         />
         {this.state?.showConfirmDialog && (
           <ConfirmationDialog

@@ -5,7 +5,7 @@ import {
   ErrorCohort,
   JointDataset,
   IFilter,
-  ModelTypes,
+  IsClassifier,
   FilterMethods,
   Cohort,
   IPreBuiltFilter
@@ -113,10 +113,7 @@ function translatePreBuiltCohortFilterForTarget(
   if (cohortColumnName === CohortColumnNames.TrueY) {
     filterColumnName = JointDataset.TrueYLabel;
   }
-  if (
-    jointDataset.getModelType() === ModelTypes.Multiclass ||
-    jointDataset.getModelType() === ModelTypes.Binary
-  ) {
+  if (IsClassifier(jointDataset.getModelType())) {
     const modelClasses = jointDataset.getModelClasses();
     const index = preBuiltCohortFilter.arg
       .map((modelClass) => modelClasses.indexOf(modelClass))
@@ -170,23 +167,11 @@ function translatePreBuiltCohortFilterForDataset(
   preBuiltCohortFilter: IPreBuiltFilter,
   jointDataset: JointDataset
 ): [IFilter | undefined, string | undefined] {
-  let jointDatasetFeatureName = undefined;
-  let userDatasetFeatureName = undefined;
-  for (jointDatasetFeatureName in jointDataset.metaDict) {
-    if (
-      jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel ===
-      preBuiltCohortFilter.column
-    ) {
-      userDatasetFeatureName =
-        jointDataset.metaDict[jointDatasetFeatureName].abbridgedLabel;
-      break;
-    }
-  }
+  const jointDatasetFeatureName = jointDataset.getJointDatasetFeatureName(
+    preBuiltCohortFilter.column
+  );
 
-  if (
-    jointDatasetFeatureName === undefined ||
-    userDatasetFeatureName === undefined
-  ) {
+  if (!jointDatasetFeatureName) {
     return [undefined, localization.Core.PreBuiltCohort.featureNameNotFound];
   }
 

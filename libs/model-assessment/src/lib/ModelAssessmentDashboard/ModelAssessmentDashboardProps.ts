@@ -4,7 +4,7 @@
 import {
   IOfficeFabricProps,
   IModelExplanationData,
-  ITelemetryMessage,
+  ITelemetryEvent,
   IDataset,
   IErrorAnalysisData,
   ICausalAnalysisData,
@@ -12,6 +12,7 @@ import {
   ICausalWhatIfData,
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
+  IHighchartBoxData,
   IPreBuiltCohort
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
@@ -63,9 +64,14 @@ export interface IModelAssessmentDashboardProps
     target: unknown[],
     abortSignal: AbortSignal
   ) => Promise<ICausalWhatIfData[]>;
+  requestBoxPlotDistribution?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
+  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   localUrl?: string;
 
-  telemetryHook?: (message: ITelemetryMessage) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness
   startingTabIndex?: number;

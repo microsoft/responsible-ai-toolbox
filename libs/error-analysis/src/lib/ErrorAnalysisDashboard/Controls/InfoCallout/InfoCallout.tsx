@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
-import { Callout, IconButton } from "office-ui-fabric-react";
+import { Callout, FocusZone, IconButton } from "@fluentui/react";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import React from "react";
 
 import { infoCalloutStyles } from "./InfoCallout.styles";
@@ -51,11 +51,13 @@ export class InfoCallout extends React.Component<
             setInitialFocus
             onDismiss={this.onDismiss}
             role="alertdialog"
-            styles={{ container: FabricStyles.calloutContainer }}
+            styles={{ container: FluentUIStyles.calloutContainer }}
           >
-            <div className={classNames.calloutInfo}>
-              <span>{this.props.infoText}</span>
-            </div>
+            <FocusZone>
+              <div data-is-focusable className={classNames.calloutInfo}>
+                <span>{this.props.infoText}</span>
+              </div>
+            </FocusZone>
           </Callout>
         )}
       </span>

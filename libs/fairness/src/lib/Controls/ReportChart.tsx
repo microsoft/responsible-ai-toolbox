@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Dropdown, IDropdownOption, Stack } from "@fluentui/react";
 import { PredictionTypes } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Dropdown, IDropdownOption, Stack } from "office-ui-fabric-react";
 import React from "react";
 
 import {
@@ -161,7 +161,7 @@ export class ReportChart extends React.Component<IReportChartProps, IState> {
   public onChange = (
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption | undefined
-  ) => {
+  ): void => {
     if (!option) {
       return;
     }

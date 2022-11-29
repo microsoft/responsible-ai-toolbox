@@ -1,18 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IDropdownOption } from "@fluentui/react";
 import {
   BinaryClassificationMetrics,
-  classificationTask,
+  DatasetTaskType,
   ErrorCohort,
   HighchartsNull,
   ILabeledStatistic,
+  ImageClassificationMetrics,
   MulticlassClassificationMetrics,
   RegressionMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { getTheme, IDropdownOption } from "office-ui-fabric-react";
 
 export interface IFairnessStats {
   max: number;
@@ -29,7 +30,10 @@ export function generateCohortsStatsTable(
   labeledStatistics: ILabeledStatistic[][],
   selectedMetrics: string[],
   useTexturedBackgroundForNaN: boolean
-) {
+): {
+  fairnessStats: IFairnessStats[];
+  items: PointOptionsObject[];
+} {
   // The "count" metric has to be treated separately
   // since it's not handled like other metrics, but
   // is part of the ErrorCohort object.
@@ -114,8 +118,13 @@ export function generateCohortsStatsTable(
           (labeledStat) => labeledStat.key === metricOption.key
         );
         if (labeledStat && !Number.isNaN(labeledStat.stat)) {
+          let colorValue = (labeledStat.stat - metricMin) / metricMinMaxDiff;
+          if (metricMin === metricMax) {
+            // only 1 unique value in the set, set color to 0
+            colorValue = 0;
+          }
           items.push({
-            colorValue: (labeledStat.stat - metricMin) / metricMinMaxDiff,
+            colorValue,
             value: Number(labeledStat.stat.toFixed(3)),
             x: metricIndex + 1,
             y: cohortIndex
@@ -163,7 +172,7 @@ export function wrapText(
   maxLines = 2,
   lineStart = 0,
   currentLine = 0
-) {
+): string {
   if (text.length <= lineStart + maxLineLength) {
     // label is short enough to fit on current line
     return text;
@@ -221,19 +230,84 @@ export interface IMetricOption extends IDropdownOption {
 }
 
 export function getSelectableMetrics(
-  taskType: "classification" | "regression",
+  taskType: DatasetTaskType,
   isMulticlass: boolean
-) {
+): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === classificationTask) {
+  if (
+    taskType === DatasetTaskType.Classification ||
+    taskType === DatasetTaskType.TextClassification ||
+    taskType === DatasetTaskType.ImageClassification
+  ) {
     if (isMulticlass) {
-      selectableMetrics.push({
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      });
+      if (taskType === DatasetTaskType.ImageClassification) {
+        selectableMetrics.push(
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.accuracy
+                .description,
+            key: ImageClassificationMetrics.Accuracy,
+            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+                .description,
+            key: ImageClassificationMetrics.MacroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMacro
+                .description,
+            key: ImageClassificationMetrics.MacroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+                .description,
+            key: ImageClassificationMetrics.MacroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+                .description,
+            key: ImageClassificationMetrics.MicroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMicro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMicro
+                .description,
+            key: ImageClassificationMetrics.MicroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+                .description,
+            key: ImageClassificationMetrics.MicroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMicro.name
+          }
+        );
+      } else {
+        selectableMetrics.push({
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description,
+          key: MulticlassClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
+        });
+      }
     } else {
       selectableMetrics.push(
         {

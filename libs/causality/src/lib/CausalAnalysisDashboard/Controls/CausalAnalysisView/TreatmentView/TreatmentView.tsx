@@ -1,9 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICausalPolicy, NoData } from "@responsible-ai/core-ui";
+import { Stack, Text } from "@fluentui/react";
+import {
+  ICausalPolicy,
+  ITelemetryEvent,
+  NoData
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentBarChartSection } from "./TreatmentBarChartSection";
@@ -14,6 +18,7 @@ import { TreatmentTableSection } from "./TreatmentTableSection";
 
 export interface ITreatmentViewProps {
   data?: ICausalPolicy[];
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 export interface ITreatmentViewState {
   selectedPolicy?: ICausalPolicy;
@@ -44,7 +49,11 @@ export class TreatmentView extends React.Component<
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <TreatmentSelection data={this.props.data} onSelect={this.onSelect} />
+          <TreatmentSelection
+            data={this.props.data}
+            onSelect={this.onSelect}
+            telemetryHook={this.props.telemetryHook}
+          />
         </Stack.Item>
         <Stack.Item>
           <TreatmentTableSection data={this.state.selectedPolicy} />

@@ -45,6 +45,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.words": [
+    "abbridged",
     "automl",
     "bdist",
     "bgcolor",
@@ -76,7 +77,6 @@
     "sdist",
     "shap",
     "sklearn",
-    "uifabric",
     "Unmount",
     "zstat"
   ],

@@ -1,11 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IComboBoxOption } from "@fluentui/react";
 import {
   JointDataset,
   Cohort,
   IExplanationModelMetadata,
-  ModelTypes
+  IsBinary
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -15,10 +16,10 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { PlotlyUtils, LoadingSpinner } from "../SharedComponents";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
+import { PlotlyUtils } from "../SharedComponents/PlotlyUtils";
 
 export interface ISwarmFeaturePlotProps {
   topK: number;
@@ -67,7 +68,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(metadata.modelType)) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -114,8 +115,7 @@ export class SwarmFeaturePlot extends React.PureComponent<
       plotlyProps.data[0].x = x;
       plotlyProps.data[0].y = y;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {

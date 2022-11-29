@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { Cohort } from "../Cohort/Cohort";
@@ -12,7 +11,7 @@ import {
   ModelTypes
 } from "../Interfaces/IExplanationContext";
 import { WeightVectorOption } from "../Interfaces/IWeightedDropdownContext";
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 import { getDependenceData } from "../util/getDependenceData";
 import { getDependencyChartOptions } from "../util/getDependencyChartOptions";
 import { IGenericChartProps } from "../util/IGenericChartProps";
@@ -26,10 +25,10 @@ export interface IFeatureImportanceDependenceProps {
   jointDataset: JointDataset;
   cohort: Cohort;
   cohortIndex: number;
+  logarithmicScaling: boolean;
   metadata: IExplanationModelMetadata;
   selectedWeight: WeightVectorOption;
   selectedWeightLabel: string;
-  onChange: (props: IGenericChartProps) => void;
 }
 
 export class FeatureImportanceDependence extends React.PureComponent<IFeatureImportanceDependenceProps> {
@@ -78,7 +77,8 @@ export class FeatureImportanceDependence extends React.PureComponent<IFeatureImp
                   this.props.jointDataset.metaDict[
                     this.props.chartProps.xAxis.property
                   ].sortedCategoricalValues,
-                  FabricStyles.fabricColorPalette[this.props.cohortIndex],
+                  FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex],
+                  this.props.logarithmicScaling,
                   getTheme()
                 )}
               />

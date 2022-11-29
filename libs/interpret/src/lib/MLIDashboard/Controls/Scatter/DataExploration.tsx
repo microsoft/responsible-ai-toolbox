@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { ComboBox, IComboBox, IComboBoxOption } from "@fluentui/react";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { AccessibleChart, IPlotlyProperty } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
-import { ComboBox, IComboBox, IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
 import { NoDataMessage } from "../../SharedComponents/NoDataMessage";
@@ -73,7 +73,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 ariaLabel="x picker"
                 selectedKey={this.plotlyProps.data[0].xAccessor}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
             <div>
@@ -84,7 +84,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 ariaLabel="color picker"
                 selectedKey={initialColorOption}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
           </div>
@@ -97,7 +97,7 @@ export class DataExploration extends React.PureComponent<IScatterProps> {
                 ariaLabel="y picker"
                 selectedKey={this.plotlyProps.data[0].yAccessor}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             </div>
           </div>

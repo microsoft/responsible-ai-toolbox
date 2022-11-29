@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IDropdownOption } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { IDropdownOption } from "office-ui-fabric-react";
 
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
 import { GlobalTabKeys } from "./ModelAssessmentEnums";
@@ -22,6 +22,13 @@ export function getAvailableTabs(
     });
   }
 
+  if (props.dataset.images) {
+    availableTabs.push({
+      key: GlobalTabKeys.VisionTab,
+      text: localization.ModelAssessment.ComponentNames.VisionTab
+    });
+  }
+
   if (props.dataset.predicted_y) {
     availableTabs.push({
       key: GlobalTabKeys.ModelOverviewTab,
@@ -29,8 +36,8 @@ export function getAvailableTabs(
     });
   }
   availableTabs.push({
-    key: GlobalTabKeys.DataExplorerTab,
-    text: localization.ModelAssessment.ComponentNames.DataExplorer
+    key: GlobalTabKeys.DataAnalysisTab,
+    text: localization.ModelAssessment.ComponentNames.DataAnalysis
   });
 
   if (props.modelExplanationData && props.modelExplanationData.length > 0) {

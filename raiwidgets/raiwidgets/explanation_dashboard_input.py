@@ -6,14 +6,13 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from responsibleai._input_processing import _convert_to_list
-from responsibleai.serialization_utilities import serialize_json_safe
+from raiutils.data_processing import convert_to_list, serialize_json_safe
+from raiutils.models import is_classifier
 
 from .constants import ErrorMessages
 from .error_handling import _format_exception
 from .explanation_constants import (ExplanationDashboardInterface,
                                     WidgetRequestResponseConstants)
-from .utils import _is_classifier
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
@@ -56,7 +55,7 @@ class ExplanationDashboardInput:
         :type features: numpy.ndarray or list[]
         """
         self._model = model
-        self._is_classifier = _is_classifier(model)
+        self._is_classifier = is_classifier(model)
         self._dataframeColumns = None
         self.dashboard_input = {}
         # List of explanations, key of explanation type is "explanation_type"
@@ -94,7 +93,7 @@ class ExplanationDashboardInput:
             self._dataframeColumns = dataset.columns
             self._dfdtypes = dataset.dtypes
         try:
-            list_dataset = _convert_to_list(dataset, EXP_VIZ_ERR_MSG)
+            list_dataset = convert_to_list(dataset, EXP_VIZ_ERR_MSG)
         except Exception as ex:
             ex_str = _format_exception(ex)
             raise ValueError(
@@ -109,7 +108,7 @@ class ExplanationDashboardInput:
                     ex_str)
                 raise ValueError(msg)
             try:
-                predicted_y = _convert_to_list(predicted_y, EXP_VIZ_ERR_MSG)
+                predicted_y = convert_to_list(predicted_y, EXP_VIZ_ERR_MSG)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -147,13 +146,13 @@ class ExplanationDashboardInput:
         if true_y is not None and len(true_y) == row_length:
             self.dashboard_input[
                 ExplanationDashboardInterface.TRUE_Y
-            ] = _convert_to_list(true_y, EXP_VIZ_ERR_MSG)
+            ] = convert_to_list(true_y, EXP_VIZ_ERR_MSG)
 
         if local_explanation is not None:
             try:
-                local_explanation["scores"] = _convert_to_list(
+                local_explanation["scores"] = convert_to_list(
                     local_explanation["scores"], EXP_VIZ_ERR_MSG)
-                local_explanation["intercept"] = _convert_to_list(
+                local_explanation["intercept"] = convert_to_list(
                     local_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 # We can ignore perf explanation data.
                 # Note if it is added back at any point,
@@ -185,10 +184,10 @@ class ExplanationDashboardInput:
                         " length differs from dataset")
         if local_explanation is None and global_explanation is not None:
             try:
-                global_explanation["scores"] = _convert_to_list(
+                global_explanation["scores"] = convert_to_list(
                     global_explanation["scores"], EXP_VIZ_ERR_MSG)
                 if 'intercept' in global_explanation:
-                    global_explanation["intercept"] = _convert_to_list(
+                    global_explanation["intercept"] = convert_to_list(
                         global_explanation["intercept"], EXP_VIZ_ERR_MSG)
                 self.dashboard_input[
                     ExplanationDashboardInterface.GLOBAL_EXPLANATION
@@ -213,7 +212,7 @@ class ExplanationDashboardInput:
                 and explanation.features is not None:
             features = explanation.features
         if features is not None:
-            features = _convert_to_list(features, EXP_VIZ_ERR_MSG)
+            features = convert_to_list(features, EXP_VIZ_ERR_MSG)
             if feature_length is not None and len(features) != feature_length:
                 raise ValueError("Feature vector length mismatch:"
                                  " feature names length differs"
@@ -227,7 +226,7 @@ class ExplanationDashboardInput:
                 and explanation.classes is not None:
             classes = explanation.classes
         if classes is not None:
-            classes = _convert_to_list(classes, EXP_VIZ_ERR_MSG)
+            classes = convert_to_list(classes, EXP_VIZ_ERR_MSG)
             if local_dim is not None and len(classes) != local_dim[0]:
                 raise ValueError("Class vector length mismatch:"
                                  "class names length differs from"
@@ -235,7 +234,7 @@ class ExplanationDashboardInput:
             self.dashboard_input[
                 ExplanationDashboardInterface.CLASS_NAMES
             ] = classes
-        if _is_classifier(model) and dataset is not None:
+        if is_classifier(model) and dataset is not None:
             try:
                 probability_y = model.predict_proba(dataset)
             except Exception as ex:
@@ -244,8 +243,8 @@ class ExplanationDashboardInput:
                                  " for given dataset type,"
                                  " inner error: {}".format(ex_str))
             try:
-                probability_y = _convert_to_list(probability_y,
-                                                 EXP_VIZ_ERR_MSG)
+                probability_y = convert_to_list(probability_y,
+                                                EXP_VIZ_ERR_MSG)
             except Exception as ex:
                 ex_str = _format_exception(ex)
                 raise ValueError(
@@ -261,11 +260,11 @@ class ExplanationDashboardInput:
                 data = pd.DataFrame(data, columns=self._dataframeColumns)
                 data = data.astype(dict(self._dfdtypes))
             if (self._is_classifier):
-                prediction = _convert_to_list(
+                prediction = convert_to_list(
                     self._model.predict_proba(data), EXP_VIZ_ERR_MSG)
             else:
-                prediction = _convert_to_list(self._model.predict(data),
-                                              EXP_VIZ_ERR_MSG)
+                prediction = convert_to_list(self._model.predict(data),
+                                             EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.DATA: prediction
             }

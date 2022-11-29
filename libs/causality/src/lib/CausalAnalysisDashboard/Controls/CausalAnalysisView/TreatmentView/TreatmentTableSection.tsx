@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { Label, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ICausalPolicy,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Label, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { TreatmentTable } from "./TreatmentTable";
@@ -38,7 +38,7 @@ export class TreatmentTableSection extends React.Component<ITreatmentTableSectio
           </Label>
         </Stack.Item>
         <Stack.Item>
-          <Stack horizontal grow tokens={{ padding: "l1" }}>
+          <Stack tokens={{ padding: "l1" }} className={styles.tableWrapper}>
             <Stack.Item className={styles.leftTable}>
               <TreatmentTable data={this.props.data.policy_tree} />
             </Stack.Item>

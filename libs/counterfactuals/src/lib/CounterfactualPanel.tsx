@@ -2,19 +2,11 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ICounterfactualData,
-  ModelAssessmentContext
-} from "@responsible-ai/core-ui";
-import { WhatIfConstants } from "@responsible-ai/interpret";
-import { localization } from "@responsible-ai/localization";
-import {
   Panel,
   PanelType,
   Text,
   Stack,
   PrimaryButton,
-  TextField,
   SearchBox,
   Toggle,
   TooltipHost,
@@ -24,11 +16,23 @@ import {
   ITooltipProps,
   MessageBar,
   MessageBarType
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ICounterfactualData,
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
+} from "@responsible-ai/core-ui";
+import { InfoCallout } from "@responsible-ai/error-analysis";
+import { WhatIfConstants } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CounterfactualList } from "./CounterfactualList";
 import { counterfactualPanelStyles } from "./CounterfactualPanel.styles";
+import { CounterfactualPanelNameTextField } from "./CounterfactualPanelNameTextField";
 
 export interface ICounterfactualPanelProps {
   selectedIndex: number;
@@ -36,6 +40,7 @@ export interface ICounterfactualPanelProps {
   isPanelOpen: boolean;
   temporaryPoint: { [key: string]: string | number } | undefined;
   originalData: { [key: string]: string | number };
+  telemetryHook?: (message: ITelemetryEvent) => void;
   closePanel(): void;
   saveAsPoint(): void;
   setCustomRowProperty(
@@ -96,6 +101,7 @@ export class CounterfactualPanel extends React.Component<
                 this.props.setCustomRowPropertyComboBox
               }
               sortFeatures={this.state.sortFeatures}
+              telemetryHook={this.props.telemetryHook}
             />
           </Stack.Item>
         </Stack>
@@ -105,6 +111,10 @@ export class CounterfactualPanel extends React.Component<
 
   private renderHeader = (): JSX.Element => {
     const classes = counterfactualPanelStyles();
+    const iconId = "counterfactualFlyoutIconId";
+    const description = this.context.requestPredictions
+      ? localization.Counterfactuals.panelDescription
+      : localization.Counterfactuals.panelDescriptionWithoutSetValue;
     const tooltipProps: ITooltipProps = {
       onRenderContent: () => (
         <div className={classes.tooltipWrapper}>
@@ -132,16 +142,23 @@ export class CounterfactualPanel extends React.Component<
                 ? localization.Counterfactuals.whatIfPanelHeader
                 : localization.Counterfactuals.panelHeader}
             </Text>
+            <div className={classes.infoCallout}>
+              <InfoCallout
+                iconId={iconId}
+                infoText={description}
+                title={localization.Common.infoTitle}
+              />
+            </div>
           </Stack.Item>
-          <Stack.Item>
-            <Text variant={"medium"}>
-              {this.context.requestPredictions
-                ? localization.Counterfactuals.panelDescription
-                : localization.Counterfactuals.panelDescriptionWithoutSetValue}
-            </Text>
+          <Stack.Item className={classes.description}>
+            <Text variant={"medium"}>{description}</Text>
           </Stack.Item>
           <Stack.Item className={classes.buttonRow}>
-            <Stack horizontal tokens={{ childrenGap: "l1" }}>
+            <Stack
+              horizontal
+              tokens={{ childrenGap: "l1" }}
+              className={classes.buttons}
+            >
               <Stack.Item className={classes.searchBox}>
                 <SearchBox
                   placeholder={
@@ -166,7 +183,10 @@ export class CounterfactualPanel extends React.Component<
                   directionalHint={DirectionalHint.rightTopEdge}
                   className={classes.tooltipHostDisplay}
                 >
-                  <IconButton iconProps={{ iconName: "info" }} />
+                  <IconButton
+                    iconProps={{ iconName: "info" }}
+                    ariaLabel={localization.Common.tooltipButton}
+                  />
                 </TooltipHost>
               </Stack.Item>
             </Stack>
@@ -189,23 +209,20 @@ export class CounterfactualPanel extends React.Component<
       return <div />;
     }
     return (
-      <Stack horizontal tokens={{ childrenGap: "l1" }}>
+      <Stack
+        horizontal
+        tokens={{ childrenGap: "l1" }}
+        className={classes.bottom}
+      >
         <Stack.Item align="end" grow={1}>
-          <TextField
-            id="whatIfNameLabel"
-            label={localization.Counterfactuals.counterfactualName}
+          <CounterfactualPanelNameTextField
             value={this.props.temporaryPoint?.[
               WhatIfConstants.namePath
             ]?.toString()}
-            onChange={this.setCustomRowProperty.bind(
-              this,
-              WhatIfConstants.namePath,
-              true
-            )}
-            className={classes.counterfactualName}
+            setCustomRowProperty={this.setCustomRowProperty}
           />
         </Stack.Item>
-        <Stack.Item align="end" grow={5}>
+        <Stack.Item align="end" grow={5} className={classes.buttonWrapper}>
           <PrimaryButton
             className={classes.button}
             text={localization.Counterfactuals.saveAsNew}
@@ -224,20 +241,24 @@ export class CounterfactualPanel extends React.Component<
   private toggleSortFeatures = (
     _event: React.MouseEvent<HTMLElement, MouseEvent>,
     checked?: boolean | undefined
-  ) => {
+  ): void => {
     if (checked !== undefined) {
       this.setState({ sortFeatures: checked });
     }
   };
-  private onClosePanel = () => {
+  private onClosePanel = (): void => {
     this.setState({
       filterText: undefined
     });
     this.props.closePanel();
   };
-  private handleSavePoint = () => {
+  private handleSavePoint = (): void => {
     this.props.saveAsPoint();
     this.onClosePanel();
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.CounterfactualSaveAsNewDatapointClick
+    });
   };
   private setCustomRowProperty = (
     key: string | number,

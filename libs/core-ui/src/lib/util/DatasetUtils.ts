@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ColumnActionsMode, IColumn } from "office-ui-fabric-react";
+import { ColumnActionsMode, IColumn } from "@fluentui/react";
 
 import { JointDataset } from "../util/JointDataset";
 

@@ -1,54 +1,101 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, IChoiceGroupOption } from "@fluentui/react";
 import {
   BasicHighChart,
+  calculateBoxPlotData,
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
+  IHighchartBoxData,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
-import { getTheme, IChoiceGroupOption } from "office-ui-fabric-react";
+import _ from "lodash";
 import React from "react";
 
+import { isFlightActive, newSdkEndpointsFlight } from "../../FeatureFlights";
+
 interface IProbabilityDistributionBoxChartProps {
+  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
+  onBoxPlotStateUpdate: (
+    boxPlotState: IProbabilityDistributionBoxChartState
+  ) => void;
 }
 
-class IProbabilityDistributionBoxChartState {}
+export interface IProbabilityDistributionBoxChartState {
+  boxPlotData: Array<IHighchartBoxData | undefined>;
+  outlierData: number[][] | undefined;
+}
 
-export class ProbabilityDistributionBoxChart extends React.Component<
-  IProbabilityDistributionBoxChartProps,
-  IProbabilityDistributionBoxChartState
-> {
+export class ProbabilityDistributionBoxChart extends React.Component<IProbabilityDistributionBoxChartProps> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  public componentDidUpdate(
+    prevProps: IProbabilityDistributionBoxChartProps
+  ): void {
+    if (isFlightActive(newSdkEndpointsFlight, this.context.featureFlights)) {
+      if (
+        this.props.boxPlotState.boxPlotData.length === 0 ||
+        !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
+        !_.isEqual(
+          prevProps.probabilityOption?.id,
+          this.props.probabilityOption?.id
+        )
+      ) {
+        const boxPlotData = this.props.selectedCohorts.map(
+          (cohort: ErrorCohort, index: number) => {
+            return calculateBoxPlotDataFromErrorCohort(
+              cohort,
+              index,
+              this.props.probabilityOption?.key || "",
+              this.props.probabilityOption?.id,
+              this.context.requestBoxPlotDistribution
+            );
+          }
+        );
+        this.getOutlierData(boxPlotData);
+      }
+    }
+  }
+
   public render(): React.ReactNode {
     const theme = getTheme();
-
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
 
-    const boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
-      return calculateBoxPlotDataFromErrorCohort(
-        cohort,
-        index,
-        this.props.probabilityOption!.key.toString()
-      );
-    });
-    const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierProbs, cohortIndex) => {
-        return outlierProbs?.map((prob) => [cohortIndex, prob]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
+    const isNewSdkEndpointsFlightOn = isFlightActive(
+      newSdkEndpointsFlight,
+      this.context.featureFlights
+    );
+    let boxPlotData;
+    let outlierData;
+    if (!isNewSdkEndpointsFlightOn) {
+      boxPlotData = this.props.selectedCohorts.map((cohort, index) => {
+        return calculateBoxPlotData(
+          cohort.cohort.filteredData.map((dict) =>
+            this.props.probabilityOption
+              ? dict[this.props.probabilityOption.key.toString()]
+              : 0
+          ),
+          index
+        );
+      });
+      outlierData = boxPlotData
+        .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+        .map((outlierProbs, cohortIndex) => {
+          return outlierProbs?.map((prob) => [cohortIndex, prob]);
+        })
+        .filter((list) => list !== undefined)
+        .reduce((list1, list2) => list1?.concat(list2 || []), []);
+    }
 
     return (
       <BasicHighChart
@@ -69,18 +116,24 @@ export class ProbabilityDistributionBoxChart extends React.Component<
           },
           series: [
             {
-              data: boxPlotData.map((boxData) => boxData as PointOptionsObject),
-              fillColor: "#b2d6f2",
+              data: isNewSdkEndpointsFlightOn
+                ? this.props.boxPlotState.boxPlotData.map(
+                    (boxData) => boxData as PointOptionsObject
+                  )
+                : boxPlotData?.map((boxData) => boxData as PointOptionsObject),
+              fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
               type: "boxplot"
             },
             {
-              data: outlierData,
+              data: isNewSdkEndpointsFlightOn
+                ? this.props.boxPlotState.outlierData
+                : outlierData,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .outlierLabel,
               tooltip: {
-                pointFormatter() {
+                pointFormatter(): string {
                   return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                 }
               },
@@ -91,10 +144,29 @@ export class ProbabilityDistributionBoxChart extends React.Component<
             categories: selectedCohortNames
           },
           yAxis: {
-            title: { text: this.props.probabilityOption!.text }
+            title: { text: this.props.probabilityOption?.text }
           }
         }}
       />
     );
+  }
+
+  private async getOutlierData(
+    boxPlotData: Array<Promise<IHighchartBoxData | undefined>>
+  ): Promise<void> {
+    const data = await Promise.all(boxPlotData);
+    const outlierData = data
+      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+      .map((outlierProbs, cohortIndex) => {
+        return outlierProbs?.map((prob) => [cohortIndex, prob]);
+      })
+      .filter((list) => list !== undefined)
+      .reduce((list1, list2) => list1?.concat(list2 || []), []);
+    if (
+      !_.isEqual(data, this.props.boxPlotState.boxPlotData) ||
+      !_.isEqual(this.props.boxPlotState.outlierData, outlierData)
+    ) {
+      this.props.onBoxPlotStateUpdate({ boxPlotData: data, outlierData });
+    }
   }
 }

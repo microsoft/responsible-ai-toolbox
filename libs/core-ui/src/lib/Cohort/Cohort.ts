@@ -40,6 +40,49 @@ export class Cohort {
     this.filteredData = this.applyFilters();
   }
 
+  public static getLabeledFilters(
+    filters: IFilter[],
+    jointDataset: JointDataset
+  ): IFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = filters
+      .filter((item) => item)
+      .map((filter: IFilter): IFilter => {
+        const label = jointDataset.metaDict[filter.column].label;
+        return {
+          arg: filter.arg,
+          column: label,
+          method: filter.method
+        };
+      });
+    return filtersRelabeled;
+  }
+
+  public static getLabeledCompositeFilters(
+    compositeFilters: ICompositeFilter[],
+    jointDataset: JointDataset
+  ): ICompositeFilter[] {
+    // return the filters relabeled from Data# to original label
+    const filtersRelabeled = compositeFilters.map(
+      (compositeFilter: ICompositeFilter): ICompositeFilter => {
+        if (compositeFilter.method) {
+          return Cohort.getLabeledFilters(
+            [compositeFilter as IFilter],
+            jointDataset
+          )[0] as ICompositeFilter;
+        }
+        return {
+          compositeFilters: Cohort.getLabeledCompositeFilters(
+            compositeFilter.compositeFilters,
+            jointDataset
+          ),
+          operation: compositeFilter.operation
+        } as ICompositeFilter;
+      }
+    );
+    return filtersRelabeled;
+  }
+
   public updateFilter(filter: IFilter, index?: number): void {
     if (index === undefined) {
       index = this.filters.length;
@@ -110,7 +153,7 @@ export class Cohort {
     if (
       applyBin &&
       !this.jointDataset.metaDict[key].isCategorical &&
-      !this.jointDataset.metaDict[key].treatAsCategorical
+      !this.jointDataset.metaDict[key]?.treatAsCategorical
     ) {
       let binVector = this.jointDataset.binDict[key];
       if (binVector === undefined) {
@@ -169,29 +212,31 @@ export class Cohort {
     row: { [key: string]: number },
     filters: IFilter[]
   ): boolean {
-    return filters.every((filter) => {
-      const rowVal = row[filter.column];
-      switch (filter.method) {
-        case FilterMethods.Equal:
-          return rowVal === filter.arg[0];
-        case FilterMethods.GreaterThan:
-          return rowVal > filter.arg[0];
-        case FilterMethods.GreaterThanEqualTo:
-          return rowVal >= filter.arg[0];
-        case FilterMethods.LessThan:
-          return rowVal < filter.arg[0];
-        case FilterMethods.LessThanEqualTo:
-          return rowVal <= filter.arg[0];
-        case FilterMethods.Includes:
-          return (filter.arg as number[]).includes(rowVal);
-        case FilterMethods.Excludes:
-          return !(filter.arg as number[]).includes(rowVal);
-        case FilterMethods.InTheRangeOf:
-          return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
-        default:
-          return false;
-      }
-    });
+    return filters
+      .filter((item) => item)
+      .every((filter) => {
+        const rowVal = row[filter.column];
+        switch (filter.method) {
+          case FilterMethods.Equal:
+            return rowVal === filter.arg[0];
+          case FilterMethods.GreaterThan:
+            return rowVal > filter.arg[0];
+          case FilterMethods.GreaterThanEqualTo:
+            return rowVal >= filter.arg[0];
+          case FilterMethods.LessThan:
+            return rowVal < filter.arg[0];
+          case FilterMethods.LessThanEqualTo:
+            return rowVal <= filter.arg[0];
+          case FilterMethods.Includes:
+            return (filter.arg as number[]).includes(rowVal);
+          case FilterMethods.Excludes:
+            return !(filter.arg as number[]).includes(rowVal);
+          case FilterMethods.InTheRangeOf:
+            return rowVal >= filter.arg[0] && rowVal <= filter.arg[1];
+          default:
+            return false;
+        }
+      });
   }
 
   private filterRecursively(

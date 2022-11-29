@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
 import {
   IStyle,
   mergeStyleSets,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { descriptionMaxWidth, hideXlDown } from "@responsible-ai/core-ui";
 
 export interface ICounterfactualsTabStyles {
   container: IStyle;
@@ -22,6 +22,6 @@ export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactuals
         color: theme.semanticColors.bodyText,
         padding: "0 40px 10px 40px"
       },
-      infoWithText: { maxWidth: descriptionMaxWidth }
+      infoWithText: { ...hideXlDown, maxWidth: descriptionMaxWidth }
     });
   };

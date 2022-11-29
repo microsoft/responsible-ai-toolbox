@@ -19,7 +19,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main, postbuild]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -197,6 +197,8 @@ jobs:
             counterfactuals,
             fairness,
             interpret,
+            interpret-text,
+            interpret-vision,
             localization,
             error-analysis,
             model-assessment,

@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import {
   ICompositeFilter,
   IFilter,
   CohortSource,
   ErrorCohort,
   MetricCohortStats,
-  IErrorAnalysisTreeNode
+  IErrorAnalysisTreeNode,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
-import { ITheme } from "office-ui-fabric-react";
 
 import { HelpMessageDict } from "../../Interfaces/IStringsParam";
 
@@ -35,4 +36,5 @@ export interface ITreeViewRendererProps {
   selectedCohort: ErrorCohort;
   baseCohort: ErrorCohort;
   showCohortName: boolean;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }

@@ -7,19 +7,22 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
 from sklearn.feature_selection import (mutual_info_classif,
                                        mutual_info_regression)
-from sklearn.preprocessing import OrdinalEncoder
 
 from erroranalysis._internal.constants import (MatrixParams, Metrics,
                                                ModelTask, RootKeys,
                                                metric_to_display_name)
 from erroranalysis._internal.matrix_filter import \
     compute_matrix as _compute_matrix
+from erroranalysis._internal.matrix_filter import \
+    compute_matrix_on_dataset as _compute_matrix_on_dataset
 from erroranalysis._internal.metrics import metric_to_func
+from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.surrogate_error_tree import \
     compute_error_tree as _compute_error_tree
+from erroranalysis._internal.surrogate_error_tree import \
+    compute_error_tree_on_dataset as _compute_error_tree_on_dataset
 from erroranalysis._internal.utils import generate_random_unique_indexes
 from erroranalysis._internal.version_checker import check_pandas_version
 from erroranalysis.report import ErrorReport
@@ -94,20 +97,12 @@ class BaseAnalyzer(ABC):
                 metric = Metrics.MEAN_SQUARED_ERROR
         self._metric = metric
         if self._categorical_features:
-            self._categorical_indexes = [feature_names.index(feature)
-                                         for feature
-                                         in self._categorical_features]
-            ordinal_enc = OrdinalEncoder()
-            ct = ColumnTransformer([('ord', ordinal_enc,
-                                     self._categorical_indexes)],
-                                   remainder='drop')
-            self._string_ind_data = ct.fit_transform(self._dataset)
-            transformer_categories = ct.transformers_[0][1].categories_
-            for category_arr, category_index in zip(transformer_categories,
-                                                    self._categorical_indexes):
-                category_values = category_arr.tolist()
-                self._categories.append(category_values)
-                self._category_dictionary[category_index] = category_values
+            self._categories, self._categorical_indexes, \
+                self._category_dictionary, self._string_ind_data = \
+                process_categoricals(
+                    all_feature_names=self._feature_names,
+                    categorical_features=self._categorical_features,
+                    dataset=self._dataset)
         check_pandas_version(self.feature_names)
 
     @property
@@ -238,7 +233,7 @@ class BaseAnalyzer(ABC):
                        num_bins=BIN_THRESHOLD):
         """Computes the matrix filter (aka heatmap) json.
 
-        :param features: One or two features to compute the heatmap.
+        :param features: One or two feature names to compute the heatmap.
         :type features: list
         :param filters: The filters to apply to the dataset.
         :type filters: list[str]
@@ -246,7 +241,7 @@ class BaseAnalyzer(ABC):
             to the dataset.
         :type composite_filters: list[str]
         :param quantile_binning: If true, use quantile binning for the
-            heatmap.  By default uses equal width binning.
+            heatmap. By default uses equal width binning.
         :type quantile_binning: bool
         :param num_bins: The number of bins per feature in the heatmap.
         :type num_bins: int
@@ -260,6 +255,40 @@ class BaseAnalyzer(ABC):
                                quantile_binning=quantile_binning,
                                num_bins=num_bins)
 
+    def compute_matrix_on_dataset(
+            self,
+            features,
+            dataset,
+            quantile_binning=False,
+            num_bins=BIN_THRESHOLD):
+        """Computes the matrix filter (aka heatmap) json.
+
+        :param features: One or two feature names to compute the heatmap.
+        :type features: list
+        :param dataset: The dataset on which matrix view needs to be computed.
+            The dataset should have the feature columns and the columns
+            'true_y' and 'index'. The 'true_y' column should have the true
+            target values corresponding to the test data. The 'index'
+            column should have the indices. If the analyzer is of type
+            PredictionsAnalyzer, then the dataset should include the column
+            'pred_y' which will hold the predictions.
+        :type dataset: pd.DataFrame
+        :param quantile_binning: If true, use quantile binning for the
+            heatmap. By default uses equal width binning.
+        :type quantile_binning: bool
+        :param num_bins: The number of bins per feature in the heatmap.
+        :type num_bins: int
+        :return: The heatmap in json representation.
+        :rtype: dict
+        """
+        return _compute_matrix_on_dataset(
+            self,
+            features,
+            dataset,
+            quantile_binning,
+            num_bins
+        )
+
     def compute_error_tree(self,
                            features,
                            filters,
@@ -269,7 +298,7 @@ class BaseAnalyzer(ABC):
                            min_child_samples=None):
         """Computes the tree view json.
 
-        :param features: The selected features to train the
+        :param features: The selected feature names to train the
             surrogate model on.
         :type features: list[str]
         :param filters: The filters to apply to the dataset.
@@ -296,6 +325,46 @@ class BaseAnalyzer(ABC):
                                    max_depth=max_depth,
                                    num_leaves=num_leaves,
                                    min_child_samples=min_child_samples)
+
+    def compute_error_tree_on_dataset(
+            self,
+            features,
+            dataset,
+            max_depth=None,
+            num_leaves=None,
+            min_child_samples=None):
+        """Computes the tree view json.
+
+        :param features: The selected feature names to train the
+            surrogate model on.
+        :type features: list[str]
+        :param dataset: The dataset on which tree view needs to be computed.
+            The dataset should have the feature columns and the columns
+            'true_y' and 'index'. The 'true_y' column should have the true
+            target values corresponding to the test data. The 'index'
+            column should have the indices. If the analyzer is of type
+            PredictionsAnalyzer, then the dataset should include the column
+            'pred_y' which will hold the predictions.
+        :type dataset: pd.DataFrame
+        :param max_depth: The maximum depth of the surrogate tree trained
+            on errors.
+        :type max_depth: int
+        :param num_leaves: The number of leaves of the surrogate tree
+            trained on errors.
+        :type num_leaves: int
+        :param min_child_samples: The minimal number of data required to
+            create one leaf.
+        :type min_child_samples: int
+        :return: The tree view in json representation.
+        :rtype: dict
+        """
+        return _compute_error_tree_on_dataset(
+            self,
+            features,
+            dataset,
+            max_depth=max_depth,
+            num_leaves=num_leaves,
+            min_child_samples=min_child_samples)
 
     def create_error_report(self,
                             filter_features=None,
@@ -381,8 +450,29 @@ class BaseAnalyzer(ABC):
                                                      IMPORTANCES_THRESHOLD)
             input_data = input_data[indexes]
             diff = diff[indexes]
+        try:
+            importances = self._compute_mutual_info(input_data, diff)
+        except ValueError:
+            # Impute input_data if it contains NaNs, infinity or a value too
+            # large for dtype('float64')
+            input_data = np.nan_to_num(input_data)
+            importances = self._compute_mutual_info(input_data, diff)
+        return importances
+
+    def _compute_mutual_info(self, input_data, diff):
+        """Compute the mutual information between the features and error.
+
+        :param input_data: The input data to compute the mutual information
+            on.
+        :type input_data: numpy.ndarray
+        :param diff: The difference between the label and prediction
+            columns.
+        :type diff: numpy.ndarray
+        :return: The computed mutual information between the features and
+            error.
+        :rtype: list[float]
+        """
         if self._model_task == ModelTask.CLASSIFICATION:
-            # compute the feature importances using mutual information
             return mutual_info_classif(input_data, diff).tolist()
         else:
             return mutual_info_regression(input_data, diff).tolist()

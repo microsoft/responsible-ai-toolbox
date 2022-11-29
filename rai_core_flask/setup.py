@@ -5,7 +5,7 @@ import setuptools
 
 # The version must be incremented every time we push an update to pypi (but
 # not before)
-VERSION = "0.3.0"
+VERSION = "0.5.0"
 
 # supply contents of our README file as our package's long description
 with open("README.md", "r") as fh:

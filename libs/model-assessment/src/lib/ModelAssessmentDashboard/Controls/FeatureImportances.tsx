@@ -1,24 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IObjectWithKey, Pivot, PivotItem, Stack } from "@fluentui/react";
 import {
   WeightVectorOption,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext,
   IModelExplanationData,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ITelemetryEvent,
+  TelemetryLevels,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
-import { Pivot, PivotItem, PivotLinkSize, Stack } from "office-ui-fabric-react";
 import * as React from "react";
 
 import { featureImportanceTabStyles } from "./FeatureImportances.styles";
-import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView";
+import { IndividualFeatureImportanceView } from "./IndividualFeatureImportanceView/IndividualFeatureImportanceView";
 
 interface IFeatureImportancesProps {
+  allSelectedItems: IObjectWithKey[];
   selectedWeightVector: WeightVectorOption;
   weightVectorOptions: WeightVectorOption[];
   weightVectorLabels: Dictionary<string>;
@@ -29,13 +33,15 @@ interface IFeatureImportancesProps {
   modelExplanationData?: IModelExplanationData[];
   modelMetadata: IExplanationModelMetadata;
   onWeightVectorChange: (weightOption: WeightVectorOption) => void;
+  telemetryHook?: (message: ITelemetryEvent) => void;
+  onPivotChange?: (option: FeatureImportancesTabOptions) => void;
 }
 
 interface IFeatureImportancesState {
   activeFeatureImportancesOption: FeatureImportancesTabOptions;
 }
 
-enum FeatureImportancesTabOptions {
+export enum FeatureImportancesTabOptions {
   GlobalExplanation = "global",
   LocalExplanation = "local"
 }
@@ -70,42 +76,27 @@ export class FeatureImportancesTab extends React.PureComponent<
 
     return (
       <Stack className={classNames.container}>
-        <Stack.Item>
-          <Pivot
-            selectedKey={this.state.activeFeatureImportancesOption}
-            onLinkClick={(item: PivotItem | undefined): void => {
-              if (
-                item &&
-                item.props.itemKey &&
-                Object.values(FeatureImportancesTabOptions).includes(
-                  item.props.itemKey as FeatureImportancesTabOptions
-                )
-              ) {
-                this.setState({
-                  activeFeatureImportancesOption: item.props
-                    .itemKey as FeatureImportancesTabOptions
-                });
-              }
-            }}
-            linkSize={PivotLinkSize.normal}
-            headersOnly
-            className={classNames.tabs}
-          >
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.GlobalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances
-                  .GlobalExplanation
-              }
-            />
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.LocalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances.LocalExplanation
-              }
-            />
-          </Pivot>
-        </Stack.Item>
+        <Pivot
+          selectedKey={this.state.activeFeatureImportancesOption}
+          onLinkClick={this.onPivotLinkClick}
+          linkSize={"normal"}
+          headersOnly
+          className={classNames.tabs}
+          overflowBehavior="menu"
+        >
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.GlobalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.GlobalExplanation
+            }
+          />
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.LocalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.LocalExplanation
+            }
+          />
+        </Pivot>
 
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.GlobalExplanation && (
@@ -119,11 +110,13 @@ export class FeatureImportancesTab extends React.PureComponent<
             explanationMethod={
               this.props.modelExplanationData?.[0].explanationMethod
             }
+            telemetryHook={this.props.telemetryHook}
           />
         )}
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.LocalExplanation && (
           <IndividualFeatureImportanceView
+            allSelectedItems={this.props.allSelectedItems}
             features={this.context.modelMetadata.featureNames}
             jointDataset={this.context.jointDataset}
             invokeModel={this.props.requestPredictions}
@@ -133,9 +126,33 @@ export class FeatureImportancesTab extends React.PureComponent<
             onWeightChange={this.props.onWeightVectorChange}
             selectedCohort={this.context.selectedErrorCohort}
             modelType={this.props.modelMetadata.modelType}
+            telemetryHook={this.props.telemetryHook}
           />
         )}
       </Stack>
     );
   }
+
+  private onPivotLinkClick = (item: PivotItem | undefined): void => {
+    if (
+      item &&
+      item.props.itemKey &&
+      Object.values(FeatureImportancesTabOptions).includes(
+        item.props.itemKey as FeatureImportancesTabOptions
+      )
+    ) {
+      const option = item.props.itemKey as FeatureImportancesTabOptions;
+      this.setState({
+        activeFeatureImportancesOption: option
+      });
+      this.props.onPivotChange?.(option);
+      this.props.telemetryHook?.({
+        level: TelemetryLevels.ButtonClick,
+        type:
+          item.props.itemKey === FeatureImportancesTabOptions.GlobalExplanation
+            ? TelemetryEventName.AggregateFeatureImportanceTabClick
+            : TelemetryEventName.IndividualFeatureImportanceTabClick
+      });
+    }
+  };
 }

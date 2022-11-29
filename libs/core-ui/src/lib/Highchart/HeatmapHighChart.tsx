@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import _ from "lodash";
-import { getTheme } from "office-ui-fabric-react";
 import React from "react";
 
 import { getDefaultHighchartOptions } from "./getDefaultHighchartOptions";
@@ -13,7 +13,7 @@ export class HeatmapHighChart extends React.Component<ICommonChartProps> {
   public render(): React.ReactNode {
     const defaultOptions = getDefaultHighchartOptions(getTheme());
     const { className, id, fallback, configOverride = {}, theme } = this.props;
-    const chartOptions = _.merge({}, configOverride, defaultOptions);
+    const chartOptions = _.merge({}, defaultOptions, configOverride);
 
     return (
       <HighchartWrapper

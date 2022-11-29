@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import {
   Dialog,
   DialogFooter,
@@ -10,7 +8,8 @@ import {
   DefaultButton,
   DialogType,
   ContextualMenu
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 export interface ICohortDeleteDialogProps {

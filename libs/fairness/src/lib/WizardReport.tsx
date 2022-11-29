@@ -1,43 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IMetricResponse,
-  PredictionTypes,
-  IFairnessResponse,
-  IBounds
-} from "@responsible-ai/core-ui";
+import { IDropdownOption, Stack, ActionButton, Text } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { Dictionary } from "lodash";
-import {
-  IDropdownOption,
-  Stack,
-  ActionButton,
-  Spinner,
-  SpinnerSize,
-  MessageBar,
-  MessageBarType,
-  Text
-} from "office-ui-fabric-react";
 import React from "react";
 
 import { DropdownBar } from "./Controls/DropdownBar";
 import { IModelComparisonProps } from "./Controls/ModelComparisonChart";
-import { OverallTable } from "./Controls/OverallTable";
-import { ReportChart } from "./Controls/ReportChart";
-import { IMetrics } from "./IMetrics";
 import { SharedStyles } from "./Shared.styles";
-import { FairnessModes, fairnessOptions } from "./util/FairnessMetrics";
-import { FormatMetrics } from "./util/FormatMetrics";
-import { performanceOptions } from "./util/PerformanceMetrics";
 import { WizardReportStyles } from "./WizardReport.styles";
+import { WizardReportMainChart } from "./WizardReportMainChart";
 
 export interface IState {
-  metrics?: IMetrics;
-  featureKey?: string;
-  fairnessKey?: string;
-  performanceKey?: string;
-  errorBarsEnabled?: boolean;
   showModalHelp?: boolean;
   chartKey?: string;
 }
@@ -50,206 +24,6 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
   public render(): React.ReactNode {
     const styles = WizardReportStyles();
     const sharedStyles = SharedStyles();
-
-    const alternateHeight =
-      this.props.featureBinPickerProps.featureBins[
-        this.props.featureBinPickerProps.selectedBinIndex
-      ].labelArray.length *
-        60 +
-      106;
-    const areaHeights = Math.max(300, alternateHeight);
-
-    const performanceKey =
-      this.props.performancePickerProps.selectedPerformanceKey;
-    const fairnessKey = this.props.fairnessPickerProps.selectedFairnessKey;
-    const outcomeKey: string =
-      this.props.dashboardContext.modelMetadata.PredictionType ===
-      PredictionTypes.BinaryClassification
-        ? "selection_rate"
-        : "average";
-
-    let mainChart;
-    if (!this.state || !this.state.metrics) {
-      this.loadData();
-      mainChart = (
-        <Spinner
-          className={styles.spinner}
-          size={SpinnerSize.large}
-          label={localization.Fairness.calculating}
-        />
-      );
-    } else {
-      // define task-specific metrics to show by default
-      const additionalMetrics: Map<string, IMetricResponse> = new Map();
-
-      switch (this.props.dashboardContext.modelMetadata.PredictionType) {
-        case PredictionTypes.BinaryClassification: {
-          if (this.state.metrics.falsePositiveRates) {
-            additionalMetrics.set(
-              "fallout_rate",
-              this.state.metrics.falsePositiveRates
-            );
-          }
-          if (this.state.metrics.falseNegativeRates) {
-            additionalMetrics.set(
-              "miss_rate",
-              this.state.metrics.falseNegativeRates
-            );
-          }
-          break;
-        }
-        case PredictionTypes.Probability: {
-          if (this.state.metrics.overpredictions) {
-            additionalMetrics.set(
-              "overprediction",
-              this.state.metrics.overpredictions
-            );
-          }
-          if (this.state.metrics.underpredictions) {
-            additionalMetrics.set(
-              "underprediction",
-              this.state.metrics.underpredictions
-            );
-          }
-          break;
-        }
-        case PredictionTypes.Regression: {
-          // TODO: define additional metrics for regression
-          break;
-        }
-        default: {
-          throw new Error(
-            `Unexpected task type ${this.props.dashboardContext.modelMetadata.PredictionType}.`
-          );
-        }
-      }
-
-      if (
-        !this.state.metrics.performance ||
-        !this.state.metrics.outcomes ||
-        !this.state.metrics.disparities
-      ) {
-        return (
-          <MessageBar messageBarType={MessageBarType.warning}>
-            <Text>
-              {localization.Fairness.ValidationErrors.missingPerformanceMetric}
-            </Text>
-          </MessageBar>
-        );
-      }
-
-      const globalPerformanceString = FormatMetrics.formatNumbers(
-        this.state.metrics.performance.global,
-        performanceKey
-      );
-
-      const fairnessMetricString = FormatMetrics.formatNumbers(
-        this.state.metrics.disparities[
-          this.props.fairnessPickerProps.selectedFairnessKey
-        ],
-        performanceKey
-      );
-
-      const globalOutcomeString = FormatMetrics.formatNumbers(
-        this.state.metrics.outcomes.global,
-        outcomeKey
-      );
-
-      const formattedBinPerformanceValues =
-        this.state.metrics.performance.bins.map((value) =>
-          FormatMetrics.formatNumbers(value, performanceKey)
-        );
-      const formattedBinOutcomeValues = this.state.metrics.outcomes.bins.map(
-        (value) => FormatMetrics.formatNumbers(value, outcomeKey)
-      );
-
-      // set the table columns to consist of performance and outcome as well
-      // as any additional metrics that may be relevant for the selected task
-      const formattedBinValues = [
-        formattedBinPerformanceValues,
-        formattedBinOutcomeValues,
-        formattedBinOutcomeValues.map(() => "") // empty entries for fairness outcome column
-      ];
-      additionalMetrics.forEach((metricObject, metricName) => {
-        formattedBinValues.push(
-          metricObject?.bins.map((value) => {
-            return FormatMetrics.formatNumbers(value, metricName);
-          })
-        );
-      });
-
-      const overallMetrics = [
-        globalPerformanceString,
-        globalOutcomeString,
-        fairnessMetricString
-      ];
-      additionalMetrics.forEach((metricObject, metricName) => {
-        overallMetrics.push(
-          FormatMetrics.formatNumbers(metricObject?.global, metricName)
-        );
-      });
-
-      const metricLabels = [
-        (
-          this.props.performancePickerProps.performanceOptions.find(
-            (a) => a.key === performanceKey
-          ) || performanceOptions[performanceKey]
-        ).title,
-        performanceOptions[outcomeKey].title,
-        (
-          this.props.fairnessPickerProps.fairnessOptions.find(
-            (a) => a.key === fairnessKey
-          ) || fairnessOptions[fairnessKey]
-        ).title
-      ];
-      additionalMetrics.forEach((_, metricName) => {
-        metricLabels.push(performanceOptions[metricName].title);
-      });
-
-      mainChart = (
-        <Stack horizontal>
-          <Stack.Item className={sharedStyles.mainLeft}>
-            <Stack tokens={{ childrenGap: "l1", padding: "0 0 0 100px" }}>
-              <OverallTable
-                binGroup={
-                  this.props.dashboardContext.modelMetadata.featureNames[
-                    this.props.featureBinPickerProps.selectedBinIndex
-                  ]
-                }
-                binLabels={this.props.dashboardContext.groupNames}
-                formattedBinValues={formattedBinValues}
-                metricLabels={metricLabels}
-                overallMetrics={overallMetrics}
-                binValues={this.state.metrics.performance.bins}
-              />
-              <ReportChart
-                areaHeights={areaHeights}
-                dashboardContext={this.props.dashboardContext}
-                featureBinPickerProps={this.props.featureBinPickerProps}
-                metrics={this.state.metrics}
-                fairnessPickerProps={this.props.fairnessPickerProps}
-                performancePickerProps={this.props.performancePickerProps}
-                errorPickerProps={this.props.errorPickerProps}
-                chartKey={this.state.chartKey}
-                onUpdateChartKey={this.updateChartKey}
-                parentErrorChanged={this.errorChanged}
-              />
-            </Stack>
-          </Stack.Item>
-          {/* TODO: define insights for single model view
-          https://github.com/microsoft/responsible-ai-widgets/issues/104
-          <Insights
-            fairnessArray={this.state.fairnessArray}
-            performanceArray={this.state.performanceArray}
-            selectedMetric={selectedMetric}
-            selectedFairnessMetric={selectedFairnessMetric}
-            selectedPerformanceKey={
-              this.props.performancePickerProps.selectedPerformanceKey
-            }
-          /> */}
-        </Stack>
-      );
-    }
 
     return (
       <Stack style={{ height: "100%", overflowY: "auto", width: "100%" }}>
@@ -288,7 +62,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
           parentFairnessChanged={this.fairnessChanged}
           parentPerformanceChanged={this.performanceChanged}
         />
-        {mainChart}
+        <WizardReportMainChart
+          dashboardContext={this.props.dashboardContext}
+          errorPickerProps={this.props.errorPickerProps}
+          fairnessPickerProps={this.props.fairnessPickerProps}
+          featureBinPickerProps={this.props.featureBinPickerProps}
+          performancePickerProps={this.props.performancePickerProps}
+          metricsCache={this.props.metricsCache}
+          selectedModelIndex={this.props.selectedModelIndex}
+        />
       </Stack>
     );
   }
@@ -299,33 +81,20 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     }
   };
 
-  // private readonly onEditConfigs = (): void => {
-  //   if (this.props.modelCount > 1) {
-  //     this.props.onChartClick(undefined);
-  //   }
-  //   this.props.onEditConfigs();
-  // };
-
-  private readonly updateChartKey = (chartKey: string): void => {
-    this.setState({ chartKey });
-  };
-
   private readonly featureChanged = (
     _: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
+    if (typeof option?.key !== "string") {
       return;
     }
-    const featureKey = option.key.toString();
-    if (this.state.featureKey !== featureKey) {
-      const index =
-        this.props.dashboardContext.modelMetadata.featureNames.indexOf(
-          featureKey
-        );
-      this.props.featureBinPickerProps.selectedBinIndex = index;
+    const featureKey = option.key;
+    const index =
+      this.props.dashboardContext.modelMetadata.featureNames.indexOf(
+        featureKey
+      );
+    if (this.props.featureBinPickerProps.selectedBinIndex !== index) {
       this.props.featureBinPickerProps.onBinChange(index);
-      this.setState({ featureKey, metrics: undefined });
     }
   };
 
@@ -333,13 +102,15 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
+    if (typeof option?.key !== "string") {
       return;
     }
-    const performanceKey = option.key.toString();
-    if (this.state.performanceKey !== performanceKey) {
+    const performanceKey = option.key;
+    if (
+      this.props.performancePickerProps.selectedPerformanceKey !==
+      performanceKey
+    ) {
       this.props.performancePickerProps.onPerformanceChange(performanceKey);
-      this.setState({ metrics: undefined, performanceKey });
     }
   };
 
@@ -347,152 +118,12 @@ export class WizardReport extends React.PureComponent<IReportProps, IState> {
     _ev: React.FormEvent<HTMLDivElement>,
     option?: IDropdownOption
   ): void => {
-    if (!option) {
+    if (typeof option?.key !== "string") {
       return;
     }
     const fairnessKey = option.key.toString();
-    if (this.state.fairnessKey !== fairnessKey) {
+    if (this.props.fairnessPickerProps.selectedFairnessKey !== fairnessKey) {
       this.props.fairnessPickerProps.onFairnessChange(fairnessKey);
-      this.setState({ fairnessKey, metrics: undefined });
     }
   };
-
-  private readonly errorChanged = (
-    _ev: React.MouseEvent<HTMLElement>,
-    checked?: boolean
-  ): void => {
-    const errorBarsEnabled = checked;
-    if (this.state.errorBarsEnabled !== errorBarsEnabled) {
-      this.props.errorPickerProps.onErrorChange(errorBarsEnabled ?? false);
-      this.setState({ errorBarsEnabled, metrics: undefined });
-    }
-  };
-
-  private async loadData(): Promise<void> {
-    try {
-      let falsePositiveRates: IMetricResponse | undefined;
-      let falseNegativeRates: IMetricResponse | undefined;
-      let overpredictions: IMetricResponse | undefined;
-      let underpredictions: IMetricResponse | undefined;
-      let predictions: number[] | undefined;
-      let errors: number[] | undefined;
-      let outcomes: IMetricResponse;
-
-      const disparities: Dictionary<number> = {};
-      const disparityBounds: Dictionary<IBounds> = {};
-      const performance = await this.getMetric(
-        this.props.performancePickerProps.selectedPerformanceKey,
-        this.props.errorPickerProps.errorBarsEnabled
-      );
-      // TODO: extend disparities to query for all possible kinds of disparities
-      // https://github.com/microsoft/responsible-ai-widgets/issues/65
-      const fairnessResponse: IFairnessResponse = await this.getFairnessMetric(
-        this.props.fairnessPickerProps.selectedFairnessKey,
-        fairnessOptions[this.props.fairnessPickerProps.selectedFairnessKey]
-          .fairnessMode,
-        this.props.errorPickerProps.errorBarsEnabled
-      );
-      disparities[this.props.fairnessPickerProps.selectedFairnessKey] =
-        fairnessResponse.overall;
-      if (fairnessResponse.bounds) {
-        disparityBounds[this.props.fairnessPickerProps.selectedFairnessKey] =
-          fairnessResponse.bounds;
-      }
-      switch (this.props.dashboardContext.modelMetadata.PredictionType) {
-        case PredictionTypes.BinaryClassification: {
-          falseNegativeRates = await this.getMetric(
-            "miss_rate",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          falsePositiveRates = await this.getMetric(
-            "fallout_rate",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          outcomes = await this.getMetric(
-            "selection_rate",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          break;
-        }
-        case PredictionTypes.Probability: {
-          predictions =
-            this.props.dashboardContext.predictions[
-              this.props.selectedModelIndex
-            ];
-          overpredictions = await this.getMetric(
-            "overprediction",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          underpredictions = await this.getMetric(
-            "underprediction",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          outcomes = await this.getMetric(
-            "average",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          break;
-        }
-        case PredictionTypes.Regression:
-        default: {
-          predictions =
-            this.props.dashboardContext.predictions[
-              this.props.selectedModelIndex
-            ];
-          errors = predictions.map((predicted, index) => {
-            return predicted - this.props.dashboardContext.trueY[index];
-          });
-          outcomes = await this.getMetric(
-            "average",
-            this.props.errorPickerProps.errorBarsEnabled
-          );
-          break;
-        }
-      }
-      this.setState({
-        metrics: {
-          disparities,
-          disparityBounds,
-          errors,
-          falseNegativeRates,
-          falsePositiveRates,
-          outcomes,
-          overpredictions,
-          performance,
-          predictions,
-          underpredictions
-        }
-      });
-    } catch {
-      // todo;
-    }
-  }
-
-  private async getMetric(
-    metricName: string,
-    errorBarsEnabled: boolean
-  ): Promise<IMetricResponse> {
-    return await this.props.metricsCache.getMetric(
-      this.props.dashboardContext.binVector,
-      this.props.featureBinPickerProps.selectedBinIndex,
-      this.props.selectedModelIndex,
-      metricName,
-      errorBarsEnabled
-    );
-  }
-
-  private async getFairnessMetric(
-    metricName: string,
-    fairnessMode: FairnessModes,
-    errorBarsEnabled: boolean
-  ): Promise<IFairnessResponse> {
-    return await this.props.metricsCache.getFairnessMetric(
-      this.props.dashboardContext.binVector,
-      this.props.featureBinPickerProps.selectedBinIndex,
-      this.props.selectedModelIndex,
-      metricName,
-      fairnessMode,
-      errorBarsEnabled
-    );
-  }
 }

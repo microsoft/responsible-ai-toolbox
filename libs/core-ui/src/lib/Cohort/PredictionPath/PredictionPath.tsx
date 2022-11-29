@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Icon,
-  IStackTokens,
-  Stack,
-  Text,
-  TooltipHost
-} from "office-ui-fabric-react";
+import { Icon, IStackTokens, Stack, Text, TooltipHost } from "@fluentui/react";
 import React from "react";
 
 import { ErrorCohort } from "../ErrorCohort";

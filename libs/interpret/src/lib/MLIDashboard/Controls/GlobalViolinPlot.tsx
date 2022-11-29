@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JointDataset, Cohort, FabricStyles } from "@responsible-ai/core-ui";
+import { IComboBoxOption } from "@fluentui/react";
+import {
+  JointDataset,
+  Cohort,
+  FluentUIStyles,
+  IExplanationModelMetadata
+} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   IPlotlyProperty,
@@ -10,11 +16,9 @@ import {
 } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import memoize from "memoize-one";
-import { IComboBoxOption } from "office-ui-fabric-react";
 import React from "react";
 
-import { IExplanationModelMetadata } from "../IExplanationContext";
-import { LoadingSpinner } from "../SharedComponents";
+import { LoadingSpinner } from "../SharedComponents/LoadingSpinner";
 
 export interface IGlobalViolinPlotProps {
   topK: number;
@@ -68,13 +72,12 @@ export class GlobalViolinPlot extends React.PureComponent<
         const data = { ...baseData };
         data.x = new Array(featureImportance.length).fill(xIndex);
         data.y = featureImportance;
-        data.line = { color: FabricStyles.plotlyColorPalette[0] } as any;
+        data.line = { color: FluentUIStyles.plotlyColorPalette[0] } as any;
         dataArray.push(data);
       });
       plotlyProps.data = dataArray;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static BasePlotlyProps: IPlotlyProperty = {

@@ -1,27 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
+import { flexMdDown, noPaddingMdDown } from "@responsible-ai/core-ui";
 
 export interface IModelOverviewChartStyles {
-  rotatedVerticalBox: IStyle;
   horizontalAxis: IStyle;
   horizontalAxisNoExtraLeftPadding: IStyle;
-  verticalAxis: IStyle;
   chart: IStyle;
   placeholderText: IStyle;
   chartConfigDropdown: IStyle;
   chartToggle: IStyle;
+  splineButtons: IStyle;
+  cohortSelectionButton: IStyle;
 }
 
 export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewChartStyles> =
   () => {
     return mergeStyleSets<IModelOverviewChartStyles>({
       chart: {
+        overflowX: "auto",
         width: "100%"
       },
       chartConfigDropdown: {
@@ -30,31 +28,23 @@ export const modelOverviewChartStyles: () => IProcessedStyleSet<IModelOverviewCh
       chartToggle: {
         paddingLeft: "10px"
       },
+      cohortSelectionButton: {
+        padding: "15px"
+      },
       horizontalAxis: {
         paddingLeft: "150px",
-        textAlign: "center"
+        textAlign: "center",
+        ...noPaddingMdDown
       },
       horizontalAxisNoExtraLeftPadding: {
         paddingLeft: "50px",
-        textAlign: "center"
+        textAlign: "center",
+        ...noPaddingMdDown
       },
       placeholderText: {
         marginBottom: "15px",
         marginTop: "15px"
       },
-      rotatedVerticalBox: {
-        marginLeft: "28px",
-        position: "absolute",
-        textAlign: "center",
-        top: "50%",
-        transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
-        width: "max-content"
-      },
-      verticalAxis: {
-        height: "auto",
-        position: "relative",
-        top: "0px",
-        width: "65px"
-      }
+      splineButtons: flexMdDown
     });
   };

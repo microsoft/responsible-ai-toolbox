@@ -21,7 +21,7 @@ export function getDependenceData(
   if (
     chartProps.colorAxis &&
     (chartProps.colorAxis.options.bin ||
-      jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
+      jointData.metaDict[chartProps.colorAxis.property]?.treatAsCategorical)
   ) {
     cohort.sort(chartProps.colorAxis.property);
   }
@@ -43,7 +43,7 @@ export function getDependenceData(
       });
       rawX.forEach((val, index) => {
         // If categorical, show string value in tooltip
-        if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+        if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
           customData[index].X =
             jointData.metaDict[
               chartProps.xAxis.property
@@ -69,8 +69,35 @@ export function getDependenceData(
         : `${yLabel}: ${customData[index].Yformatted}<br>`;
     });
   }
-  const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
-  indecies.forEach((absoluteIndex, i) => {
+  if (jointData.datasetMetaData?.featureMetaData) {
+    const identityFeatureName =
+      jointData.datasetMetaData.featureMetaData?.identity_feature_name;
+
+    if (identityFeatureName) {
+      const jointDatasetFeatureName =
+        jointData.getJointDatasetFeatureName(identityFeatureName);
+
+      if (jointDatasetFeatureName) {
+        const rawIdentityFeatureData = cohort.unwrap(jointDatasetFeatureName);
+        rawIdentityFeatureData.forEach((val, index) => {
+          // If categorical, show string value in tooltip
+          if (jointData.metaDict[jointDatasetFeatureName]?.treatAsCategorical) {
+            customData[index].ID =
+              jointData.metaDict[
+                jointDatasetFeatureName
+              ].sortedCategoricalValues?.[val];
+          } else {
+            customData[index].ID = val;
+          }
+          customData[
+            index
+          ].template += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData[index].ID}<br>`;
+        });
+      }
+    }
+  }
+  const indices = cohort.unwrap(JointDataset.IndexLabel, false);
+  indices.forEach((absoluteIndex, i) => {
     customData[i].AbsoluteIndex = absoluteIndex;
     customData[
       i

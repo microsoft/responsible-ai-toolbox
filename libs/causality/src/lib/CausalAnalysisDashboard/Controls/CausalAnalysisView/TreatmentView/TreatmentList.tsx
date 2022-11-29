@@ -2,13 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  ModelAssessmentContext,
-  toScientific
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
-import {
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
@@ -19,7 +12,13 @@ import {
   SelectionMode,
   TooltipHost,
   Text
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ModelAssessmentContext,
+  toScientific
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { TreatmentStyles } from "./TreatmentStyles";

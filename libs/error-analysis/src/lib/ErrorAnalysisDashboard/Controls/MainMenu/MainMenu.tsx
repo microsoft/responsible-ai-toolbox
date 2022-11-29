@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ErrorCohort } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import {
   CommandBar,
   Dropdown,
@@ -15,7 +13,9 @@ import {
   Label,
   PrimaryButton,
   IButtonStyles
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import { ErrorCohort } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import {
@@ -208,7 +208,7 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
           <PrimaryButton
             text="Explanation"
             styles={explanationButtonStyle}
-            onClick={this.handleExplanationButtonClicked.bind(this)}
+            onClick={this.handleExplanationButtonClicked}
             allowDisabledFocus
             disabled={false}
             checked={false}
@@ -232,9 +232,9 @@ export class MainMenu extends React.PureComponent<IMainMenuProps> {
     );
   }
 
-  private handleExplanationButtonClicked(): void {
+  private handleExplanationButtonClicked = (): void => {
     this.props.viewExplanation();
-  }
+  };
 
   private handleErrorDetectorChanged = (
     _: React.FormEvent<HTMLDivElement>,

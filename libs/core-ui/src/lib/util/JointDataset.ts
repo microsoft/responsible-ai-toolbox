@@ -11,63 +11,23 @@ import _ from "lodash";
 
 import { cohortKey } from "../cohortKey";
 import {
-  IMultiClassLocalFeatureImportance,
-  ISingleClassLocalFeatureImportance
-} from "../Interfaces/ExplanationInterfaces";
-import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
+import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
 import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
 
-export interface IJointDatasetArgs {
-  dataset?: any[][];
-  predictedY?: number[];
-  predictedProbabilities?: number[][];
-  trueY?: number[];
-  localExplanations?:
-    | IMultiClassLocalFeatureImportance
-    | ISingleClassLocalFeatureImportance;
-  metadata: IExplanationModelMetadata;
-}
-
-export enum ColumnCategories {
-  Outcome = "outcome",
-  Dataset = "dataset",
-  Index = "index",
-  Explanation = "explanation",
-  Cohort = "cohort",
-  None = "none"
-}
-
-export enum ClassificationEnum {
-  TrueNegative = 0,
-  FalsePositive = 1,
-  FalseNegative = 2,
-  TruePositive = 3
-}
-
-export enum MulticlassClassificationEnum {
-  Correct = 0,
-  Misclassified = 1
-}
-
-// The object that will store user-facing strings and associated metadata
-// It stores the categorical labels for any numeric bins
-export interface IJointMeta {
-  label: string;
-  abbridgedLabel: string;
-  isCategorical: boolean;
-  // used to allow user to treat integers as categorical (but switch back as convenient...)
-  treatAsCategorical?: boolean;
-  sortedCategoricalValues?: string[];
-  featureRange?: INumericRange;
-  category: ColumnCategories;
-  index?: number;
-}
+import {
+  ColumnCategories,
+  IJointDatasetArgs,
+  IJointMeta,
+  MulticlassClassificationEnum,
+  IDatasetMeta
+} from "./JointDatasetUtils";
+import { AxisTypes } from "./IGenericChartProps";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to
@@ -91,6 +51,7 @@ export class JointDataset {
   public static readonly ReducedLocalImportanceSortIndexRoot =
     "LocalImportanceSortIndex";
 
+  public datasetMetaData: IDatasetMeta | undefined;
   public rawLocalImportance: number[][][] | undefined;
   public metaDict: { [key: string]: IJointMeta } = {};
 
@@ -119,6 +80,11 @@ export class JointDataset {
 
   public constructor(args: IJointDatasetArgs) {
     this._modelMeta = args.metadata;
+
+    if (args.featureMetaData !== undefined) {
+      this.datasetMetaData = { featureMetaData: args.featureMetaData };
+    }
+
     if (args.dataset && args.dataset.length > 0) {
       this.initializeDataDictIfNeeded(args.dataset);
       this.datasetRowCount = args.dataset.length;
@@ -287,7 +253,7 @@ export class JointDataset {
           sortedCategoricalValues: undefined
         };
       }
-      if (args.metadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -302,7 +268,7 @@ export class JointDataset {
           treatAsCategorical: true
         };
       }
-      if (args.metadata.modelType === ModelTypes.Multiclass) {
+      if (IsMulticlass(args.metadata.modelType)) {
         this.metaDict[JointDataset.ClassificationError] = {
           abbridgedLabel: localization.Interpret.Columns.classificationOutcome,
           category: ColumnCategories.Outcome,
@@ -404,7 +370,7 @@ export class JointDataset {
       );
       return;
     }
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       // sum pred and 2*true to map to ints 0 - 3,
       // 0: TN
       // 1: FP
@@ -415,7 +381,7 @@ export class JointDataset {
       row[JointDataset.ClassificationError] = predictionCategory;
       return;
     }
-    if (modelType === ModelTypes.Multiclass) {
+    if (IsMulticlass(modelType)) {
       row[JointDataset.ClassificationError] =
         row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
           ? MulticlassClassificationEnum.Misclassified
@@ -434,13 +400,7 @@ export class JointDataset {
           featureArray.map((val) => [val])
         );
       }
-      case ModelTypes.Binary: {
-        return JointDataset.transposeLocalImportanceMatrix(
-          localExplanationRaw as number[][][]
-        ).map((featuresByClasses) =>
-          featuresByClasses.map((classArray) => classArray.slice(0, 1))
-        );
-      }
+      case ModelTypes.Binary:
       case ModelTypes.Multiclass:
       default: {
         return JointDataset.transposeLocalImportanceMatrix(
@@ -511,6 +471,14 @@ export class JointDataset {
         row[key] = this.numericValuedColumnsCache[rowIndex][key];
       });
       this.addBin(key);
+    }
+  }
+
+  public setLogarithmicScaling(key: string, value: boolean): void {
+    if (value) {
+      this.metaDict[key].AxisType = AxisTypes.Logarithmic;
+    } else {
+      this.metaDict[key].AxisType = undefined;
     }
   }
 
@@ -598,8 +566,7 @@ export class JointDataset {
       Number.MIN_SAFE_INTEGER
     );
     switch (this._modelMeta.modelType) {
-      case ModelTypes.Regression:
-      case ModelTypes.Binary: {
+      case ModelTypes.Regression: {
         // no need to flatten what is already flat
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
@@ -621,6 +588,7 @@ export class JointDataset {
         });
         break;
       }
+      case ModelTypes.Binary:
       case ModelTypes.Multiclass: {
         this.rawLocalImportance.forEach((featuresByClasses, rowIndex) => {
           featuresByClasses.forEach((classArray, featureIndex) => {
@@ -685,6 +653,28 @@ export class JointDataset {
       };
       this.binDict[key] = undefined;
     });
+  }
+
+  public getJointDatasetFeatureName(
+    userFeatureName: string
+  ): string | undefined {
+    // Return the joint dataset feature name for the given user feature name.
+    let jointDatasetFeatureName = undefined;
+    let isUserFeatureNameFound = false;
+    for (jointDatasetFeatureName in this.metaDict) {
+      if (
+        this.metaDict[jointDatasetFeatureName].abbridgedLabel ===
+        userFeatureName
+      ) {
+        isUserFeatureNameFound = true;
+        break;
+      }
+    }
+
+    if (isUserFeatureNameFound) {
+      return jointDatasetFeatureName;
+    }
+    return undefined;
   }
 
   private initializeDataDictIfNeeded(arr: any[]): void {

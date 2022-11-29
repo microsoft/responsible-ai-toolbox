@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IStackTokens, Stack, Text } from "@fluentui/react";
 import { ErrorCohort, Metrics } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { IStackTokens, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { MetricUtils, MetricLocalizationType } from "../../../MetricUtils";
@@ -37,51 +37,55 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
           <Text variant={"xLarge"} block>
             Cohort: {this.props.baseCohort.cohort.name}
           </Text>
-          <Stack horizontal>
-            <Stack horizontal>
-              <div className={classNames.metricBarBlack} />
-              <Stack tokens={cellTokens}>
-                <div className={classNames.smallHeader}>
-                  {localization.ErrorAnalysis.cells}
-                  <InfoCallout
-                    iconId={this._cellsIconId}
-                    infoText={localization.ErrorAnalysis.cellsInfo}
-                    title={localization.ErrorAnalysis.cellsTitle}
-                  />
-                </div>
-                <div className={classNames.valueBlack}>
-                  {this.props.selectedCohort.cells === 0 ||
-                  this.props.disabledView
-                    ? "-"
-                    : this.props.selectedCohort.cells}
-                </div>
-              </Stack>
-            </Stack>
-            <Stack horizontal>
-              <div className={classNames.metricBarBlack} />
-              <Stack tokens={cellTokens}>
-                <div className={classNames.smallHeader}>
-                  {localization.ErrorAnalysis.errorCoverage}
-                  <InfoCallout
-                    iconId={this._errorCoverageIconId}
-                    infoText={localization.ErrorAnalysis.errorCoverageInfo}
-                    title={localization.ErrorAnalysis.errorCoverageTitle}
-                  />
-                </div>
-                {this.props.disabledView && (
-                  <div className={classNames.valueBlack}>-</div>
-                )}
-                {!this.props.disabledView && (
-                  <div className={classNames.valueBlack}>
-                    {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
-                      2
-                    )}
-                    %
+          <Stack horizontal className={classNames.metricLegendStack}>
+            <Stack.Item>
+              <Stack horizontal>
+                <div className={classNames.metricBarBlack} />
+                <Stack tokens={cellTokens}>
+                  <div className={classNames.smallHeader}>
+                    {localization.ErrorAnalysis.cells}
+                    <InfoCallout
+                      iconId={this._cellsIconId}
+                      infoText={localization.ErrorAnalysis.cellsInfo}
+                      title={localization.ErrorAnalysis.cellsTitle}
+                    />
                   </div>
-                )}
+                  <div className={classNames.valueBlack}>
+                    {this.props.selectedCohort.cells === 0 ||
+                    this.props.disabledView
+                      ? "-"
+                      : this.props.selectedCohort.cells}
+                  </div>
+                </Stack>
               </Stack>
-            </Stack>
-            <Stack>
+            </Stack.Item>
+            <Stack.Item>
+              <Stack horizontal>
+                <div className={classNames.metricBarBlack} />
+                <Stack tokens={cellTokens}>
+                  <div className={classNames.smallHeader}>
+                    {localization.ErrorAnalysis.errorCoverage}
+                    <InfoCallout
+                      iconId={this._errorCoverageIconId}
+                      infoText={localization.ErrorAnalysis.errorCoverageInfo}
+                      title={localization.ErrorAnalysis.errorCoverageTitle}
+                    />
+                  </div>
+                  {this.props.disabledView && (
+                    <div className={classNames.valueBlack}>-</div>
+                  )}
+                  {!this.props.disabledView && (
+                    <div className={classNames.valueBlack}>
+                      {this.props.selectedCohort.cohortStats.errorCoverage.toFixed(
+                        2
+                      )}
+                      %
+                    </div>
+                  )}
+                </Stack>
+              </Stack>
+            </Stack.Item>
+            <Stack.Item>
               <Stack horizontal>
                 <div
                   className={
@@ -141,7 +145,7 @@ export class MatrixLegend extends React.Component<IMatrixLegendProps> {
                   )}
                 </g>
               </svg>
-            </Stack>
+            </Stack.Item>
           </Stack>
         </Stack>
       </div>

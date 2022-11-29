@@ -6,7 +6,7 @@ import {
   IStyle,
   IProcessedStyleSet,
   getTheme
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
 
 export interface IModelAssessmentDashboardStyles {
   page: IStyle;
@@ -31,7 +31,11 @@ export const modelAssessmentDashboardStyles: () => IProcessedStyleSet<IModelAsse
       page: {
         boxSizing: "border-box",
         height: "100%",
-        padding: "16px 14px 0 14px",
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            padding: "16px 14px 0 14px"
+          }
+        },
         width: "100%"
       },
       section: {
@@ -39,7 +43,11 @@ export const modelAssessmentDashboardStyles: () => IProcessedStyleSet<IModelAsse
       },
       sectionHeader: {
         color: theme.semanticColors.bodyText,
-        padding: "16px 24px 16px 40px"
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            padding: "16px 24px 16px 40px"
+          }
+        }
       }
     });
   };

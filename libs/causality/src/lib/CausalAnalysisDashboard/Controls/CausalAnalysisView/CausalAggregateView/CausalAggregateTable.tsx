@@ -2,15 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  defaultModelAssessmentContext,
-  getCausalDisplayFeatureName,
-  ICausalAnalysisSingleData,
-  ModelAssessmentContext,
-  nameof
-} from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
-import { isEqual } from "lodash";
-import {
   CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
@@ -20,8 +11,18 @@ import {
   IRenderFunction,
   SelectionMode,
   TooltipHost
-} from "office-ui-fabric-react";
+} from "@fluentui/react";
+import {
+  defaultModelAssessmentContext,
+  ICausalAnalysisSingleData,
+  ModelAssessmentContext,
+  nameof
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+import { isEqual } from "lodash";
 import React from "react";
+
+import { getCausalDisplayFeatureName } from "./getCausalDisplayFeatureName";
 
 export interface ICausalAggregateTableProps {
   data: ICausalAnalysisSingleData[];

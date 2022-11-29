@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Text } from "@fluentui/react";
 import {
   Cohort,
   JointDataset,
@@ -8,7 +9,7 @@ import {
   ModelTypes,
   WeightVectorOption,
   IGenericChartProps,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -17,7 +18,6 @@ import {
   PlotlyMode
 } from "@responsible-ai/mlchartlib";
 import _, { Dictionary } from "lodash";
-import { getTheme, Text } from "office-ui-fabric-react";
 import React from "react";
 
 import { dependencePlotStyles } from "./DependencePlot.styles";
@@ -53,7 +53,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       showlegend: false,
       xaxis: {
         automargin: true,
-        color: FabricStyles.chartAxisColor,
+        color: FluentUIStyles.chartAxisColor,
         gridcolor: "#e5e5e5",
         showgrid: true,
         tickfont: {
@@ -64,7 +64,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       },
       yaxis: {
         automargin: true,
-        color: FabricStyles.chartAxisColor,
+        color: FluentUIStyles.chartAxisColor,
         gridcolor: "#e5e5e5",
         showgrid: true,
         tickfont: {
@@ -145,7 +145,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
     if (
       chartProps.colorAxis &&
       (chartProps.colorAxis.options.bin ||
-        jointData.metaDict[chartProps.colorAxis.property].treatAsCategorical)
+        jointData.metaDict[chartProps.colorAxis.property]?.treatAsCategorical)
     ) {
       cohort.sort(chartProps.colorAxis.property);
     }
@@ -157,10 +157,10 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
     plotlyProps.data[0].type = chartProps.chartType;
     plotlyProps.data[0].mode = PlotlyMode.Markers;
     plotlyProps.data[0].marker = {
-      color: FabricStyles.fabricColorPalette[this.props.cohortIndex]
+      color: FluentUIStyles.fluentUIColorPalette[this.props.cohortIndex]
     };
     if (chartProps.xAxis) {
-      if (jointData.metaDict[chartProps.xAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical) {
         const xLabels =
           jointData.metaDict[chartProps.xAxis.property].sortedCategoricalValues;
         const xLabelIndexes = xLabels?.map((_, index) => index);
@@ -178,7 +178,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
         rawX.forEach((val, index) => {
           // If categorical, show string value in tooltip
           if (
-            jointData.metaDict[chartProps.xAxis.property].treatAsCategorical
+            jointData.metaDict[chartProps.xAxis.property]?.treatAsCategorical
           ) {
             customdata[index].X =
               jointData.metaDict[
@@ -194,7 +194,7 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       }
     }
     if (chartProps.yAxis) {
-      if (jointData.metaDict[chartProps.yAxis.property].treatAsCategorical) {
+      if (jointData.metaDict[chartProps.yAxis.property]?.treatAsCategorical) {
         const yLabels =
           jointData.metaDict[chartProps.yAxis.property].sortedCategoricalValues;
         const yLabelIndexes = yLabels?.map((_, index) => index);
@@ -211,8 +211,8 @@ export class DependencePlot extends React.PureComponent<IDependecePlotProps> {
       });
       hovertemplate += `${yLabel}: %{customdata.Yformatted}<br>`;
     }
-    const indecies = cohort.unwrap(JointDataset.IndexLabel, false);
-    indecies.forEach((absoluteIndex, i) => {
+    const indices = cohort.unwrap(JointDataset.IndexLabel, false);
+    indices.forEach((absoluteIndex, i) => {
       customdata[i].AbsoluteIndex = absoluteIndex;
     });
     hovertemplate += `${localization.Interpret.Charts.rowIndex}: %{customdata.AbsoluteIndex}<br>`;

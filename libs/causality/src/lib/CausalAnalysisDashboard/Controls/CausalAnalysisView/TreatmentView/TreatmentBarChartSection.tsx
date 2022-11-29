@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme, Stack, Text } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
-  getTreatmentBarChartOptions,
   ICausalPolicy,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { getTheme, Stack, Text } from "office-ui-fabric-react";
 import React from "react";
 
+import { getTreatmentBarChartOptions } from "./getTreatmentBarChartOptions";
 import { TreatmentTableStyles } from "./TreatmentTable.styles";
 
 export interface ITreatmentBarChartSectionProps {
@@ -29,7 +29,7 @@ export class TreatmentBarChartSection extends React.PureComponent<ITreatmentBarC
       this.props.data.treatment_feature
     );
     return (
-      <Stack horizontal grow>
+      <Stack horizontal grow className={styles.treatmentBarChart}>
         <Stack.Item className={styles.treatmentBarContainer}>
           {this.props.data?.policy_gains ? (
             <BasicHighChart

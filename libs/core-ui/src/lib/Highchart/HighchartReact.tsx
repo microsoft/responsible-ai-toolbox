@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { localization } from "@responsible-ai/localization";
 import * as Highcharts from "highcharts";
 import HighchartsMore from "highcharts/highcharts-more";
 import * as Accessibility from "highcharts/modules/accessibility";
+import * as ExportData from "highcharts/modules/export-data";
 import * as Exporting from "highcharts/modules/exporting";
 import * as React from "react";
 
@@ -14,6 +16,7 @@ import { HighchartsModuleNames } from "./HighchartTypes";
 // Other modules need to be loaded on demand using modules property of the chart component.
 Accessibility.default(Highcharts);
 Exporting.default(Highcharts);
+ExportData.default(Highcharts);
 // init module
 HighchartsMore(Highcharts);
 
@@ -33,7 +36,21 @@ export function HighchartReact(
   const chartRef = React.useRef<Highcharts.Chart | null>();
   const containerRef = React.createRef<HTMLDivElement>();
 
-  const createChart = () => {
+  const createChart = (): Highcharts.Chart | null | undefined => {
+    Highcharts.setOptions({
+      lang: {
+        downloadCSV: localization.ChartContextMenu.downloadCSV,
+        downloadJPEG: localization.ChartContextMenu.downloadJPEG,
+        downloadPDF: localization.ChartContextMenu.downloadPDF,
+        downloadPNG: localization.ChartContextMenu.downloadPNG,
+        downloadSVG: localization.ChartContextMenu.downloadSVG,
+        downloadXLS: localization.ChartContextMenu.downloadXLS,
+        hideData: localization.ChartContextMenu.hideData,
+        printChart: localization.ChartContextMenu.printChart,
+        viewData: localization.ChartContextMenu.viewData,
+        viewFullscreen: localization.ChartContextMenu.viewInFullScreen
+      }
+    });
     let chart: Highcharts.Chart | null | undefined;
     try {
       chart =
@@ -83,7 +100,7 @@ export function HighchartReact(
   React.useEffect(() => {
     // We need to have a separate hook since we want this to be executed
     // only when component is unloaded
-    return () => {
+    return (): void => {
       chartRef.current?.destroy();
     };
   }, []);

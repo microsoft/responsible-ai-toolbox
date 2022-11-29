@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { descriptionMaxWidth } from "@responsible-ai/core-ui";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet
-} from "office-ui-fabric-react";
+  descriptionMaxWidth,
+  flexLgDown,
+  fullLgDown,
+  hideXlDown
+} from "@responsible-ai/core-ui";
 
 export interface IGlobalTabStyles {
   chartCallout: IStyle;
   chartContainer: IStyle;
   chartLeftPart: IStyle;
-  chartRightPart: IStyle;
   page: IStyle;
   globalChartControls: IStyle;
   globalChartWithLegend: IStyle;
@@ -26,6 +26,7 @@ export interface IGlobalTabStyles {
   startingK: IStyle;
   topK: IStyle;
   rightJustifiedContainer: IStyle;
+  dependencePlotChartContainer: IStyle;
 }
 
 export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
@@ -41,13 +42,18 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       },
       chartContainer: {
         paddingLeft: "25px",
-        width: "100%"
+        width: "100%",
+        ...flexLgDown
       },
       chartLeftPart: {
-        width: "80%"
+        width: "80%",
+        ...fullLgDown
       },
-      chartRightPart: {
-        width: "20%"
+      dependencePlotChartContainer: {
+        marginBottom: "20px",
+        ...flexLgDown,
+        paddingLeft: "25px",
+        width: "100%"
       },
       globalChartControls: {
         display: "flex",
@@ -73,13 +79,16 @@ export const globalTabStyles: () => IProcessedStyleSet<IGlobalTabStyles> =
       infoWithText: {
         maxWidth: descriptionMaxWidth,
         paddingLeft: "25px",
-        width: "100%"
+        width: "100%",
+        ...hideXlDown
       },
       legendAndSort: {
-        height: "100%",
-        paddingLeft: "25px",
-        paddingTop: "55px",
-        width: rightMarginWidth
+        "@media screen and (min-width: 479px)": {
+          paddingLeft: "25px",
+          paddingTop: "55px",
+          width: rightMarginWidth
+        },
+        height: "100%"
       },
       legendHelpText: {
         fontWeight: "300"
