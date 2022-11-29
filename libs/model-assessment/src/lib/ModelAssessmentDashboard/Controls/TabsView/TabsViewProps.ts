@@ -17,7 +17,8 @@ import {
   IFilter,
   ICompositeFilter,
   MetricCohortStats,
-  IExplanationModelMetadata
+  IExplanationModelMetadata,
+  ITelemetryEvent
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -39,6 +40,7 @@ export interface ITabsViewProps {
   selectedCohort: ErrorCohort;
   dataset: IDataset;
   onClearCohortSelectionClick: () => void;
+  requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestPredictions?: (
     request: any[],
     abortSignal: AbortSignal
@@ -56,6 +58,7 @@ export interface ITabsViewProps {
     abortSignal: AbortSignal
   ) => Promise<IErrorAnalysisMatrix>;
   stringParams?: IStringsParam;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   updateSelectedCohort: (
     filters: IFilter[],
     compositeFilters: ICompositeFilter[],

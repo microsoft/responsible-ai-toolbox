@@ -8,7 +8,7 @@ import {
   getTheme
 } from "@fluentui/react";
 
-import { FabricStyles } from "../util/FabricStyles";
+import { FluentUIStyles } from "../util/FluentUIStyles";
 
 export interface ILabelWithCalloutStyles {
   callout: IStyle;
@@ -45,8 +45,8 @@ export const labelWithCalloutStyles: () => IProcessedStyleSet<ILabelWithCalloutS
         display: "inline-flex",
         paddingTop: "10px"
       },
-      calloutHeader: [FabricStyles.calloutHeader],
-      calloutInner: [FabricStyles.calloutInner],
+      calloutHeader: [FluentUIStyles.calloutHeader],
+      calloutInner: [FluentUIStyles.calloutInner],
       calloutLink: [
         theme.fonts.medium,
         {
@@ -57,8 +57,8 @@ export const labelWithCalloutStyles: () => IProcessedStyleSet<ILabelWithCalloutS
         fontWeight: "600",
         paddingTop: "5px"
       },
-      calloutTitle: [FabricStyles.calloutTitle],
-      calloutWrapper: [FabricStyles.calloutWrapper],
+      calloutTitle: [FluentUIStyles.calloutTitle],
+      calloutWrapper: [FluentUIStyles.calloutWrapper],
       infoButton: {
         margin: "5px",
         padding: "8px 10px",

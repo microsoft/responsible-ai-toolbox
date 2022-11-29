@@ -4,11 +4,11 @@
 import { getMenu } from "../../../../../util/getMenu";
 import { selectRow } from "../../../../../util/Table";
 import { Locators } from "../../Constants";
-import { IModelAssessmentData } from "../../IModelAssessmentData";
 import {
   modelAssessmentDatasets,
   regExForNumbersWithBrackets
-} from "../../modelAssessmentDatasets";
+} from "../../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 // import { describeSubBarChart } from "./describeSubBarChart";
 import { describeSubLineChart } from "./describeSubLineChart";
@@ -59,14 +59,18 @@ export function describeTabularDataView(
       });
       it("should select the row", () => {
         if (dataShape.featureImportanceData?.hasCorrectIncorrectDatapoints) {
-          cy.get(Locators.IFICollapseButton).first().click(); // expand correct predictions
+          cy.get(Locators.IFICollapseButton).eq(0).click(); // expand correct predictions
         }
-        selectRow("Index", dataShape.featureImportanceData?.rowToSelect || "4");
+        selectRow(
+          "Index",
+          dataShape.featureImportanceData?.rowToSelect || "4",
+          Locators.IFIContainer
+        );
         cy.get(Locators.IFIDropdownSelectedOption).should(
           "contain.text",
           dataShape.featureImportanceData?.dropdownRowName
         );
-        selectRow("Index", "4");
+        selectRow("Index", "4", Locators.IFIContainer);
       });
     });
 

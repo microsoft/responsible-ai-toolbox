@@ -12,10 +12,12 @@ import {
 import {
   Cohort,
   IExplanationModelMetadata,
-  ModelTypes,
+  IsClassifier,
   WeightVectorOption,
   ChartTypes,
-  LabelWithCallout
+  LabelWithCallout,
+  ITelemetryEvent,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -34,6 +36,7 @@ export interface ISidePanelProps {
   sortingSeriesIndex: number;
   cohorts: Cohort[];
   chartType: ChartTypes;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange(option: WeightVectorOption): void;
   setSortIndex(option: number): void;
   toggleActivation(index: number): void;
@@ -67,7 +70,7 @@ export class SidePanel extends React.Component<
     return (
       <Stack className={classNames.legendAndSort}>
         <Dropdown
-          label={localization.Interpret.GlobalTab.sortBy}
+          label={localization.Interpret.GlobalTab.sortByCohort}
           selectedKey={this.props.sortingSeriesIndex}
           options={this.props.cohortSeries.map((row, rowIndex) => ({
             key: rowIndex,
@@ -82,8 +85,7 @@ export class SidePanel extends React.Component<
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
         />
-        {(this.props.metadata.modelType === ModelTypes.Multiclass ||
-          this.props.metadata.modelType === ModelTypes.Binary) &&
+        {IsClassifier(this.props.metadata.modelType) &&
           this.state.weightOptions && (
             <div>
               <LabelWithCallout
@@ -91,6 +93,10 @@ export class SidePanel extends React.Component<
                   localization.Interpret.CrossClass.crossClassWeights
                 }
                 label={localization.Interpret.GlobalTab.weightOptions}
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.FeatureImportancesCrossClassWeightsCalloutClick
+                }
               >
                 <Text>{localization.Interpret.CrossClass.overviewInfo}</Text>
                 <ul>
@@ -111,6 +117,9 @@ export class SidePanel extends React.Component<
                 options={this.state.weightOptions}
                 selectedKey={this.props.selectedWeightVector}
                 onChange={this.setWeightOption}
+                ariaLabel={
+                  localization.Interpret.GlobalTab.weightOptionsDropdown
+                }
               />
             </div>
           )}
@@ -137,10 +146,7 @@ export class SidePanel extends React.Component<
   };
 
   private getWeightOptions(): IDropdownOption[] | undefined {
-    if (
-      this.props.metadata.modelType === ModelTypes.Multiclass ||
-      this.props.metadata.modelType === ModelTypes.Binary
-    ) {
+    if (IsClassifier(this.props.metadata.modelType)) {
       return this.props.weightOptions.map((option) => {
         return {
           key: option,

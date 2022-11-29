@@ -2,16 +2,17 @@
 # Licensed under the MIT License.
 
 import pytest
-from common_utils import (create_binary_classification_dataset,
-                          create_cancer_data, create_housing_data,
-                          create_iris_data, create_models_classification,
-                          create_models_regression, create_simple_titanic_data,
-                          create_titanic_pipeline)
 
 from erroranalysis._internal.constants import (Metrics, RootKeys,
                                                metric_to_display_name)
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.metrics import metric_to_func
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data, create_iris_data, create_simple_titanic_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import create_titanic_pipeline
 
 TOL = 1e-10
 

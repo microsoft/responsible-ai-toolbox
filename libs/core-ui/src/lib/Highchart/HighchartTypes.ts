@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IChartColorNames } from "./getHighchartsTheme";
+import { IColorNames } from "../util/FluentUIStyles";
 
 export type {
   Chart as Highchart,
@@ -10,4 +10,4 @@ export type {
 
 export type HighchartsModuleNames = "heatmap" | "gantt" | "pattern-fill";
 
-export type { IChartColorNames };
+export type { IColorNames };

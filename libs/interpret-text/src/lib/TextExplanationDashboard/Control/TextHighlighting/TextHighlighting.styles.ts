@@ -5,9 +5,17 @@ import {
   IStyle,
   mergeStyles,
   mergeStyleSets,
-  IProcessedStyleSet
+  IProcessedStyleSet,
+  IStackStyles,
+  getTheme
 } from "@fluentui/react";
-import { NeutralColors, SharedColors } from "@fluentui/theme";
+import { getPrimaryChartColor } from "@responsible-ai/core-ui";
+
+export const textStackStyles: IStackStyles = {
+  root: {
+    maxWidth: "1500px"
+  }
+};
 
 export interface ITextHighlightingStyles {
   normal: IStyle;
@@ -17,25 +25,26 @@ export interface ITextHighlightingStyles {
 
 export const textHighlightingStyles: () => IProcessedStyleSet<ITextHighlightingStyles> =
   () => {
+    const theme = getTheme();
     const normal = {
-      fontFamily: "Segoe UI",
-      fontSize: "1.5em"
+      color: theme.semanticColors.bodyText
     };
     return mergeStyleSets<ITextHighlightingStyles>({
       boldunderline: mergeStyles([
         normal,
         {
-          color: SharedColors.blue10,
-          fontWeight: "bold",
+          color: getPrimaryChartColor(theme),
+          fontSize: theme.fonts.large.fontSize,
+          margin: "2px",
+          padding: 0,
           textDecorationLine: "underline"
         }
       ]),
       highlighted: mergeStyles([
         normal,
         {
-          backgroundColor: SharedColors.blue10,
-          color: NeutralColors.white,
-          fontweight: "400px"
+          backgroundColor: getPrimaryChartColor(theme),
+          color: theme.semanticColors.bodyBackground
         }
       ]),
       normal

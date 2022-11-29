@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { IErrorAnalysisMatrix } from "@responsible-ai/core-ui";
-import _ from "lodash";
 import React from "react";
 
 import { IMatrixSingleCategory } from "../IMatrixCategory";
@@ -22,7 +21,7 @@ export class FeatureRowCategories extends React.PureComponent<IFeatureRowCategor
   public render(): React.ReactNode {
     const classNames = featureRowCategoriesStyles();
     return (
-      <div key={`category_col`} className={classNames.matrixCol}>
+      <div key={"category_col"} className={classNames.matrixCol}>
         {this.props.category1Values.map((_, index) => {
           return (
             <div key={`${index}col`} className={classNames.matrixRow}>
@@ -31,7 +30,7 @@ export class FeatureRowCategories extends React.PureComponent<IFeatureRowCategor
                 className={classNames.matrixCellPivot1Categories}
               >
                 <MatrixCategory
-                  featureName={this.props.selectedFeature1!}
+                  featureName={this.props.selectedFeature1 || ""}
                   category={this.props.category1Values}
                   index={index}
                 />

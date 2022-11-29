@@ -10,6 +10,7 @@ import {
   PartialRequired2,
   IExplanationContext,
   IExplanationModelMetadata,
+  IsBinary,
   ModelTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -62,8 +63,7 @@ export class ScatterUtils {
           return prev;
         }, []);
       return result as any;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   public static buildOptions: (
@@ -251,8 +251,7 @@ export class ScatterUtils {
           return result;
         }
       );
-    },
-    _.isEqual.bind(window)
+    }
   );
   private static baseScatterProperties: IPlotlyProperty = {
     config: { displaylogo: false, displayModeBar: false, responsive: true },
@@ -441,16 +440,15 @@ export class ScatterUtils {
       ];
     }
 
-    const yAxisLabel =
-      modelData.modelType === ModelTypes.Binary
-        ? `${localization.formatString(
-            localization.Interpret.ExplanationScatter.importanceLabel,
-            modelData.featureNames[maxIndex]
-          )} : ${modelData.classNames[0]}`
-        : localization.formatString(
-            localization.Interpret.ExplanationScatter.importanceLabel,
-            modelData.featureNames[maxIndex]
-          );
+    const yAxisLabel = IsBinary(modelData.modelType)
+      ? `${localization.formatString(
+          localization.Interpret.ExplanationScatter.importanceLabel,
+          modelData.featureNames[maxIndex]
+        )} : ${modelData.classNames[0]}`
+      : localization.formatString(
+          localization.Interpret.ExplanationScatter.importanceLabel,
+          modelData.featureNames[maxIndex]
+        );
     _.set(props, "layout.yaxis.title.text", yAxisLabel);
     _.set(
       props,
@@ -616,10 +614,7 @@ export class ScatterUtils {
     item: IComboBoxOption,
     modelMetadata: IExplanationModelMetadata
   ): string {
-    if (
-      modelMetadata.modelType === ModelTypes.Binary &&
-      item.data.isFeatureImportance
-    ) {
+    if (IsBinary(modelMetadata.modelType) && item.data.isFeatureImportance) {
       // Add the first class's name to the text for binary case, to clarify
       const className = modelMetadata.classNames[0];
       return `${item.text}<br> ${localization.Interpret.ExplanationScatter.class} : ${className}`;

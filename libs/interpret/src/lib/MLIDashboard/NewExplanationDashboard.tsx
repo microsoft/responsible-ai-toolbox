@@ -89,8 +89,8 @@ export class NewExplanationDashboard extends React.PureComponent<
             this.state.jointDataset
           ),
           dataset: {} as IDataset,
-          deleteCohort: () => undefined,
-          editCohort: () => undefined,
+          deleteCohort: (): void => undefined,
+          editCohort: (): void => undefined,
           errorCohorts: this.state.cohorts.map(
             (cohort) => new ErrorCohort(cohort, this.state.jointDataset)
           ),
@@ -164,6 +164,7 @@ export class NewExplanationDashboard extends React.PureComponent<
                     linkSize={"normal"}
                     headersOnly
                     id="DashboardPivot"
+                    overflowBehavior="menu"
                   >
                     {this.pivotItems.map((props) => (
                       <PivotItem key={props.itemKey} {...props} />

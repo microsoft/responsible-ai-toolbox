@@ -11,6 +11,7 @@ import {
   JointDataset,
   Operations
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 
@@ -44,7 +45,8 @@ export function generateCohortsCartesianProduct(
   jointDataset: JointDataset,
   globalCohort: ErrorCohort
 ): ErrorCohort[] {
-  return generateFiltersCartesianProduct(filters).map((compositeFilter) => {
+  const filtersCartesianProduct = generateFiltersCartesianProduct(filters);
+  return filtersCartesianProduct.map((compositeFilter) => {
     const cohortName = getCompositeFilterString(
       [compositeFilter],
       jointDataset
@@ -67,7 +69,7 @@ export function generateOverlappingFeatureBasedCohorts(
   dataset: IDataset,
   selectedFeatures: number[],
   numberOfContinuousFeaturebins: { [featureIndex: number]: number }
-) {
+): ErrorCohort[] {
   const filters: ICompositeFilter[][] = [];
   selectedFeatures.forEach((featureIndex) => {
     const featureFilters = generateFeatureBasedFilters(
@@ -82,11 +84,45 @@ export function generateOverlappingFeatureBasedCohorts(
     }
   });
 
-  return (
-    generateCohortsCartesianProduct(filters, jointDataset, globalCohort)
-      // filter the empty cohorts resulting from overlapping dimensions
-      .filter((errorCohort) => errorCohort.cohortStats.totalCohort > 0)
-  );
+  const nonZeroCohorts = generateCohortsCartesianProduct(
+    filters,
+    jointDataset,
+    globalCohort
+  )
+    // filter the empty cohorts resulting from overlapping dimensions
+    .filter((errorCohort) => errorCohort.cohortStats.totalCohort > 0);
+
+  if (nonZeroCohorts.length > 0) {
+    // sort cohort by size
+    nonZeroCohorts.sort(
+      (a, b) => b.cohortStats.totalCohort - a.cohortStats.totalCohort
+    );
+  }
+  // merge all cohorts into one after the 10th largest cohort
+  if (nonZeroCohorts.length > 10) {
+    const otherCohorts = nonZeroCohorts.slice(10, -10);
+    const otherCompositeFilters: ICompositeFilter[] = [];
+    otherCohorts.forEach((cohort) => {
+      otherCompositeFilters.push(...cohort.cohort.compositeFilters);
+    });
+    // merge the composite filters with or operation
+    const mergedCompositeFilter = {
+      compositeFilters: otherCompositeFilters,
+      operation: Operations.Or
+    } as ICompositeFilter;
+    const mergedOtherCohort = new ErrorCohort(
+      new Cohort(
+        localization.ModelAssessment.ModelOverview.other,
+        jointDataset,
+        [],
+        [mergedCompositeFilter]
+      ),
+      jointDataset
+    );
+    nonZeroCohorts.splice(10, nonZeroCohorts.length - 10);
+    nonZeroCohorts.push(mergedOtherCohort);
+  }
+  return nonZeroCohorts;
 }
 
 export function generateFeatureBasedFilters(
@@ -94,7 +130,7 @@ export function generateFeatureBasedFilters(
   dataset: IDataset,
   featureIndex: number,
   nGroupsPerFeature = 3
-) {
+): ICompositeFilter[] | undefined {
   const featureName = dataset.feature_names[featureIndex];
   const featureMetaName = JointDataset.DataLabelRoot + featureIndex;
   if (dataset.categorical_features.includes(featureName)) {
@@ -152,7 +188,7 @@ export function generateFeatureBasedFilters(
   return featureFilters;
 }
 
-export function getMinMax(values: unknown[]) {
+export function getMinMax(values: unknown[]): { min: number; max: number } {
   let min = Number.MAX_SAFE_INTEGER;
   let max = Number.MIN_SAFE_INTEGER;
   values.forEach((value) => {

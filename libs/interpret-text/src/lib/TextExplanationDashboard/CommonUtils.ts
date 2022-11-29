@@ -3,16 +3,18 @@
 
 export enum RadioKeys {
   /*
-   * keys for the radio buttons (also called ChoiceGroup)
+   * Keys for the radio buttons (also called ChoiceGroup)
    */
   All = "all",
   Pos = "pos",
   Neg = "neg"
 }
+
 export class Utils {
   public static argsort(toSort: number[]): number[] {
     /*
-     * returns the indicies that would sort an array
+     * Returns the indicies that would sort an array.
+     * Note the sorting is from low to high values.
      * param toSort: the list that you want to be sorted
      */
     const sorted = toSort.map((val, index) => [val, index]);
@@ -22,9 +24,16 @@ export class Utils {
     return sorted.map((val) => val[1]);
   }
 
-  public static sortedTopK(list: number[], k: number, radio: string): number[] {
+  public static sortedTopK(
+    list: number[],
+    k: number | undefined,
+    radio: string | undefined
+  ): number[] {
+    if (!k || !radio) {
+      return [];
+    }
     /*
-     * returns a list of indices for the tokens to be displayed based on user controls for number of tokens and type of tokens, list will be of len(number of relevant tokens)
+     * Returns a list of indices for the tokens to be displayed based on user controls for number of tokens and type of tokens, list will be of len(number of relevant tokens)
      * returns an empty list if there are no tokens that match the radio key
      * param list: the list that needs to be sorted and spliced
      * param k: the maximum length of the returning list
@@ -64,9 +73,9 @@ export class Utils {
     return sortedList;
   }
 
-  public static takeTopK(list: number[], k: number) {
+  public static takeTopK(list: number[], k: number): number[] {
     /*
-     * returns a list after splicing and taking the top K
+     * Returns a list after splicing and taking the top K
      * param list: the list to splice
      * param k: the number to splice the list by
      */
@@ -75,7 +84,7 @@ export class Utils {
 
   public static countNonzeros(list: number[]): number {
     /*
-     * returns the count of the nonzero numbers in an array
+     * Returns the count of the nonzero numbers in an array
      * param list: the list in which the numbers are looked at
      */
     return list.reduce((sum, current) => {
@@ -87,14 +96,17 @@ export class Utils {
   }
 
   public static predictClass(
-    className: string[],
-    prediction: number[]
-  ): string {
+    className: string[] | undefined,
+    prediction: number[] | undefined
+  ): string | undefined {
+    if (!className || !prediction) {
+      return "";
+    }
     /*
-     * returns the predicted class
+     * Returns the predicted class
      * param className: the list of possible classes
      * param prediction: a vector encoding of the probabilities (or one-hot vector) representing the predictions for each class
      */
-    return className[this.argsort(prediction)[0]];
+    return className[this.argsort(prediction).reverse()[0]];
   }
 }

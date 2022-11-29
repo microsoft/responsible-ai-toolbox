@@ -12,9 +12,11 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsBinary,
+  IsMulticlass,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -207,8 +209,7 @@ export class Beehive extends React.PureComponent<
           prev.push(...curr);
           return prev;
         }, []);
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildPlotlyProps: (
@@ -235,7 +236,7 @@ export class Beehive extends React.PureComponent<
         "layout.xaxis.tickvals",
         sortVector.map((_, index) => index)
       );
-      if (explanationContext.modelMetadata.modelType === ModelTypes.Binary) {
+      if (IsBinary(explanationContext.modelMetadata.modelType)) {
         _.set(
           plotlyProps,
           "layout.yaxis.title",
@@ -270,8 +271,7 @@ export class Beehive extends React.PureComponent<
         rows
       );
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private readonly _crossClassIconId = "cross-class-icon-id";
@@ -462,6 +462,8 @@ export class Beehive extends React.PureComponent<
         plotlyProps,
         this.props.selectedRow
       );
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       return (
         <div className={beehiveStyles.aggregateChart}>
           <div className={beehiveStyles.topControls}>
@@ -473,7 +475,7 @@ export class Beehive extends React.PureComponent<
               options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
             {this.colorOptions.length > 1 && (
               <ComboBox
@@ -484,7 +486,7 @@ export class Beehive extends React.PureComponent<
                 options={this.colorOptions}
                 ariaLabel={"color picker"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
             )}
             <div className={beehiveStyles.sliderControl}>
@@ -512,8 +514,7 @@ export class Beehive extends React.PureComponent<
                 }
                 max={Math.min(
                   Beehive.maxFeatures,
-                  this.props.dashboardContext.explanationContext.modelMetadata
-                    .featureNames.length
+                  modelMetadata.featureNames.length
                 )}
                 min={1}
                 step={1}
@@ -522,8 +523,7 @@ export class Beehive extends React.PureComponent<
                 showValue
               />
             </div>
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType === ModelTypes.Multiclass && (
+            {IsMulticlass(modelMetadata.modelType) && (
               <div>
                 <div className={beehiveStyles.selectorLabel}>
                   <span>{localization.Interpret.CrossClass.label}</span>
@@ -544,7 +544,7 @@ export class Beehive extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}
@@ -643,6 +643,8 @@ export class Beehive extends React.PureComponent<
     if (this.state.calloutContent) {
       this.onDismiss();
     } else {
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       const calloutContent = (
         <div>
           <span>
@@ -651,8 +653,7 @@ export class Beehive extends React.PureComponent<
                 .globalImportanceExplanation
             }
           </span>
-          {this.props.dashboardContext.explanationContext.modelMetadata
-            .modelType === ModelTypes.Multiclass && (
+          {IsMulticlass(modelMetadata.modelType) && (
             <span>
               {
                 localization.Interpret.FeatureImportanceWrapper

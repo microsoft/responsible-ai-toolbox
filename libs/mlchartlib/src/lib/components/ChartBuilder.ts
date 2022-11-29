@@ -8,6 +8,12 @@ import { Data, Datum } from "plotly.js";
 import { accessorMappingFunctions } from "./accessorMappingFunctions";
 import { IData } from "./IData";
 
+interface IRow {
+  x: any;
+  y: any;
+  group: any;
+  size: any;
+}
 export class ChartBuilder {
   public static buildPlotlySeries<T>(
     datum: IData,
@@ -24,12 +30,7 @@ export class ChartBuilder {
           })
           .join(", ")}`
       : "";
-    const projectedRows: Array<{
-      x: any;
-      y: any;
-      group: any;
-      size: any;
-    }> = jmespath.search(
+    const projectedRows: IRow[] = jmespath.search(
       rows,
       `${datum.xAccessorPrefix || ""}[*].{x: ${datum.xAccessor}, y: ${
         datum.yAccessor
@@ -71,20 +72,7 @@ export class ChartBuilder {
       // Support these cases in the minimally surprising way by upcasting a scalar point to match the highest dimension for that row (like numpy does)
       // If two arrays are logged, but of different lengths, pad the shorter ones with undefined to avoid series having different lengths concatted.
       // We always have a size of at least one, this avoids corner case of one array being empty
-      let maxLength = 1;
-      let hasVectorValues = false;
-      if (Array.isArray(row.x)) {
-        hasVectorValues = true;
-        maxLength = Math.max(maxLength, row.x.length);
-      }
-      if (Array.isArray(row.y)) {
-        hasVectorValues = true;
-        maxLength = Math.max(maxLength, row.y.length);
-      }
-      if (Array.isArray(row.size)) {
-        hasVectorValues = true;
-        maxLength = Math.max(maxLength, row.size.length);
-      }
+      const { hasVectorValues, maxLength } = ChartBuilder.getHasVectors(row);
       if (hasVectorValues) {
         // for making scalars into a vector, fill the vector with that scalar value
         if (!Array.isArray(row.x)) {
@@ -159,6 +147,27 @@ export class ChartBuilder {
       result.push(groupingDictionary[key]);
     });
     return result;
+  }
+
+  private static getHasVectors(row: IRow): {
+    maxLength: number;
+    hasVectorValues: boolean;
+  } {
+    let maxLength = 1;
+    let hasVectorValues = false;
+    if (Array.isArray(row.x)) {
+      hasVectorValues = true;
+      maxLength = Math.max(maxLength, row.x.length);
+    }
+    if (Array.isArray(row.y)) {
+      hasVectorValues = true;
+      maxLength = Math.max(maxLength, row.y.length);
+    }
+    if (Array.isArray(row.size)) {
+      hasVectorValues = true;
+      maxLength = Math.max(maxLength, row.size.length);
+    }
+    return { hasVectorValues, maxLength };
   }
 
   private static buildDefaultSeries(datum: IData): Partial<Data> {

@@ -5,10 +5,10 @@
 
 from flask import jsonify, request
 
+from raiwidgets.dashboard import Dashboard
+from raiwidgets.responsibleai_dashboard_input import \
+    ResponsibleAIDashboardInput
 from responsibleai import RAIInsights
-
-from .dashboard import Dashboard
-from .responsibleai_dashboard_input import ResponsibleAIDashboardInput
 
 
 class ResponsibleAIDashboard(Dashboard):
@@ -51,22 +51,35 @@ class ResponsibleAIDashboard(Dashboard):
         def tree():
             data = request.get_json(force=True)
             return jsonify(self.input.debug_ml(data))
-
         self.add_url_rule(tree, '/tree', methods=["POST"])
 
         def matrix():
             data = request.get_json(force=True)
             return jsonify(self.input.matrix(data))
-
         self.add_url_rule(matrix, '/matrix', methods=["POST"])
 
         def causal_whatif():
             data = request.get_json(force=True)
             return jsonify(self.input.causal_whatif(data))
-
         self.add_url_rule(causal_whatif, '/causal_whatif', methods=["POST"])
+
+        def global_causal_effects():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_global_causal_effects(data))
+        self.add_url_rule(global_causal_effects, '/global_causal_effects',
+                          methods=["POST"])
+
+        def global_causal_policy():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_global_causal_policy(data))
+        self.add_url_rule(global_causal_policy, '/global_causal_policy',
+                          methods=["POST"])
 
         def importances():
             return jsonify(self.input.importances())
-
         self.add_url_rule(importances, '/importances', methods=["POST"])
+
+        def get_exp():
+            data = request.get_json(force=True)
+            return jsonify(self.input.get_exp(data))
+        self.add_url_rule(get_exp, '/get_exp', methods=["POST"])

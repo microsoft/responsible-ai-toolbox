@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
+import * as Highcharts from "highcharts";
 
 export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
   const colorTheme = {
@@ -11,6 +12,9 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
     fontColor: theme?.semanticColors.bodyText
   };
   return {
+    accessibility: {
+      screenReaderSection: { beforeChartFormat: "" }
+    },
     chart: {
       animation: false,
       backgroundColor: colorTheme.backgroundColor,
@@ -50,8 +54,7 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       },
       scatter: {
         marker: {
-          radius: 3,
-          symbol: "circle"
+          radius: 3
         }
       }
     },
@@ -73,7 +76,8 @@ export function getDefaultHighchartOptions(theme: ITheme): Highcharts.Options {
       gridLineWidth: 0,
       labels: {
         style: {
-          color: colorTheme.fontColor
+          color: colorTheme.fontColor,
+          textOverflow: "ellipsis"
         }
       },
       title: {

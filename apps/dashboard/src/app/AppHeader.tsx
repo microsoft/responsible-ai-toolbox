@@ -27,11 +27,6 @@ export interface IAppHeaderProps extends Required<IAppSetting> {
 }
 
 export class AppHeader extends React.Component<IAppHeaderProps> {
-  private readonly onApplicationSelect = this.onSelect.bind(
-    this,
-    "application"
-  );
-
   public render(): React.ReactNode {
     const items: ICommandBarItemProps[] = [
       {
@@ -143,6 +138,12 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     return true;
   }
 
+  private readonly onApplicationSelect = (
+    _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
+    item?: IContextualMenuItem
+  ): boolean => {
+    return this.onSelect("application", _ev, item);
+  };
   private readonly onVersionSelect = (
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     item?: IContextualMenuItem

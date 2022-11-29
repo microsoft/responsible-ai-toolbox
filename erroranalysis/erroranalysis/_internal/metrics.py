@@ -1,9 +1,11 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from sklearn.metrics import (accuracy_score, f1_score, mean_absolute_error,
-                             mean_squared_error, median_absolute_error,
-                             precision_score, r2_score, recall_score)
+import numpy as np
+from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score,
+                             mean_absolute_error, mean_squared_error,
+                             median_absolute_error, precision_score, r2_score,
+                             recall_score)
 
 from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
                                                precision_metrics,
@@ -11,6 +13,71 @@ from erroranalysis._internal.constants import (Metrics, ModelTask, f1_metrics,
 
 MICRO = 'micro'
 MACRO = 'macro'
+
+
+def _confusion_matrix_helper(y_true, y_pred, classes=None):
+    """Helper function for computing confusion matrix.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :param classes: List of classes.
+    :type classes: list
+    :return: Tuple of true positive, false positive, false negative
+             and true negative.
+    :rtype: Tuple[int, int, int, int]
+    """
+    tp, fp, fn, tn = confusion_matrix(y_true, y_pred, labels=classes).ravel()
+    return tp, fp, fn, tn
+
+
+def false_negative_rate(y_true, y_pred, classes=None):
+    """Compute the false negative rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :param classes: List of classes.
+    :type classes: list
+    :return: False negative rate.
+    :rtype: float
+    """
+    tp, _, fn, _ = _confusion_matrix_helper(y_true, y_pred, classes)
+    return fn / (fn + tp)
+
+
+def false_positive_rate(y_true, y_pred, classes=None):
+    """Compute the false positive rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :param classes: List of classes.
+    :type classes: list
+    :return: False positive rate.
+    :rtype: float
+    """
+    _, fp, _, tn = _confusion_matrix_helper(y_true, y_pred, classes)
+    return fp / (fp + tn)
+
+
+def selection_rate(y_true, y_pred, classes=None):
+    """Compute the selection rate for binary classification tasks.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted labels.
+    :type y_pred: numpy.ndarray
+    :return: Selection rate.
+    :param classes: List of classes.
+    :type classes: list
+    :rtype: float
+    """
+    tp, fp, fn, tn = _confusion_matrix_helper(y_true, y_pred, classes)
+    return (fn + tp) / (tp + fp + fn + tn)
 
 
 def micro_precision_score(y_true, y_pred):
@@ -91,6 +158,19 @@ def macro_f1_score(y_true, y_pred):
     return f1_score(y_true, y_pred, average=MACRO)
 
 
+def mean_prediction(y_true, y_pred):
+    """Compute mean value for prediction.
+
+    :param y_true: True labels.
+    :type y_true: numpy.ndarray
+    :param y_pred: Predicted values.
+    :type y_pred: numpy.ndarray
+    :return: Mean Prediction.
+    :rtype: float
+    """
+    return np.mean(y_pred)
+
+
 def get_ordered_classes(classes, true_y, pred_y):
     """Get the ordered classes for the given true and predicted labels.
 
@@ -135,6 +215,7 @@ def is_multi_agg_metric(metric):
 
 
 metric_to_func = {
+    Metrics.MEAN_PREDICTION: mean_prediction,
     Metrics.MEAN_ABSOLUTE_ERROR: mean_absolute_error,
     Metrics.MEAN_SQUARED_ERROR: mean_squared_error,
     Metrics.MEDIAN_ABSOLUTE_ERROR: median_absolute_error,
@@ -148,10 +229,14 @@ metric_to_func = {
     Metrics.MACRO_PRECISION_SCORE: macro_precision_score,
     Metrics.RECALL_SCORE: recall_score,
     Metrics.MICRO_RECALL_SCORE: micro_recall_score,
-    Metrics.MACRO_RECALL_SCORE: macro_recall_score
+    Metrics.MACRO_RECALL_SCORE: macro_recall_score,
+    Metrics.FALSE_POSITIVE_RATE: false_positive_rate,
+    Metrics.FALSE_NEGATIVE_RATE: false_negative_rate,
+    Metrics.SELECTION_RATE: selection_rate
 }
 
 metric_to_task = {
+    Metrics.MEAN_PREDICTION: ModelTask.REGRESSION,
     Metrics.MEAN_ABSOLUTE_ERROR: ModelTask.REGRESSION,
     Metrics.MEAN_SQUARED_ERROR: ModelTask.REGRESSION,
     Metrics.MEDIAN_ABSOLUTE_ERROR: ModelTask.REGRESSION,
@@ -164,5 +249,8 @@ metric_to_task = {
     Metrics.MICRO_PRECISION_SCORE: ModelTask.CLASSIFICATION,
     Metrics.MICRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
     Metrics.MACRO_PRECISION_SCORE: ModelTask.CLASSIFICATION,
-    Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION
+    Metrics.MACRO_RECALL_SCORE: ModelTask.CLASSIFICATION,
+    Metrics.FALSE_NEGATIVE_RATE: ModelTask.CLASSIFICATION,
+    Metrics.FALSE_POSITIVE_RATE: ModelTask.CLASSIFICATION,
+    Metrics.SELECTION_RATE: ModelTask.CLASSIFICATION
 }

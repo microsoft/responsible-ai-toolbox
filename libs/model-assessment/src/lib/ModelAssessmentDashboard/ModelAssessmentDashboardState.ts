@@ -26,6 +26,7 @@ export interface IModelAssessmentDashboardState
   selectedWhatIfIndex: number | undefined;
   errorAnalysisOption: ErrorAnalysisOptions;
   saveCohortVisible: boolean;
+  onAddMessage: string;
 }
 
 export interface IModelAssessmentDashboardTab {

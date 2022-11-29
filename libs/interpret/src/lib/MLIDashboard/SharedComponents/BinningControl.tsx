@@ -8,7 +8,7 @@ import {
   IDropdownOption,
   TextField
 } from "@fluentui/react";
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
   ICategoricalRange,
@@ -76,7 +76,7 @@ export class BinningControl extends React.PureComponent<
             ariaLabel="feature picker"
             selectedKey={this.state ? this.state.featureIndex : undefined}
             useComboBoxAsMenuWidth
-            styles={FabricStyles.defaultDropdownStyle}
+            styles={FluentUIStyles.defaultDropdownStyle}
           />
         </div>
         {!!this.state && (
@@ -89,28 +89,28 @@ export class BinningControl extends React.PureComponent<
                 autoComplete="on"
                 options={this.state.categoricalOptions || []}
                 onChange={this.onCategoricalRangeChanged}
-                styles={FabricStyles.defaultDropdownStyle}
+                styles={FluentUIStyles.defaultDropdownStyle}
               />
             )}
             {this.state.type !== RangeTypes.Categorical && (
               <div className={binningControlStyles.featurePicker}>
                 <TextField
                   label={localization.Interpret.IcePlot.minimumInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.min}
                   onChange={this.onMinRangeChanged}
                   errorMessage={this.state.minErrorMessage}
                 />
                 <TextField
                   label={localization.Interpret.IcePlot.maximumInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.max}
                   onChange={this.onMaxRangeChanged}
                   errorMessage={this.state.maxErrorMessage}
                 />
                 <TextField
                   label={localization.Interpret.IcePlot.stepInputLabel}
-                  styles={FabricStyles.textFieldStyle}
+                  styles={FluentUIStyles.textFieldStyle}
                   value={this.state.steps}
                   onChange={this.onStepsRangeChanged}
                   errorMessage={this.state.stepsErrorMessage}

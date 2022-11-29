@@ -11,12 +11,13 @@ import {
 } from "@fluentui/react";
 import {
   ColumnCategories,
-  FabricStyles,
+  FluentUIStyles,
   ICausalWhatIfData,
   JointDataset,
   ModelAssessmentContext,
   NoData,
-  defaultModelAssessmentContext
+  defaultModelAssessmentContext,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -59,7 +60,7 @@ export class CausalWhatIf extends React.Component<
     }
   }
   public render(): React.ReactNode {
-    if (this.context.dataset.task_type !== "regression") {
+    if (this.context.dataset.task_type !== DatasetTaskType.Regression) {
       return React.Fragment;
     }
     if (!this.context.causalAnalysisData?.config) {
@@ -79,7 +80,7 @@ export class CausalWhatIf extends React.Component<
           options={treatmentOptions}
           ariaLabel={"treatment picker"}
           useComboBoxAsMenuWidth
-          styles={FabricStyles.smallDropdownStyle}
+          styles={FluentUIStyles.smallDropdownStyle}
           selectedKey={this.state.treatmentFeature}
           onChange={this.setTreatmentFeature}
         />

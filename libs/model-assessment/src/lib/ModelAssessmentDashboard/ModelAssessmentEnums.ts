@@ -2,11 +2,12 @@
 // Licensed under the MIT License.
 
 export enum GlobalTabKeys {
-  DataExplorerTab = "DataExplorerTab",
+  DataAnalysisTab = "DataAnalysisTab",
   FeatureImportancesTab = "FeatureImportancesTab",
   ErrorAnalysisTab = "ErrorAnalysisTab",
   FairnessTab = "FairnessTab",
   ModelOverviewTab = "ModelOverviewTab",
   CausalAnalysisTab = "CausalAnalysisTab",
-  CounterfactualsTab = "CounterfactualsTab"
+  CounterfactualsTab = "CounterfactualsTab",
+  VisionTab = "VisionExplanationTab"
 }

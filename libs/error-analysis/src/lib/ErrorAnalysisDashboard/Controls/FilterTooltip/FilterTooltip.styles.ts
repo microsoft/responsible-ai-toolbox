@@ -60,11 +60,13 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
         transform: "translate(20px, 75px)"
       },
       numCorrect: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
         fontWeight: "500",
         transform: "translate(10px, 15px)"
       },
       numIncorrect: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
         fontWeight: "500",
         transform: "translate(10px, 25px)"
@@ -73,6 +75,7 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
         visibility: "visible"
       },
       smallHeader: {
+        fill: theme.semanticColors.bodyText,
         fontSize: "8px",
         fontWeight: "500"
       },
@@ -80,7 +83,8 @@ export const filterTooltipStyles: () => IProcessedStyleSet<IFilterTooltipStyles>
         outline: `1px solid ${theme.palette.themeLighterAlt}`
       },
       valueBlack: mergeStyles(value, {
-        color: theme.palette.black
+        color: theme.palette.black,
+        fill: theme.semanticColors.bodyText
       })
     });
   };

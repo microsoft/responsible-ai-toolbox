@@ -7,7 +7,7 @@ import {
   ComboBox,
   TextField
 } from "@fluentui/react";
-import { FabricStyles } from "@responsible-ai/core-ui";
+import { FluentUIStyles } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
 import { toNumber } from "lodash";
@@ -75,7 +75,7 @@ export class FeatureEditingTile extends React.Component<
         </div>
         {this.props.enumeratedValues === undefined && (
           <TextField
-            styles={FabricStyles.textFieldStyle}
+            styles={FluentUIStyles.textFieldStyle}
             ariaLabel={this.props.featureName}
             value={this.state.value}
             onChange={this.onValueChanged}
@@ -90,7 +90,7 @@ export class FeatureEditingTile extends React.Component<
             autoComplete="on"
             options={this.options || []}
             onChange={this.onComboSelected}
-            styles={FabricStyles.defaultDropdownStyle}
+            styles={FluentUIStyles.defaultDropdownStyle}
           />
         )}
       </div>
