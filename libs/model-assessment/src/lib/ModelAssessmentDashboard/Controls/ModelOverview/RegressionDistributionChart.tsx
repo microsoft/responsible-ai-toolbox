@@ -82,11 +82,13 @@ export class RegressionDistributionChart extends React.Component<
   }
 
   public async componentDidUpdate(
-    prevProps: IRegressionDistributionChartProps
+    prevProps: IRegressionDistributionChartProps,
+    prevState: IRegressionDistributionChartState
   ): Promise<void> {
     if (
       this.props.boxPlotState.boxPlotData.length === 0 ||
-      !_.isEqual(prevProps.cohorts, this.props.cohorts)
+      !_.isEqual(prevProps.cohorts, this.props.cohorts) ||
+      prevState.targetOption !== this.state.targetOption
     ) {
       const targetOption = this.state.targetOption
         ? this.state.targetOption?.key.toString()
