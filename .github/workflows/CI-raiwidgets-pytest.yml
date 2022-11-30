@@ -9,7 +9,7 @@ on:
 jobs:
   ci-raiwidgets-pytest:
     env:
-      node-version: 16.8
+      node-version: 16.x
     strategy:
       matrix:
         packageDirectory: ["raiwidgets"]
