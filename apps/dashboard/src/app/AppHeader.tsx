@@ -180,7 +180,9 @@ export class AppHeader extends React.Component<IAppHeaderProps> {
     _ev?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     item?: IContextualMenuItem
   ): boolean {
-    if (!item?.data) return true;
+    if (!item?.data) {
+      return true;
+    }
 
     let flights = parseFeatureFlights(this.props.featureFlights);
     // item.checked means it was checked before the click
