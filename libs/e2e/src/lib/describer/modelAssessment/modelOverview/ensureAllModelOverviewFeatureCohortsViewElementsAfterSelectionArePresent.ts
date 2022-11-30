@@ -22,7 +22,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
       "not.exist"
     );
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("not.exist");
+    cy.get(Locators.ModelOverviewRegressionDistributionChart).should(
+      "not.exist"
+    );
     cy.get(Locators.ModelOverviewMetricChart).should("exist");
     const featureCohortView = datasetShape.modelOverviewData?.featureCohortView;
     let expectedNumberOfCohorts = featureCohortView?.singleFeatureCohorts;

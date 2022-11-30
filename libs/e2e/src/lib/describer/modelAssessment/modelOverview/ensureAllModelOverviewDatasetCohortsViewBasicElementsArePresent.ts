@@ -123,15 +123,17 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     // 2 buttons and 1 hidden overflow button, 3 total
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewRegressionDistributionChart).should("exist");
-      cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-        "not.exist"
-      );
+    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+      "not.exist"
+    );
   } else {
     // binary classification (not multiclass, not regression)
     // 2 buttons and 1 hidden overflow button, 3 total
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("not.exist");
+    cy.get(Locators.ModelOverviewRegressionDistributionChart).should(
+      "not.exist"
+    );
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
   }
 }

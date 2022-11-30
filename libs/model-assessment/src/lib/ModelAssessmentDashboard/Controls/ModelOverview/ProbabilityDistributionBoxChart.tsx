@@ -24,9 +24,7 @@ interface IProbabilityDistributionBoxChartProps {
   boxPlotState: IBoxChartState;
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
-  onBoxPlotStateUpdate: (
-    boxPlotState: IBoxChartState
-  ) => void;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
 }
 
 export class ProbabilityDistributionBoxChart extends React.Component<IProbabilityDistributionBoxChartProps> {

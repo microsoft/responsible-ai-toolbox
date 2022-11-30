@@ -27,7 +27,6 @@ import {
   ErrorCohort,
   ILabeledStatistic,
   ITelemetryEvent,
-  IsBinary,
   IsMulticlass,
   TelemetryLevels,
   TelemetryEventName,
@@ -35,10 +34,8 @@ import {
   ImageClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
-import { IBoxChartState } from "./BoxChartState";
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
@@ -47,9 +44,7 @@ import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisU
 import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
-import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
-import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
-import { RegressionDistributionChart } from "./RegressionDistributionChart";
+import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -57,8 +52,6 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
-  probabilityDistributionBoxPlotState: IBoxChartState;
-  regressionDistributionBoxPlotState: IBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -74,8 +67,6 @@ interface IModelOverviewState {
   // That way, we can distinguish between newly created cohorts
   // and deliberately ignored cohorts for the chart section.
   maxCohortId: number;
-  selectedMetric: string;
-  showSplineChart: boolean;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -99,20 +90,10 @@ export class ModelOverview extends React.Component<
       featureConfigurationIsVisible: false,
       maxCohortId: 0,
       metricConfigurationIsVisible: false,
-      probabilityDistributionBoxPlotState: {
-        boxPlotData: [],
-        outlierData: undefined
-      },
-      regressionDistributionBoxPlotState: {
-        boxPlotData: [],
-        outlierData: undefined
-      },
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
-      selectedMetric: "",
       selectedMetrics: [],
-      showHeatmapColors: true,
-      showSplineChart: false
+      showHeatmapColors: true
     };
   }
 
@@ -492,96 +473,17 @@ export class ModelOverview extends React.Component<
             selectableMetrics={selectableMetrics}
           />
           {someCohortSelected && (
-            <Pivot
-              id="modelOverviewChartPivot"
-              overflowBehavior="menu"
-              className={classNames.tabs}
-            >
-              {IsBinary(this.context.modelMetadata.modelType) && (
-                <PivotItem
-                  headerText={
-                    localization.ModelAssessment.ModelOverview
-                      .probabilityDistributionPivotItem
-                  }
-                >
-                  <ProbabilityDistributionChart
-                    onChooseCohorts={this.onChooseCohorts}
-                    cohorts={chartCohorts}
-                    telemetryHook={this.props.telemetryHook}
-                    boxPlotState={
-                      this.state.probabilityDistributionBoxPlotState
-                    }
-                    onBoxPlotStateUpdate={
-                      this.onProbabilityDistributionBoxPlotStateUpdate
-                    }
-                    onToggleChange={this.onSplineToggleChange}
-                    showSplineChart={this.state.showSplineChart}
-                  />
-                </PivotItem>
-              )}
-              {this.context.modelMetadata.modelType ===
-                ModelTypes.Regression && (
-                <PivotItem
-                  headerText={
-                    localization.ModelAssessment.ModelOverview
-                      .regressionDistributionPivotItem
-                  }
-                >
-                  <RegressionDistributionChart
-                    onChooseCohorts={this.onChooseCohorts}
-                    cohorts={chartCohorts}
-                    onBoxPlotStateUpdate={
-                      this.onRegressionDistributionBoxPlotStateUpdate
-                    }
-                    boxPlotState={this.state.regressionDistributionBoxPlotState}
-                  />
-                </PivotItem>
-              )}
-              <PivotItem
-                headerText={
-                  localization.ModelAssessment.ModelOverview
-                    .metricsVisualizationsPivotItem
-                }
-              >
-                <ModelOverviewMetricChart
-                  onChooseCohorts={this.onChooseCohorts}
-                  onApplyMetric={this.onApplyMetric}
-                  selectableMetrics={selectableMetrics}
-                  cohorts={chartCohorts}
-                  cohortStats={labeledStatistics}
-                  selectedMetric={this.state.selectedMetric}
-                />
-              </PivotItem>
-            </Pivot>
+            <ModelOverviewChartPivot
+              chartCohorts={chartCohorts}
+              labeledStatistics={labeledStatistics}
+              selectedMetrics={this.state.selectedMetrics}
+              onChooseCohorts={this.onChooseCohorts}
+            />
           )}
         </Stack>
       </Stack>
     );
   }
-
-  private onSplineToggleChange = (checked: boolean): void => {
-    this.setState({ showSplineChart: checked });
-  };
-
-  private onProbabilityDistributionBoxPlotStateUpdate = (
-    boxPlotState: IBoxChartState
-  ): void => {
-    if (
-      !_.isEqual(this.state.probabilityDistributionBoxPlotState, boxPlotState)
-    ) {
-      this.setState({ probabilityDistributionBoxPlotState: boxPlotState });
-    }
-  };
-
-  private onRegressionDistributionBoxPlotStateUpdate = (
-    boxPlotState: IBoxChartState
-  ): void => {
-    if (
-      !_.isEqual(this.state.regressionDistributionBoxPlotState, boxPlotState)
-    ) {
-      this.setState({ regressionDistributionBoxPlotState: boxPlotState });
-    }
-  };
 
   private onClickMetricsConfiguration = (): void => {
     this.setState({ metricConfigurationIsVisible: true });
@@ -595,10 +497,6 @@ export class ModelOverview extends React.Component<
     this.logButtonClick(
       TelemetryEventName.ModelOverviewFeatureConfigurationClick
     );
-  };
-
-  private onDismissChartConfigurationFlyout = (): void => {
-    this.setState({ chartConfigurationIsVisible: false });
   };
 
   private onDismissFeatureConfigurationFlyout = (): void => {
@@ -616,25 +514,6 @@ export class ModelOverview extends React.Component<
       );
     }
   };
-
-  private onChooseCohorts = (): void =>
-    this.setState({ chartConfigurationIsVisible: true });
-
-  private onApplyMetric = (metric: string): void => {
-    this.setState({ selectedMetric: metric });
-  };
-
-  private updateCohortSelection = (
-    selectedDatasetCohorts: number[],
-    selectedFeatureBasedCohorts: number[],
-    datasetCohortChartIsSelected: boolean
-  ): void =>
-    this.setState({
-      chartConfigurationIsVisible: false,
-      datasetCohortChartIsVisible: datasetCohortChartIsSelected,
-      selectedDatasetCohorts,
-      selectedFeatureBasedCohorts
-    });
 
   private onMetricSelectionChange = (
     _: React.FormEvent<IComboBox>,
@@ -786,4 +665,23 @@ export class ModelOverview extends React.Component<
       type: eventName
     });
   };
+
+  private updateCohortSelection = (
+    selectedDatasetCohorts: number[],
+    selectedFeatureBasedCohorts: number[],
+    datasetCohortChartIsSelected: boolean
+  ): void =>
+    this.setState({
+      chartConfigurationIsVisible: false,
+      datasetCohortChartIsVisible: datasetCohortChartIsSelected,
+      selectedDatasetCohorts,
+      selectedFeatureBasedCohorts
+    });
+
+  private onDismissChartConfigurationFlyout = (): void => {
+    this.setState({ chartConfigurationIsVisible: false });
+  };
+
+  private onChooseCohorts = (): void =>
+    this.setState({ chartConfigurationIsVisible: true });
 }
