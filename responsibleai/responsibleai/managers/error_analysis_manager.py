@@ -16,7 +16,7 @@ from erroranalysis._internal.error_report import as_error_report
 from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
 from responsibleai._config.base_config import BaseConfig
-from responsibleai._interfaces import ErrorAnalysisData
+from responsibleai._interfaces import ErrorAnalysisData, TaskType
 from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
@@ -80,6 +80,37 @@ def as_error_config(json_dict):
         return config
     else:
         return json_dict
+
+
+class ModelWrapper():
+    """Defines ModelWrapper, wrapping model with dropped features if any."""
+
+    def __init__(self, model: any,
+                 dropped_features: Optional[List[str]] = None):
+        """If needed, wraps the model with dropped features.
+
+        :param model: The model or function to evaluate on the examples.
+        :type model: function or model with a predict or predict_proba function
+        :param dropped_features: List of features that were dropped by the
+                                 the user during training of their model.
+        :type dropped_features: Optional[List[str]]
+        """
+        self.model = model
+        self.dropped_features = dropped_features
+
+    def predict(self, dataset: pd.DataFrame):
+        if self.dropped_features is None or \
+                len(self.dropped_features) == 0:
+            return self.model.predict(dataset)
+        return self.model.predict(dataset.drop(
+            columns=self.dropped_features, axis=1))
+
+    def predict_proba(self, dataset: pd.DataFrame):
+        if self.dropped_features is None or \
+                len(self.dropped_features) == 0:
+            return self.model.predict_proba(dataset)
+        return self.model.predict_proba(dataset.drop(
+            columns=self.dropped_features, axis=1))
 
 
 class ErrorAnalysisConfig(BaseConfig):
@@ -158,7 +189,9 @@ class ErrorAnalysisManager(BaseManager):
 
     def __init__(self, model: Any, dataset: pd.DataFrame, target_column: str,
                  classes: Optional[List] = None,
-                 categorical_features: Optional[List[str]] = None):
+                 categorical_features: Optional[List[str]] = None,
+                 dropped_features: Optional[List[str]] = None,
+                 task_type: Optional[TaskType] = None):
         """Creates an ErrorAnalysisManager object.
 
         :param model: The model to analyze errors on.
@@ -175,6 +208,11 @@ class ErrorAnalysisManager(BaseManager):
         :type classes: list
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
+        :param dropped_features: List of features that were dropped by the
+                                 the user during training of their model.
+        :type dropped_features: Optional[List[str]]
+        :param task_type: The task type of the model.
+        :type task_type: TaskType
         """
         self._true_y = dataset[target_column]
         self._dataset = dataset.drop(columns=[target_column])
@@ -183,11 +221,12 @@ class ErrorAnalysisManager(BaseManager):
         self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
-        self._analyzer = ModelAnalyzer(model,
+        self._analyzer = ModelAnalyzer(ModelWrapper(model, dropped_features),
                                        self._dataset,
                                        self._true_y,
                                        self._feature_names,
                                        self._categorical_features,
+                                       model_task=task_type,
                                        classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,

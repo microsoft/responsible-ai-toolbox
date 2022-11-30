@@ -157,16 +157,35 @@ export class GlobalExplanationTab extends React.PureComponent<
     const featureOptions: IDropdownOption[] = [];
     for (let i = 0; i < this.context.jointDataset.datasetFeatureCount; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      featureOptions.push({
-        key,
-        text: this.context.jointDataset.metaDict[key].label
-      });
+      if (
+        !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+          this.context.jointDataset.metaDict[key].label
+        )
+      ) {
+        featureOptions.push({
+          key,
+          text: this.context.jointDataset.metaDict[key].label
+        });
+      }
     }
     const selectedMeta = this.state.dependenceProps?.xAxis.property
       ? this.context.jointDataset.metaDict[
           this.state.dependenceProps?.xAxis.property
         ]
       : undefined;
+
+    let featureNames = this.context.modelMetadata.featureNames;
+    if (
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.dropped_features
+    ) {
+      featureNames = this.context.modelMetadata.featureNames.filter(
+        (name) =>
+          !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+            name
+          )
+      );
+    }
 
     return (
       <Stack horizontal={false} className={classNames.page}>
@@ -230,8 +249,8 @@ export class GlobalExplanationTab extends React.PureComponent<
                 ]}
                 sortArray={this.state.sortArray}
                 chartType={this.state.chartType}
-                unsortedX={this.context.modelMetadata.featureNames}
-                originX={this.context.modelMetadata.featureNames}
+                unsortedX={featureNames}
+                originX={featureNames}
                 unsortedSeries={this.getActiveCohortSeries(
                   this.state.seriesIsActive
                 )}

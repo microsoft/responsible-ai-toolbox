@@ -205,7 +205,7 @@ export class CausalIndividualChart extends React.PureComponent<
       </Stack>
     );
   }
-  
+
   private setTemporaryPointToCopyOfDatasetPoint(index: number): void {
     this.setState({
       temporaryPoint: {

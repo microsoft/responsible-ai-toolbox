@@ -190,7 +190,8 @@ class RAIInsights(RAIBaseInsights):
         if self._feature_metadata is None:
             return self.train
         else:
-            if self._feature_metadata.dropped_features is None:
+            if self._feature_metadata.dropped_features is None or \
+                    len(self._feature_metadata.dropped_features) == 0:
                 return self.train
             else:
                 return self.train.drop(
@@ -208,9 +209,9 @@ class RAIInsights(RAIBaseInsights):
             return test_data if test_data is not None else self.test
             # return self.test
         else:
-            if self._feature_metadata.dropped_features is None:
-                test_data if test_data is not None else self.test
-                # return self.test
+            if self._feature_metadata.dropped_features is None or \
+                    len(self._feature_metadata.dropped_features) == 0:
+                return test_data if test_data is not None else self.test
             else:
                 if test_data is None:
                     return self.test.drop(
@@ -242,9 +243,11 @@ class RAIInsights(RAIBaseInsights):
             classes=self._classes, task_type=self.task_type)
 
         self._error_analysis_manager = ErrorAnalysisManager(
-            self.model, self.get_test_data(), self.target_column,
+            self.model, self.test, self.target_column,
             self._classes,
-            self.categorical_features)
+            self.categorical_features,
+            self._feature_metadata.dropped_features,
+            task_type=self.task_type)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),
@@ -452,19 +455,23 @@ class RAIInsights(RAIBaseInsights):
             if model is not None:
                 # Pick one row from train and test data
                 if feature_metadata is not None:
-                    if feature_metadata.dropped_features is not None:
+                    if feature_metadata.dropped_features is not None and \
+                            len(feature_metadata.dropped_features) != 0:
                         small_train_data = train[0:1].drop(
-                            columns=feature_metadata.dropped_features)
+                            columns=feature_metadata.dropped_features, axis=1)
                         small_test_data = test[0:1].drop(
-                            columns=feature_metadata.dropped_features)
+                            columns=feature_metadata.dropped_features, axis=1)
+                    else:
+                        small_train_data = train[0:1]
+                        small_test_data = test[0:1]
                 else:
                     small_train_data = train[0:1]
                     small_test_data = test[0:1]
-    
+
                 small_train_data = small_train_data.drop(
-                    columns=[target_column])
+                    columns=[target_column], axis=1)
                 small_test_data = small_test_data.drop(
-                    columns=[target_column])
+                    columns=[target_column], axis=1)
 
                 small_train_features_before = list(small_train_data.columns)
 
@@ -658,9 +665,11 @@ class RAIInsights(RAIBaseInsights):
             try:
                 predict_dataset = dataset
                 if self._feature_metadata is not None:
-                    if self._feature_metadata.dropped_features is not None:
-                       predict_dataset = predict_dataset.drop(
-                            self._feature_metadata.dropped_features, axis=1) 
+                    if self._feature_metadata.dropped_features is not None \
+                            and len(self._feature_metadata.dropped_features) \
+                            != 0:
+                        predict_dataset = predict_dataset.drop(
+                            self._feature_metadata.dropped_features, axis=1)
                 predicted_y = self.model.predict(predict_dataset)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
@@ -716,9 +725,11 @@ class RAIInsights(RAIBaseInsights):
             try:
                 predict_dataset = dataset
                 if self._feature_metadata is not None:
-                    if self._feature_metadata.dropped_features is not None:
-                       predict_dataset = predict_dataset.drop(
-                            self._feature_metadata.dropped_features, axis=1) 
+                    if self._feature_metadata.dropped_features is not None \
+                            and len(self._feature_metadata.dropped_features) \
+                            != 0:
+                        predict_dataset = predict_dataset.drop(
+                            self._feature_metadata.dropped_features, axis=1)
                 probability_y = self.model.predict_proba(predict_dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
