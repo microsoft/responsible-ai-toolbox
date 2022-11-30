@@ -18,18 +18,15 @@ import React from "react";
 
 import { isFlightActive, newSdkEndpointsFlight } from "../../FeatureFlights";
 
+import { IBoxChartState } from "./BoxChartState";
+
 interface IProbabilityDistributionBoxChartProps {
-  boxPlotState: IProbabilityDistributionBoxChartState;
+  boxPlotState: IBoxChartState;
   selectedCohorts: ErrorCohort[];
   probabilityOption?: IChoiceGroupOption;
   onBoxPlotStateUpdate: (
-    boxPlotState: IProbabilityDistributionBoxChartState
+    boxPlotState: IBoxChartState
   ) => void;
-}
-
-export interface IProbabilityDistributionBoxChartState {
-  boxPlotData: Array<IHighchartBoxData | undefined>;
-  outlierData: number[][] | undefined;
 }
 
 export class ProbabilityDistributionBoxChart extends React.Component<IProbabilityDistributionBoxChartProps> {

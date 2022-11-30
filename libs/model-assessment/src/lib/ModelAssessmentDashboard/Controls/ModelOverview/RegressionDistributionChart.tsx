@@ -21,13 +21,17 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
+import _ from "lodash";
 import React from "react";
 
+import { IBoxChartState } from "./BoxChartState";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IRegressionDistributionChartProps {
   cohorts: ErrorCohort[];
   onChooseCohorts: () => void;
+  boxPlotState: IBoxChartState;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
 }
 
 interface IRegressionDistributionChartState {
@@ -35,6 +39,24 @@ interface IRegressionDistributionChartState {
   newlySelectedTargetOption?: IChoiceGroupOption;
   targetFlyoutIsVisible: boolean;
 }
+
+const targetOptions: IChoiceGroupOption[] = [
+  {
+    key: JointDataset.PredictedYLabel,
+    text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
+      .predictedY
+  },
+  {
+    key: JointDataset.TrueYLabel,
+    text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
+      .trueY
+  },
+  {
+    key: JointDataset.RegressionError,
+    text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
+      .error
+  }
+];
 
 export class RegressionDistributionChart extends React.Component<
   IRegressionDistributionChartProps,
@@ -44,20 +66,60 @@ export class RegressionDistributionChart extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  constructor(props: IRegressionDistributionChartProps) {
+  public constructor(props: IRegressionDistributionChartProps) {
     super(props);
     this.state = { targetFlyoutIsVisible: false };
   }
 
   public componentDidMount(): void {
     if (this.state.targetOption === undefined) {
-      const targetOptions = this.getTargetOptions();
-      if (targetOptions.length > 0) {
-        const firstOption = targetOptions[0];
-        this.setState({
-          newlySelectedTargetOption: firstOption,
-          targetOption: firstOption
-        });
+      const firstOption = targetOptions[0];
+      this.setState({
+        newlySelectedTargetOption: firstOption,
+        targetOption: firstOption
+      });
+    }
+  }
+
+  public async componentDidUpdate(
+    prevProps: IRegressionDistributionChartProps
+  ): Promise<void> {
+    if (
+      this.props.boxPlotState.boxPlotData.length === 0 ||
+      !_.isEqual(prevProps.cohorts, this.props.cohorts)
+    ) {
+      const targetOption = this.state.targetOption
+        ? this.state.targetOption?.key.toString()
+        : targetOptions[0].key.toString();
+      const boxPlotData = await Promise.all(
+        this.props.cohorts.map((cohort: ErrorCohort, index: number) => {
+          return calculateBoxPlotDataFromErrorCohort(
+            cohort,
+            index,
+            targetOption
+          );
+        })
+      );
+      const outlierData = boxPlotData
+        .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+        .map((outlierValues, cohortIndex) => {
+          return outlierValues?.map((val) => [cohortIndex, val]);
+        })
+        .filter((list) => list !== undefined)
+        .reduce((list1, list2) => {
+          if (list1 === undefined) {
+            return list2 ?? [];
+          }
+          if (list2 === undefined) {
+            return list1 ?? [];
+          }
+          return list1.concat(list2);
+        }, []);
+      if (
+        !_.isEqual(boxPlotData, this.props.boxPlotState.boxPlotData) ||
+        !_.isEqual(this.props.boxPlotState.outlierData, outlierData)
+      ) {
+        this.props.onBoxPlotStateUpdate({ boxPlotData, outlierData });
       }
     }
   }
@@ -71,8 +133,6 @@ export class RegressionDistributionChart extends React.Component<
     ) {
       return;
     }
-
-    const targetOptions = this.getTargetOptions();
 
     if (targetOptions.length === 0) {
       return React.Fragment;
@@ -89,123 +149,105 @@ export class RegressionDistributionChart extends React.Component<
       (cohort) => cohort.cohort.name
     );
 
-    const boxPlotData = this.props.cohorts.map((cohort, index) => {
-      return calculateBoxPlotDataFromErrorCohort(
-        cohort,
-        index,
-        this.state.targetOption!.key.toString()
-      );
-    });
-    const outlierData = boxPlotData
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierValues, cohortIndex) => {
-        return outlierValues?.map((val) => [cohortIndex, val]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1!.concat(list2!), []);
-
     return (
       <Stack
         tokens={{ childrenGap: "10px" }}
         id="modelOverviewRegressionDistributionChart"
       >
-        <Stack horizontal>
-          {!noCohortSelected && (
-            <Stack.Item className={classNames.verticalAxis}>
-              <DefaultButton
-                id="modelOverviewRegressionDistributionBoxChartCohortSelectionButton"
-                className={classNames.rotatedVerticalBox}
-                text={
-                  localization.ModelAssessment.ModelOverview
-                    .cohortSelectionButton
-                }
-                onClick={this.props.onChooseCohorts}
-              />
-            </Stack.Item>
+        {!noCohortSelected && (
+          <Stack.Item className={classNames.cohortSelectionButton}>
+            <DefaultButton
+              id="modelOverviewRegressionDistributionBoxChartCohortSelectionButton"
+              text={
+                localization.ModelAssessment.ModelOverview.cohortSelectionButton
+              }
+              onClick={this.props.onChooseCohorts}
+            />
+          </Stack.Item>
+        )}
+        <Stack.Item className={classNames.chart}>
+          {noCohortSelected && (
+            <div className={classNames.placeholderText}>
+              <Text>
+                {localization.ModelAssessment.ModelOverview.boxPlotPlaceholder}
+              </Text>
+            </div>
           )}
-          <Stack.Item className={classNames.chart}>
-            {noCohortSelected && (
-              <div className={classNames.placeholderText}>
-                <Text>
-                  {
-                    localization.ModelAssessment.ModelOverview
-                      .boxPlotPlaceholder
-                  }
-                </Text>
-              </div>
-            )}
-            {!noCohortSelected && (
-              <Stack>
-                <BasicHighChart
-                  id={"RegressionDistributionBoxChart"}
-                  theme={theme}
-                  configOverride={{
-                    chart: {
-                      height: this.props.cohorts.length * 40 + 120,
-                      inverted: true,
+          {!noCohortSelected && (
+            <Stack>
+              <BasicHighChart
+                id={"RegressionDistributionBoxChart"}
+                theme={theme}
+                configOverride={{
+                  chart: {
+                    height: this.props.cohorts.length * 40 + 120,
+                    inverted: true,
+                    type: "boxplot"
+                  },
+                  plotOptions: {
+                    bar: {
+                      dataLabels: {
+                        enabled: true
+                      }
+                    }
+                  },
+                  series: [
+                    {
+                      data: this.props.boxPlotState.boxPlotData.map(
+                        (boxData) => boxData as PointOptionsObject
+                      ),
+                      fillColor: theme.semanticColors.inputBackgroundChecked,
+                      name: localization.ModelAssessment.ModelOverview.BoxPlot
+                        .boxPlotSeriesLabel,
                       type: "boxplot"
                     },
-                    plotOptions: {
-                      bar: {
-                        dataLabels: {
-                          enabled: true
+                    {
+                      data: this.props.boxPlotState.outlierData,
+                      name: localization.ModelAssessment.ModelOverview.BoxPlot
+                        .outlierLabel,
+                      tooltip: {
+                        pointFormatter(): string {
+                          return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
                         }
-                      }
-                    },
-                    series: [
-                      {
-                        data: boxPlotData.map(
-                          (boxData) => boxData as PointOptionsObject
-                        ),
-                        fillColor: theme.semanticColors.inputBackgroundChecked,
-                        name: localization.ModelAssessment.ModelOverview.BoxPlot
-                          .boxPlotSeriesLabel,
-                        type: "boxplot"
                       },
-                      {
-                        data: outlierData,
-                        name: localization.ModelAssessment.ModelOverview.BoxPlot
-                          .outlierLabel,
-                        tooltip: {
-                          pointFormatter() {
-                            return `${localization.ModelAssessment.ModelOverview.BoxPlot.outlierProbability}: <b>${this.y}</b>`;
-                          }
-                        },
-                        type: "scatter"
-                      }
-                    ],
-                    xAxis: {
-                      categories: selectedCohortNames
-                    },
-                    yAxis: {
-                      title: { text: this.state.targetOption!.text }
+                      type: "scatter"
                     }
-                  }}
-                />
+                  ],
+                  xAxis: {
+                    categories: selectedCohortNames
+                  },
+                  yAxis: {
+                    title: {
+                      text: this.state.targetOption
+                        ? this.state.targetOption.text
+                        : targetOptions[0].text
+                    }
+                  }
+                }}
+              />
 
-                <Stack.Item className={classNames.horizontalAxis}>
-                  <DefaultButton
-                    id="modelOverviewRegressionDistributionChartLabelSelectionButton"
-                    text={
-                      localization.ModelAssessment.ModelOverview
-                        .regressionTargetSelectionButton
-                    }
-                    onClick={() =>
-                      this.setState({
-                        targetFlyoutIsVisible: true
-                      })
-                    }
-                  />
-                </Stack.Item>
-              </Stack>
-            )}
-          </Stack.Item>
-        </Stack>
+              <Stack.Item className={classNames.horizontalAxis}>
+                <DefaultButton
+                  id="modelOverviewRegressionDistributionChartLabelSelectionButton"
+                  text={
+                    localization.ModelAssessment.ModelOverview
+                      .regressionTargetSelectionButton
+                  }
+                  onClick={(): void =>
+                    this.setState({
+                      targetFlyoutIsVisible: true
+                    })
+                  }
+                />
+              </Stack.Item>
+            </Stack>
+          )}
+        </Stack.Item>
         <Panel
           id="modelOverviewRegressionDistributionChartLabelSelectionFlyout"
           isOpen={this.state.targetFlyoutIsVisible}
           closeButtonAriaLabel="Close"
-          onDismiss={() => {
+          onDismiss={(): void => {
             this.setState({ targetFlyoutIsVisible: false });
           }}
           onRenderFooterContent={this.onRenderFooterContent}
@@ -227,21 +269,22 @@ export class RegressionDistributionChart extends React.Component<
     );
   }
 
-  private onRenderFooterContent = () => {
+  private onRenderFooterContent = (): JSX.Element => {
     return (
       <Stack horizontal tokens={{ childrenGap: "10px" }}>
         <PrimaryButton
-          onClick={() => {
-            if (this.state.newlySelectedTargetOption)
+          onClick={(): void => {
+            if (this.state.newlySelectedTargetOption) {
               this.setState({
                 targetFlyoutIsVisible: false,
                 targetOption: this.state.newlySelectedTargetOption
               });
+            }
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigApply}
         />
         <DefaultButton
-          onClick={() => {
+          onClick={(): void => {
             this.setState({ targetFlyoutIsVisible: false });
           }}
           text={localization.ModelAssessment.ModelOverview.chartConfigCancel}
@@ -258,24 +301,4 @@ export class RegressionDistributionChart extends React.Component<
       this.setState({ newlySelectedTargetOption: item });
     }
   };
-
-  private getTargetOptions(): IChoiceGroupOption[] {
-    return [
-      {
-        key: JointDataset.PredictedYLabel,
-        text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
-          .predictedY
-      },
-      {
-        key: JointDataset.TrueYLabel,
-        text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
-          .trueY
-      },
-      {
-        key: JointDataset.RegressionError,
-        text: localization.ModelAssessment.ModelOverview.regressionTargetOptions
-          .error
-      }
-    ];
-  }
 }

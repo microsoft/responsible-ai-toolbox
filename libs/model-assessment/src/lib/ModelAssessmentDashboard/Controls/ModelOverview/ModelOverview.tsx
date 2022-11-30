@@ -38,6 +38,7 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
+import { IBoxChartState } from "./BoxChartState";
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
 import { DatasetCohortStatsTable } from "./DatasetCohortStatsTable";
@@ -47,7 +48,6 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
-import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
 import { RegressionDistributionChart } from "./RegressionDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
@@ -57,7 +57,8 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
-  boxPlotState: IProbabilityDistributionBoxChartState;
+  probabilityDistributionBoxPlotState: IBoxChartState;
+  regressionDistributionBoxPlotState: IBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -92,13 +93,20 @@ export class ModelOverview extends React.Component<
   public constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      boxPlotState: { boxPlotData: [], outlierData: undefined },
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
       featureConfigurationIsVisible: false,
       maxCohortId: 0,
       metricConfigurationIsVisible: false,
+      probabilityDistributionBoxPlotState: {
+        boxPlotData: [],
+        outlierData: undefined
+      },
+      regressionDistributionBoxPlotState: {
+        boxPlotData: [],
+        outlierData: undefined
+      },
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetric: "",
@@ -500,8 +508,12 @@ export class ModelOverview extends React.Component<
                     onChooseCohorts={this.onChooseCohorts}
                     cohorts={chartCohorts}
                     telemetryHook={this.props.telemetryHook}
-                    boxPlotState={this.state.boxPlotState}
-                    onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
+                    boxPlotState={
+                      this.state.probabilityDistributionBoxPlotState
+                    }
+                    onBoxPlotStateUpdate={
+                      this.onProbabilityDistributionBoxPlotStateUpdate
+                    }
                     onToggleChange={this.onSplineToggleChange}
                     showSplineChart={this.state.showSplineChart}
                   />
@@ -518,6 +530,10 @@ export class ModelOverview extends React.Component<
                   <RegressionDistributionChart
                     onChooseCohorts={this.onChooseCohorts}
                     cohorts={chartCohorts}
+                    onBoxPlotStateUpdate={
+                      this.onRegressionDistributionBoxPlotStateUpdate
+                    }
+                    boxPlotState={this.state.regressionDistributionBoxPlotState}
                   />
                 </PivotItem>
               )}
@@ -547,11 +563,23 @@ export class ModelOverview extends React.Component<
     this.setState({ showSplineChart: checked });
   };
 
-  private onBoxPlotStateUpdate = (
-    boxPlotState: IProbabilityDistributionBoxChartState
+  private onProbabilityDistributionBoxPlotStateUpdate = (
+    boxPlotState: IBoxChartState
   ): void => {
-    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
-      this.setState({ boxPlotState });
+    if (
+      !_.isEqual(this.state.probabilityDistributionBoxPlotState, boxPlotState)
+    ) {
+      this.setState({ probabilityDistributionBoxPlotState: boxPlotState });
+    }
+  };
+
+  private onRegressionDistributionBoxPlotStateUpdate = (
+    boxPlotState: IBoxChartState
+  ): void => {
+    if (
+      !_.isEqual(this.state.regressionDistributionBoxPlotState, boxPlotState)
+    ) {
+      this.setState({ regressionDistributionBoxPlotState: boxPlotState });
     }
   };
 

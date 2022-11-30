@@ -23,20 +23,16 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
+import { IBoxChartState } from "./BoxChartState";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-import {
-  IProbabilityDistributionBoxChartState,
-  ProbabilityDistributionBoxChart
-} from "./ProbabilityDistributionBoxChart";
+import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
-  boxPlotState: IProbabilityDistributionBoxChartState;
+  boxPlotState: IBoxChartState;
   cohorts: ErrorCohort[];
   showSplineChart: boolean;
-  onBoxPlotStateUpdate: (
-    boxPlotState: IProbabilityDistributionBoxChartState
-  ) => void;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
   onChooseCohorts: () => void;
   onToggleChange: (checked: boolean) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;

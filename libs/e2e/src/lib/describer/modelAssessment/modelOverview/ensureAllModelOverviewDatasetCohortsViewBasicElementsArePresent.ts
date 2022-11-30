@@ -83,8 +83,8 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   );
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
-  if (datasetShape.isRegression || datasetShape.isMulticlass) {
-    // when there are 1 pivot item, with overflow, it will have a hidden overflow button, so the length is 2
+  if (datasetShape.isMulticlass) {
+    // 1 button and 1 hidden overflow button, 2 total
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
       "not.exist"
@@ -119,9 +119,19 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
         .first()
         .should("have.attr", "aria-label", expectedAriaLabel);
     }
+  } else if (datasetShape.isRegression) {
+    // 2 buttons and 1 hidden overflow button, 3 total
+    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
+    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("exist");
+      cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
+        "not.exist"
+      );
   } else {
+    // binary classification (not multiclass, not regression)
+    // 2 buttons and 1 hidden overflow button, 3 total
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
+    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("not.exist");
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
   }
 }
