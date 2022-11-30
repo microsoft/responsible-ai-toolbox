@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ITheme } from "@fluentui/react";
 import { SeriesOptionsType } from "highcharts";
 import _ from "lodash";
 
+import { getChartColors } from "../Highchart/ChartColors";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
 import { IHighchartsConfig } from "../Highchart/IHighchartsConfig";
 
-import { FabricStyles } from "./FabricStyles";
 import { getBoxData } from "./getBoxData";
 
 export function getFeatureImportanceBoxOptions(
@@ -15,8 +16,10 @@ export function getFeatureImportanceBoxOptions(
   unsortedX: string[],
   unsortedSeries: IGlobalSeries[],
   topK: number,
+  theme: ITheme,
   onFeatureSelection?: (seriesIndex: number, featureIndex: number) => void
 ): IHighchartsConfig {
+  const chartColors = getChartColors(theme);
   const xText = sortArray.map((i) => unsortedX[i]);
   const boxTempData: any = [];
   let yAxisMin = Infinity;
@@ -35,7 +38,7 @@ export function getFeatureImportanceBoxOptions(
     const curMin = _.min(y) || 0;
     yAxisMin = Math.min(yAxisMin, curMin);
     boxTempData.push({
-      color: FabricStyles.fabricColorPalette[series.colorIndex],
+      color: chartColors[series.colorIndex],
       name: series.name,
       x,
       y
@@ -62,7 +65,7 @@ export function getFeatureImportanceBoxOptions(
       boxplot: {
         point: {
           events: {
-            click() {
+            click(): void {
               if (onFeatureSelection === undefined) {
                 return;
               }

@@ -3,15 +3,19 @@
 
 import time
 
-from common_utils import (create_binary_classification_dataset,
-                          create_cancer_data, create_housing_data,
-                          create_iris_data, create_models_classification,
-                          create_models_regression, create_simple_titanic_data,
-                          create_sklearn_random_forest_regressor,
-                          create_titanic_pipeline, replicate_dataset)
+import numpy as np
+from common_utils import replicate_dataset
 
 from erroranalysis._internal.constants import ModelTask
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
+from rai_test_utils.datasets.tabular import (
+    create_binary_classification_dataset, create_cancer_data,
+    create_housing_data, create_iris_data, create_simple_titanic_data)
+from rai_test_utils.models.lightgbm import create_lightgbm_classifier
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
+from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_regressor, create_titanic_pipeline)
 
 TOL = 1e-10
 
@@ -90,6 +94,20 @@ class TestImportances(object):
         # assert we don't take too long and downsample the dataset
         # note execution time is in seconds
         assert execution_time < 20
+
+    def test_importances_missings(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        # add missing values to X_test
+        for i in range(5, 10):
+            X_test.iloc[i, 0] = np.nan
+            X_test.iloc[i + 5, 2] = np.nan
+
+        model = create_lightgbm_classifier(X_train, y_train)
+
+        categorical_features = []
+        run_error_analyzer(model, X_test, y_test, feature_names,
+                           categorical_features)
 
 
 def run_error_analyzer(model, X_test, y_test, feature_names,

@@ -135,7 +135,7 @@ export class TabularDataView extends React.Component<
                     : SelectionMode.multiple
                 }
                 selection={this._selection}
-                onItemInvoked={this.onItemInvoked.bind(this)}
+                onItemInvoked={this.onItemInvoked}
               />
             </MarqueeSelection>
           </ScrollablePane>
@@ -167,7 +167,7 @@ export class TabularDataView extends React.Component<
         cohortData,
         this.props.jointDataset,
         viewedRows,
-        this.tabularDataFilter.bind(this),
+        this.tabularDataFilter,
         this.props.allSelectedIndexes
       );
     }
@@ -209,11 +209,11 @@ export class TabularDataView extends React.Component<
     return keys;
   }
 
-  private onItemInvoked(item: any): void {
+  private onItemInvoked = (item: any): void => {
     this.props.setWhatIfDatapoint?.(item[0] as number);
-  }
+  };
 
-  private tabularDataFilter(row: { [key: string]: number }): boolean {
+  private tabularDataFilter = (row: { [key: string]: number }): boolean => {
     switch (this.props.dataView) {
       case DataViewKeys.CorrectInstances: {
         if (
@@ -236,5 +236,5 @@ export class TabularDataView extends React.Component<
         break;
     }
     return false;
-  }
+  };
 }

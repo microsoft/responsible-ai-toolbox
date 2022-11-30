@@ -13,8 +13,11 @@ import {
   buildGlobalProperties,
   buildIndexedNames,
   getClassLength,
-  getModelType,
-  MetricCohortStats
+  getModelTypeFromExplanation,
+  getModelTypeFromTextExplanation,
+  MetricCohortStats,
+  DatasetTaskType,
+  ModelTypes
 } from "@responsible-ai/core-ui";
 import { ErrorAnalysisOptions } from "@responsible-ai/error-analysis";
 import { localization } from "@responsible-ai/localization";
@@ -48,6 +51,7 @@ export function buildInitialModelAssessmentContext(
   }
   const jointDataset = new JointDataset({
     dataset: props.dataset.features,
+    featureMetaData: props.dataset.feature_metadata,
     localExplanations,
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
@@ -112,6 +116,7 @@ export function buildInitialModelAssessmentContext(
     jointDataset,
     modelChartConfig: undefined,
     modelMetadata,
+    onAddMessage: "",
     saveCohortVisible: false,
     selectedCohort: cohorts[0],
     selectedWhatIfIndex: undefined,
@@ -119,14 +124,47 @@ export function buildInitialModelAssessmentContext(
   };
 }
 
+function getModelTypeFromProps(
+  props: IModelAssessmentDashboardProps,
+  classNames: string[] | undefined
+): ModelTypes {
+  let modelType: ModelTypes = ModelTypes.Multiclass;
+  if (props.dataset.task_type === DatasetTaskType.Regression) {
+    modelType = ModelTypes.Regression;
+  } else if (props.dataset.task_type === DatasetTaskType.Classification) {
+    modelType = getModelTypeFromExplanation(
+      props.modelExplanationData?.[0]?.precomputedExplanations,
+      props.dataset.probability_y
+    );
+  }
+  if (props.dataset.task_type === DatasetTaskType.ImageClassification) {
+    if (classNames && classNames.length === 2) {
+      modelType = ModelTypes.ImageBinary;
+    } else {
+      modelType = ModelTypes.ImageMulticlass;
+    }
+  } else if (props.dataset.task_type === DatasetTaskType.TextClassification) {
+    if (classNames) {
+      if (classNames.length === 2) {
+        modelType = ModelTypes.TextBinary;
+      } else {
+        modelType = ModelTypes.TextMulticlass;
+      }
+    } else {
+      getModelTypeFromTextExplanation(
+        props.modelExplanationData?.[0]?.precomputedExplanations,
+        props.dataset.probability_y
+      );
+    }
+  }
+  return modelType;
+}
+
 function buildModelMetadata(
   props: IModelAssessmentDashboardProps
 ): IExplanationModelMetadata {
-  const modelType = getModelType(
-    props.dataset.task_type === "regression" ? "regressor" : "classifier",
-    props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.dataset.probability_y
-  );
+  let classNames = props.dataset.class_names;
+  const modelType = getModelTypeFromProps(props, classNames);
   let featureNames = props.dataset.feature_names;
   let featureNamesAbridged: string[];
   const maxLength = 18;
@@ -183,15 +221,20 @@ function buildModelMetadata(
     );
     featureNamesAbridged = featureNames;
   }
-  let classNames = props.dataset.class_names;
-  const classLength = getClassLength(
-    props.modelExplanationData?.[0]?.precomputedExplanations,
-    props.dataset.probability_y
-  );
-  if (!classNames || classNames.length !== classLength) {
-    classNames = buildIndexedNames(
-      classLength,
-      localization.ErrorAnalysis.defaultClassNames
+  if (modelType !== ModelTypes.ImageMulticlass) {
+    const classLength = getClassLength(
+      props.modelExplanationData?.[0]?.precomputedExplanations,
+      props.dataset.probability_y
+    );
+    if (!classNames || classNames.length !== classLength) {
+      classNames = buildIndexedNames(
+        classLength,
+        localization.ErrorAnalysis.defaultClassNames
+      );
+    }
+  } else if (!classNames) {
+    throw new Error(
+      "Invalid input data for image classification, class names required."
     );
   }
   const featureIsCategorical = ModelMetadata.buildIsCategorical(

@@ -1,11 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const newModelOverviewExperienceFlight = "newModelOverviewExperience";
+export const dataBalanceExperienceFlight = "dataBalanceExperience";
+export const newSdkEndpointsFlight = "newSdkEndpoints";
 export const featureFlightSeparator = "&";
 
 // add more entries for new feature flights
-export const featureFlights = [newModelOverviewExperienceFlight];
+export const featureFlights = [
+  dataBalanceExperienceFlight,
+  newSdkEndpointsFlight
+];
 
 export function parseFeatureFlights(featureFlights?: string): string[] {
   if (featureFlights) {

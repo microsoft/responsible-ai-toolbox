@@ -6,7 +6,7 @@ import {
   PartialRequired,
   JointDataset,
   ChartTypes,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty, AccessibleChart } from "@responsible-ai/mlchartlib";
@@ -141,21 +141,21 @@ export class FeatureImportanceBar extends React.PureComponent<
         showlegend: false,
         xaxis: {
           automargin: true,
-          color: FabricStyles.chartAxisColor,
+          color: FluentUIStyles.chartAxisColor,
           showgrid: false,
           tickfont: {
-            color: FabricStyles.chartAxisColor,
+            color: FluentUIStyles.chartAxisColor,
             family: "Roboto, Helvetica Neue, sans-serif",
             size: 11
           }
         },
         yaxis: {
           automargin: true,
-          color: FabricStyles.chartAxisColor,
+          color: FluentUIStyles.chartAxisColor,
           gridcolor: "#e5e5e5",
           showgrid: true,
           tickfont: {
-            color: FabricStyles.chartAxisColor,
+            color: FluentUIStyles.chartAxisColor,
             family: "Roboto, Helvetica Neue, sans-serif",
             size: 11
           },
@@ -205,8 +205,8 @@ export class FeatureImportanceBar extends React.PureComponent<
             color: sortedIndexVector.map((index) =>
               index === this.props.selectedFeatureIndex &&
               seriesIndex === this.props.selectedSeriesIndex
-                ? FabricStyles.fabricColorPalette[series.colorIndex]
-                : FabricStyles.fabricColorPalette[series.colorIndex]
+                ? FluentUIStyles.fluentUIColorPalette[series.colorIndex]
+                : FluentUIStyles.fluentUIColorPalette[series.colorIndex]
             )
           },
           name: series.name,
@@ -235,7 +235,7 @@ export class FeatureImportanceBar extends React.PureComponent<
         baseSeries.data.push({
           boxmean: true,
           marker: {
-            color: FabricStyles.fabricColorPalette[series.colorIndex]
+            color: FluentUIStyles.fluentUIColorPalette[series.colorIndex]
           },
           name: series.name,
           type: "box",

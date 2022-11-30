@@ -14,10 +14,11 @@ export class BarChart extends React.PureComponent<IChartProps> {
    * Returns an accessible bar chart from highchart
    */
   public render(): React.ReactNode {
+    const theme = getTheme();
     return (
       <BasicHighChart
-        configOverride={getTokenImportancesChartOptions(this.props)}
-        theme={getTheme()}
+        configOverride={getTokenImportancesChartOptions(this.props, theme)}
+        theme={theme}
         id="TextExplanationChart"
       />
     );

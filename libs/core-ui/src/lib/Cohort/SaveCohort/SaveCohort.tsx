@@ -122,14 +122,14 @@ export class SaveCohort extends React.Component<
   private updateCohortName = (
     _: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
-  ) => {
+  ): void => {
     if (!newValue) {
       newValue = "";
     }
     this.setState({ cohortName: newValue });
   };
 
-  private saveCohort = (switchNew?: boolean) => {
+  private saveCohort = (switchNew?: boolean): void => {
     const tempCohort = this.props.temporaryCohort;
     const savedCohort = new ErrorCohort(
       new Cohort(

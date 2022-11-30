@@ -13,9 +13,10 @@ import {
 } from "@fluentui/react";
 import {
   IExplanationContext,
+  IsMulticlass,
   ModelTypes,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import {
@@ -92,8 +93,7 @@ export class Violin extends React.PureComponent<
       }
       plotlyProps.data = computedSeries;
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static buildViolinPlotlyProps: (
@@ -143,8 +143,8 @@ export class Violin extends React.PureComponent<
             singleSeries.offsetgroup = className;
             singleSeries.line = {
               color:
-                FabricStyles.plotlyColorPalette[
-                  classIndex % FabricStyles.plotlyColorPalette.length
+                FluentUIStyles.plotlyColorPalette[
+                  classIndex % FluentUIStyles.plotlyColorPalette.length
                 ]
             };
             if (classIndex >= Violin.maxDefaultSeries) {
@@ -169,8 +169,7 @@ export class Violin extends React.PureComponent<
         plotlyProps.layout.showlegend = false;
       }
       return plotlyProps;
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static getClassesArray: (
@@ -189,8 +188,7 @@ export class Violin extends React.PureComponent<
         default:
           return new Array(data.localExplanation?.values.length).fill(0);
       }
-    },
-    _.isEqual.bind(window)
+    }
   );
 
   private static violinPlotlyProps: IPlotlyProperty = {
@@ -336,6 +334,8 @@ export class Violin extends React.PureComponent<
         -0.5,
         this.props.config.topK - 0.5
       ]);
+      const modelMetadata =
+        this.props.dashboardContext.explanationContext.modelMetadata;
       return (
         <div className={violinStyles.aggregateChart}>
           <div className={violinStyles.topControls}>
@@ -347,10 +347,9 @@ export class Violin extends React.PureComponent<
               options={this.props.chartTypeOptions || []}
               ariaLabel={"chart type picker"}
               useComboBoxAsMenuWidth
-              styles={FabricStyles.smallDropdownStyle}
+              styles={FluentUIStyles.smallDropdownStyle}
             />
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType !== ModelTypes.Regression &&
+            {modelMetadata.modelType !== ModelTypes.Regression &&
               this.groupByOptions.length > 1 && (
                 <ComboBox
                   label={localization.Interpret.Violin.groupBy}
@@ -360,7 +359,7 @@ export class Violin extends React.PureComponent<
                   options={this.groupByOptions}
                   ariaLabel={"chart type picker"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               )}
             <div className={violinStyles.sliderControl}>
@@ -383,8 +382,7 @@ export class Violin extends React.PureComponent<
                 className={violinStyles.featureSlider}
                 max={Math.min(
                   Violin.maxFeatures,
-                  this.props.dashboardContext.explanationContext.modelMetadata
-                    .featureNames.length
+                  modelMetadata.featureNames.length
                 )}
                 min={1}
                 step={1}
@@ -393,8 +391,7 @@ export class Violin extends React.PureComponent<
                 showValue
               />
             </div>
-            {this.props.dashboardContext.explanationContext.modelMetadata
-              .modelType === ModelTypes.Multiclass && (
+            {IsMulticlass(modelMetadata.modelType) && (
               <div>
                 <div className={violinStyles.selectorLabel}>
                   <span className={violinStyles.selectorSpan}>
@@ -418,7 +415,7 @@ export class Violin extends React.PureComponent<
                   options={weightContext.options}
                   ariaLabel={"Cross-class weighting selector"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               </div>
             )}
@@ -583,8 +580,10 @@ export class Violin extends React.PureComponent<
                 .globalImportanceExplanation
             }
           </span>
-          {this.props.dashboardContext.explanationContext.modelMetadata
-            .modelType === ModelTypes.Multiclass && (
+          {IsMulticlass(
+            this.props.dashboardContext.explanationContext.modelMetadata
+              .modelType
+          ) && (
             <span>
               {
                 localization.Interpret.FeatureImportanceWrapper

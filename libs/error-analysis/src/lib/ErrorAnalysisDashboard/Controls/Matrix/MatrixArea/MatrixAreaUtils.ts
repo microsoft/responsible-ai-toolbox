@@ -7,6 +7,7 @@ import {
   FilterMethods,
   JointDataset,
   ErrorCohort,
+  Cohort,
   Metrics,
   MetricCohortStats,
   IErrorAnalysisMatrix,
@@ -47,11 +48,11 @@ export async function fetchMatrix(
   ) {
     return undefined;
   }
-  const filtersRelabeled = ErrorCohort.getLabeledFilters(
+  const filtersRelabeled = Cohort.getLabeledFilters(
     baseCohort.cohort.filters,
     baseCohort.jointDataset
   );
-  const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+  const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
     baseCohort.cohort.compositeFilters,
     baseCohort.jointDataset
   );

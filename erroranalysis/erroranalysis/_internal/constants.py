@@ -64,18 +64,21 @@ class MatrixParams:
 class Metrics(str, Enum):
     """Provide the supported error analysis metrics.
 
-    The regression metrics are 'mean_absolute_error',
-    'mean_squared_error', 'median_absolute_error',
-    and 'r2_score'.  The binary classification
-    metrics are 'f1_score', 'precision_score',
-    'recall_score', 'accuracy_score' and
-    'error_rate'. The multiclass classification
+    The regression metrics are 'mean_prediction',
+    'mean_absolute_error', 'mean_squared_error',
+    'median_absolute_error' and 'r2_score'.
+    The binary classification metrics are
+    'f1_score', 'precision_score',
+    'recall_score', 'accuracy_score', 'error_rate',
+    'false negative rate', 'false positive rate' and
+    'selection rate'. The multiclass classification
     metrics are 'macro_precision_score',
     'micro_precision_score', 'macro_recall_score',
-    'micro_recall_score', 'f1_score',
-    'accuracy_score' and 'error_rate'.
+    'micro_recall_score', 'macro_f1_score',
+    'micro_f1_score', 'accuracy_score' and 'error_rate'.
     """
     ACCURACY_SCORE = 'accuracy_score'
+    MEAN_PREDICTION = 'mean_prediction'
     MEAN_ABSOLUTE_ERROR = 'mean_absolute_error'
     MEAN_SQUARED_ERROR = 'mean_squared_error'
     MEDIAN_ABSOLUTE_ERROR = 'median_absolute_error'
@@ -90,6 +93,9 @@ class Metrics(str, Enum):
     MACRO_RECALL_SCORE = 'macro_recall_score'
     MICRO_RECALL_SCORE = 'micro_recall_score'
     ERROR_RATE = 'error_rate'
+    FALSE_POSITIVE_RATE = 'false_positive_rate'
+    FALSE_NEGATIVE_RATE = 'false_negative_rate'
+    SELECTION_RATE = 'selection_rate'
 
 
 class MetricKeys(str, Enum):
@@ -117,6 +123,7 @@ class TreeNode(str, Enum):
 
 metric_to_display_name = {
     Metrics.ACCURACY_SCORE: 'Accuracy score',
+    Metrics.MEAN_PREDICTION: 'Mean prediction',
     Metrics.MEAN_ABSOLUTE_ERROR: 'Mean absolute error',
     Metrics.MEAN_SQUARED_ERROR: 'Mean squared error',
     Metrics.MEDIAN_ABSOLUTE_ERROR: 'Median absolute error',
@@ -130,7 +137,10 @@ metric_to_display_name = {
     Metrics.RECALL_SCORE: 'Recall score',
     Metrics.MACRO_RECALL_SCORE: 'Macro recall score',
     Metrics.MICRO_RECALL_SCORE: 'Micro recall score',
-    Metrics.ERROR_RATE: 'Error rate'
+    Metrics.ERROR_RATE: 'Error rate',
+    Metrics.FALSE_POSITIVE_RATE: 'False positive rate',
+    Metrics.FALSE_NEGATIVE_RATE: 'False negative rate',
+    Metrics.SELECTION_RATE: 'Selection rate'
 }
 
 
@@ -156,3 +166,31 @@ recall_metrics = {Metrics.RECALL_SCORE,
 f1_metrics = {Metrics.F1_SCORE,
               Metrics.MACRO_F1_SCORE,
               Metrics.MICRO_F1_SCORE}
+
+
+binary_classification_metrics = [
+    Metrics.ACCURACY_SCORE,
+    Metrics.F1_SCORE, Metrics.PRECISION_SCORE,
+    Metrics.RECALL_SCORE, Metrics.ERROR_RATE,
+    Metrics.FALSE_POSITIVE_RATE,
+    Metrics.FALSE_NEGATIVE_RATE,
+    Metrics.SELECTION_RATE]
+
+
+regression_metrics = [
+    Metrics.MEAN_PREDICTION,
+    Metrics.MEAN_ABSOLUTE_ERROR,
+    Metrics.MEAN_SQUARED_ERROR,
+    Metrics.MEDIAN_ABSOLUTE_ERROR,
+    Metrics.R2_SCORE]
+
+
+multiclass_classification_metrics = [
+    Metrics.MACRO_PRECISION_SCORE,
+    Metrics.MICRO_PRECISION_SCORE,
+    Metrics.MACRO_RECALL_SCORE,
+    Metrics.MICRO_RECALL_SCORE,
+    Metrics.MACRO_F1_SCORE,
+    Metrics.MICRO_F1_SCORE,
+    Metrics.ACCURACY_SCORE,
+    Metrics.ERROR_RATE]

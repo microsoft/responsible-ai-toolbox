@@ -4,6 +4,7 @@
 import {
   Callout,
   Dropdown,
+  FocusZone,
   IconButton,
   IDropdownOption,
   PrimaryButton,
@@ -48,6 +49,7 @@ export class AddTabButton extends React.Component<
             iconProps={{ iconName: "CircleAdditionSolid" }}
             onClick={this.toggleIsCalloutVisible}
             className={style.button}
+            ariaLabel={localization.ModelAssessment.AddingTab.CalloutTitle}
           />
           {this.state.isCalloutVisible && (
             <Callout
@@ -56,9 +58,17 @@ export class AddTabButton extends React.Component<
               role="status"
               aria-live="assertive"
               className={style.callout}
+              setInitialFocus
             >
-              <Stack tokens={{ childrenGap: "l1" }}>
-                {localization.ModelAssessment.AddingTab.CalloutContent}
+              <Stack
+                tokens={{ childrenGap: "l1" }}
+                className={style.calloutContent}
+              >
+                <FocusZone>
+                  <div data-is-focusable>
+                    {localization.ModelAssessment.AddingTab.CalloutContent}
+                  </div>
+                </FocusZone>
                 <Dropdown
                   options={this.props.availableTabs}
                   onChange={this.onChange}

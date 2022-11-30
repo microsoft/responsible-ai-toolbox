@@ -3,9 +3,10 @@
 
 import json5 from "json5";
 
-import { config } from "./config";
+import { IAppConfig } from "./config";
 
 export async function callFlaskService<TRequest, TResponse>(
+  config: Pick<IAppConfig, "baseUrl" | "withCredentials">,
   data: TRequest,
   urlPath: string,
   abortSignal?: AbortSignal

@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { IGenericChartProps } from "@responsible-ai/core-ui";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
 
 export function getIndividualChartOptions(
   plotlyProperty: IPlotlyProperty,
+  chartProps?: IGenericChartProps,
   onClickHandler?: (data: any) => void
 ): any {
   let template = "";
@@ -53,7 +55,7 @@ export function getIndividualChartOptions(
         cursor: "pointer",
         point: {
           events: {
-            click() {
+            click(): void {
               if (onClickHandler === undefined) {
                 return;
               }
@@ -63,6 +65,12 @@ export function getIndividualChartOptions(
         }
       }
     },
-    series
+    series,
+    xAxis: {
+      type: chartProps?.xAxis.type
+    },
+    yAxis: {
+      type: chartProps?.yAxis.type
+    }
   };
 }

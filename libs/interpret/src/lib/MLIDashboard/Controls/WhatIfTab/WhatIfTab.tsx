@@ -22,7 +22,7 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  FabricStyles,
+  FluentUIStyles,
   InteractiveLegend,
   rowErrorSize,
   getFeatureOptions,
@@ -92,7 +92,8 @@ export class WhatIfTab extends React.PureComponent<
   private customDatapoints: any[][] = [];
   private testableDatapoints: any[][] = [];
   private temporaryPoint: { [key: string]: any } | undefined;
-  private testableDatapointColors: string[] = FabricStyles.fabricColorPalette;
+  private testableDatapointColors: string[] =
+    FluentUIStyles.fluentUIColorPalette;
   private testableDatapointNames: string[] = [];
   private rowOptions: IDropdownOption[] | undefined;
 
@@ -126,7 +127,7 @@ export class WhatIfTab extends React.PureComponent<
     this.createCopyOfFirstRow();
     this.buildRowOptions(0);
 
-    this.fetchData = _.debounce(this.fetchData.bind(this), 400);
+    this.fetchData = _.debounce(this.fetchData, 400);
 
     const featuresOption = getFeatureOptions(this.context.jointDataset);
 
@@ -235,7 +236,7 @@ export class WhatIfTab extends React.PureComponent<
         (_f, i) => this.state.pointIsActive[i]
       );
       const includedColors = this.includedFeatureImportance.map(
-        (item) => FabricStyles.fabricColorPalette[item.colorIndex]
+        (item) => FluentUIStyles.fluentUIColorPalette[item.colorIndex]
       );
       const includedNames = this.includedFeatureImportance.map(
         (item) => item.name
@@ -246,12 +247,12 @@ export class WhatIfTab extends React.PureComponent<
       const includedCustomRows = this.customDatapoints.filter((_f, i) => {
         if (this.state.pointIsActive[i]) {
           includedColors.push(
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + i + 1
             ]
           );
           includedColors.push(
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + i + 1
             ]
           );
@@ -366,7 +367,6 @@ export class WhatIfTab extends React.PureComponent<
               >
                 {this.state.yDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,
@@ -384,7 +384,6 @@ export class WhatIfTab extends React.PureComponent<
                 )}
                 {this.state.xDialogOpen && (
                   <AxisConfigDialog
-                    jointDataset={this.context.jointDataset}
                     orderedGroupTitles={[
                       ColumnCategories.Index,
                       ColumnCategories.Dataset,
@@ -479,7 +478,7 @@ export class WhatIfTab extends React.PureComponent<
                       (row, rowIndex) => {
                         return {
                           activated: this.state.pointIsActive[rowIndex],
-                          color: FabricStyles.fabricColorPalette[rowIndex],
+                          color: FluentUIStyles.fluentUIColorPalette[rowIndex],
                           index: rowIndex,
                           name: row.name,
                           onClick: this.toggleActivation,
@@ -514,7 +513,7 @@ export class WhatIfTab extends React.PureComponent<
                       return {
                         activated: this.state.customPointIsActive[rowIndex],
                         color:
-                          FabricStyles.fabricColorPalette[
+                          FluentUIStyles.fluentUIColorPalette[
                             rowIndex + WhatIfConstants.MAX_SELECTION + 1
                           ],
                         index: rowIndex,
@@ -629,7 +628,7 @@ export class WhatIfTab extends React.PureComponent<
       index
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -763,7 +762,7 @@ export class WhatIfTab extends React.PureComponent<
       indexes[0]
     );
     this.temporaryPoint[WhatIfConstants.colorPath] =
-      FabricStyles.fabricColorPalette[
+      FluentUIStyles.fluentUIColorPalette[
         WhatIfConstants.MAX_SELECTION + this.state.customPoints.length
       ];
     Object.keys(this.temporaryPoint).forEach((key) => {
@@ -890,7 +889,7 @@ export class WhatIfTab extends React.PureComponent<
   };
 
   // fetch prediction for temporary point
-  private fetchData(fetchingReference: { [key: string]: any }): void {
+  private fetchData = (fetchingReference: { [key: string]: any }): void => {
     if (!this.props.invokeModel) {
       return;
     }
@@ -943,7 +942,7 @@ export class WhatIfTab extends React.PureComponent<
         }
       }
     });
-  }
+  };
 
   private generatePlotlyProps(
     jointData: JointDataset,
@@ -960,9 +959,9 @@ export class WhatIfTab extends React.PureComponent<
         const selectionIndex =
           this.state.selectedPointsIndexes.indexOf(rowIndex);
         if (selectionIndex === -1) {
-          return FabricStyles.fabricColorInactiveSeries;
+          return FluentUIStyles.fabricColorInactiveSeries;
         }
-        return FabricStyles.fabricColorPalette[selectionIndex];
+        return FluentUIStyles.fluentUIColorPalette[selectionIndex];
       }) as any,
       size: 8,
       symbol: indexes.map((i) =>
@@ -974,7 +973,7 @@ export class WhatIfTab extends React.PureComponent<
       marker: {
         color: this.state.customPoints.map(
           (_, i) =>
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + i
             ]
         ),
@@ -991,7 +990,7 @@ export class WhatIfTab extends React.PureComponent<
         color: "rgba(0,0,0,0)",
         line: {
           color:
-            FabricStyles.fabricColorPalette[
+            FluentUIStyles.fluentUIColorPalette[
               WhatIfConstants.MAX_SELECTION + 1 + this.state.customPoints.length
             ],
           width: 2

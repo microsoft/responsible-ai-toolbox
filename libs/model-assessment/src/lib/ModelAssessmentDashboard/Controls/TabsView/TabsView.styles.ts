@@ -7,11 +7,14 @@ import {
   IProcessedStyleSet,
   getTheme
 } from "@fluentui/react";
+import { hideXxlUp } from "@responsible-ai/core-ui";
 
 export interface ITabsViewStyles {
   section: IStyle;
   sectionHeader: IStyle;
+  sectionTooltip: IStyle;
   buttonSection: IStyle;
+  stackStyle: IStyle;
 }
 
 export const tabsViewStyles: () => IProcessedStyleSet<ITabsViewStyles> = () => {
@@ -25,7 +28,29 @@ export const tabsViewStyles: () => IProcessedStyleSet<ITabsViewStyles> = () => {
     },
     sectionHeader: {
       color: theme.semanticColors.bodyText,
-      padding: "16px 24px 16px 40px"
+      display: "block",
+      overflow: "hidden",
+      padding: "16px 24px 16px 40px",
+      selectors: {
+        ":hover": {
+          height: "auto",
+          overflow: "visible",
+          whiteSpace: "normal"
+        }
+      },
+      textOverflow: "ellipsis"
+    },
+    sectionTooltip: {
+      display: "inline",
+      ...hideXxlUp
+    },
+    stackStyle: {
+      padding: "20px",
+      selectors: {
+        "@media screen and (max-width: 479px)": {
+          padding: "5px"
+        }
+      }
     }
   });
 };

@@ -3,6 +3,8 @@
 
 import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 
+import { fullLgDown } from "../util/getCommonStyles";
+
 export interface IFeatureImportanceBarStyles {
   chart: IStyle;
   chartWithVertical: IStyle;
@@ -21,7 +23,8 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       width: "95%"
     },
     chartWithVertical: {
-      width: "80%"
+      width: "80%",
+      ...fullLgDown
     },
     noData: {
       flex: "1",

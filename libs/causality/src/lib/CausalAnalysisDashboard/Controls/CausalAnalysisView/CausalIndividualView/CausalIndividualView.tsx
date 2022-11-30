@@ -6,22 +6,24 @@ import {
   defaultModelAssessmentContext,
   ICausalAnalysisData,
   ICausalAnalysisSingleData,
+  ITelemetryEvent,
   LabelWithCallout,
   MissingParametersPlaceholder,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  TelemetryEventName
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { CausalAggregateChart } from "../CausalAggregateView/CausalAggregateChart";
 import { CausalAggregateTable } from "../CausalAggregateView/CausalAggregateTable";
-import { causalCalloutDictionary } from "../CausalCallouts/causalCalloutDictionary";
 
 import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
 
 export interface ICausalIndividualViewProps {
   data: ICausalAnalysisData;
+  telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ICausalIndividualViewState {
   selectedData?: ICausalAnalysisSingleData[];
@@ -55,7 +57,10 @@ export class CausalIndividualView extends React.PureComponent<
           </Text>
         </Stack.Item>
         <Stack.Item className={styles.individualChart}>
-          <CausalIndividualChart onDataClick={this.handleOnClick} />
+          <CausalIndividualChart
+            onDataClick={this.handleOnClick}
+            telemetryHook={this.props.telemetryHook}
+          />
         </Stack.Item>
         <Stack.Item className={styles.header}>
           <Stack horizontal={false}>
@@ -67,14 +72,22 @@ export class CausalIndividualView extends React.PureComponent<
             <Stack.Item className={styles.callout}>
               <LabelWithCallout
                 label={localization.CausalAnalysis.MainMenu.why}
-                calloutTitle={causalCalloutDictionary.confounding.title}
+                calloutTitle={
+                  localization.CausalAnalysis.AggregateView.unconfounding
+                }
                 type="button"
+                telemetryHook={this.props.telemetryHook}
+                calloutEventName={
+                  TelemetryEventName.IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick
+                }
               >
                 <Text block>
-                  {causalCalloutDictionary.confounding.description}
+                  {localization.CausalAnalysis.AggregateView.confoundingFeature}
                 </Text>
                 <Link
-                  href={causalCalloutDictionary.confounding.linkUrl}
+                  href={
+                    "https://www.microsoft.com/research/project/econml/#!how-to"
+                  }
                   target="_blank"
                 >
                   {localization.Interpret.ExplanationSummary.clickHere}

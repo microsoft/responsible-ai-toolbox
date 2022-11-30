@@ -7,7 +7,11 @@ import {
   mergeStyleSets,
   IStyle
 } from "@fluentui/react";
-import { descriptionMaxWidth, FabricStyles } from "@responsible-ai/core-ui";
+import {
+  descriptionMaxWidth,
+  flexLgDown,
+  FluentUIStyles
+} from "@responsible-ai/core-ui";
 
 export interface IWhatIfTabStyles {
   absoluteValueToggle: IStyle;
@@ -46,7 +50,6 @@ export interface IWhatIfTabStyles {
   smallItalic: IStyle;
   legendHlepWrapper: IStyle;
   choiceBoxArea: IStyle;
-  choiceGroup: IStyle;
   choiceGroupFlexContainer: IStyle;
   panelIconAndLabel: IStyle;
   predictedBlock: IStyle;
@@ -77,6 +80,7 @@ export interface IWhatIfTabStyles {
   rightJustifiedContainer: IStyle;
   notAvailable: IStyle;
   subPlotContainer: IStyle;
+  choiceGroupLabel: IStyle;
 }
 
 export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
@@ -92,7 +96,7 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       boldText: {
         fontWeight: "600",
-        paddingBottom: "5px"
+        padding: "0 30px 5px 0"
       },
       calloutActions: {
         marginTop: 20,
@@ -100,16 +104,16 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         whiteSpace: "nowrap",
         width: "100%"
       },
-      calloutHeader: [FabricStyles.calloutHeader],
-      calloutInner: [FabricStyles.calloutInner],
+      calloutHeader: [FluentUIStyles.calloutHeader],
+      calloutInner: [FluentUIStyles.calloutInner],
       calloutLink: [
         theme.fonts.medium,
         {
           color: theme.semanticColors.bodyText
         }
       ],
-      calloutTitle: [FabricStyles.calloutTitle],
-      calloutWrapper: [FabricStyles.calloutWrapper],
+      calloutTitle: [FluentUIStyles.calloutTitle],
+      calloutWrapper: [FluentUIStyles.calloutWrapper],
       chartsArea: {
         flex: 1
       },
@@ -128,15 +132,24 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       choiceBoxArea: {
         alignItems: "baseline",
         display: "flex",
-        flexDirection: "row"
-      },
-      choiceGroup: {
-        paddingLeft: "30px"
+        flexDirection: "row",
+        flexFlow: "wrap"
       },
       choiceGroupFlexContainer: {
-        display: "inline-flex",
         justifyContent: "space-between",
-        width: "500px"
+        selectors: {
+          "@media screen and (min-width: 1023px)": {
+            display: "inline-flex"
+          }
+        },
+        width: "auto"
+      },
+      choiceGroupLabel: {
+        selectors: {
+          "label.ms-ChoiceField-field": {
+            marginRight: "15px"
+          }
+        }
       },
       cohortPickerLabel: {
         fontWeight: "600",
@@ -184,12 +197,19 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         display: "flex",
         flexDirection: "row",
         minHeight: "300px",
-        width: "100%"
+        width: "100%",
+        ...flexLgDown
       },
       featureImportanceControls: {
         display: "flex",
         flexDirection: "row",
-        padding: "18px 30px 4px 67px"
+        padding: "18px 30px 4px 67px",
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            flexFlow: "wrap",
+            padding: "18px 0 4px 0"
+          }
+        }
       },
       featureImportanceLegend: {
         height: "100%",
@@ -321,6 +341,11 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
         flexDirection: "row",
         justifyContent: "flex-end",
         paddingRight: legendWidth,
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            paddingRight: "0"
+          }
+        },
         width: "100%"
       },
       rotatedVerticalBox: {
@@ -345,7 +370,11 @@ export const whatIfTabStyles: () => IProcessedStyleSet<IWhatIfTabStyles> =
       },
       startingK: {
         flex: 1,
-        paddingRight: legendWidth
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            paddingRight: legendWidth
+          }
+        }
       },
       subPlotContainer: { paddingLeft: 25 },
       tooltipColumn: {

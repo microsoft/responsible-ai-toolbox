@@ -2,16 +2,15 @@
 // Licensed under the MIT License.
 
 import { getMenu } from "../../../../../util/getMenu";
-import {
-  IModelAssessmentData,
-  RAINotebookNames
-} from "../../IModelAssessmentData";
-import { modelAssessmentDatasets } from "../../modelAssessmentDatasets";
+import { visit } from "../../../../../util/visit";
+import { modelAssessmentDatasets } from "../../datasets/modelAssessmentDatasets";
+import { IModelAssessmentData } from "../../IModelAssessmentData";
 
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
   describeGlobalExplanationBarChart,
-  describeGlobalExplanationBarChartExplicitValues
+  describeGlobalExplanationBarChartExplicitValues,
+  describeGlobalExplanationChartAvgOfAbsOption
 } from "./describeGlobalExplanationBarChart";
 import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBoxChart";
 
@@ -26,14 +25,7 @@ export function describeAggregateFeatureImportance(
   }
   describe(testName, () => {
     before(() => {
-      if (name) {
-        const hosts = Cypress.env().hosts;
-        const hostDetails = hosts.find((obj: { file: string }) => {
-          return obj.file === RAINotebookNames[name];
-        });
-        cy.task("log", hostDetails.host);
-        cy.visit(hostDetails.host);
-      }
+      visit(name);
       cy.get("#ModelAssessmentDashboard").should("exist");
     });
     if (!datasetShape.featureImportanceData?.hasFeatureImportanceComponent) {
@@ -51,6 +43,9 @@ export function describeAggregateFeatureImportance(
       }
       if (!datasetShape.featureImportanceData?.noLocalImportance) {
         describeGlobalExplanationBoxChart(datasetShape);
+      }
+      if (!datasetShape.isRegression) {
+        describeGlobalExplanationChartAvgOfAbsOption(datasetShape);
       }
       describeCohortFunctionality();
     }

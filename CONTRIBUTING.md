@@ -88,11 +88,17 @@ Web Development Server is listening at http://localhost:4200/
 at which point you can follow the link to your browser and select the
 dashboard and version of your choice.
 
+### Linting
+
 To check for linting issues and auto-apply fixes where possible run
 
 ```
 yarn lintfix
 ```
+
+You could also use [prettier](https://prettier.io/docs/en/install.html) to lint your files. Once you have installed prettier using `yarn`, you could use `yarn prettier --write .` to lint files in a particular directory.
+
+### Building
 
 To build a specific app run
 
@@ -126,7 +132,7 @@ cypress window will open locally - select test file to run the tests
 6. `pip install -e raiwidgets` to install raiwidgets locally.
 7. `pip install jupyter`
 8. `cd notebooks\responsibleaidashboard`
-9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible using `yarn e2e-widget --watch`.
+9. To execute tests run `yarn e2e-widget`. Sometimes it is preferable to watch the execution and select only individual test cases. This is possible by running the notebook manually and using `yarn e2e-widget -w --host {host} -n {notebook}` where host is where RAI widget runs on (printed in notebook output) and notebook is the name of the notebook you are running. Eg: `yarn e2e-widget -w --host 5000 -n responsibleaidashboard-census-classification-model-debugging`
 
 Cypress window will open locally - select test file to run the tests.
 

@@ -7,10 +7,12 @@ export interface IModelAssessmentData {
   modelOverviewData?: IModelOverviewData;
   datasetExplorerData?: IDatasetExplorerData;
   featureImportanceData?: IFeatureImportanceData;
+  dataBalanceData?: IDataBalanceData;
   causalAnalysisData?: ICausalAnalysisData;
   whatIfCounterfactualsData?: IWhatIfCounterfactualsData;
   featureNames?: string[];
   cohortDefaultName?: string;
+  checkDupCohort?: boolean;
   isMulticlass?: boolean;
   isRegression?: boolean;
 }
@@ -116,6 +118,13 @@ export interface IFeatureImportanceData {
   aggregateFeatureImportanceExpectedValues?: {
     [key: string]: number;
   };
+  avgOfAbsValue?: string;
+}
+
+export interface IDataBalanceData {
+  aggregateBalanceMeasuresComputed?: boolean;
+  distributionBalanceMeasuresComputed?: boolean;
+  featureBalanceMeasuresComputed?: boolean;
 }
 
 export interface ICausalAnalysisData {
@@ -154,15 +163,15 @@ export interface IWhatIfCounterfactualsData {
 
 export enum RAINotebookNames {
   "CensusClassificationModelDebugging" = "responsibleaidashboard-census-classification-model-debugging.py",
-  "CensusClassificationModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
+  "CensusClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-census-classification-model-debugging.py",
   "DiabetesRegressionModelDebugging" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
-  "DiabetesRegressionModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
+  "DiabetesRegressionModelDebuggingDataBalanceExperience" = "responsibleaidashboard-diabetes-regression-model-debugging.py",
   "HousingClassificationModelDebugging" = "responsibleaidashboard-housing-classification-model-debugging.py",
-  "HousingClassificationModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-housing-classification-model-debugging.py",
+  "HousingClassificationModelDebuggingDataBalanceExperience" = "responsibleaidashboard-housing-classification-model-debugging.py",
   "DiabetesDecisionMaking" = "responsibleaidashboard-diabetes-decision-making.py",
-  "DiabetesDecisionMakingNewModelOverviewExperience" = "responsibleaidashboard-diabetes-decision-making.py",
+  "DiabetesDecisionMakingDataBalanceExperience" = "responsibleaidashboard-diabetes-decision-making.py",
   "HousingDecisionMaking" = "responsibleaidashboard-housing-decision-making.py",
-  "HousingDecisionMakingNewModelOverviewExperience" = "responsibleaidashboard-housing-decision-making.py",
+  "HousingDecisionMakingDataBalanceExperience" = "responsibleaidashboard-housing-decision-making.py",
   "MulticlassDnnModelDebugging" = "responsibleaidashboard-multiclass-dnn-model-debugging.py",
-  "MulticlassDnnModelDebuggingNewModelOverviewExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
+  "MulticlassDnnModelDebuggingDataBalanceExperience" = "responsibleaidashboard-multiclass-dnn-model-debugging.py"
 }

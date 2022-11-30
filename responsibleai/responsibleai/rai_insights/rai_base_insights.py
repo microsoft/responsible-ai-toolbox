@@ -12,10 +12,12 @@ from typing import Any, Optional
 
 import pandas as pd
 
+import responsibleai
 from responsibleai._internal.constants import Metadata
 
 _DATA = 'data'
 _DTYPES = 'dtypes'
+_RAIVERSION = "rai_version"
 _TRAIN = 'train'
 _TEST = 'test'
 _MODEL = Metadata.MODEL
@@ -106,11 +108,7 @@ class RAIBaseInsights(ABC):
 
     @abstractmethod
     def get_data(self):
-        """Get all data as RAIInsightsData object
-
-        :return: Model Analysis Data
-        :rtype: RAIInsightsData
-        """
+        """Get all data from RAIBaseInsights object."""
         pass
 
     @abstractmethod
@@ -131,7 +129,7 @@ class RAIBaseInsights(ABC):
     def _save_predictions(self, path):
         """Save the predict() and predict_proba() output.
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
         pass
@@ -159,6 +157,11 @@ class RAIBaseInsights(ABC):
         self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
                             self.test.to_json(orient='split'))
 
+        self._write_to_file(Path(path) /
+                            (_RAIVERSION + _JSON_EXTENSION),
+                            json.dumps(
+                                {"responsibleai": responsibleai.__version__}))
+
     @abstractmethod
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
@@ -172,7 +175,7 @@ class RAIBaseInsights(ABC):
     def _save_model(self, path):
         """Save the model and the serializer (if any).
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
         top_dir = Path(path)
@@ -196,7 +199,7 @@ class RAIBaseInsights(ABC):
     def _save_managers(self, path):
         """Save the state of individual managers.
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
         top_dir = Path(path)
@@ -207,7 +210,7 @@ class RAIBaseInsights(ABC):
     def save(self, path):
         """Save the RAIBaseInsights to the given path.
 
-        :param path: The directory path to save the RAIInsights to.
+        :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
         self._save_managers(path)
@@ -220,8 +223,8 @@ class RAIBaseInsights(ABC):
     def _load_data(inst, path):
         """Load the raw data (train and test sets).
 
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
+        :param inst: RAIBaseInsights object instance.
+        :type inst: RAIBaseInsights
         :param path: The directory path to data location.
         :type path: str
         """
@@ -275,8 +278,8 @@ class RAIBaseInsights(ABC):
     def _load_managers(inst, path, manager_map):
         """Load the specified managers from the given path.
 
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
+        :param inst: RAIBaseInsights object instance.
+        :type inst: RAIBaseInsights
         :param path: The directory path to the location of
             the serialized managers.
         :type path: str
@@ -296,12 +299,12 @@ class RAIBaseInsights(ABC):
 
     @staticmethod
     def _load(path, inst, manager_map, load_metadata_func):
-        """Load the RAIInsights from the given path.
+        """Load the RAIBaseInsights from the given path.
 
-        :param path: The directory path to load the RAIInsights from.
+        :param path: The directory path to load the RAIBaseInsights from.
         :type path: str
-        :param inst: RAIInsights object instance.
-        :type inst: RAIInsights
+        :param inst: RAIBaseInsights object instance.
+        :type inst: RAIBaseInsights
         :param manager_map: The map of manager names to manager classes.
         :type manager_map: dict
         :param load_metadata_func: The function to load the metadata.

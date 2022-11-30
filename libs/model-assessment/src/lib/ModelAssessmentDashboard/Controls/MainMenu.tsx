@@ -15,7 +15,10 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
-  ModelAssessmentContext
+  ITelemetryEvent,
+  ModelAssessmentContext,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -30,6 +33,7 @@ import { mainMenuStyles } from "./MainMenu.styles";
 
 export interface IMainMenuProps {
   activeGlobalTabs: IModelAssessmentDashboardTab[];
+  telemetryHook?: (message: ITelemetryEvent) => void;
   removeTab(index: number): void;
 }
 interface IMainMenuState {
@@ -63,13 +67,19 @@ export class MainMenu extends React.PureComponent<
     };
     this.menuFarItems = [
       {
+        ariaLabel: "cohortSettings",
+        iconOnly: true,
         iconProps: settingsIcon,
+        id: "cohortSettings",
         key: "cohortSettings",
         onClick: this.toggleCohortSettingsPanel,
         text: localization.ModelAssessment.MainMenu.cohortSettings
       },
       {
+        ariaLabel: "dashboardSettings",
+        iconOnly: true,
         iconProps: navigationIcon,
+        id: "dashboardSettings",
         key: "dashboardSettings",
         onClick: this.toggleDashboardSettings,
         text: localization.ModelAssessment.MainMenu.DashboardSettings
@@ -77,7 +87,7 @@ export class MainMenu extends React.PureComponent<
     ];
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(): void {
     this.commandBar.current?.remeasure();
   }
 
@@ -177,29 +187,52 @@ export class MainMenu extends React.PureComponent<
           // cursor should not change when hovering because we don't want users to think that something will happen if they click
           styles={{ rootHovered: { cursor: "default" } }}
         >
-          {cohortInfoTitle}
+          <h2>{cohortInfoTitle}</h2>
         </CommandButton>
       </TooltipHost>
     );
   };
 
-  private toggleCohortSettingsPanel = (): void =>
+  private toggleCohortSettingsPanel = (): void => {
+    if (!this.state.cohortSettingsPanelVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuCohortSettingsClick);
+    }
     this.setState((prev) => ({
       cohortSettingsPanelVisible: !prev.cohortSettingsPanelVisible
     }));
+  };
 
-  private toggleDashboardSettings = (): void =>
+  private toggleDashboardSettings = (): void => {
+    if (!this.state.dashboardSettingsVisible) {
+      this.logButtonClick(
+        TelemetryEventName.MainMenuDashboardConfigurationClick
+      );
+    }
     this.setState((prev) => ({
       dashboardSettingsVisible: !prev.dashboardSettingsVisible
     }));
-  private toggleChangeCohortVisibility = () => {
+  };
+
+  private toggleChangeCohortVisibility = (): void => {
+    if (!this.state.changeCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuSwitchCohortClick);
+    }
     this.setState((prev) => ({
       changeCohortVisible: !prev.changeCohortVisible
     }));
   };
-  private toggleCreateCohortVisibility = () => {
+  private toggleCreateCohortVisibility = (): void => {
+    if (!this.state.createCohortVisible) {
+      this.logButtonClick(TelemetryEventName.MainMenuNewCohortClick);
+    }
     this.setState((prev) => ({
       createCohortVisible: !prev.createCohortVisible
     }));
+  };
+  private logButtonClick = (eventName: TelemetryEventName): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
   };
 }

@@ -134,7 +134,7 @@ export class Navigation extends React.Component<INavigationProps> {
               <MessageBar
                 messageBarType={MessageBarType.success}
                 isMultiline={false}
-                onDismiss={() => this.props.closeMessageBar()}
+                onDismiss={(): void => this.props.closeMessageBar()}
                 className={classNames.root}
                 styles={messageBarStyles}
               >

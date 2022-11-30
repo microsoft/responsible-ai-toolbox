@@ -35,6 +35,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
         isBlocking={false}
         onDismiss={this.props.onDismiss}
         type={PanelType.medium}
+        id={"CohortSettingsPanel"}
       >
         <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
           <Stack.Item>

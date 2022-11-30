@@ -1,19 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { NeutralColors, SharedColors } from "@fluentui/theme";
-import { IHighchartsConfig } from "@responsible-ai/core-ui";
+import { ITheme } from "@fluentui/react";
+import {
+  IHighchartsConfig,
+  getPrimaryChartColor,
+  getPrimaryBackgroundChartColor
+} from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
 
 import { Utils } from "../../CommonUtils";
 import { IChartProps } from "../../Interfaces/IChartProps";
 
 export function getTokenImportancesChartOptions(
-  props: IChartProps
+  props: IChartProps,
+  theme: ITheme
 ): IHighchartsConfig {
   const importances = props.localExplanations;
-  const k = props.topK!;
-  const sortedList = Utils.sortedTopK(importances, k, props.radio!);
+  const k = props.topK;
+  const sortedList = Utils.sortedTopK(importances, k, props.radio);
   const [x, y, ylabel, tooltip]: [number[], number[], string[], string[]] = [
     [],
     [],
@@ -48,8 +54,11 @@ export function getTokenImportancesChartOptions(
   const data: any[] = [];
   x.forEach((p, index) => {
     const temp = {
-      borderColor: SharedColors.blue10,
-      color: (p || 0) >= 0 ? SharedColors.blue10 : NeutralColors.white,
+      borderColor: getPrimaryChartColor(theme),
+      color:
+        (p || 0) >= 0
+          ? getPrimaryChartColor(theme)
+          : getPrimaryBackgroundChartColor(theme),
       x: index,
       y: p
     };
@@ -71,7 +80,7 @@ export function getTokenImportancesChartOptions(
     plotOptions: {
       bar: {
         tooltip: {
-          pointFormatter() {
+          pointFormatter(): string {
             return `${tooltip[this.x || 0]}: ${this.y || 0}`;
           }
         }
@@ -80,6 +89,11 @@ export function getTokenImportancesChartOptions(
     series,
     xAxis: {
       categories: ylabel
+    },
+    yAxis: {
+      title: {
+        text: localization.Interpret.featureImportance
+      }
     }
   };
 }

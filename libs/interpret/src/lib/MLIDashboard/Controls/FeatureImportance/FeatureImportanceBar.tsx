@@ -15,7 +15,7 @@ import {
   ModelTypes,
   IGlobalExplanation,
   ModelExplanationUtils,
-  FabricStyles
+  FluentUIStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -80,7 +80,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                   options={this.props.chartTypeOptions}
                   ariaLabel={"chart type picker"}
                   useComboBoxAsMenuWidth
-                  styles={FabricStyles.smallDropdownStyle}
+                  styles={FluentUIStyles.smallDropdownStyle}
                 />
               )}
             <div className={featureImportanceBarStyles.sliderControl}>
@@ -119,7 +119,7 @@ export class FeatureImportanceBar extends React.PureComponent<
                 options={this.sortOptions}
                 ariaLabel={"sort selector"}
                 useComboBoxAsMenuWidth
-                styles={FabricStyles.smallDropdownStyle}
+                styles={FluentUIStyles.smallDropdownStyle}
               />
             )}
           </div>

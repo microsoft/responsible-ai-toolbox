@@ -7,11 +7,13 @@ import {
   IModelExplanationData,
   Metrics,
   IPreBuiltCohort,
-  FilterMethods
+  FilterMethods,
+  DatasetTaskType
 } from "@responsible-ai/core-ui";
 
 export const wineData: IDataset = {
   categorical_features: [],
+  feature_metadata: undefined,
   feature_names: [
     "alcohol",
     "malic_acid",
@@ -284,7 +286,7 @@ export const wineData: IDataset = {
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 2
   ],
-  task_type: "classification",
+  task_type: DatasetTaskType.Classification,
   true_y: [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
