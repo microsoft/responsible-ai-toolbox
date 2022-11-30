@@ -2,9 +2,9 @@ name: CI Python
 
 on:
   push:
-    branches: [main, postga]
+    branches: [main]
   pull_request:
-    branches: [main, postga]
+    branches: [main]
 
 jobs:
   ci-python:

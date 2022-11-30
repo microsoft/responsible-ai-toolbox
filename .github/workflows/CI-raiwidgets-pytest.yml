@@ -2,14 +2,14 @@ name: CI RAIWidgets pytest
 
 on:
   push:
-    branches: [main, postga]
+    branches: [main]
   pull_request:
-    branches: [main, postga]
+    branches: [main]
 
 jobs:
   ci-raiwidgets-pytest:
     env:
-      node-version: 16.8
+      node-version: 16.x
     strategy:
       matrix:
         packageDirectory: ["raiwidgets"]

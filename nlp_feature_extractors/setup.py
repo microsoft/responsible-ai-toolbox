@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 import setuptools
 
-VERSION = "0.0.3"
+VERSION = "0.1.0"
 
 # supply contents of our README file as our package's long description
 with open("README.md", "r") as fh:
