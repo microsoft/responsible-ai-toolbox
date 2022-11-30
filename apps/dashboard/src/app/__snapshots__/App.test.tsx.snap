@@ -15104,6 +15104,21 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
               },
             },
           },
+          "feature_metadata": Object {
+            "categorical_features": Array [
+              "c1",
+              "c2",
+            ],
+            "datetime_features": Array [
+              "d1",
+              "d2",
+            ],
+            "dropped_features": Array [
+              "d3",
+              "d4",
+            ],
+            "identity_feature_name": "fnlwgt",
+          },
           "feature_names": Array [
             "age",
             "workclass",
