@@ -45,6 +45,7 @@ export * from "./lib/util/getBoxData";
 export * from "./lib/util/getBasicFilterString";
 export * from "./lib/util/getCommonStyles";
 export * from "./lib/util/getCompositeFilterString";
+export * from "./lib/util/getFeatureNamesAfterDrop";
 export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/getFilterBoundsArgs";
 export * from "./lib/util/calculateBoxData";
