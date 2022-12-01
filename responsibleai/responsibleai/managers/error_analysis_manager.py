@@ -82,12 +82,13 @@ def as_error_config(json_dict):
         return json_dict
 
 
-class ModelWrapper():
-    """Defines ModelWrapper, wrapping model with dropped features if any."""
+class MetadataRemovalModelWrapper():
+    """Defines MetadataRemovalModelWrapper, wrapping the model 
+    to ignore metadata if there are any dropped features."""
 
     def __init__(self, model: any,
                  dropped_features: Optional[List[str]] = None):
-        """If needed, wraps the model with dropped features.
+        """If needed, wraps the model to ignore the dropped features.
 
         :param model: The model or function to evaluate on the examples.
         :type model: function or model with a predict or predict_proba function
@@ -99,18 +100,15 @@ class ModelWrapper():
         self.dropped_features = dropped_features
 
     def predict(self, dataset: pd.DataFrame):
-        if self.dropped_features is None or \
-                len(self.dropped_features) == 0:
-            return self.model.predict(dataset)
-        return self.model.predict(dataset.drop(
-            columns=self.dropped_features, axis=1))
+        return self._apply_func(self.model.predict, dataset)
 
     def predict_proba(self, dataset: pd.DataFrame):
-        if self.dropped_features is None or \
-                len(self.dropped_features) == 0:
-            return self.model.predict_proba(dataset)
-        return self.model.predict_proba(dataset.drop(
-            columns=self.dropped_features, axis=1))
+        return self._apply_func(self.model.predict_proba, dataset)
+
+    def _apply_func(self, func, dataset):
+        if self.dropped_features is None or len(self.dropped_features) == 0:
+            return func(dataset)
+        return func(dataset.drop(columns=self.dropped_features, axis=1))
 
 
 class ErrorAnalysisConfig(BaseConfig):
@@ -221,13 +219,14 @@ class ErrorAnalysisManager(BaseManager):
         self._categorical_features = categorical_features
         self._ea_config_list = []
         self._ea_report_list = []
-        self._analyzer = ModelAnalyzer(ModelWrapper(model, dropped_features),
-                                       self._dataset,
-                                       self._true_y,
-                                       self._feature_names,
-                                       self._categorical_features,
-                                       model_task=task_type,
-                                       classes=self._classes)
+        self._analyzer = ModelAnalyzer(MetadataRemovalModelWrapper(
+            model, dropped_features),
+            self._dataset,
+            self._true_y,
+            self._feature_names,
+            self._categorical_features,
+            model_task=task_type,
+            classes=self._classes)
 
     def add(self, max_depth: int = 3, num_leaves: int = 31,
             min_child_samples: int = 20,
