@@ -206,8 +206,9 @@ class ErrorAnalysisManager(BaseManager):
         :type classes: list
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
-        :param dropped_features: List of features that were dropped by the
-                                 the user during training of their model.
+        :param dropped_features: List of features that are omitted for model
+                            training. This includes metadata that is useful
+                            for evaluating the model.
         :type dropped_features: Optional[List[str]]
         :param task_type: The task type of the model.
         :type task_type: TaskType
