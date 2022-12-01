@@ -83,8 +83,8 @@ def as_error_config(json_dict):
 
 
 class MetadataRemovalModelWrapper():
-    """Defines MetadataRemovalModelWrapper, wrapping the model 
-    to ignore metadata if there are any dropped features."""
+    """Defines MetadataRemovalModelWrapper, wrapping the model
+    to ignore dropped feature metadata if any ."""
 
     def __init__(self, model: any,
                  dropped_features: Optional[List[str]] = None):
