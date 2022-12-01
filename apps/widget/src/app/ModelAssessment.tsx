@@ -32,6 +32,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestImportances"
       | "requestCausalWhatIf"
       | "requestBoxPlotDistribution"
+      | "requestBubblePlotData"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -73,6 +74,15 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestBubblePlotData = async (
+        data: any
+      ): Promise<IHighchartBoxData> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/dataset_analysis_bubble_chart_plot"
         );
       };
     }

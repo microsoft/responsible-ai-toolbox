@@ -20,6 +20,7 @@ export function getBubbleChartOptions(): IHighchartsConfig {
   //   backgroundColor: theme?.palette.white,
   //   fontColor: theme?.semanticColors.bodyText
   // };
+
   return {
     chart: {
       type: "bubble",

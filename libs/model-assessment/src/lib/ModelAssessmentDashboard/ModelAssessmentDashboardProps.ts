@@ -69,6 +69,10 @@ export interface IModelAssessmentDashboardProps
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestBubblePlotData?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryEvent) => void;

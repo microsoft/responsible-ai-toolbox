@@ -59,6 +59,10 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestBubblePlotData?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBoxData>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

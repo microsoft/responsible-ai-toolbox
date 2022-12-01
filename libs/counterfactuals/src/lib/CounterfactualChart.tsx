@@ -19,6 +19,7 @@ import {
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
+import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
 
 // import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
@@ -53,6 +54,7 @@ export interface ICounterfactualChartProps {
 export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
+  boxPlotData: any;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -69,9 +71,35 @@ export class CounterfactualChart extends React.PureComponent<
 
     this.state = {
       xDialogOpen: false,
-      yDialogOpen: false
+      yDialogOpen: false,
+      boxPlotData: undefined
     };
   }
+
+  public async componentDidUpdate(
+    prevProps: ICounterfactualChartProps
+  ): Promise<void> {
+    if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
+      const boxPlotData = await calculateBubblePlotDataFromErrorCohort(
+        this.context.selectedErrorCohort.cohort,
+        this.props.chartProps,
+        this.props.selectedPointsIndexes,
+        this.props.customPoints,
+        this.context,
+        this.props.chartProps.xAxis.property,
+        this.props.chartProps.yAxis.property,
+        this.context.requestBubblePlotData
+      );
+      console.log("!!boxPlotData 1: ", boxPlotData);
+      this.setState({
+        boxPlotData: boxPlotData
+      });
+      console.log("!!boxPlotData 2: ", boxPlotData);
+    }
+
+    // this.getOutlierData(boxPlotData);
+  }
+
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
 
@@ -82,6 +110,20 @@ export class CounterfactualChart extends React.PureComponent<
     //   this.props.selectedPointsIndexes,
     //   this.props.customPoints
     // );
+
+    // const bubblePlotData = this.props.selectedCohorts.map(
+    //   (cohort: ErrorCohort, index: number) => {
+    //     return calculateBoxPlotDataFromErrorCohort(
+    //       cohort,
+    //       index,
+    //       this.props.probabilityOption?.key || "",
+    //       this.props.probabilityOption?.id,
+    //       this.context.requestBoxPlotDistribution
+    //     );
+    //   }
+    // );
+
+    console.log("!!this.props.chartProps: ", this.props.chartProps);
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
