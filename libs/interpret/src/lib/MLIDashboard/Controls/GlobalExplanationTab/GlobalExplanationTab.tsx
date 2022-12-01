@@ -29,7 +29,8 @@ import {
   FeatureImportanceBar,
   ITelemetryEvent,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  getFeatureNamesAfterDrop
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { RangeTypes } from "@responsible-ai/mlchartlib";
@@ -175,18 +176,11 @@ export class GlobalExplanationTab extends React.PureComponent<
         ]
       : undefined;
 
-    let featureNames = this.context.modelMetadata.featureNames;
-    if (
+    const featureNames = getFeatureNamesAfterDrop(
+      this.context.modelMetadata.featureNames,
       this.context.jointDataset.datasetMetaData?.featureMetaData
         ?.dropped_features
-    ) {
-      featureNames = this.context.modelMetadata.featureNames.filter(
-        (name) =>
-          !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
-            name
-          )
-      );
-    }
+    );
 
     return (
       <Stack horizontal={false} className={classNames.page}>

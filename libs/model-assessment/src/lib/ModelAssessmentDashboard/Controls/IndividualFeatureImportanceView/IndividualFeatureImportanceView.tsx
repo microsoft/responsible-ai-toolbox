@@ -4,6 +4,7 @@
 import { IObjectWithKey, Label, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  getFeatureNamesAfterDrop,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { TableView } from "@responsible-ai/dataset-explorer";
@@ -40,18 +41,11 @@ export class IndividualFeatureImportanceView extends React.Component<
       !!this.context.modelExplanationData?.precomputedExplanations
         ?.textFeatureImportance;
     const classNames = individualFeatureImportanceStyles();
-    let featureNames = this.context.modelMetadata.featureNames;
-    if (
+    const featureNames = getFeatureNamesAfterDrop(
+      this.context.modelMetadata.featureNames,
       this.context.jointDataset.datasetMetaData?.featureMetaData
         ?.dropped_features
-    ) {
-      featureNames = this.context.modelMetadata.featureNames.filter(
-        (name) =>
-          !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
-            name
-          )
-      );
-    }
+    );
 
     return (
       <Stack
