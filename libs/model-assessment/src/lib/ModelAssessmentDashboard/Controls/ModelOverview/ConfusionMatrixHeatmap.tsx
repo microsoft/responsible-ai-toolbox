@@ -6,7 +6,8 @@ import {
   StackItem,
   ComboBox,
   IComboBoxOption,
-  IComboBox
+  IComboBox,
+  getTheme
 } from "@fluentui/react";
 import {
   JointDataset,
@@ -62,7 +63,8 @@ export class ConfusionMatrixHeatmap extends React.Component<
     const allClasses: string[] = context.dataset.class_names
       ? context.dataset.class_names.map(String)
       : _.range(Math.max(...predictedY, ...trueY) + 1).map(
-          (x: number) => `Class ${x}`
+          (x: number) =>
+            `${localization.ModelAssessment.ModelOverview.confusionMatrix.class} ${x}`
         );
     this.state = {
       allClasses,
@@ -115,6 +117,24 @@ export class ConfusionMatrixHeatmap extends React.Component<
       );
       selectedLabels.push(...confusionMatrixData.selectedLabels);
     }
+
+    const theme = getTheme();
+
+    let classSelectionErrorMessage: string | undefined;
+    if (this.state.selectedClasses.length < this.minDisplayableClasses) {
+      classSelectionErrorMessage = localization.formatString(
+        localization.ModelAssessment.ModelOverview.confusionMatrix
+          .confusionMatrixClassMinSelectionError,
+        this.minDisplayableClasses
+      );
+    } else if (this.state.selectedClasses.length > this.maxDisplayableClasses) {
+      classSelectionErrorMessage = localization.formatString(
+        localization.ModelAssessment.ModelOverview.confusionMatrix
+          .confusionMatrixClassMaxSelectionError,
+        this.maxDisplayableClasses
+      );
+    }
+
     return (
       <Stack id="modelOverviewConfusionMatrix">
         <Stack horizontal>
@@ -122,7 +142,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
             <ComboBox
               id="confusionMatrixCohortDropdown"
               label={
-                localization.ModelAssessment.ModelOverview
+                localization.ModelAssessment.ModelOverview.confusionMatrix
                   .confusionMatrixCohortSelectionLabel
               }
               selectedKey={this.state.selectedCohort}
@@ -142,29 +162,18 @@ export class ConfusionMatrixHeatmap extends React.Component<
             <ComboBox
               id="confusionMatrixClassDropdown"
               placeholder={
-                localization.ModelAssessment.ModelOverview
+                localization.ModelAssessment.ModelOverview.confusionMatrix
                   .confusionMatrixClassSelectionDefaultPlaceholder
               }
               label={
-                localization.ModelAssessment.ModelOverview
+                localization.ModelAssessment.ModelOverview.confusionMatrix
                   .confusionMatrixClassSelectionLabel
               }
               selectedKey={this.state.selectedClasses}
               options={this.state.allClasses.map((category: string) => {
                 return { key: category, text: category };
               })}
-              errorMessage={
-                this.state.selectedClasses.length <
-                  this.minDisplayableClasses ||
-                this.state.selectedClasses.length > this.maxDisplayableClasses
-                  ? localization.formatString(
-                      localization.ModelAssessment.ModelOverview
-                        .confusionMatrixClassSelectionError,
-                      this.minDisplayableClasses,
-                      this.maxDisplayableClasses
-                    )
-                  : undefined
-              }
+              errorMessage={classSelectionErrorMessage}
               onChange={this.onSelectClasses}
               multiSelect
               styles={FluentUIStyles.limitedSizeMenuDropdown}
@@ -186,9 +195,9 @@ export class ConfusionMatrixHeatmap extends React.Component<
                     width: this.state.selectedClasses.length * 40 + 200
                   },
                   colorAxis: {
-                    maxColor: "#2f7ed8",
+                    maxColor: theme.palette.blue,
                     min: 0,
-                    minColor: "#FFFFFF"
+                    minColor: theme.palette.white
                   },
                   custom: {
                     minHeight: 300
@@ -205,7 +214,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       borderWidth: 1,
                       data: confusionMatrix,
                       dataLabels: {
-                        color: "#000000",
+                        color: theme.palette.black,
                         enabled: true
                       },
                       type: "heatmap"
@@ -223,7 +232,7 @@ export class ConfusionMatrixHeatmap extends React.Component<
                       return wrapText(
                         localization.formatString(
                           localization.ModelAssessment.ModelOverview
-                            .confusionMatrixHeatmapTooltip,
+                            .confusionMatrix.confusionMatrixHeatmapTooltip,
                           pointValueBold,
                           trueClassBold,
                           predictedClassBold
@@ -234,218 +243,16 @@ export class ConfusionMatrixHeatmap extends React.Component<
                     }
                   },
                   xAxis: {
-                    categories: [
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1"
-                    ],
+                    categories: this.state.selectedClasses,
                     title: {
-                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrixXAxisLabel}</b>`
+                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixXAxisLabel}</b>`
                     }
                   },
                   yAxis: {
-                    categories: [
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1",
-                      "1"
-                    ],
+                    categories: this.state.selectedClasses,
                     reversed: true,
                     title: {
-                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrixYAxisLabel}</b>`
+                      text: `<b>${localization.ModelAssessment.ModelOverview.confusionMatrix.confusionMatrixYAxisLabel}</b>`
                     }
                   }
                 }}
