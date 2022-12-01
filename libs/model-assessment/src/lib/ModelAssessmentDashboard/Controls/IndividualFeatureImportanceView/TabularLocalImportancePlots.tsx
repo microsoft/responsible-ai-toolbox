@@ -75,7 +75,14 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
           key,
           text: meta.abbridgedLabel
         };
-      });
+      })
+      .filter(
+        (item) =>
+          !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+            item.text
+          )
+      );
+
     return (
       <LocalImportancePlots
         includedFeatureImportance={featureImportances}

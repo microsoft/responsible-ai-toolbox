@@ -88,6 +88,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     : undefined;
 
   private depPlot = React.createRef<HTMLDivElement>();
+  private readonly featureIndexMap = new Map<number, number>();
 
   private defaultMinK = 4;
 
@@ -162,6 +163,7 @@ export class GlobalExplanationTab extends React.PureComponent<
           this.context.jointDataset.metaDict[key].label
         )
       ) {
+        this.featureIndexMap.set(featureOptions.length, i);
         featureOptions.push({
           key,
           text: this.context.jointDataset.metaDict[key].label
@@ -512,12 +514,15 @@ export class GlobalExplanationTab extends React.PureComponent<
     cohortIndex: number,
     featureIndex: number
   ): void => {
+    const featureIndexBeforeDrop =
+      this.featureIndexMap.get(featureIndex) ?? featureIndex;
     // set to dependence plot initially, can be changed if other feature importances available
-    const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
+    const xKey = JointDataset.DataLabelRoot + featureIndexBeforeDrop.toString();
     const xIsDithered =
       this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
-      JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
+      JointDataset.ReducedLocalImportanceRoot +
+      featureIndexBeforeDrop.toString();
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
@@ -535,7 +540,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.setState({
       dependenceProps: chartProps,
       selectedCohortIndex: cohortIndex,
-      selectedFeatureIndex: featureIndex
+      selectedFeatureIndex: featureIndexBeforeDrop
     });
     // some how scroll does not work in studio under certain reslution
     // put a manual timeout to handle the issue

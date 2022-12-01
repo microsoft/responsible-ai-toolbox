@@ -152,6 +152,18 @@ export class LocalImportancePlots extends React.Component<
             this.props.weightLabels[this.props.selectedWeightVector]
           );
         }
+        let featureNames = this.props.metadata.featureNames;
+        if (
+          this.props.jointDataset.datasetMetaData?.featureMetaData
+            ?.dropped_features
+        ) {
+          featureNames = this.props.metadata.featureNames.filter(
+            (name) =>
+              !this.props.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+                name
+              )
+          );
+        }
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
@@ -178,7 +190,7 @@ export class LocalImportancePlots extends React.Component<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNames}
+                unsortedX={featureNames}
                 unsortedSeries={this.props.includedFeatureImportance}
                 topK={this.state.topK}
               />

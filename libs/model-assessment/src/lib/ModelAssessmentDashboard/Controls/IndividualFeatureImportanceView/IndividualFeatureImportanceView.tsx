@@ -40,6 +40,19 @@ export class IndividualFeatureImportanceView extends React.Component<
       !!this.context.modelExplanationData?.precomputedExplanations
         ?.textFeatureImportance;
     const classNames = individualFeatureImportanceStyles();
+    let featureNames = this.context.modelMetadata.featureNames;
+    if (
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.dropped_features
+    ) {
+      featureNames = this.context.modelMetadata.featureNames.filter(
+        (name) =>
+          !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+            name
+          )
+      );
+    }
+
     return (
       <Stack
         tokens={verticalComponentTokens}
@@ -74,7 +87,7 @@ export class IndividualFeatureImportanceView extends React.Component<
         />
         {!hasTextImportances && (
           <TabularLocalImportancePlots
-            features={this.context.modelMetadata.featureNames}
+            features={featureNames}
             jointDataset={this.context.jointDataset}
             invokeModel={this.props.invokeModel}
             selectedWeightVector={this.props.selectedWeightVector}
