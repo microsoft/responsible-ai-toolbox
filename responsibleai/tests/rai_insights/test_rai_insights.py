@@ -53,7 +53,6 @@ class TestRAIInsights(object):
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
         X_train_dropped = X_train.drop(columns=['petal length'])
-        X_test_dropped = X_test.drop(columns=['petal length'])
         models = create_models_classification(X_train_dropped, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
