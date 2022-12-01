@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort } from "../../../core-ui/src/lib/Cohort/Cohort";
-import { IModelAssessmentContext } from "../../../core-ui/src/lib/Context/ModelAssessmentContext";
+import { Cohort, IModelAssessmentContext } from "@responsible-ai/core-ui";
 import { IGenericChartProps } from "../../../core-ui/src/lib/util/IGenericChartProps";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 
