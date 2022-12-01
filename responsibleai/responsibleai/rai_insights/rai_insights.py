@@ -227,6 +227,10 @@ class RAIInsights(RAIBaseInsights):
         Initialized the causal, counterfactual, error analysis
         and explainer managers.
         """
+        if self._feature_metadata is not None:
+            dropped_features = self._feature_metadata.dropped_features
+        else:
+            dropped_features = None
         self._causal_manager = CausalManager(
             self.train, self.test, self.target_column,
             self.task_type, self.categorical_features)
@@ -244,7 +248,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.test, self.target_column,
             self._classes,
             self.categorical_features,
-            self._feature_metadata.dropped_features,
+            dropped_features,
             task_type=self.task_type)
 
         self._explainer_manager = ExplainerManager(
