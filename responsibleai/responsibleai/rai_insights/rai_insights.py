@@ -207,7 +207,6 @@ class RAIInsights(RAIBaseInsights):
         """
         if self._feature_metadata is None:
             return test_data if test_data is not None else self.test
-            # return self.test
         else:
             if self._feature_metadata.dropped_features is None or \
                     len(self._feature_metadata.dropped_features) == 0:

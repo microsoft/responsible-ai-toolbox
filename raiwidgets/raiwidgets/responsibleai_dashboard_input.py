@@ -97,7 +97,6 @@ class ResponsibleAIDashboardInput:
 
     def on_predict(self, data):
         try:
-            print(data)
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
             data = self._analysis.get_test_data(test_data=data)
