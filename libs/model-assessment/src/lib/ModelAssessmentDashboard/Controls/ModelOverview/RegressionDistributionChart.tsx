@@ -13,6 +13,7 @@ import {
 } from "@fluentui/react";
 import {
   BasicHighChart,
+  boxChartTooltipDefaultSetting,
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
@@ -201,6 +202,7 @@ export class RegressionDistributionChart extends React.Component<
                       fillColor: theme.semanticColors.inputBackgroundChecked,
                       name: localization.ModelAssessment.ModelOverview.BoxPlot
                         .boxPlotSeriesLabel,
+                      tooltip: boxChartTooltipDefaultSetting,
                       type: "boxplot"
                     },
                     {
