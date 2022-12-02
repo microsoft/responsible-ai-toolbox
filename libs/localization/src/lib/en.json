@@ -1752,7 +1752,12 @@
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "boxPlotSeriesLabel": "Box Plot",
+        "lowerWhisker": "Lower whisker",
+        "upperWhisker": "Upper whisker",
+        "median": "Median",
+        "lowerQuartile": "Lower quartile",
+        "upperQuartile": "Upper quartile"
       },
       "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
