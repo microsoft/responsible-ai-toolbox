@@ -30,7 +30,7 @@ import {
   ITelemetryEvent,
   TelemetryEventName,
   TelemetryLevels,
-  getFeatureNamesAfterDrop
+  getFeatureNamesAfterDrop,
   ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";

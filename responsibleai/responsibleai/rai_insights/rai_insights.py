@@ -232,11 +232,12 @@ class RAIInsights(RAIBaseInsights):
         else:
             dropped_features = None
         self._causal_manager = CausalManager(
-            self.train, self.test, self.target_column,
+            self.get_train_data(), self.get_test_data(), self.target_column,
             self.task_type, self.categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=self.model, train=self.train, test=self.test,
+            model=self.model, train=self.get_train_data(),
+            test=self.get_test_data(),
             target_column=self.target_column, task_type=self.task_type,
             categorical_features=self.categorical_features)
 
