@@ -17,7 +17,10 @@ import {
   ChartTypes,
   LabelWithCallout,
   ITelemetryEvent,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData,
+  ModelAssessmentContext,
+  defaultModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -49,6 +52,10 @@ export class SidePanel extends React.Component<
   ISidePanelProps,
   ISidePanelState
 > {
+  public static contextType = ModelAssessmentContext;
+  public context: React.ContextType<typeof ModelAssessmentContext> =
+    defaultModelAssessmentContext;
+
   private chartOptions: IChoiceGroupOption[] = [
     {
       key: ChartTypes.Bar,
@@ -59,6 +66,14 @@ export class SidePanel extends React.Component<
       text: localization.Interpret.FeatureImportanceWrapper.boxText
     }
   ];
+
+  private readonly largeDataChartOptions: IChoiceGroupOption[] = [
+    {
+      key: ChartTypes.Bar,
+      text: localization.Interpret.FeatureImportanceWrapper.barText
+    }
+  ];
+
   public constructor(props: ISidePanelProps) {
     super(props);
     this.state = {
@@ -81,7 +96,7 @@ export class SidePanel extends React.Component<
         <ChoiceGroup
           label={localization.Interpret.DatasetExplorer.chartType}
           selectedKey={this.props.chartType}
-          options={this.chartOptions}
+          options={this.getChartOptions()}
           onChange={this.onChartTypeChange}
           id="ChartTypeSelection"
         />
@@ -166,4 +181,12 @@ export class SidePanel extends React.Component<
       this.props.onWeightChange(newIndex);
     }
   };
+
+  private getChartOptions(): IChoiceGroupOption[] {
+    if (ifEnableLargeData(this.context.dataset)) {
+      return this.largeDataChartOptions;
+    } else {
+      return this.chartOptions;
+    }
+  }
 }

@@ -452,7 +452,7 @@ export class GlobalExplanationTab extends React.PureComponent<
   }
 
   private async getGlobalSeries(): Promise<void> {
-    let globalExplanationsSDKValue = await this.getCohortSeriesSDK();
+    const globalExplanationsSDKValue = await this.getCohortSeriesSDK();
     if (globalExplanationsSDKValue) {
       this.setState({
         cohortSeries: globalExplanationsSDKValue
