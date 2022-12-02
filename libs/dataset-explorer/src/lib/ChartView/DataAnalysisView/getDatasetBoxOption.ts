@@ -59,6 +59,6 @@ export function getDatasetBoxOption(
       title: {
         align: "high"
       }
-    },
+    }
   };
 }

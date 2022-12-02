@@ -125,8 +125,8 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
               fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
-              type: "boxplot",
-              tooltip: boxChartTooltipDefaultSetting
+              tooltip: boxChartTooltipDefaultSetting,
+              type: "boxplot"
             },
             {
               data: isNewSdkEndpointsFlightOn
