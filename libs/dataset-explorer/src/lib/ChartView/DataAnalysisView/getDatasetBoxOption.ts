@@ -6,7 +6,8 @@ import {
   getBoxData,
   getPrimaryChartColor,
   IGenericChartProps,
-  JointDataset
+  JointDataset,
+  boxChartTooltipDefaultSetting
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { IPlotlyProperty } from "@responsible-ai/mlchartlib";
@@ -32,7 +33,8 @@ export function getDatasetBoxOption(
       color: data.color,
       data,
       fillColor: theme.semanticColors.inputBackgroundChecked,
-      name: userFeatureName
+      name: userFeatureName,
+      tooltip: boxChartTooltipDefaultSetting
     });
   });
   outlier.forEach((data: any) => {

@@ -4,6 +4,7 @@
 import { getTheme, IChoiceGroupOption } from "@fluentui/react";
 import {
   BasicHighChart,
+  boxChartTooltipDefaultSetting,
   calculateBoxPlotData,
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
@@ -124,6 +125,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
               fillColor: theme.semanticColors.inputBackgroundChecked,
               name: localization.ModelAssessment.ModelOverview.BoxPlot
                 .boxPlotSeriesLabel,
+              tooltip: boxChartTooltipDefaultSetting,
               type: "boxplot"
             },
             {
