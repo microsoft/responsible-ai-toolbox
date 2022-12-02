@@ -129,9 +129,16 @@ class ResponsibleAIDashboardInput:
             num_leaves = data[4]
             min_child_samples = data[5]
             metric = display_name_to_metric[data[6]]
+
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=False)
+
             self._error_analyzer.update_metric(metric)
-            tree = self._error_analyzer.compute_error_tree(
-                features, filters, composite_filters,
+
+            tree = self._error_analyzer.compute_error_tree_on_dataset(
+                features, filtered_data_df,
                 max_depth, num_leaves, min_child_samples)
             return {
                 WidgetRequestResponseConstants.data: tree
@@ -157,9 +164,16 @@ class ResponsibleAIDashboardInput:
             quantile_binning = data[3]
             num_bins = data[4]
             metric = display_name_to_metric[data[5]]
+
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=False)
+
             self._error_analyzer.update_metric(metric)
-            matrix = self._error_analyzer.compute_matrix(
-                features, filters, composite_filters,
+
+            matrix = self._error_analyzer.compute_matrix_on_dataset(
+                features, filtered_data_df,
                 quantile_binning, num_bins)
             return {
                 WidgetRequestResponseConstants.data: matrix

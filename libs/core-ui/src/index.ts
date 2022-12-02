@@ -91,6 +91,7 @@ export * from "./lib/Interfaces/IMetaData";
 export * from "./lib/Interfaces/TextExplanationInterfaces";
 export * from "./lib/Interfaces/VisionExplanationInterfaces";
 export * from "./lib/Highchart/BasicHighChart";
+export * from "./lib/Highchart/BoxChartTooltip";
 export * from "./lib/Highchart/ChartColors";
 export * from "./lib/Highchart/FeatureImportanceDependence";
 export * from "./lib/Highchart/FeatureImportanceBar";

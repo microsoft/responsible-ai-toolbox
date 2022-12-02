@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-import gender_guesser.detector as gender
+
 import pkg_resources
 from negspacy.negation import Negex  # noqa: F401
 
@@ -151,33 +151,6 @@ def detect_sub_sentences_with_different_sentiments(classify_helper, sentence):
         return False
 
     return True
-
-
-def get_male_female_words_count(nlp_doc):
-    gender_detector = gender.Detector()
-    male_count = 0
-    female_count = 0
-    neutral_count = 0
-    for token in nlp_doc:
-        if token.text in male_words or token.lemma_ in male_words:
-            male_count += 1
-        elif token.text in female_words or token.lemma_ in female_words:
-            female_count += 1
-        elif token.text in neutral_words or token.lemma_ in neutral_words:
-            neutral_count += 1
-
-    for name in get_named_persons(nlp_doc):
-        if gender_detector.get_gender(name) in ["male", "mostly_male"]:
-            male_count += 1
-        elif gender_detector.get_gender(name) == ["female", "mostly_female"]:
-            female_count += 1
-        elif gender_detector.get_gender(name) == ["andy", "unknown"]:
-            neutral_count += 1
-
-    return {
-        "male_count": male_count,
-        "female_count": female_count,
-        "neutral_count": neutral_count}
 
 
 def detect_negation_words_and_entities(nlp_doc):
