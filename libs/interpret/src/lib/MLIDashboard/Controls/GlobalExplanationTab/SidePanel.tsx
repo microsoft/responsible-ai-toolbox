@@ -185,8 +185,8 @@ export class SidePanel extends React.Component<
   private getChartOptions(): IChoiceGroupOption[] {
     if (ifEnableLargeData(this.context.dataset)) {
       return this.largeDataChartOptions;
-    } else {
-      return this.chartOptions;
     }
+
+    return this.chartOptions;
   }
 }
