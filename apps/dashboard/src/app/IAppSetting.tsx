@@ -12,5 +12,3 @@ export const routeKey = [
 export type IAppSetting = {
   [key in typeof routeKey[number]]?: string;
 };
-
-export const noFlights = "none";
