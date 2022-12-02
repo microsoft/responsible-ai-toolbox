@@ -9,6 +9,7 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
+from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
 from responsibleai.managers.counterfactual_manager import CounterfactualManager
 from responsibleai.managers.error_analysis_manager import ErrorAnalysisManager
@@ -29,7 +30,8 @@ class ModelAnalysis(object):
                  categorical_features: Optional[List[str]] = None,
                  train_labels: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
-                 maximum_rows_for_test: int = 5000):
+                 maximum_rows_for_test: int = 5000,
+                 feature_metadata: Optional[FeatureMetadata] = None):
         """Creates a ModelAnalysis object.
 
         :param model: The model to compute RAI insights for.
@@ -57,6 +59,10 @@ class ModelAnalysis(object):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         warnings.warn(
             "MODULE-DEPRECATION-WARNING: ModelAnalysis in responsibleai "
@@ -71,13 +77,15 @@ class ModelAnalysis(object):
             categorical_features=categorical_features,
             classes=train_labels,
             serializer=serializer,
-            maximum_rows_for_test=maximum_rows_for_test)
+            maximum_rows_for_test=maximum_rows_for_test,
+            feature_metadata=feature_metadata)
         self.model = self.rai_insights.model
         self.train = self.rai_insights.train
         self.test = self.rai_insights.test
         self.target_column = self.rai_insights.target_column
         self.task_type = self.rai_insights.task_type
         self.categorical_features = self.rai_insights.categorical_features
+        self.feature_metadata = feature_metadata
 
     @property
     def causal(self) -> CausalManager:
