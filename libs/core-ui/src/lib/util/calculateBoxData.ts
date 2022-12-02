@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import _ from "lodash";
 import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
+import { IBoxChartState } from "../Interfaces/IBoxChartState";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
 export async function calculateBoxPlotDataFromErrorCohort(
@@ -118,4 +120,25 @@ export function getPercentile(
     result = sortedData[Math.floor(index)];
   }
   return result;
+}
+
+export async function setOutlierDataIfChanged(
+  boxPlotData: Array<Promise<IHighchartBoxData | undefined>>,
+  prevBoxChartState: IBoxChartState,
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void
+): Promise<void> {
+  const data = await Promise.all(boxPlotData);
+  const outlierData = data
+    .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
+    .map((outlierProbs, cohortIndex) => {
+      return outlierProbs?.map((prob) => [cohortIndex, prob]);
+    })
+    .filter((list) => list !== undefined)
+    .reduce((list1, list2) => list1?.concat(list2 || []), []);
+  if (
+    !_.isEqual(data, prevBoxChartState.boxPlotData) ||
+    !_.isEqual(prevBoxChartState.outlierData, outlierData)
+  ) {
+    onBoxPlotStateUpdate({ boxPlotData: data, outlierData });
+  }
 }

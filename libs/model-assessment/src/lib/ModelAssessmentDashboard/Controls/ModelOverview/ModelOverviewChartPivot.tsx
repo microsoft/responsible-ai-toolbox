@@ -17,7 +17,7 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { IBoxChartState } from "./BoxChartState";
+import { IBoxChartState } from "../../../../../../core-ui/src/lib/Interfaces/IBoxChartState";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";

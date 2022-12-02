@@ -18,14 +18,14 @@ import {
   defaultModelAssessmentContext,
   ErrorCohort,
   JointDataset,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  setOutlierDataIfChanged,
+  IBoxChartState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import _ from "lodash";
 import React from "react";
-
-import { IBoxChartState } from "./BoxChartState";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IRegressionDistributionChartProps {
@@ -92,38 +92,24 @@ export class RegressionDistributionChart extends React.Component<
       prevState.targetOption !== this.state.targetOption
     ) {
       const targetOption = this.state.targetOption
-        ? this.state.targetOption?.key.toString()
-        : targetOptions[0].key.toString();
-      const boxPlotData = await Promise.all(
-        this.props.cohorts.map((cohort: ErrorCohort, index: number) => {
+        ? this.state.targetOption
+        : targetOptions[0];
+      const boxPlotData = this.props.cohorts.map(
+        (cohort: ErrorCohort, index: number) => {
           return calculateBoxPlotDataFromErrorCohort(
             cohort,
             index,
-            targetOption
+            targetOption?.key.toString(),
+            targetOption?.id,
+            this.context.requestBoxPlotDistribution
           );
-        })
+        }
       );
-      const outlierData = boxPlotData
-        .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-        .map((outlierValues, cohortIndex) => {
-          return outlierValues?.map((val) => [cohortIndex, val]);
-        })
-        .filter((list) => list !== undefined)
-        .reduce((list1, list2) => {
-          if (list1 === undefined) {
-            return list2 ?? [];
-          }
-          if (list2 === undefined) {
-            return list1 ?? [];
-          }
-          return list1.concat(list2);
-        }, []);
-      if (
-        !_.isEqual(boxPlotData, this.props.boxPlotState.boxPlotData) ||
-        !_.isEqual(this.props.boxPlotState.outlierData, outlierData)
-      ) {
-        this.props.onBoxPlotStateUpdate({ boxPlotData, outlierData });
-      }
+      setOutlierDataIfChanged(
+        boxPlotData,
+        this.props.boxPlotState,
+        this.props.onBoxPlotStateUpdate
+      );
     }
   }
 

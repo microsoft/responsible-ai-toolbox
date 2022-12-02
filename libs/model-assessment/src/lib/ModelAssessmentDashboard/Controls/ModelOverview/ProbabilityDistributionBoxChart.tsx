@@ -8,15 +8,14 @@ import {
   calculateBoxPlotDataFromErrorCohort,
   defaultModelAssessmentContext,
   ErrorCohort,
-  IHighchartBoxData,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  setOutlierDataIfChanged,
+  IBoxChartState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import _ from "lodash";
 import React from "react";
-
-import { IBoxChartState } from "./BoxChartState";
 
 interface IProbabilityDistributionBoxChartProps {
   boxPlotState: IBoxChartState;
@@ -52,7 +51,11 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
           );
         }
       );
-      this.getOutlierData(boxPlotData);
+      setOutlierDataIfChanged(
+        boxPlotData,
+        this.props.boxPlotState,
+        this.props.onBoxPlotStateUpdate
+      );
     }
   }
 
@@ -111,24 +114,5 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
         }}
       />
     );
-  }
-
-  private async getOutlierData(
-    boxPlotData: Array<Promise<IHighchartBoxData | undefined>>
-  ): Promise<void> {
-    const data = await Promise.all(boxPlotData);
-    const outlierData = data
-      .map((cohortBoxPlotData) => cohortBoxPlotData?.outliers)
-      .map((outlierProbs, cohortIndex) => {
-        return outlierProbs?.map((prob) => [cohortIndex, prob]);
-      })
-      .filter((list) => list !== undefined)
-      .reduce((list1, list2) => list1?.concat(list2 || []), []);
-    if (
-      !_.isEqual(data, this.props.boxPlotState.boxPlotData) ||
-      !_.isEqual(this.props.boxPlotState.outlierData, outlierData)
-    ) {
-      this.props.onBoxPlotStateUpdate({ boxPlotData: data, outlierData });
-    }
   }
 }
