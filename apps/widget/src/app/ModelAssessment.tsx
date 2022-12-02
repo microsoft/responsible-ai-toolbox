@@ -32,6 +32,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestImportances"
       | "requestCausalWhatIf"
       | "requestBoxPlotDistribution"
+      | "requestGlobalExplanations"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -73,6 +74,18 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestGlobalExplanations = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter],
+          "/global_explanations",
+          abortSignal
         );
       };
     }
