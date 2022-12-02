@@ -456,6 +456,8 @@ class RAIInsights(RAIBaseInsights):
 
             if model is not None:
                 # Pick one row from train and test data
+                small_train_data = train[0:1]
+                small_test_data = test[0:1]
                 if feature_metadata is not None:
                     if feature_metadata.dropped_features is not None and \
                             len(feature_metadata.dropped_features) != 0:
@@ -463,12 +465,6 @@ class RAIInsights(RAIBaseInsights):
                             columns=feature_metadata.dropped_features, axis=1)
                         small_test_data = test[0:1].drop(
                             columns=feature_metadata.dropped_features, axis=1)
-                    else:
-                        small_train_data = train[0:1]
-                        small_test_data = test[0:1]
-                else:
-                    small_train_data = train[0:1]
-                    small_test_data = test[0:1]
 
                 small_train_data = small_train_data.drop(
                     columns=[target_column], axis=1)
@@ -666,12 +662,14 @@ class RAIInsights(RAIBaseInsights):
         if dataset is not None and self.model is not None:
             try:
                 predict_dataset = dataset
-                if self._feature_metadata is not None:
-                    if self._feature_metadata.dropped_features is not None \
-                            and len(self._feature_metadata.dropped_features) \
-                            != 0:
-                        predict_dataset = predict_dataset.drop(
-                            self._feature_metadata.dropped_features, axis=1)
+                metadata = self._feature_metadata
+                metadata_exists = metadata is not None
+                dropped_features_exist = metadata_exists and \
+                    metadata.dropped_features is not None
+                if dropped_features_exist and \
+                        len(metadata.dropped_features) != 0:
+                    predict_dataset = predict_dataset.drop(
+                        metadata.dropped_features, axis=1)
                 predicted_y = self.model.predict(predict_dataset)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
@@ -726,12 +724,14 @@ class RAIInsights(RAIBaseInsights):
         if is_classifier(self.model) and dataset is not None:
             try:
                 predict_dataset = dataset
-                if self._feature_metadata is not None:
-                    if self._feature_metadata.dropped_features is not None \
-                            and len(self._feature_metadata.dropped_features) \
-                            != 0:
-                        predict_dataset = predict_dataset.drop(
-                            self._feature_metadata.dropped_features, axis=1)
+                metadata = self._feature_metadata
+                metadata_exists = metadata is not None
+                dropped_features_exist = metadata_exists and \
+                    metadata.dropped_features is not None
+                if dropped_features_exist and \
+                        len(metadata.dropped_features) != 0:
+                    predict_dataset = predict_dataset.drop(
+                        metadata.dropped_features, axis=1)
                 probability_y = self.model.predict_proba(predict_dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
