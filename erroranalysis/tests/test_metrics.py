@@ -13,11 +13,14 @@ from erroranalysis._internal.metrics import metric_to_func
 class TestMetrics:
     @pytest.mark.parametrize('metric', binary_classification_metrics)
     def test_binary_classification_metrics(self, metric):
-        if metric == Metrics.ERROR_RATE:
-            pytest.skip('Not implemented')
         y_true = np.array([1, 0, 1, 1, 0, 1])
         y_pred = np.array([0, 0, 1, 1, 0, 1])
-        assert isinstance(metric_to_func[metric](y_true, y_pred), float)
+        if metric == Metrics.ERROR_RATE:
+            diff = y_true != y_pred
+            metric_value = metric_to_func[metric](y_true, y_pred, diff)
+        else:
+            metric_value = metric_to_func[metric](y_true, y_pred)
+        assert isinstance(metric_value, float)
 
     @pytest.mark.parametrize('metric', [Metrics.FALSE_NEGATIVE_RATE,
                                         Metrics.FALSE_POSITIVE_RATE,
@@ -39,8 +42,11 @@ class TestMetrics:
 
     @pytest.mark.parametrize('metric', multiclass_classification_metrics)
     def test_multiclass_classification_metrics(self, metric):
-        if metric == Metrics.ERROR_RATE:
-            pytest.skip('Not implemented')
         y_true = np.array([1, 0, 2, 1, 0, 1])
         y_pred = np.array([0, 0, 2, 1, 0, 1])
-        assert isinstance(metric_to_func[metric](y_true, y_pred), float)
+        if metric == Metrics.ERROR_RATE:
+            diff = y_true != y_pred
+            metric_value = metric_to_func[metric](y_true, y_pred, diff)
+        else:
+            metric_value = metric_to_func[metric](y_true, y_pred)
+        assert isinstance(metric_value, float)
