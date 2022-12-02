@@ -4,6 +4,7 @@
 import { ITheme } from "@fluentui/react";
 import { SeriesOptionsType } from "highcharts";
 import _ from "lodash";
+import { boxChartTooltipDefaultSetting } from "../Highchart/BoxChartTooltip";
 
 import { getChartColors } from "../Highchart/ChartColors";
 import { IGlobalSeries } from "../Highchart/FeatureImportanceBar";
@@ -51,7 +52,8 @@ export function getFeatureImportanceBoxOptions(
       color: data.color,
       data: boxData.box,
       name: data.name,
-      type: "boxplot"
+      type: "boxplot",
+      tooltip: boxChartTooltipDefaultSetting
     });
   });
   return {
@@ -86,6 +88,6 @@ export function getFeatureImportanceBoxOptions(
       title: {
         align: "high"
       }
-    }
+    },
   };
 }
