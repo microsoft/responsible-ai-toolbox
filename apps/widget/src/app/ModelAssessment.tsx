@@ -32,6 +32,8 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestImportances"
       | "requestCausalWhatIf"
       | "requestBoxPlotDistribution"
+      | "requestDatasetAnalysisBarChart"
+      | "requestDatasetAnalysisBoxChart"
       | "requestGlobalExplanations"
     > = {};
     if (this.props.config.baseUrl) {
@@ -85,6 +87,46 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           [filter, compositeFilter],
           "/global_explanations",
+          abortSignal
+        );
+      };
+      callBack.requestDatasetAnalysisBarChart = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        column_name_x: string,
+        treat_column_x_as_categorical: boolean,
+        column_name_y: string,
+        treat_column_y_as_categorical: boolean,
+        num_bins: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [
+            filter,
+            compositeFilter,
+            column_name_x,
+            treat_column_x_as_categorical,
+            column_name_y,
+            treat_column_y_as_categorical,
+            num_bins
+          ],
+          "/dataset_analysis_bar_chart_plot",
+          abortSignal
+        );
+      };
+      callBack.requestDatasetAnalysisBoxChart = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        column_name_x: string,
+        column_name_y: string,
+        num_bins: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter, column_name_x, column_name_y, num_bins],
+          "/dataset_analysis_box_chart_plot",
           abortSignal
         );
       };
