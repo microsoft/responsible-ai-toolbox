@@ -7,7 +7,8 @@ import {
   ModelAssessmentContext,
   ITelemetryEvent,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -16,6 +17,7 @@ import { DatasetExplorerTab } from "./ChartView/DataAnalysisView/DatasetExplorer
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceView/DataBalanceTab";
 import { TableViewTab } from "./TableView/TableViewTab";
+import { LargeDatasetExplorerTab } from "./ChartView/LargeDataView/LargeDatasetExplorerTab";
 
 interface IDataAnalysisTabProps {
   onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
@@ -27,7 +29,8 @@ interface IDataAnalysisTabProps {
 export enum DataAnalysisTabOptions {
   ChartView = "ChartView",
   DataBalance = "DataBalance",
-  TableView = "TableView"
+  TableView = "TableView",
+  LargeDataChartView = "LargeDataChartView"
 }
 
 export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
@@ -46,27 +49,41 @@ export class DataAnalysisTab extends React.Component<IDataAnalysisTabProps> {
         id="dataAnalysisPivot"
         overflowBehavior="menu"
       >
-        <PivotItem
-          itemKey={DataAnalysisTabOptions.TableView}
-          headerText={localization.ModelAssessment.ComponentNames.TableView}
-        >
-          <TableViewTab
-            features={this.context.modelMetadata.featureNames}
-            jointDataset={this.context.jointDataset}
-            selectedCohort={this.context.selectedErrorCohort}
-            modelType={this.context.modelMetadata.modelType}
-            telemetryHook={this.props.telemetryHook}
-          />
-        </PivotItem>
+        {!ifEnableLargeData(this.context.dataset) ? (
+          <PivotItem
+            itemKey={DataAnalysisTabOptions.TableView}
+            headerText={localization.ModelAssessment.ComponentNames.TableView}
+          >
+            <TableViewTab
+              features={this.context.modelMetadata.featureNames}
+              jointDataset={this.context.jointDataset}
+              selectedCohort={this.context.selectedErrorCohort}
+              modelType={this.context.modelMetadata.modelType}
+              telemetryHook={this.props.telemetryHook}
+            />
+          </PivotItem>
+        ) : undefined}
 
-        <PivotItem
-          itemKey={DataAnalysisTabOptions.ChartView}
-          headerText={localization.ModelAssessment.ComponentNames.ChartView}
-        >
-          <DatasetExplorerTab telemetryHook={this.props.telemetryHook} />
-        </PivotItem>
+        {!ifEnableLargeData(this.context.dataset) ? (
+          <PivotItem
+            itemKey={DataAnalysisTabOptions.ChartView}
+            headerText={localization.ModelAssessment.ComponentNames.ChartView}
+          >
+            <DatasetExplorerTab telemetryHook={this.props.telemetryHook} />
+          </PivotItem>
+        ) : undefined}
 
-        {this.props.showDataBalanceExperience ? (
+        {ifEnableLargeData(this.context.dataset) ? (
+          <PivotItem
+            itemKey={DataAnalysisTabOptions.LargeDataChartView}
+            headerText={localization.ModelAssessment.ComponentNames.ChartView}
+          >
+            <LargeDatasetExplorerTab telemetryHook={this.props.telemetryHook} />
+          </PivotItem>
+        ) : undefined}
+
+        {!ifEnableLargeData(this.context.dataset) &&
+        this.props.showDataBalanceExperience ? (
           <PivotItem
             itemKey={DataAnalysisTabOptions.DataBalance}
             headerText={localization.ModelAssessment.ComponentNames.DataBalance}
