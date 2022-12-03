@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import _ from "lodash";
+
 import { Cohort } from "../Cohort/Cohort";
 import { ErrorCohort } from "../Cohort/ErrorCohort";
-import { IBoxChartState } from "../Interfaces/IBoxChartState";
+import { IBoxChartState } from "../Highchart/IBoxChartState";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
 
 export async function calculateBoxPlotDataFromErrorCohort(

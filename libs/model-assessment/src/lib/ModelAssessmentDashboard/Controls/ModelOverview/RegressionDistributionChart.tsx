@@ -26,6 +26,7 @@ import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
 import _ from "lodash";
 import React from "react";
+
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 
 interface IRegressionDistributionChartProps {
