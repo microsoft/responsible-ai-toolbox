@@ -18,12 +18,12 @@ import {
   JointDataset,
   ModelAssessmentContext,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  IBoxChartState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { IBoxChartState } from "./BoxChartState";
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
