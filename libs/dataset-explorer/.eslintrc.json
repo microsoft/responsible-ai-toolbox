@@ -1,6 +1,6 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "LargeDatasetExplorerTab.tsx"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],

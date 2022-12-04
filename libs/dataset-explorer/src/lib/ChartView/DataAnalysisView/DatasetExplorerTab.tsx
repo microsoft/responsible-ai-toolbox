@@ -32,6 +32,7 @@ import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
 import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
 import { generatePlotlyProps } from "../utils/generatePlotlyProps";
 import { getDatasetOption } from "../utils/getDatasetOption";
+
 import { SidePanel } from "./SidePanel";
 
 export interface IDatasetExplorerTabProps {

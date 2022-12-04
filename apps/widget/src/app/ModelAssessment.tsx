@@ -93,11 +93,11 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       callBack.requestDatasetAnalysisBarChart = async (
         filter: unknown[],
         compositeFilter: unknown[],
-        column_name_x: string,
-        treat_column_x_as_categorical: boolean,
-        column_name_y: string,
-        treat_column_y_as_categorical: boolean,
-        num_bins: number,
+        columnNameX: string,
+        treatColumnXAsCategorical: boolean,
+        columnNameY: string,
+        treatColumnYAsCategorical: boolean,
+        numBins: number,
         abortSignal: AbortSignal
       ): Promise<any> => {
         return callFlaskService(
@@ -105,10 +105,10 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           [
             filter,
             compositeFilter,
-            column_name_x,
-            treat_column_x_as_categorical,
-            column_name_y,
-            treat_column_y_as_categorical,
+            columnNameX,
+            treatColumnXAsCategorical,
+            columnNameY,
+            treatColumnYAsCategorical,
             num_bins
           ],
           "/dataset_analysis_bar_chart_plot",
@@ -118,14 +118,14 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       callBack.requestDatasetAnalysisBoxChart = async (
         filter: unknown[],
         compositeFilter: unknown[],
-        column_name_x: string,
-        column_name_y: string,
+        columnNameX: string,
+        columnNameY: string,
         num_bins: number,
         abortSignal: AbortSignal
       ): Promise<any> => {
         return callFlaskService(
           this.props.config,
-          [filter, compositeFilter, column_name_x, column_name_y, num_bins],
+          [filter, compositeFilter, columnNameX, columnNameY, num_bins],
           "/dataset_analysis_box_chart_plot",
           abortSignal
         );

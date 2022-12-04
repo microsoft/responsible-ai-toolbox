@@ -63,169 +63,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     };
   }
 
-  private async generateHighChartConfigOverride(
-    cohortIndex: number,
-    chartProps: IGenericChartProps | undefined
-  ): Promise<void> {
-    if (chartProps) {
-      if (
-        !this.context.requestDatasetAnalysisBarChart ||
-        !this.context.requestDatasetAnalysisBoxChart ||
-        !chartProps?.xAxis.property ||
-        !chartProps?.yAxis.property
-      ) {
-        const plotlyProps = generatePlotlyProps(
-          this.context.jointDataset,
-          chartProps,
-          this.context.errorCohorts.map((errorCohort) => errorCohort.cohort)[
-            cohortIndex
-          ]
-        );
-        const configOverride = getDatasetOption(
-          plotlyProps,
-          this.context.jointDataset,
-          chartProps
-        );
-
-        this.setState({
-          chartProps: chartProps,
-          selectedCohortIndex: cohortIndex,
-          highChartConfigOverride: configOverride
-        });
-      } else {
-        const dataCohort = this.context.errorCohorts[cohortIndex].cohort;
-        const filtersRelabeled = Cohort.getLabeledFilters(
-          dataCohort.filters,
-          this.context.jointDataset
-        );
-        const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
-          dataCohort.compositeFilters,
-          this.context.jointDataset
-        );
-
-        if (
-          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-            .isCategorical ||
-          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-            ?.treatAsCategorical
-        ) {
-          const treatXAsCategorical =
-            (this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .isCategorical ||
-              this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-                ?.treatAsCategorical) ??
-            false;
-
-          const treatYAsCategorical =
-            (this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .isCategorical ||
-              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-                ?.treatAsCategorical) ??
-            false;
-
-          const result = await this.context.requestDatasetAnalysisBarChart(
-            filtersRelabeled,
-            compositeFiltersRelabeled,
-            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .label,
-            treatXAsCategorical,
-            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .label,
-            treatYAsCategorical,
-            5,
-            new AbortController().signal
-          );
-          const datasetBarConfigOverride = {
-            chart: {
-              type: "column"
-            },
-            series: result.values,
-            xAxis: {
-              categories: result.buckets
-            }
-          };
-          this.setState({
-            chartProps: chartProps,
-            selectedCohortIndex: cohortIndex,
-            highChartConfigOverride: datasetBarConfigOverride
-          });
-        } else {
-          const result = await this.context.requestDatasetAnalysisBoxChart(
-            filtersRelabeled,
-            compositeFiltersRelabeled,
-            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .label,
-            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .label,
-            5,
-            new AbortController().signal
-          );
-
-          const boxGroupData: any = [];
-          const theme = getTheme();
-
-          let userFeatureName =
-            localization.ModelAssessment.ModelOverview.BoxPlot
-              .boxPlotSeriesLabel;
-          if (chartProps?.yAxis.property) {
-            userFeatureName =
-              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-                .label;
-          }
-          boxGroupData.push({
-            color: undefined,
-            data: result.values,
-            fillColor: theme.semanticColors.inputBackgroundChecked,
-            name: userFeatureName
-          });
-          boxGroupData.push({
-            data: result.outliers,
-            marker: {
-              fillColor: getPrimaryChartColor(theme)
-            },
-            name: localization.ModelAssessment.ModelOverview.BoxPlot
-              .outlierLabel,
-            type: "scatter"
-          });
-          const datasetBoxConfigOverride = {
-            chart: {
-              type: "boxplot"
-            },
-            series: boxGroupData,
-            xAxis: {
-              categories: result.buckets
-            }
-          };
-          this.setState({
-            chartProps: chartProps,
-            selectedCohortIndex: cohortIndex,
-            highChartConfigOverride: datasetBoxConfigOverride
-          });
-        }
-      }
-    } else {
-      this.setState({
-        chartProps: chartProps,
-        selectedCohortIndex: cohortIndex
-      });
-    }
-  }
-
-  public componentDidMount(): void {
-    const initialCohortIndex = 0;
-    const chartProps = generateDefaultChartAxes(this.context.jointDataset);
-    this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
-  }
-
-  public componentDidUpdate(
-    _preProp: IDatasetExplorerTabProps,
-    preState: IDatasetExplorerTabState
-  ): void {
-    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
-      this.generateHighChartConfigOverride(0, this.state.chartProps);
-    }
-  }
-
   public render(): React.ReactNode {
     const classNames = datasetExplorerTabStyles();
 
@@ -380,6 +217,169 @@ export class LargeDatasetExplorerTab extends React.Component<
         </Stack.Item>
       </Stack>
     );
+  }
+
+  public componentDidMount(): void {
+    const initialCohortIndex = 0;
+    const chartProps = generateDefaultChartAxes(this.context.jointDataset);
+    this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
+  }
+
+  public componentDidUpdate(
+    _preProp: IDatasetExplorerTabProps,
+    preState: IDatasetExplorerTabState
+  ): void {
+    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
+      this.generateHighChartConfigOverride(0, this.state.chartProps);
+    }
+  }
+
+  private async generateHighChartConfigOverride(
+    cohortIndex: number,
+    chartProps: IGenericChartProps | undefined
+  ): Promise<void> {
+    if (chartProps) {
+      if (
+        !this.context.requestDatasetAnalysisBarChart ||
+        !this.context.requestDatasetAnalysisBoxChart ||
+        !chartProps?.xAxis.property ||
+        !chartProps?.yAxis.property
+      ) {
+        const plotlyProps = generatePlotlyProps(
+          this.context.jointDataset,
+          chartProps,
+          this.context.errorCohorts.map((errorCohort) => errorCohort.cohort)[
+            cohortIndex
+          ]
+        );
+        const configOverride = getDatasetOption(
+          plotlyProps,
+          this.context.jointDataset,
+          chartProps
+        );
+
+        this.setState({
+          chartProps,
+          highChartConfigOverride: configOverride,
+          selectedCohortIndex: cohortIndex
+        });
+      } else {
+        const dataCohort = this.context.errorCohorts[cohortIndex].cohort;
+        const filtersRelabeled = Cohort.getLabeledFilters(
+          dataCohort.filters,
+          this.context.jointDataset
+        );
+        const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
+          dataCohort.compositeFilters,
+          this.context.jointDataset
+        );
+
+        if (
+          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+            .isCategorical ||
+          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+            ?.treatAsCategorical
+        ) {
+          const treatXAsCategorical =
+            (this.context.jointDataset.metaDict[chartProps?.xAxis.property]
+              .isCategorical ||
+              this.context.jointDataset.metaDict[chartProps?.xAxis.property]
+                ?.treatAsCategorical) ??
+            false;
+
+          const treatYAsCategorical =
+            (this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+              .isCategorical ||
+              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+                ?.treatAsCategorical) ??
+            false;
+
+          const result = await this.context.requestDatasetAnalysisBarChart(
+            filtersRelabeled,
+            compositeFiltersRelabeled,
+            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
+              .label,
+            treatXAsCategorical,
+            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+              .label,
+            treatYAsCategorical,
+            5,
+            new AbortController().signal
+          );
+          const datasetBarConfigOverride = {
+            chart: {
+              type: "column"
+            },
+            series: result.values,
+            xAxis: {
+              categories: result.buckets
+            }
+          };
+          this.setState({
+            chartProps,
+            highChartConfigOverride: datasetBarConfigOverride,
+            selectedCohortIndex: cohortIndex
+          });
+        } else {
+          const result = await this.context.requestDatasetAnalysisBoxChart(
+            filtersRelabeled,
+            compositeFiltersRelabeled,
+            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
+              .label,
+            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+              .label,
+            5,
+            new AbortController().signal
+          );
+
+          const boxGroupData: any = [];
+          const theme = getTheme();
+
+          let userFeatureName =
+            localization.ModelAssessment.ModelOverview.BoxPlot
+              .boxPlotSeriesLabel;
+          if (chartProps?.yAxis.property) {
+            userFeatureName =
+              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
+                .label;
+          }
+          boxGroupData.push({
+            color: undefined,
+            data: result.values,
+            fillColor: theme.semanticColors.inputBackgroundChecked,
+            name: userFeatureName
+          });
+          boxGroupData.push({
+            data: result.outliers,
+            marker: {
+              fillColor: getPrimaryChartColor(theme)
+            },
+            name: localization.ModelAssessment.ModelOverview.BoxPlot
+              .outlierLabel,
+            type: "scatter"
+          });
+          const datasetBoxConfigOverride = {
+            chart: {
+              type: "boxplot"
+            },
+            series: boxGroupData,
+            xAxis: {
+              categories: result.buckets
+            }
+          };
+          this.setState({
+            chartProps,
+            highChartConfigOverride: datasetBoxConfigOverride,
+            selectedCohortIndex: cohortIndex
+          });
+        }
+      }
+    } else {
+      this.setState({
+        chartProps,
+        selectedCohortIndex: cohortIndex
+      });
+    }
   }
 
   private setSelectedCohort = (

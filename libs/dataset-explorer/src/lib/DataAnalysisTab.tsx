@@ -14,10 +14,10 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { DatasetExplorerTab } from "./ChartView/DataAnalysisView/DatasetExplorerTab";
+import { LargeDatasetExplorerTab } from "./ChartView/LargeDataView/LargeDatasetExplorerTab";
 import { dataAnalysisTabStyles } from "./DataAnalysisTab.styles";
 import { DataBalanceTab } from "./DataBalanceView/DataBalanceTab";
 import { TableViewTab } from "./TableView/TableViewTab";
-import { LargeDatasetExplorerTab } from "./ChartView/LargeDataView/LargeDatasetExplorerTab";
 
 interface IDataAnalysisTabProps {
   onAllSelectedItemsChange: (allSelectedItems: IObjectWithKey[]) => void;
