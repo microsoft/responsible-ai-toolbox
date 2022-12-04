@@ -109,7 +109,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
             treatColumnXAsCategorical,
             columnNameY,
             treatColumnYAsCategorical,
-            num_bins
+            numBins
           ],
           "/dataset_analysis_bar_chart_plot",
           abortSignal
@@ -120,12 +120,12 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         compositeFilter: unknown[],
         columnNameX: string,
         columnNameY: string,
-        num_bins: number,
+        numBins: number,
         abortSignal: AbortSignal
       ): Promise<any> => {
         return callFlaskService(
           this.props.config,
-          [filter, compositeFilter, columnNameX, columnNameY, num_bins],
+          [filter, compositeFilter, columnNameX, columnNameY, numBins],
           "/dataset_analysis_box_chart_plot",
           abortSignal
         );
