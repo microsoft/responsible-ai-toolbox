@@ -1,6 +1,6 @@
 {
   "extends": ["../../.eslintrc"],
-  "ignorePatterns": ["!**/*", "LargeDatasetExplorerTab.tsx"],
+  "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -13,6 +13,12 @@
     {
       "files": ["*.js", "*.jsx"],
       "rules": {}
+    },
+    {
+      "files": ["LargeDatasetExplorerTab.tsx"],
+      "rules": {
+        "max-lines": "warn"
+      }
     }
   ]
 }
