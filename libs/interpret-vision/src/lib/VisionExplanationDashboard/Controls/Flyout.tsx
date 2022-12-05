@@ -56,8 +56,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
     const fieldNames = this.props.otherMetadataFieldNames;
     const metadata: Array<Array<string | number | boolean>> = [];
     fieldNames.forEach((fieldName) => {
+      const itemField = item[fieldName];
+      const itemValue = Array.isArray(itemField)
+        ? itemField.join(",")
+        : itemField;
       if (item[fieldName]) {
-        metadata.push([fieldName, item[fieldName]]);
+        metadata.push([fieldName, itemValue]);
       }
     });
     this.setState({ item, metadata });
@@ -72,8 +76,12 @@ export class Flyout extends React.Component<IFlyoutProps, IFlyoutState> {
       const fieldNames = this.props.otherMetadataFieldNames;
       const metadata: Array<Array<string | number | boolean>> = [];
       fieldNames.forEach((fieldName) => {
+        const itemField = item[fieldName];
+        const itemValue = Array.isArray(itemField)
+          ? itemField.join(",")
+          : itemField;
         if (item[fieldName]) {
-          metadata.push([fieldName, item[fieldName]]);
+          metadata.push([fieldName, itemValue]);
         }
       });
       this.setState({
