@@ -25,8 +25,8 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
-import { generateDefaultYAxis } from "./generateDefaultChartAxes";
+import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
+import { generateDefaultYAxis } from "../utils/generateDefaultChartAxes";
 
 export interface ISidePanelProps {
   chartProps: IGenericChartProps;

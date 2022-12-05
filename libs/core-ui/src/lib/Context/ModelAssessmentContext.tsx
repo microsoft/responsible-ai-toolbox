@@ -59,6 +59,24 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestDatasetAnalysisBarChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    treatColumnXAsCategorical: boolean,
+    columnNameY: string,
+    treatColumnYAsCategorical: boolean,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestDatasetAnalysisBoxChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    columnNameY: string,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalExplanations?: (
     filter: unknown[],
     compositeFilter: unknown[],
