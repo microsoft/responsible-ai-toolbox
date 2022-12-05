@@ -9,45 +9,99 @@ import {
   ErrorCohort,
   ITelemetryEvent,
   ILabeledStatistic,
-  IsBinary
+  IsBinary,
+  IBoxChartState,
+  MissingParametersPlaceholder,
+  IsMulticlass
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
+import _ from "lodash";
+
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
-import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
-import { IMetricOption } from "./StatsTableUtils";
+
+import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
+import { getSelectableMetrics, IMetricOption } from "./StatsTableUtils";
+import { modelOverviewStyles } from "./ModelOverview.styles";
+import { RegressionDistributionChart } from "./RegressionDistributionChart";
 
 interface IModelOverviewChartPivotProps {
   onChooseCohorts: () => void;
   cohorts: ErrorCohort[];
+  labeledStatistics: ILabeledStatistic[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
-  boxPlotState: IProbabilityDistributionBoxChartState;
-  onBoxPlotStateUpdate: (
-    boxChartState: IProbabilityDistributionBoxChartState
-  ) => void;
-  onToggleChange: (checked: boolean) => void;
-  showSplineChart: boolean;
-  onApplyMetric: (metric: string) => void;
+  selectedMetrics: string[];
   selectableMetrics: IMetricOption[];
   cohortStats: ILabeledStatistic[][];
-  selectedMetric: string;
-  className: string;
 }
 
-export class ModelOverviewChartPivot extends React.Component<IModelOverviewChartPivotProps> {
+interface IModelOverviewChartPivotState {
+  probabilityDistributionBoxPlotState: IBoxChartState;
+  regressionDistributionBoxPlotState: IBoxChartState;
+  showSplineChart: boolean;
+  selectedMetric: string;
+}
+
+export class ModelOverviewChartPivot extends React.Component<
+  IModelOverviewChartPivotProps,
+  IModelOverviewChartPivotState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  public constructor(props: IModelOverviewChartPivotProps) {
+    super(props);
+    this.state = {
+      probabilityDistributionBoxPlotState: {
+        boxPlotData: [],
+        outlierData: undefined
+      },
+      regressionDistributionBoxPlotState: {
+        boxPlotData: [],
+        outlierData: undefined
+      },
+      selectedMetric: "",
+      showSplineChart: false
+    };
+  }
+
   public render(): React.ReactNode {
+    if (this.context.dataset.predicted_y === undefined) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.Interpret.ModelPerformance.missingParameters}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    const classNames = modelOverviewStyles();
+
+    const selectableMetrics = getSelectableMetrics(
+      this.context.dataset.task_type,
+      IsMulticlass(this.context.jointDataset.getModelType())
+    );
+
+    const columns: string[] = [
+      localization.ModelAssessment.ModelOverview.countColumnHeader
+    ];
+    columns.push(
+      ...selectableMetrics
+        .filter((element) =>
+          this.props.selectedMetrics.includes(element.key.toString())
+        )
+        .map((element) => {
+          return element.text;
+        })
+    );
+
     return (
       <Pivot
         id="modelOverviewChartPivot"
         overflowBehavior="menu"
-        className={this.props.className}
+        className={classNames.tabs}
       >
         {IsBinary(this.context.modelMetadata.modelType) && (
           <PivotItem
@@ -60,10 +114,29 @@ export class ModelOverviewChartPivot extends React.Component<IModelOverviewChart
               onChooseCohorts={this.props.onChooseCohorts}
               cohorts={this.props.cohorts}
               telemetryHook={this.props.telemetryHook}
-              boxPlotState={this.props.boxPlotState}
-              onBoxPlotStateUpdate={this.props.onBoxPlotStateUpdate}
-              onToggleChange={this.props.onToggleChange}
-              showSplineChart={this.props.showSplineChart}
+              onBoxPlotStateUpdate={
+                this.onProbabilityDistributionBoxPlotStateUpdate
+              }
+              onToggleChange={this.onSplineToggleChange}
+              showSplineChart={this.state.showSplineChart}
+              boxPlotState={this.state.probabilityDistributionBoxPlotState}
+            />
+          </PivotItem>
+        )}
+        {this.context.modelMetadata.modelType === ModelTypes.Regression && (
+          <PivotItem
+            headerText={
+              localization.ModelAssessment.ModelOverview
+                .regressionDistributionPivotItem
+            }
+          >
+            <RegressionDistributionChart
+              onChooseCohorts={this.props.onChooseCohorts}
+              cohorts={this.props.cohorts}
+              onBoxPlotStateUpdate={
+                this.onRegressionDistributionBoxPlotStateUpdate
+              }
+              boxPlotState={this.state.regressionDistributionBoxPlotState}
             />
           </PivotItem>
         )}
@@ -75,11 +148,11 @@ export class ModelOverviewChartPivot extends React.Component<IModelOverviewChart
         >
           <ModelOverviewMetricChart
             onChooseCohorts={this.props.onChooseCohorts}
-            onApplyMetric={this.props.onApplyMetric}
             selectableMetrics={this.props.selectableMetrics}
             cohorts={this.props.cohorts}
             cohortStats={this.props.cohortStats}
-            selectedMetric={this.props.selectedMetric}
+            selectedMetric={this.state.selectedMetric}
+            onApplyMetric={this.onApplyMetric}
           />
         </PivotItem>
         {(this.context.modelMetadata.modelType === ModelTypes.Binary ||
@@ -96,4 +169,32 @@ export class ModelOverviewChartPivot extends React.Component<IModelOverviewChart
       </Pivot>
     );
   }
+
+  private onSplineToggleChange = (checked: boolean): void => {
+    this.setState({ showSplineChart: checked });
+  };
+
+  private onProbabilityDistributionBoxPlotStateUpdate = (
+    boxPlotState: IBoxChartState
+  ): void => {
+    if (
+      !_.isEqual(this.state.probabilityDistributionBoxPlotState, boxPlotState)
+    ) {
+      this.setState({ probabilityDistributionBoxPlotState: boxPlotState });
+    }
+  };
+
+  private onRegressionDistributionBoxPlotStateUpdate = (
+    boxPlotState: IBoxChartState
+  ): void => {
+    if (
+      !_.isEqual(this.state.regressionDistributionBoxPlotState, boxPlotState)
+    ) {
+      this.setState({ regressionDistributionBoxPlotState: boxPlotState });
+    }
+  };
+
+  private onApplyMetric = (metric: string): void => {
+    this.setState({ selectedMetric: metric });
+  };
 }

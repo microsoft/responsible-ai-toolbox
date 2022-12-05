@@ -34,7 +34,6 @@ import {
   ImageClassificationMetrics
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import _ from "lodash";
 import React from "react";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
@@ -46,7 +45,6 @@ import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
-import { IProbabilityDistributionBoxChartState } from "./ProbabilityDistributionBoxChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewProps {
@@ -54,7 +52,6 @@ interface IModelOverviewProps {
 }
 
 interface IModelOverviewState {
-  boxPlotState: IProbabilityDistributionBoxChartState;
   selectedMetrics: string[];
   selectedFeatures: number[];
   selectedFeaturesContinuousFeatureBins: { [featureIndex: number]: number };
@@ -70,8 +67,6 @@ interface IModelOverviewState {
   // That way, we can distinguish between newly created cohorts
   // and deliberately ignored cohorts for the chart section.
   maxCohortId: number;
-  selectedMetric: string;
-  showSplineChart: boolean;
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -89,7 +84,6 @@ export class ModelOverview extends React.Component<
   public constructor(props: IModelOverviewProps) {
     super(props);
     this.state = {
-      boxPlotState: { boxPlotData: [], outlierData: undefined },
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
@@ -98,10 +92,8 @@ export class ModelOverview extends React.Component<
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
-      selectedMetric: "",
       selectedMetrics: [],
-      showHeatmapColors: true,
-      showSplineChart: false
+      showHeatmapColors: true
     };
   }
 
@@ -485,33 +477,16 @@ export class ModelOverview extends React.Component<
               onChooseCohorts={this.onChooseCohorts}
               cohorts={chartCohorts}
               telemetryHook={this.props.telemetryHook}
-              boxPlotState={this.state.boxPlotState}
-              onBoxPlotStateUpdate={this.onBoxPlotStateUpdate}
-              onToggleChange={this.onSplineToggleChange}
-              showSplineChart={this.state.showSplineChart}
-              onApplyMetric={this.onApplyMetric}
               selectableMetrics={selectableMetrics}
               cohortStats={labeledStatistics}
-              selectedMetric={this.state.selectedMetric}
-              className={classNames.tabs}
+              labeledStatistics={labeledStatistics}
+              selectedMetrics={this.state.selectedMetrics}
             />
           )}
         </Stack>
       </Stack>
     );
   }
-
-  private onSplineToggleChange = (checked: boolean): void => {
-    this.setState({ showSplineChart: checked });
-  };
-
-  private onBoxPlotStateUpdate = (
-    boxPlotState: IProbabilityDistributionBoxChartState
-  ): void => {
-    if (!_.isEqual(this.state.boxPlotState, boxPlotState)) {
-      this.setState({ boxPlotState });
-    }
-  };
 
   private onClickMetricsConfiguration = (): void => {
     this.setState({ metricConfigurationIsVisible: true });
@@ -525,10 +500,6 @@ export class ModelOverview extends React.Component<
     this.logButtonClick(
       TelemetryEventName.ModelOverviewFeatureConfigurationClick
     );
-  };
-
-  private onDismissChartConfigurationFlyout = (): void => {
-    this.setState({ chartConfigurationIsVisible: false });
   };
 
   private onDismissFeatureConfigurationFlyout = (): void => {
@@ -546,25 +517,6 @@ export class ModelOverview extends React.Component<
       );
     }
   };
-
-  private onChooseCohorts = (): void =>
-    this.setState({ chartConfigurationIsVisible: true });
-
-  private onApplyMetric = (metric: string): void => {
-    this.setState({ selectedMetric: metric });
-  };
-
-  private updateCohortSelection = (
-    selectedDatasetCohorts: number[],
-    selectedFeatureBasedCohorts: number[],
-    datasetCohortChartIsSelected: boolean
-  ): void =>
-    this.setState({
-      chartConfigurationIsVisible: false,
-      datasetCohortChartIsVisible: datasetCohortChartIsSelected,
-      selectedDatasetCohorts,
-      selectedFeatureBasedCohorts
-    });
 
   private onMetricSelectionChange = (
     _: React.FormEvent<IComboBox>,
@@ -716,4 +668,23 @@ export class ModelOverview extends React.Component<
       type: eventName
     });
   };
+
+  private updateCohortSelection = (
+    selectedDatasetCohorts: number[],
+    selectedFeatureBasedCohorts: number[],
+    datasetCohortChartIsSelected: boolean
+  ): void =>
+    this.setState({
+      chartConfigurationIsVisible: false,
+      datasetCohortChartIsVisible: datasetCohortChartIsSelected,
+      selectedDatasetCohorts,
+      selectedFeatureBasedCohorts
+    });
+
+  private onDismissChartConfigurationFlyout = (): void => {
+    this.setState({ chartConfigurationIsVisible: false });
+  };
+
+  private onChooseCohorts = (): void =>
+    this.setState({ chartConfigurationIsVisible: true });
 }

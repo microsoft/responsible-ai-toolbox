@@ -48,7 +48,7 @@ export class FeatureImportanceBar extends React.Component<
   public constructor(props: IFeatureBarProps) {
     super(props);
     this.state = {
-      highchartOption: this.getHightChartOption()
+      highchartOption: this.getHighchartOption()
     };
   }
 
@@ -60,7 +60,7 @@ export class FeatureImportanceBar extends React.Component<
       this.props.chartType !== prevProps.chartType
     ) {
       this.setState({
-        highchartOption: this.getHightChartOption()
+        highchartOption: this.getHighchartOption()
       });
     }
   }
@@ -95,7 +95,7 @@ export class FeatureImportanceBar extends React.Component<
     );
   }
 
-  private getHightChartOption(): IHighchartsConfig {
+  private getHighchartOption(): IHighchartsConfig {
     return this.props.chartType === ChartTypes.Bar
       ? getFeatureImportanceBarOptions(
           this.props.sortArray,

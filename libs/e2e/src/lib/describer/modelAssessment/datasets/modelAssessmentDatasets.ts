@@ -10,6 +10,7 @@ import { DiabetesDecisionMaking } from "./DiabetesDecisionMaking";
 import { DiabetesRegressionModelDebugging } from "./DiabetesRegressionModelDebugging";
 import { HousingClassificationModelDebugging } from "./HousingClassificationModelDebugging";
 import { HousingDecisionMaking } from "./HousingDecisionMaking";
+import { HousingRegression } from "./HousingRegression";
 import { MulticlassDnnModelDebugging } from "./MulticlassDnnModelDebugging";
 
 export const regExForNumbersWithBrackets = /^\((\d+)\)$/; // Ex: (60)
@@ -20,6 +21,7 @@ const modelAssessmentDatasets: { [name: string]: IModelAssessmentData } = {
   DiabetesRegressionModelDebugging,
   HousingClassificationModelDebugging,
   HousingDecisionMaking,
+  HousingRegression,
   MulticlassDnnModelDebugging
 };
 
