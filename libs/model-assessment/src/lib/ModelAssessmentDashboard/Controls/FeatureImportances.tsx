@@ -91,14 +91,14 @@ export class FeatureImportancesTab extends React.PureComponent<
               localization.ModelAssessment.FeatureImportances.GlobalExplanation
             }
           />
-          {!ifEnableLargeData(this.context.dataset) ? (
+          {!ifEnableLargeData(this.context.dataset) && (
             <PivotItem
               itemKey={FeatureImportancesTabOptions.LocalExplanation}
               headerText={
                 localization.ModelAssessment.FeatureImportances.LocalExplanation
               }
             />
-          ) : undefined}
+          )}
         </Pivot>
 
         {this.state.activeFeatureImportancesOption ===
