@@ -41,10 +41,28 @@ export function constructRows(
       tableRow.push(colors[i]);
     }
     if (jointDataset.hasTrueY) {
-      pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
+      if (jointDataset.numLabels > 1) {
+        pushMultilabelRowData(
+          tableRow,
+          JointDataset.TrueYLabel,
+          jointDataset,
+          row
+        );
+      } else {
+        pushRowData(tableRow, JointDataset.TrueYLabel, jointDataset, row);
+      }
     }
     if (jointDataset.hasPredictedY) {
-      pushRowData(tableRow, JointDataset.PredictedYLabel, jointDataset, row);
+      if (jointDataset.numLabels > 1) {
+        pushMultilabelRowData(
+          tableRow,
+          JointDataset.PredictedYLabel,
+          jointDataset,
+          row
+        );
+      } else {
+        pushRowData(tableRow, JointDataset.PredictedYLabel, jointDataset, row);
+      }
     }
     tableRow.push(...data);
     rows.push(tableRow);
@@ -151,4 +169,29 @@ function pushRowData(
   } else {
     tableRow.push(row[property]);
   }
+}
+
+function pushMultilabelRowData(
+  tableRow: any[],
+  property: string,
+  jointDataset: JointDataset,
+  row: { [key: string]: number }
+): void {
+  const values = [];
+  for (let i = 0; i < jointDataset.numLabels; i++) {
+    const labelProp = property + i.toString();
+    const categories = jointDataset.metaDict[labelProp].sortedCategoricalValues;
+    if (jointDataset.metaDict[labelProp].isCategorical && categories) {
+      const value = categories[row[labelProp]];
+      if (value) {
+        values.push(value);
+      }
+    } else {
+      const value = row[labelProp];
+      if (value) {
+        values.push(value);
+      }
+    }
+  }
+  tableRow.push(values.join(","));
 }

@@ -176,20 +176,22 @@ export class DataCharacteristics extends React.Component<
   ): React.ReactElement => {
     const imageDim = this.props.imageDim;
     const classNames = dataCharacteristicsStyles();
+    const predictedY = item?.predictedY;
     const indicatorStyle = mergeStyles(
       classNames.indicator,
       { width: imageDim },
-      item?.predictedY === item?.trueY
+      predictedY === item?.trueY
         ? classNames.successIndicator
         : classNames.errorIndicator
     );
+    const alt = Array.isArray(predictedY) ? predictedY.join(",") : predictedY;
     return !item ? (
       <div />
     ) : (
       <Stack className={classNames.tile}>
         <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
-            alt={item?.predictedY}
+            alt={alt}
             src={`data:image/jpg;base64,${item?.image}`}
             onClick={this.callbackWrapper(item)}
             className={classNames.image}
