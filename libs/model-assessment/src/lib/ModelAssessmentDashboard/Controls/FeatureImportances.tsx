@@ -11,7 +11,8 @@ import {
   IExplanationModelMetadata,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -90,12 +91,14 @@ export class FeatureImportancesTab extends React.PureComponent<
               localization.ModelAssessment.FeatureImportances.GlobalExplanation
             }
           />
-          <PivotItem
-            itemKey={FeatureImportancesTabOptions.LocalExplanation}
-            headerText={
-              localization.ModelAssessment.FeatureImportances.LocalExplanation
-            }
-          />
+          {!ifEnableLargeData(this.context.dataset) && (
+            <PivotItem
+              itemKey={FeatureImportancesTabOptions.LocalExplanation}
+              headerText={
+                localization.ModelAssessment.FeatureImportances.LocalExplanation
+              }
+            />
+          )}
         </Pivot>
 
         {this.state.activeFeatureImportancesOption ===

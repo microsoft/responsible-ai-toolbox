@@ -72,6 +72,8 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
     const listContainerStyle = mergeStyles(classNames.listContainer, {
       height: imageDim + 30
     });
+    const predictedY = this.props.list[0].predictedY;
+    const key = Array.isArray(predictedY) ? predictedY.join(",") : predictedY;
     return (
       <Stack>
         <Stack.Item>
@@ -93,7 +95,7 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
             )}
             <Stack.Item className={listContainerStyle}>
               <List
-                key={this.props.list[0].predictedY}
+                key={key}
                 items={list}
                 onRenderCell={onRenderCell}
                 getPageHeight={getPageHeight}
