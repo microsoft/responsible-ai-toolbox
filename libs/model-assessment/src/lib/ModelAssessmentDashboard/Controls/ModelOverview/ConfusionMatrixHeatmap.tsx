@@ -27,11 +27,9 @@ import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
 import { wrapText } from "./StatsTableUtils";
 
 interface IConfusionMatrixState {
-  predictedY: number[];
-  trueY: number[];
-  allClasses: string[];
   selectedClasses: string[];
-  selectedCohort: number;
+  allClasses: string[];
+  selectedCohort?: number;
 }
 
 interface IConfusionMatrixPoint extends Point {
@@ -48,56 +46,51 @@ export class ConfusionMatrixHeatmap extends React.Component<
   private maxDisplayableClasses = 20;
   private minDisplayableClasses = 2;
   private numberOfStartingClasses = 3;
-  public constructor(
-    props: Record<string, never> = {},
-    context: React.ContextType<typeof ModelAssessmentContext>
-  ) {
+
+  public constructor(props: Record<string, never> = {}) {
     super(props);
 
-    const predictedY: number[] = context.dataset.predicted_y
-      ? context.dataset.predicted_y
-      : [];
-    const trueY: number[] = context.dataset.true_y
-      ? context.dataset.true_y
-      : [];
-    const allClasses: string[] = context.dataset.class_names
-      ? context.dataset.class_names.map(String)
-      : _.range(Math.max(...predictedY, ...trueY) + 1).map(
-          (x: number) =>
-            `${localization.ModelAssessment.ModelOverview.confusionMatrix.class} ${x}`
-        );
     this.state = {
-      allClasses,
-      predictedY,
-      selectedClasses: allClasses.slice(0, this.numberOfStartingClasses),
-      selectedCohort: context.errorCohorts[0].cohort.getCohortID(),
-      trueY
+      selectedClasses: [],
+      allClasses: []
     };
+  }
+
+  public componentDidMount(): void {
+    const allClasses = this.getAllClasses();
+    this.setState({
+      selectedClasses: allClasses.slice(0, this.numberOfStartingClasses),
+      allClasses
+    });
   }
 
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
 
-    const selectedIndices: number[] = [];
+    if (
+      this.context.dataset.predicted_y === undefined ||
+      this.context.dataset.true_y === undefined
+    ) {
+      return <></>;
+    }
 
-    this.context.errorCohorts.forEach((errorCohort: ErrorCohort) => {
-      if (errorCohort.cohort.getCohortID() === this.state.selectedCohort) {
-        selectedIndices.push(
-          ...errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-        );
-      }
-    });
-    const yPred: number[] = [];
-    const yTrue: number[] = [];
+    const yLength = this.context.dataset.predicted_y.length;
+    if (this.context.dataset.true_y.length !== yLength) {
+      return <></>;
+    }
 
-    selectedIndices.forEach((idx) => {
-      yPred.push(this.state.predictedY[idx]);
-      yTrue.push(this.state.trueY[idx]);
-    });
+    let selectedCohort = this.context.errorCohorts.find(
+      (errorCohort) =>
+        errorCohort.cohort.getCohortID() === this.state.selectedCohort
+    );
+    if (selectedCohort === undefined) {
+      // if previously selected cohort does not exist use globally selected cohort
+      selectedCohort = this.context.baseErrorCohort;
+    }
 
     const confusionMatrixData = calculateConfusionMatrixData(
-      yTrue,
-      yPred,
+      selectedCohort.cohort.unwrap(JointDataset.TrueYLabel),
+      selectedCohort.cohort.unwrap(JointDataset.PredictedYLabel),
       this.state.allClasses,
       this.state.selectedClasses
     );
@@ -107,9 +100,9 @@ export class ConfusionMatrixHeatmap extends React.Component<
 
     if (confusionMatrixData !== undefined) {
       confusionMatrixData.confusionMatrix.forEach((row, rowIdx) =>
-        row.forEach((it, colIdx) => {
+        row.forEach((count, colIdx) => {
           confusionMatrix.push({
-            value: it,
+            value: count,
             x: colIdx,
             y: rowIdx
           });
@@ -145,9 +138,10 @@ export class ConfusionMatrixHeatmap extends React.Component<
                 localization.ModelAssessment.ModelOverview.confusionMatrix
                   .confusionMatrixCohortSelectionLabel
               }
-              selectedKey={this.state.selectedCohort}
+              selectedKey={selectedCohort.cohort.getCohortID()}
               options={this.context.errorCohorts.map(
                 (errorCohort: ErrorCohort) => {
+                  console.log(`Render: ${errorCohort.cohort.getCohortID()}`);
                   return {
                     key: errorCohort.cohort.getCohortID(),
                     text: errorCohort.cohort.name
@@ -298,4 +292,23 @@ export class ConfusionMatrixHeatmap extends React.Component<
       }
     }
   };
+
+  private getAllClasses() {
+    if (this.context.dataset.class_names) {
+      return this.context.dataset.class_names;
+    } else {
+      if (this.context.dataset.predicted_y) {
+        const allClasses = _.uniq([
+          ...this.context.dataset.true_y,
+          ...this.context.dataset.predicted_y
+        ]).map(
+          (category) =>
+            `${localization.ModelAssessment.ModelOverview.confusionMatrix.class} ${category}`
+        );
+        return allClasses;
+      } else {
+        return [];
+      }
+    }
+  }
 }
