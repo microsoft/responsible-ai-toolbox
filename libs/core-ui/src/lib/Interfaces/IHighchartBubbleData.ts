@@ -5,20 +5,20 @@ export interface IHighchartBubbleSDKData {
   id: string;
   name: string;
   size: number;
-  x: number;
-  y: number;
+  x: any;
+  y: any;
   index_series: number[];
-  x_series: number[];
-  y_series: number[];
+  x_series: any[];
+  y_series: any[];
 }
 
 export interface IHighchartBubbleData {
   id: string;
   name?: string;
   z: number;
-  x: number;
-  y: number;
+  x: any;
+  y: any;
   index_series: number[];
-  x_series: number[];
-  y_series: number[];
+  x_series: any[];
+  y_series: any[];
 }
