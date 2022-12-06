@@ -1,9 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort, IModelAssessmentContext } from "@responsible-ai/core-ui";
-import { IGenericChartProps } from "../../../core-ui/src/lib/util/IGenericChartProps";
+import {
+  Cohort,
+  IGenericChartProps,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
 import { generatePlotlyProps } from "./generatePlotlyProps";
+import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -12,36 +17,50 @@ export async function calculateBubblePlotDataFromErrorCohort(
   customPoints: Array<{
     [key: string]: any;
   }>,
-  context: IModelAssessmentContext,
-  xAxis?: string,
-  yAxis?: string,
+  jointDataset: JointDataset,
   requestBubblePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<any>
+  ) => Promise<any>,
+  selectPointFromChart?: (data: any) => void,
+  onBubbleClick?: (scatterPlotData: any) => void
 ): Promise<any | undefined> {
+  console.log(
+    "!!calculateBubblePlotDataFromErrorCohort requestBubblePlotDistribution",
+    requestBubblePlotDistribution,
+    errorCohort
+  );
   if (requestBubblePlotDistribution) {
-    return await calculateBubblePlotDataFromSDK(
+    const bubbleChartData = await calculateBubblePlotDataFromSDK(
       errorCohort,
-      context,
+      jointDataset,
       requestBubblePlotDistribution,
-      xAxis,
-      yAxis
+      jointDataset.metaDict[chartProps?.xAxis.property].label,
+      jointDataset.metaDict[chartProps?.yAxis.property].label
+    );
+    return getBubbleChartOptions(
+      bubbleChartData["clusters"],
+      chartProps,
+      jointDataset,
+      onBubbleClick,
+      selectPointFromChart
     );
   }
   // key is the identifier for the column (e.g., probability)
   // If compute instance is not connected, calculate based on the first 5k data
-  return calculateBubblePlotData(
+  return calculateOriginalScatterPlotData(
     chartProps,
     selectedPointsIndexes,
     customPoints,
-    context
+    jointDataset,
+    errorCohort,
+    selectPointFromChart
   );
 }
 
 export async function calculateBubblePlotDataFromSDK(
   errorCohort: Cohort,
-  context: IModelAssessmentContext,
+  jointDataset: JointDataset,
   requestBubblePlotData: (
     request: any,
     abortSignal: AbortSignal
@@ -49,14 +68,15 @@ export async function calculateBubblePlotDataFromSDK(
   xAxis?: string,
   yAxis?: string
 ): Promise<any> {
+  console.log("!!calculateBubblePlotDataFromSDK");
   const filtersRelabeled = Cohort.getLabeledFilters(
     errorCohort.filters,
-    context.jointDataset
+    jointDataset
   );
 
   const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
     errorCohort.compositeFilters,
-    context.jointDataset
+    jointDataset
   );
   const data = [filtersRelabeled, compositeFiltersRelabeled, xAxis, yAxis];
 
@@ -65,43 +85,35 @@ export async function calculateBubblePlotDataFromSDK(
     new AbortController().signal
   );
 
-  console.log("!!result: ", result);
+  console.log("!!calculateBubblePlotDataFromSDK result: ", result);
 
   return result;
 }
 
-export function calculateBubblePlotData(
+export function calculateOriginalScatterPlotData(
   chartProps: IGenericChartProps,
   selectedPointsIndexes: number[],
   customPoints: Array<{
     [key: string]: any;
   }>,
-  context: IModelAssessmentContext
+  jointDataset: JointDataset,
+  cohort: Cohort,
+  selectPointFromChart?: (data: any) => void
 ): any | undefined {
+  console.log("!!calculateBubblePlotData: ", cohort);
   const plotlyProps = generatePlotlyProps(
-    context.jointDataset,
+    jointDataset,
     chartProps,
-    context.selectedErrorCohort.cohort,
+    cohort,
     selectedPointsIndexes,
     customPoints
   );
-  return plotlyProps;
-}
+  const chartOptions = getCounterfactualChartOptions(
+    plotlyProps,
+    selectPointFromChart,
+    chartProps
+  );
+  console.log("!!calculateBubblePlotData plotlyProps: ", plotlyProps);
 
-export function getPercentile(
-  sortedData: number[],
-  percentile: number
-): number | undefined {
-  if (percentile <= 0 || percentile >= 100 || sortedData.length === 0) {
-    return undefined;
-  }
-  const index = (percentile / 100) * sortedData.length;
-  let result;
-  if (Math.floor(index) === index) {
-    // take average of the two adjacent numbers
-    result = (sortedData[index - 1] + sortedData[index]) / 2;
-  } else {
-    result = sortedData[Math.floor(index)];
-  }
-  return result;
+  return chartOptions;
 }

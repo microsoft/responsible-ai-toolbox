@@ -13,9 +13,13 @@ import {
   ModelAssessmentContext,
   BasicHighChart,
   ITelemetryEvent,
+  TelemetryEventName,
+  JointDataset,
+  TelemetryLevels,
+  Cohort,
+  ICounterfactualData
   // TelemetryLevels,
-  // TelemetryEventName,
-  getBubbleChartOptions
+  // TelemetryEventName
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -33,6 +37,13 @@ export interface ICounterfactualChartProps {
   originalData?: { [key: string]: string | number };
   selectedPointsIndexes: number[];
   temporaryPoint: { [key: string]: any } | undefined;
+  cohort: Cohort;
+  jointDataset: JointDataset;
+  requestBubblePlotData?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  counterfactualData?: ICounterfactualData;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -54,7 +65,8 @@ export interface ICounterfactualChartProps {
 export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
-  boxPlotData: any;
+  plotData: any;
+  isBubbleClicked: boolean;
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -72,29 +84,24 @@ export class CounterfactualChart extends React.PureComponent<
     this.state = {
       xDialogOpen: false,
       yDialogOpen: false,
-      boxPlotData: undefined
+      plotData: undefined,
+      isBubbleClicked: false
     };
   }
 
-  public async componentDidUpdate(
-    prevProps: ICounterfactualChartProps
-  ): Promise<void> {
-    if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
-      const boxPlotData = await calculateBubblePlotDataFromErrorCohort(
-        this.context.selectedErrorCohort.cohort,
-        this.props.chartProps,
-        this.props.selectedPointsIndexes,
-        this.props.customPoints,
-        this.context,
-        this.props.chartProps.xAxis.property,
-        this.props.chartProps.yAxis.property,
-        this.context.requestBubblePlotData
-      );
-      console.log("!!boxPlotData 1: ", boxPlotData);
-      this.setState({
-        boxPlotData: boxPlotData
-      });
-      console.log("!!boxPlotData 2: ", boxPlotData);
+  public componentDidMount(): void {
+    this.loadPlotData();
+  }
+
+  public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
+    if (
+      !_.isEqual(prevProps.chartProps, this.props.chartProps) ||
+      !_.isEqual(
+        prevProps.selectedPointsIndexes,
+        this.props.selectedPointsIndexes
+      )
+    ) {
+      this.setPlotData();
     }
 
     // this.getOutlierData(boxPlotData);
@@ -123,7 +130,7 @@ export class CounterfactualChart extends React.PureComponent<
     //   }
     // );
 
-    console.log("!!this.props.chartProps: ", this.props.chartProps);
+    console.log("!!in render: ", this.state.plotData);
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -201,7 +208,7 @@ export class CounterfactualChart extends React.PureComponent<
               </Stack.Item>
               <Stack.Item className={classNames.mainChartContainer}>
                 <BasicHighChart
-                  configOverride={getBubbleChartOptions()}
+                  configOverride={this.state.plotData}
                   theme={getTheme()}
                   id="CounterfactualChart"
                 />
@@ -266,18 +273,79 @@ export class CounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: false });
   };
 
-  // private selectPointFromChart = (data: any): void => {
-  //   const index = data.customdata[JointDataset.IndexLabel];
-  //   this.props.setTemporaryPointToCopyOfDatasetPoint(index);
-  //   this.props.toggleSelectionOfPoint(index);
-  //   this.logTelemetryEvent(
-  //     TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
-  //   );
-  // };
-  // private logTelemetryEvent = (eventName: TelemetryEventName): void => {
-  //   this.props.telemetryHook?.({
-  //     level: TelemetryLevels.ButtonClick,
-  //     type: eventName
+  private async loadPlotData(): Promise<any> {
+    console.log("!!in getPlotData: ");
+    const plotData = await calculateBubblePlotDataFromErrorCohort(
+      this.props.cohort,
+      this.props.chartProps,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.props.jointDataset,
+      this.props.requestBubblePlotData,
+      this.selectPointFromChart,
+      this.onBubbleClick
+    );
+    console.log("!!boxPlotData 2: ", plotData);
+    this.setState({
+      plotData: plotData
+    });
+  }
+
+  private async setPlotData(): Promise<any> {
+    console.log("!!in getPlotData: ");
+    const plotData = await calculateBubblePlotDataFromErrorCohort(
+      this.context.selectedErrorCohort.cohort,
+      this.props.chartProps,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.context.jointDataset,
+      this.context.requestBubblePlotData,
+      this.selectPointFromChart,
+      this.onBubbleClick
+    );
+    console.log("!!boxPlotData 2: ", plotData);
+    this.setState({
+      plotData: plotData
+    });
+  }
+
+  // private async setPlotData(): Promise<void> {
+  //   console.log("!!in setPlotData: ");
+  //   const plotData = await this.getPlotData();
+  //   console.log("!!boxPlotData 3: ", plotData);
+  //   this.setState({
+  //     plotData: plotData
   //   });
-  // };
+  // }
+
+  private readonly onBubbleClick = (scatterPlotData: any): void => {
+    console.log("!!in onBubbleClick: ");
+    console.log("!!scatterPlotData: ", scatterPlotData);
+    this.setState({
+      plotData: scatterPlotData,
+      isBubbleClicked: true
+    });
+  };
+
+  private selectPointFromChart = (data: any): void => {
+    console.log(
+      "!!selectPointFromChart: ",
+      data,
+      JointDataset.IndexLabel,
+      data.customdata[JointDataset.IndexLabel]
+    );
+    const index = data.customdata[JointDataset.IndexLabel];
+    this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.props.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
+  };
+
+  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: eventName
+    });
+  };
 }

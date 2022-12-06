@@ -85,6 +85,10 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             originalData={this.state.originalData}
             selectedPointsIndexes={this.props.selectedPointsIndexes}
             temporaryPoint={this.props.temporaryPoint}
+            cohort={this.context.selectedErrorCohort.cohort}
+            jointDataset={this.context.jointDataset}
+            requestBubblePlotData={this.context.requestBubblePlotData}
+            counterfactualData={this.context.counterfactualData}
             onChartPropsUpdated={this.props.onChartPropsUpdated}
             saveAsPoint={this.saveAsPoint}
             setCustomRowProperty={this.props.setCustomRowProperty}

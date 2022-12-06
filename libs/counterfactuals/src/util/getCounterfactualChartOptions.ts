@@ -65,6 +65,7 @@ export function getCounterfactualChartOptions(
               if (onClickHandler === undefined) {
                 return;
               }
+              console.log("!!this: ", this);
               onClickHandler(this);
             }
           }
