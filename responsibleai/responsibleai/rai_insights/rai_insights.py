@@ -182,7 +182,7 @@ class RAIInsights(RAIBaseInsights):
 
     def get_train_data(self):
         """Returns the training dataset after dropping
-        features if such a list is configured.
+        features if any were configured to be dropped.
 
         :return: The training dataset after dropping features.
         :rtype: pandas.DataFrame
@@ -200,7 +200,7 @@ class RAIInsights(RAIBaseInsights):
 
     def get_test_data(self, test_data=None):
         """Returns the test dataset after dropping
-        features if such a list is configured.
+        features if any were configured to be dropped.
 
         :return: The test dataset after dropping features.
         :rtype: pandas.DataFrame
