@@ -14,7 +14,7 @@ export interface IHighchartBubbleSDKData {
 
 export interface IHighchartBubbleData {
   id: string;
-  name: string;
+  name?: string;
   z: number;
   x: number;
   y: number;

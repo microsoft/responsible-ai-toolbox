@@ -174,7 +174,7 @@ function convertSDKObjectToBubbleData(
   const bubData = Object.values(data).map((d) => {
     return {
       id: d.id,
-      name: d.name,
+      name: undefined,
       z: d.size,
       x: d.x,
       y: d.y,

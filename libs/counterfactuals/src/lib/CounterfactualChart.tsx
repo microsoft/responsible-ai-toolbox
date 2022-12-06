@@ -24,6 +24,7 @@ import {
 import _ from "lodash";
 import React from "react";
 import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
+import { getLocalCounterfactualData } from "../util/getOnScatterPlotPointClick";
 
 // import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
@@ -60,6 +61,7 @@ export interface ICounterfactualChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
+  setCounterfactualLocalImportanceData: (data: any) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -283,6 +285,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.jointDataset,
       this.props.requestBubblePlotData,
       this.selectPointFromChart,
+      this.selectPointFromChartLargeData,
       this.onBubbleClick
     );
     console.log("!!boxPlotData 2: ", plotData);
@@ -301,6 +304,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.jointDataset,
       this.context.requestBubblePlotData,
       this.selectPointFromChart,
+      this.selectPointFromChartLargeData,
       this.onBubbleClick
     );
     console.log("!!boxPlotData 2: ", plotData);
@@ -330,6 +334,23 @@ export class CounterfactualChart extends React.PureComponent<
   private selectPointFromChart = (data: any): void => {
     console.log(
       "!!selectPointFromChart: ",
+      data,
+      JointDataset.IndexLabel,
+      data.customdata[JointDataset.IndexLabel]
+    );
+    const index = data.customdata[JointDataset.IndexLabel];
+    this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.props.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
+  };
+
+  private selectPointFromChartLargeData = async (data: any): Promise<void> => {
+    const localCounterfactualData = await getLocalCounterfactualData(data);
+    this.props.setCounterfactualLocalImportanceData(localCounterfactualData);
+    console.log(
+      "!!selectPointFromChartLargeData: ",
       data,
       JointDataset.IndexLabel,
       data.customdata[JointDataset.IndexLabel]

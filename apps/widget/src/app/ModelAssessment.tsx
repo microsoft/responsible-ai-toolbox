@@ -4,7 +4,8 @@
 import {
   ICausalWhatIfData,
   IErrorAnalysisMatrix,
-  IHighchartBoxData
+  IHighchartBoxData,
+  IHighchartBubbleSDKData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -36,6 +37,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestDatasetAnalysisBoxChart"
       | "requestGlobalExplanations"
       | "requestBubblePlotData"
+      | "requestLocalCounterfactuals"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -133,11 +135,20 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       };
       callBack.requestBubblePlotData = async (
         data: any
-      ): Promise<IHighchartBoxData> => {
+      ): Promise<IHighchartBubbleSDKData> => {
         return callFlaskService(
           this.props.config,
           data,
           "/dataset_analysis_bubble_chart_plot"
+        );
+      };
+      callBack.requestLocalCounterfactuals = async (
+        data: any
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/local_counterfactuals"
         );
       };
     }

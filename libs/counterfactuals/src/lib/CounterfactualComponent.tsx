@@ -41,6 +41,7 @@ export interface ICounterfactualComponentProps {
 
 export interface ICounterfactualComponentState {
   chartProps?: IGenericChartProps;
+  counterfactualsData: ICounterfactualData;
   customPointLength: number;
   request?: AbortController;
   selectedPointsIndexes: number[];
@@ -64,6 +65,7 @@ export class CounterfactualComponent extends React.PureComponent<
     super(props);
     this.state = {
       customPointLength: 0,
+      counterfactualsData: this.props.data,
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
@@ -142,9 +144,12 @@ export class CounterfactualComponent extends React.PureComponent<
           setTemporaryPointToCopyOfDatasetPoint={
             this.setTemporaryPointToCopyOfDatasetPoint
           }
+          setCounterfactualLocalImportanceData={
+            this.setCounterfactualLocalImportanceData
+          }
         />
         <CounterfactualLocalImportanceChart
-          data={this.props.data}
+          data={this.state.counterfactualsData}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
         />
         {this.state.errorMessage && (
@@ -164,6 +169,10 @@ export class CounterfactualComponent extends React.PureComponent<
   private buildRowOptions(cohortIndex: number): void {
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
+
+  private setCounterfactualLocalImportanceData = (data: any): void => {
+    this.setState({ counterfactualsData: data });
+  };
 
   private setTemporaryPointToCopyOfDatasetPoint = (index: number): void => {
     this.temporaryPoint = getCopyOfDatasetPoint(

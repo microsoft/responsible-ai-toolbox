@@ -23,6 +23,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
     abortSignal: AbortSignal
   ) => Promise<any>,
   selectPointFromChart?: (data: any) => void,
+  selectPointFromChartLargeData?: (data: any) => void,
   onBubbleClick?: (scatterPlotData: any) => void
 ): Promise<any | undefined> {
   console.log(
@@ -43,7 +44,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
       chartProps,
       jointDataset,
       onBubbleClick,
-      selectPointFromChart
+      selectPointFromChartLargeData
     );
   }
   // key is the identifier for the column (e.g., probability)

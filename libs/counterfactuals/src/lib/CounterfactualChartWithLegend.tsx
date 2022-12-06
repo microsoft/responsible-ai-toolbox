@@ -39,6 +39,7 @@ export interface ICounterfactualChartWithLegendProps {
   ) => void;
   setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
+  setCounterfactualLocalImportanceData: (data: any) => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -101,6 +102,9 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             telemetryHook={this.props.telemetryHook}
             togglePanel={this.togglePanel}
             toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+            setCounterfactualLocalImportanceData={
+              this.props.setCounterfactualLocalImportanceData
+            }
           />
           <CounterfactualChartLegend
             {...this.props}

@@ -15,6 +15,7 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
+import { IHighchartBubbleSDKData } from "../Interfaces/IHighchartBubbleData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
@@ -62,7 +63,11 @@ export interface IModelAssessmentContext {
   requestBubblePlotData?: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData>;
+  ) => Promise<IHighchartBubbleSDKData>;
+  requestLocalCounterfactuals?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestDatasetAnalysisBarChart?: (
     filter: unknown[],
     compositeFilter: unknown[],

@@ -31,6 +31,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    console.log("!!this.props.rowNumber: ", this.props.rowNumber);
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
