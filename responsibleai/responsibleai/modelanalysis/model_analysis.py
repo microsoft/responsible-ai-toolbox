@@ -171,5 +171,5 @@ class ModelAnalysis(object):
         inst.target_column = inst.rai_insights.target_column
         inst.task_type = inst.rai_insights.task_type
         inst.categorical_features = inst.rai_insights.categorical_features
-        inst.features_metadata = inst.rai_insights._feature_metadata
+        inst.feature_metadata = inst.rai_insights._feature_metadata
         return inst
