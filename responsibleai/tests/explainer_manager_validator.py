@@ -37,10 +37,10 @@ def validate_explainer(rai_insights, X_train, X_test, classes):
     assert isinstance(explanations, list)
     assert len(explanations) == 1
     explanation = explanations[0]
-    if rai_insights.feature_metadata is not None:
-        if rai_insights.feature_metadata.dropped_features is not None:
+    if rai_insights._feature_metadata is not None:
+        if rai_insights._feature_metadata.dropped_features is not None:
             num_cols = len(X_train.columns) - 1 - len(
-                rai_insights.feature_metadata.dropped_features)
+                rai_insights._feature_metadata.dropped_features)
     else:
         num_cols = len(X_train.columns) - 1
     if classes is not None:

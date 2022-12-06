@@ -85,7 +85,7 @@ class ModelAnalysis(object):
         self.target_column = self.rai_insights.target_column
         self.task_type = self.rai_insights.task_type
         self.categorical_features = self.rai_insights.categorical_features
-        self.feature_metadata = feature_metadata
+        self._feature_metadata = feature_metadata
 
     @property
     def causal(self) -> CausalManager:
@@ -171,5 +171,5 @@ class ModelAnalysis(object):
         inst.target_column = inst.rai_insights.target_column
         inst.task_type = inst.rai_insights.task_type
         inst.categorical_features = inst.rai_insights.categorical_features
-        inst.feature_metadata = inst.rai_insights._feature_metadata
+        inst._feature_metadata = inst.rai_insights._feature_metadata
         return inst

@@ -462,9 +462,9 @@ class RAIInsights(RAIBaseInsights):
                 if feature_metadata is not None:
                     if feature_metadata.dropped_features is not None and \
                             len(feature_metadata.dropped_features) != 0:
-                        small_train_data = train[0:1].drop(
+                        small_train_data = small_train_data.drop(
                             columns=feature_metadata.dropped_features, axis=1)
-                        small_test_data = test[0:1].drop(
+                        small_test_data = small_test_data.drop(
                             columns=feature_metadata.dropped_features, axis=1)
 
                 small_train_data = small_train_data.drop(

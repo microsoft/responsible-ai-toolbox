@@ -65,6 +65,9 @@ export class AxisConfigDialog extends React.PureComponent<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
+    const droppedFeatureSet = new Set(
+      this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features
+    );
     this.setState({
       binCount: getBinCountForProperty(
         this.context.jointDataset.metaDict[this.props.selectedColumn.property],
@@ -91,9 +94,7 @@ export class AxisConfigDialog extends React.PureComponent<
         })
         .filter((item) => {
           if (this.props.hideDroppedFeatures) {
-            return !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
-              item.text
-            );
+            return !droppedFeatureSet.has(item.text);
           }
           return true;
         }),

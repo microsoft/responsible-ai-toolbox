@@ -161,12 +161,11 @@ export class CounterfactualList extends React.Component<
   private onSelect = (idx: number): void => {
     const items = this.getItems();
     const data = _.cloneDeep(items[idx]);
+    const metaDict = this.context.jointDataset.metaDict;
+    const metaDictKeys = Object.keys(metaDict);
     Object.keys(data).forEach((k) => {
       data[k] = data[k] === "-" ? items[0][k] : data[k];
-      const metaDict = this.context.jointDataset.metaDict;
-      const columnKey = Object.keys(metaDict).find(
-        (item) => metaDict[item].label === k
-      );
+      const columnKey = metaDictKeys.find((item) => metaDict[item].label === k);
       if (!columnKey) {
         return;
       }
