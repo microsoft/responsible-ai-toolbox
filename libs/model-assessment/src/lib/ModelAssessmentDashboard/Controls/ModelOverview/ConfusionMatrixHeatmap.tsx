@@ -51,16 +51,16 @@ export class ConfusionMatrixHeatmap extends React.Component<
     super(props);
 
     this.state = {
-      selectedClasses: [],
-      allClasses: []
+      allClasses: [],
+      selectedClasses: []
     };
   }
 
   public componentDidMount(): void {
     const allClasses = this.getAllClasses();
     this.setState({
-      selectedClasses: allClasses.slice(0, this.numberOfStartingClasses),
-      allClasses
+      allClasses,
+      selectedClasses: allClasses.slice(0, this.numberOfStartingClasses)
     });
   }
 
@@ -71,12 +71,12 @@ export class ConfusionMatrixHeatmap extends React.Component<
       this.context.dataset.predicted_y === undefined ||
       this.context.dataset.true_y === undefined
     ) {
-      return <></>;
+      return React.Fragment;
     }
 
     const yLength = this.context.dataset.predicted_y.length;
     if (this.context.dataset.true_y.length !== yLength) {
-      return <></>;
+      return React.Fragment;
     }
 
     let selectedCohort = this.context.errorCohorts.find(
@@ -293,22 +293,20 @@ export class ConfusionMatrixHeatmap extends React.Component<
     }
   };
 
-  private getAllClasses() {
+  private getAllClasses(): string[] {
     if (this.context.dataset.class_names) {
       return this.context.dataset.class_names;
-    } else {
-      if (this.context.dataset.predicted_y) {
-        const allClasses = _.uniq([
-          ...this.context.dataset.true_y,
-          ...this.context.dataset.predicted_y
-        ]).map(
-          (category) =>
-            `${localization.ModelAssessment.ModelOverview.confusionMatrix.class} ${category}`
-        );
-        return allClasses;
-      } else {
-        return [];
-      }
     }
+    if (this.context.dataset.predicted_y) {
+      const allClasses = _.uniq([
+        ...this.context.dataset.true_y,
+        ...this.context.dataset.predicted_y
+      ]).map(
+        (category) =>
+          `${localization.ModelAssessment.ModelOverview.confusionMatrix.class} ${category}`
+      );
+      return allClasses;
+    }
+    return [];
   }
 }
