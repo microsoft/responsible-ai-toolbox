@@ -17,7 +17,7 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
   cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
-  function assertNumberOfChartRowsEqual(chartIdentifier: Locators) {
+  function assertNumberOfChartRowsEqual(chartIdentifier: Locators): void {
     const featureCohortView = datasetShape.modelOverviewData?.featureCohortView;
     let expectedNumberOfCohorts = featureCohortView?.singleFeatureCohorts;
     if (selectedFeatures > 1) {
@@ -33,7 +33,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     );
     cy.get(Locators.ModelOverviewRegressionDistributionChart).should("exist");
     cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
-    assertNumberOfChartRowsEqual(Locators.ModelOverviewRegressionDistributionChartBoxes);
+    assertNumberOfChartRowsEqual(
+      Locators.ModelOverviewRegressionDistributionChartBoxes
+    );
   } else if (datasetShape.isMulticlass) {
     cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
     cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
@@ -50,7 +52,9 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
     cy.get(Locators.ModelOverviewRegressionDistributionChart).should(
       "not.exist"
     );
-    assertNumberOfChartRowsEqual(Locators.ModelOverviewProbabilityDistributionChartBoxes);
+    assertNumberOfChartRowsEqual(
+      Locators.ModelOverviewProbabilityDistributionChartBoxes
+    );
   } else {
     throw new Error(
       "Task should be one of regression, multiclass, or binary classification."

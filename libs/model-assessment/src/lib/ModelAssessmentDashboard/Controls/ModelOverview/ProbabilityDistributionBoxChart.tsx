@@ -105,7 +105,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
     );
   }
 
-  private calculateAndSetBoxChartState() {
+  private calculateAndSetBoxChartState(): void {
     const boxPlotData = this.props.selectedCohorts.map(
       (cohort: ErrorCohort, index: number) => {
         return calculateBoxPlotDataFromErrorCohort(

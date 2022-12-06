@@ -15,17 +15,15 @@ import {
   IsMulticlass
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import _ from "lodash";
 import React from "react";
 
-import _ from "lodash";
-
+import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
+import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
-
-import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
-import { getSelectableMetrics, IMetricOption } from "./StatsTableUtils";
-import { modelOverviewStyles } from "./ModelOverview.styles";
 import { RegressionDistributionChart } from "./RegressionDistributionChart";
+import { getSelectableMetrics, IMetricOption } from "./StatsTableUtils";
 
 interface IModelOverviewChartPivotProps {
   onChooseCohorts: () => void;
