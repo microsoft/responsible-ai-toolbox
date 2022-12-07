@@ -448,7 +448,9 @@ class ErrorAnalysisManager(BaseManager):
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
-        dropped_features = rai_insights._feature_metadata.dropped_features
+        dropped_features = None
+        if rai_insights._feature_metadata is not None:
+            dropped_features = rai_insights._feature_metadata.dropped_features
         inst.__dict__['_dropped_features'] = dropped_features
         inst.__dict__['_analyzer'] = ModelAnalyzer(MetadataRemovalModelWrapper(
             rai_insights.model, dropped_features),
