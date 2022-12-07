@@ -30,6 +30,7 @@ import {
   ITelemetryEvent,
   TelemetryEventName,
   TelemetryLevels,
+  getFeatureNamesAfterDrop,
   ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -89,6 +90,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     : undefined;
 
   private depPlot = React.createRef<HTMLDivElement>();
+  private readonly featureIndexMap = new Map<number, number>();
 
   private defaultMinK = 4;
 
@@ -156,16 +158,29 @@ export class GlobalExplanationTab extends React.PureComponent<
     const featureOptions: IDropdownOption[] = [];
     for (let i = 0; i < this.context.jointDataset.datasetFeatureCount; i++) {
       const key = JointDataset.DataLabelRoot + i.toString();
-      featureOptions.push({
-        key,
-        text: this.context.jointDataset.metaDict[key].label
-      });
+      if (
+        !this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features?.includes(
+          this.context.jointDataset.metaDict[key].label
+        )
+      ) {
+        this.featureIndexMap.set(featureOptions.length, i);
+        featureOptions.push({
+          key,
+          text: this.context.jointDataset.metaDict[key].label
+        });
+      }
     }
     const selectedMeta = this.state.dependenceProps?.xAxis.property
       ? this.context.jointDataset.metaDict[
           this.state.dependenceProps?.xAxis.property
         ]
       : undefined;
+
+    const featureNames = getFeatureNamesAfterDrop(
+      this.context.modelMetadata.featureNames,
+      this.context.jointDataset.datasetMetaData?.featureMetaData
+        ?.dropped_features
+    );
 
     return (
       <Stack horizontal={false} className={classNames.page}>
@@ -229,8 +244,8 @@ export class GlobalExplanationTab extends React.PureComponent<
                 ]}
                 sortArray={this.state.sortArray}
                 chartType={this.state.chartType}
-                unsortedX={this.context.modelMetadata.featureNames}
-                originX={this.context.modelMetadata.featureNames}
+                unsortedX={featureNames}
+                originX={featureNames}
                 unsortedSeries={this.getActiveCohortSeries(
                   this.state.seriesIsActive
                 )}
@@ -544,12 +559,15 @@ export class GlobalExplanationTab extends React.PureComponent<
     cohortIndex: number,
     featureIndex: number
   ): void => {
+    const featureIndexBeforeDrop =
+      this.featureIndexMap.get(featureIndex) ?? featureIndex;
     // set to dependence plot initially, can be changed if other feature importances available
-    const xKey = JointDataset.DataLabelRoot + featureIndex.toString();
+    const xKey = JointDataset.DataLabelRoot + featureIndexBeforeDrop.toString();
     const xIsDithered =
       this.context.jointDataset.metaDict[xKey]?.treatAsCategorical;
     const yKey =
-      JointDataset.ReducedLocalImportanceRoot + featureIndex.toString();
+      JointDataset.ReducedLocalImportanceRoot +
+      featureIndexBeforeDrop.toString();
     const chartProps: IGenericChartProps = {
       chartType: ChartTypes.Scatter,
       xAxis: {
@@ -567,7 +585,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     this.setState({
       dependenceProps: chartProps,
       selectedCohortIndex: cohortIndex,
-      selectedFeatureIndex: featureIndex
+      selectedFeatureIndex: featureIndexBeforeDrop
     });
     // some how scroll does not work in studio under certain reslution
     // put a manual timeout to handle the issue

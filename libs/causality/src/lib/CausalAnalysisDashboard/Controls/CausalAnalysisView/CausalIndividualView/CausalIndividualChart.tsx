@@ -137,6 +137,7 @@ export class CausalIndividualChart extends React.PureComponent<
                       canDither={
                         this.state.chartProps.chartType === ChartTypes.Scatter
                       }
+                      hideDroppedFeatures
                       onAccept={this.onYSet}
                     />
                   </div>
@@ -184,6 +185,7 @@ export class CausalIndividualChart extends React.PureComponent<
                   canDither={
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
+                  hideDroppedFeatures
                   onAccept={this.onXSet}
                 />
               </div>
