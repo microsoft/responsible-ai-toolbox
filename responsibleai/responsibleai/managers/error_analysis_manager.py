@@ -245,7 +245,9 @@ class ErrorAnalysisManager(BaseManager):
             matrix filter.
         :type filter_features: Optional[list]
         """
-        if self._analyzer.model is None:
+        model_wrapper_without_metadata = self._analyzer.model
+        if model_wrapper_without_metadata is None or \
+                model_wrapper_without_metadata.model is None:
             raise UserConfigValidationException(
                 'Model is required for error analysis')
 
