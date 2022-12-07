@@ -101,7 +101,7 @@ export class RegressionDistributionChart extends React.Component<
             cohort,
             index,
             targetOption?.key.toString(),
-            targetOption?.id,
+            targetOption?.text,
             this.context.requestBoxPlotDistribution
           );
         }

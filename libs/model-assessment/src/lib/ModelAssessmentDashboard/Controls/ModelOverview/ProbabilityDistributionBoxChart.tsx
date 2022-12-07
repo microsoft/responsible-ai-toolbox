@@ -46,7 +46,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
             cohort,
             index,
             this.props.probabilityOption?.key || "",
-            this.props.probabilityOption?.id,
+            this.props.probabilityOption?.text,
             this.context.requestBoxPlotDistribution
           );
         }

@@ -50,11 +50,7 @@ export async function calculateBoxPlotDataFromSDK(
     errorCohort.cohort.compositeFilters,
     errorCohort.jointDataset
   );
-  const data = [
-    filtersRelabeled,
-    compositeFiltersRelabeled,
-    Number(queryClass)
-  ];
+  const data = [filtersRelabeled, compositeFiltersRelabeled, queryClass];
 
   const result: IHighchartBoxData = await requestBoxPlotDistribution?.(
     data,
