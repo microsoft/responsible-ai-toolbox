@@ -438,18 +438,23 @@ class ErrorAnalysisManager(BaseManager):
         inst.__dict__['_ea_report_list'] = ea_report_list
         inst.__dict__['_ea_config_list'] = ea_config_list
 
+        task_type = rai_insights.task_type
         categorical_features = rai_insights.categorical_features
         inst.__dict__['_categorical_features'] = categorical_features
         target_column = rai_insights.target_column
         true_y = rai_insights.test[target_column]
-        dataset = rai_insights.get_test_data().drop(columns=[target_column])
+        dataset = rai_insights.test.drop(columns=[target_column])
         inst.__dict__['_dataset'] = dataset
         inst.__dict__['_true_y'] = true_y
         feature_names = list(dataset.columns)
         inst.__dict__['_feature_names'] = feature_names
-        inst.__dict__['_analyzer'] = ModelAnalyzer(rai_insights.model,
-                                                   dataset,
-                                                   true_y,
-                                                   feature_names,
-                                                   categorical_features)
+        dropped_features = rai_insights._feature_metadata.dropped_features
+        inst.__dict__['_dropped_features'] = dropped_features
+        inst.__dict__['_analyzer'] = ModelAnalyzer(MetadataRemovalModelWrapper(
+            rai_insights.model, dropped_features),
+            dataset,
+            true_y,
+            feature_names,
+            categorical_features,
+            model_task=task_type)
         return inst
