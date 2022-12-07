@@ -1049,6 +1049,7 @@ export const bostonWithFairnessModelExplanationData: Omit<
 };
 
 export const bostonCounterfactualData: ICounterfactualData = {
+  id: "abc",
   cfs_list: [
     [
       [55, 3.4, 4.3, 2.4, 2],

@@ -3583,6 +3583,7 @@ export const adultCensusWithFairnessModelExplanationData: Omit<
 };
 
 export const adultCounterfactualData: ICounterfactualData = {
+  id: "abc",
   cfs_list: [
     [
       [
