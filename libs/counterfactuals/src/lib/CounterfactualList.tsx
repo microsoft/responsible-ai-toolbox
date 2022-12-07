@@ -161,10 +161,14 @@ export class CounterfactualList extends React.Component<
   private onSelect = (idx: number): void => {
     const items = this.getItems();
     const data = _.cloneDeep(items[idx]);
+    const metaDict = this.context.jointDataset.metaDict;
+    const metaDictKeys = Object.keys(metaDict);
     Object.keys(data).forEach((k) => {
       data[k] = data[k] === "-" ? items[0][k] : data[k];
-      const keyIndex =
-        this.props.data?.feature_names_including_target.indexOf(k);
+      const columnKey = metaDictKeys.find((item) => metaDict[item].label === k);
+      if (!columnKey) {
+        return;
+      }
       if (typeof data[k] === "string") {
         const dropdownOption = getCategoricalOption(
           this.context.jointDataset,
@@ -173,9 +177,9 @@ export class CounterfactualList extends React.Component<
         const optionIndex = dropdownOption?.data.categoricalOptions.findIndex(
           (feature: IComboBoxOption) => feature.key === data[k]
         );
-        this.props.setCustomRowProperty(`Data${keyIndex}`, true, optionIndex);
+        this.props.setCustomRowProperty(columnKey, true, optionIndex);
       } else {
-        this.props.setCustomRowProperty(`Data${keyIndex}`, false, data[k]);
+        this.props.setCustomRowProperty(columnKey, false, data[k]);
       }
     });
     data.row = localization.formatString(
