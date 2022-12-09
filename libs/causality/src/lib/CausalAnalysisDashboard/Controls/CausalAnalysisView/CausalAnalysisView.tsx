@@ -84,7 +84,6 @@ export class CausalAnalysisView extends React.PureComponent<
       if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
         this.getGlobalCausalPolicy();
       }
-      this.forceUpdate();
     }
     if (this.props.newCohort.cohort.name !== prevProps.newCohort.cohort.name) {
       if (this.props.viewOption === CausalAnalysisOptions.Aggregate) {
@@ -93,7 +92,6 @@ export class CausalAnalysisView extends React.PureComponent<
       if (this.props.viewOption === CausalAnalysisOptions.Treatment) {
         this.getGlobalCausalPolicy();
       }
-      this.forceUpdate();
     }
   }
 
