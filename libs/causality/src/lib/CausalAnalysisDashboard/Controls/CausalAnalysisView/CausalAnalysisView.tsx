@@ -44,8 +44,8 @@ export class CausalAnalysisView extends React.PureComponent<
     super(props);
     this.state = {
       currentGlobalCausalEffects: this.props.data.global_effects,
-      currentLocalCausalEffects: this.props.data.local_effects,
-      currentGlobalCausalPolicy: this.props.data.policies
+      currentGlobalCausalPolicy: this.props.data.policies,
+      currentLocalCausalEffects: this.props.data.local_effects
     };
   }
 
