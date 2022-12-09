@@ -112,6 +112,7 @@ export class CounterfactualChart extends React.PureComponent<
             canBin={false}
             mustBin={false}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            hideDroppedFeatures
             onAccept={this.onYSet}
             onCancel={this.setYClose}
           />
@@ -133,6 +134,7 @@ export class CounterfactualChart extends React.PureComponent<
               this.props.chartProps.chartType === ChartTypes.Box
             }
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXClose}
           />

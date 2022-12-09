@@ -25,7 +25,10 @@ export function getOriginalData(
   featureNames.forEach((f, index) => {
     data[f] = dataPoint[index];
   });
-  const targetLabel = dataset.target_column || "y";
+  const targetColumn = Array.isArray(dataset.target_column)
+    ? dataset.target_column?.[0]
+    : dataset.target_column;
+  const targetLabel = targetColumn || "y";
   data[targetLabel] = row[JointDataset.TrueYLabel];
   return data;
 }

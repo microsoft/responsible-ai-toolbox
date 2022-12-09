@@ -52,7 +52,8 @@ class TestRAIInsights(object):
     def test_rai_insights_iris(self, manager_type):
         X_train, X_test, y_train, y_test, feature_names, classes = \
             create_iris_data()
-        models = create_models_classification(X_train, y_train)
+        X_train_after_drop = X_train.drop(columns=['petal length'])
+        models = create_models_classification(X_train_after_drop, y_train)
         X_train[LABELS] = y_train
         X_test[LABELS] = y_test
         manager_args = {
@@ -61,9 +62,14 @@ class TestRAIInsights(object):
             ManagerParams.FEATURE_IMPORTANCE: True
         }
 
+        from responsibleai.feature_metadata import FeatureMetadata
+        feature_metadata = FeatureMetadata(
+            identity_feature_name='sepal length',
+            dropped_features=['petal length'])
         for model in models:
             run_rai_insights(model, X_train, X_test, LABELS, None,
-                             manager_type, manager_args, classes)
+                             manager_type, manager_args, classes,
+                             feature_metadata=feature_metadata)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.ERROR_ANALYSIS,
                                               ManagerNames.COUNTERFACTUAL,
@@ -174,7 +180,8 @@ class TestRAIInsights(object):
 
 def run_rai_insights(model, train_data, test_data, target_column,
                      categorical_features, manager_type,
-                     manager_args=None, classes=None):
+                     manager_args=None, classes=None,
+                     feature_metadata=None):
     if manager_args is None:
         manager_args = {}
 
@@ -201,13 +208,15 @@ def run_rai_insights(model, train_data, test_data, target_column,
                 model, train_data, test_data,
                 target_column,
                 categorical_features=categorical_features,
-                task_type=task_type)
+                task_type=task_type,
+                feature_metadata=feature_metadata)
     else:
         rai_insights = RAIInsights(
             model, train_data, test_data,
             target_column,
             categorical_features=categorical_features,
-            task_type=task_type)
+            task_type=task_type,
+            feature_metadata=feature_metadata)
 
     if manager_type == ManagerNames.EXPLAINER:
         setup_explainer(rai_insights)
