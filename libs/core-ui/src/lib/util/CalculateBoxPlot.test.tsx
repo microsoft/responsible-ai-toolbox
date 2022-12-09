@@ -120,7 +120,8 @@ describe("calculateBoxPlotDataFromErrorCohort", () => {
         0,
         "",
         "0",
-        mockRequestBoxPlotDistribution
+        mockRequestBoxPlotDistribution,
+        true
       );
       expect(boxPlotData?.high).toEqual(expectedResult.high);
       expect(boxPlotData?.q3).toEqual(expectedResult.q3);
