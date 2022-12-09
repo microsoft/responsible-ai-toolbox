@@ -31,7 +31,11 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    console.log("!!this.props.rowNumber: ", this.props.rowNumber);
+    console.log(
+      "!!this.props.rowNumber: ",
+      this.props.rowNumber,
+      this.props.data
+    );
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
@@ -71,7 +75,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         name: ""
       }
     ];
-    return {
+    const plotData = {
       chart: {
         type: "column"
       },
@@ -89,14 +93,18 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         }
       }
     };
+    console.log("!!plotData: ", plotData);
+    return plotData;
   }
   private getSortedData(): ILocalImportanceData[] {
     const data: ILocalImportanceData[] = [];
     if (this.props.rowNumber === undefined) {
       return data;
     }
-    const localImportanceData =
-      this.props.data?.local_importance?.[this.props.rowNumber];
+    // const localImportanceData = ifEnableLargeData(this.context.dataset)
+    //   ? this.props.data?.local_importance?.[0]
+    //   : this.props.data?.local_importance?.[this.props.rowNumber];
+    const localImportanceData = this.props.data?.local_importance?.[0];
     if (!localImportanceData) {
       return data;
     }
@@ -107,6 +115,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
       });
     });
     data.sort((d1, d2) => d2.value - d1.value);
+    console.log("!!data: ", data);
     return data;
   }
 }

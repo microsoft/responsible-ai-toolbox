@@ -24,7 +24,7 @@ import {
 import _ from "lodash";
 import React from "react";
 import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
-import { getLocalCounterfactualData } from "../util/getOnScatterPlotPointClick";
+import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
 
 // import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
@@ -92,17 +92,28 @@ export class CounterfactualChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
+    console.log("!!didmount");
     this.loadPlotData();
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
+    console.log(
+      "!!in didupdate: ",
+      prevProps.chartProps,
+      this.props.chartProps,
+      "----",
+      prevProps.selectedPointsIndexes,
+      this.props.selectedPointsIndexes
+    );
     if (
       !_.isEqual(prevProps.chartProps, this.props.chartProps) ||
-      !_.isEqual(
+      (!_.isEqual(
         prevProps.selectedPointsIndexes,
         this.props.selectedPointsIndexes
-      )
+      ) &&
+        this.state.isBubbleClicked === false)
     ) {
+      console.log("!!inside if");
       this.setPlotData();
     }
 
@@ -132,7 +143,11 @@ export class CounterfactualChart extends React.PureComponent<
     //   }
     // );
 
-    console.log("!!in render: ", this.state.plotData);
+    console.log(
+      "!!in render: ",
+      this.state.plotData,
+      this.props.selectedPointsIndexes
+    );
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -245,7 +260,7 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
-    this.setState({ xDialogOpen: false });
+    this.setState({ xDialogOpen: false, isBubbleClicked: false });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -255,7 +270,7 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
-    this.setState({ yDialogOpen: false });
+    this.setState({ yDialogOpen: false, isBubbleClicked: false });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -313,6 +328,16 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
 
+  private getUpdatedScatterPlot(selectedPointsIndexes: number[]): void {
+    console.log("!!in getUpdatedScatterPlot: ");
+    const plotData = this.state.plotData;
+
+    console.log("!!boxPlotData 2: ", plotData);
+    this.setState({
+      plotData: plotData
+    });
+  }
+
   // private async setPlotData(): Promise<void> {
   //   console.log("!!in setPlotData: ");
   //   const plotData = await this.getPlotData();
@@ -347,16 +372,23 @@ export class CounterfactualChart extends React.PureComponent<
   };
 
   private selectPointFromChartLargeData = async (data: any): Promise<void> => {
-    const localCounterfactualData = await getLocalCounterfactualData(data);
-    this.props.setCounterfactualLocalImportanceData(localCounterfactualData);
     console.log(
-      "!!selectPointFromChartLargeData: ",
+      "!!in selectPointFromChartLargeData: ",
+      this.props.counterfactualData,
       data,
       JointDataset.IndexLabel,
-      data.customdata[JointDataset.IndexLabel]
+      data.customData[JointDataset.IndexLabel],
+      this.context.requestLocalCounterfactuals
     );
-    const index = data.customdata[JointDataset.IndexLabel];
+    const localCounterfactualData = await getLocalCounterfactualsFromSDK(
+      data,
+      this.props.counterfactualData?.id,
+      this.context.requestLocalCounterfactuals
+    );
+
+    const index = data.customData[JointDataset.IndexLabel];
     this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+    this.props.setCounterfactualLocalImportanceData(localCounterfactualData);
     this.props.toggleSelectionOfPoint(index);
     this.logTelemetryEvent(
       TelemetryEventName.CounterfactualNewDatapointSelectedFromChart

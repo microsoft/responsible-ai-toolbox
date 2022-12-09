@@ -9,12 +9,13 @@ import {
 import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
+import { responseTemp } from "./responseTemp";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
-  selectedPointsIndexes: number[],
-  customPoints: Array<{
+  _selectedPointsIndexes: number[],
+  _customPoints: Array<{
     [key: string]: any;
   }>,
   jointDataset: JointDataset,
@@ -22,41 +23,41 @@ export async function calculateBubblePlotDataFromErrorCohort(
     request: any,
     abortSignal: AbortSignal
   ) => Promise<any>,
-  selectPointFromChart?: (data: any) => void,
+  _selectPointFromChart?: (data: any) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onBubbleClick?: (scatterPlotData: any) => void
 ): Promise<any | undefined> {
   console.log(
     "!!calculateBubblePlotDataFromErrorCohort requestBubblePlotDistribution",
     requestBubblePlotDistribution,
-    errorCohort
+    errorCohort,
+    selectPointFromChartLargeData
   );
-  if (requestBubblePlotDistribution) {
-    const bubbleChartData = await calculateBubblePlotDataFromSDK(
-      errorCohort,
-      jointDataset,
-      requestBubblePlotDistribution,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label
-    );
+  if (true) {
+    // const bubbleChartData = await calculateBubblePlotDataFromSDK(
+    //   errorCohort,
+    //   jointDataset,
+    //   requestBubblePlotDistribution,
+    //   jointDataset.metaDict[chartProps?.xAxis.property].label,
+    //   jointDataset.metaDict[chartProps?.yAxis.property].label
+    // );
     return getBubbleChartOptions(
-      bubbleChartData["clusters"],
+      responseTemp, // bubbleChartData["clusters"],
       chartProps,
       jointDataset,
       onBubbleClick,
       selectPointFromChartLargeData
     );
   }
-  // key is the identifier for the column (e.g., probability)
   // If compute instance is not connected, calculate based on the first 5k data
-  return calculateOriginalScatterPlotData(
-    chartProps,
-    selectedPointsIndexes,
-    customPoints,
-    jointDataset,
-    errorCohort,
-    selectPointFromChart
-  );
+  // return calculateOriginalScatterPlotData(
+  //   chartProps,
+  //   selectedPointsIndexes,
+  //   customPoints,
+  //   jointDataset,
+  //   errorCohort,
+  //   selectPointFromChart
+  // );
 }
 
 export async function calculateBubblePlotDataFromSDK(

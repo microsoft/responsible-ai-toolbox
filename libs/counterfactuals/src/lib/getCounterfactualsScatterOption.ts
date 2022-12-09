@@ -10,8 +10,12 @@ export function getCounterfactualsScatterOption(
   index_series: number[],
   chartProps: IGenericChartProps,
   jointData: JointDataset,
-  onClickHandler?: (data: any) => void
+  selectPointFromChartLargeData?: (data: any) => void
 ): any {
+  console.log(
+    "!!selectPointFromChartLargeData: ",
+    selectPointFromChartLargeData
+  );
   const dataSeries = getCounterfactualsScatter(
     x_series,
     y_series,
@@ -37,11 +41,15 @@ export function getCounterfactualsScatterOption(
         point: {
           events: {
             click(): void {
-              if (onClickHandler === undefined) {
+              if (selectPointFromChartLargeData === undefined) {
                 return;
               }
-              console.log("!!this: ", this);
-              onClickHandler(this);
+              console.log(
+                "!!getCounterfactualsScatterOption this: ",
+                this,
+                selectPointFromChartLargeData
+              );
+              selectPointFromChartLargeData(this);
             }
           }
         },

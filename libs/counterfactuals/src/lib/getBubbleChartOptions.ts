@@ -26,7 +26,7 @@ export function getBubbleChartOptions(
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   onBubbleClick?: (scatterPlotData: any) => void,
-  onClickHandler?: (data: any) => void
+  selectPointFromChartLargeData?: (data: any) => void
   // getDatasetScatterOption?: (
   //   x_series: number[],
   //   y_series: number[],
@@ -41,7 +41,10 @@ export function getBubbleChartOptions(
   //   backgroundColor: theme?.palette.white,
   //   fontColor: theme?.semanticColors.bodyText
   // };
-
+  console.log(
+    "!!selectPointFromChartLargeData: ",
+    selectPointFromChartLargeData
+  );
   const bubbleData = convertSDKObjectToBubbleData(data);
   console.log("!!bubbleData: ", bubbleData);
   return {
@@ -72,7 +75,7 @@ export function getBubbleChartOptions(
                 this["index_series"],
                 chartProps,
                 jointData,
-                onClickHandler
+                selectPointFromChartLargeData
               );
               console.log(
                 "!!in onclick: ",

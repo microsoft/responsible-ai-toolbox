@@ -196,7 +196,11 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
-    this.setState({ chartProps: newProps });
+    this.setState({
+      chartProps: newProps,
+      selectedPointsIndexes: [],
+      counterfactualsData: this.props.data
+    });
   };
 
   private onSelectedPointsIndexesUpdated = (newSelection: number[]): void => {
