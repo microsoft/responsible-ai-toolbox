@@ -30,6 +30,7 @@ import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointCli
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { updateScatterPlotMarker } from "./getCounterfactualsScatter";
 
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
@@ -111,10 +112,19 @@ export class CounterfactualChart extends React.PureComponent<
         prevProps.selectedPointsIndexes,
         this.props.selectedPointsIndexes
       ) &&
-        this.state.isBubbleClicked === false)
+        this.state.isBubbleClicked === false) // refine this logic to handle large data
     ) {
       console.log("!!inside if");
       this.setPlotData();
+    } else if (
+      !_.isEqual(
+        prevProps.selectedPointsIndexes,
+        this.props.selectedPointsIndexes
+      ) &&
+      this.state.isBubbleClicked === true
+    ) {
+      console.log("!!inside else if");
+      this.getUpdatedScatterPlot(this.props.selectedPointsIndexes);
     }
 
     // this.getOutlierData(boxPlotData);
@@ -330,11 +340,19 @@ export class CounterfactualChart extends React.PureComponent<
 
   private getUpdatedScatterPlot(selectedPointsIndexes: number[]): void {
     console.log("!!in getUpdatedScatterPlot: ");
-    const plotData = this.state.plotData;
+    const pData = updateScatterPlotMarker(
+      this.state.plotData,
+      selectedPointsIndexes
+    );
+    console.log(
+      "!!pData 2: ",
+      this.state.plotData,
+      selectedPointsIndexes,
+      pData
+    );
 
-    console.log("!!boxPlotData 2: ", plotData);
     this.setState({
-      plotData: plotData
+      plotData: pData
     });
   }
 

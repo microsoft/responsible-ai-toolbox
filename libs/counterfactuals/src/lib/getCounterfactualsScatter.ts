@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme } from "@fluentui/react";
 import {
-  getPrimaryChartColor,
+  FluentUIStyles,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
@@ -29,10 +28,11 @@ export function getCounterfactualsScatter(
   y_series: number[],
   index_series: number[],
   jointData: JointDataset,
+  selectedPointsIndexes: number[],
   chartProps?: IGenericChartProps
 ): any[] {
   const dataSeries: any = [];
-  const result: IDatasetExplorerSeries[] = [];
+  const result = [];
   // const customData = plotlyProps.data[0].customdata;
   const xData = x_series;
   const yData = y_series;
@@ -50,6 +50,7 @@ export function getCounterfactualsScatter(
             index,
             index_series[index]
           ),
+        marker: getMarker(selectedPointsIndexes, index),
         x: xData?.[index],
         y: data
       });
@@ -57,11 +58,51 @@ export function getCounterfactualsScatter(
   }
 
   result.push({
-    color: getPrimaryChartColor(getTheme()),
-    data: dataSeries,
-    marker: {
-      symbol: "circle"
-    }
+    // color: getPrimaryChartColor(getTheme()),
+    data: dataSeries
+    // marker: {
+    //   symbol: "circle"
+    // }
   });
   return result;
+}
+
+function getMarker(selectedPointsIndexes: number[], index: number): any {
+  const selectionIndex = selectedPointsIndexes.indexOf(index);
+  const color =
+    selectionIndex === -1
+      ? FluentUIStyles.fabricColorInactiveSeries
+      : FluentUIStyles.fluentUIColorPalette[selectionIndex];
+
+  const marker = {
+    fillColor: color,
+    radius: 4,
+    symbol: selectionIndex === -1 ? "circle" : "square"
+  };
+  return marker;
+}
+
+export function updateScatterPlotMarker(
+  plotData: any,
+  selectedPointsIndexes: number[]
+): any {
+  const pData = plotData;
+  pData.series[0].data.map(
+    (d: {
+      customData: { Index: number };
+      marker: { fillColor: string; radius: number; symbol: string };
+    }) => {
+      const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
+      const color =
+        selectionIndex === -1
+          ? FluentUIStyles.fabricColorInactiveSeries
+          : FluentUIStyles.fluentUIColorPalette[selectionIndex];
+      d.marker = {
+        fillColor: color,
+        radius: 4,
+        symbol: selectionIndex === -1 ? "circle" : "square"
+      };
+    }
+  );
+  return pData;
 }

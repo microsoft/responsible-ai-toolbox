@@ -25,6 +25,7 @@ export function getBubbleChartOptions(
   data: any,
   chartProps: IGenericChartProps,
   jointData: JointDataset,
+  selectedPointsIndexes: number[],
   onBubbleClick?: (scatterPlotData: any) => void,
   selectPointFromChartLargeData?: (data: any) => void
   // getDatasetScatterOption?: (
@@ -75,6 +76,7 @@ export function getBubbleChartOptions(
                 this["index_series"],
                 chartProps,
                 jointData,
+                selectedPointsIndexes,
                 selectPointFromChartLargeData
               );
               console.log(
