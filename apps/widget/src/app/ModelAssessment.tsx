@@ -3,6 +3,7 @@
 
 import {
   ICausalWhatIfData,
+  ICausalAnalysisData,
   IErrorAnalysisMatrix,
   IHighchartBoxData
 } from "@responsible-ai/core-ui";
@@ -34,6 +35,8 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestBoxPlotDistribution"
       | "requestDatasetAnalysisBarChart"
       | "requestDatasetAnalysisBoxChart"
+      | "requestGlobalCausalEffects"
+      | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
     > = {};
     if (this.props.config.baseUrl) {
@@ -76,6 +79,32 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestGlobalCausalEffects = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_effects",
+          abortSignal
+        );
+      };
+      callBack.requestGlobalCausalPolicy = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_policy",
+          abortSignal
         );
       };
       callBack.requestGlobalExplanations = async (

@@ -5,7 +5,7 @@ import { Link, Stack, Text } from "@fluentui/react";
 import {
   DatasetTaskType,
   defaultModelAssessmentContext,
-  ICausalAnalysisData,
+  ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
   ModelAssessmentContext,
@@ -19,7 +19,7 @@ import { CausalAggregateChart } from "./CausalAggregateChart";
 import { CausalAggregateTable } from "./CausalAggregateTable";
 
 export interface ICausalAggregateViewProps {
-  data: ICausalAnalysisData;
+  globalEffects: ICausalAnalysisSingleData[];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 
@@ -30,7 +30,7 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
 
   public render(): React.ReactNode {
     const styles = CausalAggregateStyles();
-    this.props.data.global_effects.sort((d1, d2) => d2.point - d1.point);
+    this.props.globalEffects.sort((d1, d2) => d2.point - d1.point);
 
     return (
       <Stack
@@ -79,10 +79,10 @@ export class CausalAggregateView extends React.PureComponent<ICausalAggregateVie
           <Stack.Item grow className={styles.leftPane}>
             <Stack horizontal={false}>
               <Stack.Item>
-                <CausalAggregateTable data={this.props.data.global_effects} />
+                <CausalAggregateTable data={this.props.globalEffects} />
               </Stack.Item>
               <Stack.Item>
-                <CausalAggregateChart data={this.props.data.global_effects} />
+                <CausalAggregateChart data={this.props.globalEffects} />
               </Stack.Item>
             </Stack>
           </Stack.Item>
