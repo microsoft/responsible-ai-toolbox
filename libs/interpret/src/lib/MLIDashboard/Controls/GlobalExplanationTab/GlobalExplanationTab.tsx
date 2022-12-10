@@ -281,102 +281,105 @@ export class GlobalExplanationTab extends React.PureComponent<
             </MissingParametersPlaceholder>
           </Stack.Item>
         )}
-        {this.context.jointDataset.hasDataset && (
-          <>
-            <Stack.Item className={classNames.chartCallout}>
-              <LabelWithCallout
-                label={localization.Interpret.Charts.howToRead}
-                calloutTitle={
-                  localization.Interpret.GlobalTab.dependencePlotTitle
-                }
-                type="button"
-                telemetryHook={this.props.telemetryHook}
-                calloutEventName={
-                  TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
-                }
-              >
-                <Text>
-                  {localization.Interpret.GlobalTab.dependencePlotHelperText}
-                </Text>
-              </LabelWithCallout>
-            </Stack.Item>
-            <Stack.Item>
-              <Stack
-                horizontal
-                className={classNames.dependencePlotChartContainer}
-              >
-                <Stack.Item className={classNames.chartLeftPart}>
-                  <div
-                    id="DependencePlot"
-                    className={classNames.secondaryChartAndLegend}
-                    ref={this.depPlot}
-                  >
-                    <FeatureImportanceDependence
-                      chartProps={this.state.dependenceProps}
-                      cohortIndex={this.state.selectedCohortIndex}
-                      cohort={
-                        this.props.cohorts[this.state.selectedCohortIndex]
-                      }
-                      jointDataset={this.context.jointDataset}
-                      logarithmicScaling={this.state.logarithmicScaling}
-                      metadata={this.context.modelMetadata}
-                      selectedWeight={this.props.selectedWeightVector}
-                      selectedWeightLabel={
-                        this.props.weightLabels[this.props.selectedWeightVector]
-                      }
-                    />
-                  </div>
-                </Stack.Item>
-                <Stack.Item className={classNames.legendAndSort}>
-                  {featureOptions && (
-                    <ComboBox
-                      id="DependencePlotFeatureSelection"
-                      label={
-                        localization.Interpret.GlobalTab.viewDependencePlotFor
-                      }
-                      options={featureOptions}
-                      allowFreeform={false}
-                      autoComplete="on"
-                      placeholder={
-                        localization.Interpret.GlobalTab
-                          .dependencePlotFeatureSelectPlaceholder
-                      }
-                      selectedKey={this.state.dependenceProps?.xAxis.property}
-                      onChange={this.onXSet}
-                      calloutProps={FluentUIStyles.calloutProps}
-                    />
-                  )}
-                  {cohortOptions && (
-                    <Dropdown
-                      label={
-                        localization.Interpret.GlobalTab.datasetCohortSelector
-                      }
-                      options={cohortOptions}
-                      selectedKey={this.state.selectedCohortIndex}
-                      onChange={this.setSelectedCohort}
-                    />
-                  )}
-                  {featureOptions &&
-                    (selectedMeta?.featureRange?.rangeType ===
-                      RangeTypes.Integer ||
-                      selectedMeta?.featureRange?.rangeType ===
-                        RangeTypes.Numeric) && (
-                      <Toggle
-                        key="logarithmic-scaling-toggle"
-                        label={
-                          localization.Interpret.AxisConfigDialog
-                            .logarithmicScaling
+        {!ifEnableLargeData(this.context.dataset) &&
+          this.context.jointDataset.hasDataset && (
+            <>
+              <Stack.Item className={classNames.chartCallout}>
+                <LabelWithCallout
+                  label={localization.Interpret.Charts.howToRead}
+                  calloutTitle={
+                    localization.Interpret.GlobalTab.dependencePlotTitle
+                  }
+                  type="button"
+                  telemetryHook={this.props.telemetryHook}
+                  calloutEventName={
+                    TelemetryEventName.FeatureImportancesHowToReadChartCalloutClick
+                  }
+                >
+                  <Text>
+                    {localization.Interpret.GlobalTab.dependencePlotHelperText}
+                  </Text>
+                </LabelWithCallout>
+              </Stack.Item>
+              <Stack.Item>
+                <Stack
+                  horizontal
+                  className={classNames.dependencePlotChartContainer}
+                >
+                  <Stack.Item className={classNames.chartLeftPart}>
+                    <div
+                      id="DependencePlot"
+                      className={classNames.secondaryChartAndLegend}
+                      ref={this.depPlot}
+                    >
+                      <FeatureImportanceDependence
+                        chartProps={this.state.dependenceProps}
+                        cohortIndex={this.state.selectedCohortIndex}
+                        cohort={
+                          this.props.cohorts[this.state.selectedCohortIndex]
                         }
-                        inlineLabel
-                        checked={this.state.logarithmicScaling}
-                        onChange={this.setLogarithmicScaling}
+                        jointDataset={this.context.jointDataset}
+                        logarithmicScaling={this.state.logarithmicScaling}
+                        metadata={this.context.modelMetadata}
+                        selectedWeight={this.props.selectedWeightVector}
+                        selectedWeightLabel={
+                          this.props.weightLabels[
+                            this.props.selectedWeightVector
+                          ]
+                        }
+                      />
+                    </div>
+                  </Stack.Item>
+                  <Stack.Item className={classNames.legendAndSort}>
+                    {featureOptions && (
+                      <ComboBox
+                        id="DependencePlotFeatureSelection"
+                        label={
+                          localization.Interpret.GlobalTab.viewDependencePlotFor
+                        }
+                        options={featureOptions}
+                        allowFreeform={false}
+                        autoComplete="on"
+                        placeholder={
+                          localization.Interpret.GlobalTab
+                            .dependencePlotFeatureSelectPlaceholder
+                        }
+                        selectedKey={this.state.dependenceProps?.xAxis.property}
+                        onChange={this.onXSet}
+                        calloutProps={FluentUIStyles.calloutProps}
                       />
                     )}
-                </Stack.Item>
-              </Stack>
-            </Stack.Item>
-          </>
-        )}
+                    {cohortOptions && (
+                      <Dropdown
+                        label={
+                          localization.Interpret.GlobalTab.datasetCohortSelector
+                        }
+                        options={cohortOptions}
+                        selectedKey={this.state.selectedCohortIndex}
+                        onChange={this.setSelectedCohort}
+                      />
+                    )}
+                    {featureOptions &&
+                      (selectedMeta?.featureRange?.rangeType ===
+                        RangeTypes.Integer ||
+                        selectedMeta?.featureRange?.rangeType ===
+                          RangeTypes.Numeric) && (
+                        <Toggle
+                          key="logarithmic-scaling-toggle"
+                          label={
+                            localization.Interpret.AxisConfigDialog
+                              .logarithmicScaling
+                          }
+                          inlineLabel
+                          checked={this.state.logarithmicScaling}
+                          onChange={this.setLogarithmicScaling}
+                        />
+                      )}
+                  </Stack.Item>
+                </Stack>
+              </Stack.Item>
+            </>
+          )}
       </Stack>
     );
   }
