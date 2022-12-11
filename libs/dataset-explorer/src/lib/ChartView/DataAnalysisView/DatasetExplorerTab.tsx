@@ -28,10 +28,11 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
-import { generateDefaultChartAxes } from "./generateDefaultChartAxes";
-import { generatePlotlyProps } from "./generatePlotlyProps";
-import { getDatasetOption } from "./getDatasetOption";
+import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
+import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
+import { generatePlotlyProps } from "../utils/generatePlotlyProps";
+import { getDatasetOption } from "../utils/getDatasetOption";
+
 import { SidePanel } from "./SidePanel";
 
 export interface IDatasetExplorerTabProps {

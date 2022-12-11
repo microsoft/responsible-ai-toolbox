@@ -141,6 +141,7 @@ export enum Locators {
   ModelOverviewProbabilityDistributionLineChartCohortSelectionButton = "#ModelOverview #modelOverviewProbabilityDistributionLineChartCohortSelectionButton",
   ModelOverviewProbabilityDistributionBoxChartCohortSelectionButton = "#ModelOverview #modelOverviewProbabilityDistributionBoxChartCohortSelectionButton",
   ModelOverviewProbabilityDistributionChartLabelSelectionFlyout = "#ModelOverview #modelOverviewProbabilityDistributionChartLabelSelectionFlyout",
+  ModelOverviewRegressionDistributionChart = "#ModelOverview #modelOverviewRegressionDistributionChart",
   ModelOverviewMetricChartCohortSelectionButton = "#ModelOverview #modelOverviewMetricChartCohortSelectionButton",
   ModelOverviewMetricChart = "#ModelOverview #ModelOverviewMetricChart",
   ModelOverviewMetricChartBars = "#ModelOverview #ModelOverviewMetricChart .highcharts-bar-series > rect",

@@ -70,6 +70,7 @@ export class TreatmentView extends React.Component<
       <NoData />
     );
   }
+
   private onSelect = (index: number): void => {
     if (this.props.data) {
       this.setState({

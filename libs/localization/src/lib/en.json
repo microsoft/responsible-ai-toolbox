@@ -1730,9 +1730,11 @@
       "featuresDropdown": "Feature(s)",
       "metricChartDropdownSelectionHeader": "Metric",
       "probabilityForClassSelectionHeader": "Probability for class",
+      "targetSelectionHeader": "Target",
       "metricSelectionDropdownPlaceholder": "Select metrics to compare your cohorts.",
       "featureSelectionDropdownPlaceholder": "Select features to use for a feature-based analysis.",
       "probabilityDistributionPivotItem": "Probability distribution",
+      "regressionDistributionPivotItem": "Target distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
@@ -1744,12 +1746,18 @@
       "metricSelectionButton": "Choose metric",
       "cohortSelectionButton": "Choose cohorts",
       "probabilityLabelSelectionButton": "Choose label",
+      "regressionTargetSelectionButton": "Choose target",
       "selectAllCohortsOption": "Select all",
       "other": "Other",
       "BoxPlot": {
         "outlierProbability": "probability",
         "outlierLabel": "Outliers",
-        "boxPlotSeriesLabel": "Box Plot"
+        "boxPlotSeriesLabel": "Box Plot",
+        "lowerWhisker": "Lower whisker",
+        "upperWhisker": "Upper whisker",
+        "median": "Median",
+        "lowerQuartile": "Lower quartile",
+        "upperQuartile": "Upper quartile"
       },
       "chartConfigApply": "Apply",
       "chartConfigCancel": "Cancel",
@@ -1784,6 +1792,11 @@
       "cohortSelection": {
         "flyoutHeader": "Choose cohorts",
         "flyoutDescription": "You can choose to view dataset cohorts or feature cohorts. If feature cohorts are unavailable you need to first select one or more features in the feature cohorts view. Subsequently, feature cohorts are generated and you can select them here."
+      },
+      "regressionTargetOptions": {
+        "predictedY": "Predicted Y",
+        "trueY": "True Y",
+        "error": "Error"
       },
       "topLevelDescription": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. Use the \"Dataset cohorts\" tab to investigate your model by looking at a comparative analysis of its performance across different pre-built or newly-created dataset cohorts. Use the \"Feature cohorts\" to investigate your model by looking at a comparative analysis of its performance across sensitive/non-sensitive feature subcohorts.(e.g., performance across different genders, income levels).",
       "infoTitle": "Additional information on model overview",
