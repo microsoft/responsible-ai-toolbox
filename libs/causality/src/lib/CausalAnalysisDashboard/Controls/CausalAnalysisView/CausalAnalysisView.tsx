@@ -9,7 +9,8 @@ import {
   ICausalAnalysisSingleData,
   ICausalPolicy,
   ITelemetryEvent,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -58,7 +59,7 @@ export class CausalAnalysisView extends React.PureComponent<
             telemetryHook={this.props.telemetryHook}
           />
         )}
-        {this.props.viewOption === CausalAnalysisOptions.Individual && (
+        {this.props.viewOption === CausalAnalysisOptions.Individual && !ifEnableLargeData(this.context.dataset) && (
           <CausalIndividualView
             localEffects={this.state.currentLocalCausalEffects}
             telemetryHook={this.props.telemetryHook}
