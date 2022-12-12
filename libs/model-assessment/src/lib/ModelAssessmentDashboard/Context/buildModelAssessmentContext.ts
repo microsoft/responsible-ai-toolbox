@@ -56,6 +56,7 @@ export function buildInitialModelAssessmentContext(
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
+    targetColumn: props.dataset.target_column,
     trueY: props.dataset.true_y
   });
   const globalProps = buildGlobalProperties(

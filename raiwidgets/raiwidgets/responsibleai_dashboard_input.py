@@ -99,6 +99,7 @@ class ResponsibleAIDashboardInput:
         try:
             data = pd.DataFrame(
                 data, columns=self.dashboard_input.dataset.feature_names)
+            data = self._analysis.get_test_data(test_data=data)
             if (self._is_classifier):
                 prediction = convert_to_list(
                     self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
@@ -209,7 +210,8 @@ class ResponsibleAIDashboardInput:
         try:
             id, features, feature_name, new_value, target = post_data
             whatif = self._analysis.causal._whatif(
-                id, pd.DataFrame.from_records(features), new_value,
+                id, self._analysis.get_test_data(
+                    test_data=pd.DataFrame.from_records(features)), new_value,
                 feature_name, target)
             return {
                 WidgetRequestResponseConstants.data: whatif

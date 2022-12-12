@@ -17,6 +17,7 @@ export interface IAxisConfigProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  hideDroppedFeatures?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }
 
@@ -50,6 +51,7 @@ export class AxisConfig extends React.PureComponent<
             canBin={this.props.canBin}
             mustBin={this.props.mustBin}
             canDither={this.props.canDither}
+            hideDroppedFeatures={this.props.hideDroppedFeatures}
             onAccept={this.onAccept}
           />
         )}
