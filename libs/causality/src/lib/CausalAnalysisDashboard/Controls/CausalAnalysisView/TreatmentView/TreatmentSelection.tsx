@@ -59,7 +59,7 @@ export class TreatmentSelection extends React.Component<
       this.props.onSelect(index);
       this.props.telemetryHook?.({
         level: TelemetryLevels.ButtonClick,
-        type: TelemetryEventName.CasualTreatmentPolicyNewTreatmentFeatureSelected
+        type: TelemetryEventName.CausalTreatmentPolicyNewTreatmentFeatureSelected
       });
     }
   };
