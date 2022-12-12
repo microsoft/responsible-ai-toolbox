@@ -113,7 +113,7 @@ export class CausalInsightsTab extends React.PureComponent<
       case CausalAnalysisOptions.Individual:
         return TelemetryEventName.IndividualCausalTabClick;
       case CausalAnalysisOptions.Treatment:
-        return TelemetryEventName.CasualTreatmentPolicyTabClick;
+        return TelemetryEventName.CausalTreatmentPolicyTabClick;
       default:
         return TelemetryEventName.AggregateCausalTabClick;
     }
