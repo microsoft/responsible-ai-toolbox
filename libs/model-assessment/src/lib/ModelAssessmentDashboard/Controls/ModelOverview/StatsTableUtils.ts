@@ -49,15 +49,14 @@ export function generateCohortsStatsTable(
           // metric index for Count column
           y: cohortIndex
         };
-      } else {
-        return {
-          colorValue: 0,
-          value: 0,
-          x: 0,
-          // metric index for Count column
-          y: cohortIndex
-        };
       }
+      return {
+        colorValue: 0,
+        value: 0,
+        x: 0,
+        // metric index for Count column
+        y: cohortIndex
+      };
     }
   );
   let countMax = Number.MIN_SAFE_INTEGER;
