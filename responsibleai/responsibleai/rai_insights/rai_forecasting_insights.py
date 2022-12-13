@@ -62,7 +62,6 @@ class RAIForecastingInsights(RAIBaseInsights):
     # take in also grain columns
     def __init__(self, model: Optional[Any], train: pd.DataFrame,
                  test: pd.DataFrame, target_column: str,
-                 categorical_features: Optional[List[str]] = None,
                  serializer: Optional[Any] = None,
                  maximum_rows_for_test: int = 5000,
                  feature_metadata: Optional[FeatureMetadata] = None):
@@ -77,8 +76,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param serializer: Picklable custom serializer with save and load
             methods for custom model serialization.
             The save method writes the model to file given a parent directory.
@@ -93,13 +90,12 @@ class RAIForecastingInsights(RAIBaseInsights):
                                  of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-        categorical_features = categorical_features or []
         self._is_true_y_present = self._check_true_y_present(target_column, test)
+        self._feature_metadata = feature_metadata or FeatureMetadata()
         self.task_type = "forecasting"
         self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column,
-            categorical_features=categorical_features,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test,
             feature_metadata=feature_metadata)
@@ -110,18 +106,15 @@ class RAIForecastingInsights(RAIBaseInsights):
         self._feature_columns = self._test_without_true_y.columns.tolist()
 
         self._feature_ranges = RAIForecastingInsights._get_feature_ranges(
-            test=test, categorical_features=categorical_features,
+            test=test, categorical_features=self._feature_metadata.categorical_features or [],
             feature_columns=self._feature_columns)
             
-        self._feature_metadata = feature_metadata
-
-        self.categorical_features = categorical_features
 
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
                 all_feature_names=self._feature_columns,
-                categorical_features=self.categorical_features,
+                categorical_features=self._feature_metadata.categorical_features or [],
                 dataset=self._test_without_true_y)
 
         self.datetime_index = test.index
@@ -188,7 +181,6 @@ class RAIForecastingInsights(RAIBaseInsights):
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
             target_column: str,
-            categorical_features: List[str],
             serializer,
             maximum_rows_for_test: int,
             feature_metadata: Optional[FeatureMetadata] = None):
@@ -207,8 +199,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -267,7 +257,6 @@ class RAIForecastingInsights(RAIBaseInsights):
                         test.shape[0], maximum_rows_for_test)
                 )
 
-
             if (len(set(train.columns) - set(test.columns)) != 0 or \
                     len(set(test.columns) - set(train.columns)) != 0) and \
                         self._is_true_y_present:
@@ -280,6 +269,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                         target_column)
                 )
 
+            categorical_features = feature_metadata.categorical_features
             if categorical_features is not None and \
                     len(categorical_features) > 0:
                 if target_column in categorical_features:
@@ -449,7 +439,7 @@ class RAIForecastingInsights(RAIBaseInsights):
             model=self.model,
             dataset=self._test_without_true_y,
             features=self._test_without_true_y.columns,
-            categorical_features=self.categorical_features,
+            categorical_features=self._feature_metadata.categorical_features,
             categories=self._categories,
             true_y=true_y,
             pred_y=self.predict_output,
@@ -474,7 +464,7 @@ class RAIForecastingInsights(RAIBaseInsights):
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
-        dashboard_dataset.categorical_features = self.categorical_features
+        dashboard_dataset.categorical_features = self._feature_metadata.categorical_features or []
         dashboard_dataset.is_forecasting_true_y = self._is_true_y_present
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
@@ -533,7 +523,7 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
         dashboard_dataset.index = convert_to_list(self.test.index.strftime("%Y-%m-%d"))
-            
+
         true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
@@ -601,7 +591,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         meta = {
             _TARGET_COLUMN: self.target_column,
             _TASK_TYPE: self.task_type,
-            _CATEGORICAL_FEATURES: self.categorical_features,
             _CLASSES: classes,
             _FEATURE_COLUMNS: self._feature_columns,
             _FEATURE_RANGES: self._feature_ranges,
@@ -647,7 +636,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         meta = json.loads(meta)
         inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
         inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
-        inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
         classes = None
         if _TRAIN_LABELS in meta:
             classes = meta[_TRAIN_LABELS]

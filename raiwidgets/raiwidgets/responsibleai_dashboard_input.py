@@ -308,7 +308,7 @@ class ResponsibleAIDashboardInput:
                 elif op == "Divide":
                     func = lambda x: x / float(value)
                 else:
-                    raise Exception()
+                    raise ValueError(f"An invalid transformation operation ${op} was provided.")
 
                 filtered_data_df[feature] = filtered_data_df[feature].map(func)
 
