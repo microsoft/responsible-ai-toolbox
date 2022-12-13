@@ -24,6 +24,7 @@ export class Pivots extends React.Component<IPivotsProps> {
           linkSize={"normal"}
           headersOnly
           className={classNames.tabs}
+          overflowBehavior="menu"
         >
           <PivotItem
             headerText={localization.InterpretVision.Dashboard.tabOptionFirst}

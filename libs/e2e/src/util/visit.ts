@@ -10,7 +10,7 @@ export function visit(
 ): void {
   let fileName: string;
   const hosts = Cypress.env().hosts;
-  if (!name) {
+  if (!name || !RAINotebookNames[name]) {
     return;
   }
   if (!hosts || !name) {

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import {
-  Checkbox,
   IComboBoxOption,
   IComboBox,
   ComboBox,
@@ -13,7 +12,6 @@ import {
   DefaultButton
 } from "@fluentui/react";
 import { localization } from "@responsible-ai/localization";
-import { RangeTypes } from "@responsible-ai/mlchartlib";
 import _ from "lodash";
 import React from "react";
 
@@ -22,7 +20,7 @@ import {
   ModelAssessmentContext,
   defaultModelAssessmentContext
 } from "../Context/ModelAssessmentContext";
-import { ISelectorConfig } from "../util/IGenericChartProps";
+import { AxisTypes, ISelectorConfig } from "../util/IGenericChartProps";
 import { TelemetryLevels } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
 import { ColumnCategories } from "../util/JointDatasetUtils";
@@ -31,7 +29,6 @@ import { TelemetryEventName } from "../util/TelemetryEventName";
 import { AxisConfigBinOptions } from "./AxisConfigBinOptions";
 import { AxisConfigChoiceGroup } from "./AxisConfigChoiceGroup";
 import {
-  allowUserInteract,
   extractSelectionKey,
   getBinCountForProperty
 } from "./AxisConfigDialogUtils";
@@ -42,6 +39,7 @@ export interface IAxisConfigDialogProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  hideDroppedFeatures?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
 }
@@ -67,6 +65,9 @@ export class AxisConfigDialog extends React.PureComponent<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
+    const droppedFeatureSet = new Set(
+      this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features
+    );
     this.setState({
       binCount: getBinCountForProperty(
         this.context.jointDataset.metaDict[this.props.selectedColumn.property],
@@ -90,6 +91,12 @@ export class AxisConfigDialog extends React.PureComponent<
             key,
             text: this.context.jointDataset.metaDict[key].abbridgedLabel
           };
+        })
+        .filter((item) => {
+          if (this.props.hideDroppedFeatures) {
+            return !droppedFeatureSet.has(item.text);
+          }
+          return true;
         }),
       selectedColumn: _.cloneDeep(this.props.selectedColumn),
       selectedFilterGroup: extractSelectionKey(
@@ -102,8 +109,6 @@ export class AxisConfigDialog extends React.PureComponent<
     if (!this.state) {
       return React.Fragment;
     }
-    const selectedMeta =
-      this.context.jointDataset.metaDict[this.state.selectedColumn.property];
     const isDataColumn = this.state.selectedColumn.property.includes(
       JointDataset.DataLabelRoot
     );
@@ -168,18 +173,6 @@ export class AxisConfigDialog extends React.PureComponent<
                     selectedKey={this.state.selectedColumn.property}
                   />
                 )}
-                {selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
-                  allowUserInteract(this.state.selectedColumn.property) && (
-                    <Checkbox
-                      key={this.state.selectedColumn.property}
-                      label={
-                        localization.Interpret.AxisConfigDialog
-                          .TreatAsCategorical
-                      }
-                      checked={selectedMeta.treatAsCategorical}
-                      onChange={this.setAsCategorical}
-                    />
-                  )}
                 <AxisConfigBinOptions
                   {...this.props}
                   jointDataset={this.context.jointDataset}
@@ -189,7 +182,9 @@ export class AxisConfigDialog extends React.PureComponent<
                   selectedBinCount={this.state.binCount}
                   selectedColumn={this.state.selectedColumn}
                   onBinCountUpdated={this.onBinCountUpdated}
+                  onEnableLogarithmicScaling={this.enableLogarithmicScaling}
                   onSelectedColumnUpdated={this.onSelectedColumnUpdated}
+                  onSetAsCategorical={this.setAsCategorical}
                 />
               </Stack>
             )}
@@ -225,10 +220,7 @@ export class AxisConfigDialog extends React.PureComponent<
     this.setState({ selectedFilterGroup });
   };
 
-  private readonly setAsCategorical = (
-    _ev?: React.FormEvent<HTMLElement>,
-    checked?: boolean
-  ): void => {
+  private readonly setAsCategorical = (checked?: boolean): void => {
     if (checked === undefined) {
       return;
     }
@@ -240,6 +232,23 @@ export class AxisConfigDialog extends React.PureComponent<
       binCount: checked ? undefined : AxisConfigDialog.MIN_HIST_COLS
     });
     this.forceUpdate();
+  };
+
+  private readonly enableLogarithmicScaling = (checked?: boolean): void => {
+    if (checked === undefined) {
+      return;
+    }
+    this.context.jointDataset.setLogarithmicScaling(
+      this.state.selectedColumn.property,
+      checked
+    );
+
+    this.setState({
+      selectedColumn: {
+        ...this.state.selectedColumn,
+        type: checked ? AxisTypes.Logarithmic : undefined
+      }
+    });
   };
 
   private readonly saveState = (): void => {
@@ -271,7 +280,8 @@ export class AxisConfigDialog extends React.PureComponent<
         options: {
           dither
         },
-        property
+        property,
+        type: this.context.jointDataset.metaDict[property]?.AxisType
       }
     });
   }

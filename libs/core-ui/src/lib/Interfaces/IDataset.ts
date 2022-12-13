@@ -9,19 +9,22 @@ export enum DatasetTaskType {
   Classification = "classification",
   ImageClassification = "image_classification",
   TextClassification = "text_classification",
+  MultilabelTextClassification = "multilabel_text_classification",
   Forecasting = "forecasting"
 }
 
 export interface IDataset {
   task_type: DatasetTaskType;
-  true_y: number[];
-  predicted_y?: number[];
+  true_y: number[] | number[][];
+  predicted_y?: number[] | number[][];
   probability_y?: number[][];
   features: unknown[][];
   feature_names: string[];
   categorical_features: string[];
+  is_large_data_scenario?: boolean;
+  use_entire_test_data?: boolean;
   class_names?: string[];
-  target_column?: string;
+  target_column?: string | string[];
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
   images?: string[];

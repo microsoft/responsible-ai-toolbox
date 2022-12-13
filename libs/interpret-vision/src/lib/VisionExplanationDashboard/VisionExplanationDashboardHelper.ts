@@ -30,6 +30,19 @@ export const defaultImageSizes = {
   imageExplorerView: 200,
   tableView: 50
 };
+
+export function mapClassNames(
+  labels: number[] | number[][],
+  classNames: string[]
+): string[] | string[][] {
+  if (Array.isArray(labels[0])) {
+    return (labels as number[][]).map((row) =>
+      row.map((index) => classNames[index])
+    );
+  }
+  return (labels as number[]).map((index) => classNames[index]);
+}
+
 export function preprocessData(
   props: IVisionExplanationDashboardProps
 ):
@@ -47,13 +60,9 @@ export function preprocessData(
   const successInstances: IVisionListItem[] = [];
   const classNames = props.dataSummary.class_names;
 
-  const predictedY = dataSummary.predicted_y.map((index) => {
-    return classNames[index];
-  });
+  const predictedY = mapClassNames(dataSummary.predicted_y, classNames);
 
-  const trueY = dataSummary.true_y.map((index) => {
-    return classNames[index];
-  });
+  const trueY = mapClassNames(dataSummary.true_y, classNames);
 
   const features = dataSummary.features?.map((featuresArr) => {
     return featuresArr[0] as number;

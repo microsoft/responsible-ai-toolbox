@@ -55,6 +55,9 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
     );
     const testableDatapointNames = featureImportances.map((item) => item.name);
 
+    const droppedFeatureSet = new Set(
+      this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features
+    );
     const featuresOption: IDropdownOption[] = new Array(
       this.context.jointDataset.datasetFeatureCount
     )
@@ -75,7 +78,9 @@ export class TabularLocalImportancePlots extends React.Component<ITabularLocalIm
           key,
           text: meta.abbridgedLabel
         };
-      });
+      })
+      .filter((item) => !droppedFeatureSet.has(item.text));
+
     return (
       <LocalImportancePlots
         includedFeatureImportance={featureImportances}

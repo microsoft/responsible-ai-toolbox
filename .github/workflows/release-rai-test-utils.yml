@@ -1,0 +1,71 @@
+name: Release rai_test_utils to PyPI
+
+# trigger manually only ("collaborator" or more permissions required)
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: "Test or Prod PyPI?"
+        required: true
+        default: "Test"
+
+jobs:
+  release-rai_test_utils:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fail if Test nor Prod
+        if: ${{ ! (github.event.inputs.type == 'Test' || github.event.inputs.type == 'Prod') }}
+        run: |
+          echo "Only Test or Prod can be used."
+          exit 1
+      # build wheel
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
+      - name: update and upgrade pip, setuptools, wheel, and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools wheel twine
+      - name: install requirements.txt for rai_test_utils
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+        working-directory: rai_test_utils
+
+      - name: pip freeze
+        run: pip freeze
+
+      - name: build wheel for rai_test_utils
+        run: python setup.py sdist bdist_wheel
+        working-directory: rai_test_utils
+
+      # run tests before publishing to PyPI
+
+      - name: install rai_test_utils wheel locally
+        run: find ./dist/ -name '*.whl' -exec pip install {} \;
+        working-directory: rai_test_utils
+
+      - name: run rai_test_utils tests
+        run: pytest ./tests/
+        working-directory: rai_test_utils
+
+      # publish to PyPI
+      - name: Publish rai_test_utils package to Test PyPI
+        if: ${{ github.event.inputs.type == 'Test' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN_RAI_TEST_UTILS }}
+          repository_url: https://test.pypi.org/legacy/
+          packages_dir: rai_test_utils/dist/
+      - name: Publish rai_test_utils package to PyPI
+        if: ${{ github.event.inputs.type == 'Prod' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN_RAI_TEST_UTILS }}
+          packages_dir: rai_test_utils/dist/

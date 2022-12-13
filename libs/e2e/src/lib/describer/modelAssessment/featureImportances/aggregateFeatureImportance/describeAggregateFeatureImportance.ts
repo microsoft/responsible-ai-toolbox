@@ -9,7 +9,8 @@ import { IModelAssessmentData } from "../../IModelAssessmentData";
 import { describeCohortFunctionality } from "./describeCohortFunctionality";
 import {
   describeGlobalExplanationBarChart,
-  describeGlobalExplanationBarChartExplicitValues
+  describeGlobalExplanationBarChartExplicitValues,
+  describeGlobalExplanationChartAvgOfAbsOption
 } from "./describeGlobalExplanationBarChart";
 import { describeGlobalExplanationBoxChart } from "./describeGlobalExplanationBoxChart";
 
@@ -42,6 +43,9 @@ export function describeAggregateFeatureImportance(
       }
       if (!datasetShape.featureImportanceData?.noLocalImportance) {
         describeGlobalExplanationBoxChart(datasetShape);
+      }
+      if (!datasetShape.isRegression) {
+        describeGlobalExplanationChartAvgOfAbsOption(datasetShape);
       }
       describeCohortFunctionality();
     }

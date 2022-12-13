@@ -11,8 +11,6 @@ import { precomputedBinaryWithError } from "../fairness/__mock_data__/precompute
 import { probability } from "../fairness/__mock_data__/probability";
 import { regression } from "../fairness/__mock_data__/regression";
 import { regressionWithError } from "../fairness/__mock_data__/regressionWithError";
-import { emotionLongDoc } from "../interpret-text/__mock_data__/emotionLongDoc";
-import { newsgroupBinaryData } from "../interpret-text/__mock_data__/newsgroupBinaryData";
 import { automlMimicAdult } from "../interpret/__mock_data__/automlMimicAdult";
 import { bostonData } from "../interpret/__mock_data__/bostonData";
 import { bostonDataGlobal } from "../interpret/__mock_data__/bostonDataGlobal";
@@ -32,12 +30,6 @@ import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 import { mockForecastingData } from "../model-assessment-forecasting/__mock_data__/mockForecastingData";
-import {
-  emotion,
-  emotionModelExplanationData
-} from "../model-assessment-text/__mock_data__/emotion";
-import { fridge } from "../model-assessment-vision/__mock_data__/fridge";
-import { imagenet } from "../model-assessment-vision/__mock_data__/imagenet";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -87,6 +79,8 @@ import {
   IModelAssessmentSetting,
   IModelAssessmentDataSet
 } from "./applicationInterfaces";
+import { textApplications } from "./textApplications";
+import { visionApplications } from "./visionApplications";
 
 export const applicationKeys = <const>[
   "interpret",
@@ -178,13 +172,7 @@ export const applications: IApplications = <const>{
     },
     versions: { "Version-1": 1, "Version-2": 2 }
   },
-  interpretText: {
-    datasets: {
-      emotionLongDoc: { data: emotionLongDoc },
-      newsgroupBinaryData: { data: newsgroupBinaryData }
-    },
-    versions: { "Version-1": 1 }
-  },
+  interpretText: textApplications.interpretText,
   modelAssessment: {
     datasets: {
       adultCensusIncomeData: {
@@ -261,45 +249,6 @@ export const applications: IApplications = <const>{
     },
     versions: { "1": 1, "2:Static-View": 2 }
   },
-  modelAssessmentText: {
-    datasets: {
-      emotion: {
-        classDimension: 3,
-        dataset: emotion,
-        modelExplanationData: [emotionModelExplanationData]
-      } as IModelAssessmentDataSet
-    },
-    versions: { "1": 1, "2:Static-View": 2 }
-  },
-  modelAssessmentVision: {
-    datasets: {
-      fridge: {
-        classDimension: 3,
-        dataset: {
-          categorical_features: fridge.categorical_features,
-          class_names: fridge.class_names,
-          feature_names: fridge.feature_names,
-          features: fridge.features,
-          images: fridge.images,
-          predicted_y: fridge.predicted_y,
-          task_type: fridge.task_type,
-          true_y: fridge.true_y
-        }
-      },
-      imagenet: {
-        classDimension: 3,
-        dataset: {
-          categorical_features: imagenet.categorical_features,
-          class_names: imagenet.class_names,
-          feature_names: imagenet.feature_names,
-          features: imagenet.features,
-          images: imagenet.images,
-          predicted_y: imagenet.predicted_y,
-          task_type: imagenet.task_type,
-          true_y: imagenet.true_y
-        }
-      } as IModelAssessmentDataSet
-    },
-    versions: { "1": 1, "2:Static-View": 2 }
-  }
+  modelAssessmentText: textApplications.modelAssessmentText,
+  modelAssessmentVision: visionApplications.modelAssessmentVision
 };

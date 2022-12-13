@@ -59,6 +59,41 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestGlobalCausalEffects?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestGlobalCausalPolicy?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestDatasetAnalysisBarChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    treatColumnXAsCategorical: boolean,
+    columnNameY: string,
+    treatColumnYAsCategorical: boolean,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestDatasetAnalysisBoxChart?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    columnNameX: string,
+    columnNameY: string,
+    numBins: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  requestGlobalExplanations?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;

@@ -4,7 +4,6 @@
 import { Link, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  ICausalAnalysisData,
   ICausalAnalysisSingleData,
   ITelemetryEvent,
   LabelWithCallout,
@@ -22,7 +21,7 @@ import { CausalIndividualStyles } from "./CausalIndividual.styles";
 import { CausalIndividualChart } from "./CausalIndividualChart";
 
 export interface ICausalIndividualViewProps {
-  data: ICausalAnalysisData;
+  localEffects: ICausalAnalysisSingleData[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
 }
 interface ICausalIndividualViewState {

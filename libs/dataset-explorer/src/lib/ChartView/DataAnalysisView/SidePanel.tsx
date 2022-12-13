@@ -25,8 +25,8 @@ import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
-import { datasetExplorerTabStyles } from "./DatasetExplorerTab.styles";
-import { generateDefaultYAxis } from "./generateDefaultChartAxes";
+import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
+import { generateDefaultYAxis } from "../utils/generateDefaultChartAxes";
 
 export interface ISidePanelProps {
   chartProps: IGenericChartProps;
@@ -176,7 +176,7 @@ export class SidePanel extends React.Component<
           this.props.jointDataset.metaDict[colorAxis.property]
             ?.treatAsCategorical)
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex].sort(
+        this.props.cohorts[this.props.selectedCohortIndex]?.sort(
           colorAxis.property
         );
         colorSeries =
@@ -193,7 +193,7 @@ export class SidePanel extends React.Component<
           ?.treatAsCategorical &&
         colorAxis.property !== ColumnCategories.None
       ) {
-        this.props.cohorts[this.props.selectedCohortIndex].sort(
+        this.props.cohorts[this.props.selectedCohortIndex]?.sort(
           colorAxis.property
         );
         const includedIndexes = _.uniq(
