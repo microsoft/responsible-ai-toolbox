@@ -361,7 +361,7 @@ class RAIForecastingInsights(RAIBaseInsights):
 
             feature_metadata.validate_feature_metadata_with_user_features(
                 list(train.columns))
-            feature_metadata.validate_feature_metadata_with_forecasting_grains(
+            feature_metadata.validate_feature_metadata_with_time_series_id_column_names(
                 test,
                 train
             )

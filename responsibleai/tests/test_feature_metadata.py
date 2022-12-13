@@ -15,7 +15,7 @@ class TestFeatureMetadata:
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.forecasting_grains is None
+        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
@@ -23,7 +23,7 @@ class TestFeatureMetadata:
             'datetime_features': None,
             'categorical_features': None,
             'dropped_features': None,
-            'forecasting_grains': None
+            'time_series_id_column_names': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -33,7 +33,7 @@ class TestFeatureMetadata:
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.forecasting_grains is None
+        assert feature_metadata.time_series_id_column_names is None
         with pytest.raises(
                 UserConfigValidationException,
                 match='The given identity feature name id is not present'
@@ -47,7 +47,7 @@ class TestFeatureMetadata:
             'datetime_features': None,
             'categorical_features': None,
             'dropped_features': None,
-            'forecasting_grains': None
+            'time_series_id_column_names': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -60,7 +60,7 @@ class TestFeatureMetadata:
         assert feature_metadata.datetime_features == ['d1', 'd2']
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.forecasting_grains is None
+        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
@@ -68,7 +68,7 @@ class TestFeatureMetadata:
             'datetime_features': ['d1', 'd2'],
             'categorical_features': None,
             'dropped_features': None,
-            'forecasting_grains': None
+            'time_series_id_column_names': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -82,7 +82,7 @@ class TestFeatureMetadata:
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features == ['c1', 'c2']
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.forecasting_grains is None
+        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
@@ -90,7 +90,7 @@ class TestFeatureMetadata:
             'datetime_features': None,
             'categorical_features': ['c1', 'c2'],
             'dropped_features': None,
-            'forecasting_grains': None
+            'time_series_id_column_names': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -103,7 +103,7 @@ class TestFeatureMetadata:
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features == ['d1', 'd2']
-        assert feature_metadata.forecasting_grains is None
+        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
@@ -111,22 +111,22 @@ class TestFeatureMetadata:
             'datetime_features': None,
             'categorical_features': None,
             'dropped_features': ['d1', 'd2'],
-            'forecasting_grains': None
+            'time_series_id_column_names': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
-    def test_feature_metadata_with_forecasting_grains(self):
-        feature_metadata = FeatureMetadata(forecasting_grains=['g1', 'g2'])
+    def test_feature_metadata_with_time_series_id_column_names(self):
+        feature_metadata = FeatureMetadata(time_series_id_column_names=['g1', 'g2'])
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.forecasting_grains == ['g1', 'g2']
+        assert feature_metadata.time_series_id_column_names == ['g1', 'g2']
         with pytest.raises(
                 UserConfigValidationException,
-                match='One or more of forecasting_grains g1 g2 are not present'
+                match='One or more of time_series_id_column_names g1 g2 are not present'
                     ' in test or train datasets'):
-            feature_metadata.validate_feature_metadata_with_forecasting_grains(
+            feature_metadata.validate_feature_metadata_with_time_series_id_column_names(
                 test = pd.DataFrame(columns=['A','B','C','D','E','F','G']), \
                     train = pd.DataFrame(columns=['A','B','C','D','E','F','G']))
 
@@ -136,7 +136,7 @@ class TestFeatureMetadata:
             'datetime_features': None,
             'categorical_features': None,
             'dropped_features': None,
-            'forecasting_grains': ['g1', 'g2']
+            'time_series_id_column_names': ['g1', 'g2']
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
