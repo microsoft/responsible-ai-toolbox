@@ -10,7 +10,8 @@ import {
   ILabeledStatistic,
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
-  RegressionMetrics
+  RegressionMetrics,
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
@@ -34,18 +35,29 @@ export function generateCohortsStatsTable(
   fairnessStats: IFairnessStats[];
   items: PointOptionsObject[];
 } {
-  // The "count" metric has to be treated separately
-  // since it's not handled like other metrics, but
-  // is part of the ErrorCohort object.
-  const items: PointOptionsObject[] = cohorts.map(
-    (errorCohort, cohortIndex) => {
-      return {
-        colorValue: 0,
-        value: errorCohort.cohortStats.totalCohort,
-        x: 0,
-        // metric index for Count column
-        y: cohortIndex
-      };
+  const items: PointOptionsObject[] = labeledStatistics.map(
+    (labeledStatistic, cohortIndex) => {
+      const cohortStats = labeledStatistic.find(
+        (cohortStats: ILabeledStatistic) =>
+          cohortStats.key === TotalCohortSamples
+      );
+      if (cohortStats) {
+        return {
+          colorValue: 0,
+          value: cohortStats.stat,
+          x: 0,
+          // metric index for Count column
+          y: cohortIndex
+        };
+      } else {
+        return {
+          colorValue: 0,
+          value: 0,
+          x: 0,
+          // metric index for Count column
+          y: cohortIndex
+        };
+      }
     }
   );
   let countMax = Number.MIN_SAFE_INTEGER;
