@@ -13,6 +13,8 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { getJoinedLabelString } from "../utils/labelUtils";
+
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import { DataCharacteristicsHeader } from "./DataCharacteristicsHeader";
 
@@ -73,7 +75,7 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
       height: imageDim + 30
     });
     const predictedY = this.props.list[0].predictedY;
-    const key = Array.isArray(predictedY) ? predictedY.join(",") : predictedY;
+    const key = getJoinedLabelString(predictedY);
     return (
       <Stack>
         <Stack.Item>

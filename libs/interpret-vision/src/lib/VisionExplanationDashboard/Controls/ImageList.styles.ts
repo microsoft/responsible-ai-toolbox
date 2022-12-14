@@ -29,9 +29,10 @@ export const imageListStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles
     const theme = getTheme();
     const indicator: IStyle = {
       borderRadius: 45,
-      marginLeft: 5,
       marginTop: 2,
-      textAlign: "center"
+      padding: "0px 5px",
+      textAlign: "center",
+      width: "fit-content"
     };
     return mergeStyleSets<IDatasetExplorerTabStyles>({
       errorIndicator: mergeStyles(indicator, {
