@@ -25,7 +25,9 @@ import { RegressionDistributionChart } from "./RegressionDistributionChart";
 import { getSelectableMetrics } from "./StatsTableUtils";
 
 interface IModelOverviewChartPivotProps {
-  chartCohorts: ErrorCohort[];
+  allCohorts: ErrorCohort[];
+  selectedChartCohorts: number[];
+  isDatasetBasedCohorts: boolean;
   labeledStatistics: ILabeledStatistic[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
   selectedMetrics: string[];
@@ -72,6 +74,32 @@ export class ModelOverviewChartPivot extends React.Component<
       );
     }
 
+    let chartCohorts: ErrorCohort[];
+    let labeledStatistics: ILabeledStatistic[][];
+    if (this.props.isDatasetBasedCohorts) {
+      chartCohorts = this.props.allCohorts;
+      // only keep selected stats and cohorts based on cohort ID
+      labeledStatistics = this.props.labeledStatistics.filter((_, i) =>
+        this.props.selectedChartCohorts.includes(
+          chartCohorts[i].cohort.getCohortID()
+        )
+      );
+      chartCohorts = chartCohorts.filter((errorCohort) =>
+        this.props.selectedChartCohorts.includes(
+          errorCohort.cohort.getCohortID()
+        )
+      );
+    } else {
+      chartCohorts = this.props.allCohorts;
+      // only keep selected stats and cohorts based on cohort index
+      labeledStatistics = this.props.labeledStatistics.filter((_, i) =>
+        this.props.selectedChartCohorts.includes(i)
+      );
+      chartCohorts = chartCohorts.filter((_, i) =>
+        this.props.selectedChartCohorts.includes(i)
+      );
+    }
+
     const classNames = modelOverviewStyles();
 
     const selectableMetrics = getSelectableMetrics(
@@ -107,7 +135,7 @@ export class ModelOverviewChartPivot extends React.Component<
           >
             <ProbabilityDistributionChart
               onChooseCohorts={this.props.onChooseCohorts}
-              cohorts={this.props.chartCohorts}
+              cohorts={chartCohorts}
               telemetryHook={this.props.telemetryHook}
               boxPlotState={this.state.probabilityDistributionBoxPlotState}
               onBoxPlotStateUpdate={
@@ -127,7 +155,7 @@ export class ModelOverviewChartPivot extends React.Component<
           >
             <RegressionDistributionChart
               onChooseCohorts={this.props.onChooseCohorts}
-              cohorts={this.props.chartCohorts}
+              cohorts={chartCohorts}
               onBoxPlotStateUpdate={
                 this.onRegressionDistributionBoxPlotStateUpdate
               }
@@ -145,8 +173,8 @@ export class ModelOverviewChartPivot extends React.Component<
             onChooseCohorts={this.props.onChooseCohorts}
             onApplyMetric={this.onApplyMetric}
             selectableMetrics={selectableMetrics}
-            cohorts={this.props.chartCohorts}
-            cohortStats={this.props.labeledStatistics}
+            cohorts={chartCohorts}
+            cohortStats={labeledStatistics}
             selectedMetric={this.state.selectedMetric}
           />
         </PivotItem>

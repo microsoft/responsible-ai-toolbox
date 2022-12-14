@@ -25,7 +25,7 @@ import {
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
-  ILabeledStatistic,
+  // ILabeledStatistic,
   ITelemetryEvent,
   IsMulticlass,
   TelemetryLevels,
@@ -227,38 +227,6 @@ export class ModelOverview extends React.Component<
         };
       });
 
-    let chartCohorts: ErrorCohort[];
-    let someCohortSelected: boolean;
-    let selectedChartCohorts: number[];
-    let labeledStatistics: ILabeledStatistic[][];
-    if (this.state.datasetCohortChartIsVisible) {
-      chartCohorts = this.context.errorCohorts;
-      someCohortSelected =
-        this.state.selectedDatasetCohorts !== undefined &&
-        this.state.selectedDatasetCohorts.length > 0;
-      selectedChartCohorts = this.state.selectedDatasetCohorts ?? [];
-      // only keep selected stats and cohorts based on cohort ID
-      labeledStatistics = datasetCohortLabeledStatistics.filter((_, i) =>
-        selectedChartCohorts.includes(chartCohorts[i].cohort.getCohortID())
-      );
-      chartCohorts = chartCohorts.filter((errorCohort) =>
-        selectedChartCohorts.includes(errorCohort.cohort.getCohortID())
-      );
-    } else {
-      chartCohorts = featureBasedCohorts;
-      someCohortSelected =
-        this.state.selectedFeatureBasedCohorts !== undefined &&
-        this.state.selectedFeatureBasedCohorts.length > 0;
-      selectedChartCohorts = this.state.selectedFeatureBasedCohorts ?? [];
-      // only keep selected stats and cohorts based on cohort index
-      labeledStatistics = featureBasedCohortLabeledStatistics.filter((_, i) =>
-        selectedChartCohorts.includes(i)
-      );
-      chartCohorts = chartCohorts.filter((_, i) =>
-        selectedChartCohorts.includes(i)
-      );
-    }
-
     // only show heatmap toggle if there are multiple cohorts since there won't be a color gradient otherwise.
     const showHeatmapToggleInDatasetCohortView =
       this.state.datasetCohortViewIsVisible &&
@@ -391,6 +359,7 @@ export class ModelOverview extends React.Component<
           )}
           {this.state.datasetCohortViewIsVisible ? (
             <DatasetCohortStatsTable
+              labeledStatistics={datasetCohortLabeledStatistics}
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
               showHeatmapColors={this.state.showHeatmapColors}
@@ -436,6 +405,7 @@ export class ModelOverview extends React.Component<
                 </>
               )}
               <DisaggregatedAnalysisTable
+                labeledStatistics={featureBasedCohortLabeledStatistics}
                 selectableMetrics={selectableMetrics}
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
@@ -472,10 +442,27 @@ export class ModelOverview extends React.Component<
             updateSelectedMetrics={this.onMetricConfigurationChange}
             selectableMetrics={selectableMetrics}
           />
-          {someCohortSelected && (
+          {((this.state.selectedFeatureBasedCohorts !== undefined &&
+            this.state.selectedFeatureBasedCohorts.length > 0) ||
+            (this.state.selectedDatasetCohorts !== undefined &&
+              this.state.selectedDatasetCohorts.length > 0)) && (
             <ModelOverviewChartPivot
-              chartCohorts={chartCohorts}
-              labeledStatistics={labeledStatistics}
+              allCohorts={
+                this.state.datasetCohortChartIsVisible
+                  ? this.context.errorCohorts
+                  : featureBasedCohorts
+              }
+              selectedChartCohorts={
+                this.state.datasetCohortChartIsVisible
+                  ? this.state.selectedDatasetCohorts ?? []
+                  : this.state.selectedFeatureBasedCohorts ?? []
+              }
+              isDatasetBasedCohorts={this.state.datasetCohortChartIsVisible}
+              labeledStatistics={
+                this.state.datasetCohortChartIsVisible
+                  ? datasetCohortLabeledStatistics
+                  : featureBasedCohortLabeledStatistics
+              }
               selectedMetrics={this.state.selectedMetrics}
               onChooseCohorts={this.onChooseCohorts}
             />
