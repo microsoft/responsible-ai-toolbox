@@ -16,9 +16,10 @@ export async function calculateBoxPlotDataFromErrorCohort(
   requestBoxPlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData>
+  ) => Promise<IHighchartBoxData>,
+  ifEnableLargeData?: boolean
 ): Promise<IHighchartBoxData | undefined> {
-  if (requestBoxPlotDistribution) {
+  if (ifEnableLargeData && requestBoxPlotDistribution) {
     return await calculateBoxPlotDataFromSDK(
       errorCohort,
       requestBoxPlotDistribution,

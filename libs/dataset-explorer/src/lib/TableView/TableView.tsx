@@ -17,6 +17,7 @@ import {
   Text
 } from "@fluentui/react";
 import {
+  areRowPredTrueLabelsEqual,
   constructCols,
   constructRows,
   defaultModelAssessmentContext,
@@ -227,14 +228,12 @@ export class TableView extends React.Component<
     } else {
       this.props.selectedCohort.cohort.sortByGroup(
         JointDataset.IndexLabel,
-        (row) =>
-          row[JointDataset.TrueYLabel] === row[JointDataset.PredictedYLabel]
+        (row) => areRowPredTrueLabelsEqual(row, this.props.jointDataset)
       );
       // find first incorrect item
       const firstIncorrectItemIndex =
         this.props.selectedCohort.cohort.filteredData.findIndex(
-          (row) =>
-            row[JointDataset.TrueYLabel] !== row[JointDataset.PredictedYLabel]
+          (row) => !areRowPredTrueLabelsEqual(row, this.props.jointDataset)
         );
       const noIncorrectItem = firstIncorrectItemIndex === -1;
 
