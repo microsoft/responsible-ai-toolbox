@@ -83,6 +83,7 @@ export class SidePanel extends React.Component<
             canBin
             mustBin={false}
             canDither={false}
+            allowTreatAsCategorical={true}
             onAccept={this.onColorSet}
             onCancel={this.setColorClose}
           />

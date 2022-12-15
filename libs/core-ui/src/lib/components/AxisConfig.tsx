@@ -17,6 +17,7 @@ export interface IAxisConfigProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  allowTreatAsCategorical?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }
 
@@ -49,6 +50,7 @@ export class AxisConfig extends React.PureComponent<
             selectedColumn={this.props.selectedColumn}
             canBin={this.props.canBin}
             mustBin={this.props.mustBin}
+            allowTreatAsCategorical={this.props.allowTreatAsCategorical}
             canDither={this.props.canDither}
             onAccept={this.onAccept}
           />

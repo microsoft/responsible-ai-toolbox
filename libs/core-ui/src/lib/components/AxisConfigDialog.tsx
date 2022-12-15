@@ -39,6 +39,7 @@ export interface IAxisConfigDialogProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  allowTreatAsCategorical?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
 }

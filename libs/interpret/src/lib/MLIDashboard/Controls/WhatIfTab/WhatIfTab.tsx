@@ -375,6 +375,7 @@ export class WhatIfTab extends React.PureComponent<
                     selectedColumn={this.state.chartProps.yAxis}
                     canBin={false}
                     mustBin={false}
+                    allowTreatAsCategorical={true}
                     canDither={
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
@@ -403,6 +404,7 @@ export class WhatIfTab extends React.PureComponent<
                     canDither={
                       this.state.chartProps.chartType === ChartTypes.Scatter
                     }
+                    allowTreatAsCategorical={true}
                     onAccept={this.onXSet}
                     onCancel={this.setXClose}
                   />
