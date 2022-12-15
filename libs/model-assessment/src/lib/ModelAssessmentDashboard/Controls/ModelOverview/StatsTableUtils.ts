@@ -63,15 +63,19 @@ export function generateCohortsStatsTable(
   let countMin = Number.MAX_SAFE_INTEGER;
   let countMinCohortName = "";
   let countMaxCohortName = "";
-  cohorts.forEach((errorCohort) => {
-    const cohortCount = errorCohort.cohortStats.totalCohort;
-    if (cohortCount > countMax) {
-      countMax = cohortCount;
-      countMaxCohortName = errorCohort.cohort.name;
-    }
-    if (cohortCount < countMin) {
-      countMin = cohortCount;
-      countMinCohortName = errorCohort.cohort.name;
+  cohorts.forEach((errorCohort, cohortIndex) => {
+    const labeledStat = labeledStatistics[cohortIndex].find(
+      (labeledStat) => labeledStat.key === TotalCohortSamples
+    );
+    if (labeledStat) {
+      if (labeledStat.stat > countMax) {
+        countMax = labeledStat.stat;
+        countMaxCohortName = errorCohort.cohort.name;
+      }
+      if (labeledStat.stat < countMin) {
+        countMin = labeledStat.stat;
+        countMinCohortName = errorCohort.cohort.name;
+      }
     }
   });
   const fairnessStats: IFairnessStats[] = [
