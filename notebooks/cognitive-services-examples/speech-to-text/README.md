@@ -9,7 +9,7 @@ This quickstart and example
 
 ## Prerequisites
   - [Install Anaconda](https://docs.anaconda.com/anaconda/install/)
-  - In Anaconda run: pip install azure-cognitiveservices-speech-speech to install Speech SDK
+  - In Anaconda run: conda install azure-cognitiveservices-speech-speech to install Speech SDK
       
 ## Procedures 
 * Run Speech API
