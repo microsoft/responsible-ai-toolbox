@@ -11,7 +11,8 @@ import {
   IExplanationModelMetadata,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { GlobalExplanationTab } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -76,30 +77,29 @@ export class FeatureImportancesTab extends React.PureComponent<
 
     return (
       <Stack className={classNames.container}>
-        <Stack.Item>
-          <Pivot
-            selectedKey={this.state.activeFeatureImportancesOption}
-            onLinkClick={this.onPivotLinkClick}
-            linkSize={"normal"}
-            headersOnly
-            className={classNames.tabs}
-            overflowBehavior="menu"
-          >
-            <PivotItem
-              itemKey={FeatureImportancesTabOptions.GlobalExplanation}
-              headerText={
-                localization.ModelAssessment.FeatureImportances
-                  .GlobalExplanation
-              }
-            />
+        <Pivot
+          selectedKey={this.state.activeFeatureImportancesOption}
+          onLinkClick={this.onPivotLinkClick}
+          linkSize={"normal"}
+          headersOnly
+          className={classNames.tabs}
+          overflowBehavior="menu"
+        >
+          <PivotItem
+            itemKey={FeatureImportancesTabOptions.GlobalExplanation}
+            headerText={
+              localization.ModelAssessment.FeatureImportances.GlobalExplanation
+            }
+          />
+          {!ifEnableLargeData(this.context.dataset) && (
             <PivotItem
               itemKey={FeatureImportancesTabOptions.LocalExplanation}
               headerText={
                 localization.ModelAssessment.FeatureImportances.LocalExplanation
               }
             />
-          </Pivot>
-        </Stack.Item>
+          )}
+        </Pivot>
 
         {this.state.activeFeatureImportancesOption ===
           FeatureImportancesTabOptions.GlobalExplanation && (

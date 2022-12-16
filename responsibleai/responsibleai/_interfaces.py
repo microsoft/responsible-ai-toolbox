@@ -20,6 +20,8 @@ class Dataset:
     class_names: List[str]
     categorical_features: List[str]
     target_column: str
+    is_large_data_scenario: bool
+    use_entire_test_data: bool
     feature_metadata: Optional[Dict[str, Any]]
     data_balance_measures: Dict[str, Any]
     images: Optional[List[str]]

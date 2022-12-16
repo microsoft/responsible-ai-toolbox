@@ -96,6 +96,80 @@ def compute_json_error_tree(analyzer,
                               min_child_samples)
 
 
+def compute_error_tree_on_dataset(
+        analyzer,
+        features,
+        dataset,
+        max_depth=DEFAULT_MAX_DEPTH,
+        num_leaves=DEFAULT_NUM_LEAVES,
+        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES):
+    """Computes the error tree for the given dataset.
+
+    :param analyzer: The error analyzer containing the categorical
+        features and categories for the full dataset.
+    :type analyzer: BaseAnalyzer
+    :param features: The features to train the surrogate model on.
+    :type features: numpy.ndarray or pandas.DataFrame
+    :param dataset: The dataset on which matrix view needs to be computed.
+        The dataset should have the feature columns and the columns
+        'true_y' and 'index'. The 'true_y' column should have the true
+        target values corresponding to the test data. The 'index'
+        column should have the indices. If the analyzer is of type
+        PredictionsAnalyzer, then the dataset should include the column
+        'pred_y' which will hold the predictions.
+    :type dataset: pd.DataFrame
+    :param max_depth: The maximum depth of the surrogate tree trained
+        on errors.
+    :type max_depth: int
+    :param num_leaves: The number of leaves of the surrogate tree
+        trained on errors.
+    :type num_leaves: int
+    :param min_child_samples: The minimal number of data required to
+        create one leaf.
+    :return: The tree representation as a list of nodes.
+    :rtype: list[dict[str, str]]
+    """
+    if max_depth is None:
+        max_depth = DEFAULT_MAX_DEPTH
+    if num_leaves is None:
+        num_leaves = DEFAULT_NUM_LEAVES
+    if min_child_samples is None:
+        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
+
+    if dataset.shape[0] == 0:
+        return create_empty_node(analyzer.metric)
+    is_model_analyzer = hasattr(analyzer, MODEL)
+    indexes = []
+    for feature in features:
+        indexes.append(analyzer.feature_names.index(feature))
+    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
+    dataset_sub_names = list(dataset_sub_names)
+    if not is_spark(dataset):
+        booster, dataset_indexed_df, cat_info = get_surrogate_booster_local(
+            dataset, analyzer, is_model_analyzer, indexes,
+            dataset_sub_names, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed, categories_reindexed = cat_info
+    else:
+        booster, dataset_indexed_df = get_surrogate_booster_pyspark(
+            dataset, analyzer, max_depth, num_leaves, min_child_samples)
+        cat_ind_reindexed = []
+        categories_reindexed = []
+    dumped_model = booster.dump_model()
+    tree_structure = dumped_model["tree_info"][0]['tree_structure']
+    max_split_index = get_max_split_index(tree_structure) + 1
+    cache_subtree_features(tree_structure, dataset_sub_names)
+    tree = traverse(dataset_indexed_df,
+                    tree_structure,
+                    max_split_index,
+                    (categories_reindexed,
+                     cat_ind_reindexed),
+                    [],
+                    dataset_sub_names,
+                    metric=analyzer.metric,
+                    classes=analyzer.classes)
+    return tree
+
+
 def compute_error_tree(analyzer,
                        features,
                        filters,
@@ -165,47 +239,17 @@ def compute_error_tree(analyzer,
     ...                           filters, composite_filters)
     """
     # Fit a surrogate model on errors
-    if max_depth is None:
-        max_depth = DEFAULT_MAX_DEPTH
-    if num_leaves is None:
-        num_leaves = DEFAULT_NUM_LEAVES
-    if min_child_samples is None:
-        min_child_samples = DEFAULT_MIN_CHILD_SAMPLES
     filtered_df = filter_from_cohort(analyzer,
                                      filters,
                                      composite_filters)
-    if filtered_df.shape[0] == 0:
-        return create_empty_node(analyzer.metric)
-    is_model_analyzer = hasattr(analyzer, MODEL)
-    indexes = []
-    for feature in features:
-        indexes.append(analyzer.feature_names.index(feature))
-    dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
-    dataset_sub_names = list(dataset_sub_names)
-    if not is_spark(filtered_df):
-        booster, filtered_indexed_df, cat_info = get_surrogate_booster_local(
-            filtered_df, analyzer, is_model_analyzer, indexes,
-            dataset_sub_names, max_depth, num_leaves, min_child_samples)
-        cat_ind_reindexed, categories_reindexed = cat_info
-    else:
-        booster, filtered_indexed_df = get_surrogate_booster_pyspark(
-            filtered_df, analyzer, max_depth, num_leaves, min_child_samples)
-        cat_ind_reindexed = []
-        categories_reindexed = []
-    dumped_model = booster.dump_model()
-    tree_structure = dumped_model["tree_info"][0]['tree_structure']
-    max_split_index = get_max_split_index(tree_structure) + 1
-    cache_subtree_features(tree_structure, dataset_sub_names)
-    tree = traverse(filtered_indexed_df,
-                    tree_structure,
-                    max_split_index,
-                    (categories_reindexed,
-                     cat_ind_reindexed),
-                    [],
-                    dataset_sub_names,
-                    metric=analyzer.metric,
-                    classes=analyzer.classes)
-    return tree
+    return compute_error_tree_on_dataset(
+        analyzer,
+        features,
+        filtered_df,
+        max_depth=DEFAULT_MAX_DEPTH,
+        num_leaves=DEFAULT_NUM_LEAVES,
+        min_child_samples=DEFAULT_MIN_CHILD_SAMPLES
+    )
 
 
 def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
@@ -831,11 +875,10 @@ def compute_metrics_local(df, metric, total, classes):
                                             pred_y, metric)
         success = total - error
     else:
-        error = int(df[DIFF].sum())
-        if total == 0:
-            metric_value = 0
-        else:
-            metric_value = error / total
+        func = metric_to_func[metric]
+        diff = df[DIFF]
+        metric_value = func(None, None, diff)
+        error = metric_value * total
         success = total - error
     return metric_value, success, error
 

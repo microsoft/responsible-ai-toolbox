@@ -4,6 +4,7 @@
 import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { IsBinary } from "../util/ExplanationUtils";
 
 import {
   generateMicroMacroMetrics,
@@ -42,6 +43,8 @@ export enum MulticlassClassificationMetrics {
   Accuracy = "accuracy"
 }
 
+export const TotalCohortSamples = "samples";
+
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
 ): ILabeledStatistic[] => {
@@ -59,6 +62,11 @@ const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   ).length;
   const total = outcomes.length;
   return [
+    {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: total
+    },
     {
       key: BinaryClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
@@ -123,6 +131,11 @@ const generateRegressionStats: (
   }, 0);
   return [
     {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: count
+    },
+    {
       key: RegressionMetrics.MeanAbsoluteError,
       label: localization.Interpret.Statistics.mae,
       stat: meanAbsoluteError
@@ -157,6 +170,11 @@ const generateMulticlassStats: (outcomes: number[]) => ILabeledStatistic[] = (
   const total = outcomes.length;
   return [
     {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: total
+    },
+    {
       key: MulticlassClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
       stat: correctCount / total
@@ -185,6 +203,11 @@ const generateImageStats: (
   const macroF1 = 2 * ((macroP * macroR) / (macroP + macroR)) || 0;
 
   return [
+    {
+      key: TotalCohortSamples,
+      label: localization.Interpret.Statistics.samples,
+      stat: predYs.length
+    },
     {
       key: ImageClassificationMetrics.Accuracy,
       label: localization.Interpret.Statistics.accuracy,
@@ -253,7 +276,7 @@ export const generateMetrics: (
   const outcomes = jointDataset.unwrap(JointDataset.ClassificationError);
   return selectionIndexes.map((selectionArray) => {
     const outcomeSubset = selectionArray.map((i) => outcomes[i]);
-    if (modelType === ModelTypes.Binary) {
+    if (IsBinary(modelType)) {
       return generateBinaryStats(outcomeSubset);
     }
     // modelType === ModelTypes.Multiclass

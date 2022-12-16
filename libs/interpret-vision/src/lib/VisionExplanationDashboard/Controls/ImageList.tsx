@@ -16,6 +16,7 @@ import React from "react";
 
 import { ISearchable } from "../Interfaces/ISearchable";
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { getJoinedLabelString } from "../utils/labelUtils";
 
 import { imageListStyles } from "./ImageList.styles";
 
@@ -98,6 +99,11 @@ export class ImageList extends React.Component<
     if (!item) {
       return;
     }
+    const itemPredY = item?.predictedY;
+    const predictedY = getJoinedLabelString(itemPredY);
+    const itemTrueY = item?.trueY;
+    const trueY = getJoinedLabelString(itemTrueY);
+    const alt = predictedY;
 
     return (
       <Stack
@@ -122,7 +128,7 @@ export class ImageList extends React.Component<
           >
             <Image
               {...imageProps}
-              alt={item?.predictedY}
+              alt={alt}
               src={`data:image/jpg;base64,${item?.image}`}
               onClick={this.callbackWrapper(item)}
               width={this.props.imageDim}
@@ -131,18 +137,15 @@ export class ImageList extends React.Component<
           </Stack.Item>
           <Stack.Item
             className={
-              item?.predictedY === item?.trueY
+              predictedY === trueY
                 ? classNames.successIndicator
                 : classNames.errorIndicator
             }
             style={{
-              left: ImagePadding,
-              maxWidth: this.props.imageDim
+              left: ImagePadding
             }}
           >
-            <Text className={classNames.labelPredicted}>
-              {item?.predictedY}
-            </Text>
+            <Text className={classNames.labelPredicted}>{predictedY}</Text>
           </Stack.Item>
           <Stack.Item
             className={classNames.labelContainer}
@@ -158,7 +161,7 @@ export class ImageList extends React.Component<
               className={classNames.label}
               style={{ width: this.props.imageDim - 20 }}
             >
-              {item?.trueY}
+              {trueY}
             </Text>
           </Stack.Item>
         </Stack.Item>

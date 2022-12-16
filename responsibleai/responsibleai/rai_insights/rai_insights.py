@@ -104,6 +104,32 @@ class RAIInsights(RAIBaseInsights):
         :type feature_metadata: FeatureMetadata
         """
         categorical_features = categorical_features or []
+        if len(test) > maximum_rows_for_test:
+            warnings.warn("The size of test set {0} is greater than "
+                          "supported limit of {1}. Computing insights"
+                          " for first {1} samples of "
+                          "test set".format(len(test),
+                                            maximum_rows_for_test))
+            self._large_test = test.copy()
+            test = test.copy()[0:maximum_rows_for_test]
+
+            if model is not None:
+                # Cache predictions of the model
+                self._large_predict_output = model.predict(
+                    self._large_test.drop(columns=[target_column]))
+                if hasattr(model, SKLearn.PREDICT_PROBA):
+                    self._large_predict_proba_output = model.predict_proba(
+                        self._large_test.drop(columns=[target_column]))
+                else:
+                    self._large_predict_proba_output = None
+            else:
+                self._large_predict_output = None
+                self._large_predict_proba_output = None
+        else:
+            self._large_test = None
+            self._large_predict_output = None
+            self._large_predict_proba_output = None
+
         self._validate_rai_insights_input_parameters(
             model=model, train=train, test=test,
             target_column=target_column, task_type=task_type,
@@ -142,15 +168,58 @@ class RAIInsights(RAIBaseInsights):
         if model is not None:
             # Cache predictions of the model
             self.predict_output = model.predict(
-                test.drop(columns=[target_column]))
+                self.get_test_data(
+                    test_data=test).drop(columns=[target_column]))
             if hasattr(model, SKLearn.PREDICT_PROBA):
                 self.predict_proba_output = model.predict_proba(
-                    test.drop(columns=[target_column]))
+                    self.get_test_data(
+                        test_data=test).drop(columns=[target_column]))
             else:
                 self.predict_proba_output = None
         else:
             self.predict_output = None
             self.predict_proba_output = None
+
+    def get_train_data(self):
+        """Returns the training dataset after dropping
+        features if any were configured to be dropped.
+
+        :return: The training dataset after dropping features.
+        :rtype: pandas.DataFrame
+        """
+        if self._feature_metadata is None:
+            return self.train
+        else:
+            if self._feature_metadata.dropped_features is None or \
+                    len(self._feature_metadata.dropped_features) == 0:
+                return self.train
+            else:
+                return self.train.drop(
+                    columns=self._feature_metadata.dropped_features,
+                    axis=1)
+
+    def get_test_data(self, test_data=None):
+        """Returns the test dataset after dropping
+        features if any were configured to be dropped.
+
+        :return: The test dataset after dropping features.
+        :rtype: pandas.DataFrame
+        """
+        if self._feature_metadata is None:
+            return test_data if test_data is not None else self.test
+        else:
+            if self._feature_metadata.dropped_features is None or \
+                    len(self._feature_metadata.dropped_features) == 0:
+                return test_data if test_data is not None else self.test
+            else:
+                if test_data is None:
+                    return self.test.drop(
+                        columns=self._feature_metadata.dropped_features,
+                        axis=1)
+                else:
+                    return test_data.drop(
+                        columns=self._feature_metadata.dropped_features,
+                        axis=1)
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -158,12 +227,17 @@ class RAIInsights(RAIBaseInsights):
         Initialized the causal, counterfactual, error analysis
         and explainer managers.
         """
+        if self._feature_metadata is not None:
+            dropped_features = self._feature_metadata.dropped_features
+        else:
+            dropped_features = None
         self._causal_manager = CausalManager(
-            self.train, self.test, self.target_column,
+            self.get_train_data(), self.get_test_data(), self.target_column,
             self.task_type, self.categorical_features)
 
         self._counterfactual_manager = CounterfactualManager(
-            model=self.model, train=self.train, test=self.test,
+            model=self.model, train=self.get_train_data(),
+            test=self.get_test_data(),
             target_column=self.target_column, task_type=self.task_type,
             categorical_features=self.categorical_features)
 
@@ -174,10 +248,12 @@ class RAIInsights(RAIBaseInsights):
         self._error_analysis_manager = ErrorAnalysisManager(
             self.model, self.test, self.target_column,
             self._classes,
-            self.categorical_features)
+            self.categorical_features,
+            dropped_features,
+            task_type=self.task_type)
 
         self._explainer_manager = ExplainerManager(
-            self.model, self.train, self.test,
+            self.model, self.get_train_data(), self.get_test_data(),
             self.target_column,
             self._classes,
             categorical_features=self.categorical_features)
@@ -293,15 +369,6 @@ class RAIInsights(RAIBaseInsights):
                     'Please provide non-empty dataframes for train '
                     'and test sets.'
                 )
-            if test.shape[0] > maximum_rows_for_test:
-                msg_fmt = 'The test data has {0} rows, ' +\
-                    'but limit is set to {1} rows. ' +\
-                    'Please resample the test data or ' +\
-                    'adjust maximum_rows_for_test'
-                raise UserConfigValidationException(
-                    msg_fmt.format(
-                        test.shape[0], maximum_rows_for_test)
-                )
 
             if len(set(train.columns) - set(test.columns)) != 0 or \
                     len(set(test.columns) - set(train.columns)) != 0:
@@ -379,12 +446,31 @@ class RAIInsights(RAIBaseInsights):
                         'The train labels and distinct values in '
                         'target (test data) do not match')
 
+            if feature_metadata is not None:
+                if not isinstance(feature_metadata, FeatureMetadata):
+                    raise UserConfigValidationException(
+                        "Expecting type FeatureMetadata but got {0}".format(
+                            type(feature_metadata)))
+
+                feature_metadata.validate_feature_metadata_with_user_features(
+                    list(train.columns))
+
             if model is not None:
                 # Pick one row from train and test data
-                small_train_data = train.iloc[0:1].drop(
-                    columns=[target_column])
-                small_test_data = test.iloc[0:1].drop(
-                    columns=[target_column])
+                small_train_data = train[0:1]
+                small_test_data = test[0:1]
+                if feature_metadata is not None:
+                    if feature_metadata.dropped_features is not None and \
+                            len(feature_metadata.dropped_features) != 0:
+                        small_train_data = small_train_data.drop(
+                            columns=feature_metadata.dropped_features, axis=1)
+                        small_test_data = small_test_data.drop(
+                            columns=feature_metadata.dropped_features, axis=1)
+
+                small_train_data = small_train_data.drop(
+                    columns=[target_column], axis=1)
+                small_test_data = small_test_data.drop(
+                    columns=[target_column], axis=1)
 
                 small_train_features_before = list(small_train_data.columns)
 
@@ -426,15 +512,6 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported data type for either train or test. "
                 "Expecting pandas DataFrame for train and test."
             )
-
-        if feature_metadata is not None:
-            if not isinstance(feature_metadata, FeatureMetadata):
-                raise UserConfigValidationException(
-                    "Expecting type FeatureMetadata but got {0}".format(
-                        type(feature_metadata)))
-
-            feature_metadata.validate_feature_metadata_with_user_features(
-                list(train.columns))
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -490,7 +567,8 @@ class RAIInsights(RAIBaseInsights):
         return self._explainer_manager
 
     def get_filtered_test_data(self, filters, composite_filters,
-                               include_original_columns_only=False):
+                               include_original_columns_only=False,
+                               use_entire_test_data=False):
         """Get the filtered test data based on cohort filters.
 
         :param filters: The filters to apply.
@@ -500,18 +578,36 @@ class RAIInsights(RAIBaseInsights):
         :param include_original_columns_only: Whether to return the original
                                               data columns.
         :type include_original_columns_only: bool
+        :param use_entire_test_data: Whether to use entire test set for
+                                     filtering the data based on cohort.
+        :type use_entire_test_data: bool
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
+        if not use_entire_test_data:
+            test_data = self.test
+            pred_y = self.predict_output
+            true_y = self.test[self.target_column]
+        else:
+            if self._large_test is not None:
+                test_data = self._large_test
+                pred_y = self._large_predict_output
+                true_y = self._large_test[self.target_column]
+            else:
+                test_data = self.test
+                pred_y = self.predict_output
+                true_y = self.test[self.target_column]
+
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=self.test.drop(columns=[self.target_column]),
-            features=self.test.drop(columns=[self.target_column]).columns,
+            dataset=test_data.drop(columns=[self.target_column]),
+            features=test_data.drop(columns=[self.target_column]).columns,
             categorical_features=self.categorical_features,
             categories=self._categories,
-            true_y=self.test[self.target_column],
-            pred_y=self.predict_output,
-            model_task=self.task_type)
+            true_y=true_y,
+            pred_y=pred_y,
+            model_task=self.task_type,
+            classes=self._classes)
 
         return filter_data_with_cohort.filter_data_from_cohort(
             filters=filters,
@@ -538,6 +634,9 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.categorical_features = self.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
+        dashboard_dataset.is_large_data_scenario = \
+            True if self._large_test is not None else False
+        dashboard_dataset.use_entire_test_data = False
 
         if self._feature_metadata is not None:
             dashboard_dataset.feature_metadata = \
@@ -563,7 +662,16 @@ class RAIInsights(RAIBaseInsights):
                 "Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
             try:
-                predicted_y = self.model.predict(dataset)
+                predict_dataset = dataset
+                metadata = self._feature_metadata
+                metadata_exists = metadata is not None
+                dropped_features_exist = metadata_exists and \
+                    metadata.dropped_features is not None
+                if dropped_features_exist and \
+                        len(metadata.dropped_features) != 0:
+                    predict_dataset = predict_dataset.drop(
+                        metadata.dropped_features, axis=1)
+                predicted_y = self.model.predict(predict_dataset)
             except Exception as ex:
                 msg = "Model does not support predict method for given"
                 "dataset type"
@@ -616,7 +724,16 @@ class RAIInsights(RAIBaseInsights):
         dashboard_dataset.target_column = self.target_column
         if is_classifier(self.model) and dataset is not None:
             try:
-                probability_y = self.model.predict_proba(dataset)
+                predict_dataset = dataset
+                metadata = self._feature_metadata
+                metadata_exists = metadata is not None
+                dropped_features_exist = metadata_exists and \
+                    metadata.dropped_features is not None
+                if dropped_features_exist and \
+                        len(metadata.dropped_features) != 0:
+                    predict_dataset = predict_dataset.drop(
+                        metadata.dropped_features, axis=1)
+                probability_y = self.model.predict_proba(predict_dataset)
             except Exception as ex:
                 raise ValueError("Model does not support predict_proba method"
                                  " for given dataset type,") from ex
@@ -650,6 +767,37 @@ class RAIInsights(RAIBaseInsights):
                 prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
                 json.dumps(self.predict_proba_output.tolist()))
 
+        if self._large_test is not None:
+            self._write_to_file(
+                prediction_output_path / (
+                    'large_' + _PREDICT + _JSON_EXTENSION),
+                json.dumps(self._large_predict_output.tolist()))
+
+            if self._large_predict_proba_output is not None:
+                self._write_to_file(
+                    prediction_output_path / (
+                        'large_' + _PREDICT_PROBA + _JSON_EXTENSION),
+                    json.dumps(self._large_predict_proba_output.tolist()))
+
+            # Save large test data
+            self._write_to_file(
+                prediction_output_path / ('large_' + _TEST + _JSON_EXTENSION),
+                self._large_test.to_json(orient='split'))
+
+    def _save_large_data(self, path):
+        """Save the large data.
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        if self._large_test is not None:
+            # Save large test data
+            large_test_path = Path(path) / 'data' / (
+                'large_' + _TEST + _JSON_EXTENSION)
+            self._write_to_file(
+                large_test_path,
+                self._large_test.to_json(orient='split'))
+
     def _save_metadata(self, path):
         """Save the metadata like target column, categorical features,
            task type and the classes (if any).
@@ -673,6 +821,15 @@ class RAIInsights(RAIBaseInsights):
         }
         with open(top_dir / _META_JSON, 'w') as file:
             json.dump(meta, file)
+
+    def save(self, path):
+        """Save the RAIInsights to the given path.
+
+        :param path: The directory path to save the RAIInsights to.
+        :type path: str
+        """
+        super(RAIInsights, self).save(path)
+        self._save_large_data(path)
 
     @staticmethod
     def _get_feature_ranges(test, categorical_features, feature_columns):
@@ -754,8 +911,8 @@ class RAIInsights(RAIBaseInsights):
     def _load_predictions(inst, path):
         """Load the predict() and predict_proba() output.
 
-        :param inst: RAIBaseInsights object instance.
-        :type inst: RAIBaseInsights
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
         :param path: The directory path to data location.
         :type path: str
         """
@@ -779,6 +936,61 @@ class RAIInsights(RAIBaseInsights):
                 predict_proba_output)
         else:
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
+
+        large_test_path = prediction_output_path / (
+            'large_' + _TEST + _JSON_EXTENSION)
+        if large_test_path.exists():
+            data_directory = Path(path) / "data"
+            with open(data_directory / (
+                    _TEST + 'dtypes' + _JSON_EXTENSION), 'r') as file:
+                types = json.load(file)
+            with open(large_test_path, 'r') as file:
+                inst.__dict__["_large_test"] = \
+                    pd.read_json(file, dtype=types, orient='split')
+        else:
+            inst.__dict__["_large_test"] = None
+
+        large_predict_output_path = prediction_output_path / (
+            'large_' + _PREDICT + _JSON_EXTENSION)
+        if large_predict_output_path.exists():
+            with open(large_predict_output_path, 'r') as file:
+                large_predict_output = json.load(file)
+            inst.__dict__["_large_predict_output"] = np.array(
+                large_predict_output)
+        else:
+            inst.__dict__["_large_predict_output"] = None
+
+        large_predict_proba_output_path = prediction_output_path / (
+            'large_' + _PREDICT_PROBA + _JSON_EXTENSION)
+        if large_predict_proba_output_path.exists():
+            with open(large_predict_proba_output_path, 'r') as file:
+                large_predict_proba_output = json.load(file)
+            inst.__dict__["_large_predict_proba_output"] = np.array(
+                large_predict_proba_output)
+        else:
+            inst.__dict__["_large_predict_proba_output"] = None
+
+    @staticmethod
+    def _load_large_data(inst, path):
+        """Load the large test data.
+
+        :param inst: RAIInsights object instance.
+        :type inst: RAIInsights
+        :param path: The directory path to data location.
+        :type path: str
+        """
+        large_test_path = Path(path) / 'data' / (
+            'large_' + _TEST + _JSON_EXTENSION)
+        if large_test_path.exists():
+            data_directory = Path(path) / "data"
+            with open(data_directory / (
+                    _TEST + 'dtypes' + _JSON_EXTENSION), 'r') as file:
+                types = json.load(file)
+            with open(large_test_path, 'r') as file:
+                inst.__dict__["_large_test"] = \
+                    pd.read_json(file, dtype=types, orient='split')
+        else:
+            inst.__dict__["_large_test"] = None
 
     @staticmethod
     def load(path):
@@ -804,7 +1016,7 @@ class RAIInsights(RAIBaseInsights):
         # load current state
         RAIBaseInsights._load(path, inst, manager_map,
                               RAIInsights._load_metadata)
-
         RAIInsights._load_predictions(inst, path)
+        RAIInsights._load_large_data(inst, path)
 
         return inst

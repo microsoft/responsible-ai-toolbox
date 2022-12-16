@@ -8,12 +8,18 @@ from raiwidgets.responsibleai_dashboard_input import \
     ResponsibleAIDashboardInput
 
 
+@pytest.mark.parametrize("with_model", [True, False])
 class TestResponsibleAIDashboardInputRegressionCausal(
     CheckResponsibleAIDashboardInputTestResult
 ):
     def test_rai_dashboard_input_housing_causal_whatif_success(
-            self, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         id = ri.causal.get()[0].id
         causal_whatif_test_data = ri.test.head(1).drop(
             "target", axis=1).to_dict(orient='records')
@@ -32,8 +38,13 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_housing_causal_whatif_failure(
-            self, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         id = "some_id"
         causal_whatif_test_data = ri.test.head(1).drop(
             "target", axis=1).to_dict(orient='records')
@@ -60,8 +71,13 @@ class TestResponsibleAIDashboardInputRegressionCausal(
           'method': 'less and equal'}]
     ])
     def test_rai_dashboard_input_housing_causal_global_effects_success(
-            self, create_rai_insights_object_regression, filters):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model, filters):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = ri.causal.get()[0].id
@@ -74,8 +90,13 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_housing_causal_global_effects_failure(
-            self, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = "some_id_that_does_not_exist"
@@ -96,8 +117,13 @@ class TestResponsibleAIDashboardInputRegressionCausal(
           'method': 'less and equal'}]
     ])
     def test_rai_dashboard_input_housing_causal_global_policy_success(
-            self, create_rai_insights_object_regression, filters):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model, filters):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = ri.causal.get()[0].id
@@ -110,8 +136,13 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         self.check_success_criteria(flask_server_prediction_output)
 
     def test_rai_dashboard_input_housing_causal_global_policy_failure(
-            self, create_rai_insights_object_regression):
-        ri = create_rai_insights_object_regression
+            self, create_rai_insights_object_regression_with_model,
+            create_rai_insights_object_regression_with_predictions,
+            with_model):
+        if with_model:
+            ri = create_rai_insights_object_regression_with_model
+        else:
+            ri = create_rai_insights_object_regression_with_predictions
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = "some_id_that_does_not_exist"

@@ -77,6 +77,7 @@
           "feature_value",
           "global_effects",
           "identity_feature_name",
+          "is_large_data_scenario",
           "local_effects",
           "local_importance",
           "local_policies",
@@ -130,6 +131,7 @@
           "true_positive_rate_ratio",
           "true_y",
           "upper_bounds",
+          "use_entire_test_data",
           "zero_one_loss"
         ]
       }

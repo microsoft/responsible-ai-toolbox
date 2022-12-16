@@ -13,6 +13,8 @@ import {
 import { IVisionListItem } from "@responsible-ai/core-ui";
 import React from "react";
 
+import { getJoinedLabelString } from "../utils/labelUtils";
+
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import { DataCharacteristicsHeader } from "./DataCharacteristicsHeader";
 
@@ -72,6 +74,8 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
     const listContainerStyle = mergeStyles(classNames.listContainer, {
       height: imageDim + 30
     });
+    const predictedY = this.props.list[0].predictedY;
+    const key = getJoinedLabelString(predictedY);
     return (
       <Stack>
         <Stack.Item>
@@ -93,7 +97,7 @@ export class DataCharacteristicsRow extends React.Component<IDataCharacteristics
             )}
             <Stack.Item className={listContainerStyle}>
               <List
-                key={this.props.list[0].predictedY}
+                key={key}
                 items={list}
                 onRenderCell={onRenderCell}
                 getPageHeight={getPageHeight}

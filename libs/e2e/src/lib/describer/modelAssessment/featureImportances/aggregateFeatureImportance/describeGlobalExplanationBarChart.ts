@@ -50,3 +50,19 @@ export function describeGlobalExplanationBarChartExplicitValues(
     });
   });
 }
+
+export function describeGlobalExplanationChartAvgOfAbsOption(
+  dataShape: IModelAssessmentData
+): void {
+  describe("should have average of absolute value as option", () => {
+    before(() => {
+      getMenu("Aggregate feature importance").click();
+    });
+    it("should have average of absolute value as option in class importance weights dropdown", () => {
+      cy.get("#classWeightDropdown").should(
+        "contain",
+        dataShape.featureImportanceData?.avgOfAbsValue
+      );
+    });
+  });
+}

@@ -5,6 +5,6 @@ rai-core-flask==0.4.0
 itsdangerous==2.0.1
 scikit-learn>=0.22.1
 lightgbm>=2.0.11
-erroranalysis>=0.3.11
+erroranalysis>=0.3.13
 fairlearn>=0.7.0
 raiutils>=0.2.0

@@ -6,13 +6,14 @@ import uuid
 import numpy as np
 import pandas as pd
 import pytest
-from common_utils import (create_cancer_data, create_dataframe,
-                          create_housing_data, create_iris_data,
-                          create_models_classification,
-                          create_models_regression)
 
 from erroranalysis._internal.error_analyzer import ModelAnalyzer
 from erroranalysis._internal.error_report import ErrorReport
+from rai_test_utils.datasets.tabular import (create_cancer_data,
+                                             create_housing_data,
+                                             create_iris_data)
+from rai_test_utils.models.model_utils import (create_models_classification,
+                                               create_models_regression)
 
 
 class TestErrorReport(object):
@@ -68,8 +69,8 @@ class TestErrorReport(object):
     def test_error_report_housing_pandas(self, filter_features):
         X_train, X_test, y_train, y_test, feature_names = \
             create_housing_data()
-        X_train = create_dataframe(X_train, feature_names)
-        X_test = create_dataframe(X_test, feature_names)
+        X_train = pd.DataFrame(X_train, columns=feature_names)
+        X_test = pd.DataFrame(X_test, columns=feature_names)
         models = create_models_regression(X_train, y_train)
 
         for model in models:

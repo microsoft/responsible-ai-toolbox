@@ -18,25 +18,21 @@ import {
   JointDataset,
   ModelAssessmentContext,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  IBoxChartState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { modelOverviewChartStyles } from "./ModelOverviewChart.styles";
-import {
-  IProbabilityDistributionBoxChartState,
-  ProbabilityDistributionBoxChart
-} from "./ProbabilityDistributionBoxChart";
+import { ProbabilityDistributionBoxChart } from "./ProbabilityDistributionBoxChart";
 import { ProbabilityDistributionSplineChart } from "./ProbabilityDistributionSplineChart";
 
 interface IProbabilityDistributionChartProps {
-  boxPlotState: IProbabilityDistributionBoxChartState;
+  boxPlotState: IBoxChartState;
   cohorts: ErrorCohort[];
   showSplineChart: boolean;
-  onBoxPlotStateUpdate: (
-    boxPlotState: IProbabilityDistributionBoxChartState
-  ) => void;
+  onBoxPlotStateUpdate: (boxPlotState: IBoxChartState) => void;
   onChooseCohorts: () => void;
   onToggleChange: (checked: boolean) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -77,7 +73,7 @@ export class ProbabilityDistributionChart extends React.Component<
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
     if (!this.context.jointDataset.hasPredictedProbabilities) {
-      return;
+      return React.Fragment;
     }
 
     const probabilityOptions = this.getProbabilityOptions();

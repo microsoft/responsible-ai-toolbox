@@ -13,6 +13,7 @@ import {
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
+import { getJoinedLabelString } from "./utils/labelUtils";
 
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
@@ -30,6 +31,24 @@ export const defaultImageSizes = {
   imageExplorerView: 200,
   tableView: 50
 };
+
+export function mapClassNames(
+  labels: number[] | number[][],
+  classNames: string[]
+): string[] | string[][] {
+  if (Array.isArray(labels[0])) {
+    return (labels as number[][]).map((row) =>
+      row.reduce((acc, value, index) => {
+        if (value) {
+          acc.push(classNames[index]);
+        }
+        return acc;
+      }, [] as string[])
+    );
+  }
+  return (labels as number[]).map((index) => classNames[index]);
+}
+
 export function preprocessData(
   props: IVisionExplanationDashboardProps
 ):
@@ -47,13 +66,9 @@ export function preprocessData(
   const successInstances: IVisionListItem[] = [];
   const classNames = props.dataSummary.class_names;
 
-  const predictedY = dataSummary.predicted_y.map((index) => {
-    return classNames[index];
-  });
+  const predictedY = mapClassNames(dataSummary.predicted_y, classNames);
 
-  const trueY = dataSummary.true_y.map((index) => {
-    return classNames[index];
-  });
+  const trueY = mapClassNames(dataSummary.true_y, classNames);
 
   const features = dataSummary.features?.map((featuresArr) => {
     return featuresArr[0] as number;
@@ -75,7 +90,9 @@ export function preprocessData(
     fieldNames.forEach((fieldName) => {
       item[fieldName] = features[index];
     });
-    item.predictedY === item.trueY
+    const predictedYValue = getJoinedLabelString(item.predictedY);
+    const trueYValue = getJoinedLabelString(item.trueY);
+    predictedYValue === trueYValue
       ? successInstances.push(item)
       : errorInstances.push(item);
 

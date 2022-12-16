@@ -6,7 +6,8 @@ import {
   HeaderWithInfo,
   HeatmapHighChart,
   ITargetColumnFeatureBalanceMeasures,
-  MissingParametersPlaceholder
+  MissingParametersPlaceholder,
+  tableStyles
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -187,7 +188,7 @@ export class FeatureBalanceMeasuresChart extends React.PureComponent<
         </Stack.Item>
 
         {/* Renders the chart itself */}
-        <Stack.Item>
+        <Stack.Item className={tableStyles}>
           <HeatmapHighChart
             configOverride={getFeatureBalanceMeasuresChart(
               featureBalanceMeasures,

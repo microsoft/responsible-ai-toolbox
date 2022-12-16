@@ -135,7 +135,7 @@ export class TabsView extends React.PureComponent<
         localization.ErrorAnalysis.Cohort.defaultLabel;
     const classNames = tabsViewStyles();
     return (
-      <Stack tokens={{ padding: "l1" }}>
+      <Stack className={classNames.stackStyle}>
         {this.props.activeGlobalTabs[0]?.key !==
           GlobalTabKeys.ErrorAnalysisTab && (
           <Stack.Item className={classNames.buttonSection}>
@@ -394,6 +394,7 @@ export class TabsView extends React.PureComponent<
                     </h3>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      newCohort={this.props.selectedCohort}
                       telemetryHook={this.props.telemetryHook}
                       onPivotChange={this.onCausalAnalysisOptionChange}
                     />

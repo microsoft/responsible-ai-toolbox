@@ -26,7 +26,16 @@ export const featureImportanceTabStyles: () => IProcessedStyleSet<IFeatureImport
       },
       tabs: {
         justifyContent: "start",
-        padding: "0px 30px"
+        padding: "0px 30px",
+        selectors: {
+          "[role='tablist'].ms-Pivot": {
+            display: "flex",
+            flexWrap: "wrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }
+        }
       }
     });
   };

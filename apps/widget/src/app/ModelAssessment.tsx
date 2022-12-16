@@ -3,6 +3,7 @@
 
 import {
   ICausalWhatIfData,
+  ICausalAnalysisData,
   IErrorAnalysisMatrix,
   IHighchartBoxData
 } from "@responsible-ai/core-ui";
@@ -32,6 +33,11 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestImportances"
       | "requestCausalWhatIf"
       | "requestBoxPlotDistribution"
+      | "requestDatasetAnalysisBarChart"
+      | "requestDatasetAnalysisBoxChart"
+      | "requestGlobalCausalEffects"
+      | "requestGlobalCausalPolicy"
+      | "requestGlobalExplanations"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -73,6 +79,84 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestGlobalCausalEffects = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_effects",
+          abortSignal
+        );
+      };
+      callBack.requestGlobalCausalPolicy = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_policy",
+          abortSignal
+        );
+      };
+      callBack.requestGlobalExplanations = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter],
+          "/global_explanations",
+          abortSignal
+        );
+      };
+      callBack.requestDatasetAnalysisBarChart = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        columnNameX: string,
+        treatColumnXAsCategorical: boolean,
+        columnNameY: string,
+        treatColumnYAsCategorical: boolean,
+        numBins: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [
+            filter,
+            compositeFilter,
+            columnNameX,
+            treatColumnXAsCategorical,
+            columnNameY,
+            treatColumnYAsCategorical,
+            numBins
+          ],
+          "/dataset_analysis_bar_chart_plot",
+          abortSignal
+        );
+      };
+      callBack.requestDatasetAnalysisBoxChart = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        columnNameX: string,
+        columnNameY: string,
+        numBins: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter, columnNameX, columnNameY, numBins],
+          "/dataset_analysis_box_chart_plot",
+          abortSignal
         );
       };
     }

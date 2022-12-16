@@ -10,7 +10,8 @@ import {
   ILabeledStatistic,
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
-  RegressionMetrics
+  RegressionMetrics,
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
@@ -34,14 +35,24 @@ export function generateCohortsStatsTable(
   fairnessStats: IFairnessStats[];
   items: PointOptionsObject[];
 } {
-  // The "count" metric has to be treated separately
-  // since it's not handled like other metrics, but
-  // is part of the ErrorCohort object.
-  const items: PointOptionsObject[] = cohorts.map(
-    (errorCohort, cohortIndex) => {
+  const items: PointOptionsObject[] = labeledStatistics.map(
+    (labeledStatistic, cohortIndex) => {
+      const cohortStats = labeledStatistic.find(
+        (cohortStats: ILabeledStatistic) =>
+          cohortStats.key === TotalCohortSamples
+      );
+      if (cohortStats) {
+        return {
+          colorValue: 0,
+          value: cohortStats.stat,
+          x: 0,
+          // metric index for Count column
+          y: cohortIndex
+        };
+      }
       return {
         colorValue: 0,
-        value: errorCohort.cohortStats.totalCohort,
+        value: 0,
         x: 0,
         // metric index for Count column
         y: cohortIndex
@@ -52,15 +63,19 @@ export function generateCohortsStatsTable(
   let countMin = Number.MAX_SAFE_INTEGER;
   let countMinCohortName = "";
   let countMaxCohortName = "";
-  cohorts.forEach((errorCohort) => {
-    const cohortCount = errorCohort.cohortStats.totalCohort;
-    if (cohortCount > countMax) {
-      countMax = cohortCount;
-      countMaxCohortName = errorCohort.cohort.name;
-    }
-    if (cohortCount < countMin) {
-      countMin = cohortCount;
-      countMinCohortName = errorCohort.cohort.name;
+  cohorts.forEach((errorCohort, cohortIndex) => {
+    const labeledStat = labeledStatistics[cohortIndex].find(
+      (labeledStat) => labeledStat.key === TotalCohortSamples
+    );
+    if (labeledStat) {
+      if (labeledStat.stat > countMax) {
+        countMax = labeledStat.stat;
+        countMaxCohortName = errorCohort.cohort.name;
+      }
+      if (labeledStat.stat < countMin) {
+        countMin = labeledStat.stat;
+        countMinCohortName = errorCohort.cohort.name;
+      }
     }
   });
   const fairnessStats: IFairnessStats[] = [
@@ -234,15 +249,80 @@ export function getSelectableMetrics(
   isMulticlass: boolean
 ): IMetricOption[] {
   const selectableMetrics: IMetricOption[] = [];
-  if (taskType === DatasetTaskType.Classification) {
+  if (
+    taskType === DatasetTaskType.Classification ||
+    taskType === DatasetTaskType.TextClassification ||
+    taskType === DatasetTaskType.ImageClassification
+  ) {
     if (isMulticlass) {
-      selectableMetrics.push({
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: MulticlassClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      });
+      if (taskType === DatasetTaskType.ImageClassification) {
+        selectableMetrics.push(
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.accuracy
+                .description,
+            key: ImageClassificationMetrics.Accuracy,
+            text: localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMacro
+                .description,
+            key: ImageClassificationMetrics.MacroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMacro
+                .description,
+            key: ImageClassificationMetrics.MacroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
+                .description,
+            key: ImageClassificationMetrics.MacroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMacro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.precisionMicro
+                .description,
+            key: ImageClassificationMetrics.MicroPrecision,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .precisionMicro.name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.recallMicro
+                .description,
+            key: ImageClassificationMetrics.MicroRecall,
+            text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
+              .name
+          },
+          {
+            description:
+              localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
+                .description,
+            key: ImageClassificationMetrics.MicroF1,
+            text: localization.ModelAssessment.ModelOverview.metrics
+              .f1ScoreMicro.name
+          }
+        );
+      } else {
+        selectableMetrics.push({
+          description:
+            localization.ModelAssessment.ModelOverview.metrics.accuracy
+              .description,
+          key: MulticlassClassificationMetrics.Accuracy,
+          text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
+        });
+      }
     } else {
       selectableMetrics.push(
         {
@@ -300,64 +380,6 @@ export function getSelectableMetrics(
         }
       );
     }
-  } else if (taskType === DatasetTaskType.ImageClassification) {
-    selectableMetrics.push(
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.accuracy
-            .description,
-        key: ImageClassificationMetrics.Accuracy,
-        text: localization.ModelAssessment.ModelOverview.metrics.accuracy.name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.precisionMacro
-            .description,
-        key: ImageClassificationMetrics.MacroPrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics.precisionMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.recallMacro
-            .description,
-        key: ImageClassificationMetrics.MacroRecall,
-        text: localization.ModelAssessment.ModelOverview.metrics.recallMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
-            .description,
-        key: ImageClassificationMetrics.MacroF1,
-        text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMacro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.precisionMicro
-            .description,
-        key: ImageClassificationMetrics.MicroPrecision,
-        text: localization.ModelAssessment.ModelOverview.metrics.precisionMicro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.recallMicro
-            .description,
-        key: ImageClassificationMetrics.MicroRecall,
-        text: localization.ModelAssessment.ModelOverview.metrics.recallMicro
-          .name
-      },
-      {
-        description:
-          localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
-            .description,
-        key: ImageClassificationMetrics.MicroF1,
-        text: localization.ModelAssessment.ModelOverview.metrics.f1ScoreMicro
-          .name
-      }
-    );
   } else {
     // task_type === "regression"
     selectableMetrics.push(

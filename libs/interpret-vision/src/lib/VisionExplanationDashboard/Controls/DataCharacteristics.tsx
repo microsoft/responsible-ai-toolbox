@@ -16,6 +16,7 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getFilteredDataFromSearch } from "../utils/getFilteredData";
+import { getJoinedLabelString, isItemPredTrueEqual } from "../utils/labelUtils";
 
 import { dataCharacteristicsStyles } from "./DataCharacteristics.styles";
 import {
@@ -176,10 +177,12 @@ export class DataCharacteristics extends React.Component<
   ): React.ReactElement => {
     const imageDim = this.props.imageDim;
     const classNames = dataCharacteristicsStyles();
+    const predictedY = getJoinedLabelString(item?.predictedY);
+    const trueY = getJoinedLabelString(item?.trueY);
     const indicatorStyle = mergeStyles(
       classNames.indicator,
       { width: imageDim },
-      item?.predictedY === item?.trueY
+      predictedY === trueY
         ? classNames.successIndicator
         : classNames.errorIndicator
     );
@@ -189,7 +192,7 @@ export class DataCharacteristics extends React.Component<
       <Stack className={classNames.tile}>
         <Stack.Item style={{ height: imageDim, width: imageDim }}>
           <Image
-            alt={item?.predictedY}
+            alt={predictedY}
             src={`data:image/jpg;base64,${item?.image}`}
             onClick={this.callbackWrapper(item)}
             className={classNames.image}
@@ -230,10 +233,10 @@ export class DataCharacteristics extends React.Component<
       const aItems = items.get(a);
       const bItems = items.get(b);
       const aCount = aItems?.filter(
-        (item) => item.predictedY !== item.trueY
+        (item) => !isItemPredTrueEqual(item)
       ).length;
       const bCount = bItems?.filter(
-        (item) => item.predictedY !== item.trueY
+        (item) => !isItemPredTrueEqual(item)
       ).length;
       if (aCount === bCount) {
         return a > b ? 1 : -1;
