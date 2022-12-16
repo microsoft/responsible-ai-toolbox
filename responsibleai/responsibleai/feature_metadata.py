@@ -72,7 +72,7 @@ class FeatureMetadata:
                 raise UserConfigValidationException(
                     'One or more of time_series_id_column_names '
                     f'{self.time_series_id_column_names} are not present in '
-                    'train or test datasets'     
+                     'train or test datasets')     
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert the feature metadata to a dictionary.

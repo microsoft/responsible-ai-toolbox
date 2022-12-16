@@ -11,13 +11,13 @@ import {
 } from "@fluentui/react";
 // import { localization } from "@responsible-ai/localization";
 import {
-  ErrorCohort,
   ModelAssessmentContext,
   defaultModelAssessmentContext,
   BasicHighChart,
   JointDataset,
   ICompositeFilter,
-  IFilter
+  IFilter,
+  Cohort
 } from "@responsible-ai/core-ui";
 import { SeriesOptionsType } from "highcharts";
 import React from "react";
@@ -97,19 +97,21 @@ export class ForecastCompare extends React.Component<
     }
 
     if (!isValidCohort) {
-      chooseErrorMessage = "Current selected error cohort is not a valid grain";
+      chooseErrorMessage = "Currently selected time series is not valid.";
     }
 
     const trueY: SeriesOptionsType[] = this.context.dataset
-      .is_forecasting_true_y
+      .is_forecasting_true_y && this.context.jointDataset.numLabels === 1
       ? [
           {
             data: filteredIndices
               .map((dt, idx) => [
                 Date.parse(dt),
-                this.context.dataset.true_y[idx]
+                // true_y is guaranteed to be 1-dimensional due to the assertion
+                // that numLabels = 1 above.
+                (this.context.dataset.true_y as number[])[idx]
               ])
-              .sort((objA, objB) => objA[0] - objB[0]),
+              .sort((objA: number[], objB: number[]) => objA[0] - objB[0]),
             name: "True Y",
             type: "spline"
           }
@@ -337,12 +339,12 @@ export class ForecastCompare extends React.Component<
     const categoricalTransformedCompositeFilters =
       this.convertCompositeFilterArguments(compositeFilters, jointDataset);
 
-    const filtersRelabeled = ErrorCohort.getLabeledFilters(
+    const filtersRelabeled = Cohort.getLabeledFilters(
       categoricalTransformedFilters,
       jointDataset
     );
 
-    const compositeFiltersRelabeled = ErrorCohort.getLabeledCompositeFilters(
+    const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
       categoricalTransformedCompositeFilters,
       jointDataset
     );

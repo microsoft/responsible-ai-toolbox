@@ -1807,5 +1807,8 @@
     "TableViewTab": {
       "Heading": "View the dataset in a table format for all features and rows."
     }
+  },
+  "Forecasting": {
+    "timeSeries": "Time series"
   }
 }

@@ -15,12 +15,11 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import SKLearn, is_classifier
+from raiutils.models import Forecasting, is_quantile_forecaster, is_forecaster
 from responsibleai._interfaces import Dataset, RAIForecastingInsightsData
-from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._internal.constants import Metadata
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
-from responsibleai.managers.data_balance_manager import DataBalanceManager
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
 _PREDICTIONS = 'predictions'
@@ -67,8 +66,8 @@ class RAIForecastingInsights(RAIBaseInsights):
                  feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAIForecastingInsights object.
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements predict or a function that accepts a 2d
+            ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -123,18 +122,18 @@ class RAIForecastingInsights(RAIBaseInsights):
             model, train, test, target_column, self.task_type,
             serializer)
 
-        if model is not None:
+        if is_forecaster(model):
             # Cache predictions of the model
-            self.predict_output = model.predict(
+            self.forecast_output = model.predict(
                 self._test_without_true_y)
-            if hasattr(model, SKLearn.PREDICT_PROBA):
-                self.predict_proba_output = model.predict_proba(
+            if is_quantile_forecaster:
+                self.quantile_forecast_output = model.predict_quantiles(
                     self._test_without_true_y)
             else:
-                self.predict_proba_output = None
+                self.quantile_forecast_output = None
         else:
-            self.predict_output = None
-            self.predict_proba_output = None
+            self.forecast_output = None
+            self.quantile_forecast_output = None
 
     def _check_true_y_present(self, target_column, test):
         return target_column in list(test.columns)
@@ -142,41 +141,10 @@ class RAIForecastingInsights(RAIBaseInsights):
     def _initialize_managers(self):
         """Initializes the managers.
 
-        Initialized the causal, counterfactual, error analysis
-        and explainer managers.
+        Currently not applicable for forecasting.
         """
 
-        # self._causal_manager = CausalManager(
-        #     self.train, self.test, self.target_column,
-        #     self.task_type, self.categorical_features)
-
-        # self._counterfactual_manager = CounterfactualManager(
-        #     model=self.model, train=self.train, test=self.test,
-        #     target_column=self.target_column, task_type=self.task_type,
-        #     categorical_features=self.categorical_features)
-
-        self._data_balance_manager = DataBalanceManager(
-            train=self.train, test=self.test, target_column=self.target_column,
-            classes=self._classes, task_type=self.task_type)
-
-        # self._error_analysis_manager = ErrorAnalysisManager(
-        #     self.model, self.test, self.target_column,
-        #     self._classes,
-        #     self.categorical_features)
-
-        # self._explainer_manager = ExplainerManager(
-        #     self.model, self.train, self.test,
-        #     self.target_column,
-        #     self._classes,
-        #     categorical_features=self.categorical_features)
-
-        self._managers = [
-            # self._causal_manager,
-                        #   self._counterfactual_manager,
-                          self._data_balance_manager,
-                        #   self._error_analysis_manager,
-                        #   self._explainer_manager
-                          ]
+        self._managers = []
 
     def _validate_rai_insights_input_parameters(
             self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
@@ -187,8 +155,8 @@ class RAIForecastingInsights(RAIBaseInsights):
         """Validate the inputs for the RAIForecastingInsights constructor.
 
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements predict or a function that accepts a 2d
+            ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -317,36 +285,26 @@ class RAIForecastingInsights(RAIBaseInsights):
                 )
 
             if model is not None:
-                # Pick one row from train and test data
-                small_train_data = train.iloc[0:1].drop(
-                    columns=[target_column])
-
+                # Pick one row from test data
                 if self._is_true_y_present:
                     small_test_data = test.iloc[0:1].drop(
                         columns=[target_column])
                 else:
                     small_test_data = test.iloc[0:1]
 
-                small_train_features_before = list(small_train_data.columns)
+                small_test_features_before = list(small_test_data.columns)
 
-                # Run predict() of the model
+                # Run forecast() of the model
                 try:
-                    model.predict(small_train_data)
                     model.predict(small_test_data)
                 except Exception:
                     raise UserConfigValidationException(
                         'The model passed cannot be used for'
                         ' getting predictions via predict()'
                     )
-                self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT)
-
-                if hasattr(model, SKLearn.PREDICT_PROBA):
-                    raise UserConfigValidationException(
-                        'The regression model'
-                        'provided has a predict_proba function. '
-                        'Please check the task_type.')
+                self._validate_features_same(small_test_features_before,
+                                             small_test_data,
+                                             SKlearn.predict)
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
@@ -475,9 +433,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         else:
             dashboard_dataset.feature_metadata = None
 
-        dashboard_dataset.data_balance_measures = \
-            self._data_balance_manager.get_data()
-
         predicted_y = None
         feature_length = None
 
@@ -488,8 +443,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         try:
             list_dataset = convert_to_list(dataset)
         except Exception as ex:
-            raise ValueError(
-                "Unsupported dataset type") from ex
+            raise ValueError("Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
             try:
                 predicted_y = self.model.predict(dataset)
@@ -522,7 +476,16 @@ class RAIForecastingInsights(RAIBaseInsights):
             dashboard_dataset.features = list_dataset
 
         # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
-        dashboard_dataset.index = convert_to_list(self.test.index.strftime("%Y-%m-%d"))
+        try:
+            dashboard_dataset.index = convert_to_list(self.test.index.strftime("%Y-%m-%d"))
+        except AttributeError:
+            # if strftime is not compatible with the index, check if a time column was provided
+            if self._feature_metadata.datetime_features:
+                # TODO: this isn't ideal, we need to be able to specify exactly 1. This allows for multiple.
+                datetime_feature = self._feature_metadata.datetime_features[0]
+                dashboard_dataset.index = convert_to_list(pd.to_datetime(self.test[datetime_feature], yearfirst=True, format="%&-%m-%d"))
+            else:
+                raise ValueError("No datetime_features were provided via feature_metadata.")
 
         true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
@@ -540,18 +503,18 @@ class RAIForecastingInsights(RAIBaseInsights):
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
 
-        if is_classifier(self.model) and dataset is not None:
+        if is_quantile_forecaster(self.model) and dataset is not None:
             try:
-                probability_y = self.model.predict_proba(dataset)
+                pred_quantiles = self.model.predict_quantiles(dataset)
             except Exception as ex:
-                raise ValueError("Model does not support predict_proba method"
-                                 " for given dataset type,") from ex
+                raise ValueError("Model does not support predict_quantiles method"
+                                 " for given dataset type.") from ex
             try:
-                probability_y = convert_to_list(probability_y)
+                pred_quantiles = convert_to_list(pred_quantiles)
             except Exception as ex:
                 raise ValueError(
-                    "Model predict_proba output of unsupported type,") from ex
-            dashboard_dataset.probability_y = probability_y
+                    "Model forecast_quantiles output of unsupported type.") from ex
+            dashboard_dataset.pred_quantiles = pred_quantiles
 
         return dashboard_dataset
 
@@ -704,13 +667,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         # function, similar to pickle
         inst = RAIForecastingInsights.__new__(RAIForecastingInsights)
 
-        manager_map = {
-            # ManagerNames.CAUSAL: CausalManager,
-            # ManagerNames.COUNTERFACTUAL: CounterfactualManager,
-            ManagerNames.DATA_BALANCE: DataBalanceManager,
-            # ManagerNames.ERROR_ANALYSIS: ErrorAnalysisManager,
-            # ManagerNames.EXPLAINER: ExplainerManager,
-        }
+        manager_map = {}
 
         # load current state
         RAIBaseInsights._load(path, inst, manager_map,
