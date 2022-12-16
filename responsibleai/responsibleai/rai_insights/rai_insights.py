@@ -884,7 +884,7 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        if meta[_FEATURE_METADATA] is None:
+        if _FEATURE_METADATA not in meta or meta[_FEATURE_METADATA] is None:
             inst.__dict__['_' + _FEATURE_METADATA] = None
         else:
             inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
