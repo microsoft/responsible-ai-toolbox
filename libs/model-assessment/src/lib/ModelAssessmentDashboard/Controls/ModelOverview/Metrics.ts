@@ -23,10 +23,8 @@ export async function generateMetricsCohortsSDK(
   context: IModelAssessmentContext,
   errorCohorts: ErrorCohort[]
 ): Promise<ILabeledStatistic[][]> {
-  console.log(Metrics.AccuracyScore);
   let allMetrics = [];
   if (context.requestMetrics) {
-    console.log("Requesting metrics from SDK backend");
     for (let errorCohort of errorCohorts) {
       const filtersRelabeled = Cohort.getLabeledFilters(
         errorCohort.cohort.filters,
@@ -43,8 +41,6 @@ export async function generateMetricsCohortsSDK(
         context.modelMetadata.modelType,
         new AbortController().signal
       );
-      console.log(metricResultDict);
-      console.log(typeof metricResultDict);
 
       if (context.modelMetadata.modelType == ModelTypes.Binary) {
         allMetrics.push(convertBinaryClassificationMetrics(metricResultDict));
@@ -56,9 +52,7 @@ export async function generateMetricsCohortsSDK(
         );
       }
     }
-    console.log(allMetrics);
   }
-  console.log(allMetrics);
   return allMetrics;
 }
 
@@ -67,7 +61,6 @@ export function convertBinaryClassificationMetrics(
 ): ILabeledStatistic[] {
   let allMetricsOutput = [];
   for (let [metric, stat] of Object.entries(metricResultDict)) {
-    console.log(metric, stat);
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
@@ -137,7 +130,6 @@ export function convertMultiClassClassificationMetrics(
 ): ILabeledStatistic[] {
   let allMetricsOutput = [];
   for (let [metric, stat] of Object.entries(metricResultDict)) {
-    console.log(metric, stat);
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
@@ -165,7 +157,6 @@ export function convertRegressionMetrics(
 ): ILabeledStatistic[] {
   let allMetricsOutput = [];
   for (let [metric, stat] of Object.entries(metricResultDict)) {
-    console.log(metric, stat);
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
