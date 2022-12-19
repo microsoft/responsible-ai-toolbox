@@ -67,6 +67,10 @@ interface IModelOverviewState {
   // That way, we can distinguish between newly created cohorts
   // and deliberately ignored cohorts for the chart section.
   maxCohortId: number;
+  datasetCohortLabeledStatistics: ILabeledStatistic[][];
+  datasetBasedCohorts: ErrorCohort[];
+  featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
+  featureBasedCohorts: ErrorCohort[];
 }
 
 const datasetCohortViewPivotKey = "datasetCohortView";
@@ -93,7 +97,11 @@ export class ModelOverview extends React.Component<
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true
+      showHeatmapColors: true,
+      datasetCohortLabeledStatistics: [],
+      datasetBasedCohorts: [],
+      featureBasedCohortLabeledStatistics: [],
+      featureBasedCohorts: []
     };
   }
 
@@ -137,7 +145,9 @@ export class ModelOverview extends React.Component<
         return errorCohort.cohort.getCohortID();
       }),
       selectedMetrics: defaultSelectedMetrics
-    });
+    }, () => this.state.datasetCohortChartIsVisible
+      ? this.updateDatasetCohortStats()
+      : this.updateFeatureCohortStats());
   }
 
   public componentDidUpdate(): void {
@@ -155,8 +165,45 @@ export class ModelOverview extends React.Component<
         maxCohortId,
         selectedDatasetCohorts:
           this.state.selectedDatasetCohorts?.concat(newCohorts)
-      });
+      }, () => this.updateDatasetCohortStats());
     }
+  }
+
+  private updateDatasetCohortStats(): void {
+    const datasetCohortMetricStats = generateMetrics(
+      this.context,
+      this.context.errorCohorts,
+      this.context.modelMetadata.modelType
+    );
+    console.log(datasetCohortMetricStats);
+
+    this.setState({
+      datasetBasedCohorts: this.context.errorCohorts,
+      datasetCohortLabeledStatistics: datasetCohortMetricStats
+    });
+  }
+
+  private async updateFeatureCohortStats(): Promise<void> {
+    // generate table contents for selected feature cohorts
+    const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
+      this.context.baseErrorCohort,
+      this.context.jointDataset,
+      this.context.dataset,
+      this.state.selectedFeatures,
+      this.state.selectedFeaturesContinuousFeatureBins
+    );
+
+    const featureCohortMetricStats = generateMetrics(
+      this.context,
+      featureBasedCohorts,
+      this.context.modelMetadata.modelType
+    );
+    console.log(featureCohortMetricStats);
+
+    this.setState({
+      featureBasedCohorts: featureBasedCohorts,
+      featureBasedCohortLabeledStatistics: featureCohortMetricStats
+    });
   }
 
   public render(): React.ReactNode {
@@ -164,6 +211,14 @@ export class ModelOverview extends React.Component<
       return (
         <MissingParametersPlaceholder>
           {localization.Interpret.ModelPerformance.missingParameters}
+        </MissingParametersPlaceholder>
+      );
+    }
+  
+    if (this.state.datasetCohortLabeledStatistics.length === 0) {
+      return (
+        <MissingParametersPlaceholder>
+          {"Empty dataset cohort stats"}
         </MissingParametersPlaceholder>
       );
     }
@@ -188,32 +243,6 @@ export class ModelOverview extends React.Component<
         })
     );
 
-    // generate table contents for dataset cohorts
-    const datasetCohortLabeledStatistics = generateMetrics(
-      this.context.jointDataset,
-      this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-
-    // generate table contents for selected feature cohorts
-    const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
-      this.context.baseErrorCohort,
-      this.context.jointDataset,
-      this.context.dataset,
-      this.state.selectedFeatures,
-      this.state.selectedFeaturesContinuousFeatureBins
-    );
-
-    const featureBasedCohortLabeledStatistics = generateMetrics(
-      this.context.jointDataset,
-      featureBasedCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-
     const featureSelectionLimitReached =
       this.state.selectedFeatures.length >= 2;
     const featureSelectionOptions: IComboBoxOption[] =
@@ -234,7 +263,7 @@ export class ModelOverview extends React.Component<
     const showHeatmapToggleInFeatureCohortView =
       !this.state.datasetCohortViewIsVisible &&
       this.state.selectedFeatures.length > 0 &&
-      featureBasedCohorts.length > 1;
+      this.state.featureBasedCohorts.length > 1;
 
     return (
       <Stack
@@ -359,7 +388,8 @@ export class ModelOverview extends React.Component<
           )}
           {this.state.datasetCohortViewIsVisible ? (
             <DatasetCohortStatsTable
-              labeledStatistics={datasetCohortLabeledStatistics}
+              datasetBasedCohorts={this.state.datasetBasedCohorts}
+              labeledStatistics={this.state.datasetCohortLabeledStatistics}
               selectableMetrics={selectableMetrics}
               selectedMetrics={this.state.selectedMetrics}
               showHeatmapColors={this.state.showHeatmapColors}
@@ -405,11 +435,11 @@ export class ModelOverview extends React.Component<
                 </>
               )}
               <DisaggregatedAnalysisTable
-                labeledStatistics={featureBasedCohortLabeledStatistics}
+                labeledStatistics={this.state.featureBasedCohortLabeledStatistics}
                 selectableMetrics={selectableMetrics}
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
-                featureBasedCohorts={featureBasedCohorts}
+                featureBasedCohorts={this.state.featureBasedCohorts}
                 showHeatmapColors={this.state.showHeatmapColors}
               />
             </>
@@ -418,7 +448,7 @@ export class ModelOverview extends React.Component<
             isOpen={this.state.chartConfigurationIsVisible}
             onDismissFlyout={this.onDismissChartConfigurationFlyout}
             datasetCohorts={this.context.errorCohorts}
-            featureBasedCohorts={featureBasedCohorts}
+            featureBasedCohorts={this.state.featureBasedCohorts}
             selectedDatasetCohorts={this.state.selectedDatasetCohorts}
             selectedFeatureBasedCohorts={this.state.selectedFeatureBasedCohorts}
             updateCohortSelection={this.updateCohortSelection}
@@ -449,8 +479,8 @@ export class ModelOverview extends React.Component<
             <ModelOverviewChartPivot
               allCohorts={
                 this.state.datasetCohortChartIsVisible
-                  ? this.context.errorCohorts
-                  : featureBasedCohorts
+                  ? this.state.datasetBasedCohorts
+                  : this.state.featureBasedCohorts
               }
               selectedChartCohorts={
                 this.state.datasetCohortChartIsVisible
@@ -460,8 +490,8 @@ export class ModelOverview extends React.Component<
               isDatasetBasedCohorts={this.state.datasetCohortChartIsVisible}
               labeledStatistics={
                 this.state.datasetCohortChartIsVisible
-                  ? datasetCohortLabeledStatistics
-                  : featureBasedCohortLabeledStatistics
+                  ? this.state.datasetCohortLabeledStatistics
+                  : this.state.featureBasedCohortLabeledStatistics
               }
               selectedMetrics={this.state.selectedMetrics}
               onChooseCohorts={this.onChooseCohorts}
@@ -545,7 +575,8 @@ export class ModelOverview extends React.Component<
       selectedFeatureBasedCohorts: featureBasedCohorts.map((_, index) => index),
       selectedFeatures: newSelectedFeatures,
       selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
-    });
+    },
+    () => this.updateFeatureCohortStats());
   };
 
   private onMetricConfigurationChange = (metrics: string[]): void => {
@@ -592,7 +623,8 @@ export class ModelOverview extends React.Component<
         ),
         selectedFeatures: newlySelectedFeatures,
         selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
-      });
+      },
+      () => this.updateFeatureCohortStats());
     }
   };
 

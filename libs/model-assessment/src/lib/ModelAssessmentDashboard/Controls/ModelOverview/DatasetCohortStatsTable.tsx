@@ -13,6 +13,7 @@ import { CohortStatsHeatmap } from "./CohortStatsHeatmap";
 import { generateCohortsStatsTable } from "./StatsTableUtils";
 
 interface IDatasetCohortStatsTableProps {
+  datasetBasedCohorts: ErrorCohort[];
   labeledStatistics: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
@@ -31,7 +32,7 @@ export class DatasetCohortStatsTable extends React.Component<
 
   public render(): React.ReactNode {
     const items = generateCohortsStatsTable(
-      this.context.errorCohorts,
+      this.props.datasetBasedCohorts,
       this.props.selectableMetrics,
       this.props.labeledStatistics,
       this.props.selectedMetrics,
@@ -39,13 +40,13 @@ export class DatasetCohortStatsTable extends React.Component<
     ).items;
 
     const showColors =
-      this.props.showHeatmapColors && this.context.errorCohorts.length > 1;
+      this.props.showHeatmapColors && this.props.datasetBasedCohorts.length > 1;
 
     return (
       <CohortStatsHeatmap
         id={"modelOverviewDatasetCohortStatsTable"}
         items={items}
-        cohorts={this.context.errorCohorts}
+        cohorts={this.props.datasetBasedCohorts}
         selectableMetrics={this.props.selectableMetrics}
         selectedMetrics={this.props.selectedMetrics}
         showColors={showColors}
