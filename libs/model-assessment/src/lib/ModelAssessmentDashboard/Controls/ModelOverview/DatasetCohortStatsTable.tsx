@@ -5,7 +5,8 @@ import { IDropdownOption } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  ILabeledStatistic
+  ILabeledStatistic,
+  ErrorCohort
 } from "@responsible-ai/core-ui";
 import React from "react";
 

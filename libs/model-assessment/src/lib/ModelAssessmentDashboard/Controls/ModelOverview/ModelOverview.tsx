@@ -19,13 +19,13 @@ import {
   ModelAssessmentContext,
   BinaryClassificationMetrics,
   RegressionMetrics,
-  JointDataset,
   generateMetrics,
+  JointDataset,
   ModelTypes,
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
-  // ILabeledStatistic,
+  ILabeledStatistic,
   ITelemetryEvent,
   IsMulticlass,
   TelemetryLevels,
@@ -139,15 +139,19 @@ export class ModelOverview extends React.Component<
         RegressionMetrics.MeanPrediction
       ];
     }
-    this.setState({
-      maxCohortId: this.getMaxCohortId(),
-      selectedDatasetCohorts: this.context.errorCohorts.map((errorCohort) => {
-        return errorCohort.cohort.getCohortID();
-      }),
-      selectedMetrics: defaultSelectedMetrics
-    }, () => this.state.datasetCohortChartIsVisible
-      ? this.updateDatasetCohortStats()
-      : this.updateFeatureCohortStats());
+    this.setState(
+      {
+        maxCohortId: this.getMaxCohortId(),
+        selectedDatasetCohorts: this.context.errorCohorts.map((errorCohort) => {
+          return errorCohort.cohort.getCohortID();
+        }),
+        selectedMetrics: defaultSelectedMetrics
+      },
+      () =>
+        this.state.datasetCohortChartIsVisible
+          ? this.updateDatasetCohortStats()
+          : this.updateFeatureCohortStats()
+    );
   }
 
   public componentDidUpdate(): void {
@@ -161,18 +165,23 @@ export class ModelOverview extends React.Component<
             errorCohort.cohort.getCohortID() > this.state.maxCohortId
         )
         .map((errorCohort) => errorCohort.cohort.getCohortID());
-      this.setState({
-        maxCohortId,
-        selectedDatasetCohorts:
-          this.state.selectedDatasetCohorts?.concat(newCohorts)
-      }, () => this.updateDatasetCohortStats());
+      this.setState(
+        {
+          maxCohortId,
+          selectedDatasetCohorts:
+            this.state.selectedDatasetCohorts?.concat(newCohorts)
+        },
+        () => this.updateDatasetCohortStats()
+      );
     }
   }
 
   private updateDatasetCohortStats(): void {
     const datasetCohortMetricStats = generateMetrics(
-      this.context,
-      this.context.errorCohorts,
+      this.context.jointDataset,
+      this.context.errorCohorts.map((errorCohort) =>
+        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+      ),
       this.context.modelMetadata.modelType
     );
     console.log(datasetCohortMetricStats);
@@ -194,8 +203,10 @@ export class ModelOverview extends React.Component<
     );
 
     const featureCohortMetricStats = generateMetrics(
-      this.context,
-      featureBasedCohorts,
+      this.context.jointDataset,
+      featureBasedCohorts.map((errorCohort) =>
+        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+      ),
       this.context.modelMetadata.modelType
     );
     console.log(featureCohortMetricStats);
@@ -214,7 +225,7 @@ export class ModelOverview extends React.Component<
         </MissingParametersPlaceholder>
       );
     }
-  
+
     if (this.state.datasetCohortLabeledStatistics.length === 0) {
       return (
         <MissingParametersPlaceholder>
@@ -435,7 +446,9 @@ export class ModelOverview extends React.Component<
                 </>
               )}
               <DisaggregatedAnalysisTable
-                labeledStatistics={this.state.featureBasedCohortLabeledStatistics}
+                labeledStatistics={
+                  this.state.featureBasedCohortLabeledStatistics
+                }
                 selectableMetrics={selectableMetrics}
                 selectedMetrics={this.state.selectedMetrics}
                 selectedFeatures={this.state.selectedFeatures}
@@ -570,13 +583,17 @@ export class ModelOverview extends React.Component<
       newSelectedFeatures,
       numberOfContinuousFeatureBins
     );
-    this.setState({
-      featureConfigurationIsVisible: false,
-      selectedFeatureBasedCohorts: featureBasedCohorts.map((_, index) => index),
-      selectedFeatures: newSelectedFeatures,
-      selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
-    },
-    () => this.updateFeatureCohortStats());
+    this.setState(
+      {
+        featureConfigurationIsVisible: false,
+        selectedFeatureBasedCohorts: featureBasedCohorts.map(
+          (_, index) => index
+        ),
+        selectedFeatures: newSelectedFeatures,
+        selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
+      },
+      () => this.updateFeatureCohortStats()
+    );
   };
 
   private onMetricConfigurationChange = (metrics: string[]): void => {
@@ -617,14 +634,16 @@ export class ModelOverview extends React.Component<
         newlySelectedFeatures,
         numberOfContinuousFeatureBins
       );
-      this.setState({
-        selectedFeatureBasedCohorts: featureBasedCohorts.map(
-          (_, index) => index
-        ),
-        selectedFeatures: newlySelectedFeatures,
-        selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
-      },
-      () => this.updateFeatureCohortStats());
+      this.setState(
+        {
+          selectedFeatureBasedCohorts: featureBasedCohorts.map(
+            (_, index) => index
+          ),
+          selectedFeatures: newlySelectedFeatures,
+          selectedFeaturesContinuousFeatureBins: numberOfContinuousFeatureBins
+        },
+        () => this.updateFeatureCohortStats()
+      );
     }
   };
 
