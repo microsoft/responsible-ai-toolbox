@@ -3,11 +3,14 @@
 
 """Module for managing cohort utilities for Responsible AI."""
 
-from .cohort import (ClassificationOutcomes, Cohort, CohortFilter,
-                     CohortFilterMethods, cohort_filter_json_converter)
+from .cohort import Cohort, CohortFilter, cohort_filter_json_converter
+from .constants import (ClassificationOutcomes, CohortFilterMethods,
+                        _CohortFilterOps, _CohortJsonConst)
 
 __all__ = ['Cohort',
            'CohortFilter',
            'CohortFilterMethods',
            'ClassificationOutcomes',
-           'cohort_filter_json_converter']
+           'cohort_filter_json_converter',
+           '_CohortJsonConst',
+           '_CohortFilterOps']
