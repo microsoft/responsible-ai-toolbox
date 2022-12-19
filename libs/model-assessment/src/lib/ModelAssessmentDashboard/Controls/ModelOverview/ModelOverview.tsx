@@ -63,10 +63,6 @@ interface IModelOverviewState {
   featureConfigurationIsVisible: boolean;
   metricConfigurationIsVisible: boolean;
   showHeatmapColors: boolean;
-  // The max cohort ID is needed to detect newly created cohorts.
-  // That way, we can distinguish between newly created cohorts
-  // and deliberately ignored cohorts for the chart section.
-  maxCohortId: number;
   datasetCohortLabeledStatistics: ILabeledStatistic[][];
   datasetBasedCohorts: ErrorCohort[];
   featureBasedCohortLabeledStatistics: ILabeledStatistic[][];
@@ -92,7 +88,6 @@ export class ModelOverview extends React.Component<
       datasetCohortChartIsVisible: true,
       datasetCohortViewIsVisible: true,
       featureConfigurationIsVisible: false,
-      maxCohortId: 0,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
@@ -141,7 +136,6 @@ export class ModelOverview extends React.Component<
     }
     this.setState(
       {
-        maxCohortId: this.getMaxCohortId(),
         selectedDatasetCohorts: this.context.errorCohorts.map((errorCohort) => {
           return errorCohort.cohort.getCohortID();
         }),
@@ -154,25 +148,51 @@ export class ModelOverview extends React.Component<
     );
   }
 
+  private ifCohortIndexesEquals(a: number[], b: number[]): boolean {
+    return (
+      Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index])
+    );
+  }
+
   public componentDidUpdate(): void {
-    const maxCohortId = this.getMaxCohortId();
-    if (maxCohortId > this.state.maxCohortId) {
-      // A cohort has a higher ID than the previously recorded
-      // maximum which indicates that new cohorts were created.
-      const newCohorts = this.context.errorCohorts
-        .filter(
-          (errorCohort) =>
-            errorCohort.cohort.getCohortID() > this.state.maxCohortId
-        )
-        .map((errorCohort) => errorCohort.cohort.getCohortID());
-      this.setState(
-        {
-          maxCohortId,
-          selectedDatasetCohorts:
-            this.state.selectedDatasetCohorts?.concat(newCohorts)
-        },
-        () => this.updateDatasetCohortStats()
+    const newDatasetCohortIDs = this.context.errorCohorts.map((errorCohort) => {
+      return errorCohort.cohort.getCohortID();
+    });
+    const oldDatasetCohortIDs = this.state.datasetBasedCohorts.map(
+      (errorCohort) => {
+        return errorCohort.cohort.getCohortID();
+      }
+    );
+    console.log(newDatasetCohortIDs);
+    console.log(oldDatasetCohortIDs);
+    if (!this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)) {
+      let newOldDifference = newDatasetCohortIDs.filter(
+        (x) => !oldDatasetCohortIDs.includes(x)
       );
+      let oldNewDifference = oldDatasetCohortIDs.filter(
+        (x) => !newDatasetCohortIDs.includes(x)
+      );
+      if (newOldDifference.length > 0) {
+        this.setState(
+          {
+            selectedDatasetCohorts:
+              this.state.selectedDatasetCohorts?.concat(newOldDifference)
+          },
+          () => this.updateDatasetCohortStats()
+        );
+      } else if (oldNewDifference.length > 0) {
+        this.setState(
+          {
+            // Remove the oldNewDifference from selectedDatasetCohorts
+            selectedDatasetCohorts:
+              this.state.selectedDatasetCohorts?.concat(oldNewDifference)
+          },
+          () => this.updateDatasetCohortStats()
+        );
+      }
     }
   }
 
@@ -689,14 +709,6 @@ export class ModelOverview extends React.Component<
     }
   };
 
-  private getMaxCohortId = (): number => {
-    return Math.max(
-      ...this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.getCohortID()
-      )
-    );
-  };
-
   private logButtonClick = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
@@ -708,13 +720,15 @@ export class ModelOverview extends React.Component<
     selectedDatasetCohorts: number[],
     selectedFeatureBasedCohorts: number[],
     datasetCohortChartIsSelected: boolean
-  ): void =>
+  ): void => {
+    console.log(selectedDatasetCohorts);
     this.setState({
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: datasetCohortChartIsSelected,
       selectedDatasetCohorts,
       selectedFeatureBasedCohorts
     });
+  };
 
   private onDismissChartConfigurationFlyout = (): void => {
     this.setState({ chartConfigurationIsVisible: false });
