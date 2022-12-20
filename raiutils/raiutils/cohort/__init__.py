@@ -5,12 +5,12 @@
 
 from .cohort import Cohort, CohortFilter, cohort_filter_json_converter
 from .constants import (ClassificationOutcomes, CohortFilterMethods,
-                        _CohortFilterOps, _CohortJsonConst)
+                        CohortFilterOps, CohortJsonConst)
 
 __all__ = ['Cohort',
            'CohortFilter',
            'CohortFilterMethods',
            'ClassificationOutcomes',
            'cohort_filter_json_converter',
-           '_CohortJsonConst',
-           '_CohortFilterOps']
+           'CohortJsonConst',
+           'CohortFilterOps']

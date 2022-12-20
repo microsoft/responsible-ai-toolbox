@@ -47,7 +47,7 @@ class ClassificationOutcomes:
            TRUE_NEGATIVE, TRUE_POSITIVE]
 
 
-class _CohortFilterOps:
+class CohortFilterOps:
     """
     Cohort filter operations
     """
@@ -56,7 +56,7 @@ class _CohortFilterOps:
     OR = "or"
 
 
-class _CohortJsonConst:
+class CohortJsonConst:
     ARG = "arg"
     COLUMN = "column"
     COMPOSITE_FILTERS = "compositeFilters"
