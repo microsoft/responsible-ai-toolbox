@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { localization } from "@responsible-ai/localization";
-
 import {
   Cohort,
   ErrorCohort,
@@ -18,14 +16,16 @@ import {
   TotalCohortSamples,
   ifEnableLargeData
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+
 
 export async function generateMetricsCohortsSDK(
   context: IModelAssessmentContext,
   errorCohorts: ErrorCohort[]
 ): Promise<ILabeledStatistic[][]> {
-  let allMetrics = [];
+  const allMetrics = [];
   if (context.requestMetrics) {
-    for (let errorCohort of errorCohorts) {
+    for (const errorCohort of errorCohorts) {
       const filtersRelabeled = Cohort.getLabeledFilters(
         errorCohort.cohort.filters,
         errorCohort.jointDataset
@@ -59,63 +59,63 @@ export async function generateMetricsCohortsSDK(
 export function convertBinaryClassificationMetrics(
   metricResultDict: Map<string, number>
 ): ILabeledStatistic[] {
-  let allMetricsOutput = [];
-  for (let [metric, stat] of Object.entries(metricResultDict)) {
+  const allMetricsOutput = [];
+  for (const [metric, stat] of Object.entries(metricResultDict)) {
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
           key: TotalCohortSamples,
           label: localization.Interpret.Statistics.samples,
-          stat: stat
+          stat
         });
         break;
       case Metrics.AccuracyScore:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.Accuracy,
           label: localization.Interpret.Statistics.accuracy,
-          stat: stat
+          stat
         });
         break;
       case Metrics.F1Score:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.F1Score,
           label: localization.Interpret.Statistics.f1Score,
-          stat: stat
+          stat
         });
         break;
       case Metrics.RecallScore:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.Recall,
           label: localization.Interpret.Statistics.recall,
-          stat: stat
+          stat
         });
         break;
       case Metrics.PrecisionScore:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.Precision,
           label: localization.Interpret.Statistics.precision,
-          stat: stat
+          stat
         });
         break;
       case Metrics.FalseNegativeRate:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.FalseNegativeRate,
           label: localization.Interpret.Statistics.fnr,
-          stat: stat
+          stat
         });
         break;
       case Metrics.FalsePositiveRate:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.FalsePositiveRate,
           label: localization.Interpret.Statistics.fpr,
-          stat: stat
+          stat
         });
         break;
       case Metrics.SelectionRate:
         allMetricsOutput.push({
           key: BinaryClassificationMetrics.SelectionRate,
           label: localization.Interpret.Statistics.selectionRate,
-          stat: stat
+          stat
         });
         break;
       default:
@@ -128,21 +128,21 @@ export function convertBinaryClassificationMetrics(
 export function convertMultiClassClassificationMetrics(
   metricResultDict: Map<string, number>
 ): ILabeledStatistic[] {
-  let allMetricsOutput = [];
-  for (let [metric, stat] of Object.entries(metricResultDict)) {
+  const allMetricsOutput = [];
+  for (const [metric, stat] of Object.entries(metricResultDict)) {
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
           key: TotalCohortSamples,
           label: localization.Interpret.Statistics.samples,
-          stat: stat
+          stat
         });
         break;
       case Metrics.AccuracyScore:
         allMetricsOutput.push({
           key: MulticlassClassificationMetrics.Accuracy,
           label: localization.Interpret.Statistics.accuracy,
-          stat: stat
+          stat
         });
         break;
       default:
@@ -155,42 +155,42 @@ export function convertMultiClassClassificationMetrics(
 export function convertRegressionMetrics(
   metricResultDict: Map<string, number>
 ): ILabeledStatistic[] {
-  let allMetricsOutput = [];
-  for (let [metric, stat] of Object.entries(metricResultDict)) {
+  const allMetricsOutput = [];
+  for (const [metric, stat] of Object.entries(metricResultDict)) {
     switch (metric) {
       case Metrics.SampleSize:
         allMetricsOutput.push({
           key: TotalCohortSamples,
           label: localization.Interpret.Statistics.samples,
-          stat: stat
+          stat
         });
         break;
       case Metrics.MeanAbsoluteError:
         allMetricsOutput.push({
           key: RegressionMetrics.MeanAbsoluteError,
           label: localization.Interpret.Statistics.mae,
-          stat: stat
+          stat
         });
         break;
       case Metrics.MeanSquaredError:
         allMetricsOutput.push({
           key: RegressionMetrics.MeanSquaredError,
           label: localization.Interpret.Statistics.mse,
-          stat: stat
+          stat
         });
         break;
       case Metrics.MeanPrediction:
         allMetricsOutput.push({
           key: RegressionMetrics.MeanPrediction,
           label: localization.Interpret.Statistics.meanPrediction,
-          stat: stat
+          stat
         });
         break;
       case Metrics.R2Score:
         allMetricsOutput.push({
           key: RegressionMetrics.RSquared,
           label: localization.Interpret.Statistics.rSquared,
-          stat: stat
+          stat
         });
         break;
       default:
@@ -219,7 +219,7 @@ export async function generateMetricsCohortsCombined(
 ): Promise<ILabeledStatistic[][]> {
   if (ifEnableLargeData(context.dataset) && context.requestMetrics) {
     return generateMetricsCohortsSDK(context, errorCohorts);
-  } else {
+  } 
     return generateMetricsCohortsUI(context, errorCohorts);
-  }
+  
 }
