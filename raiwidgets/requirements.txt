@@ -1,4 +1,4 @@
-numpy>=1.17.2
+numpy>=1.17.2,<1.24.0
 pandas>=0.25.1
 scipy>=1.4.1
 rai-core-flask==0.4.0
