@@ -18,7 +18,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-
 export async function generateMetricsCohortsSDK(
   context: IModelAssessmentContext,
   errorCohorts: ErrorCohort[]
@@ -42,9 +41,9 @@ export async function generateMetricsCohortsSDK(
         new AbortController().signal
       );
 
-      if (context.modelMetadata.modelType == ModelTypes.Binary) {
+      if (context.modelMetadata.modelType === ModelTypes.Binary) {
         allMetrics.push(convertBinaryClassificationMetrics(metricResultDict));
-      } else if (context.modelMetadata.modelType == ModelTypes.Regression) {
+      } else if (context.modelMetadata.modelType === ModelTypes.Regression) {
         allMetrics.push(convertRegressionMetrics(metricResultDict));
       } else {
         allMetrics.push(
@@ -219,7 +218,6 @@ export async function generateMetricsCohortsCombined(
 ): Promise<ILabeledStatistic[][]> {
   if (ifEnableLargeData(context.dataset) && context.requestMetrics) {
     return generateMetricsCohortsSDK(context, errorCohorts);
-  } 
-    return generateMetricsCohortsUI(context, errorCohorts);
-  
+  }
+  return generateMetricsCohortsUI(context, errorCohorts);
 }
