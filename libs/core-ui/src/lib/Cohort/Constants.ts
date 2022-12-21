@@ -23,4 +23,3 @@ export class Metrics {
   public static RecallScore = "Recall score";
   public static SampleSize = "Sample size";
 }
-
