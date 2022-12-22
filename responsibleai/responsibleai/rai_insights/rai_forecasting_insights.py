@@ -15,7 +15,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import Forecasting, is_quantile_forecaster, is_forecaster
+from raiutils.models import (Forecasting, is_quantile_forecaster,
+                             is_forecaster, SKLearn)
 from responsibleai._interfaces import Dataset, RAIForecastingInsightsData
 from responsibleai._internal.constants import Metadata
 from responsibleai.exceptions import UserConfigValidationException
@@ -58,7 +59,6 @@ class RAIForecastingInsights(RAIBaseInsights):
     single API.
     """
 
-    # take in also grain columns
     def __init__(self, model: Optional[Any], train: pd.DataFrame,
                  test: pd.DataFrame, target_column: str,
                  serializer: Optional[Any] = None,
@@ -124,16 +124,16 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         if is_forecaster(model):
             # Cache predictions of the model
-            self.forecast_output = model.predict(
+            self.predict_output = model.predict(
                 self._test_without_true_y)
             if is_quantile_forecaster:
-                self.quantile_forecast_output = model.predict_quantiles(
+                self.quantile_predict_output = model.predict_quantiles(
                     self._test_without_true_y)
             else:
-                self.quantile_forecast_output = None
+                self.quantile_predict_output = None
         else:
-            self.forecast_output = None
-            self.quantile_forecast_output = None
+            self.predict_output = None
+            self.quantile_predict_output = None
 
     def _check_true_y_present(self, target_column, test):
         return target_column in list(test.columns)
@@ -304,7 +304,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                     )
                 self._validate_features_same(small_test_features_before,
                                              small_test_data,
-                                             SKlearn.predict)
+                                             SKLearn.PREDICT)
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
@@ -345,38 +345,6 @@ class RAIForecastingInsights(RAIBaseInsights):
                  'predict function is defined correctly.').format(function)
             )
 
-    # @property
-    # def causal(self) -> CausalManager:
-    #     """Get the causal manager.
-    #     :return: The causal manager.
-    #     :rtype: CausalManager
-    #     """
-    #     return self._causal_manager
-
-    # @property
-    # def counterfactual(self) -> CounterfactualManager:
-    #     """Get the counterfactual manager.
-    #     :return: The counterfactual manager.
-    #     :rtype: CounterfactualManager
-    #     """
-    #     return self._counterfactual_manager
-
-    # @property
-    # def error_analysis(self) -> ErrorAnalysisManager:
-    #     """Get the error analysis manager.
-    #     :return: The error analysis manager.
-    #     :rtype: ErrorAnalysisManager
-    #     """
-    #     return self._error_analysis_manager
-
-    # @property
-    # def explainer(self) -> ExplainerManager:
-    #     """Get the explainer manager.
-    #     :return: The explainer manager.
-    #     :rtype: ExplainerManager
-    #     """
-    #     return self._explainer_manager
-
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False):
         """Get the filtered test data based on cohort filters.
@@ -391,7 +359,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
-
+        print(filters)
         true_y = self.predict_output if not self._is_true_y_present else self.test[self.target_column]
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,

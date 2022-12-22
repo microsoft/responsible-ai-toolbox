@@ -1,22 +1,80 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ICohort, ICompositeFilter } from "@responsible-ai/core-ui";
+import { ErrorCohort } from "@responsible-ai/core-ui";
 
-export enum IOperation {
-  Multiply = "multiply",
-  Add = "add",
-  Subtract = "subtract",
-  Divide = "divide"
+export type Operation = {
+  key: string;
+  displayName: string;
+  minValue: number;
+  maxValue: number;
+  excludedValues: number[];
+};
+
+export function isMultiplicationOrDivision(operation: Operation) {
+  return ["multiply", "divide"].includes(operation.key);
 }
 
-interface IForecastCohort extends ICohort {
-  compositeFilterList: ICompositeFilter[];
-}
+export const transformationOperations: Operation[] = [
+  {
+    key: "multiply",
+    displayName: "Multiply",
+    minValue: -1000,
+    maxValue: 1000,
+    excludedValues: [0, 1]
+  },
+  {
+    key: "divide",
+    displayName: "Divide",
+    minValue: -1000,
+    maxValue: 1000,
+    excludedValues: [0, 1]
+  },
+  {
+    key: "add",
+    displayName: "Add",
+    minValue: -1000,
+    maxValue: 1000,
+    excludedValues: [0]
+  },
+  {
+    key: "subtract",
+    displayName: "Subtract",
+    minValue: -1000,
+    maxValue: 1000,
+    excludedValues: [0]
+  }
+];
 
-export interface ITransformation {
-  cohort: IForecastCohort;
-  operation: IOperation;
-  feature: string;
-  value: number;
+export type Feature = {
+  key: string;
+  text: string;
+};
+
+export class Transformation {
+  public cohort: ErrorCohort;
+  public operation: Operation;
+  public feature: Feature;
+  public value: number;
+
+  constructor(
+    cohort: ErrorCohort,
+    operation: Operation,
+    feature: Feature,
+    value: number
+  ) {
+    this.cohort = cohort;
+    this.operation = operation;
+    this.feature = feature;
+    this.value = value;
+  }
+
+  public equals(obj: Transformation): boolean {
+    return (
+      this.cohort.cohort.getCohortID() === obj.cohort.cohort.getCohortID() &&
+      this.operation.key === obj.operation.key &&
+      this.feature.key === obj.feature.key &&
+      this.value === obj.value
+    );
+  }
 }

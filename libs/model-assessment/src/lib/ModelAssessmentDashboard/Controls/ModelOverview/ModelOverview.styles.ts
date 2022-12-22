@@ -50,7 +50,7 @@ export const modelOverviewStyles: () => IProcessedStyleSet<IModelOverviewStyles>
         color: theme.semanticColors.bodyText
       },
       sectionStack: {
-        padding: "0 40px 10px 40px"
+        padding: "0 40px 40px 40px"
       },
       selections: flexLgDown,
       smallDropdown: {

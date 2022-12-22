@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import traceback
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -10,21 +10,29 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiwidgets.cohort import Cohort
+from raiwidgets.cohort import Cohort, CohortFilterMethods, CohortFilter
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
-from responsibleai import RAIInsights
+from responsibleai import RAIInsights, RAIForecastingInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 
 EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 
+def _cartesian_product(lst):
+        if len(lst) == 0:
+            return []
+        if len(lst) == 1:
+            return [[l] for l in lst[0]]
+        curr = lst[0]
+        unflattened = [[[el] + tail for tail in _cartesian_product(lst[1:])] for el in curr]
+        return [item for sublist in unflattened for item in sublist]
 
 class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: RAIInsights,
+            analysis: Union[RAIInsights, RAIForecastingInsights],
             cohort_list: Optional[List[Cohort]] = None):
         """Initialize the Explanation Dashboard Input.
 
@@ -39,12 +47,17 @@ class ResponsibleAIDashboardInput:
         model = analysis.model
         self._is_classifier = is_classifier(model)
         self.dashboard_input = analysis.get_data()
+
         self._validate_cohort_list(cohort_list)
-        if cohort_list is not None:
-            # Add cohort_list to dashboard_input
-            self.dashboard_input.cohortData = cohort_list
-        else:
-            self.dashboard_input.cohortData = []
+        self.dashboard_input.cohortData = cohort_list or []
+
+        time_series_cohorts = None
+        if analysis.task_type == "forecasting" and \
+                analysis._feature_metadata.time_series_id_column_names is not None:
+            time_series_cohorts = self._pregenerate_time_series_as_cohorts(
+                analysis._feature_metadata.time_series_id_column_names)
+            self._validate_cohort_list(time_series_cohorts)    
+            self.dashboard_input.cohortData.extend(time_series_cohorts)
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
@@ -93,6 +106,29 @@ class ResponsibleAIDashboardInput:
                 target_column=self.dashboard_input.dataset.target_column,
                 categorical_features=categorical_features,
                 is_classification=self._is_classifier)
+    
+    def _pregenerate_time_series_as_cohorts(self, time_series_id_column_names):
+        test_data = pd.DataFrame(
+            data=self.dashboard_input.dataset.features,
+            columns=self.dashboard_input.dataset.feature_names)
+        unique_values_per_id_column = [[]] * len(time_series_id_column_names)
+        for index, column_name in enumerate(time_series_id_column_names):
+            unique_values_per_id_column[index] = \
+                test_data[column_name].unique().tolist()
+        time_series_id_values = _cartesian_product(unique_values_per_id_column)
+        time_series_cohorts = []
+        for ts_def in time_series_id_values:
+            cohort_name = ", ".join(
+                [f"{column_name}={ts_def[index]}" for index, column_name in
+                 enumerate(time_series_id_column_names)])
+            cohort = Cohort(name=cohort_name)
+            for index, column_name in enumerate(time_series_id_column_names):
+                cohort.add_cohort_filter(CohortFilter(
+                    method=CohortFilterMethods.METHOD_INCLUDES,
+                    arg=[ts_def[index]],
+                    column=column_name))
+            time_series_cohorts.append(cohort)
+        return time_series_cohorts
 
     def on_predict(self, data):
         try:

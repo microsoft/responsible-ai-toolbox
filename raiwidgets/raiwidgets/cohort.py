@@ -172,28 +172,28 @@ class CohortFilter:
             if len(arg) != 1:
                 raise UserConfigValidationException(
                     "Expected a single value in arg "
-                    "for cohort methods {0}.".format(
+                    "for cohort methods \"{0}\".".format(
                         " or ".join(CohortFilterMethods.SINGLE_VALUE_METHODS))
                 )
             if not isinstance(arg[0], int) and not isinstance(arg[0], float):
                 raise UserConfigValidationException(
                     "Expected int or float type for "
-                    "arg with cohort methods {0}.".format(
-                        " or ".join(CohortFilterMethods.SINGLE_VALUE_METHODS))
+                    "arg with cohort methods \"{0}\".".format(
+                        "\" or \"".join(CohortFilterMethods.SINGLE_VALUE_METHODS))
                 )
 
         if method == CohortFilterMethods.METHOD_RANGE:
             if len(arg) != 2:
                 raise UserConfigValidationException(
                     "Expected two entries in arg for "
-                    "cohort method {0}.".format(
+                    "cohort method \"{0}\".".format(
                         CohortFilterMethods.METHOD_RANGE)
                 )
             if (not all(isinstance(entry, int) for entry in arg) and
                     not all(isinstance(entry, float) for entry in arg)):
                 raise UserConfigValidationException(
                     "Expected int or float type for arg "
-                    "with cohort method {0}.".format(
+                    "with cohort method \"{0}\".".format(
                         CohortFilterMethods.METHOD_RANGE)
                 )
 

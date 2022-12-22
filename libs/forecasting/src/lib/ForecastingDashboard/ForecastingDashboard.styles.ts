@@ -8,11 +8,7 @@ import {
   getTheme,
   FontWeights
 } from "@fluentui/react";
-import {
-  descriptionMaxWidth,
-  flexLgDown,
-  hideXlDown
-} from "@responsible-ai/core-ui";
+import { descriptionMaxWidth, flexLgDown } from "@responsible-ai/core-ui";
 
 export interface IForecastingDashboardStyles {
   dropdown: IStyle;
@@ -31,6 +27,7 @@ export interface IForecastingDashboardStyles {
   transformationCreatorDialog: IStyle;
   subMediumText: IStyle;
   smallTextField: IStyle;
+  errorText: IStyle;
 }
 
 export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDashboardStyles> =
@@ -46,6 +43,10 @@ export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDa
       },
       dropdown: {
         width: "400px"
+      },
+      errorText: {
+        color: theme.semanticColors.errorText,
+        maxWidth: "200px"
       },
       forecastCategoryText: {
         fontSize: "14px",
@@ -67,7 +68,7 @@ export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDa
         maxWidth: "200px"
       },
       sectionStack: {
-        padding: "0 40px 10px 40px"
+        padding: "0 40px 40px 40px"
       },
       selections: flexLgDown,
       smallDropdown: {
@@ -83,26 +84,25 @@ export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDa
       },
       topLevelDescriptionText: {
         color: theme.semanticColors.bodyText,
-        maxWidth: descriptionMaxWidth,
-        ...hideXlDown
+        maxWidth: descriptionMaxWidth
       },
       transformationBuilder: {
-        background: "#F1F6FA",
-        // height: "202px",
-        left: "114px",
-        // position: "absolute",
-        top: "689px"
-        // width: "1000px"
+        // background: "#F1F6FA",
+        // // height: "202px",
+        // left: "114px",
+        // // position: "absolute",
+        // top: "689px"
+        // // width: "1000px"
       },
       transformationCreatorDialog: {
-        maxWidth: "1000px",
-        minWidth: "740px"
+        // maxWidth: "1000px",
+        // minWidth: "740px"
       },
       transformationCreatorStack: {
-        height: "202px",
-        left: "114px",
-        top: "689px",
-        width: "1251px"
+        // height: "202px",
+        // left: "114px",
+        // top: "689px",
+        // width: "1251px"
       }
     });
   };

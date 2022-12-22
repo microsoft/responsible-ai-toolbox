@@ -23,11 +23,11 @@ import { SeriesOptionsType } from "highcharts";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
-import { ITransformation } from "../Interfaces/Transformation";
+import { Transformation } from "../Interfaces/Transformation";
 
 export interface IForecastCompareProps {
-  cohortName: string;
-  forecasts: Map<string, ITransformation>;
+  cohortID: number;
+  transformations: Map<string, Transformation>;
 }
 
 export interface IForecastCompareState {
@@ -68,7 +68,7 @@ export class ForecastCompare extends React.Component<
   }
 
   public componentDidUpdate(prevProps: IForecastCompareProps): void {
-    if (this.props.cohortName !== prevProps.cohortName) {
+    if (this.props.cohortID !== prevProps.cohortID) {
       this.setState(
         { selectedForecasts: [], selectedPredictions: undefined },
         this.getBaselineForecastPrediction
@@ -92,7 +92,7 @@ export class ForecastCompare extends React.Component<
 
     let chooseErrorMessage = undefined;
 
-    if (this.props.forecasts.size === 0) {
+    if (this.props.transformations.size === 0) {
       chooseErrorMessage = "Create one or more forecasts to enable comparison";
     }
 
@@ -158,7 +158,7 @@ export class ForecastCompare extends React.Component<
             <Stack.Item>
               <Label>Select forecast scenarios</Label>
               <ComboBox
-                options={[...this.props.forecasts.keys()].map(
+                options={[...this.props.transformations.keys()].map(
                   (forecastName) => {
                     return {
                       key: forecastName,
@@ -169,7 +169,7 @@ export class ForecastCompare extends React.Component<
                 placeholder={"Choose scenario(s)"}
                 multiSelect
                 errorMessage={chooseErrorMessage}
-                disabled={this.props.forecasts.size === 0 || !isValidCohort}
+                disabled={this.props.transformations.size === 0 || !isValidCohort}
                 selectedKey={this.state.selectedForecasts}
                 className={classNames.smallDropdown}
                 onChange={this.onChangeSelectedForecasts}
@@ -295,7 +295,7 @@ export class ForecastCompare extends React.Component<
       return;
     }
     const forecasts = this.state.selectedForecasts.map((forecastName) =>
-      this.props.forecasts.get(forecastName)
+      this.props.transformations.get(forecastName)
     );
     if (this._getForecastController) {
       this._getForecastController.abort();
@@ -305,8 +305,8 @@ export class ForecastCompare extends React.Component<
       forecasts.map((forecast) => {
         const [filtersRelabeled, compositeFiltersRelabeled] =
           this.convertFilters(
-            forecast!.cohort.filterList,
-            forecast!.cohort.compositeFilterList,
+            forecast!.cohort.cohort.filters,
+            forecast!.cohort.cohort.compositeFilters,
             this.context.baseErrorCohort.jointDataset
           );
 

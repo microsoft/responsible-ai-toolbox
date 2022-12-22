@@ -186,12 +186,13 @@ export class TabsView extends React.PureComponent<
                 )}
               {t.key === GlobalTabKeys.ForecastingTab && (
                 <>
-                  <div className={classNames.sectionHeader}>
+                  <h3
+                    className={classNames.sectionHeader}
+                    id="forecastingHeader"
+                  >
                     <Text variant={"xxLarge"}>What-if Analysis</Text>
-                  </div>
-                  <ForecastingTab
-                    baseErrorCohortName={this.props.baseCohort.cohort.name}
-                  />
+                  </h3>
+                  <ForecastingTab />
                 </>
               )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
