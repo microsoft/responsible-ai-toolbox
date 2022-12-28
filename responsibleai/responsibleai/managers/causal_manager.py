@@ -62,6 +62,9 @@ class CausalManager(BaseManager):
         if categorical_features is None:
             self._categorical_features = []
         self._dropped_features = dropped_features
+        if dropped_features is None:
+            self._dropped_features = []
+
         self._results = []
 
     def add(
