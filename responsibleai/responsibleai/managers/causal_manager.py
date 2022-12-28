@@ -155,9 +155,10 @@ class CausalManager(BaseManager):
         :type random_state: int or RandomState or None
         """
         for feature in treatment_features:
-            if feature in set(self._dropped_features):
+            if self._dropped_features and \
+                    feature in set(self._dropped_features):
                 message = ("'{}' in treatment_features has been dropped "
-                            f"during training the model").format(feature)
+                           "during training the model").format(feature)
                 raise UserConfigValidationException(message)
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
