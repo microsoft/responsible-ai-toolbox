@@ -474,8 +474,8 @@ class RAIInsights(RAIBaseInsights):
                 if len(small_train_data.columns) == 0 or \
                         len(small_test_data.columns) == 0:
                     raise UserConfigValidationException(
-                        'There is no feature passed to the model,'
-                        ' or all features have been dropped'
+                        'There is no feature in the dataset,'
+                        ' or all features have been dropped from the dataset'
                     )
 
                 small_train_features_before = list(small_train_data.columns)
