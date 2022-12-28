@@ -32,7 +32,8 @@ class CausalManager(BaseManager):
         test: pd.DataFrame,
         target_column: str,
         task_type: str,
-        categorical_features: Optional[List[str]]
+        categorical_features: Optional[List[str]],
+        dropped_features: Optional[List[str]] = None
     ):
         """Construct a CausalManager for generating causal analyses
             from a dataset.
@@ -48,6 +49,9 @@ class CausalManager(BaseManager):
         :type task_type: str
         :param categorical_features: All categorical feature names.
         :type categorical_features: list
+        :param dropped_features: List of features that were dropped by the
+                                 the user during training of their model.
+        :type dropped_features: Optional[List[str]]
         """
         self._train = train
         self._test = test
@@ -57,7 +61,7 @@ class CausalManager(BaseManager):
         self._categorical_features = categorical_features
         if categorical_features is None:
             self._categorical_features = []
-
+        self._dropped_features = dropped_features
         self._results = []
 
     def add(
@@ -150,6 +154,11 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        for feature in treatment_features:
+            if feature in set(self._dropped_features):
+                message = ("'{}' in treatment_features has been dropped "
+                            f"during training the model").format(feature)
+                raise UserConfigValidationException(message)
         difference_set = set(treatment_features) - set(self._train.columns)
         if len(difference_set) > 0:
             message = ("Feature names in treatment_features do "

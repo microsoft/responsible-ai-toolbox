@@ -233,7 +233,7 @@ class RAIInsights(RAIBaseInsights):
             dropped_features = None
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.categorical_features)
+            self.task_type, self.categorical_features, dropped_features)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
