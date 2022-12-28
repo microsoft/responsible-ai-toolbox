@@ -471,6 +471,12 @@ class RAIInsights(RAIBaseInsights):
                     columns=[target_column], axis=1)
                 small_test_data = small_test_data.drop(
                     columns=[target_column], axis=1)
+                if len(small_train_data.columns) == 0 or \
+                        len(small_test_data.columns) == 0:
+                    raise UserConfigValidationException(
+                        'There is no feature passed to the model,'
+                        ' or all features have been dropped'
+                    )
 
                 small_train_features_before = list(small_train_data.columns)
 
