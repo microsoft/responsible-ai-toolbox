@@ -58,12 +58,8 @@ class CausalManager(BaseManager):
         self._target_column = target_column
         self._task_type = task_type
 
-        self._categorical_features = categorical_features
-        if categorical_features is None:
-            self._categorical_features = []
-        self._dropped_features = dropped_features
-        if dropped_features is None:
-            self._dropped_features = []
+        self._categorical_features = categorical_features or []
+        self._dropped_features = dropped_features or []
 
         self._results = []
 
