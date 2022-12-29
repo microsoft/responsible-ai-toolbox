@@ -507,5 +507,7 @@ class CausalManager(BaseManager):
         inst.__dict__['_task_type'] = rai_insights.task_type
         inst.__dict__['_categorical_features'] = \
             rai_insights.categorical_features
+        inst.__dict__['_dropped_features'] = \
+            rai_insights._feature_metadata.dropped_features
 
         return inst
