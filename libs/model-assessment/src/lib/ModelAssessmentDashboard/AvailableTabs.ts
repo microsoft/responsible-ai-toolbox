@@ -35,16 +35,22 @@ export function getAvailableTabs(
     });
   }
 
-  if (props.dataset.predicted_y) {
+  if (
+    props.dataset.predicted_y &&
+    props.dataset.task_type !== DatasetTaskType.Forecasting
+  ) {
     availableTabs.push({
       key: GlobalTabKeys.ModelOverviewTab,
       text: localization.ModelAssessment.ComponentNames.ModelOverview
     });
   }
-  availableTabs.push({
-    key: GlobalTabKeys.DataAnalysisTab,
-    text: localization.ModelAssessment.ComponentNames.DataAnalysis
-  });
+
+  if (props.dataset.task_type !== DatasetTaskType.Forecasting) {
+    availableTabs.push({
+      key: GlobalTabKeys.DataAnalysisTab,
+      text: localization.ModelAssessment.ComponentNames.DataAnalysis
+    });
+  }
 
   if (props.modelExplanationData && props.modelExplanationData.length > 0) {
     availableTabs.push({

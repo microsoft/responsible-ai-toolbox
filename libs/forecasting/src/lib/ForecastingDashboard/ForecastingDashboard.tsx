@@ -96,6 +96,7 @@ export class ForecastingDashboard extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <Dropdown
+              className={classNames.dropdown}
               options={this.context.errorCohorts
                 .filter(
                   (cohort) =>

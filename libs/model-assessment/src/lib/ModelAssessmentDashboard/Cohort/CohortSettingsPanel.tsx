@@ -17,6 +17,8 @@ import { CreateGlobalCohortButton } from "./CreateGlobalCohortButton";
 export interface ICohortSettingsPanelProps {
   isOpen: boolean;
   onDismiss: () => void;
+  allowCohortEditing: boolean;
+  showAllDataCohort: boolean;
 }
 
 export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPanelProps> {
@@ -49,15 +51,17 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: 25 }}>
               <Stack.Item>
-                <ChangeGlobalCohortButton />
+                <ChangeGlobalCohortButton showAllDataCohort={this.props.showAllDataCohort} />
               </Stack.Item>
-              <Stack.Item>
-                <CreateGlobalCohortButton />
-              </Stack.Item>
+              {this.props.allowCohortEditing && (
+                <Stack.Item>
+                  <CreateGlobalCohortButton />
+                </Stack.Item>
+              )}
             </Stack>
           </Stack.Item>
           <Stack.Item>
-            <CohortList enableEditing />
+            <CohortList enableEditing={this.props.allowCohortEditing} showAllDataCohort={this.props.showAllDataCohort} />
           </Stack.Item>
         </Stack>
       </Panel>
