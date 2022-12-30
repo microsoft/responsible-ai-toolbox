@@ -100,7 +100,7 @@ export interface IModelAssessmentContext {
   requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
-  ) => Promise<any[]>;
+  ) => Promise<number[]>;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;

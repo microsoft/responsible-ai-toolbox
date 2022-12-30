@@ -242,8 +242,8 @@ export const applications: IApplications = <const>{
   },
   modelAssessmentForecasting: {
     datasets: {
-      emotion: {
-        classDimension: 3,
+      restaurants: {
+        classDimension: 1,
         dataset: mockForecastingData
       } as IModelAssessmentDataSet
     },

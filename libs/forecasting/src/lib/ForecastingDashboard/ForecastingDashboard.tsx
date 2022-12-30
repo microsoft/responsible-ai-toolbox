@@ -1,14 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PrimaryButton, Stack, Text } from "@fluentui/react";
+import {
+  Dropdown,
+  IDropdownOption,
+  PrimaryButton,
+  Stack,
+  Text
+} from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { ForecastCompare } from "./Controls/ForecastCompare";
+import { ForecastComparison } from "./Controls/ForecastComparison";
 import { TransformationCreator } from "./Controls/TransformationCreator";
 import { TransformationsTable } from "./Controls/TransformationsTable";
 import { forecastingDashboardStyles } from "./ForecastingDashboard.styles";
@@ -54,6 +61,13 @@ export class ForecastingDashboard extends React.Component<
     ) {
       return <React.Fragment />;
     }
+
+    // "All data" cohort selected, so no particular time series selected yet.
+    // special case: only 1 time series in dataset, needs to be handled! TODO
+    let noCohortSelected =
+      this.context.baseErrorCohort.cohort.name ===
+      localization.ErrorAnalysis.Cohort.defaultLabel;
+
     const cohortTransformations =
       this.state.transformations?.get(
         this.context.baseErrorCohort.cohort.getCohortID()
@@ -81,29 +95,54 @@ export class ForecastingDashboard extends React.Component<
             </Text>
           </Stack.Item>
           <Stack.Item>
-            <Text>Add a combo box here to select the cohort.</Text>
-          </Stack.Item>
-          <Stack.Item>
-            <PrimaryButton
-              disabled={false}
-              onClick={() => {
-                this.setState({ isTransformationCreatorVisible: true });
-              }}
-              text="Create what-if scenario"
+            <Dropdown
+              options={this.context.errorCohorts
+                .filter(
+                  (cohort) =>
+                    cohort.cohort.name !==
+                    localization.ErrorAnalysis.Cohort.defaultLabel
+                )
+                .map((cohort) => {
+                  return {
+                    key: cohort.cohort.getCohortID(),
+                    text: cohort.cohort.name
+                  } as IDropdownOption;
+                })}
+              onChange={this.onChangeCohort}
+              selectedKey={
+                this.context.baseErrorCohort.cohort.name ===
+                localization.ErrorAnalysis.Cohort.defaultLabel
+                  ? undefined
+                  : this.context.baseErrorCohort.cohort.getCohortID()
+              }
+              placeholder={"Select a time series."}
             />
           </Stack.Item>
-          {cohortTransformations.size > 0 && (
-            <Stack tokens={{"childrenGap": "20pt"}}>
+          {!noCohortSelected && (
+            <>
               <Stack.Item>
-                <TransformationsTable transformations={cohortTransformations} />
-              </Stack.Item>
-              <Stack.Item>
-                <ForecastCompare
-                  cohortID={this.context.baseErrorCohort.cohort.getCohortID()}
-                  transformations={cohortTransformations}
+                <PrimaryButton
+                  disabled={false}
+                  onClick={() => {
+                    this.setState({ isTransformationCreatorVisible: true });
+                  }}
+                  text="Create what-if scenario"
                 />
               </Stack.Item>
-            </Stack>
+
+              <Stack tokens={{ childrenGap: "20pt" }}>
+                {cohortTransformations.size > 0 && (
+                  <Stack.Item>
+                    <TransformationsTable
+                      transformations={cohortTransformations}
+                    />
+                  </Stack.Item>
+                )}
+                <Stack.Item>
+                  <ForecastComparison transformations={cohortTransformations} />
+                </Stack.Item>
+              </Stack>
+            </>
           )}
         </Stack>
         <TransformationCreator
@@ -132,5 +171,20 @@ export class ForecastingDashboard extends React.Component<
       transformations: newMap,
       isTransformationCreatorVisible: false
     });
+  };
+
+  private onChangeCohort = (
+    _event: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption<string> | undefined
+  ): void => {
+    if (option) {
+      const newCohortId = option.key as number;
+      const newCohort = this.context.errorCohorts.find(
+        (cohort) => cohort.cohort.getCohortID() === newCohortId
+      );
+      if (newCohort) {
+        this.context.shiftErrorCohort(newCohort);
+      }
+    }
   };
 }
