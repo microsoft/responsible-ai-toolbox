@@ -386,8 +386,8 @@ def bin_data(df, feat, bins, quantile_binning=False):
     Uses equal width, quantile binning or specified custom bins. Custom
     bins is used when bins is an IntervalIndex instead of a constant number.
 
-    :param df: The DataFrame to bin.
-    :type df: pd.DataFrame
+    :param df: The pandas Series to bin.
+    :type df: pd.Series
     :param feat: The feature name to bin.
     :type feat: str
     :param bins: The number of bins or the specified bins.
@@ -440,7 +440,30 @@ def bin_data(df, feat, bins, quantile_binning=False):
         bindf = bin_data(df, feat, bindf.cat.categories, quantile_binning)
         return bindf
     else:
-        return pd.cut(feat_col, bins, precision=PRECISION)
+        cut_df = pd.cut(feat_col, bins, precision=PRECISION)
+        return adjust_bin_max_edge(cut_df, feat_col)
+
+
+def adjust_bin_max_edge(cut_df, feat_col):
+    """Adjusts the max bin edge to account for floating point precision.
+
+    Adjustment only done when the max bin edge is less than the max value.
+
+    :param cut_df: The binned DataFrame.
+    :type cut_df: pd.DataFrame
+    :param feat_col: The feature column to adjust the bins for.
+    :type feat_col: pd.Series
+    """
+    bins = cut_df.cat.categories
+    max_bin = bins[-1]
+    max_val = feat_col.max()
+    if max_bin.right < max_val:
+        adj_cat = bins.copy()
+        max_bin = pd.Interval(left=max_bin.left, right=max_val,
+                              closed=max_bin.closed)
+        adj_cat = adj_cat[:-1].append(pd.IntervalIndex([max_bin]))
+        cut_df = cut_df.cat.rename_categories(adj_cat)
+    return cut_df
 
 
 class _BaseAggFunc(ABC):
