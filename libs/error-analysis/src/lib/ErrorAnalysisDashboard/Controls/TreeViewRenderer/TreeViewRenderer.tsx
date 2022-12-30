@@ -230,7 +230,6 @@ export class TreeViewRenderer extends React.PureComponent<
           bbY: -0.5 * (bb.height + labelPaddingY) - labelYOffset,
           id: `linkLabel${d.id}`,
           style: {
-            display: d.data.nodeState.onSelectedPath ? undefined : "none",
             transform: `translate(${labelX}px, ${labelY}px)`
           },
           text: d.data.condition
