@@ -7,15 +7,15 @@ import {
   defaultModelAssessmentContext,
   BasicHighChart,
   JointDataset,
-  ICompositeFilter,
-  IFilter,
-  Cohort
+  orderByTime
 } from "@responsible-ai/core-ui";
 import { SeriesOptionsType } from "highcharts";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
 import { Transformation } from "../Interfaces/Transformation";
+
+import { getForecastPrediction } from "./getForecastPrediction";
 
 export interface IForecastComparisonProps {
   transformations: Map<string, Transformation>;
@@ -32,11 +32,6 @@ const stackTokens = {
   childrenGap: "l1"
 };
 
-interface TimeBasedValue {
-  time: number;
-  value: number;
-}
-
 export class ForecastComparison extends React.Component<
   IForecastComparisonProps,
   IForecastComparisonState
@@ -49,8 +44,8 @@ export class ForecastComparison extends React.Component<
     super(props);
     this.state = {
       baselinePrediction: undefined,
-      transformationPredictions: new Map<string, number[]>(),
-      selectedTransformations: new Set<string>()
+      selectedTransformations: new Set<string>(),
+      transformationPredictions: new Map<string, number[]>()
     };
   }
 
@@ -70,14 +65,14 @@ export class ForecastComparison extends React.Component<
       const baselinePrediction = await this.getBaselineForecastPrediction();
       const selectedTransformationsAndPredictions =
         await this.getSelectedForecastPredictions(
-          Array.from(this.props.transformations.keys()),
+          [...this.props.transformations.keys()],
           true
         );
       this.setState({
         baselinePrediction,
-        timeSeriesId: currentlySelectedTimeSeriesId,
         selectedTransformations:
           selectedTransformationsAndPredictions.selectedTransformations,
+        timeSeriesId: currentlySelectedTimeSeriesId,
         transformationPredictions:
           selectedTransformationsAndPredictions.transformationPredictions
       });
@@ -88,9 +83,7 @@ export class ForecastComparison extends React.Component<
     // If so, add their corresponding predictions to this.state.transformationPredictions.
     // If we add deletion for transformations we will need to check for transformations
     // that have been removed and delete their corresponding predictions, too.
-    const currentTransformations = Array.from(
-      this.props.transformations.keys()
-    );
+    const currentTransformations = [...this.props.transformations.keys()];
     const prevTransformations = new Set(
       this.state.transformationPredictions.keys()
     );
@@ -105,14 +98,13 @@ export class ForecastComparison extends React.Component<
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
 
-    // TODO: find out when this would ever not be the case - what does "invalid cohort" even mean?
     const indices = this.context.dataset.index;
     if (
       this.context === undefined ||
       indices === undefined ||
       this.state.baselinePrediction === undefined
     ) {
-      return <React.Fragment />;
+      return;
     }
     const rowIndices = this.context.baseErrorCohort.cohort.filteredData.map(
       (datum) => indices[datum.Index]
@@ -125,7 +117,7 @@ export class ForecastComparison extends React.Component<
     ) {
       trueY = [
         {
-          data: this.orderByTime(
+          data: orderByTime(
             this.context.baseErrorCohort.cohort.filteredData.map(
               (row) => row[JointDataset.TrueYLabel]
             ),
@@ -136,12 +128,12 @@ export class ForecastComparison extends React.Component<
         }
       ];
     }
-    let seriesData: SeriesOptionsType[] | undefined =
+    const seriesData: SeriesOptionsType[] | undefined =
       this.state.baselinePrediction !== undefined
         ? [
             {
-              data: this.orderByTime(this.state.baselinePrediction, rowIndices),
-              name: "Baseline Prediction Y",
+              data: orderByTime(this.state.baselinePrediction, rowIndices),
+              name: "Baseline Prediction",
               type: "spline"
             },
             ...trueY
@@ -152,7 +144,7 @@ export class ForecastComparison extends React.Component<
         this.state.transformationPredictions.get(transformationName);
       if (seriesData && preds) {
         seriesData.push({
-          data: this.orderByTime(preds, rowIndices),
+          data: orderByTime(preds, rowIndices),
           name: transformationName,
           type: "spline"
         } as SeriesOptionsType);
@@ -186,9 +178,6 @@ export class ForecastComparison extends React.Component<
                   }
                 },
                 series: seriesData,
-                // subtitle: {
-                //   text: "What-if scenarios for base and other predictions"
-                // },
                 title: {
                   text: "Forecasts"
                 },
@@ -217,38 +206,14 @@ export class ForecastComparison extends React.Component<
     );
   }
 
-  private orderByTime(values: number[], rowIndices: string[]) {
-    return values
-      .map((predictedValue: number, idx: number) => {
-        return {
-          time: Date.parse(rowIndices[idx]),
-          value: predictedValue
-        } as TimeBasedValue;
-      })
-      .sort(
-        (objA: TimeBasedValue, objB: TimeBasedValue) => objA.time - objB.time
-      )
-      .map((tbv) => [tbv.time, tbv.value]);
-  }
-
   private readonly getBaselineForecastPrediction = async (): Promise<
     number[] | undefined
   > => {
-    if (this.context.requestForecast === undefined) {
-      return;
-    }
-
-    const [filtersRelabeled, compositeFiltersRelabeled] = this.convertFilters(
-      this.context.baseErrorCohort.cohort.filters,
-      this.context.baseErrorCohort.cohort.compositeFilters,
-      this.context.baseErrorCohort.jointDataset
+    return await getForecastPrediction(
+      this.context.baseErrorCohort.cohort,
+      this.context.jointDataset,
+      this.context.requestForecast
     );
-
-    const baselinePrediction = await this.context.requestForecast(
-      [filtersRelabeled, compositeFiltersRelabeled, []],
-      new AbortController().signal
-    );
-    return baselinePrediction;
   };
 
   private getSelectedForecastPredictions = async (
@@ -269,32 +234,20 @@ export class ForecastComparison extends React.Component<
         if (newTransformation === undefined) {
           return;
         }
-        const [filtersRelabeled, compositeFiltersRelabeled] =
-          this.convertFilters(
-            newTransformation.cohort.cohort.filters,
-            newTransformation.cohort.cohort.compositeFilters,
-            this.context.baseErrorCohort.jointDataset
-          );
-        const newPredictions = await this.context.requestForecast(
-          [
-            filtersRelabeled,
-            compositeFiltersRelabeled,
-            [
-              newTransformation.operation.key,
-              newTransformation.feature.key,
-              newTransformation.value
-            ]
-          ],
-          new AbortController().signal
+
+        return await getForecastPrediction(
+          newTransformation.cohort.cohort,
+          this.context.jointDataset,
+          this.context.requestForecast,
+          newTransformation
         );
-        return newPredictions;
       })
     );
 
-    let newMap = ignoreExisting
+    const newMap = ignoreExisting
       ? new Map<string, number[]>()
       : new Map(this.state.transformationPredictions);
-    let newSet = ignoreExisting
+    const newSet = ignoreExisting
       ? new Set<string>()
       : new Set(this.state.selectedTransformations);
     newTransformationNames.forEach((newTransformationName, index) => {
@@ -306,8 +259,8 @@ export class ForecastComparison extends React.Component<
     });
 
     return {
-      transformationPredictions: newMap,
-      selectedTransformations: newSet
+      selectedTransformations: newSet,
+      transformationPredictions: newMap
     };
   };
 
@@ -318,77 +271,10 @@ export class ForecastComparison extends React.Component<
       await this.getSelectedForecastPredictions(newTransformationNames);
 
     this.setState({
-      transformationPredictions:
-        selectedTransformationsAndPredictions.transformationPredictions,
       selectedTransformations:
-        selectedTransformationsAndPredictions.selectedTransformations
+        selectedTransformationsAndPredictions.selectedTransformations,
+      transformationPredictions:
+        selectedTransformationsAndPredictions.transformationPredictions
     });
   };
-
-  private convertFilters = (
-    filters: IFilter[],
-    compositeFilters: ICompositeFilter[],
-    jointDataset: JointDataset
-  ): [IFilter[], ICompositeFilter[]] => {
-    // const categoricalTransformedFilters = this.convertFilterArguments(
-    //   filters,
-    //   jointDataset
-    // );
-
-    // const categoricalTransformedCompositeFilters =
-    //   this.convertCompositeFilterArguments(compositeFilters, jointDataset);
-
-    const filtersRelabeled = Cohort.getLabeledFilters(filters, jointDataset);
-
-    const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
-      compositeFilters,
-      jointDataset
-    );
-
-    return [filtersRelabeled, compositeFiltersRelabeled];
-  };
-
-  // private convertFilterArguments = (
-  //   filters: IFilter[],
-  //   jointDataset: JointDataset
-  // ): IFilter[] => {
-  //   return filters.map((filter) => {
-  //     if (jointDataset.metaDict[filter.column].treatAsCategorical) {
-  //       const args = filter.arg.map(
-  //         (a) =>
-  //           jointDataset.metaDict[filter.column].sortedCategoricalValues![a]
-  //       );
-  //       return {
-  //         arg: args,
-  //         column: filter.column,
-  //         method: filter.method
-  //       } as IGeneralFilter;
-  //     }
-  //     return filter as IGeneralFilter;
-  //   });
-  // };
-
-  // private convertCompositeFilterArguments = (
-  //   compositeFilters: ICompositeFilter[],
-  //   jointDataset: JointDataset
-  // ): ICompositeFilter[] => {
-  //   const categoricalArgumentFilters = compositeFilters.map(
-  //     (compositeFilter) => {
-  //       if (compositeFilter.method) {
-  //         return this.convertFilterArguments(
-  //           [compositeFilter as IFilter],
-  //           jointDataset
-  //         )[0] as ICompositeFilter;
-  //       }
-  //       return {
-  //         compositeFilters: this.convertCompositeFilterArguments(
-  //           compositeFilter.compositeFilters,
-  //           jointDataset
-  //         ),
-  //         operation: compositeFilter.operation
-  //       } as ICompositeFilter;
-  //     }
-  //   );
-  //   return categoricalArgumentFilters;
-  // };
 }

@@ -60,7 +60,12 @@ export const bobsSandwichesSandwich: IPreBuiltCohort = {
 // predict the number of people dining at a restaurant on any given day.
 export const mockForecastingData: IDataset = {
   categorical_features: ["restaurant", "city"],
+  feature_metadata: {
+    categorical_features: ["restaurant", "city"],
+    time_series_id_column_names: ["restaurant", "city"]
+  },
   feature_names: ["ads", "temperature", "restaurant", "city"],
+
   features: [
     [1, 56, "Giorgio's pizzeria", "Boston, MA"],
     [2, 65, "Giorgio's pizzeria", "Boston, MA"],
@@ -145,9 +150,5 @@ export const mockForecastingData: IDataset = {
   true_y: [
     240, 310, 342, 392, 514, 501, 795, 621, 600, 422, 222, 500, 345, 678, 343,
     454, 667, 399, 588, 440, 120, 99, 101, 110, 150, 130, 125, 127, 200, 187
-  ],
-  feature_metadata: {
-    categorical_features: ["restaurant", "city"],
-    time_series_id_column_names: ["restaurant", "city"]
-  }
+  ]
 };

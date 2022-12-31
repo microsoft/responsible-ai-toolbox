@@ -10,3 +10,7 @@ export function limitStringLength(
   }
   return str;
 }
+
+export function isUndefinedOrEmpty(s: string | undefined): boolean {
+  return s === undefined || s === "";
+}

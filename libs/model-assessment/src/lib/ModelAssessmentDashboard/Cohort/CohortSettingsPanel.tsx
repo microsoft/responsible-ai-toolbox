@@ -51,7 +51,9 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: 25 }}>
               <Stack.Item>
-                <ChangeGlobalCohortButton showAllDataCohort={this.props.showAllDataCohort} />
+                <ChangeGlobalCohortButton
+                  showAllDataCohort={this.props.showAllDataCohort}
+                />
               </Stack.Item>
               {this.props.allowCohortEditing && (
                 <Stack.Item>
@@ -61,7 +63,10 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
             </Stack>
           </Stack.Item>
           <Stack.Item>
-            <CohortList enableEditing={this.props.allowCohortEditing} showAllDataCohort={this.props.showAllDataCohort} />
+            <CohortList
+              enableEditing={this.props.allowCohortEditing}
+              showAllDataCohort={this.props.showAllDataCohort}
+            />
           </Stack.Item>
         </Stack>
       </Panel>

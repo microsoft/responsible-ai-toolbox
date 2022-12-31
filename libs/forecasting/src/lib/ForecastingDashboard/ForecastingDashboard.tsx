@@ -16,12 +16,12 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { ForecastComparison } from "./Controls/ForecastComparison";
-import { TransformationCreator } from "./Controls/TransformationCreator";
+import { TransformationCreationDialog } from "./Controls/TransformationCreationDialog";
 import { TransformationsTable } from "./Controls/TransformationsTable";
 import { forecastingDashboardStyles } from "./ForecastingDashboard.styles";
 import { Transformation } from "./Interfaces/Transformation";
 
-export interface IForecastingDashboardProps {}
+export class IForecastingDashboardProps {}
 
 export interface IForecastingDashboardState {
   transformations?: Map<number, Map<string, Transformation>>;
@@ -59,12 +59,12 @@ export class ForecastingDashboard extends React.Component<
       this.context === undefined ||
       this.context.baseErrorCohort === undefined
     ) {
-      return <React.Fragment />;
+      return;
     }
 
     // "All data" cohort selected, so no particular time series selected yet.
     // special case: only 1 time series in dataset, needs to be handled! TODO
-    let noCohortSelected =
+    const noCohortSelected =
       this.context.baseErrorCohort.cohort.name ===
       localization.ErrorAnalysis.Cohort.defaultLabel;
 
@@ -83,13 +83,13 @@ export class ForecastingDashboard extends React.Component<
           <Stack.Item className={classNames.topLevelDescriptionText}>
             <Text>
               What-if allows you to perturb features for any input and observe
-              how the model's prediction changes. You can perturb features
+              how the model&apos;s prediction changes. You can perturb features
               manually or simply specify the desired prediction (e.g., class
               label for a classifier) to see a list of closest data points to
               the original input that would lead to the desired prediction. Also
               known as prediction counterfactuals, you can use them for
               exploring the relationships learnt by the model; understanding
-              important, necessary features for the model's predictions; or
+              important, necessary features for the model&apos;s predictions; or
               debug edge-cases for the model. To start, choose a time series
               whose features you wish to perturb and create a what-if scenario.
             </Text>
@@ -124,7 +124,7 @@ export class ForecastingDashboard extends React.Component<
               <Stack.Item>
                 <PrimaryButton
                   disabled={false}
-                  onClick={() => {
+                  onClick={(): void => {
                     this.setState({ isTransformationCreatorVisible: true });
                   }}
                   text="Create what-if scenario"
@@ -146,7 +146,7 @@ export class ForecastingDashboard extends React.Component<
             </>
           )}
         </Stack>
-        <TransformationCreator
+        <TransformationCreationDialog
           addTransformation={this.addTransformation}
           transformations={cohortTransformations}
           isVisible={this.state.isTransformationCreatorVisible}
@@ -160,7 +160,7 @@ export class ForecastingDashboard extends React.Component<
     transformation: Transformation
   ): void => {
     const currentCohortID = this.context.baseErrorCohort.cohort.getCohortID();
-    let newMap =
+    const newMap =
       this.state.transformations ??
       new Map<number, Map<string, Transformation>>();
     const cohortMap =
@@ -169,8 +169,8 @@ export class ForecastingDashboard extends React.Component<
     cohortMap.set(name, transformation);
     newMap.set(currentCohortID, cohortMap);
     this.setState({
-      transformations: newMap,
-      isTransformationCreatorVisible: false
+      isTransformationCreatorVisible: false,
+      transformations: newMap
     });
   };
 

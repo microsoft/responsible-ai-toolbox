@@ -57,10 +57,10 @@ export function buildInitialModelAssessmentContext(
     metadata: modelMetadata,
     predictedProbabilities: props.dataset.probability_y,
     predictedY: props.dataset.predicted_y,
+    targetColumn: props.dataset.target_column,
     trueY: props.dataset.is_forecasting_true_y
       ? props.dataset.true_y
-      : undefined,
-    targetColumn: props.dataset.target_column
+      : undefined
   });
   const globalProps = buildGlobalProperties(
     props.modelExplanationData?.[0]?.precomputedExplanations

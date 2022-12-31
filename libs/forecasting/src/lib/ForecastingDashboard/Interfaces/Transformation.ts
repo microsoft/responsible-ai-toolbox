@@ -11,38 +11,38 @@ export type Operation = {
   excludedValues: number[];
 };
 
-export function isMultiplicationOrDivision(operation: Operation) {
+export function isMultiplicationOrDivision(operation: Operation): boolean {
   return ["multiply", "divide"].includes(operation.key);
 }
 
 export const transformationOperations: Operation[] = [
   {
-    key: "multiply",
     displayName: "Multiply",
-    minValue: -1000,
+    excludedValues: [0, 1],
+    key: "multiply",
     maxValue: 1000,
-    excludedValues: [0, 1]
+    minValue: -1000
   },
   {
-    key: "divide",
     displayName: "Divide",
-    minValue: -1000,
+    excludedValues: [0, 1],
+    key: "divide",
     maxValue: 1000,
-    excludedValues: [0, 1]
+    minValue: -1000
   },
   {
-    key: "add",
     displayName: "Add",
-    minValue: -1000,
+    excludedValues: [0],
+    key: "add",
     maxValue: 1000,
-    excludedValues: [0]
+    minValue: -1000
   },
   {
-    key: "subtract",
     displayName: "Subtract",
-    minValue: -1000,
+    excludedValues: [0],
+    key: "subtract",
     maxValue: 1000,
-    excludedValues: [0]
+    minValue: -1000
   }
 ];
 
@@ -57,7 +57,7 @@ export class Transformation {
   public feature: Feature;
   public value: number;
 
-  constructor(
+  public constructor(
     cohort: ErrorCohort,
     operation: Operation,
     feature: Feature,

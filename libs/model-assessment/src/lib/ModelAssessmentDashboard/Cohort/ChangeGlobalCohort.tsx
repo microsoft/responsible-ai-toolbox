@@ -12,8 +12,8 @@ import React from "react";
 import { ShiftCohort } from "./ShiftCohort";
 interface IChangeGlobalCohortProps {
   visible: boolean;
-  onDismiss(): void;
   showAllDataCohort: boolean;
+  onDismiss(): void;
 }
 export class ChangeGlobalCohort extends React.Component<IChangeGlobalCohortProps> {
   public static contextType = ModelAssessmentContext;

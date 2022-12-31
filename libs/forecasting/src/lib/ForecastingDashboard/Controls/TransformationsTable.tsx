@@ -53,10 +53,10 @@ export class TransformationsTable extends React.Component<
     const prevTransformationNames = new Set(
       this.state.rows.map((t) => t.transformationName)
     );
-    let didUpdate =
+    const didUpdate =
       prevTransformationNames.size !== nTransformations ||
       nTransformations !==
-        Array.from(this.props.transformations.keys()).filter((t) =>
+        [...this.props.transformations.keys()].filter((t) =>
           prevTransformationNames.has(t)
         ).length;
 
@@ -72,7 +72,7 @@ export class TransformationsTable extends React.Component<
       this.state.rows === undefined ||
       this.state.rows.length === 0
     ) {
-      return <React.Fragment />;
+      return;
     }
     const classNames = forecastingDashboardStyles();
 
@@ -99,17 +99,17 @@ export class TransformationsTable extends React.Component<
             items={this.state.rows}
             columns={[
               {
-                key: "name",
-                name: "Name",
                 fieldName: "transformationName",
+                key: "name",
+                maxWidth: 300,
                 minWidth: 10,
-                maxWidth: 300
+                name: "Name"
               },
               {
-                key: "method",
-                name: "Method",
                 fieldName: "method",
-                minWidth: 10
+                key: "method",
+                minWidth: 10,
+                name: "Method"
               }
             ]}
             selectionMode={SelectionMode.none}
@@ -120,18 +120,18 @@ export class TransformationsTable extends React.Component<
   }
 
   public calculateUpdatedTable(): ITransformationRow[] {
-    let rows: ITransformationRow[] = Array.from(
-      this.props.transformations.entries()
-    ).map(([transformationName, transformation], index) => {
-      const method = `${
-        transformation.feature.text
-      } ${transformation.operation.displayName} ${
+    const rows: ITransformationRow[] = [
+      ...this.props.transformations.entries()
+    ].map(([transformationName, transformation], index) => {
+      const method = `${transformation.feature.text} ${
+        transformation.operation.displayName
+      } ${
         isMultiplicationOrDivision(transformation.operation) ? "by " : ""
       }${transformation.value.toString()}`;
       return {
         key: index.toString(),
-        transformationName,
-        method
+        method,
+        transformationName
       };
     });
     return rows;

@@ -10,6 +10,7 @@ import {
   IModelAssessmentData
 } from "@responsible-ai/model-assessment";
 import React from "react";
+
 import {
   bobsSandwichesSandwich,
   giorgiosPizzeriaBoston,
@@ -42,16 +43,16 @@ export class App extends React.Component<IAppProps> {
     }
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
-      locale: this.props.language,
-      localUrl: "https://www.bing.com/",
-      requestForecast: this.requestForecast,
-      stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme,
       cohortData: [
         giorgiosPizzeriaBoston,
         nonnasCannoliBoston,
         bobsSandwichesSandwich
-      ]
+      ],
+      locale: this.props.language,
+      localUrl: "https://www.bing.com/",
+      requestForecast: this.requestForecast,
+      stringParams: { contextualHelp: this.messages },
+      theme: this.props.theme
     };
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
@@ -82,7 +83,7 @@ export class App extends React.Component<IAppProps> {
           start = 20;
           end = 30;
         }
-        let preds = this.props.dataset.predicted_y?.slice(
+        const preds = this.props.dataset.predicted_y?.slice(
           start,
           end
         ) as number[];

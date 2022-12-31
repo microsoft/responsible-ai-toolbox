@@ -42,6 +42,7 @@ export * from "./lib/util/Never";
 export * from "./lib/util/PartialRequired";
 export * from "./lib/util/nameof";
 export * from "./lib/util/rowErrorSize";
+export * from "./lib/util/TimeUtils";
 export * from "./lib/util/getBoxData";
 export * from "./lib/util/getBasicFilterString";
 export * from "./lib/util/getCommonStyles";
