@@ -9,7 +9,6 @@ import {
   Stack
 } from "@fluentui/react";
 import {
-  JointDataset,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FluentUIStyles,
@@ -35,6 +34,7 @@ export interface ICounterfactualChartLegendProps {
   }>;
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
+  indexSeries: number[];
   removeCustomPoint: (index: number) => void;
   setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -50,19 +50,22 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
+    console.log("!!data: ", this.props.data);
     return (
       <Stack className={classNames.legendAndText}>
-        <ComboBox
-          id={"CounterfactualSelectedDatapoint"}
-          className={classNames.legendLabel}
-          label={localization.Counterfactuals.selectedDatapoint}
-          onChange={this.selectPointFromDropdown}
-          options={this.getDataOptions()}
-          selectedKey={`${this.props.selectedPointsIndexes[0]}`}
-          ariaLabel={"datapoint picker"}
-          useComboBoxAsMenuWidth
-          styles={FluentUIStyles.smallDropdownStyle}
-        />
+        {this.displayDatapointDropbox() && (
+          <ComboBox
+            id={"CounterfactualSelectedDatapoint"}
+            className={classNames.legendLabel}
+            label={localization.Counterfactuals.selectedDatapoint}
+            onChange={this.selectPointFromDropdown}
+            options={this.getDataOptions()}
+            selectedKey={`${this.props.selectedPointsIndexes[0]}`}
+            ariaLabel={"datapoint picker"}
+            useComboBoxAsMenuWidth
+            styles={FluentUIStyles.smallDropdownStyle}
+          />
+        )}
         <div className={classNames.legendLabel}>
           <b>{`${this.getTargetDescription()}: `}</b>
           {getCurrentLabel(
@@ -109,6 +112,18 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     return localization.Counterfactuals.currentClass;
   }
 
+  private displayDatapointDropbox(): boolean {
+    // const indexes = this.context.selectedErrorCohort.cohort.unwrap(
+    //   JointDataset.IndexLabel
+    // );
+    if (this.props.indexSeries.length > 0) {
+      // || indexes.length > 0) {
+      //add flag for first condition
+      return true;
+    }
+    return false;
+  }
+
   private selectPointFromDropdown = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
@@ -131,14 +146,16 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   };
 
   private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.selectedErrorCohort.cohort.unwrap(
-      JointDataset.IndexLabel
-    );
-    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
-    return indexes.map((index) => {
+    // const indexes =this.context.selectedErrorCohort.cohort.unwrap(
+    //   JointDataset.IndexLabel
+    // );
+    const indexes = this.props.indexSeries;
+    // indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
+    return indexes.map((index, i) => {
       return {
-        key: `${index}`,
-        text: `Index ${index}`
+        key: `${i}`,
+        text: `Index ${index}`,
+        data: { index: indexes[i] }
       };
     });
   }

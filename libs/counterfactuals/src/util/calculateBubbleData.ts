@@ -14,7 +14,7 @@ import { responseTemp } from "./responseTemp";
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
-  _selectedPointsIndexes: number[],
+  selectedPointsIndexes: number[],
   _customPoints: Array<{
     [key: string]: any;
   }>,
@@ -25,7 +25,8 @@ export async function calculateBubblePlotDataFromErrorCohort(
   ) => Promise<any>,
   _selectPointFromChart?: (data: any) => void,
   selectPointFromChartLargeData?: (data: any) => void,
-  onBubbleClick?: (scatterPlotData: any) => void
+  onBubbleClick?: (scatterPlotData: any) => void,
+  onIndexSeriesUpdated?: (indexSeries?: number[]) => void
 ): Promise<any | undefined> {
   console.log(
     "!!calculateBubblePlotDataFromErrorCohort requestBubblePlotDistribution",
@@ -42,11 +43,15 @@ export async function calculateBubblePlotDataFromErrorCohort(
     //   jointDataset.metaDict[chartProps?.yAxis.property].label
     // );
     return getBubbleChartOptions(
-      responseTemp, // bubbleChartData["clusters"],
+      responseTemp, //bubbleChartData["clusters"],
+      jointDataset.metaDict[chartProps?.xAxis.property].label,
+      jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,
       jointDataset,
+      selectedPointsIndexes,
       onBubbleClick,
-      selectPointFromChartLargeData
+      selectPointFromChartLargeData,
+      onIndexSeriesUpdated
     );
   }
   // If compute instance is not connected, calculate based on the first 5k data

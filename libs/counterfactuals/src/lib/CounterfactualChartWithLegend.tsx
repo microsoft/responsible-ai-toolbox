@@ -23,6 +23,7 @@ export interface ICounterfactualChartWithLegendProps {
   chartProps: IGenericChartProps;
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
+  indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
@@ -40,6 +41,7 @@ export interface ICounterfactualChartWithLegendProps {
   setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   setCounterfactualLocalImportanceData: (data: any) => void;
+  onIndexSeriesUpdated?: (data: any) => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -105,12 +107,14 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             setCounterfactualLocalImportanceData={
               this.props.setCounterfactualLocalImportanceData
             }
+            onIndexSeriesUpdated={this.props.onIndexSeriesUpdated}
           />
           <CounterfactualChartLegend
             {...this.props}
             customPointIsActive={this.state.customPointIsActive}
             customPoints={this.state.customPoints}
             selectedPointsIndexes={this.props.selectedPointsIndexes}
+            indexSeries={this.props.indexSeries}
             removeCustomPoint={this.removeCustomPoint}
             setTemporaryPointToCopyOfDatasetPoint={
               this.props.setTemporaryPointToCopyOfDatasetPoint

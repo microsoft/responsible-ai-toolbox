@@ -48,6 +48,7 @@ export interface ICounterfactualComponentState {
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
   errorMessage?: string;
+  indexSeries: number[];
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -69,7 +70,8 @@ export class CounterfactualComponent extends React.PureComponent<
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortingSeriesIndex: undefined
+      sortingSeriesIndex: undefined,
+      indexSeries: []
     };
   }
 
@@ -135,6 +137,7 @@ export class CounterfactualComponent extends React.PureComponent<
           {...this.props}
           chartProps={this.state.chartProps}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
+          indexSeries={this.state.indexSeries}
           temporaryPoint={_.cloneDeep(this.temporaryPoint)}
           onChartPropsUpdated={this.onChartPropsUpdated}
           onCustomPointLengthUpdated={this.onCustomPointLengthUpdated}
@@ -147,6 +150,7 @@ export class CounterfactualComponent extends React.PureComponent<
           setCounterfactualLocalImportanceData={
             this.setCounterfactualLocalImportanceData
           }
+          onIndexSeriesUpdated={this.onIndexSeriesUpdated}
         />
         <CounterfactualLocalImportanceChart
           data={this.state.counterfactualsData}
@@ -200,6 +204,13 @@ export class CounterfactualComponent extends React.PureComponent<
       chartProps: newProps,
       selectedPointsIndexes: [],
       counterfactualsData: this.props.data
+    });
+  };
+
+  private onIndexSeriesUpdated = (indexSeries: any): void => {
+    console.log("!!indexSEies: ", indexSeries);
+    this.setState({
+      indexSeries: indexSeries
     });
   };
 

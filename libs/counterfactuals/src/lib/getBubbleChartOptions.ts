@@ -23,11 +23,14 @@ export interface IBubbleData {
 
 export function getBubbleChartOptions(
   data: any,
+  xAxisLabel: string,
+  yAxisLabel: string,
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   onBubbleClick?: (scatterPlotData: any) => void,
-  selectPointFromChartLargeData?: (data: any) => void
+  selectPointFromChartLargeData?: (data: any) => void,
+  onIndexSeriesUpdated?: (indexSeries?: number[]) => void
   // getDatasetScatterOption?: (
   //   x_series: number[],
   //   y_series: number[],
@@ -85,9 +88,12 @@ export function getBubbleChartOptions(
                 this.y,
                 this,
                 this["x_series"],
+                this["index_series"],
                 scatterPlotData
               );
               onBubbleClick && onBubbleClick(scatterPlotData);
+              onIndexSeriesUpdated &&
+                onIndexSeriesUpdated(this["index_series"]);
             }
           }
         }
@@ -126,9 +132,9 @@ export function getBubbleChartOptions(
       useHTML: true,
       headerFormat: "<table>",
       pointFormat:
-        "<tr><th>x values:</th><td>{point.x}</td></tr>" +
-        "<tr><th>y values:</th><td>{point.y}</td></tr>" +
-        "<tr><th>Size:</th><td>{point.z}</td></tr>",
+        `${xAxisLabel}: {point.x}<br>` +
+        `${yAxisLabel}: {point.y}<br>` +
+        `Size: {point.z}<br>`,
       footerFormat: "</table>",
       followPointer: true
     },

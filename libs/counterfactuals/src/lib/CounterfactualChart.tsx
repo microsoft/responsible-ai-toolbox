@@ -17,7 +17,8 @@ import {
   JointDataset,
   TelemetryLevels,
   Cohort,
-  ICounterfactualData
+  ICounterfactualData,
+  ifEnableLargeData
   // TelemetryLevels,
   // TelemetryEventName
 } from "@responsible-ai/core-ui";
@@ -63,6 +64,7 @@ export interface ICounterfactualChartProps {
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
   setCounterfactualLocalImportanceData: (data: any) => void;
+  onIndexSeriesUpdated?: (data: any) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -126,8 +128,6 @@ export class CounterfactualChart extends React.PureComponent<
       console.log("!!inside else if");
       this.getUpdatedScatterPlot(this.props.selectedPointsIndexes);
     }
-
-    // this.getOutlierData(boxPlotData);
   }
 
   public render(): React.ReactNode {
@@ -156,7 +156,12 @@ export class CounterfactualChart extends React.PureComponent<
     console.log(
       "!!in render: ",
       this.state.plotData,
-      this.props.selectedPointsIndexes
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      JointDataset.unwrap(
+        this.props.customPoints,
+        this.props.chartProps.xAxis.property
+      )
     );
 
     return (
@@ -187,6 +192,7 @@ export class CounterfactualChart extends React.PureComponent<
             selectedColumn={this.props.chartProps.yAxis}
             canBin={false}
             mustBin={false}
+            allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             onAccept={this.onYSet}
             onCancel={this.setYClose}
@@ -209,6 +215,7 @@ export class CounterfactualChart extends React.PureComponent<
               this.props.chartProps.chartType === ChartTypes.Box
             }
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             onAccept={this.onXSet}
             onCancel={this.setXClose}
           />
@@ -311,7 +318,8 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.requestBubblePlotData,
       this.selectPointFromChart,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.onIndexSeriesUpdated
     );
     console.log("!!boxPlotData 2: ", plotData);
     this.setState({
@@ -330,7 +338,8 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.requestBubblePlotData,
       this.selectPointFromChart,
       this.selectPointFromChartLargeData,
-      this.onBubbleClick
+      this.onBubbleClick,
+      this.props.onIndexSeriesUpdated
     );
     console.log("!!boxPlotData 2: ", plotData);
     this.setState({
@@ -343,6 +352,7 @@ export class CounterfactualChart extends React.PureComponent<
     const pData = updateScatterPlotMarker(
       this.state.plotData,
       selectedPointsIndexes
+      // this.props.customPoints
     );
     console.log(
       "!!pData 2: ",

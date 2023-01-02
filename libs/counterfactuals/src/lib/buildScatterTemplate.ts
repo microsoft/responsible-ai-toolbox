@@ -48,6 +48,7 @@ export function buildScatterTemplate(
     }: ${customData.Color}<br>`;
   }
   hovertemplate += `${localization.Interpret.Charts.rowIndex}: ${index}<br>`;
+  hovertemplate += `${localization.Interpret.Charts.absoluteIndex}: ${absoluteIndex}<br>`;
   customData.template = hovertemplate;
   customData.AbsoluteIndex = absoluteIndex;
   customData.Index = index;
