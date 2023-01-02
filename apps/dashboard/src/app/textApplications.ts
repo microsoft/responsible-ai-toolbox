@@ -7,6 +7,7 @@ import {
   blbooksgenre,
   blbooksgenreModelExplanationData
 } from "../model-assessment-text/__mock_data__/blbooksgenre";
+import { covid19events } from "../model-assessment-text/__mock_data__/covidevents";
 import {
   emotion,
   emotionModelExplanationData
@@ -44,6 +45,10 @@ export const textApplications: ITextApplications = <const>{
         classDimension: 3,
         dataset: blbooksgenre,
         modelExplanationData: [blbooksgenreModelExplanationData]
+      } as IModelAssessmentDataSet,
+      covid19events: {
+        classDimension: 3,
+        dataset: covid19events
       } as IModelAssessmentDataSet,
       emotion: {
         classDimension: 3,

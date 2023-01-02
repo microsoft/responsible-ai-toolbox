@@ -3,6 +3,7 @@
 
 import {
   ICausalWhatIfData,
+  ICausalAnalysisData,
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IHighchartBubbleSDKData
@@ -35,9 +36,12 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestBoxPlotDistribution"
       | "requestDatasetAnalysisBarChart"
       | "requestDatasetAnalysisBoxChart"
+      | "requestGlobalCausalEffects"
+      | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
       | "requestBubblePlotData"
       | "requestLocalCounterfactuals"
+      | "requestMetrics"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -79,6 +83,32 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/model_overview_probability_distribution"
+        );
+      };
+      callBack.requestGlobalCausalEffects = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_effects",
+          abortSignal
+        );
+      };
+      callBack.requestGlobalCausalPolicy = async (
+        id: string,
+        filter: unknown[],
+        compositeFilter: unknown[],
+        abortSignal: AbortSignal
+      ): Promise<ICausalAnalysisData> => {
+        return callFlaskService(
+          this.props.config,
+          [id, filter, compositeFilter],
+          "/global_causal_policy",
+          abortSignal
         );
       };
       callBack.requestGlobalExplanations = async (
@@ -149,6 +179,19 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           data,
           "/local_counterfactuals"
+        );
+      };
+      callBack.requestMetrics = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        metric: string,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter, metric],
+          "/model_overview_metrics",
+          abortSignal
         );
       };
     }

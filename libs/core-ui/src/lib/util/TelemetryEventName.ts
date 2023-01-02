@@ -57,6 +57,6 @@ export enum TelemetryEventName {
   IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick = "RAI_IndividualCausalWhyIncludeConfoundingFeaturesCalloutClick",
   IndividualCausalSelectedDatapointUpdatedFromChart = "RAI_IndividualCausalSelectedDatapointUpdatedFromChart",
   IndividualCausalSelectedDatapointUpdatedFromDropdown = "RAI_IndividualCausalSelectedDatapointUpdatedFromDropdown",
-  CasualTreatmentPolicyTabClick = "RAI_CasualTreatmentPolicyTabClick",
-  CasualTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CasualTreatmentPolicyNewTreatmentFeatureSelected"
+  CausalTreatmentPolicyTabClick = "RAI_CausalTreatmentPolicyTabClick",
+  CausalTreatmentPolicyNewTreatmentFeatureSelected = "RAI_CausalTreatmentPolicyNewTreatmentFeatureSelected"
 }

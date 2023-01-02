@@ -394,6 +394,7 @@ export class TabsView extends React.PureComponent<
                     </h3>
                     <CausalInsightsTab
                       data={this.props.causalAnalysisData?.[0]}
+                      newCohort={this.props.selectedCohort}
                       telemetryHook={this.props.telemetryHook}
                       onPivotChange={this.onCausalAnalysisOptionChange}
                     />

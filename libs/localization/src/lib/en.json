@@ -1163,7 +1163,8 @@
       "recall": "Recall: {0}",
       "selectionRate": "Selection rate: {0}",
       "mae": "Mean absolute error: {0}",
-      "f1Score": "F1 score: {0}"
+      "f1Score": "F1 score: {0}",
+      "samples": "Sample size: {0}"
     },
     "ValidationErrors": {
       "_inconsistentDimensions.comment": "Raise warning if arguments passed in have different sizes, listing dimensions of both mismatching pieces.",

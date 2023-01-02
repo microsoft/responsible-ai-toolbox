@@ -194,6 +194,7 @@ export class CounterfactualChart extends React.PureComponent<
             mustBin={false}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
+            hideDroppedFeatures
             onAccept={this.onYSet}
             onCancel={this.setYClose}
           />
@@ -216,6 +217,7 @@ export class CounterfactualChart extends React.PureComponent<
             }
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
+            hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXClose}
           />
