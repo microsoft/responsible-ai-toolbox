@@ -827,6 +827,7 @@
       "importancePrefix": "Importance",
       "numberOfDatapoints": "Number of datapoints",
       "rowIndex": "Row index",
+      "absoluteIndex": "Absolute index",
       "xValue": "X-value",
       "yValue": "Y-value"
     },
