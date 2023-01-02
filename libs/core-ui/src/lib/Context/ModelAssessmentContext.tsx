@@ -94,6 +94,12 @@ export interface IModelAssessmentContext {
     compositeFilter: unknown[],
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestMetrics?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    metric: string,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
