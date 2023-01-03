@@ -25,6 +25,7 @@ export * from "./lib/util/array";
 export * from "./lib/util/buildInitialContext";
 export * from "./lib/util/DatasetUtils";
 export * from "./lib/util/ExplanationUtils";
+export * from "./lib/util/FeatureMetadataUtils";
 export * from "./lib/util/FluentUIStyles";
 export * from "./lib/util/formatting/stringFormat";
 export * from "./lib/util/JointDataset";

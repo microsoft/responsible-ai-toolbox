@@ -32,7 +32,8 @@ import {
   FeatureImportanceBar,
   ITelemetryEvent,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  getFeatureNamesAfterDrop
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -152,6 +153,11 @@ export class LocalImportancePlots extends React.Component<
             this.props.weightLabels[this.props.selectedWeightVector]
           );
         }
+        const featureNames = getFeatureNamesAfterDrop(
+          this.props.metadata.featureNames,
+          this.props.jointDataset.datasetMetaData?.featureMetaData
+            ?.dropped_features
+        );
         secondaryPlot = (
           <div className={classNames.featureImportanceArea}>
             <div className={classNames.featureImportanceControls}>
@@ -178,7 +184,7 @@ export class LocalImportancePlots extends React.Component<
                 yAxisLabels={yAxisLabels}
                 chartType={ChartTypes.Bar}
                 sortArray={this.state.sortArray}
-                unsortedX={this.props.metadata.featureNames}
+                unsortedX={featureNames}
                 unsortedSeries={this.props.includedFeatureImportance}
                 topK={this.state.topK}
               />

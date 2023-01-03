@@ -39,6 +39,7 @@ export interface IAxisConfigDialogProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
+  hideDroppedFeatures?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
   onCancel: () => void;
 }
@@ -64,6 +65,9 @@ export class AxisConfigDialog extends React.PureComponent<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
+    const droppedFeatureSet = new Set(
+      this.context.jointDataset.datasetMetaData?.featureMetaData?.dropped_features
+    );
     this.setState({
       binCount: getBinCountForProperty(
         this.context.jointDataset.metaDict[this.props.selectedColumn.property],
@@ -87,6 +91,12 @@ export class AxisConfigDialog extends React.PureComponent<
             key,
             text: this.context.jointDataset.metaDict[key].abbridgedLabel
           };
+        })
+        .filter((item) => {
+          if (this.props.hideDroppedFeatures) {
+            return !droppedFeatureSet.has(item.text);
+          }
+          return true;
         }),
       selectedColumn: _.cloneDeep(this.props.selectedColumn),
       selectedFilterGroup: extractSelectionKey(
