@@ -37,6 +37,7 @@ import { AxisTypes } from "./IGenericChartProps";
 //
 export class JointDataset {
   public static readonly IndexLabel = "Index";
+  public static readonly AbsoluteIndexLabel = "AbsoluteIndex";
   public static readonly DataLabelRoot = "Data";
   public static readonly PredictedYLabel = "PredictedY";
   public static readonly ProbabilityYRoot = "ProbabilityClass";

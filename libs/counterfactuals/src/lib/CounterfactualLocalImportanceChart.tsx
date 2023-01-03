@@ -32,7 +32,7 @@ export class CounterfactualLocalImportanceChart extends React.PureComponent<ICou
           rowNumber={this.props.selectedPointsIndexes[0]}
           currentClass={getCurrentLabel(
             this.context.dataset.task_type,
-            this.props.data.desired_range,
+            this.props.data?.desired_range,
             this.props.data.desired_class
           )}
           data={this.props.data}

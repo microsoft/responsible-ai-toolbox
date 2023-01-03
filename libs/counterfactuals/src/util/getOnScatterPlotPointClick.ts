@@ -30,7 +30,7 @@ import { responseTempLC } from "./responseTempLC";
 // }
 
 export async function getLocalCounterfactualsFromSDK(
-  data: any,
+  absoluteIndex: number,
   counterfactualsId?: string,
   requestLocalCounterfactuals?: (
     request: any,
@@ -38,7 +38,7 @@ export async function getLocalCounterfactualsFromSDK(
   ) => Promise<any>
 ): Promise<any> {
   console.log("!!getLocalCounterfactualsFromSDK");
-  const input = [counterfactualsId, data.customData.AbsoluteIndex];
+  const input = [counterfactualsId, absoluteIndex];
   console.log("!!input: ", input);
   const result: any = await requestLocalCounterfactuals?.(
     input,

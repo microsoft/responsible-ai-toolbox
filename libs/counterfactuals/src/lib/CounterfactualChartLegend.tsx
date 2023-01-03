@@ -36,7 +36,11 @@ export interface ICounterfactualChartLegendProps {
   selectedPointsIndexes: number[];
   indexSeries: number[];
   removeCustomPoint: (index: number) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
+  setCounterfactualData?: (absoluteIndex: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
   toggleCustomActivation: (index: number) => void;
   togglePanel: () => void;
@@ -70,8 +74,8 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
           <b>{`${this.getTargetDescription()}: `}</b>
           {getCurrentLabel(
             this.context.dataset.task_type,
-            this.props.data.desired_range,
-            this.props.data.desired_class
+            this.props.data?.desired_range,
+            this.props.data?.desired_class
           )}
         </div>
         <PrimaryButton
@@ -130,8 +134,11 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   ): void => {
     if (typeof item?.key === "string") {
       const index = Number.parseInt(item.key);
-      this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.props.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
       this.props.toggleSelectionOfPoint(index);
+      if (this.props.setCounterfactualData) {
+        this.props.setCounterfactualData(item.data.index);
+      }
       this.logTelemetryEvent(
         TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
       );

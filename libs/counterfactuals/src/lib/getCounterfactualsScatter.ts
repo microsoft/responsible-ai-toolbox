@@ -147,6 +147,7 @@ function getCustomPointCustomData(
   console.log("!!customPoints: ", customPoints);
   customPoints.forEach((val, index) => {
     customdata[index].Name = val.Name ? val.Name : val.Index;
+    customdata[index].AbsoluteIndex = val.AbsoluteIndex;
   });
 
   if (chartProps && chartProps.xAxis && chartProps.yAxis) {
@@ -215,6 +216,7 @@ function getCustomPointCustomData(
       }
 
       hovertemplate += `${localization.Interpret.Charts.rowIndex}: ${customdata[index].Index}<br>`;
+      hovertemplate += `${localization.Interpret.Charts.absoluteIndex}: ${customdata[index].AbsoluteIndex}<br>`;
       hovertemplate += "<extra></extra>";
       customdata[index].template = hovertemplate;
     });

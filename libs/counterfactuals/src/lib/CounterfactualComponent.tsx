@@ -23,6 +23,7 @@ import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
+import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
 import { getPredictedProbabilities } from "../util/getPredictedProbabilities";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 
@@ -147,6 +148,7 @@ export class CounterfactualComponent extends React.PureComponent<
           setTemporaryPointToCopyOfDatasetPoint={
             this.setTemporaryPointToCopyOfDatasetPoint
           }
+          setCounterfactualData={this.setCounterfactualData}
           setCounterfactualLocalImportanceData={
             this.setCounterfactualLocalImportanceData
           }
@@ -178,11 +180,15 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({ counterfactualsData: data });
   };
 
-  private setTemporaryPointToCopyOfDatasetPoint = (index: number): void => {
+  private setTemporaryPointToCopyOfDatasetPoint = (
+    index: number,
+    absoluteIndex?: number
+  ): void => {
     this.temporaryPoint = getCopyOfDatasetPoint(
       index,
       this.context.jointDataset,
-      this.state.customPointLength
+      this.state.customPointLength,
+      absoluteIndex
     );
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
@@ -198,6 +204,18 @@ export class CounterfactualComponent extends React.PureComponent<
     }
     this.setTemporaryPointToCopyOfDatasetPoint(indexes[0]);
   }
+
+  private setCounterfactualData = async (
+    absoluteIndex: number
+  ): Promise<void> => {
+    // to-do: add large data enabled if condition
+    const localCounterfactualData = await getLocalCounterfactualsFromSDK(
+      absoluteIndex,
+      this.state.counterfactualsData?.id,
+      this.context.requestLocalCounterfactuals
+    );
+    this.setCounterfactualLocalImportanceData(localCounterfactualData);
+  };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
     this.setState({

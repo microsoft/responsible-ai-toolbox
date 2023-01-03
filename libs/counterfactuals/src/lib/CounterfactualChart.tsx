@@ -59,7 +59,10 @@ export interface ICounterfactualChartProps {
     index?: number,
     value?: string
   ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
@@ -446,13 +449,14 @@ export class CounterfactualChart extends React.PureComponent<
       this.context.requestLocalCounterfactuals
     );
     const localCounterfactualData = await getLocalCounterfactualsFromSDK(
-      data,
+      data.customData.AbsoluteIndex,
       this.props.counterfactualData?.id,
       this.context.requestLocalCounterfactuals
     );
 
     const index = data.customData[JointDataset.IndexLabel];
-    this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+    const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
+    this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
     this.props.setCounterfactualLocalImportanceData(localCounterfactualData);
     this.props.toggleSelectionOfPoint(index);
     this.logTelemetryEvent(
