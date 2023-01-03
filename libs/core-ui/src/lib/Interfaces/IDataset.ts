@@ -10,6 +10,7 @@ export enum DatasetTaskType {
   ImageClassification = "image_classification",
   TextClassification = "text_classification",
   MultilabelTextClassification = "multilabel_text_classification",
+  MultilabelImageClassification = "multilabel_image_classification",
   Forecasting = "forecasting"
 }
 

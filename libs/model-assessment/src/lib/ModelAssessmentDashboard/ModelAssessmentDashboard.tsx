@@ -89,6 +89,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestGlobalExplanations: this.props.requestGlobalExplanations,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
+          requestMetrics: this.props.requestMetrics,
           requestPredictions: this.props.requestPredictions,
           selectedErrorCohort: this.state.selectedCohort,
           shiftErrorCohort: this.shiftErrorCohort,

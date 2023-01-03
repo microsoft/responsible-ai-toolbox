@@ -10,6 +10,23 @@ export interface ITableState {
   columns: IColumn[];
 }
 
+export function areRowPredTrueLabelsEqual(
+  row: { [key: string]: number },
+  jointDataset: JointDataset
+): boolean {
+  if (jointDataset.numLabels === 1) {
+    return row[JointDataset.PredictedYLabel] === row[JointDataset.TrueYLabel];
+  }
+  for (let i = 0; i < jointDataset.numLabels; i++) {
+    const predLabel = row[JointDataset.PredictedYLabel + i.toString()];
+    const trueLabel = row[JointDataset.TrueYLabel + i.toString()];
+    if (predLabel !== trueLabel) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function constructRows(
   cohortData: Array<{ [key: string]: number }>,
   jointDataset: JointDataset,
