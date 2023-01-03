@@ -203,6 +203,8 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({
       chartProps: newProps,
       selectedPointsIndexes: [],
+      customPointLength: 0,
+      indexSeries: [],
       counterfactualsData: this.props.data
     });
   };

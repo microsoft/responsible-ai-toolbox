@@ -31,7 +31,7 @@ import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointCli
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
-import { updateScatterPlotMarker } from "./getCounterfactualsScatter";
+import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
 
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
@@ -72,6 +72,9 @@ export interface ICounterfactualChartState {
   yDialogOpen: boolean;
   plotData: any;
   isBubbleClicked: boolean;
+  x_series: number[];
+  y_series: number[];
+  index_series: number[];
 }
 
 export class CounterfactualChart extends React.PureComponent<
@@ -90,7 +93,10 @@ export class CounterfactualChart extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false,
       plotData: undefined,
-      isBubbleClicked: false
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
     };
   }
 
@@ -119,14 +125,18 @@ export class CounterfactualChart extends React.PureComponent<
       console.log("!!inside if");
       this.setPlotData();
     } else if (
-      !_.isEqual(
+      (!_.isEqual(
         prevProps.selectedPointsIndexes,
         this.props.selectedPointsIndexes
-      ) &&
+      ) ||
+        !_.isEqual(prevProps.customPoints, this.props.customPoints)) &&
       this.state.isBubbleClicked === true
     ) {
-      console.log("!!inside else if");
-      this.getUpdatedScatterPlot(this.props.selectedPointsIndexes);
+      console.log(
+        "!!inside else if: ",
+        !_.isEqual(prevProps.customPoints, this.props.customPoints)
+      );
+      this.updateScatterPlot();
     }
   }
 
@@ -279,7 +289,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
-    this.setState({ xDialogOpen: false, isBubbleClicked: false });
+    this.setState({
+      xDialogOpen: false,
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
+    });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -289,7 +305,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
-    this.setState({ yDialogOpen: false, isBubbleClicked: false });
+    this.setState({
+      yDialogOpen: false,
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
+    });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -349,17 +371,22 @@ export class CounterfactualChart extends React.PureComponent<
     });
   }
 
-  private getUpdatedScatterPlot(selectedPointsIndexes: number[]): void {
+  private updateScatterPlot(): void {
     console.log("!!in getUpdatedScatterPlot: ");
-    const pData = updateScatterPlotMarker(
-      this.state.plotData,
-      selectedPointsIndexes
-      // this.props.customPoints
+    const pData = getCounterfactualsScatterOption(
+      this.state.x_series,
+      this.state.y_series,
+      this.state.index_series,
+      this.props.chartProps,
+      this.props.jointDataset,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.selectPointFromChartLargeData
     );
     console.log(
       "!!pData 2: ",
       this.state.plotData,
-      selectedPointsIndexes,
+      this.props.selectedPointsIndexes,
       pData
     );
 
@@ -377,12 +404,20 @@ export class CounterfactualChart extends React.PureComponent<
   //   });
   // }
 
-  private readonly onBubbleClick = (scatterPlotData: any): void => {
+  private readonly onBubbleClick = (
+    scatterPlotData: any,
+    x_series: number[],
+    y_series: number[],
+    index_series: number[]
+  ): void => {
     console.log("!!in onBubbleClick: ");
     console.log("!!scatterPlotData: ", scatterPlotData);
     this.setState({
       plotData: scatterPlotData,
-      isBubbleClicked: true
+      isBubbleClicked: true,
+      x_series: x_series,
+      y_series: y_series,
+      index_series: index_series
     });
   };
 

@@ -11,6 +11,7 @@ export function getCounterfactualsScatterOption(
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
+  customPoints?: Array<{ [key: string]: any }>,
   selectPointFromChartLargeData?: (data: any) => void
 ): any {
   console.log(
@@ -23,7 +24,8 @@ export function getCounterfactualsScatterOption(
     index_series,
     jointData,
     selectedPointsIndexes,
-    chartProps
+    chartProps,
+    customPoints
   );
   console.log("!!dataseries: ", dataSeries);
   return {

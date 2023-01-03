@@ -92,7 +92,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             jointDataset={this.context.jointDataset}
             requestBubblePlotData={this.context.requestBubblePlotData}
             counterfactualData={this.context.counterfactualData}
-            onChartPropsUpdated={this.props.onChartPropsUpdated}
+            onChartPropsUpdated={this.onChartPropsUpdated}
             saveAsPoint={this.saveAsPoint}
             setCustomRowProperty={this.props.setCustomRowProperty}
             setCustomRowPropertyComboBox={
@@ -170,6 +170,15 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
       this.props.onCustomPointLengthUpdated(customPoints.length);
       return { customPointIsActive, customPoints };
     });
+  };
+
+  private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.setState({
+      customPoints: [],
+      customPointIsActive: [],
+      pointIsActive: []
+    });
+    this.props.onChartPropsUpdated(newProps);
   };
 
   private saveAsPoint = (): void => {

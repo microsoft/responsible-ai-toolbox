@@ -28,7 +28,13 @@ export function getBubbleChartOptions(
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
-  onBubbleClick?: (scatterPlotData: any) => void,
+  customPoints?: Array<{ [key: string]: any }>,
+  onBubbleClick?: (
+    scatterPlotData: any,
+    x_series: number[],
+    y_series: number[],
+    index_series: number[]
+  ) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
   // getDatasetScatterOption?: (
@@ -80,6 +86,7 @@ export function getBubbleChartOptions(
                 chartProps,
                 jointData,
                 selectedPointsIndexes,
+                customPoints,
                 selectPointFromChartLargeData
               );
               console.log(
@@ -91,7 +98,13 @@ export function getBubbleChartOptions(
                 this["index_series"],
                 scatterPlotData
               );
-              onBubbleClick && onBubbleClick(scatterPlotData);
+              onBubbleClick &&
+                onBubbleClick(
+                  scatterPlotData,
+                  this["x_series"],
+                  this["y_series"],
+                  this["index_series"]
+                );
               onIndexSeriesUpdated &&
                 onIndexSeriesUpdated(this["index_series"]);
             }
@@ -103,29 +116,6 @@ export function getBubbleChartOptions(
       {
         type: "bubble",
         data: bubbleData
-        // data: [
-        //   {
-        //     x: 95,
-        //     y: 95,
-        //     z: 13.8,
-        //     name: "BE",
-        //     id: "Belgium"
-        //   } as ExtendedPointOptionsObject,
-        //   { x: 86.5, y: 102.9, z: 14.7, name: "DE", id: "Germany" },
-        //   { x: 80.8, y: 91.5, z: 15.8, name: "FI", id: "Finland" },
-        //   { x: 80.4, y: 102.5, z: 12, name: "NL", id: "Netherlands" },
-        //   { x: 80.3, y: 86.1, z: 11.8, name: "SE", id: "Sweden" },
-        //   { x: 78.4, y: 70.1, z: 16.6, name: "ES", id: "Spain" },
-        //   { x: 74.2, y: 68.5, z: 14.5, name: "FR", id: "France" },
-        //   { x: 73.5, y: 83.1, z: 10, name: "NO", id: "Norway" },
-        //   { x: 71, y: 93.2, z: 24.7, name: "UK", id: "United Kingdom" },
-        //   { x: 69.2, y: 57.6, z: 10.4, name: "IT", id: "Italy" },
-        //   { x: 68.6, y: 20, z: 16, name: "RU", id: "Russia" },
-        //   { x: 65.5, y: 126.4, z: 35.3, name: "US", id: "United States" },
-        //   { x: 65.4, y: 50.8, z: 28.5, name: "HU", id: "Hungary" },
-        //   { x: 63.4, y: 51.8, z: 15.4, name: "PT", id: "Portugal" },
-        //   { x: 64, y: 82.9, z: 31.3, name: "NZ", id: "New Zealand" }
-        // ]
       }
     ],
     tooltip: {

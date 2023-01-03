@@ -6,11 +6,10 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
-//import { WhatIfConstants } from "@responsible-ai/interpret";
+import { WhatIfConstants } from "@responsible-ai/interpret";
+import { localization } from "@responsible-ai/localization";
 import { PointMarkerOptionsObject } from "highcharts";
-// import { Dictionary } from "lodash";
-// import { localization } from "@responsible-ai/localization";
-
+import { Dictionary } from "lodash";
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
 export interface IDatasetExplorerSeries {
@@ -30,9 +29,10 @@ export function getCounterfactualsScatter(
   x_series: number[],
   y_series: number[],
   index_series: number[],
-  jointData: JointDataset,
+  jointDataset: JointDataset,
   selectedPointsIndexes: number[],
-  chartProps?: IGenericChartProps
+  chartProps?: IGenericChartProps,
+  customPoints?: Array<{ [key: string]: any }>
 ): any[] {
   const dataSeries: any = [];
   const result = [];
@@ -46,7 +46,7 @@ export function getCounterfactualsScatter(
         customData:
           chartProps &&
           buildScatterTemplate(
-            jointData,
+            jointDataset,
             chartProps,
             xData?.[index],
             data,
@@ -60,12 +60,42 @@ export function getCounterfactualsScatter(
     });
   }
 
+  dataSeries.map(
+    (d: {
+      customData: { Index: number };
+      marker: { fillColor: string; radius: number; symbol: string };
+    }) => {
+      const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
+      const color =
+        selectionIndex === -1
+          ? FluentUIStyles.fabricColorInactiveSeries
+          : FluentUIStyles.fluentUIColorPalette[selectionIndex];
+      d.marker = {
+        fillColor: color,
+        radius: 4,
+        symbol: selectionIndex === -1 ? "circle" : "square"
+      };
+    }
+  );
+
+  if (customPoints) {
+    const customPointsCustomData = getCustomPointCustomData(
+      customPoints,
+      jointDataset,
+      chartProps
+    );
+    customPoints.forEach((_cp, index) => {
+      dataSeries.push({
+        customData: customPointsCustomData[index],
+        marker: getCustomPointMarker(customPoints, index),
+        x: customPointsCustomData[index].rawXValue,
+        y: customPointsCustomData[index].rawYValue
+      });
+    });
+  }
+
   result.push({
-    // color: getPrimaryChartColor(getTheme()),
     data: dataSeries
-    // marker: {
-    //   symbol: "circle"
-    // }
   });
   return result;
 }
@@ -85,131 +115,109 @@ function getMarker(selectedPointsIndexes: number[], index: number): any {
   return marker;
 }
 
-export function updateScatterPlotMarker(
-  plotData: any,
-  selectedPointsIndexes: number[],
-  _customPoints?: Array<{ [key: string]: any }>,
-  _chartProps?: IGenericChartProps
+function getCustomPointMarker(
+  customPoints: Array<{ [key: string]: any }>,
+  index: number
 ): any {
-  const pData = plotData;
-  pData.series[0].data.map(
-    (d: {
-      customData: { Index: number };
-      marker: { fillColor: string; radius: number; symbol: string };
-    }) => {
-      const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
-      const color =
-        selectionIndex === -1
-          ? FluentUIStyles.fabricColorInactiveSeries
-          : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-      d.marker = {
-        fillColor: color,
-        radius: 4,
-        symbol: selectionIndex === -1 ? "circle" : "square"
-      };
-    }
-  );
-  return pData;
+  return {
+    fillColor: customPoints.map(
+      (_, i) =>
+        FluentUIStyles.fluentUIColorPalette[
+          WhatIfConstants.MAX_SELECTION + 1 + i
+        ]
+    )[index],
+    radius: 4,
+    symbol: "triangle"
+  };
 }
 
-// export function addCustomPoints(
-//   plotData: any,
-//   selectedPointsIndexes: number[],
-//   customPoints: Array<{ [key: string]: any }>,
-//   chartProps: IGenericChartProps,
-//   jointDataset: JointDataset
-// ): any {
-//   const pData = plotData;
+function getCustomPointCustomData(
+  customPoints: Array<{ [key: string]: any }>,
+  jointDataset: JointDataset,
+  chartProps?: IGenericChartProps
+): any {
+  const customdata = JointDataset.unwrap(
+    customPoints,
+    JointDataset.IndexLabel
+  ).map((val) => {
+    const dict: Dictionary<any> = {};
+    dict[JointDataset.IndexLabel] = val;
+    return dict;
+  });
+  console.log("!!customPoints: ", customPoints);
+  customPoints.forEach((val, index) => {
+    customdata[index].Name = val.Name ? val.Name : val.Index;
+  });
 
-//   // if (customPoints) {
-//   //   customPoints.forEach((cp, index) => {
-//   //     pData.series[0].data.push({
-//   //       customData: getCustomPointCustomData(cp),
-//   //       marker: getCustomPointMarker(customPoints),
-//   //       x: rawX[index],
-//   //       y: rawY[index]
-//   //     });
-//   //   });
-//   // }
+  if (chartProps && chartProps.xAxis && chartProps.yAxis) {
+    const metaX = jointDataset.metaDict[chartProps.xAxis.property];
+    const metaY = jointDataset.metaDict[chartProps.yAxis.property];
+    const rawX = JointDataset.unwrap(customPoints, chartProps.xAxis.property);
+    const rawY = JointDataset.unwrap(customPoints, chartProps.yAxis.property);
 
-//   pData.series[0].data.push(
-//     (d: {
-//       customData: { Index: number };
-//       marker: { fillColor: string; radius: number; symbol: string };
-//     }) => {
-//       const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
-//       const color =
-//         selectionIndex === -1
-//           ? FluentUIStyles.fabricColorInactiveSeries
-//           : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-//       d.marker = {
-//         fillColor: color,
-//         radius: 4,
-//         symbol: selectionIndex === -1 ? "circle" : "square"
-//       };
-//     }
-//   );
-//   return pData;
-// }
+    rawX.forEach((val, index) => {
+      console.log("!!val: ", val);
+      if (metaX?.treatAsCategorical) {
+        customdata[index].X = metaX.sortedCategoricalValues?.[val];
+      } else {
+        customdata[index].X = (val as number).toLocaleString(undefined, {
+          maximumSignificantDigits: 5
+        });
+      }
+      customdata[index].rawXValue = val;
+      if (metaY?.treatAsCategorical) {
+        customdata[index].Y = metaY.sortedCategoricalValues?.[rawY[index]];
+      } else {
+        customdata[index].Y = (rawY[index] as number).toLocaleString(
+          undefined,
+          {
+            maximumSignificantDigits: 5
+          }
+        );
+      }
+      let hovertemplate = "";
+      hovertemplate += `${customdata[index].Name}<br>`;
+      hovertemplate += `${metaX.label}: ${customdata[index].X}<br>`;
+      hovertemplate += `${metaY.label}: ${customdata[index].Y}<br>`;
+      customdata[index].rawYValue = rawY[index];
 
-// function getCustomPointMarker(
-//   customPoints: Array<{ [key: string]: any }>
-// ): any {
-//   return {
-//     color: customPoints.map(
-//       (_, i) =>
-//         FluentUIStyles.fluentUIColorPalette[
-//           WhatIfConstants.MAX_SELECTION + 1 + i
-//         ]
-//     ),
-//     size: 12,
-//     symbol: "star"
-//   };
-// }
+      if (jointDataset.datasetMetaData?.featureMetaData !== undefined) {
+        const identityFeatureName =
+          jointDataset.datasetMetaData.featureMetaData?.identity_feature_name;
 
-// function getCustomPointCustomData(
-//   customPoint: { [key: string]: any }
-// ): any {
-//   let customData: ICustomData = {};
-//   const customdata = JointDataset.unwrap(
-//     customPoints,
-//     JointDataset.IndexLabel
-//   ).map((val) => {
-//     const dict: Dictionary<any> = {};
-//     dict[JointDataset.IndexLabel] = val;
-//     return dict;
-//   });
-//   let hovertemplate = "{point.customdata.Name}<br>";
-//   if (chartProps.xAxis) {
-//     const metaX = jointDataset.metaDict[chartProps.xAxis.property];
-//     const rawX = JointDataset.unwrap(customPoints, chartProps.xAxis.property);
-//     hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
-//     rawX.forEach((val, index) => {
-//       if (metaX?.treatAsCategorical) {
-//         customdata[index].X = metaX.sortedCategoricalValues?.[val];
-//       } else {
-//         customdata[index].X = (val as number).toLocaleString(undefined, {
-//           maximumSignificantDigits: 5
-//         });
-//       }
-//     });
-//   }
+        if (identityFeatureName !== undefined) {
+          const jointDatasetFeatureName =
+            jointDataset.getJointDatasetFeatureName(identityFeatureName);
 
-//   if (chartProps.yAxis) {
-//     const metaY = jointDataset.metaDict[chartProps.yAxis.property];
-//     const rawY = JointDataset.unwrap(customPoints, chartProps.yAxis.property);
-//     hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
-//     rawY.forEach((val, index) => {
-//       if (metaY?.treatAsCategorical) {
-//         customdata[index].Y = metaY.sortedCategoricalValues?.[val];
-//       } else {
-//         customdata[index].Y = (val as number).toLocaleString(undefined, {
-//           maximumSignificantDigits: 5
-//         });
-//       }
-//     });
-//   }
-//   hovertemplate += `${localization.Interpret.Charts.rowIndex}: {point.customdata.Index}<br>`;
-//   hovertemplate += "<extra></extra>";
-//   customdata.template = hovertemplate;
-// }
+          if (jointDatasetFeatureName !== undefined) {
+            const metaIdentityFeature =
+              jointDataset.metaDict[jointDatasetFeatureName];
+            const rawIdentityFeature = JointDataset.unwrap(
+              customPoints,
+              jointDatasetFeatureName
+            );
+            rawIdentityFeature.forEach((val, index) => {
+              if (metaIdentityFeature?.treatAsCategorical) {
+                customdata[index].ID =
+                  metaIdentityFeature.sortedCategoricalValues?.[val];
+              } else {
+                customdata[index].ID = (val as number).toLocaleString(
+                  undefined,
+                  {
+                    maximumSignificantDigits: 5
+                  }
+                );
+              }
+            });
+            hovertemplate += `${localization.Common.identityFeature} (${metaIdentityFeature.label}): ${customdata[index].ID}<br>`;
+          }
+        }
+      }
+
+      hovertemplate += `${localization.Interpret.Charts.rowIndex}: ${customdata[index].Index}<br>`;
+      hovertemplate += "<extra></extra>";
+      customdata[index].template = hovertemplate;
+    });
+  }
+  return customdata;
+}

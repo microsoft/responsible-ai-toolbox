@@ -15,7 +15,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
   selectedPointsIndexes: number[],
-  _customPoints: Array<{
+  customPoints: Array<{
     [key: string]: any;
   }>,
   jointDataset: JointDataset,
@@ -25,7 +25,12 @@ export async function calculateBubblePlotDataFromErrorCohort(
   ) => Promise<any>,
   _selectPointFromChart?: (data: any) => void,
   selectPointFromChartLargeData?: (data: any) => void,
-  onBubbleClick?: (scatterPlotData: any) => void,
+  onBubbleClick?: (
+    scatterPlotData: any,
+    x_series: number[],
+    y_series: number[],
+    index_series: number[]
+  ) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
 ): Promise<any | undefined> {
   console.log(
@@ -49,6 +54,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
       chartProps,
       jointDataset,
       selectedPointsIndexes,
+      customPoints,
       onBubbleClick,
       selectPointFromChartLargeData,
       onIndexSeriesUpdated
