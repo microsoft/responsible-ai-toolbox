@@ -16,6 +16,7 @@ import {
   isUndefinedOrEmpty,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
@@ -72,13 +73,15 @@ export class TransformationCreationDialog extends React.Component<
     let transformationNameErrorMessage = undefined;
     if (isUndefinedOrEmpty(this.state.transformationName)) {
       transformationNameErrorMessage =
-        "Enter a name for your what-if scenario.";
+        localization.Forecasting.TransformationCreation
+          .scenarioNamingInstructions;
     } else if (
       this.state.transformationName &&
       this.props.transformations.has(this.state.transformationName)
     ) {
       transformationNameErrorMessage =
-        "This name exists already. Please enter a unique name.";
+        localization.Forecasting.TransformationCreation
+          .scenarioNamingCollisionMessage;
     }
 
     let transformationValueErrorMessage = undefined;
@@ -92,9 +95,13 @@ export class TransformationCreationDialog extends React.Component<
           this.state.transformationValue
         ))
     ) {
-      transformationValueErrorMessage = `For operation ${
-        this.state.transformationOperation.displayName
-      } please select a value between ${this.state.transformationOperation.minValue.toString()} and ${this.state.transformationOperation.maxValue.toString()} other than ${this.state.transformationOperation.excludedValues.toString()}.`;
+      transformationValueErrorMessage = localization.formatString(
+        localization.Forecasting.TransformationCreation.valueErrorMessage,
+        this.state.transformationOperation.displayName,
+        this.state.transformationOperation.minValue,
+        this.state.transformationOperation.maxValue,
+        this.state.transformationOperation.excludedValues.toString()
+      );
     }
 
     let transformationCombinationErrorMessage = undefined;
@@ -109,7 +116,8 @@ export class TransformationCreationDialog extends React.Component<
           const equalsResult = transformation.equals(existingTransformation);
           if (equalsResult) {
             transformationCombinationErrorMessage =
-              "This is identical to an existing what-if scenario. Please change the feature, operation, or value.";
+              localization.Forecasting.TransformationCreation
+                .invalidCombinationErrorMessage;
           }
         });
       }
@@ -119,7 +127,7 @@ export class TransformationCreationDialog extends React.Component<
         hidden={!this.props.isVisible}
         dialogContentProps={{
           closeButtonAriaLabel: "Close",
-          title: "Create What-if Forecasts",
+          title: localization.Forecasting.TransformationCreation.title,
           type: DialogType.normal
         }}
         minWidth={740}
@@ -132,8 +140,11 @@ export class TransformationCreationDialog extends React.Component<
         >
           <Stack.Item>
             <TextField
-              label="What-if Forecast Name"
-              placeholder="Enter a unique name"
+              label={localization.Forecasting.TransformationCreation.nameLabel}
+              placeholder={
+                localization.Forecasting.TransformationCreation
+                  .scenarioNamingInstructionsPlaceholder
+              }
               value={this.state.transformationName}
               onChange={this.onChangeTransformationName}
               className={classNames.smallTextField}
@@ -172,7 +183,7 @@ export class TransformationCreationDialog extends React.Component<
               this.state.transformationFeature === undefined
             }
             onClick={this.addTransformation}
-            text="Add Transformation"
+            text={localization.Forecasting.TransformationCreation.addTransformationButton}
           />
         </DialogFooter>
       </Dialog>

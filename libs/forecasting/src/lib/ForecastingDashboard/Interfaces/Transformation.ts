@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ErrorCohort } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 
 export type Operation = {
   key: string;
@@ -17,28 +18,28 @@ export function isMultiplicationOrDivision(operation: Operation): boolean {
 
 export const transformationOperations: Operation[] = [
   {
-    displayName: "Multiply",
+    displayName: localization.Forecasting.Transformations.multiply,
     excludedValues: [0, 1],
     key: "multiply",
     maxValue: 1000,
     minValue: -1000
   },
   {
-    displayName: "Divide",
+    displayName: localization.Forecasting.Transformations.divide,
     excludedValues: [0, 1],
     key: "divide",
     maxValue: 1000,
     minValue: -1000
   },
   {
-    displayName: "Add",
+    displayName: localization.Forecasting.Transformations.add,
     excludedValues: [0],
     key: "add",
     maxValue: 1000,
     minValue: -1000
   },
   {
-    displayName: "Subtract",
+    displayName: localization.Forecasting.Transformations.subtract,
     excludedValues: [0],
     key: "subtract",
     maxValue: 1000,

@@ -116,7 +116,7 @@ export class ForecastingDashboard extends React.Component<
                   ? undefined
                   : this.context.baseErrorCohort.cohort.getCohortID()
               }
-              placeholder={"Select a time series."}
+              placeholder={localization.Forecasting.selectTimeSeries}
             />
           </Stack.Item>
           {!noCohortSelected && (
@@ -127,7 +127,7 @@ export class ForecastingDashboard extends React.Component<
                   onClick={(): void => {
                     this.setState({ isTransformationCreatorVisible: true });
                   }}
-                  text="Create what-if scenario"
+                  text={localization.Forecasting.TransformationCreation.title}
                 />
               </Stack.Item>
 

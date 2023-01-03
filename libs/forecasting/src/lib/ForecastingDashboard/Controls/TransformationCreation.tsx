@@ -14,6 +14,7 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
@@ -107,7 +108,8 @@ export class TransformationCreation extends React.Component<
             <ComboBox
               errorMessage={
                 this.props.transformationFeature === undefined
-                  ? "Choose a feature to perturb."
+                  ? localization.Forecasting.TransformationCreation
+                      .featureInstructions
                   : undefined
               }
               options={this.state.featureOptions}
@@ -121,7 +123,8 @@ export class TransformationCreation extends React.Component<
             <ComboBox
               errorMessage={
                 this.props.transformationOperation === undefined
-                  ? "Choose an operation to apply to the feature."
+                  ? localization.Forecasting.TransformationCreation
+                      .operationInstructions
                   : undefined
               }
               options={transformationOperations.map((t) => {

@@ -9,6 +9,7 @@ import {
   JointDataset,
   orderByTime
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
 import React from "react";
 
@@ -99,11 +100,7 @@ export class ForecastComparison extends React.Component<
     const classNames = forecastingDashboardStyles();
 
     const indices = this.context.dataset.index;
-    if (
-      this.context === undefined ||
-      indices === undefined ||
-      this.state.baselinePrediction === undefined
-    ) {
+    if (this.context === undefined || indices === undefined) {
       return;
     }
     const rowIndices = this.context.baseErrorCohort.cohort.filteredData.map(
@@ -123,26 +120,23 @@ export class ForecastComparison extends React.Component<
             ),
             rowIndices
           ),
-          name: "True Y",
+          name: localization.Forecasting.trueY,
           type: "spline"
         }
       ];
     }
-    const seriesData: SeriesOptionsType[] | undefined =
-      this.state.baselinePrediction !== undefined
-        ? [
-            {
-              data: orderByTime(this.state.baselinePrediction, rowIndices),
-              name: "Baseline Prediction",
-              type: "spline"
-            },
-            ...trueY
-          ]
-        : undefined;
+    const seriesData: SeriesOptionsType[] = [...trueY];
+    if (this.state.baselinePrediction !== undefined) {
+      seriesData.push({
+        data: orderByTime(this.state.baselinePrediction, rowIndices),
+        name: localization.Forecasting.baselinePrediction,
+        type: "spline"
+      } as SeriesOptionsType);
+    }
     this.state.selectedTransformations.forEach((transformationName) => {
       const preds =
         this.state.transformationPredictions.get(transformationName);
-      if (seriesData && preds) {
+      if (preds) {
         seriesData.push({
           data: orderByTime(preds, rowIndices),
           name: transformationName,
@@ -179,7 +173,7 @@ export class ForecastComparison extends React.Component<
                 },
                 series: seriesData,
                 title: {
-                  text: "Forecasts"
+                  text: localization.Forecasting.forecastComparisonChartTitle
                 },
                 xAxis: {
                   dateTimeLabelFormats: {
@@ -189,7 +183,8 @@ export class ForecastComparison extends React.Component<
                     year: "%Y"
                   },
                   title: {
-                    text: "Time"
+                    text: localization.Forecasting
+                      .forecastComparisonChartTimeAxisLabel
                   },
                   type: "datetime"
                 },

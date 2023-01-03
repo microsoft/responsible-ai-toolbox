@@ -7,6 +7,7 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
@@ -103,13 +104,15 @@ export class TransformationsTable extends React.Component<
                 key: "name",
                 maxWidth: 300,
                 minWidth: 10,
-                name: "Name"
+                name: localization.Forecasting.TransformationTable
+                  .nameColumnHeader
               },
               {
                 fieldName: "method",
                 key: "method",
                 minWidth: 10,
-                name: "Method"
+                name: localization.Forecasting.TransformationTable
+                  .methodColumnHeader
               }
             ]}
             selectionMode={SelectionMode.none}
@@ -126,7 +129,10 @@ export class TransformationsTable extends React.Component<
       const method = `${transformation.feature.text} ${
         transformation.operation.displayName
       } ${
-        isMultiplicationOrDivision(transformation.operation) ? "by " : ""
+        isMultiplicationOrDivision(transformation.operation)
+          ? localization.Forecasting.TransformationTable
+              .divisionAndMultiplicationBy
+          : ""
       }${transformation.value.toString()}`;
       return {
         key: index.toString(),
