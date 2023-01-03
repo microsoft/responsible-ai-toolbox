@@ -85,18 +85,18 @@ export class ModelOverview extends React.Component<
     super(props);
     this.state = {
       chartConfigurationIsVisible: false,
+      datasetBasedCohorts: [],
       datasetCohortChartIsVisible: true,
+      datasetCohortLabeledStatistics: [],
       datasetCohortViewIsVisible: true,
+      featureBasedCohortLabeledStatistics: [],
+      featureBasedCohorts: [],
       featureConfigurationIsVisible: false,
       metricConfigurationIsVisible: false,
       selectedFeatures: [],
       selectedFeaturesContinuousFeatureBins: {},
       selectedMetrics: [],
-      showHeatmapColors: true,
-      datasetCohortLabeledStatistics: [],
-      datasetBasedCohorts: [],
-      featureBasedCohortLabeledStatistics: [],
-      featureBasedCohorts: []
+      showHeatmapColors: true
     };
   }
 
@@ -148,15 +148,6 @@ export class ModelOverview extends React.Component<
     );
   }
 
-  private ifCohortIndexesEquals(a: number[], b: number[]): boolean {
-    return (
-      Array.isArray(a) &&
-      Array.isArray(b) &&
-      a.length === b.length &&
-      a.every((val, index) => val === b[index])
-    );
-  }
-
   public componentDidUpdate(): void {
     const newDatasetCohortIDs = this.context.errorCohorts.map((errorCohort) => {
       return errorCohort.cohort.getCohortID();
@@ -169,10 +160,10 @@ export class ModelOverview extends React.Component<
     console.log(newDatasetCohortIDs);
     console.log(oldDatasetCohortIDs);
     if (!this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)) {
-      let newOldDifference = newDatasetCohortIDs.filter(
+      const newOldDifference = newDatasetCohortIDs.filter(
         (x) => !oldDatasetCohortIDs.includes(x)
       );
-      let oldNewDifference = oldDatasetCohortIDs.filter(
+      const oldNewDifference = oldDatasetCohortIDs.filter(
         (x) => !newDatasetCohortIDs.includes(x)
       );
       if (newOldDifference.length > 0) {
@@ -194,47 +185,6 @@ export class ModelOverview extends React.Component<
         );
       }
     }
-  }
-
-  private updateDatasetCohortStats(): void {
-    const datasetCohortMetricStats = generateMetrics(
-      this.context.jointDataset,
-      this.context.errorCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-    console.log(datasetCohortMetricStats);
-
-    this.setState({
-      datasetBasedCohorts: this.context.errorCohorts,
-      datasetCohortLabeledStatistics: datasetCohortMetricStats
-    });
-  }
-
-  private async updateFeatureCohortStats(): Promise<void> {
-    // generate table contents for selected feature cohorts
-    const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
-      this.context.baseErrorCohort,
-      this.context.jointDataset,
-      this.context.dataset,
-      this.state.selectedFeatures,
-      this.state.selectedFeaturesContinuousFeatureBins
-    );
-
-    const featureCohortMetricStats = generateMetrics(
-      this.context.jointDataset,
-      featureBasedCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-    console.log(featureCohortMetricStats);
-
-    this.setState({
-      featureBasedCohorts: featureBasedCohorts,
-      featureBasedCohortLabeledStatistics: featureCohortMetricStats
-    });
   }
 
   public render(): React.ReactNode {
@@ -505,10 +455,7 @@ export class ModelOverview extends React.Component<
             updateSelectedMetrics={this.onMetricConfigurationChange}
             selectableMetrics={selectableMetrics}
           />
-          {((this.state.selectedFeatureBasedCohorts !== undefined &&
-            this.state.selectedFeatureBasedCohorts.length > 0) ||
-            (this.state.selectedDatasetCohorts !== undefined &&
-              this.state.selectedDatasetCohorts.length > 0)) && (
+          {this.shouldRenderModelOverviewChartPivot() && (
             <ModelOverviewChartPivot
               allCohorts={
                 this.state.datasetCohortChartIsVisible
@@ -532,6 +479,65 @@ export class ModelOverview extends React.Component<
           )}
         </Stack>
       </Stack>
+    );
+  }
+
+  private shouldRenderModelOverviewChartPivot(): boolean {
+    return (
+      (this.state.selectedFeatureBasedCohorts !== undefined &&
+        this.state.selectedFeatureBasedCohorts.length > 0) ||
+      (this.state.selectedDatasetCohorts !== undefined &&
+        this.state.selectedDatasetCohorts.length > 0)
+    );
+  }
+
+  private updateDatasetCohortStats(): void {
+    const datasetCohortMetricStats = generateMetrics(
+      this.context.jointDataset,
+      this.context.errorCohorts.map((errorCohort) =>
+        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+      ),
+      this.context.modelMetadata.modelType
+    );
+    console.log(datasetCohortMetricStats);
+
+    this.setState({
+      datasetBasedCohorts: this.context.errorCohorts,
+      datasetCohortLabeledStatistics: datasetCohortMetricStats
+    });
+  }
+
+  private async updateFeatureCohortStats(): Promise<void> {
+    // generate table contents for selected feature cohorts
+    const featureBasedCohorts = generateOverlappingFeatureBasedCohorts(
+      this.context.baseErrorCohort,
+      this.context.jointDataset,
+      this.context.dataset,
+      this.state.selectedFeatures,
+      this.state.selectedFeaturesContinuousFeatureBins
+    );
+
+    const featureCohortMetricStats = generateMetrics(
+      this.context.jointDataset,
+      featureBasedCohorts.map((errorCohort) =>
+        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
+      ),
+      this.context.modelMetadata.modelType
+    );
+    console.log(featureCohortMetricStats);
+
+    this.setState({
+      featureBasedCohortLabeledStatistics: featureCohortMetricStats,
+      featureBasedCohorts
+    });
+  }
+
+  private ifCohortIndexesEquals(a: number[], b: number[]): boolean {
+    return (
+      Array.isArray(a) &&
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((val, index) => val === b[index])
     );
   }
 
