@@ -10,8 +10,7 @@ import {
   ErrorCohort,
   ModelAssessmentContext,
   setOutlierDataIfChanged,
-  IBoxChartState,
-  ifEnableLargeData
+  IBoxChartState
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";

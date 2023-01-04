@@ -3,6 +3,7 @@
 
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
+import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
@@ -81,7 +82,6 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisBaseCohortWarning).should(
     "not.exist"
   );
-  cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
   function ensureNotebookModelOverviewChartIsCorrect(): void {
     if (isNotebookTest) {
@@ -115,37 +115,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     }
   }
 
-  // when there are 1 pivot item, with overflow, it will have a hidden overflow button, so the length is 2
-  if (datasetShape.isRegression) {
-    // 2 buttons and 1 hidden overflow button, 3 total
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("exist");
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-      "not.exist"
-    );
-    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
-    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
-    ensureNotebookModelOverviewChartIsCorrect();
-  } else if (datasetShape.isMulticlass) {
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-      "not.exist"
-    );
-    cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
-    ensureNotebookModelOverviewChartIsCorrect();
-  } else if (datasetShape.isBinary) {
-    // 3 buttons and 1 hidden overflow button, 3 total
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 4);
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should(
-      "not.exist"
-    );
-    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
-    cy.get(Locators.ModelOverviewConfusionMatrix).should("not.exist");
-  } else {
-    throw new Error(
-      "Task should be one of regression, multiclass, or binary classification."
-    );
-  }
+  assertChartVisibility(
+    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary),
+    datasetShape.isRegression,
+    datasetShape.isBinary
+  );
+  ensureNotebookModelOverviewChartIsCorrect();
 }

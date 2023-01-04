@@ -11,6 +11,7 @@ import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelO
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent } from "./ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent";
+import { ensureChartsPivot } from "./ensureChartsPivot";
 import { ensureNewCohortsShowUpInCharts } from "./ensureNewCohortsShowUpInCharts";
 
 const testName = "Model Overview v2";
@@ -45,6 +46,7 @@ export function describeModelOverview(
         ensureAllModelOverviewBasicElementsArePresent();
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
+          datasetShape,
           isNotebookTest
         );
         multiSelectComboBox(
@@ -71,6 +73,10 @@ export function describeModelOverview(
 
       it("should show new cohorts in charts", () => {
         ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
+      });
+
+      it("should pivot between charts when clicking", () => {
+        ensureChartsPivot(datasetShape);
       });
     } else {
       it("should not have 'Model overview' component", () => {
