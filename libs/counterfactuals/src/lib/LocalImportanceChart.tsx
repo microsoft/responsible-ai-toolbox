@@ -14,6 +14,7 @@ import {
   defaultModelAssessmentContext,
   getPrimaryChartColor,
   ICounterfactualData,
+  ifEnableLargeData,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -96,7 +97,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         name: ""
       }
     ];
-    const plotData = {
+    return {
       chart: {
         type: "column"
       },
@@ -114,18 +115,15 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         }
       }
     };
-    console.log("!!plotData: ", plotData);
-    return plotData;
   }
   private getSortedData(): ILocalImportanceData[] {
     const data: ILocalImportanceData[] = [];
     if (this.props.rowNumber === undefined) {
       return data;
     }
-    // const localImportanceData = ifEnableLargeData(this.context.dataset)
-    //   ? this.props.data?.local_importance?.[0]
-    //   : this.props.data?.local_importance?.[this.props.rowNumber];
-    const localImportanceData = this.props.data?.local_importance?.[0];
+    const localImportanceData = ifEnableLargeData(this.context.dataset)
+      ? this.props.data?.local_importance?.[0]
+      : this.props.data?.local_importance?.[this.props.rowNumber];
     if (!localImportanceData) {
       return data;
     }

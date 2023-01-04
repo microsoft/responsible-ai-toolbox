@@ -42,7 +42,8 @@ export function getCounterfactualsScatterOption(
       scatter: {
         tooltip: {
           headerFormat: "",
-          pointFormat: "{point.customData.template}"
+          pointFormat: "{point.customData.template}",
+          shared: true
         }
       },
       series: {
@@ -64,7 +65,13 @@ export function getCounterfactualsScatterOption(
             }
           }
         },
-        turboThreshold: 0
+        turboThreshold: 0,
+        lineWidth: 0,
+        states: {
+          hover: {
+            lineWidthPlus: 0
+          }
+        }
       }
     },
     series: dataSeries,
@@ -73,6 +80,9 @@ export function getCounterfactualsScatterOption(
     },
     yAxis: {
       type: chartProps?.yAxis.type
+    },
+    tooltip: {
+      shared: true
     }
   };
 }

@@ -17,7 +17,9 @@ import {
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  DatasetTaskType
+  DatasetTaskType,
+  ifEnableLargeData,
+  JointDataset
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -119,15 +121,12 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   }
 
   private displayDatapointDropbox(): boolean {
-    // const indexes = this.context.selectedErrorCohort.cohort.unwrap(
-    //   JointDataset.IndexLabel
-    // );
-    if (this.props.indexSeries.length > 0) {
-      // || indexes.length > 0) {
-      //add flag for first condition
+    const isLargeDataEnabled = ifEnableLargeData(this.context.dataset);
+    if (!isLargeDataEnabled) {
       return true;
     }
-    return false;
+
+    return isLargeDataEnabled && this.props.indexSeries.length > 0;
   }
 
   private selectPointFromDropdown = (
@@ -138,7 +137,10 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
       const index = Number.parseInt(item.key);
       this.props.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
       this.props.toggleSelectionOfPoint(index);
-      if (this.props.setCounterfactualData) {
+      if (
+        ifEnableLargeData(this.context.dataset) &&
+        this.props.setCounterfactualData
+      ) {
         this.props.setCounterfactualData(item.data.index);
       }
       this.logTelemetryEvent(
@@ -156,14 +158,19 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   };
 
   private getDataOptions(): IComboBoxOption[] {
-    // const indexes =this.context.selectedErrorCohort.cohort.unwrap(
-    //   JointDataset.IndexLabel
-    // );
-    const indexes = this.props.indexSeries;
-    // indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
-    return indexes.map((index, i) => {
+    let indexes = this.context.selectedErrorCohort.cohort.unwrap(
+      JointDataset.IndexLabel
+    );
+    indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
+    const isLargeDataEnabled = ifEnableLargeData(this.context.dataset);
+    if (isLargeDataEnabled) {
+      indexes = this.props.indexSeries;
+    }
+
+    return indexes.map((ind, i) => {
+      const index = isLargeDataEnabled ? i : ind;
       return {
-        key: `${i}`,
+        key: `${index}`,
         text: `Index ${index}`,
         data: { index: indexes[i] }
       };

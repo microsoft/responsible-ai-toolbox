@@ -215,11 +215,6 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setTemporaryPointToCopyOfDatasetPoint(indexes[0]);
   }
 
-  //to-do: remove delay
-  private delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   private setCounterfactualData = async (
     absoluteIndex: number
   ): Promise<void> => {
@@ -227,7 +222,6 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({
       isCounterfactualsDataLoading: true
     });
-    await this.delay(5000);
     const localCounterfactualData = await getLocalCounterfactualsFromSDK(
       absoluteIndex,
       this.state.counterfactualsData?.id,

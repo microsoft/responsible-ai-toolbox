@@ -5,7 +5,7 @@ import { getTheme, DefaultButton, Stack } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
-  JointDataset,
+  // JointDataset,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -13,17 +13,25 @@ import {
   ModelAssessmentContext,
   BasicHighChart,
   ITelemetryEvent,
+  TelemetryEventName,
+  JointDataset,
   TelemetryLevels,
-  TelemetryEventName
+  Cohort,
+  ICounterfactualData,
+  ifEnableLargeData
+  // TelemetryLevels,
+  // TelemetryEventName
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
+import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
+// import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
 
-import { generatePlotlyProps } from "../util/generatePlotlyProps";
-import { getCounterfactualChartOptions } from "../util/getCounterfactualChartOptions";
+// import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
+import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
 
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
@@ -32,6 +40,14 @@ export interface ICounterfactualChartProps {
   originalData?: { [key: string]: string | number };
   selectedPointsIndexes: number[];
   temporaryPoint: { [key: string]: any } | undefined;
+  cohort: Cohort;
+  jointDataset: JointDataset;
+  requestBubblePlotData?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
+  counterfactualData?: ICounterfactualData;
+  isCounterfactualsDataLoading?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -44,18 +60,28 @@ export interface ICounterfactualChartProps {
     index?: number,
     value?: string
   ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
+  setCounterfactualData: (absoluteIndex: any) => Promise<void>;
+  onIndexSeriesUpdated?: (data: any) => void;
 }
 
 export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
+  plotData: any;
+  isBubbleClicked: boolean;
+  x_series: number[];
+  y_series: number[];
+  index_series: number[];
 }
 
-export class CounterfactualChart extends React.PureComponent<
+export class LargeCounterfactualChart extends React.PureComponent<
   ICounterfactualChartProps,
   ICounterfactualChartState
 > {
@@ -69,19 +95,73 @@ export class CounterfactualChart extends React.PureComponent<
 
     this.state = {
       xDialogOpen: false,
-      yDialogOpen: false
+      yDialogOpen: false,
+      plotData: undefined,
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
     };
   }
+
+  public componentDidMount(): void {
+    console.log("!!didmount");
+    this.loadPlotData();
+  }
+
+  public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
+    console.log(
+      "!!in didupdate: ",
+      prevProps.chartProps,
+      this.props.chartProps,
+      "----",
+      prevProps.selectedPointsIndexes,
+      this.props.selectedPointsIndexes
+    );
+    if (
+      !_.isEqual(prevProps.chartProps, this.props.chartProps) ||
+      (!_.isEqual(
+        prevProps.selectedPointsIndexes,
+        this.props.selectedPointsIndexes
+      ) &&
+        this.state.isBubbleClicked === false) // refine this logic to handle large data
+    ) {
+      console.log("!!inside if");
+      this.setPlotData();
+    } else if (
+      (!_.isEqual(
+        prevProps.selectedPointsIndexes,
+        this.props.selectedPointsIndexes
+      ) ||
+        !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
+        !_.isEqual(
+          prevProps.isCounterfactualsDataLoading,
+          this.props.isCounterfactualsDataLoading
+        )) &&
+      this.state.isBubbleClicked === true
+    ) {
+      console.log(
+        "!!inside else if: ",
+        !_.isEqual(prevProps.customPoints, this.props.customPoints)
+      );
+      this.updateScatterPlot();
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
 
-    const plotlyProps = generatePlotlyProps(
-      this.context.jointDataset,
-      this.props.chartProps,
-      this.context.selectedErrorCohort.cohort,
+    console.log(
+      "!!in render: ",
+      this.state.plotData,
       this.props.selectedPointsIndexes,
-      this.props.customPoints
+      this.props.customPoints,
+      JointDataset.unwrap(
+        this.props.customPoints,
+        this.props.chartProps.xAxis.property
+      )
     );
+    console.log("!!loading: ", this.props.isCounterfactualsDataLoading);
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -111,7 +191,7 @@ export class CounterfactualChart extends React.PureComponent<
             selectedColumn={this.props.chartProps.yAxis}
             canBin={false}
             mustBin={false}
-            allowTreatAsCategorical={true}
+            allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             hideDroppedFeatures
             onAccept={this.onYSet}
@@ -135,7 +215,7 @@ export class CounterfactualChart extends React.PureComponent<
               this.props.chartProps.chartType === ChartTypes.Box
             }
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
-            allowTreatAsCategorical={true}
+            allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXClose}
@@ -158,16 +238,13 @@ export class CounterfactualChart extends React.PureComponent<
                         this.props.chartProps.yAxis.property
                       ].label
                     }
+                    disabled={this.props.isCounterfactualsDataLoading}
                   />
                 </div>
               </Stack.Item>
               <Stack.Item className={classNames.mainChartContainer}>
                 <BasicHighChart
-                  configOverride={getCounterfactualChartOptions(
-                    plotlyProps,
-                    this.selectPointFromChart,
-                    this.props.chartProps
-                  )}
+                  configOverride={this.state.plotData}
                   theme={getTheme()}
                   id="CounterfactualChart"
                 />
@@ -188,6 +265,7 @@ export class CounterfactualChart extends React.PureComponent<
                     this.props.chartProps.xAxis.property
                   ].label
                 }
+                disabled={this.props.isCounterfactualsDataLoading}
               />
             </div>
           </Stack>
@@ -202,7 +280,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
-    this.setState({ xDialogOpen: false });
+    this.setState({
+      xDialogOpen: false,
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
+    });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -212,7 +296,13 @@ export class CounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
-    this.setState({ yDialogOpen: false });
+    this.setState({
+      yDialogOpen: false,
+      isBubbleClicked: false,
+      x_series: [],
+      y_series: [],
+      index_series: []
+    });
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -232,7 +322,106 @@ export class CounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: false });
   };
 
+  private async loadPlotData(): Promise<any> {
+    console.log("!!in getPlotData: ");
+    const plotData = await calculateBubblePlotDataFromErrorCohort(
+      this.props.cohort,
+      this.props.chartProps,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.props.jointDataset,
+      this.props.isCounterfactualsDataLoading,
+      this.props.requestBubblePlotData,
+      this.selectPointFromChart,
+      this.selectPointFromChartLargeData,
+      this.onBubbleClick,
+      this.props.onIndexSeriesUpdated
+    );
+    console.log("!!boxPlotData 2: ", plotData);
+    this.setState({
+      plotData: plotData
+    });
+  }
+
+  private async setPlotData(): Promise<any> {
+    console.log("!!in getPlotData: ");
+    const plotData = await calculateBubblePlotDataFromErrorCohort(
+      this.context.selectedErrorCohort.cohort,
+      this.props.chartProps,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.context.jointDataset,
+      this.props.isCounterfactualsDataLoading,
+      this.context.requestBubblePlotData,
+      this.selectPointFromChart,
+      this.selectPointFromChartLargeData,
+      this.onBubbleClick,
+      this.props.onIndexSeriesUpdated
+    );
+    console.log("!!boxPlotData 2: ", plotData);
+    this.setState({
+      plotData: plotData
+    });
+  }
+
+  private updateScatterPlot(): void {
+    console.log("!!in getUpdatedScatterPlot: ");
+    const pData = getCounterfactualsScatterOption(
+      this.state.x_series,
+      this.state.y_series,
+      this.state.index_series,
+      this.props.chartProps,
+      this.props.jointDataset,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.props.isCounterfactualsDataLoading,
+      this.selectPointFromChartLargeData
+    );
+    console.log(
+      "!!pData 2: ",
+      this.state.plotData,
+      this.props.selectedPointsIndexes,
+      pData
+    );
+
+    this.setState({
+      plotData: pData
+    });
+  }
+
+  // private async setPlotData(): Promise<void> {
+  //   console.log("!!in setPlotData: ");
+  //   const plotData = await this.getPlotData();
+  //   console.log("!!boxPlotData 3: ", plotData);
+  //   this.setState({
+  //     plotData: plotData
+  //   });
+  // }
+
+  private readonly onBubbleClick = (
+    scatterPlotData: any,
+    x_series: number[],
+    y_series: number[],
+    index_series: number[]
+  ): void => {
+    console.log("!!in onBubbleClick: ");
+    console.log("!!scatterPlotData: ", scatterPlotData);
+    this.setState({
+      plotData: scatterPlotData,
+      isBubbleClicked: true,
+      x_series: x_series,
+      y_series: y_series,
+      index_series: index_series
+    });
+  };
+
   private selectPointFromChart = (data: any): void => {
+    console.log(
+      "!!selectPointFromChart: ",
+      data,
+      JointDataset.IndexLabel,
+      data.customdata[JointDataset.IndexLabel]
+    );
     const index = data.customdata[JointDataset.IndexLabel];
     this.props.setTemporaryPointToCopyOfDatasetPoint(index);
     this.props.toggleSelectionOfPoint(index);
@@ -240,6 +429,27 @@ export class CounterfactualChart extends React.PureComponent<
       TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
     );
   };
+
+  private selectPointFromChartLargeData = async (data: any): Promise<void> => {
+    console.log(
+      "!!in selectPointFromChartLargeData: ",
+      this.props.counterfactualData,
+      data,
+      JointDataset.IndexLabel,
+      data.customData[JointDataset.IndexLabel],
+      this.context.requestLocalCounterfactuals
+    );
+
+    const index = data.customData[JointDataset.IndexLabel];
+    const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
+    this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
+    this.props.setCounterfactualData(absoluteIndex);
+    this.props.toggleSelectionOfPoint(index);
+    this.logTelemetryEvent(
+      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
+    );
+  };
+
   private logTelemetryEvent = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
