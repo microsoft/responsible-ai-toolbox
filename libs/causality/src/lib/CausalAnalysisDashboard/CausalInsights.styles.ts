@@ -19,7 +19,7 @@ export const causalInsightsStyles: () => IProcessedStyleSet<ICausalInsightsStyle
     return mergeStyleSets<ICausalInsightsStyles>({
       container: {
         color: theme.semanticColors.bodyText,
-        padding: "0 40px 40px 40px"
+        padding: "0 40px 10px 40px"
       },
       tabs: {
         selectors: {
