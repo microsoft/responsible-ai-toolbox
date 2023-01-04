@@ -17,7 +17,7 @@ from erroranalysis._internal.matrix_filter import (CATEGORY1, CATEGORY2, COUNT,
                                                    INTERVAL_MAX, INTERVAL_MIN,
                                                    MATRIX, METRIC_NAME,
                                                    METRIC_VALUE, TN, TP,
-                                                   VALUES)
+                                                   VALUES, bin_data)
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
@@ -344,6 +344,15 @@ class TestMatrixFilter(object):
                            matrix_features=matrix_features,
                            quantile_binning=True,
                            model_task=ModelTask.CLASSIFICATION)
+
+    def test_bin_data_max_over_left_bound(self):
+        max_val = 0.9479200000000001
+        # Test bin_data when max value is over right bound of last bin
+        df = pd.DataFrame({'a': [0.49928, 0.53104, 0.40528, 0.876,
+                                 0.912, max_val]})
+        feat1 = 'a'
+        binned_data = bin_data(df, feat1, 2)
+        assert binned_data.cat.categories[1].right == max_val
 
 
 def run_error_analyzer_on_models(X_train,

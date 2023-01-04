@@ -38,6 +38,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestGlobalCausalEffects"
       | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
+      | "requestMetrics"
     > = {};
     if (this.props.config.baseUrl) {
       callBack.requestExp = async (data: number): Promise<any[]> => {
@@ -156,6 +157,19 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           [filter, compositeFilter, columnNameX, columnNameY, numBins],
           "/dataset_analysis_box_chart_plot",
+          abortSignal
+        );
+      };
+      callBack.requestMetrics = async (
+        filter: unknown[],
+        compositeFilter: unknown[],
+        metric: string,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [filter, compositeFilter, metric],
+          "/model_overview_metrics",
           abortSignal
         );
       };
