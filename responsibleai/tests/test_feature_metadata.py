@@ -86,10 +86,7 @@ class TestFeatureMetadata:
         assert feature_metadata_dict == expected_feature_metadata_dict
 
     def test_feature_metadata_with_dropped_features(self):
-        with pytest.warns(
-                UserWarning,
-                match='dropped_features are not in use currently.'):
-            feature_metadata = FeatureMetadata(dropped_features=['d1', 'd2'])
+        feature_metadata = FeatureMetadata(dropped_features=['d1', 'd2'])
         assert feature_metadata.identity_feature_name is None
         assert feature_metadata.datetime_features is None
         assert feature_metadata.categorical_features is None
