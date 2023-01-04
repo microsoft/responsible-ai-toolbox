@@ -1,20 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  getTheme,
-  mergeStyles,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  Text
-} from "@fluentui/react";
+import { getTheme, Stack, Text } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
   getPrimaryChartColor,
   ICounterfactualData,
   ifEnableLargeData,
+  LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -52,19 +46,7 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         </MissingParametersPlaceholder>
       );
     }
-    if (this.props.isCounterfactualsDataLoading) {
-      const spinnerStyles = mergeStyles({
-        margin: "auto",
-        padding: "40px"
-      });
-      return (
-        <Spinner
-          className={spinnerStyles}
-          size={SpinnerSize.large}
-          label={localization.Counterfactuals.loading}
-        />
-      );
-    }
+
     return (
       <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item>
@@ -77,11 +59,15 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           </Text>
         </Stack.Item>
         <Stack.Item>
-          <div id={"WhatIfFeatureImportanceBar"}>
-            <BasicHighChart
-              configOverride={this.getLocalImportanceBarOptions()}
-            />
-          </div>
+          {this.props.isCounterfactualsDataLoading ? (
+            <LoadingSpinner label={localization.Counterfactuals.loading} />
+          ) : (
+            <div id={"WhatIfFeatureImportanceBar"}>
+              <BasicHighChart
+                configOverride={this.getLocalImportanceBarOptions()}
+              />
+            </div>
+          )}
         </Stack.Item>
       </Stack>
     );
