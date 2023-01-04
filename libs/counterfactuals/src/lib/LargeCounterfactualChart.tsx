@@ -18,17 +18,13 @@ import {
   TelemetryLevels,
   Cohort,
   ICounterfactualData,
-  ifEnableLargeData
-  // TelemetryLevels,
-  // TelemetryEventName
+  ifEnableLargeData,
+  LoadingSpinner
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
-// import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
-
-// import { generatePlotlyProps } from "../util/generatePlotlyProps";
-
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
@@ -79,6 +75,7 @@ export interface ICounterfactualChartState {
   x_series: number[];
   y_series: number[];
   index_series: number[];
+  isBubbleChartDataLoading: boolean;
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -100,7 +97,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       isBubbleClicked: false,
       x_series: [],
       y_series: [],
-      index_series: []
+      index_series: [],
+      isBubbleChartDataLoading: false
     };
   }
 
@@ -238,16 +236,25 @@ export class LargeCounterfactualChart extends React.PureComponent<
                         this.props.chartProps.yAxis.property
                       ].label
                     }
-                    disabled={this.props.isCounterfactualsDataLoading}
+                    disabled={
+                      this.props.isCounterfactualsDataLoading ||
+                      this.state.isBubbleChartDataLoading
+                    }
                   />
                 </div>
               </Stack.Item>
               <Stack.Item className={classNames.mainChartContainer}>
-                <BasicHighChart
-                  configOverride={this.state.plotData}
-                  theme={getTheme()}
-                  id="CounterfactualChart"
-                />
+                {this.state.isBubbleChartDataLoading ? (
+                  <LoadingSpinner
+                    label={localization.Counterfactuals.loading}
+                  />
+                ) : (
+                  <BasicHighChart
+                    configOverride={this.state.plotData}
+                    theme={getTheme()}
+                    id="CounterfactualChart"
+                  />
+                )}
               </Stack.Item>
             </Stack>
           </Stack.Item>
@@ -265,7 +272,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
                     this.props.chartProps.xAxis.property
                   ].label
                 }
-                disabled={this.props.isCounterfactualsDataLoading}
+                disabled={
+                  this.props.isCounterfactualsDataLoading ||
+                  this.state.isBubbleChartDataLoading
+                }
               />
             </div>
           </Stack>
@@ -324,6 +334,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private async loadPlotData(): Promise<any> {
     console.log("!!in getPlotData: ");
+    this.setState({
+      isBubbleChartDataLoading: true
+    });
     const plotData = await calculateBubblePlotDataFromErrorCohort(
       this.props.cohort,
       this.props.chartProps,
@@ -339,12 +352,16 @@ export class LargeCounterfactualChart extends React.PureComponent<
     );
     console.log("!!boxPlotData 2: ", plotData);
     this.setState({
-      plotData: plotData
+      plotData: plotData,
+      isBubbleChartDataLoading: false
     });
   }
 
   private async setPlotData(): Promise<any> {
     console.log("!!in getPlotData: ");
+    this.setState({
+      isBubbleChartDataLoading: true
+    });
     const plotData = await calculateBubblePlotDataFromErrorCohort(
       this.context.selectedErrorCohort.cohort,
       this.props.chartProps,
@@ -360,7 +377,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
     );
     console.log("!!boxPlotData 2: ", plotData);
     this.setState({
-      plotData: plotData
+      plotData: plotData,
+      isBubbleChartDataLoading: false
     });
   }
 

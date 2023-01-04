@@ -100,3 +100,4 @@ export * from "./lib/Highchart/IHighchartsConfig";
 export * from "./lib/Highchart/Null";
 export * from "./lib/Interfaces/IHighchartBubbleData";
 export * from "./lib/Highchart/IBoxChartState";
+export * from "./lib/components/LoadingSpinner";
