@@ -1841,7 +1841,8 @@
     "TransformationTable": {
       "nameColumnHeader": "Name",
       "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by "
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
     }
   }
 }

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { DetailsList, SelectionMode, Stack, Text } from "@fluentui/react";
-// import { localization } from "@responsible-ai/localization";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
@@ -92,7 +91,10 @@ export class TransformationsTable extends React.Component<
       <Stack tokens={stackTokens}>
         <Stack.Item>
           <Text className={classNames.mediumText}>
-            What-if Forecasts ({this.props.transformations.size})
+            {localization.formatString(
+              localization.Forecasting.TransformationTable.header,
+              this.props.transformations.size
+            )}
           </Text>
         </Stack.Item>
         <Stack.Item>
