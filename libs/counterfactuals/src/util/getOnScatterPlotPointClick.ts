@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { responseTempLC } from "./responseTempLC";
+// import { responseTempLC } from "./responseTempLC";
 
 // export async function getOnScatterPlotPointClick(
 //   data: any,
@@ -47,7 +47,7 @@ export async function getLocalCounterfactualsFromSDK(
 
   console.log("!!getLocalCounterfactualsFromSDK result: ", result);
 
-  return responseTempLC;
+  return result;
 }
 
 // export async function getLocalCounterfactualData(

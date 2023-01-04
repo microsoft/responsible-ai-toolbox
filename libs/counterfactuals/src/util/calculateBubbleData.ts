@@ -9,7 +9,7 @@ import {
 import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
 import { generatePlotlyProps } from "./generatePlotlyProps";
 import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
-import { responseTemp } from "./responseTemp";
+//import { responseTemp } from "./responseTemp";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -24,7 +24,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
     request: any,
     abortSignal: AbortSignal
   ) => Promise<any>,
-  _selectPointFromChart?: (data: any) => void,
+  selectPointFromChart?: (data: any) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onBubbleClick?: (
     scatterPlotData: any,
@@ -40,16 +40,16 @@ export async function calculateBubblePlotDataFromErrorCohort(
     errorCohort,
     selectPointFromChartLargeData
   );
-  if (true) {
-    // const bubbleChartData = await calculateBubblePlotDataFromSDK(
-    //   errorCohort,
-    //   jointDataset,
-    //   requestBubblePlotDistribution,
-    //   jointDataset.metaDict[chartProps?.xAxis.property].label,
-    //   jointDataset.metaDict[chartProps?.yAxis.property].label
-    // );
+  if (requestBubblePlotDistribution) {
+    const bubbleChartData = await calculateBubblePlotDataFromSDK(
+      errorCohort,
+      jointDataset,
+      requestBubblePlotDistribution,
+      jointDataset.metaDict[chartProps?.xAxis.property].label,
+      jointDataset.metaDict[chartProps?.yAxis.property].label
+    );
     return getBubbleChartOptions(
-      responseTemp, // bubbleChartData["clusters"],
+      bubbleChartData["clusters"], //responseTemp
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,
@@ -63,14 +63,14 @@ export async function calculateBubblePlotDataFromErrorCohort(
     );
   }
   // If compute instance is not connected, calculate based on the first 5k data
-  // return calculateOriginalScatterPlotData(
-  //   chartProps,
-  //   selectedPointsIndexes,
-  //   customPoints,
-  //   jointDataset,
-  //   errorCohort,
-  //   selectPointFromChart
-  // );
+  return calculateOriginalScatterPlotData(
+    chartProps,
+    selectedPointsIndexes,
+    customPoints,
+    jointDataset,
+    errorCohort,
+    selectPointFromChart
+  );
 }
 
 export async function calculateBubblePlotDataFromSDK(
