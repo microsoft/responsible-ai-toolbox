@@ -1827,6 +1827,8 @@
       "nameLabel": "What-if scenario name",
       "featureInstructions": "Choose a feature to perturb.",
       "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationChoicePlaceholder": "Choose an operation.",
+      "featureChoicePlaceholder": "Choose a feature.",
       "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
       "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
       "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
