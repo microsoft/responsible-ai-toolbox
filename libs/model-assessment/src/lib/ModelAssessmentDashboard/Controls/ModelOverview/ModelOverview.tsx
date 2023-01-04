@@ -166,6 +166,14 @@ export class ModelOverview extends React.Component<
       const oldNewDifference = oldDatasetCohortIDs.filter(
         (x) => !newDatasetCohortIDs.includes(x)
       );
+      console.log(newOldDifference);
+      console.log(oldNewDifference);
+      console.log(this.state.selectedDatasetCohorts);
+      console.log(
+        this.state.selectedDatasetCohorts?.filter(
+          (x) => !oldNewDifference.includes(x)
+        )
+      );
       if (newOldDifference.length > 0) {
         this.setState(
           {
@@ -177,9 +185,9 @@ export class ModelOverview extends React.Component<
       } else if (oldNewDifference.length > 0) {
         this.setState(
           {
-            // Remove the oldNewDifference from selectedDatasetCohorts
-            selectedDatasetCohorts:
-              this.state.selectedDatasetCohorts?.concat(oldNewDifference)
+            selectedDatasetCohorts: this.state.selectedDatasetCohorts?.filter(
+              (x) => !oldNewDifference.includes(x)
+            )
           },
           () => this.updateDatasetCohortStats()
         );
