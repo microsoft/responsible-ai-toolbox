@@ -22,9 +22,6 @@ export interface IForecastingDashboardStyles {
   smallDropdown: IStyle;
   mediumText: IStyle;
   forecastCategoryText: IStyle;
-  transformationBuilder: IStyle;
-  transformationCreatorStack: IStyle;
-  transformationCreatorDialog: IStyle;
   subMediumText: IStyle;
   smallTextField: IStyle;
   errorText: IStyle;
@@ -85,24 +82,6 @@ export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDa
       topLevelDescriptionText: {
         color: theme.semanticColors.bodyText,
         maxWidth: descriptionMaxWidth
-      },
-      transformationBuilder: {
-        // background: "#F1F6FA",
-        // // height: "202px",
-        // left: "114px",
-        // // position: "absolute",
-        // top: "689px"
-        // // width: "1000px"
-      },
-      transformationCreatorDialog: {
-        // maxWidth: "1000px",
-        // minWidth: "740px"
-      },
-      transformationCreatorStack: {
-        // height: "202px",
-        // left: "114px",
-        // top: "689px",
-        // width: "1251px"
       }
     });
   };

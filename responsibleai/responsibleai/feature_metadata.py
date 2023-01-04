@@ -2,49 +2,42 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException
 
 
 class FeatureMetadata:
-    def __init__(self,
-                 identity_feature_name: Optional[str] = None,
+    def __init__(self, identity_feature_name: Optional[str] = None,
                  datetime_features: Optional[List[str]] = None,
                  categorical_features: Optional[List[str]] = None,
-                 dropped_features: Optional[List[str]] = None,
-                 time_series_id_column_names: Optional[List[str]] = None):
+                 dropped_features: Optional[List[str]] = None):
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
-            uniquely identify a row or instance in user input dataset.
+                                      uniquely identify a row or instance
+                                      in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param datetime_features: List of datetime features in the user input
-            dataset.
+        :param datetime_features: List of datetime features in the
+                                  user input dataset.
         :type datetime_features: Optional[List[str]]
-        :param categorical_features: List of categorical features in the user
-            input dataset.
+        :param categorical_features: List of categorical features in the
+                                     user input dataset.
         :type categorical_features: Optional[List[str]]
         :param dropped_features: List of features that were dropped by the
-            user during training of their model.
+                                 the user during training of their model.
         :type dropped_features: Optional[List[str]]
-        :param time_series_id_column_names: List of names of the columns that
-            define the various time series contained in the data set.
-            This argument is only applicable in a forecasting task.
-        :type time_series_id_column_names: Option[List[str]]
         """
-        
         self.identity_feature_name = identity_feature_name
         self.datetime_features = datetime_features
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
-        self.time_series_id_column_names = time_series_id_column_names
-
-        # shouldn't all of this be removed?
         if self.datetime_features is not None:
             warnings.warn('datetime_features are not in use currently.')
         if self.categorical_features is not None:
             warnings.warn('categorical_features are not in use currently.')
+        if self.dropped_features is not None:
+            warnings.warn('dropped_features are not in use currently.')
 
     def validate_feature_metadata_with_user_features(
             self, user_features: Optional[List[str]] = None):
@@ -62,16 +55,6 @@ class FeatureMetadata:
                     ' in user features.'.format(
                         self.identity_feature_name))
 
-    def validate_feature_metadata_with_time_series_id_column_names(
-        self, test, train):
-        if self.time_series_id_column_names is not None:
-            if not set(self.time_series_id_column_names).issubset(set(test.columns)) \
-            or not set(self.time_series_id_column_names).issubset(set(train.columns)):
-                raise UserConfigValidationException(
-                    'One or more of time_series_id_column_names '
-                    f'{self.time_series_id_column_names} are not present in '
-                     'train or test datasets')     
-
     def to_dict(self) -> Dict[str, Any]:
         """Convert the feature metadata to a dictionary.
 
@@ -82,8 +65,7 @@ class FeatureMetadata:
             'identity_feature_name': self.identity_feature_name,
             'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
-            'dropped_features': self.dropped_features,
-            'time_series_id_column_names': self.time_series_id_column_names
+            'dropped_features': self.dropped_features
         }
 
     def __eq__(self, other_feature_metadata) -> bool:
@@ -102,6 +84,4 @@ class FeatureMetadata:
             self.categorical_features == \
             other_feature_metadata.categorical_features and \
             self.dropped_features == \
-            other_feature_metadata.dropped_features and \
-            self.time_series_id_column_names == \
-            other_feature_metadata.time_series_id_column_names
+            other_feature_metadata.dropped_features

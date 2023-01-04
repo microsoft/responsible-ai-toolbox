@@ -1810,6 +1810,8 @@
     }
   },
   "Forecasting": {
+    "whatIfHeader": "What-if analysis",
+    "whatIfDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",
     "trueY": "True Y",

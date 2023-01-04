@@ -158,7 +158,7 @@ class RAIInsights(RAIBaseInsights):
                 all_feature_names=self._feature_columns,
                 categorical_features=self.categorical_features,
                 dataset=test.drop(columns=[target_column]))
-        
+
         super(RAIInsights, self).__init__(
             model, train, test, target_column, task_type,
             serializer)
@@ -702,7 +702,7 @@ class RAIInsights(RAIBaseInsights):
                                  " initialize the dashboard without passing a"
                                  " dataset.")
             dashboard_dataset.features = list_dataset
-            
+
         true_y = self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
@@ -884,7 +884,7 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        if _FEATURE_METADATA not in meta or meta[_FEATURE_METADATA] is None:
+        if meta[_FEATURE_METADATA] is None:
             inst.__dict__['_' + _FEATURE_METADATA] = None
         else:
             inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(

@@ -122,7 +122,7 @@ export class TabsView extends React.PureComponent<
     };
     if (
       this.props.requestImportances &&
-      this.props.dataset.is_forecasting_true_y === undefined
+      this.context.dataset.task_type !== DatasetTaskType.Forecasting
     ) {
       this.props
         .requestImportances([], new AbortController().signal)
@@ -192,7 +192,9 @@ export class TabsView extends React.PureComponent<
                     className={classNames.sectionHeader}
                     id="forecastingHeader"
                   >
-                    <Text variant={"xxLarge"}>What-if Analysis</Text>
+                    <Text variant={"xxLarge"}>
+                      {localization.Forecasting.whatIfHeader}
+                    </Text>
                   </h3>
                   <ForecastingTab />
                 </>

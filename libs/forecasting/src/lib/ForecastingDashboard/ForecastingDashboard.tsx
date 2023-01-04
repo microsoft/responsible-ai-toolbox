@@ -81,18 +81,7 @@ export class ForecastingDashboard extends React.Component<
           id="ForecastingDashboard"
         >
           <Stack.Item className={classNames.topLevelDescriptionText}>
-            <Text>
-              What-if allows you to perturb features for any input and observe
-              how the model&apos;s prediction changes. You can perturb features
-              manually or simply specify the desired prediction (e.g., class
-              label for a classifier) to see a list of closest data points to
-              the original input that would lead to the desired prediction. Also
-              known as prediction counterfactuals, you can use them for
-              exploring the relationships learnt by the model; understanding
-              important, necessary features for the model&apos;s predictions; or
-              debug edge-cases for the model. To start, choose a time series
-              whose features you wish to perturb and create a what-if scenario.
-            </Text>
+            <Text>{localization.Forecasting.whatIfDescription}</Text>
           </Stack.Item>
           <Stack.Item>
             <Dropdown

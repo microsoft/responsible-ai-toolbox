@@ -151,7 +151,7 @@ export class TransformationCreationDialog extends React.Component<
               errorMessage={transformationNameErrorMessage}
             />
           </Stack.Item>
-          <Stack.Item className={classNames.transformationBuilder}>
+          <Stack.Item>
             <TransformationCreation
               onChangeTransformationFeature={this.onChangeTransformationFeature}
               onChangeTransformationValue={this.onChangeTransformationValue}
