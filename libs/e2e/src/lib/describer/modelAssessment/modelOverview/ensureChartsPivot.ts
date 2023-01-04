@@ -3,6 +3,7 @@
 
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
+
 import { assertChartVisibility, getAvailableCharts } from "./charts";
 
 export function ensureChartsPivot(datasetShape: IModelAssessmentData): void {
@@ -13,11 +14,9 @@ export function ensureChartsPivot(datasetShape: IModelAssessmentData): void {
   );
   cy.get(Locators.ModelOverviewChartPivotItems).as("chartPivotItems");
   availableCharts.forEach((chartName, index) => {
-    let pivotItem = cy.get("@chartPivotItems").first();
-    for (let i = 0; i < index; i++) {
-      pivotItem = pivotItem.next();
-    }
-    pivotItem.click();
+    cy.get("@chartPivotItems").then(($pivotItems) => {
+      $pivotItems[index].click();
+    });
     assertChartVisibility(
       chartName,
       datasetShape.isRegression,

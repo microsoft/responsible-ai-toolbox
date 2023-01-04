@@ -3,6 +3,7 @@
 
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
+
 import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(

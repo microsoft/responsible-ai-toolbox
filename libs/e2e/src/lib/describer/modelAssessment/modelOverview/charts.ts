@@ -12,18 +12,18 @@ export const allCharts = [
 
 // The order in each list matters and should reflect the order in the pivot.
 export const modelOverviewCharts = {
-  regression: [
-    Locators.ModelOverviewRegressionDistributionChart,
-    Locators.ModelOverviewMetricChart
+  binary: [
+    Locators.ModelOverviewProbabilityDistributionChart,
+    Locators.ModelOverviewMetricChart,
+    Locators.ModelOverviewConfusionMatrix
   ],
   multiclass: [
     Locators.ModelOverviewMetricChart,
     Locators.ModelOverviewConfusionMatrix
   ],
-  binary: [
-    Locators.ModelOverviewProbabilityDistributionChart,
-    Locators.ModelOverviewMetricChart,
-    Locators.ModelOverviewConfusionMatrix
+  regression: [
+    Locators.ModelOverviewRegressionDistributionChart,
+    Locators.ModelOverviewMetricChart
   ]
 };
 
@@ -32,19 +32,19 @@ export function getAvailableCharts(
   isBinary?: boolean
 ): string[] {
   if (isRegression) {
-    return modelOverviewCharts["regression"];
+    return modelOverviewCharts.regression;
   }
   if (isBinary) {
-    return modelOverviewCharts["binary"];
+    return modelOverviewCharts.binary;
   }
-  return modelOverviewCharts["multiclass"];
+  return modelOverviewCharts.multiclass;
 }
 
 export function assertChartVisibility(
   expectedVisibleChart?: string,
   isRegression?: boolean,
   isBinary?: boolean
-) {
+): void {
   const charts = getAvailableCharts(isRegression, isBinary);
   if (expectedVisibleChart) {
     cy.get(Locators.ModelOverviewChartPivot).should("exist");
@@ -74,13 +74,12 @@ export function assertChartVisibility(
 export function getDefaultVisibleChart(
   isRegression?: boolean,
   isBinary?: boolean
-) {
+): string {
   if (isRegression) {
     return Locators.ModelOverviewRegressionDistributionChart;
   } else if (isBinary) {
     return Locators.ModelOverviewProbabilityDistributionChart;
-  } else {
-    // multiclass classification
-    return Locators.ModelOverviewMetricChart;
   }
+  // multiclass classification
+  return Locators.ModelOverviewMetricChart;
 }
