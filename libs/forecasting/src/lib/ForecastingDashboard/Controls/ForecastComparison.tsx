@@ -108,10 +108,7 @@ export class ForecastComparison extends React.Component<
     );
 
     let trueY: SeriesOptionsType[] = [];
-    if (
-      this.context.dataset.is_forecasting_true_y &&
-      this.context.jointDataset.numLabels === 1
-    ) {
+    if (this.context.jointDataset.numLabels === 1) {
       trueY = [
         {
           data: orderByTime(

@@ -30,7 +30,6 @@ export interface IDataset {
   feature_metadata?: IFeatureMetaData;
   images?: string[];
   index?: string[];
-  is_forecasting_true_y?: boolean;
 }
 
 // TODO Remove DatasetSummary when possible
