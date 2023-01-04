@@ -103,7 +103,7 @@ export class TransformationCreation extends React.Component<
           <Label>
             {
               localization.Forecasting.TransformationCreation
-                .featureChoicePlaceholder
+                .featureDropdownHeader
             }
           </Label>
           <ComboBox
@@ -123,7 +123,7 @@ export class TransformationCreation extends React.Component<
           <Label>
             {
               localization.Forecasting.TransformationCreation
-                .operationChoicePlaceholder
+                .operationDropdownHeader
             }
           </Label>
           <ComboBox
@@ -145,11 +145,21 @@ export class TransformationCreation extends React.Component<
           <>
             {isMultiplicationOrDivision(this.props.transformationOperation) && (
               <Stack.Item tokens={{ padding: "36px 0 0 0" }}>
-                <Text>by</Text>
+                <Text>
+                  {
+                    localization.Forecasting.TransformationCreation
+                      .divisionAndMultiplicationBy
+                  }
+                </Text>
               </Stack.Item>
             )}
             <Stack.Item>
-              <Label>Value</Label>
+              <Label>
+                {
+                  localization.Forecasting.TransformationCreation
+                    .valueSpinButtonHeader
+                }
+              </Label>
               <SpinButton
                 min={this.props.transformationOperation.minValue}
                 max={this.props.transformationOperation.maxValue}

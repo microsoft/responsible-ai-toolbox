@@ -1827,14 +1827,16 @@
       "nameLabel": "What-if scenario name",
       "featureInstructions": "Choose a feature to perturb.",
       "operationInstructions": "Choose an operation to apply to the feature.",
-      "operationChoicePlaceholder": "Choose an operation.",
-      "featureChoicePlaceholder": "Choose a feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
       "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
       "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
       "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
       "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
       "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation"
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
     },
     "TransformationTable": {
       "nameColumnHeader": "Name",
