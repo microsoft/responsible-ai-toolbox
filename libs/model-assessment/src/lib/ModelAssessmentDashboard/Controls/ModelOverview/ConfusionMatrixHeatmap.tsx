@@ -141,7 +141,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
               selectedKey={selectedCohort.cohort.getCohortID()}
               options={this.context.errorCohorts.map(
                 (errorCohort: ErrorCohort) => {
-                  console.log(`Render: ${errorCohort.cohort.getCohortID()}`);
                   return {
                     key: errorCohort.cohort.getCohortID(),
                     text: errorCohort.cohort.name
