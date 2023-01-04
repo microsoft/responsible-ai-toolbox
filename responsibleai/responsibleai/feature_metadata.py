@@ -45,8 +45,6 @@ class FeatureMetadata:
             warnings.warn('datetime_features are not in use currently.')
         if self.categorical_features is not None:
             warnings.warn('categorical_features are not in use currently.')
-        if self.dropped_features is not None:
-            warnings.warn('dropped_features are not in use currently.')
 
     def validate_feature_metadata_with_user_features(
             self, user_features: Optional[List[str]] = None):
