@@ -1,14 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import atexit
 import logging
 import socket
-import threading
 import time
 import uuid
+from threading import Thread
 
 from flask import Flask
+from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
 
 from .environment_detector import build_environment
@@ -59,14 +59,19 @@ class FlaskHelper(object):
         # Sleep for 1 second in order to prevent random errors while
         # socket is still closing
         time.sleep(1)
-        self._thread = threading.Thread(target=self.run, daemon=True)
+        self._thread = Thread(target=self.run, daemon=True)
+        # Note: We used to have an atexit handler here to stop the server,
+        # but that caused problems with the tests, which would get stuck on
+        # windows with python 3.8.  So we now rely on the
+        # WSGIServer object's serve_forever method triggering a
+        # greenlet to stop the server.  See line 402 in baseserver.py:
+        #
+        # Greenlet.spawn(self.stop, timeout=stop_timeout).join()
+        #
+        # If we still see issues in the future due to stop being removed,
+        # we may want to add OS specific logic here to only trigger stop
+        # for non-windows, python 3.8 cases.
         self._thread.start()
-
-        # Closes server on program exit, including freeing all sockets
-        def closeserver():
-            self.stop()
-
-        atexit.register(closeserver)
 
     @staticmethod
     def _is_local_port_available(ip, port, raise_error=True):
@@ -104,10 +109,15 @@ class FlaskHelper(object):
             ip = socket.gethostbyname(host_name)
         logger = logging.getLogger('wsgiserver')
         logger.setLevel(logging.ERROR)
-        self.server = WSGIServer((ip, self.port), self.app, log=logger)
+        # Setting pool manually as it seems to ensure that all greenlets are
+        # killed when the server is stopped based on documentation here:
+        # https://www.gevent.org/servers.html
+        # See doc:
+        # If you don’t want to limit concurrency, but you do want to be able
+        # to kill outstanding requests, use a pool created with a size
+        # of None.
+        pool = Pool(None)
+        self.server = WSGIServer((ip, self.port), self.app,
+                                 log=logger, spawn=pool)
         self.app.config["server"] = self.server
         self.server.serve_forever()
-
-    def stop(self):
-        if (self.server.started):
-            self.server.stop()
