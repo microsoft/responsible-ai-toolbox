@@ -467,7 +467,7 @@ export class ModelOverview extends React.Component<
                   ? this.state.selectedDatasetCohorts ?? []
                   : this.state.selectedFeatureBasedCohorts ?? []
               }
-              isDatasetBasedCohorts={this.state.datasetCohortChartIsVisible}
+              showDatasetBasedCohorts={this.state.datasetCohortChartIsVisible}
               labeledStatistics={
                 this.state.datasetCohortChartIsVisible
                   ? this.state.datasetCohortLabeledStatistics
@@ -484,9 +484,11 @@ export class ModelOverview extends React.Component<
 
   private shouldRenderModelOverviewChartPivot(): boolean {
     return (
-      (this.state.selectedFeatureBasedCohorts !== undefined &&
+      (!this.state.datasetCohortChartIsVisible &&
+        this.state.selectedFeatureBasedCohorts !== undefined &&
         this.state.selectedFeatureBasedCohorts.length > 0) ||
-      (this.state.selectedDatasetCohorts !== undefined &&
+      (this.state.datasetCohortChartIsVisible &&
+        this.state.selectedDatasetCohorts !== undefined &&
         this.state.selectedDatasetCohorts.length > 0)
     );
   }

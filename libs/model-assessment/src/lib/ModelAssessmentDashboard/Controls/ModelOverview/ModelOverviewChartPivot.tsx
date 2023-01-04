@@ -27,7 +27,7 @@ import { getSelectableMetrics } from "./StatsTableUtils";
 interface IModelOverviewChartPivotProps {
   allCohorts: ErrorCohort[];
   selectedChartCohorts: number[];
-  isDatasetBasedCohorts: boolean;
+  showDatasetBasedCohorts: boolean;
   labeledStatistics: ILabeledStatistic[][];
   telemetryHook?: (message: ITelemetryEvent) => void;
   selectedMetrics: string[];
@@ -76,7 +76,7 @@ export class ModelOverviewChartPivot extends React.Component<
 
     let chartCohorts: ErrorCohort[];
     let labeledStatistics: ILabeledStatistic[][];
-    if (this.props.isDatasetBasedCohorts) {
+    if (this.props.showDatasetBasedCohorts) {
       chartCohorts = this.props.allCohorts;
       // only keep selected stats and cohorts based on cohort ID
       labeledStatistics = this.props.labeledStatistics.filter((_, i) =>
