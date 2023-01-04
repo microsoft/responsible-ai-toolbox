@@ -25,6 +25,7 @@ export interface ICounterfactualChartWithLegendProps {
   selectedPointsIndexes: number[];
   indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
+  isCounterfactualsDataLoading?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
   onSelectedPointsIndexesUpdated: (selectedPointsIndexes: number[]) => void;
@@ -42,9 +43,8 @@ export interface ICounterfactualChartWithLegendProps {
     index: number,
     absoluteIndex?: number
   ) => void;
-  setCounterfactualData?: (absoluteIndex: number) => Promise<void>;
+  setCounterfactualData: (absoluteIndex: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
-  setCounterfactualLocalImportanceData: (data: any) => void;
   onIndexSeriesUpdated?: (data: any) => void;
 }
 
@@ -78,6 +78,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
+    console.log("!!loading: ", this.props.isCounterfactualsDataLoading);
     return (
       <Stack.Item>
         <Stack
@@ -108,10 +109,11 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             telemetryHook={this.props.telemetryHook}
             togglePanel={this.togglePanel}
             toggleSelectionOfPoint={this.toggleSelectionOfPoint}
-            setCounterfactualLocalImportanceData={
-              this.props.setCounterfactualLocalImportanceData
-            }
+            setCounterfactualData={this.props.setCounterfactualData}
             onIndexSeriesUpdated={this.props.onIndexSeriesUpdated}
+            isCounterfactualsDataLoading={
+              this.props.isCounterfactualsDataLoading
+            }
           />
           <CounterfactualChartLegend
             {...this.props}
@@ -127,6 +129,9 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             toggleCustomActivation={this.toggleCustomActivation}
             togglePanel={this.togglePanel}
             toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+            isCounterfactualsDataLoading={
+              this.props.isCounterfactualsDataLoading
+            }
           />
         </Stack>
       </Stack.Item>

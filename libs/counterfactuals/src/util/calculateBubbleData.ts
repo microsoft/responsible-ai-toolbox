@@ -19,6 +19,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
     [key: string]: any;
   }>,
   jointDataset: JointDataset,
+  isCounterfactualsDataLoading?: boolean,
   requestBubblePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
@@ -48,13 +49,14 @@ export async function calculateBubblePlotDataFromErrorCohort(
     //   jointDataset.metaDict[chartProps?.yAxis.property].label
     // );
     return getBubbleChartOptions(
-      responseTemp, //bubbleChartData["clusters"],
+      responseTemp, // bubbleChartData["clusters"],
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,
       jointDataset,
       selectedPointsIndexes,
       customPoints,
+      isCounterfactualsDataLoading,
       onBubbleClick,
       selectPointFromChartLargeData,
       onIndexSeriesUpdated

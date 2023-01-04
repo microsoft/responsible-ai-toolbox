@@ -50,6 +50,7 @@ export interface ICounterfactualComponentState {
   sortingSeriesIndex: number | undefined;
   errorMessage?: string;
   indexSeries: number[];
+  isCounterfactualsDataLoading?: boolean;
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -72,7 +73,8 @@ export class CounterfactualComponent extends React.PureComponent<
       selectedPointsIndexes: [],
       sortArray: [],
       sortingSeriesIndex: undefined,
-      indexSeries: []
+      indexSeries: [],
+      isCounterfactualsDataLoading: false
     };
   }
 
@@ -109,6 +111,11 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
+    console.log(
+      "!!states: ",
+      this.state.counterfactualsData,
+      this.state.isCounterfactualsDataLoading
+    );
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
@@ -132,6 +139,7 @@ export class CounterfactualComponent extends React.PureComponent<
       );
     }
 
+    console.log("!!loading: ", this.state.isCounterfactualsDataLoading);
     return (
       <Stack horizontal={false}>
         <CounterfactualChartWithLegend
@@ -149,14 +157,13 @@ export class CounterfactualComponent extends React.PureComponent<
             this.setTemporaryPointToCopyOfDatasetPoint
           }
           setCounterfactualData={this.setCounterfactualData}
-          setCounterfactualLocalImportanceData={
-            this.setCounterfactualLocalImportanceData
-          }
           onIndexSeriesUpdated={this.onIndexSeriesUpdated}
+          isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
         />
         <CounterfactualLocalImportanceChart
           data={this.state.counterfactualsData}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
+          isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
         />
         {this.state.errorMessage && (
           <CounterfactualErrorDialog
@@ -177,7 +184,10 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   private setCounterfactualLocalImportanceData = (data: any): void => {
-    this.setState({ counterfactualsData: data });
+    this.setState({
+      counterfactualsData: data,
+      isCounterfactualsDataLoading: false
+    });
   };
 
   private setTemporaryPointToCopyOfDatasetPoint = (
@@ -205,10 +215,19 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setTemporaryPointToCopyOfDatasetPoint(indexes[0]);
   }
 
+  //to-do: remove delay
+  private delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   private setCounterfactualData = async (
     absoluteIndex: number
   ): Promise<void> => {
     // to-do: add large data enabled if condition
+    this.setState({
+      isCounterfactualsDataLoading: true
+    });
+    await this.delay(5000);
     const localCounterfactualData = await getLocalCounterfactualsFromSDK(
       absoluteIndex,
       this.state.counterfactualsData?.id,

@@ -35,6 +35,7 @@ export interface ICounterfactualChartLegendProps {
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
   indexSeries: number[];
+  isCounterfactualsDataLoading?: boolean;
   removeCustomPoint: (index: number) => void;
   setTemporaryPointToCopyOfDatasetPoint: (
     index: number,
@@ -68,6 +69,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
             ariaLabel={"datapoint picker"}
             useComboBoxAsMenuWidth
             styles={FluentUIStyles.smallDropdownStyle}
+            disabled={this.props.isCounterfactualsDataLoading}
           />
         )}
         <div className={classNames.legendLabel}>
@@ -148,7 +150,8 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   private disableCounterfactualPanel = (): boolean => {
     return (
       this.props.selectedPointsIndexes[0] === undefined ||
-      !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]]
+      !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]] ||
+      !!this.props.isCounterfactualsDataLoading
     );
   };
 

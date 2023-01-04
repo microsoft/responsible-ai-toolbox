@@ -25,7 +25,7 @@ import {
 import _ from "lodash";
 import React from "react";
 import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
-import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
+// import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
 
 // import { generatePlotlyProps } from "../util/generatePlotlyProps";
 
@@ -47,6 +47,7 @@ export interface ICounterfactualChartProps {
     abortSignal: AbortSignal
   ) => Promise<any>;
   counterfactualData?: ICounterfactualData;
+  isCounterfactualsDataLoading?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -66,7 +67,7 @@ export interface ICounterfactualChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
-  setCounterfactualLocalImportanceData: (data: any) => void;
+  setCounterfactualData: (absoluteIndex: any) => Promise<void>;
   onIndexSeriesUpdated?: (data: any) => void;
 }
 
@@ -132,7 +133,11 @@ export class CounterfactualChart extends React.PureComponent<
         prevProps.selectedPointsIndexes,
         this.props.selectedPointsIndexes
       ) ||
-        !_.isEqual(prevProps.customPoints, this.props.customPoints)) &&
+        !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
+        !_.isEqual(
+          prevProps.isCounterfactualsDataLoading,
+          this.props.isCounterfactualsDataLoading
+        )) &&
       this.state.isBubbleClicked === true
     ) {
       console.log(
@@ -176,6 +181,7 @@ export class CounterfactualChart extends React.PureComponent<
         this.props.chartProps.xAxis.property
       )
     );
+    console.log("!!loading: ", this.props.isCounterfactualsDataLoading);
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -252,6 +258,7 @@ export class CounterfactualChart extends React.PureComponent<
                         this.props.chartProps.yAxis.property
                       ].label
                     }
+                    disabled={this.props.isCounterfactualsDataLoading}
                   />
                 </div>
               </Stack.Item>
@@ -278,6 +285,7 @@ export class CounterfactualChart extends React.PureComponent<
                     this.props.chartProps.xAxis.property
                   ].label
                 }
+                disabled={this.props.isCounterfactualsDataLoading}
               />
             </div>
           </Stack>
@@ -342,6 +350,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.props.jointDataset,
+      this.props.isCounterfactualsDataLoading,
       this.props.requestBubblePlotData,
       this.selectPointFromChart,
       this.selectPointFromChartLargeData,
@@ -362,6 +371,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.context.jointDataset,
+      this.props.isCounterfactualsDataLoading,
       this.context.requestBubblePlotData,
       this.selectPointFromChart,
       this.selectPointFromChartLargeData,
@@ -384,6 +394,7 @@ export class CounterfactualChart extends React.PureComponent<
       this.props.jointDataset,
       this.props.selectedPointsIndexes,
       this.props.customPoints,
+      this.props.isCounterfactualsDataLoading,
       this.selectPointFromChartLargeData
     );
     console.log(
@@ -448,16 +459,11 @@ export class CounterfactualChart extends React.PureComponent<
       data.customData[JointDataset.IndexLabel],
       this.context.requestLocalCounterfactuals
     );
-    const localCounterfactualData = await getLocalCounterfactualsFromSDK(
-      data.customData.AbsoluteIndex,
-      this.props.counterfactualData?.id,
-      this.context.requestLocalCounterfactuals
-    );
 
     const index = data.customData[JointDataset.IndexLabel];
     const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
     this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
-    this.props.setCounterfactualLocalImportanceData(localCounterfactualData);
+    this.props.setCounterfactualData(absoluteIndex);
     this.props.toggleSelectionOfPoint(index);
     this.logTelemetryEvent(
       TelemetryEventName.CounterfactualNewDatapointSelectedFromChart

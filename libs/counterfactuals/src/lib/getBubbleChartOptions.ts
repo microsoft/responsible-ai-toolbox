@@ -29,6 +29,7 @@ export function getBubbleChartOptions(
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
+  isCounterfactualsDataLoading?: boolean,
   onBubbleClick?: (
     scatterPlotData: any,
     x_series: number[],
@@ -87,6 +88,7 @@ export function getBubbleChartOptions(
                 jointData,
                 selectedPointsIndexes,
                 customPoints,
+                isCounterfactualsDataLoading,
                 selectPointFromChartLargeData
               );
               console.log(

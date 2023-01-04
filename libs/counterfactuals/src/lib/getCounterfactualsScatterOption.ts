@@ -12,6 +12,7 @@ export function getCounterfactualsScatterOption(
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
+  isCounterfactualsDataLoading?: boolean,
   selectPointFromChartLargeData?: (data: any) => void
 ): any {
   console.log(
@@ -27,7 +28,11 @@ export function getCounterfactualsScatterOption(
     chartProps,
     customPoints
   );
-  console.log("!!dataseries: ", dataSeries);
+  console.log(
+    "!!isCounterfactualsDataLoading: ",
+    dataSeries,
+    isCounterfactualsDataLoading
+  );
   return {
     chart: {
       type: "scatter",
@@ -41,19 +46,21 @@ export function getCounterfactualsScatterOption(
         }
       },
       series: {
-        cursor: "pointer",
+        cursor: isCounterfactualsDataLoading ? "wait" : "pointer",
         point: {
           events: {
             click(): void {
-              if (selectPointFromChartLargeData === undefined) {
-                return;
+              if (!isCounterfactualsDataLoading) {
+                if (selectPointFromChartLargeData === undefined) {
+                  return;
+                }
+                console.log(
+                  "!!getCounterfactualsScatterOption this: ",
+                  this,
+                  selectPointFromChartLargeData
+                );
+                selectPointFromChartLargeData(this);
               }
-              console.log(
-                "!!getCounterfactualsScatterOption this: ",
-                this,
-                selectPointFromChartLargeData
-              );
-              selectPointFromChartLargeData(this);
             }
           }
         },

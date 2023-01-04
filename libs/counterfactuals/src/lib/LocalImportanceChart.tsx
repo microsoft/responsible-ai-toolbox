@@ -1,7 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, Stack, Text } from "@fluentui/react";
+import {
+  getTheme,
+  mergeStyles,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  Text
+} from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
@@ -18,6 +25,7 @@ export interface ILocalImportanceChartProps {
   currentClass: string;
   data: ICounterfactualData;
   theme?: string;
+  isCounterfactualsDataLoading?: boolean;
 }
 
 export interface ILocalImportanceData {
@@ -41,6 +49,19 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
         <MissingParametersPlaceholder>
           {localization.Counterfactuals.localImportanceSelectData}
         </MissingParametersPlaceholder>
+      );
+    }
+    if (this.props.isCounterfactualsDataLoading) {
+      const spinnerStyles = mergeStyles({
+        margin: "auto",
+        padding: "40px"
+      });
+      return (
+        <Spinner
+          className={spinnerStyles}
+          size={SpinnerSize.large}
+          label={localization.Counterfactuals.loading}
+        />
       );
     }
     return (
