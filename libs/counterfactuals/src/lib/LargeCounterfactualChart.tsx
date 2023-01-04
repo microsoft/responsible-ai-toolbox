@@ -19,7 +19,8 @@ import {
   Cohort,
   ICounterfactualData,
   ifEnableLargeData,
-  LoadingSpinner
+  LoadingSpinner,
+  IDataset
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -38,12 +39,13 @@ export interface ICounterfactualChartProps {
   temporaryPoint: { [key: string]: any } | undefined;
   cohort: Cohort;
   jointDataset: JointDataset;
+  dataset: IDataset;
+  counterfactualData?: ICounterfactualData;
+  isCounterfactualsDataLoading?: boolean;
   requestBubblePlotData?: (
     request: any,
     abortSignal: AbortSignal
   ) => Promise<any>;
-  counterfactualData?: ICounterfactualData;
-  isCounterfactualsDataLoading?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -71,7 +73,6 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   plotData: any;
-  isBubbleClicked: boolean;
   x_series: number[];
   y_series: number[];
   index_series: number[];
@@ -94,7 +95,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
       xDialogOpen: false,
       yDialogOpen: false,
       plotData: undefined,
-      isBubbleClicked: false,
       x_series: [],
       y_series: [],
       index_series: [],
@@ -116,27 +116,19 @@ export class LargeCounterfactualChart extends React.PureComponent<
       prevProps.selectedPointsIndexes,
       this.props.selectedPointsIndexes
     );
-    if (
-      !_.isEqual(prevProps.chartProps, this.props.chartProps) ||
-      (!_.isEqual(
-        prevProps.selectedPointsIndexes,
-        this.props.selectedPointsIndexes
-      ) &&
-        this.state.isBubbleClicked === false) // refine this logic to handle large data
-    ) {
+    if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
       console.log("!!inside if");
-      this.setPlotData();
+      this.updateBubblePlot();
     } else if (
-      (!_.isEqual(
+      !_.isEqual(
         prevProps.selectedPointsIndexes,
         this.props.selectedPointsIndexes
       ) ||
-        !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
-        !_.isEqual(
-          prevProps.isCounterfactualsDataLoading,
-          this.props.isCounterfactualsDataLoading
-        )) &&
-      this.state.isBubbleClicked === true
+      !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
+      !_.isEqual(
+        prevProps.isCounterfactualsDataLoading,
+        this.props.isCounterfactualsDataLoading
+      )
     ) {
       console.log(
         "!!inside else if: ",
@@ -292,7 +284,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
     newProps.xAxis = value;
     this.setState({
       xDialogOpen: false,
-      isBubbleClicked: false,
       x_series: [],
       y_series: [],
       index_series: []
@@ -308,7 +299,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
     newProps.yAxis = value;
     this.setState({
       yDialogOpen: false,
-      isBubbleClicked: false,
       x_series: [],
       y_series: [],
       index_series: []
@@ -343,9 +333,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.props.jointDataset,
+      this.props.dataset,
       this.props.isCounterfactualsDataLoading,
       this.props.requestBubblePlotData,
-      this.selectPointFromChart,
       this.selectPointFromChartLargeData,
       this.onBubbleClick,
       this.props.onIndexSeriesUpdated
@@ -357,7 +347,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     });
   }
 
-  private async setPlotData(): Promise<any> {
+  private async updateBubblePlot(): Promise<any> {
     console.log("!!in getPlotData: ");
     this.setState({
       isBubbleChartDataLoading: true
@@ -368,9 +358,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.context.jointDataset,
+      this.props.dataset,
       this.props.isCounterfactualsDataLoading,
       this.context.requestBubblePlotData,
-      this.selectPointFromChart,
       this.selectPointFromChartLargeData,
       this.onBubbleClick,
       this.props.onIndexSeriesUpdated
@@ -407,15 +397,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
     });
   }
 
-  // private async setPlotData(): Promise<void> {
-  //   console.log("!!in setPlotData: ");
-  //   const plotData = await this.getPlotData();
-  //   console.log("!!boxPlotData 3: ", plotData);
-  //   this.setState({
-  //     plotData: plotData
-  //   });
-  // }
-
   private readonly onBubbleClick = (
     scatterPlotData: any,
     x_series: number[],
@@ -426,26 +407,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     console.log("!!scatterPlotData: ", scatterPlotData);
     this.setState({
       plotData: scatterPlotData,
-      isBubbleClicked: true,
       x_series: x_series,
       y_series: y_series,
       index_series: index_series
     });
-  };
-
-  private selectPointFromChart = (data: any): void => {
-    console.log(
-      "!!selectPointFromChart: ",
-      data,
-      JointDataset.IndexLabel,
-      data.customdata[JointDataset.IndexLabel]
-    );
-    const index = data.customdata[JointDataset.IndexLabel];
-    this.props.setTemporaryPointToCopyOfDatasetPoint(index);
-    this.props.toggleSelectionOfPoint(index);
-    this.logTelemetryEvent(
-      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
-    );
   };
 
   private selectPointFromChartLargeData = async (data: any): Promise<void> => {

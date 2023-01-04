@@ -3,13 +3,13 @@
 
 import {
   Cohort,
+  IDataset,
+  //ifEnableLargeData,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
 import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
-import { generatePlotlyProps } from "./generatePlotlyProps";
-import { getCounterfactualChartOptions } from "./getCounterfactualChartOptions";
-//import { responseTemp } from "./responseTemp";
+import { responseTemp } from "./responseTemp";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -19,12 +19,12 @@ export async function calculateBubblePlotDataFromErrorCohort(
     [key: string]: any;
   }>,
   jointDataset: JointDataset,
+  _dataset: IDataset,
   isCounterfactualsDataLoading?: boolean,
   requestBubblePlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
   ) => Promise<any>,
-  selectPointFromChart?: (data: any) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onBubbleClick?: (
     scatterPlotData: any,
@@ -40,16 +40,17 @@ export async function calculateBubblePlotDataFromErrorCohort(
     errorCohort,
     selectPointFromChartLargeData
   );
-  if (requestBubblePlotDistribution) {
-    const bubbleChartData = await calculateBubblePlotDataFromSDK(
-      errorCohort,
-      jointDataset,
-      requestBubblePlotDistribution,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label
-    );
+  if (true) {
+    //ifEnableLargeData(dataset) && requestBubblePlotDistribution
+    // const bubbleChartData = await calculateBubblePlotDataFromSDK(
+    //   errorCohort,
+    //   jointDataset,
+    //   requestBubblePlotDistribution,
+    //   jointDataset.metaDict[chartProps?.xAxis.property].label,
+    //   jointDataset.metaDict[chartProps?.yAxis.property].label
+    // );
     return getBubbleChartOptions(
-      bubbleChartData["clusters"], //responseTemp
+      responseTemp, // bubbleChartData["clusters"],
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,
@@ -62,15 +63,6 @@ export async function calculateBubblePlotDataFromErrorCohort(
       onIndexSeriesUpdated
     );
   }
-  // If compute instance is not connected, calculate based on the first 5k data
-  return calculateOriginalScatterPlotData(
-    chartProps,
-    selectedPointsIndexes,
-    customPoints,
-    jointDataset,
-    errorCohort,
-    selectPointFromChart
-  );
 }
 
 export async function calculateBubblePlotDataFromSDK(
@@ -88,47 +80,16 @@ export async function calculateBubblePlotDataFromSDK(
     errorCohort.filters,
     jointDataset
   );
-
   const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
     errorCohort.compositeFilters,
     jointDataset
   );
   const data = [filtersRelabeled, compositeFiltersRelabeled, xAxis, yAxis];
-
   const result: any = await requestBubblePlotData?.(
     data,
     new AbortController().signal
   );
-
   console.log("!!calculateBubblePlotDataFromSDK result: ", result);
 
   return result;
-}
-
-export function calculateOriginalScatterPlotData(
-  chartProps: IGenericChartProps,
-  selectedPointsIndexes: number[],
-  customPoints: Array<{
-    [key: string]: any;
-  }>,
-  jointDataset: JointDataset,
-  cohort: Cohort,
-  selectPointFromChart?: (data: any) => void
-): any | undefined {
-  console.log("!!calculateBubblePlotData: ", cohort);
-  const plotlyProps = generatePlotlyProps(
-    jointDataset,
-    chartProps,
-    cohort,
-    selectedPointsIndexes,
-    customPoints
-  );
-  const chartOptions = getCounterfactualChartOptions(
-    plotlyProps,
-    selectPointFromChart,
-    chartProps
-  );
-  console.log("!!calculateBubblePlotData plotlyProps: ", plotlyProps);
-
-  return chartOptions;
 }

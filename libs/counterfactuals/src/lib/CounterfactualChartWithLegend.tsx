@@ -231,6 +231,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         temporaryPoint={this.props.temporaryPoint}
         cohort={this.context.selectedErrorCohort.cohort}
         jointDataset={this.context.jointDataset}
+        dataset={this.context.dataset}
         requestBubblePlotData={this.context.requestBubblePlotData}
         counterfactualData={this.context.counterfactualData}
         onChartPropsUpdated={this.onChartPropsUpdated}
