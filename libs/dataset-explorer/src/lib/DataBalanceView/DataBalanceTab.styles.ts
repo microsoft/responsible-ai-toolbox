@@ -41,7 +41,7 @@ export const dataBalanceTabStyles: () => IProcessedStyleSet<IDataBalanceTabStyle
       page: {
         color: theme.semanticColors.bodyText,
         height: "100%",
-        padding: "0 40px 10px 40px",
+        padding: "0 40px 40px 40px",
         width: "100%"
       }
     });

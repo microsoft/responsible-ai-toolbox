@@ -20,7 +20,7 @@ export const counterfactualsTabStyles: () => IProcessedStyleSet<ICounterfactuals
     return mergeStyleSets<ICounterfactualsTabStyles>({
       container: {
         color: theme.semanticColors.bodyText,
-        padding: "0 40px 10px 40px"
+        padding: "0 40px 40px 40px"
       },
       infoWithText: { ...hideXlDown, maxWidth: descriptionMaxWidth }
     });
