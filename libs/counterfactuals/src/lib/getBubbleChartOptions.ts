@@ -38,26 +38,8 @@ export function getBubbleChartOptions(
   ) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
-  // getDatasetScatterOption?: (
-  //   x_series: number[],
-  //   y_series: number[],
-  //   indexes: number[],
-  //   chartProps: IGenericChartProps,
-  //   jointData: JointDataset
-  // ) => void
 ): IHighchartsConfig {
-  // const colorTheme = {
-  //   axisColor: theme?.palette.neutralPrimary,
-  //   axisGridColor: theme?.palette.neutralLight,
-  //   backgroundColor: theme?.palette.white,
-  //   fontColor: theme?.semanticColors.bodyText
-  // };
-  console.log(
-    "!!selectPointFromChartLargeData: ",
-    selectPointFromChartLargeData
-  );
   const bubbleData = convertSDKObjectToBubbleData(data);
-  console.log("!!bubbleData: ", bubbleData);
   return {
     chart: {
       type: "bubble",
@@ -90,15 +72,6 @@ export function getBubbleChartOptions(
                 customPoints,
                 isCounterfactualsDataLoading,
                 selectPointFromChartLargeData
-              );
-              console.log(
-                "!!in onclick: ",
-                this.x,
-                this.y,
-                this,
-                this["x_series"],
-                this["index_series"],
-                scatterPlotData
               );
               onBubbleClick &&
                 onBubbleClick(
@@ -186,6 +159,5 @@ function convertSDKObjectToBubbleData(
       y_series: d.y_series
     };
   });
-  console.log("!!bubData: ", bubData);
   return bubData;
 }

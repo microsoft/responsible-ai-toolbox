@@ -101,7 +101,6 @@ export function generatePlotlyProps(
     jointData
   );
   generateDataTrace(customPoints, chartProps, plotlyProps.data[1], jointData);
-  console.log("!!plotlyProps: ", plotlyProps);
   return plotlyProps;
 }
 
@@ -126,7 +125,6 @@ function generateDataTrace(
   if (chartProps.xAxis) {
     const metaX = jointDataset.metaDict[chartProps.xAxis.property];
     const rawX = JointDataset.unwrap(dictionary, chartProps.xAxis.property);
-    console.log("!!rawX: ", rawX);
     hovertemplate += `${metaX.label}: {point.customdata.X}<br>`;
 
     rawX.forEach((val, index) => {
@@ -150,7 +148,6 @@ function generateDataTrace(
   if (chartProps.yAxis) {
     const metaY = jointDataset.metaDict[chartProps.yAxis.property];
     const rawY = JointDataset.unwrap(dictionary, chartProps.yAxis.property);
-    console.log("!!rawY: ", rawY);
     hovertemplate += `${metaY.label}: {point.customdata.Y}<br>`;
     rawY.forEach((val, index) => {
       if (metaY?.treatAsCategorical) {

@@ -80,7 +80,6 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
-    console.log("!!loading: ", this.props.isCounterfactualsDataLoading);
     return (
       <Stack.Item>
         <Stack

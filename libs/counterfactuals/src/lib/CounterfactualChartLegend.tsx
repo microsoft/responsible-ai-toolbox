@@ -57,7 +57,6 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
-    console.log("!!data: ", this.props.data);
     return (
       <Stack className={classNames.legendAndText}>
         {this.displayDatapointDropbox() && (

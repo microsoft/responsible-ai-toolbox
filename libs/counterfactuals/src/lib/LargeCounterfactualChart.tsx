@@ -5,7 +5,6 @@ import { getTheme, DefaultButton, Stack } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
-  // JointDataset,
   ChartTypes,
   IGenericChartProps,
   ISelectorConfig,
@@ -103,21 +102,11 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    console.log("!!didmount");
     this.loadPlotData();
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
-    console.log(
-      "!!in didupdate: ",
-      prevProps.chartProps,
-      this.props.chartProps,
-      "----",
-      prevProps.selectedPointsIndexes,
-      this.props.selectedPointsIndexes
-    );
     if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
-      console.log("!!inside if");
       this.updateBubblePlot();
     } else if (
       !_.isEqual(
@@ -130,28 +119,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
         this.props.isCounterfactualsDataLoading
       )
     ) {
-      console.log(
-        "!!inside else if: ",
-        !_.isEqual(prevProps.customPoints, this.props.customPoints)
-      );
       this.updateScatterPlot();
     }
   }
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
-
-    console.log(
-      "!!in render: ",
-      this.state.plotData,
-      this.props.selectedPointsIndexes,
-      this.props.customPoints,
-      JointDataset.unwrap(
-        this.props.customPoints,
-        this.props.chartProps.xAxis.property
-      )
-    );
-    console.log("!!loading: ", this.props.isCounterfactualsDataLoading);
 
     return (
       <Stack.Item className={classNames.chartWithAxes}>
@@ -323,7 +296,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
   };
 
   private async loadPlotData(): Promise<any> {
-    console.log("!!in getPlotData: ");
     this.setState({
       isBubbleChartDataLoading: true
     });
@@ -340,7 +312,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.onBubbleClick,
       this.props.onIndexSeriesUpdated
     );
-    console.log("!!boxPlotData 2: ", plotData);
     this.setState({
       plotData: plotData,
       isBubbleChartDataLoading: false
@@ -348,7 +319,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private async updateBubblePlot(): Promise<any> {
-    console.log("!!in getPlotData: ");
     this.setState({
       isBubbleChartDataLoading: true
     });
@@ -365,7 +335,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.onBubbleClick,
       this.props.onIndexSeriesUpdated
     );
-    console.log("!!boxPlotData 2: ", plotData);
     this.setState({
       plotData: plotData,
       isBubbleChartDataLoading: false
@@ -373,7 +342,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private updateScatterPlot(): void {
-    console.log("!!in getUpdatedScatterPlot: ");
     const pData = getCounterfactualsScatterOption(
       this.state.x_series,
       this.state.y_series,
@@ -384,12 +352,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.customPoints,
       this.props.isCounterfactualsDataLoading,
       this.selectPointFromChartLargeData
-    );
-    console.log(
-      "!!pData 2: ",
-      this.state.plotData,
-      this.props.selectedPointsIndexes,
-      pData
     );
 
     this.setState({
@@ -403,8 +365,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
     y_series: number[],
     index_series: number[]
   ): void => {
-    console.log("!!in onBubbleClick: ");
-    console.log("!!scatterPlotData: ", scatterPlotData);
     this.setState({
       plotData: scatterPlotData,
       x_series: x_series,
@@ -414,15 +374,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
   };
 
   private selectPointFromChartLargeData = async (data: any): Promise<void> => {
-    console.log(
-      "!!in selectPointFromChartLargeData: ",
-      this.props.counterfactualData,
-      data,
-      JointDataset.IndexLabel,
-      data.customData[JointDataset.IndexLabel],
-      this.context.requestLocalCounterfactuals
-    );
-
     const index = data.customData[JointDataset.IndexLabel];
     const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
     this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);

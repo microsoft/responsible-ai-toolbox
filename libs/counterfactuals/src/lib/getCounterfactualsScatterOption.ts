@@ -15,10 +15,6 @@ export function getCounterfactualsScatterOption(
   isCounterfactualsDataLoading?: boolean,
   selectPointFromChartLargeData?: (data: any) => void
 ): any {
-  console.log(
-    "!!selectPointFromChartLargeData: ",
-    selectPointFromChartLargeData
-  );
   const dataSeries = getCounterfactualsScatter(
     x_series,
     y_series,
@@ -28,11 +24,7 @@ export function getCounterfactualsScatterOption(
     chartProps,
     customPoints
   );
-  console.log(
-    "!!isCounterfactualsDataLoading: ",
-    dataSeries,
-    isCounterfactualsDataLoading
-  );
+
   return {
     chart: {
       type: "scatter",
@@ -55,11 +47,6 @@ export function getCounterfactualsScatterOption(
                 if (selectPointFromChartLargeData === undefined) {
                   return;
                 }
-                console.log(
-                  "!!getCounterfactualsScatterOption this: ",
-                  this,
-                  selectPointFromChartLargeData
-                );
                 selectPointFromChartLargeData(this);
               }
             }

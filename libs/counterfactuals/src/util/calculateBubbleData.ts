@@ -4,12 +4,11 @@
 import {
   Cohort,
   IDataset,
-  //ifEnableLargeData,
+  ifEnableLargeData,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
 import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
-import { responseTemp } from "./responseTemp";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -19,7 +18,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
     [key: string]: any;
   }>,
   jointDataset: JointDataset,
-  _dataset: IDataset,
+  dataset: IDataset,
   isCounterfactualsDataLoading?: boolean,
   requestBubblePlotDistribution?: (
     request: any,
@@ -34,23 +33,16 @@ export async function calculateBubblePlotDataFromErrorCohort(
   ) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
 ): Promise<any | undefined> {
-  console.log(
-    "!!calculateBubblePlotDataFromErrorCohort requestBubblePlotDistribution",
-    requestBubblePlotDistribution,
-    errorCohort,
-    selectPointFromChartLargeData
-  );
-  if (true) {
-    //ifEnableLargeData(dataset) && requestBubblePlotDistribution
-    // const bubbleChartData = await calculateBubblePlotDataFromSDK(
-    //   errorCohort,
-    //   jointDataset,
-    //   requestBubblePlotDistribution,
-    //   jointDataset.metaDict[chartProps?.xAxis.property].label,
-    //   jointDataset.metaDict[chartProps?.yAxis.property].label
-    // );
+  if (ifEnableLargeData(dataset) && requestBubblePlotDistribution) {
+    const bubbleChartData = await calculateBubblePlotDataFromSDK(
+      errorCohort,
+      jointDataset,
+      requestBubblePlotDistribution,
+      jointDataset.metaDict[chartProps?.xAxis.property].label,
+      jointDataset.metaDict[chartProps?.yAxis.property].label
+    );
     return getBubbleChartOptions(
-      responseTemp, // bubbleChartData["clusters"],
+      bubbleChartData["clusters"],
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,
@@ -75,7 +67,6 @@ export async function calculateBubblePlotDataFromSDK(
   xAxis?: string,
   yAxis?: string
 ): Promise<any> {
-  console.log("!!calculateBubblePlotDataFromSDK");
   const filtersRelabeled = Cohort.getLabeledFilters(
     errorCohort.filters,
     jointDataset
@@ -89,7 +80,6 @@ export async function calculateBubblePlotDataFromSDK(
     data,
     new AbortController().signal
   );
-  console.log("!!calculateBubblePlotDataFromSDK result: ", result);
 
   return result;
 }

@@ -144,7 +144,6 @@ function getCustomPointCustomData(
     dict[JointDataset.IndexLabel] = val;
     return dict;
   });
-  console.log("!!customPoints: ", customPoints);
   customPoints.forEach((val, index) => {
     customdata[index].Name = val.Name ? val.Name : val.Index;
     customdata[index].AbsoluteIndex = val.AbsoluteIndex;
@@ -157,7 +156,6 @@ function getCustomPointCustomData(
     const rawY = JointDataset.unwrap(customPoints, chartProps.yAxis.property);
 
     rawX.forEach((val, index) => {
-      console.log("!!val: ", val);
       if (metaX?.treatAsCategorical) {
         customdata[index].X = metaX.sortedCategoricalValues?.[val];
       } else {

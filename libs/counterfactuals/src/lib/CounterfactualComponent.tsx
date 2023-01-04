@@ -111,11 +111,6 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   public render(): React.ReactNode {
-    console.log(
-      "!!states: ",
-      this.state.counterfactualsData,
-      this.state.isCounterfactualsDataLoading
-    );
     if (!this.context.jointDataset.hasDataset) {
       return (
         <MissingParametersPlaceholder>
@@ -139,7 +134,6 @@ export class CounterfactualComponent extends React.PureComponent<
       );
     }
 
-    console.log("!!loading: ", this.state.isCounterfactualsDataLoading);
     return (
       <Stack horizontal={false}>
         <CounterfactualChartWithLegend
@@ -241,7 +235,6 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private onIndexSeriesUpdated = (indexSeries: any): void => {
-    console.log("!!indexSEies: ", indexSeries);
     this.setState({
       indexSeries: indexSeries
     });
