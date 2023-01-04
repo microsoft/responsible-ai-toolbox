@@ -153,7 +153,7 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
       page: {
         color: theme.semanticColors.bodyText,
         height: "100%",
-        padding: "0 40px 40px 40px",
+        padding: "0 40px 32px 40px",
         width: "100%"
       },
       rotatedVerticalBox: {
