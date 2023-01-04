@@ -183,7 +183,10 @@ export class TransformationCreationDialog extends React.Component<
               this.state.transformationFeature === undefined
             }
             onClick={this.addTransformation}
-            text={localization.Forecasting.TransformationCreation.addTransformationButton}
+            text={
+              localization.Forecasting.TransformationCreation
+                .addTransformationButton
+            }
           />
         </DialogFooter>
       </Dialog>
