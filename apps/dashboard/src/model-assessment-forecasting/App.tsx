@@ -62,7 +62,6 @@ export class App extends React.Component<IAppProps> {
     x: any[],
     abortSignal: AbortSignal
   ): Promise<any[]> => {
-    console.log(x);
     return new Promise<number[]>((resolver) => {
       setTimeout(() => {
         if (abortSignal.aborted) {
