@@ -98,7 +98,6 @@ export const mockForecastingData: IDataset = {
     [3.4, 53, "Bob's sandwiches", "Sandwich, MA"],
     [3, 62, "Bob's sandwiches", "Sandwich, MA"]
   ],
-  // what about missing dates?
   index: [
     "2010-10-10",
     "2010-10-11",
