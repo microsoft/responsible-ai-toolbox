@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
+from responsibleai.feature_metadata import FeatureMetadata
 from tests.common_utils import (create_binary_classification_dataset,
                                 create_cancer_data, create_housing_data,
                                 create_iris_data, create_lightgbm_classifier,
@@ -376,6 +377,52 @@ class TestRAIInsightsValidations:
                 classes=[0, 1, 2])
         assert 'The train labels and distinct values in ' + \
             'target (train data) do not match' in str(ucve.value)
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                classes=[0, 1],
+                feature_metadata=FeatureMetadata(dropped_features=[
+                    "mean radius",
+                    "mean texture",
+                    "mean perimeter",
+                    "mean area",
+                    "mean smoothness",
+                    "mean compactness",
+                    "mean concavity",
+                    "mean concave points",
+                    "mean symmetry",
+                    "mean fractal dimension",
+                    "radius error",
+                    "texture error",
+                    "perimeter error",
+                    "area error",
+                    "smoothness error",
+                    "compactness error",
+                    "concavity error",
+                    "concave points error",
+                    "symmetry error",
+                    "fractal dimension error",
+                    "worst radius",
+                    "worst texture",
+                    "worst perimeter",
+                    "worst area",
+                    "worst smoothness",
+                    "worst compactness",
+                    "worst concavity",
+                    "worst concave points",
+                    "worst symmetry",
+                    "worst fractal dimension",
+                ]))
+        assert 'All features have been dropped from the dataset' in \
+            str(ucve.value)
 
         y_train[0] = 2
         X_train[TARGET] = y_train
