@@ -24,7 +24,9 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
+
 import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
+
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
@@ -72,9 +74,9 @@ export interface ICounterfactualChartState {
   xDialogOpen: boolean;
   yDialogOpen: boolean;
   plotData: any;
-  x_series: number[];
-  y_series: number[];
-  index_series: number[];
+  xSeries: number[];
+  ySeries: number[];
+  indexSeries: number[];
   isBubbleChartDataLoading: boolean;
 }
 
@@ -91,13 +93,13 @@ export class LargeCounterfactualChart extends React.PureComponent<
     super(props);
 
     this.state = {
-      xDialogOpen: false,
-      yDialogOpen: false,
+      indexSeries: [],
+      isBubbleChartDataLoading: false,
       plotData: undefined,
-      x_series: [],
-      y_series: [],
-      index_series: [],
-      isBubbleChartDataLoading: false
+      xDialogOpen: false,
+      xSeries: [],
+      yDialogOpen: false,
+      ySeries: []
     };
   }
 
@@ -125,7 +127,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
-
     return (
       <Stack.Item className={classNames.chartWithAxes}>
         {this.props.originalData && (
@@ -256,10 +257,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
     this.setState({
+      indexSeries: [],
       xDialogOpen: false,
-      x_series: [],
-      y_series: [],
-      index_series: []
+      xSeries: [],
+      ySeries: []
     });
     this.props.onChartPropsUpdated(newProps);
   };
@@ -271,10 +272,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
     this.setState({
+      indexSeries: [],
+      xSeries: [],
       yDialogOpen: false,
-      x_series: [],
-      y_series: [],
-      index_series: []
+      ySeries: []
     });
     this.props.onChartPropsUpdated(newProps);
   };
@@ -313,8 +314,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.onIndexSeriesUpdated
     );
     this.setState({
-      plotData: plotData,
-      isBubbleChartDataLoading: false
+      isBubbleChartDataLoading: false,
+      plotData
     });
   }
 
@@ -336,16 +337,16 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.onIndexSeriesUpdated
     );
     this.setState({
-      plotData: plotData,
-      isBubbleChartDataLoading: false
+      isBubbleChartDataLoading: false,
+      plotData
     });
   }
 
   private updateScatterPlot(): void {
     const pData = getCounterfactualsScatterOption(
-      this.state.x_series,
-      this.state.y_series,
-      this.state.index_series,
+      this.state.xSeries,
+      this.state.ySeries,
+      this.state.indexSeries,
       this.props.chartProps,
       this.props.jointDataset,
       this.props.selectedPointsIndexes,
@@ -361,15 +362,15 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private readonly onBubbleClick = (
     scatterPlotData: any,
-    x_series: number[],
-    y_series: number[],
-    index_series: number[]
+    xSeries: number[],
+    ySeries: number[],
+    indexSeries: number[]
   ): void => {
     this.setState({
+      indexSeries,
       plotData: scatterPlotData,
-      x_series: x_series,
-      y_series: y_series,
-      index_series: index_series
+      xSeries,
+      ySeries
     });
   };
 
@@ -379,15 +380,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
     this.props.setCounterfactualData(absoluteIndex);
     this.props.toggleSelectionOfPoint(index);
-    this.logTelemetryEvent(
-      TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
-    );
-  };
-
-  private logTelemetryEvent = (eventName: TelemetryEventName): void => {
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
-      type: eventName
+      type: TelemetryEventName.CounterfactualNewDatapointSelectedFromChart
     });
   };
 }

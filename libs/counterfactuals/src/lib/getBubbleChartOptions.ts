@@ -8,6 +8,8 @@ import {
   IHighchartBubbleSDKData,
   IHighchartBubbleData
 } from "@responsible-ai/core-ui";
+import { localization } from "@responsible-ai/localization";
+
 import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
 
 export interface IBubbleData {
@@ -15,11 +17,6 @@ export interface IBubbleData {
   y: number;
   customData: any[];
 }
-
-// interface ExtendedPointOptionsObject extends Highcharts.PointOptionsObject {
-//   id: string;
-//   size: number;
-// }
 
 export function getBubbleChartOptions(
   data: any,
@@ -32,9 +29,9 @@ export function getBubbleChartOptions(
   isCounterfactualsDataLoading?: boolean,
   onBubbleClick?: (
     scatterPlotData: any,
-    x_series: number[],
-    y_series: number[],
-    index_series: number[]
+    xSeries: number[],
+    ySeries: number[],
+    indexSeries: number[]
   ) => void,
   selectPointFromChartLargeData?: (data: any) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
@@ -42,30 +39,30 @@ export function getBubbleChartOptions(
   const bubbleData = convertSDKObjectToBubbleData(data);
   return {
     chart: {
-      type: "bubble",
       plotBorderWidth: 1,
+      type: "bubble",
       zoomType: "xy"
-    },
-    legend: {
-      enabled: false
     },
     custom: {
       disableUpdate: true
     },
+    legend: {
+      enabled: false
+    },
     plotOptions: {
       series: {
+        cursor: "pointer",
         dataLabels: {
           enabled: true,
           format: "{point.name}"
         },
-        cursor: "pointer",
         point: {
           events: {
             click(): void {
               const scatterPlotData = getCounterfactualsScatterOption(
-                this["x_series"],
-                this["y_series"],
-                this["index_series"],
+                this["xSeries"],
+                this["ySeries"],
+                this["indexSeries"],
                 chartProps,
                 jointData,
                 selectedPointsIndexes,
@@ -76,12 +73,11 @@ export function getBubbleChartOptions(
               onBubbleClick &&
                 onBubbleClick(
                   scatterPlotData,
-                  this["x_series"],
-                  this["y_series"],
-                  this["index_series"]
+                  this["xSeries"],
+                  this["ySeries"],
+                  this["indexSeries"]
                 );
-              onIndexSeriesUpdated &&
-                onIndexSeriesUpdated(this["index_series"]);
+              onIndexSeriesUpdated && onIndexSeriesUpdated(this["indexSeries"]);
             }
           }
         }
@@ -89,19 +85,19 @@ export function getBubbleChartOptions(
     },
     series: [
       {
-        type: "bubble",
-        data: bubbleData
+        data: bubbleData,
+        type: "bubble"
       }
     ],
     tooltip: {
-      useHTML: true,
+      followPointer: true,
+      footerFormat: "</table>",
       headerFormat: "<table>",
       pointFormat:
         `${xAxisLabel}: {point.x}<br>` +
         `${yAxisLabel}: {point.y}<br>` +
-        `Size: {point.z}<br>`,
-      footerFormat: "</table>",
-      followPointer: true
+        `${localization.Counterfactuals.Size}: {point.z}<br>`,
+      useHTML: true
     },
     xAxis: {
       gridLineWidth: 1,
@@ -112,17 +108,13 @@ export function getBubbleChartOptions(
         {
           color: "black",
           dashStyle: "Dot",
-          width: 2,
           value: 65,
+          width: 2,
           zIndex: 3
         }
-      ],
-      accessibility: {
-        rangeDescription: "Range: 60 to 100 grams."
-      }
+      ]
     },
     yAxis: {
-      startOnTick: false,
       endOnTick: false,
       labels: {
         format: "{value}"
@@ -132,14 +124,12 @@ export function getBubbleChartOptions(
         {
           color: "black",
           dashStyle: "Dot",
-          width: 2,
           value: 50,
+          width: 2,
           zIndex: 3
         }
       ],
-      accessibility: {
-        rangeDescription: "Range: 0 to 160 grams."
-      }
+      startOnTick: false
     }
   };
 }
@@ -150,13 +140,13 @@ function convertSDKObjectToBubbleData(
   const bubData = Object.values(data).map((d) => {
     return {
       id: d.id,
+      indexSeries: d.index_series,
       name: undefined,
-      z: d.size,
       x: d.x,
+      xSeries: d.x_series,
       y: d.y,
-      index_series: d.index_series,
-      x_series: d.x_series,
-      y_series: d.y_series
+      ySeries: d.y_series,
+      z: d.size
     };
   });
   return bubData;
