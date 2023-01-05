@@ -157,36 +157,26 @@ export class ModelOverview extends React.Component<
         return errorCohort.cohort.getCohortID();
       }
     );
-    console.log(newDatasetCohortIDs);
-    console.log(oldDatasetCohortIDs);
     if (!this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)) {
-      const newOldDifference = newDatasetCohortIDs.filter(
+      const addCohortIDs = newDatasetCohortIDs.filter(
         (x) => !oldDatasetCohortIDs.includes(x)
       );
-      const oldNewDifference = oldDatasetCohortIDs.filter(
+      const deleteCohortIDs = oldDatasetCohortIDs.filter(
         (x) => !newDatasetCohortIDs.includes(x)
       );
-      console.log(newOldDifference);
-      console.log(oldNewDifference);
-      console.log(this.state.selectedDatasetCohorts);
-      console.log(
-        this.state.selectedDatasetCohorts?.filter(
-          (x) => !oldNewDifference.includes(x)
-        )
-      );
-      if (newOldDifference.length > 0) {
+      if (addCohortIDs.length > 0) {
         this.setState(
           {
             selectedDatasetCohorts:
-              this.state.selectedDatasetCohorts?.concat(newOldDifference)
+              this.state.selectedDatasetCohorts?.concat(addCohortIDs)
           },
           () => this.updateDatasetCohortStats()
         );
-      } else if (oldNewDifference.length > 0) {
+      } else if (deleteCohortIDs.length > 0) {
         this.setState(
           {
             selectedDatasetCohorts: this.state.selectedDatasetCohorts?.filter(
-              (x) => !oldNewDifference.includes(x)
+              (x) => !deleteCohortIDs.includes(x)
             )
           },
           () => this.updateDatasetCohortStats()
@@ -509,7 +499,6 @@ export class ModelOverview extends React.Component<
       ),
       this.context.modelMetadata.modelType
     );
-    console.log(datasetCohortMetricStats);
 
     this.setState({
       datasetBasedCohorts: this.context.errorCohorts,
@@ -534,7 +523,6 @@ export class ModelOverview extends React.Component<
       ),
       this.context.modelMetadata.modelType
     );
-    console.log(featureCohortMetricStats);
 
     this.setState({
       featureBasedCohortLabeledStatistics: featureCohortMetricStats,
@@ -737,7 +725,6 @@ export class ModelOverview extends React.Component<
     selectedFeatureBasedCohorts: number[],
     datasetCohortChartIsSelected: boolean
   ): void => {
-    console.log(selectedDatasetCohorts);
     this.setState({
       chartConfigurationIsVisible: false,
       datasetCohortChartIsVisible: datasetCohortChartIsSelected,
