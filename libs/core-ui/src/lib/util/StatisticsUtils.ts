@@ -42,8 +42,6 @@ export enum MulticlassClassificationMetrics {
   Accuracy = "accuracy"
 }
 
-export const TotalCohortSamples = "samples";
-
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
 ): ILabeledStatistic[] => {
