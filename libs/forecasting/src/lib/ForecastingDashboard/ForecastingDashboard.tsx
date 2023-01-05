@@ -85,6 +85,7 @@ export class ForecastingDashboard extends React.Component<
           </Stack.Item>
           <Stack.Item>
             <Dropdown
+              label={localization.Forecasting.timeSeries}
               className={classNames.dropdown}
               options={this.context.errorCohorts
                 .filter(
