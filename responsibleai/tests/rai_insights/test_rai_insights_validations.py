@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import pytest
 from lightgbm import LGBMClassifier
-from responsibleai.feature_metadata import FeatureMetadata
 from tests.common_utils import (create_binary_classification_dataset,
                                 create_cancer_data, create_housing_data,
                                 create_iris_data, create_lightgbm_classifier,
@@ -16,6 +15,7 @@ from tests.common_utils import (create_binary_classification_dataset,
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 
 TARGET = 'target'
 
