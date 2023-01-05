@@ -10,6 +10,7 @@ import {
   ILabeledStatistic,
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
+  MultilabelMetrics,
   RegressionMetrics,
   TotalCohortSamples
 } from "@responsible-ai/core-ui";
@@ -380,6 +381,28 @@ export function getSelectableMetrics(
         }
       );
     }
+  } else if (
+    taskType === DatasetTaskType.MultilabelImageClassification ||
+    taskType === DatasetTaskType.MultilabelTextClassification
+  ) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: MultilabelMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.hammingScore
+            .description,
+        key: MultilabelMetrics.HammingScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.hammingScore
+          .name
+      }
+    );
   } else {
     // task_type === "regression"
     selectableMetrics.push(
