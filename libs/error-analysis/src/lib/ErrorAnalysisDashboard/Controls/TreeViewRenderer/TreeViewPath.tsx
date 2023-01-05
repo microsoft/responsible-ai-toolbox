@@ -23,7 +23,7 @@ export class TreeViewPath extends React.Component<ITreeViewPathProps> {
     return (
       <path
         key={link.key}
-        id={link.key}
+        id={link.id}
         d={link.d}
         pointerEvents="all"
         style={link.style}
