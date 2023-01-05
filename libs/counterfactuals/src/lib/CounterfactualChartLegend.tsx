@@ -169,9 +169,9 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     return indexes.map((ind, i) => {
       const index = isLargeDataEnabled ? i : ind;
       return {
+        data: { index: indexes[i] },
         key: `${index}`,
-        text: `Index ${index}`,
-        data: { index: indexes[i] }
+        text: `Index ${index}`
       };
     });
   }

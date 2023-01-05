@@ -10,6 +10,7 @@ import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { PointMarkerOptionsObject } from "highcharts";
 import { Dictionary } from "lodash";
+
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
 export interface IDatasetExplorerSeries {
@@ -26,9 +27,9 @@ export interface IDatasetExplorerData {
 }
 
 export function getCounterfactualsScatter(
-  x_series: number[],
-  y_series: number[],
-  index_series: number[],
+  xSeries: number[],
+  ySeries: number[],
+  indexSeries: number[],
   jointDataset: JointDataset,
   selectedPointsIndexes: number[],
   chartProps?: IGenericChartProps,
@@ -37,8 +38,8 @@ export function getCounterfactualsScatter(
   const dataSeries: any = [];
   const result = [];
   // const customData = plotlyProps.data[0].customdata;
-  const xData = x_series;
-  const yData = y_series;
+  const xData = xSeries;
+  const yData = ySeries;
 
   if (yData) {
     yData.forEach((data, index) => {
@@ -51,7 +52,7 @@ export function getCounterfactualsScatter(
             xData?.[index],
             data,
             index,
-            index_series[index]
+            indexSeries[index]
           ),
         marker: getMarker(selectedPointsIndexes, index),
         x: xData?.[index],
@@ -70,11 +71,11 @@ export function getCounterfactualsScatter(
         selectionIndex === -1
           ? FluentUIStyles.fabricColorInactiveSeries
           : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-      d.marker = {
+      return (d.marker = {
         fillColor: color,
         radius: 4,
         symbol: selectionIndex === -1 ? "circle" : "square"
-      };
+      });
     }
   );
 

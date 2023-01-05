@@ -18,7 +18,7 @@ export interface IHighchartBubbleData {
   z: number;
   x: any;
   y: any;
-  index_series: number[];
-  x_series: any[];
-  y_series: any[];
+  indexSeries: number[];
+  xSeries: any[];
+  ySeries: any[];
 }

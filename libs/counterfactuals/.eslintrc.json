@@ -13,6 +13,12 @@
     {
       "files": ["*.js", "*.jsx"],
       "rules": {}
+    },
+    {
+      "files": ["**/getBubbleChartOptions.ts"],
+      "rules": {
+        "dot-notation": "off"
+      }
     }
   ]
 }

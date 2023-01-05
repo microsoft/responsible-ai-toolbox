@@ -67,14 +67,14 @@ export class CounterfactualComponent extends React.PureComponent<
   public constructor(props: ICounterfactualComponentProps) {
     super(props);
     this.state = {
-      customPointLength: 0,
       counterfactualsData: this.props.data,
+      customPointLength: 0,
+      indexSeries: [],
+      isCounterfactualsDataLoading: false,
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortingSeriesIndex: undefined,
-      indexSeries: [],
-      isCounterfactualsDataLoading: false
+      sortingSeriesIndex: undefined
     };
   }
 
@@ -212,7 +212,6 @@ export class CounterfactualComponent extends React.PureComponent<
   private setCounterfactualData = async (
     absoluteIndex: number
   ): Promise<void> => {
-    // to-do: add large data enabled if condition
     this.setState({
       isCounterfactualsDataLoading: true
     });
@@ -227,16 +226,16 @@ export class CounterfactualComponent extends React.PureComponent<
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
     this.setState({
       chartProps: newProps,
-      selectedPointsIndexes: [],
+      counterfactualsData: this.props.data,
       customPointLength: 0,
       indexSeries: [],
-      counterfactualsData: this.props.data
+      selectedPointsIndexes: []
     });
   };
 
   private onIndexSeriesUpdated = (indexSeries: any): void => {
     this.setState({
-      indexSeries: indexSeries
+      indexSeries
     });
   };
 

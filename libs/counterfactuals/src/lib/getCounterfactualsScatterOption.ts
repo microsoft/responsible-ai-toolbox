@@ -2,12 +2,13 @@
 // Licensed under the MIT License.
 
 import { IGenericChartProps, JointDataset } from "@responsible-ai/core-ui";
+
 import { getCounterfactualsScatter } from "./getCounterfactualsScatter";
 
 export function getCounterfactualsScatterOption(
-  x_series: number[],
-  y_series: number[],
-  index_series: number[],
+  xSeries: number[],
+  ySeries: number[],
+  indexSeries: number[],
   chartProps: IGenericChartProps,
   jointData: JointDataset,
   selectedPointsIndexes: number[],
@@ -16,9 +17,9 @@ export function getCounterfactualsScatterOption(
   selectPointFromChartLargeData?: (data: any) => void
 ): any {
   const dataSeries = getCounterfactualsScatter(
-    x_series,
-    y_series,
-    index_series,
+    xSeries,
+    ySeries,
+    indexSeries,
     jointData,
     selectedPointsIndexes,
     chartProps,
@@ -40,6 +41,7 @@ export function getCounterfactualsScatterOption(
       },
       series: {
         cursor: isCounterfactualsDataLoading ? "wait" : "pointer",
+        lineWidth: 0,
         point: {
           events: {
             click(): void {
@@ -52,24 +54,23 @@ export function getCounterfactualsScatterOption(
             }
           }
         },
-        turboThreshold: 0,
-        lineWidth: 0,
         states: {
           hover: {
             lineWidthPlus: 0
           }
-        }
+        },
+        turboThreshold: 0
       }
     },
     series: dataSeries,
+    tooltip: {
+      shared: true
+    },
     xAxis: {
       type: chartProps?.xAxis.type
     },
     yAxis: {
       type: chartProps?.yAxis.type
-    },
-    tooltip: {
-      shared: true
     }
   };
 }

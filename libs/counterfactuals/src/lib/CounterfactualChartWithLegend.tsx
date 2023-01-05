@@ -180,8 +180,8 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
     this.setState({
-      customPoints: [],
       customPointIsActive: [],
+      customPoints: [],
       pointIsActive: []
     });
     this.props.onChartPropsUpdated(newProps);

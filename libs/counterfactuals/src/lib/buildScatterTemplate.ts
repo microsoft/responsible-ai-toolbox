@@ -20,7 +20,7 @@ export function buildScatterTemplate(
   absoluteIndex: any
 ): ICustomData {
   let hovertemplate = "";
-  let customData: ICustomData = {};
+  const customData: ICustomData = {};
   const xName = jointData.metaDict[chartProps.xAxis.property].label;
   const yName = jointData.metaDict[chartProps.yAxis.property].label;
   if (chartProps.xAxis) {
@@ -29,19 +29,6 @@ export function buildScatterTemplate(
   if (chartProps.yAxis) {
     hovertemplate += `${yName}: ${y}<br>`;
   }
-  // if (jointData.datasetMetaData?.featureMetaData) {
-  //   const identityFeatureName =
-  //     jointData.datasetMetaData.featureMetaData?.identity_feature_name;
-
-  //   if (identityFeatureName) {
-  //     const jointDatasetFeatureName =
-  //       jointData.getJointDatasetFeatureName(identityFeatureName);
-
-  //     if (jointDatasetFeatureName) {
-  //       hovertemplate += `${localization.Common.identityFeature} (${identityFeatureName}): ${customData.ID}<br>`;
-  //     }
-  //   }
-  // }
   if (chartProps.colorAxis) {
     hovertemplate += `${
       jointData.metaDict[chartProps.colorAxis.property].label
@@ -52,6 +39,5 @@ export function buildScatterTemplate(
   customData.template = hovertemplate;
   customData.AbsoluteIndex = absoluteIndex;
   customData.Index = index;
-  // customData.Color = 0;
   return customData;
 }

@@ -8,6 +8,7 @@ import {
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
+
 import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
 
 export async function calculateBubblePlotDataFromErrorCohort(
@@ -27,9 +28,9 @@ export async function calculateBubblePlotDataFromErrorCohort(
   selectPointFromChartLargeData?: (data: any) => void,
   onBubbleClick?: (
     scatterPlotData: any,
-    x_series: number[],
-    y_series: number[],
-    index_series: number[]
+    xSeries: number[],
+    ySeries: number[],
+    indexSeries: number[]
   ) => void,
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
 ): Promise<any | undefined> {
@@ -42,7 +43,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
       jointDataset.metaDict[chartProps?.yAxis.property].label
     );
     return getBubbleChartOptions(
-      bubbleChartData["clusters"],
+      bubbleChartData.clusters,
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label,
       chartProps,

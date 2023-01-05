@@ -1049,7 +1049,6 @@ export const bostonWithFairnessModelExplanationData: Omit<
 };
 
 export const bostonCounterfactualData: ICounterfactualData = {
-  id: "abc",
   cfs_list: [
     [
       [55, 3.4, 4.3, 2.4, 2],
@@ -1265,6 +1264,7 @@ export const bostonCounterfactualData: ICounterfactualData = {
   desired_range: [10, 20],
   feature_names: ["CRIM", "ZN", "INDUS", "CHAS"],
   feature_names_including_target: ["CRIM", "ZN", "INDUS", "CHAS", "y"],
+  id: "abc",
   local_importance: [
     [
       0.20821475752391416, 0.22963955590635177, 0.08919800506838538,

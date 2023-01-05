@@ -145,6 +145,7 @@
       "predictedClass": "Predicted class",
       "predictedValue": "Predicted value"
     },
+    "Size": "Size",
     "loading": "Loading...",
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
