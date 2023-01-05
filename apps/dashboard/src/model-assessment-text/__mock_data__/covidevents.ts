@@ -597,7 +597,7 @@ export const covid19events: IDataset = {
     "event7",
     "event8"
   ],
-  task_type: DatasetTaskType.TextClassification,
+  task_type: DatasetTaskType.MultilabelTextClassification,
   true_y: [
     [0, 0, 0, 0, 0, 0, 0, 1],
     [0, 0, 1, 0, 0, 0, 0, 1],
