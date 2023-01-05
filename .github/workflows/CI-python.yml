@@ -9,6 +9,9 @@ on:
 jobs:
   ci-python:
     strategy:
+      # keep running remaining matrix jobs even if one fails
+      # to avoid having to rerun all jobs several times
+      fail-fast: false
       matrix:
         packageDirectory:
           [
