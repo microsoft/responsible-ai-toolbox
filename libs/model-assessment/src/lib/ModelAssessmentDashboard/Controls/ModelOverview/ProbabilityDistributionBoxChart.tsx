@@ -42,7 +42,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
 
   public render(): React.ReactNode {
     const theme = getTheme();
-    if (this.props.boxPlotState.boxPlotData.length === 0) {
+    if (this.props.boxPlotState.boxPlotData.length) {
       return <Spinner />;
     }
     const selectedCohortNames = this.props.selectedCohorts.map(
@@ -104,7 +104,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
     prevProps?: IProbabilityDistributionBoxChartProps
   ): void {
     if (
-      this.props.boxPlotState.boxPlotData.length === 0 ||
+      this.props.boxPlotState.boxPlotData.length ||
       prevProps === undefined ||
       !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
       !_.isEqual(
