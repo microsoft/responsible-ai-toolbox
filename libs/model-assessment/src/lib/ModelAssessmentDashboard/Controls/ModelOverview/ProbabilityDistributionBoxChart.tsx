@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, IChoiceGroupOption } from "@fluentui/react";
+import { getTheme, IChoiceGroupOption, Spinner } from "@fluentui/react";
 import {
   BasicHighChart,
   boxChartTooltipDefaultSetting,
@@ -30,39 +30,21 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  public componentDidMount(): void {
+    this.calculateBoxDataIfNeeded();
+  }
+
   public componentDidUpdate(
     prevProps: IProbabilityDistributionBoxChartProps
   ): void {
-    if (
-      this.props.boxPlotState.boxPlotData.length === 0 ||
-      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
-      !_.isEqual(
-        prevProps.probabilityOption?.id,
-        this.props.probabilityOption?.id
-      )
-    ) {
-      const boxPlotData = this.props.selectedCohorts.map(
-        (cohort: ErrorCohort, index: number) => {
-          return calculateBoxPlotDataFromErrorCohort(
-            cohort,
-            index,
-            this.props.probabilityOption?.key || "",
-            this.props.probabilityOption?.text,
-            this.context.requestBoxPlotDistribution,
-            ifEnableLargeData(this.context.dataset)
-          );
-        }
-      );
-      setOutlierDataIfChanged(
-        boxPlotData,
-        this.props.boxPlotState,
-        this.props.onBoxPlotStateUpdate
-      );
-    }
+    this.calculateBoxDataIfNeeded(prevProps);
   }
 
   public render(): React.ReactNode {
     const theme = getTheme();
+    if (this.props.boxPlotState.boxPlotData.length === 0) {
+      return <Spinner />;
+    }
     const selectedCohortNames = this.props.selectedCohorts.map(
       (cohort) => cohort.cohort.name
     );
@@ -116,5 +98,37 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
         }}
       />
     );
+  }
+
+  public calculateBoxDataIfNeeded(
+    prevProps?: IProbabilityDistributionBoxChartProps
+  ): void {
+    if (
+      this.props.boxPlotState.boxPlotData.length === 0 ||
+      prevProps === undefined ||
+      !_.isEqual(prevProps.selectedCohorts, this.props.selectedCohorts) ||
+      !_.isEqual(
+        prevProps.probabilityOption?.id,
+        this.props.probabilityOption?.id
+      )
+    ) {
+      const boxPlotData = this.props.selectedCohorts.map(
+        (cohort: ErrorCohort, index: number) => {
+          return calculateBoxPlotDataFromErrorCohort(
+            cohort,
+            index,
+            this.props.probabilityOption?.key || "",
+            this.props.probabilityOption?.text,
+            this.context.requestBoxPlotDistribution,
+            ifEnableLargeData(this.context.dataset)
+          );
+        }
+      );
+      setOutlierDataIfChanged(
+        boxPlotData,
+        this.props.boxPlotState,
+        this.props.onBoxPlotStateUpdate
+      );
+    }
   }
 }

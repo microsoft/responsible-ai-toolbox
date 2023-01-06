@@ -16,8 +16,6 @@ import {
 } from "@responsible-ai/core-ui";
 
 export interface IDatasetExplorerTabStyles {
-  boldText: IStyle;
-  callout: IStyle;
   chartContainer: IStyle;
   chartEditorButton: IStyle;
   chartWithAxes: IStyle;
@@ -51,15 +49,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
   () => {
     const theme = getTheme();
     return mergeStyleSets<IDatasetExplorerTabStyles>({
-      boldText: {
-        fontWeight: "600",
-        paddingBottom: "5px"
-      },
-      callout: {
-        backgroundColor: theme.semanticColors.bodyBackground,
-        padding: "10px 20px",
-        width: "200px"
-      },
       chart: {
         marginBottom: "40px",
         width: "100%"
