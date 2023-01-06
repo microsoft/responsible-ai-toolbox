@@ -22,6 +22,9 @@ jobs:
           - packageDirectory: "raiwidgets"
             operatingSystem: macos-latest
             pythonVersion: 3.9
+          - packageDirectory: "raiwidgets"
+            operatingSystem: windows-latest
+            pythonVersion: 3.8
 
     runs-on: ${{ matrix.operatingSystem }}
 
