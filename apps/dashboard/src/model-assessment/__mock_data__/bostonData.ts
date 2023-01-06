@@ -1264,6 +1264,7 @@ export const bostonCounterfactualData: ICounterfactualData = {
   desired_range: [10, 20],
   feature_names: ["CRIM", "ZN", "INDUS", "CHAS"],
   feature_names_including_target: ["CRIM", "ZN", "INDUS", "CHAS", "y"],
+  id: "abc",
   local_importance: [
     [
       0.20821475752391416, 0.22963955590635177, 0.08919800506838538,
