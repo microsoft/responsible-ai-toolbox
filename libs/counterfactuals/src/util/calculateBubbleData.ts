@@ -42,6 +42,9 @@ export async function calculateBubblePlotDataFromErrorCohort(
       jointDataset.metaDict[chartProps?.xAxis.property].label,
       jointDataset.metaDict[chartProps?.yAxis.property].label
     );
+    if (bubbleChartData.error) {
+      return bubbleChartData;
+    }
     return getBubbleChartOptions(
       bubbleChartData.clusters,
       jointDataset.metaDict[chartProps?.xAxis.property].label,

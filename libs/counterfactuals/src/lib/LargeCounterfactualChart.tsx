@@ -65,6 +65,7 @@ export interface ICounterfactualChartState {
   ySeries: number[];
   indexSeries: number[];
   isBubbleChartDataLoading: boolean;
+  bubbleChartErrorMessage?: string;
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -79,6 +80,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     super(props);
 
     this.state = {
+      bubbleChartErrorMessage: undefined,
       indexSeries: [],
       isBubbleChartDataLoading: false,
       plotData: undefined,
@@ -176,6 +178,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
           plotData={this.state.plotData}
           isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
           isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+          bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
           setXDialogOpen={this.setXDialogOpen}
           setYDialogOpen={this.setYDialogOpen}
         />
@@ -235,7 +238,18 @@ export class LargeCounterfactualChart extends React.PureComponent<
       isBubbleChartDataLoading: true
     });
     const plotData = await this.getBubblePlotData();
+    if (plotData.error) {
+      this.setState({
+        bubbleChartErrorMessage: plotData.error.split(":").pop()
+      });
+      this.setState({
+        isBubbleChartDataLoading: false,
+        plotData: undefined
+      });
+      return;
+    }
     this.setState({
+      bubbleChartErrorMessage: undefined,
       isBubbleChartDataLoading: false,
       plotData
     });
@@ -258,7 +272,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     });
   }
 
-  private async getBubblePlotData(): Promise<void> {
+  private async getBubblePlotData(): Promise<any> {
     return await calculateBubblePlotDataFromErrorCohort(
       this.context.selectedErrorCohort.cohort,
       this.props.chartProps,

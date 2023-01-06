@@ -6,7 +6,8 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   BasicHighChart,
-  LoadingSpinner
+  LoadingSpinner,
+  MissingParametersPlaceholder
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
@@ -19,6 +20,7 @@ export interface ILargeCounterfactualChartAreaProps {
   plotData: any;
   isBubbleChartDataLoading?: boolean;
   isCounterfactualsDataLoading?: boolean;
+  bubbleChartErrorMessage?: string;
   setXDialogOpen: () => void;
   setYDialogOpen: () => void;
 }
@@ -31,6 +33,18 @@ export class LargeCounterfactualChartArea extends React.PureComponent<ILargeCoun
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
+
+    if (this.props.bubbleChartErrorMessage) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.formatString(
+            localization.Counterfactuals.BubbleChartFetchError,
+            this.props.bubbleChartErrorMessage
+          )}
+        </MissingParametersPlaceholder>
+      );
+    }
+
     return (
       <Stack horizontal={false}>
         <Stack.Item className={classNames.chartWithVertical}>
