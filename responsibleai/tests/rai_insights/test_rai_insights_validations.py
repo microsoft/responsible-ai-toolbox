@@ -15,6 +15,7 @@ from tests.common_utils import (create_binary_classification_dataset,
 
 from responsibleai import RAIInsights
 from responsibleai.exceptions import UserConfigValidationException
+from responsibleai.feature_metadata import FeatureMetadata
 
 TARGET = 'target'
 
@@ -408,6 +409,45 @@ class TestRAIInsightsValidations:
 
         assert 'The train labels and distinct values in target ' + \
             '(test data) do not match' in str(ucve.value)
+
+    def test_dataset_exception(self):
+        X_train, X_test, y_train, y_test, _, _ = \
+            create_cancer_data()
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train_feature_names = X_train.columns.tolist()
+
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                classes=[0, 1],
+                feature_metadata=FeatureMetadata(
+                    dropped_features=X_train_feature_names))
+        assert 'All features have been dropped from the dataset. ' + \
+            'Please do not drop all the features.' in str(ucve.value)
+
+        X_train = pd.DataFrame([], columns=[])
+        X_test = pd.DataFrame([], columns=[])
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        with pytest.raises(UserConfigValidationException) as ucve:
+            RAIInsights(
+                model=model,
+                train=X_train,
+                test=X_test,
+                target_column=TARGET,
+                task_type='classification',
+                classes=[0, 1])
+        assert 'There is no feature in the dataset. Please make ' + \
+            'sure that your dataset contains at least one feature.' in \
+            str(ucve.value)
 
     def test_classes_passes(self):
         X_train, X_test, y_train, y_test, _, _ = \
