@@ -4,6 +4,10 @@
 import { localization } from "@responsible-ai/localization";
 
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import {
+  ILabeledStatistic,
+  TotalCohortSamples
+} from "../Interfaces/IStatistic";
 import { IsBinary } from "../util/ExplanationUtils";
 
 import {
@@ -15,12 +19,7 @@ import {
   ClassificationEnum,
   MulticlassClassificationEnum
 } from "./JointDatasetUtils";
-
-export interface ILabeledStatistic {
-  key: string;
-  label: string;
-  stat: number;
-}
+import { generateMultilabelStats } from "./MultilabelStatisticsUtils";
 
 export enum BinaryClassificationMetrics {
   Accuracy = "accuracy",
@@ -42,8 +41,6 @@ export enum RegressionMetrics {
 export enum MulticlassClassificationMetrics {
   Accuracy = "accuracy"
 }
-
-export const TotalCohortSamples = "samples";
 
 const generateBinaryStats: (outcomes: number[]) => ILabeledStatistic[] = (
   outcomes: number[]
@@ -255,6 +252,12 @@ export const generateMetrics: (
   selectionIndexes: number[][],
   modelType: ModelTypes
 ): ILabeledStatistic[][] => {
+  if (
+    modelType === ModelTypes.ImageMultilabel ||
+    modelType === ModelTypes.TextMultilabel
+  ) {
+    return generateMultilabelStats(jointDataset, selectionIndexes);
+  }
   const trueYs = jointDataset.unwrap(JointDataset.TrueYLabel);
   const predYs = jointDataset.unwrap(JointDataset.PredictedYLabel);
   if (modelType === ModelTypes.Regression) {
