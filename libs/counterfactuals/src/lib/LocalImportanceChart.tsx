@@ -21,6 +21,7 @@ export interface ILocalImportanceChartProps {
   data: ICounterfactualData;
   theme?: string;
   isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
 }
 
 export interface ILocalImportanceData {
@@ -38,6 +39,17 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
       return (
         <MissingParametersPlaceholder>
           {localization.Counterfactuals.localImportanceSelectData}
+        </MissingParametersPlaceholder>
+      );
+    }
+
+    if (this.props.localCounterfactualErrorMessage) {
+      return (
+        <MissingParametersPlaceholder>
+          {localization.formatString(
+            localization.Counterfactuals.localImportanceFetchError,
+            this.props.localCounterfactualErrorMessage
+          )}
         </MissingParametersPlaceholder>
       );
     }

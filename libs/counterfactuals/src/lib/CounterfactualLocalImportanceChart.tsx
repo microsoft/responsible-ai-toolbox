@@ -18,6 +18,7 @@ export interface ICounterfactualLocalImportanceChartProps {
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
   isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
 }
 
 export class CounterfactualLocalImportanceChart extends React.PureComponent<ICounterfactualLocalImportanceChartProps> {
@@ -38,6 +39,9 @@ export class CounterfactualLocalImportanceChart extends React.PureComponent<ICou
           )}
           data={this.props.data}
           isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+          localCounterfactualErrorMessage={
+            this.props.localCounterfactualErrorMessage
+          }
         />
       </Stack.Item>
     );

@@ -52,6 +52,7 @@ export interface ICounterfactualComponentState {
   errorMessage?: string;
   indexSeries: number[];
   isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -75,7 +76,8 @@ export class CounterfactualComponent extends React.PureComponent<
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortingSeriesIndex: undefined
+      sortingSeriesIndex: undefined,
+      localCounterfactualErrorMessage: undefined
     };
   }
 
@@ -159,6 +161,9 @@ export class CounterfactualComponent extends React.PureComponent<
           data={this.state.counterfactualsData}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
           isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
+          localCounterfactualErrorMessage={
+            this.state.localCounterfactualErrorMessage
+          }
         />
         {this.state.errorMessage && (
           <CounterfactualErrorDialog
@@ -181,7 +186,8 @@ export class CounterfactualComponent extends React.PureComponent<
   private setCounterfactualLocalImportanceData = (data: any): void => {
     this.setState({
       counterfactualsData: data,
-      isCounterfactualsDataLoading: false
+      isCounterfactualsDataLoading: false,
+      localCounterfactualErrorMessage: undefined
     });
   };
 
@@ -221,6 +227,15 @@ export class CounterfactualComponent extends React.PureComponent<
       this.state.counterfactualsData?.id,
       this.context.requestLocalCounterfactuals
     );
+    if (localCounterfactualData.error) {
+      this.setState({
+        localCounterfactualErrorMessage: localCounterfactualData.error
+          .split(":")
+          .pop()
+      });
+      this.setCounterfactualLocalImportanceData(this.props.data);
+      return;
+    }
     this.setCounterfactualLocalImportanceData(localCounterfactualData);
   };
 
