@@ -478,13 +478,13 @@ class RAIInsights(RAIBaseInsights):
                     if has_dropped_features:
                         raise UserConfigValidationException(
                             'All features have been dropped from the dataset.'
-                            ' Please do not drop all the features'
+                            ' Please do not drop all the features.'
                         )
                     else:
                         raise UserConfigValidationException(
                             'There is no feature in the dataset. Please make '
                             'sure that your dataset contains at least '
-                            'one feature'
+                            'one feature.'
                         )
 
                 small_train_features_before = list(small_train_data.columns)
