@@ -19,6 +19,12 @@
       "rules": {
         "dot-notation": "off"
       }
+    },
+    {
+      "files": ["**/CounterfactualComponent.tsx"],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }

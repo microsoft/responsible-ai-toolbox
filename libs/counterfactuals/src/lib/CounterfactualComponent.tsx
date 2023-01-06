@@ -12,7 +12,8 @@ import {
   ModelAssessmentContext,
   rowErrorSize,
   ICounterfactualData,
-  ITelemetryEvent
+  ITelemetryEvent,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -224,13 +225,20 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    const shouldResetIndexes =
+      ifEnableLargeData(this.context.dataset) &&
+      !_.isEqual(this.state.chartProps, newProps);
     this.setState({
-      chartProps: newProps,
-      counterfactualsData: this.props.data,
-      customPointLength: 0,
-      indexSeries: [],
-      selectedPointsIndexes: []
+      chartProps: newProps
     });
+    if (shouldResetIndexes) {
+      this.setState({
+        counterfactualsData: this.props.data,
+        customPointLength: 0,
+        indexSeries: [],
+        selectedPointsIndexes: []
+      });
+    }
   };
 
   private onIndexSeriesUpdated = (indexSeries: any): void => {

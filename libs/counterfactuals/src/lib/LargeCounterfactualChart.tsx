@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, DefaultButton, Stack } from "@fluentui/react";
+import { Stack } from "@fluentui/react";
 import {
   AxisConfigDialog,
   ColumnCategories,
@@ -10,18 +10,12 @@ import {
   ISelectorConfig,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  BasicHighChart,
   ITelemetryEvent,
   TelemetryEventName,
   JointDataset,
   TelemetryLevels,
-  Cohort,
-  ICounterfactualData,
-  ifEnableLargeData,
-  LoadingSpinner,
-  IDataset
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
-import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
@@ -30,6 +24,7 @@ import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleD
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualPanel } from "./CounterfactualPanel";
 import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
+import { LargeCounterfactualChartArea } from "./LargeCounterfactualChartArea";
 
 export interface ICounterfactualChartProps {
   chartProps: IGenericChartProps;
@@ -38,15 +33,7 @@ export interface ICounterfactualChartProps {
   originalData?: { [key: string]: string | number };
   selectedPointsIndexes: number[];
   temporaryPoint: { [key: string]: any } | undefined;
-  cohort: Cohort;
-  jointDataset: JointDataset;
-  dataset: IDataset;
-  counterfactualData?: ICounterfactualData;
   isCounterfactualsDataLoading?: boolean;
-  requestBubblePlotData?: (
-    request: any,
-    abortSignal: AbortSignal
-  ) => Promise<any>;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -87,7 +74,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
-  private readonly chartAndConfigsId = "IndividualFeatureImportanceChart";
 
   public constructor(props: ICounterfactualChartProps) {
     super(props);
@@ -104,7 +90,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidMount(): void {
-    this.loadPlotData();
+    this.updateBubblePlot();
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
@@ -127,6 +113,19 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
+    const orderedGroupTitles = [
+      ColumnCategories.Index,
+      ColumnCategories.Dataset,
+      ColumnCategories.Outcome
+    ];
+    const canBin = this.state.yDialogOpen
+      ? false
+      : this.props.chartProps.chartType === ChartTypes.Histogram ||
+        this.props.chartProps.chartType === ChartTypes.Box;
+    const mustBin = this.state.yDialogOpen
+      ? false
+      : this.props.chartProps.chartType === ChartTypes.Histogram ||
+        this.props.chartProps.chartType === ChartTypes.Box;
     return (
       <Stack.Item className={classNames.chartWithAxes}>
         {this.props.originalData && (
@@ -147,105 +146,39 @@ export class LargeCounterfactualChart extends React.PureComponent<
         )}
         {this.state.yDialogOpen && (
           <AxisConfigDialog
-            orderedGroupTitles={[
-              ColumnCategories.Index,
-              ColumnCategories.Dataset,
-              ColumnCategories.Outcome
-            ]}
+            orderedGroupTitles={orderedGroupTitles}
             selectedColumn={this.props.chartProps.yAxis}
-            canBin={false}
-            mustBin={false}
+            canBin={canBin}
+            mustBin={mustBin}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             hideDroppedFeatures
             onAccept={this.onYSet}
-            onCancel={this.setYClose}
+            onCancel={this.setYDialogOpen}
           />
         )}
         {this.state.xDialogOpen && (
           <AxisConfigDialog
-            orderedGroupTitles={[
-              ColumnCategories.Index,
-              ColumnCategories.Dataset,
-              ColumnCategories.Outcome
-            ]}
+            orderedGroupTitles={orderedGroupTitles}
             selectedColumn={this.props.chartProps.xAxis}
-            canBin={
-              this.props.chartProps.chartType === ChartTypes.Histogram ||
-              this.props.chartProps.chartType === ChartTypes.Box
-            }
-            mustBin={
-              this.props.chartProps.chartType === ChartTypes.Histogram ||
-              this.props.chartProps.chartType === ChartTypes.Box
-            }
+            canBin={canBin}
+            mustBin={mustBin}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             hideDroppedFeatures
             onAccept={this.onXSet}
-            onCancel={this.setXClose}
+            onCancel={this.setXDialogOpen}
           />
         )}
-        <Stack horizontal={false}>
-          <Stack.Item className={classNames.chartWithVertical}>
-            <Stack horizontal id={this.chartAndConfigsId}>
-              <Stack.Item className={classNames.verticalAxis}>
-                <div className={classNames.rotatedVerticalBox}>
-                  <DefaultButton
-                    onClick={this.setYOpen}
-                    text={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].abbridgedLabel
-                    }
-                    title={
-                      this.context.jointDataset.metaDict[
-                        this.props.chartProps.yAxis.property
-                      ].label
-                    }
-                    disabled={
-                      this.props.isCounterfactualsDataLoading ||
-                      this.state.isBubbleChartDataLoading
-                    }
-                  />
-                </div>
-              </Stack.Item>
-              <Stack.Item className={classNames.mainChartContainer}>
-                {this.state.isBubbleChartDataLoading ? (
-                  <LoadingSpinner
-                    label={localization.Counterfactuals.loading}
-                  />
-                ) : (
-                  <BasicHighChart
-                    configOverride={this.state.plotData}
-                    theme={getTheme()}
-                    id="CounterfactualChart"
-                  />
-                )}
-              </Stack.Item>
-            </Stack>
-          </Stack.Item>
-          <Stack className={classNames.horizontalAxisWithPadding}>
-            <div className={classNames.horizontalAxis}>
-              <DefaultButton
-                onClick={this.setXOpen}
-                text={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.context.jointDataset.metaDict[
-                    this.props.chartProps.xAxis.property
-                  ].label
-                }
-                disabled={
-                  this.props.isCounterfactualsDataLoading ||
-                  this.state.isBubbleChartDataLoading
-                }
-              />
-            </div>
-          </Stack>
-        </Stack>
+        <LargeCounterfactualChartArea
+          xAxisProperty={this.props.chartProps.xAxis.property}
+          yAxisProperty={this.props.chartProps.yAxis.property}
+          plotData={this.state.plotData}
+          isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
+          isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+          setXDialogOpen={this.setXDialogOpen}
+          setYDialogOpen={this.setYDialogOpen}
+        />
       </Stack.Item>
     );
   }
@@ -256,12 +189,19 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
+    const shouldResetIndexes =
+      ifEnableLargeData(this.context.dataset) &&
+      !_.isEqual(this.props.chartProps, newProps);
     this.setState({
-      indexSeries: [],
-      xDialogOpen: false,
-      xSeries: [],
-      ySeries: []
+      xDialogOpen: false
     });
+    if (shouldResetIndexes) {
+      this.setState({
+        indexSeries: [],
+        xSeries: [],
+        ySeries: []
+      });
+    }
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -271,71 +211,35 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
+    const shouldResetIndexes =
+      ifEnableLargeData(this.context.dataset) &&
+      !_.isEqual(this.props.chartProps, newProps);
     this.setState({
-      indexSeries: [],
-      xSeries: [],
-      yDialogOpen: false,
-      ySeries: []
+      yDialogOpen: false
     });
+    if (shouldResetIndexes) {
+      this.setState({
+        indexSeries: [],
+        xSeries: [],
+        ySeries: []
+      });
+    }
     this.props.onChartPropsUpdated(newProps);
   };
 
-  private readonly setXOpen = (): void => {
+  private readonly setXDialogOpen = (): void => {
     this.setState({ xDialogOpen: !this.state.xDialogOpen });
   };
 
-  private readonly setXClose = (): void => {
-    this.setState({ xDialogOpen: false });
-  };
-
-  private readonly setYOpen = (): void => {
+  private readonly setYDialogOpen = (): void => {
     this.setState({ yDialogOpen: !this.state.yDialogOpen });
   };
-
-  private readonly setYClose = (): void => {
-    this.setState({ yDialogOpen: false });
-  };
-
-  private async loadPlotData(): Promise<any> {
-    this.setState({
-      isBubbleChartDataLoading: true
-    });
-    const plotData = await calculateBubblePlotDataFromErrorCohort(
-      this.props.cohort,
-      this.props.chartProps,
-      this.props.selectedPointsIndexes,
-      this.props.customPoints,
-      this.props.jointDataset,
-      this.props.dataset,
-      this.props.isCounterfactualsDataLoading,
-      this.props.requestBubblePlotData,
-      this.selectPointFromChartLargeData,
-      this.onBubbleClick,
-      this.props.onIndexSeriesUpdated
-    );
-    this.setState({
-      isBubbleChartDataLoading: false,
-      plotData
-    });
-  }
 
   private async updateBubblePlot(): Promise<any> {
     this.setState({
       isBubbleChartDataLoading: true
     });
-    const plotData = await calculateBubblePlotDataFromErrorCohort(
-      this.context.selectedErrorCohort.cohort,
-      this.props.chartProps,
-      this.props.selectedPointsIndexes,
-      this.props.customPoints,
-      this.context.jointDataset,
-      this.props.dataset,
-      this.props.isCounterfactualsDataLoading,
-      this.context.requestBubblePlotData,
-      this.selectPointFromChartLargeData,
-      this.onBubbleClick,
-      this.props.onIndexSeriesUpdated
-    );
+    const plotData = await this.getBubblePlotData();
     this.setState({
       isBubbleChartDataLoading: false,
       plotData
@@ -348,16 +252,31 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.state.ySeries,
       this.state.indexSeries,
       this.props.chartProps,
-      this.props.jointDataset,
+      this.context.jointDataset,
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.props.isCounterfactualsDataLoading,
       this.selectPointFromChartLargeData
     );
-
     this.setState({
       plotData: pData
     });
+  }
+
+  private async getBubblePlotData(): Promise<void> {
+    return await calculateBubblePlotDataFromErrorCohort(
+      this.context.selectedErrorCohort.cohort,
+      this.props.chartProps,
+      this.props.selectedPointsIndexes,
+      this.props.customPoints,
+      this.context.jointDataset,
+      this.context.dataset,
+      this.props.isCounterfactualsDataLoading,
+      this.context.requestBubblePlotData,
+      this.selectPointFromChartLargeData,
+      this.onBubbleClick,
+      this.props.onIndexSeriesUpdated
+    );
   }
 
   private readonly onBubbleClick = (
