@@ -50,9 +50,10 @@ class CausalManager(BaseManager):
         :type task_type: str
         :param categorical_features: All categorical feature names.
         :type categorical_features: list
-        :param dropped_features: List of features that were dropped by the
-                                 the user during training of their model.
-        :type dropped_features: Optional[List[str]]
+        :param feature_metadata: Feature metadata for the train/test
+                                 dataset to identify different kinds
+                                 of features in the dataset.
+        :type feature_metadata: FeatureMetadata
         """
         self._train = train
         self._test = test
