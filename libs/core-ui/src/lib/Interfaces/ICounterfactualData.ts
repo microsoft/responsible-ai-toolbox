@@ -12,4 +12,5 @@ export interface ICounterfactualData {
   model_type?: string;
   desired_class?: string;
   desired_range?: [number, number];
+  test_data: Array<Array<string | number>>;
 }
