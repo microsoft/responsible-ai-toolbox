@@ -12176,6 +12176,7 @@ exports[`FairnessWizardV1 should render successfully 1`] = `
               "native-country",
               "income",
             ],
+            "id": "abc",
             "local_importance": Array [
               Array [
                 0,
