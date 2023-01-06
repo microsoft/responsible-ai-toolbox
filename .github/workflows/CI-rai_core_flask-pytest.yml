@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'rai_core_flask/**'
+      - "rai_core_flask/**"
 
 jobs:
   ci-python:
