@@ -189,19 +189,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.xAxis = value;
-    const shouldResetIndexes =
-      ifEnableLargeData(this.context.dataset) &&
-      !_.isEqual(this.props.chartProps, newProps);
     this.setState({
       xDialogOpen: false
     });
-    if (shouldResetIndexes) {
-      this.setState({
-        indexSeries: [],
-        xSeries: [],
-        ySeries: []
-      });
-    }
+    this.setSeries(newProps);
     this.props.onChartPropsUpdated(newProps);
   };
 
@@ -211,12 +202,17 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     const newProps = _.cloneDeep(this.props.chartProps);
     newProps.yAxis = value;
-    const shouldResetIndexes =
-      ifEnableLargeData(this.context.dataset) &&
-      !_.isEqual(this.props.chartProps, newProps);
     this.setState({
       yDialogOpen: false
     });
+    this.setSeries(newProps);
+    this.props.onChartPropsUpdated(newProps);
+  };
+
+  private readonly setSeries = (newProps: IGenericChartProps): void => {
+    const shouldResetIndexes =
+      ifEnableLargeData(this.context.dataset) &&
+      !_.isEqual(this.props.chartProps, newProps);
     if (shouldResetIndexes) {
       this.setState({
         indexSeries: [],
@@ -224,7 +220,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
         ySeries: []
       });
     }
-    this.props.onChartPropsUpdated(newProps);
   };
 
   private readonly setXDialogOpen = (): void => {

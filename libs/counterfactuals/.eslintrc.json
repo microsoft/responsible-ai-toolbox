@@ -21,7 +21,10 @@
       }
     },
     {
-      "files": ["**/CounterfactualComponent.tsx"],
+      "files": [
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
       "rules": {
         "max-lines": "off"
       }
