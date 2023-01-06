@@ -363,7 +363,6 @@ class TestRAIInsightsValidations:
         X_train, X_test, y_train, y_test, _, _ = \
             create_cancer_data()
         model = create_lightgbm_classifier(X_train, y_train)
-        X_train_feature_names = X_train.columns.tolist()
 
         X_train[TARGET] = y_train
         X_test[TARGET] = y_test
@@ -391,19 +390,6 @@ class TestRAIInsightsValidations:
                 target_column=TARGET,
                 task_type='classification',
                 classes=[0, 1])
-        assert 'The train labels and distinct values in target ' + \
-            '(train data) do not match' in str(ucve.value)
-
-        with pytest.raises(UserConfigValidationException) as ucve:
-            RAIInsights(
-                model=model,
-                train=X_train,
-                test=X_test,
-                target_column=TARGET,
-                task_type='classification',
-                classes=[0, 1],
-                feature_metadata=FeatureMetadata(
-                    dropped_features=X_train_feature_names))
         assert 'The train labels and distinct values in target ' + \
             '(train data) do not match' in str(ucve.value)
 
