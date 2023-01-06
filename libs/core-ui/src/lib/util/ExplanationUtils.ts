@@ -26,6 +26,8 @@ export function IsClassifier(modelType: ModelTypes): boolean {
     modelType === ModelTypes.TextBinary ||
     modelType === ModelTypes.Multiclass ||
     modelType === ModelTypes.ImageMulticlass ||
-    modelType === ModelTypes.TextMulticlass
+    modelType === ModelTypes.TextMulticlass ||
+    modelType === ModelTypes.ImageMultilabel ||
+    modelType === ModelTypes.TextMultilabel
   );
 }
