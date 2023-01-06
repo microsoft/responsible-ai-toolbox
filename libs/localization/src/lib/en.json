@@ -1153,8 +1153,10 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "exactMatchRatio": "Exact match ratio: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
+      "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
@@ -1651,6 +1653,14 @@
         "accuracy": {
           "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
+        },
+        "exactMatchRatio": {
+          "name": "Exact match ratio",
+          "description": "The ratio of instances classified correctly for every label in multilabel task."
+        },
+        "hammingScore": {
+          "name": "Hamming score",
+          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
         },
         "f1Score": {
           "name": "F1 score",

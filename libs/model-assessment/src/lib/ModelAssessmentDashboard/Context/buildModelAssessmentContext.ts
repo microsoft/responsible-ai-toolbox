@@ -157,6 +157,14 @@ function getModelTypeFromProps(
         props.dataset.probability_y
       );
     }
+  } else if (
+    props.dataset.task_type === DatasetTaskType.MultilabelImageClassification
+  ) {
+    modelType = ModelTypes.ImageMultilabel;
+  } else if (
+    props.dataset.task_type === DatasetTaskType.MultilabelTextClassification
+  ) {
+    modelType = ModelTypes.TextMultilabel;
   }
   return modelType;
 }

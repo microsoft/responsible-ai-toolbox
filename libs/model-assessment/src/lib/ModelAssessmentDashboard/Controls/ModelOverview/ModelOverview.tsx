@@ -22,6 +22,7 @@ import {
   JointDataset,
   generateMetrics,
   ModelTypes,
+  MultilabelMetrics,
   FluentUIStyles,
   MulticlassClassificationMetrics,
   ErrorCohort,
@@ -123,6 +124,16 @@ export class ModelOverview extends React.Component<
       } else {
         defaultSelectedMetrics = [MulticlassClassificationMetrics.Accuracy];
       }
+    } else if (
+      this.context.dataset.task_type ===
+        DatasetTaskType.MultilabelImageClassification ||
+      this.context.dataset.task_type ===
+        DatasetTaskType.MultilabelTextClassification
+    ) {
+      defaultSelectedMetrics = [
+        MultilabelMetrics.ExactMatchRatio,
+        MultilabelMetrics.HammingScore
+      ];
     } else {
       // task_type === "regression"
       defaultSelectedMetrics = [
