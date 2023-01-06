@@ -555,6 +555,28 @@ class TestCausalUserConfigValidations:
         with pytest.raises(UserConfigValidationException, match=message):
             rai_insights.causal.add(treatment_features=['not_a_feature'])
 
+    def test_treatment_features_having_dropped_features(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+        train_data = X_train.copy()
+        X_train_dropped = train_data.drop(['col1'], axis=1)
+        model = create_lightgbm_classifier(X_train_dropped, y_train)
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+        feature_metadata = FeatureMetadata(dropped_features=['col1'])
+        rai_insights = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='classification',
+            feature_metadata=feature_metadata)
+
+        message = ("'col1' in treatment_features has been dropped "
+                   "during training the model")
+        with pytest.raises(UserConfigValidationException, match=message):
+            rai_insights.causal.add(treatment_features=['col1'])
+
     def test_heterogeneity_features_list_not_having_train_features(self):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()
