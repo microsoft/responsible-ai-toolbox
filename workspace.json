@@ -594,6 +594,46 @@
         }
       }
     },
+    "forecasting": {
+      "root": "libs/forecasting",
+      "sourceRoot": "libs/forecasting/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/forecasting",
+            "tsConfig": "libs/forecasting/tsconfig.lib.json",
+            "project": "libs/forecasting/package.json",
+            "entryFile": "libs/forecasting/src/index.ts",
+            "external": ["react/jsx-runtime"],
+            "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+            "assets": [
+              {
+                "glob": "libs/forecasting/README.md",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/forecasting/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/forecasting"],
+          "options": {
+            "jestConfig": "libs/forecasting/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "interpret": {
       "root": "libs/interpret",
       "sourceRoot": "libs/interpret/src",
