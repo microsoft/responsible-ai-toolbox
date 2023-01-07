@@ -44,6 +44,7 @@ import { FilterProps } from "../../FilterProps";
 import { TreeLegend } from "../TreeLegend/TreeLegend";
 
 import { TreeViewNode } from "./TreeViewNode";
+import { ITreeViewLink, TreeViewPath } from "./TreeViewPath";
 import { ITreeViewRendererProps } from "./TreeViewProps";
 import {
   ITreeViewRendererStyles,
@@ -190,7 +191,7 @@ export class TreeViewRenderer extends React.PureComponent<
     // or not we highlight it.  We use the d3 linkVertical which is a curved
     // spline to draw the link.  The thickness of the links depends on the
     // ratio of data going through the path versus overall data in the tree.
-    const links = rootDescendants
+    const links: ITreeViewLink[] = rootDescendants
       .slice(1)
       .map((d: HierarchyPointNode<ITreeNode>) => {
         const thick = 1 + Math.floor(30 * (d.data.size / this.state.rootSize));
@@ -201,8 +202,10 @@ export class TreeViewRenderer extends React.PureComponent<
         const linkVerticalD = linkVertical({ source: d.parent, target: d });
         return {
           d: linkVerticalD || "",
-          id: id + getRandomId(),
+          id,
+          key: id + getRandomId(),
           style: {
+            cursor: "pointer",
             fill: theme.semanticColors.bodyBackground,
             stroke: lineColor,
             strokeWidth: thick
@@ -230,7 +233,10 @@ export class TreeViewRenderer extends React.PureComponent<
           bbY: -0.5 * (bb.height + labelPaddingY) - labelYOffset,
           id: `linkLabel${d.id}`,
           style: {
-            display: d.data.nodeState.onSelectedPath ? undefined : "none",
+            display:
+              d.data.nodeState.onSelectedPath || this.state.hoverPathId === d.id
+                ? undefined
+                : "none",
             transform: `translate(${labelX}px, ${labelY}px)`
           },
           text: d.data.condition
@@ -327,11 +333,11 @@ export class TreeViewRenderer extends React.PureComponent<
               <g className={containerStyles} tabIndex={0}>
                 <g>
                   {links.map((link) => (
-                    <path
-                      key={link.id}
-                      id={link.id}
-                      d={link.d}
-                      style={link.style}
+                    <TreeViewPath
+                      key={link.key}
+                      link={link}
+                      onMouseOver={this.onMouseOver}
+                      onMouseOut={this.onMouseOut}
                     />
                   ))}
                 </g>
@@ -353,7 +359,7 @@ export class TreeViewRenderer extends React.PureComponent<
                     <g
                       key={linkLabel.id}
                       style={linkLabel.style}
-                      pointerEvents="none"
+                      pointerEvents="all"
                     >
                       <rect
                         x={linkLabel.bbX}
@@ -384,6 +390,14 @@ export class TreeViewRenderer extends React.PureComponent<
       </Stack>
     );
   }
+
+  private onMouseOver = (linkId: string | undefined): void => {
+    this.setState({ hoverPathId: linkId });
+  };
+
+  private onMouseOut = (): void => {
+    this.setState({ hoverPathId: undefined });
+  };
 
   private calculateFilterProps(
     node: IErrorAnalysisTreeNode,
@@ -541,6 +555,7 @@ export class TreeViewRenderer extends React.PureComponent<
       }
 
       return {
+        hoverPathId: undefined,
         isErrorMetric,
         maxDepth,
         metric,
@@ -659,6 +674,7 @@ export class TreeViewRenderer extends React.PureComponent<
       // APPLY TO NODEDETAIL OBJECT TO UPDATE DISPLAY PANEL
       const nodeDetail = this.getNodeDetail(node);
       return {
+        hoverPathId: undefined,
         isErrorMetric: state.isErrorMetric,
         maxDepth: state.maxDepth,
         metric: state.metric,

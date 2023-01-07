@@ -77,6 +77,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
             : undefined,
           modelMetadata: this.state.modelMetadata,
           requestBoxPlotDistribution: this.props.requestBoxPlotDistribution,
+          requestBubblePlotData: this.props.requestBubblePlotData,
           requestCausalWhatIf: this.props.requestCausalWhatIf,
           requestDatasetAnalysisBarChart:
             this.props.requestDatasetAnalysisBarChart,
@@ -86,6 +87,7 @@ export class ModelAssessmentDashboard extends CohortBasedComponent<
           requestGlobalCausalEffects: this.props.requestGlobalCausalEffects,
           requestGlobalCausalPolicy: this.props.requestGlobalCausalPolicy,
           requestGlobalExplanations: this.props.requestGlobalExplanations,
+          requestLocalCounterfactuals: this.props.requestLocalCounterfactuals,
           requestLocalFeatureExplanations:
             this.props.requestLocalFeatureExplanations,
           requestMetrics: this.props.requestMetrics,

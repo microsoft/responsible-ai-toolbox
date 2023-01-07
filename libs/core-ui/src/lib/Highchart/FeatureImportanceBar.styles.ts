@@ -23,7 +23,7 @@ export const featureImportanceBarStyles: IProcessedStyleSet<IFeatureImportanceBa
       width: "95%"
     },
     chartWithVertical: {
-      width: "80%",
+      width: "100%",
       ...fullLgDown
     },
     noData: {

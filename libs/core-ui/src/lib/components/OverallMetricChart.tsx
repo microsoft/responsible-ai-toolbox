@@ -134,6 +134,7 @@ export class OverallMetricChart extends React.PureComponent<
                 this.state.chartProps.chartType === ChartTypes.Histogram ||
                 this.state.chartProps.chartType === ChartTypes.Box
               }
+              allowTreatAsCategorical
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onYSet}
               onCancel={this.setYClose}
@@ -145,6 +146,7 @@ export class OverallMetricChart extends React.PureComponent<
               selectedColumn={this.state.chartProps.xAxis}
               canBin={false}
               mustBin={false}
+              allowTreatAsCategorical
               canDither={this.state.chartProps.chartType === ChartTypes.Scatter}
               onAccept={this.onXSet}
               onCancel={this.setXClose}
