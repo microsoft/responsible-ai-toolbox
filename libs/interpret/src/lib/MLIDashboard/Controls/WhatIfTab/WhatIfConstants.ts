@@ -31,6 +31,7 @@ export class WhatIfConstants {
   public static readonly colorPath = "Color";
   public static readonly namePath = "Name";
   public static readonly IceKey = "ice";
+  public static readonly absoluteIndex = "AbsoluteIndex";
   public static readonly featureImportanceKey = "feature-importance";
   public static readonly basePredictionTooltipIds = "predict-tooltip";
   public static readonly whatIfPredictionTooltipIds = "whatif-predict-tooltip";

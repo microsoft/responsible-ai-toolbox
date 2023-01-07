@@ -13,7 +13,8 @@ import {
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
   IHighchartBoxData,
-  IPreBuiltCohort
+  IPreBuiltCohort,
+  IHighchartBubbleSDKData
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -110,6 +111,14 @@ export interface IModelAssessmentDashboardProps
     abortSignal: AbortSignal
   ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestBubblePlotData?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBubbleSDKData>;
+  requestLocalCounterfactuals?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
   requestForecast?: (
     request: any[],

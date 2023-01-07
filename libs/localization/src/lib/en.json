@@ -145,6 +145,8 @@
       "predictedClass": "Predicted class",
       "predictedValue": "Predicted value"
     },
+    "Size": "Size",
+    "loading": "Loading...",
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
@@ -827,6 +829,7 @@
       "importancePrefix": "Importance",
       "numberOfDatapoints": "Number of datapoints",
       "rowIndex": "Row index",
+      "absoluteIndex": "Absolute index",
       "xValue": "X-value",
       "yValue": "Y-value"
     },

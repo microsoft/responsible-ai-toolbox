@@ -36,11 +36,9 @@ export class App extends React.Component<IAppProps> {
   };
 
   public render(): React.ReactNode {
-    if (this.props.modelExplanationData) {
-      for (const exp of this.props.modelExplanationData) {
-        exp.modelClass = "blackbox";
-      }
-    }
+    this.props.modelExplanationData?.forEach(
+      (modelExplanationData) => (modelExplanationData.modelClass = "blackbox")
+    );
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       cohortData: [
@@ -50,9 +48,7 @@ export class App extends React.Component<IAppProps> {
       ],
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestForecast: this.requestForecast,
-      stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme
+      requestForecast: this.requestForecast
     };
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
