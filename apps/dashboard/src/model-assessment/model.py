@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 import pandas as pd
 import numpy as np
@@ -39,11 +41,15 @@ def create_pipeline(X, task_type):
     ])
 
     if task_type == "classification":
-        pipeline = Pipeline(steps=[('preprocessor', feat_pipe),
-                                   ('model', RandomForestClassifier(n_estimators=10, max_depth=5))])
+        pipeline = Pipeline(
+            steps=[('preprocessor', feat_pipe),
+                   ('model', RandomForestClassifier(n_estimators=10,
+                                                    max_depth=5))])
     else:
-        pipeline = Pipeline(steps=[('preprocessor', feat_pipe),
-                                   ('model', RandomForestRegressor(n_estimators=10, max_depth=5))])
+        pipeline = Pipeline(
+            steps=[('preprocessor', feat_pipe),
+                   ('model', RandomForestRegressor(n_estimators=10,
+                                                   max_depth=5))])
 
     return pipeline
 
