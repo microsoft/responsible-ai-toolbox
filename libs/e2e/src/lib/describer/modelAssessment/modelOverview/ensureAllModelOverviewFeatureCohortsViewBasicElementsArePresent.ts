@@ -26,9 +26,10 @@ export function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   assertChartVisibility(
-    undefined,
-    datasetShape.isRegression,
-    datasetShape.isBinary
+    datasetShape,
+    isNotebookTest,
+    false,
+    undefined
   );
   if (isNotebookTest) {
     cy.get(Locators.MissingParameterPlaceholder).should(

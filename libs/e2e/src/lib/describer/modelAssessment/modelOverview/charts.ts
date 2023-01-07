@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../Constants";
+import { IModelAssessmentData } from "../IModelAssessmentData";
+import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export const allCharts = [
   Locators.ModelOverviewRegressionDistributionChart,
@@ -41,10 +43,13 @@ export function getAvailableCharts(
 }
 
 export function assertChartVisibility(
-  expectedVisibleChart?: string,
-  isRegression?: boolean,
-  isBinary?: boolean
+  datasetShape: IModelAssessmentData,
+  isNotebookTest: boolean,
+  includeNewCohort: boolean,
+  expectedVisibleChart?: string
 ): void {
+  const isRegression = datasetShape.isRegression;
+  const isBinary = datasetShape.isBinary;
   const charts = getAvailableCharts(isRegression, isBinary);
   if (expectedVisibleChart) {
     cy.get(Locators.ModelOverviewChartPivot).should("exist");
@@ -69,6 +74,17 @@ export function assertChartVisibility(
       cy.get(chartName).should("not.exist");
     }
   });
+
+  if (
+    expectedVisibleChart &&
+    expectedVisibleChart === Locators.ModelOverviewMetricChart
+  ) {
+    ensureNotebookModelOverviewChartIsCorrect(
+      isNotebookTest,
+      datasetShape,
+      includeNewCohort
+    );
+  }
 }
 
 export function getDefaultVisibleChart(
@@ -82,4 +98,36 @@ export function getDefaultVisibleChart(
   }
   // multiclass classification
   return Locators.ModelOverviewMetricChart;
+}
+
+function ensureNotebookModelOverviewChartIsCorrect(
+  isNotebookTest: boolean,
+  datasetShape: IModelAssessmentData,
+  includeNewCohort: boolean
+): void {
+  if (isNotebookTest) {
+    cy.get(Locators.ModelOverviewMetricChartBars).should(
+      "have.length",
+      getNumberOfCohorts(datasetShape, includeNewCohort)
+    );
+    const initialCohorts = datasetShape.modelOverviewData?.initialCohorts;
+    // check aria-label of bar chart - aria-label uses comma as delimiter
+    // between digits for thousands instead of whitespace
+    const displayedMetric =
+      (datasetShape.isRegression
+        ? initialCohorts?.[0].metrics.meanAbsoluteError
+        : initialCohorts?.[0].metrics.accuracy) || "";
+    const expectedAriaLabel =
+      !datasetShape.isRegression && !datasetShape.isMulticlass
+        ? `1. ${initialCohorts?.[0].name}, ${displayedMetric.replace(
+            " ",
+            ","
+          )}.`
+        : `${initialCohorts?.[0].name}, ${displayedMetric.replace(" ", ",")}. ${
+            datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
+          }.`;
+    cy.get(Locators.ModelOverviewMetricChartBars)
+      .first()
+      .should("have.attr", "aria-label", expectedAriaLabel);
+  }
 }

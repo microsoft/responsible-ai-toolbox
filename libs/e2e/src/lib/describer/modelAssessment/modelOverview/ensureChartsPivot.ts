@@ -18,9 +18,10 @@ export function ensureChartsPivot(datasetShape: IModelAssessmentData): void {
       $pivotItems[index].click();
     });
     assertChartVisibility(
-      chartName,
-      datasetShape.isRegression,
-      datasetShape.isBinary
+      datasetShape,
+      false,
+      false,
+      chartName
     );
   });
 }

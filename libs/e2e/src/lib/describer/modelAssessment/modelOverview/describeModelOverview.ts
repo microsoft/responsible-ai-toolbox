@@ -56,7 +56,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          1
+          1,
+          isNotebookTest
         );
       });
 
@@ -67,7 +68,8 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          2
+          2,
+          isNotebookTest
         );
       });
 

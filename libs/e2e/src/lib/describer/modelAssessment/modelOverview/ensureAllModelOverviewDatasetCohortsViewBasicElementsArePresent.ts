@@ -5,6 +5,7 @@ import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
 import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
+import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
@@ -18,9 +19,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    const numberOfCohorts =
-      (initialCohorts?.length || 0) + (includeNewCohort ? 1 : 0);
-    if (numberOfCohorts <= 1) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -84,42 +83,10 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  function ensureNotebookModelOverviewChartIsCorrect(): void {
-    if (isNotebookTest) {
-      cy.get(Locators.ModelOverviewMetricChartBars).should(
-        "have.length",
-        cohorts?.length
-      );
-      // check aria-label of bar chart - aria-label uses comma as delimiter
-      // between digits for thousands instead of whitespace
-      const displayedMetric =
-        (datasetShape.isRegression
-          ? initialCohorts?.[0].metrics.meanAbsoluteError
-          : initialCohorts?.[0].metrics.accuracy) || "";
-      const expectedAriaLabel =
-        !datasetShape.isRegression && !datasetShape.isMulticlass
-          ? `1. ${initialCohorts?.[0].name}, ${displayedMetric.replace(
-              " ",
-              ","
-            )}.`
-          : `${initialCohorts?.[0].name}, ${displayedMetric.replace(
-              " ",
-              ","
-            )}. ${
-              datasetShape.isRegression
-                ? "Mean absolute error"
-                : "Accuracy score"
-            }.`;
-      cy.get(Locators.ModelOverviewMetricChartBars)
-        .first()
-        .should("have.attr", "aria-label", expectedAriaLabel);
-    }
-  }
-
   assertChartVisibility(
-    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary),
-    datasetShape.isRegression,
-    datasetShape.isBinary
+    datasetShape,
+    isNotebookTest,
+    includeNewCohort,
+    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary)
   );
-  ensureNotebookModelOverviewChartIsCorrect();
 }

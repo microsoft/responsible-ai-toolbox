@@ -8,7 +8,8 @@ import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  selectedFeatures: number
+  selectedFeatures: number,
+  isNotebookTest: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -19,9 +20,10 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
   assertChartVisibility(
-    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary),
-    datasetShape.isRegression,
-    datasetShape.isBinary
+    datasetShape,
+    isNotebookTest,
+    false,
+    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary)
   );
 
   if (datasetShape.isRegression) {
