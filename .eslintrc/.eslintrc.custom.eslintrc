@@ -122,6 +122,7 @@
           "summary_importance",
           "target_column",
           "task_type",
+          "test_data",
           "treatment_feature",
           "treatment_gains",
           "tree_features",
