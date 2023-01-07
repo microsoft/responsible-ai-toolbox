@@ -1,19 +1,17 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-import pandas as pd
-import numpy as np
+import json
 
-from sklearn.pipeline import Pipeline
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+import numpy as np
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from raiutils.data_processing import convert_to_list
-
-import json
 
 
 def split_label(dataset, target_feature):
