@@ -6,6 +6,7 @@ import { initializeIcons } from "@fluentui/react";
 initializeIcons();
 
 jest.setTimeout(30000);
+window.Worker = jest.fn();
 
 // mock moment timezone
 const moment = jest.requireActual("moment-timezone");
