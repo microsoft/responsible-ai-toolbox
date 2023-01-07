@@ -6,17 +6,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
 
 from raiutils.data_processing import convert_to_list
 
 import json
-
-
-target_feature = 'income'
-categorical_features = ['workclass', 'education', 'marital-status',
-                        'occupation', 'relationship', 'race', 'gender', 'native-country']
 
 
 def split_label(dataset, target_feature):
@@ -25,7 +20,7 @@ def split_label(dataset, target_feature):
     return X, y
 
 
-def create_classification_pipeline(X):
+def create_pipeline(X, task_type):
     pipe_cfg = {
         'num_cols': X.dtypes[X.dtypes == 'int64'].index.values.tolist(),
         'cat_cols': X.dtypes[X.dtypes == 'object'].index.values.tolist(),
@@ -43,20 +38,21 @@ def create_classification_pipeline(X):
         ('cat_pipe', cat_pipe, pipe_cfg['cat_cols'])
     ])
 
-    # Append classifier to preprocessing pipeline.
-    # Now we have a full prediction pipeline.
-    pipeline = Pipeline(steps=[('preprocessor', feat_pipe),
-                               ('model', RandomForestClassifier(n_estimators=10, max_depth=5))])
+    if task_type == "classification":
+        pipeline = Pipeline(steps=[('preprocessor', feat_pipe),
+                                   ('model', RandomForestClassifier(n_estimators=10, max_depth=5))])
+    else:
+        pipeline = Pipeline(steps=[('preprocessor', feat_pipe),
+                                   ('model', RandomForestRegressor(n_estimators=10, max_depth=5))])
 
     return pipeline
-
 
 
 def train(task_type, feature_names, features, true_y):
     X_train = pd.DataFrame(
         data=features, columns=feature_names)
     y_train = np.array(list(true_y))
-    pipeline = create_classification_pipeline(X_train)
+    pipeline = create_pipeline(X_train, task_type)
 
     model = pipeline.fit(X_train, y_train)
 
