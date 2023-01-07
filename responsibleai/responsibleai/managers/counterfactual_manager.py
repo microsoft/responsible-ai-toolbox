@@ -723,6 +723,7 @@ class CounterfactualManager(BaseManager):
         cfdata.desired_class = json_data["desired_class"]
         cfdata.desired_range = json_data["desired_range"]
         cfdata.id = counterfactual_config.id
+        cfdata.test_data = json_data["test_data"]
         return cfdata
 
     @property
