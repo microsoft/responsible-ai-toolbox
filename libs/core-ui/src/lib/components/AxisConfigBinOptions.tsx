@@ -26,6 +26,7 @@ export interface IAxisConfigBinOptionsProps {
   minHistCols: number;
   mustBin: boolean;
   selectedBinCount?: number;
+  allowTreatAsCategorical?: boolean;
   selectedColumn: ISelectorConfig;
   onBinCountUpdated: (binCount?: number) => void;
   onEnableLogarithmicScaling: (checked?: boolean | undefined) => void;
@@ -65,6 +66,7 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
             />
           )}
         {selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
+          this.props.allowTreatAsCategorical &&
           allowUserInteract(this.props.selectedColumn.property) && (
             <Toggle
               key="categorical-toggle"
