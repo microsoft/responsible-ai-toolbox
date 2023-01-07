@@ -133,7 +133,10 @@
           "true_y",
           "upper_bounds",
           "use_entire_test_data",
-          "zero_one_loss"
+          "zero_one_loss",
+          "index_series",
+          "x_series",
+          "y_series"
         ]
       }
     ],

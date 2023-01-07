@@ -236,6 +236,13 @@ class TestCounterfactualAdvancedFeatures(object):
         assert hasattr(counterfactual_data_list[0], 'local_importance')
         assert hasattr(counterfactual_data_list[0], 'summary_importance')
         assert hasattr(counterfactual_data_list[0], 'model_type')
+        assert hasattr(counterfactual_data_list[0], 'test_data')
+        assert len(counterfactual_data_list[
+            0].feature_names_including_target) == \
+            len(counterfactual_data_list[0].test_data[0][0])
+        assert len(counterfactual_data_list[
+            0].feature_names_including_target) == \
+            len(counterfactual_data_list[0].cfs_list[0][0])
 
     def test_counterfactual_manager_get_data(self):
         X_train, X_test, y_train, y_test, feature_names, _ = \
