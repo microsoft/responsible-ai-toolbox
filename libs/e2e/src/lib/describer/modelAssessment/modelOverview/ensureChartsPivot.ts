@@ -17,11 +17,6 @@ export function ensureChartsPivot(datasetShape: IModelAssessmentData): void {
     cy.get("@chartPivotItems").then(($pivotItems) => {
       $pivotItems[index].click();
     });
-    assertChartVisibility(
-      datasetShape,
-      false,
-      false,
-      chartName
-    );
+    assertChartVisibility(datasetShape, false, false, chartName);
   });
 }

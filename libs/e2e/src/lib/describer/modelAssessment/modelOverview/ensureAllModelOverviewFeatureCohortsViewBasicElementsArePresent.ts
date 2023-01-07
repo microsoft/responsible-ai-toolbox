@@ -25,12 +25,7 @@ export function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisBaseCohortWarning).should(
     "not.exist"
   );
-  assertChartVisibility(
-    datasetShape,
-    isNotebookTest,
-    false,
-    undefined
-  );
+  assertChartVisibility(datasetShape, isNotebookTest, false, undefined);
   if (isNotebookTest) {
     cy.get(Locators.MissingParameterPlaceholder).should(
       "include.text",
