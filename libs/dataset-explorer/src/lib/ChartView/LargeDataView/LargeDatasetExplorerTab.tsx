@@ -152,6 +152,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                         canDither={
                           this.state.chartProps.chartType === ChartTypes.Scatter
                         }
+                        allowTreatAsCategorical
                         onAccept={this.onYSet}
                         buttonText={
                           this.context.jointDataset.metaDict[
@@ -196,6 +197,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                     this.state.chartProps.chartType === ChartTypes.Histogram ||
                     this.state.chartProps.chartType === ChartTypes.Box
                   }
+                  allowTreatAsCategorical
                   canDither={
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
