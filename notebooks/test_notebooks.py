@@ -123,7 +123,7 @@ def test_fairness_dashboard_loan_allocation():
 @pytest.mark.notebooks
 def test_fairness_interpretability_dashboard_loan_allocation():
     nb_path = INDIVIDUAL_DASHBOARDS
-    nb_name = "fairness-interpretability-dashboard-loan-allocation"
+    nb_name = "fairness-interpretability-dashboard-income-prediction"
 
     test_values = {}
 
