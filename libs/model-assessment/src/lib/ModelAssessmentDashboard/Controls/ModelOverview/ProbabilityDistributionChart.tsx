@@ -83,7 +83,6 @@ export class ProbabilityDistributionChart extends React.Component<
     }
 
     if (this.state.probabilityOption === undefined) {
-      this.setState({ probabilityOption: probabilityOptions[0] });
       return React.Fragment;
     }
 
