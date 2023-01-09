@@ -12,7 +12,6 @@ on:
       - "raiutils/**"
       - "responsibleai/**"
 
-
 jobs:
   ci-python:
     strategy:
