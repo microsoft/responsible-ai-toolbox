@@ -31,6 +31,7 @@ export interface ICohortListProps {
   onEditCohortClick?: (editedCohort: ErrorCohort) => void;
   onRemoveCohortClick?: (editedCohort: ErrorCohort) => void;
   enableEditing: boolean;
+  showAllDataCohort: boolean;
 }
 
 export interface ICohortListItem {
@@ -64,7 +65,7 @@ export class CohortList extends React.Component<
         fieldName: "name",
         isResizable: true,
         key: "nameColumn",
-        maxWidth: 200,
+        maxWidth: 400,
         minWidth: 50,
         name: "Name"
       },
@@ -178,13 +179,15 @@ export class CohortList extends React.Component<
                     </Stack.Item>
                   </Stack>
                 </Stack.Item>
-                <Stack.Item>
-                  <CohortListDeleteButton
-                    disabled={this.isActiveCohort(item.key)}
-                    itemKey={item.key}
-                    onDeleteCohortClick={this.onDeleteCohortClick}
-                  />
-                </Stack.Item>
+                {this.props.enableEditing && (
+                  <Stack.Item>
+                    <CohortListDeleteButton
+                      disabled={this.isActiveCohort(item.key)}
+                      itemKey={item.key}
+                      onDeleteCohortClick={this.onDeleteCohortClick}
+                    />
+                  </Stack.Item>
+                )}
               </Stack>
             );
           }
@@ -288,6 +291,12 @@ export class CohortList extends React.Component<
 
   private getCohortListItems(): ICohortListItem[] {
     const allItems = this.context.errorCohorts
+      .filter(
+        (errorCohort: ErrorCohort) =>
+          this.props.showAllDataCohort ||
+          errorCohort.cohort.name !==
+            localization.ErrorAnalysis.Cohort.defaultLabel
+      )
       .filter((errorCohort: ErrorCohort) => !errorCohort.isTemporary)
       .map((errorCohort: ErrorCohort, index: number) => {
         const details = [

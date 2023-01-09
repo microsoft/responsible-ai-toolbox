@@ -24,6 +24,7 @@ export interface IShiftCohortProps {
   onDismiss: () => void;
   onApply: (selectedCohort: ErrorCohort) => void;
   defaultCohort?: ErrorCohort;
+  showAllDataCohort: boolean;
 }
 
 export interface IShiftCohortState {
@@ -41,9 +42,14 @@ export class ShiftCohort extends React.Component<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
-    const savedCohorts = this.context.errorCohorts.filter(
-      (errorCohort) => !errorCohort.isTemporary
-    );
+    const savedCohorts = this.context.errorCohorts
+      .filter((errorCohort) => !errorCohort.isTemporary)
+      .filter(
+        (errorCohort) =>
+          this.props.showAllDataCohort ||
+          errorCohort.cohort.name !==
+            localization.ErrorAnalysis.Cohort.defaultLabel
+      );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {
         return { key: index, text: savedCohort.cohort.name };
