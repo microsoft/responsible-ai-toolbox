@@ -10,7 +10,9 @@ import {
   ILabeledStatistic,
   ImageClassificationMetrics,
   MulticlassClassificationMetrics,
-  RegressionMetrics
+  MultilabelMetrics,
+  RegressionMetrics,
+  TotalCohortSamples
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
@@ -34,14 +36,24 @@ export function generateCohortsStatsTable(
   fairnessStats: IFairnessStats[];
   items: PointOptionsObject[];
 } {
-  // The "count" metric has to be treated separately
-  // since it's not handled like other metrics, but
-  // is part of the ErrorCohort object.
-  const items: PointOptionsObject[] = cohorts.map(
-    (errorCohort, cohortIndex) => {
+  const items: PointOptionsObject[] = labeledStatistics.map(
+    (labeledStatistic, cohortIndex) => {
+      const cohortStats = labeledStatistic.find(
+        (cohortStats: ILabeledStatistic) =>
+          cohortStats.key === TotalCohortSamples
+      );
+      if (cohortStats) {
+        return {
+          colorValue: 0,
+          value: cohortStats.stat,
+          x: 0,
+          // metric index for Count column
+          y: cohortIndex
+        };
+      }
       return {
         colorValue: 0,
-        value: errorCohort.cohortStats.totalCohort,
+        value: 0,
         x: 0,
         // metric index for Count column
         y: cohortIndex
@@ -52,15 +64,19 @@ export function generateCohortsStatsTable(
   let countMin = Number.MAX_SAFE_INTEGER;
   let countMinCohortName = "";
   let countMaxCohortName = "";
-  cohorts.forEach((errorCohort) => {
-    const cohortCount = errorCohort.cohortStats.totalCohort;
-    if (cohortCount > countMax) {
-      countMax = cohortCount;
-      countMaxCohortName = errorCohort.cohort.name;
-    }
-    if (cohortCount < countMin) {
-      countMin = cohortCount;
-      countMinCohortName = errorCohort.cohort.name;
+  cohorts.forEach((errorCohort, cohortIndex) => {
+    const labeledStat = labeledStatistics[cohortIndex].find(
+      (labeledStat) => labeledStat.key === TotalCohortSamples
+    );
+    if (labeledStat) {
+      if (labeledStat.stat > countMax) {
+        countMax = labeledStat.stat;
+        countMaxCohortName = errorCohort.cohort.name;
+      }
+      if (labeledStat.stat < countMin) {
+        countMin = labeledStat.stat;
+        countMinCohortName = errorCohort.cohort.name;
+      }
     }
   });
   const fairnessStats: IFairnessStats[] = [
@@ -365,6 +381,28 @@ export function getSelectableMetrics(
         }
       );
     }
+  } else if (
+    taskType === DatasetTaskType.MultilabelImageClassification ||
+    taskType === DatasetTaskType.MultilabelTextClassification
+  ) {
+    selectableMetrics.push(
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+            .description,
+        key: MultilabelMetrics.ExactMatchRatio,
+        text: localization.ModelAssessment.ModelOverview.metrics.exactMatchRatio
+          .name
+      },
+      {
+        description:
+          localization.ModelAssessment.ModelOverview.metrics.hammingScore
+            .description,
+        key: MultilabelMetrics.HammingScore,
+        text: localization.ModelAssessment.ModelOverview.metrics.hammingScore
+          .name
+      }
+    );
   } else {
     // task_type === "regression"
     selectableMetrics.push(

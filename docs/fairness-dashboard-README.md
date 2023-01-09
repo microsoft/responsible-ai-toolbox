@@ -15,8 +15,8 @@ You can further navigate trade offs between fairness and performance of your loa
 
 ## Example Notebooks
 
-- [Fairness assessment of a loan allocation model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/fairness-dashboard-loan-allocation.ipynb)
-- [Joint Example: Interpretability and fairness assessment a loan allocation model](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/fairness-interpretability-dashboard-loan-allocation.ipynb)
+- [Fairness assessment of a loan allocation model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/fairness-dashboard/fairness-dashboard-loan-allocation.ipynb)
+- [Joint Example: Interpretability and fairness assessment on adult census data to predict income](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/fairness-interpretability-dashboard-income-prediction.ipynb)
 
 <a name="fairness dashboard"></a>
 

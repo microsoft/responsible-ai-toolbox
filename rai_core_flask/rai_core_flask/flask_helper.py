@@ -62,6 +62,12 @@ class FlaskHelper(object):
         self._thread = threading.Thread(target=self.run, daemon=True)
         self._thread.start()
 
+        # Closes server on program exit, including freeing all sockets
+        def closeserver():
+            self.stop()
+
+        atexit.register(closeserver)
+
     @staticmethod
     def _is_local_port_available(ip, port, raise_error=True):
         """Check whether the specified local port is available.
@@ -100,15 +106,8 @@ class FlaskHelper(object):
         logger.setLevel(logging.ERROR)
         self.server = WSGIServer((ip, self.port), self.app, log=logger)
         self.app.config["server"] = self.server
-        # self.app.config["CACHE_TYPE"] = "null"
         self.server.serve_forever()
 
-        # Closes server on program exit, including freeing all sockets
-        def closeserver():
-            self.stop()
-
-        atexit.register(closeserver)
-
     def stop(self):
-        if(self.server.started):
+        if (self.server.started):
             self.server.stop()

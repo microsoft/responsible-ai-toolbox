@@ -13,6 +13,7 @@ import {
 
 import { IVisionExplanationDashboardProps } from "./Interfaces/IVisionExplanationDashboardProps";
 import { IVisionExplanationDashboardState } from "./Interfaces/IVisionExplanationDashboardState";
+import { getJoinedLabelString } from "./utils/labelUtils";
 
 export enum VisionDatasetExplorerTabOptions {
   ImageExplorerView = "Image explorer view",
@@ -37,7 +38,12 @@ export function mapClassNames(
 ): string[] | string[][] {
   if (Array.isArray(labels[0])) {
     return (labels as number[][]).map((row) =>
-      row.map((index) => classNames[index])
+      row.reduce((acc, value, index) => {
+        if (value) {
+          acc.push(classNames[index]);
+        }
+        return acc;
+      }, [] as string[])
     );
   }
   return (labels as number[]).map((index) => classNames[index]);
@@ -84,7 +90,9 @@ export function preprocessData(
     fieldNames.forEach((fieldName) => {
       item[fieldName] = features[index];
     });
-    item.predictedY === item.trueY
+    const predictedYValue = getJoinedLabelString(item.predictedY);
+    const trueYValue = getJoinedLabelString(item.trueY);
+    predictedYValue === trueYValue
       ? successInstances.push(item)
       : errorInstances.push(item);
 

@@ -233,7 +233,7 @@ class RAIInsights(RAIBaseInsights):
             dropped_features = None
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
-            self.task_type, self.categorical_features)
+            self.task_type, self.categorical_features, self._feature_metadata)
 
         self._counterfactual_manager = CounterfactualManager(
             model=self.model, train=self.get_train_data(),
@@ -459,9 +459,11 @@ class RAIInsights(RAIBaseInsights):
                 # Pick one row from train and test data
                 small_train_data = train[0:1]
                 small_test_data = test[0:1]
+                has_dropped_features = False
                 if feature_metadata is not None:
                     if feature_metadata.dropped_features is not None and \
                             len(feature_metadata.dropped_features) != 0:
+                        has_dropped_features = True
                         small_train_data = small_train_data.drop(
                             columns=feature_metadata.dropped_features, axis=1)
                         small_test_data = small_test_data.drop(
@@ -471,6 +473,19 @@ class RAIInsights(RAIBaseInsights):
                     columns=[target_column], axis=1)
                 small_test_data = small_test_data.drop(
                     columns=[target_column], axis=1)
+                if len(small_train_data.columns) == 0 or \
+                        len(small_test_data.columns) == 0:
+                    if has_dropped_features:
+                        raise UserConfigValidationException(
+                            'All features have been dropped from the dataset.'
+                            ' Please do not drop all the features.'
+                        )
+                    else:
+                        raise UserConfigValidationException(
+                            'There is no feature in the dataset. Please make '
+                            'sure that your dataset contains at least '
+                            'one feature.'
+                        )
 
                 small_train_features_before = list(small_train_data.columns)
 
@@ -884,7 +899,7 @@ class RAIInsights(RAIBaseInsights):
 
         inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
         inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        if meta[_FEATURE_METADATA] is None:
+        if _FEATURE_METADATA not in meta or meta[_FEATURE_METADATA] is None:
             inst.__dict__['_' + _FEATURE_METADATA] = None
         else:
             inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
