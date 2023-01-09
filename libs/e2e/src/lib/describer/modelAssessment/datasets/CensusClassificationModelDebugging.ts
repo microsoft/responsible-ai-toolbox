@@ -62,8 +62,8 @@ export const CensusClassificationModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "age",
-      secondFeatureToSelect: "gender",
       multiFeatureCohorts: 6,
+      secondFeatureToSelect: "gender",
       singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,

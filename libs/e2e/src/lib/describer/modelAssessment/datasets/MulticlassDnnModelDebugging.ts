@@ -54,10 +54,10 @@ export const MulticlassDnnModelDebugging = {
   isMulticlass: true,
   modelOverviewData: {
     featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3,
       firstFeatureToSelect: "total_phenols",
+      multiFeatureCohorts: 9,
       secondFeatureToSelect: "hue",
+      singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

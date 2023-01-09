@@ -79,10 +79,10 @@ export const HousingClassificationModelDebugging = {
   isBinary: true,
   modelOverviewData: {
     featureCohortView: {
-      multiFeatureCohorts: 6,
-      singleFeatureCohorts: 3,
       firstFeatureToSelect: "LotFrontage",
+      multiFeatureCohorts: 6,
       secondFeatureToSelect: "OverallQual",
+      singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,
     initialCohorts: [
