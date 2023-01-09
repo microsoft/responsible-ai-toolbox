@@ -136,7 +136,6 @@ export class CounterfactualChart extends React.PureComponent<
             }
             allowTreatAsCategorical
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
-            allowTreatAsCategorical
             hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXClose}
