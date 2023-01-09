@@ -4,4 +4,4 @@ numpy>=1.17.2
 sentencepiece
 spacy
 tqdm
-raiutils>=0.2.0
+raiutils>=0.3.0

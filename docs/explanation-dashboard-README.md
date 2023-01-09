@@ -18,7 +18,7 @@ For instance, you can use the explanation dashboard to understand which factors 
 ## Example Notebooks
 
 - [Interpretability for binary classification (employee attrition)](https://github.com/microsoft/responsible-ai-widgets/blob/master/notebooks/individual-dashboards/explanation-dashboard/explanation-dashboard-employee-attrition.ipynb)
-- [Joint Example: Interpretability and fairness assessment a loan allocation model](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/fairness-interpretability-dashboard-loan-allocation.ipynb) (Please see the [Fairness dashbaord](./fairness-dashboard-README.md) guide)
+- [Joint Example: Interpretability and fairness assessment on adult census data to predict income](https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/individual-dashboards/fairness-interpretability-dashboard-income-prediction.ipynb) (Please see the [Fairness dashbaord](./fairness-dashboard-README.md) guide)
 
 <a name="interpretability dashboard"></a>
 

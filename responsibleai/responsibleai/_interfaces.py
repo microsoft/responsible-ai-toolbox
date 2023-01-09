@@ -166,6 +166,7 @@ class CounterfactualData:
     model_type: str
     desired_class: str
     desired_range: List[float]
+    test_data: List[List[Union[float, str]]]
 
 
 class RAIInsightsData:
