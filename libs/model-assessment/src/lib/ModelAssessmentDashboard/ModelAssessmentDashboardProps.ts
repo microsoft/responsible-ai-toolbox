@@ -119,7 +119,6 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<any>;
-
   localUrl?: string;
 
   telemetryHook?: (message: ITelemetryEvent) => void;

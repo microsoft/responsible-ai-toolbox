@@ -200,13 +200,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
             # while loading the model.
             model_pkl_path = Path(tmpdir) / "rai_insights" / "model.pkl"
             os.remove(model_pkl_path)
-            with pytest.warns(
-                UserWarning,
-                match='ERROR-LOADING-USER-MODEL: '
-                      'There was an error loading the user model. '
-                      'Some of RAI dashboard features may not work.'):
-                without_model_rai_insights = RAIInsights.load(save_path)
-                assert without_model_rai_insights.model is None
+            with pytest.raises(Exception):
+                RAIInsights.load(save_path)
 
     @pytest.mark.parametrize('manager_type', [ManagerNames.CAUSAL,
                                               ManagerNames.ERROR_ANALYSIS,
