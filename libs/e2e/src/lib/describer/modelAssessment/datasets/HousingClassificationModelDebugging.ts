@@ -80,8 +80,8 @@ export const HousingClassificationModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       firstFeatureToSelect: "LotFrontage",
-      multiFeatureCohorts: 6,
       secondFeatureToSelect: "OverallQual",
+      multiFeatureCohorts: 7,
       singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,
