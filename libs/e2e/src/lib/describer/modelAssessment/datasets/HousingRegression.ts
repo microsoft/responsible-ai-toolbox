@@ -50,7 +50,9 @@ export const HousingRegression = {
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 5,
-      singleFeatureCohorts: 3
+      singleFeatureCohorts: 3,
+      firstFeatureToSelect: "CRIM",
+      secondFeatureToSelect: "INDUS",
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

@@ -61,8 +61,10 @@ export const CensusClassificationModelDebugging = {
   isBinary: true,
   modelOverviewData: {
     featureCohortView: {
-      multiFeatureCohorts: 9,
-      singleFeatureCohorts: 7
+      firstFeatureToSelect: "age",
+      secondFeatureToSelect: "gender",
+      multiFeatureCohorts: 6,
+      singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

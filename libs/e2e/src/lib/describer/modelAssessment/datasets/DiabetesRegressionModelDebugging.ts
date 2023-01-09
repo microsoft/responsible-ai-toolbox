@@ -39,7 +39,9 @@ export const DiabetesRegressionModelDebugging = {
   modelOverviewData: {
     featureCohortView: {
       multiFeatureCohorts: 9,
-      singleFeatureCohorts: 3
+      singleFeatureCohorts: 3,
+      firstFeatureToSelect: "s5",
+      secondFeatureToSelect: "bp",
     },
     hasModelOverviewComponent: true,
     initialCohorts: [

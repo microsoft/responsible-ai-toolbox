@@ -64,6 +64,8 @@ export interface IModelOverviewData {
   featureCohortView?: {
     singleFeatureCohorts: number;
     multiFeatureCohorts: number;
+    firstFeatureToSelect: string;
+    secondFeatureToSelect: string;
   };
 }
 
