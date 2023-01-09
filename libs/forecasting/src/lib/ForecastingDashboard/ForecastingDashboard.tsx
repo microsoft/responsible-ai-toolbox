@@ -24,10 +24,6 @@ export class ForecastingDashboard extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  public constructor(props: IForecastingDashboardProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
 
@@ -45,48 +41,46 @@ export class ForecastingDashboard extends React.Component<
       localization.ErrorAnalysis.Cohort.defaultLabel;
 
     return (
-      <>
-        <Stack
-          className={classNames.sectionStack}
-          tokens={{ childrenGap: "24px", padding: "0 0 100px 0" }}
-          id="ForecastingDashboard"
-        >
-          <Stack.Item className={classNames.topLevelDescriptionText}>
-            <Text>{localization.Forecasting.whatIfDescription}</Text>
-          </Stack.Item>
+      <Stack
+        className={classNames.sectionStack}
+        tokens={{ childrenGap: "24px", padding: "0 0 100px 0" }}
+        id="ForecastingDashboard"
+      >
+        <Stack.Item className={classNames.topLevelDescriptionText}>
+          <Text>{localization.Forecasting.whatIfDescription}</Text>
+        </Stack.Item>
+        <Stack.Item>
+          <Dropdown
+            label={localization.Forecasting.timeSeries}
+            className={classNames.dropdown}
+            options={this.context.errorCohorts
+              .filter(
+                (cohort) =>
+                  cohort.cohort.name !==
+                  localization.ErrorAnalysis.Cohort.defaultLabel
+              )
+              .map((cohort) => {
+                return {
+                  key: cohort.cohort.getCohortID(),
+                  text: cohort.cohort.name
+                } as IDropdownOption;
+              })}
+            onChange={this.onChangeCohort}
+            selectedKey={
+              this.context.baseErrorCohort.cohort.name ===
+              localization.ErrorAnalysis.Cohort.defaultLabel
+                ? undefined
+                : this.context.baseErrorCohort.cohort.getCohortID()
+            }
+            placeholder={localization.Forecasting.selectTimeSeries}
+          />
+        </Stack.Item>
+        {!noCohortSelected && (
           <Stack.Item>
-            <Dropdown
-              label={localization.Forecasting.timeSeries}
-              className={classNames.dropdown}
-              options={this.context.errorCohorts
-                .filter(
-                  (cohort) =>
-                    cohort.cohort.name !==
-                    localization.ErrorAnalysis.Cohort.defaultLabel
-                )
-                .map((cohort) => {
-                  return {
-                    key: cohort.cohort.getCohortID(),
-                    text: cohort.cohort.name
-                  } as IDropdownOption;
-                })}
-              onChange={this.onChangeCohort}
-              selectedKey={
-                this.context.baseErrorCohort.cohort.name ===
-                localization.ErrorAnalysis.Cohort.defaultLabel
-                  ? undefined
-                  : this.context.baseErrorCohort.cohort.getCohortID()
-              }
-              placeholder={localization.Forecasting.selectTimeSeries}
-            />
+            <ForecastComparison />
           </Stack.Item>
-          {!noCohortSelected && (
-            <Stack.Item>
-              <ForecastComparison />
-            </Stack.Item>
-          )}
-        </Stack>
-      </>
+        )}
+      </Stack>
     );
   }
 
