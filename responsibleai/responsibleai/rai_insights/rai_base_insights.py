@@ -254,25 +254,24 @@ class RAIBaseInsights(ABC):
         top_dir = Path(path)
         serializer_path = top_dir / _SERIALIZER
         model_load_err = ('ERROR-LOADING-USER-MODEL: '
-                          'There was an error loading the user model. '
-                          'Some of RAI dashboard features may not work.')
+                          'There was an error loading the user model.')
         if serializer_path.exists():
             try:
                 with open(serializer_path, 'rb') as file:
                     serializer = pickle.load(file)
                 inst.__dict__['_' + _SERIALIZER] = serializer
                 inst.__dict__[_MODEL] = serializer.load(top_dir)
-            except Exception:
+            except Exception as e:
                 warnings.warn(model_load_err)
-                inst.__dict__[_MODEL] = None
+                raise e
         else:
             inst.__dict__['_' + _SERIALIZER] = None
             try:
                 with open(top_dir / _MODEL_PKL, 'rb') as file:
                     inst.__dict__[_MODEL] = pickle.load(file)
-            except Exception:
+            except Exception as e:
                 warnings.warn(model_load_err)
-                inst.__dict__[_MODEL] = None
+                raise e
 
     @staticmethod
     def _load_managers(inst, path, manager_map):
