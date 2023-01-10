@@ -7,11 +7,11 @@ import { Locators } from "../Constants";
 import { modelAssessmentDatasetsIncludingFlights } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
+import { ensureChartsPivot } from "./charts";
 import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelOverviewBasicElementsArePresent";
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent } from "./ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent";
-import { ensureChartsPivot } from "./charts";
 import { ensureNewCohortsShowUpInCharts } from "./ensureNewCohortsShowUpInCharts";
 
 const testName = "Model Overview v2";

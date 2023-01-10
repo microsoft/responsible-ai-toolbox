@@ -3,6 +3,7 @@
 
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
+
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export const allCharts = [
@@ -29,7 +30,7 @@ export const modelOverviewCharts = {
   ]
 };
 
-export function getChartItems(chartName: Locators) {
+export function getChartItems(chartName: Locators): Locators {
   // return the locators of the items (bars, boxes, etc.)
   switch (chartName) {
     case Locators.ModelOverviewMetricChart:
