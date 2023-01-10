@@ -19,7 +19,7 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { Point, PointOptionsObject } from "highcharts";
+import { PointOptionsObject } from "highcharts";
 import * as _ from "lodash";
 import React from "react";
 
@@ -30,10 +30,6 @@ interface IConfusionMatrixState {
   selectedClasses: string[];
   allClasses: string[];
   selectedCohort?: number;
-}
-
-interface IConfusionMatrixPoint extends Point {
-  value: number;
 }
 
 export class ConfusionMatrixHeatmap extends React.Component<
@@ -66,14 +62,12 @@ export class ConfusionMatrixHeatmap extends React.Component<
 
   public render(): React.ReactNode {
     const classNames = modelOverviewChartStyles();
-
     if (
       this.context.dataset.predicted_y === undefined ||
       this.context.dataset.true_y === undefined
     ) {
       return React.Fragment;
     }
-
     const yLength = this.context.dataset.predicted_y.length;
     if (this.context.dataset.true_y.length !== yLength) {
       return React.Fragment;
@@ -94,10 +88,8 @@ export class ConfusionMatrixHeatmap extends React.Component<
       this.state.allClasses,
       this.state.selectedClasses
     );
-
     const confusionMatrix: PointOptionsObject[] = [];
     const selectedLabels: string[] = [];
-
     if (confusionMatrixData !== undefined) {
       confusionMatrixData.confusionMatrix.forEach((row, rowIdx) =>
         row.forEach((count, colIdx) => {
@@ -112,7 +104,6 @@ export class ConfusionMatrixHeatmap extends React.Component<
     }
 
     const theme = getTheme();
-
     let classSelectionErrorMessage: string | undefined;
     if (this.state.selectedClasses.length < this.minDisplayableClasses) {
       classSelectionErrorMessage = localization.formatString(
@@ -215,20 +206,17 @@ export class ConfusionMatrixHeatmap extends React.Component<
                   ],
                   tooltip: {
                     formatter(): string | undefined {
-                      const x = this.point.x ? this.point.x : 0;
-                      const y = this.point.y ? this.point.y : 0;
-                      const point: IConfusionMatrixPoint = this
-                        .point as IConfusionMatrixPoint;
-                      const pointValueBold = `<b>${point.value} </b>`;
-                      const predictedClassBold = `<b>${this.series.xAxis.categories[x]}</b>`;
-                      const trueClassBold = `<b>${this.series.yAxis.categories[y]}</b>`;
                       return wrapText(
                         localization.formatString(
                           localization.ModelAssessment.ModelOverview
                             .confusionMatrix.confusionMatrixHeatmapTooltip,
-                          pointValueBold,
-                          trueClassBold,
-                          predictedClassBold
+                          `<b>${this.point.value} </b>`,
+                          `<b>${
+                            this.series.yAxis.categories[this.point.y ?? 0]
+                          }</b>`,
+                          `<b>${
+                            this.series.xAxis.categories[this.point.x ?? 0]
+                          }</b>`
                         ),
                         40,
                         10
@@ -271,18 +259,14 @@ export class ConfusionMatrixHeatmap extends React.Component<
   ): void => {
     if (item && item.selected !== undefined) {
       const selectedClass = item.key.toString();
-      if (
-        item.selected &&
-        !this.state.selectedClasses.includes(selectedClass)
-      ) {
+      const alreadySelectedClass =
+        this.state.selectedClasses.includes(selectedClass);
+      if (item.selected && !alreadySelectedClass) {
         this.setState({
           selectedClasses: [...this.state.selectedClasses, selectedClass]
         });
       }
-      if (
-        !item.selected &&
-        this.state.selectedClasses.includes(selectedClass)
-      ) {
+      if (!item.selected && alreadySelectedClass) {
         this.setState({
           selectedClasses: this.state.selectedClasses.filter(
             (presentClass: string) => presentClass !== selectedClass
