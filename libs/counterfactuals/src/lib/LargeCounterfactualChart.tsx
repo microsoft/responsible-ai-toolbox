@@ -96,19 +96,23 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
-    if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
-      this.updateBubblePlot();
-    } else if (
+    if (
       !_.isEqual(
-        prevProps.selectedPointsIndexes,
-        this.props.selectedPointsIndexes
+        prevProps.chartProps.xAxis.type,
+        this.props.chartProps.xAxis.type
       ) ||
-      !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
       !_.isEqual(
-        prevProps.isCounterfactualsDataLoading,
-        this.props.isCounterfactualsDataLoading
+        prevProps.chartProps.yAxis.type,
+        this.props.chartProps.yAxis.type
       )
     ) {
+      console.log("!!inside first if");
+      this.updateScatterPlot();
+      return;
+    }
+    if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
+      this.updateBubblePlot();
+    } else if (this.shouldUpdateScatterPlot(prevProps)) {
       this.updateScatterPlot();
     }
   }
@@ -223,6 +227,22 @@ export class LargeCounterfactualChart extends React.PureComponent<
         ySeries: []
       });
     }
+  };
+
+  private readonly shouldUpdateScatterPlot = (
+    prevProps: ICounterfactualChartProps
+  ): boolean => {
+    return (
+      !_.isEqual(
+        prevProps.selectedPointsIndexes,
+        this.props.selectedPointsIndexes
+      ) ||
+      !_.isEqual(prevProps.customPoints, this.props.customPoints) ||
+      !_.isEqual(
+        prevProps.isCounterfactualsDataLoading,
+        this.props.isCounterfactualsDataLoading
+      )
+    );
   };
 
   private readonly setXDialogOpen = (): void => {

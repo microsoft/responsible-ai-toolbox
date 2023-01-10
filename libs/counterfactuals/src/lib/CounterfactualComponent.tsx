@@ -29,6 +29,7 @@ import { getPredictedProbabilities } from "../util/getPredictedProbabilities";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
+import { isJustTypeChange } from "./CounterfactualComponentUtils";
 import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
 import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
@@ -65,6 +66,7 @@ export class CounterfactualComponent extends React.PureComponent<
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
+  private changedKeys: string[] = [];
 
   public constructor(props: ICounterfactualComponentProps) {
     super(props);
@@ -240,9 +242,13 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.changedKeys = [];
+    this.compare(newProps, this.state.chartProps);
     const shouldResetIndexes =
       ifEnableLargeData(this.context.dataset) &&
-      !_.isEqual(this.state.chartProps, newProps);
+      !_.isEqual(this.state.chartProps, newProps) &&
+      !isJustTypeChange(this.changedKeys);
+    console.log("!!shouldResetIndexes: ", shouldResetIndexes);
     this.setState({
       chartProps: newProps
     });
@@ -255,6 +261,75 @@ export class CounterfactualComponent extends React.PureComponent<
       });
     }
   };
+
+  private compare = (newProps?: any, oldProps?: any) => {
+    for (let key in newProps) {
+      if (typeof newProps[key] === "object") {
+        this.compare(newProps[key], oldProps[key]);
+      }
+      if (newProps[key] !== oldProps[key]) {
+        this.changedKeys.push(key);
+      }
+    }
+  };
+
+  // private getChangedKeys = (newProps?: any, oldProps?: any) => {
+  //   //let changedKeys: string[] = [];
+  //   for (let key in oldProps) {
+  //     if (oldProps.hasOwnProperty(key)) {
+  //       if (typeof oldProps[key] === "object") {
+  //         this.changedKeys = this.changedKeys.concat(
+  //           this.getChangedKeys(oldProps[key], newProps[key]) ?? []
+  //         );
+  //       } else {
+  //         if (oldProps[key] !== newProps[key]) {
+  //           this.changedKeys.push(key);
+  //         }
+  //       }
+  //     }
+  //     return this.changedKeys;
+  //   }
+  //   console.log("!!changedKeys: ", this.changedKeys);
+  //   return this.changedKeys;
+  // };
+
+  // private getChangedKeys = (
+  //   newProps: IGenericChartProps,
+  //   oldProps?: IGenericChartProps
+  // ) => {
+  //   for (const key in oldProps) {
+  //     if (oldProps && typeof oldProps[key] === "object") {
+  //       this.getChangedKeys(newProps[key], oldProps[key]);
+  //     } else {
+  //       if (oldProps[key] !== newProps[key]) {
+  //         this.changedKeys.push(key);
+  //       }
+  //     }
+  //   }
+  // };
+
+  // private differenceInObjects(newProps: IGenericChartProps) {
+  //   var keys = _.union(_.keys(this.state.chartProps), _.keys(newProps));
+  //   return _.filter(keys, (key) => {
+  //     const prevValue = this.state.chartProps?.xAxis[key];
+  //     return !_.eq(_.toString(prevValue), _.toString(newProps.xAxis[key]));
+  //   });
+  // }
+
+  // private updatedValues(newProps: IGenericChartProps) {
+  //   if (this.state.chartProps) {
+  //     const isModified = Object.keys(this.state.chartProps).some(
+  //       (key) => this.state.chartProps?.xAxis[key] !== newProps.xAxis[key]
+  //     );
+  //     console.log("!!isModified: ", isModified);
+  //     return Object.entries(
+  //       Object.entries(newProps.xAxis).filter(
+  //         ([key, value]) => this.state.chartProps?.xAxis[key] !== value
+  //       )
+  //     );
+  //   }
+  //   return undefined;
+  // }
 
   private onIndexSeriesUpdated = (indexSeries: any): void => {
     this.setState({
