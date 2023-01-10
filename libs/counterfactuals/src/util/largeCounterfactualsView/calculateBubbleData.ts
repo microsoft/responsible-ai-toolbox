@@ -9,7 +9,7 @@ import {
   JointDataset
 } from "@responsible-ai/core-ui";
 
-import { getBubbleChartOptions } from "../lib/getBubbleChartOptions";
+import { getBubbleChartOptions } from "./getBubbleChartOptions";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,

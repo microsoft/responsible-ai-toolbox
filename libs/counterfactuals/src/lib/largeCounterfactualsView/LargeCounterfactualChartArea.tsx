@@ -12,7 +12,7 @@ import {
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
-import { counterfactualChartStyles } from "./CounterfactualChart.styles";
+import { counterfactualChartStyles } from "../CounterfactualChart.styles";
 
 export interface ILargeCounterfactualChartAreaProps {
   xAxisProperty: string;

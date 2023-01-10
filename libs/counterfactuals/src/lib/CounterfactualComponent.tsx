@@ -24,9 +24,9 @@ import { generateDefaultChartAxes } from "../util/generateDefaultChartAxes";
 import { getCopyOfDatasetPoint } from "../util/getCopyOfDatasetPoint";
 import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointIndexes";
 import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
-import { getLocalCounterfactualsFromSDK } from "../util/getOnScatterPlotPointClick";
 import { getPredictedProbabilities } from "../util/getPredictedProbabilities";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
+import { getLocalCounterfactualsFromSDK } from "../util/largeCounterfactualsView/getOnScatterPlotPointClick";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
 import { isJustTypeChange } from "./CounterfactualComponentUtils";

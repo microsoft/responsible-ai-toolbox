@@ -19,11 +19,11 @@ import {
 import _ from "lodash";
 import React from "react";
 
-import { calculateBubblePlotDataFromErrorCohort } from "../util/calculateBubbleData";
+import { calculateBubblePlotDataFromErrorCohort } from "../../util/largeCounterfactualsView/calculateBubbleData";
+import { getCounterfactualsScatterOption } from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
+import { counterfactualChartStyles } from "../CounterfactualChart.styles";
+import { CounterfactualPanel } from "../CounterfactualPanel";
 
-import { counterfactualChartStyles } from "./CounterfactualChart.styles";
-import { CounterfactualPanel } from "./CounterfactualPanel";
-import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
 import { LargeCounterfactualChartArea } from "./LargeCounterfactualChartArea";
 
 export interface ICounterfactualChartProps {

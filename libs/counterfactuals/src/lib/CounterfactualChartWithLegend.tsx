@@ -19,7 +19,7 @@ import { getOriginalData } from "../util/getOriginalData";
 import { CounterfactualChart } from "./CounterfactualChart";
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
-import { LargeCounterfactualChart } from "./LargeCounterfactualChart";
+import { LargeCounterfactualChart } from "./largeCounterfactualsView/LargeCounterfactualChart";
 
 export interface ICounterfactualChartWithLegendProps {
   chartProps: IGenericChartProps;
