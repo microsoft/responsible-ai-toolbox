@@ -130,12 +130,6 @@ export class ForecastComparison extends React.Component<
                   text: localization.Forecasting.forecastComparisonChartTitle
                 },
                 xAxis: {
-                  dateTimeLabelFormats: {
-                    // don't display the year
-                    day: "%e. %b",
-                    month: "%b '%y",
-                    year: "%Y"
-                  },
                   title: {
                     text: localization.Forecasting
                       .forecastComparisonChartTimeAxisLabel

@@ -40,6 +40,18 @@ export class ForecastingDashboard extends React.Component<
       this.context.baseErrorCohort.cohort.name ===
       localization.ErrorAnalysis.Cohort.defaultLabel;
 
+    const dropdownOptions: IDropdownOption[] = this.context.errorCohorts
+      .filter(
+        (cohort) =>
+          cohort.cohort.name !== localization.ErrorAnalysis.Cohort.defaultLabel
+      )
+      .map((cohort) => {
+        return {
+          key: cohort.cohort.getCohortID(),
+          text: cohort.cohort.name
+        };
+      });
+
     return (
       <Stack
         className={classNames.sectionStack}
@@ -53,18 +65,7 @@ export class ForecastingDashboard extends React.Component<
           <Dropdown
             label={localization.Forecasting.timeSeries}
             className={classNames.dropdown}
-            options={this.context.errorCohorts
-              .filter(
-                (cohort) =>
-                  cohort.cohort.name !==
-                  localization.ErrorAnalysis.Cohort.defaultLabel
-              )
-              .map((cohort) => {
-                return {
-                  key: cohort.cohort.getCohortID(),
-                  text: cohort.cohort.name
-                } as IDropdownOption;
-              })}
+            options={dropdownOptions}
             onChange={this.onChangeCohort}
             selectedKey={
               this.context.baseErrorCohort.cohort.name ===

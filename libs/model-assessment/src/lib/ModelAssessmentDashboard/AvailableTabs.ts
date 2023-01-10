@@ -25,7 +25,7 @@ export function getAvailableTabs(
   if (props.dataset.task_type === DatasetTaskType.Forecasting) {
     availableTabs.push({
       key: GlobalTabKeys.ForecastingTab,
-      text: "Forecasting"
+      text: localization.ModelAssessment.ComponentNames.Forecasting
     });
   }
   if (props.dataset.images) {

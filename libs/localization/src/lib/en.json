@@ -1469,6 +1469,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
+      "Forecasting": "Forecasting",
       "ModelOverview": "Model overview",
       "TableView": "Table view",
       "VisionTab": "Vision data explorer"
