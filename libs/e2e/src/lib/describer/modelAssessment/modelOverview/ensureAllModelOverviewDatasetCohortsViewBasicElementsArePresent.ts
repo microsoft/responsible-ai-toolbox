@@ -4,7 +4,11 @@
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
+import {
+  assertChartVisibility,
+  getDefaultVisibleChart,
+  ensureNotebookModelOverviewMetricChartIsCorrect
+} from "./charts";
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
@@ -83,10 +87,17 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
 
-  assertChartVisibility(
-    datasetShape,
-    isNotebookTest,
-    includeNewCohort,
-    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary)
+  const defaultVisibleChart = getDefaultVisibleChart(
+    datasetShape.isRegression,
+    datasetShape.isBinary
   );
+  assertChartVisibility(datasetShape, defaultVisibleChart);
+
+  if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
+    ensureNotebookModelOverviewMetricChartIsCorrect(
+      isNotebookTest,
+      datasetShape,
+      includeNewCohort
+    );
+  }
 }

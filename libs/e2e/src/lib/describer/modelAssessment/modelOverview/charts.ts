@@ -3,7 +3,6 @@
 
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
-
 import { getNumberOfCohorts } from "./numberOfCohorts";
 
 export const allCharts = [
@@ -30,10 +29,26 @@ export const modelOverviewCharts = {
   ]
 };
 
+export function getChartItems(chartName: Locators) {
+  // return the locators of the items (bars, boxes, etc.)
+  switch (chartName) {
+    case Locators.ModelOverviewMetricChart:
+      return Locators.ModelOverviewMetricChartBars;
+    case Locators.ModelOverviewProbabilityDistributionChart:
+      return Locators.ModelOverviewProbabilityDistributionChartBoxes;
+    case Locators.ModelOverviewRegressionDistributionChart:
+      return Locators.ModelOverviewRegressionDistributionChartBoxes;
+    default:
+      throw new Error(
+        `Chart type ${chartName.toString()} not supported by getChartItems.`
+      );
+  }
+}
+
 export function getAvailableCharts(
   isRegression?: boolean,
   isBinary?: boolean
-): string[] {
+): Locators[] {
   if (isRegression) {
     return modelOverviewCharts.regression;
   }
@@ -45,8 +60,6 @@ export function getAvailableCharts(
 
 export function assertChartVisibility(
   datasetShape: IModelAssessmentData,
-  isNotebookTest: boolean,
-  includeNewCohort: boolean,
   expectedVisibleChart?: string
 ): void {
   const isRegression = datasetShape.isRegression;
@@ -75,23 +88,12 @@ export function assertChartVisibility(
       cy.get(chartName).should("not.exist");
     }
   });
-
-  if (
-    expectedVisibleChart &&
-    expectedVisibleChart === Locators.ModelOverviewMetricChart
-  ) {
-    ensureNotebookModelOverviewChartIsCorrect(
-      isNotebookTest,
-      datasetShape,
-      includeNewCohort
-    );
-  }
 }
 
 export function getDefaultVisibleChart(
   isRegression?: boolean,
   isBinary?: boolean
-): string {
+): Locators {
   if (isRegression) {
     return Locators.ModelOverviewRegressionDistributionChart;
   } else if (isBinary) {
@@ -101,7 +103,7 @@ export function getDefaultVisibleChart(
   return Locators.ModelOverviewMetricChart;
 }
 
-function ensureNotebookModelOverviewChartIsCorrect(
+export function ensureNotebookModelOverviewMetricChartIsCorrect(
   isNotebookTest: boolean,
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean
@@ -131,4 +133,31 @@ function ensureNotebookModelOverviewChartIsCorrect(
       .first()
       .should("have.attr", "aria-label", expectedAriaLabel);
   }
+}
+
+export function ensureChartsPivot(
+  datasetShape: IModelAssessmentData,
+  isNotebookTest: boolean,
+  includeNewCohort: boolean
+): void {
+  cy.get(Locators.ModelOverviewCohortViewDatasetCohortViewButton).click();
+  const availableCharts = getAvailableCharts(
+    datasetShape.isRegression,
+    datasetShape.isBinary
+  );
+  cy.get(Locators.ModelOverviewChartPivotItems).as("chartPivotItems");
+  availableCharts.forEach((chartName, index) => {
+    cy.get("@chartPivotItems").then(($pivotItems) => {
+      $pivotItems[index].click();
+    });
+    assertChartVisibility(datasetShape, chartName);
+
+    if (chartName === Locators.ModelOverviewMetricChart) {
+      ensureNotebookModelOverviewMetricChartIsCorrect(
+        isNotebookTest,
+        datasetShape,
+        includeNewCohort
+      );
+    }
+  });
 }

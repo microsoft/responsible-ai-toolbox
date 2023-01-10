@@ -11,7 +11,7 @@ import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelO
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent } from "./ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent";
-import { ensureChartsPivot } from "./ensureChartsPivot";
+import { ensureChartsPivot } from "./charts";
 import { ensureNewCohortsShowUpInCharts } from "./ensureNewCohortsShowUpInCharts";
 
 const testName = "Model Overview v2";
@@ -57,8 +57,7 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          1,
-          isNotebookTest
+          1
         );
       });
 
@@ -70,8 +69,7 @@ export function describeModelOverview(
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
-          2,
-          isNotebookTest
+          2
         );
       });
 
@@ -80,7 +78,7 @@ export function describeModelOverview(
       });
 
       it("should pivot between charts when clicking", () => {
-        ensureChartsPivot(datasetShape);
+        ensureChartsPivot(datasetShape, isNotebookTest, true);
       });
     } else {
       it("should not have 'Model overview' component", () => {

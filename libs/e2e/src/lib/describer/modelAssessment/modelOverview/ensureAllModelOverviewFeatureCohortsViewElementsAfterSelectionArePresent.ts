@@ -4,12 +4,15 @@
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
-import { assertChartVisibility, getDefaultVisibleChart } from "./charts";
+import {
+  assertChartVisibility,
+  getChartItems,
+  getDefaultVisibleChart
+} from "./charts";
 
 export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
   datasetShape: IModelAssessmentData,
-  selectedFeatures: number,
-  isNotebookTest: boolean
+  selectedFeatures: number
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
   cy.get(Locators.ModelOverviewFeatureConfigurationActionButton).should(
@@ -19,36 +22,17 @@ export function ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionAr
   cy.get(Locators.ModelOverviewDatasetCohortStatsTable).should("not.exist");
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisTable).should("exist");
 
-  assertChartVisibility(
-    datasetShape,
-    isNotebookTest,
-    false,
-    getDefaultVisibleChart(datasetShape.isRegression, datasetShape.isBinary)
+  const defaultVisibleChart = getDefaultVisibleChart(
+    datasetShape.isRegression,
+    datasetShape.isBinary
   );
+  assertChartVisibility(datasetShape, defaultVisibleChart);
 
-  if (datasetShape.isRegression) {
-    assertNumberOfChartRowsEqual(
-      datasetShape,
-      selectedFeatures,
-      Locators.ModelOverviewRegressionDistributionChartBoxes
-    );
-  } else if (datasetShape.isMulticlass) {
-    assertNumberOfChartRowsEqual(
-      datasetShape,
-      selectedFeatures,
-      Locators.ModelOverviewMetricChartBars
-    );
-  } else if (datasetShape.isBinary) {
-    assertNumberOfChartRowsEqual(
-      datasetShape,
-      selectedFeatures,
-      Locators.ModelOverviewProbabilityDistributionChartBoxes
-    );
-  } else {
-    throw new Error(
-      "Task should be one of regression, multiclass, or binary classification."
-    );
-  }
+  assertNumberOfChartRowsEqual(
+    datasetShape,
+    selectedFeatures,
+    defaultVisibleChart
+  );
 }
 
 function assertNumberOfChartRowsEqual(
@@ -61,5 +45,10 @@ function assertNumberOfChartRowsEqual(
   if (selectedFeatures > 1) {
     expectedNumberOfCohorts = featureCohortView?.multiFeatureCohorts;
   }
-  cy.get(chartIdentifier).should("have.length", expectedNumberOfCohorts);
+  console.log(selectedFeatures);
+  console.log(expectedNumberOfCohorts);
+  cy.get(getChartItems(chartIdentifier)).should(
+    "have.length",
+    expectedNumberOfCohorts
+  );
 }
