@@ -6,8 +6,7 @@ import {
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   ErrorCohort,
-  generateMetrics,
-  JointDataset
+  ILabeledStatistic
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -16,6 +15,7 @@ import { FairnessMetricTable } from "./FairnessMetricTable";
 import { generateCohortsStatsTable } from "./StatsTableUtils";
 
 interface IDisaggregatedAnalysisTableProps {
+  labeledStatistics: ILabeledStatistic[][];
   selectableMetrics: IDropdownOption[];
   selectedMetrics: string[];
   selectedFeatures: number[];
@@ -34,19 +34,10 @@ export class DisaggregatedAnalysisTable extends React.Component<
     defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
-    // generate table contents
-    const cohortLabeledStatistics = generateMetrics(
-      this.context.jointDataset,
-      this.props.featureBasedCohorts.map((errorCohort) =>
-        errorCohort.cohort.unwrap(JointDataset.IndexLabel)
-      ),
-      this.context.modelMetadata.modelType
-    );
-
     const cohortStatsInfo = generateCohortsStatsTable(
       this.props.featureBasedCohorts,
       this.props.selectableMetrics,
-      cohortLabeledStatistics,
+      this.props.labeledStatistics,
       this.props.selectedMetrics,
       this.props.showHeatmapColors
     );
