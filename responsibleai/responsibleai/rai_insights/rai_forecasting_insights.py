@@ -107,7 +107,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         self._feature_ranges = RAIForecastingInsights._get_feature_ranges(
             test=test, categorical_features=self._feature_metadata.categorical_features or [],
             feature_columns=self._feature_columns)
-            
 
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
@@ -115,8 +114,6 @@ class RAIForecastingInsights(RAIBaseInsights):
                 all_feature_names=self._feature_columns,
                 categorical_features=self._feature_metadata.categorical_features or [],
                 dataset=self._test_without_true_y)
-
-        self.datetime_index = test.index
 
         super(RAIForecastingInsights, self).__init__(
             model, train, test, target_column, self.task_type,
@@ -147,11 +144,13 @@ class RAIForecastingInsights(RAIBaseInsights):
         self._managers = []
 
     def _validate_rai_insights_input_parameters(
-            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
+            self,
+            model: Any,
+            train: pd.DataFrame,
+            test: pd.DataFrame,
             target_column: str,
             serializer,
-            maximum_rows_for_test: int,
-            feature_metadata: Optional[FeatureMetadata] = None):
+            maximum_rows_for_test: int):
         """Validate the inputs for the RAIForecastingInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -177,10 +176,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
-        :param feature_metadata: Feature metadata for the train/test
-                                 dataset to identify different kinds
-                                 of features in the dataset.
-        :type feature_metadata: FeatureMetadata
         """
 
         if model is None:
@@ -237,7 +232,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                         target_column)
                 )
 
-            categorical_features = feature_metadata.categorical_features
+            categorical_features = self._feature_metadata.categorical_features
             if categorical_features is not None and \
                     len(categorical_features) > 0:
                 if target_column in categorical_features:
@@ -260,17 +255,15 @@ class RAIForecastingInsights(RAIBaseInsights):
                         np.unique(train[column])
                     except Exception:
                         raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your train data.".format(column)
-                        )
+                            f"Error finding unique values in column {column}. "
+                            "Please check your train data.")
 
                     try:
                         np.unique(test[column])
                     except Exception:
                         raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your test data.".format(column)
-                        )
+                            f"Error finding unique values in column {column}. "
+                            "Please check your test data.")
 
             train_features = train.drop(columns=[target_column]).columns
             numeric_features = train.drop(
@@ -281,8 +274,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     "The following string features were not "
                     "identified as categorical features: {0}".format(
-                        string_features_set - set(categorical_features))
-                )
+                        string_features_set - set(categorical_features)))
 
             if model is not None:
                 # Pick one row from test data
@@ -317,12 +309,10 @@ class RAIForecastingInsights(RAIBaseInsights):
                     "Expecting type FeatureMetadata but got {0}".format(
                         type(feature_metadata)))
 
-            feature_metadata.validate_feature_metadata_with_user_features(
-                list(train.columns))
-            feature_metadata.validate_feature_metadata_with_time_series_id_column_names(
-                test,
-                train
-            )
+            feature_names = list(train.columns)
+            feature_metadata.validate(feature_names)
+            self._ensure_time_column_available(
+                self._feature_metadata, feature_names, model)
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -344,6 +334,53 @@ class RAIForecastingInsights(RAIBaseInsights):
                  'input dataset features. Please check if '
                  'predict function is defined correctly.').format(function)
             )
+
+    def _ensure_time_column_available(
+        self,
+        feature_metadata: FeatureMetadata,
+        feature_names: List[str],
+        model: Optional[Any]):
+        """Ensure that a time column is available from metadata or model.
+
+        Some models have the time column name stored as an attribute
+        in which case we can extract it directly without requiring users
+        to explicitly specify the time column.
+
+        :param feature_metadata: the feature metadata object
+        :type feature_metadata: FeatureMetadata
+        :param feature_names: the names of all features of the dataset
+        :type feature_names: List[str]
+        :param model: the model
+        :type model: object
+        """
+        fm_time_column = feature_metadata.time_column_name
+        model_time_column = getattr(model, "time_column_name", None)
+
+        # goal: set time column in feature metadata
+        if model_time_column is None:
+            if fm_time_column is not None:
+                return
+            else: 
+                raise UserConfigValidationException(
+                    'There was no time column name in feature metadata. '
+                    'A time column is required for forecasting.')
+        else:
+            if fm_time_column is None:
+                if model_time_column in feature_names:
+                    feature_metadata.time_column_name = model_time_column
+                    return
+                else:
+                    raise UserConfigValidationException(
+                        'The provided model expects a time column named '
+                        f'{model_time_column} that is not present in the '
+                        'provided dataset.')
+            else:
+                # both time columns were provided, ensure that they match
+                if fm_time_column != model_time_column:
+                    raise UserConfigValidationException(
+                        f'The provided time column name {fm_time_column} '
+                        "does not match the model's expected time column "
+                        f'name {model_time_column}.')
 
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False):

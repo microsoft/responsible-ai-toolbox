@@ -10,7 +10,7 @@ from responsibleai.exceptions import UserConfigValidationException
 class FeatureMetadata:
     def __init__(self,
                  identity_feature_name: Optional[str] = None,
-                 datetime_features: Optional[List[str]] = None,
+                 time_column_name: Optional[str] = None,
                  categorical_features: Optional[List[str]] = None,
                  dropped_features: Optional[List[str]] = None,
                  time_series_id_column_names: Optional[List[str]] = None):
@@ -33,44 +33,34 @@ class FeatureMetadata:
             This argument is only applicable in a forecasting task.
         :type time_series_id_column_names: Option[List[str]]
         """
-        
+
         self.identity_feature_name = identity_feature_name
-        self.datetime_features = datetime_features
+        self.time_column_name = time_column_name
         self.categorical_features = categorical_features
         self.dropped_features = dropped_features
         self.time_series_id_column_names = time_series_id_column_names
 
-        # shouldn't all of this be removed?
-        if self.datetime_features is not None:
-            warnings.warn('datetime_features are not in use currently.')
         if self.categorical_features is not None:
             warnings.warn('categorical_features are not in use currently.')
 
-    def validate_feature_metadata_with_user_features(
-            self, user_features: Optional[List[str]] = None):
-        """Validate the feature metadata with the user features.
-
-        :param user_features: List of features in the user input dataset.
-        :type user_features: Optional[List[str]]
+    def validate(self, feature_names: List[str]):
+        """Validate the user-provided feature metadata.
+        
+        :param feature_names: list of features in the dataset.
+        :type feature_names: List[str]
         """
-        if user_features is None:
-            return
-        if self.identity_feature_name is not None:
-            if self.identity_feature_name not in user_features:
-                raise UserConfigValidationException(
-                    'The given identity feature name {0} is not present'
-                    ' in user features.'.format(
-                        self.identity_feature_name))
-
-    def validate_feature_metadata_with_time_series_id_column_names(
-        self, test, train):
-        if self.time_series_id_column_names is not None:
-            if not set(self.time_series_id_column_names).issubset(set(test.columns)) \
-            or not set(self.time_series_id_column_names).issubset(set(train.columns)):
-                raise UserConfigValidationException(
-                    'One or more of time_series_id_column_names '
-                    f'{self.time_series_id_column_names} are not present in '
-                     'train or test datasets')     
+        self._validate_columns(
+            'dropped feature', self.dropped_features, feature_names)
+        self._validate_columns(
+            'categorical feature', self.categorical_features, feature_names)
+        self._validate_columns(
+            'identity feature', self.identity_feature_name, feature_names)
+        self._validate_columns(
+            'time column', self.time_column_name, feature_names)
+        self._validate_columns(
+            'time series ID column',
+            self.time_series_id_column_names,
+            feature_names)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert the feature metadata to a dictionary.
@@ -105,3 +95,24 @@ class FeatureMetadata:
             other_feature_metadata.dropped_features and \
             self.time_series_id_column_names == \
             other_feature_metadata.time_series_id_column_names
+
+    @staticmethod
+    def _validate_columns(
+            column_purpose: str,
+            column_names: List[str],
+            feature_names: List[str]):
+        """Ensure the provided column is present in the dataset.
+
+        :param column_purpose: The purpose the column fulfills in the dataset.
+        :type column_purpose: str
+        :param column_names: List of column names to validate.
+        :type column_names: List[str]
+        :param self.identity_feature_name: List of features in the user input dataset.
+        :type self.identity_feature_name: List[str]
+        """
+        for column_name in column_names:
+            if column_name not in feature_names:
+                raise UserConfigValidationException(
+                    f'The given {column_purpose} '
+                    f'{column_name} is not present '
+                    f'in the provided features: {", ".join(feature_names)}.')

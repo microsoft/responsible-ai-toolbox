@@ -452,8 +452,7 @@ class RAIInsights(RAIBaseInsights):
                         "Expecting type FeatureMetadata but got {0}".format(
                             type(feature_metadata)))
 
-                feature_metadata.validate_feature_metadata_with_user_features(
-                    list(train.columns))
+                feature_metadata.validate(list(train.columns))
 
             if model is not None:
                 # Pick one row from train and test data
