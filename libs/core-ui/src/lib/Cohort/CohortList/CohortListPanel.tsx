@@ -12,7 +12,6 @@ import { cohortListStyles } from "./CohortList.styles";
 export interface ICohortListPanelProps {
   isOpen: boolean;
   cohorts: ErrorCohort[];
-  // hostId: string
   onDismiss: () => void;
   onEditCohortClick: (editedCohort: ErrorCohort) => void;
 }
