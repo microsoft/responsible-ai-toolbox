@@ -126,7 +126,7 @@ export function ensureNotebookModelOverviewMetricChartIsCorrect(
     }, ${displayedMetric.replace(" ", ",")}. ${
       datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
     }.`;
-    
+
     // The wait time is required to allow bars to render.
     // There is no call we can intercept and wait for.
     // So contrary to the lint warning this is a necessary wait.
