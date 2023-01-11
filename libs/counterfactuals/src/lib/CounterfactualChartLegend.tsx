@@ -96,6 +96,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
         />
         {this.displayRevertButton() && (
           <DefaultButton
+            className={classNames.revertButton}
             onClick={this.onRevertButtonClick}
             text={localization.Counterfactuals.revertToBubbleChart}
             title={localization.Counterfactuals.revertToBubbleChart}

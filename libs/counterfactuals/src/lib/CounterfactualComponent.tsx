@@ -76,12 +76,12 @@ export class CounterfactualComponent extends React.PureComponent<
       customPointLength: 0,
       indexSeries: [],
       isCounterfactualsDataLoading: false,
+      isRevertButtonClicked: false,
       localCounterfactualErrorMessage: undefined,
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortingSeriesIndex: undefined,
-      isRevertButtonClicked: false
+      sortingSeriesIndex: undefined
     };
   }
 

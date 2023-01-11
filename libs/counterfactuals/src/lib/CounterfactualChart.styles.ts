@@ -16,6 +16,7 @@ export interface ICounterfactualChartStyles {
   lowerChartContainer: IStyle;
   rotatedVerticalBox: IStyle;
   verticalAxis: IStyle;
+  revertButton: IStyle;
 }
 
 export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactualChartStyles> =
@@ -55,6 +56,9 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
       },
       mainChartContainer: {
         width: "90%"
+      },
+      revertButton: {
+        paddingTop: "10px"
       },
       rotatedVerticalBox: {
         marginLeft: "28px",
