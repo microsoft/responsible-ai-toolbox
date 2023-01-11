@@ -23,10 +23,10 @@ export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactual
   () => {
     return mergeStyleSets<ICounterfactualChartStyles>({
       buttonStyle: {
-        paddingBottom: "10px",
+        marginBottom: "10px",
         marginTop: "10px",
-        paddingTop: "10px",
-        marginBottom: "10px"
+        paddingBottom: "10px",
+        paddingTop: "10px"
       },
       chartWithAxes: {
         ...fullLgDown,

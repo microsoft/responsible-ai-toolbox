@@ -117,7 +117,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
       this.updateBubblePlot();
-    } else if (this.shouldUpdateScatterPlot(prevProps)) {
+      return;
+    }
+    if (this.shouldUpdateScatterPlot(prevProps)) {
       this.updateScatterPlot();
     }
   }
