@@ -47,7 +47,9 @@ export class ShiftCohort extends React.Component<
       .filter((errorCohort) => !errorCohort.isTemporary)
       .filter(
         (errorCohort) =>
-          this.props.showAllDataCohort || !isAllDataErrorCohort(errorCohort, true)
+          !errorCohort.isTemporary &&
+          (this.props.showAllDataCohort ||
+            !isAllDataErrorCohort(errorCohort, true))
       );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {
