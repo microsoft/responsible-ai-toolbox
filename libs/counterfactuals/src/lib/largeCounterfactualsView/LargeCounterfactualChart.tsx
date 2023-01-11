@@ -14,19 +14,25 @@ import {
   TelemetryEventName,
   JointDataset,
   TelemetryLevels,
-  ifEnableLargeData
+  ifEnableLargeData,
+  Cohort
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 
-import { calculateBubblePlotDataFromErrorCohort } from "../../util/largeCounterfactualsView/calculateBubbleData";
+import {
+  calculateBubblePlotDataFromErrorCohort,
+  instanceOfHighChart
+} from "../../util/largeCounterfactualsView/calculateBubbleData";
 import { getCounterfactualsScatterOption } from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
 import { counterfactualChartStyles } from "../CounterfactualChart.styles";
+import { isJustTypeChange } from "../CounterfactualComponentUtils";
 import { CounterfactualPanel } from "../CounterfactualPanel";
 
 import { LargeCounterfactualChartArea } from "./LargeCounterfactualChartArea";
 
 export interface ICounterfactualChartProps {
+  cohort: Cohort;
   chartProps: IGenericChartProps;
   customPoints: Array<{ [key: string]: any }>;
   isPanelOpen: boolean;
@@ -66,6 +72,7 @@ export interface ICounterfactualChartState {
   indexSeries: number[];
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
+  isBubbleChartRendered: boolean;
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
@@ -75,6 +82,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private changedKeys: string[] = [];
 
   public constructor(props: ICounterfactualChartProps) {
     super(props);
@@ -87,7 +95,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       xDialogOpen: false,
       xSeries: [],
       yDialogOpen: false,
-      ySeries: []
+      ySeries: [],
+      isBubbleChartRendered: true
     };
   }
 
@@ -96,17 +105,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
-    if (
-      !_.isEqual(
-        prevProps.chartProps.xAxis.type,
-        this.props.chartProps.xAxis.type
-      ) ||
-      !_.isEqual(
-        prevProps.chartProps.yAxis.type,
-        this.props.chartProps.yAxis.type
-      )
-    ) {
-      console.log("!!inside first if");
+    if (this.props.cohort !== prevProps.cohort) {
+      this.updateBubblePlot();
+    }
+    this.changedKeys = [];
+    this.compareChartProps(this.props.chartProps, prevProps.chartProps);
+    if (isJustTypeChange(this.changedKeys)) {
       this.updateScatterPlot();
       return;
     }
@@ -157,6 +161,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             canBin={canBin}
             mustBin={mustBin}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
+            allowLogarithmicScaling={!this.state.isBubbleChartRendered}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             hideDroppedFeatures
             onAccept={this.onYSet}
@@ -171,6 +176,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             mustBin={mustBin}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
+            allowLogarithmicScaling={!this.state.isBubbleChartRendered}
             hideDroppedFeatures
             onAccept={this.onXSet}
             onCancel={this.setXDialogOpen}
@@ -216,10 +222,24 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.props.onChartPropsUpdated(newProps);
   };
 
+  private compareChartProps = (newProps?: any, oldProps?: any) => {
+    for (let key in newProps) {
+      if (typeof newProps[key] === "object") {
+        this.compareChartProps(newProps[key], oldProps[key]);
+      }
+      if (newProps[key] !== oldProps[key]) {
+        this.changedKeys.push(key);
+      }
+    }
+  };
+
   private readonly setSeries = (newProps: IGenericChartProps): void => {
+    this.changedKeys = [];
+    this.compareChartProps(newProps, this.props.chartProps);
     const shouldResetIndexes =
       ifEnableLargeData(this.context.dataset) &&
-      !_.isEqual(this.props.chartProps, newProps);
+      !_.isEqual(this.props.chartProps, newProps) &&
+      !isJustTypeChange(this.changedKeys);
     if (shouldResetIndexes) {
       this.setState({
         indexSeries: [],
@@ -258,9 +278,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
       isBubbleChartDataLoading: true
     });
     const plotData = await this.getBubblePlotData();
-    if (plotData.error) {
+    if (!instanceOfHighChart(plotData)) {
       this.setState({
-        bubbleChartErrorMessage: plotData.error.split(":").pop()
+        bubbleChartErrorMessage: plotData.toString().split(":").pop()
       });
       this.setState({
         isBubbleChartDataLoading: false,
@@ -270,6 +290,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     this.setState({
       bubbleChartErrorMessage: undefined,
+      isBubbleChartRendered: true,
       isBubbleChartDataLoading: false,
       plotData
     });
@@ -294,7 +315,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
 
   private async getBubblePlotData(): Promise<any> {
     return await calculateBubblePlotDataFromErrorCohort(
-      this.context.selectedErrorCohort.cohort,
+      this.props.cohort,
       this.props.chartProps,
       this.props.selectedPointsIndexes,
       this.props.customPoints,
@@ -318,7 +339,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       indexSeries,
       plotData: scatterPlotData,
       xSeries,
-      ySeries
+      ySeries,
+      isBubbleChartRendered: false
     });
   };
 

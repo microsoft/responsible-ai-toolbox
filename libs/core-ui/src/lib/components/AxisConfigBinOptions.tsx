@@ -27,6 +27,7 @@ export interface IAxisConfigBinOptionsProps {
   mustBin: boolean;
   selectedBinCount?: number;
   allowTreatAsCategorical?: boolean;
+  allowLogarithmicScaling?: boolean;
   selectedColumn: ISelectorConfig;
   onBinCountUpdated: (binCount?: number) => void;
   onEnableLogarithmicScaling: (checked?: boolean | undefined) => void;
@@ -39,6 +40,7 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
     const selectedMeta =
       this.props.jointDataset.metaDict[this.props.selectedColumn.property];
     const selectedColumnDesc = metaDescription(selectedMeta);
+    const allowLogarithmicScaling = this.props.allowLogarithmicScaling ?? true;
     const styles = axisConfigBinOptionsStyles();
     return (
       <Stack>
@@ -56,6 +58,7 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
         )}
         {(selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
           selectedMeta.featureRange?.rangeType === RangeTypes.Numeric) &&
+          allowLogarithmicScaling &&
           allowUserInteract(this.props.selectedColumn.property) && (
             <Toggle
               key="logarithmic-toggle"

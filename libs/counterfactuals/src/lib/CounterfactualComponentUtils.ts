@@ -30,9 +30,7 @@ enum FieldChangeUpdate {
 }
 
 export function isJustTypeChange(changedKeys: string[]) {
-  // if property, dither has changed - bubble chart
-  // if only type has changed - update scatter plot
-  console.log("!!changedKeys: ", changedKeys);
+  // return true if only type of the axis has changed in panel
   const changedKeysTemp = removeItemAll(changedKeys);
   if (
     changedKeysTemp.length === 1 &&

@@ -222,6 +222,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
   private getLargeCounterfactualChartComponent = (): React.ReactNode => {
     return (
       <LargeCounterfactualChart
+        cohort={this.context.selectedErrorCohort.cohort}
         chartProps={this.props.chartProps}
         customPoints={this.state.customPoints}
         isPanelOpen={this.state.isPanelOpen}

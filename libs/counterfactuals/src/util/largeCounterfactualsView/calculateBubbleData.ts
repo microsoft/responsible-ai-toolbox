@@ -6,6 +6,7 @@ import {
   IDataset,
   ifEnableLargeData,
   IGenericChartProps,
+  IHighchartsConfig,
   JointDataset
 } from "@responsible-ai/core-ui";
 
@@ -35,29 +36,32 @@ export async function calculateBubblePlotDataFromErrorCohort(
   onIndexSeriesUpdated?: (indexSeries?: number[]) => void
 ): Promise<any | undefined> {
   if (ifEnableLargeData(dataset) && requestBubblePlotDistribution) {
-    const bubbleChartData = await calculateBubblePlotDataFromSDK(
-      errorCohort,
-      jointDataset,
-      requestBubblePlotDistribution,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label
-    );
-    if (bubbleChartData.error) {
-      return bubbleChartData;
+    try {
+      const bubbleChartData = await calculateBubblePlotDataFromSDK(
+        errorCohort,
+        jointDataset,
+        requestBubblePlotDistribution,
+        jointDataset.metaDict[chartProps?.xAxis.property].label,
+        jointDataset.metaDict[chartProps?.yAxis.property].label
+      );
+      return getBubbleChartOptions(
+        bubbleChartData.clusters,
+        jointDataset.metaDict[chartProps?.xAxis.property].label,
+        jointDataset.metaDict[chartProps?.yAxis.property].label,
+        chartProps,
+        jointDataset,
+        selectedPointsIndexes,
+        customPoints,
+        isCounterfactualsDataLoading,
+        onBubbleClick,
+        selectPointFromChartLargeData,
+        onIndexSeriesUpdated
+      );
+    } catch (error) {
+      if (error) {
+        return error;
+      }
     }
-    return getBubbleChartOptions(
-      bubbleChartData.clusters,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label,
-      chartProps,
-      jointDataset,
-      selectedPointsIndexes,
-      customPoints,
-      isCounterfactualsDataLoading,
-      onBubbleClick,
-      selectPointFromChartLargeData,
-      onIndexSeriesUpdated
-    );
   }
 }
 
@@ -86,4 +90,8 @@ export async function calculateBubblePlotDataFromSDK(
   );
 
   return result;
+}
+
+export function instanceOfHighChart(object: any): object is IHighchartsConfig {
+  return "chart" in object;
 }
