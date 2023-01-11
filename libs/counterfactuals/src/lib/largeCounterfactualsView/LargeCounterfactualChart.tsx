@@ -40,6 +40,7 @@ export interface ICounterfactualChartProps {
   selectedPointsIndexes: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   isCounterfactualsDataLoading?: boolean;
+  isRevertButtonClicked?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -61,6 +62,7 @@ export interface ICounterfactualChartProps {
   toggleSelectionOfPoint: (index?: number) => void;
   setCounterfactualData: (absoluteIndex: any) => Promise<void>;
   onIndexSeriesUpdated?: (data: any) => void;
+  setIsRevertButtonClicked: (status: boolean) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -105,8 +107,13 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
-    if (this.props.cohort !== prevProps.cohort) {
+    if (
+      this.props.cohort.name !== prevProps.cohort.name ||
+      (prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked &&
+        this.props.isRevertButtonClicked)
+    ) {
       this.updateBubblePlot();
+      return;
     }
     this.changedKeys = [];
     this.compareChartProps(this.props.chartProps, prevProps.chartProps);
@@ -222,7 +229,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.props.onChartPropsUpdated(newProps);
   };
 
-  private compareChartProps = (newProps?: any, oldProps?: any) => {
+  private compareChartProps = (newProps?: any, oldProps?: any): void => {
     for (const key in newProps) {
       if (typeof newProps[key] === "object") {
         this.compareChartProps(newProps[key], oldProps[key]);
@@ -278,6 +285,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
       isBubbleChartDataLoading: true
     });
     const plotData = await this.getBubblePlotData();
+    this.props.setIsRevertButtonClicked(false);
     if (!instanceOfHighChart(plotData)) {
       this.setState({
         bubbleChartErrorMessage: plotData.toString().split(":").pop()

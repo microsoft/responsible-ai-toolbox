@@ -54,6 +54,7 @@ export interface ICounterfactualComponentState {
   indexSeries: number[];
   isCounterfactualsDataLoading?: boolean;
   localCounterfactualErrorMessage?: string;
+  isRevertButtonClicked?: boolean;
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -79,7 +80,8 @@ export class CounterfactualComponent extends React.PureComponent<
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
-      sortingSeriesIndex: undefined
+      sortingSeriesIndex: undefined,
+      isRevertButtonClicked: false
     };
   }
 
@@ -158,6 +160,8 @@ export class CounterfactualComponent extends React.PureComponent<
           setCounterfactualData={this.setCounterfactualData}
           onIndexSeriesUpdated={this.onIndexSeriesUpdated}
           isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
+          isRevertButtonClicked={this.state.isRevertButtonClicked}
+          setIsRevertButtonClicked={this.setIsRevertButtonClicked}
         />
         <CounterfactualLocalImportanceChart
           data={this.state.counterfactualsData}
@@ -252,16 +256,20 @@ export class CounterfactualComponent extends React.PureComponent<
       chartProps: newProps
     });
     if (shouldResetIndexes) {
-      this.setState({
-        counterfactualsData: this.props.data,
-        customPointLength: 0,
-        indexSeries: [],
-        selectedPointsIndexes: []
-      });
+      this.resetIndexes();
     }
   };
 
-  private compareChartProps = (newProps?: any, oldProps?: any) => {
+  private resetIndexes = (): void => {
+    this.setState({
+      counterfactualsData: this.props.data,
+      customPointLength: 0,
+      indexSeries: [],
+      selectedPointsIndexes: []
+    });
+  };
+
+  private compareChartProps = (newProps?: any, oldProps?: any): void => {
     for (const key in newProps) {
       if (typeof newProps[key] === "object") {
         this.compareChartProps(newProps[key], oldProps[key]);
@@ -276,6 +284,14 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({
       indexSeries
     });
+    this.setIsRevertButtonClicked(false);
+  };
+
+  private setIsRevertButtonClicked = (status: boolean): void => {
+    this.setState({ isRevertButtonClicked: status });
+    if (status) {
+      this.resetIndexes();
+    }
   };
 
   private onSelectedPointsIndexesUpdated = (newSelection: number[]): void => {

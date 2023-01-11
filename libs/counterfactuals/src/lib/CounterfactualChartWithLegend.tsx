@@ -28,6 +28,7 @@ export interface ICounterfactualChartWithLegendProps {
   indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   isCounterfactualsDataLoading?: boolean;
+  isRevertButtonClicked?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
   onSelectedPointsIndexesUpdated: (selectedPointsIndexes: number[]) => void;
@@ -48,6 +49,7 @@ export interface ICounterfactualChartWithLegendProps {
   setCounterfactualData: (absoluteIndex: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onIndexSeriesUpdated?: (data: any) => void;
+  setIsRevertButtonClicked: (status: boolean) => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -128,6 +130,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             isCounterfactualsDataLoading={
               this.props.isCounterfactualsDataLoading
             }
+            setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
           />
         </Stack>
       </Stack.Item>
@@ -242,6 +245,8 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         setCounterfactualData={this.props.setCounterfactualData}
         onIndexSeriesUpdated={this.props.onIndexSeriesUpdated}
         isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+        isRevertButtonClicked={this.props.isRevertButtonClicked}
+        setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
       />
     );
   };
