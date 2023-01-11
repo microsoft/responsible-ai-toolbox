@@ -110,6 +110,7 @@ export function ensureNotebookModelOverviewMetricChartIsCorrect(
   includeNewCohort: boolean
 ): void {
   if (isNotebookTest) {
+    cy.wait(1000);
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
       getNumberOfCohorts(datasetShape, includeNewCohort)
@@ -121,15 +122,11 @@ export function ensureNotebookModelOverviewMetricChartIsCorrect(
       (datasetShape.isRegression
         ? initialCohorts?.[0].metrics.meanAbsoluteError
         : initialCohorts?.[0].metrics.accuracy) || "";
-    const expectedAriaLabel =
-      !datasetShape.isRegression && !datasetShape.isMulticlass
-        ? `1. ${initialCohorts?.[0].name}, ${displayedMetric.replace(
-            " ",
-            ","
-          )}.`
-        : `${initialCohorts?.[0].name}, ${displayedMetric.replace(" ", ",")}. ${
-            datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
-          }.`;
+    const expectedAriaLabel = `${
+      initialCohorts?.[0].name
+    }, ${displayedMetric.replace(" ", ",")}. ${
+      datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
+    }.`;
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
       .should("have.attr", "aria-label", expectedAriaLabel);
