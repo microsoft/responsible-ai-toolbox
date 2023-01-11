@@ -4,6 +4,7 @@
 import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -36,15 +37,10 @@ export class ForecastingDashboard extends React.Component<
 
     // "All data" cohort selected, so no particular time series selected yet.
     // special case: only 1 time series in dataset, needs to be handled! TODO
-    const noCohortSelected =
-      this.context.baseErrorCohort.cohort.name ===
-      localization.ErrorAnalysis.Cohort.defaultLabel;
+    const noCohortSelected = isAllDataErrorCohort(this.context.baseErrorCohort);
 
     const dropdownOptions: IDropdownOption[] = this.context.errorCohorts
-      .filter(
-        (cohort) =>
-          cohort.cohort.name !== localization.ErrorAnalysis.Cohort.defaultLabel
-      )
+      .filter((cohort) => !isAllDataErrorCohort(cohort))
       .map((cohort) => {
         return {
           key: cohort.cohort.getCohortID(),
@@ -68,8 +64,7 @@ export class ForecastingDashboard extends React.Component<
             options={dropdownOptions}
             onChange={this.onChangeCohort}
             selectedKey={
-              this.context.baseErrorCohort.cohort.name ===
-              localization.ErrorAnalysis.Cohort.defaultLabel
+              isAllDataErrorCohort(this.context.baseErrorCohort)
                 ? undefined
                 : this.context.baseErrorCohort.cohort.getCohortID()
             }
