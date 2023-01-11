@@ -21,8 +21,8 @@ export class IForecastComparisonProps {}
 
 export interface IForecastComparisonState {
   timeSeriesId?: number;
-  baselinePrediction?: [number, number][];
-  trueY?: [number, number][];
+  baselinePrediction?: Array<[number, number]>;
+  trueY?: Array<[number, number]>;
 }
 
 const stackTokens = {
@@ -60,8 +60,8 @@ export class ForecastComparison extends React.Component<
       const baselinePrediction = await this.getBaselineForecastPrediction();
       this.setState({
         baselinePrediction,
-        trueY,
-        timeSeriesId: currentlySelectedTimeSeriesId
+        timeSeriesId: currentlySelectedTimeSeriesId,
+        trueY
       });
     }
   }
@@ -76,7 +76,7 @@ export class ForecastComparison extends React.Component<
       return;
     }
 
-    let trueY: SeriesOptionsType = {
+    const trueY: SeriesOptionsType = {
       data: this.state.trueY,
       name: localization.Forecasting.trueY,
       type: "spline"
@@ -141,34 +141,30 @@ export class ForecastComparison extends React.Component<
   }
 
   private readonly getBaselineForecastPrediction = async (): Promise<
-    [number, number][] | undefined
+    Array<[number, number]> | undefined
   > => {
     const baselinePrediction = await getForecastPrediction(
       this.context.baseErrorCohort.cohort,
       this.context.jointDataset,
       this.context.requestForecast
     );
-    if (
-      baselinePrediction === undefined ||
-      this.context.dataset.index === undefined
-    ) {
-      return undefined;
+    if (baselinePrediction && this.context.dataset.index) {
+      const dataIndex = this.context.dataset.index;
+      return orderByTime(baselinePrediction, this.getIndices(dataIndex));
     }
-    const dataIndex = this.context.dataset.index!;
-    return orderByTime(baselinePrediction, this.getIndices(dataIndex));
+    return undefined;
   };
 
-  private readonly getTrueY = (): [number, number][] | undefined => {
-    if (this.context.dataset.index === undefined) {
-      return undefined;
+  private readonly getTrueY = (): Array<[number, number]> | undefined => {
+    if (this.context.dataset.index) {
+      return orderByTime(
+        this.context.baseErrorCohort.cohort.filteredData.map(
+          (row) => row[JointDataset.TrueYLabel]
+        ),
+        this.getIndices(this.context.dataset.index)
+      );
     }
-    const dataIndex = this.context.dataset.index!;
-    return orderByTime(
-      this.context.baseErrorCohort.cohort.filteredData.map(
-        (row) => row[JointDataset.TrueYLabel]
-      ),
-      this.getIndices(dataIndex)
-    );
+    return undefined;
   };
 
   private readonly getIndices = (dataIndex: string[]): string[] => {

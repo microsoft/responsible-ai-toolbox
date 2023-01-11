@@ -4,7 +4,7 @@
 export function orderByTime(
   values: number[],
   rowIndices: string[]
-): [number, number][] {
+): Array<[number, number]> {
   return values
     .map((predictedValue: number, idx: number) => {
       return [Date.parse(rowIndices[idx]), predictedValue] as [number, number];

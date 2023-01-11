@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Cohort, ErrorCohort } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+import { Cohort } from "./Cohort";
+import { ErrorCohort } from "./ErrorCohort";
 
 export function isAllDataCohort(cohort: Cohort, checkName?: boolean): boolean {
   // Comparing localized strings such as the cohort name is bad.
