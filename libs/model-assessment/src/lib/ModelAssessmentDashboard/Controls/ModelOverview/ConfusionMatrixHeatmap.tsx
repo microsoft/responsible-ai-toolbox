@@ -19,7 +19,7 @@ import {
   ErrorCohort
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
-import { PointOptionsObject } from "highcharts";
+import { Point, PointOptionsObject } from "highcharts";
 import * as _ from "lodash";
 import React from "react";
 
@@ -210,7 +210,9 @@ export class ConfusionMatrixHeatmap extends React.Component<
                         localization.formatString(
                           localization.ModelAssessment.ModelOverview
                             .confusionMatrix.confusionMatrixHeatmapTooltip,
-                          `<b>${this.point.value} </b>`,
+                          `<b>${
+                            (this.point as Point & { value: number }).value
+                          } </b>`,
                           `<b>${
                             this.series.yAxis.categories[this.point.y ?? 0]
                           }</b>`,
