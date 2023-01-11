@@ -36,6 +36,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestBoxPlotDistribution"
       | "requestDatasetAnalysisBarChart"
       | "requestDatasetAnalysisBoxChart"
+      | "requestForecast"
       | "requestGlobalCausalEffects"
       | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
@@ -84,6 +85,9 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           data,
           "/model_overview_probability_distribution"
         );
+      };
+      callBack.requestForecast = async (data: any[]): Promise<any[]> => {
+        return callFlaskService(this.props.config, data, "/forecast");
       };
       callBack.requestGlobalCausalEffects = async (
         id: string,

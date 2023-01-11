@@ -10,7 +10,8 @@ export enum DatasetTaskType {
   ImageClassification = "image_classification",
   TextClassification = "text_classification",
   MultilabelTextClassification = "multilabel_text_classification",
-  MultilabelImageClassification = "multilabel_image_classification"
+  MultilabelImageClassification = "multilabel_image_classification",
+  Forecasting = "forecasting"
 }
 
 export interface IDataset {
@@ -28,6 +29,7 @@ export interface IDataset {
   data_balance_measures?: IDataBalanceMeasures;
   feature_metadata?: IFeatureMetaData;
   images?: string[];
+  index?: string[];
 }
 
 // TODO Remove DatasetSummary when possible

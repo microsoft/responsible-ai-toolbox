@@ -10,6 +10,7 @@ import {
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
+import { isAllDataErrorCohort } from "../isAllDataCohort";
 
 export interface ICohortInfoSectionProps {
   toggleShiftCohortVisibility: () => void;
@@ -26,10 +27,7 @@ export class CohortInfoSection extends React.PureComponent<ICohortInfoSectionPro
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
-    if (
-      currentCohort.cohort.filters.length === 0 &&
-      currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
-    ) {
+    if (isAllDataErrorCohort(currentCohort, true)) {
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }

@@ -15,7 +15,8 @@ export enum CohortSource {
   None = "None",
   TreeMap = "Tree map",
   HeatMap = "Heat map",
-  ManuallyCreated = "Manually created"
+  ManuallyCreated = "Manually created",
+  Prebuilt = "Prebuilt"
 }
 
 export class Cohort {
