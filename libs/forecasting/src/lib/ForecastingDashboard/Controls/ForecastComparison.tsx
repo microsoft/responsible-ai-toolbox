@@ -21,7 +21,8 @@ export class IForecastComparisonProps {}
 
 export interface IForecastComparisonState {
   timeSeriesId?: number;
-  baselinePrediction?: number[];
+  baselinePrediction?: [number, number][];
+  trueY?: [number, number][];
 }
 
 const stackTokens = {
@@ -38,15 +39,14 @@ export class ForecastComparison extends React.Component<
 
   public constructor(props: IForecastComparisonProps) {
     super(props);
-    this.state = {
-      baselinePrediction: undefined
-    };
+    this.state = {};
   }
 
   public async componentDidMount(): Promise<void> {
+    const trueY = this.getTrueY();
     const baselinePrediction = await this.getBaselineForecastPrediction();
     if (baselinePrediction) {
-      this.setState({ baselinePrediction });
+      this.setState({ baselinePrediction, trueY });
     }
   }
 
@@ -56,9 +56,11 @@ export class ForecastComparison extends React.Component<
     const currentlySelectedTimeSeriesId =
       this.context.baseErrorCohort.cohort.getCohortID();
     if (currentlySelectedTimeSeriesId !== this.state.timeSeriesId) {
+      const trueY = this.getTrueY();
       const baselinePrediction = await this.getBaselineForecastPrediction();
       this.setState({
         baselinePrediction,
+        trueY,
         timeSeriesId: currentlySelectedTimeSeriesId
       });
     }
@@ -67,33 +69,22 @@ export class ForecastComparison extends React.Component<
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
 
-    const indices = this.context.dataset.index;
-    if (this.context === undefined || indices === undefined) {
+    if (
+      this.context === undefined ||
+      this.context.jointDataset.numLabels !== 1
+    ) {
       return;
     }
-    const rowIndices = this.context.baseErrorCohort.cohort.filteredData.map(
-      (datum) => indices[datum.Index]
-    );
 
-    let trueY: SeriesOptionsType[] = [];
-    if (this.context.jointDataset.numLabels === 1) {
-      trueY = [
-        {
-          data: orderByTime(
-            this.context.baseErrorCohort.cohort.filteredData.map(
-              (row) => row[JointDataset.TrueYLabel]
-            ),
-            rowIndices
-          ),
-          name: localization.Forecasting.trueY,
-          type: "spline"
-        }
-      ];
-    }
-    const seriesData: SeriesOptionsType[] = [...trueY];
+    let trueY: SeriesOptionsType = {
+      data: this.state.trueY,
+      name: localization.Forecasting.trueY,
+      type: "spline"
+    };
+    const seriesData: SeriesOptionsType[] = [trueY];
     if (this.state.baselinePrediction !== undefined) {
       seriesData.push({
-        data: orderByTime(this.state.baselinePrediction, rowIndices),
+        data: this.state.baselinePrediction,
         name: localization.Forecasting.baselinePrediction,
         type: "spline"
       } as SeriesOptionsType);
@@ -150,12 +141,39 @@ export class ForecastComparison extends React.Component<
   }
 
   private readonly getBaselineForecastPrediction = async (): Promise<
-    number[] | undefined
+    [number, number][] | undefined
   > => {
-    return await getForecastPrediction(
+    const baselinePrediction = await getForecastPrediction(
       this.context.baseErrorCohort.cohort,
       this.context.jointDataset,
       this.context.requestForecast
+    );
+    if (
+      baselinePrediction === undefined ||
+      this.context.dataset.index === undefined
+    ) {
+      return undefined;
+    }
+    const dataIndex = this.context.dataset.index!;
+    return orderByTime(baselinePrediction, this.getIndices(dataIndex));
+  };
+
+  private readonly getTrueY = (): [number, number][] | undefined => {
+    if (this.context.dataset.index === undefined) {
+      return undefined;
+    }
+    const dataIndex = this.context.dataset.index!;
+    return orderByTime(
+      this.context.baseErrorCohort.cohort.filteredData.map(
+        (row) => row[JointDataset.TrueYLabel]
+      ),
+      this.getIndices(dataIndex)
+    );
+  };
+
+  private readonly getIndices = (dataIndex: string[]): string[] => {
+    return this.context.baseErrorCohort.cohort.filteredData.map(
+      (datum) => dataIndex[datum.Index]
     );
   };
 }
