@@ -54,7 +54,7 @@ export interface ICounterfactualComponentState {
   indexSeries: number[];
   isCounterfactualsDataLoading?: boolean;
   localCounterfactualErrorMessage?: string;
-  isRevertButtonClicked?: boolean;
+  isRevertButtonClicked: boolean;
 }
 
 export class CounterfactualComponent extends React.PureComponent<

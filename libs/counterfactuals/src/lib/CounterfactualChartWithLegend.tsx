@@ -28,7 +28,7 @@ export interface ICounterfactualChartWithLegendProps {
   indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   isCounterfactualsDataLoading?: boolean;
-  isRevertButtonClicked?: boolean;
+  isRevertButtonClicked: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
   onSelectedPointsIndexesUpdated: (selectedPointsIndexes: number[]) => void;

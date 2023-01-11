@@ -40,7 +40,7 @@ export interface ICounterfactualChartProps {
   selectedPointsIndexes: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   isCounterfactualsDataLoading?: boolean;
-  isRevertButtonClicked?: boolean;
+  isRevertButtonClicked: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   saveAsPoint: () => void;
   setCustomRowProperty: (
@@ -107,17 +107,11 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
-    if (
-      this.props.cohort.name !== prevProps.cohort.name ||
-      (prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked &&
-        this.props.isRevertButtonClicked)
-    ) {
+    if (this.shouldUpdateBubbleChartPlot(prevProps)) {
       this.updateBubblePlot();
       return;
     }
-    this.changedKeys = [];
-    this.compareChartProps(this.props.chartProps, prevProps.chartProps);
-    if (isJustTypeChange(this.changedKeys)) {
+    if (this.isJustTypeChange(prevProps.chartProps)) {
       this.updateScatterPlot();
       return;
     }
@@ -270,6 +264,24 @@ export class LargeCounterfactualChart extends React.PureComponent<
         this.props.isCounterfactualsDataLoading
       )
     );
+  };
+
+  private readonly shouldUpdateBubbleChartPlot = (
+    prevProps: ICounterfactualChartProps
+  ): boolean => {
+    return (
+      this.props.cohort.name !== prevProps.cohort.name ||
+      (this.props.isRevertButtonClicked &&
+        prevProps.isRevertButtonClicked !== this.props.isRevertButtonClicked)
+    );
+  };
+
+  private readonly isJustTypeChange = (
+    prevChartProps: IGenericChartProps
+  ): boolean => {
+    this.changedKeys = [];
+    this.compareChartProps(this.props.chartProps, prevChartProps);
+    return isJustTypeChange(this.changedKeys);
   };
 
   private readonly setXDialogOpen = (): void => {

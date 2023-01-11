@@ -85,7 +85,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
           )}
         </div>
         <PrimaryButton
-          className={classNames.legendLabel}
+          className={classNames.buttonStyle}
           onClick={this.props.togglePanel}
           disabled={this.disableCounterfactualPanel()}
           text={
@@ -96,7 +96,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
         />
         {this.displayRevertButton() && (
           <DefaultButton
-            className={classNames.revertButton}
+            className={classNames.buttonStyle}
             onClick={this.onRevertButtonClick}
             text={localization.Counterfactuals.revertToBubbleChart}
             title={localization.Counterfactuals.revertToBubbleChart}
