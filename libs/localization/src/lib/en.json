@@ -1422,7 +1422,8 @@
         "ModelOverview": "Model overview component added",
         "CausalAnalysis": "Causal analysis component added",
         "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added"
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
       }
     },
     "CausalAnalysis": {
@@ -1470,6 +1471,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
+      "Forecasting": "Forecasting",
       "ModelOverview": "Model overview",
       "TableView": "Table view",
       "VisionTab": "Vision data explorer"
@@ -1821,6 +1823,45 @@
     },
     "TableViewTab": {
       "Heading": "View the dataset in a table format for all features and rows."
+    }
+  },
+  "Forecasting": {
+    "target": "Target",
+    "whatIfHeader": "What-if analysis",
+    "whatIfDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
+    "timeSeries": "Time series",
+    "selectTimeSeries": "Select a time series.",
+    "trueY": "True Y",
+    "baselinePrediction": "Baseline prediction",
+    "forecastComparisonChartTitle": "Forecasts",
+    "forecastComparisonChartTimeAxisLabel": "Time",
+    "Transformations": {
+      "multiply": "Multiply",
+      "divide": "Divide",
+      "add": "Add",
+      "subtract": "Subtract"
+    },
+    "TransformationCreation": {
+      "title": "Create what-if scenario",
+      "nameLabel": "What-if scenario name",
+      "featureInstructions": "Choose a feature to perturb.",
+      "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
+      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
+      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
+      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
+      "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
+      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
+    },
+    "TransformationTable": {
+      "nameColumnHeader": "Name",
+      "methodColumnHeader": "Method",
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
     }
   }
 }
