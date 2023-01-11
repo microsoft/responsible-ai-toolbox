@@ -126,6 +126,11 @@ export function ensureNotebookModelOverviewMetricChartIsCorrect(
     }, ${displayedMetric.replace(" ", ",")}. ${
       datasetShape.isRegression ? "Mean absolute error" : "Accuracy score"
     }.`;
+    
+    // The wait time is required to allow bars to render.
+    // There is no call we can intercept and wait for.
+    // So contrary to the lint warning this is a necessary wait.
+    cy.wait(1000);
     cy.get(Locators.ModelOverviewMetricChartBars)
       .first()
       .should("have.attr", "aria-label", expectedAriaLabel);
@@ -142,9 +147,8 @@ export function ensureChartsPivot(
     datasetShape.isRegression,
     datasetShape.isBinary
   );
-  cy.get(Locators.ModelOverviewChartPivotItems).as("chartPivotItems");
   availableCharts.forEach((chartName, index) => {
-    cy.get("@chartPivotItems").then(($pivotItems) => {
+    cy.get(Locators.ModelOverviewChartPivotItems).then(($pivotItems) => {
       $pivotItems[index].click();
     });
     assertChartVisibility(datasetShape, chartName);
