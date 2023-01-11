@@ -39,7 +39,12 @@ export const forecastingDashboardStyles: () => IProcessedStyleSet<IForecastingDa
         maxWidth: descriptionMaxWidth
       },
       dropdown: {
-        width: "400px"
+        width: "auto",
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            width: "600px"
+          }
+        }
       },
       errorText: {
         color: theme.semanticColors.errorText,
