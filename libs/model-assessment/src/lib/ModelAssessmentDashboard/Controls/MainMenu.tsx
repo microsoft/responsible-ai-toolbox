@@ -12,9 +12,11 @@ import {
   TooltipHost
 } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   ErrorCohort,
   IModelAssessmentContext,
+  isAllDataErrorCohort,
   ITelemetryEvent,
   ModelAssessmentContext,
   TelemetryEventName,
@@ -93,7 +95,9 @@ export class MainMenu extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = mainMenuStyles();
-    const menuItems: ICommandBarItemProps[] = [
+    let allowCohortEditing = true;
+    let showAllDataCohort = true;
+    let menuItems: ICommandBarItemProps[] = [
       {
         className: classNames.mainMenuItem,
         key: "cohortName",
@@ -116,6 +120,15 @@ export class MainMenu extends React.PureComponent<
         text: localization.ModelAssessment.CohortInformation.NewCohort
       }
     ];
+
+    if (this.context.dataset.task_type === DatasetTaskType.Forecasting) {
+      // Creating and switching cohorts is handled differently for forecasting
+      // since we need to work with time series as cohorts only.
+      menuItems = [];
+      allowCohortEditing = false;
+      showAllDataCohort = false;
+    }
+
     return (
       <>
         <div className={classNames.banner}>
@@ -130,6 +143,8 @@ export class MainMenu extends React.PureComponent<
         <CohortSettingsPanel
           isOpen={this.state?.cohortSettingsPanelVisible}
           onDismiss={this.toggleCohortSettingsPanel}
+          allowCohortEditing={allowCohortEditing}
+          showAllDataCohort={showAllDataCohort}
         />
         <DashboardSettings
           isOpen={this.state.dashboardSettingsVisible}
@@ -140,6 +155,7 @@ export class MainMenu extends React.PureComponent<
         <ChangeGlobalCohort
           visible={this.state.changeCohortVisible}
           onDismiss={this.toggleChangeCohortVisibility}
+          showAllDataCohort={showAllDataCohort}
         />
         <CreateGlobalCohort
           visible={this.state.createCohortVisible}
@@ -172,10 +188,7 @@ export class MainMenu extends React.PureComponent<
     // add (default) if it's the default cohort
     let cohortInfoTitle =
       localization.ModelAssessment.CohortInformation.GlobalCohort + cohortName;
-    if (
-      currentCohort.cohort.filters.length === 0 &&
-      currentCohort.cohort.name === localization.Interpret.Cohort.defaultLabel
-    ) {
+    if (isAllDataErrorCohort(currentCohort, true)) {
       cohortInfoTitle +=
         localization.ModelAssessment.CohortInformation.DefaultCohort;
     }
