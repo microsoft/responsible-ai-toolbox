@@ -110,7 +110,6 @@ export function ensureNotebookModelOverviewMetricChartIsCorrect(
   includeNewCohort: boolean
 ): void {
   if (isNotebookTest) {
-    cy.wait(1000);
     cy.get(Locators.ModelOverviewMetricChartBars).should(
       "have.length",
       getNumberOfCohorts(datasetShape, includeNewCohort)
