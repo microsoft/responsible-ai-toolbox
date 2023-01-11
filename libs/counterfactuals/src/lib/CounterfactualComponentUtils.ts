@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IGenericChartProps } from "@responsible-ai/core-ui";
 import _ from "lodash";
 
@@ -42,9 +45,8 @@ export function isJustTypeChange(changedKeys: string[]) {
 }
 
 function removeItemAll(changedKeys: string[]) {
-  const valuesToRemove = ["options", "xAxis", "yAxis"];
+  const valuesToRemove = new Set(["options", "xAxis", "yAxis"]);
 
-  const res = changedKeys.filter((item) => !valuesToRemove.includes(item));
-  console.log("!!res: ", res);
+  const res = changedKeys.filter((item) => !valuesToRemove.has(item));
   return res;
 }

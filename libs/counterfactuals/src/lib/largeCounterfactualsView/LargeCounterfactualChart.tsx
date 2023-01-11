@@ -91,12 +91,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
       bubbleChartErrorMessage: undefined,
       indexSeries: [],
       isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
       plotData: undefined,
       xDialogOpen: false,
       xSeries: [],
       yDialogOpen: false,
-      ySeries: [],
-      isBubbleChartRendered: true
+      ySeries: []
     };
   }
 
@@ -223,7 +223,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   };
 
   private compareChartProps = (newProps?: any, oldProps?: any) => {
-    for (let key in newProps) {
+    for (const key in newProps) {
       if (typeof newProps[key] === "object") {
         this.compareChartProps(newProps[key], oldProps[key]);
       }
@@ -290,8 +290,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
     }
     this.setState({
       bubbleChartErrorMessage: undefined,
-      isBubbleChartRendered: true,
       isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
       plotData
     });
   }
@@ -337,10 +337,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
   ): void => {
     this.setState({
       indexSeries,
+      isBubbleChartRendered: false,
       plotData: scatterPlotData,
       xSeries,
-      ySeries,
-      isBubbleChartRendered: false
+      ySeries
     });
   };
 

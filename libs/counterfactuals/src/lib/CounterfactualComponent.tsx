@@ -248,7 +248,6 @@ export class CounterfactualComponent extends React.PureComponent<
       ifEnableLargeData(this.context.dataset) &&
       !_.isEqual(this.state.chartProps, newProps) &&
       !isJustTypeChange(this.changedKeys);
-    console.log("!!shouldResetIndexes: ", shouldResetIndexes);
     this.setState({
       chartProps: newProps
     });
@@ -263,7 +262,7 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private compareChartProps = (newProps?: any, oldProps?: any) => {
-    for (let key in newProps) {
+    for (const key in newProps) {
       if (typeof newProps[key] === "object") {
         this.compareChartProps(newProps[key], oldProps[key]);
       }
