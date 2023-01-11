@@ -12,17 +12,21 @@ import React from "react";
 
 import { ChangeGlobalCohort } from "./ChangeGlobalCohort";
 
+interface IChangeGlobalCohortButtonProps {
+  showAllDataCohort: boolean;
+}
+
 interface IChangeGlobalCohortButtonState {
   shiftCohortVisible: boolean;
 }
 
 export class ChangeGlobalCohortButton extends React.Component<
-  Record<string, never>,
+  IChangeGlobalCohortButtonProps,
   IChangeGlobalCohortButtonState
 > {
   public static contextType = ModelAssessmentContext;
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
-  public constructor(props: Record<string, never>) {
+  public constructor(props: IChangeGlobalCohortButtonProps) {
     super(props);
     this.state = { shiftCohortVisible: false };
   }
@@ -36,6 +40,7 @@ export class ChangeGlobalCohortButton extends React.Component<
         <ChangeGlobalCohort
           visible={this.state.shiftCohortVisible}
           onDismiss={this.toggleShiftCohortVisibility}
+          showAllDataCohort={this.props.showAllDataCohort}
         />
       </>
     );
