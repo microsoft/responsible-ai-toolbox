@@ -181,6 +181,10 @@ export class GlobalExplanationTab extends React.PureComponent<
       this.context.jointDataset.datasetMetaData?.featureMetaData
         ?.dropped_features
     );
+    const selectedCohort =
+      this.state.selectedCohortIndex >= this.props.cohorts.length
+        ? this.props.cohorts[0]
+        : this.props.cohorts[this.state.selectedCohortIndex];
 
     return (
       <Stack horizontal={false} className={classNames.page}>
@@ -315,9 +319,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                       <FeatureImportanceDependence
                         chartProps={this.state.dependenceProps}
                         cohortIndex={this.state.selectedCohortIndex}
-                        cohort={
-                          this.props.cohorts[this.state.selectedCohortIndex]
-                        }
+                        cohort={selectedCohort}
                         jointDataset={this.context.jointDataset}
                         logarithmicScaling={this.state.logarithmicScaling}
                         metadata={this.context.modelMetadata}
