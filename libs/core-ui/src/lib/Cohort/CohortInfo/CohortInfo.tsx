@@ -8,7 +8,7 @@ import React from "react";
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
 import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
-import { isAllDataErrorCohort } from "../isAllDataCohort";
+import { isAllDataErrorCohort } from "../allDataCohortUtils";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
 
 import { cohortInfoStyles } from "./CohortInfo.styles";
