@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDropdownOption } from "@fluentui/react";
+import { DatasetTaskType } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import { IModelAssessmentDashboardProps } from "./ModelAssessmentDashboardProps";
@@ -21,7 +22,12 @@ export function getAvailableTabs(
       text: localization.ModelAssessment.ComponentNames.ErrorAnalysis
     });
   }
-
+  if (props.dataset.task_type === DatasetTaskType.Forecasting) {
+    availableTabs.push({
+      key: GlobalTabKeys.ForecastingTab,
+      text: localization.ModelAssessment.ComponentNames.Forecasting
+    });
+  }
   if (props.dataset.images) {
     availableTabs.push({
       key: GlobalTabKeys.VisionTab,
@@ -29,16 +35,22 @@ export function getAvailableTabs(
     });
   }
 
-  if (props.dataset.predicted_y) {
+  if (
+    props.dataset.predicted_y &&
+    props.dataset.task_type !== DatasetTaskType.Forecasting
+  ) {
     availableTabs.push({
       key: GlobalTabKeys.ModelOverviewTab,
       text: localization.ModelAssessment.ComponentNames.ModelOverview
     });
   }
-  availableTabs.push({
-    key: GlobalTabKeys.DataAnalysisTab,
-    text: localization.ModelAssessment.ComponentNames.DataAnalysis
-  });
+
+  if (props.dataset.task_type !== DatasetTaskType.Forecasting) {
+    availableTabs.push({
+      key: GlobalTabKeys.DataAnalysisTab,
+      text: localization.ModelAssessment.ComponentNames.DataAnalysis
+    });
+  }
 
   if (props.modelExplanationData && props.modelExplanationData.length > 0) {
     availableTabs.push({
