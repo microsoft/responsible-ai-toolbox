@@ -18,7 +18,9 @@ import {
   ModelAssessmentContext,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
-  IsClassifier
+  IsClassifier,
+  DatasetTaskType,
+  isAllDataErrorCohort
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -34,6 +36,7 @@ import {
   MatrixFilter,
   TreeViewRenderer
 } from "@responsible-ai/error-analysis";
+import { ForecastingDashboard as ForecastingTab } from "@responsible-ai/forecasting";
 import { VisionExplanationDashboard as VisionTab } from "@responsible-ai/interpret-vision";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
@@ -118,7 +121,10 @@ export class TabsView extends React.PureComponent<
       weightVectorLabels,
       weightVectorOptions
     };
-    if (this.props.requestImportances) {
+    if (
+      this.props.requestImportances &&
+      this.context.dataset.task_type !== DatasetTaskType.Forecasting
+    ) {
       this.props
         .requestImportances([], new AbortController().signal)
         .then((result) => {
@@ -131,21 +137,21 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      this.props.baseCohort.cohort.name !==
-        localization.ErrorAnalysis.Cohort.defaultLabel;
+      !isAllDataErrorCohort(this.props.baseCohort, true);
     const classNames = tabsViewStyles();
     return (
       <Stack className={classNames.stackStyle}>
         {this.props.activeGlobalTabs[0]?.key !==
-          GlobalTabKeys.ErrorAnalysisTab && (
-          <Stack.Item className={classNames.buttonSection}>
-            <AddTabButton
-              tabIndex={0}
-              onAdd={this.props.addTab}
-              availableTabs={this.props.addTabDropdownOptions}
-            />
-          </Stack.Item>
-        )}
+          GlobalTabKeys.ErrorAnalysisTab &&
+          this.context.dataset.task_type !== DatasetTaskType.Forecasting && (
+            <Stack.Item className={classNames.buttonSection}>
+              <AddTabButton
+                tabIndex={0}
+                onAdd={this.props.addTab}
+                availableTabs={this.props.addTabDropdownOptions}
+              />
+            </Stack.Item>
+          )}
         {this.props.activeGlobalTabs.map((t, i) => (
           <>
             <Stack.Item
@@ -180,6 +186,19 @@ export class TabsView extends React.PureComponent<
                     />
                   </>
                 )}
+              {t.key === GlobalTabKeys.ForecastingTab && (
+                <>
+                  <h3
+                    className={classNames.sectionHeader}
+                    id="forecastingHeader"
+                  >
+                    <Text variant={"xxLarge"}>
+                      {localization.Forecasting.whatIfHeader}
+                    </Text>
+                  </h3>
+                  <ForecastingTab />
+                </>
+              )}
               {t.key === GlobalTabKeys.ErrorAnalysisTab &&
                 this.props.errorAnalysisData?.[0] && (
                   <>
@@ -428,13 +447,15 @@ export class TabsView extends React.PureComponent<
                   </>
                 )}
             </Stack.Item>
-            <Stack.Item className={classNames.buttonSection}>
-              <AddTabButton
-                tabIndex={i + 1}
-                onAdd={this.props.addTab}
-                availableTabs={this.props.addTabDropdownOptions}
-              />
-            </Stack.Item>
+            {this.context.dataset.task_type !== DatasetTaskType.Forecasting && (
+              <Stack.Item className={classNames.buttonSection}>
+                <AddTabButton
+                  tabIndex={i + 1}
+                  onAdd={this.props.addTab}
+                  availableTabs={this.props.addTabDropdownOptions}
+                />
+              </Stack.Item>
+            )}
           </>
         ))}
         {this.state.mapShiftVisible && (
