@@ -8,6 +8,12 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {}
+    },
+    {
+      "files": ["charts.ts"],
+      "rules": {
+        "cypress/no-unnecessary-waiting": "off"
+      }
     }
   ]
 }
