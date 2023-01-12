@@ -19,7 +19,8 @@ import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   IsClassifier,
-  DatasetTaskType
+  DatasetTaskType,
+  isAllDataErrorCohort
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -136,8 +137,7 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      this.props.baseCohort.cohort.name !==
-        localization.ErrorAnalysis.Cohort.defaultLabel;
+      !isAllDataErrorCohort(this.props.baseCohort, true);
     const classNames = tabsViewStyles();
     return (
       <Stack className={classNames.stackStyle}>

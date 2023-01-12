@@ -8,7 +8,8 @@ import {
   IsClassifier,
   FilterMethods,
   Cohort,
-  IPreBuiltFilter
+  IPreBuiltFilter,
+  CohortSource
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
@@ -96,7 +97,9 @@ export function processPreBuiltCohort(
       }
       const errorCohortEntry = new ErrorCohort(
         new Cohort(preBuiltCohort.name, jointDataset, filterList),
-        jointDataset
+        jointDataset,
+        undefined,
+        CohortSource.Prebuilt
       );
       errorCohortList.push(errorCohortEntry);
     }

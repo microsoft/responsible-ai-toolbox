@@ -15,6 +15,7 @@ import {
   CohortEditorFilterList,
   defaultModelAssessmentContext,
   ErrorCohort,
+  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -43,12 +44,11 @@ export class ShiftCohort extends React.Component<
 
   public componentDidMount(): void {
     const savedCohorts = this.context.errorCohorts
-      .filter((errorCohort) => !errorCohort.isTemporary)
       .filter(
         (errorCohort) =>
-          this.props.showAllDataCohort ||
-          errorCohort.cohort.name !==
-            localization.ErrorAnalysis.Cohort.defaultLabel
+          !errorCohort.isTemporary &&
+          (this.props.showAllDataCohort ||
+            !isAllDataErrorCohort(errorCohort, true))
       );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {

@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -64,9 +65,16 @@ export class ForecastingDashboard extends React.Component<
 
     // "All data" cohort selected, so no particular time series selected yet.
     // special case: only 1 time series in dataset, needs to be handled! TODO
-    const noCohortSelected =
-      this.context.baseErrorCohort.cohort.name ===
-      localization.ErrorAnalysis.Cohort.defaultLabel;
+    const noCohortSelected = isAllDataErrorCohort(this.context.baseErrorCohort);
+
+    const dropdownOptions: IDropdownOption[] = this.context.errorCohorts
+      .filter((cohort) => !isAllDataErrorCohort(cohort))
+      .map((cohort) => {
+        return {
+          key: cohort.cohort.getCohortID(),
+          text: cohort.cohort.name
+        };
+      });
 
     const cohortTransformations =
       this.state.transformations?.get(
@@ -87,22 +95,10 @@ export class ForecastingDashboard extends React.Component<
             <Dropdown
               label={localization.Forecasting.timeSeries}
               className={classNames.dropdown}
-              options={this.context.errorCohorts
-                .filter(
-                  (cohort) =>
-                    cohort.cohort.name !==
-                    localization.ErrorAnalysis.Cohort.defaultLabel
-                )
-                .map((cohort) => {
-                  return {
-                    key: cohort.cohort.getCohortID(),
-                    text: cohort.cohort.name
-                  } as IDropdownOption;
-                })}
+              options={dropdownOptions}
               onChange={this.onChangeCohort}
               selectedKey={
-                this.context.baseErrorCohort.cohort.name ===
-                localization.ErrorAnalysis.Cohort.defaultLabel
+                isAllDataErrorCohort(this.context.baseErrorCohort)
                   ? undefined
                   : this.context.baseErrorCohort.cohort.getCohortID()
               }
@@ -145,6 +141,21 @@ export class ForecastingDashboard extends React.Component<
     );
   }
 
+  private onChangeCohort = (
+    _event: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption<string> | undefined
+  ): void => {
+    if (option) {
+      const newCohortId = option.key as number;
+      const newCohort = this.context.errorCohorts.find(
+        (cohort) => cohort.cohort.getCohortID() === newCohortId
+      );
+      if (newCohort) {
+        this.context.shiftErrorCohort(newCohort);
+      }
+    }
+  };
+
   private addTransformation = (
     name: string,
     transformation: Transformation
@@ -162,20 +173,5 @@ export class ForecastingDashboard extends React.Component<
       isTransformationCreatorVisible: false,
       transformations: newMap
     });
-  };
-
-  private onChangeCohort = (
-    _event: React.FormEvent<HTMLDivElement>,
-    option?: IDropdownOption<string> | undefined
-  ): void => {
-    if (option) {
-      const newCohortId = option.key as number;
-      const newCohort = this.context.errorCohorts.find(
-        (cohort) => cohort.cohort.getCohortID() === newCohortId
-      );
-      if (newCohort) {
-        this.context.shiftErrorCohort(newCohort);
-      }
-    }
   };
 }

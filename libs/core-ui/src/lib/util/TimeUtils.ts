@@ -1,21 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-interface ITimeBasedValue {
-  time: number;
-  value: number;
-}
-
-export function orderByTime(values: number[], rowIndices: string[]): any[][] {
+export function orderByTime(
+  values: number[],
+  rowIndices: string[]
+): Array<[number, number]> {
   return values
     .map((predictedValue: number, idx: number) => {
-      return {
-        time: Date.parse(rowIndices[idx]),
-        value: predictedValue
-      } as ITimeBasedValue;
+      return [Date.parse(rowIndices[idx]), predictedValue] as [number, number];
     })
     .sort(
-      (objA: ITimeBasedValue, objB: ITimeBasedValue) => objA.time - objB.time
-    )
-    .map((tbv) => [tbv.time, tbv.value]);
+      (objA: [number, number], objB: [number, number]) => objA[0] - objB[1]
+    );
 }
