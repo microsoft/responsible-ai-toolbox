@@ -13,7 +13,6 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
-  isUndefinedOrEmpty,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -71,7 +70,7 @@ export class TransformationCreationDialog extends React.Component<
     const classNames = forecastingDashboardStyles();
 
     let transformationNameErrorMessage = undefined;
-    if (isUndefinedOrEmpty(this.state.transformationName)) {
+    if (!this.state.transformationName) {
       transformationNameErrorMessage =
         localization.Forecasting.TransformationCreation
           .scenarioNamingInstructions;
