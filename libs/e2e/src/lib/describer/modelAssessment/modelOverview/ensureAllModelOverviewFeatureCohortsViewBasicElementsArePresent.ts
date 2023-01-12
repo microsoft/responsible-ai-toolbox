@@ -2,8 +2,12 @@
 // Licensed under the MIT License.
 
 import { Locators } from "../Constants";
+import { IModelAssessmentData } from "../IModelAssessmentData";
+
+import { assertChartVisibility } from "./charts";
 
 export function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
+  datasetShape: IModelAssessmentData,
   isNotebookTest: boolean
 ): void {
   cy.get(Locators.ModelOverviewFeatureSelection).should("exist");
@@ -21,11 +25,7 @@ export function ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisBaseCohortWarning).should(
     "not.exist"
   );
-  cy.get(Locators.ModelOverviewChartPivot).should("not.exist");
-  cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-    "not.exist"
-  );
-  cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
+  assertChartVisibility(datasetShape);
   if (isNotebookTest) {
     cy.get(Locators.MissingParameterPlaceholder).should(
       "include.text",

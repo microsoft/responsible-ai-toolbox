@@ -14,12 +14,13 @@ import {
   IExplanationModelMetadata,
   ModelTypes
 } from "../Interfaces/IExplanationContext";
-import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
 import {
   WeightVectors,
   WeightVectorOption
 } from "../Interfaces/IWeightedDropdownContext";
+import { IsBinary, IsMulticlass } from "../util/ExplanationUtils";
 
+import { AxisTypes } from "./IGenericChartProps";
 import {
   ColumnCategories,
   IJointDatasetArgs,
@@ -27,7 +28,6 @@ import {
   MulticlassClassificationEnum,
   IDatasetMeta
 } from "./JointDatasetUtils";
-import { AxisTypes } from "./IGenericChartProps";
 
 // this is the single source for data, it should hold all raw data and be how data for presentation is
 // accessed. It shall apply filters to the raw table and persist the filtered table for presenting to
@@ -269,7 +269,7 @@ export class JointDataset {
     }
   }
 
-  // creating public static methods of the class instance methonds.
+  // creating public static methods of the class instance methods.
   // This is to enable prototyping the cohort concept, where we don't have a single
   // datasource as initially envisioned but an array of them, all build off of the true datasource
   public static unwrap(
@@ -663,10 +663,8 @@ export class JointDataset {
             this.dataDict[index][labelColName + subIndex.toString()] = subVal;
           }
         });
-      } else {
-        if (this.dataDict) {
-          this.dataDict[index][labelColName] = val;
-        }
+      } else if (this.dataDict) {
+        this.dataDict[index][labelColName] = val;
       }
     });
     for (let i = 0; i < this.numLabels; i++) {
@@ -684,10 +682,8 @@ export class JointDataset {
         if (Array.isArray(indexedValues)) {
           singleLabelValues = indexedValues;
         }
-      } else {
-        if (!Array.isArray(values)) {
-          singleLabelValues = values;
-        }
+      } else if (!Array.isArray(values)) {
+        singleLabelValues = values;
       }
       let categoricalValues =
         metadata.modelType !== ModelTypes.Regression
