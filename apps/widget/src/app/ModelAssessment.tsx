@@ -5,7 +5,8 @@ import {
   ICausalWhatIfData,
   ICausalAnalysisData,
   IErrorAnalysisMatrix,
-  IHighchartBoxData
+  IHighchartBoxData,
+  IHighchartBubbleSDKData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -35,9 +36,12 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestBoxPlotDistribution"
       | "requestDatasetAnalysisBarChart"
       | "requestDatasetAnalysisBoxChart"
+      | "requestForecast"
       | "requestGlobalCausalEffects"
       | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
+      | "requestBubblePlotData"
+      | "requestLocalCounterfactuals"
       | "requestMetrics"
     > = {};
     if (this.props.config.baseUrl) {
@@ -81,6 +85,9 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           data,
           "/model_overview_probability_distribution"
         );
+      };
+      callBack.requestForecast = async (data: any[]): Promise<any[]> => {
+        return callFlaskService(this.props.config, data, "/forecast");
       };
       callBack.requestGlobalCausalEffects = async (
         id: string,
@@ -158,6 +165,24 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           [filter, compositeFilter, columnNameX, columnNameY, numBins],
           "/dataset_analysis_box_chart_plot",
           abortSignal
+        );
+      };
+      callBack.requestBubblePlotData = async (
+        data: any
+      ): Promise<IHighchartBubbleSDKData> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/dataset_analysis_bubble_chart_plot"
+        );
+      };
+      callBack.requestLocalCounterfactuals = async (
+        data: any
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          data,
+          "/local_counterfactuals"
         );
       };
       callBack.requestMetrics = async (

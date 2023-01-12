@@ -15,6 +15,7 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
+import { IHighchartBubbleSDKData } from "../Interfaces/IHighchartBubbleData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
@@ -59,6 +60,14 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestBubblePlotData?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBubbleSDKData>;
+  requestLocalCounterfactuals?: (
+    request: any,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestGlobalCausalEffects?: (
     id: string,
     filter: unknown[],
@@ -103,6 +112,10 @@ export interface IModelAssessmentContext {
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<number[]>;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export interface ICounterfactualData {
+  id: string;
   cfs_list: Array<Array<Array<string | number>>>;
   errorMessage?: string;
   feature_names: string[];
@@ -11,4 +12,5 @@ export interface ICounterfactualData {
   model_type?: string;
   desired_class?: string;
   desired_range?: [number, number];
+  test_data: Array<Array<string | number>>;
 }

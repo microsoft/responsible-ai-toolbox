@@ -122,6 +122,8 @@
           "summary_importance",
           "target_column",
           "task_type",
+          "test_data",
+          "time_series_id_column_names",
           "treatment_feature",
           "treatment_gains",
           "tree_features",
@@ -132,7 +134,10 @@
           "true_y",
           "upper_bounds",
           "use_entire_test_data",
-          "zero_one_loss"
+          "zero_one_loss",
+          "index_series",
+          "x_series",
+          "y_series"
         ]
       }
     ],

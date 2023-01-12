@@ -5,26 +5,23 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    paths:
+      - "erroranalysis/**"
+      - "rai_core_flask/**"
+      - "rai_test_utils/**"
+      - "raiutils/**"
+      - "responsibleai/**"
 
 jobs:
   ci-python:
     strategy:
       matrix:
         packageDirectory:
-          [
-            "rai_core_flask",
-            "responsibleai",
-            "erroranalysis",
-            "raiutils",
-            "rai_test_utils"
-          ]
+          ["responsibleai", "erroranalysis", "raiutils", "rai_test_utils"]
         operatingSystem:
           [ubuntu-20.04, ubuntu-latest, macos-latest, windows-latest]
         pythonVersion: ["3.6", "3.7", "3.8", "3.9"]
         exclude:
-          - packageDirectory: "rai_core_flask"
-            operatingSystem: macos-latest
-            pythonVersion: "3.9"
           - operatingSystem: ubuntu-20.04
             pythonVersion: "3.7"
           - operatingSystem: ubuntu-20.04
