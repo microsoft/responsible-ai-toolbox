@@ -9,7 +9,8 @@ import { Dictionary } from "lodash";
 export function getCopyOfDatasetPoint(
   index: number,
   jointDataset: JointDataset,
-  customPointLength: number
+  customPointLength: number,
+  absoluteIndex?: number
 ): Dictionary<any> {
   const temporaryPoint: {
     [key: string]: any;
@@ -22,5 +23,8 @@ export function getCopyOfDatasetPoint(
     FluentUIStyles.fluentUIColorPalette[
       WhatIfConstants.MAX_SELECTION + customPointLength
     ];
+  if (absoluteIndex) {
+    temporaryPoint[WhatIfConstants.absoluteIndex] = absoluteIndex;
+  }
   return temporaryPoint;
 }

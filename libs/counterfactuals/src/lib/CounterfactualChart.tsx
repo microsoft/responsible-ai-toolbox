@@ -44,7 +44,10 @@ export interface ICounterfactualChartProps {
     index?: number,
     value?: string
   ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;

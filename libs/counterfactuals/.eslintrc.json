@@ -5,6 +5,25 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {}
+    },
+    {
+      "files": [
+        "**/getBubbleChartOptions.ts",
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
+      "rules": {
+        "dot-notation": "off"
+      }
+    },
+    {
+      "files": [
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
+      "rules": {
+        "max-lines": "off"
+      }
     }
   ]
 }

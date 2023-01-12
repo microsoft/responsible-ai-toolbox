@@ -9,7 +9,8 @@ import {
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  ICounterfactualData
+  ICounterfactualData,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import React from "react";
 
@@ -18,12 +19,15 @@ import { getOriginalData } from "../util/getOriginalData";
 import { CounterfactualChart } from "./CounterfactualChart";
 import { counterfactualChartStyles } from "./CounterfactualChart.styles";
 import { CounterfactualChartLegend } from "./CounterfactualChartLegend";
+import { LargeCounterfactualChart } from "./largeCounterfactualsView/LargeCounterfactualChart";
 
 export interface ICounterfactualChartWithLegendProps {
   chartProps: IGenericChartProps;
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
+  indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
+  isCounterfactualsDataLoading?: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
   onSelectedPointsIndexesUpdated: (selectedPointsIndexes: number[]) => void;
@@ -37,8 +41,13 @@ export interface ICounterfactualChartWithLegendProps {
     index?: number,
     value?: string
   ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
+  setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -78,38 +87,47 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
           id={"IndividualFeatureContainer"}
           className={classNames.chartWithLegend}
         >
-          <CounterfactualChart
-            chartProps={this.props.chartProps}
-            customPoints={this.state.customPoints}
-            isPanelOpen={this.state.isPanelOpen}
-            originalData={this.state.originalData}
-            selectedPointsIndexes={this.props.selectedPointsIndexes}
-            temporaryPoint={this.props.temporaryPoint}
-            onChartPropsUpdated={this.props.onChartPropsUpdated}
-            saveAsPoint={this.saveAsPoint}
-            setCustomRowProperty={this.props.setCustomRowProperty}
-            setCustomRowPropertyComboBox={
-              this.props.setCustomRowPropertyComboBox
-            }
-            setTemporaryPointToCopyOfDatasetPoint={
-              this.props.setTemporaryPointToCopyOfDatasetPoint
-            }
-            telemetryHook={this.props.telemetryHook}
-            togglePanel={this.togglePanel}
-            toggleSelectionOfPoint={this.toggleSelectionOfPoint}
-          />
+          {ifEnableLargeData(this.context.dataset) ? (
+            this.getLargeCounterfactualChartComponent()
+          ) : (
+            <CounterfactualChart
+              chartProps={this.props.chartProps}
+              customPoints={this.state.customPoints}
+              isPanelOpen={this.state.isPanelOpen}
+              originalData={this.state.originalData}
+              selectedPointsIndexes={this.props.selectedPointsIndexes}
+              temporaryPoint={this.props.temporaryPoint}
+              onChartPropsUpdated={this.props.onChartPropsUpdated}
+              saveAsPoint={this.saveAsPoint}
+              setCustomRowProperty={this.props.setCustomRowProperty}
+              setCustomRowPropertyComboBox={
+                this.props.setCustomRowPropertyComboBox
+              }
+              setTemporaryPointToCopyOfDatasetPoint={
+                this.props.setTemporaryPointToCopyOfDatasetPoint
+              }
+              telemetryHook={this.props.telemetryHook}
+              togglePanel={this.togglePanel}
+              toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+            />
+          )}
           <CounterfactualChartLegend
             {...this.props}
             customPointIsActive={this.state.customPointIsActive}
             customPoints={this.state.customPoints}
             selectedPointsIndexes={this.props.selectedPointsIndexes}
+            indexSeries={this.props.indexSeries}
             removeCustomPoint={this.removeCustomPoint}
             setTemporaryPointToCopyOfDatasetPoint={
               this.props.setTemporaryPointToCopyOfDatasetPoint
             }
+            setCounterfactualData={this.props.setCounterfactualData}
             toggleCustomActivation={this.toggleCustomActivation}
             togglePanel={this.togglePanel}
             toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+            isCounterfactualsDataLoading={
+              this.props.isCounterfactualsDataLoading
+            }
           />
         </Stack>
       </Stack.Item>
@@ -160,6 +178,15 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
     });
   };
 
+  private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.setState({
+      customPointIsActive: [],
+      customPoints: [],
+      pointIsActive: []
+    });
+    this.props.onChartPropsUpdated(newProps);
+  };
+
   private saveAsPoint = (): void => {
     const customPoints = [...this.state.customPoints];
     const customPointIsActive = [...this.state.customPointIsActive];
@@ -190,5 +217,31 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
       level: TelemetryLevels.ButtonClick,
       type: eventName
     });
+  };
+
+  private getLargeCounterfactualChartComponent = (): React.ReactNode => {
+    return (
+      <LargeCounterfactualChart
+        chartProps={this.props.chartProps}
+        customPoints={this.state.customPoints}
+        isPanelOpen={this.state.isPanelOpen}
+        originalData={this.state.originalData}
+        selectedPointsIndexes={this.props.selectedPointsIndexes}
+        temporaryPoint={this.props.temporaryPoint}
+        onChartPropsUpdated={this.onChartPropsUpdated}
+        saveAsPoint={this.saveAsPoint}
+        setCustomRowProperty={this.props.setCustomRowProperty}
+        setCustomRowPropertyComboBox={this.props.setCustomRowPropertyComboBox}
+        setTemporaryPointToCopyOfDatasetPoint={
+          this.props.setTemporaryPointToCopyOfDatasetPoint
+        }
+        telemetryHook={this.props.telemetryHook}
+        togglePanel={this.togglePanel}
+        toggleSelectionOfPoint={this.toggleSelectionOfPoint}
+        setCounterfactualData={this.props.setCounterfactualData}
+        onIndexSeriesUpdated={this.props.onIndexSeriesUpdated}
+        isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+      />
+    );
   };
 }
