@@ -7,14 +7,19 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "ErrorAnalysisDashboard.tsx",
+        "WhatIf.tsx",
+        "TreeViewRenderer.tsx",
+        "StatsAggregator.ts",
+        "MatrixArea.tsx",
+        "InstanceView.tsx",
+        "InspectionView.tsx",
+        "FeatureList.tsx"
+      ],
       "rules": {
         "max-lines": "warn"
       }
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
     }
   ]
 }
