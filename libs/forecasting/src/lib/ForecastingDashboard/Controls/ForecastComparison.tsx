@@ -26,7 +26,7 @@ export interface IForecastComparisonState {
   timeSeriesId?: number;
   baselinePrediction?: Array<[number, number]>;
   trueY?: Array<[number, number]>;
-  transformationPredictions: Map<string, number[]>;
+  transformationPredictions: Map<string, Array<[number, number]>>;
   selectedTransformations: Set<string>;
 }
 
@@ -47,7 +47,7 @@ export class ForecastComparison extends React.Component<
     this.state = {
       baselinePrediction: undefined,
       selectedTransformations: new Set<string>(),
-      transformationPredictions: new Map<string, number[]>()
+      transformationPredictions: new Map<string, Array<[number, number]>>()
     };
   }
 
@@ -73,6 +73,7 @@ export class ForecastComparison extends React.Component<
           true
         );
       this.setState({
+        trueY,
         baselinePrediction,
         selectedTransformations:
           selectedTransformationsAndPredictions.selectedTransformations,
@@ -123,11 +124,11 @@ export class ForecastComparison extends React.Component<
       } as SeriesOptionsType);
     }
     this.state.selectedTransformations.forEach((transformationName) => {
-      const preds =
+      const transformationPredictions =
         this.state.transformationPredictions.get(transformationName);
-      if (preds) {
+      if (transformationPredictions) {
         seriesData.push({
-          data: orderByTime(preds, rowIndices),
+          data: transformationPredictions,
           name: transformationName,
           type: "spline"
         } as SeriesOptionsType);
@@ -203,7 +204,7 @@ export class ForecastComparison extends React.Component<
     newTransformationNames: string[],
     ignoreExisting?: boolean
   ): Promise<{
-    transformationPredictions: Map<string, number[]>;
+    transformationPredictions: Map<string, Array<[number, number]>>;
     selectedTransformations: Set<string>;
   }> => {
     const newTransformationPredictions = await Promise.all(
@@ -218,17 +219,21 @@ export class ForecastComparison extends React.Component<
           return;
         }
 
-        return await getForecastPrediction(
+        const pred = await getForecastPrediction(
           newTransformation.cohort.cohort,
           this.context.jointDataset,
           this.context.requestForecast,
           newTransformation
         );
+        if (pred && this.context.dataset.index) {
+          return orderByTime(pred, this.getIndices(this.context.dataset.index));
+        }
+        return undefined;
       })
     );
 
     const newMap = ignoreExisting
-      ? new Map<string, number[]>()
+      ? new Map<string, Array<[number, number]>>()
       : new Map(this.state.transformationPredictions);
     const newSet = ignoreExisting
       ? new Set<string>()
