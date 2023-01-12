@@ -24,8 +24,9 @@ export interface IForecastComparisonProps {
 
 export interface IForecastComparisonState {
   timeSeriesId?: number;
-  baselinePrediction?: number[];
-  transformationPredictions: Map<string, number[]>;
+  baselinePrediction?: Array<[number, number]>;
+  trueY?: Array<[number, number]>;
+  transformationPredictions: Map<string, Array<[number, number]>>;
   selectedTransformations: Set<string>;
 }
 
@@ -46,14 +47,15 @@ export class ForecastComparison extends React.Component<
     this.state = {
       baselinePrediction: undefined,
       selectedTransformations: new Set<string>(),
-      transformationPredictions: new Map<string, number[]>()
+      transformationPredictions: new Map<string, Array<[number, number]>>()
     };
   }
 
   public async componentDidMount(): Promise<void> {
+    const trueY = this.getTrueY();
     const baselinePrediction = await this.getBaselineForecastPrediction();
     if (baselinePrediction) {
-      this.setState({ baselinePrediction });
+      this.setState({ baselinePrediction, trueY });
     }
   }
 
@@ -63,6 +65,7 @@ export class ForecastComparison extends React.Component<
     const currentlySelectedTimeSeriesId =
       this.context.baseErrorCohort.cohort.getCohortID();
     if (currentlySelectedTimeSeriesId !== this.state.timeSeriesId) {
+      const trueY = this.getTrueY();
       const baselinePrediction = await this.getBaselineForecastPrediction();
       const selectedTransformationsAndPredictions =
         await this.getSelectedForecastPredictions(
@@ -75,7 +78,8 @@ export class ForecastComparison extends React.Component<
           selectedTransformationsAndPredictions.selectedTransformations,
         timeSeriesId: currentlySelectedTimeSeriesId,
         transformationPredictions:
-          selectedTransformationsAndPredictions.transformationPredictions
+          selectedTransformationsAndPredictions.transformationPredictions,
+        trueY
       });
       return;
     }
@@ -99,46 +103,32 @@ export class ForecastComparison extends React.Component<
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
 
-    const indices = this.context.dataset.index;
-    if (this.context === undefined || indices === undefined) {
+    if (
+      this.context === undefined ||
+      this.context.jointDataset.numLabels !== 1
+    ) {
       return;
     }
-    const rowIndices = this.context.baseErrorCohort.cohort.filteredData.map(
-      (datum) => indices[datum.Index]
-    );
 
-    let trueY: SeriesOptionsType[] = [];
-    if (
-      this.context.dataset.is_forecasting_true_y &&
-      this.context.jointDataset.numLabels === 1
-    ) {
-      trueY = [
-        {
-          data: orderByTime(
-            this.context.baseErrorCohort.cohort.filteredData.map(
-              (row) => row[JointDataset.TrueYLabel]
-            ),
-            rowIndices
-          ),
-          name: localization.Forecasting.trueY,
-          type: "spline"
-        }
-      ];
-    }
-    const seriesData: SeriesOptionsType[] = [...trueY];
+    const trueY: SeriesOptionsType = {
+      data: this.state.trueY,
+      name: localization.Forecasting.trueY,
+      type: "spline"
+    };
+    const seriesData: SeriesOptionsType[] = [trueY];
     if (this.state.baselinePrediction !== undefined) {
       seriesData.push({
-        data: orderByTime(this.state.baselinePrediction, rowIndices),
+        data: this.state.baselinePrediction,
         name: localization.Forecasting.baselinePrediction,
         type: "spline"
       } as SeriesOptionsType);
     }
     this.state.selectedTransformations.forEach((transformationName) => {
-      const preds =
+      const transformationPredictions =
         this.state.transformationPredictions.get(transformationName);
-      if (preds) {
+      if (transformationPredictions) {
         seriesData.push({
-          data: orderByTime(preds, rowIndices),
+          data: transformationPredictions,
           name: transformationName,
           type: "spline"
         } as SeriesOptionsType);
@@ -176,12 +166,6 @@ export class ForecastComparison extends React.Component<
                   text: localization.Forecasting.forecastComparisonChartTitle
                 },
                 xAxis: {
-                  dateTimeLabelFormats: {
-                    // don't display the year
-                    day: "%e. %b",
-                    month: "%b '%y",
-                    year: "%Y"
-                  },
                   title: {
                     text: localization.Forecasting
                       .forecastComparisonChartTimeAxisLabel
@@ -190,7 +174,7 @@ export class ForecastComparison extends React.Component<
                 },
                 yAxis: {
                   title: {
-                    text: "Target"
+                    text: localization.Forecasting.target
                   }
                 }
               }}
@@ -202,20 +186,25 @@ export class ForecastComparison extends React.Component<
   }
 
   private readonly getBaselineForecastPrediction = async (): Promise<
-    number[] | undefined
+    Array<[number, number]> | undefined
   > => {
-    return await getForecastPrediction(
+    const baselinePrediction = await getForecastPrediction(
       this.context.baseErrorCohort.cohort,
       this.context.jointDataset,
       this.context.requestForecast
     );
+    if (baselinePrediction && this.context.dataset.index) {
+      const dataIndex = this.context.dataset.index;
+      return orderByTime(baselinePrediction, this.getIndices(dataIndex));
+    }
+    return undefined;
   };
 
   private getSelectedForecastPredictions = async (
     newTransformationNames: string[],
     ignoreExisting?: boolean
   ): Promise<{
-    transformationPredictions: Map<string, number[]>;
+    transformationPredictions: Map<string, Array<[number, number]>>;
     selectedTransformations: Set<string>;
   }> => {
     const newTransformationPredictions = await Promise.all(
@@ -230,17 +219,21 @@ export class ForecastComparison extends React.Component<
           return;
         }
 
-        return await getForecastPrediction(
+        const pred = await getForecastPrediction(
           newTransformation.cohort.cohort,
           this.context.jointDataset,
           this.context.requestForecast,
           newTransformation
         );
+        if (pred && this.context.dataset.index) {
+          return orderByTime(pred, this.getIndices(this.context.dataset.index));
+        }
+        return undefined;
       })
     );
 
     const newMap = ignoreExisting
-      ? new Map<string, number[]>()
+      ? new Map<string, Array<[number, number]>>()
       : new Map(this.state.transformationPredictions);
     const newSet = ignoreExisting
       ? new Set<string>()
@@ -271,5 +264,23 @@ export class ForecastComparison extends React.Component<
       transformationPredictions:
         selectedTransformationsAndPredictions.transformationPredictions
     });
+  };
+
+  private readonly getTrueY = (): Array<[number, number]> | undefined => {
+    if (this.context.dataset.index) {
+      return orderByTime(
+        this.context.baseErrorCohort.cohort.filteredData.map(
+          (row) => row[JointDataset.TrueYLabel]
+        ),
+        this.getIndices(this.context.dataset.index)
+      );
+    }
+    return undefined;
+  };
+
+  private readonly getIndices = (dataIndex: string[]): string[] => {
+    return this.context.baseErrorCohort.cohort.filteredData.map(
+      (datum) => dataIndex[datum.Index]
+    );
   };
 }

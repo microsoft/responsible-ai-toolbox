@@ -11,6 +11,9 @@ jobs:
     env:
       node-version: 16.x
     strategy:
+      # keep running remaining matrix jobs even if one fails
+      # to avoid having to rerun all jobs several times
+      fail-fast: false
       matrix:
         packageDirectory: ["raiwidgets"]
         operatingSystem: [ubuntu-latest, macos-latest, windows-latest]
@@ -19,6 +22,9 @@ jobs:
           - packageDirectory: "raiwidgets"
             operatingSystem: macos-latest
             pythonVersion: 3.9
+          - packageDirectory: "raiwidgets"
+            operatingSystem: windows-latest
+            pythonVersion: 3.8
 
     runs-on: ${{ matrix.operatingSystem }}
 

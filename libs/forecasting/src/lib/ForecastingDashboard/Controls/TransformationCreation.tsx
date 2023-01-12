@@ -93,79 +93,92 @@ export class TransformationCreation extends React.Component<
     const classNames = forecastingDashboardStyles();
 
     return (
-      <>
-        <Text className={classNames.subMediumText}>
-          Transformation function builder
-        </Text>
-        <Stack
-          horizontal
-          tokens={{
-            childrenGap: "l1"
-          }}
-        >
-          <Stack.Item>
-            <Label>Choose a Feature</Label>
-            <ComboBox
-              errorMessage={
-                this.props.transformationFeature === undefined
-                  ? localization.Forecasting.TransformationCreation
-                      .featureInstructions
-                  : undefined
-              }
-              options={this.state.featureOptions}
-              selectedKey={this.props.transformationFeature?.key}
-              className={classNames.smallDropdown}
-              onChange={this.onChangeTransformationFeature}
-            />
-          </Stack.Item>
-          <Stack.Item>
-            <Label>Choose an Operation</Label>
-            <ComboBox
-              errorMessage={
-                this.props.transformationOperation === undefined
-                  ? localization.Forecasting.TransformationCreation
-                      .operationInstructions
-                  : undefined
-              }
-              options={transformationOperations.map((t) => {
-                return { key: t.key, text: t.displayName };
-              })}
-              selectedKey={this.props.transformationOperation?.key}
-              className={classNames.smallDropdown}
-              onChange={this.onChangeTransformationOperation}
-            />
-          </Stack.Item>
-          {this.props.transformationOperation && (
-            <>
-              {isMultiplicationOrDivision(
-                this.props.transformationOperation
-              ) && (
-                <Stack.Item tokens={{ padding: "36px 0 0 0" }}>
-                  <Text>by</Text>
-                </Stack.Item>
-              )}
-              <Stack.Item>
-                <Label>Value</Label>
-                <SpinButton
-                  min={this.props.transformationOperation.minValue}
-                  max={this.props.transformationOperation.maxValue}
-                  step={this.transformationValueStep}
-                  value={this.props.transformationValue.toString()}
-                  className={classNames.smallDropdown}
-                  onChange={this.onChangeTransformationValue}
-                />
-                {this.props.transformationValueErrorMessage && (
-                  <div className={classNames.errorText}>
-                    <Text variant={"small"} className={classNames.errorText}>
-                      {this.props.transformationValueErrorMessage}
-                    </Text>
-                  </div>
-                )}
+      <Stack
+        horizontal
+        tokens={{
+          childrenGap: "l1"
+        }}
+      >
+        <Stack.Item>
+          <Label>
+            {
+              localization.Forecasting.TransformationCreation
+                .featureDropdownHeader
+            }
+          </Label>
+          <ComboBox
+            errorMessage={
+              this.props.transformationFeature === undefined
+                ? localization.Forecasting.TransformationCreation
+                    .featureInstructions
+                : undefined
+            }
+            options={this.state.featureOptions}
+            selectedKey={this.props.transformationFeature?.key}
+            className={classNames.smallDropdown}
+            onChange={this.onChangeTransformationFeature}
+          />
+        </Stack.Item>
+        <Stack.Item>
+          <Label>
+            {
+              localization.Forecasting.TransformationCreation
+                .operationDropdownHeader
+            }
+          </Label>
+          <ComboBox
+            errorMessage={
+              this.props.transformationOperation === undefined
+                ? localization.Forecasting.TransformationCreation
+                    .operationInstructions
+                : undefined
+            }
+            options={transformationOperations.map((t) => {
+              return { key: t.key, text: t.displayName };
+            })}
+            selectedKey={this.props.transformationOperation?.key}
+            className={classNames.smallDropdown}
+            onChange={this.onChangeTransformationOperation}
+          />
+        </Stack.Item>
+        {this.props.transformationOperation && (
+          <>
+            {isMultiplicationOrDivision(this.props.transformationOperation) && (
+              <Stack.Item tokens={{ padding: "36px 0 0 0" }}>
+                <Text>
+                  {
+                    localization.Forecasting.TransformationCreation
+                      .divisionAndMultiplicationBy
+                  }
+                </Text>
               </Stack.Item>
-            </>
-          )}
-        </Stack>
-      </>
+            )}
+            <Stack.Item>
+              <Label>
+                {
+                  localization.Forecasting.TransformationCreation
+                    .valueSpinButtonHeader
+                }
+              </Label>
+              <SpinButton
+                min={this.props.transformationOperation.minValue}
+                max={this.props.transformationOperation.maxValue}
+                step={this.transformationValueStep}
+                value={this.props.transformationValue.toString()}
+                className={classNames.smallDropdown}
+                onChange={this.onChangeTransformationValue}
+              />
+              {this.props.transformationValueErrorMessage && (
+                <div className={classNames.errorText}>
+                  <Text variant={"small"} className={classNames.errorText}>
+                    {this.props.transformationValueErrorMessage}
+                  </Text>
+                </div>
+              )}
+            </Stack.Item>
+          </>
+        )}
+      </Stack>
     );
   }
 

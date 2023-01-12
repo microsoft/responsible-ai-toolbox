@@ -32,7 +32,7 @@ setuptools.setup(
                 "Machine Learning models.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/microsoft/responsible-ai-toolbox",
+    url="https://github.com/microsoft/responsible-ai-widgets",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     install_requires=install_requires,

@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { ITheme } from "@fluentui/react";
-import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
 import {
   ModelAssessmentDashboard,
@@ -26,21 +25,10 @@ interface IAppProps extends IModelAssessmentData {
 }
 
 export class App extends React.Component<IAppProps> {
-  private messages: HelpMessageDict = {
-    LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq", format: "text" }],
-    LocalOrGlobalAndTestReq: [
-      { displayText: "LocalOrGlobalAndTestReq", format: "text" }
-    ],
-    PredictorReq: [{ displayText: "PredictorReq", format: "text" }],
-    TestReq: [{ displayText: "TestReq", format: "text" }]
-  };
-
   public render(): React.ReactNode {
-    if (this.props.modelExplanationData) {
-      for (const exp of this.props.modelExplanationData) {
-        exp.modelClass = "blackbox";
-      }
-    }
+    this.props.modelExplanationData?.forEach(
+      (modelExplanationData) => (modelExplanationData.modelClass = "blackbox")
+    );
     const modelAssessmentDashboardProps: IModelAssessmentDashboardProps = {
       ...this.props,
       cohortData: [
@@ -50,9 +38,7 @@ export class App extends React.Component<IAppProps> {
       ],
       locale: this.props.language,
       localUrl: "https://www.bing.com/",
-      requestForecast: this.requestForecast,
-      stringParams: { contextualHelp: this.messages },
-      theme: this.props.theme
+      requestForecast: this.requestForecast
     };
 
     return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
@@ -62,7 +48,6 @@ export class App extends React.Component<IAppProps> {
     x: any[],
     abortSignal: AbortSignal
   ): Promise<any[]> => {
-    console.log(x);
     return new Promise<number[]>((resolver) => {
       setTimeout(() => {
         if (abortSignal.aborted) {

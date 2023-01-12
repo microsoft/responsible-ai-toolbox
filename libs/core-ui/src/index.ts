@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export * from "./lib/cohortKey";
+export * from "./lib/Cohort/allDataCohortUtils";
 export * from "./lib/Cohort/Cohort";
 export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/Constants";
@@ -51,6 +52,7 @@ export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/getFilterBoundsArgs";
 export * from "./lib/util/calculateBoxData";
 export * from "./lib/util/calculateLineData";
+export * from "./lib/util/MultilabelStatisticsUtils";
 export * from "./lib/util/StatisticsUtils";
 export * from "./lib/util/string";
 export * from "./lib/util/toScientific";
@@ -89,6 +91,7 @@ export * from "./lib/Interfaces/IErrorAnalysisData";
 export * from "./lib/Interfaces/IDataBalanceMeasures";
 export * from "./lib/Interfaces/IHighchartBoxData";
 export * from "./lib/Interfaces/IMetaData";
+export * from "./lib/Interfaces/IStatistic";
 export * from "./lib/Interfaces/TextExplanationInterfaces";
 export * from "./lib/Interfaces/VisionExplanationInterfaces";
 export * from "./lib/Highchart/BasicHighChart";
@@ -100,3 +103,5 @@ export * from "./lib/Highchart/HeatmapHighChart";
 export * from "./lib/Highchart/IHighchartsConfig";
 export * from "./lib/Highchart/Null";
 export * from "./lib/Highchart/IBoxChartState";
+export * from "./lib/Interfaces/IHighchartBubbleData";
+export * from "./lib/components/LoadingSpinner";

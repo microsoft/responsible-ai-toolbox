@@ -145,6 +145,8 @@
       "predictedClass": "Predicted class",
       "predictedValue": "Predicted value"
     },
+    "Size": "Size",
+    "loading": "Loading...",
     "counterfactualEx": "Counterfactual Ex {0}",
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
@@ -827,6 +829,7 @@
       "importancePrefix": "Importance",
       "numberOfDatapoints": "Number of datapoints",
       "rowIndex": "Row index",
+      "absoluteIndex": "Absolute index",
       "xValue": "X-value",
       "yValue": "Y-value"
     },
@@ -1153,8 +1156,10 @@
       "_rSquared.comment": "the coefficient of determination, see https://en.wikipedia.org/wiki/Coefficient_of_determination",
       "_recall.comment": "computed recall of model, see https://en.wikipedia.org/wiki/Evaluation_of_binary_classifiers",
       "accuracy": "Accuracy: {0}",
+      "exactMatchRatio": "Exact match ratio: {0}",
       "fnr": "False negative rate: {0}",
       "fpr": "False positive rate: {0}",
+      "hammingScore": "Hamming score: {0}",
       "meanPrediction": "Mean prediction {0}",
       "mse": "Mean squared error: {0}",
       "precision": "Precision: {0}",
@@ -1464,6 +1469,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
+      "Forecasting": "Forecasting",
       "ModelOverview": "Model overview",
       "TableView": "Table view",
       "VisionTab": "Vision data explorer"
@@ -1653,6 +1659,14 @@
           "name": "Accuracy score",
           "description": "The fraction of data points classified correctly."
         },
+        "exactMatchRatio": {
+          "name": "Exact match ratio",
+          "description": "The ratio of instances classified correctly for every label in multilabel task."
+        },
+        "hammingScore": {
+          "name": "Hamming score",
+          "description": "The average ratio of labels classified correctly among those classified as 1 in multilabel task."
+        },
         "f1Score": {
           "name": "F1 score",
           "description": "F1-score is the harmonic mean of precision and recall."
@@ -1810,6 +1824,9 @@
     }
   },
   "Forecasting": {
+    "target": "Target",
+    "whatIfHeader": "What-if analysis",
+    "whatIfDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",
     "trueY": "True Y",
@@ -1827,17 +1844,22 @@
       "nameLabel": "What-if scenario name",
       "featureInstructions": "Choose a feature to perturb.",
       "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
       "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
       "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
       "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
       "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
       "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
-      "addTransformationButton": "Add Transformation"
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
     },
     "TransformationTable": {
       "nameColumnHeader": "Name",
       "methodColumnHeader": "Method",
-      "divisionAndMultiplicationBy": "by "
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
     }
   }
 }

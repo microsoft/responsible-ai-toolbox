@@ -19,7 +19,8 @@ import {
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   IsClassifier,
-  DatasetTaskType
+  DatasetTaskType,
+  isAllDataErrorCohort
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -122,7 +123,7 @@ export class TabsView extends React.PureComponent<
     };
     if (
       this.props.requestImportances &&
-      this.props.dataset.is_forecasting_true_y === undefined
+      this.context.dataset.task_type !== DatasetTaskType.Forecasting
     ) {
       this.props
         .requestImportances([], new AbortController().signal)
@@ -136,8 +137,7 @@ export class TabsView extends React.PureComponent<
     const disabledView =
       this.props.requestDebugML === undefined &&
       this.props.requestMatrix === undefined &&
-      this.props.baseCohort.cohort.name !==
-        localization.ErrorAnalysis.Cohort.defaultLabel;
+      !isAllDataErrorCohort(this.props.baseCohort, true);
     const classNames = tabsViewStyles();
     return (
       <Stack className={classNames.stackStyle}>
@@ -192,7 +192,9 @@ export class TabsView extends React.PureComponent<
                     className={classNames.sectionHeader}
                     id="forecastingHeader"
                   >
-                    <Text variant={"xxLarge"}>What-if Analysis</Text>
+                    <Text variant={"xxLarge"}>
+                      {localization.Forecasting.whatIfHeader}
+                    </Text>
                   </h3>
                   <ForecastingTab />
                 </>

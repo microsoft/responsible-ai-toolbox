@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -12,28 +12,23 @@ class FeatureMetadata:
                  identity_feature_name: Optional[str] = None,
                  time_column_name: Optional[str] = None,
                  categorical_features: Optional[List[str]] = None,
-                 dropped_features: Optional[List[str]] = None,
-                 time_series_id_column_names: Optional[List[str]] = None):
+                 dropped_features: Optional[List[str]] = None):
         """Placeholder class for feature metadata provided by the user.
 
         :param identity_feature_name: Name of the feature which helps to
-            uniquely identify a row or instance in user input dataset.
+                                      uniquely identify a row or instance
+                                      in user input dataset.
         :type identity_feature_name: Optional[str]
-        :param datetime_features: List of datetime features in the user input
-            dataset.
+        :param datetime_features: List of datetime features in the
+                                  user input dataset.
         :type datetime_features: Optional[List[str]]
-        :param categorical_features: List of categorical features in the user
-            input dataset.
+        :param categorical_features: List of categorical features in the
+                                     user input dataset.
         :type categorical_features: Optional[List[str]]
         :param dropped_features: List of features that were dropped by the
-            user during training of their model.
+                                 the user during training of their model.
         :type dropped_features: Optional[List[str]]
-        :param time_series_id_column_names: List of names of the columns that
-            define the various time series contained in the data set.
-            This argument is only applicable in a forecasting task.
-        :type time_series_id_column_names: Option[List[str]]
         """
-
         self.identity_feature_name = identity_feature_name
         self.time_column_name = time_column_name
         self.categorical_features = categorical_features
@@ -72,8 +67,7 @@ class FeatureMetadata:
             'identity_feature_name': self.identity_feature_name,
             'datetime_features': self.datetime_features,
             'categorical_features': self.categorical_features,
-            'dropped_features': self.dropped_features,
-            'time_series_id_column_names': self.time_series_id_column_names
+            'dropped_features': self.dropped_features
         }
 
     def __eq__(self, other_feature_metadata) -> bool:

@@ -10,6 +10,7 @@ import {
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -64,9 +65,16 @@ export class ForecastingDashboard extends React.Component<
 
     // "All data" cohort selected, so no particular time series selected yet.
     // special case: only 1 time series in dataset, needs to be handled! TODO
-    const noCohortSelected =
-      this.context.baseErrorCohort.cohort.name ===
-      localization.ErrorAnalysis.Cohort.defaultLabel;
+    const noCohortSelected = isAllDataErrorCohort(this.context.baseErrorCohort);
+
+    const dropdownOptions: IDropdownOption[] = this.context.errorCohorts
+      .filter((cohort) => !isAllDataErrorCohort(cohort))
+      .map((cohort) => {
+        return {
+          key: cohort.cohort.getCohortID(),
+          text: cohort.cohort.name
+        };
+      });
 
     const cohortTransformations =
       this.state.transformations?.get(
@@ -81,38 +89,16 @@ export class ForecastingDashboard extends React.Component<
           id="ForecastingDashboard"
         >
           <Stack.Item className={classNames.topLevelDescriptionText}>
-            <Text>
-              What-if allows you to perturb features for any input and observe
-              how the model&apos;s prediction changes. You can perturb features
-              manually or simply specify the desired prediction (e.g., class
-              label for a classifier) to see a list of closest data points to
-              the original input that would lead to the desired prediction. Also
-              known as prediction counterfactuals, you can use them for
-              exploring the relationships learnt by the model; understanding
-              important, necessary features for the model&apos;s predictions; or
-              debug edge-cases for the model. To start, choose a time series
-              whose features you wish to perturb and create a what-if scenario.
-            </Text>
+            <Text>{localization.Forecasting.whatIfDescription}</Text>
           </Stack.Item>
           <Stack.Item>
             <Dropdown
+              label={localization.Forecasting.timeSeries}
               className={classNames.dropdown}
-              options={this.context.errorCohorts
-                .filter(
-                  (cohort) =>
-                    cohort.cohort.name !==
-                    localization.ErrorAnalysis.Cohort.defaultLabel
-                )
-                .map((cohort) => {
-                  return {
-                    key: cohort.cohort.getCohortID(),
-                    text: cohort.cohort.name
-                  } as IDropdownOption;
-                })}
+              options={dropdownOptions}
               onChange={this.onChangeCohort}
               selectedKey={
-                this.context.baseErrorCohort.cohort.name ===
-                localization.ErrorAnalysis.Cohort.defaultLabel
+                isAllDataErrorCohort(this.context.baseErrorCohort)
                   ? undefined
                   : this.context.baseErrorCohort.cohort.getCohortID()
               }
@@ -155,6 +141,21 @@ export class ForecastingDashboard extends React.Component<
     );
   }
 
+  private onChangeCohort = (
+    _event: React.FormEvent<HTMLDivElement>,
+    option?: IDropdownOption<string> | undefined
+  ): void => {
+    if (option) {
+      const newCohortId = option.key as number;
+      const newCohort = this.context.errorCohorts.find(
+        (cohort) => cohort.cohort.getCohortID() === newCohortId
+      );
+      if (newCohort) {
+        this.context.shiftErrorCohort(newCohort);
+      }
+    }
+  };
+
   private addTransformation = (
     name: string,
     transformation: Transformation
@@ -172,20 +173,5 @@ export class ForecastingDashboard extends React.Component<
       isTransformationCreatorVisible: false,
       transformations: newMap
     });
-  };
-
-  private onChangeCohort = (
-    _event: React.FormEvent<HTMLDivElement>,
-    option?: IDropdownOption<string> | undefined
-  ): void => {
-    if (option) {
-      const newCohortId = option.key as number;
-      const newCohort = this.context.errorCohorts.find(
-        (cohort) => cohort.cohort.getCohortID() === newCohortId
-      );
-      if (newCohort) {
-        this.context.shiftErrorCohort(newCohort);
-      }
-    }
   };
 }

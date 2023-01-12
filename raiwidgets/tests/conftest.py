@@ -6,8 +6,8 @@ import pandas as pd
 import pytest
 import shap
 import sklearn
-from common_utils import (ModelWrapperPredictionsClassification,
-                          ModelWrapperPredictionsRegression)
+from ml_wrappers.model.predictions_wrapper import (
+    PredictionsModelWrapperClassification, PredictionsModelWrapperRegression)
 from sklearn.datasets import fetch_california_housing, load_iris
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -50,7 +50,7 @@ def create_rai_insights_object_classification(with_model=True):
             [X_test, X_train])
         model_predict_output = knn.predict(all_data)
         model_predict_proba_output = knn.predict_proba(all_data)
-        knn_wrapper = ModelWrapperPredictionsClassification(
+        knn_wrapper = PredictionsModelWrapperClassification(
             all_data,
             model_predict_output,
             model_predict_proba_output)
@@ -93,7 +93,7 @@ def create_rai_insights_object_regression(with_model=True):
         all_data = pd.concat(
             [X_test, X_train])
         model_predict_output = model.predict(all_data)
-        model_wrapper = ModelWrapperPredictionsRegression(
+        model_wrapper = PredictionsModelWrapperRegression(
             all_data,
             model_predict_output)
         verify_predict_outputs(model, model_wrapper, all_data)
@@ -133,7 +133,7 @@ def create_rai_insights_object_multiclass_classification(with_model=True):
             [X_test, X_train])
         model_predict_output = knn.predict(all_data)
         model_predict_proba_output = knn.predict_proba(all_data)
-        knn_wrapper = ModelWrapperPredictionsClassification(
+        knn_wrapper = PredictionsModelWrapperClassification(
             all_data,
             model_predict_output,
             model_predict_proba_output)

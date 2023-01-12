@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import pytest
-import pandas as pd
 
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
@@ -15,15 +14,13 @@ class TestFeatureMetadata:
         assert feature_metadata.time_column_name is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': None,
             'categorical_features': None,
-            'dropped_features': None,
-            'time_series_id_column_names': None
+            'dropped_features': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -33,7 +30,6 @@ class TestFeatureMetadata:
         assert feature_metadata.time_column_name is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.time_series_id_column_names is None
         with pytest.raises(
                 UserConfigValidationException,
                 match='The given identity feature id is not present '
@@ -46,8 +42,7 @@ class TestFeatureMetadata:
             'identity_feature_name': 'id',
             'time_column_name': None,
             'categorical_features': None,
-            'dropped_features': None,
-            'time_series_id_column_names': None
+            'dropped_features': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -57,15 +52,13 @@ class TestFeatureMetadata:
         assert feature_metadata.time_column_name == 'd1'
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': 'd1',
             'categorical_features': None,
-            'dropped_features': None,
-            'time_series_id_column_names': None
+            'dropped_features': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -79,15 +72,13 @@ class TestFeatureMetadata:
         assert feature_metadata.time_column_name is None
         assert feature_metadata.categorical_features == ['c1', 'c2']
         assert feature_metadata.dropped_features is None
-        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {
             'identity_feature_name': None,
             'time_column_name': None,
             'categorical_features': ['c1', 'c2'],
-            'dropped_features': None,
-            'time_series_id_column_names': None
+            'dropped_features': None
         }
         assert feature_metadata_dict == expected_feature_metadata_dict
 
@@ -97,7 +88,6 @@ class TestFeatureMetadata:
         assert feature_metadata.time_column_name is None
         assert feature_metadata.categorical_features is None
         assert feature_metadata.dropped_features == ['d1', 'd2']
-        assert feature_metadata.time_series_id_column_names is None
 
         feature_metadata_dict = feature_metadata.to_dict()
         expected_feature_metadata_dict = {

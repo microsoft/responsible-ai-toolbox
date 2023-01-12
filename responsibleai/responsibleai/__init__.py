@@ -4,17 +4,10 @@
 """Responsible AI SDK package."""
 
 from responsibleai.modelanalysis import ModelAnalysis
-from responsibleai.rai_insights import ModelTask, RAIInsights, RAIForecastingInsights
-from responsibleai.feature_metadata import FeatureMetadata
+from responsibleai.rai_insights import ModelTask, RAIInsights
 
 from .__version__ import version
 
 __version__ = version
 
-__all__ = [
-    'FeatureMetadata',
-    'ModelAnalysis',
-    'ModelTask',
-    'RAIInsights',
-    'RAIForecastingInsights'
-]
+__all__ = ['ModelAnalysis', 'ModelTask', 'RAIInsights']

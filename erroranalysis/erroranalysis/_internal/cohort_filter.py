@@ -6,7 +6,6 @@ from typing import Any, List, Optional
 import numpy as np
 import pandas as pd
 
-
 from erroranalysis._internal.constants import (ARG, COLUMN, COMPOSITE_FILTERS,
                                                METHOD, OPERATION, PRED_Y,
                                                ROW_INDEX, TRUE_Y,
@@ -167,7 +166,7 @@ class FilterDataWithCohortFilters:
         # For regression task, check if regression error
         # is included in filters, and if it is then
         # compute the necessary column data on the fly
-        if (model_task == ModelTask.REGRESSION or model_task == ModelTask.Forecasting) and filters:
+        if model_task == ModelTask.REGRESSION and filters:
             for filter in filters:
                 if COLUMN in filter:
                     column = filter[COLUMN]
