@@ -58,9 +58,12 @@ export const CensusClassificationModelDebugging = {
     "education",
     "capital-loss"
   ],
+  isBinary: true,
   modelOverviewData: {
     featureCohortView: {
-      multiFeatureCohorts: 9,
+      firstFeatureToSelect: "age",
+      multiFeatureCohorts: 6,
+      secondFeatureToSelect: "gender",
       singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,
