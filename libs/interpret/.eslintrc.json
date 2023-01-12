@@ -11,6 +11,7 @@
         "BinningControl.tsx",
         "ExplanationDashboard.tsx",
         "WhatIfTab.tsx",
+        "WhatIfTab.styles.ts",
         "LocalImportancePlots.tsx",
         "ScatterUtils.ts",
         "MultiICEPlot.tsx",
