@@ -12,7 +12,8 @@ import {
   IsBinary,
   IBoxChartState,
   MissingParametersPlaceholder,
-  IsMulticlass
+  IsMulticlass,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -179,17 +180,18 @@ export class ModelOverviewChartPivot extends React.Component<
             selectedMetric={this.state.selectedMetric}
           />
         </PivotItem>
-        {(this.context.modelMetadata.modelType === ModelTypes.Binary ||
-          this.context.modelMetadata.modelType === ModelTypes.Multiclass) && (
-          <PivotItem
-            headerText={
-              localization.ModelAssessment.ModelOverview
-                .confusionMatrixPivotItem
-            }
-          >
-            <ConfusionMatrixHeatmap />
-          </PivotItem>
-        )}
+        {!ifEnableLargeData(this.context.dataset) &&
+          (this.context.modelMetadata.modelType === ModelTypes.Binary ||
+            this.context.modelMetadata.modelType === ModelTypes.Multiclass) && (
+            <PivotItem
+              headerText={
+                localization.ModelAssessment.ModelOverview
+                  .confusionMatrixPivotItem
+              }
+            >
+              <ConfusionMatrixHeatmap />
+            </PivotItem>
+          )}
       </Pivot>
     );
   }
