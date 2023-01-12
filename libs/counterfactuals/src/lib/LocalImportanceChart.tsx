@@ -69,11 +69,10 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
           {this.props.isCounterfactualsDataLoading ? (
             <LoadingSpinner label={localization.Counterfactuals.loading} />
           ) : (
-            <div id={"WhatIfFeatureImportanceBar"}>
-              <BasicHighChart
-                configOverride={this.getLocalImportanceBarOptions()}
-              />
-            </div>
+            <BasicHighChart
+              configOverride={this.getLocalImportanceBarOptions()}
+              id={"WhatIfFeatureImportanceBar"}
+            />
           )}
         </Stack.Item>
       </Stack>

@@ -29,24 +29,22 @@ export function getCounterfactualsScatter(
 ): any[] {
   const dataSeries: any = [];
   const result = [];
-  const xData = xSeries;
-  const yData = ySeries;
 
-  if (yData) {
-    yData.forEach((data, index) => {
+  if (ySeries) {
+    ySeries.forEach((data, index) => {
       dataSeries.push({
         customData:
           chartProps &&
           buildScatterTemplate(
             jointDataset,
             chartProps,
-            xData?.[index],
+            xSeries?.[index],
             data,
             index,
             indexSeries[index]
           ),
         marker: getMarker(selectedPointsIndexes, index),
-        x: xData?.[index],
+        x: xSeries?.[index],
         y: data
       });
     });
@@ -57,16 +55,8 @@ export function getCounterfactualsScatter(
       customData: { Index: number };
       marker: { fillColor: string; radius: number; symbol: string };
     }) => {
-      const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
-      const color =
-        selectionIndex === -1
-          ? FluentUIStyles.fabricColorInactiveSeries
-          : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-      return (d.marker = {
-        fillColor: color,
-        radius: 4,
-        symbol: selectionIndex === -1 ? "circle" : "square"
-      });
+      const marker = getMarker(selectedPointsIndexes, d.customData.Index);
+      return (d.marker = marker);
     }
   );
 

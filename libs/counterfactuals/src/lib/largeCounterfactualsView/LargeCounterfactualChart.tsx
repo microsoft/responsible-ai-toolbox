@@ -10,7 +10,6 @@ import {
   ISelectorConfig,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  ITelemetryEvent,
   TelemetryEventName,
   JointDataset,
   TelemetryLevels,
@@ -26,38 +25,15 @@ import {
   getCounterfactualsScatterOption,
   IScatterPoint
 } from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
+import { ICounterfactualChartProps } from "../CounterfactualChart";
 import { counterfactualChartStyles } from "../CounterfactualChart.styles";
 import { CounterfactualPanel } from "../CounterfactualPanel";
 
 import { LargeCounterfactualChartArea } from "./LargeCounterfactualChartArea";
 
-export interface ICounterfactualChartProps {
-  chartProps: IGenericChartProps;
-  customPoints: Array<{ [key: string]: any }>;
-  isPanelOpen: boolean;
-  originalData?: { [key: string]: string | number };
-  selectedPointsIndexes: number[];
-  temporaryPoint: { [key: string]: any } | undefined;
+export interface ILargeCounterfactualChartProps
+  extends ICounterfactualChartProps {
   isCounterfactualsDataLoading?: boolean;
-  onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
-  saveAsPoint: () => void;
-  setCustomRowProperty: (
-    key: string | number,
-    isString: boolean,
-    newValue?: string | number | undefined
-  ) => void;
-  setCustomRowPropertyComboBox: (
-    key: string | number,
-    index?: number,
-    value?: string
-  ) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (
-    index: number,
-    absoluteIndex?: number
-  ) => void;
-  telemetryHook?: (message: ITelemetryEvent) => void;
-  togglePanel: () => void;
-  toggleSelectionOfPoint: (index?: number) => void;
   setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   onIndexSeriesUpdated?: (indexSeries: number[]) => void;
 }
@@ -74,14 +50,14 @@ export interface ICounterfactualChartState {
 }
 
 export class LargeCounterfactualChart extends React.PureComponent<
-  ICounterfactualChartProps,
+  ILargeCounterfactualChartProps,
   ICounterfactualChartState
 > {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  public constructor(props: ICounterfactualChartProps) {
+  public constructor(props: ILargeCounterfactualChartProps) {
     super(props);
 
     this.state = {
@@ -100,7 +76,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.updateBubblePlot();
   }
 
-  public componentDidUpdate(prevProps: ICounterfactualChartProps): void {
+  public componentDidUpdate(prevProps: ILargeCounterfactualChartProps): void {
     if (!_.isEqual(prevProps.chartProps, this.props.chartProps)) {
       this.updateBubblePlot();
     } else if (
@@ -125,14 +101,11 @@ export class LargeCounterfactualChart extends React.PureComponent<
       ColumnCategories.Dataset,
       ColumnCategories.Outcome
     ];
-    const canBin = this.state.yDialogOpen
+    const bin = this.state.yDialogOpen
       ? false
       : this.props.chartProps.chartType === ChartTypes.Histogram ||
         this.props.chartProps.chartType === ChartTypes.Box;
-    const mustBin = this.state.yDialogOpen
-      ? false
-      : this.props.chartProps.chartType === ChartTypes.Histogram ||
-        this.props.chartProps.chartType === ChartTypes.Box;
+
     return (
       <Stack.Item className={classNames.chartWithAxes}>
         {this.props.originalData && (
@@ -155,8 +128,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
           <AxisConfigDialog
             orderedGroupTitles={orderedGroupTitles}
             selectedColumn={this.props.chartProps.yAxis}
-            canBin={canBin}
-            mustBin={mustBin}
+            canBin={bin}
+            mustBin={bin}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             hideDroppedFeatures
@@ -168,8 +141,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
           <AxisConfigDialog
             orderedGroupTitles={orderedGroupTitles}
             selectedColumn={this.props.chartProps.xAxis}
-            canBin={canBin}
-            mustBin={mustBin}
+            canBin={bin}
+            mustBin={bin}
             canDither={this.props.chartProps.chartType === ChartTypes.Scatter}
             allowTreatAsCategorical={!ifEnableLargeData(this.context.dataset)}
             hideDroppedFeatures

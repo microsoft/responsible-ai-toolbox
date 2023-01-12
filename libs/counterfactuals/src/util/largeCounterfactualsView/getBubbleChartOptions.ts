@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { getTheme } from "@fluentui/react";
 import {
   IGenericChartProps,
   IHighchartsConfig,
@@ -34,6 +35,7 @@ export function getBubbleChartOptions(
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
 ): IHighchartsConfig {
   const bubbleData = convertSDKObjectToBubbleData(data);
+  const theme = getTheme();
   return {
     chart: {
       plotBorderWidth: 1,
@@ -103,7 +105,7 @@ export function getBubbleChartOptions(
       },
       plotLines: [
         {
-          color: "black",
+          color: theme.palette.black,
           dashStyle: "Dot",
           value: 65,
           width: 2,
@@ -119,7 +121,7 @@ export function getBubbleChartOptions(
       maxPadding: 0.2,
       plotLines: [
         {
-          color: "black",
+          color: theme.palette.black,
           dashStyle: "Dot",
           value: 50,
           width: 2,
