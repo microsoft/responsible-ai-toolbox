@@ -163,6 +163,8 @@
     "listDescription": "This list shows which datapoints in the current data sample have the largest causal response to the selected treatment, based on all features included in the estimated causal model. The left five columns report whether treatment is recommended for the observation, the current treatment, the estimated effect of treatment (effect of applying a treatment from a baseline of no treatment for binary treatments or increasing/decreasing the treatment feature by 10% of the typical treatment size in the sample: [dynamic: report the numerical change in treatment we used] ), and the lower and upper confidence intervals (CI) for this effect. The remaining columns show the current treatment status and other features of each observation.",
     "localImportanceDescription": "The top ranked features in Row {0} to perturb to achieve desired model prediction. Based on what-if analysis for prediction: {1}",
     "localImportanceSelectData": "Select a data point to view local importance chart",
+    "localImportanceFetchError": "There was an error while fetching the local importance data. Error details: {0} Please check the data used.",
+    "BubbleChartFetchError": "There was an error while fetching the data. Error details: {0} Please check the data used.",
     "noData": "No data",
     "noFeatures": "No features available",
     "panelDescription": "Browse counterfactuals and create your own. Search features to see suggested values from a diverse set of counterfactual examples. Set suggested counterfactual feature values by clicking “Set Value” text under each counterfactual name. Name your counterfactual and save it.",
