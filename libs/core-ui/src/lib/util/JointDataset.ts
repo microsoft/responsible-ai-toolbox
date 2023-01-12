@@ -269,7 +269,7 @@ export class JointDataset {
     }
   }
 
-  // creating public static methods of the class instance methonds.
+  // creating public static methods of the class instance methods.
   // This is to enable prototyping the cohort concept, where we don't have a single
   // datasource as initially envisioned but an array of them, all build off of the true datasource
   public static unwrap(
