@@ -3,21 +3,23 @@
 
 import { Pivot, PivotItem } from "@fluentui/react";
 import {
-  MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   ModelTypes,
   ErrorCohort,
-  ILabeledStatistic,
   ITelemetryEvent,
+  ILabeledStatistic,
   IsBinary,
+  IBoxChartState,
+  MissingParametersPlaceholder,
   IsMulticlass,
-  IBoxChartState
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
 
+import { ConfusionMatrixHeatmap } from "./ConfusionMatrixHeatmap";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewMetricChart } from "./ModelOverviewMetricChart";
 import { ProbabilityDistributionChart } from "./ProbabilityDistributionChart";
@@ -137,12 +139,12 @@ export class ModelOverviewChartPivot extends React.Component<
               onChooseCohorts={this.props.onChooseCohorts}
               cohorts={chartCohorts}
               telemetryHook={this.props.telemetryHook}
-              boxPlotState={this.state.probabilityDistributionBoxPlotState}
               onBoxPlotStateUpdate={
                 this.onProbabilityDistributionBoxPlotStateUpdate
               }
               onToggleChange={this.onSplineToggleChange}
               showSplineChart={this.state.showSplineChart}
+              boxPlotState={this.state.probabilityDistributionBoxPlotState}
             />
           </PivotItem>
         )}
@@ -178,6 +180,18 @@ export class ModelOverviewChartPivot extends React.Component<
             selectedMetric={this.state.selectedMetric}
           />
         </PivotItem>
+        {!ifEnableLargeData(this.context.dataset) &&
+          (this.context.modelMetadata.modelType === ModelTypes.Binary ||
+            this.context.modelMetadata.modelType === ModelTypes.Multiclass) && (
+            <PivotItem
+              headerText={
+                localization.ModelAssessment.ModelOverview
+                  .confusionMatrixPivotItem
+              }
+            >
+              <ConfusionMatrixHeatmap />
+            </PivotItem>
+          )}
       </Pivot>
     );
   }

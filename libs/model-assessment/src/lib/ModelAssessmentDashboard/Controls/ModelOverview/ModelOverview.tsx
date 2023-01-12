@@ -458,6 +458,8 @@ export class ModelOverview extends React.Component<
           />
           {this.shouldRenderModelOverviewChartPivot() && (
             <ModelOverviewChartPivot
+              onChooseCohorts={this.onChooseCohorts}
+              telemetryHook={this.props.telemetryHook}
               allCohorts={
                 this.state.datasetCohortChartIsVisible
                   ? this.state.datasetBasedCohorts
@@ -475,7 +477,6 @@ export class ModelOverview extends React.Component<
                   : this.state.featureBasedCohortLabeledStatistics
               }
               selectedMetrics={this.state.selectedMetrics}
-              onChooseCohorts={this.onChooseCohorts}
             />
           )}
         </Stack>

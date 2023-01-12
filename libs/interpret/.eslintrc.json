@@ -7,14 +7,22 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "BinningControl.tsx",
+        "ExplanationDashboard.tsx",
+        "WhatIfTab.tsx",
+        "WhatIfTab.styles.ts",
+        "LocalImportancePlots.tsx",
+        "ScatterUtils.ts",
+        "MultiICEPlot.tsx",
+        "ICEPlot.tsx",
+        "GlobalExplanationTab.tsx",
+        "Violin.tsx",
+        "Beehive.tsx"
+      ],
       "rules": {
         "max-lines": "warn"
       }
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
     }
   ]
 }
