@@ -73,13 +73,13 @@ export class ForecastComparison extends React.Component<
           true
         );
       this.setState({
-        trueY,
         baselinePrediction,
         selectedTransformations:
           selectedTransformationsAndPredictions.selectedTransformations,
         timeSeriesId: currentlySelectedTimeSeriesId,
         transformationPredictions:
-          selectedTransformationsAndPredictions.transformationPredictions
+          selectedTransformationsAndPredictions.transformationPredictions,
+        trueY
       });
       return;
     }
