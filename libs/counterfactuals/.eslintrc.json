@@ -15,7 +15,7 @@
       "rules": {}
     },
     {
-      "files": ["**/getBubbleChartOptions.ts"],
+      "files": ["**/getBubbleChartOptions.ts", "**/CounterfactualComponent.tsx", "**/LargeCounterfactualChart.tsx"],
       "rules": {
         "dot-notation": "off"
       }

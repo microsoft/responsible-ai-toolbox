@@ -14,7 +14,7 @@ import {
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IPreBuiltCohort,
-  IHighchartBubbleSDKData
+  IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -112,13 +112,17 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestBubblePlotData?: (
-    request: any[],
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBubbleSDKData>;
+  ) => Promise<IHighchartBubbleSDKClusterData>;
   requestLocalCounterfactuals?: (
-    request: any[],
+    counterfactualsId: string,
+    absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<any>;
+  ) => Promise<ICounterfactualData>;
   localUrl?: string;
   requestForecast?: (
     request: any[],

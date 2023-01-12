@@ -8,22 +8,14 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { PointMarkerOptionsObject } from "highcharts";
 import { Dictionary } from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
-export interface IDatasetExplorerSeries {
-  name?: string;
-  color: any;
-  data: IDatasetExplorerData[];
-  marker?: PointMarkerOptionsObject;
-}
-export interface IDatasetExplorerData {
-  x: number;
-  y: number;
-  customData: any;
-  template: string | undefined;
+interface IMarker {
+  fillColor: string;
+  radius: number;
+  symbol: string;
 }
 
 export function getCounterfactualsScatter(
@@ -37,7 +29,6 @@ export function getCounterfactualsScatter(
 ): any[] {
   const dataSeries: any = [];
   const result = [];
-  // const customData = plotlyProps.data[0].customdata;
   const xData = xSeries;
   const yData = ySeries;
 
@@ -101,7 +92,7 @@ export function getCounterfactualsScatter(
   return result;
 }
 
-function getMarker(selectedPointsIndexes: number[], index: number): any {
+function getMarker(selectedPointsIndexes: number[], index: number): IMarker {
   const selectionIndex = selectedPointsIndexes.indexOf(index);
   const color =
     selectionIndex === -1
@@ -119,7 +110,7 @@ function getMarker(selectedPointsIndexes: number[], index: number): any {
 function getCustomPointMarker(
   customPoints: Array<{ [key: string]: any }>,
   index: number
-): any {
+): IMarker {
   return {
     fillColor: customPoints.map(
       (_, i) =>
@@ -136,7 +127,7 @@ function getCustomPointCustomData(
   customPoints: Array<{ [key: string]: any }>,
   jointDataset: JointDataset,
   chartProps?: IGenericChartProps
-): any {
+): Array<Dictionary<any>> {
   const customdata = JointDataset.unwrap(
     customPoints,
     JointDataset.IndexLabel

@@ -14,13 +14,18 @@ import {
   TelemetryEventName,
   JointDataset,
   TelemetryLevels,
-  ifEnableLargeData
+  ifEnableLargeData,
+  IHighchartsConfig,
+  IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 
 import { calculateBubblePlotDataFromErrorCohort } from "../../util/largeCounterfactualsView/calculateBubbleData";
-import { getCounterfactualsScatterOption } from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
+import {
+  getCounterfactualsScatterOption,
+  IScatterPoint
+} from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
 import { counterfactualChartStyles } from "../CounterfactualChart.styles";
 import { CounterfactualPanel } from "../CounterfactualPanel";
 
@@ -53,8 +58,8 @@ export interface ICounterfactualChartProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
-  setCounterfactualData: (absoluteIndex: any) => Promise<void>;
-  onIndexSeriesUpdated?: (data: any) => void;
+  setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void;
 }
 
 export interface ICounterfactualChartState {
@@ -238,9 +243,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
       isBubbleChartDataLoading: true
     });
     const plotData = await this.getBubblePlotData();
-    if (plotData.error) {
+    if (plotData && plotData["error"]) {
       this.setState({
-        bubbleChartErrorMessage: plotData.error.split(":").pop()
+        bubbleChartErrorMessage: plotData["error"].split(":").pop()
       });
       this.setState({
         isBubbleChartDataLoading: false,
@@ -272,7 +277,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
     });
   }
 
-  private async getBubblePlotData(): Promise<any> {
+  private async getBubblePlotData(): Promise<
+    IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined
+  > {
     return await calculateBubblePlotDataFromErrorCohort(
       this.context.selectedErrorCohort.cohort,
       this.props.chartProps,
@@ -289,7 +296,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private readonly onBubbleClick = (
-    scatterPlotData: any,
+    scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
     indexSeries: number[]
@@ -302,10 +309,13 @@ export class LargeCounterfactualChart extends React.PureComponent<
     });
   };
 
-  private selectPointFromChartLargeData = async (data: any): Promise<void> => {
+  private selectPointFromChartLargeData = async (
+    data: IScatterPoint
+  ): Promise<void> => {
     const index = data.customData[JointDataset.IndexLabel];
     const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
-    this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
+    index &&
+      this.props.setTemporaryPointToCopyOfDatasetPoint(index, absoluteIndex);
     this.props.setCounterfactualData(absoluteIndex);
     this.props.toggleSelectionOfPoint(index);
     this.props.telemetryHook?.({

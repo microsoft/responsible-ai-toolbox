@@ -10,16 +10,13 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
-import { getCounterfactualsScatterOption } from "./getCounterfactualsScatterOption";
-
-export interface IBubbleData {
-  x: number;
-  y: number;
-  customData: any[];
-}
+import {
+  getCounterfactualsScatterOption,
+  IScatterPoint
+} from "./getCounterfactualsScatterOption";
 
 export function getBubbleChartOptions(
-  data: any,
+  data: IHighchartBubbleSDKData[],
   xAxisLabel: string,
   yAxisLabel: string,
   chartProps: IGenericChartProps,
@@ -28,13 +25,13 @@ export function getBubbleChartOptions(
   customPoints?: Array<{ [key: string]: any }>,
   isCounterfactualsDataLoading?: boolean,
   onBubbleClick?: (
-    scatterPlotData: any,
+    scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
     indexSeries: number[]
   ) => void,
-  selectPointFromChartLargeData?: (data: any) => void,
-  onIndexSeriesUpdated?: (indexSeries?: number[]) => void
+  selectPointFromChartLargeData?: (data: IScatterPoint) => void,
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void
 ): IHighchartsConfig {
   const bubbleData = convertSDKObjectToBubbleData(data);
   return {
@@ -142,6 +139,7 @@ function convertSDKObjectToBubbleData(
       id: d.id,
       indexSeries: d.index_series,
       name: undefined,
+      testData: d.test_data,
       x: d.x,
       xSeries: d.x_series,
       y: d.y,

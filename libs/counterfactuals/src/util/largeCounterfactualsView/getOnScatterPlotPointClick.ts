@@ -1,19 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ICounterfactualData } from "@responsible-ai/core-ui";
+
 export async function getLocalCounterfactualsFromSDK(
   absoluteIndex: number,
-  counterfactualsId?: string,
+  counterfactualsId: string,
   requestLocalCounterfactuals?: (
-    request: any,
+    counterfactualsId: string,
+    absoluteIndex: number,
     abortSignal: AbortSignal
-  ) => Promise<any>
-): Promise<any> {
-  const input = [counterfactualsId, absoluteIndex];
-  const result: any = await requestLocalCounterfactuals?.(
-    input,
-    new AbortController().signal
-  );
+  ) => Promise<Record<string, unknown> | ICounterfactualData>
+): Promise<ICounterfactualData | Record<string, unknown> | undefined> {
+  const result: ICounterfactualData | Record<string, unknown> | undefined =
+    await requestLocalCounterfactuals?.(
+      counterfactualsId,
+      absoluteIndex,
+      new AbortController().signal
+    );
 
   return result;
 }

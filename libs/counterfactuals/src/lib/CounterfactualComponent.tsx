@@ -183,7 +183,9 @@ export class CounterfactualComponent extends React.PureComponent<
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
 
-  private setCounterfactualLocalImportanceData = (data: any): void => {
+  private setCounterfactualLocalImportanceData = (
+    data: ICounterfactualData
+  ): void => {
     this.setState({
       counterfactualsData: data,
       isCounterfactualsDataLoading: false,
@@ -217,26 +219,33 @@ export class CounterfactualComponent extends React.PureComponent<
   }
 
   private setCounterfactualData = async (
-    absoluteIndex: number
+    absoluteIndex?: number
   ): Promise<void> => {
-    this.setState({
-      isCounterfactualsDataLoading: true
-    });
-    const localCounterfactualData = await getLocalCounterfactualsFromSDK(
-      absoluteIndex,
-      this.state.counterfactualsData?.id,
-      this.context.requestLocalCounterfactuals
-    );
-    if (localCounterfactualData.error) {
+    if (absoluteIndex) {
       this.setState({
-        localCounterfactualErrorMessage: localCounterfactualData.error
-          .split(":")
-          .pop()
+        isCounterfactualsDataLoading: true
       });
-      this.setCounterfactualLocalImportanceData(this.props.data);
-      return;
+      const localCounterfactualData = await getLocalCounterfactualsFromSDK(
+        absoluteIndex,
+        this.state.counterfactualsData.id,
+        this.context.requestLocalCounterfactuals
+      );
+      if (
+        typeof localCounterfactualData === "object" &&
+        localCounterfactualData["error"]
+      ) {
+        this.setState({
+          localCounterfactualErrorMessage: localCounterfactualData["error"]
+            .split(":")
+            .pop()
+        });
+        this.setCounterfactualLocalImportanceData(this.props.data);
+        return;
+      }
+      this.setCounterfactualLocalImportanceData(
+        localCounterfactualData as ICounterfactualData
+      );
     }
-    this.setCounterfactualLocalImportanceData(localCounterfactualData);
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
@@ -256,7 +265,7 @@ export class CounterfactualComponent extends React.PureComponent<
     }
   };
 
-  private onIndexSeriesUpdated = (indexSeries: any): void => {
+  private onIndexSeriesUpdated = (indexSeries: number[]): void => {
     this.setState({
       indexSeries
     });

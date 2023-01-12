@@ -1,9 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IGenericChartProps, JointDataset } from "@responsible-ai/core-ui";
+import {
+  IGenericChartProps,
+  IHighchartsConfig,
+  JointDataset
+} from "@responsible-ai/core-ui";
+import { Point } from "highcharts";
 
+import { ICustomData } from "./buildScatterTemplate";
 import { getCounterfactualsScatter } from "./getCounterfactualsScatter";
+
+export interface IScatterPoint extends Point {
+  customData: ICustomData;
+}
 
 export function getCounterfactualsScatterOption(
   xSeries: number[],
@@ -14,8 +24,8 @@ export function getCounterfactualsScatterOption(
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
   isCounterfactualsDataLoading?: boolean,
-  selectPointFromChartLargeData?: (data: any) => void
-): any {
+  selectPointFromChartLargeData?: (data: IScatterPoint) => void
+): IHighchartsConfig {
   const dataSeries = getCounterfactualsScatter(
     xSeries,
     ySeries,
@@ -35,8 +45,7 @@ export function getCounterfactualsScatterOption(
       scatter: {
         tooltip: {
           headerFormat: "",
-          pointFormat: "{point.customData.template}",
-          shared: true
+          pointFormat: "{point.customData.template}"
         }
       },
       series: {
@@ -49,7 +58,7 @@ export function getCounterfactualsScatterOption(
                 if (selectPointFromChartLargeData === undefined) {
                   return;
                 }
-                selectPointFromChartLargeData(this);
+                selectPointFromChartLargeData(this as IScatterPoint);
               }
             }
           }

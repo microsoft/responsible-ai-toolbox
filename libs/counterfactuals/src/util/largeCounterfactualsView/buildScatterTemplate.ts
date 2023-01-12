@@ -16,8 +16,8 @@ export function buildScatterTemplate(
   chartProps: IGenericChartProps,
   x: any,
   y: any,
-  index: any,
-  absoluteIndex: any
+  index: number,
+  absoluteIndex: number
 ): ICustomData {
   let hovertemplate = "";
   const customData: ICustomData = {};
