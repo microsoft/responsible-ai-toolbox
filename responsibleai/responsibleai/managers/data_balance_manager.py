@@ -184,7 +184,9 @@ class DataBalanceManager(BaseManager):
                 aggregate_balance_measures=aggregate_balance_measures,
             )
         except Exception as e:
-            warnings.warn(f"Failed to compute data balance measures due to {e!r}.")
+            warnings.warn(
+                f"Failed to compute data balance measures due to {e!r}."
+            )
 
     def _set_data_balance_measures(
         self,
