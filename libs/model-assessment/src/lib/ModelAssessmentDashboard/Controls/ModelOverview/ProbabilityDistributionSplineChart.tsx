@@ -38,7 +38,7 @@ export class ProbabilityDistributionSplineChart extends React.Component<
 
     return (
       <BasicHighChart
-        id={"ProbabilityDistributionSplineChart"}
+        id={"modelOverviewProbabilityDistributionSplineChart"}
         theme={theme}
         configOverride={{
           chart: {

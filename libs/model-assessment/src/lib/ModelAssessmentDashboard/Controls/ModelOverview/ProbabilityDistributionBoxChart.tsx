@@ -51,7 +51,7 @@ export class ProbabilityDistributionBoxChart extends React.Component<IProbabilit
 
     return (
       <BasicHighChart
-        id={"ProbabilityDistributionBoxChart"}
+        id={"modelOverviewProbabilityDistributionBoxChart"}
         theme={theme}
         configOverride={{
           chart: {
