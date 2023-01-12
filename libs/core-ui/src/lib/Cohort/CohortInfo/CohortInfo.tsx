@@ -8,6 +8,7 @@ import React from "react";
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
 import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
+import { isAllDataErrorCohort } from "../isAllDataCohort";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
 
 import { cohortInfoStyles } from "./CohortInfo.styles";
@@ -37,8 +38,7 @@ export class CohortInfo extends React.PureComponent<ICohortInfoProps> {
             <Label>
               {localization.ErrorAnalysis.CohortInfo.basicInformation}
             </Label>
-            {this.props.currentCohort.cohort.name !==
-              localization.ErrorAnalysis.Cohort.defaultLabel && (
+            {!isAllDataErrorCohort(this.props.currentCohort, true) && (
               <Text>{this.props.currentCohort.cohort.name}</Text>
             )}
             <Text>
