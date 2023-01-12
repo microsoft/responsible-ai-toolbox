@@ -8,8 +8,8 @@ enum FieldChangeUpdate {
 }
 
 export function isJustTypeChange(changedKeys: string[]): boolean {
-  // return true if only type of the axis has changed in panel
-  const changedKeysTemp = removeItemAll(changedKeys);
+  // return true only if type of the axis has changed in panel
+  const changedKeysTemp = removeParentKeys(changedKeys);
   if (
     changedKeysTemp.length === 1 &&
     changedKeysTemp.includes(FieldChangeUpdate.Type)
@@ -19,7 +19,7 @@ export function isJustTypeChange(changedKeys: string[]): boolean {
   return false;
 }
 
-function removeItemAll(changedKeys: string[]): string[] {
+function removeParentKeys(changedKeys: string[]): string[] {
   const valuesToRemove = new Set(["options", "xAxis", "yAxis"]); //Since chartProps is a nested object, these are parent keys which are usually changed if inner keys are changed.
   return changedKeys.filter((item) => !valuesToRemove.has(item));
 }
