@@ -20,6 +20,6 @@ export function isJustTypeChange(changedKeys: string[]): boolean {
 }
 
 function removeParentKeys(changedKeys: string[]): string[] {
-  const valuesToRemove = new Set(["options", "xAxis", "yAxis"]); //Since chartProps is a nested object, these are parent keys which are usually changed if inner keys are changed.
+  const valuesToRemove = new Set(["options", "xAxis", "yAxis"]); // Since chartProps is a nested object, these are parent keys which are usually changed if inner keys are changed.
   return changedKeys.filter((item) => !valuesToRemove.has(item));
 }

@@ -68,6 +68,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
       }
     }
   }
+  return undefined;
 }
 
 export async function calculateBubblePlotDataFromSDK(
