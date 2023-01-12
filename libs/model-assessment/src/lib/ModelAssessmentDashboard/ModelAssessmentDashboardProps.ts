@@ -14,7 +14,7 @@ import {
   IErrorAnalysisMatrix,
   IHighchartBoxData,
   IPreBuiltCohort,
-  IHighchartBubbleSDKData
+  IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -112,15 +112,22 @@ export interface IModelAssessmentDashboardProps
   ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
   requestBubblePlotData?: (
-    request: any[],
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBubbleSDKData>;
+  ) => Promise<IHighchartBubbleSDKClusterData>;
   requestLocalCounterfactuals?: (
+    counterfactualsId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICounterfactualData>;
+  localUrl?: string;
+  requestForecast?: (
     request: any[],
     abortSignal: AbortSignal
-  ) => Promise<any>;
-  localUrl?: string;
-
+  ) => Promise<any[]>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness

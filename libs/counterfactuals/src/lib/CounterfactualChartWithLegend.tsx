@@ -46,9 +46,9 @@ export interface ICounterfactualChartWithLegendProps {
     index: number,
     absoluteIndex?: number
   ) => void;
-  setCounterfactualData: (absoluteIndex: number) => Promise<void>;
+  setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
-  onIndexSeriesUpdated?: (data: any) => void;
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void;
   setIsRevertButtonClicked: (status: boolean) => void;
 }
 

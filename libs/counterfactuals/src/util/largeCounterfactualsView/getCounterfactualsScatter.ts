@@ -8,22 +8,14 @@ import {
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
-import { PointMarkerOptionsObject } from "highcharts";
 import { Dictionary } from "lodash";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
-export interface IDatasetExplorerSeries {
-  name?: string;
-  color: any;
-  data: IDatasetExplorerData[];
-  marker?: PointMarkerOptionsObject;
-}
-export interface IDatasetExplorerData {
-  x: number;
-  y: number;
-  customData: any;
-  template: string | undefined;
+interface IMarker {
+  fillColor: string;
+  radius: number;
+  symbol: string;
 }
 
 export function getCounterfactualsScatter(
@@ -37,25 +29,22 @@ export function getCounterfactualsScatter(
 ): any[] {
   const dataSeries: any = [];
   const result = [];
-  // const customData = plotlyProps.data[0].customdata;
-  const xData = xSeries;
-  const yData = ySeries;
 
-  if (yData) {
-    yData.forEach((data, index) => {
+  if (ySeries) {
+    ySeries.forEach((data, index) => {
       dataSeries.push({
         customData:
           chartProps &&
           buildScatterTemplate(
             jointDataset,
             chartProps,
-            xData?.[index],
+            xSeries?.[index],
             data,
             index,
             indexSeries[index]
           ),
         marker: getMarker(selectedPointsIndexes, index),
-        x: xData?.[index],
+        x: xSeries?.[index],
         y: data
       });
     });
@@ -66,16 +55,8 @@ export function getCounterfactualsScatter(
       customData: { Index: number };
       marker: { fillColor: string; radius: number; symbol: string };
     }) => {
-      const selectionIndex = selectedPointsIndexes.indexOf(d.customData.Index);
-      const color =
-        selectionIndex === -1
-          ? FluentUIStyles.fabricColorInactiveSeries
-          : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-      return (d.marker = {
-        fillColor: color,
-        radius: 4,
-        symbol: selectionIndex === -1 ? "circle" : "square"
-      });
+      const marker = getMarker(selectedPointsIndexes, d.customData.Index);
+      return (d.marker = marker);
     }
   );
 
@@ -101,7 +82,7 @@ export function getCounterfactualsScatter(
   return result;
 }
 
-function getMarker(selectedPointsIndexes: number[], index: number): any {
+function getMarker(selectedPointsIndexes: number[], index: number): IMarker {
   const selectionIndex = selectedPointsIndexes.indexOf(index);
   const color =
     selectionIndex === -1
@@ -119,7 +100,7 @@ function getMarker(selectedPointsIndexes: number[], index: number): any {
 function getCustomPointMarker(
   customPoints: Array<{ [key: string]: any }>,
   index: number
-): any {
+): IMarker {
   return {
     fillColor: customPoints.map(
       (_, i) =>
@@ -136,7 +117,7 @@ function getCustomPointCustomData(
   customPoints: Array<{ [key: string]: any }>,
   jointDataset: JointDataset,
   chartProps?: IGenericChartProps
-): any {
+): Array<Dictionary<any>> {
   const customdata = JointDataset.unwrap(
     customPoints,
     JointDataset.IndexLabel

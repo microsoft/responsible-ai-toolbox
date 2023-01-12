@@ -35,7 +35,9 @@ export const DiabetesDecisionMaking = {
   isRegression: true,
   modelOverviewData: {
     featureCohortView: {
+      firstFeatureToSelect: "s5",
       multiFeatureCohorts: 9,
+      secondFeatureToSelect: "bp",
       singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,

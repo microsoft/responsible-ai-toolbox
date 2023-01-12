@@ -6,7 +6,8 @@ import {
   ICausalAnalysisData,
   IErrorAnalysisMatrix,
   IHighchartBoxData,
-  IHighchartBubbleSDKData
+  IHighchartBubbleSDKClusterData,
+  ICounterfactualData
 } from "@responsible-ai/core-ui";
 import {
   ModelAssessmentDashboard,
@@ -36,6 +37,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestBoxPlotDistribution"
       | "requestDatasetAnalysisBarChart"
       | "requestDatasetAnalysisBoxChart"
+      | "requestForecast"
       | "requestGlobalCausalEffects"
       | "requestGlobalCausalPolicy"
       | "requestGlobalExplanations"
@@ -84,6 +86,9 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           data,
           "/model_overview_probability_distribution"
         );
+      };
+      callBack.requestForecast = async (data: any[]): Promise<any[]> => {
+        return callFlaskService(this.props.config, data, "/forecast");
       };
       callBack.requestGlobalCausalEffects = async (
         id: string,
@@ -164,21 +169,29 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
         );
       };
       callBack.requestBubblePlotData = async (
-        data: any
-      ): Promise<IHighchartBubbleSDKData> => {
+        filter: unknown[],
+        compositeFilter: unknown[],
+        xAxis: string,
+        yAxis: string,
+        abortSignal: AbortSignal
+      ): Promise<IHighchartBubbleSDKClusterData> => {
         return callFlaskService(
           this.props.config,
-          data,
-          "/dataset_analysis_bubble_chart_plot"
+          [filter, compositeFilter, xAxis, yAxis],
+          "/dataset_analysis_bubble_chart_plot",
+          abortSignal
         );
       };
       callBack.requestLocalCounterfactuals = async (
-        data: any
-      ): Promise<any> => {
+        counterfactualsId: string,
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<ICounterfactualData> => {
         return callFlaskService(
           this.props.config,
-          data,
-          "/local_counterfactuals"
+          [counterfactualsId, absoluteIndex],
+          "/local_counterfactuals",
+          abortSignal
         );
       };
       callBack.requestMetrics = async (

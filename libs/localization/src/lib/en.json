@@ -1423,7 +1423,8 @@
         "ModelOverview": "Model overview component added",
         "CausalAnalysis": "Causal analysis component added",
         "Counterfactuals": "Counterfactuals component added",
-        "Vision": "Vision data explorer component added"
+        "Vision": "Vision data explorer component added",
+        "Forecasting": "Forecasting what-if component added"
       }
     },
     "CausalAnalysis": {
@@ -1471,6 +1472,7 @@
       "ErrorAnalysis": "Error analysis",
       "Fairness": "Fairness",
       "FeatureImportances": "Feature importances",
+      "Forecasting": "Forecasting",
       "ModelOverview": "Model overview",
       "TableView": "Table view",
       "VisionTab": "Vision data explorer"
@@ -1753,6 +1755,7 @@
       "probabilityDistributionPivotItem": "Probability distribution",
       "regressionDistributionPivotItem": "Target distribution",
       "metricsVisualizationsPivotItem": "Metrics visualizations",
+      "confusionMatrixPivotItem": "Confusion matrix",
       "disaggregatedAnalysisFeatureSelectionPlaceholder": "Select features to generate the feature-based analysis.",
       "tableCountTooltip": "Cohort {0} contains {1} instances.",
       "tableMetricTooltip": "The model's {0} on cohort {1} is {2}",
@@ -1780,6 +1783,17 @@
       "chartConfigCancel": "Cancel",
       "chartConfigDatasetCohortSelectionPlaceholder": "Select dataset cohorts",
       "chartConfigFeatureBasedCohortSelectionPlaceholder": "Select feature-based cohorts",
+      "confusionMatrix": {
+        "confusionMatrixCohortSelectionLabel": "Select dataset cohort",
+        "confusionMatrixClassSelectionLabel": "Select classes",
+        "confusionMatrixClassMinSelectionError": "Select at least {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassMaxSelectionError": "Select at most {0} classes to visualize the confusion matrix.",
+        "confusionMatrixClassSelectionDefaultPlaceholder": "Choose classes",
+        "confusionMatrixHeatmapTooltip": "{0} datapoints should be {1}, predicted to be {2}",
+        "confusionMatrixYAxisLabel": "True Class",
+        "confusionMatrixXAxisLabel": "Predicted Class",
+        "class": "Class"
+      },
       "nA": "N/A",
       "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
@@ -1822,6 +1836,45 @@
     },
     "TableViewTab": {
       "Heading": "View the dataset in a table format for all features and rows."
+    }
+  },
+  "Forecasting": {
+    "target": "Target",
+    "whatIfHeader": "What-if analysis",
+    "whatIfDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
+    "timeSeries": "Time series",
+    "selectTimeSeries": "Select a time series.",
+    "trueY": "True Y",
+    "baselinePrediction": "Baseline prediction",
+    "forecastComparisonChartTitle": "Forecasts",
+    "forecastComparisonChartTimeAxisLabel": "Time",
+    "Transformations": {
+      "multiply": "Multiply",
+      "divide": "Divide",
+      "add": "Add",
+      "subtract": "Subtract"
+    },
+    "TransformationCreation": {
+      "title": "Create what-if scenario",
+      "nameLabel": "What-if scenario name",
+      "featureInstructions": "Choose a feature to perturb.",
+      "operationInstructions": "Choose an operation to apply to the feature.",
+      "operationDropdownHeader": "Operation",
+      "featureDropdownHeader": "Feature",
+      "valueSpinButtonHeader": "Value",
+      "scenarioNamingInstructionsPlaceholder": "Enter a unique name",
+      "scenarioNamingInstructions": "Enter a name for your what-if scenario.",
+      "scenarioNamingCollisionMessage": "This name exists already. Please enter a unique name.",
+      "valueErrorMessage": "For operation {0} please select a value between {1} and {2} other than {3}.",
+      "invalidCombinationErrorMessage": "This is identical to an existing what-if scenario. Please change the feature, operation, or value.",
+      "addTransformationButton": "Add Transformation",
+      "divisionAndMultiplicationBy": "by"
+    },
+    "TransformationTable": {
+      "nameColumnHeader": "Name",
+      "methodColumnHeader": "Method",
+      "divisionAndMultiplicationBy": "by ",
+      "header": "What-if Forecasts ({0})"
     }
   }
 }

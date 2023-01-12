@@ -7,15 +7,11 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
-    },
-    {
-      "files": ["**/getBubbleChartOptions.ts"],
+      "files": [
+        "**/getBubbleChartOptions.ts",
+        "**/CounterfactualComponent.tsx",
+        "**/LargeCounterfactualChart.tsx"
+      ],
       "rules": {
         "dot-notation": "off"
       }

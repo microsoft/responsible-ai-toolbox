@@ -6,11 +6,13 @@ import {
   IDataset,
   ifEnableLargeData,
   IGenericChartProps,
+  IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
   JointDataset
 } from "@responsible-ai/core-ui";
 
 import { getBubbleChartOptions } from "./getBubbleChartOptions";
+import { IScatterPoint } from "./getCounterfactualsScatterOption";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -22,25 +24,28 @@ export async function calculateBubblePlotDataFromErrorCohort(
   jointDataset: JointDataset,
   dataset: IDataset,
   isCounterfactualsDataLoading?: boolean,
-  requestBubblePlotDistribution?: (
-    request: any,
+  requestBubblePlotData?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
     abortSignal: AbortSignal
-  ) => Promise<any>,
-  selectPointFromChartLargeData?: (data: any) => void,
+  ) => Promise<IHighchartBubbleSDKClusterData>,
+  selectPointFromChartLargeData?: (data: IScatterPoint) => void,
   onBubbleClick?: (
-    scatterPlotData: any,
+    scatterPlotData: IHighchartsConfig,
     xSeries: number[],
     ySeries: number[],
     indexSeries: number[]
   ) => void,
-  onIndexSeriesUpdated?: (indexSeries?: number[]) => void
-): Promise<any | undefined> {
-  if (ifEnableLargeData(dataset) && requestBubblePlotDistribution) {
+  onIndexSeriesUpdated?: (indexSeries: number[]) => void
+): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {
+  if (ifEnableLargeData(dataset) && requestBubblePlotData) {
     try {
       const bubbleChartData = await calculateBubblePlotDataFromSDK(
         errorCohort,
         jointDataset,
-        requestBubblePlotDistribution,
+        requestBubblePlotData,
         jointDataset.metaDict[chartProps?.xAxis.property].label,
         jointDataset.metaDict[chartProps?.yAxis.property].label
       );
@@ -69,12 +74,15 @@ export async function calculateBubblePlotDataFromSDK(
   errorCohort: Cohort,
   jointDataset: JointDataset,
   requestBubblePlotData: (
-    request: any,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
     abortSignal: AbortSignal
-  ) => Promise<any>,
-  xAxis?: string,
-  yAxis?: string
-): Promise<any> {
+  ) => Promise<IHighchartBubbleSDKClusterData>,
+  xAxis: string,
+  yAxis: string
+): Promise<IHighchartBubbleSDKClusterData> {
   const filtersRelabeled = Cohort.getLabeledFilters(
     errorCohort.filters,
     jointDataset
@@ -83,9 +91,11 @@ export async function calculateBubblePlotDataFromSDK(
     errorCohort.compositeFilters,
     jointDataset
   );
-  const data = [filtersRelabeled, compositeFiltersRelabeled, xAxis, yAxis];
-  const result: any = await requestBubblePlotData?.(
-    data,
+  const result: IHighchartBubbleSDKClusterData = await requestBubblePlotData?.(
+    filtersRelabeled,
+    compositeFiltersRelabeled,
+    xAxis,
+    yAxis,
     new AbortController().signal
   );
 
