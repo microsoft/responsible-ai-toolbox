@@ -3,12 +3,15 @@
 
 import { Cohort, JointDataset } from "@responsible-ai/core-ui";
 
+import { Transformation } from "../Interfaces/Transformation";
+
 export async function getForecastPrediction(
   cohort: Cohort,
   jointDataset: JointDataset,
   requestForecast:
     | ((request: any[], abortSignal: AbortSignal) => Promise<any[]>)
-    | undefined
+    | undefined,
+  transformation?: Transformation
 ): Promise<number[] | undefined> {
   if (requestForecast === undefined) {
     return;
@@ -17,7 +20,13 @@ export async function getForecastPrediction(
     [
       Cohort.getLabeledFilters(cohort.filters, jointDataset),
       Cohort.getLabeledCompositeFilters(cohort.compositeFilters, jointDataset),
-      []
+      transformation
+        ? [
+            transformation.operation.key,
+            transformation.feature.key,
+            transformation.value
+          ]
+        : []
     ],
     new AbortController().signal
   );
