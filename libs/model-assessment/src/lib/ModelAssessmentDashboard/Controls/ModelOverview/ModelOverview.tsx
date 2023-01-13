@@ -34,9 +34,6 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
-import {
-  generateMetricsCohortsCombined
-} from "./Metrics";
 
 import { ChartConfigurationFlyout } from "./ChartConfigurationFlyout";
 import { defaultNumberOfContinuousFeatureBins } from "./Constants";
@@ -45,6 +42,7 @@ import { DisaggregatedAnalysisTable } from "./DisaggregatedAnalysisTable";
 import { generateOverlappingFeatureBasedCohorts } from "./DisaggregatedAnalysisUtils";
 import { FeatureConfigurationFlyout } from "./FeatureConfigurationFlyout";
 import { MetricConfigurationFlyout } from "./MetricConfigurationFlyout";
+import { generateMetricsCohortsCombined } from "./Metrics";
 import { modelOverviewStyles } from "./ModelOverview.styles";
 import { ModelOverviewChartPivot } from "./ModelOverviewChartPivot";
 import { getSelectableMetrics } from "./StatsTableUtils";
@@ -172,7 +170,9 @@ export class ModelOverview extends React.Component<
       }
     );
     if (!this.state.isDatasetCohortMetricCalcaulationInProgress) {
-      if (!this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)) {
+      if (
+        !this.ifCohortIndexesEquals(newDatasetCohortIDs, oldDatasetCohortIDs)
+      ) {
         const addCohortIDs = newDatasetCohortIDs.filter(
           (x) => !oldDatasetCohortIDs.includes(x)
         );
@@ -182,19 +182,19 @@ export class ModelOverview extends React.Component<
         if (addCohortIDs.length > 0) {
           this.setState(
             {
+              isDatasetCohortMetricCalcaulationInProgress: true,
               selectedDatasetCohorts:
-                this.state.selectedDatasetCohorts?.concat(addCohortIDs),
-              isDatasetCohortMetricCalcaulationInProgress: true
+                this.state.selectedDatasetCohorts?.concat(addCohortIDs)
             },
             () => this.updateDatasetCohortStats()
           );
         } else if (deleteCohortIDs.length > 0) {
           this.setState(
             {
+              isDatasetCohortMetricCalcaulationInProgress: true,
               selectedDatasetCohorts: this.state.selectedDatasetCohorts?.filter(
                 (x) => !deleteCohortIDs.includes(x)
-              ),
-              isDatasetCohortMetricCalcaulationInProgress: true
+              )
             },
             () => this.updateDatasetCohortStats()
           );
@@ -517,9 +517,9 @@ export class ModelOverview extends React.Component<
     );
 
     this.setState({
-      isDatasetCohortMetricCalcaulationInProgress: false,
       datasetBasedCohorts: this.context.errorCohorts,
-      datasetCohortLabeledStatistics: datasetCohortMetricStats
+      datasetCohortLabeledStatistics: datasetCohortMetricStats,
+      isDatasetCohortMetricCalcaulationInProgress: false
     });
   }
 
