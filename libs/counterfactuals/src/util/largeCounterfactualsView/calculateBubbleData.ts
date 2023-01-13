@@ -17,7 +17,6 @@ import { IScatterPoint } from "./getCounterfactualsScatterOption";
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
-  selectedPointsIndexes: number[],
   customPoints: Array<{
     [key: string]: any;
   }>,
@@ -42,6 +41,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
 ): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {
   if (ifEnableLargeData(dataset) && requestBubblePlotData) {
     try {
+      const selectedPointsIndexes: number[] = [];
       const bubbleChartData = await calculateBubblePlotDataFromSDK(
         errorCohort,
         jointDataset,

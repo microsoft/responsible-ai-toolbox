@@ -50,6 +50,7 @@ export interface ICounterfactualChartWithLegendProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
   onIndexSeriesUpdated?: (indexSeries: number[]) => void;
   setIsRevertButtonClicked: (status: boolean) => void;
+  resetIndexes: () => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -182,12 +183,16 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.resetCustomPoints();
+    this.props.onChartPropsUpdated(newProps);
+  };
+
+  private resetCustomPoints = (): void => {
     this.setState({
       customPointIsActive: [],
       customPoints: [],
       pointIsActive: []
     });
-    this.props.onChartPropsUpdated(newProps);
   };
 
   private saveAsPoint = (): void => {
@@ -247,6 +252,8 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
         isRevertButtonClicked={this.props.isRevertButtonClicked}
         setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
+        resetIndexes={this.props.resetIndexes}
+        resetCustomPoints={this.resetCustomPoints}
       />
     );
   };

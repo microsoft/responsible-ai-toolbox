@@ -162,6 +162,7 @@ export class CounterfactualComponent extends React.PureComponent<
           isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
           isRevertButtonClicked={this.state.isRevertButtonClicked}
           setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          resetIndexes={this.resetIndexes}
         />
         <CounterfactualLocalImportanceChart
           data={this.state.counterfactualsData}

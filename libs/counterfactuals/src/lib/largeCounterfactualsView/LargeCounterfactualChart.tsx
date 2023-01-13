@@ -41,6 +41,8 @@ export interface ILargeCounterfactualChartProps
   setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   onIndexSeriesUpdated?: (indexSeries: number[]) => void;
   setIsRevertButtonClicked: (status: boolean) => void;
+  resetIndexes: () => void;
+  resetCustomPoints: () => void;
 }
 
 export interface ICounterfactualChartState {
@@ -273,8 +275,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.setState({
       isBubbleChartDataLoading: true
     });
+    this.props.onIndexSeriesUpdated && this.props.onIndexSeriesUpdated([]);
+    this.props.resetIndexes();
+    this.props.resetCustomPoints();
     const plotData = await this.getBubblePlotData();
-    this.props.setIsRevertButtonClicked(false);
     if (plotData && plotData["error"]) {
       this.setState({
         bubbleChartErrorMessage: plotData["error"].split(":").pop()
@@ -316,7 +320,6 @@ export class LargeCounterfactualChart extends React.PureComponent<
     return await calculateBubblePlotDataFromErrorCohort(
       this.props.cohort,
       this.props.chartProps,
-      this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.context.jointDataset,
       this.context.dataset,
