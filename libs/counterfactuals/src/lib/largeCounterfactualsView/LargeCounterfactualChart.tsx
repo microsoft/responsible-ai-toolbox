@@ -21,7 +21,10 @@ import {
 import _ from "lodash";
 import React from "react";
 
-import { calculateBubblePlotDataFromErrorCohort } from "../../util/largeCounterfactualsView/calculateBubbleData";
+import {
+  calculateBubblePlotDataFromErrorCohort,
+  instanceOfHighChart
+} from "../../util/largeCounterfactualsView/calculateBubbleData";
 import {
   getCounterfactualsScatterOption,
   IScatterPoint
@@ -279,9 +282,9 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.props.resetIndexes();
     this.props.resetCustomPoints();
     const plotData = await this.getBubblePlotData();
-    if (plotData && plotData["error"]) {
+    if (plotData && !instanceOfHighChart(plotData)) {
       this.setState({
-        bubbleChartErrorMessage: plotData["error"].split(":").pop()
+        bubbleChartErrorMessage: plotData.toString().split(":").pop()
       });
       this.setState({
         isBubbleChartDataLoading: false,
