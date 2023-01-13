@@ -4,6 +4,7 @@
 import time
 
 import numpy as np
+import pytest
 from common_utils import replicate_dataset
 
 from erroranalysis._internal.constants import ModelTask
@@ -15,9 +16,12 @@ from rai_test_utils.models.lightgbm import create_lightgbm_classifier
 from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import (
+    create_sklearn_random_forest_classifier,
     create_sklearn_random_forest_regressor, create_titanic_pipeline)
 
 TOL = 1e-10
+NUM_SAMPLE_ROWS = 100
+DEFAULT_SAMPLE_COLS = 20
 
 
 class TestImportances(object):
@@ -77,7 +81,7 @@ class TestImportances(object):
         # mutual information can be very costly for large number of rows
         # hence, assert we downsample to compute importances for large data
         X_train, y_train, X_test, y_test, _ = \
-            create_binary_classification_dataset(100)
+            create_binary_classification_dataset(NUM_SAMPLE_ROWS)
         feature_names = list(X_train.columns)
         model = create_sklearn_random_forest_regressor(X_train, y_train)
         X_test, y_test = replicate_dataset(X_test, y_test)
@@ -94,6 +98,22 @@ class TestImportances(object):
         # assert we don't take too long and downsample the dataset
         # note execution time is in seconds
         assert execution_time < 20
+
+    @pytest.mark.parametrize('num_rows', [1, 2, 3, 4])
+    def test_small_data_importances(self, num_rows):
+        # validate we can run on very few rows
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset(NUM_SAMPLE_ROWS)
+        feature_names = list(X_train.columns)
+        model = create_sklearn_random_forest_classifier(X_train, y_train)
+        X_test = X_test[:num_rows]
+        y_test = y_test[:num_rows]
+        categorical_features = []
+        model_analyzer = ModelAnalyzer(model, X_test, y_test,
+                                       feature_names,
+                                       categorical_features)
+        scores = model_analyzer.compute_importances()
+        assert len(scores) == DEFAULT_SAMPLE_COLS
 
     def test_importances_missings(self):
         X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
