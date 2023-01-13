@@ -10,6 +10,12 @@ export interface IHighchartBubbleSDKData {
   index_series: number[];
   x_series: any[];
   y_series: any[];
+  test_data: any[];
+}
+
+export interface IHighchartBubbleSDKClusterData {
+  clusters: IHighchartBubbleSDKData[];
+  error?: unknown;
 }
 
 // Below interface is used by UI to render highchart data. size sent by sdk is used as z to decide the size of the bubble. Since name is sent as null by sdk, it is made optional on UI side and is not used for now in plot data.
@@ -22,4 +28,5 @@ export interface IHighchartBubbleData {
   indexSeries: number[];
   xSeries: any[];
   ySeries: any[];
+  testData: any[];
 }
