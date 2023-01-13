@@ -1133,6 +1133,7 @@
       "_modelStatistics.comment": "label for area listing statistics about model prediction",
       "cohortPickerLabel": "Select a dataset cohort to explore",
       "helperText": "Evaluate the performance of your model by exploring the distribution of your prediction values and the values of your model performance metrics. You can further investigate your model by looking at a comparative analysis of its performance across different cohorts or subgroups of your dataset. Select filters along y-value and x-value to cut across different dimensions.",
+      "missingDatasetCohortStatistics": "Model performance statistics are being computed and will be available shortly.",
       "missingParameters": "This tab requires the array of predicted values from the model be supplied.",
       "missingTrueY": "Model performance statistics require the true outcomes be provided in addition to the predicted outcomes",
       "modelStatistics": "Model statistics"

@@ -215,7 +215,10 @@ export class ModelOverview extends React.Component<
     if (this.state.datasetCohortLabeledStatistics.length === 0) {
       return (
         <MissingParametersPlaceholder>
-          {"Empty dataset cohort stats"}
+          {
+            localization.Interpret.ModelPerformance
+              .missingDatasetCohortStatistics
+          }
         </MissingParametersPlaceholder>
       );
     }
