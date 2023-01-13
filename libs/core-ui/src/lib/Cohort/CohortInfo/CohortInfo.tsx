@@ -6,9 +6,9 @@ import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { getCohortFilterCount } from "../../util/getCohortFilterCount";
+import { isAllDataErrorCohort } from "../allDataCohortUtils";
 import { ErrorCohortStats } from "../CohortStats";
 import { ErrorCohort } from "../ErrorCohort";
-import { isAllDataErrorCohort } from "../isAllDataCohort";
 import { PredictionPath } from "../PredictionPath/PredictionPath";
 
 import { cohortInfoStyles } from "./CohortInfo.styles";

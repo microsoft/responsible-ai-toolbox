@@ -28,6 +28,7 @@ from responsibleai import ModelTask, RAIInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
+from responsibleai.feature_metadata import FeatureMetadata
 
 LABELS = 'labels'
 
@@ -62,7 +63,6 @@ class TestRAIInsights(object):
             ManagerParams.FEATURE_IMPORTANCE: True
         }
 
-        from responsibleai.feature_metadata import FeatureMetadata
         feature_metadata = FeatureMetadata(
             identity_feature_name='sepal length',
             dropped_features=['petal length'])
