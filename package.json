@@ -80,6 +80,7 @@
     "@nrwl/cypress": "12.6.2",
     "@nrwl/eslint-plugin-nx": "12.6.2",
     "@nrwl/jest": "12.6.2",
+    "@nrwl/nx-cloud": "^15.0.2",
     "@nrwl/react": "12.6.2",
     "@nrwl/tao": "12.6.2",
     "@nrwl/web": "12.6.2",
@@ -142,3 +143,4 @@
     "typescript": "4.3.5"
   }
 }
+

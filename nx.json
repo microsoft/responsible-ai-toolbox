@@ -16,8 +16,10 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {}
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "accessToken": "YzhiYzM3NGUtNGUyMi00NDlmLTlhMTEtODlkNzY1MGUxN2ExfHJlYWQtd3JpdGU="
+      }
     }
   },
   "projects": {
@@ -35,7 +37,9 @@
     },
     "dashboard-e2e": {
       "tags": [],
-      "implicitDependencies": ["dashboard"]
+      "implicitDependencies": [
+        "dashboard"
+      ]
     },
     "dataset-explorer": {
       "tags": []
@@ -75,7 +79,9 @@
     },
     "widget-e2e": {
       "tags": [],
-      "implicitDependencies": ["widget"]
+      "implicitDependencies": [
+        "widget"
+      ]
     }
   },
   "targetDependencies": {
