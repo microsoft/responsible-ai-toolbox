@@ -15,8 +15,8 @@ import pandas as pd
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
-from raiutils.models import (Forecasting, is_quantile_forecaster,
-                             is_forecaster, SKLearn)
+from raiutils.models import (
+    is_forecaster, is_quantile_forecaster, Forecasting)
 from responsibleai._interfaces import Dataset, RAIForecastingInsightsData
 from responsibleai._internal.constants import Metadata
 from responsibleai.exceptions import UserConfigValidationException
@@ -89,7 +89,8 @@ class RAIForecastingInsights(RAIBaseInsights):
                                  of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-        self._is_true_y_present = self._check_true_y_present(target_column, test)
+        self._is_true_y_present = self._check_true_y_present(
+            target_column, test)
         self._feature_metadata = feature_metadata or FeatureMetadata()
         self.task_type = "forecasting"
         self._validate_rai_insights_input_parameters(
@@ -220,9 +221,9 @@ class RAIForecastingInsights(RAIBaseInsights):
                         test.shape[0], maximum_rows_for_test)
                 )
 
-            if (len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)) != 0) and \
-                        self._is_true_y_present:
+            if (len(set(train.columns) - set(test.columns)) != 0 or
+                len(set(test.columns) - set(train.columns)) != 0) and \
+                    self._is_true_y_present:
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
@@ -296,7 +297,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                     )
                 self._validate_features_same(small_test_features_before,
                                              small_test_data,
-                                             SKLearn.PREDICT)
+                                             Forecasting.PREDICT)
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
@@ -336,10 +337,10 @@ class RAIForecastingInsights(RAIBaseInsights):
             )
 
     def _ensure_time_column_available(
-        self,
-        feature_metadata: FeatureMetadata,
-        feature_names: List[str],
-        model: Optional[Any]):
+            self,
+            feature_metadata: FeatureMetadata,
+            feature_names: List[str],
+            model: Optional[Any]):
         """Ensure that a time column is available from metadata or model.
 
         Some models have the time column name stored as an attribute
@@ -360,7 +361,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         if model_time_column is None:
             if fm_time_column is not None:
                 return
-            else: 
+            else:
                 raise UserConfigValidationException(
                     'There was no time column name in feature metadata. '
                     'A time column is required for forecasting.')
@@ -397,7 +398,8 @@ class RAIForecastingInsights(RAIBaseInsights):
         :rtype: pandas.DataFrame
         """
         print(filters)
-        true_y = self.predict_output if not self._is_true_y_present else self.test[self.target_column]
+        true_y = self.predict_output if not self._is_true_y_present else self.test[
+            self.target_column]
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
             dataset=self._test_without_true_y,
@@ -482,15 +484,18 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
         try:
-            dashboard_dataset.index = convert_to_list(self.test.index.strftime("%Y-%m-%d"))
+            dashboard_dataset.index = convert_to_list(
+                self.test.index.strftime("%Y-%m-%d"))
         except AttributeError:
             # if strftime is not compatible with the index, check if a time column was provided
             if self._feature_metadata.datetime_features:
                 # TODO: this isn't ideal, we need to be able to specify exactly 1. This allows for multiple.
                 datetime_feature = self._feature_metadata.datetime_features[0]
-                dashboard_dataset.index = convert_to_list(pd.to_datetime(self.test[datetime_feature], yearfirst=True, format="%&-%m-%d"))
+                dashboard_dataset.index = convert_to_list(pd.to_datetime(
+                    self.test[datetime_feature], yearfirst=True, format="%&-%m-%d"))
             else:
-                raise ValueError("No datetime_features were provided via feature_metadata.")
+                raise ValueError(
+                    "No datetime_features were provided via feature_metadata.")
 
         true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
