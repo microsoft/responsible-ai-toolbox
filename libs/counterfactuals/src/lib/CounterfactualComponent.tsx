@@ -279,13 +279,18 @@ export class CounterfactualComponent extends React.PureComponent<
     });
   };
 
-  private compareChartProps = (newProps?: any, oldProps?: any): void => {
-    for (const key in newProps) {
-      if (typeof newProps[key] === "object") {
-        this.compareChartProps(newProps[key], oldProps[key]);
-      }
-      if (newProps[key] !== oldProps[key]) {
-        this.changedKeys.push(key);
+  private compareChartProps = (
+    newProps: IGenericChartProps,
+    oldProps?: IGenericChartProps
+  ): void => {
+    if (oldProps) {
+      for (const key in newProps) {
+        if (typeof newProps[key] === "object") {
+          this.compareChartProps(newProps[key], oldProps[key]);
+        }
+        if (newProps[key] !== oldProps[key]) {
+          this.changedKeys.push(key);
+        }
       }
     }
   };

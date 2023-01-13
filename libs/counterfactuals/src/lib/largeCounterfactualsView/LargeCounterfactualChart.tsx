@@ -205,7 +205,10 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.props.onChartPropsUpdated(newProps);
   };
 
-  private compareChartProps = (newProps?: any, oldProps?: any): void => {
+  private compareChartProps = (
+    newProps: IGenericChartProps,
+    oldProps: IGenericChartProps
+  ): void => {
     for (const key in newProps) {
       if (typeof newProps[key] === "object") {
         this.compareChartProps(newProps[key], oldProps[key]);
@@ -274,7 +277,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     this.setState({ yDialogOpen: !this.state.yDialogOpen });
   };
 
-  private async updateBubblePlot(): Promise<any> {
+  private async updateBubblePlot(): Promise<void> {
     this.setState({
       isBubbleChartDataLoading: true
     });
