@@ -45,14 +45,6 @@ export class ForecastingDashboard extends React.Component<
     };
   }
 
-  public componentDidMount(): void {
-    const transformations = new Map<number, Map<string, Transformation>>();
-    transformations.set(
-      this.context.baseErrorCohort.cohort.getCohortID(),
-      new Map<string, Transformation>()
-    );
-  }
-
   public render(): React.ReactNode {
     const classNames = forecastingDashboardStyles();
 
