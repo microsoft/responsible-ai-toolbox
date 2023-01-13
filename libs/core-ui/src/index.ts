@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export * from "./lib/cohortKey";
-export * from "./lib/Cohort/isAllDataCohort";
+export * from "./lib/Cohort/allDataCohortUtils";
 export * from "./lib/Cohort/Cohort";
 export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/Constants";
