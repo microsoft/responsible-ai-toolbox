@@ -9,7 +9,6 @@ import {
   Stack
 } from "@fluentui/react";
 import {
-  JointDataset,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
   FluentUIStyles,
@@ -18,7 +17,9 @@ import {
   ITelemetryEvent,
   TelemetryLevels,
   TelemetryEventName,
-  DatasetTaskType
+  DatasetTaskType,
+  ifEnableLargeData,
+  JointDataset
 } from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -35,8 +36,14 @@ export interface ICounterfactualChartLegendProps {
   }>;
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
+  indexSeries: number[];
+  isCounterfactualsDataLoading?: boolean;
   removeCustomPoint: (index: number) => void;
-  setTemporaryPointToCopyOfDatasetPoint: (index: number) => void;
+  setTemporaryPointToCopyOfDatasetPoint: (
+    index: number,
+    absoluteIndex?: number
+  ) => void;
+  setCounterfactualData?: (absoluteIndex?: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
   toggleCustomActivation: (index: number) => void;
   togglePanel: () => void;
@@ -52,23 +59,26 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     const classNames = counterfactualChartStyles();
     return (
       <Stack className={classNames.legendAndText}>
-        <ComboBox
-          id={"CounterfactualSelectedDatapoint"}
-          className={classNames.legendLabel}
-          label={localization.Counterfactuals.selectedDatapoint}
-          onChange={this.selectPointFromDropdown}
-          options={this.getDataOptions()}
-          selectedKey={`${this.props.selectedPointsIndexes[0]}`}
-          ariaLabel={"datapoint picker"}
-          useComboBoxAsMenuWidth
-          styles={FluentUIStyles.smallDropdownStyle}
-        />
+        {this.displayDatapointDropbox() && (
+          <ComboBox
+            id={"CounterfactualSelectedDatapoint"}
+            className={classNames.legendLabel}
+            label={localization.Counterfactuals.selectedDatapoint}
+            onChange={this.selectPointFromDropdown}
+            options={this.getDataOptions()}
+            selectedKey={`${this.props.selectedPointsIndexes[0]}`}
+            ariaLabel={"datapoint picker"}
+            useComboBoxAsMenuWidth
+            styles={FluentUIStyles.smallDropdownStyle}
+            disabled={this.props.isCounterfactualsDataLoading}
+          />
+        )}
         <div className={classNames.legendLabel}>
           <b>{`${this.getTargetDescription()}: `}</b>
           {getCurrentLabel(
             this.context.dataset.task_type,
-            this.props.data.desired_range,
-            this.props.data.desired_class
+            this.props.data?.desired_range,
+            this.props.data?.desired_class
           )}
         </div>
         <PrimaryButton
@@ -109,14 +119,29 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     return localization.Counterfactuals.currentClass;
   }
 
+  private displayDatapointDropbox(): boolean {
+    const isLargeDataEnabled = ifEnableLargeData(this.context.dataset);
+    if (!isLargeDataEnabled) {
+      return true;
+    }
+
+    return isLargeDataEnabled && this.props.indexSeries.length > 0;
+  }
+
   private selectPointFromDropdown = (
     _event: React.FormEvent<IComboBox>,
     item?: IComboBoxOption
   ): void => {
     if (typeof item?.key === "string") {
       const index = Number.parseInt(item.key);
-      this.props.setTemporaryPointToCopyOfDatasetPoint(index);
+      this.props.setTemporaryPointToCopyOfDatasetPoint(index, item.data.index);
       this.props.toggleSelectionOfPoint(index);
+      if (
+        ifEnableLargeData(this.context.dataset) &&
+        this.props.setCounterfactualData
+      ) {
+        this.props.setCounterfactualData(item.data.index);
+      }
       this.logTelemetryEvent(
         TelemetryEventName.CounterfactualNewDatapointSelectedFromDropdown
       );
@@ -126,17 +151,25 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   private disableCounterfactualPanel = (): boolean => {
     return (
       this.props.selectedPointsIndexes[0] === undefined ||
-      !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]]
+      !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]] ||
+      !!this.props.isCounterfactualsDataLoading
     );
   };
 
   private getDataOptions(): IComboBoxOption[] {
-    const indexes = this.context.selectedErrorCohort.cohort.unwrap(
+    let indexes = this.context.selectedErrorCohort.cohort.unwrap(
       JointDataset.IndexLabel
     );
     indexes.sort((a, b) => Number.parseInt(a) - Number.parseInt(b));
-    return indexes.map((index) => {
+    const isLargeDataEnabled = ifEnableLargeData(this.context.dataset);
+    if (isLargeDataEnabled) {
+      indexes = this.props.indexSeries;
+    }
+
+    return indexes.map((ind, i) => {
+      const index = isLargeDataEnabled ? i : ind;
       return {
+        data: { index: indexes[i] },
         key: `${index}`,
         text: `Index ${index}`
       };
