@@ -1,0 +1,69 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/dataset-explorer/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/dataset-explorer/**/*.js",
+          "libs/dataset-explorer/**/*.jsx",
+          "libs/dataset-explorer/**/*.ts",
+          "libs/dataset-explorer/**/*.tsx",
+          "libs/dataset-explorer/**/*.test.ts",
+          "libs/dataset-explorer/**/*.test.tsx",
+          "libs/dataset-explorer/**/*.test.js",
+          "libs/dataset-explorer/**/*.test.jsx",
+          "libs/dataset-explorer/**/*.spec.ts",
+          "libs/dataset-explorer/**/*.spec.tsx",
+          "libs/dataset-explorer/**/*.spec.js",
+          "libs/dataset-explorer/**/*.spec.jsx",
+          "libs/dataset-explorer/**/*.d.ts"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/web:package",
+      "options": {
+        "outputPath": "dist/libs/dataset-explorer",
+        "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",
+        "project": "libs/dataset-explorer/package.json",
+        "entryFile": "libs/dataset-explorer/src/index.ts",
+        "external": [
+          "@fluentui/react",
+          "highcharts",
+          "jmespath",
+          "localized-strings",
+          "lodash",
+          "memoize-one",
+          "moment",
+          "plotly.js",
+          "react-plotly.js",
+          "react",
+          "react-dom",
+          "uuid"
+        ],
+        "rollupConfig": "./rollup.config.js",
+        "assets": [
+          {
+            "glob": "README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "libs/dataset-explorer/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["coverage/libs/dataset-explorer"]
+    }
+  }
+}

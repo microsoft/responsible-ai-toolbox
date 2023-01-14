@@ -3,15 +3,17 @@ const nrwlConfig = require("@nrwl/react/plugins/webpack.js"); // require the mai
 module.exports = (config) => {
   nrwlConfig(config); // first call it so that it @nrwl/react plugin adds its configs,
 
-  config.node = {
-    module: "empty",
-    dgram: "empty",
-    dns: "mock",
-    fs: "empty",
-    http2: "empty",
-    net: "empty",
-    tls: "empty",
-    child_process: "empty"
+  config.resolve = {
+    fallback: {
+      module: false,
+      dgram: false,
+      dns: "mock",
+      fs: false,
+      http2: false,
+      net: false,
+      tls: false,
+      child_process: false
+    }
   };
 
   if (process.env.debug) {

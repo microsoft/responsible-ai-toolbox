@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@fluentui/react": "8.58.0",
+    "@svgr/webpack": "^6.5.1",
     "core-js": "^3.6.5",
     "d3-array": "^2.8.0",
     "d3-color": "^2.0.0",
