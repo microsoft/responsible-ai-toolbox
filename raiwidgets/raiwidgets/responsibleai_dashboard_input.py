@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import traceback
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -14,7 +14,7 @@ from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
-from responsibleai import RAIInsights
+from responsibleai import RAIInsights, RAIForecastingInsights
 from responsibleai._internal.constants import ManagerNames
 from responsibleai.exceptions import UserConfigValidationException
 
@@ -24,13 +24,13 @@ EXP_VIZ_ERR_MSG = ErrorMessages.EXP_VIZ_ERR_MSG
 class ResponsibleAIDashboardInput:
     def __init__(
             self,
-            analysis: RAIInsights,
+            analysis: Union[RAIInsights, RAIForecastingInsights],
             cohort_list: Optional[List[Cohort]] = None):
         """Initialize the Explanation Dashboard Input.
 
         :param analysis:
             A RAIInsights object that represents an explanation.
-        :type analysis: RAIInsights
+        :type analysis: Union[RAIInsights, RAIForecastingInsights]
         :param cohort_list:
             List of cohorts defined by the user for the dashboard.
         :type cohort_list: List[Cohort]
@@ -41,11 +41,6 @@ class ResponsibleAIDashboardInput:
         self.dashboard_input = analysis.get_data()
 
         self._validate_cohort_list(cohort_list)
-        if cohort_list is not None:
-            # Add cohort_list to dashboard_input
-            self.dashboard_input.cohortData = cohort_list
-        else:
-            self.dashboard_input.cohortData = []
 
         self._feature_length = len(self.dashboard_input.dataset.feature_names)
         if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
@@ -53,7 +48,16 @@ class ResponsibleAIDashboardInput:
 
     def _validate_cohort_list(self, cohort_list=None):
         if cohort_list is None:
+            self.dashboard_input.cohortData = []
             return
+        
+        if isinstance(self, RAIForecastingInsights):
+            # Ensure user did not pass cohort_list and use the generated time series.
+            if cohort_list is not None:
+                raise UserConfigValidationException(
+                    "cohort_list is not supported for forecasting analysis.")
+            # use generated time series
+            cohort_list = self._analysis._time_series
 
         if not isinstance(cohort_list, list):
             raise UserConfigValidationException(
@@ -94,6 +98,8 @@ class ResponsibleAIDashboardInput:
                 target_column=self.dashboard_input.dataset.target_column,
                 categorical_features=categorical_features,
                 is_classification=self._is_classifier)
+
+        self.dashboard_input.cohortData = cohort_list
 
     def on_predict(self, data):
         try:
@@ -299,3 +305,78 @@ class ResponsibleAIDashboardInput:
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
+
+    def forecast(self, post_data):
+        try:
+            filters = post_data[0]
+            # do we need this? ask ilya
+            composite_filters = post_data[1]
+            # composite_filters = post_data[2]
+            transformations = post_data[2]
+            # op, feature, value = post_data[2:]
+            filtered_data_df = self._analysis.get_filtered_test_data(
+                filters=filters,
+                composite_filters=composite_filters,
+                include_original_columns_only=True)
+
+            # transforming with pandas
+            for op, feature, value in transformations:
+                func = None
+                if op == "Add":
+                    func = lambda x: x + float(value)
+                elif op == "Subtract":
+                    func = lambda x: x - float(value)
+                elif op == "Multiply":
+                    func = lambda x: x * float(value)
+                elif op == "Divide":
+                    func = lambda x: x / float(value)
+                else:
+                    raise ValueError(f"An invalid transformation operation ${op} was provided.")
+
+                filtered_data_df[feature] = filtered_data_df[feature].map(func)
+
+            prediction = convert_to_list(
+                self._analysis.model.predict(filtered_data_df), EXP_VIZ_ERR_MSG)
+            return {
+                WidgetRequestResponseConstants.data: prediction
+            }
+            return {
+                WidgetRequestResponseConstants.data: ["post_data", *post_data, "predictions", *prediction]
+            }
+            return {
+                WidgetRequestResponseConstants.data: post_data
+            }
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            e_str = _format_exception(e)
+            return {
+                WidgetRequestResponseConstants.error:
+                    "Failed to generate forecast for cohort, "
+                    "inner error: {}".format(e_str),
+                WidgetRequestResponseConstants.data: []
+            }
+
+
+        # try:
+        #     data = pd.DataFrame(
+        #         data, columns=self.dashboard_input.dataset.feature_names)
+        #     if (self._is_classifier):
+        #         prediction = convert_to_list(
+        #             self._analysis.model.predict_proba(data), EXP_VIZ_ERR_MSG)
+        #     else:
+        #         prediction = convert_to_list(
+        #             self._analysis.model.predict(data), EXP_VIZ_ERR_MSG)
+        #     return {
+        #         WidgetRequestResponseConstants.data: prediction
+        #     }
+        # except Exception as e:
+        #     print(e)
+        #     traceback.print_exc()
+        #     e_str = _format_exception(e)
+        #     return {
+        #         WidgetRequestResponseConstants.error: "Model threw exception"
+        #         " while predicting..."
+        #         "inner error: {}".format(e_str),
+        #         WidgetRequestResponseConstants.data: []
+        #     }

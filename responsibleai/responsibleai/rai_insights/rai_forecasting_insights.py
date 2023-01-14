@@ -14,6 +14,7 @@ import pandas as pd
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
+from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import convert_to_list
 from raiutils.models import (
     is_forecaster, is_quantile_forecaster, Forecasting)
@@ -107,7 +108,7 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         self._feature_ranges = RAIForecastingInsights._get_feature_ranges(
             test=test, categorical_features=self._feature_metadata.categorical_features or [],
-            feature_columns=self._feature_columns)
+            feature_columns=self._feature_columns, time_column_name=self._feature_metadata.time_column_name)
 
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
@@ -132,6 +133,8 @@ class RAIForecastingInsights(RAIBaseInsights):
         else:
             self.predict_output = None
             self.quantile_predict_output = None
+        
+        self._time_series = self._generate_time_series_cohorts()
 
     def _check_true_y_present(self, target_column, test):
         return target_column in list(test.columns)
@@ -151,7 +154,8 @@ class RAIForecastingInsights(RAIBaseInsights):
             test: pd.DataFrame,
             target_column: str,
             serializer,
-            maximum_rows_for_test: int):
+            maximum_rows_for_test: int,
+            feature_metadata: FeatureMetadata):
         """Validate the inputs for the RAIForecastingInsights constructor.
 
         :param model: The model to compute RAI insights for.
@@ -177,6 +181,8 @@ class RAIForecastingInsights(RAIBaseInsights):
         :param maximum_rows_for_test: Limit on size of test data
             (for performance reasons)
         :type maximum_rows_for_test: int
+        :param feature_metadata: feature metadata for the dataset
+        :type feature_metadata: FeatureMetadata
         """
 
         if model is None:
@@ -233,7 +239,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                         target_column)
                 )
 
-            categorical_features = self._feature_metadata.categorical_features
+            categorical_features = feature_metadata.categorical_features
             if categorical_features is not None and \
                     len(categorical_features) > 0:
                 if target_column in categorical_features:
@@ -271,6 +277,8 @@ class RAIForecastingInsights(RAIBaseInsights):
                 columns=[target_column]).select_dtypes(
                     include='number').columns.tolist()
             string_features_set = set(train_features) - set(numeric_features)
+            if feature_metadata is not None and feature_metadata.time_column_name is not None:
+                string_features_set.remove(feature_metadata.time_column_name)
             if len(string_features_set - set(categorical_features)) > 0:
                 raise UserConfigValidationException(
                     "The following string features were not "
@@ -311,9 +319,9 @@ class RAIForecastingInsights(RAIBaseInsights):
                         type(feature_metadata)))
 
             feature_names = list(train.columns)
-            feature_metadata.validate(feature_names)
             self._ensure_time_column_available(
-                self._feature_metadata, feature_names, model)
+                feature_metadata, feature_names, model)
+            feature_metadata.validate(feature_names)
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -369,6 +377,7 @@ class RAIForecastingInsights(RAIBaseInsights):
             if fm_time_column is None:
                 if model_time_column in feature_names:
                     feature_metadata.time_column_name = model_time_column
+                    self._feature_metadata = feature_metadata
                     return
                 else:
                     raise UserConfigValidationException(
@@ -397,7 +406,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         :return: The filtered test data.
         :rtype: pandas.DataFrame
         """
-        print(filters)
         true_y = self.predict_output if not self._is_true_y_present else self.test[
             self.target_column]
         filter_data_with_cohort = FilterDataWithCohortFilters(
@@ -485,17 +493,11 @@ class RAIForecastingInsights(RAIBaseInsights):
         # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
         try:
             dashboard_dataset.index = convert_to_list(
-                self.test.index.strftime("%Y-%m-%d"))
+                pd.to_datetime(self.test.index, yearfirst=True, format="%Y-%m-%d"))
+            # dashboard_dataset.index = convert_to_list(
+            #     self.test.index.strftime("%Y-%m-%d"))
         except AttributeError:
-            # if strftime is not compatible with the index, check if a time column was provided
-            if self._feature_metadata.datetime_features:
-                # TODO: this isn't ideal, we need to be able to specify exactly 1. This allows for multiple.
-                datetime_feature = self._feature_metadata.datetime_features[0]
-                dashboard_dataset.index = convert_to_list(pd.to_datetime(
-                    self.test[datetime_feature], yearfirst=True, format="%&-%m-%d"))
-            else:
-                raise ValueError(
-                    "No datetime_features were provided via feature_metadata.")
+            raise ValueError("No time_column_name was provided via feature_metadata.")
 
         true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
@@ -527,6 +529,28 @@ class RAIForecastingInsights(RAIBaseInsights):
             dashboard_dataset.pred_quantiles = pred_quantiles
 
         return dashboard_dataset
+    
+    def _generate_time_series_cohorts(self):
+        """Generate time series cohorts based on time series ID columns."""
+        cohort_list = []
+        all_time_series = self.test[self._feature_metadata.time_series_id_column_names].value_counts().index
+        for time_series_id_values in all_time_series:
+            column_value_combinations = zip(
+                self._feature_metadata.time_series_id_column_names,
+                map(str, time_series_id_values))
+            id_columns_name_value_mapping = []
+            filters = []
+            for (col, val) in column_value_combinations:
+                id_columns_name_value_mapping += f"{col} = {val}"
+                filters.append(CohortFilter(
+                    method=CohortFilterMethods.METHOD_INCLUDES,
+                    arg=[val],
+                    column=col))
+            time_series = Cohort(", ".join(id_columns_name_value_mapping))
+            for filter in filters:
+                time_series.add_cohort_filter(filter)
+            cohort_list.append(time_series)
+        return cohort_list
 
     def _save_predictions(self, path):
         """Save the predict() and predict_proba() output.
@@ -573,21 +597,24 @@ class RAIForecastingInsights(RAIBaseInsights):
             json.dump(meta, file)
 
     @staticmethod
-    def _get_feature_ranges(test, categorical_features, feature_columns):
+    def _get_feature_ranges(test, categorical_features, feature_columns, time_column_name):
         """Get feature ranges like min, max and unique values
         for all columns"""
         result = []
         for col in feature_columns:
             res_object = {}
+            res_object[_COLUMN_NAME] = col
             if (col in categorical_features):
                 unique_value = test[col].unique()
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            elif (col == time_column_name):
+                res_object[_RANGE_TYPE] = "datetime"
+                res_object[_MIN_VALUE] = test[col].min()
+                res_object[_MAX_VALUE] = test[col].max()
             else:
                 min_value = float(test[col].min())
                 max_value = float(test[col].max())
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value

@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional, Union
 class TaskType(str, Enum):
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
+    FORECASTING = 'forecasting'
 
 
 class Dataset:
@@ -25,6 +26,7 @@ class Dataset:
     feature_metadata: Optional[Dict[str, Any]]
     data_balance_measures: Dict[str, Any]
     images: Optional[List[str]]
+    index: Optional[List[str]]
 
 
 class BoundedCoordinates:
@@ -175,3 +177,6 @@ class RAIInsightsData:
     causalAnalysisData: List[CausalData]
     counterfactualData: List[CounterfactualData]
     errorAnalysisData: List[ErrorAnalysisData]
+
+class RAIForecastingInsightsData:
+    dataset: Dataset
