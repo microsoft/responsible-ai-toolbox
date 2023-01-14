@@ -16,7 +16,8 @@ import {
   ifEnableLargeData,
   Cohort,
   IHighchartsConfig,
-  IHighchartBubbleSDKClusterData
+  IHighchartBubbleSDKClusterData,
+  ICounterfactualData
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -41,6 +42,7 @@ export interface ILargeCounterfactualChartProps
   cohort: Cohort;
   isCounterfactualsDataLoading?: boolean;
   isRevertButtonClicked: boolean;
+  counterfactualData: ICounterfactualData;
   setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   onIndexSeriesUpdated?: (indexSeries: number[]) => void;
   setIsRevertButtonClicked: (status: boolean) => void;
@@ -133,7 +135,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
             }
             temporaryPoint={this.props.temporaryPoint}
             isPanelOpen={this.props.isPanelOpen}
-            data={this.context.counterfactualData}
+            data={this.props.counterfactualData}
             telemetryHook={this.props.telemetryHook}
           />
         )}

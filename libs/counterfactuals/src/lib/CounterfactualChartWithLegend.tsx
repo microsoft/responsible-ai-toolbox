@@ -81,6 +81,24 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
     };
   }
 
+  public componentDidUpdate(
+    prevProps: ICounterfactualChartWithLegendProps
+  ): void {
+    if (!this.state) {
+      return;
+    }
+    if (prevProps.data !== this.props.data) {
+      const originalData = getOriginalData(
+        this.props.selectedPointsIndexes[0],
+        this.context.jointDataset,
+        this.context.dataset,
+        ifEnableLargeData(this.context.dataset),
+        this.props.data
+      );
+      this.setState({ originalData });
+    }
+  }
+
   public render(): React.ReactNode {
     const classNames = counterfactualChartStyles();
     return (
@@ -152,7 +170,9 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
       originalData = getOriginalData(
         index,
         this.context.jointDataset,
-        this.context.dataset
+        this.context.dataset,
+        ifEnableLargeData(this.context.dataset),
+        this.props.data
       );
     } else {
       newSelections.splice(indexOf, 1);
@@ -235,6 +255,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         customPoints={this.state.customPoints}
         isPanelOpen={this.state.isPanelOpen}
         originalData={this.state.originalData}
+        counterfactualData={this.props.data}
         selectedPointsIndexes={this.props.selectedPointsIndexes}
         temporaryPoint={this.props.temporaryPoint}
         onChartPropsUpdated={this.onChartPropsUpdated}

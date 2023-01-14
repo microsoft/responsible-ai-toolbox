@@ -135,6 +135,7 @@ export class CounterfactualList extends React.Component<
   };
 
   private getItems(): Array<Record<string, string | number>> {
+    console.log("!!in getItems");
     const items: Array<Record<string, string | number>> = [];
     const selectedData =
       this.props.data?.cfs_list[
@@ -149,9 +150,19 @@ export class CounterfactualList extends React.Component<
             i + 1
           )
         };
+        console.log("!!start");
         this.props.data?.feature_names_including_target.forEach((f, j) => {
+          console.log(
+            "!!xxx: ",
+            this.props.originalData,
+            this.props.originalData?.[f],
+            point[j],
+            this.props.originalData?.[f] !== point[j],
+            this.props.originalData?.[f] !== point[j] ? point[j] : "-"
+          );
           temp[f] = this.props.originalData?.[f] !== point[j] ? point[j] : "-";
         });
+        console.log("!!end");
         items.push(temp);
       });
     }
