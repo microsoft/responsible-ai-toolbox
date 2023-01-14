@@ -10,7 +10,7 @@ import {
   IModelAssessmentContext,
   ModelAssessmentContext
 } from "../../Context/ModelAssessmentContext";
-import { isAllDataErrorCohort } from "../isAllDataCohort";
+import { isAllDataErrorCohort } from "../allDataCohortUtils";
 
 export interface ICohortInfoSectionProps {
   toggleShiftCohortVisibility: () => void;
