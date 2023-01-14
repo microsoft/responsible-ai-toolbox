@@ -37,9 +37,7 @@
     },
     "dashboard-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "dashboard"
-      ]
+      "implicitDependencies": ["dashboard"]
     },
     "dataset-explorer": {
       "tags": []
@@ -79,9 +77,7 @@
     },
     "widget-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "widget"
-      ]
+      "implicitDependencies": ["widget"]
     }
   },
   "targetDependencies": {

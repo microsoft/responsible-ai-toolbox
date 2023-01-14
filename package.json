@@ -76,15 +76,15 @@
     "@babel/preset-env": "7.11.0",
     "@babel/preset-react": "7.10.4",
     "@babel/preset-typescript": "7.10.4",
-    "@nrwl/cli": "12.6.2",
-    "@nrwl/cypress": "12.6.2",
-    "@nrwl/eslint-plugin-nx": "12.6.2",
-    "@nrwl/jest": "12.6.2",
-    "@nrwl/nx-cloud": "^15.0.2",
-    "@nrwl/react": "12.6.2",
-    "@nrwl/tao": "12.6.2",
-    "@nrwl/web": "12.6.2",
-    "@nrwl/workspace": "12.6.2",
+    "@nrwl/cli": "15.5.1",
+    "@nrwl/cypress": "15.5.1",
+    "@nrwl/eslint-plugin-nx": "15.5.1",
+    "@nrwl/jest": "15.5.1",
+    "@nrwl/nx-cloud": "15.0.2",
+    "@nrwl/react": "15.5.1",
+    "@nrwl/tao": "15.5.1",
+    "@nrwl/web": "15.5.1",
+    "@nrwl/workspace": "15.5.1",
     "@rollup/plugin-json": "4.1.0",
     "@svgr/rollup": "5.4.0",
     "@testing-library/react": "11.2.5",
@@ -143,4 +143,3 @@
     "typescript": "4.3.5"
   }
 }
-
