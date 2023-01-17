@@ -25,7 +25,7 @@
       }
     },
     "build": {
-      "executor": "@nrwl/web:package",
+      "executor": "@nrwl/web:rollup",
       "options": {
         "outputPath": "dist/libs/dataset-explorer",
         "tsConfig": "libs/dataset-explorer/tsconfig.lib.json",

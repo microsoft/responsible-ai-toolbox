@@ -5,7 +5,7 @@ import { Data } from "plotly.js";
 
 import { IAccessor } from "./IAccessor";
 
-export interface IData extends Data {
+export type IData = Data & {
   xAccessor?: string;
   xAccessorLowerBound?: string;
   xAccessorUpperBound?: string;
@@ -20,4 +20,4 @@ export interface IData extends Data {
   maxMarkerSize?: number;
   seriesLevelAccessors?: { [key: string]: IAccessor };
   datapointLevelAccessors?: { [key: string]: IAccessor };
-}
+};

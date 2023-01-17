@@ -16,7 +16,7 @@
       }
     },
     "build": {
-      "executor": "@nrwl/web:package",
+      "executor": "@nrwl/web:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/e2e",
