@@ -194,7 +194,6 @@ export class CounterfactualComponent extends React.PureComponent<
   private setCounterfactualLocalImportanceData = (
     data: ICounterfactualData
   ): void => {
-    console.log("!!set counterfactual data");
     this.setState({
       counterfactualsData: data,
       isCounterfactualsDataLoading: false,
