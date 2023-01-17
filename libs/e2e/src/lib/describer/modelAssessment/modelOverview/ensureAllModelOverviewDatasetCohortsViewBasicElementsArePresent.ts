@@ -4,6 +4,13 @@
 import { Locators } from "../Constants";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
+import {
+  assertChartVisibility,
+  getDefaultVisibleChart,
+  ensureNotebookModelOverviewMetricChartIsCorrect
+} from "./charts";
+import { getNumberOfCohorts } from "./numberOfCohorts";
+
 export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   datasetShape: IModelAssessmentData,
   includeNewCohort: boolean,
@@ -16,9 +23,7 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
     "not.exist"
   );
   if (isNotebookTest) {
-    const numberOfCohorts =
-      (initialCohorts?.length || 0) + (includeNewCohort ? 1 : 0);
-    if (numberOfCohorts <= 1) {
+    if (getNumberOfCohorts(datasetShape, includeNewCohort) <= 1) {
       cy.get(Locators.ModelOverviewHeatmapVisualDisplayToggle).should(
         "not.exist"
       );
@@ -81,59 +86,18 @@ export function ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent(
   cy.get(Locators.ModelOverviewDisaggregatedAnalysisBaseCohortWarning).should(
     "not.exist"
   );
-  cy.get(Locators.ModelOverviewChartPivot).should("exist");
 
-  if (datasetShape.isMulticlass) {
-    // 1 button and 1 hidden overflow button, 2 total
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 2);
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-      "not.exist"
+  const defaultVisibleChart = getDefaultVisibleChart(
+    datasetShape.isRegression,
+    datasetShape.isBinary
+  );
+  assertChartVisibility(datasetShape, defaultVisibleChart);
+
+  if (defaultVisibleChart === Locators.ModelOverviewMetricChart) {
+    ensureNotebookModelOverviewMetricChartIsCorrect(
+      isNotebookTest,
+      datasetShape,
+      includeNewCohort
     );
-    cy.get(Locators.ModelOverviewMetricChart).should("exist");
-    if (isNotebookTest) {
-      cy.get(Locators.ModelOverviewMetricChartBars).should(
-        "have.length",
-        cohorts?.length
-      );
-      // check aria-label of bar chart - aria-label uses comma as delimiter
-      // between digits for thousands instead of whitespace
-      const displayedMetric =
-        (datasetShape.isRegression
-          ? initialCohorts?.[0].metrics.meanAbsoluteError
-          : initialCohorts?.[0].metrics.accuracy) || "";
-      const expectedAriaLabel =
-        !datasetShape.isRegression && !datasetShape.isMulticlass
-          ? `1. ${initialCohorts?.[0].name}, ${displayedMetric.replace(
-              " ",
-              ","
-            )}.`
-          : `${initialCohorts?.[0].name}, ${displayedMetric.replace(
-              " ",
-              ","
-            )}. ${
-              datasetShape.isRegression
-                ? "Mean absolute error"
-                : "Accuracy score"
-            }.`;
-      cy.get(Locators.ModelOverviewMetricChartBars)
-        .first()
-        .should("have.attr", "aria-label", expectedAriaLabel);
-    }
-  } else if (datasetShape.isRegression) {
-    // 2 buttons and 1 hidden overflow button, 3 total
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should("exist");
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should(
-      "not.exist"
-    );
-  } else {
-    // binary classification (not multiclass, not regression)
-    // 2 buttons and 1 hidden overflow button, 3 total
-    cy.get(Locators.ModelOverviewChartPivotItems).should("have.length", 3);
-    cy.get(Locators.ModelOverviewProbabilityDistributionChart).should("exist");
-    cy.get(Locators.ModelOverviewRegressionDistributionChart).should(
-      "not.exist"
-    );
-    cy.get(Locators.ModelOverviewMetricChart).should("not.exist");
   }
 }

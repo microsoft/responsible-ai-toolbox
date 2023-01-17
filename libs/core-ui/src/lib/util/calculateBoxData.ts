@@ -16,9 +16,10 @@ export async function calculateBoxPlotDataFromErrorCohort(
   requestBoxPlotDistribution?: (
     request: any,
     abortSignal: AbortSignal
-  ) => Promise<IHighchartBoxData>
+  ) => Promise<IHighchartBoxData>,
+  ifEnableLargeData?: boolean
 ): Promise<IHighchartBoxData | undefined> {
-  if (requestBoxPlotDistribution) {
+  if (ifEnableLargeData && requestBoxPlotDistribution) {
     return await calculateBoxPlotDataFromSDK(
       errorCohort,
       requestBoxPlotDistribution,
@@ -50,11 +51,7 @@ export async function calculateBoxPlotDataFromSDK(
     errorCohort.cohort.compositeFilters,
     errorCohort.jointDataset
   );
-  const data = [
-    filtersRelabeled,
-    compositeFiltersRelabeled,
-    Number(queryClass)
-  ];
+  const data = [filtersRelabeled, compositeFiltersRelabeled, queryClass];
 
   const result: IHighchartBoxData = await requestBoxPlotDistribution?.(
     data,

@@ -20,7 +20,8 @@ import {
   JointDataset,
   ModelAssessmentContext,
   setOutlierDataIfChanged,
-  IBoxChartState
+  IBoxChartState,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { PointOptionsObject } from "highcharts";
@@ -101,8 +102,9 @@ export class RegressionDistributionChart extends React.Component<
             cohort,
             index,
             targetOption?.key.toString(),
-            targetOption?.id,
-            this.context.requestBoxPlotDistribution
+            targetOption?.text,
+            this.context.requestBoxPlotDistribution,
+            ifEnableLargeData(this.context.dataset)
           );
         }
       );

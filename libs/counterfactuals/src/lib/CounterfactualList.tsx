@@ -215,14 +215,16 @@ export class CounterfactualList extends React.Component<
     option?: IComboBoxOption
   ): void => {
     const id = key.toString();
-    const keyIndex =
-      this.props.data?.feature_names_including_target.indexOf(id);
+    const columnKey = this.getColumnKey(id);
+    if (!columnKey) {
+      return;
+    }
     if (option?.text) {
       const optionIndex = options.findIndex(
         (feature) => feature.key === option.text
       );
       this.props.setCustomRowPropertyComboBox(
-        `Data${keyIndex}`,
+        columnKey,
         optionIndex,
         option.text
       );
@@ -239,15 +241,23 @@ export class CounterfactualList extends React.Component<
   ): void => {
     const target = evt.target as Element;
     const id = target.id;
-    const keyIndex =
-      this.props.data?.feature_names_including_target.indexOf(id);
-    this.props.setCustomRowProperty(`Data${keyIndex}`, false, newValue);
+    const columnKey = this.getColumnKey(id);
+    if (!columnKey) {
+      return;
+    }
+    this.props.setCustomRowProperty(columnKey, false, newValue);
     this.setState((prevState) => {
       prevState.data[id] = newValue?.endsWith(".")
         ? newValue
         : toNumber(newValue);
       return { data: { ...prevState.data } };
     });
+  };
+
+  private getColumnKey = (featureKey: string): string | undefined => {
+    const metaDict = this.context.jointDataset.metaDict;
+    const metaDictKeys = Object.keys(metaDict);
+    return metaDictKeys.find((item) => metaDict[item].label === featureKey);
   };
 
   private toggleCallout = (): void => {

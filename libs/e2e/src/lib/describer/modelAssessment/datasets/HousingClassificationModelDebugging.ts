@@ -76,9 +76,12 @@ export const HousingClassificationModelDebugging = {
     "PoolArea",
     "YrSold"
   ],
+  isBinary: true,
   modelOverviewData: {
     featureCohortView: {
-      multiFeatureCohorts: 6,
+      firstFeatureToSelect: "LotFrontage",
+      multiFeatureCohorts: 7,
+      secondFeatureToSelect: "OverallQual",
       singleFeatureCohorts: 3
     },
     hasModelOverviewComponent: true,

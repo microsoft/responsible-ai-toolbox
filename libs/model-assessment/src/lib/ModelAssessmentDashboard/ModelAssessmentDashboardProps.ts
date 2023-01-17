@@ -13,7 +13,8 @@ import {
   IErrorAnalysisTreeNode,
   IErrorAnalysisMatrix,
   IHighchartBoxData,
-  IPreBuiltCohort
+  IPreBuiltCohort,
+  IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
 import { IStringsParam } from "@responsible-ai/error-analysis";
 
@@ -68,6 +69,18 @@ export interface IModelAssessmentDashboardProps
     request: any[],
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestGlobalCausalEffects?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestGlobalCausalPolicy?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
   requestDatasetAnalysisBarChart?: (
     filter: unknown[],
     compositeFilter: unknown[],
@@ -91,9 +104,30 @@ export interface IModelAssessmentDashboardProps
     compositeFilter: unknown[],
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestMetrics?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    metric: string,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestExp?: (index: number, abortSignal: AbortSignal) => Promise<any[]>;
+  requestBubblePlotData?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBubbleSDKClusterData>;
+  requestLocalCounterfactuals?: (
+    counterfactualsId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICounterfactualData>;
   localUrl?: string;
-
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
   telemetryHook?: (message: ITelemetryEvent) => void;
 
   // TODO figure out how to persist starting tab for fairness

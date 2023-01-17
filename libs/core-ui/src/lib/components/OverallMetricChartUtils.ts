@@ -12,11 +12,12 @@ import { cohortKey } from "../cohortKey";
 import { IModelAssessmentContext } from "../Context/ModelAssessmentContext";
 import { getPrimaryChartColor } from "../Highchart/ChartColors";
 import { ModelTypes } from "../Interfaces/IExplanationContext";
+import { ILabeledStatistic } from "../Interfaces/IStatistic";
 import { IsBinary } from "../util/ExplanationUtils";
 import { FluentUIStyles } from "../util/FluentUIStyles";
 import { ChartTypes, IGenericChartProps } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
-import { generateMetrics, ILabeledStatistic } from "../util/StatisticsUtils";
+import { generateMetrics } from "../util/StatisticsUtils";
 
 export function generatePlotlyProps(
   jointData: JointDataset,

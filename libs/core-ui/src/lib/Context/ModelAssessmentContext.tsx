@@ -15,6 +15,7 @@ import { IDataset } from "../Interfaces/IDataset";
 import { IErrorAnalysisData } from "../Interfaces/IErrorAnalysisData";
 import { IExplanationModelMetadata } from "../Interfaces/IExplanationContext";
 import { IHighchartBoxData } from "../Interfaces/IHighchartBoxData";
+import { IHighchartBubbleSDKClusterData } from "../Interfaces/IHighchartBubbleData";
 import { IModelExplanationData } from "../Interfaces/IModelExplanationData";
 import { ITelemetryEvent } from "../util/ITelemetryEvent";
 import { JointDataset } from "../util/JointDataset";
@@ -59,6 +60,30 @@ export interface IModelAssessmentContext {
     request: any,
     abortSignal: AbortSignal
   ) => Promise<IHighchartBoxData>;
+  requestBubblePlotData?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    xAxis: string,
+    yAxis: string,
+    abortSignal: AbortSignal
+  ) => Promise<IHighchartBubbleSDKClusterData>;
+  requestLocalCounterfactuals?: (
+    counterfactualsId: string,
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<ICounterfactualData>;
+  requestGlobalCausalEffects?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
+  requestGlobalCausalPolicy?: (
+    id: string,
+    filter: unknown[],
+    compositeFilter: unknown[],
+    abortSignal: AbortSignal
+  ) => Promise<ICausalAnalysisData>;
   requestDatasetAnalysisBarChart?: (
     filter: unknown[],
     compositeFilter: unknown[],
@@ -82,9 +107,19 @@ export interface IModelAssessmentContext {
     compositeFilter: unknown[],
     abortSignal: AbortSignal
   ) => Promise<any>;
+  requestMetrics?: (
+    filter: unknown[],
+    compositeFilter: unknown[],
+    metric: string,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   requestExp?:
     | ((index: number, abortSignal: AbortSignal) => Promise<any[]>)
     | undefined;
+  requestForecast?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<number[]>;
   shiftErrorCohort(cohort: ErrorCohort): void;
   addCohort(cohort: Cohort, switchNew?: boolean): void;
   editCohort(cohort: Cohort, switchNew?: boolean): void;

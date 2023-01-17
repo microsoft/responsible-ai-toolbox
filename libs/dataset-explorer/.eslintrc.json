@@ -7,14 +7,6 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
-    },
-    {
       "files": ["LargeDatasetExplorerTab.tsx"],
       "rules": {
         "max-lines": "warn"

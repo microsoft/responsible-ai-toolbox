@@ -7,6 +7,7 @@ import { Locators } from "../Constants";
 import { modelAssessmentDatasetsIncludingFlights } from "../datasets/modelAssessmentDatasets";
 import { IModelAssessmentData } from "../IModelAssessmentData";
 
+import { ensureChartsPivot } from "./charts";
 import { ensureAllModelOverviewBasicElementsArePresent } from "./ensureAllModelOverviewBasicElementsArePresent";
 import { ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewDatasetCohortsViewBasicElementsArePresent";
 import { ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent } from "./ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent";
@@ -45,11 +46,13 @@ export function describeModelOverview(
         ensureAllModelOverviewBasicElementsArePresent();
         cy.get(Locators.ModelOverviewCohortViewFeatureCohortViewButton).click();
         ensureAllModelOverviewFeatureCohortsViewBasicElementsArePresent(
+          datasetShape,
           isNotebookTest
         );
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
-          datasetShape.featureNames?.[0] || "",
+          datasetShape.modelOverviewData?.featureCohortView
+            ?.firstFeatureToSelect || "",
           true
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
@@ -61,7 +64,8 @@ export function describeModelOverview(
       it("should show 'Feature cohorts' view with multiple features when selected", () => {
         multiSelectComboBox(
           "#modelOverviewFeatureSelection",
-          datasetShape.featureNames?.[2] || ""
+          datasetShape.modelOverviewData?.featureCohortView
+            ?.secondFeatureToSelect || ""
         );
         ensureAllModelOverviewFeatureCohortsViewElementsAfterSelectionArePresent(
           datasetShape,
@@ -71,6 +75,10 @@ export function describeModelOverview(
 
       it("should show new cohorts in charts", () => {
         ensureNewCohortsShowUpInCharts(datasetShape, isNotebookTest);
+      });
+
+      it("should pivot between charts when clicking", () => {
+        ensureChartsPivot(datasetShape, isNotebookTest, true);
       });
     } else {
       it("should not have 'Model overview' component", () => {
