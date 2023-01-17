@@ -32,7 +32,7 @@ import {
 } from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
 import { ICounterfactualChartProps } from "../CounterfactualChart";
 import { counterfactualChartStyles } from "../CounterfactualChart.styles";
-import { isJustTypeChange } from "../CounterfactualComponentUtils";
+import { hasAxisTypeChanged } from "../CounterfactualComponentUtils";
 import { CounterfactualPanel } from "../CounterfactualPanel";
 
 import { LargeCounterfactualChartArea } from "./LargeCounterfactualChartArea";
@@ -96,7 +96,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.updateBubblePlot();
       return;
     }
-    if (this.isJustTypeChange(prevProps.chartProps)) {
+    if (this.hasAxisTypeChanged(prevProps.chartProps)) {
       this.updateScatterPlot();
       return;
     }
@@ -227,7 +227,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const shouldResetIndexes =
       ifEnableLargeData(this.context.dataset) &&
       !_.isEqual(this.props.chartProps, newProps) &&
-      !isJustTypeChange(this.changedKeys);
+      !hasAxisTypeChanged(this.changedKeys);
     if (shouldResetIndexes) {
       this.setState({
         indexSeries: [],
@@ -263,12 +263,12 @@ export class LargeCounterfactualChart extends React.PureComponent<
     );
   };
 
-  private readonly isJustTypeChange = (
+  private readonly hasAxisTypeChanged = (
     prevChartProps: IGenericChartProps
   ): boolean => {
     this.changedKeys = [];
     this.compareChartProps(this.props.chartProps, prevChartProps);
-    return isJustTypeChange(this.changedKeys);
+    return hasAxisTypeChanged(this.changedKeys);
   };
 
   private readonly setXDialogOpen = (): void => {
@@ -289,9 +289,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const plotData = await this.getBubblePlotData();
     if (plotData && !instanceOfHighChart(plotData)) {
       this.setState({
-        bubbleChartErrorMessage: plotData.toString().split(":").pop()
-      });
-      this.setState({
+        bubbleChartErrorMessage: plotData.toString().split(":").pop(),
         isBubbleChartDataLoading: false,
         plotData: undefined
       });

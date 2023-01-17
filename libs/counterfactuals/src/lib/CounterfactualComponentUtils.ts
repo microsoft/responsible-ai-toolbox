@@ -7,7 +7,7 @@ enum FieldChangeUpdate {
   Type = "type"
 }
 
-export function isJustTypeChange(changedKeys: string[]): boolean {
+export function hasAxisTypeChanged(changedKeys: string[]): boolean {
   // return true only if type of the axis has changed in panel
   const changedKeysTemp = removeParentKeys(changedKeys);
   if (
