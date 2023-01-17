@@ -287,9 +287,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
     const plotData = await this.getBubblePlotData();
     if (plotData && !instanceOfHighChart(plotData)) {
       this.setState({
-        bubbleChartErrorMessage: plotData.toString().split(":").pop()
-      });
-      this.setState({
+        bubbleChartErrorMessage: plotData.toString().split(":").pop(),
         isBubbleChartDataLoading: false,
         plotData: undefined
       });
