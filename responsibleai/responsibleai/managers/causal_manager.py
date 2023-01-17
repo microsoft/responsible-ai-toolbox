@@ -157,6 +157,14 @@ class CausalManager(BaseManager):
         :param random_state: Controls the randomness of the estimator.
         :type random_state: int or RandomState or None
         """
+        if not isinstance(treatment_features, list):
+            raise UserConfigValidationException(
+                "Expecting a list for treatment_features but got {0}".format(
+                    type(treatment_features)))
+        if len(treatment_features) == 0:
+            raise UserConfigValidationException(
+                "Please specify at least one feature in "
+                "treatment_features list")
         for feature in treatment_features:
             if self._feature_metadata and \
                     self._feature_metadata.dropped_features and \
