@@ -472,10 +472,17 @@ class BaseAnalyzer(ABC):
             error.
         :rtype: list[float]
         """
+        # if only one row, replicate it to avoid exception
+        if input_data.shape[0] == 1:
+            input_data = np.concatenate((input_data, input_data))
+            diff = np.concatenate((diff, diff))
+        n_neighbors = min(3, input_data.shape[0] - 1)
         if self._model_task == ModelTask.CLASSIFICATION:
-            return mutual_info_classif(input_data, diff).tolist()
+            return mutual_info_classif(
+                input_data, diff, n_neighbors=n_neighbors).tolist()
         else:
-            return mutual_info_regression(input_data, diff).tolist()
+            return mutual_info_regression(
+                input_data, diff, n_neighbors=n_neighbors).tolist()
 
     def compute_root_stats(self):
         """Compute the root all data statistics.
