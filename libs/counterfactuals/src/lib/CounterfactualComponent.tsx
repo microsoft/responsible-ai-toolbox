@@ -29,7 +29,7 @@ import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 import { getLocalCounterfactualsFromSDK } from "../util/largeCounterfactualsView/getOnScatterPlotPointClick";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
-import { isJustTypeChange } from "./CounterfactualComponentUtils";
+import { hasAxisTypeChanged } from "./CounterfactualComponentUtils";
 import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
 import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
@@ -261,7 +261,7 @@ export class CounterfactualComponent extends React.PureComponent<
     const shouldResetIndexes =
       ifEnableLargeData(this.context.dataset) &&
       !_.isEqual(this.state.chartProps, newProps) &&
-      !isJustTypeChange(this.changedKeys);
+      !hasAxisTypeChanged(this.changedKeys);
     this.setState({
       chartProps: newProps
     });
