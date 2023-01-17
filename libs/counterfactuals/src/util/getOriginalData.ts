@@ -47,6 +47,5 @@ export function getOriginalData(
     : dataset.target_column;
   const targetLabel = targetColumn || "y";
   data[targetLabel] = row[JointDataset.TrueYLabel];
-
   return data;
 }

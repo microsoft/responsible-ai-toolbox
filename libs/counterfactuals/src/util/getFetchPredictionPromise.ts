@@ -19,15 +19,10 @@ export function getFetchPredictionPromise(
     )
   ];
   if (ifEnableLargeData && testData) {
-    testData[0][0].pop();
+    testData[0][0].pop(); // drop the prediction value before predict call
     rawData = testData[0];
   }
 
-  // const rawData = JointDataset.datasetSlice(
-  //   fetchingReference,
-  //   jointDataset.metaDict,
-  //   jointDataset.datasetFeatureCount
-  // );
   const promise = invokeModel(rawData, abortController.signal);
   return promise;
 }
