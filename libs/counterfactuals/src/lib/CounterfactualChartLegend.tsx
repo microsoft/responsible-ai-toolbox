@@ -6,7 +6,8 @@ import {
   IComboBox,
   ComboBox,
   PrimaryButton,
-  Stack
+  Stack,
+  DefaultButton
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
@@ -38,6 +39,7 @@ export interface ICounterfactualChartLegendProps {
   selectedPointsIndexes: number[];
   indexSeries: number[];
   isCounterfactualsDataLoading?: boolean;
+  isBubbleChartRendered?: boolean;
   removeCustomPoint: (index: number) => void;
   setTemporaryPointToCopyOfDatasetPoint: (
     index: number,
@@ -48,6 +50,7 @@ export interface ICounterfactualChartLegendProps {
   toggleCustomActivation: (index: number) => void;
   togglePanel: () => void;
   toggleSelectionOfPoint: (index?: number) => void;
+  setIsRevertButtonClicked: (status: boolean) => void;
 }
 
 export class CounterfactualChartLegend extends React.PureComponent<ICounterfactualChartLegendProps> {
@@ -59,7 +62,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     const classNames = counterfactualChartStyles();
     return (
       <Stack className={classNames.legendAndText}>
-        {this.displayDatapointDropbox() && (
+        {this.displayComboBox() && (
           <ComboBox
             id={"CounterfactualSelectedDatapoint"}
             className={classNames.legendLabel}
@@ -82,7 +85,7 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
           )}
         </div>
         <PrimaryButton
-          className={classNames.legendLabel}
+          className={classNames.buttonStyle}
           onClick={this.props.togglePanel}
           disabled={this.disableCounterfactualPanel()}
           text={
@@ -91,6 +94,15 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
               : localization.Counterfactuals.createCounterfactual
           }
         />
+        {this.displayRevertButton() && (
+          <DefaultButton
+            className={classNames.buttonStyle}
+            onClick={this.onRevertButtonClick}
+            text={localization.Counterfactuals.revertToBubbleChart}
+            title={localization.Counterfactuals.revertToBubbleChart}
+            disabled={this.props.isCounterfactualsDataLoading}
+          />
+        )}
         {this.props.customPoints.length > 0 && (
           <InteractiveLegend
             items={this.props.customPoints.map((row, rowIndex) => {
@@ -119,13 +131,20 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
     return localization.Counterfactuals.currentClass;
   }
 
-  private displayDatapointDropbox(): boolean {
+  private displayComboBox(): boolean {
     const isLargeDataEnabled = ifEnableLargeData(this.context.dataset);
     if (!isLargeDataEnabled) {
       return true;
     }
 
     return isLargeDataEnabled && this.props.indexSeries.length > 0;
+  }
+
+  private displayRevertButton(): boolean {
+    return (
+      ifEnableLargeData(this.context.dataset) &&
+      this.props.indexSeries.length > 0
+    );
   }
 
   private selectPointFromDropdown = (
@@ -154,6 +173,10 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
       !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]] ||
       !!this.props.isCounterfactualsDataLoading
     );
+  };
+
+  private onRevertButtonClick = (): void => {
+    this.props.setIsRevertButtonClicked(true);
   };
 
   private getDataOptions(): IComboBoxOption[] {
