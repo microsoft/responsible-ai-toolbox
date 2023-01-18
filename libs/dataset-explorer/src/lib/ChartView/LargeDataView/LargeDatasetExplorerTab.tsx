@@ -29,7 +29,8 @@ import {
   ifEnableLargeData,
   hasAxisTypeChanged,
   getCounterfactualsScatterOption,
-  LoadingSpinner
+  LoadingSpinner,
+  instanceOfHighChart
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -379,6 +380,22 @@ export class LargeDatasetExplorerTab extends React.Component<
               undefined
             );
           this.resetSeries(chartProps);
+          if (
+            datasetBarConfigOverride &&
+            !instanceOfHighChart(datasetBarConfigOverride)
+          ) {
+            this.setState({
+              bubbleChartErrorMessage: datasetBarConfigOverride
+                .toString()
+                .split(":")
+                .pop(),
+              isBubbleChartDataLoading: false,
+              highChartConfigOverride: undefined,
+              chartProps,
+              selectedCohortIndex: cohortIndex
+            });
+            return;
+          }
           this.setState({
             chartProps,
             highChartConfigOverride: datasetBarConfigOverride,
