@@ -23,17 +23,20 @@ import {
   TelemetryEventName,
   ITelemetryEvent,
   AxisConfig,
-  Cohort,
-  getPrimaryChartColor
+  OtherChartTypes,
+  calculateBubblePlotDataFromErrorCohort,
+  IHighchartsConfig
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
+import { SidePanel } from "../DataAnalysisView/SidePanel";
 
 import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
 import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
 import { generatePlotlyProps } from "../utils/generatePlotlyProps";
 import { getDatasetOption } from "../utils/getDatasetOption";
+import { getBarOrBoxChartConfig } from "./getBarOrBoxChartConfig";
 
 export interface IDatasetExplorerTabProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -61,6 +64,21 @@ export class LargeDatasetExplorerTab extends React.Component<
     this.state = {
       selectedCohortIndex: 0
     };
+  }
+
+  public componentDidMount(): void {
+    const initialCohortIndex = 0;
+    const chartProps = generateDefaultChartAxes(this.context.jointDataset);
+    this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
+  }
+
+  public componentDidUpdate(
+    _preProp: IDatasetExplorerTabProps,
+    preState: IDatasetExplorerTabState
+  ): void {
+    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
+      this.generateHighChartConfigOverride(0, this.state.chartProps);
+    }
   }
 
   public render(): React.ReactNode {
@@ -105,6 +123,8 @@ export class LargeDatasetExplorerTab extends React.Component<
     if (this.state.chartProps.chartType !== ChartTypes.Scatter) {
       yAxisCategories.push(ColumnCategories.None);
     }
+
+    console.log("!!state: ", this.state.chartProps);
     return (
       <Stack
         horizontal={false}
@@ -152,7 +172,17 @@ export class LargeDatasetExplorerTab extends React.Component<
                         canDither={
                           this.state.chartProps.chartType === ChartTypes.Scatter
                         }
-                        allowTreatAsCategorical
+                        allowTreatAsCategorical={
+                          this.state.chartProps.chartType ===
+                            ChartTypes.Histogram ||
+                          this.state.chartProps.chartType === ChartTypes.Box
+                        }
+                        allowLogarithmicScaling={
+                          this.state.chartProps.chartType ===
+                            ChartTypes.Histogram ||
+                          this.state.chartProps.chartType === ChartTypes.Box ||
+                          this.state.chartProps.chartType === ChartTypes.Scatter
+                        }
                         onAccept={this.onYSet}
                         buttonText={
                           this.context.jointDataset.metaDict[
@@ -197,7 +227,15 @@ export class LargeDatasetExplorerTab extends React.Component<
                     this.state.chartProps.chartType === ChartTypes.Histogram ||
                     this.state.chartProps.chartType === ChartTypes.Box
                   }
-                  allowTreatAsCategorical
+                  allowTreatAsCategorical={
+                    this.state.chartProps.chartType === ChartTypes.Histogram ||
+                    this.state.chartProps.chartType === ChartTypes.Box
+                  }
+                  allowLogarithmicScaling={
+                    this.state.chartProps.chartType === ChartTypes.Histogram ||
+                    this.state.chartProps.chartType === ChartTypes.Box ||
+                    this.state.chartProps.chartType === ChartTypes.Scatter
+                  }
                   canDither={
                     this.state.chartProps.chartType === ChartTypes.Scatter
                   }
@@ -215,26 +253,31 @@ export class LargeDatasetExplorerTab extends React.Component<
                 />
               </div>
             </div>
+            <Stack.Item className={classNames.sidePanel}>
+              <SidePanel
+                chartProps={this.state.chartProps}
+                cohorts={this.context.errorCohorts.map(
+                  (errorCohort) => errorCohort.cohort
+                )}
+                jointDataset={this.context.jointDataset}
+                selectedCohortIndex={this.state.selectedCohortIndex}
+                onChartPropChange={this.onChartPropsChange}
+                hideColorValue={true}
+                dataset={this.context.dataset}
+              />
+            </Stack.Item>
           </Stack>
         </Stack.Item>
       </Stack>
     );
   }
 
-  public componentDidMount(): void {
-    const initialCohortIndex = 0;
-    const chartProps = generateDefaultChartAxes(this.context.jointDataset);
-    this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
-  }
-
-  public componentDidUpdate(
-    _preProp: IDatasetExplorerTabProps,
-    preState: IDatasetExplorerTabState
-  ): void {
-    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
-      this.generateHighChartConfigOverride(0, this.state.chartProps);
-    }
-  }
+  private onChartPropsChange = (chartProps: IGenericChartProps): void => {
+    this.generateHighChartConfigOverride(
+      this.state.selectedCohortIndex,
+      chartProps
+    );
+  };
 
   private async generateHighChartConfigOverride(
     cohortIndex: number,
@@ -265,116 +308,45 @@ export class LargeDatasetExplorerTab extends React.Component<
           highChartConfigOverride: configOverride,
           selectedCohortIndex: cohortIndex
         });
+        return;
+      }
+      if (chartProps.chartType !== OtherChartTypes.Bubble) {
+        const datasetBarConfigOverride = await getBarOrBoxChartConfig(
+          this.context.errorCohorts[cohortIndex].cohort,
+          this.context.jointDataset,
+          chartProps?.xAxis.property,
+          chartProps?.yAxis.property,
+          this.context.requestDatasetAnalysisBarChart,
+          this.context.requestDatasetAnalysisBoxChart
+        );
+
+        this.setState({
+          chartProps,
+          highChartConfigOverride: datasetBarConfigOverride,
+          selectedCohortIndex: cohortIndex
+        });
       } else {
-        const dataCohort = this.context.errorCohorts[cohortIndex].cohort;
-        const filtersRelabeled = Cohort.getLabeledFilters(
-          dataCohort.filters,
-          this.context.jointDataset
-        );
-        const compositeFiltersRelabeled = Cohort.getLabeledCompositeFilters(
-          dataCohort.compositeFilters,
-          this.context.jointDataset
-        );
-
-        if (
-          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-            .isCategorical ||
-          this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-            ?.treatAsCategorical
-        ) {
-          const treatXAsCategorical =
-            (this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .isCategorical ||
-              this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-                ?.treatAsCategorical) ??
-            false;
-
-          const treatYAsCategorical =
-            (this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .isCategorical ||
-              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-                ?.treatAsCategorical) ??
-            false;
-
-          const result = await this.context.requestDatasetAnalysisBarChart(
-            filtersRelabeled,
-            compositeFiltersRelabeled,
-            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .label,
-            treatXAsCategorical,
-            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .label,
-            treatYAsCategorical,
-            5,
-            new AbortController().signal
-          );
-          const datasetBarConfigOverride = {
-            chart: {
-              type: "column"
-            },
-            series: result.values,
-            xAxis: {
-              categories: result.buckets
-            }
-          };
-          this.setState({
+        const datasetBarConfigOverride =
+          await calculateBubblePlotDataFromErrorCohort(
+            this.context.errorCohorts[cohortIndex].cohort,
             chartProps,
-            highChartConfigOverride: datasetBarConfigOverride,
-            selectedCohortIndex: cohortIndex
-          });
-        } else {
-          const result = await this.context.requestDatasetAnalysisBoxChart(
-            filtersRelabeled,
-            compositeFiltersRelabeled,
-            this.context.jointDataset.metaDict[chartProps?.xAxis.property]
-              .label,
-            this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-              .label,
-            5,
-            new AbortController().signal
+            [],
+            this.context.jointDataset,
+            this.context.dataset,
+            false,
+            false,
+            true,
+            this.context.requestBubblePlotData,
+            undefined,
+            this.onBubbleClick,
+            undefined
           );
 
-          const boxGroupData: any = [];
-          const theme = getTheme();
-
-          let userFeatureName =
-            localization.ModelAssessment.ModelOverview.BoxPlot
-              .boxPlotSeriesLabel;
-          if (chartProps?.yAxis.property) {
-            userFeatureName =
-              this.context.jointDataset.metaDict[chartProps?.yAxis.property]
-                .label;
-          }
-          boxGroupData.push({
-            color: undefined,
-            data: result.values,
-            fillColor: theme.semanticColors.inputBackgroundChecked,
-            name: userFeatureName
-          });
-          boxGroupData.push({
-            data: result.outliers,
-            marker: {
-              fillColor: getPrimaryChartColor(theme)
-            },
-            name: localization.ModelAssessment.ModelOverview.BoxPlot
-              .outlierLabel,
-            type: "scatter"
-          });
-          const datasetBoxConfigOverride = {
-            chart: {
-              type: "boxplot"
-            },
-            series: boxGroupData,
-            xAxis: {
-              categories: result.buckets
-            }
-          };
-          this.setState({
-            chartProps,
-            highChartConfigOverride: datasetBoxConfigOverride,
-            selectedCohortIndex: cohortIndex
-          });
-        }
+        this.setState({
+          chartProps,
+          highChartConfigOverride: datasetBarConfigOverride,
+          selectedCohortIndex: cohortIndex
+        });
       }
     } else {
       this.setState({
@@ -405,6 +377,31 @@ export class LargeDatasetExplorerTab extends React.Component<
     this.props.telemetryHook?.({
       level: TelemetryLevels.ButtonClick,
       type: eventName
+    });
+  };
+
+  private onBubbleClick = (
+    scatterPlotData: IHighchartsConfig,
+    xSeries: number[],
+    ySeries: number[],
+    indexSeries: number[]
+  ): void => {
+    console.log(
+      "!!data: ",
+      scatterPlotData,
+      xSeries,
+      ySeries,
+      indexSeries,
+      this.state.chartProps
+    );
+    const newProps = _.cloneDeep(this.state.chartProps);
+    if (newProps) {
+      newProps.chartType = ChartTypes.Scatter;
+    }
+
+    this.setState({
+      chartProps: newProps,
+      highChartConfigOverride: scatterPlotData
     });
   };
 

@@ -19,7 +19,10 @@ import {
   AxisConfigDialog,
   ISelectorConfig,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData,
+  IDataset,
+  OtherChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -33,6 +36,8 @@ export interface ISidePanelProps {
   jointDataset: JointDataset;
   cohorts: Cohort[];
   selectedCohortIndex: number;
+  dataset: IDataset;
+  hideColorValue?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
 }
 interface ISidePanelState {
@@ -49,7 +54,9 @@ export class SidePanel extends React.Component<
       text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
-      key: ChartTypes.Scatter,
+      key: ifEnableLargeData(this.props.dataset)
+        ? OtherChartTypes.Bubble
+        : ChartTypes.Scatter,
       text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
@@ -72,59 +79,62 @@ export class SidePanel extends React.Component<
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
         />
-        {this.state.colorDialogOpen && this.props.chartProps.colorAxis && (
-          <AxisConfigDialog
-            orderedGroupTitles={[
-              ColumnCategories.Index,
-              ColumnCategories.Dataset,
-              ColumnCategories.Outcome
-            ]}
-            selectedColumn={this.props.chartProps.colorAxis}
-            canBin
-            mustBin={false}
-            canDither={false}
-            allowTreatAsCategorical
-            onAccept={this.onColorSet}
-            onCancel={this.setColorClose}
-          />
-        )}
-        {this.props.chartProps.chartType === ChartTypes.Scatter && (
-          <Stack.Item>
-            <Label className={classNames.colorValue}>
-              {localization.Interpret.DatasetExplorer.colorValue}
-            </Label>
-            <DefaultButton
-              id="SetColorButton"
-              onClick={this.setColorOpen}
-              text={
-                this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
-                  this.props.chartProps.colorAxis.property
-                ].abbridgedLabel
-              }
-              title={
-                this.props.chartProps.colorAxis &&
-                this.props.jointDataset.metaDict[
-                  this.props.chartProps.colorAxis.property
-                ].label
-              }
+        {!this.props.hideColorValue &&
+          this.state.colorDialogOpen &&
+          this.props.chartProps.colorAxis && (
+            <AxisConfigDialog
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={this.props.chartProps.colorAxis}
+              canBin
+              mustBin={false}
+              canDither={false}
+              allowTreatAsCategorical
+              onAccept={this.onColorSet}
+              onCancel={this.setColorClose}
             />
-            <div className={classNames.legendAndText}>
-              {colorSeries?.length && (
-                <InteractiveLegend
-                  items={colorSeries.map((name, i) => {
-                    return {
-                      activated: true,
-                      color: scatterColors[i],
-                      index: i,
-                      name
-                    };
-                  })}
-                />
-              )}
-            </div>
-          </Stack.Item>
-        )}
+          )}
+        {!this.props.hideColorValue &&
+          this.props.chartProps.chartType === ChartTypes.Scatter && (
+            <Stack.Item>
+              <Label className={classNames.colorValue}>
+                {localization.Interpret.DatasetExplorer.colorValue}
+              </Label>
+              <DefaultButton
+                id="SetColorButton"
+                onClick={this.setColorOpen}
+                text={
+                  this.props.chartProps.colorAxis &&
+                  this.props.jointDataset.metaDict[
+                    this.props.chartProps.colorAxis.property
+                  ].abbridgedLabel
+                }
+                title={
+                  this.props.chartProps.colorAxis &&
+                  this.props.jointDataset.metaDict[
+                    this.props.chartProps.colorAxis.property
+                  ].label
+                }
+              />
+              <div className={classNames.legendAndText}>
+                {colorSeries?.length && (
+                  <InteractiveLegend
+                    items={colorSeries.map((name, i) => {
+                      return {
+                        activated: true,
+                        color: scatterColors[i],
+                        index: i,
+                        name
+                      };
+                    })}
+                  />
+                )}
+              </div>
+            </Stack.Item>
+          )}
       </Stack>
     );
   }
@@ -141,7 +151,9 @@ export class SidePanel extends React.Component<
     if (item?.key === undefined || !newProps) {
       return;
     }
-    newProps.chartType = item.key as ChartTypes;
+    newProps.chartType = ifEnableLargeData(this.props.dataset)
+      ? (item.key as OtherChartTypes)
+      : (item.key as ChartTypes);
     if (newProps.yAxis.property === ColumnCategories.None) {
       newProps.yAxis = generateDefaultYAxis(this.context.jointDataset);
     }

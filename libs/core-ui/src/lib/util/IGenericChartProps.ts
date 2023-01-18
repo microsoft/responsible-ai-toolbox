@@ -8,13 +8,17 @@ export enum ChartTypes {
   Bar = "bar"
 }
 
+export enum OtherChartTypes {
+  Bubble = "bubble"
+}
+
 export enum AxisTypes {
   Linear = "linear",
   Logarithmic = "logarithmic"
 }
 
 export interface IGenericChartProps {
-  chartType: ChartTypes;
+  chartType: ChartTypes | OtherChartTypes;
   xAxis: ISelectorConfig;
   yAxis: ISelectorConfig;
   colorAxis?: ISelectorConfig;
