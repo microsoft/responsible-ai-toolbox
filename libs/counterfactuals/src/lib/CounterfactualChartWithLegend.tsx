@@ -92,7 +92,6 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         this.props.selectedPointsIndexes[0],
         this.context.jointDataset,
         this.context.dataset,
-        ifEnableLargeData(this.context.dataset),
         this.props.data
       );
       this.setState({ originalData });
@@ -171,7 +170,6 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         index,
         this.context.jointDataset,
         this.context.dataset,
-        ifEnableLargeData(this.context.dataset),
         this.props.data
       );
     } else {
