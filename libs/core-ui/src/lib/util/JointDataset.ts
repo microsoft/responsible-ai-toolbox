@@ -420,6 +420,23 @@ export class JointDataset {
     return [];
   }
 
+  public readonly getRawValue = (
+    v: number | undefined,
+    k: string
+  ): string | number | undefined => {
+    const meta = this.metaDict[k];
+    if (v === undefined) {
+      return v;
+    }
+    if (
+      (meta.isCategorical || meta?.treatAsCategorical) &&
+      meta.sortedCategoricalValues
+    ) {
+      return meta.sortedCategoricalValues[v];
+    }
+    return v;
+  };
+
   public setTreatAsCategorical(key: string, value: boolean): void {
     const metadata = this.metaDict[key];
     metadata.treatAsCategorical = value;
