@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { JointDataset } from "@responsible-ai/core-ui";
+import _ from "lodash";
 
 export function getFetchPredictionPromise(
   fetchingReference: { [key: string]: any },
@@ -19,8 +20,9 @@ export function getFetchPredictionPromise(
     )
   ];
   if (ifEnableLargeData && testData) {
-    testData[0][0].pop(); // drop the prediction value before predict call
-    rawData = testData[0];
+    const tempTestData = _.cloneDeep(testData);
+    tempTestData[0][0].pop(); // drop the prediction value before predict call
+    rawData = tempTestData[0];
   }
 
   const promise = invokeModel(rawData, abortController.signal);
