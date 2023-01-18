@@ -17,7 +17,6 @@ import { IScatterPoint } from "./getCounterfactualsScatterOption";
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
   chartProps: IGenericChartProps,
-  selectedPointsIndexes: number[],
   customPoints: Array<{
     [key: string]: any;
   }>,
@@ -41,29 +40,33 @@ export async function calculateBubblePlotDataFromErrorCohort(
   onIndexSeriesUpdated?: (indexSeries: number[]) => void
 ): Promise<IHighchartsConfig | IHighchartBubbleSDKClusterData | undefined> {
   if (ifEnableLargeData(dataset) && requestBubblePlotData) {
-    const bubbleChartData = await calculateBubblePlotDataFromSDK(
-      errorCohort,
-      jointDataset,
-      requestBubblePlotData,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label
-    );
-    if (bubbleChartData.error) {
-      return bubbleChartData;
+    try {
+      const selectedPointsIndexes: number[] = [];
+      const bubbleChartData = await calculateBubblePlotDataFromSDK(
+        errorCohort,
+        jointDataset,
+        requestBubblePlotData,
+        jointDataset.metaDict[chartProps?.xAxis.property].label,
+        jointDataset.metaDict[chartProps?.yAxis.property].label
+      );
+      return getBubbleChartOptions(
+        bubbleChartData.clusters,
+        jointDataset.metaDict[chartProps?.xAxis.property].label,
+        jointDataset.metaDict[chartProps?.yAxis.property].label,
+        chartProps,
+        jointDataset,
+        selectedPointsIndexes,
+        customPoints,
+        isCounterfactualsDataLoading,
+        onBubbleClick,
+        selectPointFromChartLargeData,
+        onIndexSeriesUpdated
+      );
+    } catch (error) {
+      if (error) {
+        return error;
+      }
     }
-    return getBubbleChartOptions(
-      bubbleChartData.clusters,
-      jointDataset.metaDict[chartProps?.xAxis.property].label,
-      jointDataset.metaDict[chartProps?.yAxis.property].label,
-      chartProps,
-      jointDataset,
-      selectedPointsIndexes,
-      customPoints,
-      isCounterfactualsDataLoading,
-      onBubbleClick,
-      selectPointFromChartLargeData,
-      onIndexSeriesUpdated
-    );
   }
   return undefined;
 }
@@ -98,4 +101,8 @@ export async function calculateBubblePlotDataFromSDK(
   );
 
   return result;
+}
+
+export function instanceOfHighChart(object: any): object is IHighchartsConfig {
+  return "chart" in object;
 }

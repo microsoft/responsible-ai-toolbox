@@ -8,6 +8,7 @@ import React from "react";
 
 import { AxisTypes, ISelectorConfig } from "../util/IGenericChartProps";
 import { JointDataset } from "../util/JointDataset";
+import { IJointMeta } from "../util/JointDatasetUtils";
 
 import { axisConfigBinOptionsStyles } from "./AxisConfigBinOptions.styles";
 import { AxisConfigDialogSpinButton } from "./AxisConfigDialogSpinButton";
@@ -26,7 +27,8 @@ export interface IAxisConfigBinOptionsProps {
   minHistCols: number;
   mustBin: boolean;
   selectedBinCount?: number;
-  allowTreatAsCategorical?: boolean;
+  allowTreatAsCategorical: boolean;
+  allowLogarithmicScaling?: boolean;
   selectedColumn: ISelectorConfig;
   onBinCountUpdated: (binCount?: number) => void;
   onEnableLogarithmicScaling: (checked?: boolean | undefined) => void;
@@ -54,28 +56,24 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
             </Text>
           </Stack.Item>
         )}
-        {(selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
-          selectedMeta.featureRange?.rangeType === RangeTypes.Numeric) &&
-          allowUserInteract(this.props.selectedColumn.property) && (
-            <Toggle
-              key="logarithmic-toggle"
-              label={localization.Interpret.AxisConfigDialog.logarithmicScaling}
-              inlineLabel
-              checked={selectedMeta.AxisType === AxisTypes.Logarithmic}
-              onChange={this.enableLogarithmicScaling}
-            />
-          )}
-        {selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
-          this.props.allowTreatAsCategorical &&
-          allowUserInteract(this.props.selectedColumn.property) && (
-            <Toggle
-              key="categorical-toggle"
-              label={localization.Interpret.AxisConfigDialog.TreatAsCategorical}
-              inlineLabel
-              checked={selectedMeta.treatAsCategorical}
-              onChange={this.setAsCategorical}
-            />
-          )}
+        {this.displayLogarithmicToggle(selectedMeta) && (
+          <Toggle
+            key="logarithmic-toggle"
+            label={localization.Interpret.AxisConfigDialog.logarithmicScaling}
+            inlineLabel
+            checked={selectedMeta.AxisType === AxisTypes.Logarithmic}
+            onChange={this.enableLogarithmicScaling}
+          />
+        )}
+        {this.displayCategoricalToggle(selectedMeta) && (
+          <Toggle
+            key="categorical-toggle"
+            label={localization.Interpret.AxisConfigDialog.TreatAsCategorical}
+            inlineLabel
+            checked={selectedMeta.treatAsCategorical}
+            onChange={this.setAsCategorical}
+          />
+        )}
         {selectedMeta?.treatAsCategorical ? (
           <>
             <Text variant="small">
@@ -123,6 +121,24 @@ export class AxisConfigBinOptions extends React.PureComponent<IAxisConfigBinOpti
         checked={this.props.selectedColumn.options.dither}
         onChange={this.ditherChecked}
       />
+    );
+  };
+
+  private displayLogarithmicToggle = (selectedMeta: IJointMeta): boolean => {
+    const allowLogarithmicScaling = this.props.allowLogarithmicScaling ?? true;
+    return (
+      (selectedMeta.featureRange?.rangeType === RangeTypes.Integer ||
+        selectedMeta.featureRange?.rangeType === RangeTypes.Numeric) &&
+      allowLogarithmicScaling &&
+      allowUserInteract(this.props.selectedColumn.property)
+    );
+  };
+
+  private displayCategoricalToggle = (selectedMeta: IJointMeta): boolean => {
+    return (
+      selectedMeta.featureRange?.rangeType === RangeTypes.Integer &&
+      this.props.allowTreatAsCategorical &&
+      allowUserInteract(this.props.selectedColumn.property)
     );
   };
 

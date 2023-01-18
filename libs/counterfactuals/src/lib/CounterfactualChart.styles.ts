@@ -16,11 +16,18 @@ export interface ICounterfactualChartStyles {
   lowerChartContainer: IStyle;
   rotatedVerticalBox: IStyle;
   verticalAxis: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const counterfactualChartStyles: () => IProcessedStyleSet<ICounterfactualChartStyles> =
   () => {
     return mergeStyleSets<ICounterfactualChartStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "10px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
+      },
       chartWithAxes: {
         ...fullLgDown,
         paddingTop: "30px",

@@ -43,14 +43,12 @@ export class ShiftCohort extends React.Component<
     defaultModelAssessmentContext;
 
   public componentDidMount(): void {
-    const savedCohorts = this.context.errorCohorts
-      .filter((errorCohort) => !errorCohort.isTemporary)
-      .filter(
-        (errorCohort) =>
-          !errorCohort.isTemporary &&
-          (this.props.showAllDataCohort ||
-            !isAllDataErrorCohort(errorCohort, true))
-      );
+    const savedCohorts = this.context.errorCohorts.filter(
+      (errorCohort) =>
+        !errorCohort.isTemporary &&
+        (this.props.showAllDataCohort ||
+          !isAllDataErrorCohort(errorCohort, true))
+    );
     const options: IDropdownOption[] = savedCohorts.map(
       (savedCohort: ErrorCohort, index: number) => {
         return { key: index, text: savedCohort.cohort.name };
