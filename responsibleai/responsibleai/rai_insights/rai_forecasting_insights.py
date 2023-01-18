@@ -493,11 +493,13 @@ class RAIForecastingInsights(RAIBaseInsights):
         # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
         try:
             dashboard_dataset.index = convert_to_list(
-                pd.to_datetime(self.test.index, yearfirst=True, format="%Y-%m-%d"))
-            # dashboard_dataset.index = convert_to_list(
-            #     self.test.index.strftime("%Y-%m-%d"))
-        except AttributeError:
-            raise ValueError("No time_column_name was provided via feature_metadata.")
+                pd.to_datetime(
+                    self.test[self._feature_metadata.time_column_name])
+                    .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+        except Exception as ex:
+            raise ValueError(
+                "The time column should be parseable by pandas.to_datetime, ideally in ISO format"
+                ) from ex
 
         true_y = predicted_y if not self._is_true_y_present else self.test[self.target_column]
 
@@ -537,11 +539,11 @@ class RAIForecastingInsights(RAIBaseInsights):
         for time_series_id_values in all_time_series:
             column_value_combinations = zip(
                 self._feature_metadata.time_series_id_column_names,
-                map(str, time_series_id_values))
+                time_series_id_values)
             id_columns_name_value_mapping = []
             filters = []
             for (col, val) in column_value_combinations:
-                id_columns_name_value_mapping += f"{col} = {val}"
+                id_columns_name_value_mapping.append(f"{col} = {val}")
                 filters.append(CohortFilter(
                     method=CohortFilterMethods.METHOD_INCLUDES,
                     arg=[val],

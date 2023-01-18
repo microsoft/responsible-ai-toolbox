@@ -10,7 +10,7 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiwidgets.cohort import Cohort
+from raiutils.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -47,11 +47,11 @@ class ResponsibleAIDashboardInput:
             self._error_analyzer = analysis.error_analysis._analyzer
 
     def _validate_cohort_list(self, cohort_list=None):
-        if cohort_list is None:
+        if isinstance(self._analysis, RAIInsights) and cohort_list is None:
             self.dashboard_input.cohortData = []
             return
-        
-        if isinstance(self, RAIForecastingInsights):
+
+        if isinstance(self._analysis, RAIForecastingInsights):
             # Ensure user did not pass cohort_list and use the generated time series.
             if cohort_list is not None:
                 raise UserConfigValidationException(
@@ -309,11 +309,8 @@ class ResponsibleAIDashboardInput:
     def forecast(self, post_data):
         try:
             filters = post_data[0]
-            # do we need this? ask ilya
             composite_filters = post_data[1]
-            # composite_filters = post_data[2]
             transformations = post_data[2]
-            # op, feature, value = post_data[2:]
             filtered_data_df = self._analysis.get_filtered_test_data(
                 filters=filters,
                 composite_filters=composite_filters,
@@ -335,8 +332,7 @@ class ResponsibleAIDashboardInput:
 
                 filtered_data_df[feature] = filtered_data_df[feature].map(func)
 
-            prediction = convert_to_list(
-                self._analysis.model.predict(filtered_data_df), EXP_VIZ_ERR_MSG)
+            prediction = convert_to_list(self._analysis.model.predict(filtered_data_df), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
             }
