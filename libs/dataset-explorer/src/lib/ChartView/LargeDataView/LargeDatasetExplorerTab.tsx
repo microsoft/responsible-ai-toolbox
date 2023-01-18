@@ -25,7 +25,10 @@ import {
   AxisConfig,
   OtherChartTypes,
   calculateBubblePlotDataFromErrorCohort,
-  IHighchartsConfig
+  IHighchartsConfig,
+  ifEnableLargeData,
+  hasAxisTypeChanged,
+  getCounterfactualsScatterOption
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -46,6 +49,12 @@ export interface IDatasetExplorerTabState {
   chartProps?: IGenericChartProps;
   selectedCohortIndex: number;
   highChartConfigOverride?: any;
+  isBubbleChartRendered?: boolean;
+  xSeries: number[];
+  ySeries: number[];
+  indexSeries: number[];
+  isBubbleChartDataLoading: boolean;
+  bubbleChartErrorMessage?: string;
 }
 
 export class LargeDatasetExplorerTab extends React.Component<
@@ -55,6 +64,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
+  private changedKeys: string[] = [];
 
   private readonly chartAndConfigsId = "LargeDatasetExplorerChart";
 
@@ -62,7 +72,13 @@ export class LargeDatasetExplorerTab extends React.Component<
     super(props);
 
     this.state = {
-      selectedCohortIndex: 0
+      selectedCohortIndex: 0,
+      isBubbleChartRendered: false,
+      bubbleChartErrorMessage: undefined,
+      indexSeries: [],
+      isBubbleChartDataLoading: false,
+      xSeries: [],
+      ySeries: []
     };
   }
 
@@ -124,7 +140,11 @@ export class LargeDatasetExplorerTab extends React.Component<
       yAxisCategories.push(ColumnCategories.None);
     }
 
-    console.log("!!state: ", this.state.chartProps);
+    console.log(
+      "!!state: ",
+      this.state.chartProps,
+      this.state.isBubbleChartRendered
+    );
     return (
       <Stack
         horizontal={false}
@@ -181,7 +201,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                           this.state.chartProps.chartType ===
                             ChartTypes.Histogram ||
                           this.state.chartProps.chartType === ChartTypes.Box ||
-                          this.state.chartProps.chartType === ChartTypes.Scatter
+                          !this.state.isBubbleChartRendered
                         }
                         onAccept={this.onYSet}
                         buttonText={
@@ -234,7 +254,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                   allowLogarithmicScaling={
                     this.state.chartProps.chartType === ChartTypes.Histogram ||
                     this.state.chartProps.chartType === ChartTypes.Box ||
-                    this.state.chartProps.chartType === ChartTypes.Scatter
+                    !this.state.isBubbleChartRendered
                   }
                   canDither={
                     this.state.chartProps.chartType === ChartTypes.Scatter
@@ -283,6 +303,7 @@ export class LargeDatasetExplorerTab extends React.Component<
     cohortIndex: number,
     chartProps: IGenericChartProps | undefined
   ): Promise<void> {
+    console.log("!!charts: ", this.state.chartProps, chartProps);
     if (chartProps) {
       if (
         !this.context.requestDatasetAnalysisBarChart ||
@@ -326,27 +347,53 @@ export class LargeDatasetExplorerTab extends React.Component<
           selectedCohortIndex: cohortIndex
         });
       } else {
-        const datasetBarConfigOverride =
-          await calculateBubblePlotDataFromErrorCohort(
-            this.context.errorCohorts[cohortIndex].cohort,
+        const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
+        let datasetBarConfigOverride;
+        if (!hasAxisTypeChanged) {
+          datasetBarConfigOverride =
+            await calculateBubblePlotDataFromErrorCohort(
+              this.context.errorCohorts[cohortIndex].cohort,
+              chartProps,
+              [],
+              this.context.jointDataset,
+              this.context.dataset,
+              false,
+              false,
+              true,
+              this.context.requestBubblePlotData,
+              undefined,
+              this.onBubbleClick,
+              undefined
+            );
+          this.resetSeries(chartProps);
+          this.setState({
             chartProps,
-            [],
+            highChartConfigOverride: datasetBarConfigOverride,
+            selectedCohortIndex: cohortIndex,
+            isBubbleChartRendered: true
+          });
+          return;
+        } else {
+          datasetBarConfigOverride = getCounterfactualsScatterOption(
+            this.state.xSeries,
+            this.state.ySeries,
+            this.state.indexSeries,
+            chartProps,
             this.context.jointDataset,
-            this.context.dataset,
+            [],
+            [],
             false,
             false,
             true,
-            this.context.requestBubblePlotData,
-            undefined,
-            this.onBubbleClick,
             undefined
           );
-
-        this.setState({
-          chartProps,
-          highChartConfigOverride: datasetBarConfigOverride,
-          selectedCohortIndex: cohortIndex
-        });
+          this.setState({
+            chartProps,
+            highChartConfigOverride: datasetBarConfigOverride,
+            selectedCohortIndex: cohortIndex,
+            isBubbleChartRendered: false
+          });
+        }
       }
     } else {
       this.setState({
@@ -394,15 +441,57 @@ export class LargeDatasetExplorerTab extends React.Component<
       indexSeries,
       this.state.chartProps
     );
-    const newProps = _.cloneDeep(this.state.chartProps);
-    if (newProps) {
-      newProps.chartType = ChartTypes.Scatter;
-    }
 
     this.setState({
-      chartProps: newProps,
-      highChartConfigOverride: scatterPlotData
+      highChartConfigOverride: scatterPlotData,
+      isBubbleChartRendered: false,
+      xSeries,
+      ySeries,
+      indexSeries
     });
+  };
+
+  private readonly hasAxisTypeChanged = (
+    newChartProps: IGenericChartProps
+  ): boolean => {
+    if (this.state.chartProps) {
+      this.changedKeys = [];
+      this.compareChartProps(newChartProps, this.state.chartProps);
+      return hasAxisTypeChanged(this.changedKeys);
+    }
+    return false;
+  };
+
+  private compareChartProps = (
+    newProps: IGenericChartProps,
+    oldProps: IGenericChartProps
+  ): void => {
+    for (const key in newProps) {
+      if (typeof newProps[key] === "object") {
+        this.compareChartProps(newProps[key], oldProps[key]);
+      }
+      if (newProps[key] !== oldProps[key]) {
+        this.changedKeys.push(key);
+      }
+    }
+  };
+
+  private readonly resetSeries = (newProps: IGenericChartProps): void => {
+    this.changedKeys = [];
+    if (this.state.chartProps) {
+      this.compareChartProps(newProps, this.state.chartProps);
+      const shouldResetIndexes =
+        ifEnableLargeData(this.context.dataset) &&
+        !_.isEqual(this.state.chartProps, newProps) &&
+        !hasAxisTypeChanged(this.changedKeys);
+      if (shouldResetIndexes) {
+        this.setState({
+          indexSeries: [],
+          xSeries: [],
+          ySeries: []
+        });
+      }
+    }
   };
 
   private onXSet = (value: ISelectorConfig): void => {

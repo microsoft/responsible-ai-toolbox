@@ -33,7 +33,7 @@ export function getCounterfactualsScatter(
   const result = [];
 
   const color = useDifferentColorForScatterPoints
-    ? FluentUIStyles.scatterFluentUIColorPalette[Math.floor(Math.random() * 15)]
+    ? FluentUIStyles.scatterFluentUIColorPalette[5]
     : undefined;
 
   if (ySeries) {

@@ -109,6 +109,7 @@ export * from "./lib/Highchart/bubbleChart/calculateBubbleData";
 export * from "./lib/Highchart/bubbleChart/getBubbleChartOptions";
 export * from "./lib/Highchart/bubbleChart/getCounterfactualsScatter";
 export * from "./lib/Highchart/bubbleChart/getCounterfactualsScatterOption";
+export * from "./lib/Highchart/bubbleChart/ChartUtils";
 export * from "./lib/Highchart/IBoxChartState";
 export * from "./lib/Interfaces/IHighchartBubbleData";
 export * from "./lib/components/LoadingSpinner";
