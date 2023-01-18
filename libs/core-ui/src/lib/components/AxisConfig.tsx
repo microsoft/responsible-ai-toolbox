@@ -20,6 +20,7 @@ export interface IAxisConfigProps {
   allowTreatAsCategorical: boolean;
   hideDroppedFeatures?: boolean;
   allowLogarithmicScaling?: boolean;
+  disabled?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }
 
@@ -44,6 +45,7 @@ export class AxisConfig extends React.PureComponent<
           onClick={this.setOpen}
           text={this.props.buttonText}
           title={this.props.buttonTitle}
+          disabled={this.props.disabled}
         />
         {this.state.dialogOpen && (
           <AxisConfigDialog

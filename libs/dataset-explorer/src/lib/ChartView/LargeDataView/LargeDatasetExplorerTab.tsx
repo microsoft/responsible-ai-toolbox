@@ -28,7 +28,8 @@ import {
   IHighchartsConfig,
   ifEnableLargeData,
   hasAxisTypeChanged,
-  getCounterfactualsScatterOption
+  getCounterfactualsScatterOption,
+  LoadingSpinner
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -173,6 +174,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                 ariaLabel={
                   localization.Interpret.DatasetExplorer.datasetCohortDropdown
                 }
+                disabled={this.state.isBubbleChartDataLoading}
               />
             )}
           </Stack>
@@ -214,19 +216,25 @@ export class LargeDatasetExplorerTab extends React.Component<
                             this.state.chartProps.yAxis.property
                           ].label
                         }
+                        disabled={this.state.isBubbleChartDataLoading}
                       />
                     </div>
                   </Stack.Item>
                   <Stack.Item className={classNames.chartContainer}>
-                    {canRenderChart ? (
+                    {!canRenderChart && (
+                      <MissingParametersPlaceholder>
+                        {localization.Interpret.ValidationErrors.datasizeError}
+                      </MissingParametersPlaceholder>
+                    )}
+                    {this.state.isBubbleChartDataLoading ? (
+                      <LoadingSpinner
+                        label={localization.Counterfactuals.loading}
+                      />
+                    ) : (
                       <BasicHighChart
                         configOverride={this.state.highChartConfigOverride}
                         theme={getTheme()}
                       />
-                    ) : (
-                      <MissingParametersPlaceholder>
-                        {localization.Interpret.ValidationErrors.datasizeError}
-                      </MissingParametersPlaceholder>
                     )}
                   </Stack.Item>
                 </Stack>
@@ -270,6 +278,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                       this.state.chartProps.xAxis.property
                     ].label
                   }
+                  disabled={this.state.isBubbleChartDataLoading}
                 />
               </div>
             </div>
@@ -284,6 +293,7 @@ export class LargeDatasetExplorerTab extends React.Component<
                 onChartPropChange={this.onChartPropsChange}
                 hideColorValue={true}
                 dataset={this.context.dataset}
+                disabled={this.state.isBubbleChartDataLoading}
               />
             </Stack.Item>
           </Stack>
@@ -350,6 +360,9 @@ export class LargeDatasetExplorerTab extends React.Component<
         const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
         let datasetBarConfigOverride;
         if (!hasAxisTypeChanged) {
+          this.setState({
+            isBubbleChartDataLoading: true
+          });
           datasetBarConfigOverride =
             await calculateBubblePlotDataFromErrorCohort(
               this.context.errorCohorts[cohortIndex].cohort,
@@ -370,7 +383,8 @@ export class LargeDatasetExplorerTab extends React.Component<
             chartProps,
             highChartConfigOverride: datasetBarConfigOverride,
             selectedCohortIndex: cohortIndex,
-            isBubbleChartRendered: true
+            isBubbleChartRendered: true,
+            isBubbleChartDataLoading: false
           });
           return;
         } else {

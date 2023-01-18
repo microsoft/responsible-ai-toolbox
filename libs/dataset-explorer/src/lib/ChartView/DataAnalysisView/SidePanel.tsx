@@ -38,6 +38,7 @@ export interface ISidePanelProps {
   selectedCohortIndex: number;
   dataset: IDataset;
   hideColorValue?: boolean;
+  disabled?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
 }
 interface ISidePanelState {
@@ -78,6 +79,7 @@ export class SidePanel extends React.Component<
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
+          disabled={this.props.disabled}
         />
         {!this.props.hideColorValue &&
           this.state.colorDialogOpen &&
