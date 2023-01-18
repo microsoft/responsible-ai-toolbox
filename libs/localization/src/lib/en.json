@@ -151,6 +151,7 @@
     "counterfactualName": "What-if counterfactual name",
     "createWhatIfCounterfactual": "Create what-if counterfactual",
     "createCounterfactual": "Counterfactual",
+    "revertToBubbleChart": "Revert to bubble chart",
     "createOwn": "Create your own counterfactual:",
     "currentClass": "Current class",
     "currentRange": "Current range",

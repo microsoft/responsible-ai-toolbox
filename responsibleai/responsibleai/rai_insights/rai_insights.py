@@ -249,8 +249,7 @@ class RAIInsights(RAIBaseInsights):
             self.model, self.test, self.target_column,
             self._classes,
             self.categorical_features,
-            dropped_features,
-            task_type=self.task_type)
+            dropped_features)
 
         self._explainer_manager = ExplainerManager(
             self.model, self.get_train_data(), self.get_test_data(),

@@ -28,6 +28,7 @@ export interface ICounterfactualChartWithLegendProps {
   indexSeries: number[];
   temporaryPoint: { [key: string]: any } | undefined;
   isCounterfactualsDataLoading?: boolean;
+  isRevertButtonClicked: boolean;
   onChartPropsUpdated: (chartProps: IGenericChartProps) => void;
   onCustomPointLengthUpdated: (customPointLength: number) => void;
   onSelectedPointsIndexesUpdated: (selectedPointsIndexes: number[]) => void;
@@ -48,6 +49,8 @@ export interface ICounterfactualChartWithLegendProps {
   setCounterfactualData: (absoluteIndex?: number) => Promise<void>;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onIndexSeriesUpdated?: (indexSeries: number[]) => void;
+  setIsRevertButtonClicked: (status: boolean) => void;
+  resetIndexes: () => void;
 }
 
 export interface ICounterfactualChartWithLegendState {
@@ -128,6 +131,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
             isCounterfactualsDataLoading={
               this.props.isCounterfactualsDataLoading
             }
+            setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
           />
         </Stack>
       </Stack.Item>
@@ -179,12 +183,16 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.resetCustomPoints();
+    this.props.onChartPropsUpdated(newProps);
+  };
+
+  private resetCustomPoints = (): void => {
     this.setState({
       customPointIsActive: [],
       customPoints: [],
       pointIsActive: []
     });
-    this.props.onChartPropsUpdated(newProps);
   };
 
   private saveAsPoint = (): void => {
@@ -222,6 +230,7 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
   private getLargeCounterfactualChartComponent = (): React.ReactNode => {
     return (
       <LargeCounterfactualChart
+        cohort={this.context.selectedErrorCohort.cohort}
         chartProps={this.props.chartProps}
         customPoints={this.state.customPoints}
         isPanelOpen={this.state.isPanelOpen}
@@ -241,6 +250,10 @@ export class CounterfactualChartWithLegend extends React.PureComponent<
         setCounterfactualData={this.props.setCounterfactualData}
         onIndexSeriesUpdated={this.props.onIndexSeriesUpdated}
         isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+        isRevertButtonClicked={this.props.isRevertButtonClicked}
+        setIsRevertButtonClicked={this.props.setIsRevertButtonClicked}
+        resetIndexes={this.props.resetIndexes}
+        resetCustomPoints={this.resetCustomPoints}
       />
     );
   };

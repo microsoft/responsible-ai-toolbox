@@ -29,6 +29,7 @@ import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
 import { getLocalCounterfactualsFromSDK } from "../util/largeCounterfactualsView/getOnScatterPlotPointClick";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
+import { hasAxisTypeChanged } from "./CounterfactualComponentUtils";
 import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
 import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
@@ -53,6 +54,7 @@ export interface ICounterfactualComponentState {
   indexSeries: number[];
   isCounterfactualsDataLoading?: boolean;
   localCounterfactualErrorMessage?: string;
+  isRevertButtonClicked: boolean;
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -65,6 +67,7 @@ export class CounterfactualComponent extends React.PureComponent<
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
+  private changedKeys: string[] = [];
 
   public constructor(props: ICounterfactualComponentProps) {
     super(props);
@@ -73,6 +76,7 @@ export class CounterfactualComponent extends React.PureComponent<
       customPointLength: 0,
       indexSeries: [],
       isCounterfactualsDataLoading: false,
+      isRevertButtonClicked: false,
       localCounterfactualErrorMessage: undefined,
       request: undefined,
       selectedPointsIndexes: [],
@@ -156,6 +160,9 @@ export class CounterfactualComponent extends React.PureComponent<
           setCounterfactualData={this.setCounterfactualData}
           onIndexSeriesUpdated={this.onIndexSeriesUpdated}
           isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
+          isRevertButtonClicked={this.state.isRevertButtonClicked}
+          setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          resetIndexes={this.resetIndexes}
         />
         <CounterfactualLocalImportanceChart
           data={this.state.counterfactualsData}
@@ -249,19 +256,42 @@ export class CounterfactualComponent extends React.PureComponent<
   };
 
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
+    this.changedKeys = [];
+    this.compareChartProps(newProps, this.state.chartProps);
     const shouldResetIndexes =
       ifEnableLargeData(this.context.dataset) &&
-      !_.isEqual(this.state.chartProps, newProps);
+      !_.isEqual(this.state.chartProps, newProps) &&
+      !hasAxisTypeChanged(this.changedKeys);
     this.setState({
       chartProps: newProps
     });
     if (shouldResetIndexes) {
-      this.setState({
-        counterfactualsData: this.props.data,
-        customPointLength: 0,
-        indexSeries: [],
-        selectedPointsIndexes: []
-      });
+      this.resetIndexes();
+    }
+  };
+
+  private resetIndexes = (): void => {
+    this.setState({
+      counterfactualsData: this.props.data,
+      customPointLength: 0,
+      indexSeries: [],
+      selectedPointsIndexes: []
+    });
+  };
+
+  private compareChartProps = (
+    newProps: IGenericChartProps,
+    oldProps?: IGenericChartProps
+  ): void => {
+    if (oldProps) {
+      for (const key in newProps) {
+        if (typeof newProps[key] === "object") {
+          this.compareChartProps(newProps[key], oldProps[key]);
+        }
+        if (newProps[key] !== oldProps[key]) {
+          this.changedKeys.push(key);
+        }
+      }
     }
   };
 
@@ -269,6 +299,14 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setState({
       indexSeries
     });
+    this.setIsRevertButtonClicked(false);
+  };
+
+  private setIsRevertButtonClicked = (status: boolean): void => {
+    this.setState({ isRevertButtonClicked: status });
+    if (status) {
+      this.resetIndexes();
+    }
   };
 
   private onSelectedPointsIndexesUpdated = (newSelection: number[]): void => {
