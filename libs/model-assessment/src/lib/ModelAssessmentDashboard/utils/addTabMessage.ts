@@ -24,6 +24,8 @@ export function addTabMessage(tab: GlobalTabKeys): string {
       return strings.ModelOverview;
     case GlobalTabKeys.VisionTab:
       return strings.Vision;
+    case GlobalTabKeys.ForecastingTab:
+      return strings.Forecasting;
     default:
       throw new Error(`Unexpected component ${tab}.`);
   }

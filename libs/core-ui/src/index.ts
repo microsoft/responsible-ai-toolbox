@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 export * from "./lib/cohortKey";
+export * from "./lib/Cohort/allDataCohortUtils";
 export * from "./lib/Cohort/Cohort";
 export * from "./lib/Cohort/CohortList/CohortList";
 export * from "./lib/Cohort/Constants";
@@ -42,6 +43,7 @@ export * from "./lib/util/Never";
 export * from "./lib/util/PartialRequired";
 export * from "./lib/util/nameof";
 export * from "./lib/util/rowErrorSize";
+export * from "./lib/util/TimeUtils";
 export * from "./lib/util/getBoxData";
 export * from "./lib/util/getBasicFilterString";
 export * from "./lib/util/getCommonStyles";
@@ -49,6 +51,7 @@ export * from "./lib/util/getCompositeFilterString";
 export * from "./lib/util/getFeatureOptions";
 export * from "./lib/util/getFilterBoundsArgs";
 export * from "./lib/util/calculateBoxData";
+export * from "./lib/util/calculateConfusionMatrixData";
 export * from "./lib/util/calculateLineData";
 export * from "./lib/util/MultilabelStatisticsUtils";
 export * from "./lib/util/StatisticsUtils";
@@ -79,6 +82,7 @@ export * from "./lib/Interfaces/IFairnessData";
 export * from "./lib/Interfaces/IDataset";
 export * from "./lib/Interfaces/IGlobalExplanationProps";
 export * from "./lib/Interfaces/IModelExplanationData";
+export * from "./lib/Interfaces/IConfusionMatrixData";
 export * from "./lib/Interfaces/IVisionModelExplanationData";
 export * from "./lib/Interfaces/IWeightedDropdownContext";
 export * from "./lib/Interfaces/IFilter";

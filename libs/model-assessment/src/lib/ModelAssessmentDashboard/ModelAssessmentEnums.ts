@@ -9,5 +9,6 @@ export enum GlobalTabKeys {
   ModelOverviewTab = "ModelOverviewTab",
   CausalAnalysisTab = "CausalAnalysisTab",
   CounterfactualsTab = "CounterfactualsTab",
-  VisionTab = "VisionExplanationTab"
+  VisionTab = "VisionExplanationTab",
+  ForecastingTab = "ForecastingTab"
 }

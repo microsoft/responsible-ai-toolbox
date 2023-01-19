@@ -7,14 +7,21 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "ModelAssessmentDashboard.tsx",
+        "ModelAssessmentDashboardState.ts",
+        "TabsView.tsx",
+        "StatsTableUtils.ts",
+        "ModelOverview.tsx",
+        "FeatureConfigurationFlyout.tsx",
+        "ChartConfigurationFlyout.tsx",
+        "ProcessPreBuiltCohortRegression.test.ts",
+        "ProcessPreBuiltCohortBinaryClassification.test.ts",
+        "CohortList.tsx"
+      ],
       "rules": {
         "max-lines": "warn"
       }
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "rules": {}
     }
   ]
 }

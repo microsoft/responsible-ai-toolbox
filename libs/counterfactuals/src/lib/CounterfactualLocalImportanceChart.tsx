@@ -17,6 +17,8 @@ import { LocalImportanceChart } from "./LocalImportanceChart";
 export interface ICounterfactualLocalImportanceChartProps {
   data: ICounterfactualData;
   selectedPointsIndexes: number[];
+  isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
 }
 
 export class CounterfactualLocalImportanceChart extends React.PureComponent<ICounterfactualLocalImportanceChartProps> {
@@ -32,10 +34,14 @@ export class CounterfactualLocalImportanceChart extends React.PureComponent<ICou
           rowNumber={this.props.selectedPointsIndexes[0]}
           currentClass={getCurrentLabel(
             this.context.dataset.task_type,
-            this.props.data.desired_range,
+            this.props.data?.desired_range,
             this.props.data.desired_class
           )}
           data={this.props.data}
+          isCounterfactualsDataLoading={this.props.isCounterfactualsDataLoading}
+          localCounterfactualErrorMessage={
+            this.props.localCounterfactualErrorMessage
+          }
         />
       </Stack.Item>
     );

@@ -555,6 +555,30 @@ class TestCausalUserConfigValidations:
         with pytest.raises(UserConfigValidationException, match=message):
             rai_insights.causal.add(treatment_features=['not_a_feature'])
 
+    def test_treatment_features_list_not_having_any_features(self):
+        X_train, y_train, X_test, y_test, _ = \
+            create_binary_classification_dataset()
+
+        model = create_lightgbm_classifier(X_train, y_train)
+        X_train[TARGET] = y_train
+        X_test[TARGET] = y_test
+
+        rai_insights = RAIInsights(
+            model=model,
+            train=X_train,
+            test=X_test,
+            target_column=TARGET,
+            task_type='classification')
+
+        message = ("Please specify at least one feature in "
+                   "treatment_features list")
+        with pytest.raises(UserConfigValidationException, match=message):
+            rai_insights.causal.add(treatment_features=[])
+
+        message = ("Expecting a list for treatment_features but got")
+        with pytest.raises(UserConfigValidationException, match=message):
+            rai_insights.causal.add(treatment_features={})
+
     def test_treatment_features_having_dropped_features(self):
         X_train, y_train, X_test, y_test, _ = \
             create_binary_classification_dataset()

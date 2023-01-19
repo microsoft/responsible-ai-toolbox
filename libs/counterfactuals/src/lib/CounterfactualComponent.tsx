@@ -12,7 +12,8 @@ import {
   ModelAssessmentContext,
   rowErrorSize,
   ICounterfactualData,
-  ITelemetryEvent
+  ITelemetryEvent,
+  ifEnableLargeData
 } from "@responsible-ai/core-ui";
 import { IGlobalSeries } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
@@ -25,8 +26,10 @@ import { getDefaultSelectedPointIndexes } from "../util/getDefaultSelectedPointI
 import { getFetchPredictionPromise } from "../util/getFetchPredictionPromise";
 import { getPredictedProbabilities } from "../util/getPredictedProbabilities";
 import { getSortArrayAndIndex } from "../util/getSortArrayAndIndex";
+import { getLocalCounterfactualsFromSDK } from "../util/largeCounterfactualsView/getOnScatterPlotPointClick";
 
 import { CounterfactualChartWithLegend } from "./CounterfactualChartWithLegend";
+import { hasAxisTypeChanged } from "./CounterfactualComponentUtils";
 import { CounterfactualErrorDialog } from "./CounterfactualErrorDialog";
 import { CounterfactualLocalImportanceChart } from "./CounterfactualLocalImportanceChart";
 export interface ICounterfactualComponentProps {
@@ -41,12 +44,17 @@ export interface ICounterfactualComponentProps {
 
 export interface ICounterfactualComponentState {
   chartProps?: IGenericChartProps;
+  counterfactualsData: ICounterfactualData;
   customPointLength: number;
   request?: AbortController;
   selectedPointsIndexes: number[];
   sortArray: number[];
   sortingSeriesIndex: number | undefined;
   errorMessage?: string;
+  indexSeries: number[];
+  isCounterfactualsDataLoading?: boolean;
+  localCounterfactualErrorMessage?: string;
+  isRevertButtonClicked: boolean;
 }
 
 export class CounterfactualComponent extends React.PureComponent<
@@ -59,11 +67,17 @@ export class CounterfactualComponent extends React.PureComponent<
   private selectedFeatureImportance: IGlobalSeries[] = [];
   private validationErrors: { [key: string]: string | undefined } = {};
   private temporaryPoint: { [key: string]: any } | undefined;
+  private changedKeys: string[] = [];
 
   public constructor(props: ICounterfactualComponentProps) {
     super(props);
     this.state = {
+      counterfactualsData: this.props.data,
       customPointLength: 0,
+      indexSeries: [],
+      isCounterfactualsDataLoading: false,
+      isRevertButtonClicked: false,
+      localCounterfactualErrorMessage: undefined,
       request: undefined,
       selectedPointsIndexes: [],
       sortArray: [],
@@ -131,8 +145,10 @@ export class CounterfactualComponent extends React.PureComponent<
       <Stack horizontal={false}>
         <CounterfactualChartWithLegend
           {...this.props}
+          data={this.state.counterfactualsData}
           chartProps={this.state.chartProps}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
+          indexSeries={this.state.indexSeries}
           temporaryPoint={_.cloneDeep(this.temporaryPoint)}
           onChartPropsUpdated={this.onChartPropsUpdated}
           onCustomPointLengthUpdated={this.onCustomPointLengthUpdated}
@@ -142,10 +158,20 @@ export class CounterfactualComponent extends React.PureComponent<
           setTemporaryPointToCopyOfDatasetPoint={
             this.setTemporaryPointToCopyOfDatasetPoint
           }
+          setCounterfactualData={this.setCounterfactualData}
+          onIndexSeriesUpdated={this.onIndexSeriesUpdated}
+          isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
+          isRevertButtonClicked={this.state.isRevertButtonClicked}
+          setIsRevertButtonClicked={this.setIsRevertButtonClicked}
+          resetIndexes={this.resetIndexes}
         />
         <CounterfactualLocalImportanceChart
-          data={this.props.data}
+          data={this.state.counterfactualsData}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
+          isCounterfactualsDataLoading={this.state.isCounterfactualsDataLoading}
+          localCounterfactualErrorMessage={
+            this.state.localCounterfactualErrorMessage
+          }
         />
         {this.state.errorMessage && (
           <CounterfactualErrorDialog
@@ -165,11 +191,25 @@ export class CounterfactualComponent extends React.PureComponent<
     this.context.errorCohorts[cohortIndex].cohort.sort(JointDataset.IndexLabel);
   }
 
-  private setTemporaryPointToCopyOfDatasetPoint = (index: number): void => {
+  private setCounterfactualLocalImportanceData = (
+    data: ICounterfactualData
+  ): void => {
+    this.setState({
+      counterfactualsData: data,
+      isCounterfactualsDataLoading: false,
+      localCounterfactualErrorMessage: undefined
+    });
+  };
+
+  private setTemporaryPointToCopyOfDatasetPoint = (
+    index: number,
+    absoluteIndex?: number
+  ): void => {
     this.temporaryPoint = getCopyOfDatasetPoint(
       index,
       this.context.jointDataset,
-      this.state.customPointLength
+      this.state.customPointLength,
+      absoluteIndex
     );
     Object.keys(this.temporaryPoint).forEach((key) => {
       this.validationErrors[key] = undefined;
@@ -186,8 +226,88 @@ export class CounterfactualComponent extends React.PureComponent<
     this.setTemporaryPointToCopyOfDatasetPoint(indexes[0]);
   }
 
+  private setCounterfactualData = async (
+    absoluteIndex?: number
+  ): Promise<void> => {
+    if (absoluteIndex) {
+      this.setState({
+        isCounterfactualsDataLoading: true
+      });
+      const localCounterfactualData = await getLocalCounterfactualsFromSDK(
+        absoluteIndex,
+        this.state.counterfactualsData.id,
+        this.context.requestLocalCounterfactuals
+      );
+      if (
+        typeof localCounterfactualData === "object" &&
+        localCounterfactualData["error"]
+      ) {
+        this.setState({
+          localCounterfactualErrorMessage: localCounterfactualData["error"]
+            .split(":")
+            .pop()
+        });
+        this.setCounterfactualLocalImportanceData(this.props.data);
+        return;
+      }
+      this.setCounterfactualLocalImportanceData(
+        localCounterfactualData as ICounterfactualData
+      );
+    }
+  };
+
   private onChartPropsUpdated = (newProps: IGenericChartProps): void => {
-    this.setState({ chartProps: newProps });
+    this.changedKeys = [];
+    this.compareChartProps(newProps, this.state.chartProps);
+    const shouldResetIndexes =
+      ifEnableLargeData(this.context.dataset) &&
+      !_.isEqual(this.state.chartProps, newProps) &&
+      !hasAxisTypeChanged(this.changedKeys);
+    this.setState({
+      chartProps: newProps
+    });
+    if (shouldResetIndexes) {
+      this.resetIndexes();
+    }
+  };
+
+  private resetIndexes = (): void => {
+    this.setState({
+      counterfactualsData: this.props.data,
+      customPointLength: 0,
+      indexSeries: [],
+      selectedPointsIndexes: []
+    });
+  };
+
+  private compareChartProps = (
+    newProps: IGenericChartProps,
+    oldProps?: IGenericChartProps
+  ): void => {
+    if (oldProps) {
+      for (const key in newProps) {
+        if (typeof newProps[key] === "object") {
+          this.compareChartProps(newProps[key], oldProps[key]);
+        }
+        if (newProps[key] !== oldProps[key]) {
+          this.changedKeys.push(key);
+        }
+      }
+    }
+  };
+
+  private onIndexSeriesUpdated = (indexSeries: number[]): void => {
+    this.setState({
+      indexSeries
+    });
+    this.setIsRevertButtonClicked(false);
+  };
+
+  private setIsRevertButtonClicked = (status: boolean): void => {
+    this.setState({ isRevertButtonClicked: status });
+    if (status) {
+      this.resetIndexes();
+    }
   };
 
   private onSelectedPointsIndexesUpdated = (newSelection: number[]): void => {
@@ -210,7 +330,9 @@ export class CounterfactualComponent extends React.PureComponent<
     const promise = getFetchPredictionPromise(
       fetchingReference,
       this.context.jointDataset,
-      this.props.invokeModel
+      this.props.invokeModel,
+      this.state.counterfactualsData.test_data,
+      ifEnableLargeData(this.context.dataset)
     );
     fetchingReference[JointDataset.PredictedYLabel] = undefined;
     this.setState(
