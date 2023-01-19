@@ -21,7 +21,6 @@ import {
   BasicHighChart,
   TelemetryLevels,
   TelemetryEventName,
-  ITelemetryEvent,
   AxisConfig,
   OtherChartTypes,
   calculateBubblePlotDataFromErrorCohort,
@@ -30,7 +29,8 @@ import {
   hasAxisTypeChanged,
   getCounterfactualsScatterOption,
   LoadingSpinner,
-  instanceOfHighChart
+  instanceOfHighChart,
+  IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -39,26 +39,13 @@ import { SidePanel } from "../DataAnalysisView/SidePanel";
 
 import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
 import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
-import { generatePlotlyProps } from "../utils/generatePlotlyProps";
-import { getDatasetOption } from "../utils/getDatasetOption";
 import { getBarOrBoxChartConfig } from "./getBarOrBoxChartConfig";
-
-export interface IDatasetExplorerTabProps {
-  telemetryHook?: (message: ITelemetryEvent) => void;
-}
-
-export interface IDatasetExplorerTabState {
-  chartProps?: IGenericChartProps;
-  selectedCohortIndex: number;
-  highChartConfigOverride?: any;
-  isBubbleChartRendered?: boolean;
-  xSeries: number[];
-  ySeries: number[];
-  indexSeries: number[];
-  isBubbleChartDataLoading: boolean;
-  bubbleChartErrorMessage?: string;
-  isRevertButtonClicked?: boolean;
-}
+import {
+  getInitialState,
+  IDatasetExplorerTabProps,
+  IDatasetExplorerTabState
+} from "./ILargeDatasetExplorerTabSpec";
+import { getDefaultChart } from "./LargeDatasetExplorerTabUtils";
 
 export class LargeDatasetExplorerTab extends React.Component<
   IDatasetExplorerTabProps,
@@ -74,16 +61,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   public constructor(props: IDatasetExplorerTabProps) {
     super(props);
 
-    this.state = {
-      selectedCohortIndex: 0,
-      isBubbleChartRendered: false,
-      bubbleChartErrorMessage: undefined,
-      indexSeries: [],
-      isBubbleChartDataLoading: false,
-      xSeries: [],
-      ySeries: [],
-      isRevertButtonClicked: false
-    };
+    this.state = getInitialState();
   }
 
   public componentDidMount(): void {
@@ -153,6 +131,11 @@ export class LargeDatasetExplorerTab extends React.Component<
     if (this.state.chartProps.chartType !== ChartTypes.Scatter) {
       yAxisCategories.push(ColumnCategories.None);
     }
+    const isHistogramOrBoxChart =
+      this.state.chartProps.chartType === ChartTypes.Histogram ||
+      this.state.chartProps.chartType === ChartTypes.Box;
+    const isScatterChart =
+      this.state.chartProps.chartType === ChartTypes.Scatter;
 
     console.log(
       "!!state: ",
@@ -204,18 +187,10 @@ export class LargeDatasetExplorerTab extends React.Component<
                         selectedColumn={this.state.chartProps.yAxis}
                         canBin={false}
                         mustBin={false}
-                        canDither={
-                          this.state.chartProps.chartType === ChartTypes.Scatter
-                        }
-                        allowTreatAsCategorical={
-                          this.state.chartProps.chartType ===
-                            ChartTypes.Histogram ||
-                          this.state.chartProps.chartType === ChartTypes.Box
-                        }
+                        canDither={isScatterChart}
+                        allowTreatAsCategorical={isHistogramOrBoxChart}
                         allowLogarithmicScaling={
-                          this.state.chartProps.chartType ===
-                            ChartTypes.Histogram ||
-                          this.state.chartProps.chartType === ChartTypes.Box ||
+                          isHistogramOrBoxChart ||
                           !this.state.isBubbleChartRendered
                         }
                         onAccept={this.onYSet}
@@ -260,26 +235,13 @@ export class LargeDatasetExplorerTab extends React.Component<
                     ColumnCategories.Outcome
                   ]}
                   selectedColumn={this.state.chartProps.xAxis}
-                  canBin={
-                    this.state.chartProps.chartType === ChartTypes.Histogram ||
-                    this.state.chartProps.chartType === ChartTypes.Box
-                  }
-                  mustBin={
-                    this.state.chartProps.chartType === ChartTypes.Histogram ||
-                    this.state.chartProps.chartType === ChartTypes.Box
-                  }
-                  allowTreatAsCategorical={
-                    this.state.chartProps.chartType === ChartTypes.Histogram ||
-                    this.state.chartProps.chartType === ChartTypes.Box
-                  }
+                  canBin={isHistogramOrBoxChart}
+                  mustBin={isHistogramOrBoxChart}
+                  allowTreatAsCategorical={isHistogramOrBoxChart}
                   allowLogarithmicScaling={
-                    this.state.chartProps.chartType === ChartTypes.Histogram ||
-                    this.state.chartProps.chartType === ChartTypes.Box ||
-                    !this.state.isBubbleChartRendered
+                    isHistogramOrBoxChart || !this.state.isBubbleChartRendered
                   }
-                  canDither={
-                    this.state.chartProps.chartType === ChartTypes.Scatter
-                  }
+                  canDither={isScatterChart}
                   onAccept={this.onXSet}
                   buttonText={
                     this.context.jointDataset.metaDict[
@@ -344,15 +306,10 @@ export class LargeDatasetExplorerTab extends React.Component<
         !chartProps?.xAxis.property ||
         !chartProps?.yAxis.property
       ) {
-        const plotlyProps = generatePlotlyProps(
-          this.context.jointDataset,
-          chartProps,
+        const configOverride = getDefaultChart(
           this.context.errorCohorts.map((errorCohort) => errorCohort.cohort)[
             cohortIndex
-          ]
-        );
-        const configOverride = getDatasetOption(
-          plotlyProps,
+          ],
           this.context.jointDataset,
           chartProps
         );
@@ -380,76 +337,14 @@ export class LargeDatasetExplorerTab extends React.Component<
           selectedCohortIndex: cohortIndex
         });
       } else {
+        // at this point it is either a bubble chart or scatter chart for individual bubbles
         const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
-        let datasetBarConfigOverride;
         if (!hasAxisTypeChanged) {
           console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
-          this.setState({
-            isBubbleChartDataLoading: true
-          });
-          datasetBarConfigOverride =
-            await calculateBubblePlotDataFromErrorCohort(
-              this.context.errorCohorts[cohortIndex].cohort,
-              chartProps,
-              [],
-              this.context.jointDataset,
-              this.context.dataset,
-              false,
-              false,
-              true,
-              this.context.requestBubblePlotData,
-              undefined,
-              this.onBubbleClick,
-              undefined
-            );
-          this.resetSeries(chartProps);
-          if (
-            datasetBarConfigOverride &&
-            !instanceOfHighChart(datasetBarConfigOverride)
-          ) {
-            this.setState({
-              bubbleChartErrorMessage: datasetBarConfigOverride
-                .toString()
-                .split(":")
-                .pop(),
-              isBubbleChartDataLoading: false,
-              highChartConfigOverride: undefined,
-              chartProps,
-              selectedCohortIndex: cohortIndex
-            });
-            return;
-          }
-          this.setState({
-            chartProps,
-            highChartConfigOverride: datasetBarConfigOverride,
-            selectedCohortIndex: cohortIndex,
-            isBubbleChartRendered: true,
-            isBubbleChartDataLoading: false,
-            isRevertButtonClicked: false
-          });
-          return;
+          this.updateBubblePlotData(chartProps, cohortIndex);
         } else {
           console.log("!!in else scatter: ", hasAxisTypeChanged, chartProps);
-          datasetBarConfigOverride = getCounterfactualsScatterOption(
-            this.state.xSeries,
-            this.state.ySeries,
-            this.state.indexSeries,
-            chartProps,
-            this.context.jointDataset,
-            [],
-            [],
-            false,
-            false,
-            true,
-            undefined
-          );
-          this.setState({
-            chartProps,
-            highChartConfigOverride: datasetBarConfigOverride,
-            selectedCohortIndex: cohortIndex,
-            isBubbleChartRendered: false,
-            isRevertButtonClicked: false
-          });
+          this.updateScatterPlotData(chartProps, cohortIndex);
         }
       }
     } else {
@@ -482,6 +377,108 @@ export class LargeDatasetExplorerTab extends React.Component<
       level: TelemetryLevels.ButtonClick,
       type: eventName
     });
+  };
+
+  private setErrorStatus = (
+    chartProps: IGenericChartProps,
+    cohortIndex: number,
+    datasetBarConfigOverride: any
+  ): void => {
+    this.setState({
+      bubbleChartErrorMessage: datasetBarConfigOverride
+        .toString()
+        .split(":")
+        .pop(),
+      isBubbleChartDataLoading: false,
+      highChartConfigOverride: undefined,
+      chartProps,
+      selectedCohortIndex: cohortIndex
+    });
+  };
+
+  private getBubblePlotData = async (
+    chartProps: IGenericChartProps,
+    cohortIndex: number
+  ): Promise<
+    IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
+  > => {
+    return await calculateBubblePlotDataFromErrorCohort(
+      this.context.errorCohorts[cohortIndex].cohort,
+      chartProps,
+      [],
+      this.context.jointDataset,
+      this.context.dataset,
+      false,
+      false,
+      true,
+      this.context.requestBubblePlotData,
+      undefined,
+      this.onBubbleClick,
+      undefined
+    );
+  };
+
+  private updateBubblePlotData = async (
+    chartProps: IGenericChartProps,
+    cohortIndex: number
+  ): Promise<void> => {
+    console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
+    this.setState({
+      isBubbleChartDataLoading: true
+    });
+    const datasetBarConfigOverride = await this.getBubblePlotData(
+      chartProps,
+      cohortIndex
+    );
+    this.resetSeries(chartProps);
+    if (
+      datasetBarConfigOverride &&
+      !instanceOfHighChart(datasetBarConfigOverride)
+    ) {
+      this.setErrorStatus(chartProps, cohortIndex, datasetBarConfigOverride);
+      return;
+    }
+    this.setState({
+      chartProps,
+      highChartConfigOverride: datasetBarConfigOverride,
+      selectedCohortIndex: cohortIndex,
+      isBubbleChartRendered: true,
+      isBubbleChartDataLoading: false,
+      isRevertButtonClicked: false
+    });
+  };
+
+  private updateScatterPlotData = (
+    chartProps: IGenericChartProps,
+    cohortIndex: number
+  ): void => {
+    console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
+    const datasetBarConfigOverride = this.getScatterPlotData(chartProps);
+    this.setState({
+      chartProps,
+      highChartConfigOverride: datasetBarConfigOverride,
+      selectedCohortIndex: cohortIndex,
+      isBubbleChartRendered: false,
+      isRevertButtonClicked: false
+    });
+  };
+
+  private getScatterPlotData = (
+    chartProps: IGenericChartProps
+  ): IHighchartsConfig => {
+    return getCounterfactualsScatterOption(
+      this.state.xSeries,
+      this.state.ySeries,
+      this.state.indexSeries,
+      chartProps,
+      this.context.jointDataset,
+      [],
+      [],
+      false,
+      false,
+      true,
+      undefined
+    );
   };
 
   private onBubbleClick = (
@@ -545,7 +542,8 @@ export class LargeDatasetExplorerTab extends React.Component<
         this.setState({
           indexSeries: [],
           xSeries: [],
-          ySeries: []
+          ySeries: [],
+          isRevertButtonClicked: false
         });
       }
     }
