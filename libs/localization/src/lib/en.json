@@ -1795,7 +1795,7 @@
         "class": "Class"
       },
       "nA": "N/A",
-      "disaggregatedAnalysisBaseCohortDislaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
+      "disaggregatedAnalysisBaseCohortDisclaimer": "The cohorts in the following feature-based analysis are based on the global cohort, {0}.",
       "disaggregatedAnalysisBaseCohortWarning": "Unlike the {0} cohort, {1} includes filters. As a consequence, it only captures a subset of the whole dataset and insights may not generalize to the full dataset.",
       "probabilitySplineChartToggleLabel": "Use spline chart",
       "countAxisLabel": "Count",
