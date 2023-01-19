@@ -1,13 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  getTheme,
-  IDropdownOption,
-  Dropdown,
-  Text,
-  Stack
-} from "@fluentui/react";
+import { IDropdownOption, Dropdown, Text, Stack } from "@fluentui/react";
 import {
   ColumnCategories,
   cohortKey,
@@ -17,18 +11,14 @@ import {
   MissingParametersPlaceholder,
   defaultModelAssessmentContext,
   ModelAssessmentContext,
-  rowErrorSize,
-  BasicHighChart,
   TelemetryLevels,
   TelemetryEventName,
-  AxisConfig,
   OtherChartTypes,
   calculateBubblePlotDataFromErrorCohort,
   IHighchartsConfig,
   ifEnableLargeData,
   hasAxisTypeChanged,
   getScatterOption,
-  LoadingSpinner,
   instanceOfHighChart,
   IHighchartBubbleSDKClusterData
 } from "@responsible-ai/core-ui";
@@ -46,6 +36,7 @@ import {
   IDatasetExplorerTabProps,
   IDatasetExplorerTabState
 } from "./ILargeDatasetExplorerTabSpec";
+import { LargeDatasetExplorerChartArea } from "./LargeDatasetExplorerChartArea";
 import { getDefaultChart } from "./LargeDatasetExplorerTabUtils";
 
 export class LargeDatasetExplorerTab extends React.Component<
@@ -108,22 +99,12 @@ export class LargeDatasetExplorerTab extends React.Component<
       return <div />;
     }
 
-    const selectedCohortIndex =
-      this.state.selectedCohortIndex >= this.context.errorCohorts.length
-        ? 0
-        : this.state.selectedCohortIndex;
-
     const cohortOptions =
       this.state.chartProps.xAxis.property !== cohortKey
         ? this.context.errorCohorts.map((errorCohort, index) => {
             return { key: index, text: errorCohort.cohort.name };
           })
         : undefined;
-    const cohortLength =
-      this.context.errorCohorts[selectedCohortIndex].cohort.filteredData.length;
-    const canRenderChart =
-      cohortLength < rowErrorSize ||
-      this.state.chartProps.chartType !== ChartTypes.Scatter;
     const yAxisCategories = [
       ColumnCategories.Index,
       ColumnCategories.Dataset,
@@ -132,11 +113,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     if (this.state.chartProps.chartType !== ChartTypes.Scatter) {
       yAxisCategories.push(ColumnCategories.None);
     }
-    const isHistogramOrBoxChart =
-      this.state.chartProps.chartType === ChartTypes.Histogram ||
-      this.state.chartProps.chartType === ChartTypes.Box;
-    const isScatterChart =
-      this.state.chartProps.chartType === ChartTypes.Scatter;
 
     return (
       <Stack
@@ -173,94 +149,16 @@ export class LargeDatasetExplorerTab extends React.Component<
         </Stack.Item>
         <Stack.Item className={classNames.mainArea}>
           <Stack horizontal grow className={classNames.chartAndType}>
-            <div className={classNames.chart}>
-              <Stack.Item className={classNames.chartWithAxes}>
-                <Stack horizontal className={classNames.chartWithVertical}>
-                  <Stack.Item className={classNames.verticalAxis}>
-                    <div className={classNames.rotatedVerticalBox}>
-                      <AxisConfig
-                        orderedGroupTitles={yAxisCategories}
-                        selectedColumn={this.state.chartProps.yAxis}
-                        canBin={false}
-                        mustBin={false}
-                        canDither={isScatterChart}
-                        allowTreatAsCategorical={isHistogramOrBoxChart}
-                        allowLogarithmicScaling={
-                          isHistogramOrBoxChart ||
-                          !this.state.isBubbleChartRendered
-                        }
-                        onAccept={this.onYSet}
-                        buttonText={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].abbridgedLabel
-                        }
-                        buttonTitle={
-                          this.context.jointDataset.metaDict[
-                            this.state.chartProps.yAxis.property
-                          ].label
-                        }
-                        disabled={this.state.isBubbleChartDataLoading}
-                      />
-                    </div>
-                  </Stack.Item>
-                  <Stack.Item className={classNames.chartContainer}>
-                    {(!canRenderChart ||
-                      this.state.bubbleChartErrorMessage) && (
-                      <MissingParametersPlaceholder>
-                        {!canRenderChart
-                          ? localization.Interpret.ValidationErrors
-                              .datasizeError
-                          : localization.formatString(
-                              localization.Counterfactuals
-                                .BubbleChartFetchError,
-                              this.state.bubbleChartErrorMessage
-                            )}
-                      </MissingParametersPlaceholder>
-                    )}
-                    {!this.state.isBubbleChartDataLoading && canRenderChart ? (
-                      <BasicHighChart
-                        configOverride={this.state.highChartConfigOverride}
-                        theme={getTheme()}
-                      />
-                    ) : (
-                      <LoadingSpinner
-                        label={localization.Counterfactuals.loading}
-                      />
-                    )}
-                  </Stack.Item>
-                </Stack>
-              </Stack.Item>
-              <div className={classNames.horizontalAxis}>
-                <AxisConfig
-                  orderedGroupTitles={[
-                    ColumnCategories.Index,
-                    ColumnCategories.Dataset,
-                    ColumnCategories.Outcome
-                  ]}
-                  selectedColumn={this.state.chartProps.xAxis}
-                  canBin={isHistogramOrBoxChart}
-                  mustBin={isHistogramOrBoxChart}
-                  allowTreatAsCategorical={isHistogramOrBoxChart}
-                  allowLogarithmicScaling={
-                    isHistogramOrBoxChart || !this.state.isBubbleChartRendered
-                  }
-                  canDither={isScatterChart}
-                  onAccept={this.onXSet}
-                  buttonText={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].abbridgedLabel
-                  }
-                  buttonTitle={
-                    this.context.jointDataset.metaDict[
-                      this.state.chartProps.xAxis.property
-                    ].label
-                  }
-                  disabled={this.state.isBubbleChartDataLoading}
-                />
-              </div>
-            </div>
+            <LargeDatasetExplorerChartArea
+              chartProps={this.state.chartProps}
+              selectedCohortIndex={this.state.selectedCohortIndex}
+              isBubbleChartRendered={this.state.isBubbleChartRendered}
+              highChartConfigOverride={this.state.highChartConfigOverride}
+              isBubbleChartDataLoading={this.state.isBubbleChartDataLoading}
+              bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
+              onXSet={this.onXSet}
+              onYSet={this.onYSet}
+            />
             <Stack.Item className={classNames.sidePanel}>
               <SidePanel
                 chartProps={this.state.chartProps}
