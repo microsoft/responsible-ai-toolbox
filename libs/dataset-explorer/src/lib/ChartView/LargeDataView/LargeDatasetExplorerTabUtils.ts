@@ -1,8 +1,12 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import {
   Cohort,
   IGenericChartProps,
   JointDataset
 } from "@responsible-ai/core-ui";
+
 import { generatePlotlyProps } from "../utils/generatePlotlyProps";
 import { getDatasetOption } from "../utils/getDatasetOption";
 

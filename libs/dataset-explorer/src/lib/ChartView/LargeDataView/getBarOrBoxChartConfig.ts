@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { getTheme } from "@fluentui/react";
 import {
   Cohort,
@@ -73,7 +76,7 @@ export async function getBarOrBoxChartConfig(
       }
     };
     return datasetBarConfigOverride;
-  } else {
+  } 
     const result = await requestDatasetAnalysisBoxChart(
       filtersRelabeled,
       compositeFiltersRelabeled,
@@ -115,5 +118,5 @@ export async function getBarOrBoxChartConfig(
       }
     };
     return datasetBoxConfigOverride;
-  }
+  
 }

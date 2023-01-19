@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 import { IGenericChartProps, ITelemetryEvent } from "@responsible-ai/core-ui";
 
 export interface IDatasetExplorerTabProps {
@@ -19,13 +22,13 @@ export interface IDatasetExplorerTabState {
 
 export function getInitialState() {
   return {
-    selectedCohortIndex: 0,
-    isBubbleChartRendered: false,
     bubbleChartErrorMessage: undefined,
     indexSeries: [],
-    xSeries: [],
-    ySeries: [],
     isBubbleChartDataLoading: false,
-    isRevertButtonClicked: false
+    isBubbleChartRendered: false,
+    isRevertButtonClicked: false,
+    selectedCohortIndex: 0,
+    xSeries: [],
+    ySeries: []
   };
 }

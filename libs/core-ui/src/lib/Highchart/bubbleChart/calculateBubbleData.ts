@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Cohort,
-  IDataset,
-  ifEnableLargeData,
-  IGenericChartProps,
-  IHighchartBubbleSDKClusterData,
-  IHighchartsConfig,
-  JointDataset
-} from "@responsible-ai/core-ui";
+import { Cohort } from "../../Cohort/Cohort";
+import { IDataset } from "../../Interfaces/IDataset";
+import { IHighchartBubbleSDKClusterData } from "../../Interfaces/IHighchartBubbleData";
+import { ifEnableLargeData } from "../../util/buildInitialContext";
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
+import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { getBubbleChartOptions } from "./getBubbleChartOptions";
 import { IScatterPoint } from "./getCounterfactualsScatterOption";

@@ -50,6 +50,12 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
   () => {
     const theme = getTheme();
     return mergeStyleSets<IDatasetExplorerTabStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "20px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
+      },
       chart: {
         marginBottom: "40px",
         width: "100%"
@@ -164,12 +170,6 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         position: "relative",
         top: "0px",
         width: "65px"
-      },
-      buttonStyle: {
-        marginBottom: "10px",
-        marginTop: "20px",
-        paddingBottom: "10px",
-        paddingTop: "10px"
       }
     });
   };

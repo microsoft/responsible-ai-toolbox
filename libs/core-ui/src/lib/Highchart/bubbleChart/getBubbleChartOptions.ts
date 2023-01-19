@@ -2,14 +2,15 @@
 // Licensed under the MIT License.
 
 import { getTheme } from "@fluentui/react";
-import {
-  IGenericChartProps,
-  IHighchartsConfig,
-  JointDataset,
-  IHighchartBubbleSDKData,
-  IHighchartBubbleData
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+
+import {
+  IHighchartBubbleData,
+  IHighchartBubbleSDKData
+} from "../../Interfaces/IHighchartBubbleData";
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
+import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import {
   getCounterfactualsScatterOption,

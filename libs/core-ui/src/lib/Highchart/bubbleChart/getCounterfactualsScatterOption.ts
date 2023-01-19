@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IGenericChartProps,
-  IHighchartsConfig,
-  JointDataset
-} from "@responsible-ai/core-ui";
 import { Point } from "highcharts";
+
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
+import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { ICustomData } from "./buildScatterTemplate";
 import { getCounterfactualsScatter } from "./getCounterfactualsScatter";

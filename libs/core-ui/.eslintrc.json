@@ -11,6 +11,14 @@
       "rules": {
         "max-lines": "warn"
       }
+    },
+    {
+      "files": [
+        "**/getBubbleChartOptions.ts"
+      ],
+      "rules": {
+        "dot-notation": "off"
+      }
     }
   ]
 }

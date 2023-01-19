@@ -35,10 +35,11 @@ import {
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
 import React from "react";
-import { SidePanel } from "../DataAnalysisView/SidePanel";
 
+import { SidePanel } from "../DataAnalysisView/SidePanel";
 import { datasetExplorerTabStyles } from "../utils/DatasetExplorerTab.styles";
 import { generateDefaultChartAxes } from "../utils/generateDefaultChartAxes";
+
 import { getBarOrBoxChartConfig } from "./getBarOrBoxChartConfig";
 import {
   getInitialState,
@@ -137,11 +138,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     const isScatterChart =
       this.state.chartProps.chartType === ChartTypes.Scatter;
 
-    console.log(
-      "!!state: ",
-      this.state.chartProps,
-      this.state.isBubbleChartRendered
-    );
     return (
       <Stack
         horizontal={false}
@@ -287,8 +283,8 @@ export class LargeDatasetExplorerTab extends React.Component<
 
   private setIsRevertButtonClicked = (status: boolean): void => {
     this.setState({
-      isRevertButtonClicked: status,
       indexSeries: [],
+      isRevertButtonClicked: status,
       xSeries: [],
       ySeries: []
     });
@@ -298,7 +294,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     cohortIndex: number,
     chartProps: IGenericChartProps | undefined
   ): Promise<void> {
-    console.log("!!charts: ", this.state.chartProps, chartProps);
     if (chartProps) {
       if (
         !this.context.requestDatasetAnalysisBarChart ||
@@ -340,10 +335,8 @@ export class LargeDatasetExplorerTab extends React.Component<
         // at this point it is either a bubble chart or scatter chart for individual bubbles
         const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
         if (!hasAxisTypeChanged) {
-          console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
           this.updateBubblePlotData(chartProps, cohortIndex);
         } else {
-          console.log("!!in else scatter: ", hasAxisTypeChanged, chartProps);
           this.updateScatterPlotData(chartProps, cohortIndex);
         }
       }
@@ -383,7 +376,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     chartProps: IGenericChartProps,
     cohortIndex: number
   ): Promise<void> => {
-    console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
     this.setState({
       isBubbleChartDataLoading: true
     });
@@ -402,10 +394,10 @@ export class LargeDatasetExplorerTab extends React.Component<
     this.setState({
       chartProps,
       highChartConfigOverride: datasetBarConfigOverride,
-      selectedCohortIndex: cohortIndex,
-      isBubbleChartRendered: true,
       isBubbleChartDataLoading: false,
-      isRevertButtonClicked: false
+      isBubbleChartRendered: true,
+      isRevertButtonClicked: false,
+      selectedCohortIndex: cohortIndex
     });
   };
 
@@ -413,14 +405,13 @@ export class LargeDatasetExplorerTab extends React.Component<
     chartProps: IGenericChartProps,
     cohortIndex: number
   ): void => {
-    console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
     const datasetBarConfigOverride = this.getScatterPlotData(chartProps);
     this.setState({
       chartProps,
       highChartConfigOverride: datasetBarConfigOverride,
-      selectedCohortIndex: cohortIndex,
       isBubbleChartRendered: false,
-      isRevertButtonClicked: false
+      isRevertButtonClicked: false,
+      selectedCohortIndex: cohortIndex
     });
   };
 
@@ -474,9 +465,9 @@ export class LargeDatasetExplorerTab extends React.Component<
         .toString()
         .split(":")
         .pop(),
-      isBubbleChartDataLoading: false,
-      highChartConfigOverride: undefined,
       chartProps,
+      highChartConfigOverride: undefined,
+      isBubbleChartDataLoading: false,
       selectedCohortIndex: cohortIndex
     });
   };
@@ -487,21 +478,12 @@ export class LargeDatasetExplorerTab extends React.Component<
     ySeries: number[],
     indexSeries: number[]
   ): void => {
-    console.log(
-      "!!data: ",
-      scatterPlotData,
-      xSeries,
-      ySeries,
-      indexSeries,
-      this.state.chartProps
-    );
-
     this.setState({
       highChartConfigOverride: scatterPlotData,
+      indexSeries,
       isBubbleChartRendered: false,
       xSeries,
-      ySeries,
-      indexSeries
+      ySeries
     });
   };
 
@@ -541,9 +523,9 @@ export class LargeDatasetExplorerTab extends React.Component<
       if (shouldResetIndexes) {
         this.setState({
           indexSeries: [],
+          isRevertButtonClicked: false,
           xSeries: [],
-          ySeries: [],
-          isRevertButtonClicked: false
+          ySeries: []
         });
       }
     }

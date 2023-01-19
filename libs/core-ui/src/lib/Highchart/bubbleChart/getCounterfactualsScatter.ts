@@ -1,14 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  FluentUIStyles,
-  IGenericChartProps,
-  JointDataset
-} from "@responsible-ai/core-ui";
 import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
+
+import { FluentUIStyles } from "../../util/FluentUIStyles";
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
@@ -99,11 +98,11 @@ function getMarker(
   colorToUse?: string
 ): IMarker {
   const selectionIndex = selectedPointsIndexes.indexOf(index);
-  let color = colorToUse
+  const color = colorToUse
     ? colorToUse
-    : selectionIndex === -1
+    : (selectionIndex === -1
     ? FluentUIStyles.fabricColorInactiveSeries
-    : FluentUIStyles.fluentUIColorPalette[selectionIndex];
+    : FluentUIStyles.fluentUIColorPalette[selectionIndex]);
 
   const marker = {
     fillColor: color,
