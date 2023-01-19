@@ -37,7 +37,6 @@ export interface ISidePanelProps {
   cohorts: Cohort[];
   selectedCohortIndex: number;
   dataset: IDataset;
-  hideColorValue?: boolean;
   disabled?: boolean;
   isBubbleChartRendered?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
@@ -83,62 +82,59 @@ export class SidePanel extends React.Component<
           onChange={this.onChartTypeChange}
           disabled={this.props.disabled}
         />
-        {!this.props.hideColorValue &&
-          this.state.colorDialogOpen &&
-          this.props.chartProps.colorAxis && (
-            <AxisConfigDialog
-              orderedGroupTitles={[
-                ColumnCategories.Index,
-                ColumnCategories.Dataset,
-                ColumnCategories.Outcome
-              ]}
-              selectedColumn={this.props.chartProps.colorAxis}
-              canBin
-              mustBin={false}
-              canDither={false}
-              allowTreatAsCategorical
-              onAccept={this.onColorSet}
-              onCancel={this.setColorClose}
+        {this.displayAxisConfigDialog() && this.props.chartProps.colorAxis && (
+          <AxisConfigDialog
+            orderedGroupTitles={[
+              ColumnCategories.Index,
+              ColumnCategories.Dataset,
+              ColumnCategories.Outcome
+            ]}
+            selectedColumn={this.props.chartProps.colorAxis}
+            canBin
+            mustBin={false}
+            canDither={false}
+            allowTreatAsCategorical
+            onAccept={this.onColorSet}
+            onCancel={this.setColorClose}
+          />
+        )}
+        {this.displayColorValueButton() && (
+          <Stack.Item>
+            <Label className={classNames.colorValue}>
+              {localization.Interpret.DatasetExplorer.colorValue}
+            </Label>
+            <DefaultButton
+              id="SetColorButton"
+              onClick={this.setColorOpen}
+              text={
+                this.props.chartProps.colorAxis &&
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.colorAxis.property
+                ].abbridgedLabel
+              }
+              title={
+                this.props.chartProps.colorAxis &&
+                this.props.jointDataset.metaDict[
+                  this.props.chartProps.colorAxis.property
+                ].label
+              }
             />
-          )}
-        {!this.props.hideColorValue &&
-          this.props.chartProps.chartType === ChartTypes.Scatter && (
-            <Stack.Item>
-              <Label className={classNames.colorValue}>
-                {localization.Interpret.DatasetExplorer.colorValue}
-              </Label>
-              <DefaultButton
-                id="SetColorButton"
-                onClick={this.setColorOpen}
-                text={
-                  this.props.chartProps.colorAxis &&
-                  this.props.jointDataset.metaDict[
-                    this.props.chartProps.colorAxis.property
-                  ].abbridgedLabel
-                }
-                title={
-                  this.props.chartProps.colorAxis &&
-                  this.props.jointDataset.metaDict[
-                    this.props.chartProps.colorAxis.property
-                  ].label
-                }
-              />
-              <div className={classNames.legendAndText}>
-                {colorSeries?.length && (
-                  <InteractiveLegend
-                    items={colorSeries.map((name, i) => {
-                      return {
-                        activated: true,
-                        color: scatterColors[i],
-                        index: i,
-                        name
-                      };
-                    })}
-                  />
-                )}
-              </div>
-            </Stack.Item>
-          )}
+            <div className={classNames.legendAndText}>
+              {colorSeries?.length && (
+                <InteractiveLegend
+                  items={colorSeries.map((name, i) => {
+                    return {
+                      activated: true,
+                      color: scatterColors[i],
+                      index: i,
+                      name
+                    };
+                  })}
+                />
+              )}
+            </div>
+          </Stack.Item>
+        )}
         {this.displayRevertButton() && (
           <Stack.Item>
             <DefaultButton
@@ -156,6 +152,19 @@ export class SidePanel extends React.Component<
   private readonly setColorOpen = (): void => {
     this.setState({ colorDialogOpen: true });
   };
+
+  private displayColorValueButton(): boolean {
+    return (
+      !ifEnableLargeData(this.context.dataset) &&
+      this.props.chartProps.chartType === ChartTypes.Scatter
+    );
+  }
+
+  private displayAxisConfigDialog(): boolean {
+    return (
+      !ifEnableLargeData(this.context.dataset) && this.state.colorDialogOpen
+    );
+  }
 
   private displayRevertButton(): boolean {
     return (

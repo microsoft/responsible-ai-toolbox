@@ -304,7 +304,6 @@ export class LargeDatasetExplorerTab extends React.Component<
                 jointDataset={this.context.jointDataset}
                 selectedCohortIndex={this.state.selectedCohortIndex}
                 onChartPropChange={this.onChartPropsChange}
-                hideColorValue={true}
                 dataset={this.context.dataset}
                 disabled={this.state.isBubbleChartDataLoading}
                 isBubbleChartRendered={this.state.isBubbleChartRendered}
