@@ -379,45 +379,6 @@ export class LargeDatasetExplorerTab extends React.Component<
     });
   };
 
-  private setErrorStatus = (
-    chartProps: IGenericChartProps,
-    cohortIndex: number,
-    datasetBarConfigOverride: any
-  ): void => {
-    this.setState({
-      bubbleChartErrorMessage: datasetBarConfigOverride
-        .toString()
-        .split(":")
-        .pop(),
-      isBubbleChartDataLoading: false,
-      highChartConfigOverride: undefined,
-      chartProps,
-      selectedCohortIndex: cohortIndex
-    });
-  };
-
-  private getBubblePlotData = async (
-    chartProps: IGenericChartProps,
-    cohortIndex: number
-  ): Promise<
-    IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
-  > => {
-    return await calculateBubblePlotDataFromErrorCohort(
-      this.context.errorCohorts[cohortIndex].cohort,
-      chartProps,
-      [],
-      this.context.jointDataset,
-      this.context.dataset,
-      false,
-      false,
-      true,
-      this.context.requestBubblePlotData,
-      undefined,
-      this.onBubbleClick,
-      undefined
-    );
-  };
-
   private updateBubblePlotData = async (
     chartProps: IGenericChartProps,
     cohortIndex: number
@@ -463,6 +424,28 @@ export class LargeDatasetExplorerTab extends React.Component<
     });
   };
 
+  private getBubblePlotData = async (
+    chartProps: IGenericChartProps,
+    cohortIndex: number
+  ): Promise<
+    IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
+  > => {
+    return await calculateBubblePlotDataFromErrorCohort(
+      this.context.errorCohorts[cohortIndex].cohort,
+      chartProps,
+      [],
+      this.context.jointDataset,
+      this.context.dataset,
+      false,
+      false,
+      true,
+      this.context.requestBubblePlotData,
+      undefined,
+      this.onBubbleClick,
+      undefined
+    );
+  };
+
   private getScatterPlotData = (
     chartProps: IGenericChartProps
   ): IHighchartsConfig => {
@@ -479,6 +462,23 @@ export class LargeDatasetExplorerTab extends React.Component<
       true,
       undefined
     );
+  };
+
+  private setErrorStatus = (
+    chartProps: IGenericChartProps,
+    cohortIndex: number,
+    datasetBarConfigOverride: any
+  ): void => {
+    this.setState({
+      bubbleChartErrorMessage: datasetBarConfigOverride
+        .toString()
+        .split(":")
+        .pop(),
+      isBubbleChartDataLoading: false,
+      highChartConfigOverride: undefined,
+      chartProps,
+      selectedCohortIndex: cohortIndex
+    });
   };
 
   private onBubbleClick = (
