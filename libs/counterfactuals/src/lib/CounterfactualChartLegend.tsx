@@ -168,9 +168,12 @@ export class CounterfactualChartLegend extends React.PureComponent<ICounterfactu
   };
 
   private disableCounterfactualPanel = (): boolean => {
+    const counterfactualsList = ifEnableLargeData(this.context.dataset)
+      ? this.props.data.cfs_list
+      : this.props.data.cfs_list[this.props.selectedPointsIndexes[0]];
     return (
       this.props.selectedPointsIndexes[0] === undefined ||
-      !this.props.data.cfs_list[this.props.selectedPointsIndexes[0]] ||
+      !counterfactualsList ||
       !!this.props.isCounterfactualsDataLoading
     );
   };
