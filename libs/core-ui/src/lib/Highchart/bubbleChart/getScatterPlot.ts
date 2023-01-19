@@ -18,7 +18,7 @@ interface IMarker {
 
 const maxSelection = 2;
 
-export function getCounterfactualsScatter(
+export function getScatterPlot(
   xSeries: number[],
   ySeries: number[],
   indexSeries: number[],

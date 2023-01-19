@@ -8,13 +8,13 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { ICustomData } from "./buildScatterTemplate";
-import { getCounterfactualsScatter } from "./getCounterfactualsScatter";
+import { getScatterPlot } from "./getScatterPlot";
 
 export interface IScatterPoint extends Point {
   customData: ICustomData;
 }
 
-export function getCounterfactualsScatterOption(
+export function getScatterOption(
   xSeries: number[],
   ySeries: number[],
   indexSeries: number[],
@@ -22,12 +22,12 @@ export function getCounterfactualsScatterOption(
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
-  isCounterfactualsDataLoading?: boolean,
+  isScatterPlotDataLoading?: boolean,
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean,
   selectPointFromChartLargeData?: (data: IScatterPoint) => void
 ): IHighchartsConfig {
-  const dataSeries = getCounterfactualsScatter(
+  const dataSeries = getScatterPlot(
     xSeries,
     ySeries,
     indexSeries,
@@ -52,12 +52,12 @@ export function getCounterfactualsScatterOption(
         }
       },
       series: {
-        cursor: isCounterfactualsDataLoading ? "wait" : "pointer",
+        cursor: isScatterPlotDataLoading ? "wait" : "pointer",
         lineWidth: 0,
         point: {
           events: {
             click(): void {
-              if (!isCounterfactualsDataLoading) {
+              if (!isScatterPlotDataLoading) {
                 if (selectPointFromChartLargeData === undefined) {
                   return;
                 }

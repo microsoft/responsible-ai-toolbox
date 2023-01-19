@@ -12,10 +12,7 @@ import { IGenericChartProps } from "../../util/IGenericChartProps";
 import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
-import {
-  getCounterfactualsScatterOption,
-  IScatterPoint
-} from "./getCounterfactualsScatterOption";
+import { getScatterOption, IScatterPoint } from "./getScatterOption";
 
 export function getBubbleChartOptions(
   data: IHighchartBubbleSDKData[],
@@ -25,7 +22,7 @@ export function getBubbleChartOptions(
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
-  isCounterfactualsDataLoading?: boolean,
+  isScatterPlotDataLoading?: boolean,
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean,
   onBubbleClick?: (
@@ -61,7 +58,7 @@ export function getBubbleChartOptions(
         point: {
           events: {
             click(): void {
-              const scatterPlotData = getCounterfactualsScatterOption(
+              const scatterPlotData = getScatterOption(
                 this["xSeries"],
                 this["ySeries"],
                 this["indexSeries"],
@@ -69,7 +66,7 @@ export function getBubbleChartOptions(
                 jointData,
                 selectedPointsIndexes,
                 customPoints,
-                isCounterfactualsDataLoading,
+                isScatterPlotDataLoading,
                 showColorAxis,
                 useDifferentColorForScatterPoints,
                 selectPointFromChartLargeData

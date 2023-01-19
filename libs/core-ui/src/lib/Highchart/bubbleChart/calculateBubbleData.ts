@@ -10,7 +10,7 @@ import { JointDataset } from "../../util/JointDataset";
 import { IHighchartsConfig } from "../IHighchartsConfig";
 
 import { getBubbleChartOptions } from "./getBubbleChartOptions";
-import { IScatterPoint } from "./getCounterfactualsScatterOption";
+import { IScatterPoint } from "./getScatterOption";
 
 export async function calculateBubblePlotDataFromErrorCohort(
   errorCohort: Cohort,
@@ -20,7 +20,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
   }>,
   jointDataset: JointDataset,
   dataset: IDataset,
-  isCounterfactualsDataLoading?: boolean,
+  isScatterPlotDataLoading?: boolean,
   showColorAxis?: boolean,
   useDifferentColorForScatterPoints?: boolean,
   requestBubblePlotData?: (
@@ -57,7 +57,7 @@ export async function calculateBubblePlotDataFromErrorCohort(
         jointDataset,
         selectedPointsIndexes,
         customPoints,
-        isCounterfactualsDataLoading,
+        isScatterPlotDataLoading,
         showColorAxis,
         useDifferentColorForScatterPoints,
         onBubbleClick,

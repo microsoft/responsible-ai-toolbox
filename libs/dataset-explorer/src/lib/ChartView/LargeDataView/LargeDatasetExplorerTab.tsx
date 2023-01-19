@@ -27,7 +27,7 @@ import {
   IHighchartsConfig,
   ifEnableLargeData,
   hasAxisTypeChanged,
-  getCounterfactualsScatterOption,
+  getScatterOption,
   LoadingSpinner,
   instanceOfHighChart,
   IHighchartBubbleSDKClusterData
@@ -448,7 +448,7 @@ export class LargeDatasetExplorerTab extends React.Component<
   private getScatterPlotData = (
     chartProps: IGenericChartProps
   ): IHighchartsConfig => {
-    return getCounterfactualsScatterOption(
+    return getScatterOption(
       this.state.xSeries,
       this.state.ySeries,
       this.state.indexSeries,
