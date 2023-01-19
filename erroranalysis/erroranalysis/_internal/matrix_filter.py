@@ -17,6 +17,7 @@ from erroranalysis._internal.constants import (DIFF, PRED_Y, ROW_INDEX, TRUE_Y,
 from erroranalysis._internal.metrics import (get_ordered_classes,
                                              is_multi_agg_metric,
                                              metric_to_func)
+from raiutils.exceptions import UserConfigValidationException
 
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
 CATEGORY1 = 'category1'
@@ -124,6 +125,10 @@ def compute_matrix_on_dataset(analyzer, features, dataset,
     for feature in features:
         if feature is None:
             continue
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
         indexes.append(analyzer.feature_names.index(feature))
     if is_pandas:
         input_data = input_data.to_numpy()
