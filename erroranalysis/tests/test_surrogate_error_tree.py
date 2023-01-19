@@ -332,11 +332,12 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                 columns=tree_features_list + [TRUE_Y, ROW_INDEX])
 
     new_tree = error_analyzer.compute_error_tree_on_dataset(
-        tree_features, dataset,
+        tree_features, pd.concat([dataset, dataset]),
         max_depth=max_depth, num_leaves=num_leaves,
         min_child_samples=min_child_samples)
 
-    validate_error_tree(new_tree, len(dataset), min_child_samples)
+    validate_error_tree(new_tree, len(pd.concat([dataset, dataset])),
+                        min_child_samples)
 
 
 def validate_error_tree(tree, validation_data_len, min_child_samples):
