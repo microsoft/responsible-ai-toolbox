@@ -43,6 +43,7 @@ export interface IDatasetExplorerTabStyles {
   sidePanel: IStyle;
   chartAndType: IStyle;
   chart: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
@@ -163,6 +164,12 @@ export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorer
         position: "relative",
         top: "0px",
         width: "65px"
+      },
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "20px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
       }
     });
   };

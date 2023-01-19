@@ -57,6 +57,7 @@ export interface IDatasetExplorerTabState {
   indexSeries: number[];
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
+  isRevertButtonClicked?: boolean;
 }
 
 export class LargeDatasetExplorerTab extends React.Component<
@@ -80,7 +81,8 @@ export class LargeDatasetExplorerTab extends React.Component<
       indexSeries: [],
       isBubbleChartDataLoading: false,
       xSeries: [],
-      ySeries: []
+      ySeries: [],
+      isRevertButtonClicked: false
     };
   }
 
@@ -96,6 +98,16 @@ export class LargeDatasetExplorerTab extends React.Component<
   ): void {
     if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
       this.generateHighChartConfigOverride(0, this.state.chartProps);
+      return;
+    }
+    if (
+      this.state.isRevertButtonClicked &&
+      preState.isRevertButtonClicked !== this.state.isRevertButtonClicked
+    ) {
+      this.generateHighChartConfigOverride(
+        this.state.selectedCohortIndex,
+        this.state.chartProps
+      );
     }
   }
 
@@ -295,6 +307,8 @@ export class LargeDatasetExplorerTab extends React.Component<
                 hideColorValue={true}
                 dataset={this.context.dataset}
                 disabled={this.state.isBubbleChartDataLoading}
+                isBubbleChartRendered={this.state.isBubbleChartRendered}
+                setIsRevertButtonClicked={this.setIsRevertButtonClicked}
               />
             </Stack.Item>
           </Stack>
@@ -308,6 +322,15 @@ export class LargeDatasetExplorerTab extends React.Component<
       this.state.selectedCohortIndex,
       chartProps
     );
+  };
+
+  private setIsRevertButtonClicked = (status: boolean): void => {
+    this.setState({
+      isRevertButtonClicked: status,
+      indexSeries: [],
+      xSeries: [],
+      ySeries: []
+    });
   };
 
   private async generateHighChartConfigOverride(
@@ -361,6 +384,7 @@ export class LargeDatasetExplorerTab extends React.Component<
         const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
         let datasetBarConfigOverride;
         if (!hasAxisTypeChanged) {
+          console.log("!!hasAxisTypeChanged: ", hasAxisTypeChanged, chartProps);
           this.setState({
             isBubbleChartDataLoading: true
           });
@@ -401,10 +425,12 @@ export class LargeDatasetExplorerTab extends React.Component<
             highChartConfigOverride: datasetBarConfigOverride,
             selectedCohortIndex: cohortIndex,
             isBubbleChartRendered: true,
-            isBubbleChartDataLoading: false
+            isBubbleChartDataLoading: false,
+            isRevertButtonClicked: false
           });
           return;
         } else {
+          console.log("!!in else scatter: ", hasAxisTypeChanged, chartProps);
           datasetBarConfigOverride = getCounterfactualsScatterOption(
             this.state.xSeries,
             this.state.ySeries,
@@ -422,7 +448,8 @@ export class LargeDatasetExplorerTab extends React.Component<
             chartProps,
             highChartConfigOverride: datasetBarConfigOverride,
             selectedCohortIndex: cohortIndex,
-            isBubbleChartRendered: false
+            isBubbleChartRendered: false,
+            isRevertButtonClicked: false
           });
         }
       }

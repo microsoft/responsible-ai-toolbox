@@ -39,7 +39,9 @@ export interface ISidePanelProps {
   dataset: IDataset;
   hideColorValue?: boolean;
   disabled?: boolean;
+  isBubbleChartRendered?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
+  setIsRevertButtonClicked?: (status: boolean) => void;
 }
 interface ISidePanelState {
   colorDialogOpen: boolean;
@@ -137,12 +139,35 @@ export class SidePanel extends React.Component<
               </div>
             </Stack.Item>
           )}
+        {this.displayRevertButton() && (
+          <Stack.Item>
+            <DefaultButton
+              className={classNames.buttonStyle}
+              onClick={this.onRevertButtonClick}
+              text={localization.Counterfactuals.revertToBubbleChart}
+              title={localization.Counterfactuals.revertToBubbleChart}
+            />
+          </Stack.Item>
+        )}
       </Stack>
     );
   }
 
   private readonly setColorOpen = (): void => {
     this.setState({ colorDialogOpen: true });
+  };
+
+  private displayRevertButton(): boolean {
+    return (
+      ifEnableLargeData(this.context.dataset) &&
+      this.props.chartProps.chartType !== ChartTypes.Histogram &&
+      !this.props.isBubbleChartRendered
+    );
+  }
+
+  private onRevertButtonClick = (): void => {
+    this.props.setIsRevertButtonClicked &&
+      this.props.setIsRevertButtonClicked(true);
   };
 
   private onChartTypeChange = (
