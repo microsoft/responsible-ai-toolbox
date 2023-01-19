@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
 
@@ -16,6 +15,8 @@ interface IMarker {
   radius: number;
   symbol: string;
 }
+
+const maxSelection = 2;
 
 export function getCounterfactualsScatter(
   xSeries: number[],
@@ -98,12 +99,7 @@ function getMarker(
   colorToUse?: string
 ): IMarker {
   const selectionIndex = selectedPointsIndexes.indexOf(index);
-  const color = colorToUse
-    ? colorToUse
-    : (selectionIndex === -1
-    ? FluentUIStyles.fabricColorInactiveSeries
-    : FluentUIStyles.fluentUIColorPalette[selectionIndex]);
-
+  const color = getColor(selectionIndex, colorToUse);
   const marker = {
     fillColor: color,
     radius: 4,
@@ -112,16 +108,26 @@ function getMarker(
   return marker;
 }
 
+function getColor(selectionIndex: number, colorToUse?: string): string {
+  let color;
+  if (colorToUse) {
+    color = colorToUse;
+  } else if (selectionIndex === -1) {
+    color = FluentUIStyles.fabricColorInactiveSeries;
+  } else {
+    color = FluentUIStyles.fluentUIColorPalette[selectionIndex];
+  }
+
+  return color;
+}
+
 function getCustomPointMarker(
   customPoints: Array<{ [key: string]: any }>,
   index: number
 ): IMarker {
   return {
     fillColor: customPoints.map(
-      (_, i) =>
-        FluentUIStyles.fluentUIColorPalette[
-          WhatIfConstants.MAX_SELECTION + 1 + i
-        ]
+      (_, i) => FluentUIStyles.fluentUIColorPalette[maxSelection + 1 + i]
     )[index],
     radius: 4,
     symbol: "triangle"

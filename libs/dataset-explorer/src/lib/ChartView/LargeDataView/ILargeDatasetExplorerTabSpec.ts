@@ -20,7 +20,7 @@ export interface IDatasetExplorerTabState {
   isRevertButtonClicked?: boolean;
 }
 
-export function getInitialState() {
+export function getInitialState(): IDatasetExplorerTabState {
   return {
     bubbleChartErrorMessage: undefined,
     indexSeries: [],

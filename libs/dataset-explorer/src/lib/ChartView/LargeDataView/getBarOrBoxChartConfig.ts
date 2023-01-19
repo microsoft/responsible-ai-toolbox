@@ -76,47 +76,46 @@ export async function getBarOrBoxChartConfig(
       }
     };
     return datasetBarConfigOverride;
-  } 
-    const result = await requestDatasetAnalysisBoxChart(
-      filtersRelabeled,
-      compositeFiltersRelabeled,
-      jointDataset.metaDict[xAxisProperty].label,
-      jointDataset.metaDict[yAxisProperty].label,
-      5,
-      new AbortController().signal
-    );
+  }
+  const result = await requestDatasetAnalysisBoxChart(
+    filtersRelabeled,
+    compositeFiltersRelabeled,
+    jointDataset.metaDict[xAxisProperty].label,
+    jointDataset.metaDict[yAxisProperty].label,
+    5,
+    new AbortController().signal
+  );
 
-    const boxGroupData: any = [];
-    const theme = getTheme();
+  const boxGroupData: any = [];
+  const theme = getTheme();
 
-    let userFeatureName =
-      localization.ModelAssessment.ModelOverview.BoxPlot.boxPlotSeriesLabel;
-    if (yAxisProperty) {
-      userFeatureName = jointDataset.metaDict[yAxisProperty].label;
+  let userFeatureName =
+    localization.ModelAssessment.ModelOverview.BoxPlot.boxPlotSeriesLabel;
+  if (yAxisProperty) {
+    userFeatureName = jointDataset.metaDict[yAxisProperty].label;
+  }
+  boxGroupData.push({
+    color: undefined,
+    data: result.values,
+    fillColor: theme.semanticColors.inputBackgroundChecked,
+    name: userFeatureName
+  });
+  boxGroupData.push({
+    data: result.outliers,
+    marker: {
+      fillColor: getPrimaryChartColor(theme)
+    },
+    name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
+    type: "scatter"
+  });
+  const datasetBoxConfigOverride = {
+    chart: {
+      type: "boxplot"
+    },
+    series: boxGroupData,
+    xAxis: {
+      categories: result.buckets
     }
-    boxGroupData.push({
-      color: undefined,
-      data: result.values,
-      fillColor: theme.semanticColors.inputBackgroundChecked,
-      name: userFeatureName
-    });
-    boxGroupData.push({
-      data: result.outliers,
-      marker: {
-        fillColor: getPrimaryChartColor(theme)
-      },
-      name: localization.ModelAssessment.ModelOverview.BoxPlot.outlierLabel,
-      type: "scatter"
-    });
-    const datasetBoxConfigOverride = {
-      chart: {
-        type: "boxplot"
-      },
-      series: boxGroupData,
-      xAxis: {
-        categories: result.buckets
-      }
-    };
-    return datasetBoxConfigOverride;
-  
+  };
+  return datasetBoxConfigOverride;
 }

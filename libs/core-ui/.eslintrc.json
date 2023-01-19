@@ -13,9 +13,7 @@
       }
     },
     {
-      "files": [
-        "**/getBubbleChartOptions.ts"
-      ],
+      "files": ["**/getBubbleChartOptions.ts"],
       "rules": {
         "dot-notation": "off"
       }

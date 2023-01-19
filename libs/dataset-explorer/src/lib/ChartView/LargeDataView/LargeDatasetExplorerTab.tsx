@@ -205,19 +205,27 @@ export class LargeDatasetExplorerTab extends React.Component<
                     </div>
                   </Stack.Item>
                   <Stack.Item className={classNames.chartContainer}>
-                    {!canRenderChart && (
+                    {(!canRenderChart ||
+                      this.state.bubbleChartErrorMessage) && (
                       <MissingParametersPlaceholder>
-                        {localization.Interpret.ValidationErrors.datasizeError}
+                        {!canRenderChart
+                          ? localization.Interpret.ValidationErrors
+                              .datasizeError
+                          : localization.formatString(
+                              localization.Counterfactuals
+                                .BubbleChartFetchError,
+                              this.state.bubbleChartErrorMessage
+                            )}
                       </MissingParametersPlaceholder>
                     )}
-                    {this.state.isBubbleChartDataLoading ? (
-                      <LoadingSpinner
-                        label={localization.Counterfactuals.loading}
-                      />
-                    ) : (
+                    {!this.state.isBubbleChartDataLoading && canRenderChart ? (
                       <BasicHighChart
                         configOverride={this.state.highChartConfigOverride}
                         theme={getTheme()}
+                      />
+                    ) : (
+                      <LoadingSpinner
+                        label={localization.Counterfactuals.loading}
                       />
                     )}
                   </Stack.Item>
