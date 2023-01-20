@@ -29,6 +29,7 @@ from rai_test_utils.models.model_utils import (create_models_classification,
                                                create_models_regression)
 from rai_test_utils.models.sklearn import (create_kneighbors_classifier,
                                            create_titanic_pipeline)
+from raiutils.exceptions import UserConfigValidationException
 
 TOLERANCE = 1e-5
 BIN_THRESHOLD = MatrixParams.BIN_THRESHOLD
@@ -353,6 +354,17 @@ class TestMatrixFilter(object):
         feat1 = 'a'
         binned_data = bin_data(df, feat1, 2)
         assert binned_data.cat.categories[1].right == max_val
+
+    def test_matrix_filter_with_invalid_feature_names(self):
+        X_train, X_test, y_train, y_test, feature_names = create_housing_data()
+
+        # Test with invalid feature names
+        model_task = ModelTask.REGRESSION
+        err = "not found in dataset. Existing features"
+        with pytest.raises(UserConfigValidationException, match=err):
+            run_error_analyzer_on_models(X_train, y_train, X_test,
+                                         y_test, feature_names, model_task,
+                                         matrix_features=['invalid_feature'])
 
 
 def run_error_analyzer_on_models(X_train,
