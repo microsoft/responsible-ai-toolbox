@@ -13,15 +13,21 @@ import {
   IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
   instanceOfHighChart,
+  IScatterPoint,
   ISelectorConfig,
   ITelemetryEvent,
+  JointDataset,
   ModelAssessmentContext,
-  OtherChartTypes
+  OtherChartTypes,
+  TelemetryEventName,
+  TelemetryLevels
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 import { verticalComponentTokens } from "../IndividualFeatureImportanceView.styles";
+import { getLocalExplanationsFromSDK } from "./getOnScatterPlotPointClick";
 import { LargeIndividualFeatureImportanceChartArea } from "./LargeIndividualFeatureImportanceChartArea";
+import { LocalImportanceChart } from "./LocalImportanceChart";
 
 export interface ILargeIndividualFeatureImportanceViewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
@@ -38,6 +44,10 @@ export interface ILargeIndividualFeatureImportanceViewState {
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
   isRevertButtonClicked?: boolean;
+  selectedPointsIndexes: number[];
+  localExplanationsData: any;
+  isLocalExplanationsDataLoading?: boolean;
+  localExplanationsErrorMessage?: string;
 }
 
 export class LargeIndividualFeatureImportanceView extends React.Component<
@@ -59,7 +69,11 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       isRevertButtonClicked: false,
       selectedCohortIndex: 0,
       xSeries: [],
-      ySeries: []
+      ySeries: [],
+      selectedPointsIndexes: [],
+      localExplanationsData: undefined,
+      isLocalExplanationsDataLoading: false,
+      localExplanationsErrorMessage: undefined
     };
   }
 
@@ -92,6 +106,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
           onXSet={this.onXSet}
           onYSet={this.onYSet}
+        />
+        <LocalImportanceChart
+          rowNumber={this.state.selectedPointsIndexes[0]}
+          data={this.state.localExplanationsData}
+          isLocalExplanationsDataLoading={
+            this.state.isLocalExplanationsDataLoading
+          }
+          localExplanationsErrorMessage={
+            this.state.localExplanationsErrorMessage
+          }
         />
       </Stack>
     );
@@ -177,7 +201,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       true,
       false,
       this.context.requestBubblePlotData,
-      undefined,
+      this.selectPointFromChartLargeData,
       this.onBubbleClick,
       undefined
     );
@@ -299,5 +323,66 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.selectedCohortIndex,
       newProps
     );
+  };
+
+  private selectPointFromChartLargeData = async (
+    data: IScatterPoint
+  ): Promise<void> => {
+    const index = data.customData[JointDataset.IndexLabel];
+    const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
+    this.setLocalExplanationsData(absoluteIndex);
+    this.toggleSelectionOfPoint(index);
+    this.props.telemetryHook?.({
+      level: TelemetryLevels.ButtonClick,
+      type: TelemetryEventName.FeatureImportancesNewDatapointSelectedFromChart
+    });
+  };
+
+  private toggleSelectionOfPoint = (index?: number): void => {
+    if (index === undefined) {
+      return;
+    }
+    const indexOf = this.state.selectedPointsIndexes.indexOf(index);
+    let newSelections = [...this.state.selectedPointsIndexes];
+    if (indexOf === -1) {
+      newSelections = [index];
+    } else {
+      newSelections.splice(indexOf, 1);
+    }
+    this.setState({
+      selectedPointsIndexes: newSelections
+    });
+  };
+
+  private setLocalExplanationsData = async (
+    absoluteIndex?: number
+  ): Promise<void> => {
+    if (absoluteIndex) {
+      this.setState({
+        isLocalExplanationsDataLoading: true
+      });
+      const localExplanationsData = await getLocalExplanationsFromSDK(
+        absoluteIndex,
+        this.context.requestLocalExplanations
+      );
+      if (
+        typeof localExplanationsData === "object" &&
+        localExplanationsData &&
+        localExplanationsData["error"]
+      ) {
+        this.setState({
+          localExplanationsErrorMessage: localExplanationsData["error"]
+            .split(":")
+            .pop()
+        });
+        this.setState({
+          localExplanationsData: undefined
+        });
+        return;
+      }
+      this.setState({
+        localExplanationsData: localExplanationsData
+      });
+    }
   };
 }
