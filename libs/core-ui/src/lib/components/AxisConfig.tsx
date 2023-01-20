@@ -17,7 +17,7 @@ export interface IAxisConfigProps {
   canBin: boolean;
   mustBin: boolean;
   canDither: boolean;
-  allowTreatAsCategorical?: boolean;
+  allowTreatAsCategorical: boolean;
   hideDroppedFeatures?: boolean;
   onAccept: (newConfig: ISelectorConfig) => void;
 }

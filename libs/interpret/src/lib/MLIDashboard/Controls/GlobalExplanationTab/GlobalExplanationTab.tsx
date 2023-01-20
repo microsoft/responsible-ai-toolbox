@@ -75,6 +75,7 @@ interface IGlobalExplanationTabState {
   dependenceProps?: IGenericChartProps;
   cohortSeries: IGlobalSeries[];
   logarithmicScaling: boolean;
+  selectedCohort: Cohort;
 }
 
 export class GlobalExplanationTab extends React.PureComponent<
@@ -105,6 +106,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       chartType: ChartTypes.Bar,
       cohortSeries: [],
       logarithmicScaling: false,
+      selectedCohort: this.props.cohorts[initialCohortIndex],
       selectedCohortIndex: initialCohortIndex,
       seriesIsActive: this.props.cohorts.map(() => true),
       sortArray: [],
@@ -136,7 +138,7 @@ export class GlobalExplanationTab extends React.PureComponent<
       this.props.cohorts !== prevProps.cohorts ||
       this.props.selectedWeightVector !== prevProps.selectedWeightVector
     ) {
-      this.updateIncludedCohortsOnCohortEdit();
+      this.updateIncludedCohortsOnCohortEdit(prevProps.cohorts);
     }
   }
 
@@ -315,9 +317,7 @@ export class GlobalExplanationTab extends React.PureComponent<
                       <FeatureImportanceDependence
                         chartProps={this.state.dependenceProps}
                         cohortIndex={this.state.selectedCohortIndex}
-                        cohort={
-                          this.props.cohorts[this.state.selectedCohortIndex]
-                        }
+                        cohort={this.state.selectedCohort}
                         jointDataset={this.context.jointDataset}
                         logarithmicScaling={this.state.logarithmicScaling}
                         metadata={this.context.modelMetadata}
@@ -399,7 +399,11 @@ export class GlobalExplanationTab extends React.PureComponent<
     item?: IDropdownOption
   ): void => {
     if (item?.key !== undefined) {
-      this.setState({ selectedCohortIndex: item.key as number });
+      const idx = item.key as number;
+      this.setState({
+        selectedCohort: this.props.cohorts[idx],
+        selectedCohortIndex: idx
+      });
     }
   };
 
@@ -496,10 +500,26 @@ export class GlobalExplanationTab extends React.PureComponent<
     return this.state.cohortSeries.filter((_series, idx) => activeArray[idx]);
   }
 
-  private updateIncludedCohortsOnCohortEdit(): void {
+  private updateIncludedCohortsOnCohortEdit(prevCohorts: Cohort[]): void {
     let selectedCohortIndex = this.state.selectedCohortIndex;
-    if (selectedCohortIndex >= this.props.cohorts.length) {
-      selectedCohortIndex = 0;
+    // find the cohort idx that was removed
+    if (prevCohorts.length > this.props.cohorts.length) {
+      let idx = 0;
+      for (const cohort of prevCohorts) {
+        if (cohort === this.props.cohorts[idx]) {
+          idx++;
+        } else {
+          break;
+        }
+      }
+      // if the deleted cohort was earlier sequentially than the current selected index
+      // adjust the selected index. If the deleted cohort was the selected index, reset
+      // to 0
+      if (idx < selectedCohortIndex) {
+        selectedCohortIndex--;
+      } else if (idx === selectedCohortIndex) {
+        selectedCohortIndex = 0;
+      }
     }
     const seriesIsActive: boolean[] = this.props.cohorts.map(() => true);
     this.getGlobalSeries();
@@ -587,6 +607,7 @@ export class GlobalExplanationTab extends React.PureComponent<
     };
     this.setState({
       dependenceProps: chartProps,
+      selectedCohort: this.props.cohorts[cohortIndex],
       selectedCohortIndex: cohortIndex,
       selectedFeatureIndex: featureIndexBeforeDrop
     });
