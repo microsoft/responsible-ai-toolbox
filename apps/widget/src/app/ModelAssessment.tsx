@@ -43,6 +43,7 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
       | "requestGlobalExplanations"
       | "requestBubblePlotData"
       | "requestLocalCounterfactuals"
+      | "requestLocalExplanations"
       | "requestMetrics"
     > = {};
     if (this.props.config.baseUrl) {
@@ -191,6 +192,17 @@ export class ModelAssessment extends React.Component<IModelAssessmentProps> {
           this.props.config,
           [counterfactualsId, absoluteIndex],
           "/local_counterfactuals",
+          abortSignal
+        );
+      };
+      callBack.requestLocalExplanations = async (
+        absoluteIndex: number,
+        abortSignal: AbortSignal
+      ): Promise<any> => {
+        return callFlaskService(
+          this.props.config,
+          [absoluteIndex],
+          "/local_explanations",
           abortSignal
         );
       };

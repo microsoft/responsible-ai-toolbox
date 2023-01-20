@@ -123,6 +123,10 @@ export interface IModelAssessmentDashboardProps
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<ICounterfactualData>;
+  requestLocalExplanations?: (
+    absoluteIndex: number,
+    abortSignal: AbortSignal
+  ) => Promise<any>;
   localUrl?: string;
   requestForecast?: (
     request: any[],
