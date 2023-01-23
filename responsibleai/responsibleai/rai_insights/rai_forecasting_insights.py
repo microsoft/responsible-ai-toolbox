@@ -3,8 +3,10 @@
 
 """Defines the RAIForecastingInsights class."""
 
+import inspect
 import json
 import pickle
+import sys
 import warnings
 from pathlib import Path
 from typing import Any, List, Optional
@@ -14,7 +16,7 @@ import pandas as pd
 
 from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
-from raiutils.cohort import Cohort, CohortFilter, CohortFilterMethods
+from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiutils.data_processing import convert_to_list
 from raiutils.models import (
     is_forecaster, is_quantile_forecaster, Forecasting)
@@ -52,6 +54,18 @@ _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 _MODEL = "model"
 
+class ForecastingWrapper(object):
+    def __init__(self, forecast_method, forecast_quantiles_method=None):
+        self._forecast_method = forecast_method
+        self._forecast_quantiles_method = forecast_quantiles_method
+
+    def forecast(self, X):
+        return self._forecast_method(X)
+    
+    def forecast_quantiles(self, X, quantiles):
+        return self._forecast_quantiles_method(X, quantiles)
+
+
 
 class RAIForecastingInsights(RAIBaseInsights):
     """Defines the top-level Model Analysis API.
@@ -67,7 +81,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                  feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAIForecastingInsights object.
         :param model: The model to compute RAI insights for.
-            A model that implements predict or a function that accepts a 2d
+            A model that implements forecast or a function that accepts a 2d
             ndarray.
         :type model: object
         :param train: The training dataset including the label column.
@@ -118,16 +132,16 @@ class RAIForecastingInsights(RAIBaseInsights):
                 dataset=self._test_without_true_y)
 
         super(RAIForecastingInsights, self).__init__(
-            model, train, test, target_column, self.task_type,
+            self.model, train, test, target_column, self.task_type,
             serializer)
 
-        if is_forecaster(model):
-            # Cache predictions of the model
-            self.predict_output = model.predict(
+        if is_forecaster(self.model):
+            # Cache forecasts of the model
+            self.predict_output = self.model.forecast(
                 self._test_without_true_y)
             if is_quantile_forecaster:
-                self.quantile_predict_output = model.predict_quantiles(
-                    self._test_without_true_y)
+                self.quantile_predict_output = self.model.forecast_quantiles(
+                    self._test_without_true_y, [0.025, 0.975])
             else:
                 self.quantile_predict_output = None
         else:
@@ -159,7 +173,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         """Validate the inputs for the RAIForecastingInsights constructor.
 
         :param model: The model to compute RAI insights for.
-            A model that implements predict or a function that accepts a 2d
+            A model that implements forecast or a function that accepts a 2d
             ndarray.
         :type model: object
         :param train: The training dataset including the label column.
@@ -296,16 +310,33 @@ class RAIForecastingInsights(RAIBaseInsights):
                 small_test_features_before = list(small_test_data.columns)
 
                 # Run forecast() of the model
-                try:
-                    model.predict(small_test_data)
-                except Exception:
-                    raise UserConfigValidationException(
-                        'The model passed cannot be used for'
-                        ' getting predictions via predict()'
-                    )
-                self._validate_features_same(small_test_features_before,
-                                             small_test_data,
-                                             Forecasting.PREDICT)
+                self._validate_model_forecast(model, small_test_data, small_test_features_before)
+                
+                # Wrap model to make forecasting API compatible.
+                # Detect if the model is from AzureML as a special case.
+                model_package = sys.modules[inspect.getmodule(model).__name__.partition('.')[0]].__package__
+                if model_package == "azureml":
+                    def forecast(forecasting_model, X):
+                        # AzureML forecasting models return a tuple of (forecast, data)
+                        # but we only want to return the actual forecast.
+                        return forecasting_model.forecast(X)[0]
+                    def forecast_quantiles(forecasting_model, X, quantiles):
+                        # AzureML forecasting models don't take quantiles as an argument but
+                        # instead need to have it set on the model object.
+                        if type(quantiles) == list and len(quantiles) > 0 and \
+                                all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
+                            forecasting_model.quantiles = quantiles
+                            return forecasting_model.forecast_quantiles(X)
+                        else:
+                            raise ValueError("quantiles must be a list of floats between 0 and 1.")
+                    wrapper = ForecastingWrapper(
+                        lambda X: forecast(model, X),
+                        lambda X, quantiles: forecast_quantiles(model, X, quantiles))
+                    self._validate_model_forecast(wrapper, small_test_data, small_test_features_before)
+                    self.model = wrapper
+                else:
+                    self.model = model
+
         else:
             raise UserConfigValidationException(
                 "Unsupported data type for either train or test. "
@@ -323,6 +354,19 @@ class RAIForecastingInsights(RAIBaseInsights):
                 feature_metadata, feature_names, model)
             feature_metadata.validate(feature_names)
 
+    def _validate_model_forecast(self, model, small_test_data,
+                                 small_test_features_before):
+        try:
+            model.forecast(small_test_data)
+        except Exception:
+            raise UserConfigValidationException(
+                'The model passed cannot be used for'
+                ' getting forecasts via forecast()'
+            )
+        self._validate_features_same(small_test_features_before,
+                                     small_test_data,
+                                     Forecasting.FORECAST)
+
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
         """
@@ -339,10 +383,9 @@ class RAIForecastingInsights(RAIBaseInsights):
         small_train_features_after = list(small_train_data.columns)
         if small_train_features_before != small_train_features_after:
             raise UserConfigValidationException(
-                ('Calling model {} function modifies '
-                 'input dataset features. Please check if '
-                 'predict function is defined correctly.').format(function)
-            )
+                f'Calling model {function} function modifies '
+                'input dataset features. Please check if '
+                f'{function} function is defined correctly.')
 
     def _ensure_time_column_available(
             self,
@@ -461,16 +504,16 @@ class RAIForecastingInsights(RAIBaseInsights):
             raise ValueError("Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
             try:
-                predicted_y = self.model.predict(dataset)
+                predicted_y = self.model.forecast(dataset)
             except Exception as ex:
-                msg = "Model does not support predict method for given"
+                msg = "Model does not support forecast method for given"
                 "dataset type"
                 raise ValueError(msg) from ex
             try:
                 predicted_y = convert_to_list(predicted_y)
             except Exception as ex:
                 raise ValueError(
-                    "Model prediction output of unsupported type,") from ex
+                    "Model forecast output of unsupported type,") from ex
 
         if predicted_y is not None:
             dashboard_dataset.predicted_y = predicted_y
@@ -490,7 +533,6 @@ class RAIForecastingInsights(RAIBaseInsights):
                                  " dataset.")
             dashboard_dataset.features = list_dataset
 
-        # NOTICE THAT IT MUST BE %Y-%m-%d HERE, change this to be easier for the user
         try:
             dashboard_dataset.index = convert_to_list(
                 pd.to_datetime(
@@ -519,9 +561,9 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         if is_quantile_forecaster(self.model) and dataset is not None:
             try:
-                pred_quantiles = self.model.predict_quantiles(dataset)
+                pred_quantiles = self.model.forecast_quantiles(dataset, [0.025, 0.975])
             except Exception as ex:
-                raise ValueError("Model does not support predict_quantiles method"
+                raise ValueError("Model does not support forecast_quantiles method"
                                  " for given dataset type.") from ex
             try:
                 pred_quantiles = convert_to_list(pred_quantiles)
@@ -555,7 +597,7 @@ class RAIForecastingInsights(RAIBaseInsights):
         return cohort_list
 
     def _save_predictions(self, path):
-        """Save the predict() and predict_proba() output.
+        """Save the forecast() and forecast_quantiles() output.
 
         :param path: The directory path to save the RAIForecastingInsights to.
         :type path: str
@@ -673,7 +715,7 @@ class RAIForecastingInsights(RAIBaseInsights):
 
     @staticmethod
     def _load_predictions(inst, path):
-        """Load the predict() and predict_proba() output.
+        """Load the forecast() and forecast_quantiles() output.
 
         :param inst: RAIBaseInsights object instance.
         :type inst: RAIBaseInsights

@@ -10,7 +10,7 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiutils.cohort import Cohort
+from raiwidgets.cohort import Cohort
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -116,7 +116,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: prediction
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -150,7 +149,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: tree
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -185,7 +183,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: matrix
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -202,7 +199,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: scores
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -223,7 +219,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: whatif
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -240,7 +235,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: exp
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -268,7 +262,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: global_effects
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -296,7 +289,6 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: global_policy
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -333,12 +325,11 @@ class ResponsibleAIDashboardInput:
 
                 filtered_data_df[feature] = filtered_data_df[feature].map(transformation_func)
 
-            prediction = convert_to_list(self._analysis.model.predict(filtered_data_df), EXP_VIZ_ERR_MSG)
+            prediction = convert_to_list(self._analysis.model.forecast(filtered_data_df), EXP_VIZ_ERR_MSG)
             return {
                 WidgetRequestResponseConstants.data: prediction
             }
         except Exception as e:
-            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {

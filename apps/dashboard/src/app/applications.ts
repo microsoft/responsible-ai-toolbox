@@ -30,6 +30,8 @@ import { irisNoData } from "../interpret/__mock_data__/irisNoData";
 import { irisNoFeatures } from "../interpret/__mock_data__/irisNoFeatures";
 import { largeFeatureCount } from "../interpret/__mock_data__/largeFeatureCount";
 import { mockForecastingData } from "../model-assessment-forecasting/__mock_data__/mockForecastingData";
+import { mockForecastingDataSingleTimeSeries } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataSingleTimeSeries";
+import { mockForecastingDataNoFeatures } from "../model-assessment-forecasting/__mock_data__/mockForecastingDataNoFeatures";
 import {
   adultCensusWithFairnessDataset,
   adultCensusWithFairnessModelExplanationData,
@@ -245,7 +247,15 @@ export const applications: IApplications = <const>{
       restaurants: {
         classDimension: 1,
         dataset: mockForecastingData
-      } as IModelAssessmentDataSet
+      } as IModelAssessmentDataSet,
+      restaurantsSingleTimeSeries: {
+        classDimension: 1,
+        dataset: mockForecastingDataSingleTimeSeries
+      } as IModelAssessmentDataSet,
+      restaurantsNoFeatures: {
+        classDimension: 1,
+        dataset: mockForecastingDataNoFeatures
+      }
     },
     versions: { "1": 1, "2:Static-View": 2 }
   },

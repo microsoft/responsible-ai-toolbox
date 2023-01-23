@@ -1,15 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  Dropdown,
-  IDropdownOption,
-  PrimaryButton,
-  Stack,
-  Text
-} from "@fluentui/react";
+import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  featureColumnsExist,
   isAllDataErrorCohort,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
@@ -18,7 +13,7 @@ import React from "react";
 
 import { ForecastComparison } from "./Controls/ForecastComparison";
 import { TransformationCreationDialog } from "./Controls/TransformationCreationDialog";
-import { TransformationsTable } from "./Controls/TransformationsTable";
+import { WhatIfSection } from "./Controls/WhatIfSection";
 import { forecastingDashboardStyles } from "./ForecastingDashboard.styles";
 import { Transformation } from "./Interfaces/Transformation";
 
@@ -27,6 +22,8 @@ export class IForecastingDashboardProps {}
 export interface IForecastingDashboardState {
   transformations?: Map<number, Map<string, Transformation>>;
   isTransformationCreatorVisible: boolean;
+  timeSeriesOptions?: IDropdownOption[];
+  whatIfEnabled: boolean;
 }
 
 export class ForecastingDashboard extends React.Component<
@@ -41,8 +38,33 @@ export class ForecastingDashboard extends React.Component<
     super(props);
 
     this.state = {
-      isTransformationCreatorVisible: false
+      isTransformationCreatorVisible: false,
+      whatIfEnabled: true
     };
+  }
+
+  public componentDidMount(): void {
+    const timeSeries = this.context.errorCohorts.filter(
+      (cohort) => !isAllDataErrorCohort(cohort)
+    );
+    const dropdownOptions: IDropdownOption[] = timeSeries.map((cohort) => {
+      return {
+        key: cohort.cohort.getCohortID(),
+        text: cohort.cohort.name
+      };
+    });
+    // If there is only 1 time series, switch to the corresponding cohort.
+    if (timeSeries.length === 1) {
+      this.context.shiftErrorCohort(timeSeries[0]);
+    }
+    // If the dataset only has a time column and time series identifying columns
+    // there is nothing to transform with what-if.
+    const whatIfEnabled = featureColumnsExist(
+      this.context.dataset.feature_names,
+      this.context.dataset.feature_metadata
+    );
+
+    this.setState({ timeSeriesOptions: dropdownOptions, whatIfEnabled });
   }
 
   public render(): React.ReactNode {
@@ -50,28 +72,30 @@ export class ForecastingDashboard extends React.Component<
 
     if (
       this.context === undefined ||
-      this.context.baseErrorCohort === undefined
+      this.context.baseErrorCohort === undefined ||
+      this.state.timeSeriesOptions === undefined
     ) {
-      return;
+      return <></>;
     }
 
     // "All data" cohort selected, so no particular time series selected yet.
-    // special case: only 1 time series in dataset, needs to be handled! TODO
-    const noCohortSelected = isAllDataErrorCohort(this.context.baseErrorCohort);
-
-    const dropdownOptions: IDropdownOption[] = this.context.errorCohorts
-      .filter((cohort) => !isAllDataErrorCohort(cohort))
-      .map((cohort) => {
-        return {
-          key: cohort.cohort.getCohortID(),
-          text: cohort.cohort.name
-        };
-      });
+    // Special case: if there's only 1 time series then it is selected by default.
+    const noCohortSelected =
+      isAllDataErrorCohort(this.context.baseErrorCohort) &&
+      this.state.timeSeriesOptions.length > 1;
 
     const cohortTransformations =
       this.state.transformations?.get(
         this.context.baseErrorCohort.cohort.getCohortID()
       ) ?? new Map<string, Transformation>();
+
+    const description =
+      (this.state.whatIfEnabled
+        ? localization.Forecasting.whatIfDescription
+        : localization.Forecasting.forecastDescription) +
+      (this.state.timeSeriesOptions?.length > 1
+        ? " " + localization.Forecasting.whatIfChooseTimeSeries
+        : "");
 
     return (
       <>
@@ -81,53 +105,52 @@ export class ForecastingDashboard extends React.Component<
           id="ForecastingDashboard"
         >
           <Stack.Item className={classNames.topLevelDescriptionText}>
-            <Text>{localization.Forecasting.whatIfDescription}</Text>
+            <Text>{description}</Text>
           </Stack.Item>
           <Stack.Item>
-            <Dropdown
-              label={localization.Forecasting.timeSeries}
-              className={classNames.dropdown}
-              options={dropdownOptions}
-              onChange={this.onChangeCohort}
-              selectedKey={
-                isAllDataErrorCohort(this.context.baseErrorCohort)
-                  ? undefined
-                  : this.context.baseErrorCohort.cohort.getCohortID()
-              }
-              placeholder={localization.Forecasting.selectTimeSeries}
-            />
+            {this.state.timeSeriesOptions.length <= 1 ? (
+              <Text>
+                {localization.formatString(
+                  localization.Forecasting.singleTimeSeries,
+                  this.context.baseErrorCohort.cohort.name
+                )}
+              </Text>
+            ) : (
+              <Dropdown
+                label={localization.Forecasting.timeSeries}
+                className={classNames.dropdown}
+                options={this.state.timeSeriesOptions}
+                onChange={this.onChangeCohort}
+                selectedKey={
+                  isAllDataErrorCohort(this.context.baseErrorCohort)
+                    ? undefined
+                    : this.context.baseErrorCohort.cohort.getCohortID()
+                }
+                placeholder={localization.Forecasting.selectTimeSeries}
+              />
+            )}
           </Stack.Item>
           {!noCohortSelected && (
-            <>
-              <Stack.Item>
-                <PrimaryButton
-                  disabled={false}
-                  onClick={(): void => {
+            <Stack tokens={{ childrenGap: "20pt" }}>
+              {this.state.whatIfEnabled && (
+                <WhatIfSection
+                  transformations={cohortTransformations}
+                  onClickWhatIfButton={() => {
                     this.setState({ isTransformationCreatorVisible: true });
                   }}
-                  text={localization.Forecasting.TransformationCreation.title}
                 />
-              </Stack.Item>
-
-              <Stack tokens={{ childrenGap: "20pt" }}>
-                {cohortTransformations.size > 0 && (
-                  <Stack.Item>
-                    <TransformationsTable
-                      transformations={cohortTransformations}
-                    />
-                  </Stack.Item>
-                )}
-                <Stack.Item>
-                  <ForecastComparison transformations={cohortTransformations} />
-                </Stack.Item>
-              </Stack>
-            </>
+              )}
+              <ForecastComparison transformations={cohortTransformations} />
+            </Stack>
           )}
         </Stack>
         <TransformationCreationDialog
           addTransformation={this.addTransformation}
           transformations={cohortTransformations}
           isVisible={this.state.isTransformationCreatorVisible}
+          onDismiss={(): void =>
+            this.setState({ isTransformationCreatorVisible: false })
+          }
         />
       </>
     );

@@ -15,8 +15,8 @@ class SKLearn(object):
 class Forecasting(object):
     """Provide forecasting related constants."""
 
-    PREDICT = "predict"
-    PREDICT_QUANTILES = "predict_quantiles"
+    FORECAST = "forecast"
+    FORECAST_QUANTILES = "forecast_quantiles"
 
 
 def is_classifier(model):
@@ -37,8 +37,8 @@ def is_forecaster(model):
     :rtype: bool
     """
     return (model is not None and
-            hasattr(model, Forecasting.PREDICT) and
-            model.predict is not None)
+            hasattr(model, Forecasting.FORECAST) and
+            model.forecast is not None)
 
 
 def is_quantile_forecaster(model):
@@ -48,5 +48,5 @@ def is_quantile_forecaster(model):
     :rtype: bool
     """
     return (model is not None and
-            hasattr(model, Forecasting.PREDICT_QUANTILES) and
-            model.predict_quantiles is not None)
+            hasattr(model, Forecasting.FORECAST_QUANTILES) and
+            model.forecast_quantiles is not None)
