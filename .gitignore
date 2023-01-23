@@ -50,6 +50,7 @@ Thumbs.db
 **-checkpoint.ipynb
 **.egg-info/
 **-py3-none-any.whl
+!**/wheels/**-py3-none-any.whl
 **.tar.gz
 **.zip
 **.output.ipynb
