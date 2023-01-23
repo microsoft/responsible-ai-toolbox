@@ -145,6 +145,7 @@ export class CounterfactualComponent extends React.PureComponent<
       <Stack horizontal={false}>
         <CounterfactualChartWithLegend
           {...this.props}
+          data={this.state.counterfactualsData}
           chartProps={this.state.chartProps}
           selectedPointsIndexes={this.state.selectedPointsIndexes}
           indexSeries={this.state.indexSeries}
@@ -329,7 +330,9 @@ export class CounterfactualComponent extends React.PureComponent<
     const promise = getFetchPredictionPromise(
       fetchingReference,
       this.context.jointDataset,
-      this.props.invokeModel
+      this.props.invokeModel,
+      this.state.counterfactualsData.test_data,
+      ifEnableLargeData(this.context.dataset)
     );
     fetchingReference[JointDataset.PredictedYLabel] = undefined;
     this.setState(

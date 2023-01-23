@@ -394,7 +394,7 @@ export class ModelOverview extends React.Component<
                   >
                     {localization.formatString(
                       localization.ModelAssessment.ModelOverview
-                        .disaggregatedAnalysisBaseCohortDislaimer,
+                        .disaggregatedAnalysisBaseCohortDisclaimer,
                       this.context.baseErrorCohort.cohort.name
                     )}
                   </Text>
