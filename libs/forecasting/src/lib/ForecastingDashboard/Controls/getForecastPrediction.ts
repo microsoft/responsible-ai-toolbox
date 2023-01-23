@@ -16,15 +16,25 @@ export async function getForecastPrediction(
   if (requestForecast === undefined) {
     return;
   }
+  // Before sending the forecast request we need to convert
+  // column names from Data# into the original labels.
+  const labeledFilters = Cohort.getLabeledFilters(cohort.filters, jointDataset);
+  const labeledCompositeFilters = Cohort.getLabeledCompositeFilters(
+    cohort.compositeFilters,
+    jointDataset
+  );
   return await requestForecast(
     [
-      Cohort.getLabeledFilters(cohort.filters, jointDataset),
-      Cohort.getLabeledCompositeFilters(cohort.compositeFilters, jointDataset),
+      labeledFilters,
+      labeledCompositeFilters,
       transformation
         ? [
             transformation.operation.key,
-            transformation.feature.key,
-            transformation.value
+            jointDataset.metaDict[transformation.feature.key].label,
+            jointDataset.getRawValue(
+              transformation.value,
+              transformation.feature.key
+            )
           ]
         : []
     ],

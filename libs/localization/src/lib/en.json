@@ -114,7 +114,9 @@
       "apply": "Apply",
       "cancel": "Cancel",
       "title": "Switch Cohort",
-      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard."
+      "subText": "Select a cohort from the cohort list. Apply the cohort to the dashboard.",
+      "selectCohort": "Select a cohort",
+      "cohortList": "Cohort list"
     },
     "PreBuiltCohort": {
       "featureNameNotFound": "Feature name not found in the dataset",
@@ -1841,18 +1843,24 @@
   "Forecasting": {
     "target": "Target",
     "whatIfHeader": "What-if analysis",
-    "whatIfDescription": "What-if allows you to perturb features for any input and observe how the model's prediction changes. You can perturb features manually or specify the desired prediction (e.g., class label for a classifier) to see a list of closest data points to the original input that would lead to the desired prediction. Also known as prediction counterfactuals, you can use them for exploring the relationships learnt by the model; understanding important, necessary features for the model's predictions; or debug edge-cases for the model. To start, choose input points from the data table or scatter plot.",
+    "forecastHeader": "Forecast analysis",
+    "whatIfDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
+    "whatIfChooseTimeSeries": "To start, choose a time series from the options below.",
+    "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",
+    "singleTimeSeries": "The dataset contains only a single time series '{0}' which has been selected by default.",
     "trueY": "True Y",
     "baselinePrediction": "Baseline prediction",
+    "forecastComparisonHeader": "Compare What-if Forecasts",
     "forecastComparisonChartTitle": "Forecasts",
     "forecastComparisonChartTimeAxisLabel": "Time",
     "Transformations": {
-      "multiply": "Multiply",
-      "divide": "Divide",
-      "add": "Add",
-      "subtract": "Subtract"
+      "multiply": "multiply",
+      "divide": "divide",
+      "add": "add",
+      "subtract": "subtract",
+      "change": "change to"
     },
     "TransformationCreation": {
       "title": "Create what-if scenario",
@@ -1875,6 +1883,18 @@
       "methodColumnHeader": "Method",
       "divisionAndMultiplicationBy": "by ",
       "header": "What-if Forecasts ({0})"
+    },
+    "TimeSeries": {
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "cohortList": "Time series list",
+      "selectCohort": "Select a time series",
+      "shiftCohort": "Switch time series",
+      "shiftCohortDescription": "Select a time series from the time series list. Apply the time series to the dashboard."
+    },
+    "TimeSeriesSettings": {
+      "CohortSettingsDescription": "Time series are pre-defined based on time series identifying columns.",
+      "CohortSettingsTitle": "Time series settings"
     }
   }
 }
