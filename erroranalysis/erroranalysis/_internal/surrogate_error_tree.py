@@ -23,6 +23,7 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
 from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
+from raiutils.exceptions import UserConfigValidationException
 
 # imports required for pyspark support
 try:
@@ -142,6 +143,10 @@ def compute_error_tree_on_dataset(
     is_model_analyzer = hasattr(analyzer, MODEL)
     indexes = []
     for feature in features:
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
         indexes.append(analyzer.feature_names.index(feature))
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     dataset_sub_names = list(dataset_sub_names)

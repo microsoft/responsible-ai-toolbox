@@ -15,7 +15,9 @@
     "./.eslintrc/.eslintrc.import.eslintrc",
     "./.eslintrc/.eslintrc.typescript.eslintrc",
     "./.eslintrc/.eslintrc.unicorn.eslintrc",
-    "./.eslintrc/.eslintrc.custom.eslintrc"
+    "./.eslintrc/.eslintrc.custom.eslintrc",
+    "./.eslintrc/.eslintrc.worker.eslintrc",
+    "./.eslintrc/.eslintrc.type.eslintrc"
   ],
   "overrides": [
     {
