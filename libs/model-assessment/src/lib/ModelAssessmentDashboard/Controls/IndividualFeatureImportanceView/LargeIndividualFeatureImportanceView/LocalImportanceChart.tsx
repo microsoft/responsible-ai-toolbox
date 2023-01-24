@@ -1,19 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, Stack, Text } from "@fluentui/react";
+import { getTheme, Stack, Toggle } from "@fluentui/react";
 import {
   BasicHighChart,
-  DatasetTaskType,
   defaultModelAssessmentContext,
   getPrimaryChartColor,
-  ifEnableLargeData,
   LoadingSpinner,
   MissingParametersPlaceholder,
-  ModelAssessmentContext
+  ModelAssessmentContext,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
+import { ClassImportanceWeights } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
 
 export interface ILocalImportanceChartProps {
   rowNumber?: number;
@@ -21,19 +22,51 @@ export interface ILocalImportanceChartProps {
   theme?: string;
   isLocalExplanationsDataLoading?: boolean;
   localExplanationsErrorMessage?: string;
+  selectedWeightVector: WeightVectorOption;
+  weightOptions: WeightVectorOption[];
+  weightLabels: any;
+  onWeightChange: (option: WeightVectorOption) => void;
 }
 
+export interface ILocalImportanceChartState {
+  sortAbsolute: boolean;
+  sortedData: Array<number[]>;
+}
 export interface ILocalImportanceData {
   label: string;
   value: number;
 }
 
-export class LocalImportanceChart extends React.PureComponent<ILocalImportanceChartProps> {
+export class LocalImportanceChart extends React.PureComponent<
+  ILocalImportanceChartProps,
+  ILocalImportanceChartState
+> {
   public static contextType = ModelAssessmentContext;
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
+  public constructor(props: ILocalImportanceChartProps) {
+    super(props);
+
+    this.state = {
+      sortAbsolute: true,
+      sortedData: new Array(this.props.weightOptions.length)
+    };
+  }
+
+  // public componentDidMount(): void {
+  //   this.generateSortedData();
+  // }
+
+  public componentDidUpdate(prevProps: ILocalImportanceChartProps): void {
+    if (this.props.data !== prevProps.data) {
+      this.generateSortedData();
+    }
+  }
+
   public render(): React.ReactNode {
+    const classNames = localImportanceChartStyles();
+    console.log("!!weightLabels: ", this.props.weightLabels);
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
@@ -54,21 +87,8 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     }
 
     return (
-      <Stack horizontal={false} grow tokens={{ childrenGap: "l1" }}>
-        <Stack.Item>
-          <Text variant={"medium"} id="LocalImportanceDescription">
-            {localization.formatString(
-              localization.Counterfactuals.localImportanceDescription,
-              this.props.rowNumber,
-              this.getCurrentLabel(
-                this.context.dataset.task_type,
-                this.props.data?.desired_range,
-                this.props.data.desired_class
-              )
-            )}
-          </Text>
-        </Stack.Item>
-        <Stack.Item>
+      <Stack horizontal={true} grow tokens={{ childrenGap: "l1" }}>
+        <Stack.Item className={classNames.localImportanceChart}>
           {this.props.isLocalExplanationsDataLoading ? (
             <LoadingSpinner label={localization.Counterfactuals.loading} />
           ) : (
@@ -78,9 +98,80 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
             />
           )}
         </Stack.Item>
+        <Stack.Item className={classNames.localImportanceLegend}>
+          <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
+            <Stack.Item className={classNames.absoluteValueToggle}>
+              <Toggle
+                label={localization.Interpret.GlobalTab.absoluteValues}
+                inlineLabel
+                checked={this.state.sortAbsolute}
+                onChange={this.toggleSortAbsolute}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              <ClassImportanceWeights
+                onWeightChange={this.onWeightChange}
+                selectedWeightVector={this.props.selectedWeightVector}
+                weightOptions={this.props.weightOptions}
+                weightLabels={this.props.weightLabels}
+              />
+            </Stack.Item>
+          </Stack>
+        </Stack.Item>
       </Stack>
     );
   }
+
+  private generateSortedData(): any {
+    const weightValues = this.props.weightOptions.map(
+      (option) => this.props.weightLabels[option]
+    );
+    console.log("!!weiLa: ", weightValues);
+    let sortedData = [];
+    sortedData.push(this.getAverageAbsoluteValues());
+    sortedData.push(...this.addScores());
+    this.setState({ sortedData: sortedData });
+    console.log("!!sortedData: ", sortedData);
+  }
+
+  private getAverageAbsoluteValues(): void {
+    console.log(
+      "!!getAverageAbsoluteValues: ",
+      this.props.data?.precomputedExplanations?.localFeatureImportance
+        .scores[0][0]
+    );
+    const sortedScores =
+      this.props.data?.precomputedExplanations?.localFeatureImportance.scores[0][0].map(
+        (score: any) => Math.abs(score)
+      );
+    console.log("!!res: ", sortedScores);
+    return sortedScores;
+  }
+
+  private addScores(): any {
+    console.log(
+      "!!sortedData: ",
+      this.props.data?.precomputedExplanations?.localFeatureImportance
+        .scores[0],
+      typeof this.props.data?.precomputedExplanations?.localFeatureImportance
+        .scores[0]
+    );
+    let scores: number[][] = new Array(
+      this.props.data?.precomputedExplanations?.localFeatureImportance.scores[0].length
+    );
+    this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
+      (score: any[]) => {
+        scores.push(score[0]);
+      }
+    );
+    // let sortedData: ISortedData[] = [];
+    // scores.forEach((sc: any) => {
+    //   sortedData.push(sc);
+    // });
+    console.log("!!addScores: ", scores);
+    return scores.filter((s) => s);
+  }
+
   private getLocalImportanceBarOptions(): any {
     const sortedData = this.getSortedData();
     const x = sortedData.map((d) => d.label);
@@ -116,31 +207,48 @@ export class LocalImportanceChart extends React.PureComponent<ILocalImportanceCh
     if (this.props.rowNumber === undefined) {
       return data;
     }
-    const localImportanceData = ifEnableLargeData(this.context.dataset)
-      ? this.props.data?.local_importance?.[0]
-      : this.props.data?.local_importance?.[this.props.rowNumber];
-    if (!localImportanceData) {
+
+    console.log(
+      "!!data: ",
+      this.state.sortedData,
+      this.props.selectedWeightVector,
+      this.props.weightLabels,
+      this.props.weightOptions
+    );
+    const localExplanationsData =
+      this.state.sortedData[
+        this.props.weightLabels[this.props.selectedWeightVector]
+      ];
+    if (!localExplanationsData) {
       return data;
     }
-    this.props.data.feature_names.forEach((f: any, index: string | number) => {
-      data.push({
-        label: f,
-        value: localImportanceData[index] || -Infinity
-      });
-    });
+    this.props.data.precomputedExplanations.globalFeatureImportance.feature_list.forEach(
+      (f: any, index: string | number) => {
+        data.push({
+          label: f,
+          value: localExplanationsData[index] || -Infinity
+        });
+      }
+    );
     data.sort((d1, d2) => d2.value - d1.value);
     return data;
   }
 
-  private getCurrentLabel(
-    taskType: DatasetTaskType,
-    desiredRange?: [number, number],
-    desiredClass?: string
-  ): string {
-    if (taskType === DatasetTaskType.Regression) {
-      return `[${desiredRange}]`;
+  private toggleSortAbsolute = (
+    _event: React.MouseEvent<HTMLElement, MouseEvent>,
+    checked?: boolean | undefined
+  ): void => {
+    if (checked !== undefined) {
+      // const sortArray = this.getSortedArray(
+      //   this.state.sortingSeriesIndex,
+      //   checked
+      // );
+      this.setState({ sortAbsolute: checked });
     }
+  };
 
-    return desiredClass || "";
-  }
+  private onWeightChange = (option: WeightVectorOption): void => {
+    // add logic to update plot
+    this.props.onWeightChange(option);
+  };
 }

@@ -4,6 +4,7 @@
 import { Stack } from "@fluentui/react";
 import {
   calculateBubblePlotDataFromErrorCohort,
+  ChartTypes,
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
   getScatterOption,
@@ -20,7 +21,8 @@ import {
   ModelAssessmentContext,
   OtherChartTypes,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  WeightVectorOption
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
@@ -31,6 +33,10 @@ import { LocalImportanceChart } from "./LocalImportanceChart";
 
 export interface ILargeIndividualFeatureImportanceViewProps {
   telemetryHook?: (message: ITelemetryEvent) => void;
+  selectedWeightVector: WeightVectorOption;
+  weightOptions: WeightVectorOption[];
+  weightLabels: any;
+  onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface ILargeIndividualFeatureImportanceViewState {
@@ -86,6 +92,26 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
   }
 
+  public componentDidUpdate(
+    _preProp: ILargeIndividualFeatureImportanceViewProps,
+    preState: ILargeIndividualFeatureImportanceViewState
+  ): void {
+    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
+      this.generateHighChartConfigOverride(0, this.state.chartProps);
+      return;
+    }
+    if (
+      (this.state.isRevertButtonClicked &&
+        preState.isRevertButtonClicked !== this.state.isRevertButtonClicked) ||
+      this.state.selectedPointsIndexes !== preState.selectedPointsIndexes
+    ) {
+      this.generateHighChartConfigOverride(
+        this.state.selectedCohortIndex,
+        this.state.chartProps
+      );
+    }
+  }
+
   public render(): React.ReactNode {
     if (
       this.state.highChartConfigOverride === undefined ||
@@ -116,6 +142,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           localExplanationsErrorMessage={
             this.state.localExplanationsErrorMessage
           }
+          selectedWeightVector={this.props.selectedWeightVector}
+          onWeightChange={this.props.onWeightChange}
+          weightOptions={this.props.weightOptions}
+          weightLabels={this.props.weightLabels}
         />
       </Stack>
     );
@@ -133,12 +163,14 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         } else {
           this.updateScatterPlotData(chartProps, cohortIndex);
         }
+      } else if (chartProps.chartType === ChartTypes.Scatter) {
+        this.updateScatterPlotData(chartProps, cohortIndex);
+      } else {
+        this.setState({
+          chartProps,
+          selectedCohortIndex: cohortIndex
+        });
       }
-    } else {
-      this.setState({
-        chartProps,
-        selectedCohortIndex: cohortIndex
-      });
     }
   }
 
@@ -216,12 +248,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.indexSeries,
       chartProps,
       this.context.jointDataset,
-      [],
+      this.state.selectedPointsIndexes,
       [],
       false,
       true,
       false,
-      undefined
+      this.selectPointFromChartLargeData
     );
   };
 
@@ -292,12 +324,18 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     ySeries: number[],
     indexSeries: number[]
   ): void => {
+    if (!this.state.chartProps) {
+      return;
+    }
+    const newProps = _.cloneDeep(this.state.chartProps);
+    newProps.chartType = ChartTypes.Scatter;
     this.setState({
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
       xSeries,
-      ySeries
+      ySeries,
+      chartProps: newProps
     });
   };
 
@@ -381,7 +419,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         return;
       }
       this.setState({
-        localExplanationsData: localExplanationsData
+        localExplanationsData: localExplanationsData,
+        isLocalExplanationsDataLoading: false
       });
     }
   };

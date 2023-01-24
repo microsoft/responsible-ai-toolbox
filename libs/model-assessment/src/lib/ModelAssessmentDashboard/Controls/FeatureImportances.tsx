@@ -137,6 +137,10 @@ export class FeatureImportancesTab extends React.PureComponent<
           ifEnableLargeData(this.context.dataset) && (
             <LargeIndividualFeatureImportanceView
               telemetryHook={this.props.telemetryHook}
+              selectedWeightVector={this.props.selectedWeightVector}
+              onWeightChange={this.props.onWeightVectorChange}
+              weightOptions={this.props.weightVectorOptions}
+              weightLabels={this.props.weightVectorLabels}
             />
           )}
       </Stack>
