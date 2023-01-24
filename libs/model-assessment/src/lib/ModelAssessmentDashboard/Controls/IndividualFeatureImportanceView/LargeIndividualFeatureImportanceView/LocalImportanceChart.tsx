@@ -30,7 +30,7 @@ export interface ILocalImportanceChartProps {
 
 export interface ILocalImportanceChartState {
   sortAbsolute: boolean;
-  sortedData: Array<number[]>;
+  sortedData: Array<{ [key: string]: number[] }>;
 }
 export interface ILocalImportanceData {
   label: string;
@@ -54,12 +54,23 @@ export class LocalImportanceChart extends React.PureComponent<
     };
   }
 
-  // public componentDidMount(): void {
-  //   this.generateSortedData();
-  // }
+  public componentDidMount(): void {
+    this.generateSortedData();
+  }
 
   public componentDidUpdate(prevProps: ILocalImportanceChartProps): void {
-    if (this.props.data !== prevProps.data) {
+    console.log(
+      "!!didUpdate ",
+      prevProps.data,
+      this.props.data,
+      this.props.data !== prevProps.data
+    );
+    if (
+      this.props.data !== prevProps.data ||
+      (!this.props.isLocalExplanationsDataLoading &&
+        this.props.isLocalExplanationsDataLoading !==
+          prevProps.isLocalExplanationsDataLoading)
+    ) {
       this.generateSortedData();
     }
   }
@@ -126,9 +137,11 @@ export class LocalImportanceChart extends React.PureComponent<
     const weightValues = this.props.weightOptions.map(
       (option) => this.props.weightLabels[option]
     );
-    console.log("!!weiLa: ", weightValues);
+    console.log("!!in generateSortedData: ", weightValues);
     let sortedData = [];
-    sortedData.push(this.getAverageAbsoluteValues());
+    sortedData.push({
+      [this.props.weightOptions[0]]: this.getAverageAbsoluteValues()
+    });
     sortedData.push(...this.addScores());
     this.setState({ sortedData: sortedData });
     console.log("!!sortedData: ", sortedData);
@@ -149,25 +162,14 @@ export class LocalImportanceChart extends React.PureComponent<
   }
 
   private addScores(): any {
-    console.log(
-      "!!sortedData: ",
-      this.props.data?.precomputedExplanations?.localFeatureImportance
-        .scores[0],
-      typeof this.props.data?.precomputedExplanations?.localFeatureImportance
-        .scores[0]
-    );
-    let scores: number[][] = new Array(
-      this.props.data?.precomputedExplanations?.localFeatureImportance.scores[0].length
+    let scores: Array<{ [key: string]: number[] }> = new Array(
+      this.props.data?.precomputedExplanations?.localFeatureImportance.scores.length
     );
     this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
-      (score: any[]) => {
-        scores.push(score[0]);
+      (score: any[], index: number) => {
+        scores.push({ [this.props.weightOptions[index + 1]]: score[0] });
       }
     );
-    // let sortedData: ISortedData[] = [];
-    // scores.forEach((sc: any) => {
-    //   sortedData.push(sc);
-    // });
     console.log("!!addScores: ", scores);
     return scores.filter((s) => s);
   }
@@ -202,6 +204,23 @@ export class LocalImportanceChart extends React.PureComponent<
       }
     };
   }
+
+  private findValue(sortedData: any, keyToFind: string): number[] | undefined {
+    const sortedDataTemp: Array<{ [key: string]: number[] }> = sortedData;
+    let valToReturn: number[] | undefined;
+    for (let data of sortedDataTemp) {
+      Object.entries(data).find(([key, val]) => {
+        if (key === keyToFind.toString()) {
+          valToReturn = val;
+        }
+      });
+      if (valToReturn) {
+        break;
+      }
+    }
+    return valToReturn;
+  }
+
   private getSortedData(): ILocalImportanceData[] {
     const data: ILocalImportanceData[] = [];
     if (this.props.rowNumber === undefined) {
@@ -215,10 +234,14 @@ export class LocalImportanceChart extends React.PureComponent<
       this.props.weightLabels,
       this.props.weightOptions
     );
-    const localExplanationsData =
-      this.state.sortedData[
-        this.props.weightLabels[this.props.selectedWeightVector]
-      ];
+
+    const localExplanationsData = this.findValue(
+      this.state.sortedData,
+      this.props.selectedWeightVector as string
+    );
+
+    console.log("!!localExplanationsData: ", localExplanationsData);
+
     if (!localExplanationsData) {
       return data;
     }

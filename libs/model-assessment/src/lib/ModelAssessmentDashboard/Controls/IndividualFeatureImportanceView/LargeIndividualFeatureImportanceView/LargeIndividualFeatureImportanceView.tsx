@@ -411,9 +411,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         this.setState({
           localExplanationsErrorMessage: localExplanationsData["error"]
             .split(":")
-            .pop()
-        });
-        this.setState({
+            .pop(),
           localExplanationsData: undefined
         });
         return;
