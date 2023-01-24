@@ -140,23 +140,26 @@ export class LocalImportanceChart extends React.PureComponent<
     console.log("!!in generateSortedData: ", weightValues);
     let sortedData = [];
     sortedData.push({
-      [this.props.weightOptions[0]]: this.getAverageAbsoluteValues()
+      [this.props.weightOptions[0]]: this.getAbsoluteValues(
+        this.props.data?.precomputedExplanations?.localFeatureImportance
+          .scores[0][0]
+      )
     });
     sortedData.push(...this.addScores());
     this.setState({ sortedData: sortedData });
     console.log("!!sortedData: ", sortedData);
   }
 
-  private getAverageAbsoluteValues(): void {
+  private getAbsoluteValues(values?: number[]): number[] | undefined {
     console.log(
       "!!getAverageAbsoluteValues: ",
       this.props.data?.precomputedExplanations?.localFeatureImportance
         .scores[0][0]
     );
-    const sortedScores =
-      this.props.data?.precomputedExplanations?.localFeatureImportance.scores[0][0].map(
-        (score: any) => Math.abs(score)
-      );
+    if (!values) {
+      return values;
+    }
+    const sortedScores = values.map((score: any) => Math.abs(score));
     console.log("!!res: ", sortedScores);
     return sortedScores;
   }
@@ -240,16 +243,20 @@ export class LocalImportanceChart extends React.PureComponent<
       this.props.selectedWeightVector as string
     );
 
+    const sortedLocalExplanationsData = this.state.sortAbsolute
+      ? this.getAbsoluteValues(localExplanationsData)
+      : localExplanationsData;
+
     console.log("!!localExplanationsData: ", localExplanationsData);
 
-    if (!localExplanationsData) {
+    if (!sortedLocalExplanationsData) {
       return data;
     }
     this.props.data.precomputedExplanations.globalFeatureImportance.feature_list.forEach(
       (f: any, index: string | number) => {
         data.push({
           label: f,
-          value: localExplanationsData[index] || -Infinity
+          value: sortedLocalExplanationsData[index] || -Infinity
         });
       }
     );
