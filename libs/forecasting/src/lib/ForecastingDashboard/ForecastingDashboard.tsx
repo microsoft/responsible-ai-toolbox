@@ -89,13 +89,7 @@ export class ForecastingDashboard extends React.Component<
         this.context.baseErrorCohort.cohort.getCohortID()
       ) ?? new Map<string, Transformation>();
 
-    const description =
-      (this.state.whatIfEnabled
-        ? localization.Forecasting.whatIfDescription
-        : localization.Forecasting.forecastDescription) +
-      (this.state.timeSeriesOptions?.length > 1
-        ? ` ${  localization.Forecasting.whatIfChooseTimeSeries}`
-        : "");
+    const description = this.getDescription();
 
     return (
       <>
@@ -155,6 +149,19 @@ export class ForecastingDashboard extends React.Component<
       </>
     );
   }
+
+  private getDescription = (): string => {
+    let description = this.state.whatIfEnabled
+      ? localization.Forecasting.whatIfDescription
+      : localization.Forecasting.forecastDescription;
+    if (
+      this.state.timeSeriesOptions &&
+      this.state.timeSeriesOptions.length > 1
+    ) {
+      description += ` ${localization.Forecasting.whatIfChooseTimeSeries}`;
+    }
+    return description;
+  };
 
   private onChangeCohort = (
     _event: React.FormEvent<HTMLDivElement>,
