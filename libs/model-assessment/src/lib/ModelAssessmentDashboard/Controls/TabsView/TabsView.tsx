@@ -20,7 +20,8 @@ import {
   IModelAssessmentContext,
   IsClassifier,
   DatasetTaskType,
-  isAllDataErrorCohort
+  isAllDataErrorCohort,
+  featureColumnsExist
 } from "@responsible-ai/core-ui";
 import { CounterfactualsTab } from "@responsible-ai/counterfactuals";
 import {
@@ -193,7 +194,12 @@ export class TabsView extends React.PureComponent<
                     className={classNames.sectionHeader}
                     id="forecastingHeader"
                   >
-                    {localization.Forecasting.whatIfHeader}
+                    {featureColumnsExist(
+                      this.context.dataset.feature_names,
+                      this.context.dataset.feature_metadata
+                    )
+                      ? localization.Forecasting.whatIfForecastingHeader
+                      : localization.Forecasting.forecastHeader}
                   </Text>
                   <ForecastingTab />
                 </>
