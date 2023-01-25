@@ -3,7 +3,7 @@
 
 export interface IFeatureMetaData {
   identity_feature_name?: string;
-  datetime_features?: string[];
+  time_column_name?: string;
   categorical_features?: string[];
   dropped_features?: string[];
   time_series_id_column_names?: string[];

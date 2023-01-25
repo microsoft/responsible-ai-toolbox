@@ -3,27 +3,24 @@
 
 import {
   Stack,
-  Text,
   Label,
   ComboBox,
   IComboBox,
-  IComboBoxOption,
-  SpinButton
+  IComboBoxOption
 } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  isTimeOrTimeSeriesIDColumn,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
-import {
-  Operation,
-  transformationOperations,
-  Feature,
-  isMultiplicationOrDivision
-} from "../Interfaces/Transformation";
+import { Operation, Feature } from "../Interfaces/Transformation";
+
+import { TransformationCreationCategorical } from "./TransformationCreationCategorical";
+import { TransformationCreationContinuous } from "./TransformationCreationContinuous";
 
 export interface ITransformationCreationProps {
   transformationName?: string;
@@ -48,8 +45,6 @@ export class TransformationCreation extends React.Component<
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  private transformationValueStep = 0.01;
-
   public constructor(props: ITransformationCreationProps) {
     super(props);
     this.state = { featureOptions: [] };
@@ -61,28 +56,16 @@ export class TransformationCreation extends React.Component<
         .map((featureName, idx) => {
           return { featureName, idx };
         })
-        .filter(({ featureName, idx }) => {
-          const columnMetaName = `Data${idx.toString()}`;
-          const columnMetadata =
-            this.context.jointDataset.metaDict[columnMetaName];
-          const isDatetimeFeature =
-            this.context.dataset.feature_metadata?.datetime_features?.includes(
-              featureName
-            ) ?? false;
-          const isTimeSeriesIdColumn =
-            this.context.dataset.feature_metadata?.time_series_id_column_names?.includes(
-              featureName
-            ) ?? false;
-          return (
-            !columnMetadata.isCategorical &&
-            !columnMetadata.treatAsCategorical &&
-            !isDatetimeFeature &&
-            !isTimeSeriesIdColumn
+        .filter(({ featureName }) => {
+          return !isTimeOrTimeSeriesIDColumn(
+            featureName,
+            this.context.dataset.feature_metadata
           );
         })
         .map(({ featureName, idx }) => {
+          const columnMetaName = `Data${idx.toString()}`;
           return {
-            key: `Data${idx.toString()}`,
+            key: columnMetaName,
             text: featureName
           } as IComboBoxOption;
         })
@@ -119,90 +102,52 @@ export class TransformationCreation extends React.Component<
             onChange={this.onChangeTransformationFeature}
           />
         </Stack.Item>
-        <Stack.Item>
-          <Label>
-            {
-              localization.Forecasting.TransformationCreation
-                .operationDropdownHeader
+        {this.isFeatureSelected() && this.isCategoricalFeature() && (
+          <TransformationCreationCategorical
+            transformationFeature={this.props.transformationFeature}
+            transformationValue={this.props.transformationValue}
+            onChangeTransformationValue={this.props.onChangeTransformationValue}
+            transformationValueErrorMessage={
+              this.props.transformationValueErrorMessage
             }
-          </Label>
-          <ComboBox
-            errorMessage={
-              this.props.transformationOperation === undefined
-                ? localization.Forecasting.TransformationCreation
-                    .operationInstructions
-                : undefined
-            }
-            options={transformationOperations.map((t) => {
-              return { key: t.key, text: t.displayName };
-            })}
-            selectedKey={this.props.transformationOperation?.key}
-            className={classNames.smallDropdown}
-            onChange={this.onChangeTransformationOperation}
           />
-        </Stack.Item>
-        {this.props.transformationOperation && (
-          <>
-            {isMultiplicationOrDivision(this.props.transformationOperation) && (
-              <Stack.Item tokens={{ padding: "36px 0 0 0" }}>
-                <Text>
-                  {
-                    localization.Forecasting.TransformationCreation
-                      .divisionAndMultiplicationBy
-                  }
-                </Text>
-              </Stack.Item>
-            )}
-            <Stack.Item>
-              <Label>
-                {
-                  localization.Forecasting.TransformationCreation
-                    .valueSpinButtonHeader
-                }
-              </Label>
-              <SpinButton
-                min={this.props.transformationOperation.minValue}
-                max={this.props.transformationOperation.maxValue}
-                step={this.transformationValueStep}
-                value={this.props.transformationValue.toString()}
-                className={classNames.smallDropdown}
-                onChange={this.onChangeTransformationValue}
-              />
-              {this.props.transformationValueErrorMessage && (
-                <div className={classNames.errorText}>
-                  <Text variant={"small"} className={classNames.errorText}>
-                    {this.props.transformationValueErrorMessage}
-                  </Text>
-                </div>
-              )}
-            </Stack.Item>
-          </>
+        )}
+        {this.isFeatureSelected() && !this.isCategoricalFeature() && (
+          <TransformationCreationContinuous
+            transformationFeature={this.props.transformationFeature}
+            transformationValue={this.props.transformationValue}
+            transformationOperation={this.props.transformationOperation}
+            onChangeTransformationValue={this.props.onChangeTransformationValue}
+            onChangeTransformationOperation={
+              this.props.onChangeTransformationOperation
+            }
+            transformationValueErrorMessage={
+              this.props.transformationValueErrorMessage
+            }
+          />
         )}
       </Stack>
     );
   }
 
-  private onChangeTransformationValue = (
-    _event: React.SyntheticEvent<HTMLElement>,
-    newValue?: string
-  ): void => {
-    if (newValue) {
-      this.props.onChangeTransformationValue(Number(newValue));
-    }
-  };
-
-  private onChangeTransformationOperation = (
-    _event: React.FormEvent<IComboBox>,
-    item?: IComboBoxOption
-  ): void => {
-    if (item) {
-      const transformationOperation = transformationOperations.find(
-        (op) => op.key === item.key
-      );
-      if (transformationOperation) {
-        this.props.onChangeTransformationOperation(transformationOperation);
+  private isCategoricalFeature = (): boolean => {
+    if (this.props.transformationFeature) {
+      const featureMeta =
+        this.context.jointDataset.metaDict[
+          this.props.transformationFeature.key
+        ];
+      if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
+        return true;
       }
     }
+    return false;
+  };
+
+  private isFeatureSelected = (): boolean => {
+    return (
+      this.props.transformationFeature !== undefined &&
+      this.context !== undefined
+    );
   };
 
   private onChangeTransformationFeature = (

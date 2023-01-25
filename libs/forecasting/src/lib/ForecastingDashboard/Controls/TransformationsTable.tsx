@@ -4,6 +4,7 @@
 import { DetailsList, SelectionMode, Stack, Text } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
+  JointDataset,
   ModelAssessmentContext
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
@@ -17,6 +18,7 @@ import {
 
 interface ITransformationsTableProps {
   transformations: Map<string, Transformation>;
+  jointDataset: JointDataset;
 }
 
 interface ITransformationsTableState {
@@ -43,7 +45,7 @@ export class TransformationsTable extends React.Component<
 
   public constructor(props: ITransformationsTableProps) {
     super(props);
-    this.state = { rows: this.calculateUpdatedTable() };
+    this.state = { rows: this.calculateUpdatedTable(this.props.jointDataset) };
   }
 
   public componentDidUpdate(): void {
@@ -61,7 +63,9 @@ export class TransformationsTable extends React.Component<
         ).length;
 
     if (didUpdate) {
-      this.setState({ rows: this.calculateUpdatedTable() });
+      this.setState({
+        rows: this.calculateUpdatedTable(this.props.jointDataset)
+      });
     }
   }
 
@@ -124,24 +128,41 @@ export class TransformationsTable extends React.Component<
     );
   }
 
-  public calculateUpdatedTable(): ITransformationRow[] {
-    const rows: ITransformationRow[] = [
-      ...this.props.transformations.entries()
-    ].map(([transformationName, transformation], index) => {
-      const method = `${transformation.feature.text} ${
-        transformation.operation.displayName
-      } ${
-        isMultiplicationOrDivision(transformation.operation)
-          ? localization.Forecasting.TransformationTable
-              .divisionAndMultiplicationBy
-          : ""
-      }${transformation.value.toString()}`;
-      return {
-        key: index.toString(),
-        method,
-        transformationName
-      };
-    });
+  public calculateUpdatedTable(
+    jointDataset: JointDataset
+  ): ITransformationRow[] {
+    const rows: ITransformationRow[] = [...this.props.transformations.entries()]
+      .map(([transformationName, transformation], index) => {
+        let value: string | number = transformation.value;
+        if (jointDataset.metaDict) {
+          const featureMeta = jointDataset.metaDict[transformation.feature.key];
+          if (
+            featureMeta.sortedCategoricalValues &&
+            (featureMeta.isCategorical || featureMeta.treatAsCategorical)
+          ) {
+            value = featureMeta.sortedCategoricalValues[value];
+          }
+          // example method strings:
+          // "Temperature add 5"
+          // "Temperature divide by 2.5" (incl. divisionAndMultiplicationBy)
+          // "Outdoor seating available change to no"
+          const method = `${transformation.feature.text} ${
+            transformation.operation.displayName
+          } ${
+            isMultiplicationOrDivision(transformation.operation)
+              ? localization.Forecasting.TransformationTable
+                  .divisionAndMultiplicationBy
+              : ""
+          }${value.toString()}`;
+          return {
+            key: index.toString(),
+            method,
+            transformationName
+          };
+        }
+        return undefined;
+      })
+      .filter((row) => row !== undefined) as ITransformationRow[];
     return rows;
   }
 }

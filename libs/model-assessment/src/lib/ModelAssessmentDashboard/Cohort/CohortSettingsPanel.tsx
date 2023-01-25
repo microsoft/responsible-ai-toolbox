@@ -3,6 +3,7 @@
 
 import { Panel, PanelType, Stack, Text } from "@fluentui/react";
 import {
+  DatasetTaskType,
   defaultModelAssessmentContext,
   IModelAssessmentContext,
   ModelAssessmentContext
@@ -26,11 +27,18 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
   public context: IModelAssessmentContext = defaultModelAssessmentContext;
 
   public render(): React.ReactNode {
+    let localizationBase;
+    if (
+      this.context &&
+      this.context.dataset.task_type === DatasetTaskType.Forecasting
+    ) {
+      localizationBase = localization.Forecasting.TimeSeriesSettings;
+    } else {
+      localizationBase = localization.ModelAssessment.CohortSettings;
+    }
     return (
       <Panel
-        headerText={
-          localization.ModelAssessment.CohortSettings.CohortSettingsTitle
-        }
+        headerText={localizationBase.CohortSettingsTitle}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
@@ -41,12 +49,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
       >
         <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
           <Stack.Item>
-            <Text>
-              {
-                localization.ModelAssessment.CohortSettings
-                  .CohortSettingsDescription
-              }
-            </Text>
+            <Text>{localizationBase.CohortSettingsDescription}</Text>
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: 25 }}>
