@@ -63,6 +63,7 @@
     "minimist": "^1.2.6",
     "moment": "^2.29.4",
     "plotly.js": "^1.48.0",
+    "pyodide": "^0.21.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-plotly.js": "^2.5.0",
@@ -135,10 +136,12 @@
     "node-fetch": "2.6.1",
     "prettier": "2.3.1",
     "prettier-plugin-packagejson": "2.2.5",
+    "raw-loader": "^4.0.2",
     "semver": "7.3.2",
     "serve": "11.3.2",
     "ts-jest": "27.0.3",
     "ts-node": "9.1.1",
-    "typescript": "4.3.5"
+    "typescript": "4.3.5",
+    "worker-loader": "^3.0.8"
   }
 }

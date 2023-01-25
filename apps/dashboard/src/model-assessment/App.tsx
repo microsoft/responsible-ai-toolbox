@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ITheme } from "@fluentui/react";
+import { ITheme, MessageBar, Stack, Text } from "@fluentui/react";
 import { ICausalWhatIfData, Metrics } from "@responsible-ai/core-ui";
 import { HelpMessageDict } from "@responsible-ai/error-analysis";
 import { Language } from "@responsible-ai/localization";
@@ -26,6 +26,9 @@ import {
   getJsonTreeWine
 } from "../error-analysis/utils";
 
+import ModelWorker from "./Model.worker";
+import { ModelWorkerMessageType } from "./ModelWorkerMessageTypes";
+
 interface IAppProps extends IModelAssessmentData {
   theme: ITheme;
   language: Language;
@@ -34,7 +37,16 @@ interface IAppProps extends IModelAssessmentData {
   featureFlights?: string[];
 }
 
-export class App extends React.Component<IAppProps> {
+interface IAppState {
+  requestPredictions?: (
+    request: any[],
+    abortSignal: AbortSignal
+  ) => Promise<any[]>;
+  messages: string[];
+  modelReady: boolean;
+}
+
+export class App extends React.Component<IAppProps, IAppState> {
   private messages: HelpMessageDict = {
     LocalExpAndTestReq: [{ displayText: "LocalExpAndTestReq", format: "text" }],
     LocalOrGlobalAndTestReq: [
@@ -43,6 +55,19 @@ export class App extends React.Component<IAppProps> {
     PredictorReq: [{ displayText: "PredictorReq", format: "text" }],
     TestReq: [{ displayText: "TestReq", format: "text" }]
   };
+  private worker: ModelWorker | undefined;
+  private requestPredictionPromise: Map<number, (value: any[]) => void>;
+  private requestPredictionPromiseId: number;
+  public constructor(props: IAppProps) {
+    super(props);
+    this.state = { messages: [], modelReady: false };
+    this.requestPredictionPromise = new Map();
+    this.requestPredictionPromiseId = 0;
+  }
+
+  public componentDidMount(): void {
+    this.loadPython();
+  }
 
   public render(): React.ReactNode {
     if (this.props.modelExplanationData) {
@@ -58,8 +83,8 @@ export class App extends React.Component<IAppProps> {
         localUrl: "https://www.bing.com/",
         requestCausalWhatIf: this.requestCausalWhatIf,
         requestMatrix: generateJsonMatrix(DatasetName.BreastCancer),
-        requestPredictions: !this.props.classDimension
-          ? undefined
+        requestPredictions: this.state.modelReady
+          ? this.requestPrediction
           : createPredictionsRequestGenerator(this.props.classDimension),
         stringParams: { contextualHelp: this.messages },
         theme: this.props.theme
@@ -125,8 +150,66 @@ export class App extends React.Component<IAppProps> {
       };
     }
 
-    return <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />;
+    return (
+      <Stack>
+        <MessageBar>
+          <Stack>
+            {this.state.messages.map((m, i) => (
+              <Text key={i}>{m}</Text>
+            ))}
+          </Stack>
+        </MessageBar>
+        <ModelAssessmentDashboard {...modelAssessmentDashboardProps} />
+      </Stack>
+    );
   }
+
+  private workerCallback = (mess: MessageEvent): void => {
+    const { type, message } = mess.data;
+    if (message) {
+      this.setState((prev) => ({
+        messages: [...prev.messages, message]
+      }));
+    }
+    if (type === ModelWorkerMessageType.Message) {
+      return;
+    }
+    if (type === ModelWorkerMessageType.Ready) {
+      this.setState({
+        modelReady: true
+      });
+    }
+    if (type === ModelWorkerMessageType.Predict) {
+      const { id, data } = mess.data;
+      const resolver = this.requestPredictionPromise.get(id);
+      this.requestPredictionPromise.delete(id);
+      resolver?.(JSON.parse(data));
+    }
+  };
+
+  private async loadPython(): Promise<void> {
+    this.worker = new ModelWorker();
+    this.worker.addEventListener("message", this.workerCallback);
+    this.worker.postMessage({
+      featureNames: this.props.dataset.feature_names,
+      features: this.props.dataset.features,
+      taskType: this.props.dataset.task_type,
+      trueY: this.props.dataset.true_y,
+      type: ModelWorkerMessageType.Init
+    });
+  }
+
+  private requestPrediction = (data: any[]): Promise<any[]> => {
+    return new Promise((resolver) => {
+      const id = this.requestPredictionPromiseId++;
+      this.requestPredictionPromise.set(id, resolver);
+      this.worker?.postMessage({
+        data,
+        id,
+        type: ModelWorkerMessageType.Predict
+      });
+    });
+  };
 
   private readonly requestCausalWhatIf = async (
     _id: string,

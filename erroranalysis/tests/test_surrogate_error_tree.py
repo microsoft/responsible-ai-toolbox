@@ -30,6 +30,7 @@ from rai_test_utils.models.model_utils import create_models_classification
 from rai_test_utils.models.sklearn import (
     create_kneighbors_classifier, create_sklearn_random_forest_regressor,
     create_titanic_pipeline)
+from raiutils.exceptions import UserConfigValidationException
 
 SIZE = 'size'
 PARENTID = 'parentId'
@@ -268,6 +269,16 @@ class TestSurrogateErrorTree(object):
         assert ('Column string_index of type string is incorrectly treated '
                 'as numeric with threshold value') in str(ve.value)
 
+    def test_surrogate_error_tree_with_invalid_feature_names(self):
+        X_train, X_test, y_train, y_test, feature_names, _ = create_iris_data()
+
+        model = create_kneighbors_classifier(X_train, y_train)
+        err = "not found in dataset. Existing features"
+        with pytest.raises(UserConfigValidationException, match=err):
+            run_error_analyzer(model, X_test, y_test, feature_names,
+                               AnalyzerType.MODEL,
+                               tree_features=['invalid_feature'])
+
 
 def run_error_analyzer(model, X_test, y_test, feature_names,
                        analyzer_type, categorical_features=None,
@@ -332,11 +343,12 @@ def run_error_analyzer(model, X_test, y_test, feature_names,
                 columns=tree_features_list + [TRUE_Y, ROW_INDEX])
 
     new_tree = error_analyzer.compute_error_tree_on_dataset(
-        tree_features, dataset,
+        tree_features, pd.concat([dataset, dataset]),
         max_depth=max_depth, num_leaves=num_leaves,
         min_child_samples=min_child_samples)
 
-    validate_error_tree(new_tree, len(dataset), min_child_samples)
+    validate_error_tree(new_tree, len(pd.concat([dataset, dataset])),
+                        min_child_samples)
 
 
 def validate_error_tree(tree, validation_data_len, min_child_samples):

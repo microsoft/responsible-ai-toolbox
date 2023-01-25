@@ -21,7 +21,9 @@ from erroranalysis._internal.constants import (DIFF, LEAF_INDEX, METHOD,
                                                precision_metrics,
                                                recall_metrics)
 from erroranalysis._internal.metrics import get_ordered_classes, metric_to_func
+from erroranalysis._internal.process_categoricals import process_categoricals
 from erroranalysis._internal.utils import is_spark
+from raiutils.exceptions import UserConfigValidationException
 
 # imports required for pyspark support
 try:
@@ -141,6 +143,10 @@ def compute_error_tree_on_dataset(
     is_model_analyzer = hasattr(analyzer, MODEL)
     indexes = []
     for feature in features:
+        if feature not in analyzer.feature_names:
+            msg = 'Feature {} not found in dataset. Existing features: {}'
+            raise UserConfigValidationException(
+                msg.format(feature, analyzer.feature_names))
         indexes.append(analyzer.feature_names.index(feature))
     dataset_sub_names = np.array(analyzer.feature_names)[np.array(indexes)]
     dataset_sub_names = list(dataset_sub_names)
@@ -314,8 +320,16 @@ def get_surrogate_booster_local(filtered_df, analyzer, is_model_analyzer,
 
     if analyzer.categorical_features:
         # Inplace replacement of columns
+        if len(input_data) != len(analyzer.string_indexed_data):
+            _, _, _, string_indexed_data = \
+                process_categoricals(
+                    all_feature_names=analyzer._feature_names,
+                    categorical_features=analyzer._categorical_features,
+                    dataset=input_data)
+        else:
+            string_indexed_data = analyzer.string_indexed_data
         for idx, c_i in enumerate(analyzer.categorical_indexes):
-            input_data[:, c_i] = analyzer.string_indexed_data[row_index, idx]
+            input_data[:, c_i] = string_indexed_data[row_index, idx]
     dataset_sub_features = input_data[:, indexes]
 
     categorical_info = get_categorical_info(analyzer,
