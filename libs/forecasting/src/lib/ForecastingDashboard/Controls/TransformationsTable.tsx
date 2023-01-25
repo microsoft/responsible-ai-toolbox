@@ -142,6 +142,10 @@ export class TransformationsTable extends React.Component<
           ) {
             value = featureMeta.sortedCategoricalValues[value];
           }
+          // example method strings:
+          // "Temperature add 5"
+          // "Temperature divide by 2.5" (incl. divisionAndMultiplicationBy)
+          // "Outdoor seating available change to no"
           const method = `${transformation.feature.text} ${
             transformation.operation.displayName
           } ${
