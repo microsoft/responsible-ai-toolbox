@@ -49,7 +49,7 @@ export interface ILargeIndividualFeatureImportanceViewState {
   indexSeries: number[];
   isBubbleChartDataLoading: boolean;
   bubbleChartErrorMessage?: string;
-  isRevertButtonClicked?: boolean;
+  isRevertButtonClicked: boolean;
   selectedPointsIndexes: number[];
   localExplanationsData: any;
   isLocalExplanationsDataLoading?: boolean;
@@ -113,12 +113,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   }
 
   public render(): React.ReactNode {
-    if (
-      this.state.highChartConfigOverride === undefined ||
-      this.state.chartProps === undefined
-    ) {
-      return <div />;
-    }
     return (
       <Stack
         tokens={verticalComponentTokens}
