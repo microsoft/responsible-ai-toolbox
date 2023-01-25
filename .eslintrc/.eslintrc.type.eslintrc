@@ -1,0 +1,11 @@
+{
+  "plugins": ["import"],
+  "overrides": [
+    {
+      "files": ["*.d.ts"],
+      "rules": {
+        "filenames/match-regex": ["error", ["^[A-z]+\\.d?$"]]
+      }
+    }
+  ]
+}

@@ -29,9 +29,9 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         current_outcome = [ri.test.head(1)["target"].values[0]]
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        post_data = (id, causal_whatif_test_data,
+        post_data = [id, causal_whatif_test_data,
                      treatment_feature, current_treatment_value,
-                     current_outcome)
+                     current_outcome]
         flask_server_prediction_output = dashboard_input.causal_whatif(
             post_data)
 
@@ -54,9 +54,9 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         current_outcome = [ri.test.head(1)["target"].values[0]]
 
         dashboard_input = ResponsibleAIDashboardInput(ri)
-        post_data = (id, causal_whatif_test_data,
+        post_data = [id, causal_whatif_test_data,
                      treatment_feature, current_treatment_value,
-                     current_outcome)
+                     current_outcome]
         flask_server_prediction_output = dashboard_input.causal_whatif(
             post_data)
 
@@ -81,7 +81,7 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = ri.causal.get()[0].id
-        post_data = (id, filters, [])
+        post_data = [id, filters, []]
 
         flask_server_prediction_output = \
             dashboard_input.get_global_causal_effects(
@@ -100,7 +100,7 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = "some_id_that_does_not_exist"
-        post_data = (id, [], [])
+        post_data = [id, [], []]
 
         flask_server_prediction_output = \
             dashboard_input.get_global_causal_effects(
@@ -127,7 +127,7 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = ri.causal.get()[0].id
-        post_data = (id, filters, [])
+        post_data = [id, filters, []]
 
         flask_server_prediction_output = \
             dashboard_input.get_global_causal_policy(
@@ -146,7 +146,7 @@ class TestResponsibleAIDashboardInputRegressionCausal(
         dashboard_input = ResponsibleAIDashboardInput(ri)
 
         id = "some_id_that_does_not_exist"
-        post_data = (id, [], [])
+        post_data = [id, [], []]
 
         flask_server_prediction_output = \
             dashboard_input.get_global_causal_policy(

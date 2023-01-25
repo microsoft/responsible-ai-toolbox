@@ -1,0 +1,13 @@
+{
+  "plugins": ["import"],
+  "overrides": [
+    {
+      "files": ["*.worker.ts"],
+      "rules": {
+        "import/no-default-export": "off",
+        "filenames/match-exported": "off",
+        "filenames/match-regex": ["error", ["^[A-z]+\\.worker?$"]]
+      }
+    }
+  ]
+}
