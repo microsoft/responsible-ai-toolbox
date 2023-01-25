@@ -86,10 +86,7 @@ export class App extends React.Component<IAppProps> {
             start = 10;
             end = 20;
           }
-          preds = this.props.dataset.predicted_y?.slice(
-            start,
-            end
-          ) as number[];
+          preds = this.props.dataset.predicted_y?.slice(start, end) as number[];
         }
         if (x[2].length === 0) {
           // return original predictions

@@ -36,6 +36,7 @@ export class TransformationCreationCategorical extends React.Component<ITransfor
     const classNames = forecastingDashboardStyles();
     let options = undefined;
     if (this.props.transformationFeature) {
+      // find all categorical values for the selected feature
       options = this.context.jointDataset.metaDict[
         this.props.transformationFeature.key
       ].sortedCategoricalValues?.map((value, index) => {

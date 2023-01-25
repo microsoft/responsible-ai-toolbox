@@ -7,6 +7,12 @@
       "rules": {}
     },
     {
+      "files": ["TabsView.tsx"],
+      "rules": {
+        "complexity": "warn"
+      }
+    },
+    {
       "files": [
         "ModelAssessmentDashboard.tsx",
         "ModelAssessmentDashboardState.ts",

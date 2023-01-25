@@ -86,7 +86,7 @@ export class TransformationCreationDialog extends React.Component<
           .scenarioNamingCollisionMessage;
     }
 
-    let transformationValueErrorMessage =
+    const transformationValueErrorMessage =
       this.getTransformationValueErrorMessage();
 
     let transformationCombinationErrorMessage = undefined;
@@ -214,6 +214,40 @@ export class TransformationCreationDialog extends React.Component<
     return undefined;
   }
 
+  private getTransformationValueErrorMessage(): string | undefined {
+    if (
+      this.state.transformationOperation &&
+      this.state.transformationFeature &&
+      this.context
+    ) {
+      const featureMeta =
+        this.context.jointDataset.metaDict[
+          this.state.transformationFeature.key
+        ];
+      if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
+        return undefined;
+      }
+      if (
+        this.state.transformationValue <
+          this.state.transformationOperation.minValue ||
+        this.state.transformationValue >
+          this.state.transformationOperation.maxValue ||
+        this.state.transformationOperation.excludedValues.includes(
+          this.state.transformationValue
+        )
+      ) {
+        return localization.formatString(
+          localization.Forecasting.TransformationCreation.valueErrorMessage,
+          this.state.transformationOperation.displayName,
+          this.state.transformationOperation.minValue,
+          this.state.transformationOperation.maxValue,
+          this.state.transformationOperation.excludedValues.toString()
+        );
+      }
+    }
+    return undefined;
+  }
+
   private onChangeTransformationName = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
@@ -239,11 +273,11 @@ export class TransformationCreationDialog extends React.Component<
       this.setState({
         transformationFeature: { key: item.key as string, text: item.text },
         transformationOperation: {
-          key: "change",
           displayName: localization.Forecasting.Transformations.change,
-          minValue: 0,
+          excludedValues: [],
+          key: "change",
           maxValue: 0,
-          excludedValues: []
+          minValue: 0
         } as Operation
       });
       return;

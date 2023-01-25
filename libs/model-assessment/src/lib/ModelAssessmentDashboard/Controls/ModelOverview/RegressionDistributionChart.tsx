@@ -131,7 +131,6 @@ export class RegressionDistributionChart extends React.Component<
     }
 
     if (this.state.targetOption === undefined) {
-      this.setState({ targetOption: targetOptions[0] });
       return React.Fragment;
     }
 

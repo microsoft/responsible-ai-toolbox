@@ -198,7 +198,7 @@ export class TabsView extends React.PureComponent<
                       this.context.dataset.feature_names,
                       this.context.dataset.feature_metadata
                     )
-                      ? localization.Forecasting.whatIfHeader
+                      ? localization.Forecasting.whatIfForecastingHeader
                       : localization.Forecasting.forecastHeader}
                   </Text>
                   <ForecastingTab />

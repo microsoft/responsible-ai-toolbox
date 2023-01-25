@@ -1842,10 +1842,10 @@
   },
   "Forecasting": {
     "target": "Target",
-    "whatIfHeader": "What-if analysis",
+    "whatIfForecastingHeader": "What-if analysis",
     "forecastHeader": "Forecast analysis",
-    "whatIfDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
-    "whatIfChooseTimeSeries": "To start, choose a time series from the options below.",
+    "whatIfForecastingDescription": "What-if allows you to perturb features for your entire time series and observe how the model's forecast changes.",
+    "whatIfForecastingChooseTimeSeries": "To start, choose a time series from the options below.",
     "forecastDescription": "Forecast analysis compares your model's forecast to the actual values of your time series.",
     "timeSeries": "Time series",
     "selectTimeSeries": "Select a time series.",

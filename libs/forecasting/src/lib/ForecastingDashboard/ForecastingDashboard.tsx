@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Dropdown, IDropdownOption, Stack, Text } from "@fluentui/react";
+import {
+  Dropdown,
+  IDropdownOption,
+  Spinner,
+  Stack,
+  Text
+} from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   featureColumnsExist,
@@ -75,7 +81,7 @@ export class ForecastingDashboard extends React.Component<
       this.context.baseErrorCohort === undefined ||
       this.state.timeSeriesOptions === undefined
     ) {
-      return <></>;
+      return <Spinner />;
     }
 
     // "All data" cohort selected, so no particular time series selected yet.
@@ -89,13 +95,7 @@ export class ForecastingDashboard extends React.Component<
         this.context.baseErrorCohort.cohort.getCohortID()
       ) ?? new Map<string, Transformation>();
 
-    const description =
-      (this.state.whatIfEnabled
-        ? localization.Forecasting.whatIfDescription
-        : localization.Forecasting.forecastDescription) +
-      (this.state.timeSeriesOptions?.length > 1
-        ? " " + localization.Forecasting.whatIfChooseTimeSeries
-        : "");
+    const description = this.getDescription();
 
     return (
       <>
@@ -135,7 +135,7 @@ export class ForecastingDashboard extends React.Component<
               {this.state.whatIfEnabled && (
                 <WhatIfSection
                   transformations={cohortTransformations}
-                  onClickWhatIfButton={() => {
+                  onClickWhatIfButton={(): void => {
                     this.setState({ isTransformationCreatorVisible: true });
                   }}
                 />
@@ -155,6 +155,19 @@ export class ForecastingDashboard extends React.Component<
       </>
     );
   }
+
+  private getDescription = (): string => {
+    let description = this.state.whatIfEnabled
+      ? localization.Forecasting.whatIfForecastingDescription
+      : localization.Forecasting.forecastDescription;
+    if (
+      this.state.timeSeriesOptions &&
+      this.state.timeSeriesOptions.length > 1
+    ) {
+      description += ` ${localization.Forecasting.whatIfForecastingChooseTimeSeries}`;
+    }
+    return description;
+  };
 
   private onChangeCohort = (
     _event: React.FormEvent<HTMLDivElement>,

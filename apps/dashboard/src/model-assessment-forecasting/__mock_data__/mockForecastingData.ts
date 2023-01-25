@@ -56,7 +56,7 @@ export const bobsSandwichesSandwich: IPreBuiltCohort = {
   name: "restaurant = Bob's sandwiches, city = Sandwich, MA"
 };
 
-const categorical_features = [
+const categoricalFeatures = [
   "restaurant",
   "city",
   "outdoor seating",
@@ -66,9 +66,9 @@ const categorical_features = [
 // Based on how much money is spent on ads and the daily outside temperature
 // predict the number of people dining at a restaurant on any given day.
 export const mockForecastingData: IDataset = {
-  categorical_features,
+  categorical_features: categoricalFeatures,
   feature_metadata: {
-    categorical_features,
+    categorical_features: categoricalFeatures,
     time_series_id_column_names: ["restaurant", "city"]
   },
   feature_names: [
@@ -81,8 +81,8 @@ export const mockForecastingData: IDataset = {
   ],
 
   features: [
-    [1.0, 56, "available", "regular", "Giorgio's pizzeria", "Boston, MA"],
-    [2.0, 65, "available", "special", "Giorgio's pizzeria", "Boston, MA"],
+    [1, 56, "available", "regular", "Giorgio's pizzeria", "Boston, MA"],
+    [2, 65, "available", "special", "Giorgio's pizzeria", "Boston, MA"],
     [1.3, 43, "unavailable", "none", "Giorgio's pizzeria", "Boston, MA"],
     [2.1, 55, "unavailable", "regular", "Giorgio's pizzeria", "Boston, MA"],
     [1.6, 70, "available", "regular", "Giorgio's pizzeria", "Boston, MA"],
@@ -101,7 +101,7 @@ export const mockForecastingData: IDataset = {
     [0.4, 76, "unavailable", "special", "Nonna's cannoli", "Boston, MA"],
     [0.3, 73, "unavailable", "none", "Nonna's cannoli", "Boston, MA"],
     [0.5, 61, "available", "regular", "Nonna's cannoli", "Boston, MA"],
-    [3.0, 27, "available", "regular", "Bob's sandwiches", "Sandwich, MA"],
+    [3, 27, "available", "regular", "Bob's sandwiches", "Sandwich, MA"],
     [2.5, 31, "unavailable", "regular", "Bob's sandwiches", "Sandwich, MA"],
     [2.7, 33, "unavailable", "regular", "Bob's sandwiches", "Sandwich, MA"],
     [3.9, 47, "available", "regular", "Bob's sandwiches", "Sandwich, MA"],
@@ -110,7 +110,7 @@ export const mockForecastingData: IDataset = {
     [1.9, 81, "available", "none", "Bob's sandwiches", "Sandwich, MA"],
     [1.8, 34, "unavailable", "regular", "Bob's sandwiches", "Sandwich, MA"],
     [3.4, 53, "unavailable", "special", "Bob's sandwiches", "Sandwich, MA"],
-    [3.0, 62, "available", "regular", "Bob's sandwiches", "Sandwich, MA"]
+    [3, 62, "available", "regular", "Bob's sandwiches", "Sandwich, MA"]
   ],
   index: [
     "10-10-2022",
