@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PrimaryButton, Stack } from "@fluentui/react";
+import { PrimaryButton, Spinner, Stack } from "@fluentui/react";
 import {
   defaultModelAssessmentContext,
   ModelAssessmentContext
@@ -23,16 +23,12 @@ export class WhatIfSection extends React.Component<IWhatIfSectionProps> {
   public context: React.ContextType<typeof ModelAssessmentContext> =
     defaultModelAssessmentContext;
 
-  public constructor(props: IWhatIfSectionProps) {
-    super(props);
-  }
-
   public render(): React.ReactNode {
     if (
       this.context === undefined ||
       this.context.baseErrorCohort === undefined
     ) {
-      return <></>;
+      return <Spinner />;
     }
 
     return (

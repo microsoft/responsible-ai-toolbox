@@ -425,10 +425,8 @@ export class JointDataset {
     k: string
   ): string | number | undefined => {
     const meta = this.metaDict[k];
-    if (v === undefined) {
-      return v;
-    }
     if (
+      v !== undefined &&
       (meta.isCategorical || meta?.treatAsCategorical) &&
       meta.sortedCategoricalValues
     ) {

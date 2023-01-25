@@ -38,9 +38,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
     }
     return (
       <Panel
-        headerText={
-          localizationBase.CohortSettingsTitle
-        }
+        headerText={localizationBase.CohortSettingsTitle}
         isOpen={this.props.isOpen}
         // You MUST provide this prop! Otherwise screen readers will just say "button" with no label.
         closeButtonAriaLabel="Close"
@@ -51,11 +49,7 @@ export class CohortSettingsPanel extends React.PureComponent<ICohortSettingsPane
       >
         <Stack horizontal={false} tokens={{ childrenGap: 20 }}>
           <Stack.Item>
-            <Text>
-              {
-                localizationBase.CohortSettingsDescription
-              }
-            </Text>
+            <Text>{localizationBase.CohortSettingsDescription}</Text>
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={{ childrenGap: 25 }}>

@@ -56,7 +56,7 @@ export const bobsSandwichesSandwich: IPreBuiltCohort = {
   name: "restaurant = Bob's sandwiches, city = Sandwich, MA"
 };
 
-const categorical_features = [
+const categoricalFeatures = [
   "restaurant",
   "city",
   "outdoor seating",
@@ -66,9 +66,9 @@ const categorical_features = [
 // Based on how much money is spent on ads and the daily outside temperature
 // predict the number of people dining at a restaurant on any given day.
 export const mockForecastingData: IDataset = {
-  categorical_features,
+  categorical_features: categoricalFeatures,
   feature_metadata: {
-    categorical_features,
+    categorical_features: categoricalFeatures,
     time_series_id_column_names: ["restaurant", "city"]
   },
   feature_names: [

@@ -182,7 +182,7 @@ export class TransformationCreationDialog extends React.Component<
     );
   }
 
-  getTransformationValueErrorMessage() {
+  private getTransformationValueErrorMessage(): string | undefined {
     if (
       this.state.transformationOperation &&
       this.state.transformationFeature &&
