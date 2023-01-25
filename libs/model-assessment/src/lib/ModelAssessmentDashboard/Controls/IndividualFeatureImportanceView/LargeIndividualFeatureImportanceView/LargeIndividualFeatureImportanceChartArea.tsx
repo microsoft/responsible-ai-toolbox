@@ -19,7 +19,7 @@ import React from "react";
 import { largeIndividualFeatureImportanceViewStyles } from "./LargeIndividualFeatureImportanceView.styles";
 
 export interface ILargeIndividualFeatureImportanceChartAreaProps {
-  chartProps: IGenericChartProps;
+  chartProps?: IGenericChartProps;
   isBubbleChartRendered?: boolean;
   highChartConfigOverride?: any;
   isBubbleChartDataLoading?: boolean;
@@ -49,13 +49,13 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
       ColumnCategories.Dataset,
       ColumnCategories.Outcome
     ];
-    if (chartProps.chartType !== ChartTypes.Scatter) {
+    if (chartProps?.chartType !== ChartTypes.Scatter) {
       yAxisCategories.push(ColumnCategories.None);
     }
     const isHistogramOrBoxChart =
-      chartProps.chartType === ChartTypes.Histogram ||
-      chartProps.chartType === ChartTypes.Box;
-    const isScatterChart = chartProps.chartType === ChartTypes.Scatter;
+      chartProps?.chartType === ChartTypes.Histogram ||
+      chartProps?.chartType === ChartTypes.Box;
+    const isScatterChart = chartProps?.chartType === ChartTypes.Scatter;
 
     return (
       <div className={classNames.chart}>
@@ -63,29 +63,31 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
           <Stack horizontal className={classNames.chartWithVertical}>
             <Stack.Item className={classNames.verticalAxis}>
               <div className={classNames.rotatedVerticalBox}>
-                <AxisConfig
-                  orderedGroupTitles={yAxisCategories}
-                  selectedColumn={chartProps.yAxis}
-                  canBin={false}
-                  mustBin={false}
-                  canDither={isScatterChart}
-                  allowTreatAsCategorical={isHistogramOrBoxChart}
-                  allowLogarithmicScaling={
-                    isHistogramOrBoxChart || !isBubbleChartRendered
-                  }
-                  onAccept={onYSet}
-                  buttonText={
-                    this.context.jointDataset.metaDict[
-                      chartProps.yAxis.property
-                    ].abbridgedLabel
-                  }
-                  buttonTitle={
-                    this.context.jointDataset.metaDict[
-                      chartProps.yAxis.property
-                    ].label
-                  }
-                  disabled={isBubbleChartDataLoading}
-                />
+                {chartProps && (
+                  <AxisConfig
+                    orderedGroupTitles={yAxisCategories}
+                    selectedColumn={chartProps.yAxis}
+                    canBin={false}
+                    mustBin={false}
+                    canDither={isScatterChart}
+                    allowTreatAsCategorical={isHistogramOrBoxChart}
+                    allowLogarithmicScaling={
+                      isHistogramOrBoxChart || !isBubbleChartRendered
+                    }
+                    onAccept={onYSet}
+                    buttonText={
+                      this.context.jointDataset.metaDict[
+                        chartProps.yAxis.property || ""
+                      ].abbridgedLabel
+                    }
+                    buttonTitle={
+                      this.context.jointDataset.metaDict[
+                        chartProps.yAxis.property || ""
+                      ].label
+                    }
+                    disabled={isBubbleChartDataLoading}
+                  />
+                )}
               </div>
             </Stack.Item>
             <Stack.Item className={classNames.chartContainer}>
@@ -109,31 +111,33 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
           </Stack>
         </Stack.Item>
         <div className={classNames.horizontalAxis}>
-          <AxisConfig
-            orderedGroupTitles={[
-              ColumnCategories.Index,
-              ColumnCategories.Dataset,
-              ColumnCategories.Outcome
-            ]}
-            selectedColumn={chartProps.xAxis}
-            canBin={isHistogramOrBoxChart}
-            mustBin={isHistogramOrBoxChart}
-            allowTreatAsCategorical={isHistogramOrBoxChart}
-            allowLogarithmicScaling={
-              isHistogramOrBoxChart || !isBubbleChartRendered
-            }
-            canDither={isScatterChart}
-            onAccept={onXSet}
-            buttonText={
-              this.context.jointDataset.metaDict[chartProps.xAxis.property]
-                .abbridgedLabel
-            }
-            buttonTitle={
-              this.context.jointDataset.metaDict[chartProps.xAxis.property]
-                .label
-            }
-            disabled={isBubbleChartDataLoading}
-          />
+          {chartProps && (
+            <AxisConfig
+              orderedGroupTitles={[
+                ColumnCategories.Index,
+                ColumnCategories.Dataset,
+                ColumnCategories.Outcome
+              ]}
+              selectedColumn={chartProps.xAxis}
+              canBin={isHistogramOrBoxChart}
+              mustBin={isHistogramOrBoxChart}
+              allowTreatAsCategorical={isHistogramOrBoxChart}
+              allowLogarithmicScaling={
+                isHistogramOrBoxChart || !isBubbleChartRendered
+              }
+              canDither={isScatterChart}
+              onAccept={onXSet}
+              buttonText={
+                this.context.jointDataset.metaDict[chartProps.xAxis.property]
+                  .abbridgedLabel
+              }
+              buttonTitle={
+                this.context.jointDataset.metaDict[chartProps.xAxis.property]
+                  .label
+              }
+              disabled={isBubbleChartDataLoading}
+            />
+          )}
         </div>
       </div>
     );
