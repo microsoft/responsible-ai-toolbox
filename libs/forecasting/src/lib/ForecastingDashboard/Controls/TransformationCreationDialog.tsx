@@ -181,10 +181,12 @@ export class TransformationCreationDialog extends React.Component<
       </Dialog>
     );
   }
+
   getTransformationValueErrorMessage() {
     if (
       this.state.transformationOperation &&
-      this.state.transformationFeature
+      this.state.transformationFeature &&
+      this.context
     ) {
       const featureMeta =
         this.context.jointDataset.metaDict[
