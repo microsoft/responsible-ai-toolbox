@@ -364,18 +364,23 @@ export class LargeDatasetExplorerTab extends React.Component<
   private setErrorStatus = (
     chartProps: IGenericChartProps,
     cohortIndex: number,
-    datasetBarConfigOverride: any
+    datasetBarConfigOverride:
+      | IHighchartBubbleSDKClusterData
+      | IHighchartsConfig
+      | undefined
   ): void => {
-    this.setState({
-      bubbleChartErrorMessage: datasetBarConfigOverride
-        .toString()
-        .split(":")
-        .pop(),
-      chartProps,
-      highChartConfigOverride: undefined,
-      isBubbleChartDataLoading: false,
-      selectedCohortIndex: cohortIndex
-    });
+    if (datasetBarConfigOverride) {
+      this.setState({
+        bubbleChartErrorMessage: datasetBarConfigOverride
+          .toString()
+          .split(":")
+          .pop(),
+        chartProps,
+        highChartConfigOverride: undefined,
+        isBubbleChartDataLoading: false,
+        selectedCohortIndex: cohortIndex
+      });
+    }
   };
 
   private onBubbleClick = (

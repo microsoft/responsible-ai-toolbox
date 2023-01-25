@@ -32,7 +32,7 @@ export async function getBarOrBoxChartConfig(
     numBins: number,
     abortSignal: AbortSignal
   ) => Promise<any>
-): Promise<any> {
+): Promise<unknown> {
   const filtersRelabeled = Cohort.getLabeledFilters(
     dataCohort.filters,
     jointDataset
@@ -42,18 +42,14 @@ export async function getBarOrBoxChartConfig(
     jointDataset
   );
 
-  if (
+  const treatYAsCategorical =
     jointDataset.metaDict[yAxisProperty].isCategorical ||
-    jointDataset.metaDict[yAxisProperty]?.treatAsCategorical
-  ) {
+    jointDataset.metaDict[yAxisProperty]?.treatAsCategorical;
+
+  if (treatYAsCategorical) {
     const treatXAsCategorical =
       (jointDataset.metaDict[xAxisProperty].isCategorical ||
         jointDataset.metaDict[xAxisProperty]?.treatAsCategorical) ??
-      false;
-
-    const treatYAsCategorical =
-      (jointDataset.metaDict[yAxisProperty].isCategorical ||
-        jointDataset.metaDict[yAxisProperty]?.treatAsCategorical) ??
       false;
 
     const result = await requestDatasetAnalysisBarChart(
