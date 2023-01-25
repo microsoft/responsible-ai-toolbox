@@ -18,6 +18,7 @@ import React from "react";
 
 import { forecastingDashboardStyles } from "../ForecastingDashboard.styles";
 import { Operation, Feature } from "../Interfaces/Transformation";
+
 import { TransformationCreationCategorical } from "./TransformationCreationCategorical";
 import { TransformationCreationContinuous } from "./TransformationCreationContinuous";
 

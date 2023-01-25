@@ -94,7 +94,7 @@ export class ForecastingDashboard extends React.Component<
         ? localization.Forecasting.whatIfDescription
         : localization.Forecasting.forecastDescription) +
       (this.state.timeSeriesOptions?.length > 1
-        ? " " + localization.Forecasting.whatIfChooseTimeSeries
+        ? ` ${  localization.Forecasting.whatIfChooseTimeSeries}`
         : "");
 
     return (

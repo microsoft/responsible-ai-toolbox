@@ -8,7 +8,9 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
 import { Transformation } from "../Interfaces/Transformation";
+
 import { TransformationsTable } from "./TransformationsTable";
 
 export interface IWhatIfSectionProps {

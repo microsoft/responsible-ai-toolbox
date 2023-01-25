@@ -86,7 +86,7 @@ export class TransformationCreationDialog extends React.Component<
           .scenarioNamingCollisionMessage;
     }
 
-    let transformationValueErrorMessage =
+    const transformationValueErrorMessage =
       this.getTransformationValueErrorMessage();
 
     let transformationCombinationErrorMessage = undefined;
@@ -239,11 +239,11 @@ export class TransformationCreationDialog extends React.Component<
       this.setState({
         transformationFeature: { key: item.key as string, text: item.text },
         transformationOperation: {
-          key: "change",
           displayName: localization.Forecasting.Transformations.change,
-          minValue: 0,
+          excludedValues: [],
+          key: "change",
           maxValue: 0,
-          excludedValues: []
+          minValue: 0
         } as Operation
       });
       return;
