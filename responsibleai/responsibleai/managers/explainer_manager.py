@@ -43,6 +43,7 @@ CATEGORICAL_FEATURES = 'categorical_features'
 META_JSON = Metadata.META_JSON
 MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
+MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 5000
 
 
 class ExplainerManager(BaseManager):
@@ -141,7 +142,18 @@ class ExplainerManager(BaseManager):
             model_task=model_task,
             classes=self._classes,
             categorical_features=self._categorical_features)
-        return explainer.explain_global(data, include_local=local)
+
+        if len(data) <= MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS:
+            return explainer.explain_global(data, include_local=local)
+        else:
+            warnings.warn((
+                "LARGE-DATA-SCENARIO-DETECTED: "
+                "The data is larger than the supported limit of {0}. "
+                "Computing explanations for first {0} samples only.").format(
+                    MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS),
+                UserWarning)
+            return explainer.explain_global(data[
+                0:MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS], include_local=local)
 
     def compute(self):
         """Creates an explanation by running the explainer on the model."""
