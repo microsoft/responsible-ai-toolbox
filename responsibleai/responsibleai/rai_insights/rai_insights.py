@@ -42,7 +42,6 @@ _CATEGORIES = 'categories'
 _CATEGORY_DICTIONARY = 'category_dictionary'
 _CATEGORICAL_INDEXES = 'categorical_indexes'
 _STRING_IND_DATA = 'string_ind_data'
-_META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
 _JSON_EXTENSION = '.json'
 _PREDICT = 'predict'
@@ -833,7 +832,7 @@ class RAIInsights(RAIBaseInsights):
             _FEATURE_RANGES: self._feature_ranges,
             _FEATURE_METADATA: feature_metadata_dict
         }
-        with open(top_dir / _META_JSON, 'w') as file:
+        with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)
 
     def save(self, path):
@@ -877,7 +876,7 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         top_dir = Path(path)
-        with open(top_dir / _META_JSON, 'r') as meta_file:
+        with open(top_dir / Metadata.META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
         inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
