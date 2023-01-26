@@ -248,6 +248,40 @@ export class TransformationCreationDialog extends React.Component<
     return undefined;
   }
 
+  private getTransformationValueErrorMessage(): string | undefined {
+    if (
+      this.state.transformationOperation &&
+      this.state.transformationFeature &&
+      this.context
+    ) {
+      const featureMeta =
+        this.context.jointDataset.metaDict[
+          this.state.transformationFeature.key
+        ];
+      if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
+        return undefined;
+      }
+      if (
+        this.state.transformationValue <
+          this.state.transformationOperation.minValue ||
+        this.state.transformationValue >
+          this.state.transformationOperation.maxValue ||
+        this.state.transformationOperation.excludedValues.includes(
+          this.state.transformationValue
+        )
+      ) {
+        return localization.formatString(
+          localization.Forecasting.TransformationCreation.valueErrorMessage,
+          this.state.transformationOperation.displayName,
+          this.state.transformationOperation.minValue,
+          this.state.transformationOperation.maxValue,
+          this.state.transformationOperation.excludedValues.toString()
+        );
+      }
+    }
+    return undefined;
+  }
+
   private onChangeTransformationName = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
