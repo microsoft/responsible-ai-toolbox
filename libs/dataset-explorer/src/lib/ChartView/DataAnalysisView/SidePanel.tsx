@@ -19,7 +19,10 @@ import {
   AxisConfigDialog,
   ISelectorConfig,
   TelemetryLevels,
-  TelemetryEventName
+  TelemetryEventName,
+  ifEnableLargeData,
+  IDataset,
+  OtherChartTypes
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import _ from "lodash";
@@ -33,7 +36,11 @@ export interface ISidePanelProps {
   jointDataset: JointDataset;
   cohorts: Cohort[];
   selectedCohortIndex: number;
+  dataset: IDataset;
+  disabled?: boolean;
+  isBubbleChartRendered?: boolean;
   onChartPropChange: (p: IGenericChartProps) => void;
+  setIsRevertButtonClicked?: (status: boolean) => void;
 }
 interface ISidePanelState {
   colorDialogOpen: boolean;
@@ -49,7 +56,9 @@ export class SidePanel extends React.Component<
       text: localization.Interpret.DatasetExplorer.aggregatePlots
     },
     {
-      key: ChartTypes.Scatter,
+      key: ifEnableLargeData(this.props.dataset)
+        ? OtherChartTypes.Bubble
+        : ChartTypes.Scatter,
       text: localization.Interpret.DatasetExplorer.individualDatapoints
     }
   ];
@@ -71,8 +80,9 @@ export class SidePanel extends React.Component<
           selectedKey={this.props.chartProps.chartType}
           options={this.chartOptions}
           onChange={this.onChartTypeChange}
+          disabled={this.props.disabled}
         />
-        {this.state.colorDialogOpen && this.props.chartProps.colorAxis && (
+        {this.displayAxisConfigDialog() && this.props.chartProps.colorAxis && (
           <AxisConfigDialog
             orderedGroupTitles={[
               ColumnCategories.Index,
@@ -88,7 +98,7 @@ export class SidePanel extends React.Component<
             onCancel={this.setColorClose}
           />
         )}
-        {this.props.chartProps.chartType === ChartTypes.Scatter && (
+        {this.displayColorValueButton() && (
           <Stack.Item>
             <Label className={classNames.colorValue}>
               {localization.Interpret.DatasetExplorer.colorValue}
@@ -125,12 +135,48 @@ export class SidePanel extends React.Component<
             </div>
           </Stack.Item>
         )}
+        {this.displayRevertButton() && (
+          <Stack.Item>
+            <DefaultButton
+              className={classNames.buttonStyle}
+              onClick={this.onRevertButtonClick}
+              text={localization.Counterfactuals.revertToBubbleChart}
+              title={localization.Counterfactuals.revertToBubbleChart}
+            />
+          </Stack.Item>
+        )}
       </Stack>
     );
   }
 
   private readonly setColorOpen = (): void => {
     this.setState({ colorDialogOpen: true });
+  };
+
+  private displayColorValueButton(): boolean {
+    return (
+      !ifEnableLargeData(this.context.dataset) &&
+      this.props.chartProps.chartType === ChartTypes.Scatter
+    );
+  }
+
+  private displayAxisConfigDialog(): boolean {
+    return (
+      !ifEnableLargeData(this.context.dataset) && this.state.colorDialogOpen
+    );
+  }
+
+  private displayRevertButton(): boolean {
+    return (
+      ifEnableLargeData(this.context.dataset) &&
+      this.props.chartProps.chartType !== ChartTypes.Histogram &&
+      !this.props.isBubbleChartRendered
+    );
+  }
+
+  private onRevertButtonClick = (): void => {
+    this.props.setIsRevertButtonClicked &&
+      this.props.setIsRevertButtonClicked(true);
   };
 
   private onChartTypeChange = (
@@ -141,7 +187,9 @@ export class SidePanel extends React.Component<
     if (item?.key === undefined || !newProps) {
       return;
     }
-    newProps.chartType = item.key as ChartTypes;
+    newProps.chartType = ifEnableLargeData(this.props.dataset)
+      ? (item.key as OtherChartTypes)
+      : (item.key as ChartTypes);
     if (newProps.yAxis.property === ColumnCategories.None) {
       newProps.yAxis = generateDefaultYAxis(this.context.jointDataset);
     }

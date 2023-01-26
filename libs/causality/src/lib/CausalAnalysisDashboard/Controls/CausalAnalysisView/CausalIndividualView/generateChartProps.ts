@@ -29,7 +29,7 @@ export function generatePlotlyProps(
   const theme = getTheme();
   plotlyProps.data[0].hoverinfo = "all";
   const indexes = cohort.unwrap(JointDataset.IndexLabel);
-  plotlyProps.data[0].type = chartProps.chartType;
+  plotlyProps.data[0].type = chartProps.chartType as ChartTypes;
   plotlyProps.data[0].mode = PlotlyMode.Markers;
   plotlyProps.data[0].marker = {
     color: indexes.map((rowIndex) => {
