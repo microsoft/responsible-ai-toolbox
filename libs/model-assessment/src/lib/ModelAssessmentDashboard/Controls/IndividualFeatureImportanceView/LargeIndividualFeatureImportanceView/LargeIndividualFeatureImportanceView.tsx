@@ -342,7 +342,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       [],
       this.context.jointDataset,
       this.context.dataset,
-      false,
+      this.state.isLocalExplanationsDataLoading,
       true,
       false,
       this.context.requestBubblePlotData,
@@ -363,7 +363,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.context.jointDataset,
       this.state.selectedPointsIndexes,
       [],
-      false,
+      this.state.isLocalExplanationsDataLoading,
       true,
       false,
       this.selectPointFromChartLargeData
