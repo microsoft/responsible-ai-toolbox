@@ -9,7 +9,6 @@ import {
   generateDefaultChartAxes,
   getScatterOption,
   hasAxisTypeChanged,
-  ifEnableLargeData,
   IGenericChartProps,
   IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
@@ -289,7 +288,14 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   ): Promise<void> => {
     if (chartProps) {
       this.setState({
-        isBubbleChartDataLoading: true
+        isBubbleChartDataLoading: true,
+        indexSeries: [],
+        xSeries: [],
+        ySeries: [],
+        selectedPointsIndexes: [],
+        localExplanationsData: undefined,
+        isLocalExplanationsDataLoading: false,
+        localExplanationsErrorMessage: undefined
       });
       const datasetBarConfigOverride = await this.getBubblePlotData(chartProps);
       if (
@@ -383,25 +389,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
   };
 
-  private readonly resetSeries = (newProps: IGenericChartProps): void => {
-    this.changedKeys = [];
-    if (this.state.chartProps) {
-      this.compareChartProps(newProps, this.state.chartProps);
-      const shouldResetIndexes =
-        ifEnableLargeData(this.context.dataset) &&
-        !_.isEqual(this.state.chartProps, newProps) &&
-        !hasAxisTypeChanged(this.changedKeys);
-      if (shouldResetIndexes) {
-        this.setState({
-          indexSeries: [],
-          isRevertButtonClicked: false,
-          xSeries: [],
-          ySeries: []
-        });
-      }
-    }
-  };
-
   private setErrorStatus = (datasetBarConfigOverride: any): void => {
     this.setState({
       bubbleChartErrorMessage: datasetBarConfigOverride
@@ -440,16 +427,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
-    this.resetSeries(newProps);
     this.setState({ chartProps: newProps });
-    // this.generateHighChartConfigOverride(
-    //   newProps,
-    //   false,
-    //   false,
-    //   false,
-    //   true,
-    //   false
-    // );
   };
 
   private onYSet = (value: ISelectorConfig): void => {
@@ -458,16 +436,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
-    this.resetSeries(newProps);
     this.setState({ chartProps: newProps });
-    // this.generateHighChartConfigOverride(
-    //   newProps,
-    //   false,
-    //   false,
-    //   false,
-    //   true,
-    //   false
-    // );
   };
 
   private selectPointFromChartLargeData = async (
