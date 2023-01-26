@@ -116,6 +116,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: prediction
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -163,6 +164,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: tree
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -193,6 +195,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: matrix
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -209,6 +212,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: scores
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -229,6 +233,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: whatif
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -245,6 +250,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: exp
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -272,6 +278,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: global_effects
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -299,6 +306,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: global_policy
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
@@ -340,6 +348,7 @@ class ResponsibleAIDashboardInput:
                 WidgetRequestResponseConstants.data: prediction
             }
         except Exception as e:
+            print(e)
             traceback.print_exc()
             e_str = _format_exception(e)
             return {
