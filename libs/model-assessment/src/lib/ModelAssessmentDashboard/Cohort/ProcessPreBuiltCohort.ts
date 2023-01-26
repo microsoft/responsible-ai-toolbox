@@ -32,7 +32,7 @@ export function processPreBuiltCohort(
   if (props.cohortData) {
     for (const preBuiltCohort of props.cohortData) {
       const filterList: IFilter[] = [];
-      for (const preBuiltCohortFilter of preBuiltCohort.cohort_filter_list) {
+      preBuiltCohort.cohort_filter_list.forEach((preBuiltCohortFilter) => {
         switch (preBuiltCohortFilter.column) {
           case CohortColumnNames.PredictedY: {
             const filter = translatePreBuiltCohortFilterForTarget(
@@ -94,7 +94,7 @@ export function processPreBuiltCohort(
             break;
           }
         }
-      }
+      });
       const errorCohortEntry = new ErrorCohort(
         new Cohort(preBuiltCohort.name, jointDataset, filterList),
         jointDataset,

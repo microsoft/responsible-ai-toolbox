@@ -152,7 +152,10 @@ export class CausalWhatIf extends React.Component<
       this.context.dataset.feature_names.indexOf(this.state.treatmentFeature);
     this.setState(
       {
-        newTreatmentRawValue: this.getRawValue(value, featureKey),
+        newTreatmentRawValue: this.context.jointDataset.getRawValue(
+          value,
+          featureKey
+        ),
         newTreatmentValue: value
       },
       this.getWhatIf
@@ -208,7 +211,10 @@ export class CausalWhatIf extends React.Component<
       treatmentValueMax = treatmentValue * 1.1;
       treatmentValueStep = treatmentValue * 0.01;
     }
-    const rawValue = this.getRawValue(treatmentValue, featureKey);
+    const rawValue = this.context.jointDataset.getRawValue(
+      treatmentValue,
+      featureKey
+    );
     this.setState(
       {
         currentOutcome: this.context.selectedErrorCohort.cohort.getRow(
@@ -225,23 +231,6 @@ export class CausalWhatIf extends React.Component<
       },
       this.getWhatIf
     );
-  };
-
-  private readonly getRawValue = (
-    v: number | undefined,
-    k: string
-  ): string | number | undefined => {
-    const meta = this.context.jointDataset.metaDict[k];
-    if (v === undefined) {
-      return v;
-    }
-    if (
-      (meta.isCategorical || meta?.treatAsCategorical) &&
-      meta.sortedCategoricalValues
-    ) {
-      return meta.sortedCategoricalValues[v];
-    }
-    return v;
   };
 
   private readonly getWhatIf = async (): Promise<void> => {
@@ -265,7 +254,7 @@ export class CausalWhatIf extends React.Component<
           this.context.jointDataset.metaDict[k]?.category ===
           ColumnCategories.Dataset
       )
-      .mapValues(this.getRawValue)
+      .mapValues(this.context.jointDataset.getRawValue)
       .mapKeys((_, k) => this.context.jointDataset.metaDict[k].label)
       .value();
     if (this._getWhatIfController) {

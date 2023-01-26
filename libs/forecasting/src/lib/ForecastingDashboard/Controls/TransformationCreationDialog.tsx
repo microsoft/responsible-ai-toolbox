@@ -31,6 +31,7 @@ export interface ITransformationCreationDialogProps {
   addTransformation: (name: string, transformation: Transformation) => void;
   transformations: Map<string, Transformation>;
   isVisible: boolean;
+  onDismiss: () => void;
 }
 
 export interface ITransformationCreationDialogState {
@@ -39,6 +40,8 @@ export interface ITransformationCreationDialogState {
   transformationFeature?: Feature;
   transformationValue: number;
 }
+
+const transformationDefaultValue = 2;
 
 export class TransformationCreationDialog extends React.Component<
   ITransformationCreationDialogProps,
@@ -50,7 +53,7 @@ export class TransformationCreationDialog extends React.Component<
 
   public constructor(props: ITransformationCreationDialogProps) {
     super(props);
-    this.state = { transformationValue: 2 };
+    this.state = { transformationValue: transformationDefaultValue };
   }
 
   public componentDidUpdate(
@@ -61,7 +64,7 @@ export class TransformationCreationDialog extends React.Component<
         transformationFeature: undefined,
         transformationName: undefined,
         transformationOperation: undefined,
-        transformationValue: 2
+        transformationValue: transformationDefaultValue
       });
     }
   }
@@ -83,25 +86,8 @@ export class TransformationCreationDialog extends React.Component<
           .scenarioNamingCollisionMessage;
     }
 
-    let transformationValueErrorMessage = undefined;
-    if (
-      this.state.transformationOperation &&
-      (this.state.transformationValue <
-        this.state.transformationOperation.minValue ||
-        this.state.transformationValue >
-          this.state.transformationOperation.maxValue ||
-        this.state.transformationOperation.excludedValues.includes(
-          this.state.transformationValue
-        ))
-    ) {
-      transformationValueErrorMessage = localization.formatString(
-        localization.Forecasting.TransformationCreation.valueErrorMessage,
-        this.state.transformationOperation.displayName,
-        this.state.transformationOperation.minValue,
-        this.state.transformationOperation.maxValue,
-        this.state.transformationOperation.excludedValues.toString()
-      );
-    }
+    const transformationValueErrorMessage =
+      this.getTransformationValueErrorMessage();
 
     let transformationCombinationErrorMessage = undefined;
     if (
@@ -129,8 +115,12 @@ export class TransformationCreationDialog extends React.Component<
           title: localization.Forecasting.TransformationCreation.title,
           type: DialogType.normal
         }}
+        modalProps={{
+          isBlocking: true
+        }}
         minWidth={740}
         maxWidth={1000}
+        onDismiss={this.props.onDismiss}
       >
         <Stack
           tokens={{
@@ -192,6 +182,40 @@ export class TransformationCreationDialog extends React.Component<
     );
   }
 
+  private getTransformationValueErrorMessage(): string | undefined {
+    if (
+      this.state.transformationOperation &&
+      this.state.transformationFeature &&
+      this.context
+    ) {
+      const featureMeta =
+        this.context.jointDataset.metaDict[
+          this.state.transformationFeature.key
+        ];
+      if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
+        return undefined;
+      }
+      if (
+        this.state.transformationValue <
+          this.state.transformationOperation.minValue ||
+        this.state.transformationValue >
+          this.state.transformationOperation.maxValue ||
+        this.state.transformationOperation.excludedValues.includes(
+          this.state.transformationValue
+        )
+      ) {
+        return localization.formatString(
+          localization.Forecasting.TransformationCreation.valueErrorMessage,
+          this.state.transformationOperation.displayName,
+          this.state.transformationOperation.minValue,
+          this.state.transformationOperation.maxValue,
+          this.state.transformationOperation.excludedValues.toString()
+        );
+      }
+    }
+    return undefined;
+  }
+
   private onChangeTransformationName = (
     _event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
@@ -210,8 +234,26 @@ export class TransformationCreationDialog extends React.Component<
   };
 
   private onChangeTransformationFeature = (item: IComboBoxOption): void => {
+    const featureMetaName = item.key;
+    const featureMeta = this.context.jointDataset.metaDict[featureMetaName];
+    // with categorical features the operation is always "change"
+    if (featureMeta.isCategorical || featureMeta.treatAsCategorical) {
+      this.setState({
+        transformationFeature: { key: item.key as string, text: item.text },
+        transformationOperation: {
+          displayName: localization.Forecasting.Transformations.change,
+          excludedValues: [],
+          key: "change",
+          maxValue: 0,
+          minValue: 0
+        } as Operation
+      });
+      return;
+    }
     this.setState({
-      transformationFeature: { key: item.key as string, text: item.text }
+      transformationFeature: { key: item.key as string, text: item.text },
+      transformationOperation: undefined,
+      transformationValue: transformationDefaultValue
     });
   };
 

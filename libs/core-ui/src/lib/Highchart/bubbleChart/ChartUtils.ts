@@ -10,13 +10,10 @@ enum FieldChangeUpdate {
 export function hasAxisTypeChanged(changedKeys: string[]): boolean {
   // return true only if type of the axis has changed in panel
   const changedKeysTemp = removeParentKeys(changedKeys);
-  if (
+  return (
     changedKeysTemp.length === 1 &&
     changedKeysTemp.includes(FieldChangeUpdate.Type)
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
 function removeParentKeys(changedKeys: string[]): string[] {
