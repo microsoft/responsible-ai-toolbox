@@ -71,7 +71,7 @@ apps/*-e2e/debug.log
 /notebooks/*.zip
 *.csv
 /notebooks/**/config.json
-notebooks/responsibleaidashboard/*.py
+/notebooks/responsibleaidashboard/*.py
 /notebooks/**/*.log
 /notebooks/**/*.json
 /notebooks/**/*.pkl
