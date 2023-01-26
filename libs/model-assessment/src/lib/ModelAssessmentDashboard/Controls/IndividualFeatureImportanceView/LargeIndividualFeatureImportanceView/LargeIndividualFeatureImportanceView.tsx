@@ -92,6 +92,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       false,
       false,
       true,
+      false,
       false
     );
   }
@@ -137,12 +138,14 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.chartProps,
       prevState.chartProps
     );
+    const hasAxisTypeChanged = this.hasAxisTypeChanged(prevState.chartProps);
     if (
       hasRevertToBubbleChartUpdated ||
       hasSelectedPointIndexesUpdated ||
       hasChartPropsUpdated ||
       hasIsLocalExplanationsDataLoadingUpdated ||
-      hasCohortUpdated
+      hasCohortUpdated ||
+      hasAxisTypeChanged
     ) {
       this.generateHighChartConfigOverride(
         this.state.chartProps,
@@ -150,7 +153,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         hasIsLocalExplanationsDataLoadingUpdated,
         hasRevertToBubbleChartUpdated,
         hasChartPropsUpdated,
-        hasCohortUpdated
+        hasCohortUpdated,
+        hasAxisTypeChanged
       );
     }
   }
@@ -194,10 +198,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     hasIsLocalExplanationsDataLoadingUpdated: boolean,
     hasRevertToBubbleChartUpdated: boolean,
     hasChartPropsUpdated: boolean,
-    hasCohortUpdated: boolean
+    hasCohortUpdated: boolean,
+    hasAxisTypeChanged: boolean
   ): Promise<void> {
     if (chartProps) {
-      const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
       if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
         this.updateBubblePlotData(chartProps);
         return;
@@ -365,11 +369,11 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private readonly hasAxisTypeChanged = (
-    newChartProps: IGenericChartProps
+    prevChartProps?: IGenericChartProps
   ): boolean => {
-    if (this.state.chartProps) {
+    if (this.state.chartProps && prevChartProps) {
       this.changedKeys = [];
-      this.compareChartProps(newChartProps, this.state.chartProps);
+      this.compareChartProps(prevChartProps, this.state.chartProps);
       return hasAxisTypeChanged(this.changedKeys);
     }
     return false;
