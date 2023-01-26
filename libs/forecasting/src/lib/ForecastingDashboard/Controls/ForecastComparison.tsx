@@ -7,7 +7,8 @@ import {
   defaultModelAssessmentContext,
   BasicHighChart,
   JointDataset,
-  orderByTime
+  orderByTime,
+  featureColumnsExist
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import { SeriesOptionsType } from "highcharts";
@@ -135,13 +136,20 @@ export class ForecastComparison extends React.Component<
       }
     });
 
+    const whatIfEnabled = featureColumnsExist(
+      this.context.dataset.feature_names,
+      this.context.dataset.feature_metadata
+    );
+
     return (
       <Stack tokens={stackTokens}>
-        <Stack.Item>
-          <Text className={classNames.mediumText}>
-            Compare What-if Forecasts
-          </Text>
-        </Stack.Item>
+        {whatIfEnabled && (
+          <Stack.Item>
+            <Text className={classNames.mediumText}>
+              {localization.Forecasting.forecastComparisonHeader}
+            </Text>
+          </Stack.Item>
+        )}
         {seriesData !== undefined && (
           <Stack.Item>
             <BasicHighChart
