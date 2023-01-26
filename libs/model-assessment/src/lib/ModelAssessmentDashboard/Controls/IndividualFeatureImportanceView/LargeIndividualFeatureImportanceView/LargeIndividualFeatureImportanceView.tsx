@@ -4,7 +4,7 @@
 import { Stack } from "@fluentui/react";
 import {
   calculateBubblePlotDataFromErrorCohort,
-  ChartTypes,
+  Cohort,
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
   getScatterOption,
@@ -32,16 +32,16 @@ import { LargeIndividualFeatureImportanceChartArea } from "./LargeIndividualFeat
 import { LocalImportanceChart } from "./LocalImportanceChart";
 
 export interface ILargeIndividualFeatureImportanceViewProps {
-  telemetryHook?: (message: ITelemetryEvent) => void;
+  cohort: Cohort;
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
 export interface ILargeIndividualFeatureImportanceViewState {
   chartProps?: IGenericChartProps;
-  selectedCohortIndex: number;
   highChartConfigOverride?: any;
   isBubbleChartRendered?: boolean;
   xSeries: number[];
@@ -73,7 +73,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: false,
       isRevertButtonClicked: false,
-      selectedCohortIndex: 0,
       xSeries: [],
       ySeries: [],
       selectedPointsIndexes: [],
@@ -84,30 +83,75 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   }
 
   public componentDidMount(): void {
-    const initialCohortIndex = 0;
     const chartProps = generateDefaultChartAxes(
       this.context.jointDataset,
       OtherChartTypes.Bubble
     );
-    this.generateHighChartConfigOverride(initialCohortIndex, chartProps);
+    this.generateHighChartConfigOverride(
+      chartProps,
+      false,
+      false,
+      false,
+      true,
+      false
+    );
   }
 
   public componentDidUpdate(
-    _preProp: ILargeIndividualFeatureImportanceViewProps,
-    preState: ILargeIndividualFeatureImportanceViewState
+    prevProps: ILargeIndividualFeatureImportanceViewProps,
+    prevState: ILargeIndividualFeatureImportanceViewState
   ): void {
-    if (preState.selectedCohortIndex >= this.context.errorCohorts.length) {
-      this.generateHighChartConfigOverride(0, this.state.chartProps);
-      return;
-    }
+    // if (
+    //   this.props.cohort.name !== prevProps.cohort.name ||
+    //   (this.state.isRevertButtonClicked &&
+    //     prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked)
+    // ) {
+    //   this.updateBubblePlotData(this.state.chartProps);
+    //   return;
+    // }
+
+    // if (this.hasAxisTypeChanged(prevState.chartProps)) {
+    //   this.updateScatterPlotData();
+    //   return;
+    // }
+    // if (!_.isEqual(prevState.chartProps, this.state.chartProps)) {
+    //   this.updateBubblePlotData();
+    //   return;
+    // }
+    // if (this.shouldUpdateScatterPlot(prevState)) {
+    //   this.updateScatterPlotData();
+    // }
+
+    const hasSelectedPointIndexesUpdated = !_.isEqual(
+      this.state.selectedPointsIndexes,
+      prevState.selectedPointsIndexes
+    );
+    const hasIsLocalExplanationsDataLoadingUpdated = !_.isEqual(
+      this.state.isLocalExplanationsDataLoading,
+      prevState.isLocalExplanationsDataLoading
+    );
+    const hasRevertToBubbleChartUpdated =
+      this.state.isRevertButtonClicked &&
+      prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked;
+    const hasCohortUpdated = this.props.cohort.name !== prevProps.cohort.name;
+    const hasChartPropsUpdated = !_.isEqual(
+      this.state.chartProps,
+      prevState.chartProps
+    );
     if (
-      (this.state.isRevertButtonClicked &&
-        preState.isRevertButtonClicked !== this.state.isRevertButtonClicked) ||
-      this.state.selectedPointsIndexes !== preState.selectedPointsIndexes
+      hasRevertToBubbleChartUpdated ||
+      hasSelectedPointIndexesUpdated ||
+      hasChartPropsUpdated ||
+      hasIsLocalExplanationsDataLoadingUpdated ||
+      hasCohortUpdated
     ) {
       this.generateHighChartConfigOverride(
-        this.state.selectedCohortIndex,
-        this.state.chartProps
+        this.state.chartProps,
+        hasSelectedPointIndexesUpdated,
+        hasIsLocalExplanationsDataLoadingUpdated,
+        hasRevertToBubbleChartUpdated,
+        hasChartPropsUpdated,
+        hasCohortUpdated
       );
     }
   }
@@ -146,79 +190,142 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   }
 
   private async generateHighChartConfigOverride(
-    cohortIndex: number,
-    chartProps: IGenericChartProps | undefined
+    chartProps: IGenericChartProps | undefined,
+    hasSelectedPointIndexesUpdated: boolean,
+    hasIsLocalExplanationsDataLoadingUpdated: boolean,
+    hasRevertToBubbleChartUpdated: boolean,
+    hasChartPropsUpdated: boolean,
+    hasCohortUpdated: boolean
   ): Promise<void> {
     if (chartProps) {
-      if (chartProps.chartType === OtherChartTypes.Bubble) {
-        const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
-        if (!hasAxisTypeChanged) {
-          this.updateBubblePlotData(chartProps, cohortIndex);
-        } else {
-          this.updateScatterPlotData(chartProps, cohortIndex);
-        }
-      } else if (chartProps.chartType === ChartTypes.Scatter) {
-        this.updateScatterPlotData(chartProps, cohortIndex);
-      } else {
-        this.setState({
-          chartProps,
-          selectedCohortIndex: cohortIndex
-        });
+      const hasAxisTypeChanged = this.hasAxisTypeChanged(chartProps);
+      if (hasCohortUpdated || hasRevertToBubbleChartUpdated) {
+        this.updateBubblePlotData(chartProps);
+        return;
       }
+      if (hasAxisTypeChanged) {
+        this.updateScatterPlotData(chartProps);
+        return;
+      }
+      if (hasChartPropsUpdated) {
+        this.updateBubblePlotData(chartProps);
+        return;
+      }
+      if (
+        hasSelectedPointIndexesUpdated ||
+        hasIsLocalExplanationsDataLoadingUpdated
+      ) {
+        this.updateScatterPlotData(chartProps);
+        return;
+      }
+      // if (
+      //   !hasAxisTypeChanged ||
+      //   hasRevertToBubbleChartUpdated ||
+      //   hasCohortUpdated
+      // ) {
+      //   this.updateBubblePlotData(chartProps);
+      // } else if (
+      //   !this.state.isBubbleChartRendered &&
+      //   hasSelectedPointIndexesUpdated
+      // ) {
+      //   this.updateScatterPlotData(chartProps);
+      // }
+      // if (chartProps.chartType === OtherChartTypes.Bubble) {
+      //   if (!hasAxisTypeChanged) {
+      //     this.updateBubblePlotData(chartProps);
+      //     return;
+      //   }
+      //   // } else {
+      //   //   this.updateScatterPlotData();
+      //   // }
+      // } else if (chartProps.chartType === ChartTypes.Scatter) {
+      //   if (
+      //     hasAxisTypeChanged ||
+      //     hasSelectedPointIndexesUpdated ||
+      //     hasIsLocalExplanationsDataLoadingUpdated
+      //   ) {
+      //     this.updateScatterPlotData(chartProps);
+      //     return;
+      //   } else {
+      //     this.updateBubblePlotData(chartProps);
+      //     return;
+      //   }
+      // }
+    } else {
+      this.setState({
+        chartProps
+      });
     }
   }
 
+  // private readonly shouldUpdateScatterPlot = (
+  //   prevState: ILargeIndividualFeatureImportanceViewState
+  // ): boolean => {
+  //   return (
+  //     !_.isEqual(
+  //       prevState.selectedPointsIndexes,
+  //       this.state.selectedPointsIndexes
+  //     ) ||
+  //     !_.isEqual(
+  //       prevState.isLocalExplanationsDataLoading,
+  //       this.state.isLocalExplanationsDataLoading
+  //     )
+  //   );
+  // };
+
+  // private readonly shouldUpdateBubbleChartPlot = (
+  //   prevProps: ILargeIndividualFeatureImportanceViewProps,
+  //   prevState: ILargeIndividualFeatureImportanceViewState
+  // ): boolean => {
+  //   return (
+  //     this.props.cohort.name !== prevProps.cohort.name ||
+  //     (this.state.isRevertButtonClicked &&
+  //       prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked)
+  //   );
+  // };
+
   private updateBubblePlotData = async (
-    chartProps: IGenericChartProps,
-    cohortIndex: number
+    chartProps?: IGenericChartProps
   ): Promise<void> => {
-    this.setState({
-      isBubbleChartDataLoading: true
-    });
-    const datasetBarConfigOverride = await this.getBubblePlotData(
-      chartProps,
-      cohortIndex
-    );
-    this.resetSeries(chartProps);
-    if (
-      datasetBarConfigOverride &&
-      !instanceOfHighChart(datasetBarConfigOverride)
-    ) {
-      this.setErrorStatus(chartProps, cohortIndex, datasetBarConfigOverride);
-      return;
+    if (chartProps) {
+      this.setState({
+        isBubbleChartDataLoading: true
+      });
+      const datasetBarConfigOverride = await this.getBubblePlotData(chartProps);
+      if (
+        datasetBarConfigOverride &&
+        !instanceOfHighChart(datasetBarConfigOverride)
+      ) {
+        this.setErrorStatus(datasetBarConfigOverride);
+        return;
+      }
+      this.setState({
+        highChartConfigOverride: datasetBarConfigOverride,
+        isBubbleChartDataLoading: false,
+        isBubbleChartRendered: true,
+        isRevertButtonClicked: false,
+        chartProps: chartProps
+      });
     }
-    this.setState({
-      chartProps,
-      highChartConfigOverride: datasetBarConfigOverride,
-      isBubbleChartDataLoading: false,
-      isBubbleChartRendered: true,
-      isRevertButtonClicked: false,
-      selectedCohortIndex: cohortIndex
-    });
   };
 
-  private updateScatterPlotData = (
-    chartProps: IGenericChartProps,
-    cohortIndex: number
-  ): void => {
+  private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
     const datasetBarConfigOverride = this.getScatterPlotData(chartProps);
     this.setState({
-      chartProps,
       highChartConfigOverride: datasetBarConfigOverride,
       isBubbleChartRendered: false,
       isRevertButtonClicked: false,
-      selectedCohortIndex: cohortIndex
+      chartProps: chartProps
     });
   };
 
   private getBubblePlotData = async (
-    chartProps: IGenericChartProps,
-    cohortIndex: number
+    chartProps: IGenericChartProps
   ): Promise<
     IHighchartBubbleSDKClusterData | IHighchartsConfig | undefined
   > => {
     return await calculateBubblePlotDataFromErrorCohort(
-      this.context.errorCohorts[cohortIndex].cohort,
+      this.props.cohort,
       chartProps,
       [],
       this.context.jointDataset,
@@ -235,7 +342,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
 
   private getScatterPlotData = (
     chartProps: IGenericChartProps
-  ): IHighchartsConfig => {
+  ): IHighchartsConfig | undefined => {
     return getScatterOption(
       this.state.xSeries,
       this.state.ySeries,
@@ -295,20 +402,14 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
   };
 
-  private setErrorStatus = (
-    chartProps: IGenericChartProps,
-    cohortIndex: number,
-    datasetBarConfigOverride: any
-  ): void => {
+  private setErrorStatus = (datasetBarConfigOverride: any): void => {
     this.setState({
       bubbleChartErrorMessage: datasetBarConfigOverride
         .toString()
         .split(":")
         .pop(),
-      chartProps,
       highChartConfigOverride: undefined,
-      isBubbleChartDataLoading: false,
-      selectedCohortIndex: cohortIndex
+      isBubbleChartDataLoading: false
     });
   };
 
@@ -318,18 +419,18 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     ySeries: number[],
     indexSeries: number[]
   ): void => {
-    if (!this.state.chartProps) {
-      return;
-    }
-    const newProps = _.cloneDeep(this.state.chartProps);
-    newProps.chartType = ChartTypes.Scatter;
+    // if (!this.state.chartProps) {
+    //   return;
+    // }
+    // const newProps = _.cloneDeep(this.state.chartProps);
+    // newProps.chartType = ChartTypes.Scatter;
     this.setState({
       highChartConfigOverride: scatterPlotData,
       indexSeries,
       isBubbleChartRendered: false,
       xSeries,
-      ySeries,
-      chartProps: newProps
+      ySeries
+      //  chartProps: newProps
     });
   };
 
@@ -339,10 +440,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.xAxis = value;
-    this.generateHighChartConfigOverride(
-      this.state.selectedCohortIndex,
-      newProps
-    );
+    this.resetSeries(newProps);
+    this.setState({ chartProps: newProps });
+    // this.generateHighChartConfigOverride(
+    //   newProps,
+    //   false,
+    //   false,
+    //   false,
+    //   true,
+    //   false
+    // );
   };
 
   private onYSet = (value: ISelectorConfig): void => {
@@ -351,10 +458,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     }
     const newProps = _.cloneDeep(this.state.chartProps);
     newProps.yAxis = value;
-    this.generateHighChartConfigOverride(
-      this.state.selectedCohortIndex,
-      newProps
-    );
+    this.resetSeries(newProps);
+    this.setState({ chartProps: newProps });
+    // this.generateHighChartConfigOverride(
+    //   newProps,
+    //   false,
+    //   false,
+    //   false,
+    //   true,
+    //   false
+    // );
   };
 
   private selectPointFromChartLargeData = async (
