@@ -137,6 +137,7 @@ export class FeatureImportancesTab extends React.PureComponent<
           ifEnableLargeData(this.context.dataset) && (
             <LargeIndividualFeatureImportanceView
               cohort={this.context.selectedErrorCohort.cohort}
+              modelType={this.props.modelMetadata.modelType}
               telemetryHook={this.props.telemetryHook}
               selectedWeightVector={this.props.selectedWeightVector}
               onWeightChange={this.props.onWeightVectorChange}

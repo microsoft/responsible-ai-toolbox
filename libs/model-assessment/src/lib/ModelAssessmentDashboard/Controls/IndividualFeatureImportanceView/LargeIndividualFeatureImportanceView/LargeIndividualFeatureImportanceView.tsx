@@ -35,6 +35,7 @@ export interface ILargeIndividualFeatureImportanceViewProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  modelType: string;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
@@ -187,6 +188,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           onWeightChange={this.props.onWeightChange}
           weightOptions={this.props.weightOptions}
           weightLabels={this.props.weightLabels}
+          modelType={this.props.modelType}
         />
       </Stack>
     );

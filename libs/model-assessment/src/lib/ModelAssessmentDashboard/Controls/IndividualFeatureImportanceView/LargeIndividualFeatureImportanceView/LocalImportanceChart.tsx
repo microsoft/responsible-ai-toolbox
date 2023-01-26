@@ -9,6 +9,7 @@ import {
   LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
+  ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
 import { ClassImportanceWeights } from "@responsible-ai/interpret";
@@ -25,6 +26,7 @@ export interface ILocalImportanceChartProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
+  modelType: string;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
@@ -181,6 +183,12 @@ export class LocalImportanceChart extends React.PureComponent<
     const sortedData = this.getSortedData();
     const x = sortedData.map((d) => d.label);
     const y = sortedData.map((d) => d.value);
+    let yAxisLabels: string = localization.Interpret.featureImportance;
+    if (this.props.modelType !== ModelTypes.Regression) {
+      const weightLabel =
+        this.props.weightLabels[this.props.selectedWeightVector];
+      yAxisLabels = yAxisLabels.concat(" - ", weightLabel);
+    }
     const seriesData = [
       {
         color: getPrimaryChartColor(getTheme()),
@@ -201,8 +209,7 @@ export class LocalImportanceChart extends React.PureComponent<
       },
       yAxis: {
         title: {
-          text: localization.Counterfactuals.WhatIf
-            .percentCounterfactualLocalImportance //update this
+          text: yAxisLabels
         }
       }
     };
