@@ -44,7 +44,7 @@ export const transformationOperations: Operation[] = [
     key: "subtract",
     maxValue: 1000,
     minValue: -1000
-  },
+  }
 ];
 
 export type Feature = {

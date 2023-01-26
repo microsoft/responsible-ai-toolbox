@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { IDataset } from "@responsible-ai/core-ui";
+
 import { mockForecastingData } from "./mockForecastingData";
 
 // Based on how much money is spent on ads and the daily outside temperature

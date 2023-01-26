@@ -317,6 +317,10 @@ class ResponsibleAIDashboardInput:
             }
 
     def forecast(self, post_data):
+        # This is a separate function from predict since we apply
+        # transformations to an entire time series. That enables us
+        # to only send the transformation information from UI to backend
+        # rather than having to send the entire time series across.
         try:
             filters = post_data[0]
             composite_filters = post_data[1]
@@ -338,6 +342,8 @@ class ResponsibleAIDashboardInput:
                     transformation_func = lambda x: x * float(value)
                 elif op == "divide":
                     transformation_func = lambda x: x / float(value)
+                elif op == "change":
+                    transformation_func = lambda x: value
                 else:
                     raise ValueError(f"An invalid transformation operation {op} was provided.")
 
@@ -353,7 +359,7 @@ class ResponsibleAIDashboardInput:
             e_str = _format_exception(e)
             return {
                 WidgetRequestResponseConstants.error:
-                    "Failed to generate forecast for cohort, "
+                    "Failed to generate forecast for time series, "
                     "inner error: {}".format(e_str),
                 WidgetRequestResponseConstants.data: []
             }
