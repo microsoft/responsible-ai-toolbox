@@ -22,8 +22,8 @@ from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
                                                FileFormats, ListProperties,
                                                ManagerNames)
-from responsibleai._tools.shared.state_directory_management import (
-    DirectoryManager)
+from responsibleai._tools.shared.state_directory_management import \
+    DirectoryManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
                                       SchemaErrorException,
                                       UserConfigValidationException)
