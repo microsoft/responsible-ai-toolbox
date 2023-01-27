@@ -83,13 +83,19 @@ export interface ILocalImportanceChartStyles {
   choiceGroupLabel: IStyle;
   localImportanceChart: IStyle;
   localImportanceLegend: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportanceChartStyles> =
   () => {
-    const legendWidth = "160px";
     const theme = getTheme();
     return mergeStyleSets<ILocalImportanceChartStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "10px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
+      },
       absoluteValueToggle: {
         width: "170px"
       },
@@ -214,8 +220,7 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
         }
       },
       featureImportanceLegend: {
-        height: "100%",
-        width: legendWidth
+        height: "100%"
       },
       featureList: {
         display: "flex",
@@ -270,8 +275,7 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
         boxSizing: "border-box",
         height: "100%",
         paddingLeft: "10px",
-        paddingRight: "10px",
-        width: legendWidth
+        paddingRight: "10px"
       },
       legendHelpText: {
         fontWeight: "300",
@@ -342,7 +346,6 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
         display: "inline-flex",
         flexDirection: "row",
         justifyContent: "flex-end",
-        paddingRight: legendWidth,
         selectors: {
           "@media screen and (max-width: 639px)": {
             paddingRight: "0"
@@ -374,7 +377,7 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
         flex: 1,
         selectors: {
           "@media screen and (min-width: 1024px)": {
-            paddingRight: legendWidth
+            paddingRight: "160px"
           }
         }
       },

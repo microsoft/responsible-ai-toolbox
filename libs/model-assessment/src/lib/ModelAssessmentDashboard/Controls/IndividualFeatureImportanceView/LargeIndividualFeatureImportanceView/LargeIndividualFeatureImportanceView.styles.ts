@@ -44,12 +44,16 @@ export interface ILargeIndividualFeatureImportanceViewStyles {
   chartAndType: IStyle;
   chart: IStyle;
   buttonStyle: IStyle;
+  legendContainer: IStyle;
 }
 
 export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSet<ILargeIndividualFeatureImportanceViewStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<ILargeIndividualFeatureImportanceViewStyles>({
+      legendContainer: {
+        width: "15%"
+      },
       buttonStyle: {
         marginBottom: "10px",
         marginTop: "20px",
@@ -58,7 +62,7 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
       },
       chart: {
         marginBottom: "40px",
-        width: "100%"
+        width: "90%"
       },
       chartAndType: flexLgDown,
       chartContainer: {
@@ -78,7 +82,7 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
         paddingRight: "10px"
       },
       chartWithVertical: {
-        width: "100%"
+        // width: "100%"
       },
       cohortDropdown: {
         width: "170px"
@@ -124,8 +128,7 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
         ...hideXlDown
       },
       legendAndText: {
-        height: "100%",
-        width: "195px"
+        height: "100%"
       },
       legendItem: {
         alignItems: "center",

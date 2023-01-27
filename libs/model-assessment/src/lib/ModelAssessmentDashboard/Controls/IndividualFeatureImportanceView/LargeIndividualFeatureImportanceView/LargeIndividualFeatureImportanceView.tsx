@@ -71,7 +71,7 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       bubbleChartErrorMessage: undefined,
       indexSeries: [],
       isBubbleChartDataLoading: false,
-      isBubbleChartRendered: false,
+      isBubbleChartRendered: true,
       isRevertButtonClicked: false,
       xSeries: [],
       ySeries: [],
@@ -102,27 +102,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     prevProps: ILargeIndividualFeatureImportanceViewProps,
     prevState: ILargeIndividualFeatureImportanceViewState
   ): void {
-    // if (
-    //   this.props.cohort.name !== prevProps.cohort.name ||
-    //   (this.state.isRevertButtonClicked &&
-    //     prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked)
-    // ) {
-    //   this.updateBubblePlotData(this.state.chartProps);
-    //   return;
-    // }
-
-    // if (this.hasAxisTypeChanged(prevState.chartProps)) {
-    //   this.updateScatterPlotData();
-    //   return;
-    // }
-    // if (!_.isEqual(prevState.chartProps, this.state.chartProps)) {
-    //   this.updateBubblePlotData();
-    //   return;
-    // }
-    // if (this.shouldUpdateScatterPlot(prevState)) {
-    //   this.updateScatterPlotData();
-    // }
-
     const hasSelectedPointIndexesUpdated = !_.isEqual(
       this.state.selectedPointsIndexes,
       prevState.selectedPointsIndexes
@@ -174,6 +153,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
           bubbleChartErrorMessage={this.state.bubbleChartErrorMessage}
           onXSet={this.onXSet}
           onYSet={this.onYSet}
+          isLocalExplanationsDataLoading={
+            this.state.isLocalExplanationsDataLoading
+          }
+          setIsRevertButtonClicked={this.setIsRevertButtonClicked}
         />
         <LocalImportanceChart
           rowNumber={this.state.selectedPointsIndexes[0]}
@@ -193,6 +176,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       </Stack>
     );
   }
+
+  private setIsRevertButtonClicked = (status: boolean): void => {
+    this.setState({ isRevertButtonClicked: status });
+  };
 
   private async generateHighChartConfigOverride(
     chartProps: IGenericChartProps | undefined,
@@ -223,71 +210,12 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         this.updateScatterPlotData(chartProps);
         return;
       }
-      // if (
-      //   !hasAxisTypeChanged ||
-      //   hasRevertToBubbleChartUpdated ||
-      //   hasCohortUpdated
-      // ) {
-      //   this.updateBubblePlotData(chartProps);
-      // } else if (
-      //   !this.state.isBubbleChartRendered &&
-      //   hasSelectedPointIndexesUpdated
-      // ) {
-      //   this.updateScatterPlotData(chartProps);
-      // }
-      // if (chartProps.chartType === OtherChartTypes.Bubble) {
-      //   if (!hasAxisTypeChanged) {
-      //     this.updateBubblePlotData(chartProps);
-      //     return;
-      //   }
-      //   // } else {
-      //   //   this.updateScatterPlotData();
-      //   // }
-      // } else if (chartProps.chartType === ChartTypes.Scatter) {
-      //   if (
-      //     hasAxisTypeChanged ||
-      //     hasSelectedPointIndexesUpdated ||
-      //     hasIsLocalExplanationsDataLoadingUpdated
-      //   ) {
-      //     this.updateScatterPlotData(chartProps);
-      //     return;
-      //   } else {
-      //     this.updateBubblePlotData(chartProps);
-      //     return;
-      //   }
-      // }
     } else {
       this.setState({
         chartProps
       });
     }
   }
-
-  // private readonly shouldUpdateScatterPlot = (
-  //   prevState: ILargeIndividualFeatureImportanceViewState
-  // ): boolean => {
-  //   return (
-  //     !_.isEqual(
-  //       prevState.selectedPointsIndexes,
-  //       this.state.selectedPointsIndexes
-  //     ) ||
-  //     !_.isEqual(
-  //       prevState.isLocalExplanationsDataLoading,
-  //       this.state.isLocalExplanationsDataLoading
-  //     )
-  //   );
-  // };
-
-  // private readonly shouldUpdateBubbleChartPlot = (
-  //   prevProps: ILargeIndividualFeatureImportanceViewProps,
-  //   prevState: ILargeIndividualFeatureImportanceViewState
-  // ): boolean => {
-  //   return (
-  //     this.props.cohort.name !== prevProps.cohort.name ||
-  //     (this.state.isRevertButtonClicked &&
-  //       prevState.isRevertButtonClicked !== this.state.isRevertButtonClicked)
-  //   );
-  // };
 
   private updateBubblePlotData = async (
     chartProps?: IGenericChartProps
