@@ -265,9 +265,9 @@ class RAIInsights(RAIBaseInsights):
         Add data balance measures to be computed on categorical features
         if it is a classification task.
         """
-        if self.task_type == ModelTask.CLASSIFICATION and \
-                len(self.categorical_features) > 0 and \
-                self._classes is not None:
+        if (self.task_type == ModelTask.CLASSIFICATION and
+                len(self.categorical_features) > 0 and
+                self._classes is not None):
             self._data_balance_manager.add(
                 cols_of_interest=self.categorical_features)
 
@@ -353,20 +353,20 @@ class RAIInsights(RAIBaseInsights):
                     'and test sets.'
                 )
 
-            if len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)) != 0:
+            if (len(set(train.columns) - set(test.columns)) != 0 or
+                    len(set(test.columns) - set(train.columns)) != 0):
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
-            if target_column not in list(train.columns) or \
-                    target_column not in list(test.columns):
+            if (target_column not in list(train.columns) or
+                    target_column not in list(test.columns)):
                 raise UserConfigValidationException(
                     'Target name {0} not present in train/test data'.format(
                         target_column)
                 )
 
-            if categorical_features is not None and \
-                    len(categorical_features) > 0:
+            if (categorical_features is not None and
+                    len(categorical_features) > 0):
                 if target_column in categorical_features:
                     raise UserConfigValidationException(
                         'Found target name {0} in '
@@ -411,20 +411,19 @@ class RAIInsights(RAIBaseInsights):
                         string_features_set - set(categorical_features))
                 )
 
-            if classes is not None and task_type == \
-                    ModelTask.CLASSIFICATION:
-                if len(set(train[target_column].unique()) -
-                       set(classes)) != 0 or \
+            if classes is not None and task_type == ModelTask.CLASSIFICATION:
+                if (len(set(train[target_column].unique()) -
+                        set(classes)) != 0 or
                         len(set(classes) -
-                            set(train[target_column].unique())) != 0:
+                            set(train[target_column].unique())) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'target (train data) do not match')
 
-                if len(set(test[target_column].unique()) -
-                       set(classes)) != 0 or \
+                if (len(set(test[target_column].unique()) -
+                        set(classes)) != 0 or
                         len(set(classes) -
-                            set(test[target_column].unique())) != 0:
+                            set(test[target_column].unique())) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'target (test data) do not match')
@@ -443,8 +442,8 @@ class RAIInsights(RAIBaseInsights):
                 small_test_data = test[0:1]
                 has_dropped_features = False
                 if feature_metadata is not None:
-                    if feature_metadata.dropped_features is not None and \
-                            len(feature_metadata.dropped_features) != 0:
+                    if (feature_metadata.dropped_features is not None and
+                            len(feature_metadata.dropped_features) != 0):
                         has_dropped_features = True
                         small_train_data = small_train_data.drop(
                             columns=feature_metadata.dropped_features, axis=1)
@@ -455,8 +454,8 @@ class RAIInsights(RAIBaseInsights):
                     columns=[target_column], axis=1)
                 small_test_data = small_test_data.drop(
                     columns=[target_column], axis=1)
-                if len(small_train_data.columns) == 0 or \
-                        len(small_test_data.columns) == 0:
+                if (len(small_train_data.columns) == 0 or
+                        len(small_test_data.columns) == 0):
                     if has_dropped_features:
                         raise UserConfigValidationException(
                             'All features have been dropped from the dataset.'
@@ -664,8 +663,8 @@ class RAIInsights(RAIBaseInsights):
                 metadata_exists = metadata is not None
                 dropped_features_exist = metadata_exists and \
                     metadata.dropped_features is not None
-                if dropped_features_exist and \
-                        len(metadata.dropped_features) != 0:
+                if (dropped_features_exist and
+                        len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                 predicted_y = self.model.predict(predict_dataset)
@@ -726,8 +725,8 @@ class RAIInsights(RAIBaseInsights):
                 metadata_exists = metadata is not None
                 dropped_features_exist = metadata_exists and \
                     metadata.dropped_features is not None
-                if dropped_features_exist and \
-                        len(metadata.dropped_features) != 0:
+                if (dropped_features_exist and
+                        len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                 probability_y = self.model.predict_proba(predict_dataset)
@@ -749,8 +748,9 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIInsights to.
         :type path: str
         """
-        prediction_output_path = Path(path) / \
-            SerializationAttributes.PREDICTIONS_DIRECTORY
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
         prediction_output_path.mkdir(parents=True, exist_ok=True)
 
         if self.model is None:
@@ -792,9 +792,10 @@ class RAIInsights(RAIBaseInsights):
         """
         if self._large_test is not None:
             # Save large test data
-            large_test_path = Path(path) / \
-                SerializationAttributes.DATA_DIRECTORY / \
-                SerializationAttributes.LARGE_TEST_JSON
+            large_test_path = (
+                Path(path) /
+                SerializationAttributes.DATA_DIRECTORY /
+                SerializationAttributes.LARGE_TEST_JSON)
             self._write_to_file(
                 large_test_path,
                 self._large_test.to_json(orient='split'))
@@ -888,8 +889,8 @@ class RAIInsights(RAIBaseInsights):
             meta[Metadata.FEATURE_COLUMNS]
         inst.__dict__['_' + Metadata.FEATURE_RANGES] = \
             meta[Metadata.FEATURE_RANGES]
-        if Metadata.FEATURE_METADATA not in meta or \
-                meta[Metadata.FEATURE_METADATA] is None:
+        if (Metadata.FEATURE_METADATA not in meta or
+                meta[Metadata.FEATURE_METADATA] is None):
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = None
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
@@ -929,8 +930,9 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
             return
 
-        prediction_output_path = Path(path) / \
-            SerializationAttributes.PREDICTIONS_DIRECTORY
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
 
         with open(prediction_output_path / (
                 SerializationAttributes.PREDICT_JSON), 'r') as file:
@@ -988,13 +990,16 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to data location.
         :type path: str
         """
-        large_test_path = Path(path) / \
-            SerializationAttributes.DATA_DIRECTORY / \
-            SerializationAttributes.LARGE_TEST_JSON
+        large_test_path = (
+            Path(path) /
+            SerializationAttributes.DATA_DIRECTORY /
+            SerializationAttributes.LARGE_TEST_JSON)
         if large_test_path.exists():
-            data_directory = Path(path) / \
-                SerializationAttributes.DATA_DIRECTORY
-            with open(data_directory / (
+            data_directory = (
+                Path(path) /
+                SerializationAttributes.DATA_DIRECTORY)
+            with open(
+                data_directory / (
                     Metadata.TEST + 'dtypes' + FileFormats.JSON),
                     'r') as file:
                 types = json.load(file)
