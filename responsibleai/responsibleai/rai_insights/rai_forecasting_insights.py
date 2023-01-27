@@ -696,8 +696,8 @@ class RAIForecastingInsights(RAIBaseInsights):
             inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[_FEATURE_METADATA][
                     'identity_feature_name'],
-                datetime_features=meta[_FEATURE_METADATA][
-                    'datetime_features'],
+                time_column_name=meta[_FEATURE_METADATA][
+                    'time_column_name'],
                 categorical_features=meta[_FEATURE_METADATA][
                     'categorical_features'],
                 dropped_features=meta[_FEATURE_METADATA][
