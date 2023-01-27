@@ -13,8 +13,8 @@ import pandas as pd
 
 from responsibleai._interfaces import TaskType
 from responsibleai._internal.constants import DataBalanceManagerKeys as Keys
-from responsibleai._internal.constants import ListProperties, ManagerNames, \
-    FileFormats
+from responsibleai._internal.constants import (FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.databalanceanalysis import (AggregateBalanceMeasures,

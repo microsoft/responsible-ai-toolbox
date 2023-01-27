@@ -9,8 +9,6 @@ from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
 import pandas as pd
-from responsibleai._internal.constants import FileFormats, \
-    SerializationAttributes
 import semver
 
 from responsibleai._interfaces import CausalConfig as CausalConfigInterface
@@ -18,6 +16,8 @@ from responsibleai._interfaces import (CausalData, CausalPolicy,
                                        CausalPolicyGains,
                                        CausalPolicyTreeInternal,
                                        CausalPolicyTreeLeaf, ComparisonTypes)
+from responsibleai._internal.constants import (FileFormats,
+                                               SerializationAttributes)
 from responsibleai._tools.causal.causal_config import CausalConfig
 from responsibleai._tools.causal.causal_constants import ResultAttributes
 from responsibleai._tools.shared.base_result import BaseResult

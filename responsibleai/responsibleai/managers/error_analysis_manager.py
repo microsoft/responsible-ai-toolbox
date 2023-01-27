@@ -17,9 +17,9 @@ from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
-from responsibleai._internal.constants import \
-    ErrorAnalysisManagerKeys as Keys, FileFormats
-from responsibleai._internal.constants import ListProperties, ManagerNames
+from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
+from responsibleai._internal.constants import (FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (ConfigAndResultMismatchException,
