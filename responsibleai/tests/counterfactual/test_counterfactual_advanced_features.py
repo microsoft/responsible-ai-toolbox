@@ -139,9 +139,9 @@ class TestCounterfactualAdvancedFeatures(object):
             directory_manager = DirectoryManager(
                 parent_directory_path=counterfactual_path,
                 sub_directory_name=counterfactual_config_dir)
-            explainer_pkl_path = \
-                directory_manager.get_generators_directory() / \
-                ("explainer" + FileFormats.PKL)
+            explainer_pkl_path = (
+                directory_manager.get_generators_directory() /
+                ("explainer" + FileFormats.PKL))
             os.remove(explainer_pkl_path)
 
         with pytest.warns(UserWarning,
