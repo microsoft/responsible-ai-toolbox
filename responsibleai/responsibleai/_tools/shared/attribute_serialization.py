@@ -8,6 +8,8 @@ import warnings
 from pathlib import Path
 from typing import Any, List, Union
 
+from responsibleai._internal.constants import FileFormats
+
 
 class SerializationFormats:
     PICKLE = 'pickle'
@@ -16,18 +18,14 @@ class SerializationFormats:
 
 
 class SerializationExtensions:
-    PKL = 'pkl'
-    JSON = 'json'
-    TXT = 'txt'
-
     @classmethod
     def from_format(cls, file_format: str) -> str:
         if file_format == SerializationFormats.PICKLE:
-            return cls.PKL
+            return FileFormats.PKL
         elif file_format == SerializationFormats.JSON:
-            return cls.JSON
+            return FileFormats.JSON
         elif file_format == SerializationFormats.TEXT:
-            return cls.TXT
+            return FileFormats.TXT
         else:
             raise ValueError(f"Unknown format: {file_format}")
 
@@ -55,7 +53,7 @@ def save_attributes(
         attribute_format = file_format[i] if is_format_list else file_format
         value = getattr(o, attribute)
         extension = SerializationExtensions.from_format(attribute_format)
-        path = dir_path / f'{attribute}.{extension}'
+        path = dir_path / f'{attribute}{extension}'
         _save_attribute(value, path, attribute_format)
         paths.append(path)
     return paths
@@ -102,7 +100,7 @@ def load_attributes(
     for i, attribute in enumerate(attributes):
         attribute_format = file_format[i] if is_format_list else file_format
         extension = SerializationExtensions.from_format(attribute_format)
-        path = dir_path / f'{attribute}.{extension}'
+        path = dir_path / f'{attribute}{extension}'
         if not fail_on_missing and (not path.exists() or not path.is_file()):
             continue
         value = _load_attribute(path, attribute_format)
