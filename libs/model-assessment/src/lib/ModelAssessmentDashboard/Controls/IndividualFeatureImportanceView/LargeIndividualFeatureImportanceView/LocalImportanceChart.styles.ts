@@ -15,23 +15,14 @@ export interface ILocalImportanceChartStyles {
 export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportanceChartStyles> =
   () => {
     return mergeStyleSets<ILocalImportanceChartStyles>({
+      absoluteValueToggle: {
+        width: "170px"
+      },
       buttonStyle: {
         marginBottom: "10px",
         marginTop: "10px",
         paddingBottom: "10px",
         paddingTop: "10px"
-      },
-      absoluteValueToggle: {
-        width: "170px"
-      },
-      legendAndText: {
-        boxSizing: "border-box",
-        height: "100%",
-        paddingLeft: "10px",
-        paddingRight: "10px"
-      },
-      localImportanceChart: {
-        width: "85%"
       },
       featureImportanceControls: {
         display: "flex",
@@ -43,6 +34,15 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
             padding: "18px 0 4px 0"
           }
         }
+      },
+      legendAndText: {
+        boxSizing: "border-box",
+        height: "100%",
+        paddingLeft: "10px",
+        paddingRight: "10px"
+      },
+      localImportanceChart: {
+        width: "85%"
       },
       startingK: {
         flex: 1,

@@ -14,7 +14,7 @@ export async function getLocalExplanationsFromSDK(
       new AbortController().signal
     );
     return result;
-  } catch (e) {
-    return e;
+  } catch (error) {
+    return error;
   }
 }

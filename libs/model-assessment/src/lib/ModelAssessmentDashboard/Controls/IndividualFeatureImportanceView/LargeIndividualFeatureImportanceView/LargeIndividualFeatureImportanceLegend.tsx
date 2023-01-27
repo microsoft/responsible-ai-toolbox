@@ -9,6 +9,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
 
 export interface ILargeIndividualFeatureImportanceLegendProps {

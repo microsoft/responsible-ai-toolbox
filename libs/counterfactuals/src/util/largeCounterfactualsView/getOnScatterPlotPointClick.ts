@@ -23,7 +23,7 @@ export async function getLocalCounterfactualsFromSDK(
       );
 
     return result;
-  } catch (e) {
-    return e;
+  } catch (error) {
+    return error;
   }
 }

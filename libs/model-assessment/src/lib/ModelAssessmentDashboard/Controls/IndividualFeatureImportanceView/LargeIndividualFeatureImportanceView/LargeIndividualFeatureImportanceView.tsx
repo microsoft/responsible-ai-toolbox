@@ -27,7 +27,9 @@ import {
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
+
 import { verticalComponentTokens } from "../IndividualFeatureImportanceView.styles";
+
 import { getLocalExplanationsFromSDK } from "./getOnScatterPlotPointClick";
 import { LargeIndividualFeatureImportanceChartArea } from "./LargeIndividualFeatureImportanceChartArea";
 import { LocalImportanceChart } from "./LocalImportanceChart";
@@ -74,13 +76,13 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       indexSeries: [],
       isBubbleChartDataLoading: false,
       isBubbleChartRendered: true,
-      isRevertButtonClicked: false,
-      xSeries: [],
-      ySeries: [],
-      selectedPointsIndexes: [],
-      localExplanationsData: undefined,
       isLocalExplanationsDataLoading: false,
-      localExplanationsErrorMessage: undefined
+      isRevertButtonClicked: false,
+      localExplanationsData: undefined,
+      localExplanationsErrorMessage: undefined,
+      selectedPointsIndexes: [],
+      xSeries: [],
+      ySeries: []
     };
   }
 
@@ -224,14 +226,14 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   ): Promise<void> => {
     if (chartProps) {
       this.setState({
-        isBubbleChartDataLoading: true,
         indexSeries: [],
-        xSeries: [],
-        ySeries: [],
-        selectedPointsIndexes: [],
-        localExplanationsData: undefined,
+        isBubbleChartDataLoading: true,
         isLocalExplanationsDataLoading: false,
-        localExplanationsErrorMessage: undefined
+        localExplanationsData: undefined,
+        localExplanationsErrorMessage: undefined,
+        selectedPointsIndexes: [],
+        xSeries: [],
+        ySeries: []
       });
       const datasetBarConfigOverride = await this.getBubblePlotData(chartProps);
       if (
@@ -242,11 +244,11 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         return;
       }
       this.setState({
+        chartProps,
         highChartConfigOverride: datasetBarConfigOverride,
         isBubbleChartDataLoading: false,
         isBubbleChartRendered: true,
-        isRevertButtonClicked: false,
-        chartProps: chartProps
+        isRevertButtonClicked: false
       });
     }
   };
@@ -254,10 +256,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
     const datasetBarConfigOverride = this.getScatterPlotData(chartProps);
     this.setState({
+      chartProps,
       highChartConfigOverride: datasetBarConfigOverride,
       isBubbleChartRendered: false,
-      isRevertButtonClicked: false,
-      chartProps: chartProps
+      isRevertButtonClicked: false
     });
   };
 
@@ -422,18 +424,18 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
         !instanceOfLocalExplanation(localExplanationsData)
       ) {
         this.setState({
+          isLocalExplanationsDataLoading: false,
+          localExplanationsData: undefined,
           localExplanationsErrorMessage: localExplanationsData
             .toString()
             .split(":")
-            .pop(),
-          localExplanationsData: undefined,
-          isLocalExplanationsDataLoading: false
+            .pop()
         });
         return;
       }
       this.setState({
-        localExplanationsData: localExplanationsData,
-        isLocalExplanationsDataLoading: false
+        isLocalExplanationsDataLoading: false,
+        localExplanationsData
       });
     }
   };

@@ -17,6 +17,7 @@ import {
 import { ClassImportanceWeights } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
 import { localImportanceChartStyles } from "./LocalImportanceChart.styles";
 
 export interface ILocalImportanceChartProps {
@@ -99,7 +100,7 @@ export class LocalImportanceChart extends React.PureComponent<
     }
 
     return (
-      <Stack horizontal={true} grow tokens={{ childrenGap: "l1" }}>
+      <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item className={classNames.localImportanceChart}>
           <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
             <Stack.Item className={classNames.featureImportanceControls}>
@@ -169,7 +170,7 @@ export class LocalImportanceChart extends React.PureComponent<
   };
 
   private generateSortedData(): any {
-    let sortedData = [];
+    const sortedData = [];
     if (IsClassifier(this.props.modelType)) {
       sortedData.push({
         [this.props.weightOptions[0]]: this.getAbsoluteValues(
@@ -186,7 +187,7 @@ export class LocalImportanceChart extends React.PureComponent<
       });
     }
 
-    this.setState({ sortedData: sortedData });
+    this.setState({ sortedData });
   }
 
   private getAbsoluteValues(values?: number[]): number[] | undefined {
@@ -198,7 +199,7 @@ export class LocalImportanceChart extends React.PureComponent<
   }
 
   private addScores(): any {
-    let scores: Array<{ [key: string]: number[] }> = new Array(
+    const scores: Array<{ [key: string]: number[] }> = new Array(
       this.props.data?.precomputedExplanations?.localFeatureImportance.scores.length
     );
     this.props.data?.precomputedExplanations?.localFeatureImportance.scores.forEach(
@@ -249,7 +250,7 @@ export class LocalImportanceChart extends React.PureComponent<
   private findValue(sortedData: any, keyToFind: string): number[] | undefined {
     const sortedDataTemp: Array<{ [key: string]: number[] }> = sortedData;
     let valToReturn: number[] | undefined;
-    for (let data of sortedDataTemp) {
+    for (const data of sortedDataTemp) {
       Object.entries(data).find(([key, val]) => {
         if (key === keyToFind.toString()) {
           valToReturn = val;

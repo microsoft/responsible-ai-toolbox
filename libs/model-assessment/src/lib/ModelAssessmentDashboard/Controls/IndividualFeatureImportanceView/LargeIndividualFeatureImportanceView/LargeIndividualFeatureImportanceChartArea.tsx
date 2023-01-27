@@ -16,6 +16,7 @@ import {
 } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 import React from "react";
+
 import { LargeIndividualFeatureImportanceLegend } from "./LargeIndividualFeatureImportanceLegend";
 import { largeIndividualFeatureImportanceViewStyles } from "./LargeIndividualFeatureImportanceView.styles";
 
@@ -62,7 +63,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
     const isScatterChart = chartProps?.chartType === ChartTypes.Scatter;
 
     return (
-      <Stack horizontal={true} grow tokens={{ childrenGap: "l1" }}>
+      <Stack horizontal grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item className={classNames.chart}>
           <Stack.Item className={classNames.chartWithAxes}>
             <Stack horizontal>

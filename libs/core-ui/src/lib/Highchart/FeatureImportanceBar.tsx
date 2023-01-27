@@ -66,7 +66,6 @@ export class FeatureImportanceBar extends React.Component<
   }
 
   public render(): React.ReactNode {
-    console.log("!!this.state.highchartOption: ", this.state.highchartOption);
     return (
       <Stack
         horizontal

@@ -16,9 +16,6 @@ export interface ILargeIndividualFeatureImportanceViewStyles {
 export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSet<ILargeIndividualFeatureImportanceViewStyles> =
   () => {
     return mergeStyleSets<ILargeIndividualFeatureImportanceViewStyles>({
-      legendContainer: {
-        width: "15%"
-      },
       chart: {
         marginBottom: "40px",
         width: "90%"
@@ -33,6 +30,9 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
       },
       horizontalAxis: {
         textAlign: "center"
+      },
+      legendContainer: {
+        width: "15%"
       },
       rotatedVerticalBox: {
         marginLeft: "28px",
