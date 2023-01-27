@@ -187,20 +187,13 @@ export class LocalImportanceChart extends React.PureComponent<
     }
 
     this.setState({ sortedData: sortedData });
-    console.log("!!sortedData: ", sortedData);
   }
 
   private getAbsoluteValues(values?: number[]): number[] | undefined {
-    console.log(
-      "!!getAverageAbsoluteValues: ",
-      this.props.data?.precomputedExplanations?.localFeatureImportance
-        .scores[0][0]
-    );
     if (!values) {
       return values;
     }
     const sortedScores = values.map((score: any) => Math.abs(score));
-    console.log("!!res: ", sortedScores);
     return sortedScores;
   }
 
@@ -213,7 +206,6 @@ export class LocalImportanceChart extends React.PureComponent<
         scores.push({ [this.props.weightOptions[index + 1]]: score[0] });
       }
     );
-    console.log("!!addScores: ", scores);
     return scores.filter((s) => s);
   }
 
@@ -275,16 +267,6 @@ export class LocalImportanceChart extends React.PureComponent<
     if (this.props.rowNumber === undefined) {
       return data;
     }
-
-    console.log(
-      "!!data: ",
-      this.props.data,
-      this.state.sortedData,
-      this.props.selectedWeightVector,
-      this.props.weightLabels,
-      this.props.weightOptions
-    );
-
     const keyToFind = IsClassifier(this.props.modelType)
       ? (this.props.selectedWeightVector as string)
       : regressionKeyValue;
