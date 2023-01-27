@@ -42,6 +42,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
       chartProps,
       isBubbleChartRendered,
       isBubbleChartDataLoading,
+      isLocalExplanationsDataLoading,
       highChartConfigOverride,
       bubbleChartErrorMessage,
       onXSet,
@@ -89,7 +90,10 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                           chartProps.yAxis.property || ""
                         ].label
                       }
-                      disabled={isBubbleChartDataLoading}
+                      disabled={
+                        isBubbleChartDataLoading ||
+                        isLocalExplanationsDataLoading
+                      }
                     />
                   )}
                 </div>
@@ -141,7 +145,9 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
                   this.context.jointDataset.metaDict[chartProps.xAxis.property]
                     .label
                 }
-                disabled={isBubbleChartDataLoading}
+                disabled={
+                  isBubbleChartDataLoading || isLocalExplanationsDataLoading
+                }
               />
             )}
           </div>

@@ -11,13 +11,19 @@ export async function getLocalCounterfactualsFromSDK(
     absoluteIndex: number,
     abortSignal: AbortSignal
   ) => Promise<Record<string, unknown> | ICounterfactualData>
-): Promise<ICounterfactualData | Record<string, unknown> | undefined> {
-  const result: ICounterfactualData | Record<string, unknown> | undefined =
-    await requestLocalCounterfactuals?.(
-      counterfactualsId,
-      absoluteIndex,
-      new AbortController().signal
-    );
+): Promise<
+  ICounterfactualData | Record<string, unknown> | undefined | unknown
+> {
+  try {
+    const result: ICounterfactualData | Record<string, unknown> | undefined =
+      await requestLocalCounterfactuals?.(
+        counterfactualsId,
+        absoluteIndex,
+        new AbortController().signal
+      );
 
-  return result;
+    return result;
+  } catch (e) {
+    return e;
+  }
 }

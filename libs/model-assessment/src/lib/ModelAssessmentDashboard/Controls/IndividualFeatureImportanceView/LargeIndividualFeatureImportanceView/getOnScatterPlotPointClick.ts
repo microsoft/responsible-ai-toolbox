@@ -8,10 +8,13 @@ export async function getLocalExplanationsFromSDK(
     abortSignal: AbortSignal
   ) => Promise<any>
 ): Promise<unknown> {
-  const result: unknown = await requestLocalExplanations?.(
-    absoluteIndex,
-    new AbortController().signal
-  );
-
-  return result;
+  try {
+    const result = await requestLocalExplanations?.(
+      absoluteIndex,
+      new AbortController().signal
+    );
+    return result;
+  } catch (e) {
+    return e;
+  }
 }

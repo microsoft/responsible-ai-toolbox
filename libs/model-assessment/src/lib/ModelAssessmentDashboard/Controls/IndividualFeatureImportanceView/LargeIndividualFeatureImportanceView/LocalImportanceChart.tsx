@@ -119,6 +119,7 @@ export class LocalImportanceChart extends React.PureComponent<
                 inlineLabel
                 checked={this.state.sortAbsolute}
                 onChange={this.toggleSortAbsolute}
+                disabled={this.props.isLocalExplanationsDataLoading}
               />
             </Stack.Item>
             <Stack.Item>
@@ -127,6 +128,7 @@ export class LocalImportanceChart extends React.PureComponent<
                 selectedWeightVector={this.props.selectedWeightVector}
                 weightOptions={this.props.weightOptions}
                 weightLabels={this.props.weightLabels}
+                disabled={this.props.isLocalExplanationsDataLoading}
               />
             </Stack.Item>
           </Stack>

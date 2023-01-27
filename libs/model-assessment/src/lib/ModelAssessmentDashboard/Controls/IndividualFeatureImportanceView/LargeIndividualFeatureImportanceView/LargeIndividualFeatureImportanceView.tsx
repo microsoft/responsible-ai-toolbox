@@ -12,6 +12,7 @@ import {
   IGenericChartProps,
   IHighchartBubbleSDKClusterData,
   IHighchartsConfig,
+  ILocalExplanations,
   instanceOfHighChart,
   IScatterPoint,
   ISelectorConfig,
@@ -407,7 +408,8 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   ): Promise<void> => {
     if (absoluteIndex) {
       this.setState({
-        isLocalExplanationsDataLoading: true
+        isLocalExplanationsDataLoading: true,
+        localExplanationsErrorMessage: undefined
       });
       const localExplanationsData = await getLocalExplanationsFromSDK(
         absoluteIndex,
@@ -416,13 +418,15 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       if (
         typeof localExplanationsData === "object" &&
         localExplanationsData &&
-        localExplanationsData["error"]
+        !instanceOfLocalExplanation(localExplanationsData)
       ) {
         this.setState({
-          localExplanationsErrorMessage: localExplanationsData["error"]
+          localExplanationsErrorMessage: localExplanationsData
+            .toString()
             .split(":")
             .pop(),
-          localExplanationsData: undefined
+          localExplanationsData: undefined,
+          isLocalExplanationsDataLoading: false
         });
         return;
       }
@@ -432,4 +436,10 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       });
     }
   };
+}
+
+export function instanceOfLocalExplanation(
+  object: any
+): object is ILocalExplanations {
+  return "method" in object;
 }
