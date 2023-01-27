@@ -293,7 +293,8 @@ class CounterfactualConfig(BaseConfig):
                 file_path)
 
     def load_result(self, data_directory_path):
-        metadata_file_path = (data_directory_path /
+        metadata_file_path = (
+            data_directory_path /
             (_CommonSchemaConstants.METADATA + FileFormats.JSON))
 
         if metadata_file_path.exists():
@@ -307,7 +308,8 @@ class CounterfactualConfig(BaseConfig):
 
             counterfactual_examples_dict = {}
             for counterfactual_examples_key in cf_schema_keys:
-                result_path = (data_directory_path /
+                result_path = (
+                    data_directory_path /
                     (counterfactual_examples_key + FileFormats.JSON))
                 with open(result_path, 'r') as result_file:
                     counterfactual_examples_dict[
@@ -319,17 +321,20 @@ class CounterfactualConfig(BaseConfig):
         else:
             self.counterfactual_obj = None
 
-        result_path = (data_directory_path /
+        result_path = (
+            data_directory_path /
             (CounterfactualConfig.HAS_COMPUTATION_FAILED + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.has_computation_failed = json.load(result_file)
 
-        result_path = (data_directory_path /
+        result_path = (
+            data_directory_path /
             (CounterfactualConfig.FAILURE_REASON + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.failure_reason = json.load(result_file)
 
-        result_path = (data_directory_path /
+        result_path = (
+            data_directory_path /
             (CounterfactualConfig.IS_COMPUTED + FileFormats.JSON))
         with open(result_path, 'r') as result_file:
             self.is_computed = json.load(result_file)
@@ -399,9 +404,10 @@ class CounterfactualManager(BaseManager):
         dice_data = dice_ml.Data(dataframe=self._train,
                                  continuous_features=continuous_features,
                                  outcome_name=self._target_column)
-        model_type = CounterfactualConstants.CLASSIFIER \
-            if self._task_type == ModelTask.CLASSIFICATION else \
-            CounterfactualConstants.REGRESSOR
+        model_type = (
+            CounterfactualConstants.CLASSIFIER
+            if self._task_type == ModelTask.CLASSIFICATION else
+            CounterfactualConstants.REGRESSOR)
         dice_model = dice_ml.Model(model=self._model,
                                    backend=CounterfactualConstants.SKLEARN,
                                    model_type=model_type)

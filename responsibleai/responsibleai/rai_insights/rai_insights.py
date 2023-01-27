@@ -413,7 +413,7 @@ class RAIInsights(RAIBaseInsights):
 
             if classes is not None and task_type == ModelTask.CLASSIFICATION:
                 if (len(set(train[target_column].unique()) -
-                       set(classes)) != 0 or
+                        set(classes)) != 0 or
                         len(set(classes) -
                             set(train[target_column].unique())) != 0):
                     raise UserConfigValidationException(
@@ -421,7 +421,7 @@ class RAIInsights(RAIBaseInsights):
                         'target (train data) do not match')
 
                 if (len(set(test[target_column].unique()) -
-                       set(classes)) != 0 or
+                        set(classes)) != 0 or
                         len(set(classes) -
                             set(test[target_column].unique())) != 0):
                     raise UserConfigValidationException(
@@ -749,7 +749,8 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIInsights to.
         :type path: str
         """
-        prediction_output_path = (Path(path) /
+        prediction_output_path = (
+            Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
         prediction_output_path.mkdir(parents=True, exist_ok=True)
 
@@ -792,7 +793,8 @@ class RAIInsights(RAIBaseInsights):
         """
         if self._large_test is not None:
             # Save large test data
-            large_test_path = (Path(path) /
+            large_test_path = (
+                Path(path) /
                 SerializationAttributes.DATA_DIRECTORY /
                 SerializationAttributes.LARGE_TEST_JSON)
             self._write_to_file(
@@ -929,7 +931,8 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
             return
 
-        prediction_output_path = (Path(path) /
+        prediction_output_path = (
+            Path(path) /
             SerializationAttributes.PREDICTIONS_DIRECTORY)
 
         with open(prediction_output_path / (
@@ -988,13 +991,16 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to data location.
         :type path: str
         """
-        large_test_path = (Path(path) /
+        large_test_path = (
+            Path(path) /
             SerializationAttributes.DATA_DIRECTORY /
             SerializationAttributes.LARGE_TEST_JSON)
         if large_test_path.exists():
-            data_directory = (Path(path) /
+            data_directory = (
+                Path(path) /
                 SerializationAttributes.DATA_DIRECTORY)
-            with open(data_directory / (
+            with open(
+                data_directory / (
                     Metadata.TEST + 'dtypes' + FileFormats.JSON),
                     'r') as file:
                 types = json.load(file)
