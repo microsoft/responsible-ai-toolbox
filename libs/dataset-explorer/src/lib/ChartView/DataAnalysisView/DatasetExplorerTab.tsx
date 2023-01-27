@@ -249,6 +249,7 @@ export class DatasetExplorerTab extends React.Component<
                 jointDataset={this.context.jointDataset}
                 selectedCohortIndex={this.state.selectedCohortIndex}
                 onChartPropChange={this.onChartPropsChange}
+                dataset={this.context.dataset}
               />
             </Stack.Item>
           </Stack>

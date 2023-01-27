@@ -17,7 +17,9 @@ from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
 from responsibleai._interfaces import Dataset, RAIInsightsData
-from responsibleai._internal.constants import ManagerNames, Metadata
+from responsibleai._internal.constants import (FileFormats, ManagerNames,
+                                               Metadata,
+                                               SerializationAttributes)
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.managers.causal_manager import CausalManager
@@ -28,25 +30,8 @@ from responsibleai.managers.explainer_manager import ExplainerManager
 from responsibleai.rai_insights.constants import ModelTask
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
-_PREDICTIONS = 'predictions'
-_TRAIN = 'train'
-_TEST = 'test'
-_TARGET_COLUMN = 'target_column'
-_TASK_TYPE = 'task_type'
-_CLASSES = 'classes'
-_FEATURE_COLUMNS = 'feature_columns'
-_FEATURE_METADATA = 'feature_metadata'
-_FEATURE_RANGES = 'feature_ranges'
-_CATEGORICAL_FEATURES = 'categorical_features'
-_CATEGORIES = 'categories'
-_CATEGORY_DICTIONARY = 'category_dictionary'
-_CATEGORICAL_INDEXES = 'categorical_indexes'
-_STRING_IND_DATA = 'string_ind_data'
-_META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
-_JSON_EXTENSION = '.json'
-_PREDICT = 'predict'
-_PREDICT_PROBA = 'predict_proba'
+_MODEL = "model"
 _PREDICT_OUTPUT = 'predict_output'
 _PREDICT_PROBA_OUTPUT = 'predict_proba_output'
 _COLUMN_NAME = 'column_name'
@@ -54,7 +39,6 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
-_MODEL = "model"
 
 
 class RAIInsights(RAIBaseInsights):
@@ -281,9 +265,9 @@ class RAIInsights(RAIBaseInsights):
         Add data balance measures to be computed on categorical features
         if it is a classification task.
         """
-        if self.task_type == ModelTask.CLASSIFICATION and \
-                len(self.categorical_features) > 0 and \
-                self._classes is not None:
+        if (self.task_type == ModelTask.CLASSIFICATION and
+                len(self.categorical_features) > 0 and
+                self._classes is not None):
             self._data_balance_manager.add(
                 cols_of_interest=self.categorical_features)
 
@@ -369,20 +353,20 @@ class RAIInsights(RAIBaseInsights):
                     'and test sets.'
                 )
 
-            if len(set(train.columns) - set(test.columns)) != 0 or \
-                    len(set(test.columns) - set(train.columns)) != 0:
+            if (len(set(train.columns) - set(test.columns)) != 0 or
+                    len(set(test.columns) - set(train.columns)) != 0):
                 raise UserConfigValidationException(
                     'The features in train and test data do not match')
 
-            if target_column not in list(train.columns) or \
-                    target_column not in list(test.columns):
+            if (target_column not in list(train.columns) or
+                    target_column not in list(test.columns)):
                 raise UserConfigValidationException(
                     'Target name {0} not present in train/test data'.format(
                         target_column)
                 )
 
-            if categorical_features is not None and \
-                    len(categorical_features) > 0:
+            if (categorical_features is not None and
+                    len(categorical_features) > 0):
                 if target_column in categorical_features:
                     raise UserConfigValidationException(
                         'Found target name {0} in '
@@ -427,20 +411,19 @@ class RAIInsights(RAIBaseInsights):
                         string_features_set - set(categorical_features))
                 )
 
-            if classes is not None and task_type == \
-                    ModelTask.CLASSIFICATION:
-                if len(set(train[target_column].unique()) -
-                       set(classes)) != 0 or \
+            if classes is not None and task_type == ModelTask.CLASSIFICATION:
+                if (len(set(train[target_column].unique()) -
+                        set(classes)) != 0 or
                         len(set(classes) -
-                            set(train[target_column].unique())) != 0:
+                            set(train[target_column].unique())) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'target (train data) do not match')
 
-                if len(set(test[target_column].unique()) -
-                       set(classes)) != 0 or \
+                if (len(set(test[target_column].unique()) -
+                        set(classes)) != 0 or
                         len(set(classes) -
-                            set(test[target_column].unique())) != 0:
+                            set(test[target_column].unique())) != 0):
                     raise UserConfigValidationException(
                         'The train labels and distinct values in '
                         'target (test data) do not match')
@@ -460,8 +443,8 @@ class RAIInsights(RAIBaseInsights):
                 small_test_data = test[0:1]
                 has_dropped_features = False
                 if feature_metadata is not None:
-                    if feature_metadata.dropped_features is not None and \
-                            len(feature_metadata.dropped_features) != 0:
+                    if (feature_metadata.dropped_features is not None and
+                            len(feature_metadata.dropped_features) != 0):
                         has_dropped_features = True
                         small_train_data = small_train_data.drop(
                             columns=feature_metadata.dropped_features, axis=1)
@@ -472,8 +455,8 @@ class RAIInsights(RAIBaseInsights):
                     columns=[target_column], axis=1)
                 small_test_data = small_test_data.drop(
                     columns=[target_column], axis=1)
-                if len(small_train_data.columns) == 0 or \
-                        len(small_test_data.columns) == 0:
+                if (len(small_train_data.columns) == 0 or
+                        len(small_test_data.columns) == 0):
                     if has_dropped_features:
                         raise UserConfigValidationException(
                             'All features have been dropped from the dataset.'
@@ -681,8 +664,8 @@ class RAIInsights(RAIBaseInsights):
                 metadata_exists = metadata is not None
                 dropped_features_exist = metadata_exists and \
                     metadata.dropped_features is not None
-                if dropped_features_exist and \
-                        len(metadata.dropped_features) != 0:
+                if (dropped_features_exist and
+                        len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                 predicted_y = self.model.predict(predict_dataset)
@@ -696,7 +679,7 @@ class RAIInsights(RAIBaseInsights):
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
-            if(self.task_type == "classification" and
+            if (self.task_type == "classification" and
                     dashboard_dataset.class_names is not None):
                 predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
@@ -720,7 +703,7 @@ class RAIInsights(RAIBaseInsights):
         true_y = self.test[self.target_column]
 
         if true_y is not None and len(true_y) == row_length:
-            if(self.task_type == "classification" and
+            if (self.task_type == "classification" and
                dashboard_dataset.class_names is not None):
                 true_y = [dashboard_dataset.class_names.index(
                     y) for y in true_y]
@@ -743,8 +726,8 @@ class RAIInsights(RAIBaseInsights):
                 metadata_exists = metadata is not None
                 dropped_features_exist = metadata_exists and \
                     metadata.dropped_features is not None
-                if dropped_features_exist and \
-                        len(metadata.dropped_features) != 0:
+                if (dropped_features_exist and
+                        len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
                 probability_y = self.model.predict_proba(predict_dataset)
@@ -766,36 +749,40 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIInsights to.
         :type path: str
         """
-        prediction_output_path = Path(path) / _PREDICTIONS
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
         prediction_output_path.mkdir(parents=True, exist_ok=True)
 
         if self.model is None:
             return
 
         self._write_to_file(
-            prediction_output_path / (_PREDICT + _JSON_EXTENSION),
+            prediction_output_path / SerializationAttributes.PREDICT_JSON,
             json.dumps(self.predict_output.tolist()))
 
         if self.predict_proba_output is not None:
             self._write_to_file(
-                prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
+                prediction_output_path /
+                SerializationAttributes.PREDICT_PROBA_JSON,
                 json.dumps(self.predict_proba_output.tolist()))
 
         if self._large_test is not None:
             self._write_to_file(
-                prediction_output_path / (
-                    'large_' + _PREDICT + _JSON_EXTENSION),
+                prediction_output_path /
+                SerializationAttributes.LARGE_PREDICT_JSON,
                 json.dumps(self._large_predict_output.tolist()))
 
             if self._large_predict_proba_output is not None:
                 self._write_to_file(
-                    prediction_output_path / (
-                        'large_' + _PREDICT_PROBA + _JSON_EXTENSION),
+                    prediction_output_path /
+                    SerializationAttributes.LARGE_PREDICT_PROBA_JSON,
                     json.dumps(self._large_predict_proba_output.tolist()))
 
             # Save large test data
             self._write_to_file(
-                prediction_output_path / ('large_' + _TEST + _JSON_EXTENSION),
+                prediction_output_path /
+                SerializationAttributes.LARGE_TEST_JSON,
                 self._large_test.to_json(orient='split'))
 
     def _save_large_data(self, path):
@@ -806,8 +793,10 @@ class RAIInsights(RAIBaseInsights):
         """
         if self._large_test is not None:
             # Save large test data
-            large_test_path = Path(path) / 'data' / (
-                'large_' + _TEST + _JSON_EXTENSION)
+            large_test_path = (
+                Path(path) /
+                SerializationAttributes.DATA_DIRECTORY /
+                SerializationAttributes.LARGE_TEST_JSON)
             self._write_to_file(
                 large_test_path,
                 self._large_test.to_json(orient='split'))
@@ -825,15 +814,15 @@ class RAIInsights(RAIBaseInsights):
         if self._feature_metadata is not None:
             feature_metadata_dict = self._feature_metadata.to_dict()
         meta = {
-            _TARGET_COLUMN: self.target_column,
-            _TASK_TYPE: self.task_type,
-            _CATEGORICAL_FEATURES: self.categorical_features,
-            _CLASSES: classes,
-            _FEATURE_COLUMNS: self._feature_columns,
-            _FEATURE_RANGES: self._feature_ranges,
-            _FEATURE_METADATA: feature_metadata_dict
+            Metadata.TARGET_COLUMN: self.target_column,
+            Metadata.TASK_TYPE: self.task_type,
+            Metadata.CATEGORICAL_FEATURES: self.categorical_features,
+            Metadata.CLASSES: classes,
+            Metadata.FEATURE_COLUMNS: self._feature_columns,
+            Metadata.FEATURE_RANGES: self._feature_ranges,
+            Metadata.FEATURE_METADATA: feature_metadata_dict
         }
-        with open(top_dir / _META_JSON, 'w') as file:
+        with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)
 
     def save(self, path):
@@ -877,49 +866,56 @@ class RAIInsights(RAIBaseInsights):
         :type path: str
         """
         top_dir = Path(path)
-        with open(top_dir / _META_JSON, 'r') as meta_file:
+        with open(top_dir / Metadata.META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
-        inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
-        inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
-        inst.__dict__[_CATEGORICAL_FEATURES] = meta[_CATEGORICAL_FEATURES]
+        inst.__dict__[Metadata.TARGET_COLUMN] = meta[Metadata.TARGET_COLUMN]
+        inst.__dict__[Metadata.TASK_TYPE] = meta[Metadata.TASK_TYPE]
+        inst.__dict__[Metadata.CATEGORICAL_FEATURES] = \
+            meta[Metadata.CATEGORICAL_FEATURES]
         classes = None
         if _TRAIN_LABELS in meta:
             classes = meta[_TRAIN_LABELS]
         else:
-            classes = meta[_CLASSES]
+            classes = meta[Metadata.CLASSES]
 
-        inst.__dict__['_' + _CLASSES] = RAIInsights._get_classes(
-            task_type=meta[_TASK_TYPE],
-            train=inst.__dict__[_TRAIN],
-            target_column=meta[_TARGET_COLUMN],
+        inst.__dict__['_' + Metadata.CLASSES] = RAIInsights._get_classes(
+            task_type=meta[Metadata.TASK_TYPE],
+            train=inst.__dict__[Metadata.TRAIN],
+            target_column=meta[Metadata.TARGET_COLUMN],
             classes=classes
         )
 
-        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
-        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        if _FEATURE_METADATA not in meta or meta[_FEATURE_METADATA] is None:
-            inst.__dict__['_' + _FEATURE_METADATA] = None
+        inst.__dict__['_' + Metadata.FEATURE_COLUMNS] = \
+            meta[Metadata.FEATURE_COLUMNS]
+        inst.__dict__['_' + Metadata.FEATURE_RANGES] = \
+            meta[Metadata.FEATURE_RANGES]
+        if (Metadata.FEATURE_METADATA not in meta or
+                meta[Metadata.FEATURE_METADATA] is None):
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = None
         else:
-            inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=meta[_FEATURE_METADATA][
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
+                identity_feature_name=meta[Metadata.FEATURE_METADATA][
                     'identity_feature_name'],
-                datetime_features=meta[_FEATURE_METADATA][
+                datetime_features=meta[Metadata.FEATURE_METADATA][
                     'datetime_features'],
-                categorical_features=meta[_FEATURE_METADATA][
+                categorical_features=meta[Metadata.FEATURE_METADATA][
                     'categorical_features'],
-                dropped_features=meta[_FEATURE_METADATA][
+                dropped_features=meta[Metadata.FEATURE_METADATA][
                     'dropped_features'],)
 
-        inst.__dict__['_' + _CATEGORIES], \
-            inst.__dict__['_' + _CATEGORICAL_INDEXES], \
-            inst.__dict__['_' + _CATEGORY_DICTIONARY], \
-            inst.__dict__['_' + _STRING_IND_DATA] = \
+        all_features_names = inst.__dict__['_' + Metadata.FEATURE_COLUMNS]
+        categorical_features = inst.__dict__[Metadata.CATEGORICAL_FEATURES]
+        dataset = inst.__dict__[Metadata.TEST].drop(
+            columns=[inst.__dict__[Metadata.TARGET_COLUMN]])
+        inst.__dict__['_' + Metadata.CATEGORIES], \
+            inst.__dict__['_' + Metadata.CATEGORICAL_INDEXES], \
+            inst.__dict__['_' + Metadata.CATEGORY_DICTIONARY], \
+            inst.__dict__['_' + Metadata.STRING_IND_DATA] = \
             process_categoricals(
-                all_feature_names=inst.__dict__['_' + _FEATURE_COLUMNS],
-                categorical_features=inst.__dict__[_CATEGORICAL_FEATURES],
-                dataset=inst.__dict__[_TEST].drop(columns=[
-                    inst.__dict__[_TARGET_COLUMN]]))
+                all_feature_names=all_features_names,
+                categorical_features=categorical_features,
+                dataset=dataset)
 
     @staticmethod
     def _load_predictions(inst, path):
@@ -935,16 +931,18 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
             return
 
-        prediction_output_path = Path(path) / _PREDICTIONS
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
 
         with open(prediction_output_path / (
-                _PREDICT + _JSON_EXTENSION), 'r') as file:
+                SerializationAttributes.PREDICT_JSON), 'r') as file:
             predict_output = json.load(file)
         inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
 
-        if inst.__dict__[_TASK_TYPE] == ModelTask.CLASSIFICATION:
+        if inst.__dict__[Metadata.TASK_TYPE] == ModelTask.CLASSIFICATION:
             with open(prediction_output_path / (
-                    _PREDICT_PROBA + _JSON_EXTENSION), 'r') as file:
+                    SerializationAttributes.PREDICT_PROBA_JSON), 'r') as file:
                 predict_proba_output = json.load(file)
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = np.array(
                 predict_proba_output)
@@ -952,11 +950,11 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
 
         large_test_path = prediction_output_path / (
-            'large_' + _TEST + _JSON_EXTENSION)
+            SerializationAttributes.LARGE_TEST_JSON)
         if large_test_path.exists():
             data_directory = Path(path) / "data"
             with open(data_directory / (
-                    _TEST + 'dtypes' + _JSON_EXTENSION), 'r') as file:
+                    Metadata.TEST + 'dtypes' + FileFormats.JSON), 'r') as file:
                 types = json.load(file)
             with open(large_test_path, 'r') as file:
                 inst.__dict__["_large_test"] = \
@@ -965,7 +963,7 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__["_large_test"] = None
 
         large_predict_output_path = prediction_output_path / (
-            'large_' + _PREDICT + _JSON_EXTENSION)
+            SerializationAttributes.LARGE_PREDICT_JSON)
         if large_predict_output_path.exists():
             with open(large_predict_output_path, 'r') as file:
                 large_predict_output = json.load(file)
@@ -975,7 +973,7 @@ class RAIInsights(RAIBaseInsights):
             inst.__dict__["_large_predict_output"] = None
 
         large_predict_proba_output_path = prediction_output_path / (
-            'large_' + _PREDICT_PROBA + _JSON_EXTENSION)
+            SerializationAttributes.LARGE_PREDICT_PROBA_JSON)
         if large_predict_proba_output_path.exists():
             with open(large_predict_proba_output_path, 'r') as file:
                 large_predict_proba_output = json.load(file)
@@ -993,12 +991,18 @@ class RAIInsights(RAIBaseInsights):
         :param path: The directory path to data location.
         :type path: str
         """
-        large_test_path = Path(path) / 'data' / (
-            'large_' + _TEST + _JSON_EXTENSION)
+        large_test_path = (
+            Path(path) /
+            SerializationAttributes.DATA_DIRECTORY /
+            SerializationAttributes.LARGE_TEST_JSON)
         if large_test_path.exists():
-            data_directory = Path(path) / "data"
-            with open(data_directory / (
-                    _TEST + 'dtypes' + _JSON_EXTENSION), 'r') as file:
+            data_directory = (
+                Path(path) /
+                SerializationAttributes.DATA_DIRECTORY)
+            with open(
+                data_directory / (
+                    Metadata.TEST + 'dtypes' + FileFormats.JSON),
+                    'r') as file:
                 types = json.load(file)
             with open(large_test_path, 'r') as file:
                 inst.__dict__["_large_test"] = \

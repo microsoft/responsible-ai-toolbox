@@ -8,6 +8,7 @@ import pytest
 
 from responsibleai import RAIInsights
 from responsibleai._interfaces import CounterfactualData
+from responsibleai._internal.constants import FileFormats
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
@@ -138,8 +139,9 @@ class TestCounterfactualAdvancedFeatures(object):
             directory_manager = DirectoryManager(
                 parent_directory_path=counterfactual_path,
                 sub_directory_name=counterfactual_config_dir)
-            explainer_pkl_path = \
-                directory_manager.get_generators_directory() / "explainer.pkl"
+            explainer_pkl_path = (
+                directory_manager.get_generators_directory() /
+                ("explainer" + FileFormats.PKL))
             os.remove(explainer_pkl_path)
 
         with pytest.warns(UserWarning,

@@ -40,8 +40,6 @@ U_INITIALIZATION_EXAMPLES = '_initialization_examples'
 U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 CATEGORICAL_FEATURES = 'categorical_features'
-META_JSON = Metadata.META_JSON
-MODEL = Metadata.MODEL
 EXPLANATION = '_explanation'
 MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 5000
 
@@ -302,7 +300,7 @@ class ExplainerManager(BaseManager):
                     raise ValueError(
                         "Shape mismatch: local explanation"
                         "length differs from dataset")
-                if(len(local_dim) == 3 and
+                if (len(local_dim) == 3 and
                    (local_dim[2] != _feature_length or
                         local_dim[1] != _row_length)):
                     raise ValueError(
@@ -362,7 +360,7 @@ class ExplainerManager(BaseManager):
 
             meta = {IS_RUN: self._is_run,
                     IS_ADDED: self._is_added}
-            with open(data_directory / META_JSON, 'w') as file:
+            with open(data_directory / Metadata.META_JSON, 'w') as file:
                 json.dump(meta, file)
 
     @staticmethod
@@ -387,7 +385,7 @@ class ExplainerManager(BaseManager):
                 sub_directory_name=all_cf_dirs[0])
             data_directory = directory_manager.get_data_directory()
 
-            with open(data_directory / META_JSON, 'r') as meta_file:
+            with open(data_directory / Metadata.META_JSON, 'r') as meta_file:
                 meta = meta_file.read()
             meta = json.loads(meta)
             inst.__dict__['_' + IS_RUN] = meta[IS_RUN]
@@ -403,7 +401,7 @@ class ExplainerManager(BaseManager):
             inst.__dict__['_' + IS_ADDED] = False
             inst.__dict__[EXPLANATION] = None
 
-        inst.__dict__['_' + MODEL] = rai_insights.model
+        inst.__dict__['_' + Metadata.MODEL] = rai_insights.model
         inst.__dict__['_' + CLASSES] = rai_insights._classes
         inst.__dict__['_' + CATEGORICAL_FEATURES] = \
             rai_insights.categorical_features

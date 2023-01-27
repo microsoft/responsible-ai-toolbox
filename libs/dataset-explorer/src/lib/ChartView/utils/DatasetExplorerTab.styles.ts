@@ -43,12 +43,19 @@ export interface IDatasetExplorerTabStyles {
   sidePanel: IStyle;
   chartAndType: IStyle;
   chart: IStyle;
+  buttonStyle: IStyle;
 }
 
 export const datasetExplorerTabStyles: () => IProcessedStyleSet<IDatasetExplorerTabStyles> =
   () => {
     const theme = getTheme();
     return mergeStyleSets<IDatasetExplorerTabStyles>({
+      buttonStyle: {
+        marginBottom: "10px",
+        marginTop: "20px",
+        paddingBottom: "10px",
+        paddingTop: "10px"
+      },
       chart: {
         marginBottom: "40px",
         width: "100%"

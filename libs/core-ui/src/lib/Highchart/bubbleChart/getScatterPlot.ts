@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  FluentUIStyles,
-  IGenericChartProps,
-  JointDataset
-} from "@responsible-ai/core-ui";
-import { WhatIfConstants } from "@responsible-ai/interpret";
 import { localization } from "@responsible-ai/localization";
 import { Dictionary } from "lodash";
+
+import { FluentUIStyles } from "../../util/FluentUIStyles";
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
 
 import { buildScatterTemplate } from "./buildScatterTemplate";
 
@@ -18,17 +16,25 @@ interface IMarker {
   symbol: string;
 }
 
-export function getCounterfactualsScatter(
+const maxSelection = 2;
+
+export function getScatterPlot(
   xSeries: number[],
   ySeries: number[],
   indexSeries: number[],
   jointDataset: JointDataset,
   selectedPointsIndexes: number[],
   chartProps?: IGenericChartProps,
-  customPoints?: Array<{ [key: string]: any }>
+  customPoints?: Array<{ [key: string]: any }>,
+  showColorAxis?: boolean,
+  useDifferentColorForScatterPoints?: boolean
 ): any[] {
   const dataSeries: any = [];
   const result = [];
+
+  const color = useDifferentColorForScatterPoints
+    ? FluentUIStyles.scatterFluentUIColorPalette[5]
+    : undefined;
 
   if (ySeries) {
     ySeries.forEach((data, index) => {
@@ -41,9 +47,10 @@ export function getCounterfactualsScatter(
             xSeries?.[index],
             data,
             index,
-            indexSeries[index]
+            indexSeries[index],
+            showColorAxis
           ),
-        marker: getMarker(selectedPointsIndexes, index),
+        marker: getMarker(selectedPointsIndexes, index, color),
         x: xSeries?.[index],
         y: data
       });
@@ -55,7 +62,11 @@ export function getCounterfactualsScatter(
       customData: { Index: number };
       marker: { fillColor: string; radius: number; symbol: string };
     }) => {
-      const marker = getMarker(selectedPointsIndexes, d.customData.Index);
+      const marker = getMarker(
+        selectedPointsIndexes,
+        d.customData.Index,
+        color
+      );
       return (d.marker = marker);
     }
   );
@@ -82,13 +93,13 @@ export function getCounterfactualsScatter(
   return result;
 }
 
-function getMarker(selectedPointsIndexes: number[], index: number): IMarker {
+function getMarker(
+  selectedPointsIndexes: number[],
+  index: number,
+  colorToUse?: string
+): IMarker {
   const selectionIndex = selectedPointsIndexes.indexOf(index);
-  const color =
-    selectionIndex === -1
-      ? FluentUIStyles.fabricColorInactiveSeries
-      : FluentUIStyles.fluentUIColorPalette[selectionIndex];
-
+  const color = getColor(selectionIndex, colorToUse);
   const marker = {
     fillColor: color,
     radius: 4,
@@ -97,16 +108,26 @@ function getMarker(selectedPointsIndexes: number[], index: number): IMarker {
   return marker;
 }
 
+function getColor(selectionIndex: number, colorToUse?: string): string {
+  let color;
+  if (colorToUse) {
+    color = colorToUse;
+  } else if (selectionIndex === -1) {
+    color = FluentUIStyles.fabricColorInactiveSeries;
+  } else {
+    color = FluentUIStyles.fluentUIColorPalette[selectionIndex];
+  }
+
+  return color;
+}
+
 function getCustomPointMarker(
   customPoints: Array<{ [key: string]: any }>,
   index: number
 ): IMarker {
   return {
     fillColor: customPoints.map(
-      (_, i) =>
-        FluentUIStyles.fluentUIColorPalette[
-          WhatIfConstants.MAX_SELECTION + 1 + i
-        ]
+      (_, i) => FluentUIStyles.fluentUIColorPalette[maxSelection + 1 + i]
     )[index],
     radius: 4,
     symbol: "triangle"

@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { IGenericChartProps, JointDataset } from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
+
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
 
 export interface ICustomData {
   AbsoluteIndex?: number;
@@ -17,7 +19,8 @@ export function buildScatterTemplate(
   x: any,
   y: any,
   index: number,
-  absoluteIndex: number
+  absoluteIndex: number,
+  showColorAxis?: boolean
 ): ICustomData {
   let hovertemplate = "";
   const customData: ICustomData = {};
@@ -29,7 +32,7 @@ export function buildScatterTemplate(
   if (chartProps.yAxis) {
     hovertemplate += `${yName}: ${y}<br>`;
   }
-  if (chartProps.colorAxis) {
+  if (showColorAxis && chartProps.colorAxis) {
     hovertemplate += `${
       jointData.metaDict[chartProps.colorAxis.property].label
     }: ${customData.Color}<br>`;

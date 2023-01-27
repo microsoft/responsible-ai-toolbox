@@ -8,6 +8,7 @@ import pytest
 
 from responsibleai import ModelTask, RAIInsights
 from responsibleai._interfaces import CausalData
+from responsibleai._internal.constants import FileFormats
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import UserConfigValidationException
@@ -60,7 +61,7 @@ class TestCausalManager:
             dm = DirectoryManager(parent_directory_path=save_dir,
                                   sub_directory_name=causal_dir)
             causal_analysis_pkl_file_path = \
-                dm.get_data_directory() / "causal_analysis.pkl"
+                dm.get_data_directory() / ("causal_analysis" + FileFormats.PKL)
             os.remove(causal_analysis_pkl_file_path)
 
         model_load_err = ('ERROR-LOADING-EXPLAINER: '
