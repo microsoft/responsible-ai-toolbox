@@ -129,7 +129,7 @@ class CounterfactualConfig(BaseConfig):
     HAS_COMPUTATION_FAILED = 'has_computation_failed'
     FAILURE_REASON = 'failure_reason'
 
-    CONFIG_FILE_NAME = F'config{FileFormats.JSON}'
+    CONFIG_FILE_NAME = f'config{FileFormats.JSON}'
     RESULT_FILE_NAME = f'result{FileFormats.JSON}'
     EXPLAINER_FILE_NAME = f'explainer{FileFormats.PKL}'
 
