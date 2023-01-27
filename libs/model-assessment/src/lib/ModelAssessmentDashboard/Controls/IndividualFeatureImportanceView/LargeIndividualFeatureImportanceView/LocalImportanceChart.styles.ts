@@ -8,6 +8,8 @@ export interface ILocalImportanceChartStyles {
   absoluteValueToggle: IStyle;
   legendAndText: IStyle;
   buttonStyle: IStyle;
+  featureImportanceControls: IStyle;
+  startingK: IStyle;
 }
 
 export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportanceChartStyles> =
@@ -30,6 +32,25 @@ export const localImportanceChartStyles: () => IProcessedStyleSet<ILocalImportan
       },
       localImportanceChart: {
         width: "85%"
+      },
+      featureImportanceControls: {
+        display: "flex",
+        flexDirection: "row",
+        padding: "18px 30px 4px 67px",
+        selectors: {
+          "@media screen and (max-width: 639px)": {
+            flexFlow: "wrap",
+            padding: "18px 0 4px 0"
+          }
+        }
+      },
+      startingK: {
+        flex: 1,
+        selectors: {
+          "@media screen and (min-width: 1024px)": {
+            paddingRight: "160px"
+          }
+        }
       }
     });
   };

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getTheme, Stack, Toggle } from "@fluentui/react";
+import { getTheme, Slider, Stack, Toggle } from "@fluentui/react";
 import {
   BasicHighChart,
   defaultModelAssessmentContext,
@@ -35,6 +35,7 @@ export interface ILocalImportanceChartProps {
 export interface ILocalImportanceChartState {
   sortAbsolute: boolean;
   sortedData: Array<{ [key: string]: number[] }>;
+  topK: number;
 }
 export interface ILocalImportanceData {
   label: string;
@@ -56,7 +57,8 @@ export class LocalImportanceChart extends React.PureComponent<
 
     this.state = {
       sortAbsolute: true,
-      sortedData: new Array(this.props.weightOptions.length)
+      sortedData: new Array(this.props.weightOptions.length),
+      topK: 4
     };
   }
 
@@ -99,14 +101,40 @@ export class LocalImportanceChart extends React.PureComponent<
     return (
       <Stack horizontal={true} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item className={classNames.localImportanceChart}>
-          {this.props.isLocalExplanationsDataLoading ? (
-            <LoadingSpinner label={localization.Counterfactuals.loading} />
-          ) : (
-            <BasicHighChart
-              configOverride={this.getLocalImportanceBarOptions()}
-              id={"WhatIfFeatureImportanceBar"}
-            />
-          )}
+          <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
+            <Stack.Item className={classNames.featureImportanceControls}>
+              <Slider
+                label={localization.formatString(
+                  localization.Interpret.GlobalTab.topAtoB,
+                  this.state.topK
+                )}
+                className={classNames.startingK}
+                ariaLabel={
+                  localization.Interpret.AggregateImportance.topKFeatures
+                }
+                max={
+                  this.props.data?.precomputedExplanations
+                    ?.globalFeatureImportance?.feature_list.length || 1
+                }
+                min={1}
+                step={1}
+                value={this.state.topK}
+                onChange={this.setTopK}
+                showValue={false}
+                disabled={this.props.isLocalExplanationsDataLoading}
+              />
+            </Stack.Item>
+            <Stack.Item>
+              {this.props.isLocalExplanationsDataLoading ? (
+                <LoadingSpinner label={localization.Counterfactuals.loading} />
+              ) : (
+                <BasicHighChart
+                  configOverride={this.getLocalImportanceBarOptions()}
+                  id={"WhatIfFeatureImportanceBar"}
+                />
+              )}
+            </Stack.Item>
+          </Stack>
         </Stack.Item>
         <Stack.Item>
           <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
@@ -135,6 +163,10 @@ export class LocalImportanceChart extends React.PureComponent<
       </Stack>
     );
   }
+
+  private setTopK = (newValue: number): void => {
+    this.setState({ topK: newValue });
+  };
 
   private generateSortedData(): any {
     let sortedData = [];
@@ -211,7 +243,8 @@ export class LocalImportanceChart extends React.PureComponent<
         text: ""
       },
       xAxis: {
-        categories: x
+        categories: x,
+        max: this.state.topK - 1
       },
       yAxis: {
         title: {
