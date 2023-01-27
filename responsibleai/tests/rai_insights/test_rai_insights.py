@@ -25,8 +25,8 @@ from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
 from responsibleai import ModelTask, RAIInsights
-from responsibleai._internal.constants import ManagerNames, \
-    SerializationAttributes
+from responsibleai._internal.constants import (ManagerNames,
+                                               SerializationAttributes)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata

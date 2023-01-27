@@ -19,8 +19,9 @@ from dice_ml.explainer_interfaces.explainer_base import ExplainerBase
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
-from responsibleai._internal.constants import \
-    CounterfactualManagerKeys, FileFormats, ListProperties, ManagerNames
+from responsibleai._internal.constants import (CounterfactualManagerKeys,
+                                               FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,

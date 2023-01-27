@@ -13,8 +13,8 @@ from typing import Any, Optional
 import pandas as pd
 
 import responsibleai
-from responsibleai._internal.constants import Metadata, FileFormats, \
-    SerializationAttributes
+from responsibleai._internal.constants import (FileFormats, Metadata,
+                                               SerializationAttributes)
 
 _DTYPES = 'dtypes'
 _MODEL_PKL = Metadata.MODEL + FileFormats.PKL
