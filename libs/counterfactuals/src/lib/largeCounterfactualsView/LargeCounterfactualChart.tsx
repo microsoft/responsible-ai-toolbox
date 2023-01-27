@@ -17,19 +17,15 @@ import {
   Cohort,
   IHighchartsConfig,
   IHighchartBubbleSDKClusterData,
-  ICounterfactualData
+  ICounterfactualData,
+  calculateBubblePlotDataFromErrorCohort,
+  instanceOfHighChart,
+  getScatterOption,
+  IScatterPoint
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import React from "react";
 
-import {
-  calculateBubblePlotDataFromErrorCohort,
-  instanceOfHighChart
-} from "../../util/largeCounterfactualsView/calculateBubbleData";
-import {
-  getCounterfactualsScatterOption,
-  IScatterPoint
-} from "../../util/largeCounterfactualsView/getCounterfactualsScatterOption";
 import { ICounterfactualChartProps } from "../CounterfactualChart";
 import { counterfactualChartStyles } from "../CounterfactualChart.styles";
 import { hasAxisTypeChanged } from "../CounterfactualComponentUtils";
@@ -304,7 +300,7 @@ export class LargeCounterfactualChart extends React.PureComponent<
   }
 
   private updateScatterPlot(): void {
-    const pData = getCounterfactualsScatterOption(
+    const pData = getScatterOption(
       this.state.xSeries,
       this.state.ySeries,
       this.state.indexSeries,
@@ -313,6 +309,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.props.selectedPointsIndexes,
       this.props.customPoints,
       this.props.isCounterfactualsDataLoading,
+      true,
+      false,
       this.selectPointFromChartLargeData
     );
     this.setState({
@@ -330,6 +328,8 @@ export class LargeCounterfactualChart extends React.PureComponent<
       this.context.jointDataset,
       this.context.dataset,
       this.props.isCounterfactualsDataLoading,
+      true,
+      false,
       this.context.requestBubblePlotData,
       this.selectPointFromChartLargeData,
       this.onBubbleClick,

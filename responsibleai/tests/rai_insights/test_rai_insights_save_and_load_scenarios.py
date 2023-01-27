@@ -14,7 +14,8 @@ from tests.common_utils import (create_adult_income_dataset,
                                 create_iris_data, create_lightgbm_classifier)
 
 from responsibleai import ModelTask, RAIInsights
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import (ManagerNames,
+                                               SerializationAttributes)
 from responsibleai.feature_metadata import FeatureMetadata
 
 LABELS = 'labels'
@@ -198,7 +199,8 @@ class TestRAIInsightsSaveAndLoadScenarios(object):
 
             # Remove the model.pkl file to cause an exception to occur
             # while loading the model.
-            model_pkl_path = Path(tmpdir) / "rai_insights" / "model.pkl"
+            model_pkl_path = Path(tmpdir) / \
+                "rai_insights" / SerializationAttributes.MODEL_PKL
             os.remove(model_pkl_path)
             with pytest.raises(Exception):
                 RAIInsights.load(save_path)

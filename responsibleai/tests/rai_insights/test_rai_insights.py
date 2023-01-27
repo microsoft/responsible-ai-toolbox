@@ -25,7 +25,8 @@ from tests.explainer_manager_validator import (setup_explainer,
                                                validate_explainer)
 
 from responsibleai import ModelTask, RAIInsights
-from responsibleai._internal.constants import ManagerNames
+from responsibleai._internal.constants import (ManagerNames,
+                                               SerializationAttributes)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.feature_metadata import FeatureMetadata
@@ -278,27 +279,29 @@ def run_rai_insights(model, train_data, test_data, target_column,
 
 def validate_common_state_directories(path, task_type):
     all_other_files = os.listdir(path)
-    assert "rai_version.json" in all_other_files
-    assert "meta.json" in all_other_files
-    assert "model.pkl" in all_other_files
+    assert SerializationAttributes.RAI_VERSION_JSON in all_other_files
+    assert SerializationAttributes.META_JSON in all_other_files
+    assert SerializationAttributes.MODEL_PKL in all_other_files
 
     model = None
-    with open(path / 'model.pkl', 'rb') as file:
+    with open(path / SerializationAttributes.MODEL_PKL, 'rb') as file:
         model = pickle.load(file)
 
-    predictions_path = path / "predictions"
+    predictions_path = path / SerializationAttributes.PREDICTIONS_DIRECTORY
     assert predictions_path.exists()
     all_predictions_files = os.listdir(predictions_path)
     if model is not None:
-        assert "predict.json" in all_predictions_files
+        assert SerializationAttributes.PREDICT_JSON in all_predictions_files
         if task_type == ModelTask.CLASSIFICATION:
-            assert "predict_proba.json" in all_predictions_files
+            assert SerializationAttributes.PREDICT_PROBA_JSON in \
+                all_predictions_files
         else:
-            assert "predict_proba.json" not in all_predictions_files
+            assert SerializationAttributes.PREDICT_PROBA_JSON not in \
+                all_predictions_files
     else:
         assert len(all_predictions_files) == 0
 
-    data_path = path / "data"
+    data_path = path / SerializationAttributes.DATA_DIRECTORY
     assert data_path.exists()
     all_data_files = os.listdir(data_path)
     assert "train.json" in all_data_files

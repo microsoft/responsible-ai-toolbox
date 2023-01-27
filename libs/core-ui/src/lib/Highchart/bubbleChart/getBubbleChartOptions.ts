@@ -2,19 +2,17 @@
 // Licensed under the MIT License.
 
 import { getTheme } from "@fluentui/react";
-import {
-  IGenericChartProps,
-  IHighchartsConfig,
-  JointDataset,
-  IHighchartBubbleSDKData,
-  IHighchartBubbleData
-} from "@responsible-ai/core-ui";
 import { localization } from "@responsible-ai/localization";
 
 import {
-  getCounterfactualsScatterOption,
-  IScatterPoint
-} from "./getCounterfactualsScatterOption";
+  IHighchartBubbleData,
+  IHighchartBubbleSDKData
+} from "../../Interfaces/IHighchartBubbleData";
+import { IGenericChartProps } from "../../util/IGenericChartProps";
+import { JointDataset } from "../../util/JointDataset";
+import { IHighchartsConfig } from "../IHighchartsConfig";
+
+import { getScatterOption, IScatterPoint } from "./getScatterOption";
 
 export function getBubbleChartOptions(
   data: IHighchartBubbleSDKData[],
@@ -24,7 +22,9 @@ export function getBubbleChartOptions(
   jointData: JointDataset,
   selectedPointsIndexes: number[],
   customPoints?: Array<{ [key: string]: any }>,
-  isCounterfactualsDataLoading?: boolean,
+  isScatterPlotDataLoading?: boolean,
+  showColorAxis?: boolean,
+  useDifferentColorForScatterPoints?: boolean,
   onBubbleClick?: (
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
@@ -58,7 +58,7 @@ export function getBubbleChartOptions(
         point: {
           events: {
             click(): void {
-              const scatterPlotData = getCounterfactualsScatterOption(
+              const scatterPlotData = getScatterOption(
                 this["xSeries"],
                 this["ySeries"],
                 this["indexSeries"],
@@ -66,7 +66,9 @@ export function getBubbleChartOptions(
                 jointData,
                 selectedPointsIndexes,
                 customPoints,
-                isCounterfactualsDataLoading,
+                isScatterPlotDataLoading,
+                showColorAxis,
+                useDifferentColorForScatterPoints,
                 selectPointFromChartLargeData
               );
               onBubbleClick &&

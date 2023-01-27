@@ -20,7 +20,8 @@ from responsibleai._config.base_config import BaseConfig
 from responsibleai._data_validations import validate_train_test_categories
 from responsibleai._interfaces import CounterfactualData
 from responsibleai._internal.constants import (CounterfactualManagerKeys,
-                                               ListProperties, ManagerNames)
+                                               FileFormats, ListProperties,
+                                               ManagerNames)
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
 from responsibleai.exceptions import (DuplicateManagerConfigException,
@@ -129,9 +130,9 @@ class CounterfactualConfig(BaseConfig):
     HAS_COMPUTATION_FAILED = 'has_computation_failed'
     FAILURE_REASON = 'failure_reason'
 
-    CONFIG_FILE_NAME = 'config.json'
-    RESULT_FILE_NAME = 'result.json'
-    EXPLAINER_FILE_NAME = 'explainer.pkl'
+    CONFIG_FILE_NAME = f'config{FileFormats.JSON}'
+    RESULT_FILE_NAME = f'result{FileFormats.JSON}'
+    EXPLAINER_FILE_NAME = f'explainer{FileFormats.PKL}'
 
     def __init__(self, method, continuous_features, total_CFs,
                  desired_class=CounterfactualConstants.OPPOSITE,
@@ -264,36 +265,36 @@ class CounterfactualConfig(BaseConfig):
 
             for counterfactual_examples_key in cf_schema_keys:
                 file_path = (data_directory_path /
-                             (counterfactual_examples_key + '.json'))
+                             (counterfactual_examples_key + FileFormats.JSON))
                 with open(file_path, 'w') as file_path:
                     json.dump(
                         counterfactuals_dict[counterfactual_examples_key],
                         file_path)
 
-        file_path = (data_directory_path /
-                     (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        file_path = data_directory_path / (
+            CounterfactualConfig.HAS_COMPUTATION_FAILED + FileFormats.JSON)
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.HAS_COMPUTATION_FAILED],
                 file_path)
 
         file_path = (data_directory_path /
-                     (CounterfactualConfig.FAILURE_REASON + '.json'))
+                     (CounterfactualConfig.FAILURE_REASON + FileFormats.JSON))
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.FAILURE_REASON],
                 file_path)
 
         file_path = (data_directory_path /
-                     (CounterfactualConfig.IS_COMPUTED + '.json'))
+                     (CounterfactualConfig.IS_COMPUTED + FileFormats.JSON))
         with open(file_path, 'w') as file_path:
             json.dump(
                 cf_result[CounterfactualConfig.IS_COMPUTED],
                 file_path)
 
     def load_result(self, data_directory_path):
-        metadata_file_path = (data_directory_path /
-                              (_CommonSchemaConstants.METADATA + '.json'))
+        metadata_file_path = data_directory_path / \
+            (_CommonSchemaConstants.METADATA + FileFormats.JSON)
 
         if metadata_file_path.exists():
             with open(metadata_file_path, 'r') as result_file:
@@ -306,8 +307,8 @@ class CounterfactualConfig(BaseConfig):
 
             counterfactual_examples_dict = {}
             for counterfactual_examples_key in cf_schema_keys:
-                result_path = (data_directory_path /
-                               (counterfactual_examples_key + '.json'))
+                result_path = data_directory_path / \
+                    (counterfactual_examples_key + FileFormats.JSON)
                 with open(result_path, 'r') as result_file:
                     counterfactual_examples_dict[
                         counterfactual_examples_key] = json.load(result_file)
@@ -318,18 +319,18 @@ class CounterfactualConfig(BaseConfig):
         else:
             self.counterfactual_obj = None
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.HAS_COMPUTATION_FAILED + '.json'))
+        result_path = data_directory_path / \
+            (CounterfactualConfig.HAS_COMPUTATION_FAILED + FileFormats.JSON)
         with open(result_path, 'r') as result_file:
             self.has_computation_failed = json.load(result_file)
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.FAILURE_REASON + '.json'))
+        result_path = data_directory_path / \
+            (CounterfactualConfig.FAILURE_REASON + FileFormats.JSON)
         with open(result_path, 'r') as result_file:
             self.failure_reason = json.load(result_file)
 
-        result_path = (data_directory_path /
-                       (CounterfactualConfig.IS_COMPUTED + '.json'))
+        result_path = data_directory_path / \
+            (CounterfactualConfig.IS_COMPUTED + FileFormats.JSON)
         with open(result_path, 'r') as result_file:
             self.is_computed = json.load(result_file)
 
