@@ -4,20 +4,19 @@ import pickle
 from pathlib import Path
 
 from responsibleai import RAIInsights
+from responsibleai._internal.constants import SerializationAttributes
 
 from .common_utils import create_cancer_data, create_lightgbm_classifier
 
 
 class PickleSerializer:
-    MODEL_FILENAME = 'model.pkl'
-
     def save(self, model, model_dir):
-        filepath = Path(model_dir) / self.MODEL_FILENAME
+        filepath = Path(model_dir) / SerializationAttributes.MODEL_PKL
         with open(filepath, 'wb') as f:
             pickle.dump(model, f)
 
     def load(self, model_dir):
-        filepath = Path(model_dir) / self.MODEL_FILENAME
+        filepath = Path(model_dir) / SerializationAttributes.MODEL_PKL
         with open(filepath, 'rb') as f:
             return pickle.load(f)
 
