@@ -41,7 +41,7 @@ U_EVALUATION_EXAMPLES = '_evaluation_examples'
 FEATURES = 'features'
 CATEGORICAL_FEATURES = 'categorical_features'
 EXPLANATION = '_explanation'
-MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 5000
+MAXIMUM_ROWS_FOR_GLOBAL_EXPLANATIONS = 10000
 
 
 class ExplainerManager(BaseManager):

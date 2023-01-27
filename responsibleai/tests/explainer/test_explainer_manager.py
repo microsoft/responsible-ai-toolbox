@@ -52,12 +52,12 @@ class TestExplainerManager:
         with pytest.warns(
                 UserWarning,
                 match="LARGE-DATA-SCENARIO-DETECTED: "
-                      "The data is larger than the supported limit of 5000. "
-                      "Computing explanations for first 5000 samples only."):
+                      "The data is larger than the supported limit of 10000. "
+                      "Computing explanations for first 10000 samples only."):
             global_explanations = \
                 rai_insights.explainer.request_explanations(
                     local=False,
-                    data=pd.concat([X_test] * 200).drop(['target'], axis=1))
+                    data=pd.concat([X_test] * 400).drop(['target'], axis=1))
         self.verify_explanations(global_explanations, is_global=True)
 
     def test_explainer_manager_request_local_explanations(self):
