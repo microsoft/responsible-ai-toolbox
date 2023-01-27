@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any, List, Optional, Tuple, Union
 
 import pandas as pd
+from responsibleai._internal.constants import FileFormats, \
+    SerializationAttributes
 import semver
 
 from responsibleai._interfaces import CausalConfig as CausalConfigInterface
@@ -311,8 +313,9 @@ class CausalResult(BaseResult['CausalResult']):
     def _get_schema(cls, version: str):
         cls._validate_version(version)
 
-        schema_directory = Path(__file__).parent / 'dashboard_schemas'
-        schema_filename = f'schema_{version}.json'
+        schema_directory = Path(__file__).parent / \
+            SerializationAttributes.DASHBOARD_SCHEMAS
+        schema_filename = f'schema_{version}{FileFormats.JSON}'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
             return json.load(f)

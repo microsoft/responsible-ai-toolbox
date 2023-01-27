@@ -13,18 +13,13 @@ from typing import Any, Optional
 import pandas as pd
 
 import responsibleai
-from responsibleai._internal.constants import Metadata
+from responsibleai._internal.constants import Metadata, FileFormats, \
+    SerializationAttributes
 
-_DATA = 'data'
 _DTYPES = 'dtypes'
-_RAIVERSION = "rai_version"
-_TRAIN = 'train'
-_TEST = 'test'
-_MODEL = Metadata.MODEL
-_MODEL_PKL = _MODEL + '.pkl'
+_MODEL_PKL = Metadata.MODEL + FileFormats.PKL
 _SERIALIZER = 'serializer'
 _MANAGERS = 'managers'
-_JSON_EXTENSION = '.json'
 
 
 class RAIBaseInsights(ABC):
@@ -141,24 +136,26 @@ class RAIBaseInsights(ABC):
         :param path: The directory path to save the RAIBaseInsights to.
         :type path: str
         """
-        data_directory = Path(path) / _DATA
+        data_directory = Path(path) / SerializationAttributes.DATA_DIRECTORY
         data_directory.mkdir(parents=True, exist_ok=True)
         dtypes = self.train.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory /
-                            (_TRAIN + _DTYPES + _JSON_EXTENSION),
+                            (Metadata.TRAIN + _DTYPES + FileFormats.JSON),
                             json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TRAIN + _JSON_EXTENSION),
+        self._write_to_file(data_directory /
+                            (Metadata.TRAIN + FileFormats.JSON),
                             self.train.to_json(orient='split'))
 
         dtypes = self.test.dtypes.astype(str).to_dict()
         self._write_to_file(data_directory /
-                            (_TEST + _DTYPES + _JSON_EXTENSION),
+                            (Metadata.TEST + _DTYPES + FileFormats.JSON),
                             json.dumps(dtypes))
-        self._write_to_file(data_directory / (_TEST + _JSON_EXTENSION),
+        self._write_to_file(data_directory /
+                            (Metadata.TEST + FileFormats.JSON),
                             self.test.to_json(orient='split'))
 
         self._write_to_file(Path(path) /
-                            (_RAIVERSION + _JSON_EXTENSION),
+                            (SerializationAttributes.RAI_VERSION_JSON),
                             json.dumps(
                                 {"responsibleai": responsibleai.__version__}))
 
@@ -228,19 +225,21 @@ class RAIBaseInsights(ABC):
         :param path: The directory path to data location.
         :type path: str
         """
-        data_directory = Path(path) / _DATA
+        data_directory = Path(path) / SerializationAttributes.DATA_DIRECTORY
         with open(data_directory /
-                  (_TRAIN + _DTYPES + _JSON_EXTENSION), 'r') as file:
+                  (Metadata.TRAIN + _DTYPES + FileFormats.JSON), 'r') as file:
             types = json.load(file)
-        with open(data_directory / (_TRAIN + _JSON_EXTENSION), 'r') as file:
+        with open(data_directory / (Metadata.TRAIN + FileFormats.JSON),
+                  'r') as file:
             train = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TRAIN] = train
+        inst.__dict__[Metadata.TRAIN] = train
         with open(data_directory /
-                  (_TEST + _DTYPES + _JSON_EXTENSION), 'r') as file:
+                  (Metadata.TEST + _DTYPES + FileFormats.JSON), 'r') as file:
             types = json.load(file)
-        with open(data_directory / (_TEST + _JSON_EXTENSION), 'r') as file:
+        with open(data_directory / (Metadata.TEST + FileFormats.JSON),
+                  'r') as file:
             test = pd.read_json(file, dtype=types, orient='split')
-        inst.__dict__[_TEST] = test
+        inst.__dict__[Metadata.TEST] = test
 
     @staticmethod
     def _load_model(inst, path):
@@ -260,7 +259,7 @@ class RAIBaseInsights(ABC):
                 with open(serializer_path, 'rb') as file:
                     serializer = pickle.load(file)
                 inst.__dict__['_' + _SERIALIZER] = serializer
-                inst.__dict__[_MODEL] = serializer.load(top_dir)
+                inst.__dict__[Metadata.MODEL] = serializer.load(top_dir)
             except Exception as e:
                 warnings.warn(model_load_err)
                 raise e
@@ -268,7 +267,7 @@ class RAIBaseInsights(ABC):
             inst.__dict__['_' + _SERIALIZER] = None
             try:
                 with open(top_dir / _MODEL_PKL, 'rb') as file:
-                    inst.__dict__[_MODEL] = pickle.load(file)
+                    inst.__dict__[Metadata.MODEL] = pickle.load(file)
             except Exception as e:
                 warnings.warn(model_load_err)
                 raise e

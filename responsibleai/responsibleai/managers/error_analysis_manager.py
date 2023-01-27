@@ -17,7 +17,8 @@ from erroranalysis._internal.error_report import \
     json_converter as report_json_converter
 from responsibleai._config.base_config import BaseConfig
 from responsibleai._interfaces import ErrorAnalysisData
-from responsibleai._internal.constants import ErrorAnalysisManagerKeys as Keys
+from responsibleai._internal.constants import \
+    ErrorAnalysisManagerKeys as Keys, FileFormats
 from responsibleai._internal.constants import ListProperties, ManagerNames
 from responsibleai._tools.shared.state_directory_management import \
     DirectoryManager
@@ -342,7 +343,7 @@ class ErrorAnalysisManager(BaseManager):
         """Get the schema for validating the error analysis output."""
         schema_directory = (Path(__file__).parent.parent / '_tools' /
                             'error_analysis' / 'dashboard_schemas')
-        schema_filename = 'error_analysis_output_v0.0.json'
+        schema_filename = f'error_analysis_output_v0.0{FileFormats.JSON}'
         schema_filepath = schema_directory / schema_filename
         with open(schema_filepath, 'r') as f:
             return json.load(f)
@@ -420,7 +421,7 @@ class ErrorAnalysisManager(BaseManager):
             # save the configs
             directory_manager = DirectoryManager(parent_directory_path=path)
             config_path = (directory_manager.create_config_directory() /
-                           'config.json')
+                           f'config{FileFormats.JSON}')
             ea_config = self._ea_config_list[index]
             with open(config_path, 'w') as file:
                 json.dump(ea_config, file,
@@ -428,7 +429,7 @@ class ErrorAnalysisManager(BaseManager):
 
             # save the reports
             report_path = (directory_manager.create_data_directory() /
-                           'report.json')
+                           f'report{FileFormats.JSON}')
             ea_report = self._ea_report_list[index]
             with open(report_path, 'w') as file:
                 json.dump(ea_report, file,
@@ -458,13 +459,13 @@ class ErrorAnalysisManager(BaseManager):
                 sub_directory_name=ea_dir)
 
             config_path = (directory_manager.get_config_directory() /
-                           'config.json')
+                           f'config{FileFormats.JSON}')
             with open(config_path, 'r') as file:
                 ea_config = json.load(file, object_hook=as_error_config)
                 ea_config_list.append(ea_config)
 
             report_path = (directory_manager.get_data_directory() /
-                           'report.json')
+                           f'report{FileFormats.JSON}')
             with open(report_path, 'r') as file:
                 ea_report = json.load(file, object_hook=as_error_report)
                 # Validate the serialized output against schema
