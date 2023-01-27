@@ -6,6 +6,7 @@ import {
   BasicHighChart,
   defaultModelAssessmentContext,
   getPrimaryChartColor,
+  IsClassifier,
   LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
@@ -27,7 +28,7 @@ export interface ILocalImportanceChartProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
-  modelType: string;
+  modelType: ModelTypes;
   onWeightChange: (option: WeightVectorOption) => void;
 }
 
@@ -39,6 +40,8 @@ export interface ILocalImportanceData {
   label: string;
   value: number;
 }
+
+const regressionKeyValue = "regressionScore";
 
 export class LocalImportanceChart extends React.PureComponent<
   ILocalImportanceChartProps,
@@ -62,12 +65,6 @@ export class LocalImportanceChart extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: ILocalImportanceChartProps): void {
-    console.log(
-      "!!didUpdate ",
-      prevProps.data,
-      this.props.data,
-      this.props.data !== prevProps.data
-    );
     if (
       this.props.data !== prevProps.data ||
       (!this.props.isLocalExplanationsDataLoading &&
@@ -122,15 +119,17 @@ export class LocalImportanceChart extends React.PureComponent<
                 disabled={this.props.isLocalExplanationsDataLoading}
               />
             </Stack.Item>
-            <Stack.Item>
-              <ClassImportanceWeights
-                onWeightChange={this.onWeightChange}
-                selectedWeightVector={this.props.selectedWeightVector}
-                weightOptions={this.props.weightOptions}
-                weightLabels={this.props.weightLabels}
-                disabled={this.props.isLocalExplanationsDataLoading}
-              />
-            </Stack.Item>
+            {IsClassifier(this.props.modelType) && (
+              <Stack.Item>
+                <ClassImportanceWeights
+                  onWeightChange={this.onWeightChange}
+                  selectedWeightVector={this.props.selectedWeightVector}
+                  weightOptions={this.props.weightOptions}
+                  weightLabels={this.props.weightLabels}
+                  disabled={this.props.isLocalExplanationsDataLoading}
+                />
+              </Stack.Item>
+            )}
           </Stack>
         </Stack.Item>
       </Stack>
@@ -138,18 +137,23 @@ export class LocalImportanceChart extends React.PureComponent<
   }
 
   private generateSortedData(): any {
-    const weightValues = this.props.weightOptions.map(
-      (option) => this.props.weightLabels[option]
-    );
-    console.log("!!in generateSortedData: ", weightValues);
     let sortedData = [];
-    sortedData.push({
-      [this.props.weightOptions[0]]: this.getAbsoluteValues(
-        this.props.data?.precomputedExplanations?.localFeatureImportance
-          .scores[0][0]
-      )
-    });
-    sortedData.push(...this.addScores());
+    if (IsClassifier(this.props.modelType)) {
+      sortedData.push({
+        [this.props.weightOptions[0]]: this.getAbsoluteValues(
+          this.props.data?.precomputedExplanations?.localFeatureImportance
+            .scores[0][0]
+        )
+      });
+      sortedData.push(...this.addScores());
+    } else {
+      sortedData.push({
+        [regressionKeyValue]:
+          this.props.data?.precomputedExplanations?.localFeatureImportance
+            .scores[0]
+      });
+    }
+
     this.setState({ sortedData: sortedData });
     console.log("!!sortedData: ", sortedData);
   }
@@ -241,15 +245,19 @@ export class LocalImportanceChart extends React.PureComponent<
 
     console.log(
       "!!data: ",
+      this.props.data,
       this.state.sortedData,
       this.props.selectedWeightVector,
       this.props.weightLabels,
       this.props.weightOptions
     );
 
+    const keyToFind = IsClassifier(this.props.modelType)
+      ? (this.props.selectedWeightVector as string)
+      : regressionKeyValue;
     const localExplanationsData = this.findValue(
       this.state.sortedData,
-      this.props.selectedWeightVector as string
+      keyToFind
     );
 
     if (!localExplanationsData) {
@@ -282,10 +290,6 @@ export class LocalImportanceChart extends React.PureComponent<
     checked?: boolean | undefined
   ): void => {
     if (checked !== undefined) {
-      // const sortArray = this.getSortedArray(
-      //   this.state.sortingSeriesIndex,
-      //   checked
-      // );
       this.setState({ sortAbsolute: checked });
     }
   };

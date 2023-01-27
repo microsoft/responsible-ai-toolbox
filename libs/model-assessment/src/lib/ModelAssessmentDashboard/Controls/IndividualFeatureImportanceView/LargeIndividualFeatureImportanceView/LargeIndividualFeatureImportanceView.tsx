@@ -19,6 +19,7 @@ import {
   ITelemetryEvent,
   JointDataset,
   ModelAssessmentContext,
+  ModelTypes,
   OtherChartTypes,
   TelemetryEventName,
   TelemetryLevels,
@@ -36,7 +37,7 @@ export interface ILargeIndividualFeatureImportanceViewProps {
   selectedWeightVector: WeightVectorOption;
   weightOptions: WeightVectorOption[];
   weightLabels: any;
-  modelType: string;
+  modelType: ModelTypes;
   telemetryHook?: (message: ITelemetryEvent) => void;
   onWeightChange: (option: WeightVectorOption) => void;
 }
