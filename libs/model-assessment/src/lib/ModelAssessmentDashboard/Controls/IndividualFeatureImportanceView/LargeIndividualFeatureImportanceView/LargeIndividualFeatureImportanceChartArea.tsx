@@ -65,7 +65,7 @@ export class LargeIndividualFeatureImportanceChartArea extends React.PureCompone
       <Stack horizontal={true} grow tokens={{ childrenGap: "l1" }}>
         <Stack.Item className={classNames.chart}>
           <Stack.Item className={classNames.chartWithAxes}>
-            <Stack horizontal className={classNames.chartWithVertical}>
+            <Stack horizontal>
               <Stack.Item className={classNames.verticalAxis}>
                 <div className={classNames.rotatedVerticalBox}>
                   {chartProps && (

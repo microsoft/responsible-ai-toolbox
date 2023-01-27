@@ -79,7 +79,6 @@ export class LocalImportanceChart extends React.PureComponent<
 
   public render(): React.ReactNode {
     const classNames = localImportanceChartStyles();
-    console.log("!!weightLabels: ", this.props.weightLabels);
     if (this.props.rowNumber === undefined) {
       return (
         <MissingParametersPlaceholder>
@@ -111,7 +110,7 @@ export class LocalImportanceChart extends React.PureComponent<
             />
           )}
         </Stack.Item>
-        <Stack.Item className={classNames.localImportanceLegend}>
+        <Stack.Item>
           <Stack horizontal={false} tokens={{ childrenGap: "m1" }}>
             <Stack.Item className={classNames.absoluteValueToggle}>
               <Toggle

@@ -1,159 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  IStyle,
-  mergeStyleSets,
-  IProcessedStyleSet,
-  getTheme
-} from "@fluentui/react";
-import {
-  descriptionMaxWidth,
-  flexLgDown,
-  FluentUIStyles,
-  fullLgDown,
-  hideXlDown
-} from "@responsible-ai/core-ui";
+import { IStyle, mergeStyleSets, IProcessedStyleSet } from "@fluentui/react";
 
 export interface ILargeIndividualFeatureImportanceViewStyles {
-  chartContainer: IStyle;
-  chartEditorButton: IStyle;
+  chart: IStyle;
   chartWithAxes: IStyle;
-  chartWithVertical: IStyle;
-  cohortDropdown: IStyle;
-  cohortPickerWrapper: IStyle;
-  cohortPicker: IStyle;
-  cohortPickerLabel: IStyle;
-  colorBox: IStyle;
-  colorValue: IStyle;
   verticalAxis: IStyle;
   rotatedVerticalBox: IStyle;
-  legendAndText: IStyle;
-  paddingDiv: IStyle;
+  chartContainer: IStyle;
   horizontalAxis: IStyle;
-  page: IStyle;
-  infoIcon: IStyle;
-  helperText: IStyle;
-  infoWithText: IStyle;
-  individualChartContainer: IStyle;
-  mainArea: IStyle;
-  legendLabel: IStyle;
-  legendItem: IStyle;
-  smallItalic: IStyle;
-  sidePanel: IStyle;
-  chartAndType: IStyle;
-  chart: IStyle;
-  buttonStyle: IStyle;
   legendContainer: IStyle;
 }
 
 export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSet<ILargeIndividualFeatureImportanceViewStyles> =
   () => {
-    const theme = getTheme();
     return mergeStyleSets<ILargeIndividualFeatureImportanceViewStyles>({
       legendContainer: {
         width: "15%"
-      },
-      buttonStyle: {
-        marginBottom: "10px",
-        marginTop: "20px",
-        paddingBottom: "10px",
-        paddingTop: "10px"
       },
       chart: {
         marginBottom: "40px",
         width: "90%"
       },
-      chartAndType: flexLgDown,
       chartContainer: {
         height: "100%",
         width: "90%"
       },
-      chartEditorButton: [
-        FluentUIStyles.chartEditorButton,
-        {
-          position: "absolute",
-          right: "10px",
-          zIndex: 10
-        }
-      ],
       chartWithAxes: {
         height: "100%",
         paddingRight: "10px"
       },
-      chartWithVertical: {
-        // width: "100%"
-      },
-      cohortDropdown: {
-        width: "170px"
-      },
-      cohortPicker: flexLgDown,
-      cohortPickerLabel: {
-        fontWeight: "600",
-        paddingRight: "8px"
-      },
-      cohortPickerWrapper: {
-        alignItems: "center",
-        height: "32px"
-      },
-      colorBox: {
-        borderRadius: "6px",
-        cursor: "pointer",
-        display: "inline-block",
-        height: "12px",
-        margin: "11px 4px 11px 8px",
-        width: "12px"
-      },
-      colorValue: {
-        padding: "12px 0px"
-      },
-      helperText: {
-        paddingLeft: "15px",
-        paddingRight: "160px"
-      },
       horizontalAxis: {
         textAlign: "center"
-      },
-      individualChartContainer: {
-        width: "90%"
-      },
-      infoIcon: {
-        fontSize: "23px",
-        height: "23px",
-        width: "23px"
-      },
-      infoWithText: {
-        maxWidth: descriptionMaxWidth,
-        width: "100%",
-        ...hideXlDown
-      },
-      legendAndText: {
-        height: "100%"
-      },
-      legendItem: {
-        alignItems: "center",
-        height: "28px"
-      },
-      legendLabel: {
-        display: "inline-block"
-      },
-      mainArea: {
-        height: "100%",
-        selectors: {
-          "@media screen and (max-width: 479px)": {
-            marginTop: "60px !important"
-          }
-        },
-        width: "100%"
-      },
-      paddingDiv: {
-        width: "50px"
-      },
-      page: {
-        color: theme.semanticColors.bodyText,
-        height: "100%",
-        padding: "0 40px 32px 40px",
-        width: "100%"
       },
       rotatedVerticalBox: {
         marginLeft: "28px",
@@ -163,11 +42,6 @@ export const largeIndividualFeatureImportanceViewStyles: () => IProcessedStyleSe
         transform: "translateX(-50%) translateY(-50%) rotate(270deg)",
         width: "max-content"
       },
-      sidePanel: {
-        width: "15%",
-        ...fullLgDown
-      },
-      smallItalic: [FluentUIStyles.placeholderItalic],
       verticalAxis: {
         height: "auto",
         position: "relative",
