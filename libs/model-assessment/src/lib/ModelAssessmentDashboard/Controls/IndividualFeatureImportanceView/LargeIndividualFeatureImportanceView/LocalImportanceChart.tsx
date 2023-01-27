@@ -9,6 +9,7 @@ import {
   LoadingSpinner,
   MissingParametersPlaceholder,
   ModelAssessmentContext,
+  ModelExplanationUtils,
   ModelTypes,
   WeightVectorOption
 } from "@responsible-ai/core-ui";
@@ -251,24 +252,28 @@ export class LocalImportanceChart extends React.PureComponent<
       this.props.selectedWeightVector as string
     );
 
-    const sortedLocalExplanationsData = this.state.sortAbsolute
-      ? this.getAbsoluteValues(localExplanationsData)
-      : localExplanationsData;
-
-    console.log("!!localExplanationsData: ", localExplanationsData);
-
-    if (!sortedLocalExplanationsData) {
+    if (!localExplanationsData) {
       return data;
     }
-    this.props.data.precomputedExplanations.globalFeatureImportance.feature_list.forEach(
-      (f: any, index: string | number) => {
-        data.push({
-          label: f,
-          value: sortedLocalExplanationsData[index] || -Infinity
-        });
-      }
+
+    const unSortedX =
+      this.props.data.precomputedExplanations.globalFeatureImportance
+        .feature_list;
+    const sortedLocalExplanationsIndices = this.state.sortAbsolute
+      ? ModelExplanationUtils.getAbsoluteSortIndices(
+          localExplanationsData
+        ).reverse()
+      : ModelExplanationUtils.getSortIndices(localExplanationsData).reverse();
+    const sortedLocalExplanationsData = sortedLocalExplanationsIndices.map(
+      (index) => localExplanationsData[index]
     );
-    data.sort((d1, d2) => d2.value - d1.value);
+    const sortedX = sortedLocalExplanationsIndices.map((i) => unSortedX[i]);
+    sortedX.forEach((x: any, index: string | number) => {
+      data.push({
+        label: x,
+        value: sortedLocalExplanationsData[index] || -Infinity
+      });
+    });
     return data;
   }
 
