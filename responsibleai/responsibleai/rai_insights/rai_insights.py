@@ -272,9 +272,14 @@ class RAIInsights(RAIBaseInsights):
                 cols_of_interest=self.categorical_features)
 
     def _validate_rai_insights_input_parameters(
-            self, model: Any, train: pd.DataFrame, test: pd.DataFrame,
-            target_column: str, task_type: str,
-            categorical_features: List[str], classes: np.ndarray,
+            self,
+            model: Any,
+            train: pd.DataFrame,
+            test: pd.DataFrame,
+            target_column: str,
+            task_type: str,
+            categorical_features: List[str],
+            classes: np.ndarray,
             serializer,
             maximum_rows_for_test: int,
             feature_metadata: Optional[FeatureMetadata] = None):
