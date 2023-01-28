@@ -21,30 +21,13 @@ from raiutils.data_processing import convert_to_list
 from raiutils.models import (
     is_forecaster, is_quantile_forecaster, Forecasting)
 from responsibleai._interfaces import Dataset, RAIForecastingInsightsData
-from responsibleai._internal.constants import Metadata
+from responsibleai._internal.constants import Metadata, SerializationAttributes, FileFormats
 from responsibleai.exceptions import UserConfigValidationException
 from responsibleai.feature_metadata import FeatureMetadata
 from responsibleai.rai_insights.rai_base_insights import RAIBaseInsights
 
-_PREDICTIONS = 'predictions'
-_TRAIN = 'train'
-_TEST = 'test'
-_TARGET_COLUMN = 'target_column'
-_TASK_TYPE = 'task_type'
-_CLASSES = 'classes'
-_FEATURE_COLUMNS = 'feature_columns'
-_FEATURE_METADATA = 'feature_metadata'
-_FEATURE_RANGES = 'feature_ranges'
-_CATEGORICAL_FEATURES = 'categorical_features'
-_CATEGORIES = 'categories'
-_CATEGORY_DICTIONARY = 'category_dictionary'
-_CATEGORICAL_INDEXES = 'categorical_indexes'
-_STRING_IND_DATA = 'string_ind_data'
-_META_JSON = Metadata.META_JSON
 _TRAIN_LABELS = 'train_labels'
-_JSON_EXTENSION = '.json'
-_PREDICT = 'predict'
-_PREDICT_PROBA = 'predict_proba'
+_MODEL = "model"
 _PREDICT_OUTPUT = 'predict_output'
 _PREDICT_PROBA_OUTPUT = 'predict_proba_output'
 _COLUMN_NAME = 'column_name'
@@ -52,7 +35,6 @@ _RANGE_TYPE = 'range_type'
 _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
-_MODEL = "model"
 
 class ForecastingWrapper(object):
     def __init__(self, forecast_method, forecast_quantiles_method=None):
@@ -602,19 +584,21 @@ class RAIForecastingInsights(RAIBaseInsights):
         :param path: The directory path to save the RAIForecastingInsights to.
         :type path: str
         """
-        prediction_output_path = Path(path) / _PREDICTIONS
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
         prediction_output_path.mkdir(parents=True, exist_ok=True)
 
         if self.model is None:
             return
 
         self._write_to_file(
-            prediction_output_path / (_PREDICT + _JSON_EXTENSION),
+            prediction_output_path / SerializationAttributes.PREDICT_JSON,
             json.dumps(self.predict_output.tolist()))
 
         if self.predict_proba_output is not None:
             self._write_to_file(
-                prediction_output_path / (_PREDICT_PROBA + _JSON_EXTENSION),
+                prediction_output_path / SerializationAttributes.PREDICT_PROBA_JSON,
                 json.dumps(self.predict_proba_output.tolist()))
 
     def _save_metadata(self, path):
@@ -630,14 +614,14 @@ class RAIForecastingInsights(RAIBaseInsights):
         if self._feature_metadata is not None:
             feature_metadata_dict = self._feature_metadata.to_dict()
         meta = {
-            _TARGET_COLUMN: self.target_column,
-            _TASK_TYPE: self.task_type,
-            _CLASSES: classes,
-            _FEATURE_COLUMNS: self._feature_columns,
-            _FEATURE_RANGES: self._feature_ranges,
-            _FEATURE_METADATA: feature_metadata_dict
+            Metadata.TARGET_COLUMN: self.target_column,
+            Metadata.TASK_TYPE: self.task_type,
+            Metadata.CLASSES: classes,
+            Metadata.FEATURE_COLUMNS: self._feature_columns,
+            Metadata.FEATURE_RANGES: self._feature_ranges,
+            Metadata.FEATURE_METADATA: feature_metadata_dict
         }
-        with open(top_dir / _META_JSON, 'w') as file:
+        with open(top_dir / Metadata.META_JSON, 'w') as file:
             json.dump(meta, file)
 
     @staticmethod
@@ -675,43 +659,43 @@ class RAIForecastingInsights(RAIBaseInsights):
         :type path: str
         """
         top_dir = Path(path)
-        with open(top_dir / _META_JSON, 'r') as meta_file:
+        with open(top_dir / Metadata.META_JSON, 'r') as meta_file:
             meta = meta_file.read()
         meta = json.loads(meta)
-        inst.__dict__[_TARGET_COLUMN] = meta[_TARGET_COLUMN]
-        inst.__dict__[_TASK_TYPE] = meta[_TASK_TYPE]
+        inst.__dict__[Metadata.TARGET_COLUMN] = meta[Metadata.TARGET_COLUMN]
+        inst.__dict__[Metadata.TASK_TYPE] = meta[Metadata.TASK_TYPE]
         classes = None
         if _TRAIN_LABELS in meta:
             classes = meta[_TRAIN_LABELS]
         else:
-            classes = meta[_CLASSES]
+            classes = meta[Metadata.CLASSES]
 
-        inst.__dict__['_' + _CLASSES] = None
+        inst.__dict__['_' + Metadata.CLASSES] = None
 
-        inst.__dict__['_' + _FEATURE_COLUMNS] = meta[_FEATURE_COLUMNS]
-        inst.__dict__['_' + _FEATURE_RANGES] = meta[_FEATURE_RANGES]
-        if meta[_FEATURE_METADATA] is None:
-            inst.__dict__['_' + _FEATURE_METADATA] = None
+        inst.__dict__['_' + Metadata.FEATURE_COLUMNS] = meta[Metadata.FEATURE_COLUMNS]
+        inst.__dict__['_' + Metadata.FEATURE_RANGES] = meta[Metadata.FEATURE_RANGES]
+        if meta[Metadata.FEATURE_METADATA] is None:
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = None
         else:
-            inst.__dict__['_' + _FEATURE_METADATA] = FeatureMetadata(
-                identity_feature_name=meta[_FEATURE_METADATA][
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
+                identity_feature_name=meta[Metadata.FEATURE_METADATA][
                     'identity_feature_name'],
-                time_column_name=meta[_FEATURE_METADATA][
+                time_column_name=meta[Metadata.FEATURE_METADATA][
                     'time_column_name'],
-                categorical_features=meta[_FEATURE_METADATA][
+                categorical_features=meta[Metadata.FEATURE_METADATA][
                     'categorical_features'],
-                dropped_features=meta[_FEATURE_METADATA][
+                dropped_features=meta[Metadata.FEATURE_METADATA][
                     'dropped_features'],)
 
-        inst.__dict__['_' + _CATEGORIES], \
-            inst.__dict__['_' + _CATEGORICAL_INDEXES], \
-            inst.__dict__['_' + _CATEGORY_DICTIONARY], \
-            inst.__dict__['_' + _STRING_IND_DATA] = \
+        inst.__dict__['_' + Metadata.CATEGORIES], \
+            inst.__dict__['_' + Metadata.CATEGORICAL_INDEXES], \
+            inst.__dict__['_' + Metadata.CATEGORY_DICTIONARY], \
+            inst.__dict__['_' + Metadata.STRING_IND_DATA] = \
             process_categoricals(
-                all_feature_names=inst.__dict__['_' + _FEATURE_COLUMNS],
-                categorical_features=inst.__dict__[_CATEGORICAL_FEATURES],
-                dataset=inst.__dict__[_TEST].drop(columns=[
-                    inst.__dict__[_TARGET_COLUMN]]))
+                all_feature_names=inst.__dict__['_' + Metadata.FEATURE_COLUMNS],
+                categorical_features=inst.__dict__[Metadata.CATEGORICAL_FEATURES],
+                dataset=inst.__dict__[Metadata.TEST].drop(columns=[
+                    inst.__dict__[Metadata.TARGET_COLUMN]]))
 
     @staticmethod
     def _load_predictions(inst, path):
@@ -727,10 +711,12 @@ class RAIForecastingInsights(RAIBaseInsights):
             inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
             return
 
-        prediction_output_path = Path(path) / _PREDICTIONS
+        prediction_output_path = (
+            Path(path) /
+            SerializationAttributes.PREDICTIONS_DIRECTORY)
 
         with open(prediction_output_path / (
-                _PREDICT + _JSON_EXTENSION), 'r') as file:
+                SerializationAttributes.PREDICT_JSON), 'r') as file:
             predict_output = json.load(file)
         inst.__dict__[_PREDICT_OUTPUT] = np.array(predict_output)
         inst.__dict__[_PREDICT_PROBA_OUTPUT] = None
