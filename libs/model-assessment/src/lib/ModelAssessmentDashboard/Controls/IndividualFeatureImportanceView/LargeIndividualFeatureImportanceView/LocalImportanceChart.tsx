@@ -251,12 +251,11 @@ export class LocalImportanceChart extends React.PureComponent<
     const sortedDataTemp: Array<{ [key: string]: number[] }> = sortedData;
     let valToReturn: number[] | undefined;
     for (const data of sortedDataTemp) {
-      Object.entries(data).find(([key, val]) => {
-        if (key === keyToFind.toString()) {
-          valToReturn = val;
-        }
-      });
-      if (valToReturn) {
+      const entry = Object.entries(data).find(
+        (pair) => pair[0] === keyToFind.toString()
+      );
+      if (entry) {
+        valToReturn = entry[1]; // value of the entry
         break;
       }
     }
@@ -292,7 +291,7 @@ export class LocalImportanceChart extends React.PureComponent<
       (index) => localExplanationsData[index]
     );
     const sortedX = sortedLocalExplanationsIndices.map((i) => unSortedX[i]);
-    sortedX.forEach((x: any, index: string | number) => {
+    sortedX.forEach((x: string, index: string | number) => {
       data.push({
         label: x,
         value: sortedLocalExplanationsData[index] || -Infinity

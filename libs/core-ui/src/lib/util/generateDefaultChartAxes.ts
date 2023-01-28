@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import {
+  ChartTypes,
   IGenericChartProps,
-  JointDataset,
   ISelectorConfig,
-  OtherChartTypes,
-  ChartTypes
-} from "@responsible-ai/core-ui";
+  OtherChartTypes
+} from "./IGenericChartProps";
+import { JointDataset } from "./JointDataset";
 
 export function generateDefaultChartAxes(
   jointDataset: JointDataset,
