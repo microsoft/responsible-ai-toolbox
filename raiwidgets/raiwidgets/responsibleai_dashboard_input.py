@@ -10,7 +10,7 @@ import pandas as pd
 from erroranalysis._internal.constants import ModelTask, display_name_to_metric
 from raiutils.data_processing import convert_to_list, serialize_json_safe
 from raiutils.models import is_classifier
-from raiwidgets.cohort import Cohort
+from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 from raiwidgets.constants import ErrorMessages
 from raiwidgets.error_handling import _format_exception
 from raiwidgets.interfaces import WidgetRequestResponseConstants
@@ -46,18 +46,43 @@ class ResponsibleAIDashboardInput:
         if hasattr(analysis, ManagerNames.ERROR_ANALYSIS):
             self._error_analyzer = analysis.error_analysis._analyzer
 
+    def _generate_time_series_cohorts(self):
+        """Generate time series cohorts based on time series ID columns."""
+        cohort_list = []
+        ts_id_cols = self._analysis._feature_metadata.time_series_id_column_names
+        all_time_series = self.test[ts_id_cols].value_counts().index
+        for time_series_id_values in all_time_series:
+            column_value_combinations = zip(
+                ts_id_cols,
+                time_series_id_values)
+            id_columns_name_value_mapping = []
+            filters = []
+            for (col, val) in column_value_combinations:
+                id_columns_name_value_mapping.append(f"{col} = {val}")
+                filters.append(CohortFilter(
+                    method=CohortFilterMethods.METHOD_INCLUDES,
+                    arg=[val],
+                    column=col))
+            time_series = Cohort(", ".join(id_columns_name_value_mapping))
+            for filter in filters:
+                time_series.add_cohort_filter(filter)
+            cohort_list.append(time_series)
+        return cohort_list
+
     def _validate_cohort_list(self, cohort_list=None):
-        if isinstance(self._analysis, RAIInsights) and cohort_list is None:
+        task_type = self.dashboard_input.dataset.task_type
+        if (task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]
+                and cohort_list is None):
             self.dashboard_input.cohortData = []
             return
 
-        if isinstance(self._analysis, RAIForecastingInsights):
+        if task_type == ModelTask.FORECASTING:
             # Ensure user did not pass cohort_list and use the generated time series.
             if cohort_list is not None:
                 raise UserConfigValidationException(
                     "cohort_list is not supported for forecasting analysis.")
             # use generated time series
-            cohort_list = self._analysis._time_series
+            cohort_list = self._generate_time_series_cohorts()
 
         if not isinstance(cohort_list, list):
             raise UserConfigValidationException(
@@ -78,8 +103,7 @@ class ResponsibleAIDashboardInput:
         test_data = pd.DataFrame(
             data=self.dashboard_input.dataset.features,
             columns=self.dashboard_input.dataset.feature_names)
-        if self.dashboard_input.dataset.task_type == \
-                ModelTask.CLASSIFICATION:
+        if task_type == ModelTask.CLASSIFICATION:
             class_names_list = self.dashboard_input.dataset.class_names
             true_y_array = self.dashboard_input.dataset.true_y
             true_class_array = np.array(

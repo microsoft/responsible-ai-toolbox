@@ -36,6 +36,7 @@ _UNIQUE_VALUES = 'unique_values'
 _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
+
 class ForecastingWrapper(object):
     def __init__(self, forecast_method, forecast_quantiles_method=None):
         self._forecast_method = forecast_method
@@ -46,7 +47,6 @@ class ForecastingWrapper(object):
     
     def forecast_quantiles(self, X, quantiles):
         return self._forecast_quantiles_method(X, quantiles)
-
 
 
 class RAIForecastingInsights(RAIBaseInsights):
@@ -116,24 +116,6 @@ class RAIForecastingInsights(RAIBaseInsights):
         super(RAIForecastingInsights, self).__init__(
             self.model, train, test, target_column, self.task_type,
             serializer)
-
-        if is_forecaster(self.model):
-            # Cache forecasts of the model
-            self.predict_output = self.model.forecast(
-                self._test_without_true_y)
-            if is_quantile_forecaster:
-                self.quantile_predict_output = self.model.forecast_quantiles(
-                    self._test_without_true_y, [0.025, 0.975])
-            else:
-                self.quantile_predict_output = None
-        else:
-            self.predict_output = None
-            self.quantile_predict_output = None
-        
-        self._time_series = self._generate_time_series_cohorts()
-
-    def _check_true_y_present(self, target_column, test):
-        return target_column in list(test.columns)
 
     def _initialize_managers(self):
         """Initializes the managers.
@@ -281,49 +263,7 @@ class RAIForecastingInsights(RAIBaseInsights):
                     "identified as categorical features: {0}".format(
                         string_features_set - set(categorical_features)))
 
-            if model is not None:
-                # Pick one row from test data
-                if self._is_true_y_present:
-                    small_test_data = test.iloc[0:1].drop(
-                        columns=[target_column])
-                else:
-                    small_test_data = test.iloc[0:1]
-
-                small_test_features_before = list(small_test_data.columns)
-
-                # Run forecast() of the model
-                self._validate_model_forecast(model, small_test_data, small_test_features_before)
-                
-                # Wrap model to make forecasting API compatible.
-                # Detect if the model is from AzureML as a special case.
-                model_package = sys.modules[inspect.getmodule(model).__name__.partition('.')[0]].__package__
-                if model_package == "azureml":
-                    def forecast(forecasting_model, X):
-                        # AzureML forecasting models return a tuple of (forecast, data)
-                        # but we only want to return the actual forecast.
-                        return forecasting_model.forecast(X)[0]
-                    def forecast_quantiles(forecasting_model, X, quantiles):
-                        # AzureML forecasting models don't take quantiles as an argument but
-                        # instead need to have it set on the model object.
-                        if type(quantiles) == list and len(quantiles) > 0 and \
-                                all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
-                            forecasting_model.quantiles = quantiles
-                            return forecasting_model.forecast_quantiles(X)
-                        else:
-                            raise ValueError("quantiles must be a list of floats between 0 and 1.")
-                    wrapper = ForecastingWrapper(
-                        lambda X: forecast(model, X),
-                        lambda X, quantiles: forecast_quantiles(model, X, quantiles))
-                    self._validate_model_forecast(wrapper, small_test_data, small_test_features_before)
-                    self.model = wrapper
-                else:
-                    self.model = model
-
-        else:
-            raise UserConfigValidationException(
-                "Unsupported data type for either train or test. "
-                "Expecting pandas DataFrame for train and test."
-            )
+            
 
         if feature_metadata is not None:
             if not isinstance(feature_metadata, FeatureMetadata):
@@ -335,19 +275,25 @@ class RAIForecastingInsights(RAIBaseInsights):
             self._ensure_time_column_available(
                 feature_metadata, feature_names, model)
             feature_metadata.validate(feature_names)
+            
+            if model is not None:
+                # Pick one row from test data
+                if self._is_true_y_present:
+                    small_test_data = test.iloc[0:1].drop(
+                        columns=[target_column])
+                else:
+                    small_test_data = test.iloc[0:1]
 
-    def _validate_model_forecast(self, model, small_test_data,
-                                 small_test_features_before):
-        try:
-            model.forecast(small_test_data)
-        except Exception:
+                small_test_features_before = list(small_test_data.columns)
+
+                
+
+        else:
             raise UserConfigValidationException(
-                'The model passed cannot be used for'
-                ' getting forecasts via forecast()'
+                "Unsupported data type for either train or test. "
+                "Expecting pandas DataFrame for train and test."
             )
-        self._validate_features_same(small_test_features_before,
-                                     small_test_data,
-                                     Forecasting.FORECAST)
+
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -369,53 +315,6 @@ class RAIForecastingInsights(RAIBaseInsights):
                 'input dataset features. Please check if '
                 f'{function} function is defined correctly.')
 
-    def _ensure_time_column_available(
-            self,
-            feature_metadata: FeatureMetadata,
-            feature_names: List[str],
-            model: Optional[Any]):
-        """Ensure that a time column is available from metadata or model.
-
-        Some models have the time column name stored as an attribute
-        in which case we can extract it directly without requiring users
-        to explicitly specify the time column.
-
-        :param feature_metadata: the feature metadata object
-        :type feature_metadata: FeatureMetadata
-        :param feature_names: the names of all features of the dataset
-        :type feature_names: List[str]
-        :param model: the model
-        :type model: object
-        """
-        fm_time_column = feature_metadata.time_column_name
-        model_time_column = getattr(model, "time_column_name", None)
-
-        # goal: set time column in feature metadata
-        if model_time_column is None:
-            if fm_time_column is not None:
-                return
-            else:
-                raise UserConfigValidationException(
-                    'There was no time column name in feature metadata. '
-                    'A time column is required for forecasting.')
-        else:
-            if fm_time_column is None:
-                if model_time_column in feature_names:
-                    feature_metadata.time_column_name = model_time_column
-                    self._feature_metadata = feature_metadata
-                    return
-                else:
-                    raise UserConfigValidationException(
-                        'The provided model expects a time column named '
-                        f'{model_time_column} that is not present in the '
-                        'provided dataset.')
-            else:
-                # both time columns were provided, ensure that they match
-                if fm_time_column != model_time_column:
-                    raise UserConfigValidationException(
-                        f'The provided time column name {fm_time_column} '
-                        "does not match the model's expected time column "
-                        f'name {model_time_column}.')
 
     def get_filtered_test_data(self, filters, composite_filters,
                                include_original_columns_only=False):
@@ -598,7 +497,8 @@ class RAIForecastingInsights(RAIBaseInsights):
 
         if self.predict_proba_output is not None:
             self._write_to_file(
-                prediction_output_path / SerializationAttributes.PREDICT_PROBA_JSON,
+                prediction_output_path /
+                SerializationAttributes.PREDICT_PROBA_JSON,
                 json.dumps(self.predict_proba_output.tolist()))
 
     def _save_metadata(self, path):

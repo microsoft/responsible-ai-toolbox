@@ -16,6 +16,7 @@ from erroranalysis._internal.cohort_filter import FilterDataWithCohortFilters
 from erroranalysis._internal.process_categoricals import process_categoricals
 from raiutils.data_processing import convert_to_list
 from raiutils.models import SKLearn, is_classifier
+from raiutils.models.model_utils import Forecasting, is_forecaster, is_quantile_forecaster
 from responsibleai._interfaces import Dataset, RAIInsightsData
 from responsibleai._internal.constants import (FileFormats, ManagerNames,
                                                Metadata,
@@ -41,6 +42,33 @@ _MIN_VALUE = 'min_value'
 _MAX_VALUE = 'max_value'
 
 
+class ForecastingWrapper(object):
+    def __init__(self, forecast_method, forecast_quantiles_method=None):
+        self._forecast_method = forecast_method
+        self._forecast_quantiles_method = forecast_quantiles_method
+
+    def forecast(self, X):
+        return self._forecast_method(X)
+    
+    def forecast_quantiles(self, X, quantiles):
+        return self._forecast_quantiles_method(X, quantiles)
+
+
+model_methods = {
+    ModelTask.CLASSIFICATON: [
+        'predict',
+        'predict_proba'
+    ],
+    ModelTask.REGRESSION: [
+        'predict'
+    ],
+    ModelTask.FORECASTING: [
+        'forecast',
+        'forecast_quantiles'
+    ]
+}
+
+
 class RAIInsights(RAIBaseInsights):
     """Defines the top-level Model Analysis API.
     Use RAIInsights to analyze errors, explain the most important
@@ -48,8 +76,12 @@ class RAIInsights(RAIBaseInsights):
     single API.
     """
 
-    def __init__(self, model: Optional[Any], train: pd.DataFrame,
-                 test: pd.DataFrame, target_column: str, task_type: str,
+    def __init__(self,
+                 model: Optional[Any],
+                 train: pd.DataFrame,
+                 test: pd.DataFrame,
+                 target_column: str,
+                 task_type: str,
                  categorical_features: Optional[List[str]] = None,
                  classes: Optional[np.ndarray] = None,
                  serializer: Optional[Any] = None,
@@ -57,8 +89,8 @@ class RAIInsights(RAIBaseInsights):
                  feature_metadata: Optional[FeatureMetadata] = None):
         """Creates an RAIInsights object.
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements sklearn-style predict or predict_proba
+            or a function that accepts a 2d ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -66,8 +98,8 @@ class RAIInsights(RAIBaseInsights):
         :type test: pandas.DataFrame
         :param target_column: The name of the label column.
         :type target_column: str
-        :param task_type: The task to run, can be `classification` or
-            `regression`.
+        :param task_type: The task to run, can be `classification`,
+            `regression`, or `forecasting`.
         :type task_type: str
         :param categorical_features: The categorical feature names.
         :type categorical_features: list[str]
@@ -87,13 +119,16 @@ class RAIInsights(RAIBaseInsights):
                                  of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
-        categorical_features = categorical_features or []
+        self._feature_metadata = feature_metadata or FeatureMetadata()
+        self._consolidate_categorical_features(
+            self._feature_metadata.categorical_features,
+            categorical_features)
         if len(test) > maximum_rows_for_test:
-            warnings.warn("The size of test set {0} is greater than "
-                          "supported limit of {1}. Computing insights"
-                          " for first {1} samples of "
-                          "test set".format(len(test),
-                                            maximum_rows_for_test))
+            warnings.warn(
+                f"The size of test set {len(test)} is greater than the "
+                f"supported limit of {maximum_rows_for_test}. "
+                "Computing insights for the first "
+                f"{maximum_rows_for_test} samples of the test set")
             self._large_test = test.copy()
             test = test.copy()[0:maximum_rows_for_test]
 
@@ -102,6 +137,7 @@ class RAIInsights(RAIBaseInsights):
                 self._large_predict_output = model.predict(
                     self._large_test.drop(columns=[target_column]))
                 if hasattr(model, SKLearn.PREDICT_PROBA):
+                    # TODO generalize to use forecasting forecast_quantiles
                     self._large_predict_proba_output = model.predict_proba(
                         self._large_test.drop(columns=[target_column]))
                 else:
@@ -115,13 +151,14 @@ class RAIInsights(RAIBaseInsights):
             self._large_predict_proba_output = None
 
         self._validate_rai_insights_input_parameters(
-            model=model, train=train, test=test,
-            target_column=target_column, task_type=task_type,
-            categorical_features=categorical_features,
+            model=model, train=train,
+            test=test,
+            target_column=target_column,
+            task_type=task_type,
             classes=classes,
             serializer=serializer,
             maximum_rows_for_test=maximum_rows_for_test,
-            feature_metadata=feature_metadata)
+            feature_metadata=self._feature_metadata)
         self._classes = RAIInsights._get_classes(
             task_type=task_type,
             train=train,
@@ -131,11 +168,10 @@ class RAIInsights(RAIBaseInsights):
         self._feature_columns = \
             test.drop(columns=[target_column]).columns.tolist()
         self._feature_ranges = RAIInsights._get_feature_ranges(
-            test=test, categorical_features=categorical_features,
-            feature_columns=self._feature_columns)
-        self._feature_metadata = feature_metadata
-
-        self.categorical_features = categorical_features
+            test=test,
+            categorical_features=categorical_features,
+            feature_columns=self._feature_columns,
+            time_column_name=self._feature_metadata.time_column_name)
         self._categories, self._categorical_indexes, \
             self._category_dictionary, self._string_ind_data = \
             process_categoricals(
@@ -149,20 +185,26 @@ class RAIInsights(RAIBaseInsights):
 
         self._try_add_data_balance()
 
+        self.predict_output = None
+        self.predict_proba_output = None
+        self.quantile_predict_output = None
         if model is not None:
             # Cache predictions of the model
-            self.predict_output = model.predict(
-                self.get_test_data(
-                    test_data=test).drop(columns=[target_column]))
-            if hasattr(model, SKLearn.PREDICT_PROBA):
-                self.predict_proba_output = model.predict_proba(
+            if is_forecaster(self.model):
+                self.predict_output = self.model.forecast(
+                    self._test_without_true_y)
+                if is_quantile_forecaster:
+                    self.quantile_predict_output = self.model.forecast_quantiles(
+                        self._test_without_true_y, [0.025, 0.975])
+            else:
+                self.predict_output = model.predict(
                     self.get_test_data(
                         test_data=test).drop(columns=[target_column]))
-            else:
-                self.predict_proba_output = None
-        else:
-            self.predict_output = None
-            self.predict_proba_output = None
+                if hasattr(model, SKLearn.PREDICT_PROBA):
+                    self.predict_proba_output = model.predict_proba(
+                        self.get_test_data(
+                            test_data=test).drop(columns=[target_column]))
+            
 
     def get_train_data(self):
         """Returns the training dataset after dropping
@@ -205,16 +247,50 @@ class RAIInsights(RAIBaseInsights):
                         columns=self._feature_metadata.dropped_features,
                         axis=1)
 
+    def _consolidate_categorical_features(
+            self,
+            categorical_features_from_feature_metadata,
+            categorical_features):
+        """Consolidates the categorical features.
+        
+        Originally, only the RAIInsights constructor accepted categorical_features.
+        Later on, feature_metadata was added as an argument that also includes
+        categorical_features. This method consolidates them or raises an exception
+        if it is not possible. The resulting categorical features should be set on
+        the self._feature_metadata object. Eventually, the categorical_features
+        argument on the RAIInsights constructor will be deprecated.
+        """
+        if categorical_features_from_feature_metadata is None:
+            if categorical_features is None:
+                return
+            else:
+                self._feature_metadata.categorical_features = categorical_features
+                return
+        else:
+            if categorical_features is None:
+                return
+            else:
+                # Both are specified, so raise an exception if they don't match.
+                if (set(categorical_features) ==
+                        set(categorical_features_from_feature_metadata)):
+                    return
+                else:
+                    raise UserConfigValidationException(
+                        'The categorical_features provided via the RAIInsights '
+                        'constructor and the categorical_features provided via '
+                        'the feature_metadata argument do not match.')
+
     def _initialize_managers(self):
         """Initializes the managers.
 
         Initialized the causal, counterfactual, error analysis
         and explainer managers.
         """
-        if self._feature_metadata is not None:
-            dropped_features = self._feature_metadata.dropped_features
-        else:
-            dropped_features = None
+        if self.task_type == ModelTask.FORECASTING:
+            self._managers = []
+            return
+
+        dropped_features = self._feature_metadata.dropped_features
         self._causal_manager = CausalManager(
             self.get_train_data(), self.get_test_data(), self.target_column,
             self.task_type, self.categorical_features, self._feature_metadata)
@@ -278,16 +354,14 @@ class RAIInsights(RAIBaseInsights):
             test: pd.DataFrame,
             target_column: str,
             task_type: str,
-            categorical_features: List[str],
             classes: np.ndarray,
             serializer,
-            maximum_rows_for_test: int,
-            feature_metadata: Optional[FeatureMetadata] = None):
+            feature_metadata: FeatureMetadata):
         """Validate the inputs for the RAIInsights constructor.
 
         :param model: The model to compute RAI insights for.
-            A model that implements sklearn.predict or sklearn.predict_proba
-            or function that accepts a 2d ndarray.
+            A model that implements sklearn-style predict or predict_proba
+            or a function that accepts a 2d ndarray.
         :type model: object
         :param train: The training dataset including the label column.
         :type train: pandas.DataFrame
@@ -298,8 +372,6 @@ class RAIInsights(RAIBaseInsights):
         :param task_type: The task to run, can be `classification` or
             `regression`.
         :type task_type: str
-        :param categorical_features: The categorical feature names.
-        :type categorical_features: list[str]
         :param classes: The class labels in the training dataset
         :type classes: numpy.ndarray
         :param serializer: Picklable custom serializer with save and load
@@ -307,18 +379,15 @@ class RAIInsights(RAIBaseInsights):
             method returns a dictionary state and load method returns the
             model.
         :type serializer: object
-        :param maximum_rows_for_test: Limit on size of test data
-            (for performance reasons)
-        :type maximum_rows_for_test: int
         :param feature_metadata: Feature metadata for the train/test
-                                 dataset to identify different kinds
-                                 of features in the dataset.
+            dataset to identify various kinds of features in the dataset.
         :type feature_metadata: FeatureMetadata
         """
 
         valid_tasks = [
             ModelTask.CLASSIFICATION.value,
-            ModelTask.REGRESSION.value
+            ModelTask.REGRESSION.value,
+            ModelTask.FORECASTING.value
         ]
         if task_type not in valid_tasks:
             message = (f"Unsupported task type '{task_type}'. "
@@ -350,131 +419,142 @@ class RAIInsights(RAIBaseInsights):
                 raise UserConfigValidationException(
                     'The serializer should be serializable via pickle')
 
-        if isinstance(train, pd.DataFrame) and isinstance(test, pd.DataFrame):
-            if len(train) <= 0 or len(test) <= 0:
-                raise UserConfigValidationException(
-                    'Either of the train/test are empty. '
-                    'Please provide non-empty dataframes for train '
-                    'and test sets.'
-                )
+        if not isinstance(train, pd.DataFrame) or not isinstance(test, pd.DataFrame):
+            raise UserConfigValidationException(
+                "Unsupported data type for either train or test. "
+                "Expecting pandas DataFrame for train and test."
+            )
 
-            if (len(set(train.columns) - set(test.columns)) != 0 or
-                    len(set(test.columns) - set(train.columns)) != 0):
-                raise UserConfigValidationException(
-                    'The features in train and test data do not match')
+        if len(train) <= 0 or len(test) <= 0:
+            raise UserConfigValidationException(
+                'Either of the train/test are empty. '
+                'Please provide non-empty dataframes for train '
+                'and test sets.'
+            )
 
-            if (target_column not in list(train.columns) or
-                    target_column not in list(test.columns)):
+        if (len(set(train.columns) - set(test.columns)) != 0 or
+                len(set(test.columns) - set(train.columns)) != 0):
+            raise UserConfigValidationException(
+                'The features in train and test data do not match')
+
+        if (target_column not in list(train.columns) or
+                target_column not in list(test.columns)):
+            raise UserConfigValidationException(
+                f'Target name {target_column} not present in train/test data')
+        
+        categorical_features = self._feature_metadata.categorical_features
+        if (categorical_features is not None and
+                len(categorical_features) > 0):
+            if target_column in categorical_features:
                 raise UserConfigValidationException(
-                    'Target name {0} not present in train/test data'.format(
+                    'Found target name {0} in '
+                    'categorical feature list'.format(
                         target_column)
                 )
 
-            if (categorical_features is not None and
-                    len(categorical_features) > 0):
-                if target_column in categorical_features:
+            difference_set = set(categorical_features) - set(
+                train.drop(columns=[target_column]).columns)
+            if len(difference_set) > 0:
+                message = ("Feature names in categorical_features "
+                            "do not exist in train data: "
+                            f"{list(difference_set)}")
+                raise UserConfigValidationException(message)
+
+            for column in categorical_features:
+                try:
+                    np.unique(train[column])
+                except Exception:
                     raise UserConfigValidationException(
-                        'Found target name {0} in '
-                        'categorical feature list'.format(
-                            target_column)
+                        f"Error finding unique values in column {column}. "
+                        "Please check your train data.")
+
+                try:
+                    np.unique(test[column])
+                except Exception:
+                    raise UserConfigValidationException(
+                        f"Error finding unique values in column {column}. "
+                        "Please check your test data.")
+
+        train_features = train.drop(columns=[target_column]).columns
+        numeric_features = train.drop(
+            columns=[target_column]).select_dtypes(
+                include='number').columns.tolist()
+        string_features_set = set(train_features) - set(numeric_features)
+        if (task_type == ModelTask.FORECASTING and
+                feature_metadata is not None and
+                feature_metadata.time_column_name is not None):
+            string_features_set.remove(feature_metadata.time_column_name)
+        non_categorical_string_columns = string_features_set - set(categorical_features)
+        if len(non_categorical_string_columns) > 0:
+            raise UserConfigValidationException(
+                f"The following string features were not "
+                "identified as categorical features: {non_categorical_string_columns}")
+
+        if classes is not None and task_type == ModelTask.CLASSIFICATION:
+            if (len(set(train[target_column].unique()) -
+                    set(classes)) != 0 or
+                    len(set(classes) -
+                        set(train[target_column].unique())) != 0):
+                raise UserConfigValidationException(
+                    'The train labels and distinct values in '
+                    'target (train data) do not match')
+
+            if (len(set(test[target_column].unique()) -
+                    set(classes)) != 0 or
+                    len(set(classes) -
+                        set(test[target_column].unique())) != 0):
+                raise UserConfigValidationException(
+                    'The train labels and distinct values in '
+                    'target (test data) do not match')
+
+        if feature_metadata is not None:
+            if not isinstance(feature_metadata, FeatureMetadata):
+                raise UserConfigValidationException(
+                    "Expecting type FeatureMetadata but got {0}".format(
+                        type(feature_metadata)))
+
+            feature_names = list(train.columns)
+            feature_metadata.validate(feature_names)
+            if task_type == ModelTask.FORECASTING:
+                self._ensure_time_column_available(
+                    feature_metadata, feature_names, model)
+
+
+        if model is not None:
+            # Pick one row from train and test data
+            small_train_data = train[0:1]
+            small_test_data = test[0:1]
+            has_dropped_features = False
+            if len(feature_metadata.dropped_features or []) != 0:
+                has_dropped_features = True
+                small_train_data = small_train_data.drop(
+                    columns=feature_metadata.dropped_features, axis=1)
+                small_test_data = small_test_data.drop(
+                    columns=feature_metadata.dropped_features, axis=1)
+
+            small_train_data = small_train_data.drop(
+                columns=[target_column], axis=1)
+            small_test_data = small_test_data.drop(
+                columns=[target_column], axis=1)
+            # TODO The following error doesn't make sense for forecasting.
+            # Make sure to add a test case for this.
+            if (len(small_train_data.columns) == 0 or
+                    len(small_test_data.columns) == 0):
+                if has_dropped_features:
+                    raise UserConfigValidationException(
+                        'All features have been dropped from the dataset.'
+                        ' Please do not drop all the features.'
+                    )
+                else:
+                    raise UserConfigValidationException(
+                        'There is no feature in the dataset. Please make '
+                        'sure that your dataset contains at least '
+                        'one feature.'
                     )
 
-                difference_set = set(categorical_features) - set(
-                    train.drop(columns=[target_column]).columns)
-                if len(difference_set) > 0:
-                    message = ("Feature names in categorical_features "
-                               "do not exist in train data: "
-                               f"{list(difference_set)}")
-                    raise UserConfigValidationException(message)
+            small_train_features_before = list(small_train_data.columns)
 
-                for column in categorical_features:
-                    try:
-                        np.unique(train[column])
-                    except Exception:
-                        raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your train data.".format(column)
-                        )
-
-                    try:
-                        np.unique(test[column])
-                    except Exception:
-                        raise UserConfigValidationException(
-                            "Error finding unique values in column {0}. "
-                            "Please check your test data.".format(column)
-                        )
-
-            train_features = train.drop(columns=[target_column]).columns
-            numeric_features = train.drop(
-                columns=[target_column]).select_dtypes(
-                    include='number').columns.tolist()
-            string_features_set = set(train_features) - set(numeric_features)
-            if len(string_features_set - set(categorical_features)) > 0:
-                raise UserConfigValidationException(
-                    "The following string features were not "
-                    "identified as categorical features: {0}".format(
-                        string_features_set - set(categorical_features))
-                )
-
-            if classes is not None and task_type == ModelTask.CLASSIFICATION:
-                if (len(set(train[target_column].unique()) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(train[target_column].unique())) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (train data) do not match')
-
-                if (len(set(test[target_column].unique()) -
-                        set(classes)) != 0 or
-                        len(set(classes) -
-                            set(test[target_column].unique())) != 0):
-                    raise UserConfigValidationException(
-                        'The train labels and distinct values in '
-                        'target (test data) do not match')
-
-            if feature_metadata is not None:
-                if not isinstance(feature_metadata, FeatureMetadata):
-                    raise UserConfigValidationException(
-                        "Expecting type FeatureMetadata but got {0}".format(
-                            type(feature_metadata)))
-
-                feature_metadata.validate(list(train.columns))
-
-            if model is not None:
-                # Pick one row from train and test data
-                small_train_data = train[0:1]
-                small_test_data = test[0:1]
-                has_dropped_features = False
-                if feature_metadata is not None:
-                    if (feature_metadata.dropped_features is not None and
-                            len(feature_metadata.dropped_features) != 0):
-                        has_dropped_features = True
-                        small_train_data = small_train_data.drop(
-                            columns=feature_metadata.dropped_features, axis=1)
-                        small_test_data = small_test_data.drop(
-                            columns=feature_metadata.dropped_features, axis=1)
-
-                small_train_data = small_train_data.drop(
-                    columns=[target_column], axis=1)
-                small_test_data = small_test_data.drop(
-                    columns=[target_column], axis=1)
-                if (len(small_train_data.columns) == 0 or
-                        len(small_test_data.columns) == 0):
-                    if has_dropped_features:
-                        raise UserConfigValidationException(
-                            'All features have been dropped from the dataset.'
-                            ' Please do not drop all the features.'
-                        )
-                    else:
-                        raise UserConfigValidationException(
-                            'There is no feature in the dataset. Please make '
-                            'sure that your dataset contains at least '
-                            'one feature.'
-                        )
-
-                small_train_features_before = list(small_train_data.columns)
-
+            if task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
                 # Run predict() of the model
                 try:
                     model.predict(small_train_data)
@@ -485,8 +565,8 @@ class RAIInsights(RAIBaseInsights):
                         ' getting predictions via predict()'
                     )
                 self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT)
+                                            small_train_data,
+                                            SKLearn.PREDICT)
 
                 # Run predict_proba() of the model
                 if task_type == ModelTask.CLASSIFICATION:
@@ -499,8 +579,8 @@ class RAIInsights(RAIBaseInsights):
                             ' getting predictions via predict_proba()'
                         )
                 self._validate_features_same(small_train_features_before,
-                                             small_train_data,
-                                             SKLearn.PREDICT_PROBA)
+                                            small_train_data,
+                                            SKLearn.PREDICT_PROBA)
 
                 if task_type == ModelTask.REGRESSION:
                     if hasattr(model, SKLearn.PREDICT_PROBA):
@@ -508,11 +588,47 @@ class RAIInsights(RAIBaseInsights):
                             'The regression model'
                             'provided has a predict_proba function. '
                             'Please check the task_type.')
-        else:
+            elif task_type == ModelTask.FORECASTING:
+                # Run forecast() of the model
+                self._validate_model_forecast(model, small_test_data, small_test_features_before)
+                
+                # Wrap model to make forecasting API compatible.
+                # Detect if the model is from AzureML as a special case.
+                model_package = sys.modules[inspect.getmodule(model).__name__.partition('.')[0]].__package__
+                if model_package == "azureml":
+                    def forecast(forecasting_model, X):
+                        # AzureML forecasting models return a tuple of (forecast, data)
+                        # but we only want to return the actual forecast.
+                        return forecasting_model.forecast(X)[0]
+                    def forecast_quantiles(forecasting_model, X, quantiles):
+                        # AzureML forecasting models don't take quantiles as an argument but
+                        # instead need to have it set on the model object.
+                        if type(quantiles) == list and len(quantiles) > 0 and \
+                                all([type(q) == float and q > 0 and q < 1 for q in quantiles]):
+                            forecasting_model.quantiles = quantiles
+                            return forecasting_model.forecast_quantiles(X)
+                        else:
+                            raise ValueError("quantiles must be a list of floats between 0 and 1.")
+                    wrapper = ForecastingWrapper(
+                        lambda X: forecast(model, X),
+                        lambda X, quantiles: forecast_quantiles(model, X, quantiles))
+                    self._validate_model_forecast(wrapper, small_test_data, small_test_features_before)
+                    self.model = wrapper
+                else:
+                    self.model = model
+
+    def _validate_model_forecast(self, model, small_test_data,
+                                 small_test_features_before):
+        try:
+            model.forecast(small_test_data)
+        except Exception:
             raise UserConfigValidationException(
-                "Unsupported data type for either train or test. "
-                "Expecting pandas DataFrame for train and test."
+                'The model passed cannot be used for'
+                ' getting forecasts via forecast()'
             )
+        self._validate_features_same(small_test_features_before,
+                                     small_test_data,
+                                     Forecasting.FORECAST)
 
     def _validate_features_same(self, small_train_features_before,
                                 small_train_data, function):
@@ -530,10 +646,57 @@ class RAIInsights(RAIBaseInsights):
         small_train_features_after = list(small_train_data.columns)
         if small_train_features_before != small_train_features_after:
             raise UserConfigValidationException(
-                ('Calling model {} function modifies '
-                 'input dataset features. Please check if '
-                 'predict function is defined correctly.').format(function)
-            )
+                f'Calling model {function} function modifies '
+                'input dataset features. Please check if '
+                '{function} function is defined correctly.')
+
+    def _ensure_time_column_available(
+            self,
+            feature_metadata: FeatureMetadata,
+            feature_names: List[str],
+            model: Optional[Any]):
+        """Ensure that a time column is available from metadata or model.
+
+        Some models have the time column name stored as an attribute
+        in which case we can extract it directly without requiring users
+        to explicitly specify the time column.
+
+        :param feature_metadata: the feature metadata object
+        :type feature_metadata: FeatureMetadata
+        :param feature_names: the names of all features of the dataset
+        :type feature_names: List[str]
+        :param model: the model
+        :type model: object
+        """
+        fm_time_column = feature_metadata.time_column_name
+        model_time_column = getattr(model, "time_column_name", None)
+
+        # goal: set time column in feature metadata
+        if model_time_column is None:
+            if fm_time_column is not None:
+                return
+            else:
+                raise UserConfigValidationException(
+                    'There was no time column name in feature metadata. '
+                    'A time column is required for forecasting.')
+        else:
+            if fm_time_column is None:
+                if model_time_column in feature_names:
+                    feature_metadata.time_column_name = model_time_column
+                    self._feature_metadata = feature_metadata
+                    return
+                else:
+                    raise UserConfigValidationException(
+                        'The provided model expects a time column named '
+                        f'{model_time_column} that is not present in the '
+                        'provided dataset.')
+            else:
+                # both time columns were provided, ensure that they match
+                if fm_time_column != model_time_column:
+                    raise UserConfigValidationException(
+                        f'The provided time column name {fm_time_column} '
+                        "does not match the model's expected time column "
+                        f'name {model_time_column}.')
 
     @property
     def causal(self) -> CausalManager:
@@ -599,11 +762,12 @@ class RAIInsights(RAIBaseInsights):
                 pred_y = self.predict_output
                 true_y = self.test[self.target_column]
 
+        X_test = test_data.drop(columns=[self.target_column])
         filter_data_with_cohort = FilterDataWithCohortFilters(
             model=self.model,
-            dataset=test_data.drop(columns=[self.target_column]),
-            features=test_data.drop(columns=[self.target_column]).columns,
-            categorical_features=self.categorical_features,
+            dataset=X_test,
+            features=X_test.columns,
+            categorical_features=self._feature_metadata.categorical_features,
             categories=self._categories,
             true_y=true_y,
             pred_y=pred_y,
@@ -632,7 +796,7 @@ class RAIInsights(RAIBaseInsights):
     def _get_dataset(self):
         dashboard_dataset = Dataset()
         dashboard_dataset.task_type = self.task_type
-        dashboard_dataset.categorical_features = self.categorical_features
+        dashboard_dataset.categorical_features = self._feature_metadata.categorical_features
         dashboard_dataset.class_names = convert_to_list(
             self._classes)
         dashboard_dataset.is_large_data_scenario = \
@@ -659,9 +823,12 @@ class RAIInsights(RAIBaseInsights):
         try:
             list_dataset = convert_to_list(dataset)
         except Exception as ex:
-            raise ValueError(
-                "Unsupported dataset type") from ex
+            raise ValueError("Unsupported dataset type") from ex
         if dataset is not None and self.model is not None:
+            if self.task_type in [ModelTask.CLASSIFICATION, ModelTask.REGRESSION]:
+                predict_method = self.model.predict
+            if self.task_type == ModelTask.FORECASTING:
+                predict_method = self.model.forecast
             try:
                 predict_dataset = dataset
                 metadata = self._feature_metadata
@@ -672,9 +839,9 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                predicted_y = self.model.predict(predict_dataset)
+                    predicted_y = predict_method(predict_dataset)
             except Exception as ex:
-                msg = "Model does not support predict method for given"
+                msg = f"Model does not support {predict_method.__name__} method for given"
                 "dataset type"
                 raise ValueError(msg) from ex
             try:
@@ -683,7 +850,7 @@ class RAIInsights(RAIBaseInsights):
                 raise ValueError(
                     "Model prediction output of unsupported type,") from ex
         if predicted_y is not None:
-            if (self.task_type == "classification" and
+            if (self.task_type == ModelTask.CLASSIFICATION and
                     dashboard_dataset.class_names is not None):
                 predicted_y = [dashboard_dataset.class_names.index(
                     y) for y in predicted_y]
@@ -705,6 +872,17 @@ class RAIInsights(RAIBaseInsights):
             dashboard_dataset.features = list_dataset
 
         true_y = self.test[self.target_column]
+        if self.task_type == ModelTask.FORECASTING:
+            try:
+                dashboard_dataset.index = convert_to_list(
+                    pd.to_datetime(
+                        self.test[self._feature_metadata.time_column_name])
+                        .apply(lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%SZ")))
+            except Exception as ex:
+                raise ValueError(
+                    "The time column should be parseable by pandas.to_datetime, ideally in ISO format"
+                    ) from ex
+
 
         if true_y is not None and len(true_y) == row_length:
             if (self.task_type == "classification" and
@@ -723,7 +901,18 @@ class RAIInsights(RAIBaseInsights):
                                  " from local explanations dimension")
             dashboard_dataset.feature_names = features
         dashboard_dataset.target_column = self.target_column
-        if is_classifier(self.model) and dataset is not None:
+
+        predict_proba_method = None
+        if (self.task_type == ModelTask.CLASSIFICATION and 
+                is_classifier(self.model)):
+            predict_proba_method = self.model.predict_proba
+        elif (self.task_type == ModelTask.FORECASTING and
+                is_quantile_forecaster(self.model)):
+            predict_proba_method = \
+                lambda dataset: self.model.forecast_quantiles(dataset, [0.025, 0.975])
+            predict_proba_method.__name__ = Forecasting.FORECAST_QUANTILES
+
+        if predict_proba_method is not None and dataset is not None:
             try:
                 predict_dataset = dataset
                 metadata = self._feature_metadata
@@ -734,21 +923,23 @@ class RAIInsights(RAIBaseInsights):
                         len(metadata.dropped_features) != 0):
                     predict_dataset = predict_dataset.drop(
                         metadata.dropped_features, axis=1)
-                probability_y = self.model.predict_proba(predict_dataset)
+                probability_y = predict_proba_method(predict_dataset)
             except Exception as ex:
-                raise ValueError("Model does not support predict_proba method"
-                                 " for given dataset type,") from ex
+                raise ValueError(
+                    f"Model does not support {predict_proba_method.__name__} method"
+                    " for given dataset type,") from ex
             try:
                 probability_y = convert_to_list(probability_y)
             except Exception as ex:
                 raise ValueError(
-                    "Model predict_proba output of unsupported type,") from ex
+                    f"Model {predict_proba_method.__name__} "
+                    "output of unsupported type,") from ex
             dashboard_dataset.probability_y = probability_y
 
         return dashboard_dataset
 
     def _save_predictions(self, path):
-        """Save the predict() and predict_proba() output.
+        """Save the predictions to files.
 
         :param path: The directory path to save the RAIInsights to.
         :type path: str
@@ -820,7 +1011,8 @@ class RAIInsights(RAIBaseInsights):
         meta = {
             Metadata.TARGET_COLUMN: self.target_column,
             Metadata.TASK_TYPE: self.task_type,
-            Metadata.CATEGORICAL_FEATURES: self.categorical_features,
+            Metadata.CATEGORICAL_FEATURES: \
+                self._feature_metadata.categorical_features,
             Metadata.CLASSES: classes,
             Metadata.FEATURE_COLUMNS: self._feature_columns,
             Metadata.FEATURE_RANGES: self._feature_ranges,
@@ -839,21 +1031,25 @@ class RAIInsights(RAIBaseInsights):
         self._save_large_data(path)
 
     @staticmethod
-    def _get_feature_ranges(test, categorical_features, feature_columns):
+    def _get_feature_ranges(test, categorical_features, feature_columns,
+                            time_column_name):
         """Get feature ranges like min, max and unique values
         for all columns"""
         result = []
         for col in feature_columns:
             res_object = {}
+            res_object[_COLUMN_NAME] = col
             if (col in categorical_features):
                 unique_value = test[col].unique()
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "categorical"
                 res_object[_UNIQUE_VALUES] = unique_value.tolist()
+            elif (col == time_column_name):
+                res_object[_RANGE_TYPE] = "datetime"
+                res_object[_MIN_VALUE] = test[col].min()
+                res_object[_MAX_VALUE] = test[col].max()
             else:
                 min_value = float(test[col].min())
                 max_value = float(test[col].max())
-                res_object[_COLUMN_NAME] = col
                 res_object[_RANGE_TYPE] = "integer"
                 res_object[_MIN_VALUE] = min_value
                 res_object[_MAX_VALUE] = max_value
@@ -896,7 +1092,8 @@ class RAIInsights(RAIBaseInsights):
             meta[Metadata.FEATURE_RANGES]
         if (Metadata.FEATURE_METADATA not in meta or
                 meta[Metadata.FEATURE_METADATA] is None):
-            inst.__dict__['_' + Metadata.FEATURE_METADATA] = None
+            inst.__dict__['_' + Metadata.FEATURE_METADATA] = \
+                FeatureMetadata()
         else:
             inst.__dict__['_' + Metadata.FEATURE_METADATA] = FeatureMetadata(
                 identity_feature_name=meta[Metadata.FEATURE_METADATA][
@@ -923,7 +1120,7 @@ class RAIInsights(RAIBaseInsights):
 
     @staticmethod
     def _load_predictions(inst, path):
-        """Load the predict() and predict_proba() output.
+        """Load the predictions.
 
         :param inst: RAIInsights object instance.
         :type inst: RAIInsights
