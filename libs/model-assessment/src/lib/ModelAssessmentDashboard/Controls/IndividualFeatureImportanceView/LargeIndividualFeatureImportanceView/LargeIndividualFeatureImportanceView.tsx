@@ -151,44 +151,46 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private updateBubblePlotData = async (
-    chartProps?: IGenericChartProps
+    chartProps: IGenericChartProps
   ): Promise<void> => {
-    if (chartProps) {
+    this.setState({
+      indexSeries: [],
+      isBubbleChartDataLoading: true,
+      isLocalExplanationsDataLoading: false,
+      localExplanationsData: undefined,
+      localExplanationsErrorMessage: undefined,
+      selectedPointsIndexes: [],
+      xSeries: [],
+      ySeries: []
+    });
+    const datasetBarConfigOverride = await getBubblePlotData(
+      chartProps,
+      this.props.cohort,
+      this.context.jointDataset,
+      this.context.dataset,
+      this.state.isLocalExplanationsDataLoading,
+      this.context.requestBubblePlotData,
+      this.selectPointFromChartLargeData,
+      this.onBubbleClick
+    );
+    if (
+      datasetBarConfigOverride &&
+      !instanceOfHighChart(datasetBarConfigOverride)
+    ) {
       this.setState({
-        indexSeries: [],
-        isBubbleChartDataLoading: true,
-        isLocalExplanationsDataLoading: false,
-        localExplanationsData: undefined,
-        localExplanationsErrorMessage: undefined,
-        selectedPointsIndexes: [],
-        xSeries: [],
-        ySeries: []
+        bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
+        highChartConfigOverride: undefined,
+        isBubbleChartDataLoading: false
       });
-      const datasetBarConfigOverride = await getBubblePlotData(
-        chartProps,
-        this.props.cohort,
-        this.context.jointDataset,
-        this.context.dataset,
-        this.state.isLocalExplanationsDataLoading,
-        this.context.requestBubblePlotData,
-        this.selectPointFromChartLargeData,
-        this.onBubbleClick
-      );
-      if (
-        datasetBarConfigOverride &&
-        !instanceOfHighChart(datasetBarConfigOverride)
-      ) {
-        this.setErrorStatus(datasetBarConfigOverride);
-        return;
-      }
-      this.setState({
-        chartProps,
-        highChartConfigOverride: datasetBarConfigOverride,
-        isBubbleChartDataLoading: false,
-        isBubbleChartRendered: true,
-        isRevertButtonClicked: false
-      });
+      return;
     }
+    this.setState({
+      chartProps,
+      highChartConfigOverride: datasetBarConfigOverride,
+      isBubbleChartDataLoading: false,
+      isBubbleChartRendered: true,
+      isRevertButtonClicked: false
+    });
   };
 
   private updateScatterPlotData = (chartProps: IGenericChartProps): void => {
@@ -213,14 +215,6 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
   };
 
-  private setErrorStatus = (datasetBarConfigOverride: any): void => {
-    this.setState({
-      bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
-      highChartConfigOverride: undefined,
-      isBubbleChartDataLoading: false
-    });
-  };
-
   private onBubbleClick = (
     scatterPlotData: IHighchartsConfig,
     xSeries: number[],
@@ -237,15 +231,15 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
   };
 
   private onXSet = (value: ISelectorConfig): void => {
-    const newProps = getNewChartProps(value, true, this.state.chartProps);
-    if (newProps) {
+    if (this.state.chartProps) {
+      const newProps = getNewChartProps(value, true, this.state.chartProps);
       this.setState({ chartProps: newProps });
     }
   };
 
   private onYSet = (value: ISelectorConfig): void => {
-    const newProps = getNewChartProps(value, false, this.state.chartProps);
-    if (newProps) {
+    if (this.state.chartProps) {
+      const newProps = getNewChartProps(value, false, this.state.chartProps);
       this.setState({ chartProps: newProps });
     }
   };
@@ -266,45 +260,39 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       this.state.selectedPointsIndexes,
       index
     );
-    if (newSelections === undefined) {
-      return;
+    if (newSelections !== undefined) {
+      this.setState({
+        selectedPointsIndexes: newSelections
+      });
     }
-    this.setState({
-      selectedPointsIndexes: newSelections
-    });
   };
 
   private setLocalExplanationsData = async (
-    absoluteIndex?: number
+    absoluteIndex: number
   ): Promise<void> => {
-    if (absoluteIndex) {
-      this.setState({
-        isLocalExplanationsDataLoading: true,
-        localExplanationsErrorMessage: undefined
-      });
-      const localExplanationsData = await getLocalExplanationsFromSDK(
-        absoluteIndex,
-        this.context.requestLocalExplanations
-      );
-      if (
-        typeof localExplanationsData === "object" &&
-        localExplanationsData &&
-        !instanceOfLocalExplanation(localExplanationsData)
-      ) {
-        this.setState({
-          isLocalExplanationsDataLoading: false,
-          localExplanationsData: undefined,
-          localExplanationsErrorMessage: localExplanationsData
-            .toString()
-            .split(":")
-            .pop()
-        });
-        return;
-      }
+    this.setState({
+      isLocalExplanationsDataLoading: true,
+      localExplanationsErrorMessage: undefined
+    });
+    const localExplanationsData = await getLocalExplanationsFromSDK(
+      absoluteIndex,
+      this.context.requestLocalExplanations
+    );
+    if (
+      typeof localExplanationsData === "object" &&
+      localExplanationsData &&
+      !instanceOfLocalExplanation(localExplanationsData)
+    ) {
       this.setState({
         isLocalExplanationsDataLoading: false,
-        localExplanationsData
+        localExplanationsData: undefined,
+        localExplanationsErrorMessage: getErrorMessage(localExplanationsData)
       });
+      return;
     }
+    this.setState({
+      isLocalExplanationsDataLoading: false,
+      localExplanationsData
+    });
   };
 }

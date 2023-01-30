@@ -126,13 +126,15 @@ export function getNewSelections(
 
 export async function selectPointFromChartLargeData(
   data: IScatterPoint,
-  setLocalExplanationsData: (absoluteIndex?: number) => Promise<void>,
+  setLocalExplanationsData: (absoluteIndex: number) => Promise<void>,
   toggleSelectionOfPoint: (index?: number) => void,
   telemetryHook?: ((message: ITelemetryEvent) => void) | undefined
 ): Promise<void> {
   const index = data.customData[JointDataset.IndexLabel];
   const absoluteIndex = data.customData[JointDataset.AbsoluteIndexLabel];
-  setLocalExplanationsData(absoluteIndex);
+  if (absoluteIndex) {
+    setLocalExplanationsData(absoluteIndex);
+  }
   toggleSelectionOfPoint(index);
   telemetryHook?.({
     level: TelemetryLevels.ButtonClick,
@@ -182,11 +184,8 @@ export async function getBubblePlotData(
 export function getNewChartProps(
   value: ISelectorConfig,
   xSet: boolean,
-  chartProps?: IGenericChartProps
-): IGenericChartProps | undefined {
-  if (!chartProps) {
-    return;
-  }
+  chartProps: IGenericChartProps
+): IGenericChartProps {
   const newProps = _.cloneDeep(chartProps);
   if (xSet) {
     newProps.xAxis = value;
