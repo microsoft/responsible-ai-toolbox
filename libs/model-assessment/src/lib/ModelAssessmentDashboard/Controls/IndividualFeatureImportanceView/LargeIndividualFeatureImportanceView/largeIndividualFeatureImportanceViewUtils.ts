@@ -11,7 +11,8 @@ import {
   ITelemetryEvent,
   JointDataset,
   TelemetryEventName,
-  TelemetryLevels
+  TelemetryLevels,
+  hasAxisTypeChanged
 } from "@responsible-ai/core-ui";
 import _ from "lodash";
 import {
@@ -29,8 +30,9 @@ export function shouldUpdateHighchart(
   prevState: ILargeIndividualFeatureImportanceViewState,
   prevProps: ILargeIndividualFeatureImportanceViewProps,
   currentState: ILargeIndividualFeatureImportanceViewState,
-  currentProps: ILargeIndividualFeatureImportanceViewProps
-): [boolean, boolean, boolean, boolean, boolean, boolean] {
+  currentProps: ILargeIndividualFeatureImportanceViewProps,
+  changedKeys: string[]
+): [boolean, boolean, boolean, boolean, boolean, boolean, boolean] {
   const hasSelectedPointIndexesUpdated = !_.isEqual(
     currentState.selectedPointsIndexes,
     prevState.selectedPointsIndexes
@@ -47,20 +49,27 @@ export function shouldUpdateHighchart(
     currentState.chartProps,
     prevState.chartProps
   );
+  const hasAxisTypeChanged = hasAxisTypeUpdated(
+    changedKeys,
+    prevState.chartProps,
+    currentState.chartProps
+  );
 
   const shouldUpdate =
     hasRevertToBubbleChartUpdated ||
     hasSelectedPointIndexesUpdated ||
     hasChartPropsUpdated ||
     hasIsLocalExplanationsDataLoadingUpdated ||
-    hasCohortUpdated;
+    hasCohortUpdated ||
+    hasAxisTypeChanged;
   return [
     shouldUpdate,
     hasSelectedPointIndexesUpdated,
     hasIsLocalExplanationsDataLoadingUpdated,
     hasRevertToBubbleChartUpdated,
     hasCohortUpdated,
-    hasChartPropsUpdated
+    hasChartPropsUpdated,
+    hasAxisTypeChanged
   ];
 }
 
@@ -185,4 +194,37 @@ export function getNewChartProps(
     newProps.yAxis = value;
   }
   return newProps;
+}
+
+export function getErrorMessage(datasetBarConfigOverride: any): string {
+  return datasetBarConfigOverride.toString().split(":").pop();
+}
+
+export function compareChartProps(
+  newProps: IGenericChartProps,
+  oldProps: IGenericChartProps,
+  changedKeys: string[]
+): void {
+  for (const key in newProps) {
+    if (typeof newProps[key] === "object") {
+      compareChartProps(newProps[key], oldProps[key], changedKeys);
+    }
+    if (newProps[key] !== oldProps[key]) {
+      changedKeys.push(key);
+    }
+  }
+}
+
+export function hasAxisTypeUpdated(
+  changedKeys: string[],
+  prevChartProps?: IGenericChartProps,
+  currentChartProps?: IGenericChartProps
+): boolean {
+  if (currentChartProps && prevChartProps) {
+    changedKeys = [];
+    compareChartProps(prevChartProps, currentChartProps, changedKeys);
+    console.log("!!CK, ", changedKeys);
+    return hasAxisTypeChanged(changedKeys);
+  }
+  return false;
 }

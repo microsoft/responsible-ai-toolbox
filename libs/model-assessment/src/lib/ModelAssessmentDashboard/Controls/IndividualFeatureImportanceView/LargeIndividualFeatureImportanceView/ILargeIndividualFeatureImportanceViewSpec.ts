@@ -1,7 +1,6 @@
 import {
   Cohort,
   IGenericChartProps,
-  ILocalExplanations,
   ITelemetryEvent,
   ModelTypes,
   WeightVectorOption
@@ -33,17 +32,6 @@ export interface ILargeIndividualFeatureImportanceViewState {
   localExplanationsErrorMessage?: string;
 }
 
-export interface IResetStateOnBubbleChartUpdate {
-  indexSeries: number[];
-  isBubbleChartDataLoading: boolean;
-  isLocalExplanationsDataLoading: boolean;
-  localExplanationsData?: ILocalExplanations;
-  localExplanationsErrorMessage?: string;
-  selectedPointsIndexes: number[];
-  xSeries: number[];
-  ySeries: number[];
-}
-
 export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
   return {
     bubbleChartErrorMessage: undefined,
@@ -58,21 +46,4 @@ export function getInitialSpec(): ILargeIndividualFeatureImportanceViewState {
     xSeries: [],
     ySeries: []
   };
-}
-
-export function resetBubbleChartStates(
-  resetBubbleChartSpec: React.Dispatch<
-    React.SetStateAction<IResetStateOnBubbleChartUpdate>
-  >
-): void {
-  resetBubbleChartSpec({
-    indexSeries: [],
-    isBubbleChartDataLoading: true,
-    isLocalExplanationsDataLoading: false,
-    localExplanationsData: undefined,
-    localExplanationsErrorMessage: undefined,
-    selectedPointsIndexes: [],
-    xSeries: [],
-    ySeries: []
-  });
 }

@@ -6,7 +6,6 @@ import {
   defaultModelAssessmentContext,
   generateDefaultChartAxes,
   getScatterOption,
-  hasAxisTypeChanged,
   IGenericChartProps,
   IHighchartsConfig,
   instanceOfHighChart,
@@ -30,6 +29,7 @@ import { LargeIndividualFeatureImportanceChartArea } from "./LargeIndividualFeat
 import {
   generateHighChartConfigOverride,
   getBubblePlotData,
+  getErrorMessage,
   getNewChartProps,
   getNewSelections,
   instanceOfLocalExplanation,
@@ -80,10 +80,16 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
       hasIsLocalExplanationsDataLoadingUpdated,
       hasRevertToBubbleChartUpdated,
       hasCohortUpdated,
-      hasChartPropsUpdated
-    ] = shouldUpdateHighchart(prevState, prevProps, this.state, this.props);
-    const hasAxisTypeChanged = this.hasAxisTypeChanged(prevState.chartProps);
-    if (shouldUpdate || hasAxisTypeChanged) {
+      hasChartPropsUpdated,
+      hasAxisTypeChanged
+    ] = shouldUpdateHighchart(
+      prevState,
+      prevProps,
+      this.state,
+      this.props,
+      this.changedKeys
+    );
+    if (shouldUpdate) {
       this.state.chartProps
         ? generateHighChartConfigOverride(
             this.state.chartProps,
@@ -207,37 +213,9 @@ export class LargeIndividualFeatureImportanceView extends React.Component<
     });
   };
 
-  private readonly hasAxisTypeChanged = (
-    prevChartProps?: IGenericChartProps
-  ): boolean => {
-    if (this.state.chartProps && prevChartProps) {
-      this.changedKeys = [];
-      this.compareChartProps(prevChartProps, this.state.chartProps);
-      return hasAxisTypeChanged(this.changedKeys);
-    }
-    return false;
-  };
-
-  private compareChartProps = (
-    newProps: IGenericChartProps,
-    oldProps: IGenericChartProps
-  ): void => {
-    for (const key in newProps) {
-      if (typeof newProps[key] === "object") {
-        this.compareChartProps(newProps[key], oldProps[key]);
-      }
-      if (newProps[key] !== oldProps[key]) {
-        this.changedKeys.push(key);
-      }
-    }
-  };
-
   private setErrorStatus = (datasetBarConfigOverride: any): void => {
     this.setState({
-      bubbleChartErrorMessage: datasetBarConfigOverride
-        .toString()
-        .split(":")
-        .pop(),
+      bubbleChartErrorMessage: getErrorMessage(datasetBarConfigOverride),
       highChartConfigOverride: undefined,
       isBubbleChartDataLoading: false
     });
